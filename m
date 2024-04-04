@@ -1,93 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9556CD1288
-	for <buildroot@archiver.kernel.org>; Thu,  4 Apr 2024 19:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79072CD1288
+	for <buildroot@archiver.kernel.org>; Thu,  4 Apr 2024 20:43:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E75861008;
-	Thu,  4 Apr 2024 19:55:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EE7241E2E;
+	Thu,  4 Apr 2024 20:43:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0t_Vm0GJLHev; Thu,  4 Apr 2024 19:55:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NLlSQM1xvwOz; Thu,  4 Apr 2024 20:43:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18E5461078
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C558341E56
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18E5461078;
-	Thu,  4 Apr 2024 19:55:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C558341E56;
+	Thu,  4 Apr 2024 20:43:15 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C86A31BF48B
- for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 19:55:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B001B1BF3C0
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 20:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B5CA141CB3
- for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 19:55:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D33A41CD2
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 20:43:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BrZ23rLAZK86 for <buildroot@lists.busybox.net>;
- Thu,  4 Apr 2024 19:55:05 +0000 (UTC)
+ id h59YPZWcDrkf for <buildroot@lists.busybox.net>;
+ Thu,  4 Apr 2024 20:43:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 11A2A40195
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11A2A40195
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 11A2A40195
- for <buildroot@buildroot.org>; Thu,  4 Apr 2024 19:55:04 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4155baa696eso10429705e9.2
- for <buildroot@buildroot.org>; Thu, 04 Apr 2024 12:55:04 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8F25040195
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F25040195
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8F25040195
+ for <buildroot@buildroot.org>; Thu,  4 Apr 2024 20:43:12 +0000 (UTC)
+Received: by mail-lj1-x22e.google.com with SMTP id
+ 38308e7fff4ca-2d68651e253so18491221fa.0
+ for <buildroot@buildroot.org>; Thu, 04 Apr 2024 13:43:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712260502; x=1712865302;
+ d=1e100.net; s=20230601; t=1712263389; x=1712868189;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=7sSAp7ZJh8kG9sDXgbNVWyuMOnHBdxBkQNF9/NpJOwY=;
- b=ZHA/yfYcFC3SYEU0QPkEsOxIrkJAmQAaiASlu7d8UAYSlAnWhi2ijIPlExaCKiIJPi
- bhpAVfmn2y+P2ciFjSn3YiKRARxW+3YWFevx4zptGe4CFhfCuhVjKHZWXzrvBq5KmGJ2
- UpwAWIU6jAyXE/WQVv3eNtPItHxWnunzNrBh+y/QRFgGkC/mbm/1D+NsHgkeeCfedfKN
- x4dyFPPsniDr2YvnB/89CD4pvO0aTATBdMBqYHTYZYI6CgfnlXzdw7rbvDgJzyPesqbg
- +gbcP+gCKQLbmJJY1VKRWDkRA+VBPwBfzGdHTYQLRMYjjwh4WzD489zhIXB+MygcVkp2
- L1Bg==
-X-Gm-Message-State: AOJu0YySRXv0hxfU/zAR9Xjz2ZEu0OY7BTmU6vQk+91qqegaAEqQrDyV
- Rk125VJzyR7V1pF9/5Pq8/UdH9He6QNt4SWwNggQtqmE7agHq4aSZ2N5fGfo
-X-Google-Smtp-Source: AGHT+IGEbHIPpIe8Z3SOpRqf6Te9z1Avu83zPquN/Q1jsQm7M8aNjAzidCtTFbCg3UoUWAqcLJgyYQ==
-X-Received: by 2002:a05:600c:3c88:b0:415:4599:ca70 with SMTP id
- bg8-20020a05600c3c8800b004154599ca70mr2683107wmb.5.1712260501557; 
- Thu, 04 Apr 2024 12:55:01 -0700 (PDT)
+ bh=kOf+zFVcA3yXbNR2Xuc4jjh8FzSMl3wOyK1fBO222FY=;
+ b=CxJ2IDnXeh9/7Nasl8ep4mmrK6Hj9MpwvO5iEVOqQphAl3kro6J3gmzs0I64dqK3a5
+ 2LnghgUYHvewMJO0C5e/w3Qot4MRcdx0Xsag9yRXffHqArHDZxl00nRiJqwySieMHuE1
+ BiXI/cXAF/Ah27rZe5rVyQtVB/Qo1GHSkYF1PlsNI2tCo3+hYM2ALkPsE2q7JzI4OGqv
+ 9KdLCFvi4Q63xRBShJo0n6wPPsPNgpeLlLqsDXsxjdfk+6mt+ZQ5y38jmvIK4d+xYbrD
+ ZZcuTVht+EVXJsjGB/1mZFIjMGDEl5+FjcILrjqYcsE+eJRjqdx2Ou+oIUyNA7LhxhsP
+ MsQQ==
+X-Gm-Message-State: AOJu0YwpmAivKnw2cHVGrlOnkkqsOrbY8OBCFna5ywwzHN00tCv7UHvG
+ 1EvuyuRvMH4cn7LbsrjTOgUJ234hDKT4WENWT2B2swmQxGOlpd8/c/n3jpJz
+X-Google-Smtp-Source: AGHT+IEf50xjyeGVMCpTR16q4PL9K9xf5knwJWoxKEScdplZCWCLoQh3F4eXKy1cAelhugPsmG/FAg==
+X-Received: by 2002:a2e:8559:0:b0:2d7:8152:1ee5 with SMTP id
+ u25-20020a2e8559000000b002d781521ee5mr2635186ljj.31.1712263389054; 
+ Thu, 04 Apr 2024 13:43:09 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l14-20020a05600c1d0e00b0041477f3f99fsm3766949wms.30.2024.04.04.12.55.01
+ i6-20020a05600c354600b0041488691eb1sm3863241wmq.17.2024.04.04.13.43.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 04 Apr 2024 12:55:01 -0700 (PDT)
+ Thu, 04 Apr 2024 13:43:08 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  4 Apr 2024 21:53:46 +0200
-Message-ID: <20240404195346.1434611-1-fontaine.fabrice@gmail.com>
+Date: Thu,  4 Apr 2024 22:42:41 +0200
+Message-ID: <20240404204241.1784136-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712260502; x=1712865302; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1712263389; x=1712868189; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7sSAp7ZJh8kG9sDXgbNVWyuMOnHBdxBkQNF9/NpJOwY=;
- b=d4OAEv6m51HhPImGqxz9Kdtgp8hyG0QoIGpbqwsBALGg44/3Mt4N0M4phRbro32LXs
- nSrqm751D0/SNyYyJgCSnWRqlagd0D/GAx+rDlGWmXDC1B+g+XfPhltoK050PMGW2tlr
- giY/QMLC/E1DWj80gLbAa1iAgd5ufKlf3o8IFa8AYJTZEyPFNJvubC1zppBzBkfK2z7a
- NSLCmpN70Dt7EobT3NGjGkq8tYdO8B2IGUNKDTUhSLM2KEisEDs0BASpRKCgT+vc2eTq
- aekmSWZZX1c/h/EejpdWcCJVynpsUbkwntZ3Fs8ntKMxYT4slEjiRQfplKqkK8Wn4lyR
- YWTQ==
+ bh=kOf+zFVcA3yXbNR2Xuc4jjh8FzSMl3wOyK1fBO222FY=;
+ b=bvFVZpTl350MRIF/8NtBFbzJvVKb2fdjRqsIA7SnlI48qDqd0np7RoLfAdS1mg17Fl
+ 8JqiM5/uvu1F8/YaLbrxjlsPXOzxGh/8MWsJ1hvgPApWwCUPxNE7GtI45SwlEZbbhiMS
+ RUGj38PMVl1QAJhVXYX3b+sg5nQ11DP3i7dBsVOZlg0o2J8b+bEt//Tn7GOR98ceWO4e
+ FwJJHX0PxmfMbp87iHXX0QkeeI/HTfZC5hC/IQLomkzZVGjHToXQOLqTaIg7ErBxS/i1
+ jbjVHiDHIBuPpVr9vzwbQ8QHK3iU23Vgf6sg+r2RvB6BEn6BQfGyr2/1v/kPuL2polNv
+ q5Dw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=d4OAEv6m
-Subject: [Buildroot] [PATCH 1/1] package/nut: bump to version 2.8.2
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=bvFVZpTl
+Subject: [Buildroot] [PATCH 1/1] package/dante: add libxcrypt optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,235 +101,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patches (already in version) and so also drop autoreconf
+Fix the following build failure raised since bump of glibc to version
+2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
 
-https://github.com/networkupstools/nut/releases/tag/v2.8.2
+/home/autobuild/autobuild/instance-5/output-1/per-package/dante/host/bin/../lib/gcc/sparc64-buildroot-linux-gnu/12.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: auth_password.o: in function `passwordcheck':
+/home/autobuild/autobuild/instance-5/output-1/build/dante-1.4.3/sockd/auth_password.c:126:(.text+0xc4): undefined reference to `crypt'
+
+Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
+ - http://autobuild.buildroot.org/results/c817caa1e9ad91a1c0f61d92f24d35612cc3a5d5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...iler_family.m4-fix-cross-compilation.patch |  55 ---------
- ...hon.m4-allow-overriding-of-PYTHON-2-.patch | 106 ------------------
- package/nut/nut.hash                          |   4 +-
- package/nut/nut.mk                            |   5 +-
- 4 files changed, 4 insertions(+), 166 deletions(-)
- delete mode 100644 package/nut/0001-m4-nut_compiler_family.m4-fix-cross-compilation.patch
- delete mode 100644 package/nut/0002-m4-nut_check_python.m4-allow-overriding-of-PYTHON-2-.patch
+ package/dante/Config.in | 1 +
+ package/dante/dante.mk  | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/nut/0001-m4-nut_compiler_family.m4-fix-cross-compilation.patch b/package/nut/0001-m4-nut_compiler_family.m4-fix-cross-compilation.patch
-deleted file mode 100644
-index 6356990749..0000000000
---- a/package/nut/0001-m4-nut_compiler_family.m4-fix-cross-compilation.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From a743617099ea50fcce333a8a074751434d25b7ac Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 3 Nov 2023 18:29:29 +0100
--Subject: [PATCH] m4/nut_compiler_family.m4: fix cross-compilation
--
--Do not use isystem with host paths when cross-compiling
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/networkupstools/nut/pull/2146
-----
-- m4/nut_compiler_family.m4 | 28 +++++++++++++++-------------
-- 1 file changed, 15 insertions(+), 13 deletions(-)
--
--diff --git a/m4/nut_compiler_family.m4 b/m4/nut_compiler_family.m4
--index f47b1ae9..99608bab 100644
----- a/m4/nut_compiler_family.m4
--+++ b/m4/nut_compiler_family.m4
--@@ -178,19 +178,21 @@ dnl # confuse the compiler assumptions - along with its provided headers)...
-- dnl # ideally; in practice however cppunit, net-snmp and some system include
-- dnl # files do cause grief to picky compiler settings (more so from third
-- dnl # party packages shipped via /usr/local/... namespace):
---    AS_IF([test "x$CLANGCC" = xyes -o "x$GCC" = xyes], [
---dnl #        CFLAGS="-isystem /usr/include $CFLAGS"
---        AS_IF([test -d /usr/local/include],
---            [CFLAGS="-isystem /usr/local/include $CFLAGS"])
---        AS_IF([test -d /usr/pkg/include],
---            [CFLAGS="-isystem /usr/pkg/include $CFLAGS"])
---    ])
---    AS_IF([test "x$CLANGXX" = xyes -o "x$GXX" = xyes], [
---dnl #        CXXFLAGS="-isystem /usr/include $CXXFLAGS"
---        AS_IF([test -d /usr/local/include],
---            [CXXFLAGS="-isystem /usr/local/include $CXXFLAGS"])
---        AS_IF([test -d /usr/pkg/include],
---            [CXXFLAGS="-isystem /usr/pkg/include $CXXFLAGS"])
--+    AS_IF([test "x$cross_compiling" != xyes], [
--+        AS_IF([test "x$CLANGCC" = xyes -o "x$GCC" = xyes], [
--+dnl #            CFLAGS="-isystem /usr/include $CFLAGS"
--+            AS_IF([test -d /usr/local/include],
--+                [CFLAGS="-isystem /usr/local/include $CFLAGS"])
--+            AS_IF([test -d /usr/pkg/include],
--+                [CFLAGS="-isystem /usr/pkg/include $CFLAGS"])
--+        ])
--+        AS_IF([test "x$CLANGXX" = xyes -o "x$GXX" = xyes], [
--+dnl #           CXXFLAGS="-isystem /usr/include $CXXFLAGS"
--+            AS_IF([test -d /usr/local/include],
--+                [CXXFLAGS="-isystem /usr/local/include $CXXFLAGS"])
--+            AS_IF([test -d /usr/pkg/include],
--+                [CXXFLAGS="-isystem /usr/pkg/include $CXXFLAGS"])
--+        ])
--     ])
-- 
-- dnl # Default to avoid noisy warnings on older compilers
---- 
--2.42.0
--
-diff --git a/package/nut/0002-m4-nut_check_python.m4-allow-overriding-of-PYTHON-2-.patch b/package/nut/0002-m4-nut_check_python.m4-allow-overriding-of-PYTHON-2-.patch
-deleted file mode 100644
-index d2571cf438..0000000000
---- a/package/nut/0002-m4-nut_check_python.m4-allow-overriding-of-PYTHON-2-.patch
-+++ /dev/null
-@@ -1,106 +0,0 @@
--From 511ee899ee687216fa8fcf2231a60941b9e4cf81 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 3 Nov 2023 14:34:54 +0100
--Subject: [PATCH] m4/nut_check_python.m4: allow overriding of
-- PYTHON{2,3}_SITE_PACKAGES
--
--Allow the end-user to override PYTHON{2,3}_SITE_PACKAGES as this can be
--useful when cross-compiling
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/networkupstools/nut/pull/2147
-----
-- m4/nut_check_python.m4 | 60 +++++++++++++++++++++---------------------
-- 1 file changed, 30 insertions(+), 30 deletions(-)
--
--diff --git a/m4/nut_check_python.m4 b/m4/nut_check_python.m4
--index 995a3e7c..7f29558e 100644
----- a/m4/nut_check_python.m4
--+++ b/m4/nut_check_python.m4
--@@ -116,17 +116,17 @@ AC_DEFUN([NUT_CHECK_PYTHON],
--         AM_CONDITIONAL([HAVE_PYTHON], [test -n "${PYTHON}" && test "${PYTHON}" != "no"])
--         AS_IF([test -n "${PYTHON}" && test "${PYTHON}" != "no"], [
--             export PYTHON
---            AC_MSG_CHECKING([python site-packages location])
---            PYTHON_SITE_PACKAGES="`${PYTHON} -c 'import site; print(site.getsitepackages().pop(0))'`"
---            AS_CASE(["$PYTHON_SITE_PACKAGES"],
---                [*:*], [
---                    dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
---                    PYTHON_SITE_PACKAGES="`cd "$PYTHON_SITE_PACKAGES" && pwd`"
---                    ]
---                )
---            AC_MSG_RESULT([${PYTHON_SITE_PACKAGES}])
--+            AC_CACHE_CHECK([python site-packages location], [nut_cv_PYTHON_SITE_PACKAGES], [
--+                nut_cv_PYTHON_SITE_PACKAGES="`${PYTHON} -c 'import site; print(site.getsitepackages().pop(0))'`"
--+                AS_CASE(["$nut_cv_PYTHON_SITE_PACKAGES"],
--+                    [*:*], [
--+                        dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
--+                        nut_cv_PYTHON_SITE_PACKAGES="`cd "$nut_cv_PYTHON_SITE_PACKAGES" && pwd`"
--+                        ]
--+                   )
--+               ])
--             ])
---        AC_SUBST([PYTHON_SITE_PACKAGES], [${PYTHON_SITE_PACKAGES}])
--+        AC_SUBST([PYTHON_SITE_PACKAGES], [${nut_cv_PYTHON_SITE_PACKAGES}])
--         AM_CONDITIONAL([HAVE_PYTHON_SITE_PACKAGES], [test x"${PYTHON_SITE_PACKAGES}" != "x"])
--     ])
-- ])
--@@ -228,17 +228,17 @@ AC_DEFUN([NUT_CHECK_PYTHON2],
--         AM_CONDITIONAL([HAVE_PYTHON2], [test -n "${PYTHON2}" && test "${PYTHON2}" != "no"])
--         AS_IF([test -n "${PYTHON2}" && test "${PYTHON2}" != "no"], [
--             export PYTHON2
---            AC_MSG_CHECKING([python2 site-packages location])
---            PYTHON2_SITE_PACKAGES="`${PYTHON2} -c 'import site; print(site.getsitepackages().pop(0))'`"
---            AS_CASE(["$PYTHON2_SITE_PACKAGES"],
---                [*:*], [
---                    dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
---                    PYTHON2_SITE_PACKAGES="`cd "$PYTHON2_SITE_PACKAGES" && pwd`"
---                    ]
---                )
---            AC_MSG_RESULT([${PYTHON2_SITE_PACKAGES}])
--+            AC_CACHE_CHECK([python2 site-packages location], [nut_cv_PYTHON2_SITE_PACKAGES], [
--+                nut_cv_PYTHON2_SITE_PACKAGES="`${PYTHON2} -c 'import site; print(site.getsitepackages().pop(0))'`"
--+                AS_CASE(["$nut_cv_PYTHON2_SITE_PACKAGES"],
--+                    [*:*], [
--+                        dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
--+                        nut_cv_PYTHON2_SITE_PACKAGES="`cd "$nut_cv_PYTHON2_SITE_PACKAGES" && pwd`"
--+                        ]
--+                    )
--+                ])
--             ])
---        AC_SUBST([PYTHON2_SITE_PACKAGES], [${PYTHON2_SITE_PACKAGES}])
--+        AC_SUBST([PYTHON2_SITE_PACKAGES], [${nut_cv_PYTHON2_SITE_PACKAGES}])
--         AM_CONDITIONAL([HAVE_PYTHON2_SITE_PACKAGES], [test x"${PYTHON2_SITE_PACKAGES}" != "x"])
--     ])
-- ])
--@@ -340,17 +340,17 @@ AC_DEFUN([NUT_CHECK_PYTHON3],
--         AM_CONDITIONAL([HAVE_PYTHON3], [test -n "${PYTHON3}" && test "${PYTHON3}" != "no"])
--         AS_IF([test -n "${PYTHON3}" && test "${PYTHON3}" != "no"], [
--             export PYTHON3
---            AC_MSG_CHECKING([python3 site-packages location])
---            PYTHON3_SITE_PACKAGES="`${PYTHON3} -c 'import site; print(site.getsitepackages().pop(0))'`"
---            AS_CASE(["$PYTHON3_SITE_PACKAGES"],
---                [*:*], [
---                    dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
---                    PYTHON3_SITE_PACKAGES="`cd "$PYTHON3_SITE_PACKAGES" && pwd`"
---                    ]
---                )
---            AC_MSG_RESULT([${PYTHON3_SITE_PACKAGES}])
--+            AC_CACHE_CHECK([python3 site-packages location], [nut_cv_PYTHON3_SITE_PACKAGES], [
--+                nut_cv_PYTHON3_SITE_PACKAGES="`${PYTHON3} -c 'import site; print(site.getsitepackages().pop(0))'`"
--+                AS_CASE(["$nut_cv_PYTHON3_SITE_PACKAGES"],
--+                    [*:*], [
--+                        dnl Note: on Windows MSYS2 this embeds "C:/msys64/mingw..." into the string [nut#1584]
--+                        nut_cv_PYTHON3_SITE_PACKAGES="`cd "$nut_cv_PYTHON3_SITE_PACKAGES" && pwd`"
--+                        ]
--+                    )
--+                ])
--             ])
---        AC_SUBST([PYTHON3_SITE_PACKAGES], [${PYTHON3_SITE_PACKAGES}])
--+        AC_SUBST([PYTHON3_SITE_PACKAGES], [${nut_cv_PYTHON3_SITE_PACKAGES}])
--         AM_CONDITIONAL([HAVE_PYTHON3_SITE_PACKAGES], [test x"${PYTHON3_SITE_PACKAGES}" != "x"])
--     ])
-- ])
---- 
--2.42.0
--
-diff --git a/package/nut/nut.hash b/package/nut/nut.hash
-index 9cd5fcc8de..4c962ee9d8 100644
---- a/package/nut/nut.hash
-+++ b/package/nut/nut.hash
-@@ -1,5 +1,7 @@
-+# From https://github.com/networkupstools/nut/releases/download/v2.8.2/nut-2.8.2.tar.gz.sha256
-+sha256  e4b4b0cbe7dd39ba9097be7f7d787bb2fffbe35df64dff53b5fe393d659c597d  nut-2.8.2.tar.gz
+diff --git a/package/dante/Config.in b/package/dante/Config.in
+index 41a89990d2..bd0ddb236d 100644
+--- a/package/dante/Config.in
++++ b/package/dante/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_DANTE
+ 	bool "dante"
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Dante is a product developed by Inferno Nettverk A/S. It
+ 	  consists of a SOCKS server and a SOCKS client, implementing
+diff --git a/package/dante/dante.mk b/package/dante/dante.mk
+index ae60252bed..bae46c5a71 100644
+--- a/package/dante/dante.mk
++++ b/package/dante/dante.mk
+@@ -22,6 +22,10 @@ else
+ DANTE_CONF_OPTS += --without-upnp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
++DANTE_DEPENDENCIES += libxcrypt
++endif
 +
- # Locally computed
--sha256  7da48ee23b1f0d8d72560bb0af84f5c5ae4dbe35452b84cb49840132e47f099c  nut-2.8.1.tar.gz
- sha256  8a3de48b86daffcbe822dd94e514c8a77fe70f77c9005ffd9dcf1709dbdc80c7  COPYING
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE-GPL2
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  LICENSE-GPL3
-diff --git a/package/nut/nut.mk b/package/nut/nut.mk
-index 371c783783..93522d017e 100644
---- a/package/nut/nut.mk
-+++ b/package/nut/nut.mk
-@@ -4,16 +4,13 @@
- #
- ################################################################################
- 
--NUT_VERSION = 2.8.1
-+NUT_VERSION = 2.8.2
- NUT_SITE = https://github.com/networkupstools/nut/releases/download/v$(NUT_VERSION)
- NUT_LICENSE = GPL-2.0+, GPL-3.0+ (python scripts), GPL/Artistic (perl client)
- NUT_LICENSE_FILES = COPYING LICENSE-GPL2 LICENSE-GPL3
- NUT_SELINUX_MODULES = apache nut
- NUT_INSTALL_STAGING = YES
- NUT_DEPENDENCIES = host-pkgconf
--# We're patching m4/nut_compiler_family.m4
--# We're patching m4/nut_check_python.m4
--NUT_AUTORECONF = YES
- 
- # Put the PID files in a read-write place (/var/run is a tmpfs)
- # since the default location (/var/state/ups) maybe readonly.
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ DANTE_DEPENDENCIES += linux-pam
+ DANTE_CONF_OPTS += --with-pam
 -- 
 2.43.0
 
