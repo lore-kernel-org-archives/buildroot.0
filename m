@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D2D8C6FD1F
-	for <buildroot@archiver.kernel.org>; Wed,  3 Apr 2024 05:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECD63CD1288
+	for <buildroot@archiver.kernel.org>; Thu,  4 Apr 2024 03:59:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C3C1740153;
-	Wed,  3 Apr 2024 05:38:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6670441944;
+	Thu,  4 Apr 2024 03:59:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qfq4l4Bx6AIj; Wed,  3 Apr 2024 05:38:53 +0000 (UTC)
+ id L308Q8AktBQW; Thu,  4 Apr 2024 03:59:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9240F40BDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48A7C41971
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9240F40BDC;
-	Wed,  3 Apr 2024 05:38:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 862501BF591
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 05:38:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48A7C41971;
+	Thu,  4 Apr 2024 03:59:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BA161BF239
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 03:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72DE14064D
- for <buildroot@lists.busybox.net>; Wed,  3 Apr 2024 05:38:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 823568124B
+ for <buildroot@lists.busybox.net>; Thu,  4 Apr 2024 03:59:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tD7J2YMrVKVd for <buildroot@lists.busybox.net>;
- Wed,  3 Apr 2024 05:38:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NfZWUrhH25uU for <buildroot@lists.busybox.net>;
+ Thu,  4 Apr 2024 03:59:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
  helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8625240643
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8625240643
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5C0C480EEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C0C480EEC
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8625240643
- for <buildroot@buildroot.org>; Wed,  3 Apr 2024 05:38:48 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B4E841BF20B
- for <buildroot@buildroot.org>; Wed,  3 Apr 2024 05:38:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C0C480EEC
+ for <buildroot@buildroot.org>; Thu,  4 Apr 2024 03:59:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D8F571BF20B
+ for <buildroot@buildroot.org>; Thu,  4 Apr 2024 03:58:59 +0000 (UTC)
 MIME-Version: 1.0
 To: buildroot@buildroot.org
-Date: Wed, 03 Apr 2024 05:38:45 -0000
+Date: Thu, 04 Apr 2024 03:58:59 -0000
 X-GND-Sasl: bot@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=gm1; 
- t=1712122725; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ t=1712203140; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
  mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding;
- bh=4cQYC+38ksaqhxuUH/ENE/Zh0VL+QX2y2Mow5lhDlmI=;
- b=L6nNOhcsEN8DWaGYmctUo+N3/jEUcaiOxCym79VeGbtD5EVOTAs3QGHkAsiCd3RWnm/0I9
- LCxHoY8h6Xpr8YAbiXmGl5rOxqY5UpmZt0a97naR8lkX/Cz+qU0GOZaSaYF1vneFV3QtLL
- bsIjyBGvzIxri4p5d9BaapZ8s51KPK8Po9vinuucItrjE+BfXwXXAIZrZlwsqNkiBM9mq1
- L6LWTLz1ST2omZQqSsfhvKY/01bF1pnc7DfJmyLYDOFI2zSkby/BjKRZd+dctBM9r22A4R
- vh1M47DQJ2wav/XDkPCRq6ZbD41TunnmkpIYO1T1vk0q2/VDqqFI6LN70jK2Xg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=hJ1oPGLeOmm8Slk0cXezEk9607mIBGY3+V24MIEwLcI=;
+ b=c4c49k0GA09iD9FzP60aCBWGuHicC2lXI2TNKU4/tuPFO6rvzcFS/8Hjec60b+5ZdrPIQi
+ A/vh4a+ZcECHLG+TJJv7gMNIaMj12fzNTRG6D8BY7M4B+O6H1aEl66reUe3agfA56+oaWA
+ uHptmhSRtu6NRLVAK9wia9FfhLrjgmm3yoQe7Aqh8/oVHVBsp2yXpkoy90GwWPLv46Re/E
+ g4pk5OTt030oBRPn2QcVubC7skpf0tm7Uzn7lOztAfldzRtMif3aFoy3XQ+Uph2DvAjRhU
+ u5/hHjKKfGE6AoSicSXhJtNDjyJcy6jLbcU1Noy0BZZgi3FHJf0v2seezu1WLA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=L6nNOhcs
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2024-04-02
+ header.s=gm1 header.b=c4c49k0G
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2024-04-03
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,87 +80,76 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-Message-ID: <20240403053845.-dJSLiJjssuFTYor3hxgMBlpI97IrrwdJcbtVh1TK7I@z>
+Message-ID: <20240404035859.yDGsvTtC7UX1LEy4FWNvTnf_ksnydYkII8k2QKqte9s@z>
 
 Hello,
 
-Autobuild statistics for 2024-04-02
+Autobuild statistics for 2024-04-03
 ===================================
 
       branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  7  | 11  |  0  | 18  |
-  2023.11.x  |  3  |  7  |  0  | 10  |
-  2024.02.x  |  9  |  5  |  0  | 14  |
-    master   | 38  | 145 |  1  | 184 |
+  2024.02.x  |  5  | 11  |  0  | 16  |
+    master   | 57  | 117 |  1  | 175 |
 
 Classification of failures by reason for master
 -----------------------------------------------
 
-               linux-pam-1.6.0 | 11
-              host-scons-4.5.2 | 10
+              host-scons-4.5.2 | 13
              util-linux-2.39.3 | 10
-                   dante-1.4.3 | 9 
-                 sysvinit-3.04 | 7 
-                    apg-2.3.0b | 6 
-          libcamera-apps-1.2.1 | 4 
-               asterisk-20.5.2 | 3 
-             dahdi-linux-3.3.0 | 3 
-dmenu-wayland-a380201dff5bf... | 3 
-                libressl-3.8.2 | 3 
-               lighttpd-1.4.73 | 3 
-                   linux-6.8.1 | 3 
-                 systemd-254.9 | 3 
-                       unknown | 3 
+                    apg-2.3.0b | 9 
+               linux-pam-1.6.0 | 8 
+glibc-2.39-5-ge0910f1d3278f... | 5 
+                   dante-1.4.3 | 4 
+               apcupsd-3.14.14 | 3 
+                fail2ban-1.0.2 | 3 
+  gobject-introspection-1.76.1 | 3 
 android-tools-4.2.2+git2013... | 2 
-                 apache-2.4.58 | 2 
-                   bird-2.0.12 | 2 
 check-11970a7e112dfe243a2e6... | 2 
-                dovecot-2.3.21 | 2 
-       freeradius-client-1.1.7 | 2 
-        host-sentry-cli-2.20.3 | 2 
+                   foot-1.16.2 | 2 
+            gdk-pixbuf-2.42.10 | 2 
 leafnode2-ce7d3b13fb285c9fb... | 2 
+          libcamera-apps-1.2.1 | 2 
                  libcli-1.10.7 | 2 
-     linux-5.10.162-cip24-rt10 | 2 
-                  monit-5.33.0 | 2 
-                  nginx-1.24.0 | 2 
+                   linux-6.8.1 | 2 
+                   oatpp-1.3.0 | 2 
                     pppd-2.5.0 | 2 
-                   thttpd-2.29 | 2 
-               apcupsd-3.14.14 | 1 
-               belle-sip-4.4.8 | 1 
-                   botan-3.2.0 | 1 
-                    brltty-6.6 | 1 
-             containerd-1.7.14 | 1 
-           dmraid-1.0.0.rc16-3 | 1 
+                 sysvinit-3.04 | 2 
+                       unknown | 2 
+                 apache-2.4.58 | 1 
+                  clamav-1.0.5 | 1 
+                 coreutils-9.3 | 1 
+           crucible-legal-info | 1 
+                     crun-1.12 | 1 
+                dovecot-2.3.21 | 1 
                 elfutils-0.189 | 1 
-                   exim-4.97.1 | 1 
-glibc-2.39-5-ge0910f1d3278f... | 1 
-         gobject-introspection | 1 
-       gst1-plugins-bad-1.22.9 | 1 
+                  ffmpeg-4.4.4 | 1 
+                flutter-engine | 1 
+       freeradius-client-1.1.7 | 1 
+       freeradius-server-3.2.3 | 1 
+fs/romfs/romfs.mk:32: /home... | 1 
+                gnu-efi-3.0.18 | 1 
+            host-binutils-2.42 | 1 
  host-binutils-bare-metal-2.42 | 1 
    host-flutter-sdk-bin-3.19.4 | 1 
-               ipmitool-1_8_19 | 1 
-      libabseil-cpp-20230802.1 | 1 
+              host-rust-1.74.1 | 1 
+             kismet-2023-07-R1 | 1 
               libarchive-3.7.2 | 1 
-                libglvnd-1.4.0 | 1 
+                  libffi-3.4.6 | 1 
                    libnss-3.99 | 1 
               libopenssl-3.2.1 | 1 
-              libudfread-1.1.2 | 1 
-          linux-5.10.162-cip24 | 1 
-                  ntpsec-1.2.3 | 1 
-                  octave-8.4.0 | 1 
-                    ola-0.10.9 | 1 
-                 openrc-0.52.1 | 1 
-                 openssh-9.7p1 | 1 
-                privoxy-3.0.34 | 1 
-                proftpd-1.3.8b | 1 
+                libsoup3-3.4.4 | 1 
+     linux-5.10.162-cip24-rt10 | 1 
+              liquid-dsp-1.6.0 | 1 
+                 minisign-0.11 | 1 
+                  nginx-1.24.0 | 1 
+                  ntp-4.2.8p17 | 1 
+   openvmtools-11.3.5-18557794 | 1 
+                    proj-9.3.0 | 1 
               pure-ftpd-1.0.51 | 1 
-            python-pudb-2023.1 | 1 
-                  quagga-1.2.4 | 1 
-                    rtty-8.1.0 | 1 
-                 shadow-4.14.5 | 1 
-               tcf-agent-1.8.0 | 1 
-uhttpd-15346de8d3ba42200249... | 1 
-                  vsftpd-3.0.5 | 1 
+           python-numpy-1.25.0 | 1 
+             strongswan-5.9.13 | 1 
+                   trinity-1.9 | 1 
+           uboot-tools-2021.07 | 1 
                   whois-5.5.14 | 1 
 
 
@@ -169,222 +158,137 @@ Detail of failures for master
 
     arch     |             reason             | OK? |                                       url                                       | orph?
 -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/fef490072a5cd6e17ccb7ed3245770498a91831e |     
-microblazeel | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/376558d4f5434f31129a680cbf234d866bc79b97 |     
- powerpc64   |         apache-2.4.58          | NOK | http://autobuild.buildroot.net/results/11ccf857a70ae9f44e8d3ae39fc01db68632ca64 |     
-  aarch64    |         apache-2.4.58          | NOK | http://autobuild.buildroot.net/results/072afe03988e285adccd58f3240e33785c8ef663 |     
-   s390x     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/f1f08becbc1d46ec90d4efb1e51dcdf2f6b7f8f6 |     
-  riscv32    |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/3df84ae300bb648492cffc21e4481fc5abf02aeb |     
-    sh4a     |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/9827bcb4b60d955b9d8ef82fa428996e58eb1f7d |     
-  mips64el   |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/d812059d861dc0729c1a6d4189ce12cfa94c9306 |     
-    m68k     |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/c2555933aa1555e3f62d75477b3210ada7423bcd |     
-   armeb     |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/df486aca497d0a5837bef959f8e337229d5cd18d |     
-  powerpc    |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/006e7fa1210ee8fd21705b45a1080a5b70411375 |     
-    arm      |        asterisk-20.5.2         | NOK | http://autobuild.buildroot.net/results/41f2af925a5f95a6c6ff5c9dba9af38e74be3b5a |     
-  riscv32    |        asterisk-20.5.2         | NOK | http://autobuild.buildroot.net/results/bc6be415000895fed4ca9ee61e4c0b1b802c7097 |     
-  riscv32    |        asterisk-20.5.2         | NOK | http://autobuild.buildroot.net/results/dc981f4a3f837c9407054d7fd8ea5dcd1b942a54 |     
-   xtensa    |        belle-sip-4.4.8         | NOK | http://autobuild.buildroot.net/results/864172a5b823af11a1fc274f6bc255b19168af29 |     
-   x86_64    |          bird-2.0.12           | NOK | http://autobuild.buildroot.net/results/92e2d27429ec2ba6d7120a8228b0428f04c032d0 |     
-    or1k     |          bird-2.0.12           | NOK | http://autobuild.buildroot.net/results/98d46e798f95786ff98572a3e175ce54669bfcf1 |     
-   sparc     |          botan-3.2.0           | NOK | http://autobuild.buildroot.net/results/a1dbb7c96b5529981b96b1d22a679a29a3e91a26 | ORPH
-   mipsel    |           brltty-6.6           | NOK | http://autobuild.buildroot.net/results/84426dd0df0dca45b7535f41ecc1693df8224489 |     
-    arc      | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/ddee53538dc6df421ea4f94353182dfe4b6c5d1f | ORPH
-   mipsel    | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/e17b3d82d0ce3f2b414643f13eb3414d9cdc5863 | ORPH
-  riscv64    |       containerd-1.7.14        | NOK | http://autobuild.buildroot.net/results/cf0320c303888bb4082debd69207abbf2eb957c0 |     
-  aarch64    |       dahdi-linux-3.3.0        | NOK | http://autobuild.buildroot.net/results/3c44450ac4a6942bbff1879c372e4d1da4187ed0 |     
-microblazeel |       dahdi-linux-3.3.0        | NOK | http://autobuild.buildroot.net/results/87012a5fedfe1cb1b26e9cf6c7f13e380a8c93c1 |     
-  aarch64    |       dahdi-linux-3.3.0        | NOK | http://autobuild.buildroot.net/results/3f9d48ea5841b1e6d9ba550d8aed80cdbf8a259c |     
-   armeb     |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/933f37e4b5668028e1c762337e8183a6b6339ed3 | ORPH
-  riscv32    |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/a5736266d54d64da88b80725ba3b15b2a9e6f42f | ORPH
-    or1k     |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/181f550bcd35b2630177bb080d396c387834dc8b | ORPH
-  aarch64    |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/269982098097157296b3b19b391e9eb7fb9083dd | ORPH
-    or1k     |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/8817709bceb2b629f53d3ef7a8f568a216b57f47 | ORPH
-    sh4      |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/6c8542efc23f9aacae82c3064b67e60ae059c873 | ORPH
-   mips64    |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/0b6445a31e78c29007a1b57bea87a95e830ebc0a | ORPH
-  riscv64    |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/cc68ce25b20578da2efedf3d68149bebea526269 | ORPH
-   x86_64    |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/221bca318a1c53e5cfea42ee80c7fb5df858af69 | ORPH
-  powerpc    | dmenu-wayland-a380201dff5bf... | NOK | http://autobuild.buildroot.net/results/6f00c92524fba3fb678648d9c17c5c82466051c1 |     
-   xtensa    | dmenu-wayland-a380201dff5bf... | NOK | http://autobuild.buildroot.net/results/db20f5886bec8631cfc741e356887919aa2aed14 |     
-    or1k     | dmenu-wayland-a380201dff5bf... | NOK | http://autobuild.buildroot.net/results/6aa1cba0f90c154a34a28d106d2193cc5ebcc261 |     
- aarch64_be  |      dmraid-1.0.0.rc16-3       | NOK | http://autobuild.buildroot.net/results/83ec391a20f63468cd4b40ca87e4f38f7b2282be | ORPH
- powerpc64   |         dovecot-2.3.21         | NOK | http://autobuild.buildroot.net/results/99d816fb7a033ec73a958200041f0dcd728e0e87 |     
-   x86_64    |         dovecot-2.3.21         | NOK | http://autobuild.buildroot.net/results/129bde8f795133b034a28a0303150c8d5859a098 |     
- microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/5ba2940353c1cafdbeb9de16979bdcfd57793358 | ORPH
-    or1k     |          exim-4.97.1           | NOK | http://autobuild.buildroot.net/results/004eb0a0ca1b55c9fe6fc88b92754c92ce7c9a24 |     
-  powerpc    |    freeradius-client-1.1.7     | NOK | http://autobuild.buildroot.net/results/ce983100adfae32e9596d347d02b2e2c32685f6f |     
-  sparc64    |    freeradius-client-1.1.7     | NOK | http://autobuild.buildroot.net/results/4443f3e1c60c2cb6c7fa91d3c8e066479f8acb71 |     
-   arceb     | glibc-2.39-5-ge0910f1d3278f... | NOK | http://autobuild.buildroot.net/results/6baa9cfa2d64f0ae7a74126f0644c843087fda74 |     
-microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/272e7d9b8f564fd3c1e573cb351f4594eaaf4c8c |     
-   x86_64    |    gst1-plugins-bad-1.22.9     | NOK | http://autobuild.buildroot.net/results/7cd14d8c379812d135bb5440fa10b38138512dee | ORPH
-  aarch64    | host-binutils-bare-metal-2.42  | NOK | http://autobuild.buildroot.net/results/80b9fe68768d653a3f9b79f727e1129d65c12196 |     
-  aarch64    |  host-flutter-sdk-bin-3.19.4   | NOK | http://autobuild.buildroot.net/results/854021dbc22118c33ec01849199c036399b12021 |     
- aarch64_be  |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/20bd170da0f2db16d391b8dd7c3925b1d82f4601 |     
-  powerpc    |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/99dd69413aadcccd9c1a36b91453bdbb53762add |     
-powerpc64le  |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/23a76bbd37e9e2d8d4061d9dbb6c2fa662a15a4e |     
- powerpc64   |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/e3faae1043f80b5f1646e47476c48623f7d0af84 |     
-  mips64el   |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/e1a47e4efd8670e5b012fbcd93480009a3be19ae |     
-    arm      |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/fe064721250e034503df540b86e02518412452cf |     
-  riscv64    |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/6428d9d58b451e46d6e55710565e787a81ca103f |     
-   armeb     |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/d015d5c5d272aaf35ebed21567220fa97868e808 |     
- aarch64_be  |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/643eb202970bea3219520e59c99d45dd279bb5dd |     
-   x86_64    |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/0b15579edb877042fc640c602f178f79a9e272fb |     
-    or1k     |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/a9860f54f2b077b1dbe14e5c01b96ade9b3e820e |     
-    arm      |     host-sentry-cli-2.20.3     | NOK | http://autobuild.buildroot.net/results/005c2ed5195e60bfebb61e377f5bdad82a7e00a8 |     
-   mipsel    |        ipmitool-1_8_19         | NOK | http://autobuild.buildroot.net/results/0016cfbf71bfadf4c6a51113d3da4406a7a0334a |     
-  aarch64    | leafnode2-ce7d3b13fb285c9fb... | NOK | http://autobuild.buildroot.net/results/08f86ce128623105087cda0c5b32a1d0d0cfa166 |     
-    or1k     | leafnode2-ce7d3b13fb285c9fb... | NOK | http://autobuild.buildroot.net/results/bebb26a0fac06eb542ad55ea85726a6cb3a3a8c5 |     
-  mips64el   |    libabseil-cpp-20230802.1    | NOK | http://autobuild.buildroot.net/results/6c04f7af11b22a7b74cd5adaeb746b498c5d440b |     
-  aarch64    |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/da47c97e5e38df5ddb7ca808c7370c3af65c46a0 |     
-    or1k     |      libcamera-apps-1.2.1      | NOK | http://autobuild.buildroot.net/results/776194138d7874b8e75cb7aff347e5c78dd0a850 |     
-  sparc64    |      libcamera-apps-1.2.1      | NOK | http://autobuild.buildroot.net/results/d11edc5d7e7528ef8877c72b44a01d12bc0f9965 |     
-    arm      |      libcamera-apps-1.2.1      | NOK | http://autobuild.buildroot.net/results/ce3a0f6ccedc116e3bdebc48322b5fdc02d9e17f |     
-    sh4      |      libcamera-apps-1.2.1      | NOK | http://autobuild.buildroot.net/results/3734810ae7fd06ce53bba21bd28331756147b464 |     
-   x86_64    |         libcli-1.10.7          | NOK | http://autobuild.buildroot.net/results/e54587733b3b10b67b751ae2f6319ca71dbdf2c0 |     
- aarch64_be  |         libcli-1.10.7          | NOK | http://autobuild.buildroot.net/results/f16750d07ddc1a5de1a83b960fe6fe20d125e91f |     
-   x86_64    |         libglvnd-1.4.0         | NOK | http://autobuild.buildroot.net/results/7e480e5963ccb78f76fc6d2c779fe69a1022a590 | ORPH
-   sh4eb     |          libnss-3.99           | NOK | http://autobuild.buildroot.net/results/ea8000ef3eb07d900fd42c7773b83929f75981fb |     
-    arm      |        libopenssl-3.2.1        | NOK | http://autobuild.buildroot.net/results/72836e59c7799ad73bcc6a2b201163aecd84cd51 | ORPH
-   s390x     |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/b635628259a969b057d7b07aa3a73786de6cc2a3 | ORPH
-   mips64    |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/85480625db6a1f8a21dcf1acf3ca60640bc414b2 | ORPH
- microblaze  |         libressl-3.8.2         | NOK | http://autobuild.buildroot.net/results/746ddc80248b7111994100dfffd6b2164441ce96 | ORPH
-   armeb     |        libudfread-1.1.2        | NOK | http://autobuild.buildroot.net/results/f417c79a9e6d25d58af059419b8da71419f8f596 |     
-   mips64    |        lighttpd-1.4.73         | NOK | http://autobuild.buildroot.net/results/da902f722cce202f0eb694043fe690577bccd6b5 | ORPH
-   s390x     |        lighttpd-1.4.73         | NOK | http://autobuild.buildroot.net/results/6e091a7c946fac7699c5ccf80007215c34a4ccdd | ORPH
-   mipsel    |        lighttpd-1.4.73         | NOK | http://autobuild.buildroot.net/results/498f6a225594bc74429c8c135fd4980f2604db1b | ORPH
-    arm      |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/3f04d6da3e39b098644697e5e27022a9ee9637e5 | ORPH
-   sh4eb     |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/83bfc56717f6cf3e0c5e9403727b752f70912127 | ORPH
-   xtensa    |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/dfa2978a8e3a0175bb75cda441951a36e0321aa2 | ORPH
-   armeb     |          linux-6.8.1           | NOK | http://autobuild.buildroot.net/results/6d7f43a7159860b97b65cf6718f77d0e48ef6de4 | ORPH
-   sh4eb     |          linux-6.8.1           | NOK | http://autobuild.buildroot.net/results/a2aadcf240c3999f2c37fd35c09fe2010c85ccef | ORPH
-   xtensa    |          linux-6.8.1           | NOK | http://autobuild.buildroot.net/results/a8a05a6a28a6191fc0cacaa883602fe9656745ff | ORPH
-   mips64    |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/db38bc667609b030875f473fe0842ba6eeaf231c | ORPH
-   mipsel    |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/299fd77e57735b8977b6e10f43aafb4b1e572f2a | ORPH
-  mips64el   |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/92cf2c9a6e93e7becf10789502268e21b89574ac | ORPH
-   mips64    |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/cfb9fae5612932319a68538cdc05205492541536 | ORPH
-   x86_64    |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/75d826b97d1d3477220a546abb3913c667c7663d | ORPH
-microblazeel |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/8cc519489a923a3db39bd169dcddc3574d3ff90e | ORPH
-powerpc64le  |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/c37dde190b722782a553a3434752e0c1573f8e01 | ORPH
-  sparc64    |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/c8510bd1b06121a47d9012cef8da512061c985f7 | ORPH
-   nios2     |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/25d1d6ac1563b6c8804f40d33b0893b072a7e2fa | ORPH
-    or1k     |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/7c61881a44aaff908a2e145f26f033a05cd9c8d5 | ORPH
-  sparc64    |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/98abc06951b89176a5c7959f844f08653d2838fd | ORPH
-    or1k     |          monit-5.33.0          | NOK | http://autobuild.buildroot.net/results/e37c3678bfbda66206f56bf5660434ae82e6d5df |     
-  powerpc    |          monit-5.33.0          | NOK | http://autobuild.buildroot.net/results/12b2c6665280dcb813a58d9b025038bacc3b8d51 |     
-   armeb     |          nginx-1.24.0          | NOK | http://autobuild.buildroot.net/results/a81af3696c780dd3dac5ffb726e66b0d765b2a5c |     
-   nios2     |          nginx-1.24.0          | NOK | http://autobuild.buildroot.net/results/95e1a74cad83856a5050d553a11139e8828b09fb |     
-    m68k     |          ntpsec-1.2.3          | NOK | http://autobuild.buildroot.net/results/d0bed741506be443c1b0a6de92b40fab9d90ec09 | ORPH
-powerpc64le  |          octave-8.4.0          | NOK | http://autobuild.buildroot.net/results/4ef786b4988c99e13a4c54faa5cc321093e22a57 |     
-  sparc64    |           ola-0.10.9           | NOK | http://autobuild.buildroot.net/results/2de53b696a4c61a961639d5a1d78dad471e403a0 |     
-    sh4a     |         openrc-0.52.1          | NOK | http://autobuild.buildroot.net/results/52187a593d3da39051e635a9cb5a19d5bfe2bef6 |     
-  aarch64    |         openssh-9.7p1          | NOK | http://autobuild.buildroot.net/results/7f6d6787669751b510221a877131a82e0711efcf | ORPH
-   sparc     |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/51563570934097e8a85fdc8816b2f0af00bee09b |     
-  sparc64    |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/a1a0ff11ca5546dec86028f8a24ec8552a63fc1b |     
-   x86_64    |         privoxy-3.0.34         | NOK | http://autobuild.buildroot.net/results/7663d19bd4c4c79a99a03033f0b68ca0a84131c5 |     
- microblaze  |         proftpd-1.3.8b         | NOK | http://autobuild.buildroot.net/results/dba9d5560503ed5da5493f84e0b7780c1f9df767 | ORPH
- powerpc64   |        pure-ftpd-1.0.51        | NOK | http://autobuild.buildroot.net/results/2a62f48973b30873f4da842e75176633398bef86 |     
-   mips64    |       python-pudb-2023.1       | NOK | http://autobuild.buildroot.net/results/09adbbe47c3b9acdb4d5fc61d8a9a0b2b11215b1 |     
-   s390x     |          quagga-1.2.4          | NOK | http://autobuild.buildroot.net/results/40fd9f8825fd7cc1fc5748a0233f08afa2ba79cd | ORPH
-   mips64    |           rtty-8.1.0           | NOK | http://autobuild.buildroot.net/results/d3cae5b798c6e4eb6589cb6ab070d5c4a9abe800 |     
-   nios2     |         shadow-4.14.5          | NOK | http://autobuild.buildroot.net/results/cd97aa4ee49c3052b762deccb5aa28cd23c54f5f |     
-   mips64    |         systemd-254.9          | NOK | http://autobuild.buildroot.net/results/f0bf2538d61e7d94ebd8d58440b75f3e0ed1e47e |     
-   mipsel    |         systemd-254.9          | NOK | http://autobuild.buildroot.net/results/dcd51a4cbd7026fb44ac84fdcb85cc6901190b75 |     
-  sparc64    |         systemd-254.9          | NOK | http://autobuild.buildroot.net/results/036d2e764c206e38eea1d24376e323190ccac2cc |     
-  aarch64    |         sysvinit-3.04          | NOK | http://autobuild.buildroot.net/results/cc07bc857d964b47a278a0e0a45c1e29c79ea500 | ORPH
-   nios2     |         sysvinit-3.04          | NOK | http://autobuild.buildroot.net/results/1bd677938104b34cc855a5db991587af8e6a7f47 | ORPH
-   s390x     |         sysvinit-3.04          | NOK | http://autobuild.buildroot.net/results/58dc9fca5ae6fd2832e82450110d929e5e91f9a1 | ORPH
-    i686     |         sysvinit-3.04          | NOK | http://autobuild.buildroot.net/results/eae827c76f83e3632577b26eb2c185f7e71fb23e | ORPH
-  aarch64    |         sysvinit-3.04          | NOK | http://autobuild.buildroot.net/results/66111c7996f4870b7df0b449a52cad41cb93e1d4 | ORPH
-    or1k     |         sysvinit-3.04          | NOK | http://autobuild.buildroot.net/results/66cf4f8051b8cc5384817b7fb0a74b185c5e3287 | ORPH
-    m68k     |         sysvinit-3.04          | NOK | http://autobuild.buildroot.net/results/05187d79a0706fa3bbaac1b7bd163451bbf5fe29 | ORPH
-  aarch64    |        tcf-agent-1.8.0         | NOK | http://autobuild.buildroot.net/results/a631a1af594b50819210d7cc86006e451961e5c2 |     
-    i586     |          thttpd-2.29           | NOK | http://autobuild.buildroot.net/results/7186e045319a02a0b8fda748f6cbd195c5232171 | ORPH
-    arm      |          thttpd-2.29           | NOK | http://autobuild.buildroot.net/results/bfb8a115edf71b1852cc8585c00eb9f0e801a955 | ORPH
-  mips64el   | uhttpd-15346de8d3ba42200249... | NOK | http://autobuild.buildroot.net/results/2fa54180107b4338f5c57d5bc305e1606f6e6806 | ORPH
-  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/970b800382fe0a50bb58da89d07107b9f83ca045 |     
-  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/86084f19b17ecd93ca541dcefd06f2ccc2541112 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/05371f12477c5187792b2d5ffc31564d2d782db9 |     
-    sh4      |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/e938ab422e264f88d21c80b143643a722742634f | ORPH
-   nios2     |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/34c994d32737a769596c5b7ce738f133d9a036cc | ORPH
- microblaze  |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/32f38f486e69ad488c51bef4a9e3062aefa5041f | ORPH
-   mipsel    |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/b7fefbf00746484a45c2ac2099cdc7316fd23c57 | ORPH
-    m68k     |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/eedf31fe52d669a5332f0be429a3981f06b0887c | ORPH
-    arm      |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/7120257f5a5dc8f1d00dfa32d54482a5ce238e8c | ORPH
-  aarch64    |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/b5f201e4c894923e3499b2c540ec9f697ef59d39 | ORPH
-   x86_64    |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/ceaaf55fa7dc6b12994019fb86c40377e288101a | ORPH
-  sparc64    |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/011a3b34a2c41b0c7f1bc6e9188f361d978ed283 | ORPH
-    sh4      |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/4d422364aeae673f703d3405c4200b3369ad94fd | ORPH
-   mipsel    |          vsftpd-3.0.5          | NOK | http://autobuild.buildroot.net/results/062dbadf1f2f8e25747f7689974a693163932113 | ORPH
-  powerpc    |          whois-5.5.14          | NOK | http://autobuild.buildroot.net/results/877e6717f0a13382b170eb92e5b9ab2574126ede |     
-
-
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-                  check-0.15.2 | 1 
-             fluent-bit-2.0.10 | 1 
-            freeswitch-1.10.11 | 1 
-google-breakpad-c85eb4a59b6... | 1 
-               gupnp-av-0.14.0 | 1 
-            host-binutils-2.37 | 1 
-        liblog4c-localtime-1.0 | 1 
-        ltp-testsuite-20220930 | 1 
-                   perl-5.36.3 | 1 
-                privoxy-3.0.33 | 1 
-                 raptor-2.0.15 | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arc      |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/cc01e0d50e2c86779c112d9e839d91b8acaa005c | ORPH
-    i686     |       fluent-bit-2.0.10        | NOK | http://autobuild.buildroot.net/results/ac720654faa4cac2940962fa6db973caca126a53 |     
-powerpc64le  |       freeswitch-1.10.11       | NOK | http://autobuild.buildroot.net/results/5f879ca5909ced97a2ea53e44294192743a93bb9 |     
-   mipsel    | google-breakpad-c85eb4a59b6... | NOK | http://autobuild.buildroot.net/results/3537655b54ee3bd208be6da560ccac691ca07d9d |     
-   mipsel    |        gupnp-av-0.14.0         | NOK | http://autobuild.buildroot.net/results/737b21ebb1a3627c3edf665c7fa01e57be2fbb00 |     
-microblazeel |       host-binutils-2.37       | NOK | http://autobuild.buildroot.net/results/da3cafa6854bacacbe8c7409bf740acfb19acfbc |     
-  riscv64    |     liblog4c-localtime-1.0     | NOK | http://autobuild.buildroot.net/results/255b9c84473fce6d260bbd6731b8eed0b9edfca4 |     
- powerpc64   |     ltp-testsuite-20220930     | NOK | http://autobuild.buildroot.net/results/5df3a0b940860c5a690352457b7419e94a48f614 |     
-    arc      |          perl-5.36.3           | NOK | http://autobuild.buildroot.net/results/190e97a90d3a97371b05e988c4b5c74e2bb8b1bc |     
- powerpc64   |         privoxy-3.0.33         | NOK | http://autobuild.buildroot.net/results/83e0f1339ca4ea7369c5839c9a6bc811a8e0910f |     
-    sh4      |         raptor-2.0.15          | NOK | http://autobuild.buildroot.net/results/a008c09f45b1eb843b89d3059790e29cb61249a8 | ORPH
-
-
-Classification of failures by reason for 2023.11.x
---------------------------------------------------
-
-  binutils-arc-2020.09-release | 1 
-            freeswitch-1.10.11 | 1 
-                     frr-8.5.4 | 1 
-              libarchive-3.7.2 | 1 
-          libcamera-apps-1.2.1 | 1 
-               libglib2-2.76.1 | 1 
-                mongodb-4.2.18 | 1 
-
-
-Detail of failures for 2023.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arc      |  binutils-arc-2020.09-release  | NOK | http://autobuild.buildroot.net/results/4a7e41b69f78f549c76c15367a4780c78c590075 |     
-  aarch64    |       freeswitch-1.10.11       | NOK | http://autobuild.buildroot.net/results/2c7b9f5167c0d12be04449e2a9c6693237b808e7 |     
-    arc      |           frr-8.5.4            | NOK | http://autobuild.buildroot.net/results/bfe423f1bda364a2b2add5679f6999a07bd8429e |     
-    or1k     |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/913fc2bab51e0880fd7bd3ab4612cf911889ba79 |     
-   x86_64    |      libcamera-apps-1.2.1      | NOK | http://autobuild.buildroot.net/results/5d42cd75aca43ec1d8e1e85f9c92bc323f1bef3c |     
-   arceb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/4dfba9a40a6a1e1ea8f627ffd922837dd35c0fb6 |     
-    arm      |         mongodb-4.2.18         | NOK | http://autobuild.buildroot.net/results/cb8bd9d355bf2b84a4c2a8c0eb2bcc1ee3629036 |     
+  mips64el   | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/037b8ff8f404d19e483f307dbb6f92103b754419 |     
+ powerpc64   | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/c8c22ea6c69f5f949746f3618e9d31d9f82fd836 |     
+    arc      |         apache-2.4.58          | NOK | http://autobuild.buildroot.net/results/f0f55d9d66b07cb3408086d2632f8cd1bebb670e |     
+ powerpc64   |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/b03bc4f57cb4db1bac799d23e6dd2b435b6fb687 |     
+  riscv64    |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/2e4b1e1d524c9dfc26145fc1c7efb3b867f72ddf |     
+   mipsel    |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/cce717162effb114b9285bb25eebf0b162e9aaab |     
+   armeb     |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/32dc57abaee2b0af989ca699cceb1bc92fead38e |     
+   s390x     |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/815ac0b13ffcb7452d1d1c52ac80b6d4e8a7d41d |     
+powerpc64le  |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/5b1c3fcf11a447b2fd2f21096b64ebc0d20248d1 |     
+microblazeel |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/f536daaed3590af6036eb48aef86279df79c062b |     
+  sparc64    |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/047582a179105c067078828910f5fd1c5e7d2ec2 |     
+  mips64el   |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/9863cfc53e7ffb0b671ca4d092d55d3bcaca77f8 |     
+    or1k     |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/3ae35d874b6c2965ae8f894045e162fc7096d872 |     
+    sh4      |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/daa5196b8ae681cec080792aaddaa23b9b9a14b9 |     
+    sh4      |           apg-2.3.0b           | NOK | http://autobuild.buildroot.net/results/fc1a298b229569ff60eae92afd5eb83f71a65c91 |     
+  riscv64    | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/81dc5f088abf49328caa4052ac55d2e86c93bfad | ORPH
+  riscv64    | check-11970a7e112dfe243a2e6... | NOK | http://autobuild.buildroot.net/results/151a826301bc6a1efc0ceb30723835dac7950f08 | ORPH
+    i586     |          clamav-1.0.5          | NOK | http://autobuild.buildroot.net/results/fc9f1b6a373fa285152730b79eb190b1b4c0a451 |     
+    i686     |         coreutils-9.3          | NOK | http://autobuild.buildroot.net/results/b0c1afe40f5d152e08b128359289225d06eae927 | ORPH
+  aarch64    |      crucible-legal-info       | NOK | http://autobuild.buildroot.net/results/14dfa0a47be54929c527c12fe9b95f34c1d8c7f5 |     
+  mips64el   |           crun-1.12            | NOK | http://autobuild.buildroot.net/results/7f7956c6d85f6fdce380ff45f50c04eca30778a9 |     
+  powerpc    |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/9cdd9191643c67b1b259b5aebb5c92887294601f | ORPH
+   x86_64    |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/656659aba445cb6b0fb4097b1a57b22599191578 | ORPH
+    mips     |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/bb36bc30c833c63c850a219e51286ae3be458e64 | ORPH
+    i686     |          dante-1.4.3           | NOK | http://autobuild.buildroot.net/results/75df29d5e405dbeb5d678edbd67dc45802d4389a | ORPH
+ powerpc64   |         dovecot-2.3.21         | NOK | http://autobuild.buildroot.net/results/3dc43d834152281f9cd4a628814579d7b26f6295 |     
+    arc      |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/1b7d91346bc159b24e1a9ccfd12cd7a4988b084d | ORPH
+    or1k     |         fail2ban-1.0.2         | NOK | http://autobuild.buildroot.net/results/4709367a39a8ceb41b58454fc9638441a40624e0 |     
+  mips64el   |         fail2ban-1.0.2         | NOK | http://autobuild.buildroot.net/results/8fae0aef8e958fe0e8b7c51329138aef7a7cb2d4 |     
+   sparc     |         fail2ban-1.0.2         | NOK | http://autobuild.buildroot.net/results/583805eb1751bcbb20f3a26fa4545c3b142b1a03 |     
+  sparc64    |          ffmpeg-4.4.4          | NOK | http://autobuild.buildroot.net/results/b50673ce97168c73bd47783f08ed14de7ba6dbb7 |     
+  aarch64    |         flutter-engine         | TIM | http://autobuild.buildroot.net/results/7d792f1363f2662d79941e8aa85a43ebbe6d8bd8 |     
+ microblaze  |          foot-1.16.2           | NOK | http://autobuild.buildroot.net/results/bf87442ae8da2f552419152340bc6fe8427dc646 |     
+   nios2     |          foot-1.16.2           | NOK | http://autobuild.buildroot.net/results/a15e2f3d765feb28bb81e891b141f3bffd1f88e7 |     
+   mipsel    |    freeradius-client-1.1.7     | NOK | http://autobuild.buildroot.net/results/c23984fd2995ed99f8f93850beb65ad44c034df4 |     
+ microblaze  |    freeradius-server-3.2.3     | NOK | http://autobuild.buildroot.net/results/45c42d07224c0fb6cb8cc2c91782e61992d0e664 |     
+    arm      | fs/romfs/romfs.mk:32: /home... | NOK | http://autobuild.buildroot.net/results/4f29f997ad1fd6f52a621a4046d1eed7fee03edc |     
+    i586     |       gdk-pixbuf-2.42.10       | NOK | http://autobuild.buildroot.net/results/3f76f3e95c55461efac15b024ceff66ee799235b | ORPH
+microblazeel |       gdk-pixbuf-2.42.10       | NOK | http://autobuild.buildroot.net/results/c74bb61edefcb8be0edab0eac47c2ad749484328 | ORPH
+  riscv64    | glibc-2.39-5-ge0910f1d3278f... | NOK | http://autobuild.buildroot.net/results/6abd5eea1e8388425b1f2b969ef2e7f32435a651 |     
+powerpc64le  | glibc-2.39-5-ge0910f1d3278f... | NOK | http://autobuild.buildroot.net/results/bcf9351f2cd9b8cc3acf5a2bf73fca710c598389 |     
+  powerpc    | glibc-2.39-5-ge0910f1d3278f... | NOK | http://autobuild.buildroot.net/results/5348c4d3df38925938c7dddaa6c280ada0a3a592 |     
+ powerpc64   | glibc-2.39-5-ge0910f1d3278f... | NOK | http://autobuild.buildroot.net/results/7da65899a2fad309fee733b1129cd3945db26afa |     
+    sh4      | glibc-2.39-5-ge0910f1d3278f... | NOK | http://autobuild.buildroot.net/results/a3fbecce0093e5db6bac0c5e19cecec5f4a5e3f8 |     
+  aarch64    |         gnu-efi-3.0.18         | NOK | http://autobuild.buildroot.net/results/57c619e6777aab7649dd514d2a7a23f27a728945 |     
+    m68k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/0add0ea0a68ba92c387061545fb17e5489c66cd0 | ORPH
+    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/ac2980147ac4ab8387a895c6d5a0c48256ad5350 | ORPH
+   mipsel    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/21eef56cda1d417b45111bb592afb5be3d00dd8f | ORPH
+    or1k     |       host-binutils-2.42       | NOK | http://autobuild.buildroot.net/results/00c33db37e3511c0650ee3229b108b88a5ed6c06 |     
+  riscv64    | host-binutils-bare-metal-2.42  | NOK | http://autobuild.buildroot.net/results/a812e4c714d3123f2251ec8f8471d97036eb6a67 |     
+    arm      |  host-flutter-sdk-bin-3.19.4   | NOK | http://autobuild.buildroot.net/results/08f6288a5859a93f078761da68b20979630a20a5 |     
+  aarch64    |        host-rust-1.74.1        | NOK | http://autobuild.buildroot.net/results/ca46b31dfcfa936309175426ab4c36857b46f71c |     
+    arm      |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/d22a672f448b7a69b55b1d4c1ed34946132af06c |     
+    arm      |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/721b90f2681e6739aba6468b886b1a266b4553ff |     
+    i686     |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/051fb039f2aac6c6caf07203e18c61537cb6be78 |     
+    i686     |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/2248e20a6f89dda2ea3b8331e64d52ed28b6b7b1 |     
+   xtensa    |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/dbe866a9a649d9b550d5ca8dcbcf723b9cb103e8 |     
+    arc      |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/08af493a9a328aa27cef653899c96efc5118bd01 |     
+powerpc64le  |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/d7d8a9ee1b506172d2ace87a42315585d9624854 |     
+    m68k     |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/819fa686b29f1fc7e7c04da073bc8bec989ca4d4 |     
+    arc      |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/db6b4106e2e0235674454e5a2b07caf15db948e2 |     
+    i686     |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/f3ce7390637b109c0bd2301eac9214591cdbca2b |     
+   s390x     |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/c9b10eed73dbc19ae03f5589cc6d55d464bdc84a |     
+  powerpc    |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/799b3c160229c40462ba79207e800d8472f88c96 |     
+    arm      |        host-scons-4.5.2        | NOK | http://autobuild.buildroot.net/results/5f242217299b0ed1f5c9e57874b4b2f7818dbc6a |     
+    m68k     |       kismet-2023-07-R1        | NOK | http://autobuild.buildroot.net/results/ad49b827da1a31d7f8aed55adda0c5bee49681c9 | ORPH
+    mips     | leafnode2-ce7d3b13fb285c9fb... | NOK | http://autobuild.buildroot.net/results/ed64962142053c8ad460e3ad2df0e8dbba0d63ce |     
+   x86_64    | leafnode2-ce7d3b13fb285c9fb... | NOK | http://autobuild.buildroot.net/results/0527c9807ed0bf7c0078c8869dcbe580a048a55b |     
+ microblaze  |        libarchive-3.7.2        | NOK | http://autobuild.buildroot.net/results/d0cca3efa7e2f4432a751e0c7f22a5a4aa5d60db |     
+powerpc64le  |      libcamera-apps-1.2.1      | NOK | http://autobuild.buildroot.net/results/efef685a36cbd7c6ad103ea8e1459603765e8c31 |     
+  sparc64    |      libcamera-apps-1.2.1      | NOK | http://autobuild.buildroot.net/results/b1be59b51730a6cbc461b3ba355a829a8fdba6fa |     
+    or1k     |         libcli-1.10.7          | NOK | http://autobuild.buildroot.net/results/24c0580ced0c8a1ba45192066b87a1036fc6a29b |     
+    i686     |         libcli-1.10.7          | NOK | http://autobuild.buildroot.net/results/e1777e4721c48db1501ef70c48387df68464b417 |     
+    arc      |          libffi-3.4.6          | NOK | http://autobuild.buildroot.net/results/e2c7f1bcda802f8e56a439149566d89939521300 |     
+ microblaze  |          libnss-3.99           | NOK | http://autobuild.buildroot.net/results/1c1e7ee699328d9976b15c8f3dde0588c647909e |     
+    arm      |        libopenssl-3.2.1        | NOK | http://autobuild.buildroot.net/results/574f802246287773a75c2fbd1df56e8cd534ee0d | ORPH
+   sparc     |         libsoup3-3.4.4         | NOK | http://autobuild.buildroot.net/results/73670f734c1b164d4281cce7a2c9e6d715feefaf |     
+   mipsel    |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/4a875a73c2461a50a82e1418b2270a6ba921ef69 | ORPH
+   x86_64    |          linux-6.8.1           | NOK | http://autobuild.buildroot.net/results/b2328888f2b56b45447ff91151c772a7afd7cd79 | ORPH
+   armeb     |          linux-6.8.1           | NOK | http://autobuild.buildroot.net/results/dbab2a97b2a380b7b6667185cfd2c7913b87c077 | ORPH
+    arc      |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/4b76418f1aeb296046949d1a167eb9db0d022c96 | ORPH
+   mipsel    |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/67967dab453e36efd34f5ebf98e246ffbb4dae48 | ORPH
+ powerpc64   |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/9e5cc961ac9f4e9b2970f6abbe41b0d70cd951c1 | ORPH
+   s390x     |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/76fdbf11170616613c34970d1b84dfce49974794 | ORPH
+   s390x     |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/b363a91f193f4eb6ec0ab6de8e4c1549c70ca492 | ORPH
+ aarch64_be  |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/ee05da50a7d18472581802688598fc42deb2b477 | ORPH
+    mips     |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/14e76f8d118201499a6eba03a2249f8a1a2623d6 | ORPH
+   s390x     |        linux-pam-1.6.0         | NOK | http://autobuild.buildroot.net/results/09c3a2a5a55ec525188c914e74aa7af1b3a0089a | ORPH
+    sh4a     |        liquid-dsp-1.6.0        | NOK | http://autobuild.buildroot.net/results/0030f70c224aa741b22412446380c05c1f4543a3 |     
+    m68k     |         minisign-0.11          | NOK | http://autobuild.buildroot.net/results/84d5fb351f3c856d8ae5f98b160e1f380debe7eb |     
+   mipsel    |          nginx-1.24.0          | NOK | http://autobuild.buildroot.net/results/5ab320af0b72534362a0a746d143cd4a8aea3b79 |     
+   sh4eb     |          ntp-4.2.8p17          | NOK | http://autobuild.buildroot.net/results/202f2bf56329441bd2b9e80222063031501d7b4f |     
+    m68k     |          oatpp-1.3.0           | NOK | http://autobuild.buildroot.net/results/6778b965321d890590f5ed5b7453ab42b37bfc56 |     
+    m68k     |          oatpp-1.3.0           | NOK | http://autobuild.buildroot.net/results/1587b391baecdbb5a24a0c0b2c33d63cb71a2f7f |     
+   x86_64    |  openvmtools-11.3.5-18557794   | NOK | http://autobuild.buildroot.net/results/e5e05d9638e16cc23669971373e73b157a18a94a |     
+  sparc64    |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/edbaff32a16da1e64ce3116f6b0d3acad2278323 |     
+   sparc     |           pppd-2.5.0           | NOK | http://autobuild.buildroot.net/results/8ba1189ba0f177024338f0bb2b59ef6d83f8d251 |     
+    or1k     |           proj-9.3.0           | NOK | http://autobuild.buildroot.net/results/217daf9c768b1ece59896deda5b725317cc8f139 |     
+   s390x     |        pure-ftpd-1.0.51        | NOK | http://autobuild.buildroot.net/results/5980524893fa5e58bc554e6a365e813a62b94878 |     
+ powerpc64   |      python-numpy-1.25.0       | NOK | http://autobuild.buildroot.net/results/a0c171294c6438de6769610bd55f0389aa6a01d9 |     
+   x86_64    |       strongswan-5.9.13        | NOK | http://autobuild.buildroot.net/results/6717e293f771f3af2ae345c9d81d813e504dca80 |     
+   nios2     |         sysvinit-3.04          | NOK | http://autobuild.buildroot.net/results/0bd769db31cdb3d868b5a213626aab9ea9e7d768 | ORPH
+   armeb     |         sysvinit-3.04          | NOK | http://autobuild.buildroot.net/results/3a99389bd7b6db7f9467b34c7bead1d58ce5a18d | ORPH
+   x86_64    |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/1432ed09766b493d60b6bd7aab01c71715d8673e | ORPH
+    arc      |      uboot-tools-2021.07       | NOK | http://autobuild.buildroot.net/results/611d5fcb3af98239445f25d44280b695aee4ab37 | ORPH
+powerpc64le  |            unknown             | NOK | http://autobuild.buildroot.net/results/63647a197a23359431d93f008094fd9f198f2212 |     
+  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/9289b0863dff46ee7c6a25bd2aa277f301fea8e6 |     
+   mipsel    |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/209012be5b6fc9aa74028596c7d08a071e4096d2 | ORPH
+  riscv64    |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/1bedc430c5b3b2d162bc6df7a75981e1db69d4b0 | ORPH
+ powerpc64   |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/dbee922343d23b80287327f1b9af050bdd3e5f30 | ORPH
+  mips64el   |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/e162e9a0a042738ae3c97a61f055301f0f2a208a | ORPH
+  aarch64    |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/7a359d8379bbe42828d228165919a83eaa897529 | ORPH
+  mips64el   |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/86913f47f9cb289506145c016d7cd5630ea4bf96 | ORPH
+    i686     |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/535b218677758f3baf98c3047d4b94a0de0b5c11 | ORPH
+    arm      |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/5c9a88155962ac1b02036f2725acad9b159910c0 | ORPH
+   sh4aeb    |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/a052687d3f5480a4f43a408e7f49b97ff5c9aa4b | ORPH
+ powerpc64   |       util-linux-2.39.3        | NOK | http://autobuild.buildroot.net/results/9a02d92f19ec96fe559aafe1c579b80eeb138195 | ORPH
+   s390x     |          whois-5.5.14          | NOK | http://autobuild.buildroot.net/results/00cec06ce5162ca3f8fcf867c876460faa7a5cdc |     
 
 
 Classification of failures by reason for 2024.02.x
 --------------------------------------------------
 
-               apcupsd-3.14.14 | 1 
-                  boost-1.83.0 | 1 
-   host-flutter-sdk-bin-3.16.8 | 1 
-                       inih-57 | 1 
-              libtracefs-1.8.0 | 1 
+               apcupsd-3.14.14 | 2 
+                    fcft-3.1.6 | 2 
+          libcamera-apps-1.2.1 | 2 
+                 coreutils-9.3 | 1 
+dmenu-wayland-a380201dff5bf... | 1 
+  gobject-introspection-1.76.1 | 1 
+package/crucible/crucible.m... | 1 
+                    proj-9.3.0 | 1 
 
 
 Detail of failures for 2024.02.x
@@ -392,11 +296,17 @@ Detail of failures for 2024.02.x
 
     arch     |             reason             | OK? |                                       url                                       | orph?
 -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  aarch64    |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/964c9dd654e4c76aa3e7814543b1459384d92a5d |     
-   x86_64    |          boost-1.83.0          | NOK | http://autobuild.buildroot.net/results/d3941ec1122f27767a1f723ab2987b45fae883b8 |     
-    arm      |  host-flutter-sdk-bin-3.16.8   | NOK | http://autobuild.buildroot.net/results/c12314a25ddb5eed361f2e73bd132e60971e47c6 |     
-  mips64el   |            inih-57             | NOK | http://autobuild.buildroot.net/results/51f97fb3d52f4c217991fa1e13b94a0b8b9f3c7e | ORPH
-    i586     |        libtracefs-1.8.0        | NOK | http://autobuild.buildroot.net/results/1cab14b8f976ded4d7e473b36c71debaa9b91e4c |     
+  aarch64    |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/474fbdbfc45be369b9b892beaf1f4d70d9159aea |     
+microblazeel |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/a51477e08702eb797b1ee0967009b2472c1d0e07 |     
+   xtensa    |         coreutils-9.3          | NOK | http://autobuild.buildroot.net/results/57c6984198dae5bb9b2af85dd46bfd5d16efb78f | ORPH
+    sh4      | dmenu-wayland-a380201dff5bf... | NOK | http://autobuild.buildroot.net/results/55ab63d35ba52adca69458fd165b55c1e97960fa |     
+  aarch64    |           fcft-3.1.6           | NOK | http://autobuild.buildroot.net/results/ba86c86eae3696340cc7ad2abd4bbd17cb225d05 |     
+ aarch64_be  |           fcft-3.1.6           | NOK | http://autobuild.buildroot.net/results/58edec7c04d042b9c04e9e546241883cba46818b |     
+   x86_64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/253295cbd8d89fb58ad199a5a93f7df62c5a7a43 | ORPH
+   s390x     |      libcamera-apps-1.2.1      | NOK | http://autobuild.buildroot.net/results/7c4f58deea41b6b9c06bcfc36d4e8a7d4a516de1 |     
+  aarch64    |      libcamera-apps-1.2.1      | NOK | http://autobuild.buildroot.net/results/5151eb1cbe1d5a35370857708a0169b7e09cf633 |     
+   x86_64    | package/crucible/crucible.m... | NOK | http://autobuild.buildroot.net/results/16b653e9bb3fd9dc3ffad8bd653210a544b053c5 |     
+    m68k     |           proj-9.3.0           | NOK | http://autobuild.buildroot.net/results/8f6e0736b5e6051ca38ab2b12a806f01022f13dd |     
 
 
 
