@@ -4,90 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1E41CD11C2
-	for <buildroot@archiver.kernel.org>; Fri,  5 Apr 2024 16:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D318FCD11C2
+	for <buildroot@archiver.kernel.org>; Fri,  5 Apr 2024 16:41:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5751A60609;
-	Fri,  5 Apr 2024 16:28:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 985CA60BBA;
+	Fri,  5 Apr 2024 16:41:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OOIBcnE4R2ao; Fri,  5 Apr 2024 16:28:43 +0000 (UTC)
+ id 9bnrmSxS9az7; Fri,  5 Apr 2024 16:41:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6027860622
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D1E960F46
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6027860622;
-	Fri,  5 Apr 2024 16:28:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CCC441BF346
- for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 16:28:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D1E960F46;
+	Fri,  5 Apr 2024 16:41:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DFDD31BF346
+ for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 16:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0BB680BB2
- for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 16:28:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB65341B59
+ for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 16:41:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rV978KP2t-_j for <buildroot@lists.busybox.net>;
- Fri,  5 Apr 2024 16:28:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::232; helo=mail-oi1-x232.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AEA8F80B4B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEA8F80B4B
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com
- [IPv6:2607:f8b0:4864:20::232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AEA8F80B4B
- for <buildroot@buildroot.org>; Fri,  5 Apr 2024 16:28:40 +0000 (UTC)
-Received: by mail-oi1-x232.google.com with SMTP id
- 5614622812f47-3c4e99e7f78so445281b6e.2
- for <buildroot@buildroot.org>; Fri, 05 Apr 2024 09:28:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712334519; x=1712939319;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=7lBOMAVGuE9aKp0hcSRHDaO5r2wY3hnZxTSMWxMn6ds=;
- b=AJIDCUvtb76Bpm37h5IbTFyXldYI0Ixs097L8KH1gVMYG1d3xrP8yiEPug0+bM0Vrp
- vyNo8IllfwpWmzq3PcfAt83qWGOkw8BlxIFtrW5oVGUYdKPTKMag6EAd++AiurB6PAed
- 7iiN4EsyotseCO7XQxd1CsCSpggtALA76ShE41BDkdfr4pASsbK3VfG5VjRRQ/op2bzg
- WADHFZp87CxcT6Q8on3vWLFfB8rxtKkn6M++xS3EJ/YAM5AC6FCrAT4DMdf4JDomuU7A
- EkDynDr+cbqLh0vBW1iUh/Kcgx01vkH17/3iHwSZRFwjllgVd4+v6AZqSZJpXL41PlSf
- z0+Q==
-X-Gm-Message-State: AOJu0YwPZ5ib1w2DgpiRUwRQ+oeov3/dUwArf9xVSqsZHfbLJRQ1Zd3s
- kHhKRmqJuvtaILrGNj0gRDlTrpKyFYXy8Svxa+OxZvinst05VoXjabVpWp0c7RTKQSOYYezYdAp
- hJ/5a4AU2cHM08O6iDYxcDgJDCg0k1eUdFBs=
-X-Google-Smtp-Source: AGHT+IHs4f56aLArvNuGUo3H7TAxWE+GXibNsncFTAFIBV0FbFJzhNDHJFfJJR6X6leF8Dco9QchxASVdl60DMoA+4w=
-X-Received: by 2002:a05:6808:208f:b0:3c5:dfbe:e0cd with SMTP id
- s15-20020a056808208f00b003c5dfbee0cdmr940420oiw.8.1712334518948; Fri, 05 Apr
- 2024 09:28:38 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W-syu1Pi-zr6 for <buildroot@lists.busybox.net>;
+ Fri,  5 Apr 2024 16:41:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.141;
+ helo=fllv0015.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 84C9441B37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84C9441B37
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 84C9441B37
+ for <buildroot@buildroot.org>; Fri,  5 Apr 2024 16:41:31 +0000 (UTC)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+ by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 435GfTd9027920;
+ Fri, 5 Apr 2024 11:41:29 -0500
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+ by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 435GfTQR013180
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Fri, 5 Apr 2024 11:41:29 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 5
+ Apr 2024 11:41:29 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 5 Apr 2024 11:41:28 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+ by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 435GfSut038737;
+ Fri, 5 Apr 2024 11:41:28 -0500
+To: Buildroot Mailing List <buildroot@buildroot.org>
+Date: Fri, 5 Apr 2024 11:41:01 -0500
+Message-ID: <20240405164102.42353-1-bb@ti.com>
+X-Mailer: git-send-email 2.43.2
 MIME-Version: 1.0
-References: <20240405153622.3348696-1-bernd@kuhls.net>
-In-Reply-To: <20240405153622.3348696-1-bernd@kuhls.net>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 5 Apr 2024 10:28:26 -0600
-Message-ID: <CADvTj4pxnTzftL6m1VJ57_zgbqHY4wXiQmutBEYeBK3K0DoNUw@mail.gmail.com>
-To: Bernd Kuhls <bernd@kuhls.net>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712334519; x=1712939319; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=7lBOMAVGuE9aKp0hcSRHDaO5r2wY3hnZxTSMWxMn6ds=;
- b=X5B/FM0Gcm4HPPdBkXf1lgoX56aOZBBLDwgEdUvX4QKBlDmhGhtvbfYJbmI64X0fSr
- UY05lpB7yQoJIAj//228H3sDze80N5jaGgbJlwVJy4WjioXBNRvfPtOb9kQwE54gP2KI
- CERpxnNTuD2JzdDCML+3HZDtDOuWINujYSnkZ/M2R8NRpbaz2Jl6urYBaEQuHFTKA7UN
- TPhu2Dk/BJDf8nz/F0xjgLsem0ur+Wq8d7FnaI4LwUscvZdrIKFVT5YR6f6DzVQ5lyV8
- xVzc2auIrbaVo/AU7EF0vmUMx7FyEFzxOTOi4ECSUFqcCda4cxLcAP1MZNDMVxUWVsbS
- 5Eqw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=X5B/FM0G
-Subject: Re: [Buildroot] [PATCH 1/1] package/dropbear: add optional
- dependency to libxcrypt
+ d=ti.com; s=ti-com-17Q1; t=1712335289;
+ bh=JimrHpenjQdJ9wNhZt7z5dC/TM0bJ4hL8klsOkULja8=;
+ h=From:To:CC:Subject:Date;
+ b=m+C3JWzNjxnuxN3N7sIDM6/bOPLkocXd8Tv5cUX3G0Zm0Xs88aaYbbv9v4rNp3ubL
+ V2XDhF0mBJLJS+LbaqFOz9OXhrmAFce7YBY4XLpOaH5wg3WBTNeP737HrJNydc46ah
+ RFDZpQUtfc5TCQ2d9Bu0+cKLYptelWNkfWrnf8u8=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=m+C3JWzN
+Subject: [Buildroot] [PATCH] package/arm-gnu-toolcahin: bump version to
+ 13.2-rel1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,46 +87,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
+Cc: Bryan Brattlof <bb@ti.com>, Suniel Mahesh <sunil@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCBBcHIgNSwgMjAyNCBhdCA5OjM24oCvQU0gQmVybmQgS3VobHMgPGJlcm5kQGt1aGxz
-Lm5ldD4gd3JvdGU6Cj4KPiBXaGVuIGdsaWJjIHdhcyBidW1wZWQgdG8gdmVyc2lvbiAyLjM5IGlu
-IGNvbW1pdAo+IGI1NjgwZjUzZDYwYWNmOGZmNjAxMDA4MmY4NzM0MzhhMzliZDVkOTcgaXQgcmVt
-b3ZlZCB0aGUgZGVwcmVjYXRlZAo+IGxpYmNyeXB0IHN1cHBvcnQuCj4KPiBEdWUgdG8gdGhpcyBy
-ZW1vdmFsIGRyb3BiZWFyIHdhcyB1bmFibGUgdG8gYWNjZXB0IGNvbm5lY3Rpb25zIHVzaW5nCj4g
-cGFzc3dvcmQgYXV0aGVudGljYXRpb24uCj4KPiBTaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8
-YmVybmRAa3VobHMubmV0PgpUZXN0ZWQtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFy
-ZDFAZ21haWwuY29tPgo+IC0tLQo+IE15IGtub3dsZWRnZSBhYm91dCB0aGUgaW50ZXJuYWxzIG9m
-IGRyb3BiZWFyIGlzIG5vbi1leGlzdGVudCBidXQgYWRkaW5nCj4gbGlieGNyeXB0IGZpeGVkIHRo
-ZSBjb25uZWN0aW9uIHByb2JsZW0gd2hpY2ggb2NjdXJlZCByaWdodCBhZnRlciB0aGUKPiBnbGli
-YyBidW1wLgo+Cj4gIHBhY2thZ2UvZHJvcGJlYXIvQ29uZmlnLmluICAgfCAxICsKPiAgcGFja2Fn
-ZS9kcm9wYmVhci9kcm9wYmVhci5tayB8IDQgKysrKwo+ICAyIGZpbGVzIGNoYW5nZWQsIDUgaW5z
-ZXJ0aW9ucygrKQo+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZHJvcGJlYXIvQ29uZmlnLmluIGIv
-cGFja2FnZS9kcm9wYmVhci9Db25maWcuaW4KPiBpbmRleCBlMTRhNjcwYzE5Li42YTkxNjFkNjU5
-IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvZHJvcGJlYXIvQ29uZmlnLmluCj4gKysrIGIvcGFja2Fn
-ZS9kcm9wYmVhci9Db25maWcuaW4KPiBAQCAtMiw2ICsyLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdF
-X0RST1BCRUFSCj4gICAgICAgICBib29sICJkcm9wYmVhciIKPiAgICAgICAgIHNlbGVjdCBCUjJf
-UEFDS0FHRV9aTElCIGlmICFCUjJfUEFDS0FHRV9EUk9QQkVBUl9TTUFMTAo+ICAgICAgICAgc2Vs
-ZWN0IEJSMl9QQUNLQUdFX0xJQlRPTUNSWVBUIGlmICFCUjJfUEFDS0FHRV9EUk9QQkVBUl9TTUFM
-TAo+ICsgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0xJQlhDUllQVCBpZiBCUjJfVE9PTENIQUlO
-X1VTRVNfR0xJQkMKPiAgICAgICAgIGhlbHAKPiAgICAgICAgICAgQSBzbWFsbCBTU0ggMiBzZXJ2
-ZXIgZGVzaWduZWQgZm9yIHNtYWxsIG1lbW9yeSBlbnZpcm9ubWVudHMuCj4KPiBkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9kcm9wYmVhci9kcm9wYmVhci5tayBiL3BhY2thZ2UvZHJvcGJlYXIvZHJvcGJl
-YXIubWsKPiBpbmRleCA3YWM4YTM4NTU5Li41NmY1NjVlMDE2IDEwMDY0NAo+IC0tLSBhL3BhY2th
-Z2UvZHJvcGJlYXIvZHJvcGJlYXIubWsKPiArKysgYi9wYWNrYWdlL2Ryb3BiZWFyL2Ryb3BiZWFy
-Lm1rCj4gQEAgLTM5LDYgKzM5LDEwIEBAIGlmZXEgKCQoQlIyX1NIQVJFRF9TVEFUSUNfTElCUyks
-eSkKPiAgRFJPUEJFQVJfQ09ORl9PUFRTICs9IC0tZGlzYWJsZS1zdGF0aWMKPiAgZW5kaWYKPgo+
-ICtpZmVxICgkKEJSMl9QQUNLQUdFX0xJQlhDUllQVCkseSkKPiArRFJPUEJFQVJfREVQRU5ERU5D
-SUVTICs9IGxpYnhjcnlwdAo+ICtlbmRpZgo+ICsKPiAgaWZlcSAoJChCUjJfUEFDS0FHRV9MSU5V
-WF9QQU0pLHkpCj4gIGRlZmluZSBEUk9QQkVBUl9TVlJfUEFNX0FVVEgKPiAgICAgICAgIGVjaG8g
-JyNkZWZpbmUgRFJPUEJFQVJfU1ZSX1BBU1NXT1JEX0FVVEggMCcgICAgID4+ICQoQEQpL2xvY2Fs
-b3B0aW9ucy5oCj4gLS0KPiAyLjM5LjIKPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+The arm-gnu-toolchain is used by TI's K3 generation of devices to
+compile the first stage bootloader (tiboot3.bin) which will run on the
+32bit R5 MCU.
+
+The 10.3-2021.10 version of this toolchain is no longer publicized as
+being downloadable (and it's fairly old) on ARM's website. Let's upgrade
+to the latest version of the toolchain ARM (13.2-rel1)
+
+Signed-off-by: Bryan Brattlof <bb@ti.com>
+---
+ package/arm-gnu-toolchain/arm-gnu-toolchain.hash | 4 ++--
+ package/arm-gnu-toolchain/arm-gnu-toolchain.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
+index dec23f7ba534d..0800fa2168970 100644
+--- a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
++++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256  97dbb4f019ad1650b732faffcc881689cedc14e2b7ee863d390e0a41ef16c9a3  gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
++# taken from https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz.sha256asc
++sha256  6cd1bbc1d9ae57312bcd169ae283153a9572bd6a8e4eeae2fedfbc33b115fdbb  arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz
+diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
+index 87e12874ea416..03bb4dc5dae3e 100644
+--- a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
++++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-ARM_GNU_TOOLCHAIN_VERSION = 10.3-2021.10
+-ARM_GNU_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-rm/$(ARM_GNU_TOOLCHAIN_VERSION)
+-ARM_GNU_TOOLCHAIN_SOURCE = gcc-arm-none-eabi-$(ARM_GNU_TOOLCHAIN_VERSION)-x86_64-linux.tar.bz2
++ARM_GNU_TOOLCHAIN_VERSION = 13.2.rel1
++ARM_GNU_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(ARM_GNU_TOOLCHAIN_VERSION)/binrel
++ARM_GNU_TOOLCHAIN_SOURCE = arm-gnu-toolchain-$(ARM_GNU_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
+ ARM_GNU_TOOLCHAIN_LICENSE = GPL-3.0+
+ 
+ HOST_ARM_GNU_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
+
+base-commit: 1a015540278ba742b5a77e90e80e2f858af14f04
+-- 
+2.44.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
