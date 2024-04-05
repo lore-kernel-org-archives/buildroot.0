@@ -4,90 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B89B8C67861
-	for <buildroot@archiver.kernel.org>; Fri,  5 Apr 2024 07:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7629EC67861
+	for <buildroot@archiver.kernel.org>; Fri,  5 Apr 2024 08:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D7824076F;
-	Fri,  5 Apr 2024 07:52:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2220C409DF;
+	Fri,  5 Apr 2024 08:12:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sQDmBxXCVyT4; Fri,  5 Apr 2024 07:52:45 +0000 (UTC)
+ id reOQqNaMEXXE; Fri,  5 Apr 2024 08:12:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11F8E407AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D97EE40AB9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11F8E407AD;
-	Fri,  5 Apr 2024 07:52:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EB7A61BF33F
- for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 07:52:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D97EE40AB9;
+	Fri,  5 Apr 2024 08:12:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F65A1BF27A
+ for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 08:12:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D715E407AD
- for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 07:52:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1947E8217D
+ for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 08:12:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9qPKPojRm_Fp for <buildroot@lists.busybox.net>;
- Fri,  5 Apr 2024 07:52:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 330F24076F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 330F24076F
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 330F24076F
- for <buildroot@buildroot.org>; Fri,  5 Apr 2024 07:52:41 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4162fe73594so2362205e9.2
- for <buildroot@buildroot.org>; Fri, 05 Apr 2024 00:52:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712303560; x=1712908360;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=J4YlfCzbygWIk2hIBB7PUWOs8P2RiPP81zWPS9iqxi0=;
- b=HoSw5PJKXAz7NZxYg7wE091DONKzm8wqEWXZpFrqF3Wfzh6x9pevjfPT9cxqkLKiUk
- 2j9E9RKIuTE3z2uVmn9vrF3W280mKnz7AcR+Inh+cKLudLhQ1nybk9fDVYD4OayEgOlH
- JFPutelyY0VCglgpqXTyTf8IupYasIuPeWpFm1x9sdDwFldPcqEmXmcLkQJg+z5P1DCJ
- pwWDfZzxJwNNrUb5IXHhNBvFOmCCS4vaof8VAWY64Ll/3dBynavZvFr7a3khlEHS52BM
- 5eK5QBAkK8+zxRpOtH04GvKWVoP4jxctcv2IyMX7w+Y6olOFz2oTe2B6RpO2c8CdbwG6
- ORTA==
-X-Gm-Message-State: AOJu0YwpSqtuQl2k/jK1kTS1xTYUAx4qDrA0eRgTRjdlegaIb5UtpRRS
- /Ch7HsY11q74F5LziyZxQOpCkciiaAdsC6SM8O3T29vU5FsjVXuetmS/+ZC5YHq95oIk9AQLx4N
- A9H0=
-X-Google-Smtp-Source: AGHT+IFHtGrqYNBaV+v21lylSL3XpLwcydZBAnYt5K2B3MELtAYGOZvbi0ca6JaWs/pPDL1Gqah0Hg==
-X-Received: by 2002:a05:600c:4e93:b0:415:691c:f83d with SMTP id
- f19-20020a05600c4e9300b00415691cf83dmr559604wmq.33.1712303559726; 
- Fri, 05 Apr 2024 00:52:39 -0700 (PDT)
-Received: from localhost.localdomain ([2001:b07:6474:ebbf:faed:9680:1a03:7f6c])
- by smtp.gmail.com with ESMTPSA id
- f14-20020a05600c154e00b0041552dbc539sm1970983wmg.11.2024.04.05.00.52.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 05 Apr 2024 00:52:39 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Fri,  5 Apr 2024 09:52:30 +0200
-Message-ID: <20240405075230.809460-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2gLfOTL2NEZR for <buildroot@lists.busybox.net>;
+ Fri,  5 Apr 2024 08:12:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
+ helo=mslow1.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9182082175
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9182082175
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9182082175
+ for <buildroot@buildroot.org>; Fri,  5 Apr 2024 08:12:54 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::229])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id D63FDC049A
+ for <buildroot@buildroot.org>; Fri,  5 Apr 2024 08:12:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CD4DDFF80B;
+ Fri,  5 Apr 2024 08:12:44 +0000 (UTC)
+Date: Fri, 5 Apr 2024 10:12:43 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240405101243.58a8281f@booty>
+In-Reply-To: <20240404211228.1979139-1-fontaine.fabrice@gmail.com>
+References: <20240404211228.1979139-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1712303560; x=1712908360;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=J4YlfCzbygWIk2hIBB7PUWOs8P2RiPP81zWPS9iqxi0=;
- b=R9cnDZy683DfYT9KY0WI7SKs2dclq7vn7O2VQB0HyUTPkAAlpz6lUaCwlVWyUv9tCY
- JDe6ZvLNZtLmcfxONsryZ9ADz0jVqc0Hd2fWw9cQ62lnLirW44j7wLKRyce0VMrM7TR6
- N0NtuwZEK08Ihnm/OnoClZSii3Pad8Pyh2j/A=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=R9cnDZy6
-Subject: [Buildroot] [PATCH 1/1] package/uuu: bump to version 1.5.177
+ d=bootlin.com; s=gm1; t=1712304765;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=0GwHh6T7v/D9API4OpxdYqcaAN68iAdBQeRHqR8M2FE=;
+ b=g0a6sIr9/13/71TJq7iWBzGCaUfLmvcs57WSwmuI3XkzlJgUBSvaGMY4LlRU6w5qzefUPh
+ tKouCvJeAkZXYE+8wfE1WzBX4ZgsJgujoTkzTzJwOQIzTAAakJmYzn2O/JSXQohpOINc+3
+ aCBGVgHLu+7ssSPhM21ifvPH0GuJU5ICIOfahdK/igx0pK/ohudrOEEcYAi6sOfqPEGBBA
+ oRacUEYVS+or0LSTDIaWEizYZahLh5LaW8HZsnoU0aY0/u94fiZe16bp5wH5MZGU6FLKB6
+ EaeLZjJ7AN/kVtRmNo1j7McemmF8NJz8AcY6lBaGhsMXvkyMMue6tohEQ6HawA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=g0a6sIr9
+Subject: Re: [Buildroot] [PATCH 1/1] package/exim: add libxcrypt optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,50 +83,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Support i.MX91
-- Fix a crash with -d option when change back file.
+Hi Fabrice,
 
-Release notes:
-https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.177
+On Thu,  4 Apr 2024 23:12:28 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/uuu/uuu.hash | 2 +-
- package/uuu/uuu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Fix the following build failure raised since bump of glibc to version
+> 2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
+> 
+> crypt16.c:45:10: fatal error: crypt.h: No such file or directory
+>    45 | #include <crypt.h>
+>       |          ^~~~~~~~~
+> 
+> Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
+>  - http://autobuild.buildroot.org/results/3c846c763a05f2569db7a019af8b91b0563c8f42
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index e45cbb868078..0f746a763385 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  6e65fc028afacc94b805ae376e3da3864dcb2570d425037820e716207ab70373  uuu_source-uuu_1.5.165.tar.gz
-+sha256  fac38e93714181fbfb0ff52b9cd29395c7eb342def5c3857da87e5429beb3927  uuu_source-uuu_1.5.177.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 5800277b10d5..b6611dc3d406 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UUU_VERSION = 1.5.165
-+UUU_VERSION = 1.5.177
- UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+Thank you for the fix. Indeed libxcrypt was removed from glibc 2.39:
+https://lists.gnu.org/archive/html/info-gnu/2024-01/msg00017.html
+
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+
 -- 
-2.43.0
-
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
