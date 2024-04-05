@@ -1,77 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7629EC67861
-	for <buildroot@archiver.kernel.org>; Fri,  5 Apr 2024 08:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6670CD11C2
+	for <buildroot@archiver.kernel.org>; Fri,  5 Apr 2024 09:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2220C409DF;
-	Fri,  5 Apr 2024 08:12:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id reOQqNaMEXXE; Fri,  5 Apr 2024 08:12:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D97EE40AB9
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D97EE40AB9;
-	Fri,  5 Apr 2024 08:12:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F65A1BF27A
- for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 08:12:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1947E8217D
- for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 08:12:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 730AD82174;
+	Fri,  5 Apr 2024 09:21:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2gLfOTL2NEZR for <buildroot@lists.busybox.net>;
- Fri,  5 Apr 2024 08:12:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9182082175
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9182082175
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9182082175
- for <buildroot@buildroot.org>; Fri,  5 Apr 2024 08:12:54 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::229])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id D63FDC049A
- for <buildroot@buildroot.org>; Fri,  5 Apr 2024 08:12:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CD4DDFF80B;
- Fri,  5 Apr 2024 08:12:44 +0000 (UTC)
-Date: Fri, 5 Apr 2024 10:12:43 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240405101243.58a8281f@booty>
-In-Reply-To: <20240404211228.1979139-1-fontaine.fabrice@gmail.com>
-References: <20240404211228.1979139-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+ id K8hZMzBFNChK; Fri,  5 Apr 2024 09:21:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AA09821A8
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AA09821A8;
+	Fri,  5 Apr 2024 09:21:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 387F11BF5F8
+ for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 09:21:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3253E407CB
+ for <buildroot@lists.busybox.net>; Fri,  5 Apr 2024 09:21:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qnf6GH9ZHczE for <buildroot@lists.busybox.net>;
+ Fri,  5 Apr 2024 09:21:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5E40D407B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E40D407B7
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5E40D407B7
+ for <buildroot@buildroot.org>; Fri,  5 Apr 2024 09:21:09 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPA id 3BD241814B9; Fri,  5 Apr 2024 11:21:03 +0200 (CEST)
+In-Reply-To: <20240404124329.768546-1-thomas.perale@mind.be>
+References: <20240404124329.768546-1-thomas.perale@mind.be>
+Date: Fri, 05 Apr 2024 11:21:03 +0200
+To: "Thomas Perale" <thomas.perale@essensium.com>
 MIME-Version: 1.0
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Message-ID: <21d09-660fc280-5-914bd10@117861333>
+User-Agent: SOGoMail 5.9.1
+X-Last-TLS-Session-Version: None
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1712304765;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=0GwHh6T7v/D9API4OpxdYqcaAN68iAdBQeRHqR8M2FE=;
- b=g0a6sIr9/13/71TJq7iWBzGCaUfLmvcs57WSwmuI3XkzlJgUBSvaGMY4LlRU6w5qzefUPh
- tKouCvJeAkZXYE+8wfE1WzBX4ZgsJgujoTkzTzJwOQIzTAAakJmYzn2O/JSXQohpOINc+3
- aCBGVgHLu+7ssSPhM21ifvPH0GuJU5ICIOfahdK/igx0pK/ohudrOEEcYAi6sOfqPEGBBA
- oRacUEYVS+or0LSTDIaWEizYZahLh5LaW8HZsnoU0aY0/u94fiZe16bp5wH5MZGU6FLKB6
- EaeLZjJ7AN/kVtRmNo1j7McemmF8NJz8AcY6lBaGhsMXvkyMMue6tohEQ6HawA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=g0a6sIr9
-Subject: Re: [Buildroot] [PATCH 1/1] package/exim: add libxcrypt optional
- dependency
+ d=heine.tech; s=dkim; 
+ t=1712308867; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=gOQOsxqN6yJbEscdpS7NKDW6sQ9AndpgVe59KWrntyY=;
+ b=KNiTeHFnY5mqvDQ87Gu42RP9HK4cE9vNFEDHrmIoaiZau8Np3s9cmlAi2mGlAB5wGeWTPd
+ tjPVhuBBQiiwIVDCIpzcnhGAHGMU55E9FA19CWRSYoO3LR4AcHN/2pXwKmGI85Ab71P/PO
+ +c/4xea3Q90i3kSIau2OqGyHVeNW5Yo=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=KNiTeHFn
+Subject: Re: [Buildroot] 
+ =?utf-8?q?=5BRFC_PATCH_0/5=5D_Support_SBOM_in_Cyclon?=
+ =?utf-8?q?eDX_format?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,40 +75,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Robert Smigielski <ptdropper@gmail.com>,
+ Thomas Perale <thomas.perale@mind.be>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabrice,
+Hi Thomas,
 
-On Thu,  4 Apr 2024 23:12:28 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Great that you're taking up this topic. I'm highly interested because I'm currently generating my sbom "by hand" using a small python script which
+converts the output of show-info. But yours is already better as it adds the dependency info and also fills the purl field (to the best of its knowledge).
 
-> Fix the following build failure raised since bump of glibc to version
-> 2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
-> 
-> crypt16.c:45:10: fatal error: crypt.h: No such file or directory
->    45 | #include <crypt.h>
->       |          ^~~~~~~~~
-> 
-> Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
->  - http://autobuild.buildroot.org/results/3c846c763a05f2569db7a019af8b91b0563c8f42
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Did you see the work of Robert (i added him in CC)? He submitted a script to the list some time ago which can run on the manifest.csv [0]. 
+Maybe there are some synergies.
 
-Thank you for the fix. Indeed libxcrypt was removed from glibc 2.39:
-https://lists.gnu.org/archive/html/info-gnu/2024-01/msg00017.html
+First feedback:
+I created my SBOM using your patchset and put it into our dependency track instance. Looks promising.
 
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+One thing that I noticed: 
+when running `make cyclonedx` I first get the output of wget which retrieves the cyclonedx schema. 
+So I have to cut it from the output to have proper json. Maybe you want to silence this in some way.
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I'll keep playing around and will give you further feedback if I'm noticing things.
+
+Regards,
+Michael
+
+[0] https://github.com/CycloneDX/cyclonedx-buildroot
+
+On Thursday, April 04, 2024 14:43 CEST, Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
