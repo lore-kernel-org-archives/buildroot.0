@@ -4,73 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A57DC67861
-	for <buildroot@archiver.kernel.org>; Sat,  6 Apr 2024 07:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCCF3CD128A
+	for <buildroot@archiver.kernel.org>; Sat,  6 Apr 2024 07:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24F454194B;
-	Sat,  6 Apr 2024 07:34:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABB2440414;
+	Sat,  6 Apr 2024 07:34:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T4TUXemTg_pp; Sat,  6 Apr 2024 07:34:06 +0000 (UTC)
+ id j4g3K_OsAtQo; Sat,  6 Apr 2024 07:34:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C62A41709
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B114B4044D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C62A41709;
-	Sat,  6 Apr 2024 07:34:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 687C31BF390
- for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:34:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B114B4044D;
+	Sat,  6 Apr 2024 07:34:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FC351BF870
+ for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E63781E13
- for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:34:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D42F41944
+ for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:34:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fC2QEywCa2X3 for <buildroot@lists.busybox.net>;
- Sat,  6 Apr 2024 07:34:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bi5ph1tFXQWz for <buildroot@lists.busybox.net>;
+ Sat,  6 Apr 2024 07:34:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4BAFA81E12
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BAFA81E12
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3E03F4194A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E03F4194A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4BAFA81E12
- for <buildroot@buildroot.org>; Sat,  6 Apr 2024 07:34:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3E03F4194A
+ for <buildroot@buildroot.org>; Sat,  6 Apr 2024 07:34:15 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cabe.dip0.t-ipconnect.de [79.214.202.190])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 33D34A4C2D8A;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 69751A4C2D8F;
  Sat,  6 Apr 2024 09:32:18 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:60956)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rt0XB-000000000gm-1UOI;
- Sat, 06 Apr 2024 07:32:17 +0000
+ (envelope-from <bernd@kuhls.net>) id 1rt0XB-000000000gm-2hiG;
+ Sat, 06 Apr 2024 07:32:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  6 Apr 2024 09:32:07 +0200
-Message-Id: <20240406073216.1054073-9-bernd@kuhls.net>
+Date: Sat,  6 Apr 2024 09:32:09 +0200
+Message-Id: <20240406073216.1054073-11-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240406073216.1054073-1-bernd@kuhls.net>
 References: <20240406073216.1054073-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202312101026; t=1712388738;
- bh=Cle9UynmYt2PmbWeHnfPr99wtwjxDltdjjC72h2++5o=;
+ bh=6jIVaOpmi1bK4da2SO4VB7MV+jDa8Nx+ieDGYfCl69c=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=bIAzSJ4dMS1tSd9htMX8wLn13AgaJQi5zOYItzONkqOXKczDLn40atSHSJjcL2tje
- v+VbsywtUxDpC3VEECVlXNr0bjUy4TtRWdU2yth9r9Cf+HO1HwrjZJiu74keA/fhcb
- savewAAWhdRXQ8H5Bl9POcR8CdeUYp7qkbO1PaR3DVN+Z6X+9L0gqaeRlRVhpLgOLU
- 8NtkMLnbk0H5Lx2DKvJtqjhuxLr5uogvVLxUtFNgjiBtCiE0Zh3yN8IAl6g09jvUk9
- SnBC6yHRQXocNz7gJAjsMoLtyrytcI5ynVA9YvVet3Kp6OPVENy9RZybzFv7N0W+rE
- 0etUehSK3MlNw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=ecxZKWdHZadkjc3lhbtYnEqUiyJYID6bpH8u3jd68By9sKVGSS3wtK4ClKte7KLQA
+ NKXMJU3uEV5OtrKp0p9+PWT976O0pdGOnIABt14M4LcbCF5JWLUeg5yRwrZgRse6vt
+ bWUV7kGL4M73Cx3opKMR6rxo20lCisG/YXSCQ8YP9nsCdo2k/ULQfxYAzATD1tlT0T
+ e3o9KoipqzLVmoYryd7ilI8dN3JYcBsaruXDNVyXzwbqp8AEQYARlRayZNQPIpQ0PZ
+ TSbbkgqFYSShq8550r1hd1CwSWwYhijk+ublj51W+716kBqTSblmhtzA/ATqVh/HQ2
+ ieflA2Ehay0wQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=bIAzSJ4d
-Subject: [Buildroot] [PATCH 09/18] package/kodi-inputstream-adaptive: bump
- version to 21.4.4-Omega
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202312101026 header.b=ecxZKWdH
+Subject: [Buildroot] [PATCH 11/18] package/kodi-inputstream-rtmp: bump
+ version to 21.1.0-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,64 +92,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Added dependency to pugixml:
-https://github.com/xbmc/inputstream.adaptive/commit/31a51a8b0f265ffc5ac62e70c2447334d148c819
-
-Removed dependency to expat:
-https://github.com/xbmc/inputstream.adaptive/commit/8816b9089bb4cefc0bf2996db49c3bd1b81b42fe
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/kodi-inputstream-adaptive/Config.in                   | 2 +-
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash  | 2 +-
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk    | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 2 +-
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index 3efe3aa114..f1f98b8304 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
- 		|| BR2_mips64el || BR2_x86_64
- 	select BR2_PACKAGE_BENTO4
--	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_PUGIXML
- 	help
- 	  Kodi inputstream addon for several manifest types
- 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index e38191c0c4..b7a89a8a02 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+index affe8b5171..7a86e54048 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  f67cfef057f8842716db4521a8cd3966c37a1da8fc3fb297527f6f25be20688a  kodi-inputstream-adaptive-20.3.17-Nexus.tar.gz
-+sha256  0a1074fe04fb7e9500d578490b4cda12ecfcf433495e15e7bf65861527586167  kodi-inputstream-adaptive-21.4.4-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index ba4f6de61a..e1fe3f37ed 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+-sha256  6a6129dca822e1447c0945ddf9cc6dbff1203dab313395d27efb4669a0ef3370  kodi-inputstream-rtmp-20.3.0-Nexus.tar.gz
++sha256  193fabb14cd9d92baecf7319c50ba183bc6254385bf187fe2a726159134df2a9  kodi-inputstream-rtmp-21.1.0-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+index f496fd3881..5c09144e71 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.17-Nexus
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.4.4-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
-@@ -22,6 +22,6 @@ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = \
- 	LICENSES/GPL-2.0-or-later \
- 	LICENSES/RSA-MD
- 
--KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = bento4 expat kodi
-+KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = bento4 kodi pugixml
- 
- $(eval $(cmake-package))
+-KODI_INPUTSTREAM_RTMP_VERSION = 20.3.0-Nexus
++KODI_INPUTSTREAM_RTMP_VERSION = 21.1.0-Omega
+ KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
+ KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_RTMP_LICENSE_FILES = LICENSE.md
 -- 
 2.39.2
 
