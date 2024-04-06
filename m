@@ -4,60 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55411CD128A
-	for <buildroot@archiver.kernel.org>; Sat,  6 Apr 2024 07:43:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99C3CCD128A
+	for <buildroot@archiver.kernel.org>; Sat,  6 Apr 2024 07:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A3BF40396;
-	Sat,  6 Apr 2024 07:43:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AFEF40444;
+	Sat,  6 Apr 2024 07:43:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n85KuYbXeWPT; Sat,  6 Apr 2024 07:43:27 +0000 (UTC)
+ id e7yL7L4QvOIh; Sat,  6 Apr 2024 07:43:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CC6D4042A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 834DE40484
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3CC6D4042A;
-	Sat,  6 Apr 2024 07:43:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 74E7A1BF390
- for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:43:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 834DE40484;
+	Sat,  6 Apr 2024 07:43:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 56DAE1BF870
+ for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:43:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6050581E91
- for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:43:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42E0760817
+ for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:43:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xd55uZVQViju for <buildroot@lists.busybox.net>;
- Sat,  6 Apr 2024 07:43:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LPiTb4HjD2za for <buildroot@lists.busybox.net>;
+ Sat,  6 Apr 2024 07:43:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B0F081E41
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B0F081E41
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8B0F081E41
- for <buildroot@buildroot.org>; Sat,  6 Apr 2024 07:43:23 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B498260004
- for <buildroot@buildroot.org>; Sat,  6 Apr 2024 07:43:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1rt0hs-00E37q-03
- for buildroot@buildroot.org; Sat, 06 Apr 2024 09:43:20 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FE87607D8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FE87607D8
+ for <buildroot@buildroot.org>; Sat,  6 Apr 2024 07:43:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7972384599; Sat,  6 Apr 2024 07:43:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20240404153438.3337807-1-peter@korsgaard.com>
- <20240404153438.3337807-2-peter@korsgaard.com>
-Date: Sat, 06 Apr 2024 09:43:19 +0200
-In-Reply-To: <20240404153438.3337807-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 4 Apr 2024 17:34:37 +0200")
-Message-ID: <87le5ros14.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/2] package/tiff: explicitly disable jbig
+Date: Sat, 6 Apr 2024 09:42:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a4011ec1e13baa1190a41d949ad2cd945a9ecbe2
+X-Git-Newrev: a7d491b0ffc5c0876053cc94c4112e73096aa5c2
+X-Patchwork-Hint: ignore
+Message-Id: <20240406074344.7972384599@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tiff: explicitly disable jbig
  support for host and target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -70,28 +59,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a7d491b0ffc5c0876053cc94c4112e73096aa5c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > BR2_PACKAGE_TIFF_JBIG did actually not do anything, as no explicit
- > --enable-jbig was passed to configure and there is no libjbig in Buildroot,
- > so drop it and instead explicitly disable jbig support.
+BR2_PACKAGE_TIFF_JBIG did actually not do anything, as no explicit
+--enable-jbig was passed to configure and there is no libjbig in Buildroot,
+so drop it and instead explicitly disable jbig support.
 
- > Also add --disable-jbig for the host build, which was missed when host
- > support was added in commit 91b16fbbf9db (tiff: add host variant).
+Also add --disable-jbig for the host build, which was missed when host
+support was added in commit 91b16fbbf9db (tiff: add host variant).
 
- > As the TIFF_JBIG option was a noop, do not add legacy handling for it.
+As the TIFF_JBIG option was a noop, do not add legacy handling for it.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tiff/Config.in | 4 ----
+ package/tiff/tiff.mk   | 6 ++----
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index d1004d6668..d357d08406 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -63,10 +63,6 @@ config BR2_PACKAGE_TIFF_OLD_JPEG
+ 	bool "Old JPEG decompression"
+ 	default y
+ 
+-config BR2_PACKAGE_TIFF_JBIG
+-	bool "JBIG compression"
+-	default y
+-
+ config BR2_PACKAGE_TIFF_UTILITIES
+ 	bool "tiff utilities"
+ 	help
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 8ec53d4fe1..0e5e0dd48a 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -17,6 +17,7 @@ TIFF_INSTALL_STAGING = YES
+ TIFF_CONF_OPTS = \
+ 	--disable-contrib \
+ 	--disable-lerc \
++	--disable-jbig \
+ 	--disable-tests \
+ 	--disable-webp
+ 
+@@ -28,6 +29,7 @@ HOST_TIFF_CONF_OPTS = \
+ 	--disable-lerc \
+ 	--disable-libdeflate \
+ 	--disable-lzma \
++	--disable-jbig \
+ 	--disable-jpeg \
+ 	--disable-tests \
+ 	--disable-webp \
+@@ -101,10 +103,6 @@ ifneq ($(BR2_PACKAGE_TIFF_OLD_JPEG),y)
+ TIFF_CONF_OPTS += --disable-old-jpeg
+ endif
+ 
+-ifneq ($(BR2_PACKAGE_TIFF_JBIG),y)
+-TIFF_CONF_OPTS += --disable-jbig
+-endif
+-
+ ifeq ($(BR2_PACKAGE_TIFF_UTILITIES),y)
+ TIFF_CONF_OPTS += --enable-tools
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
