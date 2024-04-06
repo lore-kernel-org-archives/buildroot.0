@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05B95CD128A
-	for <buildroot@archiver.kernel.org>; Sat,  6 Apr 2024 07:33:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5EC2C67861
+	for <buildroot@archiver.kernel.org>; Sat,  6 Apr 2024 07:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7D42740443;
-	Sat,  6 Apr 2024 07:33:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A155240492;
+	Sat,  6 Apr 2024 07:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EdZdxOMo1JNU; Sat,  6 Apr 2024 07:33:14 +0000 (UTC)
+ id DnPwlblSmnB8; Sat,  6 Apr 2024 07:33:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D82440448
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAA0440188
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D82440448;
-	Sat,  6 Apr 2024 07:33:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AAA0440188;
+	Sat,  6 Apr 2024 07:33:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 62E491BF390
- for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:33:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7C18C1BF8A8
+ for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4FBA341DE0
- for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:33:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE72740325
+ for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 07:33:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mOnZNk1YqF1u for <buildroot@lists.busybox.net>;
- Sat,  6 Apr 2024 07:33:10 +0000 (UTC)
+ id ne4J040yg3aC for <buildroot@lists.busybox.net>;
+ Sat,  6 Apr 2024 07:33:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 551EC41C4E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 551EC41C4E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EA4BF40173
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA4BF40173
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 551EC41C4E
- for <buildroot@buildroot.org>; Sat,  6 Apr 2024 07:33:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EA4BF40173
+ for <buildroot@buildroot.org>; Sat,  6 Apr 2024 07:33:23 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cabe.dip0.t-ipconnect.de [79.214.202.190])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id B27B7A4C2D80;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D6391A4C2D88;
  Sat,  6 Apr 2024 09:32:17 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:60956)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rt0XA-000000000gm-32aE;
- Sat, 06 Apr 2024 07:32:17 +0000
+ (envelope-from <bernd@kuhls.net>) id 1rt0XA-000000000gm-1OW3;
+ Sat, 06 Apr 2024 07:32:16 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  6 Apr 2024 09:32:04 +0200
-Message-Id: <20240406073216.1054073-6-bernd@kuhls.net>
+Date: Sat,  6 Apr 2024 09:32:02 +0200
+Message-Id: <20240406073216.1054073-4-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240406073216.1054073-1-bernd@kuhls.net>
 References: <20240406073216.1054073-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202312101026; t=1712388737;
- bh=owK5CPk1bwMlgNXAHh3+zU1ypiIpbktQNbELta0cXvs=;
+ bh=+2mAbrEtxuqPmtKogcdaygljTDjPUNN3TO/8wzDSBPM=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=O7Y9JdpuBHs/Emt5LP0WJ1cfv0PUqzJyq8+Ml9NQmh4CLtzUIJrv3l1ErcHtU2fSD
- cXBLZzOudg5oWxc5xAfUmVYKUFgapkr+j4eEqOfrHM4HrFyL1DDWwf83z6OnpUsewv
- 6tsHVYHkRvtobMN5ZRIHYcgptYPIZAyvUAX/jjtQbJime43dCvtX+KWaBn9YyABUwV
- NNX/z3v7tY13v7FTTgYgJqfmO1U0p94anlkrPXXpwnMr47TdE8WVCXQ8bqE9eGB2xX
- 7M3CIxwmN5DtRJcH/JrTgvpqaXFCdsztVrWz05vfIkp085V0YL0oNd8J/UWucfc7GJ
- L4XmuLtLmFCVQ==
+ b=hdVnPoLb5EOrsadIgbWbfkyzXI6/Slr+7MK3X1BaTEtoKlKEiGECBxajnCHOkBs8q
+ Mfcp7aFQEeiS7XtYi22vdNgqeQDJcR4UYpud04EsTWa+iDIZk5yjE2704WvNxkQa4q
+ 5YgahT9nRsE9E3kxbhkX/pg22BJ2bAhpH9w0zvtpBj0xQbQrSw7pdhHT2JuzjC384q
+ thIWV0lsggS3Q3AoeysgmkjdUbFMqQI1fQhg98IMdz6JV7CATT3jYllutcb1oW7ZMO
+ 6Fu/z+Woubg71MuCARztVfPL1KtsVHpCyif2FaoDXMdZo7BelxmKIyrY0QErdUs/LD
+ aNtypdxVxmRTw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=O7Y9Jdpu
-Subject: [Buildroot] [PATCH 06/18] package/kodi-audiodecoder-*: mass version
- bump to Omega
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=hdVnPoLb
+Subject: [Buildroot] [PATCH 04/18] package/bento4: bump version to
+ 1.6.0-641-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,218 +91,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch from kodi-audiodecoder-timidity which is included in
-upstream release.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../kodi-audiodecoder-modplug.hash            |  2 +-
- .../kodi-audiodecoder-modplug.mk              |  2 +-
- .../kodi-audiodecoder-nosefart.hash           |  2 +-
- .../kodi-audiodecoder-nosefart.mk             |  2 +-
- .../kodi-audiodecoder-sidplay.hash            |  2 +-
- .../kodi-audiodecoder-sidplay.mk              |  2 +-
- .../kodi-audiodecoder-snesapu.hash            |  2 +-
- .../kodi-audiodecoder-snesapu.mk              |  2 +-
- .../kodi-audiodecoder-stsound.hash            |  2 +-
- .../kodi-audiodecoder-stsound.mk              |  2 +-
- ...001-MidiScan-include-missing-cstdint.patch | 29 -------------------
- .../kodi-audiodecoder-timidity.hash           |  2 +-
- .../kodi-audiodecoder-timidity.mk             |  2 +-
- .../kodi-audiodecoder-vgmstream.hash          |  2 +-
- .../kodi-audiodecoder-vgmstream.mk            |  2 +-
- 15 files changed, 14 insertions(+), 43 deletions(-)
- delete mode 100644 package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch
+ package/bento4/bento4.hash | 2 +-
+ package/bento4/bento4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-index 20f13e95f7..054e7581cc 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
+diff --git a/package/bento4/bento4.hash b/package/bento4/bento4.hash
+index b9391aed6a..b933c74d2d 100644
+--- a/package/bento4/bento4.hash
++++ b/package/bento4/bento4.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  619ba20ea19dd9aea15e7d30aa12a146b412c7fcd9e709528f6758e82a3d85e7  kodi-audiodecoder-modplug-20.2.0-Nexus.tar.gz
-+sha256  7c637f4e012e7e26a3431244a8444331f9bfeaf9c6af73cac799b58b9a0eefdf  kodi-audiodecoder-modplug-e697156054ea3eb5974fb9727e046287220985e5.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-index bbbada01da..e435591cbf 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
+ # Locally calculated
+-sha256  4464cd47b597e6dedbfc231bb6eb097c45cfe5ee0051082460d9ac53e9d74dc3  bento4-1.6.0-639-7-Omega.tar.gz
++sha256  f1f8cfa4f7cb651b609e587f825607cb4b06fe5b08af876fd0154a434f9a5315  bento4-1.6.0-641-Omega.tar.gz
+ sha256  7daae92c8628ada28def8d096fe2fde298b72ec3e2d64a3c408afce38edb361b  Documents/LICENSE.txt
+diff --git a/package/bento4/bento4.mk b/package/bento4/bento4.mk
+index 8aefc401ef..569e320a2f 100644
+--- a/package/bento4/bento4.mk
++++ b/package/bento4/bento4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_AUDIODECODER_MODPLUG_VERSION = 20.2.0-Nexus
-+KODI_AUDIODECODER_MODPLUG_VERSION = e697156054ea3eb5974fb9727e046287220985e5
- KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
- KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-index 4012353b0b..b2e3a36a0d 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2f7a92bfaddcd5aa63e2ea7348ae9eeefd07dee2aba46840ce5376677e2abc19  kodi-audiodecoder-nosefart-20.2.0-Nexus.tar.gz
-+sha256  fd0d12af9d3d59fbcf41e67d1f8ac9e1339c702219da4a3393688e89ff911ebb  kodi-audiodecoder-nosefart-92c6daeb278b02cd63fee724c96051421c9149f3.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-index 8954da18de..7425447115 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_NOSEFART_VERSION = 20.2.0-Nexus
-+KODI_AUDIODECODER_NOSEFART_VERSION = 92c6daeb278b02cd63fee724c96051421c9149f3
- KODI_AUDIODECODER_NOSEFART_SITE = $(call github,xbmc,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
- KODI_AUDIODECODER_NOSEFART_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-index caf9390eaa..1f0da25fc3 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ab1f89237c91bc7157557f42dadcff50a7191eb7285ee668543defce9f1efcf2  kodi-audiodecoder-sidplay-20.2.0-Nexus.tar.gz
-+sha256  63090c74af51db7a859f8a2aa317ea2c4f2125be3306190502efc5522f00ec93  kodi-audiodecoder-sidplay-0ba1bc70faced93352cdd9ec1a5ec84e22a2e0f5.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-index c30be0774b..a08901328f 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_SIDPLAY_VERSION = 20.2.0-Nexus
-+KODI_AUDIODECODER_SIDPLAY_VERSION = 0ba1bc70faced93352cdd9ec1a5ec84e22a2e0f5
- KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,xbmc,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
- KODI_AUDIODECODER_SIDPLAY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-index 3ed7483fdb..db8b33cb4b 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f216a7d25c864986618118236c575687ab62d129a16cb1f73c15860948d9ac92  kodi-audiodecoder-snesapu-20.2.0-Nexus.tar.gz
-+sha256  4932d6d00c3b8662bc6e1600757bd85856c79028c5ecb920fa0d257bab30b7a2  kodi-audiodecoder-snesapu-532186702c49ba7fe007badc74fa6a6e9cac48fe.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-index 577adc0bc3..5b6cafcc0f 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_SNESAPU_VERSION = 20.2.0-Nexus
-+KODI_AUDIODECODER_SNESAPU_VERSION = 532186702c49ba7fe007badc74fa6a6e9cac48fe
- KODI_AUDIODECODER_SNESAPU_SITE = $(call github,xbmc,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
- KODI_AUDIODECODER_SNESAPU_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-index c4d6a68ef9..daa3f537fd 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a8138fb075a480c59d7041a9408eca6e52dc88f188daed519cd9e684b430f333  kodi-audiodecoder-stsound-20.2.0-Nexus.tar.gz
-+sha256  bf292e364bd9bbc0286fb49815cd4c2f86e5952d9bd1c878f6d1952d081d87de  kodi-audiodecoder-stsound-b72c793e2ada7ab2358568ec5b01fd71ddf7cdb3.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-index 0fa9a654e4..36535cde60 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_STSOUND_VERSION = 20.2.0-Nexus
-+KODI_AUDIODECODER_STSOUND_VERSION = b72c793e2ada7ab2358568ec5b01fd71ddf7cdb3
- KODI_AUDIODECODER_STSOUND_SITE = $(call github,xbmc,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
- KODI_AUDIODECODER_STSOUND_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_STSOUND_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch b/package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch
-deleted file mode 100644
-index a0fb586e44..0000000000
---- a/package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 0d4d3fcf5c58dd16b3e9a7337189141b839e4ace Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Sat, 15 Apr 2023 07:41:15 +1000
--Subject: [PATCH] MidiScan: include missing <cstdint>
--
--gcc 13 moved some includes around and as a result <cstdint> is no longer transitively
--included [1]. Explicitly include it for uint{32,64}_t.
--
--[1] https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
--
--Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
--Upstream: https://github.com/xbmc/audiodecoder.timidity/commit/0d4d3fcf5c58dd16b3e9a7337189141b839e4ace
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/MidiScan.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/MidiScan.h b/src/MidiScan.h
--index 9c19bdf..ac959e0 100644
----- a/src/MidiScan.h
--+++ b/src/MidiScan.h
--@@ -8,6 +8,7 @@
-- 
-- #pragma once
-- 
--+#include <cstdint>
-- #include <string>
-- #include <vector>
-- 
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-index d8c1535395..8714ebbdac 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ef1b384090df3c2c78d00ed33de1d989ce802702b0a9aa13575946409a5cd0f1  kodi-audiodecoder-timidity-20.2.0-Nexus.tar.gz
-+sha256  6f8e72ab3c63db04fd863893bbc5afe2c8cfcc7a71d86b68ed5bfe26ea5bf066  kodi-audiodecoder-timidity-00bee97ded3bc824dc454104bd53d0f431404571.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-index 6ec66fab9b..bef0d67214 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_TIMIDITY_VERSION = 20.2.0-Nexus
-+KODI_AUDIODECODER_TIMIDITY_VERSION = 00bee97ded3bc824dc454104bd53d0f431404571
- KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,xbmc,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
- KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-index d861b5957e..a39c49bbb2 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  72367d7196f8049ef1fae426d32d3de1eac56bd4cb5a8fc38a6ba0c3da1b23d8  kodi-audiodecoder-vgmstream-20.2.0-Nexus.tar.gz
-+sha256  c198151522b082feef1855e8a94d45ee498388c6764d58b92af9de20c72896c0  kodi-audiodecoder-vgmstream-56bedfc90ca600401e6dda407a5b933da0976664.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-index 78e7a9f1a2..62d956892b 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_VGMSTREAM_VERSION = 20.2.0-Nexus
-+KODI_AUDIODECODER_VGMSTREAM_VERSION = 56bedfc90ca600401e6dda407a5b933da0976664
- KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,xbmc,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
- KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = LICENSE.md
+-BENTO4_VERSION = 1.6.0-639-7-Omega
++BENTO4_VERSION = 1.6.0-641-Omega
+ BENTO4_SITE = $(call github,xbmc,Bento4,$(BENTO4_VERSION))
+ BENTO4_INSTALL_STAGING = YES
+ BENTO4_LICENSE = GPL-2.0+
 -- 
 2.39.2
 
