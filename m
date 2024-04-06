@@ -1,75 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E418C67861
-	for <buildroot@archiver.kernel.org>; Sat,  6 Apr 2024 21:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6468BC67861
+	for <buildroot@archiver.kernel.org>; Sat,  6 Apr 2024 23:03:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E714C60613;
-	Sat,  6 Apr 2024 21:37:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D116D40721;
+	Sat,  6 Apr 2024 23:03:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ptqNDaqUvms4; Sat,  6 Apr 2024 21:37:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LEu6Pzf_odHB; Sat,  6 Apr 2024 23:03:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F49160621
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FE9140785
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F49160621;
-	Sat,  6 Apr 2024 21:37:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AD28B1BF5A7
- for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 21:37:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FE9140785;
+	Sat,  6 Apr 2024 23:03:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C65891BF2F1
+ for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 23:03:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 968DF40065
- for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 21:37:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C011C40721
+ for <buildroot@lists.busybox.net>; Sat,  6 Apr 2024 23:03:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LQljh6YPipUL for <buildroot@lists.busybox.net>;
- Sat,  6 Apr 2024 21:37:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 66A57400AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66A57400AC
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 66A57400AC
- for <buildroot@buildroot.org>; Sat,  6 Apr 2024 21:37:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C8560FF803;
- Sat,  6 Apr 2024 21:37:02 +0000 (UTC)
-Date: Sat, 6 Apr 2024 23:37:01 +0200
-To: Chin Huat Ang <chinhuat@gmail.com>
-Message-ID: <20240406233701.036e7ca8@windsurf>
-In-Reply-To: <20240406154308.3336009-1-chinhuat@gmail.com>
-References: <20240406154308.3336009-1-chinhuat@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m3BzRs_ICD94 for <buildroot@lists.busybox.net>;
+ Sat,  6 Apr 2024 23:03:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3426C4070F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3426C4070F
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3426C4070F
+ for <buildroot@buildroot.org>; Sat,  6 Apr 2024 23:03:46 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 57D21B004FF;
+ Sun,  7 Apr 2024 01:03:42 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun,  7 Apr 2024 01:03:36 +0200
+Message-ID: <20240406230336.9906-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1712439423;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=bh992OyJYBr5NHMA45N2uo/qq9XRg9IwxWX7RH5b3KA=;
- b=U9NFS5By6/JAG4Lfx0Q6OyXEUdwMpod7gnA0REng/kpBQrWeoYkuOMMM33rn/w+dAJDwet
- +edEJ/hkeaNrq+TBzhG3u6av/jnucTlGz6eFE7SFcoxyuur4l53lV5wcPAqJlm+0sYaTvQ
- +Gv8wa2K62VThg6Fx1HJjVBSjWmvg5O5HaTrHBftp4PznbsHn2o2JV13AllF0U1C/Th37u
- 8+bySivXYO9nyCmJm5nBmdNByVsjnugqRag8nX/rgOv1Hjv0JbM5XM5oh+WqqLlfTvuAtF
- LeqVMbXfFH9e4+gJI9wAKgSZbdTS5EeYosQXi8mQVocIg/XcwmSw2Q9U2M43uw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1712444623;
+ bh=8U/hlqWlw5Fn58rq1evmQKfMR/zSi/oqVGdKlkN+2to=;
+ h=From:To:Cc:Subject:Date:From;
+ b=g4ZPLeNuzoztTl8/gtRKOJWlntMDGZmpiY7YycnpxJE14GWUjpCEhOvfp8oSCLaWh
+ rosCKGxy9qWEgRGaaXi+mazPKNAzg+r2R5+ZDcQGbQc6NFqhrV2zQgjb6zfdJ3ULfH
+ p5C2yZ5vFGFe8tBUqw9Ikjc4GL89KXbtliObg8VAlSWZ+pzICvgMF8yf5G73Uf46rN
+ 52q2UPTb0TiAvDADQhd5UeTid1DZM/rKQROgiDzNCUl089kQ6D3m+/vCISA7PRlQI1
+ PaJWD5+u9Hto0mSJkrxSVwhvsYKSCkiNRmGBwAXzB1ik5IVXpW/nyhieopTPx3Iiwd
+ ml+wSFs8Ofh6w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=U9NFS5By
-Subject: Re: [Buildroot] [PATCH] package/uclibc: bump to version 1.0.47,
- add Y2038 config option
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=g4ZPLeNu
+Subject: [Buildroot] [PATCH 1/1] package/openblas: bump to version v0.3.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,46 +76,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Chin,
+For change log since v0.3.26, see:
+https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.27
 
-On Sat,  6 Apr 2024 23:43:08 +0800
-Chin Huat Ang <chinhuat@gmail.com> wrote:
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/openblas/openblas.hash | 6 +++---
+ package/openblas/openblas.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> +config BR2_UCLIBC_USE_TIME64
-> +	bool "Use 64-bit date and time functions (Y2038-ready)"
-> +	depends on !BR2_ARCH_IS_64
-> +	default n
-> +	help
-> +	  Enabling this option for 32-bit targets will configure
-> +	  uClibc with config UCLIBC_USE_TIME64=y which enables 64-bit
-> +	  date and time handling to support date/time beyond Y2038.
-
-Thanks a lot for your patch!
-
-I don't think we should add a BR2_UCLIBC_USE_TIME64 option. Instead,
-there is already a BR2_TIME_BITS_64, which enables 64-bit time_t for
-glibc. It simply needs to be extended to also allow enabling 64-bit
-time_t in uClibc.
-
-Also, can I suggest that you split your change into two commits? One
-bumping uClibc to 1.0.47, and one making it possible to configure it
-with 64-bit time_t?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+index a0f054dab78..cd594969080 100644
+--- a/package/openblas/openblas.hash
++++ b/package/openblas/openblas.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.26
+-md5  bd496a1c81769ed19a161c1f8f904ccd  openblas-0.3.26.tar.gz
++# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.27
++md5  ef71c66ffeb1ab0f306a37de07d2667f  openblas-0.3.27.tar.gz
+ # Locally calculated
+-sha256  4e6e4f5cb14c209262e33e6816d70221a2fe49eb69eaf0a06f065598ac602c68  openblas-0.3.26.tar.gz
++sha256  aa2d68b1564fe2b13bc292672608e9cdeeeb6dc34995512e65c3b10f4599e897  openblas-0.3.27.tar.gz
+ sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index a678153d7b6..a3c7a194cf2 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENBLAS_VERSION = 0.3.26
++OPENBLAS_VERSION = 0.3.27
+ OPENBLAS_SITE = https://github.com/OpenMathLib/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
+ OPENBLAS_LICENSE = BSD-3-Clause
+ OPENBLAS_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.44.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
