@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6EEECD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 19:49:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA222CD1292
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 19:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6C9E40350;
-	Sun,  7 Apr 2024 19:49:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACACC40B11;
+	Sun,  7 Apr 2024 19:49:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pTW1uTliltfk; Sun,  7 Apr 2024 19:49:45 +0000 (UTC)
+ id m_DcqV578n6K; Sun,  7 Apr 2024 19:49:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE9F3403EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BC7340B24
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE9F3403EA;
-	Sun,  7 Apr 2024 19:49:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5E6701BF473
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3BC7340B24;
+	Sun,  7 Apr 2024 19:49:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B8AB1BF94D
  for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 19:49:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58CA581E56
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58A4E60A65
  for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 19:49:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3nQB3qWkRJ-i for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tCenL8c84-GB for <buildroot@lists.busybox.net>;
  Sun,  7 Apr 2024 19:49:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACB1E81E54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E7BF60A5E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ACB1E81E54
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E7BF60A5E
  for <buildroot@buildroot.org>; Sun,  7 Apr 2024 19:49:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9357D85C7F; Sun,  7 Apr 2024 19:49:43 +0000 (UTC)
+ id 7106485C77; Sun,  7 Apr 2024 19:49:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Apr 2024 21:45:36 +0200
+Date: Sun, 7 Apr 2024 21:44:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2fcc74594c457bed7f0f2a4826ada265861be6bf
-X-Git-Newrev: 345c38ab11ac821bdaf4b250683fad366631c87b
+X-Git-Oldrev: c8df468c7b192dec02440436767eccd51f5a4c3f
+X-Git-Newrev: 3a2891621c35fea394b135256c7a0846ece442aa
 X-Patchwork-Hint: ignore
-Message-Id: <20240407194943.9357D85C7F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nasm: bump to version 2.16.02
+Message-Id: <20240407194943.7106485C77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wolfssl: security bump to version
+ 5.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +66,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=345c38ab11ac821bdaf4b250683fad366631c87b
+commit: https://git.buildroot.net/buildroot/commit/?id=3a2891621c35fea394b135256c7a0846ece442aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://nasm.us/doc/nasmdocc.html
+Vulnerabilities
+ - [High] CVE-2024-0901 Potential denial of service and out of bounds
+   read. Affects TLS 1.3 on the server side when accepting a connection
+   from a malicious TLS 1.3 client. If using TLS 1.3 on the server side
+   it is recommended to update the version of wolfSSL used.
+ - [Med] CVE-2024-1545 Fault Injection vulnerability in
+   RsaPrivateDecryption function that potentially allows an attacker
+   that has access to the same system with a victims process to perform
+   a Rowhammer fault injection.
+ - [Med] Fault injection attack with EdDSA signature operations. This
+   affects ed25519 sign operations where the system could be susceptible
+   to Rowhammer attacks.
+
+No official tarball provided so switch to github and set autoreconf
+
+https://github.com/wolfSSL/wolfssl/releases/tag/v5.7.0-stable
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/nasm/nasm.hash | 2 +-
- package/nasm/nasm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
-index e9771c1d7f..d6513ff9c6 100644
---- a/package/nasm/nasm.hash
-+++ b/package/nasm/nasm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c77745f4802375efeee2ec5c0ad6b7f037ea9c87c92b149a9637ff099f162558  nasm-2.16.01.tar.xz
-+sha256  1e1b942ea88f22edae89659e15be26fa027eae0747f51413540f52d4eac4790d  nasm-2.16.02.tar.xz
- sha256  1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index 043a84cf07..ec03b03977 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index 59e42e98b9..e705bba9fd 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  75aaafe3b8c776d1ac417288116c8d444115f9fac5acb382a39a7d163dfd618d  wolfssl-5.6.6.tar.gz
++sha256  2de93e8af588ee856fe67a6d7fce23fc1b226b74d710b0e3946bc8061f6aa18f  wolfssl-5.7.0.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 68c69afd59..893408eca4 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,14 +4,16 @@
  #
  ################################################################################
  
--NASM_VERSION = 2.16.01
-+NASM_VERSION = 2.16.02
- NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
- NASM_SITE = https://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2-Clause
+-WOLFSSL_VERSION = 5.6.6
+-WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/releases/download/v$(WOLFSSL_VERSION)-stable
++WOLFSSL_VERSION = 5.7.0
++WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
+ WOLFSSL_INSTALL_STAGING = YES
+ 
+ WOLFSSL_LICENSE = GPL-2.0+
+ WOLFSSL_LICENSE_FILES = COPYING LICENSING
+ WOLFSSL_CPE_ID_VENDOR = wolfssl
+ WOLFSSL_CONFIG_SCRIPTS = wolfssl-config
++# From git
++WOLFSSL_AUTORECONF = YES
+ WOLFSSL_DEPENDENCIES = host-pkgconf
+ 
+ WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
