@@ -4,98 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 532E9CD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A5D5CD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:57:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16FEF407EB;
-	Sun,  7 Apr 2024 15:51:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22DAC40998;
+	Sun,  7 Apr 2024 15:57:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GVPukPj-9pzl; Sun,  7 Apr 2024 15:50:59 +0000 (UTC)
+ id mc_gCm7A_cr9; Sun,  7 Apr 2024 15:57:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0CAC40835
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 926B8409A3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0CAC40835;
-	Sun,  7 Apr 2024 15:50:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 926B8409A3;
+	Sun,  7 Apr 2024 15:57:19 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F1E911BF2CC
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:50:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8F5021BF2CC
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:57:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF66B60A93
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:50:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88CC060ACF
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:57:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4XZh7pyrjLqV for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 15:50:56 +0000 (UTC)
+ id zrWq4CXMWGR2 for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 15:57:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1007860A8C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1007860A8C
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1007860A8C
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 15:50:55 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-4162b74f2a1so21789705e9.3
- for <buildroot@buildroot.org>; Sun, 07 Apr 2024 08:50:55 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4EB0060ACA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EB0060ACA
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4EB0060ACA
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 15:57:17 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-41551639550so25705085e9.2
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 08:57:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712505054; x=1713109854;
+ d=1e100.net; s=20230601; t=1712505435; x=1713110235;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=pOoiSVxUHV2WajVISbuFlJgohXLu3OwrLOR+4c3m8aA=;
- b=HCYmm03JMzPtd0DQ9ULI77N2M+AacAyncTNBSGJ7w0/cXcVYQDCbIE46s6xcEnVu9A
- su3SW2K28Lq26CrhQI+UItpeU8SdqKBOIj4xn0/7Y/2+COuY9YXJVT49ISNH7MHJJEeV
- RIHko/TIBfT8ECNmAgyaZKfRxZKCFg8/9LRKw0fu1n1rggmwmKVYeAkz0iQSUE0FMd3r
- J0/PAuE6dxtB4/SlwLsOvIDjOsB9eKj5Zmhv4oYBJbAtsUd2t4qvqr0OflB6ZMCjRd8j
- gFs8zgDpP0T83QjAB15Osan8lHJDgcYE8V4BIYl2NBarj9yZjtLg2HriZ3p2njo7U30I
- KU0Q==
+ bh=x46BMVe+N+NAmDBypQWaHI1aAM1aG7dEj9f94NJEp0w=;
+ b=MoypETHzuXbu/CLOC6fsY2DU4kYGdVQdOKRCuGtwhbAe25S18oVnqkl/Gcq5EFph20
+ dvs5vp/8kQAnU41NBzl6QDWBQBW/nlMZsdJEWF91VQ5bAndAuNyxnaeVImPHV3NH0l34
+ zIQH9vTHq+oTZX1WwOWD37fpQIdlZhN3mJCV1loAVkxDQWl+hxOlfk9U3+cxxGJKL1Vw
+ 8dEYq7hXNY+a4kXzuqM5Xm+90ApLMh4Dn1QkTn5XT7OC2QTqXM/JK9OYB49+6v5dg2Q5
+ 1OBpYz/+cOKpEVfJWcgBJqJh7Wcb90nesWh/5uytfQRuul7y8wNp+7MQtRde8/op+liz
+ uqNg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCU4+fURLWhXEU1+KsfdY45V7qUuiGr0BH6hkGiCK1iHJLeAdxt5QAZBAJwX6RFtHNq0c49KTHxHjT5TWKREI71QhSvLYOMuvA==
-X-Gm-Message-State: AOJu0Yz6QSjV8PlFZs7LgZqD5ybi81RjO8dnqTwfSxrXd8twfez0gfhD
- 1AuEAKW/6AKsSMdQreg+u/qa5Blkl4kFHFefyQTySPTTXtIiZs/X4hE1fDIp59U=
-X-Google-Smtp-Source: AGHT+IEa780PDyDX8iNB/jFdf65LYv8gkWEtahqbqRJWaC6ulW70UCTgtHzQsBddhG/zr55r7KJctg==
+ AJvYcCU6ABj9mrNGUzrKDctUKSgi9ONiwyau725imDCzjwGop/OlddB6hcIvKuS2Ct8EJrOElPEoGkE68io/mQ8LYM+4UvN1JharYg==
+X-Gm-Message-State: AOJu0YwAnS2KFwMyuSSUE8w979z7BtcDuJG2Vj6+2fO3Ukkwy/Bn+pWh
+ jlfkTBSCdFDbnXyKF7DqDyLL9ubeieIoVFHQUg63cnm8w4S5zloSdG7zVjklTx8D+MUacwSDkjj
+ s
+X-Google-Smtp-Source: AGHT+IGT8VV7uKIjrqxHiuaIB4MubD5liafTKKDFckehSxcL0SNOie9D1K0v8YET/FRVhX0x27w3Tw==
 X-Received: by 2002:a05:600c:190d:b0:416:5cf2:bc13 with SMTP id
- j13-20020a05600c190d00b004165cf2bc13mr1401212wmq.14.1712505053928; 
- Sun, 07 Apr 2024 08:50:53 -0700 (PDT)
+ j13-20020a05600c190d00b004165cf2bc13mr1409911wmq.14.1712505435141; 
+ Sun, 07 Apr 2024 08:57:15 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- e38-20020a5d5966000000b003437ad152f9sm6883442wri.105.2024.04.07.08.50.52
+ o32-20020a05600c512000b004163321790esm7503642wms.19.2024.04.07.08.57.13
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 07 Apr 2024 08:50:53 -0700 (PDT)
-Message-ID: <9b60fd4d-7a0e-47da-a37a-9690b4ac84db@mind.be>
-Date: Sun, 7 Apr 2024 17:50:50 +0200
+ Sun, 07 Apr 2024 08:57:14 -0700 (PDT)
+Message-ID: <38d2c054-189d-4312-ae18-bc4c28304086@mind.be>
+Date: Sun, 7 Apr 2024 17:57:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>, buildroot@buildroot.org
-References: <20240305070452.183573-1-karthikeyan@linumiz.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20240301213722.91942-1-fontaine.fabrice@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <20240305070452.183573-1-karthikeyan@linumiz.com>
+In-Reply-To: <20240301213722.91942-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1712505054; x=1713109854; darn=buildroot.org;
+ d=mind.be; s=google; t=1712505435; x=1713110235; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=pOoiSVxUHV2WajVISbuFlJgohXLu3OwrLOR+4c3m8aA=;
- b=YiWAL3DxchWftAD2NbUJXAT7G3V0UxfdeAJV++rxYzxkCspKjyruEadQAblNFMD6Ld
- CHoeqDNmN+dNg9FPuguEHwLu0m2xOXnbbaI4r7gkQylkBidODEosO6fNOa8EJZy8cOzw
- Bv4k5b9FXdUrVqm+I5MixgN5xGF2fsGjipAglUpXcZuN/mST9TU7ZvKW/7BUevWSG0sP
- grJJ/SwToxkJQdiTYaDXV/WqUlPrUzMRzeKTM3NV6h4IIppHBXb1JRmhtKZEhepAzFog
- nL4/7jSML7jH9pmCSm38cylUH4HCGSHcbRUftqIFNJkCC/UWsiau6uuhLqXtHRnQzNLH
- vDQQ==
+ bh=x46BMVe+N+NAmDBypQWaHI1aAM1aG7dEj9f94NJEp0w=;
+ b=Q+FROeG08djRI9EUYGxLnSTYezDZaMvhhkQisBzHnrM6YeCZ5z73f0LdyQ9e1353z7
+ mDfi4np4TsUpRYJSIpaJXx5XEkfDNi49viWFyYZC9WtygyDGPzrJVc+MGxamXlDgWB2A
+ JDGNpitZ9UYymtwnIBTwQgqxiDfJ7/VuR3rlDI8gumPUHCfcOlsAOCrbMF+6MpPVKOZC
+ ZSJ0YObkj8mFJyuUUnRDKyHY0QlaI0Z4/WuIKFEx2Zs8jy4IFLLCXoCcvTRzvTNe4oX0
+ 5IpCvBb8ujm2hPpHS8AUTBx6cZ+qIsQilPCRLX6pU46oRNyrgUp5BjFYCf9jwdLBoDzc
+ Orhg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YiWAL3Dx
-Subject: Re: [Buildroot] [PATCH] package: linux-firmware: update linux fw
- bluetooth package for rtl88xx
+ header.a=rsa-sha256 header.s=google header.b=Q+FROeG0
+Subject: Re: [Buildroot] [PATCH 1/1] package/tcf-agent: fix x86 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,8 +109,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: saravanan@linumiz.com, bernd@kuhls.net, parthiban@linumiz.com,
- yann.morin.1998@free.fr
+Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -118,53 +117,102 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/03/2024 08:04, Karthikeyan Krishnasamy wrote:
-> add realtek 8821cs bluetooth firmware in linux firmware package,
-> BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX_BT config for realtek 88xx family,
-> not device specific config to enable, add fw's in realtek 88xx family
-> in build instead of adding them separately.
-
-  I reworded this as follows.
-
-     package/linux-firmware: RTL_88XX_BT: install all firmware
-
-     Instead of enumerating each binary, which is cumbersome and may miss
-     some of them, simply install all binaries starting with rtl88.
-
+On 01/03/2024 22:37, Fabrice Fontaine wrote:
+> Fix the following x86 build failure raised since bump to version 1.8.0
+> in commit 81802e263a12e173e0e1028449d1e1e11b2e5974 and
+> https://gitlab.eclipse.org/eclipse/tcf/tcf.agent/-/commit/8df5540c53b862d516ac25f908c2fff4a547b4a6:
+> 
+> /home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'unpack_elf_symbol_info':
+> /home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: error: 'STT_ARM_16BIT' undeclared (first use in this function)
+>   2079 |         if (info->type == STT_ARM_16BIT) {
+>        |                           ^~~~~~~~~~~~~
+> /home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: note: each undeclared identifier is reported only once for each function it appears in
+> /home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'create_symbol_addr_search_index':
+> /home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2228:78: error: 'STT_ARM_16BIT' undeclared (first use in this function)
+>   2228 |                     if (type == STT_FUNC || type == STT_ARM_TFUNC || type == STT_ARM_16BIT) {
+>        |                                                                              ^~~~~~~~~~~~~
+> 
+> Fixes: 81802e263a12e173e0e1028449d1e1e11b2e5974
+>   - http://autobuild.buildroot.org/results/8388acf59689ed7e621bdf158483e3df1cf9bef7
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
   Applied to master, thanks.
 
   Regards,
   Arnout
 
-> 
-> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
 > ---
->   package/linux-firmware/linux-firmware.mk | 11 +----------
->   1 file changed, 1 insertion(+), 10 deletions(-)
+>   ...tcf-services-tcf_elf.c-fix-x86-build.patch | 60 +++++++++++++++++++
+>   1 file changed, 60 insertions(+)
+>   create mode 100644 package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch
 > 
-> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-> index 60e8861abe..7e1e5cf6f2 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -90,16 +90,7 @@ endif
->   # Realtek 88xx Bluetooth
->   ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX_BT),y)
->   LINUX_FIRMWARE_FILES += \
-> -	rtl_bt/rtl8812ae_fw.bin rtl_bt/rtl8821a_fw.bin \
-> -	rtl_bt/rtl8821c_config.bin rtl_bt/rtl8821c_fw.bin \
-> -	rtl_bt/rtl8822b_config.bin rtl_bt/rtl8822b_fw.bin \
-> -	rtl_bt/rtl8822cs_config.bin rtl_bt/rtl8822cs_fw.bin \
-> -	rtl_bt/rtl8822cu_config.bin rtl_bt/rtl8822cu_fw.bin \
-> -	rtl_bt/rtl8851bu_fw.bin rtl_bt/rtl8851bu_config.bin \
-> -	rtl_bt/rtl8852au_fw.bin rtl_bt/rtl8852au_config.bin \
-> -	rtl_bt/rtl8852bu_fw.bin rtl_bt/rtl8852bu_config.bin \
-> -	rtl_bt/rtl8852cu_fw.bin rtl_bt/rtl8852cu_config.bin \
-> -	rtl_bt/rtl8852cu_fw_v2.bin
-> +	rtl_bt/rtl88*_fw.bin rtl_bt/rtl88*_config.bin
->   LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
->   endif
->   
+> diff --git a/package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch b/package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch
+> new file mode 100644
+> index 0000000000..5f08fa485e
+> --- /dev/null
+> +++ b/package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch
+> @@ -0,0 +1,60 @@
+> +From 0a847ca035113540ee44d17f364bf4701fe78355 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 1 Mar 2024 22:31:05 +0100
+> +Subject: [PATCH] agent/tcf/services/tcf_elf.c: fix x86 build
+> +
+> +Fix the following x86 build failure raised since version 1.8.0 and
+> +https://gitlab.eclipse.org/eclipse/tcf/tcf.agent/-/commit/8df5540c53b862d516ac25f908c2fff4a547b4a6:
+> +
+> +/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'unpack_elf_symbol_info':
+> +/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: error: 'STT_ARM_16BIT' undeclared (first use in this function)
+> + 2079 |         if (info->type == STT_ARM_16BIT) {
+> +      |                           ^~~~~~~~~~~~~
+> +/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: note: each undeclared identifier is reported only once for each function it appears in
+> +/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'create_symbol_addr_search_index':
+> +/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2228:78: error: 'STT_ARM_16BIT' undeclared (first use in this function)
+> + 2228 |                     if (type == STT_FUNC || type == STT_ARM_TFUNC || type == STT_ARM_16BIT) {
+> +      |                                                                              ^~~~~~~~~~~~~
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/8388acf59689ed7e621bdf158483e3df1cf9bef7
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Upstream: https://gitlab.eclipse.org/eclipse/tcf/tcf.agent/-/merge_requests/1
+> +---
+> + agent/tcf/services/tcf_elf.c | 8 +++++++-
+> + 1 file changed, 7 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/agent/tcf/services/tcf_elf.c b/agent/tcf/services/tcf_elf.c
+> +index 1b3900ec..b0b948e4 100644
+> +--- a/agent/tcf/services/tcf_elf.c
+> ++++ b/agent/tcf/services/tcf_elf.c
+> +@@ -2076,10 +2076,12 @@ void unpack_elf_symbol_info(ELF_Section * sym_sec, U4_T index, ELF_SymbolInfo *
+> +     }
+> +
+> +     if (file->machine == EM_ARM) {
+> ++#ifdef STT_ARM_16BIT
+> +         if (info->type == STT_ARM_16BIT) {
+> +             info->type = STT_OBJECT;
+> +             info->type16bit = 1;
+> +         }
+> ++#endif
+> +         if (info->type == STT_ARM_TFUNC) {
+> +             info->type = STT_FUNC;
+> +             info->type16bit = 1;
+> +@@ -2225,7 +2227,11 @@ static void create_symbol_addr_search_index(ELF_Section * sec) {
+> +                 }
+> +                 add = add && type != STT_GNU_IFUNC;
+> +                 if (add && file->machine == EM_ARM) {
+> +-                    if (type == STT_FUNC || type == STT_ARM_TFUNC || type == STT_ARM_16BIT) {
+> ++                    if (type == STT_FUNC || type == STT_ARM_TFUNC
+> ++#ifdef STT_ARM_16BIT
+> ++                     || type == STT_ARM_16BIT
+> ++#endif
+> ++                     ) {
+> +                         addr = addr & ~(U8_T)1;
+> +                     }
+> +                 }
+> +--
+> +2.43.0
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
