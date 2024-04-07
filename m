@@ -4,57 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE70CD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 10:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37D18CD128A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 10:45:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29E19407B3;
-	Sun,  7 Apr 2024 10:41:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3B6240770;
+	Sun,  7 Apr 2024 10:45:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X_n6b0Ckc26d; Sun,  7 Apr 2024 10:41:17 +0000 (UTC)
+ id tBqBINd8WQgH; Sun,  7 Apr 2024 10:45:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04156407B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B20CE407B4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04156407B4;
-	Sun,  7 Apr 2024 10:41:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B2151BF575
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 10:41:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B20CE407B4;
+	Sun,  7 Apr 2024 10:45:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 13BF21BF575
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 10:45:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 872C3407B4
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 10:41:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E6F340434
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 10:45:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vbQYlUVe_XqB for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 10:41:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x9ylQgZsOnP5 for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 10:45:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DAE2E407B3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAE2E407B3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 279F0403E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 279F0403E9
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DAE2E407B3
- for <buildroot@uclibc.org>; Sun,  7 Apr 2024 10:41:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 279F0403E9
+ for <buildroot@uclibc.org>; Sun,  7 Apr 2024 10:45:04 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1rtPxX-0004Nx-0k
- for buildroot@uclibc.org; Sun, 07 Apr 2024 12:41:11 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1rtQ1G-0008iZ-Bg
+ for buildroot@uclibc.org; Sun, 07 Apr 2024 12:45:02 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sun, 07 Apr 2024 12:40:20 +0200
-Message-ID: <pan$bdb59$3181f1e9$1c1e22ce$1d1fb283@ID-313208.user.individual.net>
+Date: Sun, 07 Apr 2024 12:42:56 +0200
+Message-ID: <pan$3e2fd$c5a948fb$259223af$b8ed487e@ID-313208.user.individual.net>
 References: <20240406073216.1054073-1-bernd@kuhls.net>
- <20240406073216.1054073-6-bernd@kuhls.net>
- <ZhJuDnF5x2UviN68__14164.349895303$1712483892$gmane$org@landeda>
+ <20240406073216.1054073-2-bernd@kuhls.net>
+ <ZhJmcptsEo41MP6G__17866.991232016$1712481939$gmane$org@landeda>
 Mime-Version: 1.0
 User-Agent: Pan/0.154 (Izium; 517acf4)
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH 06/18] package/kodi-audiodecoder-*: mass
- version bump to Omega
+Subject: Re: [Buildroot] [PATCH 02/18] package/ffmpeg: bump version to 6.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,15 +70,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sun, 7 Apr 2024 11:57:34 +0200 schrieb Yann E. MORIN:
-
-> Any reason the audioencoders bumps were split in two patches rather than
-> one?
-
 Hi Yann,
 
-there is no split, one patch is for audio_de_coders, the other for 
-audio_en_coders ;)
+Am Sun, 7 Apr 2024 11:25:06 +0200 schrieb Yann E. MORIN:
+
+> For aubio, it was only an optional dependency, so that loses an optional
+> feature. While not ideal, this is not breaking the package, but we have
+> no way to tell the user when they update that aubio no longer uses
+> ffmpeg. Unless there is an aubio version bump that supports newer
+> ffmpeg?
+
+v2 of the patch series will include a bump for aubio to support ffmpeg 6.x
+
+> For opencv3 and opencv4, this is also optional, and there are Kconfig
+> options we'd move to legacy, that will tell the user opencv3/4 no longer
+> uses ffmpeg. And then we can simplify the ffmpeg.mk itself about its own
+> dependency on opencv3.
+
+Correct.
+
+> Which leaves us with omxplayer, for which libavresample is a mandatory
+> dependency. Is there an upstream changin in omxplayer that makes
+> libavresample optional? If not, then we'd have to drop omxplayer before
+> we bump ffmpeg...
+
+The package was deprecated in 2020 and will be removed in v2 of the patch 
+series.
 
 Regards, Bernd
 
