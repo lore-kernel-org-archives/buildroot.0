@@ -4,97 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0793CD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 14:48:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8FDCD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 14:48:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60152600C6;
-	Sun,  7 Apr 2024 14:48:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66E35605F4;
+	Sun,  7 Apr 2024 14:48:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 30nQqDSXBZzU; Sun,  7 Apr 2024 14:48:17 +0000 (UTC)
+ id Rz1Bf1fvrVRI; Sun,  7 Apr 2024 14:48:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B1B4608A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58E64605D4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B1B4608A5;
-	Sun,  7 Apr 2024 14:48:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A19E11BF30F
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 14:48:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58E64605D4;
+	Sun,  7 Apr 2024 14:48:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 48A801BF30F
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 14:48:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B36D40600
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 14:48:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41059812C5
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 14:48:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FXNh8PsJ42au for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 14:48:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QTHB28gx7HvG for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 14:48:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 29F4B4053A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29F4B4053A
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 29F4B4053A
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 14:48:13 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-416664dbee1so1265395e9.0
- for <buildroot@buildroot.org>; Sun, 07 Apr 2024 07:48:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1BF5D80DA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BF5D80DA5
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1BF5D80DA5
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 14:48:42 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-416511f13aaso3144825e9.1
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 07:48:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712501292; x=1713106092;
+ d=1e100.net; s=20230601; t=1712501321; x=1713106121;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=VOFXuDJdM7T1Mcsw0Ne9apcewT84t0Z2qOftAEgDDjE=;
- b=ol0+phtGtGNyTh2bR0YuC+ViK4L3KldpY/mRdd/cya2j+EB/o9b0yNAYU16ZD5oAiW
- yLul96i58MrE2L7HziFb2BzOTHW3fJkij8R1uH9aPEISWqMeF+6bYCkmE66hfAMT48a8
- a4ywUQLRlyQBGb+VMCJk2PH/INa1te4BKPVYusZt5YwDxejFHwglWaSZFJoj7Vh+C2Hq
- 5Ch1Qlc2C0VDuylLvSTFZ3mWbPQLNY2zJCNg5tN3oXsZylJnZfOxclEe+W6jcHh6g4S6
- Or8AYRTqqowvdKL4g//CIQ6ImB7PZ+oiXlt05aq2ozsJjdQSO8aGid7fFSC1j40cQNoo
- uAow==
+ bh=gRgr3kaGNfJlVRTedvDcIQo/qsf0mDWp9gX/oUgbf8E=;
+ b=YqHJNvnJpxIDqKg48nr93nC6dvpGVicM1MyDdan3FAOBK1VBWJN8z7RfGg9PjhLvBT
+ 9KvvVOnNkpMHsquJNs+e4JWbHTE9vg4zqkZHh+dti98T6bD9/i4GQ1TU5vvsbZkw2EbA
+ j9z7iCaBI7RTZdxZ06sl42rW4u4acfuZXja9zHJ1zap2ydpx4I14bDAnr9HMN5RpH9Ys
+ X7yntwyeM3OsenJ/vV4gS78reW+7MfO1TCG9lpQI/2P70FJbnfFdUJ0/BR+KKXlhANrS
+ 6gpvdL7ieOOkKhOWOy5ECox5c4KYO9PGXeGKlO6xNYABEUie0gs2RWgf7YSepghxS4ZE
+ xtPQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVAvwcEQ7xoPM0Xx4AGAvklex55WMPgCWHMuFpVguo0+V9usWXN1HHkI9iuzDLyEd/YYXsZ2UxIrGtGpBFE/DXAGECxQsny3w==
-X-Gm-Message-State: AOJu0YzKINIy6ytYi5sn0BGSI4x1n+PSOsBg8J7Z1mgtXo6C5WwspLMa
- +bcMuT5O7T2+F1AeELFDvtr3DG06F0Qs+mya3qjNuUReRCRZP0rYplU0TZw9ozQ=
-X-Google-Smtp-Source: AGHT+IGATzm/Em0a1HpI8DAVxySkZupTe5JKZTE5MA6NPWr1Muis05iKlU6XTpqVys9rvYx5O/6UYQ==
-X-Received: by 2002:a05:600c:1d1b:b0:416:4eae:9adc with SMTP id
- l27-20020a05600c1d1b00b004164eae9adcmr1827027wms.6.1712501292059; 
- Sun, 07 Apr 2024 07:48:12 -0700 (PDT)
+ AJvYcCUHMqJ6dDR0HxW3THcPpouysYeArsjEYKBA/mQguP8/mFsAtqcTG7jx+vDI9T54bmn+KC+h5UUUxrIimqu4HRKQP2+N+S2t2w==
+X-Gm-Message-State: AOJu0YwUqexaRArpa12F+E18BDe6q8ckOOvmtlFH2Q/7IvgTcU4s2TJ8
+ sFoTnZNkXWwSLI5eD7X0S3LBN1JjiLMDj+73Q3c997tfKiz8taY38Mz7UPC1hzg=
+X-Google-Smtp-Source: AGHT+IGUx1VLVeGSeHmKrZFGwdXO84tBM2lubv++LxRQZQ6OP6yfVwdv5GbIdtqI+c85QMKxSM/VIg==
+X-Received: by 2002:a05:600c:4714:b0:415:52e2:64b2 with SMTP id
+ v20-20020a05600c471400b0041552e264b2mr4871149wmo.6.1712501320832; 
+ Sun, 07 Apr 2024 07:48:40 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- bd8-20020a05600c1f0800b004162b0b88f4sm12888966wmb.31.2024.04.07.07.48.11
+ o32-20020a05600c512000b004163321790esm7318011wms.19.2024.04.07.07.48.39
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 07 Apr 2024 07:48:11 -0700 (PDT)
-Message-ID: <19077b76-db3a-444a-a62b-d3104c02427f@mind.be>
-Date: Sun, 7 Apr 2024 16:48:09 +0200
+ Sun, 07 Apr 2024 07:48:40 -0700 (PDT)
+Message-ID: <129e9e89-b2be-4fdf-8307-b6e9bf384cab@mind.be>
+Date: Sun, 7 Apr 2024 16:48:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20240224115922.234596-1-bernd@kuhls.net>
+References: <20240224121007.435474-1-bernd@kuhls.net>
 Content-Language: en-GB
-In-Reply-To: <20240224115922.234596-1-bernd@kuhls.net>
+In-Reply-To: <20240224121007.435474-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1712501292; x=1713106092; darn=buildroot.org;
+ d=mind.be; s=google; t=1712501321; x=1713106121; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=VOFXuDJdM7T1Mcsw0Ne9apcewT84t0Z2qOftAEgDDjE=;
- b=Act+Ij1VE86uGtCq0UGKKcPZpzDl++YlcMdcaukByo0xvASiLYHfsvPIh9lQ6RBAyK
- ZO+X621nvxHEUTrLMfcme7pb4oaflyLvm2IIc96xabPDivmo/vBbGXT0o4E7mrbLcUQ0
- NQltINt5gmrHgPy/SpY7TJbkwEbix8iMsSetruclLA7M3Id6zcyjdmsdpq7MD4wBtxun
- QYXpahjdEDdLBIAYUOYjEx9oAs/QNcN576dah6aap3gSqN7Bb3qEdZYe3e+5OuDdgOBQ
- L3PTcq8Cs3Uw963a/aCAthBTZvmyqaD82N3JzSG/zwu5oadzCqIr/MA5B9vLu2Cj7EJG
- mz/g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=gRgr3kaGNfJlVRTedvDcIQo/qsf0mDWp9gX/oUgbf8E=;
+ b=DeY1+XtTkPhYvxLfvG861zVxkwLRQO1W5Gvqt+VK87W6iYrvScWsHuRn2PAMxkFw3l
+ H1obthjItlVMU7awwWr2ZvQB6H9lF+zEPeZrgv4xB/bH7Keyq/QPur9Au5aAVJLXI07g
+ MXIAMeZd83eIzIL4vYXjjRDUd/zi3cmmsezQ7jJ+Q2oWPrvMvzP+Q4sD9Xyc12P/mPCa
+ samC+LhVlO2eFuntAJsYjI9jXmTVWool95EQFI9VWbZBI5G1iIeElIRWvSn9pI+HP91v
+ 5b5lWWfJiTBimoa0kSBar76CgMLWJyUpkVu+9cuLF3HeN2rIPpS02152HDcbmVc4aPI8
+ z1nQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Act+Ij1V
-Subject: Re: [Buildroot] [PATCH 1/1] package/cmake: bump version to 3.28.3
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=DeY1+XtT
+Subject: Re: [Buildroot] [PATCH 1/1] package/ccache: bump version to 4.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,7 +109,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -116,10 +116,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 24/02/2024 12:59, Bernd Kuhls wrote:
-> Release notes:
-> https://www.kitware.com/cmake-3-28-3-available-for-download/
-> https://www.kitware.com/cmake-3-28-2-available-for-download/
+On 24/02/2024 13:10, Bernd Kuhls wrote:
+> Removed patch which is included in this release.
+> 
+> Updated license hash due to various version and copyright year bumps:
+> https://github.com/ccache/ccache/commits/master/LICENSE.adoc
+> 
+> Release notes: https://ccache.dev/releasenotes.html#_ccache_4_9_1
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
@@ -129,35 +132,71 @@ On 24/02/2024 12:59, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   package/cmake/cmake.hash | 4 ++--
->   package/cmake/cmake.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   ...-fix-Work-around-GCC-12.3-bug-109241.patch | 29 -------------------
+>   package/ccache/ccache.hash                    |  4 +--
+>   package/ccache/ccache.mk                      |  2 +-
+>   3 files changed, 3 insertions(+), 32 deletions(-)
+>   delete mode 100644 package/ccache/0001-fix-Work-around-GCC-12.3-bug-109241.patch
 > 
-> diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-> index 51fff6c3ef..74b4a0a3a8 100644
-> --- a/package/cmake/cmake.hash
-> +++ b/package/cmake/cmake.hash
-> @@ -1,5 +1,5 @@
-> -# From https://cmake.org/files/v3.28/cmake-3.28.1-SHA-256.txt
-> -sha256  15e94f83e647f7d620a140a7a5da76349fc47a1bfed66d0f5cdee8e7344079ad  cmake-3.28.1.tar.gz
-> +# From https://cmake.org/files/v3.28/cmake-3.28.3-SHA-256.txt
-> +sha256  72b7570e5c8593de6ac4ab433b73eab18c5fb328880460c86ce32608141ad5c1  cmake-3.28.3.tar.gz
+> diff --git a/package/ccache/0001-fix-Work-around-GCC-12.3-bug-109241.patch b/package/ccache/0001-fix-Work-around-GCC-12.3-bug-109241.patch
+> deleted file mode 100644
+> index 42872597cd..0000000000
+> --- a/package/ccache/0001-fix-Work-around-GCC-12.3-bug-109241.patch
+> +++ /dev/null
+> @@ -1,29 +0,0 @@
+> -From 689168c292f1ed26c5f4a3070aeb649dad7facb5 Mon Sep 17 00:00:00 2001
+> -From: Joel Rosdahl <joel@rosdahl.net>
+> -Date: Tue, 1 Aug 2023 12:30:12 +0200
+> -Subject: [PATCH] fix: Work around GCC 12.3 bug 109241
+> -
+> -See also #1289.
+> -
+> -Upstream: https://github.com/ccache/ccache/commit/689168c292f1ed26c5f4a3070aeb649dad7facb5
+> -
+> -Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ----
+> - src/storage/local/LocalStorage.cpp | 4 +++-
+> - 1 file changed, 3 insertions(+), 1 deletion(-)
+> -
+> -diff --git a/src/storage/local/LocalStorage.cpp b/src/storage/local/LocalStorage.cpp
+> -index 3e5abe5074..d0a904e553 100644
+> ---- a/src/storage/local/LocalStorage.cpp
+> -+++ b/src/storage/local/LocalStorage.cpp
+> -@@ -854,7 +854,9 @@ LocalStorage::recompress(const std::optional<int8_t> level,
+> -           auto l2_content_lock = get_level_2_content_lock(l1_index, l2_index);
+> -           l2_content_lock.make_long_lived(lock_manager);
+> -           if (!l2_content_lock.acquire()) {
+> --            LOG("Failed to acquire content lock for {}/{}", l1_index, l2_index);
+> -+            // LOG_RAW+fmt::format instead of LOG due to GCC 12.3 bug #109241
+> -+            LOG_RAW(fmt::format(
+> -+              "Failed to acquire content lock for {}/{}", l1_index, l2_index));
+> -             return;
+> -           }
+> -
+> diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+> index 736122e0ab..a2537077b6 100644
+> --- a/package/ccache/ccache.hash
+> +++ b/package/ccache/ccache.hash
+> @@ -1,4 +1,4 @@
+>   # sha256 computed locally
+> -sha256  3d3fb3f888a5b16c4fa7ee5214cca76348afd6130e8443de5f6f2424f2076a49  ccache-4.8.2.tar.xz
+> +sha256  4c03bc840699127d16c3f0e6112e3f40ce6a230d5873daa78c60a59c7ef59d25  ccache-4.9.1.tar.xz
+>   sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  GPL-3.0.txt
+> -sha256  55ce274f2b898dad70d3695ab13f82656fd455bd8fb6d1c85d6f7c453bef0b2e  LICENSE.adoc
+> +sha256  a6aea7358a30ded3f8abbff979219bdbe7b7a9aa489a8c70030afd96a83caf84  LICENSE.adoc
+> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+> index ac4bc4aba5..1ac825439b 100644
+> --- a/package/ccache/ccache.mk
+> +++ b/package/ccache/ccache.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
->   # Locally calculated
->   sha256  4a01ccf2dc580ba570d02bc015bbe0ec92f1f318717aae9540ba841ba7946756  Copyright.txt
-> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-> index 23d00b95c5..49d1f9fea5 100644
-> --- a/package/cmake/cmake.mk
-> +++ b/package/cmake/cmake.mk
-> @@ -6,7 +6,7 @@
->   
->   # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
->   CMAKE_VERSION_MAJOR = 3.28
-> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
-> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
->   CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
->   CMAKE_LICENSE = BSD-3-Clause
->   CMAKE_LICENSE_FILES = Copyright.txt
+> -CCACHE_VERSION = 4.8.2
+> +CCACHE_VERSION = 4.9.1
+>   CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
+>   CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+>   CCACHE_LICENSE = GPL-3.0+, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
