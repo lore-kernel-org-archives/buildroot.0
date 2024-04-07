@@ -4,98 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6804BCD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5E98CD128A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFEE0407AB;
-	Sun,  7 Apr 2024 15:16:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54CA240286;
+	Sun,  7 Apr 2024 15:22:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n4f6mjgJKlbQ; Sun,  7 Apr 2024 15:16:02 +0000 (UTC)
+ id 79Iz0vCjDPcf; Sun,  7 Apr 2024 15:22:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8371407A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6AA840738
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8371407A0;
-	Sun,  7 Apr 2024 15:16:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6AA840738;
+	Sun,  7 Apr 2024 15:22:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CAF0F1BF489
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:16:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 559621BF489
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C4D6E608DE
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:16:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 429B6608F6
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7qTr6c-WuLg8 for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 15:15:59 +0000 (UTC)
+ id yF_vkORIue-B for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 15:22:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7CEE0608A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CEE0608A5
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7CEE0608A5
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 15:15:59 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-415523d9824so37311265e9.3
- for <buildroot@buildroot.org>; Sun, 07 Apr 2024 08:15:59 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 14F9A608DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14F9A608DE
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 14F9A608DE
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 15:22:00 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-343e7c20686so1723344f8f.1
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 08:22:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712502957; x=1713107757;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=b6XegeyCKNEHHwGBlYtMAKpY+ZKAoeJJx55Q6FlEpaY=;
- b=XttCvhJwOxp50OXO3JX1x5E8hXHkFpzUpnDp/v2UPbKXsu+q4KkiHUh+HEA923h9Rw
- IRofOVnohNCvccTq8KuGR7ywIes+P0TBDSu76J68A0FrN3M4MnlDU8Si4KPelkLLBpj1
- z3AnOI1BuMqMJ8fgBFJq0KTpuV0pgz4OQ2PFOOLFf3RqK7IaEkU4Jm/K67uoOuTZzne1
- Rg7T8y+xUyJOHlZu2pG98MRf8GGDe4DWNNFe4R5rWPlRCu+6s1bGhGgUmVCIMbqCDuAC
- 3qLdUawipT8PL8j7OxLx909X7Aa9WpScVFsnL/EfwjOudEdCs/QQMHfcoom5lkfdZvR0
- JMLA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVRbNtG3Sk/J2dlSGEgzP2DnP1JhqNzQxMgqiJDt9Reu0XGbaVVWIF5EBM8KlUI6STVSctGHT0NmlGWF5jVXNL/qtbCyO9sDw==
-X-Gm-Message-State: AOJu0YxONFOObDCZJDqyFLU0OJXCeKem1HdezeUhc2GIbPMMnDYOcJ/6
- H6GczwhMl8bvN/H0T8y30g4IebBd+/wFoJIzZcfcVl7bkOczPCdWh7dABOof0aJcN26p8n/Pz5U
- k
-X-Google-Smtp-Source: AGHT+IFWV419Fx6rXUTLryAEp+ipFHYbnSCLONPk6zm6ejTjRUwmLhzmev07Wyl2jNiCSZCsVal3NQ==
-X-Received: by 2002:a05:600c:5494:b0:416:2d39:bcc2 with SMTP id
- iv20-20020a05600c549400b004162d39bcc2mr6235826wmb.29.1712502957491; 
- Sun, 07 Apr 2024 08:15:57 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- r12-20020a5d498c000000b00343e8968917sm6366972wrq.1.2024.04.07.08.15.56
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 07 Apr 2024 08:15:56 -0700 (PDT)
-Message-ID: <414577b2-fdc6-4b26-b079-ea0a1ae8d79f@mind.be>
-Date: Sun, 7 Apr 2024 17:15:54 +0200
+ d=1e100.net; s=20230601; t=1712503318; x=1713108118;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ryPUYSU+GV9+4tY6PI4oPJ6t2PYh9n7MJGJ7gXkn4rU=;
+ b=N5ldAYS/7McjvDRwhQ+O+TZbc1Swpf65B7ZO4nUadhQ0Ev4QZAOiVmKtiYY42z7ahg
+ mYkttw3kUkIxQXwvk0Dbnbc8XqSXoZrk8T2dO2zdPOr3SpycHQTN5JLr3edwCYRCoHgN
+ Jg+2tdYiNPDeI7CjNLRhN7UGoPLmCwJxXKaPSECeHv8z3ejIDvO8AlAx86Rvrvvi24Xn
+ f3tBbkY331Oah2IcjiRQjxjUlo9Rs7YGdB0m233E5ENu08Q0Wg79fHNGK3D1S6sC9lT2
+ fDyZUrRfpwNlKnm9aWt3iJUv9UW3dmzCW1BF7ONspsi+b4fKEGvvaEYSiObs2J/cEzp7
+ qXFg==
+X-Gm-Message-State: AOJu0YzOhXmB8UFsukvAb+zttg6XK17sJbtyLB1Hss+o7x2eGD92QS9s
+ pgTb7lbmBYMQLhy2padzky0LpG5bKfV4DYS/sBOcbUbQYkU9Pb4uOxdEq8hK
+X-Google-Smtp-Source: AGHT+IFe8bQkgoo3ZaI80D8K8UDn4FupQCDbYJAJk1EwWIDv84E5apib3s5oVwIZSt1VzPaMP45GlA==
+X-Received: by 2002:adf:ed89:0:b0:341:d811:b573 with SMTP id
+ c9-20020adfed89000000b00341d811b573mr4731639wro.23.1712503318050; 
+ Sun, 07 Apr 2024 08:21:58 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ i17-20020a05600c355100b0041663c75ef1sm1604683wmq.32.2024.04.07.08.21.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Apr 2024 08:21:57 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  7 Apr 2024 17:21:55 +0200
+Message-ID: <20240407152155.1913254-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20240303132222.151704-1-fontaine.fabrice@gmail.com>
-Content-Language: en-GB
-In-Reply-To: <20240303132222.151704-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1712502957; x=1713107757; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=b6XegeyCKNEHHwGBlYtMAKpY+ZKAoeJJx55Q6FlEpaY=;
- b=C1I7hBwm9m7ZKlDs3SYRtz0tP0oqHDl1dK/R//Sl1VdldqkX3ugqwMMJHA119QHnPf
- VXGSU5TqI9UR7K5JcGdM7mmitWwRpVDJpzNYDjYWGDEwqdKO8bk3A5i0NJrlmXduCcHG
- 3gkcza1WYhK6laIDqP+QbABmnA4X+HQ/2LkU5FHNO+CmPHHdQ9JxyxHBcwT6FsMEysWN
- 1Sc5yJJhXosJrpw7u/+MvXUz3it4VLKsI8HAJoIJV2ykAiKQwAKkQoStum4SN9J0CxLL
- yxaq8z0nUuwiV9KXVK4NfcEyJUJwQ6lTl3xxKw8sRi0dGasU2Sn55gGMyaGuRLwCLKcz
- rjww==
+ d=gmail.com; s=20230601; t=1712503318; x=1713108118; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ryPUYSU+GV9+4tY6PI4oPJ6t2PYh9n7MJGJ7gXkn4rU=;
+ b=cFmm+zKJlNQ2O0IFw//MIGjuTTaxvgZtD3MWBXbgLPjEr3J8XTcoEgxtkPZP5F3pdg
+ 6e4/zNDzZOR9YOlvBBOhOfmygPlnnNZ0pAJI92BDAae5hyJNcUCZKf/VgSj4qYUpFfH1
+ UA8FisPWudyg3PUjq+JflS6ya2S6cfK/7srhofJpZOlEZW12kqXu5qBG0WYN7Ec/boHQ
+ dUj8PvrmlDRJxbH/TJNS0zOT5EkodEocIoMikk9eqwdVa4P2+DPsN0pabQuqJyISEeqe
+ jj03eNcLEJ7nA/Pb507NCmCrZNL7uhhniXbgCGJIhZvYnalmTmvR+ZZisHHgi8xmbPMF
+ wYAw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=C1I7hBwm
-Subject: Re: [Buildroot] [PATCH 1/1] package/google-breakpad: needs C++17
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=cFmm+zKJ
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/cups: add libxcrypt optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,92 +101,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Pascal Huerst <pascal.huerst@gmail.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following build failure raised since bump of glibc to version
+2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
 
+/home/buildroot/autobuild/run/instance-1/output-1/host/lib/gcc/arc-buildroot-linux-gnu/13.1.1/../../../../arc-buildroot-linux-gnu/bin/ld: auth.o: in function `cupsdAuthorize':
+auth.c:(.text+0xdba): undefined reference to `crypt'
 
-On 03/03/2024 14:22, Fabrice Fontaine wrote:
-> Fix the following build failure raised since commit
-> 32c1fbad554d4c2bfbe56a652333195c8ae67904:
-> 
-> configure: error: *** A compiler with support for C++17 language features is required.
-> 
-> Fixes: 32c1fbad554d4c2bfbe56a652333195c8ae67904
->   - http://autobuild.buildroot.org/results/451bae7151a74cbcb5d199b8516e9c255a0953fe
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
+ - http://autobuild.buildroot.org/results/39b72d4e14895f901590d7e3404f69b4573d2cd2
 
-  You forgot to update BR2_GOOGLE_BREAKPAD_ENABLE in Config.in.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Add missing '\'
 
-  Applied to master with that fixed, thanks.
+ package/cups/Config.in | 1 +
+ package/cups/cups.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-  Regards,
-  Arnout
+diff --git a/package/cups/Config.in b/package/cups/Config.in
+index 51cf10b073..ad852c0998 100644
+--- a/package/cups/Config.in
++++ b/package/cups/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_CUPS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  The Common Unix Printing System
+ 
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 91fad30b38..2ef480afe0 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -32,6 +32,7 @@ CUPS_CONFIG_SCRIPTS = cups-config
+ CUPS_DEPENDENCIES = \
+ 	host-autoconf \
+ 	host-pkgconf \
++	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
+ 	$(if $(BR2_PACKAGE_ZLIB),zlib)
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+-- 
+2.43.0
 
-> ---
->   package/google-breakpad/Config.in | 6 +++---
->   package/sentry-native/Config.in   | 6 +++---
->   2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-> index 5c7f4bb7ba..4e2d98eb04 100644
-> --- a/package/google-breakpad/Config.in
-> +++ b/package/google-breakpad/Config.in
-> @@ -6,7 +6,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
->   config BR2_PACKAGE_GOOGLE_BREAKPAD
->   	bool "google-breakpad"
->   	depends on BR2_INSTALL_LIBSTDCPP
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
->   	depends on BR2_USE_WCHAR
->   	depends on BR2_TOOLCHAIN_HAS_THREADS
->   	depends on BR2_TOOLCHAIN_USES_GLIBC
-> @@ -45,10 +45,10 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_TOOLS
->   
->   endif
->   
-> -comment "google-breakpad requires a glibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
-> +comment "google-breakpad requires a glibc toolchain w/ wchar, threads, C++, gcc >= 7"
->   	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
->   	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
->   	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->   		!BR2_TOOLCHAIN_HAS_THREADS || \
->   		!BR2_TOOLCHAIN_USES_GLIBC || \
-> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
-> diff --git a/package/sentry-native/Config.in b/package/sentry-native/Config.in
-> index 7a3cbd36ad..88db2779f1 100644
-> --- a/package/sentry-native/Config.in
-> +++ b/package/sentry-native/Config.in
-> @@ -1,7 +1,7 @@
->   config BR2_PACKAGE_SENTRY_NATIVE
->   	bool "sentry-native"
->   	depends on BR2_INSTALL_LIBSTDCPP # google-breakpad
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # google-breakpad
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # google-breakpad
->   	depends on BR2_USE_WCHAR # google-breakpad
->   	depends on BR2_TOOLCHAIN_HAS_THREADS # google-breakpad
->   	# google-breakpad is restricted to glibc or uClibc, but
-> @@ -19,10 +19,10 @@ config BR2_PACKAGE_SENTRY_NATIVE
->   
->   	  https://github.com/getsentry/sentry-native
->   
-> -comment "sentry-native needs a glibc toolchain with w/ wchar, thread, C++, gcc >= 4.8"
-> +comment "sentry-native needs a glibc toolchain with w/ wchar, threads, C++, gcc >= 7"
->   	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
->   	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
->   	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->   		!BR2_TOOLCHAIN_HAS_THREADS || \
->   		!BR2_TOOLCHAIN_USES_GLIBC || \
-> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
