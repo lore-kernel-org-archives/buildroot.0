@@ -4,49 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07D73CD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 20:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC499CD1292
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 20:31:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C7C9641518;
-	Sun,  7 Apr 2024 20:30:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A940A41521;
+	Sun,  7 Apr 2024 20:31:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id msFOWphWgeAt; Sun,  7 Apr 2024 20:30:37 +0000 (UTC)
+ id fKHJlVVskjZP; Sun,  7 Apr 2024 20:31:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00DF741528
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 403FE41529
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 00DF741528;
-	Sun,  7 Apr 2024 20:30:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A06B1BF94D
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 20:30:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 403FE41529;
+	Sun,  7 Apr 2024 20:31:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C2151BF3F6
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 20:31:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DD486065D
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 20:30:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C26C81B0A
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 20:30:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t5nhjXx5VbuK for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 20:30:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6478C6079B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6478C6079B
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 20:30:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5CFD4835E5; Sun,  7 Apr 2024 20:30:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 7 Apr 2024 21:52:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae1d482a3d1ebbae3f58fb6cf847d78a554d48a2
-X-Git-Newrev: 182756a0328d677a215551bfb2b5b22849c2d85e
-X-Patchwork-Hint: ignore
-Message-Id: <20240407203020.5CFD4835E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/uboot: rename TI_K3_DM option to
- cover further TI K3 SoCs support
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vscn9N6IHnPn for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 20:30:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BE62981ADE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE62981ADE
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BE62981ADE
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 20:30:56 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4166ccac75cso2636105e9.0
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 13:30:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712521854; x=1713126654;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=7aeMZ80+oVR9e4oLpFnXVv/YYv68xfeodumZx0FAvYQ=;
+ b=EdUVopSRtvATb1JESeM1pZx+mIDrPesLmbp5PrwMABgwAQaU4QYN8Hnxk2JjxkkWRQ
+ 3TyZwajVQ8JnTBgmunGWpnnhqujOV+Z8Htvra2hhrpVQxKmt+jjvwRh9UqiSkmUOyQ4J
+ fA5Gn8azWxf+nk2/f0oh7/4Tx7dSxMdTkW2YIshASeOR/MuK3OxXrMqMa/Gq1Q//V4pO
+ mr9/aRmNxGV2nShS7tXTX34Gp+XvZHZ0M8r5JYbshpjOOaPTFga67JoYZlukMRzZE+AP
+ ta/WMBwVkWCmJY7TWCU18hda8FlA0uHah5lTKLOOEi+uhiidrDqbHysBFMoAg391NO+S
+ mofQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXPWXRk/IUL0g+p7MIBKp+w/RrXeZ5pUzU7UapEZmX/LF3E7+j9fIs2XbxpV3WiABudNhpjjyoR+2i/1+snpj73hAKAGYTkug==
+X-Gm-Message-State: AOJu0Ywbr+Yr/EXJNwP1TL+GDke5yxqId5eQQsMyi/wDr58rQMxjPd/B
+ qMRaRU5XvtzR4KIKxiPmXz4qosoujaiJCwV8wurytLgNe+1AjMRXaVtzr6NAsLo=
+X-Google-Smtp-Source: AGHT+IGocbWGOzgnfhQ1XFpiKynlZN0ubDgHAJLNTpz9TWCywmYBFhrYiaDnxKefyNX7JGlYB6y6pQ==
+X-Received: by 2002:a05:600c:3551:b0:416:6344:8948 with SMTP id
+ i17-20020a05600c355100b0041663448948mr1259814wmq.2.1712521854270; 
+ Sun, 07 Apr 2024 13:30:54 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ h15-20020a05600c314f00b00416509d7d95sm4024901wmo.37.2024.04.07.13.30.53
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 07 Apr 2024 13:30:53 -0700 (PDT)
+Message-ID: <58478029-3c92-497e-bb31-4a1f1119afd4@mind.be>
+Date: Sun, 7 Apr 2024 22:30:51 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+References: <20240407103512.1112712-1-romain.naour@smile.fr>
+Content-Language: en-GB
+In-Reply-To: <20240407103512.1112712-1-romain.naour@smile.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1712521854; x=1713126654; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=7aeMZ80+oVR9e4oLpFnXVv/YYv68xfeodumZx0FAvYQ=;
+ b=hDXARmCoCqk2oMpscpeeuxNHTJTX2bufFQJ01GGhKmKieDNh4LMdl4rlArwVqT2/QK
+ WRas7tlr17CIdCAw0XmpodviefvomtjQujTrkTYo1oFPa3KFenO3qLClY4s1+z7CAErg
+ a/RHHAoUKFDY3wiqmhbQRvOIbcTc1YzHvZ7aZheqvaudxk8/mGNsByWXhesL4tenK0Cv
+ u+Qfg5PjVTUVpHXDJTqTW9t1suJjb7nEVjBMugoNuRWX7e9UW9p3o1OgTrCxeD1Gosct
+ IILjaWHXprOz5FOxk3nM10OQEt/sRO7JyzPeWvLO6nlCRSTXFO7LXD01FiiPfEumLREF
+ Movg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=hDXARmCo
+Subject: Re: [Buildroot] [PATCH v12 00/16] Add support for AM62x-SK HS-FS
+ devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,139 +109,102 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?Q?Gero_Schw=C3=A4ricke?= <gero.schwaericke@grandcentrix.net>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=182756a0328d677a215551bfb2b5b22849c2d85e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-BR2_TARGET_UBOOT_NEEDS_TI_K3_DM option has been introduced initially to
-support certain TI K3 devices such as AM62x and AM62Ax that require a
-Device Manager (DM) firmware.
-
-This option needs to be renamed to use a more generic name in order
-to cover further TI K3 SoCs support along with the new u-boot binman
-tool that will be added in followup patch. With binman enabled in
-u-boot on TI K3 SoC, ti-k3-boot-firmware is needed at buildtime to
-provide ti-sysfw (System Firmware) for all TI K3 SoC along with Device
-Manager (DM) firmware for AM62x and AM62Ax devices.
-
-With binman support enabled, we don't need to provide the path of the
-Device Manager firmware anymore (see [2]).
-We can remove DM="<DM firmware>.xer5f" from UBOOT_MAKE_OPTS.
-It also means that we can also remove BR2_TARGET_UBOOT_TI_K3_DM_SOCNAME
-used to define DM path.
-
-  DM=$(BINARIES_DIR)/ti-dm/$(UBOOT_TI_K3_DM_SOCNAME)/ipc_echo_testb_mcu1_0_release_strip.xer5f
-
-For now, keep BR2_TARGET_UBOOT_TI_K3_DM_SOCNAME and DM only when
-ti-k3-image-gen is used. We need to update ti_am62x_sk_defconfig
-to use binman before removing them along with ti-k3-image-gen.
-
-[1] 52ce606c05ee3ac869f8087292bc3dbb0d25b79b
-[2] https://software-dl.ti.com/processor-sdk-linux/esd/AM62X/09_01_00_08/exports/docs/linux/Foundational_Components/U-Boot/UG-General-Info.html
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- Config.in.legacy              |  8 ++++++++
- boot/uboot/Config.in          | 23 ++++++++++++++---------
- boot/uboot/uboot.mk           |  4 +++-
- configs/ti_am62x_sk_defconfig |  2 +-
- 4 files changed, 26 insertions(+), 11 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index d00196e08b..4084ffa516 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2024.05"
- 
-+config BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
-+	bool "u-boot TI K3 DM option has been renamed."
-+	select BR2_LEGACY
-+	select BR2_TARGET_UBOOT_NEEDS_TI_K3_BOOT_FIRMWARE
-+	help
-+	  The TI K3 Device Manager is already included in
-+	  ti-k3-boot-firmware.
-+
- config BR2_PACKAGE_FLUTTER_GALLERY
- 	bool "flutter-gallery removed"
- 	select BR2_LEGACY
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 39b3f2c81b..e310c09217 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -240,18 +240,23 @@ config BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE
- 	  U-Boot, and that the TEE variable pointing to OPTEE's
- 	  tee.elf, is passed during the Buildroot build.
- 
--config BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
--	bool "U-Boot needs TI K3 Device Manager (DM)"
--	# We use the SoC selection defined for the ti-k3-image-gen
--	# package
--	depends on BR2_TARGET_TI_K3_IMAGE_GEN
--	depends on BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX || BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
-+config BR2_TARGET_UBOOT_NEEDS_TI_K3_BOOT_FIRMWARE
-+	bool "U-Boot needs ti-k3-boot-firmware"
-+	depends on BR2_TARGET_TI_K3_BOOT_FIRMWARE
- 	help
--	  Some TI K3 devices need the Device Manager (DM) firmware to
--	  be available for the U-Boot build.
-+	  TI K3 devices needs at least ti-sysfw (System Firmware) when
-+	  built with u-boot's binman tool.
- 
--if BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
-+	  Some TI K3 devices using a split firmware boot flow (AM62,
-+	  j721e) also need the Device Manager (DM) firmware to be
-+	  available for the U-Boot build.
- 
-+if BR2_TARGET_UBOOT_NEEDS_TI_K3_BOOT_FIRMWARE
-+
-+# TI_K3_DM_SOCNAME is only needed when ti-k3-image-gen is used for
-+# TI K3 devices using the Device Manager (DM) firmware.
-+# We use the SoC selection defined for the ti-k3-image-gen
-+# package.
- config BR2_TARGET_UBOOT_TI_K3_DM_SOCNAME
- 	string
- 	default "am62axx" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 491f654cec..47fb419e92 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -194,11 +194,13 @@ UBOOT_DEPENDENCIES += optee-os
- UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee.elf
- endif
- 
--ifeq ($(BR2_TARGET_UBOOT_NEEDS_TI_K3_DM),y)
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_TI_K3_BOOT_FIRMWARE),y)
- UBOOT_TI_K3_DM_SOCNAME = $(call qstrip,$(BR2_TARGET_UBOOT_TI_K3_DM_SOCNAME))
- UBOOT_DEPENDENCIES += ti-k3-boot-firmware
-+ifneq ($(UBOOT_TI_K3_DM_SOCNAME),)
- UBOOT_MAKE_OPTS += DM=$(BINARIES_DIR)/ti-dm/$(UBOOT_TI_K3_DM_SOCNAME)/ipc_echo_testb_mcu1_0_release_strip.xer5f
- endif
-+endif
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSBI),y)
- UBOOT_DEPENDENCIES += opensbi
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index 37df7a93f7..b2814526bb 100644
---- a/configs/ti_am62x_sk_defconfig
-+++ b/configs/ti_am62x_sk_defconfig
-@@ -37,7 +37,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am62x_evm_a53"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_NEEDS_TI_K3_DM=y
-+BR2_TARGET_UBOOT_NEEDS_TI_K3_BOOT_FIRMWARE=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAwNy8wNC8yMDI0IDEyOjM0LCBSb21haW4gTmFvdXIgd3JvdGU6Cj4gVGhpcyBzZXJpZXMg
+YWltcyBpbml0aWFsbHkgdG8gZml4IEFNNjJ4LVNLIEhTLUZTIGRldmljZXMgYnV0IGRvaW5nIHNv
+Cj4gd291bGQgcmVxdWlyZXMgYWRkaW5nIGEgVEkgbGVnYWN5IHRvb2wgInRpLWszLWNvcmUtc2Vj
+ZGV2IiBpbnRvIEJ1aWxkcm9vdC4KPiB0aS1rMy1jb3JlLXNlY2RldiBpcyByZXBsYWNlZCBieSB1
+LWJvb3QncyBiaW5tYW4gdG9vbCBzaW5jZSB2MjAyMy4xMCByZWxlYXNlCj4gb2YgdS1ib290Lgo+
+IAo+IEluc3RlYWQsIHdlIGJ1bXAgdGhlIEJTUCB0byB1c2UgdGhlIGxhdGVzdCB1LWJvb3QgcmVs
+ZWFzZSAoMjAyNC4wMSkgdG8gdXNlCj4gYmlubWFuLiBEb2luZyBzbyByZXF1aXJlcyB0byByZXdv
+cmsgdGhlIFRJIEszIFNvQyBzdXBwb3J0IGluIEJ1aWxkcm9vdC4KPiAKPiBUaGlzIG5ldyB2ZXJz
+aW9uICh2MTIpIG9mIHRoaXMgc2VyaWVzIHJlbW92ZSB0aGUgdGktazMgcGFja2FnZSBhbmQKPiBh
+bGwgU09DIGFuZCBTRUNUWVBFIG9wdGlvbnMuIEFzIHN1Z2dlc3RlZCBieSBNaWNoYWVsIFdhbGxl
+LCBjb3B5IHRoZQo+IGRlZmF1bHQgdGlib290My5iaW4gYW5kIHN5c2Z3Lml0YiAoaWYgYW55KSBp
+ZiBubyBjdXN0b20gZmlsZSBuYW1lIGlzCj4gcHJvdmlkZWQgb24gdGhlIGRlZmNvbmZpZy4gU2lu
+Y2Ugc3VjaCBmaWxlIG5hbWUgY2FuIGJlIGN1c3RvbWl6ZWQsCj4gdGhlIHVzZXIgbXVzdCBwcm92
+aWRlIHRoZSBjb21wbGV0ZSBmaXJtd2FyZSBuYW1lIGlmIG5vdCB1c2luZyB0aGUKPiBkZWZhdWx0
+IG9uZS4KPiAKPiBodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQvcGlwZXJtYWlsL2J1aWxkcm9vdC8y
+MDI0LUFwcmlsLzY4ODk0My5odG1sCj4gCj4gV2l0aCB0aGUgYWR2aWNlIG9mIEFuZHJlYXMgRGFu
+bmVuYmVyZyAoVEkgSzMgYXJjaGl0ZWN0KSwgd2Ugc3dpdGNoCj4gQU02MngvQU02MkF4L0FNNjR4
+IHRvIEhTLUZTIGJ5IGRlZmF1bHQuCj4gCj4gVGVzdHMgcGVyZm9ybWVkIG9uIGVhcmxpZXIgcmV2
+aXNpb24gb2YgdGhpcyBzZXJpZXM6Cj4gCj4gKiBjb21waWxlZCB0aV9hbTYyeF9za19kZWZjb25m
+aWcKPiAgICAqIHN1Y2Nlc3MKPiAqIGJvb3RlZCBvbiBBTTYyeCBTSyBFVk0gKEUzKQo+ICAgICog
+c3VjY2Vzcwo+ICAgICogbm8gb2J2aW91cyBlcnJvcnMgaW4gZG1lc2cKPiAKPiBUZXN0ZWQtYnk6
+IEdlcm8gU2Nod8Okcmlja2UgPGdlcm8uc2Nod2Flcmlja2VAZ3JhbmRjZW50cml4Lm5ldD4KPiAK
+PiBEYXJpbyBCaW5hY2NoaSAoMTApOgo+ICAgIGJvb3QvdGktazMtcjUtbG9hZGVyOiBkcm9wIGhh
+c2ggZm9yIHZlcnNpb24gMjAyMi4xMAo+ICAgIGJvb3QvdGktazMtcjUtbG9hZGVyOiBhZGQgQlIy
+X1RBUkdFVF9USV9LM19SNV9MT0FERVJfVVNFX0JJTk1BTiBvcHRpb24KPiAgICBib290L3Vib290
+OiBhZGQgQlIyX1RBUkdFVF9VQk9PVF9VU0VfQklOTUFOIG9wdGlvbgo+ICAgIGJvb3QvdGktazMt
+cjUtbG9hZGVyOiBpbnN0YWxsIHRpYm9vdDMuYmluIGFuZCBzeXNmdy5pdGIgdG8KPiAgICAgIEJJ
+TkFSSUVTX0RJUgo+ICAgIGNvbmZpZ3MvdGlfYW02Mnhfc2tfZGVmY29uZmlnOiBidW1wIFUtQm9v
+dCB2ZXJzaW9uIHRvIDIwMjQuMDEKPiAgICBjb25maWdzL3RpX2FtNjJ4X3NrX2RlZmNvbmZpZzog
+YnVtcCBMaW51eCB2ZXJzaW9uIHRvIDYuNi4xOAo+ICAgIGJvYXJkL3RpL2FtNjJ4LXNrOiBnZW5l
+cmFsaXplIHBvc3QtYnVpbGQuc2gKPiAgICBib2FyZC90aS9hbTYyeC1zazogbW92ZSBwb3N0LWJ1
+aWxkLnNoIHRvIGJvYXJkL3RpL2NvbW1vbi9hbTZ4eAo+ICAgIGNvbmZpZ3MvdGlfYW02NHhfc2tf
+ZGVmY29uZmlnOiBidW1wIFUtQm9vdCB2ZXJzaW9uIHRvIDIwMjQuMDEKPiAgICBjb25maWdzL3Rp
+X2FtNjR4X3NrX2RlZmNvbmZpZzogYnVtcCBMaW51eCB2ZXJzaW9uIHRvIDYuNi4xOAo+IAo+IFJv
+bWFpbiBOYW91ciAoNik6Cj4gICAgYm9hcmQvdGkvYW02ezIsNH14LXNrOiBhZGQgYXJtLXRydXN0
+ZWQtZmlybXdhcmUgdjIuNyBoYXNoCj4gICAgYm9vdC91Ym9vdDogcmVuYW1lIFRJX0szX0RNIG9w
+dGlvbiB0byBjb3ZlciBmdXJ0aGVyIFRJIEszIFNvQ3Mgc3VwcG9ydAo+ICAgIGJvb3QvdWJvb3Q6
+IHJlbW92ZSBCUjJfVEFSR0VUX1VCT09UX1RJX0szX0RNX1NPQ05BTUUKPiAgICBib290L3RpLWsz
+LWltYWdlLWdlbjogcmVtb3ZlIHBhY2thZ2UKPiAgICBib290L3RpLWszLXI1LWxvYWRlcjogcmVt
+b3ZlIEJSMl9UQVJHRVRfVElfSzNfUjVfTE9BREVSX1VTRV9CSU5NQU4KPiAgICBwYWNrYWdlL3Rp
+LWszOiBzd2l0Y2ggQU02MngvQU02MkF4L0FNNjR4IHRvIEhTLUZTIGJ5IGRlZmF1bHQKCiAgUGF0
+Y2hlcyAxLTUgYXBwbGllZCB0byBtYXN0ZXIuIEFuZCB0aGVyZSBJIHN0b3BwZWQsIGR1ZSB0byB0
+aGUgU1dTRlcgdHlwby4gSSAKY291bGQgaGF2ZSBmaXhlZCBpdCB1cCBteXNlbGYgYnV0IGl0J3Mg
+cmVhbGx5IGV2ZXJ5IHBhdGNoIHRoYXQgbmVlZHMgdG8gYmUgCnVwZGF0ZWQuLi4KCgogIFJlZ2Fy
+ZHMsCiAgQXJub3V0Cgo+IAo+ICAgQ29uZmlnLmluLmxlZ2FjeSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgMTUgKysrKwo+ICAgREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDIgLQo+ICAgYm9hcmQvdGkvYW02Mngtc2svZ2VuaW1hZ2UuY2ZnICAg
+ICAgICAgICAgICAgIHwgIDcgKy0KPiAgIC4uLi9hcm0tdHJ1c3RlZC1maXJtd2FyZS5oYXNoICAg
+ICAgICAgICAgICAgICB8ICAyICsKPiAgIC4uLi9wYXRjaGVzL2xpbnV4LWhlYWRlcnMvbGludXgt
+aGVhZGVycy5oYXNoICB8ICAxICsKPiAgIGJvYXJkL3RpL2FtNjJ4LXNrL3BhdGNoZXMvbGludXgv
+bGludXguaGFzaCAgICB8ICAyICsKPiAgIC4uLi90aS1rMy1yNS1sb2FkZXIvdGktazMtcjUtbG9h
+ZGVyLmhhc2ggICAgICB8ICAyICsKPiAgIGJvYXJkL3RpL2FtNjR4LXNrL2dlbmltYWdlLmNmZyAg
+ICAgICAgICAgICAgICB8ICA3ICstCj4gICAuLi4vYXJtLXRydXN0ZWQtZmlybXdhcmUuaGFzaCAg
+ICAgICAgICAgICAgICAgfCAgMiArCj4gICAuLi4vcGF0Y2hlcy9saW51eC1oZWFkZXJzL2xpbnV4
+LWhlYWRlcnMuaGFzaCAgfCAgMSArCj4gICBib2FyZC90aS9hbTY0eC1zay9wYXRjaGVzL2xpbnV4
+L2xpbnV4Lmhhc2ggICAgfCAgMiArCj4gICAuLi4vdGktazMtcjUtbG9hZGVyL3RpLWszLXI1LWxv
+YWRlci5oYXNoICAgICAgfCAgMSArCj4gICBib2FyZC90aS9jb21tb24vYW02eHgvcG9zdC1idWls
+ZC5zaCAgICAgICAgICAgfCA1OCArKysrKysrKysrKysrKwo+ICAgYm9vdC9Db25maWcuaW4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgLQo+ICAgYm9vdC90aS1rMy1pbWFnZS1n
+ZW4vQ29uZmlnLmluICAgICAgICAgICAgICAgIHwgNzcgLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICAg
+Ym9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1hZ2UtZ2VuLmhhc2ggICAgIHwgIDMgLQo+ICAg
+Ym9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1hZ2UtZ2VuLm1rICAgICAgIHwgNTQgLS0tLS0t
+LS0tLS0tLQo+ICAgYm9vdC90aS1rMy1yNS1sb2FkZXIvQ29uZmlnLmluICAgICAgICAgICAgICAg
+IHwgMzMgKysrKysrKysKPiAgIGJvb3QvdGktazMtcjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5o
+YXNoICAgICB8ICAxIC0KPiAgIGJvb3QvdGktazMtcjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5t
+ayAgICAgICB8IDQwICsrKysrKysrKy0KPiAgIGJvb3QvdWJvb3QvQ29uZmlnLmluICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8IDM1ICsrKysrLS0tLQo+ICAgYm9vdC91Ym9vdC91Ym9vdC5tayAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgMTIgKystCj4gICBjb25maWdzL3RpX2FtNjJ4X3Nr
+X2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgfCAyMSArKy0tLQo+ICAgY29uZmlncy90aV9hbTY0
+eF9za19kZWZjb25maWcgICAgICAgICAgICAgICAgIHwgMjAgKysrLS0KPiAgIDI0IGZpbGVzIGNo
+YW5nZWQsIDIyMSBpbnNlcnRpb25zKCspLCAxNzggZGVsZXRpb25zKC0pCj4gICBjcmVhdGUgbW9k
+ZSAxMDA2NDQgYm9hcmQvdGkvYW02Mngtc2svcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS9h
+cm0tdHJ1c3RlZC1maXJtd2FyZS5oYXNoCj4gICBjcmVhdGUgbW9kZSAxMjAwMDAgYm9hcmQvdGkv
+YW02Mngtc2svcGF0Y2hlcy9saW51eC1oZWFkZXJzL2xpbnV4LWhlYWRlcnMuaGFzaAo+ICAgY3Jl
+YXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjJ4LXNrL3BhdGNoZXMvbGludXgvbGludXguaGFz
+aAo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjJ4LXNrL3BhdGNoZXMvdGktazMt
+cjUtbG9hZGVyL3RpLWszLXI1LWxvYWRlci5oYXNoCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9h
+cmQvdGkvYW02NHgtc2svcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS9hcm0tdHJ1c3RlZC1m
+aXJtd2FyZS5oYXNoCj4gICBjcmVhdGUgbW9kZSAxMjAwMDAgYm9hcmQvdGkvYW02NHgtc2svcGF0
+Y2hlcy9saW51eC1oZWFkZXJzL2xpbnV4LWhlYWRlcnMuaGFzaAo+ICAgY3JlYXRlIG1vZGUgMTAw
+NjQ0IGJvYXJkL3RpL2FtNjR4LXNrL3BhdGNoZXMvbGludXgvbGludXguaGFzaAo+ICAgY3JlYXRl
+IG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjR4LXNrL3BhdGNoZXMvdGktazMtcjUtbG9hZGVyL3Rp
+LWszLXI1LWxvYWRlci5oYXNoCj4gICBjcmVhdGUgbW9kZSAxMDA3NTUgYm9hcmQvdGkvY29tbW9u
+L2FtNnh4L3Bvc3QtYnVpbGQuc2gKPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBib290L3RpLWszLWlt
+YWdlLWdlbi9Db25maWcuaW4KPiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBib290L3RpLWszLWltYWdl
+LWdlbi90aS1rMy1pbWFnZS1nZW4uaGFzaAo+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGJvb3QvdGkt
+azMtaW1hZ2UtZ2VuL3RpLWszLWltYWdlLWdlbi5tawo+IAo+IC0tCj4gMi40NC4wCj4gCj4gX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
