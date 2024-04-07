@@ -4,98 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3AC5CD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 16:00:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5493CD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 16:03:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32960408EA;
-	Sun,  7 Apr 2024 16:00:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8DF814002D;
+	Sun,  7 Apr 2024 16:03:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PalLUTaZaE8P; Sun,  7 Apr 2024 16:00:35 +0000 (UTC)
+ id uuyyEy5bz-le; Sun,  7 Apr 2024 16:03:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD205408F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 167CD410CA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD205408F0;
-	Sun,  7 Apr 2024 16:00:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4EF071BF2CC
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 16:00:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 167CD410CA;
+	Sun,  7 Apr 2024 16:03:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A9171BF2CC
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 16:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BD1D60AD4
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 16:00:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 87B8F82040
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 16:03:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IRKs5NyhhJTJ for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 16:00:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kERlfB5Q_zxe for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 16:03:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 354A660AD2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 354A660AD2
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 354A660AD2
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 16:00:32 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-34175878e3cso2694954f8f.0
- for <buildroot@buildroot.org>; Sun, 07 Apr 2024 09:00:32 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4BC2B8203E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BC2B8203E
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4BC2B8203E
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 16:03:17 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-415446af364so27090525e9.0
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 09:03:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712505630; x=1713110430;
+ d=1e100.net; s=20230601; t=1712505796; x=1713110596;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=I+hWbJTdecGtRb8iA6Ay8bc8j8xowizGyXQn+UKeHw0=;
- b=ASzLec09a4FPfzFGobteEFIpX+4lnr2ff4TIU0e2ibt+4yIeozQ5dKNpPfPplDWfRE
- AIR3xItp8GUNP+D4NcG07Kdl8pSD6NI6FVHyR2gqWLOA8BId3iOXY2MosctPnoHxUE/U
- h9n1Op1W4uCX+ZmI9SxTI5iXNRtNnunt+H39Ho/uqL8FLBb6Yh+gL1+hGK9eVyG9Sfbn
- 5yMknl+csE92sfSTSDjqBIA3iAYadZgMyya9E7+VKlGh8CP3noF1N5rLZfOYAcTBW4wd
- 6JdYRydY4UIYpTm7CX7lF3q8nFk+IYNqlWQSR+IOujV6qAiWx3aKF72x0GgSGwDW2NaS
- GZFg==
+ bh=3maXZKIWCOGMpntgxjuaZmPnAOAaq1UMosfB9mYyF2k=;
+ b=oSvGbJAGReOC9ZAr/m9o8NzHMk7kyv+QBMaWreuLoSjTMnnsIsBh5sX8ebZtZHlQo9
+ pEDiNTMHoSXBc1vLQ9yv+kFbc7fF6YMGCrxt3u7QQgDz+7RJgXsqWpn73PkSbziqyafj
+ +9I2X9YF9LvtKG+9aIq4qfnvFHdSngJFkH2shRprxBpqhxNHSyixSJrgRvlwUALh15WW
+ g8a+UuaRfXWDVYCMMT+EMwtuz9/v0C/N9ZqgBvLSn1+4GLq4oblKcEYwaUrAfKBt2cqM
+ ZC2/RRBo1TTjDItdred2GSV/sepba1kA33xA0eVGpLKC78PXm4IPIeRCkC3TIGp4hgRZ
+ HMYQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVF6dHbTF0bzKyra21Lk85ZGldWKpRU1HZXM2Vkq5BpNT62N3Q0GvVqixm40taUbyUd7rBnr2leBUxjHM4u6ju4bfpNbRJgGg==
-X-Gm-Message-State: AOJu0Yxp4NlwMAVNwyMRz9ZUyyj0qBbFgbk+6O+YeMSUzOmH+AE4n7Q1
- xcofh/66fNLRgtVz94A4kKaOg/9Z13Y/mqka/IOGKovn9TqnZDZWX2JBBYV+Mxk=
-X-Google-Smtp-Source: AGHT+IGW8MCDlzHp3CT+HEoccrAt7uzyXRAih5chbS9bG7CsFrdZTuBTt1bJWUbntAR8iGWGRw0ayA==
-X-Received: by 2002:a5d:654e:0:b0:343:bd44:c261 with SMTP id
- z14-20020a5d654e000000b00343bd44c261mr4507756wrv.8.1712505630076; 
- Sun, 07 Apr 2024 09:00:30 -0700 (PDT)
+ AJvYcCV6rqMLmsfWwnTB9PT5ztAKVq+Jn6ltPivzljON7JBl/4zmrpgQYr61/+dWAPdoUqKq0OcqE8vCm4pPPH5KLANH45ns5vB0uw==
+X-Gm-Message-State: AOJu0YyBurlZUADRfyxljI+gNi964f07rowf+Sg0dNIcodC+WI24lihY
+ f+r8Lp1SouHkkDbfyhDvWimDtaBZsPCWSgmjy9tLqCx5oVnbAXVh70G7ARoC4IQ=
+X-Google-Smtp-Source: AGHT+IGanYGwr6StVKPMjSqoKnMbU9WrvUoM3qlTIG/q+Up//lJdTcx+NzEYbxlCfO4kDJIlQt0Cyw==
+X-Received: by 2002:a5d:410e:0:b0:343:d7fe:96f8 with SMTP id
+ l14-20020a5d410e000000b00343d7fe96f8mr6126414wrp.19.1712505795943; 
+ Sun, 07 Apr 2024 09:03:15 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- n15-20020a5d67cf000000b00345555956c6sm3694304wrw.92.2024.04.07.09.00.29
+ c8-20020adfe748000000b00343a0e2375esm6906581wrn.27.2024.04.07.09.03.14
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 07 Apr 2024 09:00:29 -0700 (PDT)
-Message-ID: <929e101e-8222-42dd-8f3e-660818d08a44@mind.be>
-Date: Sun, 7 Apr 2024 18:00:27 +0200
+ Sun, 07 Apr 2024 09:03:15 -0700 (PDT)
+Message-ID: <597fe4d9-17ba-45e5-9208-cdd1a4359dfc@mind.be>
+Date: Sun, 7 Apr 2024 18:03:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Sen Hastings <sen@hastings.org>, buildroot@buildroot.org
-References: <20240225220544.754965-1-sen@hastings.org>
+References: <20240305093334.2233237-1-sen@hastings.org>
 Content-Language: en-GB
-In-Reply-To: <20240225220544.754965-1-sen@hastings.org>
+In-Reply-To: <20240305093334.2233237-1-sen@hastings.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1712505630; x=1713110430; darn=buildroot.org;
+ d=mind.be; s=google; t=1712505796; x=1713110596; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:to:subject:user-agent:mime-version:date:message-id:from
  :to:cc:subject:date:message-id:reply-to;
- bh=I+hWbJTdecGtRb8iA6Ay8bc8j8xowizGyXQn+UKeHw0=;
- b=Aw+7ysWLumU/P9GbjodEVYxoser32i48cdtUIs+LOtV7+O3c9lRe48NvO0h0FJrt+Z
- FgTeiHmX3kS2z6IcELXAmMgEX9sW7ct2RHIyMD9W35QkeP7G27sXrnaFNDW7AV3mnFU3
- mSIH+1CTJ9EyjFBvHcFAB/S00U8cnIkWeggxyhZ3SU++8D9kqCh1o3KUZm9UawbdoEXl
- xxgrJrxMI6SnWzeXiSXMCmtPowa+mKYCmnkHm8iD4SAzf1FN7tDG+LTHvxKQ9Rbyywi7
- 3anzKQUaTgvNeVmy7CYyaoC126nGXX/V/lwmASq1fxk9GUUXHSCzEGOtyyc0lg+3MxZ3
- 8yVQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=3maXZKIWCOGMpntgxjuaZmPnAOAaq1UMosfB9mYyF2k=;
+ b=IYNxmpqUrCTPu1LTtuuFtIntox3jxdmyHXukRCLlpa2bQX5coEgmFi7yifh5imOu/T
+ gaLXEGSiFGuHCx8kOch9bMhxTzvaitlihnr0jtH3uzN6z5gfWYLqtyktLbcq/JqKbmPA
+ N67NUM744cu9Xe5SHHBieDpY7NP3LregvPhj5BppplELYCG1MrLeBXEjf16WLQApJRc/
+ vDDIzHd+1APlbPqYnvpiHLv6oPUXervNpknSga0acnRsa5rKLAgr7gsydo1NEK/bwTuL
+ hjtChl/y0+QfCNMV07cuMUyayIUrWN5LdBjgQ60hMoQqxQn1ThpITcA5d0iILOJr3XaS
+ nKfw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Aw+7ysWL
-Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: fix bug when
- sorting by hashfile
+ header.a=rsa-sha256 header.s=google header.b=IYNxmpqU
+Subject: Re: [Buildroot] [PATCH v2 1/1] support/scripts/pkg-stats:
+ fix/improve git hash sorting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -116,44 +116,87 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 25/02/2024 23:05, Sen Hastings wrote:
-> Because the div_class variable was not reassigned a value,
-> cells in the latest_version column were still being assigned
-> hash_file classes and so were being picked up as elements in
-> the hash_file sort. This lead to execessive grid gap elements
-> stacking up and creating huge blank spaces at the top of the page.
-> This is very noticable on pages with a large number of packages,
-> like the ones the autobuilder creates.
+On 05/03/2024 10:33, Sen Hastings wrote:
+> sortGrid()'s handling of git hashes and other large hex numbers
+> has been inconsistent, they can be detected as strings or numbers
+> depending on what type of character they start with.
+> This patch fixes the behaviour by using a regex to capture everything
+> that looks like a big hex number and treat it as a string.
+> This means when you sort by current version ascending all the version
+> strings with big hex numbers should show up first, sorted 0-9,a-f.
 > 
-> original behaviour(click the "Hash file" column label twice):
-> http://autobuild.buildroot.org/stats/master.html
+> First we check for a string length >= 39, and then apply a regex
+> to return an array with every char from that string that matched
+> the regex. If the length of this array is still >= 39 we can assume
+> we are looking at something containing a git hash.
 > 
-> demo of fixed behaviour:
-> https://sen-h.codeberg.page/pkg-stats-demos/@pages/fix-bug-when-sorting-by-hash-file.html
+> The reason why the length is defined as ">= 39" and not "40" or
+> "39 or 40" is twofold:
+> 
+> Firstly, 39 was chosen as a minimum to match stuff with 39 char git
+> hashes, like the rockchip-mali package.
+> 
+> Secondly, there is no max because we actually want to catch not
+> just explicitly git hashes, but any verson string with big gnarly
+> hex numbers in it.
+> Stuff like: "1.4.2-168-ged3039cdbeeb28fc0011c3585d8f7dfb91038292"
+> 
+> Why? Well, the idea is less about git hashes and sorting
+> and more about grouping similarly formatted version strings.
+> 
+> It would be impossble (or at least annoyingly complicated) and of
+> dubious utility to get a real sequential sort out of the
+> current version column, so the attempt here is to at the very
+> least collect all the similarly formatted things together.
+> 
+> This isn't perfect, but it's a (arguably) more useful sorted
+> output than before.
+> 
+> A demo is available here:
+> https://sen-h.codeberg.page/pkg-stats-demos/@pages/fix-improve-git-hash-sorting.html
 > 
 > Signed-off-by: Sen Hastings <sen@hastings.org>
 
   Applied to master, thanks.
 
+  That said, sorting by version is of no practical value, because the versions 
+of different packages bear absolutely no relation with each other. So maybe it's 
+more useful to disable the sorting entirely in the Current version, Latest 
+version, and CPE ID columns.
+
   Regards,
   Arnout
 
 > ---
->   support/scripts/pkg-stats | 1 +
->   1 file changed, 1 insertion(+)
+> Changes v1 -> v2:
+>    - more detailed commit log (requested by Yann E. MORIN)
+> ---
+>   support/scripts/pkg-stats | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
 > 
 > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index 9307992d29..9ba356cb7c 100755
+> index 3295eb7a48..4dc1857a9e 100755
 > --- a/support/scripts/pkg-stats
 > +++ b/support/scripts/pkg-stats
-> @@ -977,6 +977,7 @@ def dump_html_pkg(f, pkg):
->   
->       # Latest version
->       data_field_id = f'latest_version__{pkg_css_class}'
-> +    div_class = ["centered"]
->       div_class.append(f'_{pkg_css_class}')
->       div_class.append("latest_version data")
->       if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+> @@ -741,6 +741,7 @@ addedCSSRules.forEach(rule => styleSheet.insertRule(rule));
+>   function sortGrid(sortLabel){
+>   	let i = 0;
+>   	let pkgSortArray = [], sortedPkgArray = [], pkgStringSortArray = [], pkgNumSortArray = [];
+> +	const git_hash_regex = /[a-f,0-9]/gi;
+>   	const columnValues = Array.from(document.getElementsByClassName(sortLabel));
+>   	const columnName = document.getElementById(sortLabel);
+>   	let lastStyle = document.getElementById("sort-css");
+> @@ -765,7 +766,9 @@ function sortGrid(sortLabel){
+>                   pkgSortArray.push(sortArr);
+>           });
+>           pkgSortArray.forEach((listing) => {
+> -                if ( isNaN(parseInt(listing[1], 10)) ){
+> +                if ( listing[1].length >= 39 && listing[1].match(git_hash_regex).length >= 39){
+> +                        pkgStringSortArray.push(listing);
+> +		} else if ( isNaN(parseInt(listing[1], 10)) ){
+>                           pkgStringSortArray.push(listing);
+>                   } else {
+>                           listing[1] = parseFloat(listing[1]);
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
