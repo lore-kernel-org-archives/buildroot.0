@@ -4,73 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4ED1CD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 17:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A67D2CD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 17:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8561B81B14;
-	Sun,  7 Apr 2024 17:44:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EE1A81BBD;
+	Sun,  7 Apr 2024 17:47:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nMIfjRmPpmu1; Sun,  7 Apr 2024 17:44:39 +0000 (UTC)
+ id 5Gjht9Wfqyed; Sun,  7 Apr 2024 17:47:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7380E81B7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57F6081BCF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7380E81B7B;
-	Sun,  7 Apr 2024 17:44:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C5C281BF2BE
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 17:44:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57F6081BCF;
+	Sun,  7 Apr 2024 17:47:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A46C1BF2BE
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 17:47:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B084481B25
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 17:44:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 175484035D
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 17:47:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WI_Stg2YsUoI for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 17:44:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A7A3981B14
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7A3981B14
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A7A3981B14
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 17:44:36 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id BBD4113F8AD;
- Sun,  7 Apr 2024 19:44:30 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 07 Apr 2024 19:44:30 +0200
-Date: Sun, 7 Apr 2024 19:44:30 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Perale <thomas.perale@essensium.com>
-Message-ID: <ZhLbfkgliWC2sR19@landeda>
-References: <20240404124329.768546-1-thomas.perale@mind.be>
- <20240404124329.768546-3-thomas.perale@mind.be>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZTqYS0B0_hfq for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 17:47:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::429; helo=mail-pf1-x429.google.com;
+ envelope-from=chinhuat@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5BC2F4018F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BC2F4018F
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com
+ [IPv6:2607:f8b0:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5BC2F4018F
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 17:47:14 +0000 (UTC)
+Received: by mail-pf1-x429.google.com with SMTP id
+ d2e1a72fcca58-6ecec796323so3413117b3a.3
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 10:47:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712512033; x=1713116833;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=fUKd3euqRcs+njQrrrQ/TBE46mBu8ApVxDtiKAQT2uE=;
+ b=I6Q5spCTMDCDfDZaiOqKpN7ES4eHR1U7xvd6v4aaEV71YHxwl+Ux8FDiZKIbc7xMxx
+ 2HocluKlGMzkVzzeQNuGNZKWPuuYh6tLJWpA4l6cp0mh8yk63MklK9ntf90RuanWWiKj
+ fP3qsn1XPSUqtCKroySxbgIA+QTe7HAlCMpBjaoRyPuSctmrNnq+QIgCThf/FI+XAqM3
+ lZcg1A7Ydi5kS6y0NvEFWyBpmlR/1ChtJcRBG22QO2tQJXfEplfUTZHHm1M4/EfgdIBC
+ zBRr15SxmWfcHQmrieLmoyP+8vw+3+gwU0YItLpPBEoGIeWheGVm1WZ/KYEIA5enZbB/
+ l32A==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWRxoKTa6lvAGddmNfVRyyJTQcwF/1jCHF7zph4pmJRNR8hkC9pNyhQyWURBg2ZQHqO1L6ECuPrFmG+o3rAnEsIrZKRV3enGw==
+X-Gm-Message-State: AOJu0YxR3R58n82q8vIUUxSATWEgUSYtsHfaxCG4ic277famqjvIU65Y
+ N/VOZe4oyvHbHOikGx76I/zl1ALRRPjEybnoSoFurRF9kI5AnuAS
+X-Google-Smtp-Source: AGHT+IGOR44ScvcEtdCu9u50vdWeBDDwhbpyt22p/kAwyRjLNBldgSHEalt744dR7Sg11OJ8L3Avrw==
+X-Received: by 2002:aa7:88d3:0:b0:6ea:f422:64ce with SMTP id
+ k19-20020aa788d3000000b006eaf42264cemr9007167pff.33.1712512033513; 
+ Sun, 07 Apr 2024 10:47:13 -0700 (PDT)
+Received: from NUC7CJYS ([175.144.129.205]) by smtp.gmail.com with ESMTPSA id
+ s25-20020a056a00179900b006ecffb316ccsm4705279pfg.202.2024.04.07.10.47.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Apr 2024 10:47:13 -0700 (PDT)
+From: Chin Huat Ang <chinhuat@gmail.com>
+X-Google-Original-From: Chin Huat Ang <chinhuat>
+Date: Mon, 8 Apr 2024 01:47:08 +0800
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZhLcHN3heQjqZvCD@NUC7CJYS>
+References: <20240406154308.3336009-1-chinhuat@gmail.com>
+ <20240406233701.036e7ca8@windsurf>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240404124329.768546-3-thomas.perale@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1712511875;
- bh=52t5A5uQIgEEXuxiuSx7HYOkRMihklpM1/9QxOkQU00=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=iGeyYDUmVg0FFtka/hB8SWD66e21jv6U2Reg0GVjUJSN1D8hC9U+dOitC0t8eJsfy
- ArQbTnSotWkY8S7B3rdmj12AR7dEvarz757C09YxM4e+3w4oypr3GLP5T0azaz1mCv
- mFOGBBHfgYS1eepm4km3UZbf3DRiGW6ziOglsmEaKZ5ND6nk90G7UrBs2EgntJ8bvL
- gGhmBbtgZsnrLxHDq0HjurEAxSDUry0A+AUZ9OAy3fZi4KME5CwAXVhAuwf7yM+t51
- VnRWWfDLbBUJBat6Js899ABgXEJsIQ24JpUYDMHDeBOGddZuHkgri93bFfmt+Zaukv
- t0GrUmzQZV37Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+In-Reply-To: <20240406233701.036e7ca8@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1712512033; x=1713116833; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=fUKd3euqRcs+njQrrrQ/TBE46mBu8ApVxDtiKAQT2uE=;
+ b=HflLMym2FoS+DqX6yvpf7rVVas853GXCVKn4yIwOR+gD+ktdUGSTio8JyxSuLcUNLs
+ wDq3KCNu+IyuRHFPqFn3KccPMykmzMyzxnU+ftXQ3xbo9TFd3+GnD9HypoesIruvn8sB
+ pd3QSOPyb5F+JLY4cX6rJvANiTCZknnIeqOu+0I3p8r2nxdlcOtqRZHT63+uMZex/heL
+ V8qgD/XSrhUuN+Ba4La3k8ilFG9RT1HkK0hWZZFJnWmLVJxr2pGkrViCgVZdHwFKVvpG
+ Mzucwc63E93KMTPpIDT46zUPfrekMG0z1TDmAqhakdJoK1tsoh2p9GwaemvkTOJGYaL2
+ wH3g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iGeyYDUm
-Subject: Re: [Buildroot] [RFC PATCH 2/5] package/pkg-utils.mk:
- urlencode/urldecode macros
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=HflLMym2
+Subject: Re: [Buildroot] [PATCH] package/uclibc: bump to version 1.0.47,
+ add Y2038 config option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,84 +105,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org, Chin Huat Ang <chinhuat@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Hi Thomas,
 
-On 2024-04-04 14:43 +0200, Thomas Perale via buildroot spake thusly:
-> This patch introduces two new macros:
-> 
->   - urlencode
->   - urldecode
-> 
-> URL encoding consists of converting ASCII characters into
-> a percent symbol followed by a two digit hexadecimal code.
-> And the other way around for URL decoding.
-> 
-> The macros encode/decode a string passed as an argument by
-> escaping the following characters:
-> 
->   - '%' is replaced by %25
->   - 'space' is replaced by %20
-> 
-> The characters covered by this patch is non exhaustive.
+> I don't think we should add a BR2_UCLIBC_USE_TIME64 option. Instead,
+> there is already a BR2_TIME_BITS_64, which enables 64-bit time_t for
+> glibc. It simply needs to be extended to also allow enabling 64-bit
+> time_t in uClibc.
 
-Not sure what you meant with this sentence... Can you elaborate?
-Or did you mean that we can add more chars in the future?
+I contemplated reusing BR2_TIME_BITS_64 but I noticed it has a
+widespread impact of causing many packages to be configured with
+-D_TIME_BITS=64 due to these in package/Makefile.in:
 
-Regards,
-Yann E. MORIN.
+  ifeq ($(BR2_TIME_BITS_64),y)                                                                                                                                                                                
+  TARGET_CPPFLAGS += -D_TIME_BITS=64                                                                                                                                                                          
+  endif                                                                                                                                                                                                       
+  TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)                                                                                              
+  TARGET_CXXFLAGS = $(TARGET_CFLAGS)  
+  ...
+  TARGET_CONFIGURE_OPTS = \                                                                                                                                                                                   
+  ...
+          CPPFLAGS="$(TARGET_CPPFLAGS)" \                                                                                                                                                                     
+          CFLAGS="$(TARGET_CFLAGS)" \                                                                                                                                                                         
+          CXXFLAGS="$(TARGET_CXXFLAGS)" \ 
+  ...
 
-> Because the Make language treats spaces as different entry of a list,
-> the aim of those macros is to provide a well known encoding method
-> to escape text containing spaces into a string that won't be
-> treated as a list by the Make language.
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> ---
->  package/pkg-utils.mk | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 723bbe4e24..b8cfb85fca 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -329,3 +329,15 @@ define NXP_EXTRACT_HELPER
->  	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
->  	rmdir $(@D)/$(basename $(notdir $(1)))
->  endef
-> +
-> +# urlencode -- returns an url encoded string.
-> +#   - encode % into %25
-> +#   - encode spaces into %20
-> +#
-> +# $(1): text
-> +urlencode = $(subst $(space),%20,$(subst %,%25,$(1)))
-> +
-> +# urldecode -- decode an url encoded string.
-> +#
-> +# $(1): text
-> +urldecode = $(subst %25,%,$(subst %20,$(space),$(1)))
-> --
-> 2.44.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+I wasn't sure if this is the right thing to do but at the very least
+whenever uClib is used, my intention was to only configure itself with
+UCLIBC_USE_TIME64.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Assuming if BR2_TIME_BITS_64 applies to both glibc and uClibc, should
+-D_TIME_BITS=64 only be appended to glibc GLIBC_EXTRA_CFLAGS?
+
+> Also, can I suggest that you split your change into two commits? One
+> bumping uClibc to 1.0.47, and one making it possible to configure it
+> with 64-bit time_t?
+
+That's a good idea, I guess I was too focused on trying out uClib's
+Y2038 solution. I'll split the patch up as you suggested. 
+
+--Chin Huat
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
