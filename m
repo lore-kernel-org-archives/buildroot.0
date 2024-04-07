@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6551FCD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 19:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97B53CD1292
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 19:49:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 311C340BA1;
-	Sun,  7 Apr 2024 19:49:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 610B140B87;
+	Sun,  7 Apr 2024 19:49:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nixliTvGxkNw; Sun,  7 Apr 2024 19:49:55 +0000 (UTC)
+ id RsPfX5xve25T; Sun,  7 Apr 2024 19:49:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D03D40BA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA09B40BA8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D03D40BA8;
-	Sun,  7 Apr 2024 19:49:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7A8F91BF473
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA09B40BA8;
+	Sun,  7 Apr 2024 19:49:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BA90F1BF473
  for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 19:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 720D381E54
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5EE0D60A5E
  for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 19:49:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zy9Sew0PE4bA for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YU9dt37Eu0r9 for <buildroot@lists.busybox.net>;
  Sun,  7 Apr 2024 19:49:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCE3E81E55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B15F60A57
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CCE3E81E55
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B15F60A57
  for <buildroot@buildroot.org>; Sun,  7 Apr 2024 19:49:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA11C85C77; Sun,  7 Apr 2024 19:49:43 +0000 (UTC)
+ id 80DE085C78; Sun,  7 Apr 2024 19:49:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Apr 2024 21:47:00 +0200
+Date: Sun, 7 Apr 2024 21:44:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 066c3e67d7f117f7810597e1ab36e2346fe8f7c2
-X-Git-Newrev: caf3f7fb5dc289c0c25254af78dc655687ad4bec
+X-Git-Oldrev: 3a2891621c35fea394b135256c7a0846ece442aa
+X-Git-Newrev: 2fcc74594c457bed7f0f2a4826ada265861be6bf
 X-Patchwork-Hint: ignore
-Message-Id: <20240407194943.BA11C85C77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/oprofile: drop unrecognized option
+Message-Id: <20240407194943.80DE085C78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/botan: security bump to version
+ 3.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,33 +66,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caf3f7fb5dc289c0c25254af78dc655687ad4bec
+commit: https://git.buildroot.net/buildroot/commit/?id=2fcc74594c457bed7f0f2a4826ada265861be6bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---enable-gui is unrecognized since bump to version 1.0.0 in commit
-7f7dc71cc8545dacf23f9a25f33c184d15bed65c and
-https://github.com/wcohen/oprofile/commit/0c142c3a096d3e9ec42cc9b0ddad994fea60d135:
+- Fix a potential denial of service caused by accepting arbitrary
+  length primes as potential elliptic curve parameters in ASN.1
+  encodings. With very large inputs the primality verification
+  can become computationally expensive. Now any prime field larger
+  than 1024 bits is rejected immediately.
 
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls, --enable-gui
+https://botan.randombit.net/news.html#version-3-3-0-2024-02-20
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/oprofile/oprofile.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 265d6ebd18..512fbf9ea1 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -11,7 +11,6 @@ OPROFILE_LICENSE_FILES = COPYING
- OPROFILE_CPE_ID_VENDOR = maynard_johnson
- OPROFILE_CONF_OPTS = \
- 	--disable-account-check \
--	--enable-gui=no \
- 	--with-kernel=$(STAGING_DIR)/usr
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index 840191aa4b..37e00ea9cc 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,4 @@
+ # From https://botan.randombit.net/releases/sha256sums.txt
+-sha256  049c847835fcf6ef3a9e206b33de05dd38999c325e247482772a5598d9e5ece3  Botan-3.2.0.tar.xz
++sha256  368f11f426f1205aedb9e9e32368a16535dc11bd60351066e6f6664ec36b85b9  Botan-3.3.0.tar.xz
+ # Locally computed
+ sha256  1833cde7c7cc03296b1ef2ddc178b1cd7fd1c476840f32cf6aedb09ab0bc9004  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 95352ea41b..e0bd258f57 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- OPROFILE_DEPENDENCIES = popt binutils host-pkgconf
+-BOTAN_VERSION = 3.2.0
++BOTAN_VERSION = 3.3.0
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
