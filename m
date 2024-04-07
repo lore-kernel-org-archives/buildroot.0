@@ -4,50 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68A0ACD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 12:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0947CD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 12:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 103D6608A5;
-	Sun,  7 Apr 2024 12:54:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B777608A5;
+	Sun,  7 Apr 2024 12:56:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A9LKsopW482J; Sun,  7 Apr 2024 12:54:27 +0000 (UTC)
+ id pPZ1qX3W_4kX; Sun,  7 Apr 2024 12:56:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 041AA608B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A83B608B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 041AA608B0;
-	Sun,  7 Apr 2024 12:54:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D4DED1BF4DB
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 12:54:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A83B608B0;
+	Sun,  7 Apr 2024 12:56:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 92B7C1BF4DB
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 12:56:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CDFCC81E3E
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 12:54:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7EEDF407E2
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 12:56:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pvNqql2Ky4JH for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 12:54:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E83A58128F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E83A58128F
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 12:54:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2E3B84E86; Sun,  7 Apr 2024 12:54:24 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id peCt3fq2CraG for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 12:56:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1597D407E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1597D407E0
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1597D407E0
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 12:56:04 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-34388753650so1516428f8f.3
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 05:56:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712494562; x=1713099362;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EGO2qP6W3q0LL/HOXSPnIokMHjYQkyMvEfpRVF69yuk=;
+ b=WE9yGZiSotxWjQUYg+YZNvJal6NgIiBL7sXQi4gDHka1sgcPfaKeX/Vb/m8lUAmHsd
+ RXWywEyusG6lTCbPhT1OMwCt/Glcm0+j3KGOR+GVobsMEF9Y19ZqsjfDJmnb4H5HamVf
+ NaMZctenOzmxfRaQ32hIwd5vfiJ7TntZCKtQbVN5hB7PI71hBIP+f832NGZEu3jty3IJ
+ XLJE4fLt0kS8H76se0TyR528z8z04ZI66EhGORwefX2+N4m2gjhF6ej0HKsrwN9WLtE9
+ RQt2mS6Zr4ShXWmjz5wrNeipJ9DL1FvbOZyxr26A7lrjvCzwACavfTvsCcuW4JnsYek/
+ yxLA==
+X-Gm-Message-State: AOJu0Yw5n5tVinT2r/fTmRttvNR+y/S0aYWewk4iibR848dpYRZFzLyW
+ YT3zS2ynZ++mM2PU9lvhzSXovTNJfnQ/KTYpiPiPdorO0Idmx2N/OIMbtIda
+X-Google-Smtp-Source: AGHT+IEmiqiELCLjYCk8gZAoFod67cKa4vUH1CHAbo7DWHXMddbXdFNBXEEYmQJJgz8hp282ZwsyMg==
+X-Received: by 2002:a5d:63cb:0:b0:341:c996:c15a with SMTP id
+ c11-20020a5d63cb000000b00341c996c15amr4699599wrw.16.1712494562166; 
+ Sun, 07 Apr 2024 05:56:02 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ k2-20020a5d5242000000b00343c0c24a65sm6585289wrc.89.2024.04.07.05.56.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Apr 2024 05:56:01 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Apr 2024 14:53:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0653e3b2c4a6f6183ba5bf2c22542bc81b80467
-X-Git-Newrev: bfefed17a9e5a421b3217685003d3b22c99de4ab
-X-Patchwork-Hint: ignore
-Message-Id: <20240407125424.D2E3B84E86@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdb: bump 14.x series from 14.1 to
- 14.2
+Date: Sun,  7 Apr 2024 14:55:55 +0200
+Message-ID: <20240407125555.1350085-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1712494562; x=1713099362; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=EGO2qP6W3q0LL/HOXSPnIokMHjYQkyMvEfpRVF69yuk=;
+ b=JDOqE4TOezKCyDjuKuk43rr/btdr0Ksesp9yjmVtkTvF0aUSOkaO0xKDRd2R7mNDsl
+ jNIet6Zpwf5ir6MnTJNhTkSbXvOxAUQjfaYKD9FG9QnS527OTqAmQQDhxjF0H62bPQR9
+ ZBqF5ruF96U5+qeUAJXKT2GiVsOCgg3INT717X4aicsKZp9p10VaombLqcwh9D0iE/hP
+ oHhxwVQaPSL2/p0LlGPtyXDW4Mo1ClfD8zVsM7cGSbG4E2nbekUmiPKQb7v0a8aV4CUy
+ AeVyP8L0bdO4YF7Ur/tELtvz+oy+OCl+4UQ7ty7mF8IWkO/aIp6nH/lUgP6nBTTk+RfP
+ JdQw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=JDOqE4TO
+Subject: [Buildroot] [PATCH 1/1] package/policycoreutils: add libxcrypt
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,56 +100,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfefed17a9e5a421b3217685003d3b22c99de4ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix the following build failure raised since bump of glibc to version
+2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
 
-According to https://www.sourceware.org/gdb/:
+/home/autobuild/autobuild/instance-15/output-1/per-package/policycoreutils/host/bin/../lib/gcc/powerpc-buildroot-linux-gnu/12.3.0/../../../../powerpc-buildroot-linux-gnu/bin/ld: cannot find -lcrypt: No such file or directory
 
- This is a minor corrective release over GDB 14.1, fixing the following issues:
+Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
+ - http://autobuild.buildroot.org/results/74c9775e5da7846b8dcff10e3966789458592450
 
-    PR symtab/31112 (DLL export forwarding is broken)
-    PR c++/31128 (gdb crashes when trying to print a global variable stub without a running inferior)
-    PR tdep/31254 ([gdb/tdep, arm] FAIL: gdb.threads/staticthreads.exp: up 10)
-    PR gdb/31256 (Crash with basic 'list .')
-    PR python/31366 (Frame.static_link() segfaults)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gdb/Config.in.host | 2 +-
- package/gdb/gdb.hash       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/policycoreutils/Config.in          | 1 +
+ package/policycoreutils/policycoreutils.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 891e45948e..53706cd3ee 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -67,5 +67,5 @@ config BR2_GDB_VERSION
- 	default "13.2"     if BR2_GDB_VERSION_13 || !BR2_PACKAGE_HOST_GDB
- 	# When making 14.x the default, or 14.x becomes the oldest version,
- 	# be sure to update the target variant to properly select mpfr.
--	default "14.1"     if BR2_GDB_VERSION_14
-+	default "14.2"     if BR2_GDB_VERSION_14
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index c62da28cbf..144f6da296 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -3,7 +3,7 @@ sha512  3653762ac008e065c37cd641653184c9ff7ce51ee2222ade1122bec9d6cc64dffd4fb748
- sha512  07e9026423438049b11f4f784d57401ece4e940570f613bd6958b3714fe7fbc2c048470bcce3e7d7d9f93331cdf3881d30dcc964cb113a071143a02b28e5b127  gdb-11.2.tar.xz
- sha512  425568d2e84672177d0fb87b1ad7daafdde097648d605e30cf0656970f66adc6a82ca2d83375ea4be583e9683a340e5bfdf5819668ddf66728200141ae50ff2d  gdb-12.1.tar.xz
- sha512  8185d3e11ab60dafff5860a5016577bfe7dd7547ef01ebc867bc247603d82b74ff74c4f29492c7d2aee57076f52be33e289f4c6b414a4b870d4b3004909f4c34  gdb-13.2.tar.xz
--sha512  575e198105076fc4a88f68591aa114ab9c1196e84386a3f7b9b58fe5f30cdeed33f6a5f957b68f08c47284ec922bb60c964627e238471419673fd913575ce427  gdb-14.1.tar.xz
-+sha512  7e07941f1fe661288cc571b4964012ceabc1760624fce20320db2f470c01439b2386f859b5288da13204b758e2e3b22a74c68c012178db93b9529b06f1e22ede  gdb-14.2.tar.xz
+diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+index 3201c8fede..499aaf531d 100644
+--- a/package/policycoreutils/Config.in
++++ b/package/policycoreutils/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_POLICYCOREUTILS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsemanage -> libselinux -> libsepol
+ 	select BR2_PACKAGE_LIBSEMANAGE
+ 	select BR2_PACKAGE_LIBCAP_NG
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Policycoreutils is a collection of policy utilities
+ 	  (originally the "core" set of utilities needed to use
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 3ad7e9a5b3..bcfbb7ebc5 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -13,6 +13,10 @@ POLICYCOREUTILS_CPE_ID_VENDOR = selinuxproject
+ POLICYCOREUTILS_DEPENDENCIES = libsemanage libcap-ng $(TARGET_NLS_DEPENDENCIES)
+ POLICYCOREUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) LDLIBS=$(TARGET_NLS_LIBS)
  
- # Locally calculated (fetched from Github)
- sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  gdb-arc-2023.09-release.tar.gz
++ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
++POLICYCOREUTILS_DEPENDENCIES += libxcrypt
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ POLICYCOREUTILS_DEPENDENCIES += linux-pam
+ POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
