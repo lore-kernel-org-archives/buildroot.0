@@ -4,49 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF64CD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB6C9CD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:34:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 949A3407BE;
-	Sun,  7 Apr 2024 15:31:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76BD240715;
+	Sun,  7 Apr 2024 15:34:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id srbGqbwYjqOV; Sun,  7 Apr 2024 15:31:57 +0000 (UTC)
+ id 9pJis0JiX8un; Sun,  7 Apr 2024 15:34:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A554840818
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EAFD4073B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A554840818;
-	Sun,  7 Apr 2024 15:31:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF0FB1BF94D
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:31:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EAFD4073B;
+	Sun,  7 Apr 2024 15:34:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 499A61BF2CC
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCE2D608DE
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:31:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4271E4073B
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:34:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 58Dgo2X0PXip for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 15:31:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89A1A608BD
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89A1A608BD
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 15:31:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6F298852F0; Sun,  7 Apr 2024 15:31:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id alUKJ73wsnuZ for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 15:34:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 05AB240715
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05AB240715
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 05AB240715
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 15:34:25 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-343f62d8124so1476657f8f.2
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 08:34:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712504064; x=1713108864;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=2XIrZNOOh08t4RkGCXeybJ8uHFjEDhChhM8U6SJEIY8=;
+ b=bwxIbVj7TwSza+CG3qoascuQYqGE6iQJg0HDmqQujK37LhP1E8Z0yOKpX1NUvx6/Bc
+ ClvGLxKY+IpIM+QvlqnV3P/OwpSdd4vCZ0eNXo3UOQB6I2a8MNj7fWc488Z7GrCXxnUx
+ qSa17r/l/Tn2Ha3eBFCQgdGCRH2tBqZfr+YfWvpPFe4e2SYEh9w5mjbk+ZFi7WTazd6M
+ Oxj+PfPG5Zg4rplLvuCxs5iAyRyhHj9ofU70Pa/uKPvZBFsJWy8MTb8DlFtJCIxqPX1n
+ Dtlye0P4mc+0kod0BbcFgwgLZBPiQyH3/2uQ/9faSbtNb5L5QDTWZ/BlUuN9wUE4Grq5
+ a7qg==
+X-Gm-Message-State: AOJu0YyC5/8+90+qXFKmnhoORP8w9deCeKsE59pd2+Wdd+3F9L6fvczt
+ OC8moI8TXDR1iLxOK2Xx04QEiyy/IfM2sYaA1jNCjktKC7E5xCnge4zy3UsC
+X-Google-Smtp-Source: AGHT+IGKIeGpNXm9+lJMcXQHpEFdVl3qfBZkvujVTvgYdYDBBwO6uppzsfTwvivMi7obxN8Je98eFg==
+X-Received: by 2002:a5d:64cf:0:b0:343:60c1:eeb4 with SMTP id
+ f15-20020a5d64cf000000b0034360c1eeb4mr5613403wri.1.1712504063569; 
+ Sun, 07 Apr 2024 08:34:23 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ p9-20020adff209000000b003432d61d6b7sm6854508wro.51.2024.04.07.08.34.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Apr 2024 08:34:23 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 7 Apr 2024 17:10:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9cd7d506b17da805a80db9339e554f9837596cae
-X-Git-Newrev: ab2410053770b92ec1ee12d9da271b432053c38c
-X-Patchwork-Hint: ignore
-Message-Id: <20240407153141.6F298852F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/brcmfmac_sdio-firmware-rpi: bump
- version to 26ff205
+Date: Sun,  7 Apr 2024 17:34:17 +0200
+Message-ID: <20240407153417.2030051-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1712504064; x=1713108864; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=2XIrZNOOh08t4RkGCXeybJ8uHFjEDhChhM8U6SJEIY8=;
+ b=jxP6m3P1Lv8n0TgBqTvbAL4/bUmLpA7D9ETXAfV8Yny+XYbQQ/V206zWbHw9ht36Kd
+ 9wA/4svrBHzmXqzcta7O6Tll4XZb6leXaydPeWKm4+o9jyaze25eWPOW19J6loVPpASr
+ 5w8iC5HZVcXaadZKSCIil1j9+XWvd25dpxJmQpcdrU8FfuUPNEgNJnIaI/y86TfLZfbK
+ +JUUoX0onqb1RLp84RoPBGvR/cSvv87vNatj5Oq8yA9do9quiFhiu+bhNKeN2l8odF52
+ RzlQD3pkREA3+EGDD2hMUF4PETFvuoSudd0PQ+MkUs+sOi8p1SKolSWDWSpYBsdduWyU
+ RDhQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=jxP6m3P1
+Subject: [Buildroot] [PATCH 1/1] package/openblas: fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,99 +99,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab2410053770b92ec1ee12d9da271b432053c38c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix the following build failure raised since bump to version 0.3.27 in
+commit 59b48b5cff057f2429b1143d6f50c39d93ca8ef3:
 
-The current version is more than 2 years old. Update to the latest.
+/bin/sh: ./xccblat3_3m: No such file or directory
 
-This fixes runtime issues with the newer kernel used in our defconfigs
-since commit 13ba668a2da3a0dcb386578ce15b00a444101dbe.
+Fixes: 59b48b5cff057f2429b1143d6f50c39d93ca8ef3
+ - http://autobuild.buildroot.org/results/52acc2d95bbc07155b9d446ab8625f9c9eb81b52
 
-License file changed name from LICENCE to LICENSE but is otherwise
-unchanged.
-
-There is a new directory "synaptics", install this one as well.
-
-A lot of the files are symlinks. "install" creates copies for these,
-which consumes a lot of unnecessary space. Instead of individually
-restoring the links, using `cp --remove-destination --no-dereference`
-and `chmod` instead of `install`.
-
-Fixes: 13ba668a2da3a0dcb386578ce15b00a444101dbe
-Signed-off-by: Nisarg Jhaveri <nisargjhaveri@gmail.com>
-[Arnout: correct license file name]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../brcmfmac_sdio-firmware-rpi.hash                |  4 ++--
- .../brcmfmac_sdio-firmware-rpi.mk                  | 27 ++++++++--------------
- 2 files changed, 12 insertions(+), 19 deletions(-)
+ ...-should-not-be-run-in-cross-compiles.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/openblas/0002-fix-position-of-endif-gemm3m-tests-should-not-be-run-in-cross-compiles.patch
 
-diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
-index a12e92cbac..c20abfc26c 100644
---- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
-+++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e51b717c2a60ca29fcdd8e04e07c00996226cb48fa56a8ad1934b5f4ddee2e3d  brcmfmac_sdio-firmware-rpi-ea9963f3f77b4bb6cd280577eb115152bdd67e8d.tar.gz
--sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-+sha256  2f0917b104739455dd488dd8f5af2ee4430801a7ac8fe8d9866e74bfbb185356  brcmfmac_sdio-firmware-rpi-26ff205b45dc109b498a70aaf182804ad9dbfea5.tar.gz
-+sha256  ea8b7b7b6cfc6fd30587ed977100f6a542734ce53218b5b63de16180acddd599  LICENSE
-diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
-index 5332bf53d7..95707487a9 100644
---- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
-+++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
-@@ -4,33 +4,26 @@
- #
- ################################################################################
- 
--BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = ea9963f3f77b4bb6cd280577eb115152bdd67e8d
-+BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = 26ff205b45dc109b498a70aaf182804ad9dbfea5
- BRCMFMAC_SDIO_FIRMWARE_RPI_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION))
- BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE = PROPRIETARY
--BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE_FILES = LICENCE.broadcom_bcm43xx
-+BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE_FILES = LICENSE
- 
- ifeq ($(BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_BT),y)
- define BRCMFMAC_SDIO_FIRMWARE_RPI_INSTALL_TARGET_BT
--	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
--	$(INSTALL) -m 0644 $(@D)/firmware/brcm/*.hcd $(TARGET_DIR)/lib/firmware/brcm
-+	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm $(TARGET_DIR)/lib/firmware/synaptics
-+	cp --remove-destination --no-dereference $(@D)/firmware/brcm/*.hcd $(TARGET_DIR)/lib/firmware/brcm
-+	cp --remove-destination --no-dereference $(@D)/firmware/synaptics/*.hcd $(TARGET_DIR)/lib/firmware/synaptics
-+	chmod 644 $(TARGET_DIR)/lib/firmware/brcm/*.hcd $(TARGET_DIR)/lib/firmware/synaptics/*.hcd
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_BRCMFMAC_SDIO_FIRMWARE_RPI_WIFI),y)
- define BRCMFMAC_SDIO_FIRMWARE_RPI_INSTALL_TARGET_WIFI
--	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
--	$(INSTALL) -m 0644 $(@D)/firmware/brcm/brcmfmac* $(TARGET_DIR)/lib/firmware/brcm
--	ln -sf ../cypress/cyfmac43430-sdio.bin $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.bin
--	ln -sf ../cypress/cyfmac43430-sdio.clm_blob $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.clm_blob
--	ln -sf brcmfmac43430-sdio.txt $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,3-model-b.txt
--	ln -sf brcmfmac43430-sdio.txt $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi,model-zero-w.txt
--	ln -sf ../cypress/cyfmac43455-sdio.bin $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.bin
--	ln -sf ../cypress/cyfmac43455-sdio.clm_blob $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.clm_blob
--	ln -sf brcmfmac43455-sdio.txt $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,3-model-a-plus.txt
--	ln -sf brcmfmac43455-sdio.txt $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt
--	ln -sf brcmfmac43455-sdio.txt $(TARGET_DIR)/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt
--	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/cypress
--	$(INSTALL) -m 0644 $(@D)/firmware/cypress/cyfmac* $(TARGET_DIR)/lib/firmware/cypress
-+	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm $(TARGET_DIR)/lib/firmware/cypress
-+	cp --remove-destination --no-dereference $(@D)/firmware/brcm/brcmfmac* $(TARGET_DIR)/lib/firmware/brcm
-+	cp --remove-destination --no-dereference $(@D)/firmware/cypress/cyfmac* $(TARGET_DIR)/lib/firmware/cypress
-+	chmod 644 $(TARGET_DIR)/lib/firmware/brcm/brcmfmac* $(TARGET_DIR)/lib/firmware/cypress/cyfmac*
- endef
- endif
- 
+diff --git a/package/openblas/0002-fix-position-of-endif-gemm3m-tests-should-not-be-run-in-cross-compiles.patch b/package/openblas/0002-fix-position-of-endif-gemm3m-tests-should-not-be-run-in-cross-compiles.patch
+new file mode 100644
+index 0000000000..44883b2c26
+--- /dev/null
++++ b/package/openblas/0002-fix-position-of-endif-gemm3m-tests-should-not-be-run-in-cross-compiles.patch
+@@ -0,0 +1,33 @@
++From 48e017de095018c60d83355804a3075658b4970c Mon Sep 17 00:00:00 2001
++From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
++Date: Fri, 5 Apr 2024 22:54:34 +0200
++Subject: [PATCH] fix position of endif - gemm3m tests should not be run in
++ cross-compiles
++
++Upstream: https://github.com/OpenMathLib/OpenBLAS/commit/48e017de095018c60d83355804a3075658b4970c
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ ctest/Makefile | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/ctest/Makefile b/ctest/Makefile
++index bbaf96f8ed..6c7cc1ed56 100644
++--- a/ctest/Makefile
+++++ b/ctest/Makefile
++@@ -203,7 +203,6 @@ ifeq ($(BUILD_COMPLEX16),1)
++ 	OPENBLAS_NUM_THREADS=2 ./xzcblat3 < zin3
++ endif
++ endif
++-endif
++ 
++ ifeq ($(SUPPORT_GEMM3M),1)
++ ifeq ($(USE_OPENMP), 1)
++@@ -222,7 +221,7 @@ ifeq ($(BUILD_COMPLEX16),1)
++ endif
++ endif
++ endif
++-
+++endif
++ 
++ 
++ 
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
