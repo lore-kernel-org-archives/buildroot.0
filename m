@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93E47CD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 11:46:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10B1FCD128A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 11:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCA7682062;
-	Sun,  7 Apr 2024 11:46:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C97E820C9;
+	Sun,  7 Apr 2024 11:46:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lu2340Ov01V0; Sun,  7 Apr 2024 11:46:21 +0000 (UTC)
+ id wCrw6du9RvYN; Sun,  7 Apr 2024 11:46:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EA9E8207F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75B6C8207F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EA9E8207F;
-	Sun,  7 Apr 2024 11:46:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75B6C8207F;
+	Sun,  7 Apr 2024 11:46:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BCC281BF94D
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 11:46:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 73A921BF947
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 11:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A920260705
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 11:46:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C56760769
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 11:46:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j2ahucmxLShl for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 11:46:17 +0000 (UTC)
+ id oDJjHDb_RNId for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 11:46:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F2AED60733
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2AED60733
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 03D9B60705
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03D9B60705
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F2AED60733
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 11:46:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03D9B60705
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 11:46:28 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a070b.dip0.t-ipconnect.de [91.58.7.11])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CE409A4C2DD2;
- Sun,  7 Apr 2024 13:44:47 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 122ECA4C2DDE;
+ Sun,  7 Apr 2024 13:44:48 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:53892)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1rtQx5-000000005Wv-20cb;
+ (envelope-from <bernd@kuhls.net>) id 1rtQx5-000000005Wv-3LpK;
  Sun, 07 Apr 2024 11:44:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  7 Apr 2024 13:44:32 +0200
-Message-Id: <20240407114445.683504-8-bernd@kuhls.net>
+Date: Sun,  7 Apr 2024 13:44:33 +0200
+Message-Id: <20240407114445.683504-9-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240407114445.683504-1-bernd@kuhls.net>
 References: <20240407114445.683504-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202312101026; t=1712490287;
- bh=dAQcqqAjEmAefc4n6OA8/Xt2RNNgxArmpy+UQKh4Zw4=;
+ s=kas202312101026; t=1712490288;
+ bh=owK5CPk1bwMlgNXAHh3+zU1ypiIpbktQNbELta0cXvs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=UeAl86KzWcWjIwhdZGErOwhjfifdn3mipkeayNkG5qtb20FxWqqzJD2M1WyMSfTtE
- bCGt7p9o1tjbrcu+WoIYcteknuxkb0iFNAvrn/SXBiq4c2EjtTG3XwTS3BVLIpHVhk
- NHlLBbuRGz9vr/8sHPlH9sTihz5Lv9J8PSAd6ohPq343iWTHVABgPZ/wbelJIdTRbN
- qITuxx2o4FvyA6CpCj37Hmk7ZYn6S7c3gKdMrWOhOyCaXF5oy/jIYYqSGNFVxCmre3
- QXNCwbRun7IUyw4nUFSNAFwY0btYh37VFGfLXBeRE0CUhVdvTvdTu7bmJ93VhlO2r1
- Ffel6s6KDkQqA==
+ b=Z06eZ+7TJQn6QaD+3llBWbyjL2ic3ehAOUEdoqg+dH8+YBtfqhvoqz7ZT3FiU49En
+ 8WYtDHMh3Xa+xh5RdTfoNxD0DXmt0FCLLF8jXop+uqYuIaU9tjUUzityBmQ2W3aCJv
+ BLvKA1DicCQNwudqG17LhV0+wtlNguDydjIgEQjFBAMKJh3hUWBQRPZ1br9e8s5L9u
+ DOdpVB1h83BejxYLt7tnwUZRy9ZWvcjt4LEAqVtt8pUEMCSldZO3FLnOJtljd8qoUS
+ OeDZ/QI+/5mqHJ8bhCP3hpGbiKJ8+nMuDq1495N7LSzA9L0np/mT5xUO8Ia2tSQ6zk
+ EKdHXqT7aSDZQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=UeAl86Kz
-Subject: [Buildroot] [PATCH v2 07/20] package/kodi: bump version to
- 21.0-Omega
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=Z06eZ+7T
+Subject: [Buildroot] [PATCH v2 08/20] package/kodi-audiodecoder-*: mass
+ version bump to Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,321 +94,218 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Added new dependency to libdisplay-info for gbm support:
-https://github.com/xbmc/xbmc/commit/ce9626479c1792210c7b7cc02c7dc4f819ace509
-
-Added new required dependency to tinyxml2:
-https://github.com/xbmc/xbmc/commit/9e983ed0449aaf3007d8bfa3261056b120d84188
-Please note that parts of kodi still use tinyxml so both dependencies
-are needed.
-
-Added new required dependency to libudfread: Since upstream commit
-https://github.com/xbmc/xbmc/commit/5f9b9cfa26f274e381e92d73cfa33fb55582436e
-kodi does not build anymore without libudfread.
-
-Upstream removed the bundled groovy/apache commons binaries:
-https://github.com/xbmc/xbmc/commit/d6bc920e056baad7782f47b86cba85d1336bb134
-
-- JsonSchemaBuilder fixes:
-
-Upstream moved CMakeLists.txt to src/ subfolder:
-https://github.com/xbmc/xbmc/commit/7e87d98ca55c72fcbc9b8dadf2cb979a85732606
-
-- TexturePacker fixes:
-
-texturepacker now depends on c++17:
-https://github.com/xbmc/xbmc/commit/54bd6d7ab552a4ddc04d2595826457d8bfa864d5
-
-Since the host version of texturepacker is a build dependency of kodi:
-https://github.com/xbmc/xbmc/blob/Omega/CMakeLists.txt#L187
-https://github.com/xbmc/xbmc/blob/Omega/CMakeLists.txt#L472
-we add a new dependency to BR2_HOST_GCC_AT_LEAST_9.
-
-Upstream moved CMakeLists.txt to src/ subfolder
-https://github.com/xbmc/xbmc/commit/e336a75f42d9c4efd3433f3fa6edd05309689deb
-
-Due to this update we can remove all of our patches for texturepacker.
-
-- Kodi fixes:
-
-Set KODI_SOURCE_DIR variable to root directory of the source tarball.
-When building natively, outside of a meta buildsystem like Buildroot,
-kodi builds its own tools as part of its build process. TexturePacker
-needs cmake modules available from the top of the Kodi source tree, a
-source file in a sub-directory at the top-level source tree, which
-itself needs includes from the same sub-dir. The Kodi build process sets
-KODI_SOURCE_DIR so that TexturePacker can find those files.
-
-In Buildroot, as we cross-build, we build the tools explicitly, without
-using the Kodi build process, and thus we must set KODI_SOURCE_DIR to the
-root directory of the source tarball. LibreELEC added something similar:
-https://github.com/LibreELEC/LibreELEC.tv/commit/70abdd27a22b22547060fcb00a2c70ea61721465
+Removed patch from kodi-audiodecoder-timidity which is included in
+upstream release.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../kodi-jsonschemabuilder.mk                 |  6 ++---
- .../0001-texturepacker.patch                  | 16 -----------
- ...-fix-texture-packer-cmake-source-dir.patch | 27 -------------------
- .../kodi-texturepacker/kodi-texturepacker.mk  |  9 ++++---
- package/kodi/Config.in                        |  4 +++
- package/kodi/kodi.hash                        |  6 ++++-
- package/kodi/kodi.mk                          | 25 ++++++++++-------
- 7 files changed, 33 insertions(+), 60 deletions(-)
- delete mode 100644 package/kodi-texturepacker/0001-texturepacker.patch
- delete mode 100644 package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch
+ .../kodi-audiodecoder-modplug.hash            |  2 +-
+ .../kodi-audiodecoder-modplug.mk              |  2 +-
+ .../kodi-audiodecoder-nosefart.hash           |  2 +-
+ .../kodi-audiodecoder-nosefart.mk             |  2 +-
+ .../kodi-audiodecoder-sidplay.hash            |  2 +-
+ .../kodi-audiodecoder-sidplay.mk              |  2 +-
+ .../kodi-audiodecoder-snesapu.hash            |  2 +-
+ .../kodi-audiodecoder-snesapu.mk              |  2 +-
+ .../kodi-audiodecoder-stsound.hash            |  2 +-
+ .../kodi-audiodecoder-stsound.mk              |  2 +-
+ ...001-MidiScan-include-missing-cstdint.patch | 29 -------------------
+ .../kodi-audiodecoder-timidity.hash           |  2 +-
+ .../kodi-audiodecoder-timidity.mk             |  2 +-
+ .../kodi-audiodecoder-vgmstream.hash          |  2 +-
+ .../kodi-audiodecoder-vgmstream.mk            |  2 +-
+ 15 files changed, 14 insertions(+), 43 deletions(-)
+ delete mode 100644 package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-index a43ee57e00..ee94a52502 100644
---- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -6,20 +6,20 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_JSONSCHEMABUILDER_VERSION = 20.5-Nexus
-+KODI_JSONSCHEMABUILDER_VERSION = 21.0-Omega
- KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
- KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
- KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
- KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
- KODI_JSONSCHEMABUILDER_LICENSE_FILES = LICENSE.md
--HOST_KODI_JSONSCHEMABUILDER_SUBDIR = tools/depends/native/JsonSchemaBuilder
-+HOST_KODI_JSONSCHEMABUILDER_SUBDIR = tools/depends/native/JsonSchemaBuilder/src
- 
- HOST_KODI_JSONSCHEMABUILDER_CONF_OPTS = \
- 	-DCMAKE_MODULE_PATH=$(@D)/project/cmake/modules
- 
- define HOST_KODI_JSONSCHEMABUILDER_INSTALL_CMDS
- 	$(INSTALL) -m 755 -D \
--		$(@D)/tools/depends/native/JsonSchemaBuilder/JsonSchemaBuilder \
-+		$(@D)/tools/depends/native/JsonSchemaBuilder/src/JsonSchemaBuilder \
- 		$(HOST_DIR)/bin/kodi-JsonSchemaBuilder
- endef
- 
-diff --git a/package/kodi-texturepacker/0001-texturepacker.patch b/package/kodi-texturepacker/0001-texturepacker.patch
-deleted file mode 100644
-index 8830b4c646..0000000000
---- a/package/kodi-texturepacker/0001-texturepacker.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Fix host compile
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr xbmc-656cba5d5c7c5edb166196b48560825b9b1f03fd.org/tools/depends/native/TexturePacker/Makefile xbmc-656cba5d5c7c5edb166196b48560825b9b1f03fd/tools/depends/native/TexturePacker/Makefile
----- xbmc-656cba5d5c7c5edb166196b48560825b9b1f03fd.org/tools/depends/native/TexturePacker/Makefile	2015-01-25 09:00:48.000000000 +0100
--+++ xbmc-656cba5d5c7c5edb166196b48560825b9b1f03fd/tools/depends/native/TexturePacker/Makefile	2015-01-25 13:03:23.606140953 +0100
--@@ -36,7 +36,7 @@
-- 	-rm -rf $(PLATFORM)/*; mkdir -p $(PLATFORM)
-- 	cd $(PLATFORM); cp -a $(SOURCE)/* .
-- 	cd $(PLATFORM); ./autogen.sh
---	cd $(PLATFORM); ./configure --prefix=$(PREFIX) $(EXTRA_CONFIGURE) EXTRA_DEFINES="$(NATIVE_ARCH_DEFINES)"
--+	cd $(PLATFORM); ./configure --prefix=$(PREFIX) EXTRA_DEFINES="$(NATIVE_ARCH_DEFINES)"
-- 
-- 
-- $(APP): $(PLATFORM)
-diff --git a/package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch b/package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch
-deleted file mode 100644
-index ddd82439fe..0000000000
---- a/package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Fix stand-alone build
--
--CMake Error at CMakeLists.txt:40 (add_executable):
--  Cannot find source file:
--
--    /home/bernd/buildroot/output/build/host-kodi-texturepacker-18.4-Leia/tools/depends/native/TexturePacker/xbmc/guilib/XBTF.cpp
--
--  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .m .M .mm .h .hh .h++ .hm
--  .hpp .hxx .in .txx
--
--CMake Error at CMakeLists.txt:40 (add_executable):
--  No SOURCES given to target: TexturePacker
--
--Downloaded from
--https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi/patches/kodi-100.25-hack-fix-texture-packer-cmake-source-dir.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -Naur a/tools/depends/native/TexturePacker/CMakeLists.txt b/tools/depends/native/TexturePacker/CMakeLists.txt
----- a/tools/depends/native/TexturePacker/CMakeLists.txt	2016-12-23 17:10:28.593185862 +0000
--+++ b/tools/depends/native/TexturePacker/CMakeLists.txt	2016-12-23 17:10:39.469253011 +0000
--@@ -1,3 +1,5 @@
--+set(CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/../../../..)
--+
-- list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
-- 
-- if(APPLE)
-diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-index e640ab3a90..c3c06d0210 100644
---- a/package/kodi-texturepacker/kodi-texturepacker.mk
-+++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-@@ -6,13 +6,13 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_TEXTUREPACKER_VERSION = 20.5-Nexus
-+KODI_TEXTUREPACKER_VERSION = 21.0-Omega
- KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
- KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
- KODI_TEXTUREPACKER_DL_SUBDIR = kodi
- KODI_TEXTUREPACKER_LICENSE = GPL-2.0
- KODI_TEXTUREPACKER_LICENSE_FILES = LICENSE.md
--HOST_KODI_TEXTUREPACKER_SUBDIR = tools/depends/native/TexturePacker
-+HOST_KODI_TEXTUREPACKER_SUBDIR = tools/depends/native/TexturePacker/src
- HOST_KODI_TEXTUREPACKER_DEPENDENCIES = \
- 	host-giflib \
- 	host-libjpeg \
-@@ -21,7 +21,7 @@ HOST_KODI_TEXTUREPACKER_DEPENDENCIES = \
- 
- HOST_KODI_TEXTUREPACKER_CXXFLAGS = \
- 	$(HOST_CXXFLAGS) \
--	-std=c++0x \
-+	-std=c++17 \
- 	-DTARGET_POSIX \
- 	-DTARGET_LINUX \
- 	-D_LINUX \
-@@ -30,11 +30,12 @@ HOST_KODI_TEXTUREPACKER_CXXFLAGS = \
- HOST_KODI_TEXTUREPACKER_CONF_OPTS += \
- 	-DCMAKE_CXX_FLAGS="$(HOST_KODI_TEXTUREPACKER_CXXFLAGS)" \
- 	-DCMAKE_MODULE_PATH=$(@D)/cmake/modules \
-+	-DKODI_SOURCE_DIR=$(@D) \
- 	-Wno-dev
- 
- define HOST_KODI_TEXTUREPACKER_INSTALL_CMDS
- 	$(INSTALL) -m 755 -D \
--		$(@D)/tools/depends/native/TexturePacker/TexturePacker \
-+		$(@D)/tools/depends/native/TexturePacker/src/TexturePacker \
- 		$(HOST_DIR)/bin/kodi-TexturePacker
- endef
- 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 8ad9fdae78..885550a542 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -26,6 +26,7 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
- 	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+	select BR2_PACKAGE_LIBDISPLAY_INFO
- 
- comment "kodi needs udev support for gbm"
- 	depends on !BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-@@ -56,6 +57,7 @@ menuconfig BR2_PACKAGE_KODI
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # C++17
-+	depends on BR2_HOST_GCC_AT_LEAST_9 # C++17
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_USE_WCHAR
-@@ -103,6 +105,7 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_TAGLIB
- 	select BR2_PACKAGE_TINYXML
-+	select BR2_PACKAGE_TINYXML2
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
- 	select BR2_PACKAGE_LIBINPUT if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
-@@ -162,6 +165,7 @@ config BR2_PACKAGE_KODI_EVENTCLIENTS
- config BR2_PACKAGE_KODI_LIBBLURAY
- 	bool "blu-ray"
- 	select BR2_PACKAGE_LIBBLURAY
-+	select BR2_PACKAGE_LIBUDFREAD
- 	help
- 	  Enable Blu-ray input support.
- 	  Select this if you want to play back Blu-ray content.
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index b497ab7dca..15d1e471cd 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,5 +1,9 @@
-+# From https://github.com/xbmc/xbmc/blob/Omega/xbmc/interfaces/swig/CMakeLists.txt
-+sha512  743698979c801f3cfb36545888b5303e1e25dae5692bb45cab7ebbe102a6eda31f09abc6978349ad90ecaf630416fc87eacba7781244855e7e771a3c44041fa0  apache-groovy-binary-4.0.16.zip
-+sha512  8e7e62418a49ba810512c13a640a8bf35f878fcd54af32fdaab1111e37817f58b21b475980ba663fba4887e45ef8d88af8ff17796f20d202e929e8e2574546dc  commons-lang3-3.14.0-bin.tar.gz
-+sha512  2e94877000dd270b69e2e8cbf49f258a90b4c628b6b6b0814e300a2f0e9c391f0816dceb0707e596ae3b7c9532f93e7a4917df47c77f44b3a810e14042ce5f3f  commons-text-1.11.0-bin.tar.gz
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
+index 20f13e95f7..054e7581cc 100644
+--- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  9bf3257ebf251d20f276b7f90681985a270779150af2fb395d4b593c04002deb  kodi-20.5-Nexus.tar.gz
-+sha256  7f54c1fd8456ac46221fbc85e447362bdc209163c6cb19fca98d106560071b7c  kodi-21.0-Omega.tar.gz
- sha256  f38c4a4e7a4f4da6d8e83b8852489aa3bb6588a915dc41f5ee89d9aad305a06e  kodi-libdvdcss-1.4.3-Next-Nexus-Alpha2-2.tar.gz
- sha256  584f62a3896794408d46368e2ecf2c6217ab9c676ce85921b2d68b8961f49dfc  kodi-libdvdnav-6.1.1-Next-Nexus-Alpha2-2.tar.gz
- sha256  719130091e3adc9725ba72df808f24a14737a009dca5a4c38c601c0c76449b62  kodi-libdvdread-6.1.3-Next-Nexus-Alpha2-2.tar.gz
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 085169367d..b9931f9609 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -6,8 +6,8 @@
+-sha256  619ba20ea19dd9aea15e7d30aa12a146b412c7fcd9e709528f6758e82a3d85e7  kodi-audiodecoder-modplug-20.2.0-Nexus.tar.gz
++sha256  7c637f4e012e7e26a3431244a8444331f9bfeaf9c6af73cac799b58b9a0eefdf  kodi-audiodecoder-modplug-e697156054ea3eb5974fb9727e046287220985e5.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
+index bbbada01da..e435591cbf 100644
+--- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # When updating the version, please also update kodi-jsonschemabuilder
- # and kodi-texturepacker
--KODI_VERSION_MAJOR = 20.5
--KODI_VERSION_NAME = Nexus
-+KODI_VERSION_MAJOR = 21.0
-+KODI_VERSION_NAME = Omega
- KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
- KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
-@@ -45,6 +45,7 @@ KODI_DEPENDENCIES = \
- 	libfribidi \
- 	libplist \
- 	libpng \
-+	libudfread \
- 	lzo \
- 	openssl \
- 	pcre \
-@@ -54,6 +55,7 @@ KODI_DEPENDENCIES = \
- 	sqlite \
- 	taglib \
- 	tinyxml \
-+	tinyxml2 \
- 	zlib
+-KODI_AUDIODECODER_MODPLUG_VERSION = 20.2.0-Nexus
++KODI_AUDIODECODER_MODPLUG_VERSION = e697156054ea3eb5974fb9727e046287220985e5
+ KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
+ KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
+index 4012353b0b..b2e3a36a0d 100644
+--- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2f7a92bfaddcd5aa63e2ea7348ae9eeefd07dee2aba46840ce5376677e2abc19  kodi-audiodecoder-nosefart-20.2.0-Nexus.tar.gz
++sha256  fd0d12af9d3d59fbcf41e67d1f8ac9e1339c702219da4a3393688e89ff911ebb  kodi-audiodecoder-nosefart-92c6daeb278b02cd63fee724c96051421c9149f3.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+index 8954da18de..7425447115 100644
+--- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # taken from tools/depends/target/*/*-VERSION
-@@ -61,10 +63,21 @@ KODI_LIBDVDCSS_VERSION = 1.4.3-Next-Nexus-Alpha2-2
- KODI_LIBDVDNAV_VERSION = 6.1.1-Next-Nexus-Alpha2-2
- KODI_LIBDVDREAD_VERSION = 6.1.3-Next-Nexus-Alpha2-2
- KODI_EXTRA_DOWNLOADS += \
-+	https://groovy.jfrog.io/artifactory/dist-release-local/groovy-zips/apache-groovy-binary-4.0.16.zip \
-+	https://dlcdn.apache.org/commons/lang/binaries/commons-lang3-3.14.0-bin.tar.gz \
-+	https://dlcdn.apache.org/commons/text/binaries/commons-text-1.11.0-bin.tar.gz \
- 	$(call github,xbmc,libdvdcss,$(KODI_LIBDVDCSS_VERSION))/kodi-libdvdcss-$(KODI_LIBDVDCSS_VERSION).tar.gz \
- 	$(call github,xbmc,libdvdnav,$(KODI_LIBDVDNAV_VERSION))/kodi-libdvdnav-$(KODI_LIBDVDNAV_VERSION).tar.gz \
- 	$(call github,xbmc,libdvdread,$(KODI_LIBDVDREAD_VERSION))/kodi-libdvdread-$(KODI_LIBDVDREAD_VERSION).tar.gz
+-KODI_AUDIODECODER_NOSEFART_VERSION = 20.2.0-Nexus
++KODI_AUDIODECODER_NOSEFART_VERSION = 92c6daeb278b02cd63fee724c96051421c9149f3
+ KODI_AUDIODECODER_NOSEFART_SITE = $(call github,xbmc,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
+ KODI_AUDIODECODER_NOSEFART_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
+index caf9390eaa..1f0da25fc3 100644
+--- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ab1f89237c91bc7157557f42dadcff50a7191eb7285ee668543defce9f1efcf2  kodi-audiodecoder-sidplay-20.2.0-Nexus.tar.gz
++sha256  63090c74af51db7a859f8a2aa317ea2c4f2125be3306190502efc5522f00ec93  kodi-audiodecoder-sidplay-0ba1bc70faced93352cdd9ec1a5ec84e22a2e0f5.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
+index c30be0774b..a08901328f 100644
+--- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define KODI_PROVIDE_JAVA_TARBALLS
-+	mkdir -p $(@D)/buildroot-build/build/download
-+	cp $(KODI_DL_DIR)/apache-groovy-binary-4.0.16.zip $(@D)/buildroot-build/build/download
-+	cp $(KODI_DL_DIR)/commons-lang3-3.14.0-bin.tar.gz $(@D)/buildroot-build/build/download
-+	cp $(KODI_DL_DIR)/commons-text-1.11.0-bin.tar.gz $(@D)/buildroot-build/build/download
-+endef
-+KODI_POST_EXTRACT_HOOKS = KODI_PROVIDE_JAVA_TARBALLS
-+
- KODI_CONF_OPTS += \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(KODI_C_FLAGS)" \
- 	-DENABLE_APP_AUTONAME=OFF \
-@@ -104,7 +117,7 @@ endif
+-KODI_AUDIODECODER_SIDPLAY_VERSION = 20.2.0-Nexus
++KODI_AUDIODECODER_SIDPLAY_VERSION = 0ba1bc70faced93352cdd9ec1a5ec84e22a2e0f5
+ KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,xbmc,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
+ KODI_AUDIODECODER_SIDPLAY_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
+index 3ed7483fdb..db8b33cb4b 100644
+--- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
++++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f216a7d25c864986618118236c575687ab62d129a16cb1f73c15860948d9ac92  kodi-audiodecoder-snesapu-20.2.0-Nexus.tar.gz
++sha256  4932d6d00c3b8662bc6e1600757bd85856c79028c5ecb920fa0d257bab30b7a2  kodi-audiodecoder-snesapu-532186702c49ba7fe007badc74fa6a6e9cac48fe.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
+index 577adc0bc3..5b6cafcc0f 100644
+--- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
++++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM),y)
- KODI_CORE_PLATFORM_NAME += gbm
--KODI_DEPENDENCIES += libgbm libinput libxkbcommon
-+KODI_DEPENDENCIES += libdisplay-info libgbm libinput libxkbcommon
- endif
+-KODI_AUDIODECODER_SNESAPU_VERSION = 20.2.0-Nexus
++KODI_AUDIODECODER_SNESAPU_VERSION = 532186702c49ba7fe007badc74fa6a6e9cac48fe
+ KODI_AUDIODECODER_SNESAPU_SITE = $(call github,xbmc,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
+ KODI_AUDIODECODER_SNESAPU_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
+index c4d6a68ef9..daa3f537fd 100644
+--- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a8138fb075a480c59d7041a9408eca6e52dc88f188daed519cd9e684b430f333  kodi-audiodecoder-stsound-20.2.0-Nexus.tar.gz
++sha256  bf292e364bd9bbc0286fb49815cd4c2f86e5952d9bd1c878f6d1952d081d87de  kodi-audiodecoder-stsound-b72c793e2ada7ab2358568ec5b01fd71ddf7cdb3.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+index 0fa9a654e4..36535cde60 100644
+--- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND),y)
-@@ -368,12 +381,6 @@ else
- KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
--KODI_DEPENDENCIES += libudfread
--else
--KODI_CONF_OPTS += -DENABLE_INTERNAL_UDFREAD=OFF
--endif
+-KODI_AUDIODECODER_STSOUND_VERSION = 20.2.0-Nexus
++KODI_AUDIODECODER_STSOUND_VERSION = b72c793e2ada7ab2358568ec5b01fd71ddf7cdb3
+ KODI_AUDIODECODER_STSOUND_SITE = $(call github,xbmc,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
+ KODI_AUDIODECODER_STSOUND_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_STSOUND_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch b/package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch
+deleted file mode 100644
+index a0fb586e44..0000000000
+--- a/package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 0d4d3fcf5c58dd16b3e9a7337189141b839e4ace Mon Sep 17 00:00:00 2001
+-From: Rudi Heitbaum <rudi@heitbaum.com>
+-Date: Sat, 15 Apr 2023 07:41:15 +1000
+-Subject: [PATCH] MidiScan: include missing <cstdint>
 -
- # Remove versioncheck addon, updating Kodi is done by building a new
- # buildroot image.
- KODI_ADDON_MANIFEST = $(TARGET_DIR)/usr/share/kodi/system/addon-manifest.xml
+-gcc 13 moved some includes around and as a result <cstdint> is no longer transitively
+-included [1]. Explicitly include it for uint{32,64}_t.
+-
+-[1] https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
+-
+-Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
+-Upstream: https://github.com/xbmc/audiodecoder.timidity/commit/0d4d3fcf5c58dd16b3e9a7337189141b839e4ace
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/MidiScan.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/MidiScan.h b/src/MidiScan.h
+-index 9c19bdf..ac959e0 100644
+---- a/src/MidiScan.h
+-+++ b/src/MidiScan.h
+-@@ -8,6 +8,7 @@
+- 
+- #pragma once
+- 
+-+#include <cstdint>
+- #include <string>
+- #include <vector>
+- 
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+index d8c1535395..8714ebbdac 100644
+--- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ef1b384090df3c2c78d00ed33de1d989ce802702b0a9aa13575946409a5cd0f1  kodi-audiodecoder-timidity-20.2.0-Nexus.tar.gz
++sha256  6f8e72ab3c63db04fd863893bbc5afe2c8cfcc7a71d86b68ed5bfe26ea5bf066  kodi-audiodecoder-timidity-00bee97ded3bc824dc454104bd53d0f431404571.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+index 6ec66fab9b..bef0d67214 100644
+--- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_TIMIDITY_VERSION = 20.2.0-Nexus
++KODI_AUDIODECODER_TIMIDITY_VERSION = 00bee97ded3bc824dc454104bd53d0f431404571
+ KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,xbmc,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
+ KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
+index d861b5957e..a39c49bbb2 100644
+--- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  72367d7196f8049ef1fae426d32d3de1eac56bd4cb5a8fc38a6ba0c3da1b23d8  kodi-audiodecoder-vgmstream-20.2.0-Nexus.tar.gz
++sha256  c198151522b082feef1855e8a94d45ee498388c6764d58b92af9de20c72896c0  kodi-audiodecoder-vgmstream-56bedfc90ca600401e6dda407a5b933da0976664.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
+index 78e7a9f1a2..62d956892b 100644
+--- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_VGMSTREAM_VERSION = 20.2.0-Nexus
++KODI_AUDIODECODER_VGMSTREAM_VERSION = 56bedfc90ca600401e6dda407a5b933da0976664
+ KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,xbmc,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
+ KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = LICENSE.md
 -- 
 2.39.2
 
