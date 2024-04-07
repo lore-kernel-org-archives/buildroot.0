@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92C80CD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 16:17:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D412CD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 16:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 58F45820EE;
-	Sun,  7 Apr 2024 16:17:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA7CF80B31;
+	Sun,  7 Apr 2024 16:18:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id myrvjMOJ0Ov7; Sun,  7 Apr 2024 16:17:23 +0000 (UTC)
+ id mJSvcwxq3YSn; Sun,  7 Apr 2024 16:18:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D15B820F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB26182113
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D15B820F2;
-	Sun,  7 Apr 2024 16:17:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E05F61BF326
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 16:17:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB26182113;
+	Sun,  7 Apr 2024 16:18:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DFDF1BF326
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 16:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA44860B4B
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 16:17:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7618782113
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 16:18:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mUXq8vm3qkjh for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 16:17:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wLXgpyCs4R73 for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 16:18:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09BCD60B43
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09BCD60B43
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 16:17:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5CCC842CE; Sun,  7 Apr 2024 16:17:20 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 7 Apr 2024 18:16:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ce7363524c172e65571e4b5d76ef65a36f7c3020
-X-Git-Newrev: 4922233cb0c8b0355acf8e96ac0eb59422405c17
-X-Patchwork-Hint: ignore
-Message-Id: <20240407161720.E5CCC842CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "package/apache: add libxcrypt
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 470918210D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 470918210D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 470918210D
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 16:18:36 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 043EF13F8AD;
+ Sun,  7 Apr 2024 18:18:30 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 07 Apr 2024 18:18:30 +0200
+Date: Sun, 7 Apr 2024 18:18:30 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <ZhLHVqz7nQBRkR66@landeda>
+References: <20240407154958.4107385-1-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240407154958.4107385-1-bernd@kuhls.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1712506713;
+ bh=ImKDq625o6PhxNsmv2IMbljxVx257RtQcF/kpcCZ21o=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=QuR2wTZ9cyEROH41qW3TGwzUvenBnWQ4W900Dh8FsgTIhxe+AtJ6vmFgOm7RieNL7
+ 6GlOQDDXO1lP4d5s0VQ2C0xS7lgQMZjlpxffRsc3sqF1CopUvbdgNWZkeNNQMDPy/q
+ BnMMFS526Pv9edsEQkQRR0UAAsFbd0HjNrFy2/Xe2AvnWkpWLVs5ZEqQFRKWgo/x7S
+ WRfaCEf6llc++PBCmteJfhh6+TByI/93CjbLTIgn/jfIAdufoKDlkfjVZVN5YfMP8u
+ 2qRTJAxYjE0KvPC9bYpboZNoFezdwORtaLXORgQNWdqbxTaX73LzDWo0ghlaPNfg4A
+ d1ivjkg488DiA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=QuR2wTZ9
+Subject: Re: [Buildroot] [PATCH 1/1] Revert "package/apache: add libxcrypt
  optional dependency"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,57 +81,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4922233cb0c8b0355acf8e96ac0eb59422405c17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, all,
 
-This reverts commit 02905fe54cb2136c15cc71d2840d60537f1513a8.
+On 2024-04-07 17:49 +0200, Bernd Kuhls spake thusly:
+> This reverts commit 02905fe54cb2136c15cc71d2840d60537f1513a8.
+> 
+> The build error
+> http://autobuild.buildroot.org/results/f0f55d9d66b07cb3408086d2632f8cd1bebb670e/
+> 
+> resulted from the apr package and was fixed with commit
+> https://git.buildroot.net/buildroot/commit/?id=2402e0f1d31327806422692db6523120227bc5b0
 
-The build error
-http://autobuild.buildroot.org/results/f0f55d9d66b07cb3408086d2632f8cd1bebb670e/
+Indeed, I did a test build with this patch applied, and threre is indeed
+no failure.
 
-resulted from the apr package and was fixed with commit
-https://git.buildroot.net/buildroot/commit/?id=2402e0f1d31327806422692db6523120227bc5b0
+Thanks for noticing!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/apache/Config.in | 1 -
- package/apache/apache.mk | 4 ----
- 2 files changed, 5 deletions(-)
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-diff --git a/package/apache/Config.in b/package/apache/Config.in
-index bc3133ea00..270296bce4 100644
---- a/package/apache/Config.in
-+++ b/package/apache/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_APACHE
- 	depends on BR2_USE_MMU # apr
- 	select BR2_PACKAGE_APR_UTIL
- 	select BR2_PACKAGE_PCRE2
--	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  The Apache HTTP Server Project is an effort to develop and
- 	  maintain an open-source HTTP server for modern operating
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 619d13726e..1b095c5eb1 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -52,10 +52,6 @@ else
- APACHE_CONF_OPTS += --disable-brotli
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
--APACHE_DEPENDENCIES += libxcrypt
--endif
--
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
- APACHE_DEPENDENCIES += libxml2
- # Apache wants the path to the header file, where it can find
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/apache/Config.in | 1 -
+>  package/apache/apache.mk | 4 ----
+>  2 files changed, 5 deletions(-)
+> 
+> diff --git a/package/apache/Config.in b/package/apache/Config.in
+> index bc3133ea00..270296bce4 100644
+> --- a/package/apache/Config.in
+> +++ b/package/apache/Config.in
+> @@ -5,7 +5,6 @@ config BR2_PACKAGE_APACHE
+>  	depends on BR2_USE_MMU # apr
+>  	select BR2_PACKAGE_APR_UTIL
+>  	select BR2_PACKAGE_PCRE2
+> -	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+>  	help
+>  	  The Apache HTTP Server Project is an effort to develop and
+>  	  maintain an open-source HTTP server for modern operating
+> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+> index 619d13726e..1b095c5eb1 100644
+> --- a/package/apache/apache.mk
+> +++ b/package/apache/apache.mk
+> @@ -52,10 +52,6 @@ else
+>  APACHE_CONF_OPTS += --disable-brotli
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
+> -APACHE_DEPENDENCIES += libxcrypt
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_LIBXML2),y)
+>  APACHE_DEPENDENCIES += libxml2
+>  # Apache wants the path to the header file, where it can find
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
