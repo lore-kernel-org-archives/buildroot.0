@@ -4,91 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3E9CD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 09:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CC4FCD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 09:53:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C5A481B60;
-	Sun,  7 Apr 2024 09:49:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69FC081EF2;
+	Sun,  7 Apr 2024 09:53:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8lraI4nv09Pf; Sun,  7 Apr 2024 09:49:43 +0000 (UTC)
+ id yZot6xeOLW7A; Sun,  7 Apr 2024 09:53:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 386A281EC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F5BD81F17
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 386A281EC9;
-	Sun,  7 Apr 2024 09:49:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F5BD81F17;
+	Sun,  7 Apr 2024 09:53:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8FD881BF296
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:49:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 80B0D1BF296
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:53:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A3EF606C7
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:49:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E033606C7
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:53:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ineMGWERUzBX for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 09:49:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 75B0C6069A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75B0C6069A
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 75B0C6069A
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 09:49:40 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-3454fbdd88aso909446f8f.3
- for <buildroot@buildroot.org>; Sun, 07 Apr 2024 02:49:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712483378; x=1713088178;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=IsBh3cYjYgOU1+bov/tXl1OKFWJ3+KRVO/3IM4WJlZo=;
- b=JF4LVJ8ovRN6a1mXBivCSXWZPWy1P/kspOSFFx6D1CoZUUm46uAAopUduc31rdYLRl
- V/T8bkryy4s6o3H0kvAdmZn1YliNzgAuXZb+3a/teC3NRrMC0t65QmqF93LhPtXwPXg8
- qyEX+TMCmEa25lzCrQFr/JRnYV3t0DsrSD9G8tYrUiJn4mwO9ydHhh2wBK7/RF0Tkqkg
- RiT9qWLNeRO0DjAal/Ix6uY4F3aFWDu+/FpkN2aoB9fHTIhXynzlG+xL/zf9ThTCnq7/
- 4vgok7KnylGokW2kTSPMtB+UIsQyYWlBbNqyiy++EMM6d6BQjbFQiUVcZVbyH2ygSVm5
- HwOA==
-X-Gm-Message-State: AOJu0YyKzdUq1V+JkXAKBEo6Kg3obZcH8hEFHWnE658bR9FutRgMgwl2
- NBp2M76sbNx3hxUFqwqZaJ08f6TMqQQ2y8Kf48a2PI4/zEROBnTGMhyTksCi
-X-Google-Smtp-Source: AGHT+IHURyCTW2gVNq1udMH0LtwHFfXxJeLUxddcoe66hVcn1DqiEFASPiDokqqKUTzRbW3orxIyUg==
-X-Received: by 2002:a5d:634c:0:b0:343:f662:1916 with SMTP id
- b12-20020a5d634c000000b00343f6621916mr4464390wrw.17.1712483377567; 
- Sun, 07 Apr 2024 02:49:37 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- i14-20020a5d558e000000b003434b41c83fsm6319128wrv.81.2024.04.07.02.49.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Apr 2024 02:49:37 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  7 Apr 2024 11:49:35 +0200
-Message-ID: <20240407094935.562389-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ id uEluqkaMAnDr for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 09:53:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3D33D6069A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D33D6069A
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3D33D6069A
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 09:52:59 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6191313F899;
+ Sun,  7 Apr 2024 11:52:48 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 07 Apr 2024 11:52:48 +0200
+Date: Sun, 7 Apr 2024 11:52:48 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <ZhJs8G5Uyf0Rs4ai@landeda>
+References: <20240406073216.1054073-1-bernd@kuhls.net>
+ <20240406073216.1054073-5-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712483378; x=1713088178; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=IsBh3cYjYgOU1+bov/tXl1OKFWJ3+KRVO/3IM4WJlZo=;
- b=JqOgncVHhNobhEgdg1OJRyHRaay7dPzh+wjNQTkZ1T+11+VwUqplzX9T57CtZ2pKbt
- xUfPs1dipQzsCNhaZR+o694+SMtn/D4AyiF80y2KKmzr0fMLVZhffvVEfq2U0tCeqY8c
- yOrsZa+FzgsCB8y7FrCjKbzNYTjKxBuLoolNQ/zx2IJPObnp+w4pA35U6k8PZu4c1545
- Fuas3BnENaBQw1H3NvbmMoB3wjoOQCR3pjT2QIpz+BT7WV6olOJX9MtKQh2Uo3QrvCA3
- yTOOghx5Ru4sKfDO/FjZ22gh9TqhRwQrypWau67hhZckWZZ2jQgP25gLh/9ZJqNM1D8m
- +6CA==
+Content-Disposition: inline
+In-Reply-To: <20240406073216.1054073-5-bernd@kuhls.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1712483577;
+ bh=oTqi1cBTqrQMzFqgL3H/4kjOiFuuCNXG0JxXjLkyzF4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=mjHHoNEccr924+wvl6cNAThu0j37NL1zItt+Ih3QnB8voCPvGifQECBMnic6J+12d
+ CP3KKJH8csMompEQqUS9TkFMsvXjv9xIFoM7wrL2y0oLX3kT0F9YDu7KIkblJp3I3Y
+ L4BDn2IVKFW166n3v8uExM8YiAfsSkU5CjWWVyps8jJKSNo9t4sMhcggC6FpFaOc6f
+ /dITrSm10N15p1gMKSKoUkpoNC8+LoGiQqouGycvoNcx14u72SNvjnqdYxGchfN0QZ
+ DTFvUywLcN81nMmE1Xq00qJLFRidoFXCdmvslrYy0V9Wp9H/gESmGSpDS5hVkIRwf9
+ WwFTIc1FHY9qg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JqOgncVH
-Subject: [Buildroot] [PATCH 1/1] package/libcli: add libxcrypt optional
- dependency
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mjHHoNEc
+Subject: Re: [Buildroot] [PATCH 05/18] package/kodi: bump version to
+ 21.0-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,56 +82,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Steve James <ste@junkomatic.net>
+Cc: Julien Corjon <corjon.j@ecagroup.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since bump of glibc to version
-2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
+Berdn, All,
 
-/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/nios2-buildroot-linux-gnu/12.3.0/../../../../nios2-buildroot-linux-gnu/bin/ld: cannot find -lcrypt: No such file or directory
+On 2024-04-06 09:32 +0200, Bernd Kuhls spake thusly:
+> Added new dependency to libdisplay-info for gbm support:
+> https://github.com/xbmc/xbmc/commit/ce9626479c1792210c7b7cc02c7dc4f819ace509
+> 
+> Added new required dependency to tinyxml2:
+> https://github.com/xbmc/xbmc/commit/9e983ed0449aaf3007d8bfa3261056b120d84188
 
-Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
- - http://autobuild.buildroot.org/results/3a5cc2a90d58f39a6c9f27ad87e0d54e705f0c84
+So, is the dependency to tinyxml still needed?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcli/Config.in | 1 +
- package/libcli/libcli.mk | 4 ++++
- 2 files changed, 5 insertions(+)
+> Added new required dependency to libudfread: Since upstream commit
+> https://github.com/xbmc/xbmc/commit/5f9b9cfa26f274e381e92d73cfa33fb55582436e
+> kodi does not build anymore without libudfread.
+> 
+> Upstream removed the bundled groovy/apache commons binaries:
+> https://github.com/xbmc/xbmc/commit/d6bc920e056baad7782f47b86cba85d1336bb134
 
-diff --git a/package/libcli/Config.in b/package/libcli/Config.in
-index b2829cad3f..a5a8872d41 100644
---- a/package/libcli/Config.in
-+++ b/package/libcli/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBCLI
- 	bool "libcli"
-+	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  Libcli provides a shared library for including a Cisco-like
- 	  command-line interface into other software. It's a telnet
-diff --git a/package/libcli/libcli.mk b/package/libcli/libcli.mk
-index a18daa911c..f3f68f780a 100644
---- a/package/libcli/libcli.mk
-+++ b/package/libcli/libcli.mk
-@@ -26,6 +26,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
- LIBCLI_MAKE_ARGS += DYNAMIC_LIB=
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+LIBCLI_DEPENDENCIES += libxcrypt
-+endif
-+
- define LIBCLI_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		$(LIBCLI_MAKE_ARGS)
+Any reason why we can't make those additional host packages, e.g. like
+add host-groovy, and then use the new -D options listed int hat commit,
+to point kodi where they are installed in?
+
+Also, I see you use sha256 hashes for those, but kodi uses sha512
+hashes, so I think it would be better to use the same hashes as kodi, so
+that we can check that indeed what we get is what kodi expects.
+
+> - JsonSchemaBuilder fixes:
+> 
+> Upstream moved CMakeLists.txt to src/ subfolder:
+> https://github.com/xbmc/xbmc/commit/7e87d98ca55c72fcbc9b8dadf2cb979a85732606
+> 
+> - TexturePacker fixes:
+> 
+> texturepacker now depends on c++17:
+> https://github.com/xbmc/xbmc/commit/54bd6d7ab552a4ddc04d2595826457d8bfa864d5
+> 
+> Upstream moved CMakeLists.txt to src/ subfolder
+> https://github.com/xbmc/xbmc/commit/e336a75f42d9c4efd3433f3fa6edd05309689deb
+> 
+> Due to this update we can remove all of our patches for texturepacker.
+> 
+> Set KODI_SOURCE_DIR variable to root directory of the source tarball,
+> LibreELEC added something similar:
+> https://github.com/LibreELEC/LibreELEC.tv/commit/70abdd27a22b22547060fcb00a2c70ea61721465
+
+Stating "others do that as well" is not really a justification, although
+it can hints that's the way to go.
+
+In fact, the reason is simple: when building natively, outside of a meta
+buildsystem like Buildroot, kodi builds its own tools as part of its
+build process. TexturePacker needs cmake modules available from the top
+of the Kopdi source tree, a source file in a sub-directory at the
+top-level source tree, which itself needs includes from the same
+sub-dir. The Kodi build process sets KODI_SOURCE_DIR so that
+TexturePacker can fidn those files.
+
+In Buildroot, as we cross-build, we build the tools explicitly, without
+using the Kodi build process, and thus we must set that variable.
+
+[--SNIP--]
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index 8ad9fdae78..885550a542 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+[--SNIP--]
+> @@ -56,6 +57,7 @@ menuconfig BR2_PACKAGE_KODI
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # C++17
+> +	depends on BR2_HOST_GCC_AT_LEAST_9 # C++17
+
+It's not Kodi itself that needs host C++17, it's host-kodi-texturepacker
+so the dependency needs to reflect that:
+
+    depends on BR2_HOST_GCC_AT_LEAST_9  # host-kodi-texturepacker
+
+(unless kodi itself needs it during its own build, of course, at which
+point you'll need to expalin so in the commit log as well.)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.43.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
