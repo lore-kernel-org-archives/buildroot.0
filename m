@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CDDFCD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20AAECD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CCB2940810;
-	Sun,  7 Apr 2024 15:37:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E43E54080C;
+	Sun,  7 Apr 2024 15:37:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N58ynczCugoX; Sun,  7 Apr 2024 15:37:15 +0000 (UTC)
+ id HCTBCdt3jdWC; Sun,  7 Apr 2024 15:37:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83E994083D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCE3540853
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83E994083D;
-	Sun,  7 Apr 2024 15:37:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B29C51BF2CC
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:36:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCE3540853;
+	Sun,  7 Apr 2024 15:37:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 24DAA1BF2CC
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:36:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E38881DF7
+ by smtp3.osuosl.org (Postfix) with ESMTP id F2ACF608DE
  for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:36:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PshpSRPyj8j1 for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 15:36:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FOfFulWgGFx4 for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 15:36:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAF9981DFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 342F9608F6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAF9981DFE
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 15:36:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 342F9608F6
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 15:36:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C331885615; Sun,  7 Apr 2024 15:36:56 +0000 (UTC)
+ id 2F96F85615; Sun,  7 Apr 2024 15:36:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 Apr 2024 17:34:16 +0200
+Date: Sun, 7 Apr 2024 17:34:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8dd367b82cb4eb9f974c3fd683de79f01be85c80
-X-Git-Newrev: 0a9164adeecabf77a6a811dcc0e629d3d37a35f8
+X-Git-Oldrev: 55f3df2dbedc7880bd949d722254cec7fc9af522
+X-Git-Newrev: c08c98c889ef3e7622717c5247000d4f505a24ce
 X-Patchwork-Hint: ignore
-Message-Id: <20240407153656.C331885615@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freeradius-client: add libxcrypt
- optional dependency
+Message-Id: <20240407153657.2F96F85615@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/frr: add libxcrypt optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,51 +65,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a9164adeecabf77a6a811dcc0e629d3d37a35f8
+commit: https://git.buildroot.net/buildroot/commit/?id=c08c98c889ef3e7622717c5247000d4f505a24ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fix the following build failure raised since bump of glibc to version
 2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
 
-/home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/riscv32-buildroot-linux-gnu/12.3.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: local.o: in function `auth_local':
-local.c:(.text+0xe8): undefined reference to `crypt'
+/home/autobuild/autobuild/instance-1/output-1/per-package/frr/host/bin/../lib/gcc/i686-buildroot-linux-gnu/12.3.0/../../../../i686-buildroot-linux-gnu/bin/ld: lib/.libs/libfrr.so: undefined reference to `crypt'
 
 Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
- - http://autobuild.buildroot.org/results/207bba3df700108839382007020be56c4629ef75
+ - http://autobuild.buildroot.org/results/668da3829cacbe883e6cf97ce6191a8180441db6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/freeradius-client/Config.in            | 1 +
- package/freeradius-client/freeradius-client.mk | 4 ++++
- 2 files changed, 5 insertions(+)
+ package/frr/Config.in | 1 +
+ package/frr/frr.mk    | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/freeradius-client/Config.in b/package/freeradius-client/Config.in
-index 773adb8a09..36a74c3a6d 100644
---- a/package/freeradius-client/Config.in
-+++ b/package/freeradius-client/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_FREERADIUS_CLIENT
- 	bool "freeradius-client"
+diff --git a/package/frr/Config.in b/package/frr/Config.in
+index f6c058e6df..0afd8c61a2 100644
+--- a/package/frr/Config.in
++++ b/package/frr/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_FRR
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c, libyang
+ 	select BR2_PACKAGE_BASH
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
 +	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  FreeRADIUS Client is a framework and library for
- 	  writing RADIUS Clients.
-diff --git a/package/freeradius-client/freeradius-client.mk b/package/freeradius-client/freeradius-client.mk
-index 981ed163e0..b113643415 100644
---- a/package/freeradius-client/freeradius-client.mk
-+++ b/package/freeradius-client/freeradius-client.mk
-@@ -12,6 +12,10 @@ FREERADIUS_CLIENT_INSTALL_STAGING = YES
+ 	select BR2_PACKAGE_LIBYANG
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_JSON_C
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index a4b4bccaf9..1b7d66fc68 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
+@@ -13,7 +13,8 @@ FRR_CPE_ID_PRODUCT = free_range_routing
+ FRR_AUTORECONF = YES
  
- FREERADIUS_CLIENT_DEPENDENCIES = host-pkgconf
+ FRR_DEPENDENCIES = host-frr readline json-c libyang \
+-	$(if $(BR2_PACKAGE_C_ARES),c-ares)
++	$(if $(BR2_PACKAGE_C_ARES),c-ares) \
++	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
  
-+ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+FREERADIUS_CLIENT_DEPENDENCIES += libxcrypt
-+endif
-+
- ifeq ($(BR2_PACKAGE_NETTLE),y)
- FREERADIUS_CLIENT_DEPENDENCIES += nettle
- FREERADIUS_CLIENT_CONF_OPTS += --with-nettle=yes
+ HOST_FRR_DEPENDENCIES = host-flex host-bison host-elfutils host-python3
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
