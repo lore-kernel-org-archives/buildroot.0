@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71F32CD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 09:22:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFE12CD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 09:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DA2E82015;
-	Sun,  7 Apr 2024 09:22:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C6C582093;
+	Sun,  7 Apr 2024 09:22:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pnIAUMzSvDa0; Sun,  7 Apr 2024 09:22:02 +0000 (UTC)
+ id LomuuJt4pumI; Sun,  7 Apr 2024 09:22:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCDF981FE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E9E782098
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCDF981FE6;
-	Sun,  7 Apr 2024 09:22:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AA2411BF94D
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:21:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E9E782098;
+	Sun,  7 Apr 2024 09:22:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 731E01BF296
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:22:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9691160769
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:21:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 606564052E
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:22:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ivdqkZV0pizA for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 09:21:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jSi6U6HlZhZC for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 09:22:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 214AA607CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 214AA607CF
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 214AA607CF
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 09:21:54 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-343cfe8cae1so2021510f8f.3
- for <buildroot@buildroot.org>; Sun, 07 Apr 2024 02:21:54 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5CC9A403E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CC9A403E9
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5CC9A403E9
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 09:22:53 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-415446af364so26127775e9.0
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 02:22:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712481712; x=1713086512;
+ d=1e100.net; s=20230601; t=1712481771; x=1713086571;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=CBw6g+V7y88fwLE1Y3CIfB82SZYYGGSWdBRPmBUSq6g=;
- b=X1h3DeW7uEVsA5Z8FfvNu03MjuFv9NQTZAk5KBHYm9shwuSwe2Gu18X9utQIwEIJgo
- kPgun3JALlRml6FbIMRuVb3p18ByzVNxjaTwGbBdt81qvCDZIfZ7yYOFH8VOa34vTEkw
- UJ1oBoows6UbcYlti1QYHU5aeVpJgDGuxT3hMOAT+wcuCCA5O57Z/CLrMJOxOA/bioKm
- yMsDjxqJajZOoQyF8a1zebCnbbQRTANiuQUIZ7zuQKgSBxDQMGbcDYebgfAr0CWJSkc6
- 1c9j7o+FGKssOJslcpLjpppcb0uLCc3qrGByGTc4jXaR/cXtf8VZ7PDHAD1n9YEeENiH
- cQDQ==
-X-Gm-Message-State: AOJu0YyEL4n3bQSB300vZRNg6QosQMnP4/gTnxuD2WmczqsIc9/9AxT4
- E5df15cNNEMD/eXlJBNLh5cp2Kzlzk39bwHpKn/ip93qIc2JIO1I0XgCC40F
-X-Google-Smtp-Source: AGHT+IEssNf0LmmKAoSRfz9hA2HDXNSLPiVho1TdKeUbCncqhAFm3rZ4QE2d/Loe1uikjEwTOdobPQ==
-X-Received: by 2002:a05:600c:198e:b0:414:842:a548 with SMTP id
- t14-20020a05600c198e00b004140842a548mr4417629wmq.13.1712481711840; 
- Sun, 07 Apr 2024 02:21:51 -0700 (PDT)
+ bh=f+j8b5P2xcpcgY1TnQQHitPwnnigG/sFB+d2c6cOrx8=;
+ b=APelGVPkCwc2wXefT48ltYdZA3Hi0SRXseG0Xzj+X/fqT2UKTNddM5yRviBmbjCzOe
+ gsxsgY5yNHvkifV7llrw7JeL3Cp/SzaEakP+uQeh6zc4CaGPdx05enLM6bLvN9DeR+NF
+ P67cTns/YgH71ErVZen3vZ8kpzsohpfszXcmpM0eRPzsYP8OPlGEkgG8bLXP7Akju3kK
+ dvpNt9rZ2KQ85qri+1yW00hdCUhR4XNxWxgWJNq/P0KnQLgDGybrmE390CdCyByTbBMf
+ 5Zp6GoVjdmy4ObbCMVUwasUkmhI5hq8fAVwbGRXnkfZct2XwxEUwkq6icx9xSNMkuSBQ
+ OctA==
+X-Gm-Message-State: AOJu0Yyi1ZRAkTlW5D4UdF5dBrgIFXM9XAXowZEcyB8sUnabDNB+yzJk
+ +Nba6/Yr174P41ESqptP8QAMJ4fzM2raq+uiFlZ5mzxp30viqYBMh9v+PAxh
+X-Google-Smtp-Source: AGHT+IEqT7wbVMGwnMrjBZF1F5Y+EG8DU2RVRIprR3gnbPuwm+6j/oLZqqTqvPkJtrUO4bz6GN+6jw==
+X-Received: by 2002:a05:600c:3ba7:b0:416:2abe:b886 with SMTP id
+ n39-20020a05600c3ba700b004162abeb886mr5642266wms.0.1712481771105; 
+ Sun, 07 Apr 2024 02:22:51 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- p15-20020a05600c358f00b004156b689edfsm9397478wmq.33.2024.04.07.02.21.51
+ g14-20020a05600c4ece00b0041633f1513bsm5635076wmq.46.2024.04.07.02.22.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Apr 2024 02:21:51 -0700 (PDT)
+ Sun, 07 Apr 2024 02:22:50 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 Apr 2024 11:21:04 +0200
-Message-ID: <20240407092105.276261-1-fontaine.fabrice@gmail.com>
+Date: Sun,  7 Apr 2024 11:22:47 +0200
+Message-ID: <20240407092247.277457-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712481712; x=1713086512; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1712481771; x=1713086571; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CBw6g+V7y88fwLE1Y3CIfB82SZYYGGSWdBRPmBUSq6g=;
- b=B7z6z5dS/yxGl8vIgnE0UCJd9X+dX0+ybL0LEpLPMGTekV9lnanr5EUBLgh+SRpIjr
- 9kRGEb3F5aTjj4tLccyW7Jwo/Twc5FG3o4dP/k7TRgU2ykHKZW1LA9Zx7Lc2XwqNDx7r
- fJrKWT9/syD06dw1bweLTGaYjQLP9TAZctOcAJhFL7v8+A5e9FiJzhqZfcTbQTFa13jh
- 02H/nBbdgo31Fu61mLVk90w5YuD0S/K4PzojT2LFfmMKfIC1tV6HJEpaun76ZDfTj9Y+
- cmexmDksCjGHzZ1YZDBOL440/S1MvdcPnWc5HA+bd5ICeBIAH6BBulHXxzy+P9Dh2xLG
- YpzA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=f+j8b5P2xcpcgY1TnQQHitPwnnigG/sFB+d2c6cOrx8=;
+ b=OnusPIyhjBCVRqqwzisXianwMnJy2AZrUfRFeHkWsWtB19cTlsaWtiCHVa5jtYXwBV
+ 1y95UOTYu/dIaiypT5z1y7sbPnKVm8978vojIiBHbBpCb85MaKMdWK42WeGXcWjZsOXw
+ aP09eNlZqMjTQr1OGDH+b6hiPS3n0/aMsq3EeBzsrE2VbivS1waMXc5Nm8rZQNpM8Y4Z
+ udOrK5D7kzgKSVdgzx7GaPey7WL6TWqNfrihDqjP2MFUMRVpGJLLjM26Id82o9v+JrJI
+ TceXe3O+vTOs8h2qKKQpUig+OgQwtYifPolA0aNBn8ruaKTyLShjRHaqwp0zA8OCuers
+ wbdA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=B7z6z5dS
-Subject: [Buildroot] [PATCH 1/2] package/libnpth: fix musl build
+ header.s=20230601 header.b=OnusPIyh
+Subject: [Buildroot] [PATCH 1/1] package/android-tools: add libxcrypt
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,87 +101,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following musl build failure raised since bump to version 1.7 in
-commit 3ef4d24192b20bd1eb5e34c9fa2a6aa5bde91f91 and
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=575573b5b63e147b1906240f192dbe37a26ca4b9:
+Fix the following build failure raised since bump of glibc to version
+2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
 
-npth.c:392:21: error: unknown type name 'npth_rwlock_t'; did you mean 'npth_cond_t'?
-  392 | npth_rwlock_rdlock (npth_rwlock_t *rwlock)
-      |                     ^~~~~~~~~~~~~
-      |                     npth_cond_t
+/home/autobuild/autobuild/instance-7/output-1/host/lib/gcc/aarch64_be-buildroot-linux-gnu/12.3.0/../../../../aarch64_be-buildroot-linux-gnu/bin/ld: cannot find -lcrypt: No such file or directory
 
-Fixes: 3ef4d24192b20bd1eb5e34c9fa2a6aa5bde91f91
- - http://autobuild.buildroot.org/results/d986ba27b734679fd70b4e0f23278ebd38e13c5d
+Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
+ - http://autobuild.buildroot.org/results/ab7c1ff0649bec21584654431e722efe2dc88c3d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...EXPOSE_RWLOCK_API-for-musl-C-library.patch | 37 +++++++++++++++++++
- package/libnpth/libnpth.mk                    |  2 +
- 2 files changed, 39 insertions(+)
- create mode 100644 package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
+ package/android-tools/Config.in        | 1 +
+ package/android-tools/android-tools.mk | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch b/package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
-new file mode 100644
-index 0000000000..bc5ed70a9c
---- /dev/null
-+++ b/package/libnpth/0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
-@@ -0,0 +1,37 @@
-+From 417abd56fd7bf45cd4948414050615cb1ad59134 Mon Sep 17 00:00:00 2001
-+From: NIIBE Yutaka <gniibe@fsij.org>
-+Date: Fri, 1 Mar 2024 13:53:52 +0900
-+Subject: [PATCH] Fix INSERT_EXPOSE_RWLOCK_API for musl C library.
-+
-+* configure.ac: Add a case for musl system.
-+
-+--
-+
-+GnuPG-bug-id: 5664
-+Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-+
-+Upstream: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=417abd56fd7bf45cd4948414050615cb1ad59134
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index c1091b1..576a26e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -381,7 +381,10 @@ fi
-+ AC_SUBST(INSERT_NO_RWLOCK)
-+ 
-+ case "${host}" in
-+-    *-*-linux*|*-*-gnu*)
-++    *-*-linux-musl*)
-++        INSERT_EXPOSE_RWLOCK_API="1"
-++        ;;
-++    *-*-linux-gnu*|*-*-gnu*)
-+         INSERT_EXPOSE_RWLOCK_API="defined(__USE_UNIX98) || defined(__USE_XOPEN2K)"
-+         ;;
-+     *)
-+-- 
-+2.30.2
-+
-diff --git a/package/libnpth/libnpth.mk b/package/libnpth/libnpth.mk
-index dc603b607f..46c8154021 100644
---- a/package/libnpth/libnpth.mk
-+++ b/package/libnpth/libnpth.mk
-@@ -10,5 +10,7 @@ LIBNPTH_SITE = https://www.gnupg.org/ftp/gcrypt/npth
- LIBNPTH_LICENSE = LGPL-2.0+
- LIBNPTH_LICENSE_FILES = COPYING.LIB
- LIBNPTH_INSTALL_STAGING = YES
-+# 0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
-+LIBNPTH_AUTORECONF = YES
+diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
+index bc76d545c1..a688182ed9 100644
+--- a/package/android-tools/Config.in
++++ b/package/android-tools/Config.in
+@@ -68,6 +68,7 @@ config BR2_PACKAGE_ANDROID_TOOLS_ADB
+ config BR2_PACKAGE_ANDROID_TOOLS_ADBD
+ 	bool "adbd"
+ 	depends on BR2_USE_MMU # uses fork()
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
+index 3d5c76a322..f273ea5cdf 100644
+--- a/package/android-tools/android-tools.mk
++++ b/package/android-tools/android-tools.mk
+@@ -63,7 +63,9 @@ endif
  
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_ANDROID_TOOLS_ADBD),y)
+ ANDROID_TOOLS_TARGETS += adbd
+-ANDROID_TOOLS_DEPENDENCIES += zlib openssl
++ANDROID_TOOLS_DEPENDENCIES += \
++	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
++	zlib openssl
+ endif
+ 
+ # Build each tool in its own directory not to share object files
 -- 
 2.43.0
 
