@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D84ECD11C2
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 12:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5832CCD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 12:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7987D606BB;
-	Sun,  7 Apr 2024 12:07:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 253576069A;
+	Sun,  7 Apr 2024 12:13:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lyVKRWyOY5jZ; Sun,  7 Apr 2024 12:07:03 +0000 (UTC)
+ id PXKQLvyX7NDR; Sun,  7 Apr 2024 12:13:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 852046077E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 355996089F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 852046077E;
-	Sun,  7 Apr 2024 12:07:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9331B1BF4DB
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 12:07:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 355996089F;
+	Sun,  7 Apr 2024 12:13:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 290D71BF4DB
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 12:13:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D13C405FF
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 12:07:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 21BE58137E
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 12:13:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BmFbMbhY4u7o for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 12:07:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kwGBYPIHaB48 for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 12:13:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3A122407B4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A122407B4
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3A122407B4
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 12:07:00 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-41649860cecso3616315e9.0
- for <buildroot@buildroot.org>; Sun, 07 Apr 2024 05:06:59 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1B35381377
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B35381377
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1B35381377
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 12:13:49 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-3454fbdd88aso989667f8f.3
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 05:13:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712491617; x=1713096417;
+ d=1e100.net; s=20230601; t=1712492027; x=1713096827;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=9v9zmOde/Eq/2Ez1LL+t/e1/aHbtNONqCuw0EzkjQL8=;
- b=BLal7XPvgUIFLe1sK9xRMmS6nq8iEAtW8Cp5Pl+ikkGsFh3ErZELiiQEdDhpfL3sPs
- Bi4LgwpNMLtnTJeLdoxXd4PuseTCpmQIzs/RnusKB9RY8sUn6ouT7cbOKwvzR54l9aHH
- XXtcD/F0y+tzeUeLQpOi0nqnp7TNDJTStqFmC6erTSlC7ydHmgGm0OfoYZDPaGMgwJvh
- 6uJRrS9dosr9g+s1F8TCBR+peSmLpToM4Yw4n0BzcTFxhKmbpnqKVJDqmlULfAEvY25K
- MEyAxNqMfdPLGxIRcTZEFeGXnjdFyuzz8mry411JC4NaWIsJw80hgr1psgk+2Nrp/L+6
- cYEg==
-X-Gm-Message-State: AOJu0YxrSwa+vzb+8e+8OTZ1bnUBeIj9YThfox8D/Pt9HrMYj9l++CsQ
- JKlKhBOWqy3gPqgTuDaPppJL2QH5UPBwhvlT70XRxk974JW8DmNoltkoUcCx
-X-Google-Smtp-Source: AGHT+IF7L344KXjO1SvEw0Iqss3IJqYR7Wl2ACnz/SGeAgEtFJPCPcchlIw1HGGjNPB5ItyV8d3P3g==
-X-Received: by 2002:a05:600c:1d0a:b0:415:6d51:8e53 with SMTP id
- l10-20020a05600c1d0a00b004156d518e53mr5804073wms.4.1712491617088; 
- Sun, 07 Apr 2024 05:06:57 -0700 (PDT)
+ bh=E+aYmZyjIW0srfDBz/Lkgsz4WeZKsnhVXrO/MJ+OCGU=;
+ b=RfM+DGNSNMeWAFFQin2WORuwYXSkknNAv6O5AR0oeNpeaERyEWAMouVk3Vncp999aG
+ SxqBI4MHuLZfg6mEE6pahCckpDhD3q4ReCv85hsc+/roZ1mayIcH2zwTgJ+6MplZl4GL
+ IB5KWneycF95Ei2yKDKMylXHNRW3TlIgt8eLCBf8XdGtTQxra0g34qFR//CQdgg26a6e
+ ADa0C3qPbkGi8oGCv88ops7Ciy1qDQppzVj/6sPIx3e5vFicg61IBpbObrAfB9Al8sWC
+ sIV1QlDxkAHbsvEW1KuP6lnAL97zozg8H01QTkpIdUViA09WBVwXLuN6pO/JlblK6436
+ I5PQ==
+X-Gm-Message-State: AOJu0Ywg90o1Bza32BjunFuSJX1+6J7DurLQhFs6r6ofl99mSYHuu+Sb
+ o+O8WRWuEOh2MCSZCfHOBrPOZQ1qVnMQagdxBBEyfHrhVq7ndhGMyuKR7pnf
+X-Google-Smtp-Source: AGHT+IFCs1T4GPFpc4ev9yAHkq1jb8vi0kui3vSa8nusAZ01nGohzDw+MAAePZQYAanPls/a4Xt8VA==
+X-Received: by 2002:a5d:4527:0:b0:344:2550:4bcd with SMTP id
+ j7-20020a5d4527000000b0034425504bcdmr2699192wra.25.1712492026894; 
+ Sun, 07 Apr 2024 05:13:46 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- iv9-20020a05600c548900b004162ce49719sm10654574wmb.6.2024.04.07.05.06.56
+ ay4-20020a05600c1e0400b0041646c5fc21sm3793333wmb.42.2024.04.07.05.13.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Apr 2024 05:06:56 -0700 (PDT)
+ Sun, 07 Apr 2024 05:13:46 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 Apr 2024 14:06:52 +0200
-Message-ID: <20240407120652.888743-1-fontaine.fabrice@gmail.com>
+Date: Sun,  7 Apr 2024 14:13:42 +0200
+Message-ID: <20240407121342.892419-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712491617; x=1713096417; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1712492027; x=1713096827; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9v9zmOde/Eq/2Ez1LL+t/e1/aHbtNONqCuw0EzkjQL8=;
- b=Nd5yXSD03uhl2j4aUQv3U71sxhcmH6VSF0Age5MOZtangAVWb3vN28wpadhpMAcAZx
- V7An94mxE/5Ri3FVB54vUj648n8ghDKcxnGXlYTCvrg+J980bHyeF8guaXU+KtvIWUA9
- hOwzEWhmKqyw/KrezOmzZz4yrQPGM9T+zDbHAGIsaWVqW7OgHped76AR4HZ+wK88mf4T
- kufHtWACVMN380h0mFJfBEhj8G0hnBbXTDfJS5n+XOGK8FGlaZITdPCvwwLjv2TYnn3l
- 2orvlQiDfjLZ5UrwTNFtcx/j5SmuKZG+E3uuj+TrIUhzTXSLaeqcJn5epTQHTBif4akI
- iM1Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=E+aYmZyjIW0srfDBz/Lkgsz4WeZKsnhVXrO/MJ+OCGU=;
+ b=F/cCvCdVHDEQtQL9nZOnQBypQkkU7sKxrayIeGML/NPp0X4bt2IxdqsRt+Ijq/GT81
+ kkp2dG22nxQ2MMqZtgyR3ABsivrDE1suKhEs5dgXMcDb5vqSOyOHqu9Ihxabetr8O5He
+ 34mESUHJf3t9XC/+i9x4tQuyOOOsKbBe6hxUwyxSCDKFPUk+QNRRbZo4eozHDJoDXaPz
+ s3GO91wJNUR+uX+bTKNFWyF5YE5MDhnb1Kf0122lZP5InFgXwJXeoOvrHvClhnNKb+PF
+ 1aG254Iexn3XkQiDFsmdPxkTzp9/6sYx8dysqloUdYDRHf8bXyV7NEqfd+T+78u8gI+l
+ yDig==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Nd5yXSD0
-Subject: [Buildroot] [PATCH 1/1] package/libxcrypt: use official tarball
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=F/cCvCdV
+Subject: [Buildroot] [PATCH 1/1] package/whois: add libxcrypt optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,51 +100,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use official tarball and so drop autoreconf
+Fix the following build failure raised since bump of glibc to version
+2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
+
+/home/autobuild/autobuild/instance-12/output-1/host/lib/gcc/riscv32-buildroot-linux-gnu/12.3.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: cannot find -lcrypt: No such file or directory
+
+Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
+ - http://autobuild.buildroot.org/results/b0aaffaf951725186ae078ce101edb24c963c6a3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libxcrypt/libxcrypt.hash | 4 +++-
- package/libxcrypt/libxcrypt.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/whois/Config.in | 1 +
+ package/whois/whois.mk  | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
-index f021436b71..9bcf119077 100644
---- a/package/libxcrypt/libxcrypt.hash
-+++ b/package/libxcrypt/libxcrypt.hash
-@@ -1,4 +1,6 @@
-+# From https://github.com/besser82/libxcrypt/releases/download/v4.4.36/libxcrypt-4.4.36.tar.xz.sha256sum
-+sha256  e5e1f4caee0a01de2aee26e3138807d6d3ca2b8e67287966d1fefd65e1fd8943  libxcrypt-4.4.36.tar.xz
-+
- # Locally calculated
--sha256  b979838d5f1f238869d467484793b72b8bca64c4eae696fdbba0a9e0b6c28453  libxcrypt-4.4.36.tar.gz
- sha256  f9b48b0bc67a92b752780710aa774cf08b62ec2ebaa3f4aebd00069fba6effd2  LICENSING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-index 8cb6751442..d39186eecb 100644
---- a/package/libxcrypt/libxcrypt.mk
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -5,11 +5,11 @@
- ################################################################################
+diff --git a/package/whois/Config.in b/package/whois/Config.in
+index d2a030282b..19c22b5583 100644
+--- a/package/whois/Config.in
++++ b/package/whois/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_WHOIS
+ 	bool "whois"
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Improved whois client.
  
- LIBXCRYPT_VERSION = 4.4.36
--LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
-+LIBXCRYPT_SITE = https://github.com/besser82/libxcrypt/releases/download/v$(LIBXCRYPT_VERSION)
-+LIBXCRYPT_SOURCE = libxcrypt-$(LIBXCRYPT_VERSION).tar.xz
- LIBXCRYPT_LICENSE = LGPL-2.1+
- LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
- LIBXCRYPT_INSTALL_STAGING = YES
--LIBXCRYPT_AUTORECONF = YES
- 
- # Some warnings turn into errors with some sensitive compilers
- LIBXCRYPT_CONF_OPTS = --disable-werror
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 5a85bea358..e98add4e6a 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -10,6 +10,7 @@ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ WHOIS_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBIDN2),libidn2) \
++	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+ WHOIS_MAKE_OPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
 -- 
 2.43.0
 
