@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93B96CD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EA31CD128A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 15:31:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53251407BC;
-	Sun,  7 Apr 2024 15:31:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 211BB4080E;
+	Sun,  7 Apr 2024 15:31:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hSDWrsn9aQai; Sun,  7 Apr 2024 15:31:48 +0000 (UTC)
+ id pI68bsLJdBia; Sun,  7 Apr 2024 15:31:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC97E407DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91C8B40801
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC97E407DE;
-	Sun,  7 Apr 2024 15:31:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CA5AA1BF94D
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:31:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91C8B40801;
+	Sun,  7 Apr 2024 15:31:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CEDEC1BF2CC
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:31:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B63CF608F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id B731740104
  for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 15:31:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LVwPz4AZbOZW for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 15:31:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ex_NG5mMJDF5 for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 15:31:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC278608DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE77E401AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC278608DE
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE77E401AD
  for <buildroot@buildroot.org>; Sun,  7 Apr 2024 15:31:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A61EB81266; Sun,  7 Apr 2024 15:31:41 +0000 (UTC)
+ id D84C481266; Sun,  7 Apr 2024 15:31:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 7 Apr 2024 17:14:46 +0200
+Date: Sun, 7 Apr 2024 17:28:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50d3a1f73a6c054b02a9ba535a696fbd5bd5714e
-X-Git-Newrev: 109362c90418d9595e3bab0c9ab6d1c8a24f01db
+X-Git-Oldrev: 109362c90418d9595e3bab0c9ab6d1c8a24f01db
+X-Git-Newrev: 345ccb523e412b390d42073cd976a3288b0733c1
 X-Patchwork-Hint: ignore
-Message-Id: <20240407153141.A61EB81266@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/google-breakpad: needs C++17
+Message-Id: <20240407153141.D84C481266@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ toolchain/toolchain-external/toolchain-external-bootlin: bump to 2024.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,91 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=109362c90418d9595e3bab0c9ab6d1c8a24f01db
+commit: https://git.buildroot.net/buildroot/commit/?id=345ccb523e412b390d42073cd976a3288b0733c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure raised since commit
-32c1fbad554d4c2bfbe56a652333195c8ae67904:
+2024.02 Bootlin toolchains have been released, so let's update the
+support in Buildroot. Notable changes:
 
-configure: error: *** A compiler with support for C++17 language features is required.
+- Bleeding edge toolchains now use binutils 2.42, and stable
+  toolchains use binutils 2.41. This fixes binutils bug 27597
+  for both.
 
-Fixes: 32c1fbad554d4c2bfbe56a652333195c8ae67904
- - http://autobuild.buildroot.org/results/451bae7151a74cbcb5d199b8516e9c255a0953fe
+- glibc has been updated to 2.39
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Arnout: also update BR2_GOOGLE_BREAKPAD_ENABLE]
+- musl has been updated to 1.2.5, which brings 32-bit RISC-V
+  support. Due to this, 2 new toolchain variants are added: 32-bit
+  RISC-V stable, 32-bit RISC-V bleeding edge.
+
+- Bleeding edge toolchains now use 5.15 kernel headers, and stable
+  toolchains now use 4.19 kernel headers
+
+- Fortran support has been disabled on Microblaze, as the libgfortran
+  build at -O2 causes an internal compiler error.
+
+All runtime tests are passing, except the ones for the new RISC-V
+32-bit musl toolchain, for which Busybox fails to build due to an
+interaction between musl-specific code in Busybox and musl. This issue
+has been reported:
+
+  https://www.openwall.com/lists/musl/2024/03/03/2
+
+The runtime tests are nevertheless included, with the hope that this
+issue will reasonably quickly be resolved.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- Config.in                         | 2 +-
- package/google-breakpad/Config.in | 6 +++---
- package/sentry-native/Config.in   | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ .../tests/toolchain/test_external_bootlin.py       |  34 +
+ .../toolchain-external-bootlin/Config.in.options   | 896 +++++++++++----------
+ .../toolchain-external-bootlin.hash                | 828 +++++++++----------
+ .../toolchain-external-bootlin.mk                  | 424 +++++-----
+ 4 files changed, 1138 insertions(+), 1044 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 113adf0755..e4f58f3f66 100644
---- a/Config.in
-+++ b/Config.in
-@@ -586,7 +586,7 @@ config BR2_ENABLE_LTO
- config BR2_GOOGLE_BREAKPAD_ENABLE
- 	bool "Enable google-breakpad support"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-index 5c7f4bb7ba..4e2d98eb04 100644
---- a/package/google-breakpad/Config.in
-+++ b/package/google-breakpad/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- config BR2_PACKAGE_GOOGLE_BREAKPAD
- 	bool "google-breakpad"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-@@ -45,10 +45,10 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_TOOLS
- 
- endif
- 
--comment "google-breakpad requires a glibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
-+comment "google-breakpad requires a glibc toolchain w/ wchar, threads, C++, gcc >= 7"
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_USES_GLIBC || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/sentry-native/Config.in b/package/sentry-native/Config.in
-index 7a3cbd36ad..88db2779f1 100644
---- a/package/sentry-native/Config.in
-+++ b/package/sentry-native/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_SENTRY_NATIVE
- 	bool "sentry-native"
- 	depends on BR2_INSTALL_LIBSTDCPP # google-breakpad
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # google-breakpad
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # google-breakpad
- 	depends on BR2_USE_WCHAR # google-breakpad
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # google-breakpad
- 	# google-breakpad is restricted to glibc or uClibc, but
-@@ -19,10 +19,10 @@ config BR2_PACKAGE_SENTRY_NATIVE
- 
- 	  https://github.com/getsentry/sentry-native
- 
--comment "sentry-native needs a glibc toolchain with w/ wchar, thread, C++, gcc >= 4.8"
-+comment "sentry-native needs a glibc toolchain with w/ wchar, threads, C++, gcc >= 7"
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_USES_GLIBC || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
