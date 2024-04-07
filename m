@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18505CD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 08:52:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FB7DCD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 08:52:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBABC409A6;
-	Sun,  7 Apr 2024 08:52:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C9F840AE4;
+	Sun,  7 Apr 2024 08:52:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aGkJW7kc5rBE; Sun,  7 Apr 2024 08:52:27 +0000 (UTC)
+ id SVg1rLaSiWpf; Sun,  7 Apr 2024 08:52:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97CAD405C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C42540993
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 97CAD405C8;
-	Sun,  7 Apr 2024 08:52:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A92631BF57C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C42540993;
+	Sun,  7 Apr 2024 08:52:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E34311BF94D
  for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 08:52:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A273605E8
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC0C340527
  for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 08:52:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7QlRZWwo4gXI for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XhVlC61wycR7 for <buildroot@lists.busybox.net>;
  Sun,  7 Apr 2024 08:52:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4F4C605EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8BB340672
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4F4C605EB
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8BB340672
  for <buildroot@buildroot.org>; Sun,  7 Apr 2024 08:52:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD54F84BCE; Sun,  7 Apr 2024 08:52:10 +0000 (UTC)
+ id A9AE984BCC; Sun,  7 Apr 2024 08:52:10 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 7 Apr 2024 10:51:44 +0200
+Date: Sun, 7 Apr 2024 10:51:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 55c4e96c1bdca0ecff5daccb149d9717e10d081d
-X-Git-Newrev: 12ea11d86efa62af8f4b19cd871adf4c90981f52
+X-Git-Oldrev: b0865e2a76cc5d51dc874ceb448572081f001f92
+X-Git-Newrev: 938857ab3ba1c5cb01d8ce5f068dcf27de2fe253
 X-Patchwork-Hint: ignore
-Message-Id: <20240407085210.BD54F84BCE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dropbear: add optional dependency
- to libxcrypt
+Message-Id: <20240407085210.A9AE984BCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/exim: add libxcrypt optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,51 +65,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12ea11d86efa62af8f4b19cd871adf4c90981f52
+commit: https://git.buildroot.net/buildroot/commit/?id=938857ab3ba1c5cb01d8ce5f068dcf27de2fe253
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When glibc was bumped to version 2.39 in commit
-b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
-libcrypt support.
+Fix the following build failure raised since bump of glibc to version
+2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
 
-Due to this removal dropbear was unable to accept connections using
-password authentication.
+crypt16.c:45:10: fatal error: crypt.h: No such file or directory
+   45 | #include <crypt.h>
+      |          ^~~~~~~~~
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Tested-by: James Hilliard <james.hilliard1@gmail.com>
+Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
+ - http://autobuild.buildroot.org/results/3c846c763a05f2569db7a019af8b91b0563c8f42
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dropbear/Config.in   | 1 +
- package/dropbear/dropbear.mk | 4 ++++
+ package/exim/Config.in | 1 +
+ package/exim/exim.mk   | 4 ++++
  2 files changed, 5 insertions(+)
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index e14a670c19..6a9161d659 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_DROPBEAR
- 	bool "dropbear"
- 	select BR2_PACKAGE_ZLIB if !BR2_PACKAGE_DROPBEAR_SMALL
- 	select BR2_PACKAGE_LIBTOMCRYPT if !BR2_PACKAGE_DROPBEAR_SMALL
+diff --git a/package/exim/Config.in b/package/exim/Config.in
+index 2557251fd1..0d2f5f4999 100644
+--- a/package/exim/Config.in
++++ b/package/exim/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_EXIM
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_BERKELEYDB
 +	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
  	help
- 	  A small SSH 2 server designed for small memory environments.
- 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 440ebd44a2..1571c5d957 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -36,6 +36,10 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- DROPBEAR_CONF_OPTS += --disable-static
+ 	  Exim is a message transfer agent (MTA) developed at the
+ 	  University of Cambridge for use on Unix systems connected to
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 84fe96218c..d78b95ad15 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -75,6 +75,10 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_CLAMAV
+ endef
  endif
  
 +ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+DROPBEAR_DEPENDENCIES += libxcrypt
++EXIM_DEPENDENCIES += libxcrypt
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- define DROPBEAR_SVR_PAM_AUTH
- 	echo '#define DROPBEAR_SVR_PASSWORD_AUTH 0'     >> $(@D)/localoptions.h
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ EXIM_DEPENDENCIES += host-openssl openssl
+ define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
