@@ -4,72 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7B75CD128A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 09:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32E63CD11C2
+	for <buildroot@archiver.kernel.org>; Sun,  7 Apr 2024 09:22:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5424B81FC5;
-	Sun,  7 Apr 2024 09:20:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2B2181FC5;
+	Sun,  7 Apr 2024 09:21:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZkXoLPzyxJd8; Sun,  7 Apr 2024 09:20:57 +0000 (UTC)
+ id VXMg3ixpNxtK; Sun,  7 Apr 2024 09:21:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49ADB81FAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB7A381FC9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49ADB81FAF;
-	Sun,  7 Apr 2024 09:20:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 79B1C1BF296
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:20:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB7A381FC9;
+	Sun,  7 Apr 2024 09:21:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 78E521BF296
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:21:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 671A6404A8
- for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:20:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 651EA407B7
+ for <buildroot@lists.busybox.net>; Sun,  7 Apr 2024 09:21:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ql3dbkZJ9rqJ for <buildroot@lists.busybox.net>;
- Sun,  7 Apr 2024 09:20:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C443403E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C443403E9
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C443403E9
- for <buildroot@buildroot.org>; Sun,  7 Apr 2024 09:20:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7ED1360004;
- Sun,  7 Apr 2024 09:20:50 +0000 (UTC)
-Date: Sun, 7 Apr 2024 11:20:49 +0200
-To: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Message-ID: <20240407112049.2552ae1c@windsurf>
-In-Reply-To: <20240405164102.42353-1-bb@ti.com>
-References: <20240405164102.42353-1-bb@ti.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wPN93Tp6xWjV for <buildroot@lists.busybox.net>;
+ Sun,  7 Apr 2024 09:21:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7A7DC407B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A7DC407B4
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7A7DC407B4
+ for <buildroot@buildroot.org>; Sun,  7 Apr 2024 09:21:56 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-415523d9824so35550785e9.3
+ for <buildroot@buildroot.org>; Sun, 07 Apr 2024 02:21:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712481714; x=1713086514;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=EdjeSYi5Xk9PEbuVfak6u+XrULUcEencUnYMnAJKIBM=;
+ b=Oxp2CudwmoSp84v2svwhK9Nv8bg91kJGalhmpOE01icSS74yioTfcmDZ9sYfPfZSDS
+ Sj4DetoSAlyNQ5zewu/LRUqIVlt4sfH1mHyXBqWui1AJpoR72Euq75eOu6lNR4AgYDVY
+ sEbyrEK7o6ip7pxgl6/bIrg2cXjWg+wsSGUAlocP6ugVnycYmerUUwM9xmHgnajl/4q0
+ R91OW+Nc8sXwpBh/jPwF789vBQOqUk4IVdbFb1WgORX7nLwiRHSocVhiYbIOqgv65IBl
+ SVIy/U0CW3GxsgaZpPw8KapVZ9TMDiEc2ux1uRgEvkir3Sz781kGA/hDQ6ZfmdTIAcOv
+ mW/w==
+X-Gm-Message-State: AOJu0Yy9utlQAC/Jpcmicnv+5jYdT9v7a/PtoXX6up/R1HwV86fA70gt
+ eTspGXgmVAY87MrctYWwUXyxGp+a4oLKFQ3v+3rJiGM1SmAOfnspROlYyjbp
+X-Google-Smtp-Source: AGHT+IHuEHy2rimb52ooy31QishUu8ooxyg+EpdgVDFP8bxSY1khy2PbLBeLvmFkWn84U8z6zTR5CA==
+X-Received: by 2002:a05:600c:35cc:b0:416:5e85:5ef7 with SMTP id
+ r12-20020a05600c35cc00b004165e855ef7mr750724wmq.38.1712481714052; 
+ Sun, 07 Apr 2024 02:21:54 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ p15-20020a05600c358f00b004156b689edfsm9397478wmq.33.2024.04.07.02.21.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 07 Apr 2024 02:21:53 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  7 Apr 2024 11:21:05 +0200
+Message-ID: <20240407092105.276261-2-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240407092105.276261-1-fontaine.fabrice@gmail.com>
+References: <20240407092105.276261-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1712481650;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=s4tRx/QPQOOdOb3PP60CKYI5XFrL4yFx9EwNkJLG1sM=;
- b=guK3MQtVc/IbEyW0KE13bHQcYR6TvDsrUI1EM9NjHOTDiwYCYohUbb2HCd7hQJ2k6H89qS
- RUyqOwPu7TpYMBycLWUv5bEGJFtPRoPo6Sbosg+PLoCm5eB6IkVKD9ATuU3J4vvqx3MfIV
- dPFYVSWjBWuQA2ljXT92P8nmU3N7QCWJjJQsOF/h8011vjtH1l7Krxkw635yIPaYzWkzgv
- AIwQ5rgwEylBIXtU7C4aMj6WCi1mvI3Q6KuRCBRjrkxCY72BeJJkL09z93xzXA102CJYng
- QRS2FjCGMr26ddIpkU+gCR/TN3z9rI7hy4s2yNkeGRjnelsr0Z8RBpj58/mMEw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=guK3MQtV
-Subject: Re: [Buildroot] [PATCH] package/arm-gnu-toolcahin: bump version to
- 13.2-rel1
+ d=gmail.com; s=20230601; t=1712481714; x=1713086514; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=EdjeSYi5Xk9PEbuVfak6u+XrULUcEencUnYMnAJKIBM=;
+ b=P2CPfrgRZ93ZZTidnXc+7N1GHBL7L793S9A+mwMvWu3fOKCO5MCFvrawDWAcEPo8Yh
+ 9XbBGsumkBRzZPWTW5Cd1Y4cKCoxKDsWqX2+PKwCLocXNOeH7SJB21WLhjrFrV1F3QbH
+ ISZ9VKFxcBYwiGQH57KPAES84hCZfoT4H83G7qUqBdOK3oojTyErsNTHZ8jVPqVyKQ/Q
+ 9iGOS92Fe5xO9GXosRH/i4Bb/dxtnqKp9dgsbvvZD3A2rme2faHvnyERu8SethCqZaBU
+ CJM8YXgrkiUghEo2CYRKvQ9Yq0GOIIj6XZ+elOm8N1S+VoKHrfcW+nr+dGEmV6V6iQde
+ WB/w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=P2CPfrgR
+Subject: [Buildroot] [PATCH 2/2] package/libnpth: disable tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,38 +102,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bryan Brattlof <bb@ti.com>, Suniel Mahesh <sunil@amarulasolutions.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 5 Apr 2024 11:41:01 -0500
-Bryan Brattlof via buildroot <buildroot@buildroot.org> wrote:
+tests are enabled by default since the addition of the package in commit
+5d74d39cb421611e7be8ee73a308d608c47cfa28
 
-> The arm-gnu-toolchain is used by TI's K3 generation of devices to
-> compile the first stage bootloader (tiboot3.bin) which will run on the
-> 32bit R5 MCU.
-> 
-> The 10.3-2021.10 version of this toolchain is no longer publicized as
-> being downloadable (and it's fairly old) on ARM's website. Let's upgrade
-> to the latest version of the toolchain ARM (13.2-rel1)
-> 
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
-> ---
->  package/arm-gnu-toolchain/arm-gnu-toolchain.hash | 4 ++--
->  package/arm-gnu-toolchain/arm-gnu-toolchain.mk   | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libnpth/libnpth.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/libnpth/libnpth.mk b/package/libnpth/libnpth.mk
+index 46c8154021..3fa5e1f905 100644
+--- a/package/libnpth/libnpth.mk
++++ b/package/libnpth/libnpth.mk
+@@ -12,5 +12,6 @@ LIBNPTH_LICENSE_FILES = COPYING.LIB
+ LIBNPTH_INSTALL_STAGING = YES
+ # 0001-Fix-INSERT_EXPOSE_RWLOCK_API-for-musl-C-library.patch
+ LIBNPTH_AUTORECONF = YES
++LIBNPTH_CONF_OPTS = --disable-tests
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
