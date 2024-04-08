@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F5EBC67861
-	for <buildroot@archiver.kernel.org>; Mon,  8 Apr 2024 21:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72DBEC67861
+	for <buildroot@archiver.kernel.org>; Mon,  8 Apr 2024 21:11:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA70340490;
-	Mon,  8 Apr 2024 21:11:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FBA74148B;
+	Mon,  8 Apr 2024 21:11:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WkiF-JCfh8GL; Mon,  8 Apr 2024 21:11:00 +0000 (UTC)
+ id ZW0hOU-4kkQe; Mon,  8 Apr 2024 21:11:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0C5340CA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 470214148C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D0C5340CA1;
-	Mon,  8 Apr 2024 21:10:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6CC051BF2A6
- for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 21:10:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 470214148C;
+	Mon,  8 Apr 2024 21:11:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 386631BF2A6
+ for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 21:11:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6725940CA1
- for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 21:10:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 230E881EDC
+ for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 21:11:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bh-mHRreb88S for <buildroot@lists.busybox.net>;
- Mon,  8 Apr 2024 21:10:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UUhY_pI9yuFN for <buildroot@lists.busybox.net>;
+ Mon,  8 Apr 2024 21:10:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8CFA40490
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A8CFA40490
- for <buildroot@buildroot.org>; Mon,  8 Apr 2024 21:10:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 96F4885D35; Mon,  8 Apr 2024 21:10:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 8 Apr 2024 23:09:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4edd837ac0193db83202030ee2997ac811e6bc45
-X-Git-Newrev: dfe02734bfbbab680cd9ceb98e10d0344abbe058
-X-Patchwork-Hint: ignore
-Message-Id: <20240408211057.96F4885D35@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uuu: bump to version 1.5.177
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D9FB281ECF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9FB281ECF
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D9FB281ECF
+ for <buildroot@buildroot.org>; Mon,  8 Apr 2024 21:10:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E0969FF804;
+ Mon,  8 Apr 2024 21:10:56 +0000 (UTC)
+Date: Mon, 8 Apr 2024 23:10:56 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20240408231056.3a9fc7da@windsurf>
+In-Reply-To: <20240405075230.809460-1-dario.binacchi@amarulasolutions.com>
+References: <20240405075230.809460-1-dario.binacchi@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1712610657;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=KWYGQTUzkdIKU1svQdwXK0dK5JjzQ5hImZKaievwdu0=;
+ b=PcOHVLWwjCbBqrd5J98++cTkKWjt3+rihxAHFemIDspWt7EMynhrnyp8NtONGSGQOklZCZ
+ B2Q8FGpfRdRkBUy4h0kQTE//5nA1yu56fUdYeCi7eGivMJoeKx3i3rN/Q/2thhl057F676
+ H0BYGDtOhLHNV0FmcbxZw4s8v1eQD35Qe3sh0YVe9L+c9jI57hs/ZvISJ6j6jUkh4NvNj4
+ XtJKM5G/ESaW0HEmOcnB2uFbtEr5P9QJNpBEoyvNLqHcIAhJek02pEJ3p2FjjJS5AKJos8
+ sIWS2yN5abgUn6TROfc3fZ44QAFLuvAitylMtMw4qoue7l05v3c0bJdIhb/qRA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=PcOHVLWw
+Subject: Re: [Buildroot] [PATCH 1/1] package/uuu: bump to version 1.5.177
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +82,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfe02734bfbbab680cd9ceb98e10d0344abbe058
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  5 Apr 2024 09:52:30 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-- Support i.MX91
-- Fix a crash with -d option when change back file.
+> - Support i.MX91
+> - Fix a crash with -d option when change back file.
+> 
+> Release notes:
+> https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.177
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  package/uuu/uuu.hash | 2 +-
+>  package/uuu/uuu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Release notes:
-https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.177
+Applied to master, thanks.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/uuu/uuu.hash | 2 +-
- package/uuu/uuu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index e45cbb8680..0f746a7633 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  6e65fc028afacc94b805ae376e3da3864dcb2570d425037820e716207ab70373  uuu_source-uuu_1.5.165.tar.gz
-+sha256  fac38e93714181fbfb0ff52b9cd29395c7eb342def5c3857da87e5429beb3927  uuu_source-uuu_1.5.177.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 5800277b10..b6611dc3d4 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UUU_VERSION = 1.5.165
-+UUU_VERSION = 1.5.177
- UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
