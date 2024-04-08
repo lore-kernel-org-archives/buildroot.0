@@ -4,97 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23A73CD1296
-	for <buildroot@archiver.kernel.org>; Mon,  8 Apr 2024 13:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27003C67861
+	for <buildroot@archiver.kernel.org>; Mon,  8 Apr 2024 13:01:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78F4060AD2;
-	Mon,  8 Apr 2024 13:00:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD2CE60AD2;
+	Mon,  8 Apr 2024 13:01:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ky6oTyUWBXpO; Mon,  8 Apr 2024 13:00:52 +0000 (UTC)
+ id Kl6kYnZg4DPD; Mon,  8 Apr 2024 13:01:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C83760B00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2EF060B00
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C83760B00;
-	Mon,  8 Apr 2024 13:00:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2EF060B00;
+	Mon,  8 Apr 2024 13:01:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E420D1BF3C2
- for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 13:00:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 826821BF3C2
+ for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 13:01:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D06EC40494
- for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 13:00:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 700AE40494
+ for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 13:01:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id leZHb4EYgfHZ for <buildroot@lists.busybox.net>;
- Mon,  8 Apr 2024 13:00:50 +0000 (UTC)
+ id ifXeKjeeS_Dk for <buildroot@lists.busybox.net>;
+ Mon,  8 Apr 2024 13:01:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E276440159
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E276440159
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E276440159
- for <buildroot@buildroot.org>; Mon,  8 Apr 2024 13:00:49 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-41551639550so30807795e9.2
- for <buildroot@buildroot.org>; Mon, 08 Apr 2024 06:00:49 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::630; helo=mail-pl1-x630.google.com;
+ envelope-from=chinhuat@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6046640159
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6046640159
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com
+ [IPv6:2607:f8b0:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6046640159
+ for <buildroot@buildroot.org>; Mon,  8 Apr 2024 13:01:49 +0000 (UTC)
+Received: by mail-pl1-x630.google.com with SMTP id
+ d9443c01a7336-1e45b9a5c53so3388395ad.3
+ for <buildroot@buildroot.org>; Mon, 08 Apr 2024 06:01:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712581247; x=1713186047;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Mt71+BstAuZ4nzUAcXXIU8ruJSksDZg72u8A8EmvAEI=;
- b=azgw/xUkJhUOvFH5kr3XLnAPSCwDz7lTVtC41mZ6y5Lgfdt6qOHFwItAtOhSpHEs3q
- SVx4hfQB2cMUudRL+Z5bm+fnEr1YgavCs6tyFHJWLwsVOHuh3KzcXtUbGDdRtqhs2ZT4
- iF+/IHlmZQ37DDPcy/oa1Sw5iFdPaLm0oYC2pS+nf+VihjZyU+fNUOS6+TwGNpT1SVMB
- /w2Z8UxusUX5oTub+wKamKbliE90F+v/Lj+OLWDmAXo38prLP0twjfR99DWzAxbKtru9
- Y+EzJ1d3YmPIFRsxpVPevENQVdLwoxBrKbi34qJfq2x6GxibaLqitS2EwjcJTfws4G47
- /+Cg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCU1WqyCep8w6pCQ+y+f4tPM7NJPN3ep9DLHdQNrYtCFp4QTkGZoVy85WAQjIj4IpOKl0aPVY0cDOl6RlIaPcJ5Z9TNJTiNscw==
-X-Gm-Message-State: AOJu0YzgDJmtRoJYRQtql1CWJeIwXxtnggytt5c+wItw+ZbA4ZHG7tMp
- oj2PI13PXljfqQBBHsF936KGzd0/1DVmsLlVkW2ZM09sL2ODtmMoBMGeveIh5Wk=
-X-Google-Smtp-Source: AGHT+IEpE9J6MRhC5IykDVkwV8zdZR0t8sedRZxNG7Ylzu8eOoDTzN1rGNU/R6hV7QntgekaYmysPg==
-X-Received: by 2002:a05:600c:470d:b0:416:6b95:fc89 with SMTP id
- v13-20020a05600c470d00b004166b95fc89mr2507318wmo.1.1712581247333; 
- Mon, 08 Apr 2024 06:00:47 -0700 (PDT)
-Received: from [10.1.0.191] (ip-188-118-3-185.reverse.destiny.be.
- [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- f8-20020a05600c4e8800b00415dfa709dasm13369327wmq.15.2024.04.08.06.00.45
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 08 Apr 2024 06:00:45 -0700 (PDT)
-Message-ID: <452821da-0cdd-41af-bf8f-7c78297878d6@mind.be>
-Date: Mon, 8 Apr 2024 15:00:42 +0200
+ d=1e100.net; s=20230601; t=1712581308; x=1713186108;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=vqOaDukeFk17kTu/xzWHpB15c5r/96kQxkjRor4uR+Y=;
+ b=LjtjQfQg+jFf3SqCPGhGUt3pZq1NWGpaefZTnzbNogtRCGjUT5VZ3zhJcgSpzYlfP3
+ DYpyag5vti+9ReqZfdC0jTpOs9xawN5DGiav+xX+CCUB0e9qKUTW2O5AbTFOmtPJjoYC
+ OJsgOQ40R8dHHLwGSI5ElCfU2ZT8T0wqJK2vns9PNslGGVDtGzlcGJyTKUeYCFwjPrVQ
+ pnHq+APkIYyzX4FBfxd5TFxxhgP5oFOiaU/Zn4pee6XreKSnQQdXtsd/U9bDziwTqCiv
+ R42O+bHc6sp0GReCNlf++tcMlutsBKsP2JXqIM4dXlJrGf8dc2BJHfh1dZIzYzdJ5I6m
+ Q/cg==
+X-Gm-Message-State: AOJu0YwalfTRm5FDN49fgRoJFlj7WfaQefVPYR5GQDFJM5q74fZKlgLW
+ FBw40+uw9c34O4cgF2pN1kCFVBV7rgEgX22Dv31Dz+MZ2xJrzlFkn2cVZJqD/+QeIA==
+X-Google-Smtp-Source: AGHT+IEsZW/D6dre5l1dR6wjuUYzqXNSZu5/tuJyeUHSfC9eoqVnBrNiAyFuHFY9LDMDJd2NAPubhg==
+X-Received: by 2002:a17:902:f552:b0:1e2:44c7:b2af with SMTP id
+ h18-20020a170902f55200b001e244c7b2afmr12428860plf.61.1712581306128; 
+ Mon, 08 Apr 2024 06:01:46 -0700 (PDT)
+Received: from NUC7CJYS.. ([175.144.129.205]) by smtp.gmail.com with ESMTPSA id
+ f17-20020a170902ce9100b001e219142f18sm6412319plg.114.2024.04.08.06.01.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 08 Apr 2024 06:01:45 -0700 (PDT)
+From: Chin Huat Ang <chinhuat@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon,  8 Apr 2024 21:01:03 +0800
+Message-Id: <20240408130103.3680258-1-chinhuat@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
-References: <20240407103512.1112712-1-romain.naour@smile.fr>
- <20240407103512.1112712-8-romain.naour@smile.fr>
-Content-Language: en-GB
-In-Reply-To: <20240407103512.1112712-8-romain.naour@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1712581247; x=1713186047; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Mt71+BstAuZ4nzUAcXXIU8ruJSksDZg72u8A8EmvAEI=;
- b=ZfFLHnxmj1+Y/Xt4ir4fHUSE8Vq3ZsonMuV9PN74ObdKYNTXRj03AHXTnJMRCONCwC
- 7SB+Efvkw8TirOCeVnYOw1GrePOSHWGAet5uuNF2jaaVQkK8AwQH3nnYm7iWKqCk9xKr
- qm9Bwv985qwhQ68Q1AlIwm3qRxrnoCm+wAQzE4rTLDzClJiZcEfV8QY+BOJAlI3BKVj8
- 1cwTkYJxvh5zn2vdIgO6TwO0gAPL/nCwLzz0W12qvhfp5NHxsgXfGz+JQNiPjrQ0IUHi
- ytvCtl9weZhuf+eJBOXpxkupm99o/fkPnKSZTbklxG8mlaMRUlnPkz3ryUs6rAv03f2J
- Umvw==
+ d=gmail.com; s=20230601; t=1712581308; x=1713186108; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=vqOaDukeFk17kTu/xzWHpB15c5r/96kQxkjRor4uR+Y=;
+ b=DuojCXqLtgllXMLQtvMCzFzbkZz4VhuPXtOhDSNxkOpBIFLZ0vfcdSVd1f8SeTLQxM
+ 4of1Juv2bnpmAWPPosawOBhFADuc8Hc/dxW6+ZDuKMCyWfC1WY9ofVHCwpyhMyMq1AVH
+ coKw/HGDndBJxysKOYOt9gWmiqEBoE/bCGmyh/S2PgAMTfpkIgPIrezHZWOHwluQunqW
+ BzAbrptYfzHJiVpZOoCWr+eBmhDYTAcLc+5nv/Y0x1f01+cSb0sgantzKDuwjmowurJM
+ 2gsjNs3fOQGR+6JlLsyV+p3cFn2xzuf0kmYVZr4m3Mf06lDo0aCd8ZpUpYrDQCjfN5fg
+ EbHQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ZfFLHnxm
-Subject: Re: [Buildroot] [PATCH v12 07/16] configs/ti_am62x_sk_defconfig:
- bump U-Boot version to 2024.01
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=DuojCXqL
+Subject: [Buildroot] [PATCH] package/uclibc: bump to version 1.0.47
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,80 +98,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Chin Huat Ang <chinhuat@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Git shortlog:
 
+Dmitry Chestnykh (23):
+      Fix redefinition of _GNU_SOURCE.
+      ld.so: Add support of DT_RELR relocation format.
+      libc: Fix dns-related build issues.
+      Add extra `-shared` to link.so command.
+      Fix broken compilation of uClibc-ng.
+      Rename `reloc_addr` to suppress `-Wshadow` warning.
+      Introduce time64 support.
+      xtensa: Add time64 support.
+      ldso: Remove unneeded semicolons.
+      Remove unneeded comparisons.
+      Add support for using time64 on big-endian machines.
+      Add time64 support for PowerPC.
+      Refactor `ts32_struct` and `TO_ITS64_P`.
+      Add time64 support for MIPS32.
+      Fix *stat() and *stat64() when the time is beyond year 2038.
+      ldso: Use statx() when time64 is enabled.
+      libc: always redirect *stat() family to statx() with time64 enabled.
+      libc: Pass 64bit-only time structures to syscalls.
+      Add time64 support to OpenRISC.
+      Add time64 support for sparc.
+      libc: restore correct definition of semid_ds struct.
+      libc: Remove 32bit timespec structures everywhere.
+      Add time64 support to ARC.
 
-On 07/04/2024 12:35, Romain Naour wrote:
-> From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> 
-> The 2024.01 version of U-Boot for the am62x-sk board has introduced two
-> major changes:
-> - The device tree k3-am625-sk.dtb is no longer searched in /boot, but in
->    /boot/dtb/ti. Hence, the disabling of BR2_LINUX_KERNEL_INSTALL_TARGET
->    and the use of extlinux.conf for the proper loading of the device tree.
->    Furthermore, the parameter BR2_ROOTFS_POST_SCRIPT_ARGS was used to
->    auto-generate the extlinux.conf file so that developers can change the
->    kernel loading options by modifying the .config.
-> - U-Boot is capable of building tiboot3.bin using Binman. So it's no longer
->    necessary to use custom tools like ti-k3-image-gen.
-> - Use a custom tiboot3.bin since the default is "hs-fs",
->    but the ti_am62x_sk_defconfig expect the "gp" one
-> 
-> Tested on SK-AM62B-P1.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Frank Mehnert (1):
+      ldso: add null-pointer check
 
-[snip]
-> +cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
-> +	label am62x-sk-buildroot
-> +	  kernel /Image
-> +	  fdtdir /
-> +	  devicetree /${DEVICETREE}
-> +	  append ${append}
+Marcus Haehnel (4):
+      Remove duplicate semicolons
+      libm/w_j0f.c: Call correct ieee754 function
+      libpthread: Remove no longer valid attribute_unused
+      libpthread/linuxthreads: add missing string.h include in condvar.c
 
-  I wonder if it's really useful to have this custom extlinux.conf... We could 
-also give the devicetree a common name, and move the append line into the device 
-tree itself.
+Marius Melzer (2):
+      Fix -Wgnu-designator clang warnings
+      Fix -Wnon-literal-null-conversion clang warning
 
-  But this patch has had enough iterations, let's just keep it as is :-)
+Paul Cercueil (3):
+      sys/stat.h: Make S_ISSOCK() available if __USE_XOPEN2K
+      sys/stat.h: Make fchmod() available if __USE_XOPEN2K
+      features.h: Rework _DEFAULT_SOURCE
 
-[snip]
-> -BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2022.10"
-> +BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.01"
+Sven Linker (3):
+      Avoid fall-through if file matching temporary name exists
+      libc: Fix some unused parameter warnings
+      Replace null subtraction with cast
 
-  The hash for 2024.01 is currently in boot/uboot/uboot.hash, but as soon as we 
-update the U-Boot version, it will no longer be. So to be future safe, we should 
-add a local override of the uboot hash file as well (which is simply identical 
-to uboot.hash).
+Waldemar Brodkorb (25):
+      c6x: fix duplicate include
+      add newline at end of file
+      fix c6x toolchain compile
+      remove symlink
+      riscv32: decouple from riscv64
+      riscv32: add ldso support, enable time64.
+      riscv32: add basic support for NPTL
+      microblaze: enable time64
+      superh: enable time64
+      m68k: enable time64
+      x86: enable time64
+      update MAINTAINERS
+      bump version for 1.0.46 release
+      add reallocarray from musl
+      add explicit_bzero from musl
+      riscv64: sync with glibc, fix all TLS errors in uClibc-ng-test
+      riscv64: page size is 4096, reported by sorear
+      riscv64: sync with glibc clone.S
+      riscv64: clone behaves like on aarch64, fixes tst-basic3, reported by sorear
+      riscv64: add atomic.h, fixes tst-cond16, suggested by sorear
+      riscv32: sync with riscv64
+      riscv64: enable CTORS, fixes C++ applications, found by sorear
+      riscv: fix pread64/pwrite64 users like git, suggested by sorear
+      riscv: add __UCLIBC_ABORT_INSTRUCTION__, suggested by sorear
+      bump version for 1.0.47 release
 
-  Regards,
-  Arnout
+Signed-off-by: Chin Huat Ang <chinhuat@gmail.com>
+---
+ package/uclibc/uclibc.hash | 4 ++--
+ package/uclibc/uclibc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->   BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am62x_evm_r5"
-> +BR2_TARGET_TI_K3_R5_LOADER_TIBOOT3_BIN="tiboot3-am62x-gp-evm.bin"
-> +BR2_TARGET_TI_K3_R5_LOADER_USE_BINMAN=y
->   BR2_TARGET_UBOOT=y
->   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
->   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am62x_evm_a53"
->   BR2_TARGET_UBOOT_NEEDS_DTC=y
->   BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->   BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
->   BR2_TARGET_UBOOT_NEEDS_TI_K3_BOOT_FIRMWARE=y
-> +BR2_TARGET_UBOOT_USE_BINMAN=y
->   # BR2_TARGET_UBOOT_FORMAT_BIN is not set
->   BR2_TARGET_UBOOT_FORMAT_IMG=y
->   BR2_TARGET_UBOOT_SPL=y
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index ae1f3178d9..a10ceab54c 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.44/uClibc-ng-1.0.45.tar.xz.sha256
+-sha256  c2f4c6b6e19d7c9c226992a3746efd7ab932040463c15ee0bc8f4132b5777ac4  uClibc-ng-1.0.45.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.47.tar.xz.sha256
++sha256  29a4d684a06da344ee3ee09acc2ca7649d592ae3ff848f698145c46def05efcb  uClibc-ng-1.0.47.tar.xz
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 88623840bf..a7b18133ff 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.45
++UCLIBC_VERSION = 1.0.47
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
