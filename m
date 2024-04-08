@@ -4,89 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27003C67861
-	for <buildroot@archiver.kernel.org>; Mon,  8 Apr 2024 13:01:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F637CD128A
+	for <buildroot@archiver.kernel.org>; Mon,  8 Apr 2024 13:26:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD2CE60AD2;
-	Mon,  8 Apr 2024 13:01:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBE6B60B20;
+	Mon,  8 Apr 2024 13:26:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kl6kYnZg4DPD; Mon,  8 Apr 2024 13:01:53 +0000 (UTC)
+ id o3h_zYfh_XNT; Mon,  8 Apr 2024 13:26:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2EF060B00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B9C460B00
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2EF060B00;
-	Mon,  8 Apr 2024 13:01:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 826821BF3C2
- for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 13:01:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B9C460B00;
+	Mon,  8 Apr 2024 13:26:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D33F1BF344
+ for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 13:26:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 700AE40494
- for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 13:01:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49E7581A33
+ for <buildroot@lists.busybox.net>; Mon,  8 Apr 2024 13:26:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ifXeKjeeS_Dk for <buildroot@lists.busybox.net>;
- Mon,  8 Apr 2024 13:01:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v_Gg8YWsEutT for <buildroot@lists.busybox.net>;
+ Mon,  8 Apr 2024 13:26:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::630; helo=mail-pl1-x630.google.com;
- envelope-from=chinhuat@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6046640159
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6046640159
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com
- [IPv6:2607:f8b0:4864:20::630])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6046640159
- for <buildroot@buildroot.org>; Mon,  8 Apr 2024 13:01:49 +0000 (UTC)
-Received: by mail-pl1-x630.google.com with SMTP id
- d9443c01a7336-1e45b9a5c53so3388395ad.3
- for <buildroot@buildroot.org>; Mon, 08 Apr 2024 06:01:49 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4AA498193E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AA498193E
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4AA498193E
+ for <buildroot@buildroot.org>; Mon,  8 Apr 2024 13:25:59 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-343d2b20c4bso2791565f8f.2
+ for <buildroot@buildroot.org>; Mon, 08 Apr 2024 06:25:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712581308; x=1713186108;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=vqOaDukeFk17kTu/xzWHpB15c5r/96kQxkjRor4uR+Y=;
- b=LjtjQfQg+jFf3SqCPGhGUt3pZq1NWGpaefZTnzbNogtRCGjUT5VZ3zhJcgSpzYlfP3
- DYpyag5vti+9ReqZfdC0jTpOs9xawN5DGiav+xX+CCUB0e9qKUTW2O5AbTFOmtPJjoYC
- OJsgOQ40R8dHHLwGSI5ElCfU2ZT8T0wqJK2vns9PNslGGVDtGzlcGJyTKUeYCFwjPrVQ
- pnHq+APkIYyzX4FBfxd5TFxxhgP5oFOiaU/Zn4pee6XreKSnQQdXtsd/U9bDziwTqCiv
- R42O+bHc6sp0GReCNlf++tcMlutsBKsP2JXqIM4dXlJrGf8dc2BJHfh1dZIzYzdJ5I6m
- Q/cg==
-X-Gm-Message-State: AOJu0YwalfTRm5FDN49fgRoJFlj7WfaQefVPYR5GQDFJM5q74fZKlgLW
- FBw40+uw9c34O4cgF2pN1kCFVBV7rgEgX22Dv31Dz+MZ2xJrzlFkn2cVZJqD/+QeIA==
-X-Google-Smtp-Source: AGHT+IEsZW/D6dre5l1dR6wjuUYzqXNSZu5/tuJyeUHSfC9eoqVnBrNiAyFuHFY9LDMDJd2NAPubhg==
-X-Received: by 2002:a17:902:f552:b0:1e2:44c7:b2af with SMTP id
- h18-20020a170902f55200b001e244c7b2afmr12428860plf.61.1712581306128; 
- Mon, 08 Apr 2024 06:01:46 -0700 (PDT)
-Received: from NUC7CJYS.. ([175.144.129.205]) by smtp.gmail.com with ESMTPSA id
- f17-20020a170902ce9100b001e219142f18sm6412319plg.114.2024.04.08.06.01.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Apr 2024 06:01:45 -0700 (PDT)
-From: Chin Huat Ang <chinhuat@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  8 Apr 2024 21:01:03 +0800
-Message-Id: <20240408130103.3680258-1-chinhuat@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ d=1e100.net; s=20230601; t=1712582758; x=1713187558;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=7qCG+YGsICuvm5cr+/vNzuMndOuVoKSYxQ88rmvXjF4=;
+ b=Ta15ES07xfKRJQsv9cTy6ksW2jeDqUXhVlovyP1s4s/qHW4TsXn4womaivQTM90ffY
+ BRxmwEyk5HfmlCS6TxUmvrSsAqTRaKsypJVXvi+TbsdaPNvCpPh7g8B8rS6Fs1g6yLnz
+ h0CBzjmqgbVFqhOExkahv34ujidlKLymYWl1dNWvCskt0dwjChF+OGkmUAYRB84bqaQF
+ Lgxkg882F0fpETydUy1HaAYOoJ+wQWQGKf772kiBA3mJ177NGbrdqgzf6ox10jQi6HzR
+ J8Y1qsAA1Eq2ywc231uJpMzIEW/XFLtd/UEuuCk/FiU5Sy15ZYI8wa6Rx09p8v+FhTKB
+ t43A==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVeGMYd3bZKboSzrukBThr/XipFl2vEPkp0gkwc2Q2IR0SxVJ/VQOFapTwIclzzFfFvtlxSSpcLxwzJdfid9UzxzSY5jcDzxQ==
+X-Gm-Message-State: AOJu0YzfAQN7yZ1lnlccR8SLVYsOlGfwYCXPq0a3SeVE9/bL2QJkWRZa
+ JyOLVVMruQ120aUOrtA0gFESpCsgt+8axKjv6bU+ZQr6dbL0tVW18OxfWzPcWVg=
+X-Google-Smtp-Source: AGHT+IFrkEmz4QHLf+qb+5D6jnOGljkIa58O7vGXH/yqeCS4FCrwVzdxWdUGf6yjob6Ew4ABT3kmTQ==
+X-Received: by 2002:a05:6000:400b:b0:345:6c19:d06e with SMTP id
+ cp11-20020a056000400b00b003456c19d06emr5615746wrb.31.1712582757799; 
+ Mon, 08 Apr 2024 06:25:57 -0700 (PDT)
+Received: from [10.1.0.191] (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
+ a17-20020a5d5091000000b00341ba91c1f5sm8991618wrt.102.2024.04.08.06.25.53
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 08 Apr 2024 06:25:55 -0700 (PDT)
+Message-ID: <61d88146-6450-4d59-9865-9f38babb2a27@mind.be>
+Date: Mon, 8 Apr 2024 15:25:51 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+References: <20240407103512.1112712-1-romain.naour@smile.fr>
+ <20240407103512.1112712-10-romain.naour@smile.fr>
+Content-Language: en-GB
+In-Reply-To: <20240407103512.1112712-10-romain.naour@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712581308; x=1713186108; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vqOaDukeFk17kTu/xzWHpB15c5r/96kQxkjRor4uR+Y=;
- b=DuojCXqLtgllXMLQtvMCzFzbkZz4VhuPXtOhDSNxkOpBIFLZ0vfcdSVd1f8SeTLQxM
- 4of1Juv2bnpmAWPPosawOBhFADuc8Hc/dxW6+ZDuKMCyWfC1WY9ofVHCwpyhMyMq1AVH
- coKw/HGDndBJxysKOYOt9gWmiqEBoE/bCGmyh/S2PgAMTfpkIgPIrezHZWOHwluQunqW
- BzAbrptYfzHJiVpZOoCWr+eBmhDYTAcLc+5nv/Y0x1f01+cSb0sgantzKDuwjmowurJM
- 2gsjNs3fOQGR+6JlLsyV+p3cFn2xzuf0kmYVZr4m3Mf06lDo0aCd8ZpUpYrDQCjfN5fg
- EbHQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=DuojCXqL
-Subject: [Buildroot] [PATCH] package/uclibc: bump to version 1.0.47
+ d=mind.be; s=google; t=1712582758; x=1713187558; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=7qCG+YGsICuvm5cr+/vNzuMndOuVoKSYxQ88rmvXjF4=;
+ b=gwZ/363rb1U44KHpw6C92C/rMkmxfK85KbsavgXpPOg3B12naJZE8xnRU9SMthgWsc
+ 6ST7ubjgeE8D63OFIGsRny+fhMsomRdz8XBkZCtmJ+vwC3sK7ekv3XzKSLz+BRcRhSLb
+ tF17CUB6iK8HHAz18W6ohIKPS7fqifsXNMtiyEhGLafb6r4BfTPG56lfebLhwIUmA5+e
+ PMjrmC7r9vXnFmlSg9BSUVFcGpQ5YWk0HMuGacsOXCIpaVcOm3cgaSGoUcUOhQyIXD1g
+ JfstCSOgw4PmStV07xJ9yq6UC3pZpxcaEEgLteoyghkk1rthySbGXES1SGu0tAik93Ry
+ CY9g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=gwZ/363r
+Subject: Re: [Buildroot] [PATCH v12 09/16] board/ti/am62x-sk: generalize
+ post-build.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,122 +106,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Chin Huat Ang <chinhuat@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Git shortlog:
 
-Dmitry Chestnykh (23):
-      Fix redefinition of _GNU_SOURCE.
-      ld.so: Add support of DT_RELR relocation format.
-      libc: Fix dns-related build issues.
-      Add extra `-shared` to link.so command.
-      Fix broken compilation of uClibc-ng.
-      Rename `reloc_addr` to suppress `-Wshadow` warning.
-      Introduce time64 support.
-      xtensa: Add time64 support.
-      ldso: Remove unneeded semicolons.
-      Remove unneeded comparisons.
-      Add support for using time64 on big-endian machines.
-      Add time64 support for PowerPC.
-      Refactor `ts32_struct` and `TO_ITS64_P`.
-      Add time64 support for MIPS32.
-      Fix *stat() and *stat64() when the time is beyond year 2038.
-      ldso: Use statx() when time64 is enabled.
-      libc: always redirect *stat() family to statx() with time64 enabled.
-      libc: Pass 64bit-only time structures to syscalls.
-      Add time64 support to OpenRISC.
-      Add time64 support for sparc.
-      libc: restore correct definition of semid_ds struct.
-      libc: Remove 32bit timespec structures everywhere.
-      Add time64 support to ARC.
 
-Frank Mehnert (1):
-      ldso: add null-pointer check
+On 07/04/2024 12:35, Romain Naour wrote:
+> From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> 
+> Removing any explicit reference to the ti_am62x_sk_defconfig
+> configuration, the script can also be used by other configurations or at
+> least by ti_am64x_sk_defconfig.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
+> 
+> Added in v8
+> ---
+>   board/ti/am62x-sk/post-build.sh | 10 +++++++---
 
-Marcus Haehnel (4):
-      Remove duplicate semicolons
-      libm/w_j0f.c: Call correct ieee754 function
-      libpthread: Remove no longer valid attribute_unused
-      libpthread/linuxthreads: add missing string.h include in condvar.c
+  Keeping in mind the above remark that it can be reused for ti_am64x, perhaps 
+move it to board/ti/common or board/ti/common-am6x or something like that?
 
-Marius Melzer (2):
-      Fix -Wgnu-designator clang warnings
-      Fix -Wnon-literal-null-conversion clang warning
+  Same for the hash files BTW.
 
-Paul Cercueil (3):
-      sys/stat.h: Make S_ISSOCK() available if __USE_XOPEN2K
-      sys/stat.h: Make fchmod() available if __USE_XOPEN2K
-      features.h: Rework _DEFAULT_SOURCE
+  For me it's fine to apply as is and clean this up afterwards.
 
-Sven Linker (3):
-      Avoid fall-through if file matching temporary name exists
-      libc: Fix some unused parameter warnings
-      Replace null subtraction with cast
+>   configs/ti_am62x_sk_defconfig   |  2 +-
+>   2 files changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/board/ti/am62x-sk/post-build.sh b/board/ti/am62x-sk/post-build.sh
+> index 4f19f4d6cf..d066e28fd0 100755
+> --- a/board/ti/am62x-sk/post-build.sh
+> +++ b/board/ti/am62x-sk/post-build.sh
+> @@ -12,8 +12,8 @@ EOF
+>     exit 1
+>   }
+>   
+> -o='c:d:r:x:'
+> -O='console:,devicetree:,root:,extra-args:'
+> +o='c:d:l:r:x:'
+> +O='console:,devicetree:,label:,root:,extra-args:'
+>   opts="$(getopt -n "${0##*/}" -o "${o}" -l "${O}" -- "${@}")"
+>   eval set -- "${opts}"
+>   while [ ${#} -gt 0 ]; do
+> @@ -24,6 +24,9 @@ while [ ${#} -gt 0 ]; do
+>       (-d|--devicetree)
+>           DEVICETREE="${2}"; shift 2
+>           ;;
+> +    (-l|--label)
+> +        LABEL="${2}"; shift 2
+> +        ;;
+>       (-r|--root)
+>           ROOT="${2}"; shift 2
+>           ;;
+> @@ -38,6 +41,7 @@ done
+>   
+>   [ -n "${CONSOLE}" ] || die "Missing \`console' argument"
+>   [ -n "${DEVICETREE}" ] || die "Missing \`devicetree' argument"
+> +[ -n "${LABEL}" ] || die "Missing \`label' argument"
+>   [ -n "${ROOT}" ] || die "Missing \`root' argument"
+>   append="console=${CONSOLE} root=${ROOT} rw rootfstype=ext4 rootwait"
+>   if [ -n "${EXTRA_ARGS}" ]; then
+> @@ -46,7 +50,7 @@ fi
+>   
+>   mkdir -p "${BINARIES_DIR}"
+>   cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
+> -	label am62x-sk-buildroot
+> +	label ${LABEL}
 
-Waldemar Brodkorb (25):
-      c6x: fix duplicate include
-      add newline at end of file
-      fix c6x toolchain compile
-      remove symlink
-      riscv32: decouple from riscv64
-      riscv32: add ldso support, enable time64.
-      riscv32: add basic support for NPTL
-      microblaze: enable time64
-      superh: enable time64
-      m68k: enable time64
-      x86: enable time64
-      update MAINTAINERS
-      bump version for 1.0.46 release
-      add reallocarray from musl
-      add explicit_bzero from musl
-      riscv64: sync with glibc, fix all TLS errors in uClibc-ng-test
-      riscv64: page size is 4096, reported by sorear
-      riscv64: sync with glibc clone.S
-      riscv64: clone behaves like on aarch64, fixes tst-basic3, reported by sorear
-      riscv64: add atomic.h, fixes tst-cond16, suggested by sorear
-      riscv32: sync with riscv64
-      riscv64: enable CTORS, fixes C++ applications, found by sorear
-      riscv: fix pread64/pwrite64 users like git, suggested by sorear
-      riscv: add __UCLIBC_ABORT_INSTRUCTION__, suggested by sorear
-      bump version for 1.0.47 release
+  AFAIK the label is completely meaningless when you use extlinux.conf from 
+U-Boot. It's used as the menu entry in the extlinux bootloader, but in U-Boot I 
+think it's just the first one which gets chosen, without menu. And regardless, 
+we have one entry anyway. So can't we just set the label to "buildroot"?
 
-Signed-off-by: Chin Huat Ang <chinhuat@gmail.com>
----
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+  If we do set a label, I would use BR2_TARGET_GENERIC_HOSTNAME instead of 
+adding yet another option in the post-build script.
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index ae1f3178d9..a10ceab54c 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.44/uClibc-ng-1.0.45.tar.xz.sha256
--sha256  c2f4c6b6e19d7c9c226992a3746efd7ab932040463c15ee0bc8f4132b5777ac4  uClibc-ng-1.0.45.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.47.tar.xz.sha256
-+sha256  29a4d684a06da344ee3ee09acc2ca7649d592ae3ff848f698145c46def05efcb  uClibc-ng-1.0.47.tar.xz
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 88623840bf..a7b18133ff 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.45
-+UCLIBC_VERSION = 1.0.47
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
--- 
-2.34.1
+  Regards,
+  Arnout
 
+>   	  kernel /Image
+>   	  fdtdir /
+>   	  devicetree /${DEVICETREE}
+> diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
+> index d4b19e5039..1c7085d04d 100644
+> --- a/configs/ti_am62x_sk_defconfig
+> +++ b/configs/ti_am62x_sk_defconfig
+> @@ -3,7 +3,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+>   BR2_GLOBAL_PATCH_DIR="board/ti/am62x-sk/patches"
+>   BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+>   BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/am62x-sk/post-build.sh"
+> -BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -l am62x-sk-buildroot -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
+>   BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>   BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/ti/am62x-sk/genimage.cfg"
+>   BR2_LINUX_KERNEL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
