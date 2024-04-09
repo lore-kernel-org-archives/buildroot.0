@@ -4,50 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94228C67861
-	for <buildroot@archiver.kernel.org>; Tue,  9 Apr 2024 21:59:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2005CD128A
+	for <buildroot@archiver.kernel.org>; Tue,  9 Apr 2024 21:59:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0494B80FA9;
-	Tue,  9 Apr 2024 21:59:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 692AE815E7;
+	Tue,  9 Apr 2024 21:59:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N7_keZA1OR1M; Tue,  9 Apr 2024 21:58:59 +0000 (UTC)
+ id JGzwxf3xW1Tf; Tue,  9 Apr 2024 21:59:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5A7980FFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7145081751
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5A7980FFE;
-	Tue,  9 Apr 2024 21:58:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1CDEA1BF969
- for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 21:58:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7145081751;
+	Tue,  9 Apr 2024 21:59:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EBDE11BF97D
+ for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 21:59:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09CB5401B2
- for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 21:58:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E337040603
+ for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 21:59:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZeNdOjbblXRq for <buildroot@lists.busybox.net>;
- Tue,  9 Apr 2024 21:58:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Htq2CHRoeM16 for <buildroot@lists.busybox.net>;
+ Tue,  9 Apr 2024 21:59:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.217;
+ helo=smtpcmd01-g.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA52540195
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA52540195
- for <buildroot@buildroot.org>; Tue,  9 Apr 2024 21:58:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CF55085E64; Tue,  9 Apr 2024 21:58:11 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 9 Apr 2024 23:57:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: df2540adeac1a924dfa4fe1da7d654db49151420
-X-Git-Newrev: d01e13c4d419ca2fc31d6300033eacb1d19cb615
-X-Patchwork-Hint: ignore
-Message-Id: <20240409215811.CF55085E64@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python3: fix cross builds when
- host and target use the same SOABI
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DB01840611
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB01840611
+Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DB01840611
+ for <buildroot@buildroot.org>; Tue,  9 Apr 2024 21:59:11 +0000 (UTC)
+Received: from [192.168.50.121] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id uJUir5PfqGFWQuJUjrsivL; Tue, 09 Apr 2024 23:59:09 +0200
+Message-ID: <6068206a-9a0c-4ef4-a5bb-9e6f35218297@benettiengineering.com>
+Date: Tue, 9 Apr 2024 23:59:08 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Don <dterry_engineer@yahoo.com>, buildroot@buildroot.org
+References: <e2634bc6-2e68-4331-8354-49407b40f191.ref@yahoo.com>
+ <e2634bc6-2e68-4331-8354-49407b40f191@yahoo.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <e2634bc6-2e68-4331-8354-49407b40f191@yahoo.com>
+X-CMAE-Envelope: MS4xfJ7qoXmenq8vlxM5lL8YIoiuVYDksQj3Fg2kRyU5pngx9PLAyqLe62peZKfUZZx2/Zc0yrgfiMdp1eeBnoKX2uE0NCWfY7Dq8bKv1nNt1gA8WA4y3DgT
+ PfDvYgxRFnNKUP0dSxrQcetSQckZVmuo6gFJPpTEOm4lB0FhZRYRa9oSUQpup22QchIH0JfZyHXkeBCI6WdXBhAud6SdkfQ+U4ZpAQ9NNk8qwS+X3TUdwu4d
+ AkhdJjizN/caL/OHCkHnJQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1712699949; bh=l7YAPjJg1nkYLz0FSimOXGObyum/lfLP/bDscjo5hZ0=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=n70CN1lQmUPt9ggK5vcnsLQJp1c0twIGgi41jyJgzs8DwJ/pVWCxVHvfka4YlPOw2
+ p4kdjxwCo6+8WJYVZJM9/JR5h6qMyqdSfTom13txAW2vOcQ0qtgsOfgr6XJmF28tBP
+ tREtSfVadMwMgJFufnYumNk90qGkiJlPNqaxsKkUG3kjF98TFhbsAr7g7jjZIGn7GZ
+ GWdM1Ru+OPeEOIL9jf9Om44e/i70r3tgcVImPXN7LNFoImOFU4fzXz27m620X+vF0G
+ LpK7DT3gqxCZfprBTKqHQSRoJYKitZ99W16rTl6S3ImsaBveaG5cV8vtpfLYDaMeOs
+ vkN3c1Va6/kkQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=n70CN1lQ
+Subject: Re: [Buildroot] Problem with device tree
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,186 +82,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d01e13c4d419ca2fc31d6300033eacb1d19cb615
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Don,
 
-When python performs a cross compile, it uses a host interpreter to run
-steps on behalf of the foreign architecture to finalize the build.
+On 09/04/24 23:23, Don via buildroot wrote:
+> This is my first time using buildroot. Following the instructions of 
+> bootlin.com/doc/training/buildroot/buildroot-labs.pdf, building for 
+> Beaglebone Black though not the wireless of the training pdf. Under 
+> Kernel - selected device tree blob and in-tree device tree name I put 
+> am335x-boneblack. However I get
+> 
+> Device Tree Source (arch/arm/dts/am335x-.dtb) is not correctly specified.
+> Please define 'CONFIG_DEFAULT_DEVICE_TREE'
+> or build with 'DEVICE_TREE=<device_tree>' argument
+> 
+> What does it want? Something is missing but I don't know what.
 
-When performing these steps, foreign modules may be loaded if the SOABI
-matches that of the host. This can lead to issues if the modules are
-linked against a libc not available on the host or if the binaries
-include instructions unsupported by the host.
+Starting from  Linux version 6.5[0] you have to specify the manufacturer 
+folder too compared to previous versions(i.e. 6.4[1]). So if you're 
+using a kernel newer than 6.5 you have to specify something like:
+arch/arm/dts/ti/omap/am335x-.dtb
 
-For now, patch the foreign libraries out of PYTHONPATH and explicitly
-define the path to sysconfigdata so builds can complete without error.
+Hope this helps.
 
-This method currently passes all upstream CI pipelines [0] and should
-also work (with some modifications) for the migration to 3.12 [1].
+[0]: https://elixir.bootlin.com/linux/v6.5-rc1/source/arch/arm/boot/dts
+[1]: https://elixir.bootlin.com/linux/v6.4.16/source/arch/arm/boot/dts
 
-Fixes: http://autobuild.buildroot.net/results/c854080e003e9a7d525325073190b472a8f982aa/
-[0]: https://github.com/python/cpython/pull/116294
-[1]: https://lists.buildroot.org/pipermail/buildroot/2024-February/685369.html
+Best regards
+-- 
+Giulio Benetti
+CEO&CTO@Benetti Engineering
 
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...ix-cross-compiles-when-host-and-target-us.patch | 140 +++++++++++++++++++++
- 1 file changed, 140 insertions(+)
+> Thanks.
+> 
+> Have a Blessed day!
+> 
+> Don
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch b/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-new file mode 100644
-index 0000000000..4d5afeb3cb
---- /dev/null
-+++ b/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-@@ -0,0 +1,140 @@
-+From 8d8cc9087fd44c097775ca0a9ebb6c877605baec Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <5265893+vfazio@users.noreply.github.com>
-+Date: Wed, 28 Feb 2024 13:55:04 -0600
-+Subject: [PATCH] gh-115382: Fix cross compiles when host and target use same
-+ SOABI
-+
-+Previously, when a build was configured to use a host interpreter via
-+--with-build-python, the PYTHON_FOR_BUILD config value included a path
-+in PYTHONPATH that pointed to the target's built external modules.
-+
-+For "normal" foreign architecture cross compiles, when loading compiled
-+external libraries, the target libraries were processed first due to
-+their precedence in sys.path. These libraries were then ruled out due to
-+a mismatch in the SOABI so the import mechanism continued searching
-+until it found the host's native modules.
-+
-+However, if the host interpreter and the target python were on the same
-+version + SOABI combination, the host interpreter would attempt to load
-+the target's external modules due to their precedence in sys.path.
-+
-+Despite the "match", the target build may have been linked against a
-+different libc or may include unsupported instructions so loading or
-+executing the target's external modules can lead to crashes.
-+
-+Now, the path to the target's external modules is no longer defined in
-+PYTHONPATH to prevent accidentally loading these foreign modules.
-+
-+One caveat is that during certain build stages, the target's sysconfig
-+module requires higher precedence than the host's version in order to
-+accurately query the target build's configuration.
-+
-+This worked previously due to the target's sysconfig data module having
-+precedence over the host's (see above). In order to keep this desired
-+behavior, a new environment variable, _PYTHON_SYSCONFIGDATA_PATH, has
-+been defined so sysconfig can search this directory for the target's
-+sysconfig data.
-+
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+Upstream-issue: https://github.com/python/cpython/issues/115382
-+Upstream: https://github.com/python/cpython/pull/116294
-+---
-+ Lib/sysconfig.py             | 15 ++++++++++++++-
-+ Lib/test/libregrtest/main.py |  1 +
-+ Lib/test/pythoninfo.py       |  1 +
-+ Tools/scripts/run_tests.py   |  1 +
-+ configure                    |  2 +-
-+ configure.ac                 |  2 +-
-+ 6 files changed, 19 insertions(+), 3 deletions(-)
-+
-+diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
-+index 6328ec41af..744f715fe2 100644
-+--- a/Lib/sysconfig.py
-++++ b/Lib/sysconfig.py
-+@@ -535,7 +535,20 @@ def _init_posix(vars):
-+     """Initialize the module as appropriate for POSIX systems."""
-+     # _sysconfigdata is generated at build time, see _generate_posix_vars()
-+     name = _get_sysconfigdata_name()
-+-    _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)
-++
-++    # For cross builds, the path to the target's sysconfigdata must be specified
-++    # so it can be imported. It cannot be in PYTHONPATH, as foreign modules in
-++    # sys.path can cause crashes when loaded by the host interpreter.
-++    # Rely on truthiness as a valueless env variable is still an empty string.
-++    # See OS X note in _generate_posix_vars re _sysconfigdata.
-++    if (path := os.environ.get('_PYTHON_SYSCONFIGDATA_PATH')):
-++        from importlib.machinery import FileFinder, SourceFileLoader, SOURCE_SUFFIXES
-++        from importlib.util import module_from_spec
-++        spec = FileFinder(path, (SourceFileLoader, SOURCE_SUFFIXES)).find_spec(name)
-++        _temp = module_from_spec(spec)
-++        spec.loader.exec_module(_temp)
-++    else:
-++        _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)
-+     build_time_vars = _temp.build_time_vars
-+     vars.update(build_time_vars)
-+ 
-+diff --git a/Lib/test/libregrtest/main.py b/Lib/test/libregrtest/main.py
-+index a9725fa967..121e2e7393 100644
-+--- a/Lib/test/libregrtest/main.py
-++++ b/Lib/test/libregrtest/main.py
-+@@ -519,6 +519,7 @@ def _add_cross_compile_opts(self, regrtest_opts):
-+                 '_PYTHON_PROJECT_BASE',
-+                 '_PYTHON_HOST_PLATFORM',
-+                 '_PYTHON_SYSCONFIGDATA_NAME',
-++                "_PYTHON_SYSCONFIGDATA_PATH",
-+                 'PYTHONPATH'
-+             }
-+             old_environ = os.environ
-+diff --git a/Lib/test/pythoninfo.py b/Lib/test/pythoninfo.py
-+index 74ebb5e5b8..fa7fbca34e 100644
-+--- a/Lib/test/pythoninfo.py
-++++ b/Lib/test/pythoninfo.py
-+@@ -326,6 +326,7 @@ def format_groups(groups):
-+         "_PYTHON_HOST_PLATFORM",
-+         "_PYTHON_PROJECT_BASE",
-+         "_PYTHON_SYSCONFIGDATA_NAME",
-++        "_PYTHON_SYSCONFIGDATA_PATH",
-+         "__PYVENV_LAUNCHER__",
-+ 
-+         # Sanitizer options
-+diff --git a/Tools/scripts/run_tests.py b/Tools/scripts/run_tests.py
-+index 445a34ae3e..4077a83424 100644
-+--- a/Tools/scripts/run_tests.py
-++++ b/Tools/scripts/run_tests.py
-+@@ -42,6 +42,7 @@ def main(regrtest_args):
-+             '_PYTHON_PROJECT_BASE',
-+             '_PYTHON_HOST_PLATFORM',
-+             '_PYTHON_SYSCONFIGDATA_NAME',
-++            "_PYTHON_SYSCONFIGDATA_PATH",
-+             'PYTHONPATH'
-+         }
-+         environ = {
-+diff --git a/configure b/configure
-+index a1ad0ae251..0657162d1a 100755
-+--- a/configure
-++++ b/configure
-+@@ -3262,7 +3262,7 @@ fi
-+     fi
-+         ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
-+     PYTHON_FOR_FREEZE="$with_build_python"
-+-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$with_build_python
-++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
-+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_build_python" >&5
-+ $as_echo "$with_build_python" >&6; }
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index e5fb8bd99e..d444f5ec09 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -162,7 +162,7 @@ AC_ARG_WITH(
-+     dnl Build Python interpreter is used for regeneration and freezing.
-+     ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
-+     PYTHON_FOR_FREEZE="$with_build_python"
-+-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$with_build_python
-++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
-+     AC_MSG_RESULT([$with_build_python])
-+   ], [
-+     AS_VAR_IF([cross_compiling], [yes],
-+-- 
-+2.34.1
-+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
