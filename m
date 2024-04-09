@@ -4,104 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACF4CCD128A
-	for <buildroot@archiver.kernel.org>; Tue,  9 Apr 2024 21:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9A6DC67861
+	for <buildroot@archiver.kernel.org>; Tue,  9 Apr 2024 21:28:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 694F081C38;
-	Tue,  9 Apr 2024 21:23:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6710E81CD0;
+	Tue,  9 Apr 2024 21:28:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5rnyQKJ64O6x; Tue,  9 Apr 2024 21:23:37 +0000 (UTC)
+ id MlUnJ69p82ux; Tue,  9 Apr 2024 21:28:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B79F81C46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F2C881D16
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B79F81C46;
-	Tue,  9 Apr 2024 21:23:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 831AB1BF299
- for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 21:23:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F2C881D16;
+	Tue,  9 Apr 2024 21:28:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B83E21BF299
+ for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 21:28:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 294DA40279
- for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 21:23:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2079606B0
+ for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 21:28:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2KrH3NpMSjfC for <buildroot@lists.busybox.net>;
- Tue,  9 Apr 2024 21:23:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=66.163.184.44;
- helo=sonic317-33.consmr.mail.ne1.yahoo.com;
- envelope-from=dterry_engineer@yahoo.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BCA9E40123
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCA9E40123
-Received: from sonic317-33.consmr.mail.ne1.yahoo.com
- (sonic317-33.consmr.mail.ne1.yahoo.com [66.163.184.44])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BCA9E40123
- for <buildroot@buildroot.org>; Tue,  9 Apr 2024 21:23:32 +0000 (UTC)
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048;
- t=1712697811; bh=48GgkagC2OVY0LDpksLJ4rJEo/zxJcKR6UXyWg66DgO=;
- h=X-Sonic-MF:Date:To:From:Subject:From:Subject;
- b=T2hleRn9DzHQ3Oh1Ice5GpN0I3x6FzP2MZH7YHBN2U0IkuHKZoLQb+Qy/1GlOH/xN0nGgcdlgyqQXSFEShy2j9pJ0gRQGkyjutQRcx+pYrcXyKILC7wUpf7eQXlCPux0rRN3+G4OLPJuOeq7MyoyDKXCfVSB8oeeVBJTm5btlhQ3CHFCv4hSlSe8tBRsvDKfepQh/fmniCLj6JjK6FLpNBdkkHiEHOZ2yYGx0BRbSXiQkLNEkWUzveEThuZGqGzkhx8StkpM5KKG73JCF5y4AJf6JopuOEp13fkz8uOLbrSv81PXdo6CVbxBfa1NkGVOnNUzXLG3Ua/oSbCQ2qHJ8Q==
-X-YMail-OSG: UMUOv30VM1ms7WA5Q2aPQCnlLppkc10IKtiOqSmircjHXQuo8WA4K_bAyAwV19i
- ckq6dPWFl2Je3fftbGTeOmPOdn.eDhDVY3yhzltsGLexNlLJMJ.KvS8XmoRWJ7XA6up9VqNxm9I_
- dGwyxIiupjMCetjgXaJQV9nNb1zwWorsL.NC76GJFcRIJbQW9e8WCqI3fIng3lVVxWVm4uHmI93f
- 1L.ewDHCxboXvthBxJb0LAv7sLDTW_dw.5HepVgQMSMD6t897aELswKaKOrE3Msw1HfIZXEjJyoz
- LqE.4KcUv994IYrjAmfV6aTMDphOaXL93CiO5vMgtxs2rRveLw0RyCoN4Wf2k9zIj1emin4BsH1w
- JTxBgkKoqL8IgtLEp4OdfndQiecXeNgjkXRgJ6gGtoJuWkvzT7QyU2D7D.2ZcUHC_rdRbir.EqzC
- thAhCpndO2c975MhBO_68arP2WwKJJ42YjkHDG63K34kLdTSEHFvweB3uPMkKOiMTjW2EuLoQk6Y
- hhlysGskSSbOmlQ51VDDUoDJkyW5276d2rqLcJL8Ki6r23Zwa.rQI87zemh7iYkZL3.WvuONdkRs
- jA0da_Puk9fUeWYQE3rgXfyHJ0ILUeW.P2t8LqEjc9hDawb05Yq_qzTLllaXoOaEn4KvqHG7Youi
- PTGWzKbqIS8JnvqoUKC8BR6I1pSz6pBdGpGLsBWqhGqKUnJRhLtM4T9WRg2UjWS15KgGfltvD9AE
- SFQILMerTtLAKZ1eYcf0JaF8BmMC93YZxfHPqRmAfSYJ7aD4Uf4GTqoM8_4DKu4hB193_PDg3ZP5
- U0z90NolGNXMroDfqCtQP.utMq_zLgRFkPwLRR2V4w_JXd.fZ45ORucylJSoObtL1K02gIyMWFfm
- DiQrYbIcphYXQQFAQq6AO0xabC_sjkdlnema6gkyYzcVHxY.FSYCjU68LELVNTY9ZgB.E7gafLdM
- .ER2lUzqS9XU5aLU_eM9tpLpW19o63GQqDd4Y_ywRx_C8LzjWIUvcUoqcAldAV7Fp0MqrAFN4_fT
- mQRyyLJgrs2Q75Cd6pl_2juifRPmkw2bkHMgmfsHum7ljebBOCI2.mmBWCYYaWLvdUXPw7DjooLH
- _fLM87g2ubQU3h6zriCiIWaR8MFHWTpBcQpjEHpWdqSn8eqv5hzisGqJOKbBtCsMXtfo2ZLYQuhC
- aovynmWLUpeE9A24TzZ1LHu_YtkzzDOjOjBRFuZg9_iQRV0ucFdwJa7RU9z7a9ZdhVBRgNdY4Gan
- jpimLfMrA9TqeMQFLfG3r_jokD3U_48pYx_nk9fETnnfBubVX7P9yQX.YNLhrbuz374n6W7vAqyd
- U4WXtaykDCNI8QzZxNjJ9n.0Av86iSw3Z2sNfcxpx0BY.xGHZawmBI6_tT151Avuf7OQvjeNcz7u
- 5TWTygvOYziZQ2zbtb93oX1ndaSI6Es6.3zkpT_gsQTkZksGEwuKnmGjHqqV2XjygxROktqPkmsS
- yBwEke33p0ua9NTPRiqq1Tx4TyAyUwzk4W.aXH8gtRZiU1N99.oIsyomeppeMmmXsFEf_u5K_vs_
- 8fSFr5oaWzUJTH68oMXUMkgqZ_zHSvfOJhK66efH.Bjnvmm2tBpHnbsfRDa7VldSOV8MON1toKka
- .PX.ycjUKHrR9vrH3gaMGFiPWgq60YK7aCdAVu0EMJQljlaOCX_nUYiMhfMQNFL50ixbgjS2bZTN
- zHLYl4fzCGJrrCYyiNyYwexJLQhbKYEqYsptRWfUNXGehPIWUo62BkI5Km0m1PVW9YDjB6sr0lmt
- gy3bgat_pA6FGVfIx6p8vdCR3qaMV6fUwu00Du3SBhd_J7xRu2rqhe06KoAfHRo_6RE5sn.XG.u4
- .q87zYErZEsiClOF_.ISgyuCuWOeihhW28cX0WNwIPOhrojZV5hH.Mif7vmhYnmctWn_gtEnDV2f
- hFmBPSBu7QegKDEQJe8XwOIGQzeRVgL33AqqqWVM8Ma1Qzr5SveQknIchhYeOHPcp7vD2MC7nX_1
- GCTAu1Cb4Y3QV61Wp8GlnPJFQUV0g.ZlGN6Kz57AwlYJe.Dk8LVb2oYVS2SYfWNq6VCm6N_irqGU
- AJ.YCW2pNLCzstpzDM2VtdZ7v8JUCrfWH1HtvBovpj2I7kxTOrDmJRPbI4TEdEj1cd3mEr7WqHhw
- aEq9XN7N6mYxbNFrMqIZWE5Lgg6aZ3nSTTVKrXpA7DaCTT9krhUqsdk8fR3S_M5zMbm75IG0EfuL
- F_sChdl6lEyh5eLzopgj4J5GjIu9mMaCyKRZ1..kphAYUJpR5P_MLkDrOE3Q6GUUDR_zWN9kESHD
- 1Yv7444Ur
-X-Sonic-MF: <dterry_engineer@yahoo.com>
-X-Sonic-ID: 40f454dc-967a-45c6-95d6-6692a4001e9e
-Received: from sonic.gate.mail.ne1.yahoo.com by
- sonic317.consmr.mail.ne1.yahoo.com with HTTP; Tue, 9 Apr 2024 21:23:31 +0000
-Received: by hermes--production-bf1-7d6dbd57c9-n5bk5 (Yahoo Inc. Hermes SMTP
- Server) with ESMTPA ID 57ee0c5bbdeccdebf2d273434bb9d60a; 
- Tue, 09 Apr 2024 21:23:27 +0000 (UTC)
-Message-ID: <e2634bc6-2e68-4331-8354-49407b40f191@yahoo.com>
-Date: Tue, 9 Apr 2024 16:23:25 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aJ3YiZoUphth for <buildroot@lists.busybox.net>;
+ Tue,  9 Apr 2024 21:28:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4E74F6063C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E74F6063C
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4E74F6063C
+ for <buildroot@buildroot.org>; Tue,  9 Apr 2024 21:28:15 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id CA66CB00535;
+ Tue,  9 Apr 2024 23:28:10 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Content-Language: en-US
-References: <e2634bc6-2e68-4331-8354-49407b40f191.ref@yahoo.com>
-X-Mailer: WebService/1.1.22205
- mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yahoo.com; s=s2048; t=1712697811;
- bh=QHO/7BqEF/de9fTCLjHWbS9o4kN4ks3d+FKBvKlfINU=;
- h=Date:To:From:Subject:References:From:Subject:Reply-To;
- b=GQrA/DgmJCUwDzBm2iVEHzAGOg7UYsSrzaTO1Bkux88kJvxp/s/MfLcZ+JtP9kUyIk8qSetxOpJOFS8wAeCT6NWmmwOSeP0xlW0+dVILZe/H21DAcgY4cY+mPoWXclp+qQxSIpo3OPtfoxD+ke0XX32bKfF14lVhV6zyo8t9zbgtoG/NLDaLGMGafYdXeuyP5/gWpidUjTWgClv+qpNmnaXH4vV/ygiWi0sIHVtJTDMCtywvQZe4dA6WV8iK065H2cyJg6fMp/vM2MZC8TVC3Gg072wP6Et+LTlQmRoTvobCvgS8bNKYchm0yfCK/I8fISHNV3Kew5zWVBbRiuqk3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=yahoo.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com
- header.a=rsa-sha256 header.s=s2048 header.b=GQrA/Dgm
-Subject: [Buildroot] Problem with device tree
+Date: Tue,  9 Apr 2024 23:27:57 +0200
+Message-ID: <20240409212758.380547-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.44.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1712698092;
+ bh=Q2qTb6HszNY/rrjD5JwEPseXlgMNqR/yFXQfEmZvDGM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=OU2E8GWx/MOXzfHeRgSJYcG0rAEfPmvm0BZ7pTEuCNwEmzLeN003kjoY7WaXuZ0e0
+ G0ZPPe/hYLZ3gpM/8tn+NGF/BnDUnA1RAe1Nc1Pb+Rk5+ggJGrn9GTq16g/ZCfge8a
+ 6kAqyr4LkR+pRjWNSMVDd63Q0ioUyGOtd4nwjkc3qrinNvuB5OC8CNLvBVlg85x5Ke
+ I8pOILJv6Z3So1jxltj6ljMp97pvcqvS7GW70gbuwqosTzz2hhCZVnLAbCXKF5JhWy
+ wyI8H5ZHKPyRz/pcO5idz/Za4TYp1BFEH88sET280QIOYw0B7KG52ncc7UmT1eGHuc
+ A/zLB/s6gcaoQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=OU2E8GWx
+Subject: [Buildroot] [PATCH v2 1/2] package/rdma-core: bump to version v50.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,31 +76,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Don via buildroot <buildroot@buildroot.org>
-Reply-To: Don <dterry_engineer@yahoo.com>
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is my first time using buildroot. Following the instructions of 
-bootlin.com/doc/training/buildroot/buildroot-labs.pdf, building for 
-Beaglebone Black though not the wireless of the training pdf. Under 
-Kernel - selected device tree blob and in-tree device tree name I put 
-am335x-boneblack. However I get
+For change log, see:
+https://github.com/linux-rdma/rdma-core/releases/tag/v50.0
 
-Device Tree Source (arch/arm/dts/am335x-.dtb) is not correctly specified.
-Please define 'CONFIG_DEFAULT_DEVICE_TREE'
-or build with 'DEVICE_TREE=<device_tree>' argument
+This commit drops the package patch, which is now included in the
+release.
 
-What does it want? Something is missing but I don't know what.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+No change between v1 and v2.
+---
+ ...-util-udma_barrier.h-fix-mips4-build.patch | 56 -------------------
+ package/rdma-core/rdma-core.hash              |  2 +-
+ package/rdma-core/rdma-core.mk                |  2 +-
+ 3 files changed, 2 insertions(+), 58 deletions(-)
+ delete mode 100644 package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
 
-Thanks.
-
-Have a Blessed day!
-
-Don
-
+diff --git a/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch b/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
+deleted file mode 100644
+index 6dfb476faaa..00000000000
+--- a/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 1b1ca539f6e1f0b774e989f1022477686e4fc77f Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 21 Jan 2024 18:55:34 +0100
+-Subject: [PATCH] util/udma_barrier.h: fix mips4 build
+-
+-The 'sync' instruction for MIPS was defined in MIPS-II as taking no
+-operands. MIPS32 extended the define of 'sync' as taking an optional
+-unsigned 5 bit immediate.
+-
+-As a result, replace "sync 0" by "sync" to fix the following build
+-failure on mips4 raised since version 43.0 and
+-https://github.com/linux-rdma/rdma-core/commit/b7c428344ea96d446f6ffe31c620a238a7f25c9e:
+-
+-/tmp/ccrBy9fV.s: Assembler messages:
+-/tmp/ccrBy9fV.s:994: Error: invalid operands `sync 0'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/2ab22a3ec4287fc15ff6a90d8715b4897b32a933
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/linux-rdma/rdma-core/commit/f3f0c06014c6de845032e6fe9f152674919b3ec6
+----
+- util/udma_barrier.h | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/util/udma_barrier.h b/util/udma_barrier.h
+-index 0a1f8a45b..3793d2f18 100644
+---- a/util/udma_barrier.h
+-+++ b/util/udma_barrier.h
+-@@ -101,7 +101,7 @@
+- #elif defined(__riscv)
+- #define udma_to_device_barrier() asm volatile("fence ow,ow" ::: "memory")
+- #elif defined(__mips__)
+--#define udma_to_device_barrier() asm volatile("sync 0" ::: "memory")
+-+#define udma_to_device_barrier() asm volatile("sync" ::: "memory")
+- #else
+- #error No architecture specific memory barrier defines found!
+- #endif
+-@@ -139,7 +139,7 @@
+- #elif defined(__riscv)
+- #define udma_from_device_barrier() asm volatile("fence ir,ir" ::: "memory")
+- #elif defined(__mips__)
+--#define udma_from_device_barrier() asm volatile("sync 0" ::: "memory")
+-+#define udma_from_device_barrier() asm volatile("sync" ::: "memory")
+- #else
+- #error No architecture specific memory barrier defines found!
+- #endif
+-@@ -212,7 +212,7 @@
+- #include "s390_mmio_insn.h"
+- #define mmio_flush_writes() s390_pciwb()
+- #elif defined(__mips__)
+--#define mmio_flush_writes() asm volatile("sync 0" ::: "memory")
+-+#define mmio_flush_writes() asm volatile("sync" ::: "memory")
+- #else
+- #error No architecture specific memory barrier defines found!
+- #endif
+diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
+index fc1d319123d..27fe7e208d8 100644
+--- a/package/rdma-core/rdma-core.hash
++++ b/package/rdma-core/rdma-core.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  1ea2c2678d48be0b179871e9ae8c58ceab11a0c5b69315a332ff51dd607180b7  rdma-core-49.0.tar.gz
++sha256  ecb866caaec7ce13f40074c769860f9c36c3a37a70913c5218217e3293d7cb11  rdma-core-50.0.tar.gz
+ sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
+ sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
+diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
+index 5f8989b3bd4..7818b396a46 100644
+--- a/package/rdma-core/rdma-core.mk
++++ b/package/rdma-core/rdma-core.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RDMA_CORE_VERSION = 49.0
++RDMA_CORE_VERSION = 50.0
+ RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
+ RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
+ RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
+-- 
+2.44.0
 
 _______________________________________________
 buildroot mailing list
