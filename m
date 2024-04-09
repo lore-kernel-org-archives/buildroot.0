@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6378BCD1299
-	for <buildroot@archiver.kernel.org>; Tue,  9 Apr 2024 19:23:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 313C6C67861
+	for <buildroot@archiver.kernel.org>; Tue,  9 Apr 2024 19:42:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11006606A3;
-	Tue,  9 Apr 2024 19:23:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA2616067E;
+	Tue,  9 Apr 2024 19:42:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XnbdpDjuRHkt; Tue,  9 Apr 2024 19:23:47 +0000 (UTC)
+ id gKvBGuFLbD8b; Tue,  9 Apr 2024 19:42:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A4BA606AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E520D606A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A4BA606AE;
-	Tue,  9 Apr 2024 19:23:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5B5361BF59E
- for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 19:23:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E520D606A8;
+	Tue,  9 Apr 2024 19:42:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D0661BF59E
+ for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 19:42:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 485A940289
- for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 19:23:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 187BA81BD6
+ for <buildroot@lists.busybox.net>; Tue,  9 Apr 2024 19:42:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PaDeBXHFuvA9 for <buildroot@lists.busybox.net>;
- Tue,  9 Apr 2024 19:23:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J0DueyptA5Gu for <buildroot@lists.busybox.net>;
+ Tue,  9 Apr 2024 19:42:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8903F40B6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B578819D6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8903F40B6D
- for <buildroot@uclibc.org>; Tue,  9 Apr 2024 19:23:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5B578819D6
+ for <buildroot@uclibc.org>; Tue,  9 Apr 2024 19:42:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 3F10681517; Tue,  9 Apr 2024 19:23:44 +0000 (UTC)
+ id 52689835B1; Tue,  9 Apr 2024 19:42:21 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 09 Apr 2024 19:23:44 +0000
+Date: Tue, 09 Apr 2024 19:42:21 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -57,7 +57,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-16027-163-SlX3A7Gp0A@https.bugs.busybox.net/>
+Message-ID: <bug-16027-163-rXnfW6OoA1@https.bugs.busybox.net/>
 In-Reply-To: <bug-16027-163@https.bugs.busybox.net/>
 References: <bug-16027-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -82,14 +82,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=16027
 
---- Comment #2 from stsp <stsp2@yandex.ru> ---
-Further problems:
+--- Comment #3 from stsp <stsp2@yandex.ru> ---
+Further problem:
 
->>> host-libzlib 1.2.12 Downloading
-wget --passive-ftp -nd -t 3 -O
-'/home/stas/src/fdpp-buildroot/buildroot/output/build/.zlib-1.2.12.tar.xz.18scLK/output'
-'http://www.zlib.net/zlib-1.2.12.tar.xz' 
-Unknown option 'passive-ftp'
+make[3]: Entering directory
+'/home/stas/src/fdpp-buildroot/buildroot/output/build/host-util-linux-2.38'
+  CCLD     libcommon.la
+  CCLD     libtcolors.la
+  CC       misc-utils/kill.o
+  CC       sys-utils/ctrlaltdel.o
+  CC       sys-utils/fsfreeze.o
+  CC       sys-utils/blkdiscard-blkdiscard.o
+misc-utils/kill.c: In function 'kill_with_timeout':
+misc-utils/kill.c:397:20: error: implicit declaration of function 'pidfd_open';
+did you mean 'fdopen'? [-Wimplicit-function-declaration]
+  397 |         if ((pfd = pidfd_open(ctl->pid, 0)) < 0)
 
 -- 
 You are receiving this mail because:
