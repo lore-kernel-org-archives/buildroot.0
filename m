@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 993DACD11C2
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:12:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34DF3CD128A
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:12:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC40560EA4;
-	Wed, 10 Apr 2024 21:12:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFEDC60ECF;
+	Wed, 10 Apr 2024 21:12:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MHWFVh2aj8KW; Wed, 10 Apr 2024 21:12:09 +0000 (UTC)
+ id ob9h0rVS2OVr; Wed, 10 Apr 2024 21:12:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7135A60EC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A65B360EBF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7135A60EC7;
-	Wed, 10 Apr 2024 21:12:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B574D1BF4D6
+	by smtp3.osuosl.org (Postfix) with ESMTP id A65B360EBF;
+	Wed, 10 Apr 2024 21:12:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BC47E1BF980
  for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ECD0C605CA
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A92C7409AB
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:12:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CIEWuo4rJk4j for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y42Xd_y7QaLE for <buildroot@lists.busybox.net>;
  Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E9EF60E8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B56EA40694
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E9EF60E8D
+ by smtp4.osuosl.org (Postfix) with ESMTP id B56EA40694
  for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2816B85F2C; Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
+ id 129D985F2F; Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Apr 2024 23:11:07 +0200
+Date: Wed, 10 Apr 2024 23:10:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b7aeee28ed2f62370084dac4a92bdef89046b41
-X-Git-Newrev: 0f5bbd4458c1307eba7acba2c7f4990973cff115
+X-Git-Oldrev: 98ee9f8b49ebd7aa6d9dc2c726030ec396910f6c
+X-Git-Newrev: 4b7aeee28ed2f62370084dac4a92bdef89046b41
 X-Patchwork-Hint: ignore
-Message-Id: <20240410211159.2816B85F2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php-xdebug: bump to version 3.3.1
+Message-Id: <20240410211159.129D985F2F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php-xdebug: add zlib optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,57 +66,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f5bbd4458c1307eba7acba2c7f4990973cff115
+commit: https://git.buildroot.net/buildroot/commit/?id=4b7aeee28ed2f62370084dac4a92bdef89046b41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- License updated to match the PHP 3.01 license:
-  https://github.com/xdebug/xdebug/commit/5fc2d818067d05503226ee8c6442985cb2fe069d
-- This bump will fix the following build failure raised since bump of
-  php to version 8.3.4 in commit
-  e50460f9f12a8c5f82f2166733afe9cca3c8cd19:
+zlib is an optional dependency (enabled by default) since bump to
+version 3.2.0 in commit 8280400fbadde09e51ccff312d7a4ef6a386f589 and
+https://github.com/xdebug/xdebug/commit/3954e5cd9e48eec0a8a2a0c6a2fc120bbe562656
 
-  checking Check for supported PHP versions... configure: error: not supported. Need a PHP version >= 8.0.0 and < 8.3.0 (found 8.3.4)
-
-https://xdebug.org/updates#x_3_3_1
-
-Fixes: e50460f9f12a8c5f82f2166733afe9cca3c8cd19
- - http://autobuild.buildroot.org/results/0209b522baec3c88a2060e79f805552db79b2c70
+Fixes: 8280400fbadde09e51ccff312d7a4ef6a386f589
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php-xdebug/php-xdebug.hash | 4 ++--
- package/php-xdebug/php-xdebug.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/php-xdebug/php-xdebug.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/php-xdebug/php-xdebug.hash b/package/php-xdebug/php-xdebug.hash
-index 2509e6e2ee..251b79ab77 100644
---- a/package/php-xdebug/php-xdebug.hash
-+++ b/package/php-xdebug/php-xdebug.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f48777371f90cbb315ea4ea082a1ede6765bcfb35d7d6356ab8f71fd6dfcc157  xdebug-3.2.2.tgz
--sha256  ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
-+sha256  4eb4ee270bbcc5f14195c38f6ee58580e007cf4886ce32e11430318ab5bc2315  xdebug-3.3.1.tgz
-+sha256  bc2aee27f3f0806be39e329d284ddbbfb14602a49af261df305dd6122d988eb0  LICENSE
 diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-xdebug/php-xdebug.mk
-index 3bc197e556..771b96534a 100644
+index 62ef3fa997..3bc197e556 100644
 --- a/package/php-xdebug/php-xdebug.mk
 +++ b/package/php-xdebug/php-xdebug.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+@@ -25,4 +25,11 @@ endef
  
--PHP_XDEBUG_VERSION = 3.2.2
-+PHP_XDEBUG_VERSION = 3.3.1
- PHP_XDEBUG_SOURCE = xdebug-$(PHP_XDEBUG_VERSION).tgz
- PHP_XDEBUG_SITE = https://xdebug.org/files
- PHP_XDEBUG_INSTALL_STAGING = YES
--PHP_XDEBUG_LICENSE = Xdebug License (PHP-3.0-like)
-+PHP_XDEBUG_LICENSE = Xdebug License (PHP-3.01-like)
- PHP_XDEBUG_LICENSE_FILES = LICENSE
- # phpize does the autoconf magic
- PHP_XDEBUG_DEPENDENCIES = php host-autoconf
+ PHP_XDEBUG_PRE_CONFIGURE_HOOKS += PHP_XDEBUG_PHPIZE
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++PHP_XDEBUG_CONF_OPTS += --with-xdebug-compression
++PHP_XDEBUG_DEPENDENCIES += zlib
++else
++PHP_XDEBUG_CONF_OPTS += --without-xdebug-compression
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
