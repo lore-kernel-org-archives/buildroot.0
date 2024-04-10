@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 647D1CD11C2
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:45:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D07CCD1284
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3704A60EDA;
-	Wed, 10 Apr 2024 21:45:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F17EE60A7F;
+	Wed, 10 Apr 2024 21:46:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c6EE8RljeTvl; Wed, 10 Apr 2024 21:45:32 +0000 (UTC)
+ id 1huTv2k1FzEn; Wed, 10 Apr 2024 21:46:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC86B60EEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EA9B60EA9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EC86B60EEC;
-	Wed, 10 Apr 2024 21:45:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1EA9B60EA9;
+	Wed, 10 Apr 2024 21:46:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A1E281BF980
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:45:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3D9F41BF4D6
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F92E40491
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:45:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B3D04036A
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:46:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BXys7qnik2Il for <buildroot@lists.busybox.net>;
- Wed, 10 Apr 2024 21:45:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id NLmccj6YTDvD for <buildroot@lists.busybox.net>;
+ Wed, 10 Apr 2024 21:46:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D7884059D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D7884059D
- for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:45:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 28E2085F7D; Wed, 10 Apr 2024 21:45:21 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 10 Apr 2024 23:35:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b6e6b563305a0469d6e3216cafa82c1b81ce82d
-X-Git-Newrev: 949232218a73dac849e5589caf803ea3f8b2ea4b
-X-Patchwork-Hint: ignore
-Message-Id: <20240410214521.28E2085F7D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8192eu: bump to 2024-03-25
- version
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F02F040359
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F02F040359
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F02F040359
+ for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:45:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 256F3FF802;
+ Wed, 10 Apr 2024 21:45:57 +0000 (UTC)
+Date: Wed, 10 Apr 2024 23:45:56 +0200
+To: Saeed Kazemi <kazemi.ms@gmail.com>
+Message-ID: <20240410234556.438f627d@windsurf>
+In-Reply-To: <20240326190538.3708590-1-kazemi.ms@gmail.com>
+References: <20240326190538.3708590-1-kazemi.ms@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1712785557;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=yI0Yy7rsfabTc8Yd3/kLciVktG+nJn2oEgNN4aVVEIA=;
+ b=YJExonZfTQ0fLFK7b5LIQ3Cwxps1xcWyq9Sx27Lzltkrfe8jjKB5sdI8pCGwkohsYiqy4m
+ omIDh1OZo3oQK2vFq3gHYfhXQ7qSEfTzh0PZ4TRa9huxsOt6z6Gdv8MFR2tm/2G1idJz+X
+ IpB4BYAK6xowctcWbaq+xscnSGiVWHzhIntM/8VoGftKncOrskiP2QcVtbgPRC6sPIOMwV
+ KxmHZF7br/HygA2JVegV3EhYT6l9hYAAJ9p1EHNCFIQMZ7hZpTfup93t3zM4mj1vqGFu05
+ R7Pq7JTIdr61D5ufU7ZYMNw4wM18ySBDzE2osfmVO2XvwFsCxgTo2yyu8nTgIQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=YJExonZf
+Subject: Re: [Buildroot] [PATCH 1/1] package/procs: bump to version 0.14.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,45 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=949232218a73dac849e5589caf803ea3f8b2ea4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 26 Mar 2024 20:05:38 +0100
+Saeed Kazemi <kazemi.ms@gmail.com> wrote:
 
-This version allows to build with Linux 6.9.
+> Release notes:
+> https://github.com/dalance/procs/releases/tag/v0.14.5
+> 
+> Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+> ---
+>  package/procs/procs.hash | 2 +-
+>  package/procs/procs.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rtl8192eu/rtl8192eu.hash | 2 +-
- package/rtl8192eu/rtl8192eu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/rtl8192eu/rtl8192eu.hash b/package/rtl8192eu/rtl8192eu.hash
-index a08ed04010..a8b7cb9358 100644
---- a/package/rtl8192eu/rtl8192eu.hash
-+++ b/package/rtl8192eu/rtl8192eu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  b5d3b8de0b4f05aa2b452dd01f4386e9b671e03c2bbf8e032f1c593befc5a153  rtl8192eu-e90a6043be141bde8847e84223e106eff38ecdfd.tar.gz
-+sha256  8da0f54bd9ae094b5f61fe3c4dd207b2df62b4286970e2828f7c5ce1146447fb  rtl8192eu-56f672a8b9572c743148f2e60068fd341d52d5a3.tar.gz
-diff --git a/package/rtl8192eu/rtl8192eu.mk b/package/rtl8192eu/rtl8192eu.mk
-index 3d24b0caf8..0f00d301a8 100644
---- a/package/rtl8192eu/rtl8192eu.mk
-+++ b/package/rtl8192eu/rtl8192eu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8192EU_VERSION = e90a6043be141bde8847e84223e106eff38ecdfd
-+RTL8192EU_VERSION = 56f672a8b9572c743148f2e60068fd341d52d5a3
- RTL8192EU_SITE = $(call github,clnhub,rtl8192eu-linux,$(RTL8192EU_VERSION))
- RTL8192EU_LICENSE = GPL-2.0
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
