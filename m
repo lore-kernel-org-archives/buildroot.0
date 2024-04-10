@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 396EDCD128A
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:06:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F48ACD128A
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:06:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3E6D60EA5;
-	Wed, 10 Apr 2024 21:06:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E00C60E90;
+	Wed, 10 Apr 2024 21:06:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KRmLvzAG9rO2; Wed, 10 Apr 2024 21:06:25 +0000 (UTC)
+ id jBDjr2D9kbDt; Wed, 10 Apr 2024 21:06:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3D5260EBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01CD760EC7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3D5260EBB;
-	Wed, 10 Apr 2024 21:06:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 82E531BF4D6
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:06:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01CD760EC7;
+	Wed, 10 Apr 2024 21:06:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B5701BF4D6
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C3E5405CA
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:06:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1712360EBB
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:06:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 67YY2bAxwJIB for <buildroot@lists.busybox.net>;
- Wed, 10 Apr 2024 21:06:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o5YTFmOfaSVS for <buildroot@lists.busybox.net>;
+ Wed, 10 Apr 2024 21:06:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2790040425
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2790040425
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2790040425
- for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:06:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E21351C0002;
- Wed, 10 Apr 2024 21:06:18 +0000 (UTC)
-Date: Wed, 10 Apr 2024 23:06:17 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20240410230617.706f2d7e@windsurf>
-In-Reply-To: <20240330143005.1621629-1-giulio.benetti@benettiengineering.com>
-References: <20240330143005.1621629-1-giulio.benetti@benettiengineering.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B215560EBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B215560EBD
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B215560EBD
+ for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:06:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4EEA4240003;
+ Wed, 10 Apr 2024 21:06:22 +0000 (UTC)
+Date: Wed, 10 Apr 2024 23:06:21 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240410230621.36c7317e@windsurf>
+In-Reply-To: <20240330180023.787791-1-fontaine.fabrice@gmail.com>
+References: <20240330180023.787791-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1712783179;
+ d=bootlin.com; s=gm1; t=1712783182;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=DWlP9dg0I+SstDO7KOEplAYp4qeLfgcBLdLAzfWV0/Q=;
- b=oKK/NCuE1ZmmEbIjhoEaBaLuNcRTS8z/AgznJzzedDRYrvmTDSzTWyA44/byT+mBNOdTbr
- B5hhL/N9h7rDpAmpy/XvDPXpnzJZukqAcBo/B86mEoSN9zbWHMFsOSEWmqrTN+VS2lPYcT
- wfOvdxFTtZa0ZwMhknB0rSf3p4pnmipYJ35ni3ZxPA/ufbNiM9++pmXoa5lhfoLVUZ4zXm
- Bo5jvIYF34PtFCXUTDVAKHFqz5HevuAYB5uA6MnJKUCmGPdvYkRo9gIQIbk4BjAzYuQfDM
- WMbR4uIvcJ5iNsFwVV6xGhO7KYFAMvr4308gw9YqYNa7UHOZ5oqzOhMuiMZXlw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=9czR8AOHEcq/r6Yg2xecwY1+WuJ7TsShp9SEzxORzV0=;
+ b=Bq59UfbiI5Lx02EocB0g6U1Xn5K8jP1Xeribavnil8PExiSN22sZRuUmJzqcurqWHAnZmV
+ xmE4ujEk9jxmFl7ORdOXdWtKo/+wsZGpaSAMBtJGkTlcF8Aq7rA0E7TMX/E2xG1weExxCk
+ bw7eu4pkWQWzKMBV+5xB4PMmpKctB7Kb7MF/2CdtWLfm4W2052u74PZ1k1cgmYQihi8/2w
+ 4OH4WDaDCZqqEQ3JlxoTEX29uPodBkEJ4Jnc8h1EybpRvLfnYn8rDdJIsnlqutbKbFGTIm
+ N5IxUWXQQVy4iS6ZAJshvsaQnYu9MCio2BD+yv7deVQqpSi1w7HNAJGEbAbQZg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oKK/NCuE
-Subject: Re: [Buildroot] [PATCH] package/swugenerator: bump to version 0.3
+ header.s=gm1 header.b=Bq59Ufbi
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: fix build without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,23 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 30 Mar 2024 15:30:05 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Sat, 30 Mar 2024 19:00:23 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Upstream github tarball dropped prefix "v" while releasing version 0.3
-> so let's drop it in swugenerator.mk as well.
+> Fix the following build failure without threads raised since bump to
+> version 8.3.4 in commit e50460f9f12a8c5f82f2166733afe9cca3c8cd19 and
+> https://github.com/php/php-src/commit/a11c8a30399e90c17c287b9656c0077bc5131c9c:
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> /home/buildroot/instance-0/output-1/build/php-8.3.4/Zend/zend_call_stack.c:39:11: fatal error: pthread.h: No such file or directory
+>    39 | # include <pthread.h>
+>       |           ^~~~~~~~~~~
+> 
+> Fixes: e50460f9f12a8c5f82f2166733afe9cca3c8cd19
+>  - http://autobuild.buildroot.org/results/a4ef648a9da50b26ed56d5d490e4cf5a1bfff970
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/swugenerator/swugenerator.hash | 2 +-
->  package/swugenerator/swugenerator.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...ll_stack.c-fix-build-without-pthread.patch | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 package/php/0006-Zend-zend_call_stack.c-fix-build-without-pthread.patch
 
 Applied to master, thanks.
 
