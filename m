@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47571CD11C2
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:06:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F3CFCD128A
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:06:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09C9760E8D;
-	Wed, 10 Apr 2024 21:06:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17D7960E9E;
+	Wed, 10 Apr 2024 21:06:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rcanuHDcSprL; Wed, 10 Apr 2024 21:06:15 +0000 (UTC)
+ id TvvZP3qui5_N; Wed, 10 Apr 2024 21:06:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0590B60E90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8F5160EA8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0590B60E90;
-	Wed, 10 Apr 2024 21:06:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8F5160EA8;
+	Wed, 10 Apr 2024 21:06:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DBD2A1BF4D6
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:06:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3EB8B1BF4D6
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D540540485
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:06:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BCB0402D4
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:06:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 393-OypbJkMy for <buildroot@lists.busybox.net>;
+ id ltmD0mXy6YK6 for <buildroot@lists.busybox.net>;
  Wed, 10 Apr 2024 21:06:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A804402D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55B704036A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A804402D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55B704036A
  for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:06:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1B5A85F0A; Wed, 10 Apr 2024 21:06:11 +0000 (UTC)
+ id 07DC585F0B; Wed, 10 Apr 2024 21:06:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Apr 2024 22:26:12 +0200
+Date: Wed, 10 Apr 2024 22:41:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f09010ecb8cd97ad91e886cafcfaa607344f5625
-X-Git-Newrev: d8964c003a8b6e650126f02df764c60487e013a2
+X-Git-Oldrev: d8964c003a8b6e650126f02df764c60487e013a2
+X-Git-Newrev: 4990bccd4e24e9b01b8e1f980dda4062770dfb5c
 X-Patchwork-Hint: ignore
-Message-Id: <20240410210611.F1B5A85F0A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 8.4.0
+Message-Id: <20240410210612.07DC585F0B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swugenerator: bump to version 0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,38 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8964c003a8b6e650126f02df764c60487e013a2
+commit: https://git.buildroot.net/buildroot/commit/?id=4990bccd4e24e9b01b8e1f980dda4062770dfb5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Upstream github tarball dropped prefix "v" while releasing version 0.3
+so let's drop it in swugenerator.mk as well.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/swugenerator/swugenerator.hash | 2 +-
+ package/swugenerator/swugenerator.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index f107aee8c2..1ea54e8ee9 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f73e1eacd7e2ffae687bc3f056bb0c705b7a05aee86337686e09da8fc1c2030c  harfbuzz-8.3.1.tar.xz
-+sha256  af4ea73e25ab748c8c063b78c2f88e48833db9b2ac369e29bd115702e789755e  harfbuzz-8.4.0.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index e3da4add43..848fac4dd6 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/swugenerator/swugenerator.hash b/package/swugenerator/swugenerator.hash
+index 2125be3d1c..301f168681 100644
+--- a/package/swugenerator/swugenerator.hash
++++ b/package/swugenerator/swugenerator.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  b5c47c47be0df4df476d2bf596f58a7296a4b0cebe6c8de42251605475b37d25  swugenerator-0.2.tar.gz
++sha256  3f4885242bce9523d26567578793c828e2f07122c6b7e44cce8ede33e5618a01  swugenerator-0.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
+diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
+index 466fe1f046..22ed799e99 100644
+--- a/package/swugenerator/swugenerator.mk
++++ b/package/swugenerator/swugenerator.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 8.3.1
-+HARFBUZZ_VERSION = 8.4.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-SWUGENERATOR_VERSION = 0.2
+-SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,v$(SWUGENERATOR_VERSION))
++SWUGENERATOR_VERSION = 0.3
++SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,$(SWUGENERATOR_VERSION))
+ SWUGENERATOR_LICENSE = GPL-3.0
+ SWUGENERATOR_LICENSE_FILES = LICENSE
+ HOST_SWUGENERATOR_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
