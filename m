@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45AE9CD11C2
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:56:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80151CD128A
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:56:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89E4D60EAA;
-	Wed, 10 Apr 2024 21:56:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0BFC60EDB;
+	Wed, 10 Apr 2024 21:56:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1pXLdiB4FEE6; Wed, 10 Apr 2024 21:56:27 +0000 (UTC)
+ id cykiGO-m6--q; Wed, 10 Apr 2024 21:56:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2884560EB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D3C360ECF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2884560EB1;
-	Wed, 10 Apr 2024 21:56:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A20CD1BF980
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D3C360ECF;
+	Wed, 10 Apr 2024 21:56:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BAA181BF983
  for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:56:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A59060EAA
+ by smtp1.osuosl.org (Postfix) with ESMTP id A75D78176D
  for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:56:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ob4_rPLra56W for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gTmXq10nD8ap for <buildroot@lists.busybox.net>;
  Wed, 10 Apr 2024 21:56:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C84C560EA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF4C881766
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C84C560EA9
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF4C881766
  for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:56:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B1E2085FDA; Wed, 10 Apr 2024 21:56:21 +0000 (UTC)
+ id BB89585FDB; Wed, 10 Apr 2024 21:56:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Apr 2024 23:48:08 +0200
+Date: Wed, 10 Apr 2024 23:48:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ee074ddf6f0d00a97a1cae4ba62c1cffc77bb6e4
-X-Git-Newrev: 5652306f7e72792655f0b2b2ea978734fc2e5938
+X-Git-Oldrev: 5652306f7e72792655f0b2b2ea978734fc2e5938
+X-Git-Newrev: 63a673c7e38154bb14cb1f87ee5d2a1b05fc956b
 X-Patchwork-Hint: ignore
-Message-Id: <20240410215621.B1E2085FDA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/petitboot: bump to version 1.15
+Message-Id: <20240410215621.BB89585FDB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openlayers: bump version to 9.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,38 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5652306f7e72792655f0b2b2ea978734fc2e5938
+commit: https://git.buildroot.net/buildroot/commit/?id=63a673c7e38154bb14cb1f87ee5d2a1b05fc956b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/petitboot/petitboot.hash | 2 +-
- package/petitboot/petitboot.mk   | 2 +-
+ package/openlayers/openlayers.hash | 2 +-
+ package/openlayers/openlayers.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/petitboot/petitboot.hash b/package/petitboot/petitboot.hash
-index a9a21f2c1b..3a90bc5296 100644
---- a/package/petitboot/petitboot.hash
-+++ b/package/petitboot/petitboot.hash
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index af9087ede2..31496bbfca 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  fa2367370d3ce5dd9910ab08a0832071e2508c8bf75cfec6d3b9807fbefc507a  petitboot-v1.14.tar.gz
-+sha256  eed29ec841c2bcd5ecc65347f5b95a0087a541bd9c04ca3c17c55d1f7357d189  petitboot-v1.15.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-index 4c8bc35adb..cd7631fa5c 100644
---- a/package/petitboot/petitboot.mk
-+++ b/package/petitboot/petitboot.mk
+ # Locally computed:
+-sha256  867778afdd66cd29fe0f14ac4ed316a0ab393f5dccfd2219450848cd0347f1d6  v8.1.0-package.zip
++sha256  73acb923c0ef53c6b6bb34b6dba782e03e1d24279f5aadbec5e787269456a6d8  v9.1.0-package.zip
+ sha256  6c4347b83a8c9feef18d57b18e3b6c44cf901b3c344a4a1fbd837e421555ab8e  LICENSE.md
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index fde83d6e84..df29e04e65 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PETITBOOT_VERSION = 1.14
-+PETITBOOT_VERSION = 1.15
- PETITBOOT_SOURCE = petitboot-v$(PETITBOOT_VERSION).tar.gz
- PETITBOOT_SITE = https://github.com/open-power/petitboot/releases/download/v$(PETITBOOT_VERSION)
- PETITBOOT_DEPENDENCIES = \
+-OPENLAYERS_VERSION = 8.1.0
++OPENLAYERS_VERSION = 9.1.0
+ OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-package.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
