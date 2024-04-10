@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CACCCD11C2
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A2A1CD128A
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:12:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0910A605CA;
-	Wed, 10 Apr 2024 21:12:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCA9B60EB2;
+	Wed, 10 Apr 2024 21:12:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iYV3LNTBuLLl; Wed, 10 Apr 2024 21:12:02 +0000 (UTC)
+ id bgq5TB9-uD9V; Wed, 10 Apr 2024 21:12:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0DB060E8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E68A60EAD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0DB060E8D;
-	Wed, 10 Apr 2024 21:12:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D6E561BF4D6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E68A60EAD;
+	Wed, 10 Apr 2024 21:12:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E304A1BF980
  for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFF3B60E90
+ by smtp2.osuosl.org (Postfix) with ESMTP id D028740485
  for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lmhp4SvlOjnu for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Fk0C3igKj0fq for <buildroot@lists.busybox.net>;
  Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11039605CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 028E4402D4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 11039605CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 028E4402D4
  for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 071A085F2E; Wed, 10 Apr 2024 21:11:59 +0000 (UTC)
+ id E05BD85F2C; Wed, 10 Apr 2024 21:11:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Apr 2024 23:10:33 +0200
+Date: Wed, 10 Apr 2024 23:08:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c245b37190f18d1f0551dd95027b2b65fa63e704
-X-Git-Newrev: 98ee9f8b49ebd7aa6d9dc2c726030ec396910f6c
+X-Git-Oldrev: 70031dd7fa09191566f2d1e895399ae578c62d1b
+X-Git-Newrev: 99e9ff08d0705279532ca0cf3de22ea54660cbdc
 X-Patchwork-Hint: ignore
-Message-Id: <20240410211159.071A085F2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php-xdebug: drop unrecognized
- variable
+Message-Id: <20240410211158.E05BD85F2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mdadm: bump to version 4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,36 +65,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98ee9f8b49ebd7aa6d9dc2c726030ec396910f6c
+commit: https://git.buildroot.net/buildroot/commit/?id=99e9ff08d0705279532ca0cf3de22ea54660cbdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---with-xdebug is not recognized since the addition of the package in
-commit 7b7dffd0984e1b274273f5638a975165606384f9:
-
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --enable-ipv6, --disable-nls, --with-xdebug
-
-Fixes: 7b7dffd0984e1b274273f5638a975165606384f9
+https://lore.kernel.org/all/20240215183844.00003735@linux.intel.com
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php-xdebug/php-xdebug.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ ...c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch | 34 ++++++++++++++++++++++
+ package/mdadm/mdadm.hash                           |  2 +-
+ package/mdadm/mdadm.mk                             |  2 +-
+ 3 files changed, 36 insertions(+), 2 deletions(-)
 
-diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-xdebug/php-xdebug.mk
-index c5a1e10ebc..62ef3fa997 100644
---- a/package/php-xdebug/php-xdebug.mk
-+++ b/package/php-xdebug/php-xdebug.mk
-@@ -14,8 +14,7 @@ PHP_XDEBUG_LICENSE_FILES = LICENSE
- PHP_XDEBUG_DEPENDENCIES = php host-autoconf
- PHP_XDEBUG_CONF_OPTS = \
- 	--enable-xdebug \
--	--with-php-config=$(STAGING_DIR)/usr/bin/php-config \
--	--with-xdebug=$(STAGING_DIR)/usr
-+	--with-php-config=$(STAGING_DIR)/usr/bin/php-config
+diff --git a/package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch b/package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch
+new file mode 100644
+index 0000000000..5c3d6e03b4
+--- /dev/null
++++ b/package/mdadm/0001-udev-c-Do-not-require-libudev-h-if-DNO_LIBUDEV.patch
+@@ -0,0 +1,34 @@
++From 1750758c7ff526e3560433f6235e5cfa35cf646a Mon Sep 17 00:00:00 2001
++From: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
++Date: Wed, 6 Mar 2024 15:50:55 +0100
++Subject: udev.c: Do not require libudev.h if DNO_LIBUDEV
++
++libudev may not be presented at all, do not require it.
++
++Reported-by: Boian Bonev <bbonev@ipacct.com>
++Signed-off-by: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
++
++Upstream: https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/commit/?id=1750758c7ff526e3560433f6235e5cfa35cf646a
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ udev.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/udev.c b/udev.c
++index bc4722b0..066e6ab1 100644
++--- a/udev.c
+++++ b/udev.c
++@@ -26,7 +26,10 @@
++ #include	<signal.h>
++ #include	<limits.h>
++ #include	<syslog.h>
+++
+++#ifndef NO_LIBUDEV
++ #include	<libudev.h>
+++#endif
++ 
++ static char *unblock_path;
++ 
++-- 
++cgit 1.2.3-korg
++
+diff --git a/package/mdadm/mdadm.hash b/package/mdadm/mdadm.hash
+index b9631a2aaa..84bae1aebf 100644
+--- a/package/mdadm/mdadm.hash
++++ b/package/mdadm/mdadm.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/raid/mdadm/sha256sums.asc
+-sha256  461c215670864bb74a4d1a3620684aa2b2f8296dffa06743f26dda5557acf01d  mdadm-4.2.tar.xz
++sha256  416727ae1f1080ea6e3090cea36dd076826fc369151e36ab736557ba92196f9f  mdadm-4.3.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index b54e34b230..c6178700ef 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define PHP_XDEBUG_PHPIZE
- 	(cd $(@D); \
+-MDADM_VERSION = 4.2
++MDADM_VERSION = 4.3
+ MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
+ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
+ MDADM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
