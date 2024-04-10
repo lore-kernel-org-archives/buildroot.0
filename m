@@ -4,48 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA1D5CD128A
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 19:46:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97095CD11C2
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 19:57:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A941E40182;
-	Wed, 10 Apr 2024 19:46:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 447D741713;
+	Wed, 10 Apr 2024 19:57:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1nzv0KsGiqR1; Wed, 10 Apr 2024 19:46:05 +0000 (UTC)
+ id hhMC6vez9B9d; Wed, 10 Apr 2024 19:57:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 330D5417A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 238C84036E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 330D5417A6;
-	Wed, 10 Apr 2024 19:46:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 38FF21BF59A
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 19:45:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 238C84036E;
+	Wed, 10 Apr 2024 19:57:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DEAF31BF59A
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 19:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DD4F82109
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 19:45:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D800E404CA
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 19:57:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gp0T-LhNgiE3 for <buildroot@lists.busybox.net>;
- Wed, 10 Apr 2024 19:45:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KBaAvat3jeMW for <buildroot@lists.busybox.net>;
+ Wed, 10 Apr 2024 19:57:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 300108210E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 300108210E
- for <buildroot@buildroot.org>; Wed, 10 Apr 2024 19:45:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23DE185E9C; Wed, 10 Apr 2024 19:45:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 10 Apr 2024 21:44:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e6fd72719537989212a7c1e9faef697d76298b0f
-X-Git-Newrev: 94b8a6ed7777905d93195ee86696a1cb52442a52
-X-Patchwork-Hint: ignore
-Message-Id: <20240410194547.23DE185E9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rdma-core: bump to version v51.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 580F9404C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 580F9404C6
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 580F9404C6
+ for <buildroot@buildroot.org>; Wed, 10 Apr 2024 19:57:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C07D740003;
+ Wed, 10 Apr 2024 19:56:57 +0000 (UTC)
+Date: Wed, 10 Apr 2024 21:56:56 +0200
+To: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+Message-ID: <20240410215656.1756a37e@windsurf>
+In-Reply-To: <20240410171211.1633127-2-jeanmichel.hautbois@yoseli.org>
+References: <20240410171211.1633127-1-jeanmichel.hautbois@yoseli.org>
+ <20240410171211.1633127-2-jeanmichel.hautbois@yoseli.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1712779018;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=X+cfYvGodu9f2NZ3CyhfAqKYNaJBZh3fAsyrKtN5M5s=;
+ b=TecSLAmTU4/dYEUVHleIuL2UacnEm6zP5Bwr8pgpBrPOYLbYKpIl24/FPxS30d3clYiqJZ
+ H9TIYPyDEa32heW4rSUKhgjXYsa+MH7pk4QIVE9Pzndt3kPBMUW/V26IbSEvOIYxlCapWI
+ 5wTQW/NTZYB1YyBBpTKQkCSq59drvioKb527horTNakeX1p4KHcbfuQ6qoN+78zGaPfM0B
+ dl2J7pLATHA+gX5BwA/p/X1EDRHKjJ2GOXeeRrHGlOAhlN0tPHlml3M4tsyhmXoQJ0TVYP
+ ZFRGy0Qxi7AwTiayuquEqDNYgup+8KUyX6+2KG8x2UTVBBneYZmKFs23W1JKZQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TecSLAmT
+Subject: Re: [Buildroot] [PATCH v2 1/3] arch: add support for mcf5441x
+ Colfdire
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,118 +82,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ yann.morin.1998@free.fr, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94b8a6ed7777905d93195ee86696a1cb52442a52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For change log since v49.0, see:
-https://github.com/linux-rdma/rdma-core/releases/tag/v50.0
-https://github.com/linux-rdma/rdma-core/releases/tag/v51.0
-
-This commit drops the package patch, which is included v50.0.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- .../0001-util-udma_barrier.h-fix-mips4-build.patch | 56 ----------------------
- package/rdma-core/rdma-core.hash                   |  2 +-
- package/rdma-core/rdma-core.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 58 deletions(-)
-
-diff --git a/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch b/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
-deleted file mode 100644
-index 6dfb476faa..0000000000
---- a/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 1b1ca539f6e1f0b774e989f1022477686e4fc77f Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 21 Jan 2024 18:55:34 +0100
--Subject: [PATCH] util/udma_barrier.h: fix mips4 build
--
--The 'sync' instruction for MIPS was defined in MIPS-II as taking no
--operands. MIPS32 extended the define of 'sync' as taking an optional
--unsigned 5 bit immediate.
--
--As a result, replace "sync 0" by "sync" to fix the following build
--failure on mips4 raised since version 43.0 and
--https://github.com/linux-rdma/rdma-core/commit/b7c428344ea96d446f6ffe31c620a238a7f25c9e:
--
--/tmp/ccrBy9fV.s: Assembler messages:
--/tmp/ccrBy9fV.s:994: Error: invalid operands `sync 0'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/2ab22a3ec4287fc15ff6a90d8715b4897b32a933
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/linux-rdma/rdma-core/commit/f3f0c06014c6de845032e6fe9f152674919b3ec6
-----
-- util/udma_barrier.h | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/util/udma_barrier.h b/util/udma_barrier.h
--index 0a1f8a45b..3793d2f18 100644
----- a/util/udma_barrier.h
--+++ b/util/udma_barrier.h
--@@ -101,7 +101,7 @@
-- #elif defined(__riscv)
-- #define udma_to_device_barrier() asm volatile("fence ow,ow" ::: "memory")
-- #elif defined(__mips__)
---#define udma_to_device_barrier() asm volatile("sync 0" ::: "memory")
--+#define udma_to_device_barrier() asm volatile("sync" ::: "memory")
-- #else
-- #error No architecture specific memory barrier defines found!
-- #endif
--@@ -139,7 +139,7 @@
-- #elif defined(__riscv)
-- #define udma_from_device_barrier() asm volatile("fence ir,ir" ::: "memory")
-- #elif defined(__mips__)
---#define udma_from_device_barrier() asm volatile("sync 0" ::: "memory")
--+#define udma_from_device_barrier() asm volatile("sync" ::: "memory")
-- #else
-- #error No architecture specific memory barrier defines found!
-- #endif
--@@ -212,7 +212,7 @@
-- #include "s390_mmio_insn.h"
-- #define mmio_flush_writes() s390_pciwb()
-- #elif defined(__mips__)
---#define mmio_flush_writes() asm volatile("sync 0" ::: "memory")
--+#define mmio_flush_writes() asm volatile("sync" ::: "memory")
-- #else
-- #error No architecture specific memory barrier defines found!
-- #endif
-diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
-index fc1d319123..f8b01e882d 100644
---- a/package/rdma-core/rdma-core.hash
-+++ b/package/rdma-core/rdma-core.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  1ea2c2678d48be0b179871e9ae8c58ceab11a0c5b69315a332ff51dd607180b7  rdma-core-49.0.tar.gz
-+sha256  a4065b0454249839dc75b61c6ee428e917d9cddf964ff7a33d479f00d1264ba0  rdma-core-51.0.tar.gz
- sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
- sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
-diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
-index 5f8989b3bd..834d9ea3ef 100644
---- a/package/rdma-core/rdma-core.mk
-+++ b/package/rdma-core/rdma-core.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RDMA_CORE_VERSION = 49.0
-+RDMA_CORE_VERSION = 51.0
- RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
- RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
- RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpPbiBXZWQsIDEwIEFwciAyMDI0IDE5OjEyOjA5ICswMjAwCkplYW4tTWljaGVsIEhh
+dXRib2lzIDxqZWFubWljaGVsLmhhdXRib2lzQHlvc2VsaS5vcmc+IHdyb3RlOgoKPiBUaGUgbTY4
+ayBmYW1pbHkgb255IGhhcyBvbmUgQ29sZGZpcmUgdmFyaWFudCwgbmFtZWx5IHRoZSA1MjA4LiBB
+ZGQgdGhlCj4gc3VwcG9ydCBmb3IgdGhlIE1DRjU0NDF4IENQVSBmYW1pbHkgaW4gdGhlIGNvbmZp
+Z3VyYXRpb24gZmlsZS4KPiBUaGlzIGNvdmVycyBNQ0Y1NDQxMCwgTUNGNTQ0MTUsIE1DRjU0NDE2
+LCBNQ0Y1NDQxNyBhbmQgTUNGNTQ0MTguCgpJbnRlcmVzdGluZy4gSSBhbHdheXMgdGhvdWdodCB0
+aGF0IENvbGRmaXJlIG1lYW50ICJubyBNTVUiIGFuZCA2OGsKbWVhbnQgIk1NVSIsIGJ1dCBJIHdh
+cyB3cm9uZy4gVGhlIGZhbWlseSBvZiA2OGsgYW5kIGNvbGRmaXJlIGlzIHF1aXRlCm1lc3N5LCBk
+aWZmaWN1bHQgdG8gZmluZCBjbGVhciBhbmQgcmVsaWFibGUgc291cmNlcyBvZiBpbmZvcm1hdGlv
+bi4KCj4gK2NvbmZpZyBCUjJfR0NDX1RBUkdFVF9BUkNICj4gKwlkZWZhdWx0ICJjZiIgICAgICAg
+ICAgICBpZiBCUjJfbTY4a19jZjU0NDF4CgpUaGUgcHJvYmxlbSB3aXRoIHRoaXMgaXMgdGhhdCAi
+Y2YiIGlzIG5vdCBhIHZhbGlkIHZhbHVlIGZvciBnY2MgLW1hcmNoPQpvcHRpb24uIExvb2sgYXQg
+dGhlIGRvY3VtZW50YXRpb24gYXQ6Cmh0dHBzOi8vZ2NjLmdudS5vcmcvb25saW5lZG9jcy9nY2Mt
+MTMuMi4wL2djYy9NNjgweDAtT3B0aW9ucy5odG1sCgpUaGUgdmFsaWQgdmFsdWVzIG9mIC1tYXJj
+aCBhcmU6CgogIFBlcm1pc3NpYmxlIHZhbHVlcyBvZiBhcmNoIGZvciBNNjgweDAgYXJjaGl0ZWN0
+dXJlcyBhcmU6IOKAmDY4MDAw4oCZLAogIOKAmDY4MDEw4oCZLCDigJg2ODAyMOKAmSwg4oCYNjgw
+MzDigJksIOKAmDY4MDQw4oCZLCDigJg2ODA2MOKAmSBhbmQg4oCYY3B1MzLigJkuIENvbGRGaXJl
+CiAgYXJjaGl0ZWN0dXJlcyBhcmUgc2VsZWN0ZWQgYWNjb3JkaW5nIHRvIEZyZWVzY2FsZeKAmXMg
+SVNBIGNsYXNzaWZpY2F0aW9uCiAgYW5kIHRoZSBwZXJtaXNzaWJsZSB2YWx1ZXMgYXJlOiDigJhp
+c2Fh4oCZLCDigJhpc2FhcGx1c+KAmSwg4oCYaXNhYuKAmSBhbmQKICDigJhpc2Fj4oCZLiAKCldo
+YXQgaGFwcGVucyB3aGVuIHlvdSBkb24ndCBzcGVjaWZ5IC1tYXJjaD8gRG8geW91IGtub3cgd2hp
+Y2ggb2YgaXNhYSwKaXNhYXBsdXMsIGlzYWIgYW5kIGlzYWMgdGhlIE1DRjU0NDF4IGNvcnJlc3Bv
+bmRzIHRvPwoKQmVzdCByZWdhcmRzLAoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1v
+d25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJp
+bmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QK
