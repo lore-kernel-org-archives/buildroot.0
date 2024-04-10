@@ -4,66 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67840CD128A
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 19:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 722D2CD11C2
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 19:42:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0B10A40182;
-	Wed, 10 Apr 2024 19:37:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D39D40182;
+	Wed, 10 Apr 2024 19:42:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XeO4IzksKsaJ; Wed, 10 Apr 2024 19:37:29 +0000 (UTC)
+ id vD3vMNfn7IsJ; Wed, 10 Apr 2024 19:42:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DECA64036E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37C9F40399
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DECA64036E;
-	Wed, 10 Apr 2024 19:37:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37C9F40399;
+	Wed, 10 Apr 2024 19:42:00 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EA5DF1BF59A
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 19:37:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7F65A1BF59A
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 19:41:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D55DD820E9
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 19:37:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A873820FB
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 19:41:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nci4OTeLvSsL for <buildroot@lists.busybox.net>;
- Wed, 10 Apr 2024 19:37:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 01CEE820CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01CEE820CB
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01CEE820CB
- for <buildroot@buildroot.org>; Wed, 10 Apr 2024 19:37:25 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 654F5B0037C;
- Wed, 10 Apr 2024 21:37:21 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 10 Apr 2024 21:37:12 +0200
-Message-ID: <20240410193712.31108-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.44.0
+ id I2jECUlPJILi for <buildroot@lists.busybox.net>;
+ Wed, 10 Apr 2024 19:41:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 33931820F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33931820F7
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 33931820F7
+ for <buildroot@buildroot.org>; Wed, 10 Apr 2024 19:41:53 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-416f04059beso6911635e9.1
+ for <buildroot@buildroot.org>; Wed, 10 Apr 2024 12:41:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712778112; x=1713382912;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=aocxZ7i77JzvlH7cPp0zbvqIGeKMHG6QEimPQJruyAY=;
+ b=YpcUK2sKqV4l3/WILvNPnYMCWcyW9cEsMTH8vcqM9RLx1UNGPlQCsK2EzPq861+qrB
+ OCgdhV1EVT1rldisZRf6zONwZWPhmRmIP8zUL48aeYN5ZV9QvwcaoZ1Z3tMJC8Cizh2G
+ H6iThoY6mJWBy4oECY31ZhleO+YQ4CScRgBNDV8vVwL9Hu2LHIJRV+tni3IK3NjsffeP
+ 5dzrdv2K4wEM3m+ZTBi5zpaTOJWIQoeu1VHkkxfMi30ZjCSrvk/d1PZeSH1zGqJ2ilJt
+ tjuIVsCyHQXudzCtcK8SB0hgBHTPQcSgmkroix+toK2Urh+Jzk4HJMmbo9Xhr/xcc2cu
+ WsIQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUFxhiVDKkkI85UXmTJETL2E4gADCpXOgR/ps0p+8jO2sJp00NSo0+pzvTnw52CwCGoxIvz1UXi9wJjGjUo1UpthWoqyhwOcA==
+X-Gm-Message-State: AOJu0YyKdyKnI9WgXYTBKFmbbO9tZ5fRtRDJVCnD8LT8gawPkG+diIG7
+ EDZ1Em01G8EbICjycP30C+fC1YR3wac5R9Pd6RPbtfNNPfxtHyqdiIjJbsF7wEINWKiQUSgIQZm
+ g
+X-Google-Smtp-Source: AGHT+IGh/VshJlVYt/GCMkNu/CleyG3o9DCJnsrxsP4nen+jXWUsqRIrsyZ5vd+T76+0xV7Oql4lBA==
+X-Received: by 2002:a05:600c:3592:b0:415:511c:f801 with SMTP id
+ p18-20020a05600c359200b00415511cf801mr2582262wmq.34.1712778111547; 
+ Wed, 10 Apr 2024 12:41:51 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ k23-20020a05600c1c9700b0041469869d11sm3206636wms.47.2024.04.10.12.41.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 10 Apr 2024 12:41:51 -0700 (PDT)
+Message-ID: <68394e48-3b02-4a67-871c-4d4719f28873@mind.be>
+Date: Wed, 10 Apr 2024 21:41:49 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1712777842;
- bh=jEvzu4kMxGKdvkt0DaZsRUeEgo7lxo00dGi/Pd2JW1s=;
- h=From:To:Cc:Subject:Date:From;
- b=IP59nnQoSfKbdqcUCmDcq1kSd6IRTJO1jsEKWhlkdYmOAXL9VMhFZ0+d57SnZBHax
- K7gt1y/ihKZOgzXdGTTr1Ei/kI24uJc1V/Qr+ri6Wm5Ae+c13QKlZJn1Wkqlmd7NnP
- PDln0rY2f1NoH7AcNilG1YPN9/mlFDTBIl+oWy2cg3PozkrT7iKorIicBa9r6FgzA8
- xCxEcpubPVzdcGt3YJ2rrFnhnM2V21wuWyPIng1tsDNGFqwXiIiw9sw9grGnodBIST
- O0WHvSEhauRm9crYvznCy2fUjBSHNw66u1cZano0AOvHR+KYawgUCpwgovJtMbpRzm
- MG0oRB08QNgng==
+User-Agent: Mozilla Thunderbird
+To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
+References: <ZgQcVayV4juxXnnZ@waldemar-brodkorb.de>
+Content-Language: en-GB
+In-Reply-To: <ZgQcVayV4juxXnnZ@waldemar-brodkorb.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1712778112; x=1713382912; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=aocxZ7i77JzvlH7cPp0zbvqIGeKMHG6QEimPQJruyAY=;
+ b=QW3GYQhGqWM4XXir4u3f5+fuCqyoyzgKYsgY1yjEQkKCN3A3GJ+OUifkdqIZi0t+cS
+ av/ifgtfcDPPVxnm6RUJhWVM0F5bzeoJMJp+WC3GIxjr6uXWMKO64VAp7TyYncWCedJk
+ rbL1h/jMzBwSNYAXAx0D20sikg/ZvtnecsM9+dwGSmBd3Lgb9eHjwMP9Vsd9MvVJltTs
+ LMjIzRszL0WUmiPRN/AFu8gLLBgAHCy1X+XqeNA9T/jazeNh2DTwksg+qdwAcOIdoza+
+ kW1XxZNciKfHjwISkZF4SOvfzUHp1OeHF4MDhr/sb+hugyFHvz1PvGRnbK/3MSUqfazW
+ A4xg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=IP59nnQo
-Subject: [Buildroot] [PATCH v3 1/1] package/rdma-core: bump to version v51.0
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=QW3GYQhG
+Subject: Re: [Buildroot] [PATCH] package/uclibc: bump to 1.0.47
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,119 +107,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since v49.0, see:
-https://github.com/linux-rdma/rdma-core/releases/tag/v50.0
-https://github.com/linux-rdma/rdma-core/releases/tag/v51.0
 
-This commit drops the package patch, which is included v50.0.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Changes v2 -> v3:
-- Squashed patches into a single one,
-  reworded the commit log accordingly.
----
- ...-util-udma_barrier.h-fix-mips4-build.patch | 56 -------------------
- package/rdma-core/rdma-core.hash              |  2 +-
- package/rdma-core/rdma-core.mk                |  2 +-
- 3 files changed, 2 insertions(+), 58 deletions(-)
- delete mode 100644 package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
+On 27/03/2024 14:17, Waldemar Brodkorb wrote:
+> Fixes riscv port. NPTL/TLS fixed. C++ applications now working.
+> Added explicit_bzero and reallocarray.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-diff --git a/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch b/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
-deleted file mode 100644
-index 6dfb476faaa..00000000000
---- a/package/rdma-core/0001-util-udma_barrier.h-fix-mips4-build.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 1b1ca539f6e1f0b774e989f1022477686e4fc77f Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 21 Jan 2024 18:55:34 +0100
--Subject: [PATCH] util/udma_barrier.h: fix mips4 build
--
--The 'sync' instruction for MIPS was defined in MIPS-II as taking no
--operands. MIPS32 extended the define of 'sync' as taking an optional
--unsigned 5 bit immediate.
--
--As a result, replace "sync 0" by "sync" to fix the following build
--failure on mips4 raised since version 43.0 and
--https://github.com/linux-rdma/rdma-core/commit/b7c428344ea96d446f6ffe31c620a238a7f25c9e:
--
--/tmp/ccrBy9fV.s: Assembler messages:
--/tmp/ccrBy9fV.s:994: Error: invalid operands `sync 0'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/2ab22a3ec4287fc15ff6a90d8715b4897b32a933
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/linux-rdma/rdma-core/commit/f3f0c06014c6de845032e6fe9f152674919b3ec6
-----
-- util/udma_barrier.h | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/util/udma_barrier.h b/util/udma_barrier.h
--index 0a1f8a45b..3793d2f18 100644
----- a/util/udma_barrier.h
--+++ b/util/udma_barrier.h
--@@ -101,7 +101,7 @@
-- #elif defined(__riscv)
-- #define udma_to_device_barrier() asm volatile("fence ow,ow" ::: "memory")
-- #elif defined(__mips__)
---#define udma_to_device_barrier() asm volatile("sync 0" ::: "memory")
--+#define udma_to_device_barrier() asm volatile("sync" ::: "memory")
-- #else
-- #error No architecture specific memory barrier defines found!
-- #endif
--@@ -139,7 +139,7 @@
-- #elif defined(__riscv)
-- #define udma_from_device_barrier() asm volatile("fence ir,ir" ::: "memory")
-- #elif defined(__mips__)
---#define udma_from_device_barrier() asm volatile("sync 0" ::: "memory")
--+#define udma_from_device_barrier() asm volatile("sync" ::: "memory")
-- #else
-- #error No architecture specific memory barrier defines found!
-- #endif
--@@ -212,7 +212,7 @@
-- #include "s390_mmio_insn.h"
-- #define mmio_flush_writes() s390_pciwb()
-- #elif defined(__mips__)
---#define mmio_flush_writes() asm volatile("sync 0" ::: "memory")
--+#define mmio_flush_writes() asm volatile("sync" ::: "memory")
-- #else
-- #error No architecture specific memory barrier defines found!
-- #endif
-diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
-index fc1d319123d..f8b01e882dc 100644
---- a/package/rdma-core/rdma-core.hash
-+++ b/package/rdma-core/rdma-core.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  1ea2c2678d48be0b179871e9ae8c58ceab11a0c5b69315a332ff51dd607180b7  rdma-core-49.0.tar.gz
-+sha256  a4065b0454249839dc75b61c6ee428e917d9cddf964ff7a33d479f00d1264ba0  rdma-core-51.0.tar.gz
- sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
- sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
-diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
-index 5f8989b3bd4..834d9ea3efe 100644
---- a/package/rdma-core/rdma-core.mk
-+++ b/package/rdma-core/rdma-core.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RDMA_CORE_VERSION = 49.0
-+RDMA_CORE_VERSION = 51.0
- RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
- RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
- RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
--- 
-2.44.0
+  Applied to master, thanks.
 
+  Regards,
+  Arnout
+
+> ---
+>   package/uclibc/uclibc.hash | 4 ++--
+>   package/uclibc/uclibc.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+> index ae1f3178d9..a10ceab54c 100644
+> --- a/package/uclibc/uclibc.hash
+> +++ b/package/uclibc/uclibc.hash
+> @@ -1,4 +1,4 @@
+> -# From https://downloads.uclibc-ng.org/releases/1.0.44/uClibc-ng-1.0.45.tar.xz.sha256
+> -sha256  c2f4c6b6e19d7c9c226992a3746efd7ab932040463c15ee0bc8f4132b5777ac4  uClibc-ng-1.0.45.tar.xz
+> +# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.47.tar.xz.sha256
+> +sha256  29a4d684a06da344ee3ee09acc2ca7649d592ae3ff848f698145c46def05efcb  uClibc-ng-1.0.47.tar.xz
+>   # Locally calculated
+>   sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index 88623840bf..a7b18133ff 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -UCLIBC_VERSION = 1.0.45
+> +UCLIBC_VERSION = 1.0.47
+>   UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+>   UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+>   UCLIBC_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
