@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C998CD11C2
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51E0CCD1284
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:35:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69A39605E8;
-	Wed, 10 Apr 2024 21:33:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EBE0605E8;
+	Wed, 10 Apr 2024 21:35:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wZn1Pa--JWRU; Wed, 10 Apr 2024 21:33:58 +0000 (UTC)
+ id N6Fu0n18nFNc; Wed, 10 Apr 2024 21:34:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F91E60E8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E8CF6069B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F91E60E8D;
-	Wed, 10 Apr 2024 21:33:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 660B61BF4D6
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:33:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E8CF6069B;
+	Wed, 10 Apr 2024 21:34:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DEF741BF4D6
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:34:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F9A940473
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:33:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5DA282033
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:34:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fVpX2EMMiseL for <buildroot@lists.busybox.net>;
- Wed, 10 Apr 2024 21:33:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ESa-fMEWY-hC for <buildroot@lists.busybox.net>;
+ Wed, 10 Apr 2024 21:34:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E80B54046C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E80B54046C
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E80B54046C
- for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:33:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D14640003;
- Wed, 10 Apr 2024 21:33:53 +0000 (UTC)
-Date: Wed, 10 Apr 2024 23:33:52 +0200
-To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Message-ID: <20240410233352.72bb3737@windsurf>
-In-Reply-To: <20240328165000.16191-1-nicolas.cavallari@green-communications.fr>
-References: <20240328165000.16191-1-nicolas.cavallari@green-communications.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1712784833;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=zVj4LN9gZr6bJV7StA0gZj+RpPfsr3q4FJaPpmfUJSE=;
- b=A8B/gzlQm7oCidguiOjhyCegKrFYmmE2Vxl8CvUk8F7lfbp8Nt9FEAbxl0vv1dUTdwUH7R
- A6xv7vKFGbQMAOuMI82Tm4HWyD0dkywGFSZXzeyHBYByjGvjdfa4pvO7//pjJQPCulagg8
- dVKHguz9zxe2CgczeVklMsXWuc1C7yCo5V7eQZFcnophxNofnGO/x3KcDFGaMi0bdhilp2
- EKFqukqBmGZM1D8p+4bPwZE7xnrrMeMNlWm/1eLq1HXmOcv2efkrUJmku78Ovg+15UJLuS
- 4D9lMZU+gYGGpQVpNbRpQ52cf9/r8sytMck8bIJgeba3boMiBn3lylajVmIc3w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=A8B/gzlQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgit2: bump to version 1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 356A181B6D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 356A181B6D
+ for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:34:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DB10A8225C; Wed, 10 Apr 2024 21:34:56 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 10 Apr 2024 23:34:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ad8af5a2c75caa39eab911c775e9ce775497b57b
+X-Git-Newrev: b53a5425569d2176b951a18ad04c179cf3fff5ce
+X-Patchwork-Hint: ignore
+Message-Id: <20240410213456.DB10A8225C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flutter-engine: bump version to
+ 3.19.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,37 +60,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Mar 2024 17:49:56 +0100
-Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b53a5425569d2176b951a18ad04c179cf3fff5ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The license file was updated for two reasons:
-> * This version now bundles ntlmclient.  NTLM support is disabled by
->   the buildroot package.
-> * The bundled zlib version (that buildroot does not use) was updated and
->   its copyright years changed.
-> 
-> This version also adds support for using the SSH binary (at an hardcoded
-> /usr/bin/ssh path) instead of using libssh2.
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
->  package/libgit2/libgit2.hash | 4 ++--
->  package/libgit2/libgit2.mk   | 6 ++++--
->  2 files changed, 6 insertions(+), 4 deletions(-)
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/flutter-engine/flutter-engine.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
+index ff21e0949d..d9c2b3dee5 100644
+--- a/package/flutter-engine/flutter-engine.mk
++++ b/package/flutter-engine/flutter-engine.mk
+@@ -21,7 +21,7 @@
+ #
+ # There is no hash provided, as the gn binary (used for configuration) relies
+ # on the .git directories. As such, a reproducible tarball is not possible.
+-FLUTTER_ENGINE_VERSION = 3.19.4
++FLUTTER_ENGINE_VERSION = 3.19.5
+ 
+ # There is nothing for Buildroot to download. This is handled by gclient.
+ FLUTTER_ENGINE_SITE =
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
