@@ -4,82 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 657BACD1284
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 22:14:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4B8BCD11C2
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 22:14:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F60960EA9;
-	Wed, 10 Apr 2024 22:14:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3E6760EA9;
+	Wed, 10 Apr 2024 22:14:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JJWQmXHngRrp; Wed, 10 Apr 2024 22:14:19 +0000 (UTC)
+ id tJ5LKk8-KW6F; Wed, 10 Apr 2024 22:14:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C609260606
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6FB760EAF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C609260606;
-	Wed, 10 Apr 2024 22:14:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 228981BF40A
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 22:14:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6FB760EAF;
+	Wed, 10 Apr 2024 22:14:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 979471BF40A
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 22:14:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0FBCE80E61
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 22:14:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 847B8404D2
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 22:14:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7PF0B3airXfs for <buildroot@lists.busybox.net>;
- Wed, 10 Apr 2024 22:14:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
- helo=fllv0016.ext.ti.com; envelope-from=dannenberg@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8976680E57
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8976680E57
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8976680E57
- for <buildroot@buildroot.org>; Wed, 10 Apr 2024 22:14:15 +0000 (UTC)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
- by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 43AMEDA1048828;
- Wed, 10 Apr 2024 17:14:13 -0500
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
- by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 43AMEDhK056243
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Wed, 10 Apr 2024 17:14:13 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 10
- Apr 2024 17:14:14 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 10 Apr 2024 17:14:13 -0500
-Received: from dasso (dasso.dhcp.ti.com [128.247.79.182])
- by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 43AMEDmE085368;
- Wed, 10 Apr 2024 17:14:13 -0500
-Date: Wed, 10 Apr 2024 17:14:13 -0500
-To: Bryan Brattlof <bb@ti.com>, Xuanhao Shi <X15000177@gmail.com>, Anand
- Gadiyar <gadiyar@ti.com>, Buildroot Mailing List <buildroot@buildroot.org>
-Message-ID: <20240410221413.la4kqjy4b7hapb3i@dasso>
-References: <20240402153328.1859642-1-bb@ti.com>
- <20240410105035.phl3xamt7bdb3jhk@dasso>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UNoo9tbNU41B for <buildroot@lists.busybox.net>;
+ Wed, 10 Apr 2024 22:14:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 35E82404A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35E82404A5
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 35E82404A5
+ for <buildroot@buildroot.org>; Wed, 10 Apr 2024 22:14:53 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-417d14b39feso1648235e9.2
+ for <buildroot@buildroot.org>; Wed, 10 Apr 2024 15:14:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712787291; x=1713392091;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JEwoW00CFJCtlk1jS/oWNTPYjt819C6QBTPM1J3GgFo=;
+ b=tFxBpwtX0N0u5ObFNSebzG/8EcUhctU8Sx9zFxdwCNTT/wlESUvQLgp+rYt5Wz9bX3
+ 1u5oJq+znAzhFz/d+4IVbnu5eqlmOKOVf5pCfhg+V9fd64WtzyKzB2XnYSs9HJ5K1lJw
+ kEeDHeC6Dq1hcutWzj+vInrQ40WXZHipFQIk7Q6rVcvGC5dePnP4oswNW8JzQAhvF0gw
+ /xBf4vCE28a+JQKNUG7vpVJhI5cUbc6/6fr8giwxeysAq5zumZGAyDp7FEKOhT/htPGP
+ DmpjpcnCoJdUC5Chkic4UixXaNJ/quthEQP3jLa5ZqsTYFAz5C1TPgZ7BRmKF0Ky8ooU
+ dlpA==
+X-Gm-Message-State: AOJu0YwgmI2S6El7kEPRNapGr6wUMRVyGZzRntPWN6Fmkyz0d6LukmRn
+ CA7E6LAeHyAHmGMfHkZpekMuFffYHL4rFXl4Sde1XvdovxYWwi5QxItuNcG1NfNFH0BEGRBrNKc
+ i
+X-Google-Smtp-Source: AGHT+IFHQEQUandC4jXwPgjL24mCOJNEzw7jCOYQLBmm0ilWlpbMofgm6OyJfMfcSTnUyaZcKV5cPQ==
+X-Received: by 2002:a7b:ca57:0:b0:414:8c5:42ce with SMTP id
+ m23-20020a7bca57000000b0041408c542cemr2963427wml.19.1712787291175; 
+ Wed, 10 Apr 2024 15:14:51 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
+ by smtp.gmail.com with ESMTPSA id
+ w6-20020a5d4b46000000b00341c7129e28sm213944wrs.91.2024.04.10.15.14.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 10 Apr 2024 15:14:50 -0700 (PDT)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Thu, 11 Apr 2024 00:14:48 +0200
+Message-ID: <20240410221448.88466-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240410105035.phl3xamt7bdb3jhk@dasso>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1712787253;
- bh=naSjS3yE2OUzorX09Wd8aZsBkNl7OpGegImlTBnAD3s=;
- h=Date:From:To:Subject:References:In-Reply-To;
- b=nzSSXRswKaL+cIFSt2fLdDLuw89foGm0FxI9gDdCm9ttJQ1RU37UyO4/WtBCZ5rZx
- cD+6c7nYN0wvAZb3uTaAZMb56bg9lrijrtk8IFAZ0mhRSvM9AB1C7LlzevLwtB3UE3
- 0dB7wSSMU7MEuEmLFnIDQtzjBghrhQf+QH3Uqk6M=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=nzSSXRsw
-Subject: Re: [Buildroot] [PATCH] boot/ti-k3-boot-firmware: bump to latest
- version
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1712787291; x=1713392091;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JEwoW00CFJCtlk1jS/oWNTPYjt819C6QBTPM1J3GgFo=;
+ b=wBFoBN9TieL7s1nXYoqqn8NCEF/A8p+IVS7LTOJ6XGK23p4GLGnq/CvFNxPHXNnoBm
+ 7l2OJss4f+kmSXEOSGC2ajUgVy20osKWe/KdB5M2UpUTVSaoKmwqzNob3Dl/iaSNr7cy
+ zKIOjJ5TRD0UudZA0NUxMz+eJrxJiQa8TRj25xuCkZpsTMY+wx12hvIgCcTGqhPGrziK
+ KIcoyx4Ngeawsy6kOZ1qpcKV6aHTcCKyqEJKegJp73MoU/WU4JwwVSZnp/g+IymWufZI
+ XvYIao3mzEx6t9ztvX9m/No8qII40vSiey2l6mfDXG0WvddMWY9hAL3ucwvIZAWF9U5H
+ yLXQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=wBFoBN9T
+Subject: [Buildroot] [PATCH] support/testing: regenerate .checkpackageignore
+ used in TestCheckPackage
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,149 +105,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Andreas Dannenberg via buildroot <buildroot@buildroot.org>
-Reply-To: Andreas Dannenberg <dannenberg@ti.com>
+Cc: Romain Naour <romain.naour@smile.fr>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bryan, All,
+Commit ccb4e5db5c ("utils/check-package: emit library name along with check function name")
+updated the .checkpackageignore format but forgot to update
+.checkpackageignore files used in TestCheckPackage.
 
-On Wed, Apr 10, 2024 at 05:50:35AM -0500, Andreas Dannenberg via buildroot wrote:
-> Bryan, All,
-> 
-> On Tue, Apr 02, 2024 at 10:33:28AM -0500, Bryan Brattlof via buildroot wrote:
-> > The 09.02.00.009 release of ti-linux-firmware has the latest updates to
-> > TI's TIFS, DM and DMSC firmware needed for the K3 generation of
-> > processors. Update to pull in these latest updates.
-> > 
-> > Signed-off-by: Bryan Brattlof <bb@ti.com>
-> 
-> I just tested this patch to enable latest TIFS/SYSFW device firmwares on
-> top of....
-> 
-> d01e13c4d4 ("package/python3: fix cross builds when host and target use the same SOABI")
-> 
-> ...and can confirm the following 4 platforms booted without any serious
-> issues(*) in both U-Boot and Linux Kernel.
-> 
-> 1) SK-AM62 (with GP silicon)
-> 2) SK-AM62B (production board, with HS-FS silicon) 
-> 3) SK-AM64 (with GP silicon)
-> 4) SK-AM62B (production board, with HS-FS silicon) 
-> 
-> With this...
-> 
-> Tested-by: Andreas Dannenberg <dannenberg@ti.com>
-> 
-> 
-> (*) I did see some extra Kernel warnings related to what Bryan pointed
-> to on this thread on AM62 GP. I wouldn't care about too much except that
-> is the device BeaglePlay is using. So something to keep an eye out for
-> to fix when adding BeaglePlay support to Buildroot. These warnings where
-> NOT there when booting AM62 GP with TIFS/SYSFW v8.6, I just went back to
-> my earlier log to confirm.
-> 
-> <snip>
-> [    2.447524] ti-sci-clk 44043000.system-controller:clock-controller: is_prepared failed for dev=40, clk=9, ret=-19
-> [    2.474423] ti-sci-clk 44043000.system-controller:clock-controller: is_prepared failed for dev=39, clk=18, ret=-19
-> [    2.484806] ti-sci-clk 44043000.system-controller:clock-controller: is_prepared failed for dev=39, clk=17, ret=-19
-> [    2.495185] ti-sci-clk 44043000.system-controller:clock-controller: is_prepared failed for dev=39, clk=16, ret=-19
-> [    2.505570] ti-sci-clk 44043000.system-controller:clock-controller: is_prepared failed for dev=39, clk=15, ret=-19
-> [    2.516161] ti-sci-clk 44043000.system-controller:clock-controller: is_prepared failed for dev=39, clk=9, ret=-19
-> [    2.526765] ti-sci-clk 44043000.system-controller:clock-controller: is_prepared failed for dev=38, clk=18, ret=-19
-> [    2.537148] ti-sci-clk 44043000.system-controller:clock-controller: is_prepared failed for dev=38, clk=17, ret=-19
-> <snip>
+Keep .checkpackageignore_outdated as is since it must be outdated.
 
-I need to correct my yesterday's statement/post. Those TISCI-related
-warnings (from the device manager FW) are also present on AM62 HS-FS
-silicon, I was looking at the wrong log. So this concern is NOT limited
-to GP device variants.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6568786785
 
-Anyways I don't think this should get in the way of accepting this patch
-as the warnings are harmless as per Bryan's comment.
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ support/testing/tests/utils/br2-external/.checkpackageignore    | 2 +-
+ .../tests/utils/br2-external/package/.checkpackageignore        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-(I haven't tried it) but looking further it looks like the fix is the
-following kernel upstream commit. It's part of the TI SDK also hence is
-why we dont; see this issue with current TI Linux SDK v9.2.
+diff --git a/support/testing/tests/utils/br2-external/.checkpackageignore b/support/testing/tests/utils/br2-external/.checkpackageignore
+index efb7680173..2a29916d08 100644
+--- a/support/testing/tests/utils/br2-external/.checkpackageignore
++++ b/support/testing/tests/utils/br2-external/.checkpackageignore
+@@ -1 +1 @@
+-package/external/external.mk PackageHeader
++package/external/external.mk lib_mk.PackageHeader
+diff --git a/support/testing/tests/utils/br2-external/package/.checkpackageignore b/support/testing/tests/utils/br2-external/package/.checkpackageignore
+index 5f4a5e1187..a9368d1c1c 100644
+--- a/support/testing/tests/utils/br2-external/package/.checkpackageignore
++++ b/support/testing/tests/utils/br2-external/package/.checkpackageignore
+@@ -1 +1 @@
+-external/external.mk PackageHeader
++external/external.mk lib_mk.PackageHeader
+-- 
+2.44.0
 
-"clk: keystone: sci-clk: Adding support for non contiguous clocks"
-https://github.com/torvalds/linux/commit/ad3ac13c6ec318b43e769cc9ffde67528e58e555
-
-I'll double-check this.
-
-
---
-Andreas Dannenberg
-Texas Instruments Inc
-
-
-
-> 
-> Also for reference, here are the three places in the boot log that show
-> the new FW version (9.2.7):
-> 
-> U-Boot SPL 2024.01 (Apr 10 2024 - 04:49:11 -0500)
-> SYSFW ABI: 3.1 (firmware rev 0x0009 '9.2.7--v09.02.07 (Kool Koala)')
-> <...snip...>
-> NOTICE:  BL31: v2.7(release):v2.7
-> NOTICE:  BL31: Built : 04:39:08, Apr 10 2024
-> I/TC:
-> I/TC: OP-TEE version: Unknown_4.0 (gcc version 12.3.0 (Buildroot 024.02-417-g2adb5a690c)) #1 Wed Apr 10 09:39:07 UTC 2024 aarch64
-> I/TC: WARNING: This OP-TEE configuration might be insecure!
-> I/TC: WARNING: Please check ttps://optee.readthedocs.io/en/latest/architecture/porting_guidelines.html
-> I/TC: Primary CPU initializing
-> I/TC: SYSFW ABI: 3.1 (firmware rev 0x0009 '9.2.7--v09.02.07 (Kool oala)')
-> <...snip...>
-> [    1.311403] ti-sci 44043000.system-controller: ABI: 3.1 (firmware rev 0x0009 '9.2.7--v09.02.07 (Kool Koala)')
-> <...snip...>
-> Welcome to Buildroot
-> buildroot login:
-> 
-> 
-> > ---
-> >  boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash | 2 +-
-> >  boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk   | 4 +---
-> >  2 files changed, 2 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> > index 95131180ef400..2398d02da258a 100644
-> > --- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> > +++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> > @@ -1,3 +1,3 @@
-> >  # Locally calculated
-> >  sha256  ab20ffbe7bba7e94be246b3417d33a914b3f07c16c47ef5a7f7602349a666a61  LICENSE.ti
-> > -sha256  6032a258ce731d987576115f5de44c677a6b0cf8bddcd61a9a2852928bdfff92  ti-linux-firmware-08.06.00.006.tar.xz
-> > +sha256  ae888a0a22f8c5b8fe841236d6e40bb2f821d9a4161dab6924fd989e1467ef0e  ti-linux-firmware-09.02.00.009.tar.xz
-> > diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> > index 1f8ade207c13a..9332732ad4a32 100644
-> > --- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> > +++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> > @@ -4,9 +4,7 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -# The hash 340194800a581baf976360386dfc7b5acab8d948 defined in the
-> > -# Makefile of ti-k3-image-gen corresponds to the tag 08.06.00.006.
-> > -TI_K3_BOOT_FIRMWARE_VERSION = 08.06.00.006
-> > +TI_K3_BOOT_FIRMWARE_VERSION = 09.02.00.009
-> >  TI_K3_BOOT_FIRMWARE_SITE = https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/snapshot
-> >  TI_K3_BOOT_FIRMWARE_SOURCE = ti-linux-firmware-$(TI_K3_BOOT_FIRMWARE_VERSION).tar.xz
-> >  TI_K3_BOOT_FIRMWARE_INSTALL_IMAGES = YES
-> > 
-> > base-commit: d69e13b0e965961019b4aab38e187267af3cab78
-> > -- 
-> > 2.43.2
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
