@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6F4DCD1284
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:46:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14B2FCD1284
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:46:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8769A60EDF;
-	Wed, 10 Apr 2024 21:46:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D753B60EA9;
+	Wed, 10 Apr 2024 21:46:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UXkPn0xrNDrX; Wed, 10 Apr 2024 21:46:19 +0000 (UTC)
+ id 7chGy0k9pK1E; Wed, 10 Apr 2024 21:46:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A655B60EE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E834C60EAF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A655B60EE8;
-	Wed, 10 Apr 2024 21:46:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D8CDC1BF4D6
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:46:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E834C60EAF;
+	Wed, 10 Apr 2024 21:46:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DBE31BF4D6
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5E478211E
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:46:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AADC4036A
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:46:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uJRAoVS6VqwP for <buildroot@lists.busybox.net>;
- Wed, 10 Apr 2024 21:46:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IDDx2QbmJBKl for <buildroot@lists.busybox.net>;
+ Wed, 10 Apr 2024 21:46:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C12E28211D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C12E28211D
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C12E28211D
- for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:46:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5CFBE1BF203;
- Wed, 10 Apr 2024 21:46:14 +0000 (UTC)
-Date: Wed, 10 Apr 2024 23:46:13 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20240410234613.205a7b78@windsurf>
-In-Reply-To: <20240326225031.224022-3-giulio.benetti@benettiengineering.com>
-References: <20240326225031.224022-1-giulio.benetti@benettiengineering.com>
- <20240326225031.224022-3-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1712785574;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=QyHzjoJtwD86+9bg+56XSTEQUHbI+9u6f0q+g+usZKk=;
- b=Bz2Erawempt235Hrh5mxwvBtlBd2D1fH1NDohFo3V2fM3wS3BbwFL6SY+OlBDPRuQpzq97
- Ju/xS7c2NBProwKSMRMdG+O0MvfsAvvhhJKcWuBrjfScv8cP3GU/u0XrLjAPMMCKB3H80u
- wxkvasjRpiCjyCvSOgcZov6rd0ZsOzc+qgDf1fOZ/uQfVUFJtvwmQY+CZpVHPlgkvDEOX3
- bntHEsPwdEHPJXhl+UkjzRc68huHPaY0Syp4nGXb0LCW29N0TaLcvAMluJP4SU3LuqDhyc
- cJtyVfkktMrKsL/PnEdklBa8fIPga8bubUims54+Km0zDe+hA7fR0cjjWw12Tw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Bz2Erawe
-Subject: Re: [Buildroot] [PATCH] package/libblockdev: bump to version 3.1.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FD0340359
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7FD0340359
+ for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:46:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7A3C585FA4; Wed, 10 Apr 2024 21:46:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 10 Apr 2024 23:46:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dd79b8dd60ab6817f2d3a0db9eedc1526005c9be
+X-Git-Newrev: 07ef00df9bdff1486622fe8248168137aa531c9d
+X-Patchwork-Hint: ignore
+Message-Id: <20240410214651.7A3C585FA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: TestFileCapabilities:
+ update kernel to 4.19.310
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,29 +60,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 26 Mar 2024 23:50:31 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=07ef00df9bdff1486622fe8248168137aa531c9d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/libblockdev/libblockdev.hash | 2 +-
->  package/libblockdev/libblockdev.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Since the toolchain Bootlin update to 2023.11-1 [1], the arm Linux
+kernel build is broken with binutils >= 2.41 with:
 
-Applied to master, thanks.
+  arch/arm/mm/proc-v7.S: Assembler messages:
+  arch/arm/mm/proc-v7.S:640: Error: junk at end of line, first unrecognized character is `#'
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+A similar issue has already be fixed for qemu m68k [2].
+
+Bump to the latest kernel 4.19 that already include the backport
+of 790756c7e022 ("ARM: 8933/1: replace Sun/Solaris style flag on section directive")
+
+[1] 7e0e6e3b8618ab942f25b11ee72fbc5a4deefdf1
+[2] a1ce9474e40f731f327035d8c0962abb16f00ff7
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6414160106 (TestFileCapabilities)
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/core/test_file_capabilities.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/testing/tests/core/test_file_capabilities.py b/support/testing/tests/core/test_file_capabilities.py
+index fe21d76c94..e2600ae794 100644
+--- a/support/testing/tests/core/test_file_capabilities.py
++++ b/support/testing/tests/core/test_file_capabilities.py
+@@ -13,7 +13,7 @@ class TestFileCapabilities(infra.basetest.BRTest):
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.310"
+         BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
+         BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
