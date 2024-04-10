@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75F99CD11C2
-	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B27DCD1284
+	for <buildroot@archiver.kernel.org>; Wed, 10 Apr 2024 21:45:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4564D60EAF;
-	Wed, 10 Apr 2024 21:45:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B627960EE6;
+	Wed, 10 Apr 2024 21:45:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z7wQg15sZYZN; Wed, 10 Apr 2024 21:45:26 +0000 (UTC)
+ id 5GoPAhu_lzjl; Wed, 10 Apr 2024 21:45:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29D9460ECC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F84D60ECC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29D9460ECC;
-	Wed, 10 Apr 2024 21:45:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9172F1BF4D6
- for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:45:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F84D60ECC;
+	Wed, 10 Apr 2024 21:45:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D2C01BF4D6
+ for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:45:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8DBE40359
+ by smtp1.osuosl.org (Postfix) with ESMTP id C52648211D
  for <buildroot@lists.busybox.net>; Wed, 10 Apr 2024 21:45:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wr0NQ5xgEd39 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GefaNsnCljwe for <buildroot@lists.busybox.net>;
  Wed, 10 Apr 2024 21:45:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B1D94058D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 181BF8211E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B1D94058D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 181BF8211E
  for <buildroot@buildroot.org>; Wed, 10 Apr 2024 21:45:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 19F8585F9D; Wed, 10 Apr 2024 21:45:21 +0000 (UTC)
+ id 0349C85F9C; Wed, 10 Apr 2024 21:45:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Apr 2024 23:35:30 +0200
+Date: Wed, 10 Apr 2024 23:35:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aa4c77b4a886e0d85ee38f2edc99eb3f33fed663
-X-Git-Newrev: 1b6e6b563305a0469d6e3216cafa82c1b81ce82d
+X-Git-Oldrev: b53a5425569d2176b951a18ad04c179cf3fff5ce
+X-Git-Newrev: aa4c77b4a886e0d85ee38f2edc99eb3f33fed663
 X-Patchwork-Hint: ignore
-Message-Id: <20240410214521.19F8585F9D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8821cu: bump to version
- 2024-03-25
+Message-Id: <20240410214521.0349C85F9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/procs: bump to version 0.14.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,40 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b6e6b563305a0469d6e3216cafa82c1b81ce82d
+commit: https://git.buildroot.net/buildroot/commit/?id=aa4c77b4a886e0d85ee38f2edc99eb3f33fed663
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this version we can build with Linux 6.9.
+Release notes:
+https://github.com/dalance/procs/releases/tag/v0.14.5
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rtl8821cu/rtl8821cu.hash | 2 +-
- package/rtl8821cu/rtl8821cu.mk   | 2 +-
+ package/procs/procs.hash | 2 +-
+ package/procs/procs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
-index b3d6d2c569..fba2f7a109 100644
---- a/package/rtl8821cu/rtl8821cu.hash
-+++ b/package/rtl8821cu/rtl8821cu.hash
+diff --git a/package/procs/procs.hash b/package/procs/procs.hash
+index a3ec5d2b75..93be601c6d 100644
+--- a/package/procs/procs.hash
++++ b/package/procs/procs.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3ccec54462a8668142a9c2b2ddfffe4e0434feebe6caf6a7de6812dc8713c37f  rtl8821cu-5b39398e2de146edeb76716420f3288f508bea61.tar.gz
-+sha256  c04741129e815c30c51e509012d1a21e4f6d568c211921e6bc46e1adc3d4d4e1  rtl8821cu-0b505f382ea67bd8bdc9288ba5dbe7f4c9de33c0.tar.gz
- sha256  22cdb0a9cf492dbf05c5b27381a5c0e73ae0d4622427b522b0ba92b7495e5fb0  LICENSE
-diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
-index 8cb8ea710b..39aea1d7a4 100644
---- a/package/rtl8821cu/rtl8821cu.mk
-+++ b/package/rtl8821cu/rtl8821cu.mk
+ # Locally computed
+-sha256  22d9ef44bf06bbd6d0d463a40678a1560a9125fdc6e6fbb5db294e05a174ea01  procs-0.14.4.tar.gz
++sha256  d90d350ebac64b6a5b2c89881421c27d266653ec1f4a6ed10e32892fe38d3c60  procs-0.14.5.tar.gz
+ sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
+diff --git a/package/procs/procs.mk b/package/procs/procs.mk
+index 34e874a4f2..019e69a1de 100644
+--- a/package/procs/procs.mk
++++ b/package/procs/procs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8821CU_VERSION = 5b39398e2de146edeb76716420f3288f508bea61
-+RTL8821CU_VERSION = 0b505f382ea67bd8bdc9288ba5dbe7f4c9de33c0
- RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
- RTL8821CU_LICENSE = GPL-2.0
- RTL8821CU_LICENSE_FILES = LICENSE
+-PROCS_VERSION = 0.14.4
++PROCS_VERSION = 0.14.5
+ PROCS_SITE = $(call github,dalance,procs,v$(PROCS_VERSION))
+ PROCS_LICENSE = MIT
+ PROCS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
