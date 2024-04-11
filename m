@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7691CCD1292
-	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 04:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8DCCCD1292
+	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 04:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32A944061A;
-	Thu, 11 Apr 2024 04:35:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 824F54061A;
+	Thu, 11 Apr 2024 04:35:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QBQu1Bnvc-oB; Thu, 11 Apr 2024 04:35:46 +0000 (UTC)
+ id fYw-Im3zUrYT; Thu, 11 Apr 2024 04:35:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3BA3407A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B525407A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3BA3407A8;
-	Thu, 11 Apr 2024 04:35:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B016B1BF396
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 04:35:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B525407A8;
+	Thu, 11 Apr 2024 04:35:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 013131BF396
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 04:35:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A75B81B6D
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 04:35:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E275A60A7F
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 04:35:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4WG5VPtdQHbp for <buildroot@lists.busybox.net>;
- Thu, 11 Apr 2024 04:35:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HqjXzgaU2lzA for <buildroot@lists.busybox.net>;
+ Thu, 11 Apr 2024 04:35:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAE6E81B23
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAE6E81B23
- for <buildroot@buildroot.org>; Thu, 11 Apr 2024 04:35:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5B0C86024; Thu, 11 Apr 2024 04:35:43 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 11 Apr 2024 06:35:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 107bcd536dae1bc26e4f34ed510484d3abcc6b5f
-X-Git-Newrev: 15381b57559182693f6d5530544937f8fcf3b471
-X-Patchwork-Hint: ignore
-Message-Id: <20240411043543.D5B0C86024@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pypng: add missing
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 59AB660768
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59AB660768
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 59AB660768
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 04:35:55 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 4E69E13F846;
+ Thu, 11 Apr 2024 06:35:50 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 11 Apr 2024 06:35:50 +0200
+Date: Thu, 11 Apr 2024 06:35:50 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <ZhdopjP2hfRQ7no7@landeda>
+References: <20240410221806.89203-1-romain.naour@smile.fr>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240410221806.89203-1-romain.naour@smile.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1712810153;
+ bh=MVSAA3K0RRn95btSf2rUXbakdh07MbbwNn7bkkPwh88=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=flCueDjYhJXdzo/ndAC2qLO4PZx/LBNb9gqFEpD+O8G6pqoZOvdSwCebjVOaLmtwN
+ /k9jva808ixLbL8OpsRkjQhirLWPHsFr6tYRaYh+EfKwzHJtVd+KIBPU7Jkmiz8orQ
+ Xg26OQkj4yp8Bti+gMErrAVE6c+HpS2RMPMLu2zWkPMbEv6Tr+C7b1z/wMkqvArKLd
+ p9chycy72mJ7/GgMOBtIpVVf2+BzVipnO7P5Ak5F/H7XcTcBDtbx6t9ZSuqlzbKxav
+ tQJs0QeINuvaBqK6PFt7aQR592vGhn73RaqTG69LyepTsO/+Ohskg7gX/hjIS5SxwW
+ 616v7AciIEL7A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=flCueDjY
+Subject: Re: [Buildroot] [PATCH] package/python-pypng: add missing
  python3-zlib dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,41 +81,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15381b57559182693f6d5530544937f8fcf3b471
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Romain, All,
 
-png.py import zlib [1] so python3-zlib needs to be installed at
-runtime.
+On 2024-04-11 00:18 +0200, Romain Naour spake thusly:
+> png.py import zlib [1] so python3-zlib needs to be installed at
+> runtime.
+> 
+> [1] https://gitlab.com/drj11/pypng/-/blob/pypng-0.20220715.0/code/png.py?ref_type=tags#L185
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/6477656971 (TestPythonPy3Qrcode)
+> 
+> Cc: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-[1] https://gitlab.com/drj11/pypng/-/blob/pypng-0.20220715.0/code/png.py?ref_type=tags#L185
+Applied to master, thanks.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/6477656971 (TestPythonPy3Qrcode)
+Regards,
+Yann E. MORIN.
 
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-pypng/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> ---
+>  package/python-pypng/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/python-pypng/Config.in b/package/python-pypng/Config.in
+> index c1ed405615..952b46c2c5 100644
+> --- a/package/python-pypng/Config.in
+> +++ b/package/python-pypng/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_PYPNG
+>  	bool "python-pypng"
+> +	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
+>  	help
+>  	  Pure Python library for saving and loading PNG images.
+>  
+> -- 
+> 2.44.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/python-pypng/Config.in b/package/python-pypng/Config.in
-index c1ed405615..952b46c2c5 100644
---- a/package/python-pypng/Config.in
-+++ b/package/python-pypng/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYPNG
- 	bool "python-pypng"
-+	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	help
- 	  Pure Python library for saving and loading PNG images.
- 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
