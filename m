@@ -1,81 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56D1EC4345F
-	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 13:48:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4680BC4345F
+	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 14:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2226F405EE;
-	Thu, 11 Apr 2024 13:48:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6252605C3;
+	Thu, 11 Apr 2024 14:56:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PaKM2ZOHWgRq; Thu, 11 Apr 2024 14:56:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A05AD606BD
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A05AD606BD;
+	Thu, 11 Apr 2024 14:56:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D0F531BF370
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 14:56:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDAD040201
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 14:56:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KBRkcrSZBxfk; Thu, 11 Apr 2024 13:48:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18B3A41959
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18B3A41959;
-	Thu, 11 Apr 2024 13:48:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 86B581BF3DB
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 13:48:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 80F6581354
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 13:48:28 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WNq67_LIZ4hb for <buildroot@lists.busybox.net>;
- Thu, 11 Apr 2024 13:48:27 +0000 (UTC)
-Received-SPF: Pass (sender SPF authorized) identity=helo;
- client-ip=2001:4b98:dc4:8::224; helo=relay4-d.mail.gandi.net;
- envelope-from=jeanmichel.hautbois@yoseli.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4B10381399
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B10381399
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4B10381399
- for <buildroot@buildroot.org>; Thu, 11 Apr 2024 13:48:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DD314E000A;
- Thu, 11 Apr 2024 13:48:24 +0000 (UTC)
-Message-ID: <4ce12a2a-17e5-483a-abdf-5d5cec085875@yoseli.org>
-Date: Thu, 11 Apr 2024 15:48:24 +0200
+ id EXdboSAydG4G for <buildroot@lists.busybox.net>;
+ Thu, 11 Apr 2024 14:56:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
+ envelope-from=ben.hutchings@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A41D040196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A41D040196
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
+ [IPv6:2a00:1450:4864:20::232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A41D040196
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 14:56:18 +0000 (UTC)
+Received: by mail-lj1-x232.google.com with SMTP id
+ 38308e7fff4ca-2d717603aa5so92228531fa.0
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 07:56:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712847376; x=1713452176;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=u5bnm6DScLyRYMTcYAaAXSVem3eBW/UxS2vWxL/ajl0=;
+ b=fXqUBIbOjF5D1UjC5ygOvWokIlNWe26fxeeFlsnMpNPA3cYa0gTFyE+JSC+9/GErsl
+ YOfYFpoxiXwvKzypQFJkRTVvd+tzCeLzzbNOrAb65/0eGVbPan8Ildyc7+T6gkSThaR8
+ HtZGUN32HGxjJR2V1X+ZlCvYvbKCdPkiqhvG05DLcbJMuaJQgCuGh9aJEu5rh74KCNtz
+ aars9eOCEA6dQnTCBOT3Vzx4TGBaNc51XJurMBQ0b89VBLse0HFTp3+chWi+Qzt432l4
+ vsGalbZX1QcLm5kgdz82J2cDWRMmAU0XG0c0Tmy2b2h3CtjSaMBiKnCczeJKgCg1Qnwa
+ 8aRw==
+X-Gm-Message-State: AOJu0YywklYyQrDJ9R3AzPjKR2g2gTfGu7BX85IkPVqLNQqopPswBflD
+ cOnzt1nF/k7KJIQToOFWUBL1yTuMgHH2aBj5fu1BGk1juBLlM/09Lm/nR2d5EQ8kIGMPcYvsib3
+ +63w=
+X-Google-Smtp-Source: AGHT+IGIUB7v5KbAJNqZxlhicvpTB7DhD9XZhE6DgjMEuX8W7r8cba2ILfSvRlG1jLdNkPmEhAfSQA==
+X-Received: by 2002:a2e:98c7:0:b0:2d8:dd28:8748 with SMTP id
+ s7-20020a2e98c7000000b002d8dd288748mr3228786ljj.1.1712847375892; 
+ Thu, 11 Apr 2024 07:56:15 -0700 (PDT)
+Received: from cephalopod.i.decadent.org.uk
+ (213.219.156.63.adsl.dyn.edpnet.net. [213.219.156.63])
+ by smtp.gmail.com with ESMTPSA id
+ n39-20020a05600c502700b00417e3695371sm1318335wmr.33.2024.04.11.07.56.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 11 Apr 2024 07:56:15 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Thu, 11 Apr 2024 16:55:58 +0200
+Message-Id: <20240411145559.1183064-1-ben.hutchings@mind.be>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20240410171211.1633127-1-jeanmichel.hautbois@yoseli.org>
- <20240410171211.1633127-2-jeanmichel.hautbois@yoseli.org>
- <20240410215656.1756a37e@windsurf>
- <f85e872c-8d99-4dcf-997e-95d3a382b463@yoseli.org>
- <20240410231711.084c9d7e@windsurf>
- <9b5aee40-4cdb-480c-bd9f-d1bcbe5c57a9@yoseli.org>
-Content-Language: en-US
-In-Reply-To: <9b5aee40-4cdb-480c-bd9f-d1bcbe5c57a9@yoseli.org>
-X-GND-Sasl: jeanmichel.hautbois@yoseli.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yoseli.org; s=gm1; t=1712843305;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=z/4fJ1oRFonhjAqX4xxAayJZLXF2b4qiguCKTfhKhUk=;
- b=e8/Jvp/L1OQdv9zovjoBI9mby2+sKSNDOeQZR0Bq5i7wN6E7tqDVsJipWbuzadnudSDYFS
- yDGXXBQKac5U/5xAi0iLa1sxNE6EF5D7dRjaRGGdll58EvlrglddimnCjkDK2pndpflvJ/
- u+9kQpWbQoL5zBga8Z71YGyIESBX1Ni8Aa2+yJ46vzcL4wVCDXV98ETwPTD2cUwCsHB3lJ
- JHfvTMKU6MGlVo5Wk1lwzhnRyrcRjF5+0FMbgH+sA8urKWxgkQUYoKtCubw1qiM3eYRUuX
- FAxgOSLZkKeJNK8TCBONcXn0XVBIGy93VPwardN9JpI1XBP6UaFoLNix+KI37A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=yoseli.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=yoseli.org header.i=@yoseli.org header.a=rsa-sha256
- header.s=gm1 header.b=e8/Jvp/L
-Subject: Re: [Buildroot] [PATCH v2 1/3] arch: add support for mcf5441x
- Colfdire
+ d=mind.be; s=google; t=1712847376; x=1713452176; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=u5bnm6DScLyRYMTcYAaAXSVem3eBW/UxS2vWxL/ajl0=;
+ b=HYFNTwMn9RhQdANBxPbCfvgNLoOr7cXdN29AOYmXcY0FD8759BsyAj6RovPtwmOOFN
+ kpcI3KScBGS7d0SiJt9oKXO4bczDUOW9BYsSowrXvZU0/8hoNzg4yB42TWCSdqac9j8/
+ gcVSFBJpjlg/j4+f1I+qOLSeoB8lOHAf4aJaO/0G2ixP2Pbw+H+mN+gsgILJ/+Ncperc
+ q/mLExoob+JuQGaPTKlzbxgDusm2KsQEa/vhjFvCNpekHBvUHiKGwEgOYu+avOtuMnks
+ 4G6ohMpqy+LkchNbE6AJ7Bm97Lq/tQogYIoW94Zo+uJf08HfZT0NdZcbRgNQUl0qV42u
+ tDuw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=HYFNTwMn
+Subject: [Buildroot] [PATCH] package/qt6/qt6base: Make qmake work
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,65 +100,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- yann.morin.1998@free.fr, buildroot@buildroot.org
+From: Ben Hutchings via buildroot <buildroot@buildroot.org>
+Reply-To: Ben Hutchings <ben.hutchings@mind.be>
+Cc: Ben Hutchings <ben.hutchings@mind.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Currently the qt6base package does not install a working qmake
+program, so applications can only be built with CMake.
 
-On 11/04/2024 07:59, Jean-Michel Hautbois wrote:
-> On 10/04/2024 23:17, Thomas Petazzoni via buildroot wrote:
->> On Wed, 10 Apr 2024 23:08:14 +0200
->> Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org> wrote:
->>
->>>> What happens when you don't specify -march? Do you know which of isaa,
->>>> isaaplus, isab and isac the MCF5441x corresponds to?
->>>
->>> I did not check what happens, but based on the following file it is 
->>> isac:
->>> https://github.com/gcc-mirror/gcc/blob/master/gcc/config/m68k/m68k-devices.def#L168
->>
->> And if you specify -mcpu instead, does it work? What doesn't work if
->> you omit -march?
-> 
-> If I change the line to pass isac, host-gcc-final doest not build at all:
-> <snip>
-> checking if mkdir takes one argument... no
-> Invalid --with-arch=isac
-> make[3]: *** [Makefile:4553: configure-gcc] Error 1
-> make[2]: *** [Makefile:1029: all] Error 2
-> make[1]: *** [package/pkg-generic.mk:283: 
-> /home/jm/Projects/wabtec/buildroot/output/build/host-gcc-final-12.3.0/.stamp_built] Error 2
-> 
-> As I am not as experimented as you with toolchains, I would certainly 
-> appreciate some guidance to debug if needed.
-> 
-> I can tell for sure that with "cf" and the 54455 family specified, it 
-> builds my applications ;-).
+To ease upgrades from Qt 5, make qmake work as well:
 
-Small update:
-I have to add the following patch in package/gcc/12.3.0 to make it use 
-the march="isac".
+- Create a linux-buildroot-g++ device spec, like we do for Qt 5.
 
-diff --git a/gcc/config.gcc b/gcc/config.gcc
-index 5c378c698ff..a6fe9c2ad53 100644
---- a/gcc/config.gcc
-+++ b/gcc/config.gcc
-@@ -4522,7 +4522,7 @@ case "${target}" in
-         fido-*-* | m68k*-*-*)
-                 supported_defaults="arch cpu"
-                 case "$with_arch" in
--               "" | "m68k"| "cf")
-+               "" | "m68k"| "cf" | "isac")
-                         m68k_arch_family="$with_arch"
-                         ;;
-                 *)
+- Fix the generated target_qt.conf file.  The Qt build system
+  currently generates this with the sysroot directory wrongly added in
+  various places.
 
-JM
+- Fix the qmake wrapper script in the sysroot to set the QMAKEPATH
+  environment variable.
+
+Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
+---
+ package/qt6/qt6base/qmake.conf.in     | 34 +++++++++++++++++++++++
+ package/qt6/qt6base/qplatformdefs.h   |  1 +
+ package/qt6/qt6base/qt6base.mk        | 39 +++++++++++++++++++++++++++
+ package/qt6/qt6base/target_qt.conf.in | 11 ++++++++
+ 4 files changed, 85 insertions(+)
+ create mode 100644 package/qt6/qt6base/qmake.conf.in
+ create mode 100644 package/qt6/qt6base/qplatformdefs.h
+ create mode 100644 package/qt6/qt6base/target_qt.conf.in
+
+diff --git a/package/qt6/qt6base/qmake.conf.in b/package/qt6/qt6base/qmake.conf.in
+new file mode 100644
+index 0000000000..b62a671c35
+--- /dev/null
++++ b/package/qt6/qt6base/qmake.conf.in
+@@ -0,0 +1,34 @@
++# Qt6 has a mechanism to support "device" profiles, so that people can
++# specify the compiler, compiler flags and so on for a specific device.
++
++# We leverage this mechanism in the Buildroot packaging of qt6 to
++# simplify cross-compilation: we have our own "device" definition, which
++# allows us to easily pass the cross-compiler paths and flags from our
++# qt6.mk.
++
++CROSS_COMPILE = @CROSS_COMPILE@
++
++include(../common/linux_device_pre.conf)
++
++# modifications to gcc-base.conf
++QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
++QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
++# Remove all optimisation flags, we really only want our own.
++QMAKE_CFLAGS_OPTIMIZE       =
++QMAKE_CFLAGS_OPTIMIZE_DEBUG =
++QMAKE_CFLAGS_OPTIMIZE_FULL  =
++QMAKE_CFLAGS_OPTIMIZE_SIZE  =
++QMAKE_CFLAGS_DEBUG =
++QMAKE_CXXFLAGS_DEBUG =
++QMAKE_CFLAGS_RELEASE =
++QMAKE_CXXFLAGS_RELEASE =
++CONFIG                 += nostrip
++
++QMAKE_LIBS             += -lrt -lpthread -ldl
++QMAKE_CFLAGS_ISYSTEM   =
++
++# Architecture specific configuration
++include(arch.conf)
++
++include(../common/linux_device_post.conf)
++load(qt_config)
+diff --git a/package/qt6/qt6base/qplatformdefs.h b/package/qt6/qt6base/qplatformdefs.h
+new file mode 100644
+index 0000000000..99e9a27923
+--- /dev/null
++++ b/package/qt6/qt6base/qplatformdefs.h
+@@ -0,0 +1 @@
++#include "../../linux-g++/qplatformdefs.h"
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 6857725ef5..049d73a84f 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -78,6 +78,45 @@ QT6BASE_CONF_OPTS += \
+ 	-DFEATURE_avx512vl=OFF \
+ 	-DFEATURE_vaes=OFF
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++define QT6BASE_MKSPEC_ARCH_CONFIG
++# Qt 6 needs atomics, which on various architectures are in -latomic
++	printf '!host_build { \n LIBS += -latomic\n }' > \
++		$(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++/arch.conf
++endef
++endif
++
++define QT6BASE_INSTALL_MKSPEC
++	mkdir -p $(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++
++	$(INSTALL) -m 0644 $(QT6BASE_PKGDIR)/qplatformdefs.h \
++		$(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++/
++	sed 's%@CROSS_COMPILE@%$(TARGET_CROSS)%' \
++		< $(QT6BASE_PKGDIR)/qmake.conf.in \
++		> $(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++/qmake.conf
++	touch $(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++/arch.conf
++	$(QT6BASE_MKSPEC_ARCH_CONFIG)
++endef
++
++# The generated broken target_qt.conf is broken, so replace it
++define QT6BASE_INSTALL_TARGET_QT_CONF
++	sed 's%@HOST_DIR@%$(HOST_DIR)%; s%@SYSROOT@%$(STAGING_DIR)%' \
++		< $(QT6BASE_PKGDIR)/target_qt.conf.in \
++		> $(STAGING_DIR)/usr/bin/target_qt.conf
++endef
++
++# The qmake wrapper script doesn't set QMAKEPATH, so qmake doesn't
++# find specs and modules installed for the target
++define QT6BASE_FIX_QMAKE_SCRIPT
++	sed -i '1a\
++export QMAKEPATH=$(STAGING_DIR)/usr' \
++		$(STAGING_DIR)/usr/bin/qmake
++endef
++
++QT6BASE_POST_INSTALL_STAGING_HOOKS += \
++	QT6BASE_INSTALL_MKSPEC \
++	QT6BASE_INSTALL_TARGET_QT_CONF \
++	QT6BASE_FIX_QMAKE_SCRIPT
++
+ HOST_QT6BASE_DEPENDENCIES = \
+ 	host-double-conversion \
+ 	host-libb2 \
+diff --git a/package/qt6/qt6base/target_qt.conf.in b/package/qt6/qt6base/target_qt.conf.in
+new file mode 100644
+index 0000000000..5702970c47
+--- /dev/null
++++ b/package/qt6/qt6base/target_qt.conf.in
+@@ -0,0 +1,11 @@
++[Paths]
++Prefix=/usr
++HostPrefix=@HOST_DIR@
++HostBinaries=bin
++HostLibraries=lib
++HostLibraryExecutables=libexec
++HostData=.
++Sysroot=@SYSROOT@
++SysrootifyPrefix=true
++TargetSpec=devices/linux-buildroot-g++
++HostSpec=
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
