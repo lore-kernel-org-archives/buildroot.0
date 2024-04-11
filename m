@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C6EC4345F
-	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 17:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90C51C4345F
+	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 17:43:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53B18605C8;
-	Thu, 11 Apr 2024 17:39:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56FFF605FC;
+	Thu, 11 Apr 2024 17:43:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0-AqLCYpq0nb; Thu, 11 Apr 2024 17:39:06 +0000 (UTC)
+ id URQjqYzijlHK; Thu, 11 Apr 2024 17:43:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57425605FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CE8260619
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57425605FB;
-	Thu, 11 Apr 2024 17:39:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D2C8C1BF3FC
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 17:39:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CE8260619;
+	Thu, 11 Apr 2024 17:43:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CA101BF3FC
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 17:43:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE14080C66
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 17:39:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED43F60619
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 17:43:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ug3V_jkXwKed for <buildroot@lists.busybox.net>;
- Thu, 11 Apr 2024 17:39:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mGFEp4wrvlFr for <buildroot@lists.busybox.net>;
+ Thu, 11 Apr 2024 17:43:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 968C680C46
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 968C680C46
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 968C680C46
- for <buildroot@buildroot.org>; Thu, 11 Apr 2024 17:39:03 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-417d14c3426so706795e9.3
- for <buildroot@buildroot.org>; Thu, 11 Apr 2024 10:39:03 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DF6C7605FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF6C7605FC
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DF6C7605FC
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 17:43:33 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-417f52738fdso103785e9.1
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 10:43:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712857141; x=1713461941;
+ d=1e100.net; s=20230601; t=1712857411; x=1713462211;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pLFuAb8WRGS73cc+zzSzQRzTK5ZCI+/3seAIQjYzn1A=;
- b=chfkHifMHJGV+oC0Wd6XPfZAbOzsCSB1wYOy/HHaHbrch0kSCb0vKcH4wvAJW25GyK
- ygv/dVoCsnkEddAiIoImjM/uD3jlZ/ULOT0qHW8eN0j4bgeSQ5Xo+WdVUxn8JVwYXtEs
- GSxC4EE/CR4VBWscj1bXPWwtuMAtdyg/eGHcZYDjRGcZ6JPQtbfK/oiyJokivgUkzmSo
- l3eeqpTUdL2NooAuuIUTsotakoop9gzJP3XvpBlJ8A0aQPdA/0DPUKPalD/xgTcKwdew
- ntFLGbOy3/F1TpwnxXvkKPx3xHwQEzXRtCzZVawTDY+wJYl20W49nTS/LZ0P9DyIuTHm
- NYdg==
-X-Gm-Message-State: AOJu0YyREBpiMNT/sExyn74nzGXgPgbmZNnj8mDji18cqOwnCrdEp4Wb
- +p8Pth+FNJnZPzxJFxOoHHuAwxYcF/Efrn+CMipgJZAd4LzBMPbWus1WxobC
-X-Google-Smtp-Source: AGHT+IGHsyJe3kjKXcLHc6e485ROH1I99MstLMU+NhuZgw/r65QvPR79szoh91mwacBdv69baPimng==
-X-Received: by 2002:a05:600c:3482:b0:417:bbb3:ce4a with SMTP id
- a2-20020a05600c348200b00417bbb3ce4amr321435wmq.37.1712857141012; 
- Thu, 11 Apr 2024 10:39:01 -0700 (PDT)
+ bh=FTUsou87mhWJgZwmLPG+OzmWU5okwYKLRGdjhn2V8l0=;
+ b=IYGlR+QHfhzNa2PpzrGSIj1mjnEACZ0R60L+Wr6PHH/2kbih4nWeusWcy6jmim0SkY
+ 1BhYlT2xB+NCgOQ9552VmwHXmc1uR0jqdKTsb5cc+OgKqgP5Mu7prYkCsckTPCZ+nqri
+ BhqH8iOgKfehx1Fb9SEXhNYoSnrvXzem60hTpaJsFH9tMuYVXOi2sikYHTQPInKVmflX
+ S3pkvOjgzgBxsbCURJ++SZXFSZnnxRjF2rs5bD5JZAe6DNZ7Uzw+P1XyMYEGZXh5SKo1
+ Hz9K0RkcpT0R7v0HfZhlG9uPX0CXtEPaPmWyFZTC7SP4OH0VhHh3sFlc6gnRS3LKvIN+
+ Thqw==
+X-Gm-Message-State: AOJu0YxtiowTW7E65O4BL8xXDWv8gGn+XJ9uvuQvWGCMhfSI799ybLtr
+ Rux5kAohqY98W9JK+Z6G3sY0rgXVVLMtlzxJpJVmLK9VpttZeZ1tkUZLxtmr
+X-Google-Smtp-Source: AGHT+IFkcO8uqjTtgpPI2kHiGBJgJA8GLNx/4qkUX2bcImRatNA/Lm3M0WB1eDKUEssqHtJg7jrmsw==
+X-Received: by 2002:a05:600c:5114:b0:416:605b:584d with SMTP id
+ o20-20020a05600c511400b00416605b584dmr374882wms.3.1712857410897; 
+ Thu, 11 Apr 2024 10:43:30 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- k23-20020a05600c1c9700b0041469869d11sm6129384wms.47.2024.04.11.10.39.00
+ gw7-20020a05600c850700b004146e58cc35sm6268686wmb.46.2024.04.11.10.43.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Apr 2024 10:39:00 -0700 (PDT)
+ Thu, 11 Apr 2024 10:43:30 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Apr 2024 19:38:55 +0200
-Message-ID: <20240411173855.583816-1-fontaine.fabrice@gmail.com>
+Date: Thu, 11 Apr 2024 19:43:28 +0200
+Message-ID: <20240411174328.586338-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712857141; x=1713461941; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1712857411; x=1713462211; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pLFuAb8WRGS73cc+zzSzQRzTK5ZCI+/3seAIQjYzn1A=;
- b=drwCaFL0dgT+WjyiC2izQTjXjBMiAMYJ2GxEjbkwm2b8iu6y/THLCA4WaXW0aL5BwH
- bFPD4B00xCqvjZYqTw4EfUpqNDgWPCTD6wOvMmk/XeRiuu6GUcNjy6KmXmUV4JCd8uex
- MyJcCrCjT/dJXom/COPnZMDTm1Lzbz/f8kcbqmA8aXCoYR5XBysG9ObaUJD1lNWrgZ1k
- wxqwe4rGUwR7aK1JakXH8exKAIYtq3rjixCxnWqIjk9qjMWQwctia4rhV6uqWpohaqGI
- ehHoReinXxYlmWA+xqj8N9Tp06u66zC25UGcPlJoNRWi1umsFnCvR51SrgK9tJxePRh+
- 6qAw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=FTUsou87mhWJgZwmLPG+OzmWU5okwYKLRGdjhn2V8l0=;
+ b=h5KeAgrWHX3GfIsASOEUODnvM43S5It5uVkcTHhXkmZG0CrGPDEHvgRzxyZKNpvx/i
+ xjYIBVYMEOKZ34AOmWCmtVLvzVB/QGoX+Zuk+d8oUOKJZXLreSJgVLa7T5uXPyzspzEl
+ 51SbFadbtXtx8p0xH90G/yQETo7cT9Cm68oT78MDwB+519DGRIyq8DQ0wtBygkAgcSR5
+ ytqN3uAXJPhjKYnfEgtqXzuUo1802hN/WH0LsDFhV0I8hSJZhbE/tHA7y6HR1t4yi5h1
+ GZt/RxPXUqMQCUL0fMJ/TMGkG8O37c9G74KyQJEVB4Ct7MYWN/jJ48Vxdfh6oUxeJ180
+ imsQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=drwCaFL0
-Subject: [Buildroot] [PATCH 1/1] package/glog: needs gcc >= 6
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=h5KeAgrW
+Subject: [Buildroot] [PATCH 1/1] package/ti-sgx-km: needs BR2_ARM_EABIHF
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,77 +100,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Lothar Felten <lothar.felten@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-C++14 is mandatory since bump to version 0.7.0 in commit
-2e9f161d4a7a68a041860e5855e98bee9d3a1498 and
-https://github.com/google/glog/commit/674283420118bb919f83ceb3d9dee31ef43ff3aa
-and
-https://github.com/google/glog/commit/42a185cd888439d500a35191cd31a605b7c5bd20
-resulting in the following build failure with gcc 5:
+ti-sgx-km raises the following build failure without BR2_ARM_EABIHF:
 
-In file included from /home/buildroot/autobuild/run/instance-2/output-1/build/glog-0.7.0/src/demangle.cc:43:0:
-/home/buildroot/autobuild/run/instance-2/output-1/build/glog-0.7.0/src/utilities.h:210:22: error: enclosing class of constexpr non-static member function 'google::glog_internal_namespace_::FileDescriptor::operator bool() const' is not a literal type
-   constexpr explicit operator bool() const noexcept {
-                      ^
+eurasiacon/build/linux2/toplevel.mk:230: eurasiacon/build/linux2/moduledefs/target_armel.mk: No such file or directory
 
-Fixes: 2e9f161d4a7a68a041860e5855e98bee9d3a1498
- - http://autobuild.buildroot.org/results/8d5e105283ead1057545b46726385f4ba4dff29e
+Fixes:
+ - http://autobuild.buildroot.org/results/17e4da346d062570b9a84ab8eb1ce93c6d7384be
+ - http://autobuild.buildroot.org/results/04fd659472f1928c2621354bb0ea3b60c5dfadec
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/glog/Config.in            | 6 ++++--
- package/opencv4-contrib/Config.in | 4 ++++
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/ti-sgx-km/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glog/Config.in b/package/glog/Config.in
-index bbdd1e2151..85873f02f0 100644
---- a/package/glog/Config.in
-+++ b/package/glog/Config.in
-@@ -2,11 +2,13 @@ config BR2_PACKAGE_GLOG
- 	bool "glog"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
+diff --git a/package/ti-sgx-km/Config.in b/package/ti-sgx-km/Config.in
+index 964889ff40..3e8a41b755 100644
+--- a/package/ti-sgx-km/Config.in
++++ b/package/ti-sgx-km/Config.in
+@@ -1,10 +1,10 @@
+ comment "ti-sgx-km needs a Linux kernel to be built"
+-	depends on BR2_arm
++	depends on BR2_ARM_EABIHF
+ 	depends on !BR2_LINUX_KERNEL
+ 
+ config BR2_PACKAGE_TI_SGX_KM
+ 	bool "ti-sgx-km"
+-	depends on BR2_LINUX_KERNEL && BR2_arm
++	depends on BR2_LINUX_KERNEL && BR2_ARM_EABIHF
+ 	select BR2_LINUX_NEEDS_MODULES
  	help
- 	  C++ implementation of the Google logging module
- 
- 	  https://github.com/google/glog
- 
--comment "glog needs a toolchain w/ C++, threads"
-+comment "glog needs a toolchain w/ C++, threads, gcc >= 6"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_6
-diff --git a/package/opencv4-contrib/Config.in b/package/opencv4-contrib/Config.in
-index 261d414869..d992c6d1ac 100644
---- a/package/opencv4-contrib/Config.in
-+++ b/package/opencv4-contrib/Config.in
-@@ -251,6 +251,7 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SALIENCY
- 
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM
- 	bool "sfm"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # glog
- 	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV4_LIB_IMGCODECS
- 	select BR2_PACKAGE_EIGEN
-@@ -261,6 +262,9 @@ config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SFM
- 	  to perform 3d reconstruction from 2d images. The core of
- 	  the module is a light version of Libmv.
- 
-+comment "sfm needs a toolchain w/ gcc >= 6"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+
- config BR2_PACKAGE_OPENCV4_CONTRIB_LIB_SHAPE
- 	bool "shape"
- 	help
+ 	  Kernel modules for TI CPUs with SGX GPU.
 -- 
 2.43.0
 
