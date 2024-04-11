@@ -4,91 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90C51C4345F
-	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 17:43:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01B96C4345F
+	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 17:44:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56FFF605FC;
-	Thu, 11 Apr 2024 17:43:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C120F60801;
+	Thu, 11 Apr 2024 17:44:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id URQjqYzijlHK; Thu, 11 Apr 2024 17:43:36 +0000 (UTC)
+ id 2LAT94CjQesB; Thu, 11 Apr 2024 17:44:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CE8260619
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9AAD60844
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CE8260619;
-	Thu, 11 Apr 2024 17:43:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0CA101BF3FC
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 17:43:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9AAD60844;
+	Thu, 11 Apr 2024 17:44:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B8871BF3FC
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 17:44:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED43F60619
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 17:43:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 387A040196
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 17:44:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mGFEp4wrvlFr for <buildroot@lists.busybox.net>;
- Thu, 11 Apr 2024 17:43:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DF6C7605FC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF6C7605FC
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DF6C7605FC
- for <buildroot@buildroot.org>; Thu, 11 Apr 2024 17:43:33 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-417f52738fdso103785e9.1
- for <buildroot@buildroot.org>; Thu, 11 Apr 2024 10:43:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712857411; x=1713462211;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=FTUsou87mhWJgZwmLPG+OzmWU5okwYKLRGdjhn2V8l0=;
- b=IYGlR+QHfhzNa2PpzrGSIj1mjnEACZ0R60L+Wr6PHH/2kbih4nWeusWcy6jmim0SkY
- 1BhYlT2xB+NCgOQ9552VmwHXmc1uR0jqdKTsb5cc+OgKqgP5Mu7prYkCsckTPCZ+nqri
- BhqH8iOgKfehx1Fb9SEXhNYoSnrvXzem60hTpaJsFH9tMuYVXOi2sikYHTQPInKVmflX
- S3pkvOjgzgBxsbCURJ++SZXFSZnnxRjF2rs5bD5JZAe6DNZ7Uzw+P1XyMYEGZXh5SKo1
- Hz9K0RkcpT0R7v0HfZhlG9uPX0CXtEPaPmWyFZTC7SP4OH0VhHh3sFlc6gnRS3LKvIN+
- Thqw==
-X-Gm-Message-State: AOJu0YxtiowTW7E65O4BL8xXDWv8gGn+XJ9uvuQvWGCMhfSI799ybLtr
- Rux5kAohqY98W9JK+Z6G3sY0rgXVVLMtlzxJpJVmLK9VpttZeZ1tkUZLxtmr
-X-Google-Smtp-Source: AGHT+IFkcO8uqjTtgpPI2kHiGBJgJA8GLNx/4qkUX2bcImRatNA/Lm3M0WB1eDKUEssqHtJg7jrmsw==
-X-Received: by 2002:a05:600c:5114:b0:416:605b:584d with SMTP id
- o20-20020a05600c511400b00416605b584dmr374882wms.3.1712857410897; 
- Thu, 11 Apr 2024 10:43:30 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- gw7-20020a05600c850700b004146e58cc35sm6268686wmb.46.2024.04.11.10.43.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Apr 2024 10:43:30 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o7dZPQglc9Ve for <buildroot@lists.busybox.net>;
+ Thu, 11 Apr 2024 17:44:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 17FAC4011A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17FAC4011A
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 17FAC4011A
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 17:44:37 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1be10.dip0.t-ipconnect.de [84.161.190.16])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 271E9A4C0EDA
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 19:44:36 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48060)
+ by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
+ (envelope-from <bernd@kuhls.net>) id 1ruyTT-000000002Ll-2QCY
+ for buildroot@buildroot.org; Thu, 11 Apr 2024 17:44:35 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 11 Apr 2024 19:43:28 +0200
-Message-ID: <20240411174328.586338-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Thu, 11 Apr 2024 19:44:34 +0200
+Message-Id: <20240411174435.2499446-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712857411; x=1713462211; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FTUsou87mhWJgZwmLPG+OzmWU5okwYKLRGdjhn2V8l0=;
- b=h5KeAgrWHX3GfIsASOEUODnvM43S5It5uVkcTHhXkmZG0CrGPDEHvgRzxyZKNpvx/i
- xjYIBVYMEOKZ34AOmWCmtVLvzVB/QGoX+Zuk+d8oUOKJZXLreSJgVLa7T5uXPyzspzEl
- 51SbFadbtXtx8p0xH90G/yQETo7cT9Cm68oT78MDwB+519DGRIyq8DQ0wtBygkAgcSR5
- ytqN3uAXJPhjKYnfEgtqXzuUo1802hN/WH0LsDFhV0I8hSJZhbE/tHA7y6HR1t4yi5h1
- GZt/RxPXUqMQCUL0fMJ/TMGkG8O37c9G74KyQJEVB4Ct7MYWN/jJ48Vxdfh6oUxeJ180
- imsQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202312101026; t=1712857476;
+ bh=Ez1mImxbdPaa/m7/D/nLTimsQW9WLCeVKs0JBgrBCF4=;
+ h=From:To:Subject:Date:From;
+ b=lgiemkV9dJD/FCO2o0hwhEWaIGUB9BZ+9zg8uhd3HS7rdH+7H0VAzQxuxqH2lrmOs
+ Zmlq6iuJt6OiM/LHKQ4Hkhy3gPSa30Vl8lJLU8+Zy3GWCGxk/G90+p8QdhIdRilqd2
+ TrB/5jfr/w+qyW1DGKuwZTwJPPlNYqcIRrHwmX7i64GXxNUA++ft1XgnVJ6dGSHmdo
+ zxoBFJeshKZEgQP5qBGTVYaOyvA+OmR4eNQiuM0dybOVvRSnwrZNRnPnnITXw5McZ6
+ kjsgjltgrTmzffbX7cHc2lsZIMW73Mzov+mVh5zoR2U+WKTL86qE5yqUtzt4dn3HEv
+ PskWfgxC+mwRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=h5KeAgrW
-Subject: [Buildroot] [PATCH 1/1] package/ti-sgx-km: needs BR2_ARM_EABIHF
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202312101026 header.b=lgiemkV9
+Subject: [Buildroot] [PATCH 1/2] {linux, linux-headers}: bump 4.19.x / 5.{4,
+ 10, 15}.x / 6.{1, 6, 7, 8}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,45 +81,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Lothar Felten <lothar.felten@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ti-sgx-km raises the following build failure without BR2_ARM_EABIHF:
-
-eurasiacon/build/linux2/toplevel.mk:230: eurasiacon/build/linux2/moduledefs/target_armel.mk: No such file or directory
-
-Fixes:
- - http://autobuild.buildroot.org/results/17e4da346d062570b9a84ab8eb1ce93c6d7384be
- - http://autobuild.buildroot.org/results/04fd659472f1928c2621354bb0ea3b60c5dfadec
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ti-sgx-km/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 16 ++++++++--------
+ package/linux-headers/Config.in.host | 16 ++++++++--------
+ 3 files changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/package/ti-sgx-km/Config.in b/package/ti-sgx-km/Config.in
-index 964889ff40..3e8a41b755 100644
---- a/package/ti-sgx-km/Config.in
-+++ b/package/ti-sgx-km/Config.in
-@@ -1,10 +1,10 @@
- comment "ti-sgx-km needs a Linux kernel to be built"
--	depends on BR2_arm
-+	depends on BR2_ARM_EABIHF
- 	depends on !BR2_LINUX_KERNEL
+diff --git a/linux/Config.in b/linux/Config.in
+index 2767b709d4..c19ad6a3f8 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- config BR2_PACKAGE_TI_SGX_KM
- 	bool "ti-sgx-km"
--	depends on BR2_LINUX_KERNEL && BR2_arm
-+	depends on BR2_LINUX_KERNEL && BR2_ARM_EABIHF
- 	select BR2_LINUX_NEEDS_MODULES
- 	help
- 	  Kernel modules for TI CPUs with SGX GPU.
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.8.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.8.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 4fa9f701cd..e382ba48e7 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,14 +1,14 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  8d0c8936e3140a0fbdf511ad7a9f21121598f3656743898f47bb9052d37cff68  linux-6.8.1.tar.xz
+-sha256  a9b99fb376f9fcd699c7c252aeef3bb5ba26280eb049711ac091b2eb2b487c03  linux-6.7.10.tar.xz
+-sha256  23e3e7b56407250f5411bdab95763d0bc4e3a19dfa431d951df7eacabd61a2f4  linux-6.6.22.tar.xz
+-sha256  d150d2d9d416877668d8b56f75759f166168d192419eefaa942ed67225cbec06  linux-6.1.82.tar.xz
++sha256  138923e5d73748b4bdbe9b5a0b8f36dfac9fcc16753a9222928dc6c963effa89  linux-6.8.5.tar.xz
++sha256  6c2979e3948806a0dbacba193f8453ea42c179c1eb9f6136e3c35d87e5707984  linux-6.7.12.tar.xz
++sha256  af54b449f4fb93b8e8daa346144a7309e8e95174bd962c4b5917cf56120456d9  linux-6.6.26.tar.xz
++sha256  33fe9bcc597c60021a2b2abacd4e0f6f546200ab99594c9a07ad600258b86274  linux-6.1.85.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  f0805225f4a5b24d0bba9302c2c2f261c04f737ac5dd931da9b112e9f3e4a47e  linux-5.15.152.tar.xz
+-sha256  84cf30223239ec3333a5f7b2a7fba2042bba70d1582a139f7543956af871ad80  linux-5.10.213.tar.xz
+-sha256  3599d5959a403e64be407d7f05e56cb270d6ddd154e89a596609919ab1e2e366  linux-5.4.272.tar.xz
++sha256  17f85ea79ff2bcd2a577be9d8090e70573a671eaf1d35d897e739ce0603d0698  linux-5.15.154.tar.xz
++sha256  40f014d53e81f204f6d2a364aae4201ae07970dd1b70dc602d7c66c1a140f558  linux-5.10.214.tar.xz
++sha256  8ba0cfd3faa7222542b30791def49f426d7b50a07217366ead655a5687534743  linux-5.4.273.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  95ec94c4ab8f46d8a54430893f9bd653c46b0f1587d216818aa8f52fd313de69  linux-4.19.310.tar.xz
++sha256  260b387525514ef705817adaaa0cdd0fadec80ba2f22f8251f8e7de5d9e0bc81  linux-4.19.311.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4c3651450e..0091afd39c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -419,14 +419,14 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.19.310"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.272"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.213"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.152"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.82"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.22"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.7.10"	if BR2_KERNEL_HEADERS_6_7
+-	default "6.8.1"		if BR2_KERNEL_HEADERS_6_8
++	default "4.19.311"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.273"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.214"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.154"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.85"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.26"	if BR2_KERNEL_HEADERS_6_6
++	default "6.7.12"	if BR2_KERNEL_HEADERS_6_7
++	default "6.8.5"		if BR2_KERNEL_HEADERS_6_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.43.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
