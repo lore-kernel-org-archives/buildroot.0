@@ -1,69 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5378C4345F
-	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 21:39:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36FDFC4345F
+	for <buildroot@archiver.kernel.org>; Thu, 11 Apr 2024 22:52:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86CC681272;
-	Thu, 11 Apr 2024 21:39:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4176606CB;
+	Thu, 11 Apr 2024 22:52:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OOByTTKiJnTB; Thu, 11 Apr 2024 21:39:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id glCB2yMaGcPJ; Thu, 11 Apr 2024 22:52:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83E70812FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F40D0606F5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83E70812FA;
-	Thu, 11 Apr 2024 21:39:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F40D0606F5;
+	Thu, 11 Apr 2024 22:52:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EB8321BF393
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 21:39:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D7F821BF3DE
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 22:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D8638404E7
- for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 21:39:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D0AA541F2E
+ for <buildroot@lists.busybox.net>; Thu, 11 Apr 2024 22:52:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L3F-QSutTmCS for <buildroot@lists.busybox.net>;
- Thu, 11 Apr 2024 21:39:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9DB364049A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DB364049A
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9DB364049A
- for <buildroot@buildroot.org>; Thu, 11 Apr 2024 21:39:49 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 8B58CB0051B;
- Thu, 11 Apr 2024 23:39:45 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 11 Apr 2024 23:39:40 +0200
-Message-ID: <20240411213940.91282-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.44.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1712871586;
- bh=hZIn/AKcxTS0erEhuf5vRJE+dbQaGB1XSm1EfB4FRsQ=;
- h=From:To:Cc:Subject:Date:From;
- b=p+EMPc7ckAY4wWMUmVspQm2SV6xCgaHx+2PcRYXDHounU6U8nBN+eTXk7ul9H1JLx
- Au7YEFv25j40L8LKrRWDKDDUcRql/0CuAj+NVFBukbVu9VoSOiXo/bvIf9zN+mHred
- podU2HRL//2C0K2N+CEfqnr21a3lZfBzLPZyN9KMzm8Lmy7vj5NABkyweyo5vsXsW4
- 2vUPgjd7iGNOmlnzdfbivJ+uH5UNuCfcwxPrYFT3qlouzg497CDKyKtSG/kkBJZ757
- v2fI8i/bztqsEE5rCNSpzMg9FqfTtkSf7gxhKccqR/jpQ9zDS6dWequhAgdsBlooml
- KrlvHwzI0mHTA==
+ id 9IIMEPIGr25I for <buildroot@lists.busybox.net>;
+ Thu, 11 Apr 2024 22:52:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=matt.stav.taylor@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 30C5141EB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30C5141EB8
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 30C5141EB8
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 22:52:01 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-416c4767ae6so2680455e9.3
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 15:52:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1712875919; x=1713480719;
+ h=in-reply-to:references:to:from:subject:cc:message-id:date
+ :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=A6ImAYotI5e14HGcHTyb2mphhl0f40LkOPgHk5xXwPM=;
+ b=PVxoBqb8r/bPjMv/QrS3tYIJu8LCklddgsYP28bMEWcYsP52Cfe/WyG/U0DjWJ+r/b
+ dEIEuo1HVJZCRf3FlsFZq+2/iijPsDcqUcd3gMe8ngocgm9uvqUR04auMOhZlQG9vlK8
+ U2acQ+j45iuNvq4rwzbP27fjSPxPlALZROIIoc0+g7yNnxhYcwIk8iBCuMemjGC32L+f
+ LF08z0WoETrUONYQdudmTRbgqyVUleIph2gNEoYCOq2pvjJYDFwyihCAdD7yuRdZmbCZ
+ gAIOhnv09+XtIabWqQc4v0dSgWbr2faTAaMsxUsDRLiXa0ltHquWmjwvHXszHgJBb4ty
+ 95hQ==
+X-Gm-Message-State: AOJu0YyomQM7jDbL0AqCugd/cXQ2kbVab+DKNJpbxuwNvg4BvdLzfbbh
+ cibZGHEQNBOyyIuqCYjVZ9Vpq/GXKGxqoiHOdAOe5Ol19JAj9WKJ
+X-Google-Smtp-Source: AGHT+IHjxycwUCO0rbMpMZsZc3aIBd1E/1DsWoKR8HeQF5CUX//VEJMyYqDR8GyZSF7quq7M6eBq/g==
+X-Received: by 2002:a05:600c:4f01:b0:416:97b2:aa58 with SMTP id
+ l1-20020a05600c4f0100b0041697b2aa58mr696086wmq.20.1712875918756; 
+ Thu, 11 Apr 2024 15:51:58 -0700 (PDT)
+Received: from localhost ([2a00:23c4:b436:9101:9ba4:f365:9eb6:5e88])
+ by smtp.gmail.com with ESMTPSA id
+ a21-20020a05600c349500b0041680911b0fsm6894089wmq.30.2024.04.11.15.51.57
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 11 Apr 2024 15:51:58 -0700 (PDT)
+Mime-Version: 1.0
+Date: Thu, 11 Apr 2024 23:51:57 +0100
+Message-Id: <D0HNU5GTK85W.1677VO1E2EDIS@gmail.com>
+From: "Matt Staveley-Taylor" <matt.stav.taylor@gmail.com>
+To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+X-Mailer: aerc 0.15.2
+References: <20240408013859.732937-1-matt.stav.taylor@gmail.com>
+ <20240408225410.6a8ba988@windsurf> <D0FYEL09CD80.1UJQPUQZNKEPS@gmail.com>
+ <20240410113043.419ef54b@windsurf> <D0GWMG6HYQAC.1IJW02HTVHSQB@gmail.com>
+ <20240411144804.03fed97d@windsurf>
+In-Reply-To: <20240411144804.03fed97d@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1712875919; x=1713480719; darn=buildroot.org;
+ h=in-reply-to:references:to:from:subject:cc:message-id:date
+ :content-transfer-encoding:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=A6ImAYotI5e14HGcHTyb2mphhl0f40LkOPgHk5xXwPM=;
+ b=Y5AjC/TBav/IJZt/lD/WKk8qfvtITu9l9dxe0758/nv+5GPMcq/i3MFBDNTPjuDZLr
+ 6W5cZ57Lw2u3xnu9LUqQh+2FUdWbNKZYFpZHg0+4Zd07gz+omK2O6W5um+rs4XjI+rvl
+ O3vUOirt0o6/OlGN5RCu61W+DJz7MCIjNalOGplQdxeNx3P0XPwdDO4seegvMMiDohpM
+ GFj8fHuk2sxcuTZaJY/I8xGC10+P62LWaE2DzQa2/786q3veOFFREWwmz3Oh8EwMB7iD
+ NfzJICOko6d28f8JzbPF2ACln9DaR+U+vXTQtdPCtvyPKkbdTtKhAbb5O1Sk4uU1h/i6
+ 2ZYw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=p+EMPc7c
-Subject: [Buildroot] [PATCH 1/1] support/testing: add links runtime test
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Y5AjC/TB
+Subject: Re: [Buildroot] [PATCH 0/2] Add bcachefs-tools package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,91 +106,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                    |  2 ++
- support/testing/tests/package/test_links.py   | 33 +++++++++++++++++++
- .../test_links/rootfs-overlay/root/file.html  |  9 +++++
- 3 files changed, 44 insertions(+)
- create mode 100644 support/testing/tests/package/test_links.py
- create mode 100644 support/testing/tests/package/test_links/rootfs-overlay/root/file.html
+On Thu Apr 11, 2024 at 1:48 PM BST, Thomas Petazzoni wrote:
+> It seems that
+> https://github.com/llvm/llvm-project/releases/tag/llvmorg-18.1.1 has
+> pre-built binaries, but not for the very common x86-64 linux host
+> platform, which seems odd? Apparently, those binaries are made by
+> volunteers. Not sure how much we want to use those binaries.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 399b2931ff3..9001632cfa3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1815,6 +1815,8 @@ F:	support/testing/tests/package/test_libcamera.py
- F:	support/testing/tests/package/test_libcamera/
- F:	support/testing/tests/package/test_libgpgme.py
- F:	support/testing/tests/package/test_libjxl.py
-+F:	support/testing/tests/package/test_links.py
-+F:	support/testing/tests/package/test_links/
- F:	support/testing/tests/package/test_lrzip.py
- F:	support/testing/tests/package/test_ltrace.py
- F:	support/testing/tests/package/test_lvm2.py
-diff --git a/support/testing/tests/package/test_links.py b/support/testing/tests/package/test_links.py
-new file mode 100644
-index 00000000000..ed52bb2d5fc
---- /dev/null
-+++ b/support/testing/tests/package/test_links.py
-@@ -0,0 +1,33 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestLinks(infra.basetest.BRTest):
-+    rootfs_overlay = \
-+        infra.filepath("tests/package/test_links/rootfs-overlay")
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        f"""
-+        BR2_PACKAGE_LINKS=y
-+        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        self.assertRunOk("links -version")
-+
-+        expected_str = "Hello Buildroot !"
-+        html_file = "/root/file.html"
-+        url = f"file://{html_file}"
-+
-+        cmd = f"links -dump {url}"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0].strip(), expected_str)
-diff --git a/support/testing/tests/package/test_links/rootfs-overlay/root/file.html b/support/testing/tests/package/test_links/rootfs-overlay/root/file.html
-new file mode 100644
-index 00000000000..65b33cb5a7d
---- /dev/null
-+++ b/support/testing/tests/package/test_links/rootfs-overlay/root/file.html
-@@ -0,0 +1,9 @@
-+<!DOCTYPE html>
-+<html lang="en">
-+  <head>
-+    <title>Buildroot Test Page</title>
-+  </head>
-+  <body>
-+    <p><b>Hello</b> <i>Buildroot</i> &excl;</p>
-+  </body>
-+</html>
--- 
-2.44.0
+Yeah, agreed. Perhaps there is some Buildroot infrastructure we can
+leverage for building these ourselves?
 
+Failing that -- is there actually a problem with merging the patch
+as-is? I can see a couple of other packages that already depend on
+host-clang.
+
+Matt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
