@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FC52C4345F
-	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 21:43:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED6B1C4345F
+	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 21:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A33D41C7E;
-	Fri, 12 Apr 2024 21:43:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B73AD41C8C;
+	Fri, 12 Apr 2024 21:43:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id arKP1w1HqKw3; Fri, 12 Apr 2024 21:43:54 +0000 (UTC)
+ id rnThJ0SprpRd; Fri, 12 Apr 2024 21:43:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8302641C51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73A8C41C82
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8302641C51;
-	Fri, 12 Apr 2024 21:43:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 555A71BF37B
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 21:43:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 73A8C41C82;
+	Fri, 12 Apr 2024 21:43:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E3481BF37B
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 21:43:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 416D9826F5
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 21:43:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3751241C4F
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 21:43:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P1k-Gd1qInSC for <buildroot@lists.busybox.net>;
- Fri, 12 Apr 2024 21:43:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FoaS0dTEJOIC for <buildroot@lists.busybox.net>;
+ Fri, 12 Apr 2024 21:43:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=ben.hutchings@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 75BD682702
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75BD682702
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 75BD682702
- for <buildroot@buildroot.org>; Fri, 12 Apr 2024 21:43:35 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-41802f985baso6365075e9.3
- for <buildroot@buildroot.org>; Fri, 12 Apr 2024 14:43:35 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4E23C41493
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E23C41493
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4E23C41493
+ for <buildroot@buildroot.org>; Fri, 12 Apr 2024 21:43:36 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-417f81ef284so7545925e9.3
+ for <buildroot@buildroot.org>; Fri, 12 Apr 2024 14:43:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712958213; x=1713563013;
+ d=1e100.net; s=20230601; t=1712958214; x=1713563014;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=qGotaBoaJPYmiiKPnvP14DgQ2PKiQDTYqhixJniCAbY=;
- b=dmBTPd1QC4uUlFiDwAzeGQdBQptHo/RwJkqY2P4RTkblC9B2bIDoIdP41m2z36GFg7
- zuFwkqKL9zMovbi36gnGP84uIWv8j9GChbqSVx7WAcYoRLSEckHhtHolrNv1z6HE1nUC
- rQEmPoA6m/ynT9g1VXE2xn+70QodsZZIj3EXJ2UmnzN4c/AAjmEHjEX7jRSDBeg/ectX
- jtGxg4u5o6Y8NSXuPAk8ZOpfdOwPgEuhRTIvUBObmxRXATCugz5Ke96joNRlXyKwsOvy
- IPguAMWUBunUxHxdoPFQHk5899EQnoV9uykpW7pzcKeamCFlicnLYXc2OsYQzHMEA5Ej
- hQig==
-X-Gm-Message-State: AOJu0YyNc4MZ5rOd0u3P00cC6lkZ/lUDUes4tLz+sPvPkgj4SRFAhmPT
- apwZuTVe5p1JyoWW1fygcpMF87rD//zLYdVjEqns3s4pMlVBqM4h0raLQijEWo1dJL8Wu22TsXs
- G0Ys=
-X-Google-Smtp-Source: AGHT+IEXJv5w52yNMoYjEMb2YaD3VQBfJW7PUBikUgshbhO5mVGHzK3I3P8jncNHfi7U1iUv0yg2yw==
-X-Received: by 2002:a05:600c:1994:b0:418:1f7a:e951 with SMTP id
- t20-20020a05600c199400b004181f7ae951mr160847wmq.15.1712958213356; 
- Fri, 12 Apr 2024 14:43:33 -0700 (PDT)
+ bh=iITBCy1uVWklHIMZDti+g/KFbqOh57OY1EhLNHZwaCY=;
+ b=U1KiLQK1WAY0OA0Vq8347jhofl8DiLQGLY51rTtx02O0M/kZJlGi1uzYLAgAB+oLsS
+ 9fkg5Jv+2nXeF2MNht70b6kU3BFHc/zyhAVejqHSm0y25kuMRDG8pxSVmKWpfjh6/xyF
+ EomlXyLhka5TiC+n/AoFPIfyq8JCqsU96lhBGjUcWWiodbEOGBB0EuAh2SAhhrzQ2+XM
+ MRrNOtwSDKVLR2UQgvYWUUucoL7oC52TF2jMYbB73UCFMqoBYRSrABbNHxdD4H0gzure
+ yKxQLY3FfeogND6NGFYs34zaQcN7CnehH/y/dFif9GyiR2CgeRX20rUUvE6JD98fq4hh
+ bgUA==
+X-Gm-Message-State: AOJu0YxsEWifdFMPTK5kGl/KrOkTEcf9VpDsfQY8AMU2ZZvbLuwNPcmu
+ HaphugSVR2RVrXLH6pVWqf/fDYRPlTZX1P4pY4vHF4CldDBq0qdIdMLambaM9o9qTx2k3k+8k4/
+ mvaE=
+X-Google-Smtp-Source: AGHT+IEyyr87IfqMWQUC6hxYMEh/rqmeLnQ9QLA5qnJO5+1QxHIO0jx5ONOP6vIV3JnQgeMUc1mmaQ==
+X-Received: by 2002:a05:600c:1c95:b0:416:9fc0:972d with SMTP id
+ k21-20020a05600c1c9500b004169fc0972dmr3121779wms.37.1712958214007; 
+ Fri, 12 Apr 2024 14:43:34 -0700 (PDT)
 Received: from cephalopod.i.decadent.org.uk
  (213.219.156.63.adsl.dyn.edpnet.net. [213.219.156.63])
  by smtp.gmail.com with ESMTPSA id
- l23-20020a05600c1d1700b004163ee3922csm10034597wms.38.2024.04.12.14.43.32
+ l23-20020a05600c1d1700b004163ee3922csm10034597wms.38.2024.04.12.14.43.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Apr 2024 14:43:32 -0700 (PDT)
+ Fri, 12 Apr 2024 14:43:33 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 12 Apr 2024 23:43:07 +0200
-Message-Id: <cbb92cca08b1e2cee69a63569b3c37cbe884a19c.1712957992.git.ben.hutchings@mind.be>
+Date: Fri, 12 Apr 2024 23:43:08 +0200
+Message-Id: <3c8dd9da9315d5ed33b43fdbfc5898573d966a84.1712957992.git.ben.hutchings@mind.be>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1712957992.git.ben.hutchings@mind.be>
 References: <cover.1712957992.git.ben.hutchings@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1712958213; x=1713563013; darn=buildroot.org;
+ d=mind.be; s=google; t=1712958214; x=1713563014; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qGotaBoaJPYmiiKPnvP14DgQ2PKiQDTYqhixJniCAbY=;
- b=N5LeReBCJon7cezv1xusnUd5vQBRO2TPH4Qi9i3GddrrwpERsyV+1CCNAJkqeax6d7
- UsGu249sOZfOYVNk4ijbVUXudsZcoY18/QRlgX3ZBuJFpqPr5eXVhTu6kzqrHfcTsg9G
- Qw8/rOCFfGG9/IpJ5MabOqihFdZ5j5Yyf4Acr5joAlv8GpwrS0Qjbh96Lx53YnJpnda/
- 7w6IMA8tDgoDavhbVmKf1UUD9Rot38uA6HCRHG8wnqkWkxVnJLZ/91diMopGZZzvBHNY
- a7DFHcoQsefr1sSvI87uH0JzLpfTZNbW/Ge/q+B0/fUD3VtLG+LgqVQK5lvOoD4iT+W9
- VY+Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=iITBCy1uVWklHIMZDti+g/KFbqOh57OY1EhLNHZwaCY=;
+ b=Xwd8QAP0J+J6gW6XiLxrIMNKeoE/JmXSFMKGn8ozNiUH7SGfozsHHisP8n2x0U8IAb
+ I15rWTUsK/7chLKIZnqNOoTt2pL55Ks/Hij1U1n3zsX43yTQ1zlsC7nN+quQyBGCeCgx
+ 4MgdXO2kFo5TyoQWqU1HapnDGuI+wxLZ8hr8rNmYRq+IpKFiiCRbAvswO1hLhm3hLsfz
+ y+HSWl7FgoOXAC2abJBQuTnqSAZhkdyT+7b4NmL9vU/Is9jSMVhSorqzXVuh+eO2bSP2
+ lNpVi1kP0BmGryBm4l8mjfPSktcyB6CHFSau+A2aBJhay26Kt3mcG95uqIysNVkAjA2H
+ XVNQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=N5LeReBC
-Subject: [Buildroot] [PATCH 3/6] package/libassuan: Add host package
+ header.a=rsa-sha256 header.s=google header.b=Xwd8QAP0
+Subject: [Buildroot] [PATCH 4/6] package/libgcrypt: Add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -116,25 +116,32 @@ selectable.
 
 Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
 ---
- package/libassuan/libassuan.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libgcrypt/libgcrypt.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
-index fb95a6fd67..d4800d698f 100644
---- a/package/libassuan/libassuan.mk
-+++ b/package/libassuan/libassuan.mk
-@@ -14,9 +14,14 @@ LIBASSUAN_DEPENDENCIES = libgpg-error
- LIBASSUAN_CONF_OPTS = \
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 2e4bf7448e..af342c6948 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -13,6 +13,7 @@ LIBGCRYPT_INSTALL_STAGING = YES
+ LIBGCRYPT_DEPENDENCIES = libgpg-error
+ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
+ LIBGCRYPT_CPE_ID_VENDOR = gnupg
++HOST_LIBGCRYPT_DEPENDENCIES = host-libgpg-error
+ 
+ # Patching configure.ac and Makefile.am in 0001
+ LIBGCRYPT_AUTORECONF = YES
+@@ -20,6 +21,8 @@ LIBGCRYPT_CONF_OPTS = \
+ 	--disable-tests \
+ 	$(if $(BR2_OPTIMIZE_0),--disable-ppc-crypto-support,) \
  	--with-gpg-error-prefix=$(STAGING_DIR)/usr
- LIBASSUAN_CONFIG_SCRIPTS = libassuan-config
-+HOST_LIBASSUAN_DEPENDENCIES = host-libgpg-error
-+HOST_LIBASSUAN_CONF_OPTS = \
++HOST_LIBGCRYPT_CONF_OPTS = \
 +	--with-gpg-error-prefix=$(HOST_DIR)
  
- # Force the path to "gpgrt-config" (from the libgpg-error package) to
- # avoid using the one on host, if present.
- LIBASSUAN_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
-+HOST_LIBASSUAN_CONF_ENV += GPGRT_CONFIG=$(HOST_DIR)/bin/gpgrt-config
+ # disable asm for broken archs
+ ifeq ($(BR2_i386)$(BR2_m68k_cf),y)
+@@ -32,3 +35,4 @@ LIBGCRYPT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+ endif
  
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
