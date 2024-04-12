@@ -4,90 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEA52C4345F
-	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 05:54:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F12BCC4345F
+	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 05:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9476C40305;
-	Fri, 12 Apr 2024 05:54:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE981405D9;
+	Fri, 12 Apr 2024 05:54:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ahaVN_l4mSny; Fri, 12 Apr 2024 05:54:18 +0000 (UTC)
+ id dIjtB33le-45; Fri, 12 Apr 2024 05:54:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E946540339
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A85BB4064F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E946540339;
-	Fri, 12 Apr 2024 05:54:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D93A1BF23C
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 05:54:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A85BB4064F;
+	Fri, 12 Apr 2024 05:54:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 45B381BF23C
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 05:54:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 691BF80E69
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 05:54:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 334DF40540
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 05:54:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SW_EY-Op1v92 for <buildroot@lists.busybox.net>;
- Fri, 12 Apr 2024 05:54:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XOMA34ackaVf for <buildroot@lists.busybox.net>;
+ Fri, 12 Apr 2024 05:54:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
+ client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
  envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 01F0B80E66
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01F0B80E66
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01F0B80E66
- for <buildroot@buildroot.org>; Fri, 12 Apr 2024 05:54:13 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id
- a640c23a62f3a-a46de423039so29177466b.0
- for <buildroot@buildroot.org>; Thu, 11 Apr 2024 22:54:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 27ED840446
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27ED840446
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 27ED840446
+ for <buildroot@buildroot.org>; Fri, 12 Apr 2024 05:54:18 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-56e1bbdb362so494092a12.1
+ for <buildroot@buildroot.org>; Thu, 11 Apr 2024 22:54:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712901251; x=1713506051;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=vNVW5bq+TAb0XydSvm1KQ0Hat5KIP5BsE38D7Ogi9LQ=;
- b=dGCwifML7QnVDHcn9skSNDHP82cQEkrAtql8/cRMBYDKlb0EzHfyLXAzoTb8aPrWaU
- r5sS+9NADSh7aBI8eL7ylyBorG4fF32Uwal7yFSLD2h8pBkKzosDvANIIeaWOJti2GPP
- qpM4m9TF4SxiJO3pStLsv7qidc4+DggkwT0lunISy1VDCzerr13R5ZdQY3wrojvckuQN
- w9JHZBM9xlO+6/GQK+RyL+o85J6ve9a3ufEfO3GxSkVolSrh5FUzPMhT5094BY5EkcLM
- orPV5OYxXo8z62m/FF6AwfX6/vwCtW1a9VpwxT3U17G1dQKYEqYBFBYuaBI9RyGsyswO
- 6IBQ==
-X-Gm-Message-State: AOJu0YzzE030NoP1KK9av2KZ5CG5mLI+ONr9XtntuCK1lRwfD5njtJDx
- PlP4MaarZhgZ+t3an8h9e2+OexymsqFrOCyjO86/Ela8qS1K217elCLS5A==
-X-Google-Smtp-Source: AGHT+IGOSeQ8PlM2aCTepIHKVNPfwZ98/+bOt4M8SOlKGk/8J/aKtkD4IsjBQT5wa88sffVBbXiGLg==
-X-Received: by 2002:a50:cdd5:0:b0:56b:d1c2:9b42 with SMTP id
- h21-20020a50cdd5000000b0056bd1c29b42mr1459399edj.29.1712901250938; 
- Thu, 11 Apr 2024 22:54:10 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1712901255; x=1713506055;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=sRzjNRHPgAQ6wlr8QiRClIcfA0qsMLRON2Larwhe/f0=;
+ b=k/3S2szaEb/GNSjlS3CnUARRO70gDkmOPfKMEMOd2q507JoCsPqQgp3VeO5fmE/ZtD
+ hDZNNeqVIjHipvujYznatXF6bh62VqOxcOrX11bR+wtXSw4/Yk3myH4XLZVB1henwFMn
+ SO6dwU3KHN2hCZPyi7d3zZBFVn1ek5AIEXrBvpWvFQyXxRESQ4L5vPPRMMgA/NFY4MOg
+ f/nYh307v2dD1QF7xXZzp3RsINiGPGPOHJ86g1+NWeg+g1fMDxL5M32Iz6gVowiPwYF/
+ F+j6Zk6DC4US/Ue3prMSt5fjbEpfVvU1vJG0KJDy011DONGf3p3XLIlsuxshIgXcNsz0
+ PATQ==
+X-Gm-Message-State: AOJu0YzyGa/wwSYMyRcvD7yHbuunoa9lxbe225ZGW4uoEN74xboWFvS1
+ cR4OtIf5OWJICwJ9d0kkVarjF6Ie3bSLiopWnlgutWmXY1DQREnDjspDUg==
+X-Google-Smtp-Source: AGHT+IFin3O8FNzIcXP3haAaKTNbJ/KLJBJwgAkJ/9lSp9m7/jmVAhS1U1urhkMk+CeZ59nYCWm0Bw==
+X-Received: by 2002:a50:cd0b:0:b0:56b:a03c:4eb with SMTP id
+ z11-20020a50cd0b000000b0056ba03c04ebmr1437898edi.31.1712901255522; 
+ Thu, 11 Apr 2024 22:54:15 -0700 (PDT)
 Received: from hthiery.kontron.local ([213.135.10.150])
  by smtp.gmail.com with ESMTPSA id
- cb12-20020a0564020b6c00b0056e67aa7118sm1354199edb.52.2024.04.11.22.54.10
+ cb12-20020a0564020b6c00b0056e67aa7118sm1354199edb.52.2024.04.11.22.54.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Apr 2024 22:54:10 -0700 (PDT)
+ Thu, 11 Apr 2024 22:54:15 -0700 (PDT)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Apr 2024 07:53:57 +0200
-Message-Id: <20240412055358.1354293-1-heiko.thiery@gmail.com>
+Date: Fri, 12 Apr 2024 07:53:59 +0200
+Message-Id: <20240412055358.1354293-2-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240412055358.1354293-1-heiko.thiery@gmail.com>
+References: <20240412055358.1354293-1-heiko.thiery@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712901251; x=1713506051; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vNVW5bq+TAb0XydSvm1KQ0Hat5KIP5BsE38D7Ogi9LQ=;
- b=j6JZcFfPmIaG/gqodJIQtfwO0byz/QcOtastaDnYO4V+5DIZc2w7nqEEvyJZ5G9vS4
- Qq715G9VSZKaqYW+DDAHCzA7gvwoL0KT9O/tpCXY6ASmqHbOr9710PJ9AxxOwVLKbpa8
- kOB+/LUT12Z6TPr+52WF+bm0vmG0tEm5EY7jSSmMDi7amPWwbVhMY6cFyXIu/6suhqkq
- wHB6qFYn6I1OdQ2URgOzl7OaxWp/r6pqi0s0UBw0tia3MUEq2rQjx88U6H6EwzlCMq8g
- 7s5WmjWZ/S36tBZKiCirmxevVEdQ96pG9cB2OWjY95XWdFvkGYX1gMW04Uj1UB8dahe0
- gCtQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1712901255; x=1713506055; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=sRzjNRHPgAQ6wlr8QiRClIcfA0qsMLRON2Larwhe/f0=;
+ b=aYqF2mDdn+KacBR5rHYqxPZx1q1bPH/sqefIcv0InXLloWMB/kqxWHcidkchTiikWZ
+ 6O6PJDzvEyrssk23yojaj+Pg51RP7ohnVm6LrInx0f2PosnaRBWSKYdc+Ymk3F/gDQDv
+ YjQrzdKMpAulvuRxyN+9QU08Ziph0LZ4GlkMovbAfvm2p/SRvso0p1v14Nv0HZXJZs4A
+ zLnzBYWxx6sgG6WDBKz4gGsl9wgPfnIfLycJ3GM1IJdn3Nbx4E/VTEZGDssAsfTTIBrA
+ lTkrJ9xgY8GlImSo32J+b9509km7I5l4kUHaUUSNhBPhVAxQbjpiyJJWb8QYvnxVclyW
+ eBPg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=j6JZcFfP
-Subject: [Buildroot] [PATCH v3 1/3] package/python-yamllint: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=aYqF2mDd
+Subject: [Buildroot] [PATCH v3 2/3] boot/ti-k3-r5-loader: add dependency to
+ yamllint
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,11 +113,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This host package is needed since u-boot 2024.04 for building ti defconfigs.
+Since U-Boot 2024.04 [1] binman also uses yamllint as dependency [2].
 
-This is an requirement for using buildman/binman [1].
-
-[1] https://source.denx.de/u-boot/u-boot/-/blob/v2024.04/tools/buildman/requirements.txt?ref_type=tags#L3
+[1] https://source.denx.de/u-boot/u-boot/-/commit/10fee88d42f
+[2] https://source.denx.de/u-boot/u-boot/-/blob/v2024.04/tools/buildman/requirements.txt?ref_type=tags#L3
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
@@ -122,116 +125,34 @@ v2: accidentally resend this series as v2
     (it's too early in the morning and no coffee yet)
 
 v3:
- - add missing runtime depnedencies
-  - a patch that enables the target build for python-pathspec is
-    required https://patchwork.ozlabs.org/project/buildroot/patch/20240412054421.1346030-1-heiko.thiery@gmail.com/
- - add runtime test
+ - update URLs in the comment
 
- package/Config.in                                 |  1 +
- package/python-yamllint/Config.in                 |  8 ++++++++
- package/python-yamllint/python-yamllint.hash      |  3 +++
- package/python-yamllint/python-yamllint.mk        | 15 +++++++++++++++
- .../tests/package/sample_python_yamllint.py       | 13 +++++++++++++
- .../testing/tests/package/test_python_yamllint.py | 11 +++++++++++
- 6 files changed, 51 insertions(+)
- create mode 100644 package/python-yamllint/Config.in
- create mode 100644 package/python-yamllint/python-yamllint.hash
- create mode 100644 package/python-yamllint/python-yamllint.mk
- create mode 100644 support/testing/tests/package/sample_python_yamllint.py
- create mode 100644 support/testing/tests/package/test_python_yamllint.py
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d9bbf64c95..1935077f0f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1437,6 +1437,7 @@ menu "External python modules"
- 	source "package/python-xmljson/Config.in"
- 	source "package/python-xmltodict/Config.in"
- 	source "package/python-xmodem/Config.in"
-+	source "package/python-yamllint/Config.in"
- 	source "package/python-yarl/Config.in"
- 	source "package/python-yatl/Config.in"
- 	source "package/python-zc-lockfile/Config.in"
-diff --git a/package/python-yamllint/Config.in b/package/python-yamllint/Config.in
-new file mode 100644
-index 0000000000..5c0962f09f
---- /dev/null
-+++ b/package/python-yamllint/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_YAMLLINT
-+	bool "python-yamllint"
-+	select BR2_PACKAGE_PYTHON_PATHSPEC # runtime
-+	select BR2_PACKAGE_PYTHON_PYYAML # runtime
-+	help
-+	  A linter for YAML files.
-+
-+	  https://github.com/adrienverge/yamllint
-diff --git a/package/python-yamllint/python-yamllint.hash b/package/python-yamllint/python-yamllint.hash
-new file mode 100644
-index 0000000000..d80e0fdf42
---- /dev/null
-+++ b/package/python-yamllint/python-yamllint.hash
-@@ -0,0 +1,3 @@
-+# Locally computed sha256 checksums
-+sha256  7a003809f88324fd2c877734f2d575ee7881dd9043360657cc8049c809eba6cd  yamllint-1.35.1.tar.gz
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-diff --git a/package/python-yamllint/python-yamllint.mk b/package/python-yamllint/python-yamllint.mk
-new file mode 100644
-index 0000000000..ceaca3b0b8
---- /dev/null
-+++ b/package/python-yamllint/python-yamllint.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-yamllint
-+#
-+################################################################################
-+
-+PYTHON_YAMLLINT_VERSION = 1.35.1
-+PYTHON_YAMLLINT_SOURCE = yamllint-$(PYTHON_YAMLLINT_VERSION).tar.gz
-+PYTHON_YAMLLINT_SITE = https://files.pythonhosted.org/packages/da/06/d8cee5c3dfd550cc0a466ead8b321138198485d1034130ac1393cc49d63e
-+PYTHON_YAMLLINT_SETUP_TYPE = pep517
-+PYTHON_YAMLLINT_LICENSE = GPL-3.0
-+PYTHON_YAMLLINT_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
-diff --git a/support/testing/tests/package/sample_python_yamllint.py b/support/testing/tests/package/sample_python_yamllint.py
-new file mode 100644
-index 0000000000..369a3b8d7d
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_yamllint.py
-@@ -0,0 +1,13 @@
-+# example form https://yamllint.readthedocs.io/en/stable/development.html
-+
-+from yamllint import (config, linter)
-+
-+data = '''---
-+- &anchor
-+  foo: bar
-+- *anchor
-+'''
-+
-+yaml_config = config.YamlLintConfig("extends: default")
-+for p in linter.run(data, yaml_config):
-+    print(p.desc, p.line, p.rule)
-diff --git a/support/testing/tests/package/test_python_yamllint.py b/support/testing/tests/package/test_python_yamllint.py
-new file mode 100644
-index 0000000000..226048ae87
---- /dev/null
-+++ b/support/testing/tests/package/test_python_yamllint.py
-@@ -0,0 +1,11 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonYamllint(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_YAMLLINT=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_yamllint.py"]
+diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+index 0fb07f2d65..891783e40f 100644
+--- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
++++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+@@ -35,8 +35,8 @@ TI_K3_R5_LOADER_LICENSE_FILES = Licenses/gpl-2.0.txt
+ TI_K3_R5_LOADER_CPE_ID_VENDOR = denx
+ TI_K3_R5_LOADER_CPE_ID_PRODUCT = u-boot
+ TI_K3_R5_LOADER_INSTALL_IMAGES = YES
+-# https://source.denx.de/u-boot/u-boot/-/blob/v2024.01/tools/binman/binman.rst?plain=1#L377
+-# https://source.denx.de/u-boot/u-boot/-/blob/v2024.01/tools/buildman/requirements.txt
++# https://source.denx.de/u-boot/u-boot/-/blob/v2024.04/tools/binman/binman.rst?plain=1#L377
++# https://source.denx.de/u-boot/u-boot/-/blob/v2024.04/tools/buildman/requirements.txt
+ # Make sure that all binman requirements are built before ti-k3-r5-loader.
+ TI_K3_R5_LOADER_DEPENDENCIES = \
+ 	host-pkgconf \
+@@ -49,6 +49,7 @@ TI_K3_R5_LOADER_DEPENDENCIES = \
+ 	host-python-pylibfdt \
+ 	host-python-pyyaml \
+ 	host-python-setuptools \
++	host-python-yamllint \
+ 	ti-k3-boot-firmware
+
+ TI_K3_R5_LOADER_MAKE = $(BR2_MAKE)
 --
 2.39.2
 
