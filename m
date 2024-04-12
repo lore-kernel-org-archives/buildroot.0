@@ -4,96 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E80FC04FF9
-	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 21:18:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88B68C4345F
+	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 21:43:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4637C40BD2;
-	Fri, 12 Apr 2024 21:18:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0059741493;
+	Fri, 12 Apr 2024 21:43:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M1k5memDVhAk; Fri, 12 Apr 2024 21:18:53 +0000 (UTC)
+ id 9-dNQcVPI5ws; Fri, 12 Apr 2024 21:43:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 513874117E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14E8741C4D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 513874117E;
-	Fri, 12 Apr 2024 21:18:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 66BC61BF37B
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 21:18:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 14E8741C4D;
+	Fri, 12 Apr 2024 21:43:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A16011BF37B
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 21:43:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 529B44071B
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 21:18:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D5034196E
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 21:43:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XQz01UH34eCX for <buildroot@lists.busybox.net>;
- Fri, 12 Apr 2024 21:18:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BoYfhogggzI3 for <buildroot@lists.busybox.net>;
+ Fri, 12 Apr 2024 21:43:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=ben.hutchings@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6D543405D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D543405D9
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6D543405D9
- for <buildroot@buildroot.org>; Fri, 12 Apr 2024 21:18:49 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4181e10b346so934225e9.1
- for <buildroot@buildroot.org>; Fri, 12 Apr 2024 14:18:49 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A23341493
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A23341493
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A23341493
+ for <buildroot@buildroot.org>; Fri, 12 Apr 2024 21:43:34 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-41804f10e36so5969875e9.3
+ for <buildroot@buildroot.org>; Fri, 12 Apr 2024 14:43:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712956728; x=1713561528;
- h=in-reply-to:content-transfer-encoding:content-disposition
- :mime-version:references:message-id:subject:cc:to:from:date
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=1quyl+sfHNJQJ07oOI3W0pwRLyDcZkbGGFyvHdoCV5c=;
- b=xSm6rLOVAuA6Cuyz2So48NdKoTfBITiZq0m+4kHCat1+lP/iZoOsu9QBMs8Qhcpi7C
- jjxR8PuDoo9mxK4IC10cmQSYVpOKBpJ+FSjwQfvHGXTqX0+BI/ssDofQZyde2x3GtVIR
- zHGipssrS1u8oMTQBl/co9M4KrWQvKoP7Rb00/7woSE+80R/4FePQ2j4z2eiXEZTgkpe
- +kRbu71M8O3uwKcvcsxEW2HiZ3qPAIiesLeCD69qNoE6y/o8h1WWLsH+UJZHGSXAhnxW
- K/MI9aqTMxF0KpukrqpN82goPCCcVe1lKScu9zxmEdtgP1HR2H/ori+7ArBn2pZ5S40m
- 2YWw==
-X-Gm-Message-State: AOJu0YwQ9OsBAeHShtAYpVMvi4JdkwM4SnTobIS0sViB32N5p+nVd+t8
- Hzd5osdCeRDLYehdnnfZ2kbjKWFzvkX9J+nkvknKQRpK3udpEopHCEKwRC7oC5w=
-X-Google-Smtp-Source: AGHT+IE4ZAkeGmzH2HSfmbv43rewdchP4SavusNPlNfRCAzymYaqCfKLhhnfDRmTavbiZXZWwIoqpA==
-X-Received: by 2002:a05:600c:5252:b0:418:1031:2a84 with SMTP id
- fc18-20020a05600c525200b0041810312a84mr1125632wmb.17.1712956728009; 
- Fri, 12 Apr 2024 14:18:48 -0700 (PDT)
-Received: from cephalopod (213.219.156.63.adsl.dyn.edpnet.net.
- [213.219.156.63]) by smtp.gmail.com with ESMTPSA id
- g7-20020a05600c310700b00417e4add806sm5485988wmo.7.2024.04.12.14.18.47
+ d=1e100.net; s=20230601; t=1712958212; x=1713563012;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=+zSTfsVkah+g3bdSbn2kuw3OyYBzTfv9HcO4Zr6szBo=;
+ b=EMHx3y0QTXGbk3pd4K/FNhidit0s8jeWgsvS2eQYWPDUQGrGjAuDUDWiIbm9Bxcnq7
+ fS6E5K/yFSJX268xeUXPUpXUhqAXZESzidAUAsBOiqCHidEUNdVtvGoP150LA26Py234
+ eFGKm7lVQ57kCv8uw38vsnkG7h/asuTrF0VGS03Ydp5L7vKABwfY/cBjHIx9BhfURHNU
+ y5l6YsbhlCdxrBz67CvCiH015fGvP0k1yIyx9AilUwjuMhTSwyOQcoE/s5nXMM2AN6Vx
+ iO/nTplUAHt54divhL3zgaiC9yD3NKLNU2XEPJAPaNozFh13Dlwpg2zoF46ftRdJLa5b
+ OrpA==
+X-Gm-Message-State: AOJu0YxVN8L6KpCC8HbY0uaoLBbhXtZjQZGnEh+OVpyYoBkAaKjjeWku
+ kx6OzQKTedYKFHKOgNd2McjN9UJX3KZd5zTAeEAWocHO8j1dIrigypT1krt3VGTic70+hdDMXxq
+ Q4hQ=
+X-Google-Smtp-Source: AGHT+IEiIhFDB6vXsd6QocuSvtwqZPprusVCk8ZCI3CKBa3I93uCpI2td0NCOCJSeOCNpG188rkfmQ==
+X-Received: by 2002:a05:600c:4e8b:b0:416:3f85:d49 with SMTP id
+ f11-20020a05600c4e8b00b004163f850d49mr3130938wmq.18.1712958212213; 
+ Fri, 12 Apr 2024 14:43:32 -0700 (PDT)
+Received: from cephalopod.i.decadent.org.uk
+ (213.219.156.63.adsl.dyn.edpnet.net. [213.219.156.63])
+ by smtp.gmail.com with ESMTPSA id
+ l23-20020a05600c1d1700b004163ee3922csm10034597wms.38.2024.04.12.14.43.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Apr 2024 14:18:47 -0700 (PDT)
-Date: Fri, 12 Apr 2024 23:18:46 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <ZhmlNkAZ8_BA5NzZ@cephalopod>
-References: <20240411145559.1183064-1-ben.hutchings@mind.be>
- <20240411145559.1183064-2-ben.hutchings@mind.be>
- <ZhgwczmiLaRsX25t@landeda>
+ Fri, 12 Apr 2024 14:43:31 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Fri, 12 Apr 2024 23:43:05 +0200
+Message-Id: <baf799dacd2d518a6e274aa59c7659fe12b68834.1712957992.git.ben.hutchings@mind.be>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <cover.1712957992.git.ben.hutchings@mind.be>
+References: <cover.1712957992.git.ben.hutchings@mind.be>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ZhgwczmiLaRsX25t@landeda>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1712956728; x=1713561528; darn=buildroot.org;
- h=in-reply-to:content-transfer-encoding:content-disposition
- :mime-version:references:message-id:subject:cc:to:from:date:from:to
- :cc:subject:date:message-id:reply-to;
- bh=1quyl+sfHNJQJ07oOI3W0pwRLyDcZkbGGFyvHdoCV5c=;
- b=RilUdn/InfcdrRpNsnrp3kGVWex4jGdSU8WZnTcXppXObWEaY08DJaV10C5HAj7ay6
- sfnqE/M+xuh8er7+EUNadMS9m2d1wSYBFBADevgVxmW1XPLXQY/BbFtIxuGtLXFIc+OH
- ibeloxy1c2uwBLi7HhDDsZMvtm0YRWjfjcLUWavC0KSLihsSqLWrP47PMYiRfb+2VjPs
- dIvcxKnwsYMxDKT/Bt8TrnupprdZ47rO70XS1M/30XlwRbaoLnHWj2Dv8+LZb9Y2L7IM
- k/jRdPmDZW8Qvc3f8m6wBbLo1sRyB9mV95GCryAapyiWTJa4mKdFbiOj9e82VNPWsEQ1
- nTgA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=mind.be; s=google; t=1712958212; x=1713563012; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=+zSTfsVkah+g3bdSbn2kuw3OyYBzTfv9HcO4Zr6szBo=;
+ b=IJXBMOuGA8s4WBvxMptcxC9yasWxSKgcC3N18gQ7ccskwwfkyuKKntSSiWKbx1dGEf
+ aKNUXQolOH6RRqj1a0Jlzehqf1nzMXGZVeHP4CJXgMJSO9zt0whtD8BD3lu/ykjHdC3R
+ 8bwmNcNVQs9lmNK0Wt/6PmO9ls84VuMNtRNzYzeTc8LUX8lX3lCh2x4ElxgY3B3nVE+B
+ RixOYU/hoRQvS2Nv7mxK3SAcBzG9vovJj/94CDHAiU3+HGqC/6EczTnThgaxNzXfa3pj
+ yVRisstNhAFVG5m/B1FuarOpctW5cGkpR2pne4VRxwq0IGxgRPGnFiNdblEaIbHjmeOd
+ ZD4Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=RilUdn/I
-Subject: Re: [Buildroot] [PATCH] package/qt6/qt6base: Restore DirectFB
- support
+ header.s=google header.b=IJXBMOuG
+Subject: [Buildroot] [PATCH 1/6] package/libgpg-error: Add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,60 +106,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Ben Hutchings via buildroot <buildroot@buildroot.org>
 Reply-To: Ben Hutchings <ben.hutchings@mind.be>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cc: Ben Hutchings <ben.hutchings@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Apr 11, 2024 at 08:48:19PM +0200, Yann E. MORIN wrote:
-> Ben, All,
-> =
+This is needed to support a host build of gnupg2.  It is not directly
+selectable.
 
-> On 2024-04-11 16:55 +0200, Ben Hutchings via buildroot spake thusly:
-> > Apply a patch from upstream to make Qt 6 support DirectFB again.
-> > =
+Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
+---
+ package/libgpg-error/libgpg-error.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> > Implement a config option for this, similar to what we do for Qt 5.
-> > =
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 60e3da9de1..9c8233b492 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -19,6 +19,9 @@ LIBGPG_ERROR_CONF_OPTS = \
+ 	--enable-install-gpg-error-config \
+ 	--disable-tests \
+ 	--disable-languages
++HOST_LIBGPG_ERROR_CONF_OPTS = \
++	--enable-install-gpg-error-config \
++	--disable-languages
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIBGPG_ERROR_CONF_OPTS += --enable-threads
+@@ -27,3 +30,4 @@ LIBGPG_ERROR_CONF_OPTS += --disable-threads
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+2.39.2
 
-> > Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
-> > ---
-> >  package/qt6/qt6base/Config.in                 |   8 +
-> >  .../qt6base-directfb-Fix-compilation.patch    | 288 ++++++++++++++++++
-> >  package/qt6/qt6base/qt6base.mk                |   7 +
-> =
-
->     $ ./utils/docker-run make check-package
->     package/qt6/qt6base/qt6base-directfb-Fix-compilation.patch:0: use nam=
-e <number>-<description>.patch (https://nightly.buildroot.org/#_providing_p=
-atches)
->     package/qt6/qt6base/qt6base-directfb-Fix-compilation.patch:0: missing=
- Signed-off-by in the header (https://nightly.buildroot.org/#_format_and_li=
-censing_of_the_package_patches)
->     package/qt6/qt6base/qt6base-directfb-Fix-compilation.patch:0: missing=
- Upstream in the header (https://nightly.buildroot.org/#_additional_patch_d=
-ocumentation)
-
-Sorry, I should have known about those.
-
-> Also, we currently only have qt6.4, while qt-6.7 is already released
-> now, and the patch you add was already present in qt-6.5.
-> =
-
-> So, maybe it would be better to actually bump qt6 rather than backport
-> patches?
-[...]
-
-That should also work!  But I don't know what else might break when
-updating Qt.
-
-Ben.
-
--- =
-
-Ben Hutchings =B7 Senior Embedded Software Engineer, Essensium-Mind =B7 min=
-d.be
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
