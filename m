@@ -1,97 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B36DC4345F
-	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 05:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C83E6C4345F
+	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 08:04:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF0D1406E1;
-	Fri, 12 Apr 2024 05:54:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A14F6136A;
+	Fri, 12 Apr 2024 08:04:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gKvAsVyv720Y; Fri, 12 Apr 2024 05:54:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LB6GtiZXPS-R; Fri, 12 Apr 2024 08:04:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C269E41FAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE0CB606E5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C269E41FAD;
-	Fri, 12 Apr 2024 05:54:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE0CB606E5;
+	Fri, 12 Apr 2024 08:04:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6A69C1BF23C
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 05:54:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2448A1BF316
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 08:04:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55969406E1
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 05:54:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A80A4027D
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 08:04:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yrEvc5LCV0n2 for <buildroot@lists.busybox.net>;
- Fri, 12 Apr 2024 05:54:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52d; helo=mail-ed1-x52d.google.com;
- envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4A627405E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A627405E7
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4A627405E7
- for <buildroot@buildroot.org>; Fri, 12 Apr 2024 05:54:23 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id
- 4fb4d7f45d1cf-56e509baddaso468751a12.1
- for <buildroot@buildroot.org>; Thu, 11 Apr 2024 22:54:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712901260; x=1713506060;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=qDwpOjOpRVPKekKO/HzqEi8u8rqhrezawEX2z9IYs1A=;
- b=Qy8V/31YoLxT0iQxmMmy2CP0y09jmQsJld8CNk5RFR2X/C2PFHxiwQbPX4a9znIvgp
- IBetaISlIS/nMzdPqwYISCagx74agCqFtlqZo+CRqGSpBqSBC8s21XE2WcOPwpzz5gZK
- ruiLw7WnG0KQnyC9ocuKX8HHzU1nfXULAz3KOl05YzjmFb9jEabIM77Lw9rHWCq8suxT
- 8iPNHENzkHtdlAH5hh+ckwrJjSuYP8lfcuJIennFoD5mYmMR8fWOxf2e29M+rS6WuCxz
- nH2lGinqZAZVo23rWaTYpiWYc3OFd457idOJEyqeit//ckmmhu+qBSygS0HO7ikeivvg
- eF4g==
-X-Gm-Message-State: AOJu0YyO/wLBKZiVs+qQ/4KINaFZvBbw4ImGtQND0TRvovuYFJNlAaBk
- ffDt8IYtoKLUGo//gFqF85lZ3jlEjKxft8WisA9by1n+r+1q/S7onid9BQ==
-X-Google-Smtp-Source: AGHT+IE0fVIKNzTMfmCAkpVtLSTHrwwi5YOaGwQ3R+vwY4ulHkw4UVYkVXAh9yiph98c9LaIXG5vSQ==
-X-Received: by 2002:a50:99d8:0:b0:56e:2f2c:e249 with SMTP id
- n24-20020a5099d8000000b0056e2f2ce249mr1089001edb.7.1712901259958; 
- Thu, 11 Apr 2024 22:54:19 -0700 (PDT)
-Received: from hthiery.kontron.local ([213.135.10.150])
- by smtp.gmail.com with ESMTPSA id
- cb12-20020a0564020b6c00b0056e67aa7118sm1354199edb.52.2024.04.11.22.54.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Apr 2024 22:54:19 -0700 (PDT)
-From: Heiko Thiery <heiko.thiery@gmail.com>
+ id BGJOs3hoqYHm for <buildroot@lists.busybox.net>;
+ Fri, 12 Apr 2024 08:04:18 +0000 (UTC)
+X-Greylist: delayed 1135 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 12 Apr 2024 08:04:16 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5DE7F40278
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DE7F40278
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5DE7F40278
+ for <buildroot@buildroot.org>; Fri, 12 Apr 2024 08:04:16 +0000 (UTC)
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1rvBtO-003pCp-JW; Fri, 12 Apr 2024 10:04:14 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 3f3c7fc9;
+ Fri, 12 Apr 2024 08:04:14 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Apr 2024 07:54:01 +0200
-Message-Id: <20240412055358.1354293-3-heiko.thiery@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240412055358.1354293-1-heiko.thiery@gmail.com>
-References: <20240412055358.1354293-1-heiko.thiery@gmail.com>
+Date: Fri, 12 Apr 2024 11:04:12 +0300
+Message-ID: <20240412080413.1407759-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712901260; x=1713506060; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=qDwpOjOpRVPKekKO/HzqEi8u8rqhrezawEX2z9IYs1A=;
- b=Sa0Hm5kknG9IcAYWdpEseMxz7rvfzcE3zcolpbzq8x7opMlg1O9T9JXIp3eOa1N7o3
- f/rqmXIZ5k/jYTkYW7iCjjCeEDZH1VdebS5qdAOlumIyXQCGHUxlEWL0LRssRsG2I/bR
- xq5lMCVF2YmwZT1eVWXoQn4HkUSOoxwiCob+/hd9MEvXQDAmWKhF0IbcQw1s+kQtEV5B
- 8+lRRTN6p5UHI63aAV3JiDV8rdwuhDcS2wpUh3xzylbCIbhyPOmf2ojPYdw/b5zbPsCD
- jiKMGuN/BKbd2rBWfi5eosmbkE+BmqABouycE1e2C/NlakBJLZONUmSraxWueoB9Ac5d
- ZKiQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=c60Q2ZnIUrqsaIkwEMCu+T8jLKeHXNxYzJm4mm5yv5g=; b=KpF82+MONqvIkFBtHBjAJj2g+U
+ kxfT1c81O+Ta6/yCRoKR8ofdrHIqhBh5FHp+0VthZKE/GHRsvy56AIHGT6w4vfHdTG1G3jg+Vq3qt
+ X0UzJCsPwsDJq02COehWiIzMwINEUuuvKx9i8PdtwHQNgVbxgdhnmBQGoDxlNuIDQsaNWIIqQD5Eu
+ 6gUSL5FCXCzy8lGPR8sMj6lIWpGpOImhS7U4EwKXr/L9Kmpplk6Hjo4qDUnXJ2rqIUC5iwZebfxSo
+ eKG+sd4rQ+ZHZa22I00O1tqGxp5DOImy5rZCQDwFzNQy/6OFCIVBiGQG/6Kh3qcquZbSYGc7+fdiE
+ abnbJDaA==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=none (p=none dis=none)
+ header.from=igalia.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Sa0Hm5kk
-Subject: [Buildroot] [PATCH v3 3/3] uboot/uboot: add new dependency to
- yamllint
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=KpF82+MO
+Subject: [Buildroot] [PATCH] package/bubblewrap: bump to version 0.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,54 +83,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, Xuanhao Shi <X15000177@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@smile.fr>, Heiko Thiery <heiko.thiery@gmail.com>,
- Anand Gadiyar <gadiyar@ti.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since U-Boot 2024.04 [1] binman also uses yamllint as dependency [2].
+This version adds a new --argv0 flag, has better error reporting, and
+fixes and important file descriptor double-close when using --args,
+--seccomp, and --seccomp-fd. Release notes:
 
-[1] https://source.denx.de/u-boot/u-boot/-/commit/10fee88d42f
-[2] https://source.denx.de/u-boot/u-boot/-/blob/v2024.04/tools/buildman/requirements.txt?ref_type=tags#L3
+  https://github.com/containers/bubblewrap/releases/tag/v0.9.0
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
+ package/bubblewrap/bubblewrap.hash | 4 ++--
+ package/bubblewrap/bubblewrap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-v2: accidentally resend this series as v2
-    (it's too early in the morning and no coffee yet)
-
-v3:
- - update URLs in the comment
-
- boot/uboot/uboot.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index a894654698..0ee63cabdb 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -276,10 +276,12 @@ UBOOT_DEPENDENCIES += host-vim
- endif
-
- ifeq ($(BR2_TARGET_UBOOT_USE_BINMAN),y)
--# https://source.denx.de/u-boot/u-boot/-/blob/v2024.01/tools/buildman/requirements.txt
-+# https://source.denx.de/u-boot/u-boot/-/blob/v2024.04/tools/binman/binman.rst?plain=1#L377
-+# https://source.denx.de/u-boot/u-boot/-/blob/v2024.04/tools/buildman/requirements.txt
- UBOOT_DEPENDENCIES += \
- 	host-python-jsonschema \
--	host-python-pyyaml
-+	host-python-pyyaml \
-+	host-python-yamllint
- UBOOT_MAKE_OPTS += BINMAN_INDIRS=$(BINARIES_DIR)
- endif
-
---
-2.39.2
+diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
+index abc69d96be..f61aca34f9 100644
+--- a/package/bubblewrap/bubblewrap.hash
++++ b/package/bubblewrap/bubblewrap.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/containers/bubblewrap/releases/tag/v0.8.0
+-sha256  957ad1149db9033db88e988b12bcebe349a445e1efc8a9b59ad2939a113d333a  bubblewrap-0.8.0.tar.xz
++# From https://github.com/containers/bubblewrap/releases/tag/v0.9.0
++sha256  c6347eaced49ac0141996f46bba3b089e5e6ea4408bc1c43bab9f2d05dd094e1  bubblewrap-0.9.0.tar.xz
+ 
+ # Hash for license files:
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
+index 1081db697d..9dd711ce47 100644
+--- a/package/bubblewrap/bubblewrap.mk
++++ b/package/bubblewrap/bubblewrap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUBBLEWRAP_VERSION = 0.8.0
++BUBBLEWRAP_VERSION = 0.9.0
+ BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
+ BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
+ BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
+-- 
+2.44.0
 
 _______________________________________________
 buildroot mailing list
