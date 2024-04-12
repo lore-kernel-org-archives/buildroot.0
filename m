@@ -4,96 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79C00C4345F
-	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 13:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91F91C4345F
+	for <buildroot@archiver.kernel.org>; Fri, 12 Apr 2024 13:27:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B9F860834;
-	Fri, 12 Apr 2024 13:27:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25ACD60898;
+	Fri, 12 Apr 2024 13:27:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ez1dW-d4r-o3; Fri, 12 Apr 2024 13:27:49 +0000 (UTC)
+ id o2GpzCzmdEmj; Fri, 12 Apr 2024 13:27:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE5BF60859
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5CD2608A3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE5BF60859;
-	Fri, 12 Apr 2024 13:27:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EE6CB1BF3A9
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 13:27:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5CD2608A3;
+	Fri, 12 Apr 2024 13:27:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F5F91BF3A9
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 13:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1C4240434
- for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 13:27:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9849280F62
+ for <buildroot@lists.busybox.net>; Fri, 12 Apr 2024 13:27:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7aAE_dyRWK-M for <buildroot@lists.busybox.net>;
- Fri, 12 Apr 2024 13:27:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hkJ3Qteb5VEi for <buildroot@lists.busybox.net>;
+ Fri, 12 Apr 2024 13:27:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4EE3D401D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EE3D401D5
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4EE3D401D5
- for <buildroot@buildroot.org>; Fri, 12 Apr 2024 13:27:42 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-41550858cabso6762785e9.2
- for <buildroot@buildroot.org>; Fri, 12 Apr 2024 06:27:42 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A033A80F53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A033A80F53
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A033A80F53
+ for <buildroot@buildroot.org>; Fri, 12 Apr 2024 13:27:40 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-3465921600dso740663f8f.3
+ for <buildroot@buildroot.org>; Fri, 12 Apr 2024 06:27:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712928460; x=1713533260;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=3zR/3BoWJ/B5etW1tCI0GFmfYtBkoqPOnBmQI2pKCSE=;
- b=lp6J4zTjxPOER3n7i2o4Rjz98p75c+GBmnngFwPypu6VGCjmdiCiQp0GxI8b+vKKPP
- FmkDsoPGBArOYcwaHjyeQNKKFAXqIp5s1fWlJLtB1usA6X42B2RJNtK95P+w4wxBicmX
- PxKU2RoMW4d4UntxbZrzJZLGgJQ6GwqBshyrxa5untTiWLR6Kah2bsAhDJSgqz0ZeHPU
- UPYmAfZ5kSWNfM2gZK0x9Jsg4zSqNr0hTUEVHbKzsUgJGxl7pfW8rqvsDuG4S2Opzf2c
- qaoyRlnd352apfJlbcqhlPBeWBARWnTEz9x29/sVSIWOfYvvznWWMP9aB/6GMBgs9O7c
- ugMQ==
-X-Gm-Message-State: AOJu0YzjGhgar9poEHlqcL1c4ykRqIug7MlsOpe9P4uwisBxQ9pAiOnH
- 2C3stQ4zbA1Wq/qbUNRJzKVdknO/gfUyPBC+kOc6aOGMuHljz5hDCp9Q1Ipw0b8x0Ev8F8Sqmyp
- XN8c=
-X-Google-Smtp-Source: AGHT+IG70wTJw0cldbrAPPmj60u22CbO8x+jwPUlfh9vP7oGFjWFbbTnyWHYW09nACyqEBAcYR/fzw==
-X-Received: by 2002:a05:6000:12c6:b0:346:c7ed:22de with SMTP id
- l6-20020a05600012c600b00346c7ed22demr1632900wrx.14.1712928460172; 
- Fri, 12 Apr 2024 06:27:40 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1712928458; x=1713533258;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=75UEMKxW3PENqC1yVV06gj0fYqrizarhnJJGgz8j1PE=;
+ b=MTha1cHs77Mx/JZkHHVyuMGX2uP2usgiRqMjAQVHjqCpOnOoaQCptK0XcH+6hRQzrs
+ WzCZUALOdESXFcJTFj9ZmHtv949lFkSLf1431UjFDX2BYEpBFwiyEWZHykMsA7ze9lJU
+ 2d/Euj/yY+WSIYaSOUiYUapNBDto4J9nR73btSGVJjlM3tui6g9yo83+k//x14rYbmPG
+ sAKzbLAVCWv6e9U8E1Qj4qlf8sekZ3D52Sndlhfpkz9EV3eob4QHq93qHRLGapklaW/q
+ gbiw1y1R0uEo5pV5nQPBDF4B/bShQh0pl3t+NIEXIw3Y4euCcYFVq1kO1PCcoJ0pY2j0
+ l7lg==
+X-Gm-Message-State: AOJu0YzP0qFTq2csI/8gCUtKM1btj9QFoVaStmUWQ3xGIuZY/9pD7CEf
+ QR4RWPEHGD8CCK8F+jx4ISKs/tYEyxascLO8EWAuKMWKMXf9JjMbhNJDxmKmusmyZ7Kd3Q0NUIA
+ Yf4U=
+X-Google-Smtp-Source: AGHT+IEoxUKkhIi0J9BSuCsgmtOCsPfvPNgwWikcslMNuTu3AEHf/HR7e6vdRk0DFwrSHIkbEUSh4A==
+X-Received: by 2002:adf:fe90:0:b0:343:740c:5d14 with SMTP id
+ l16-20020adffe90000000b00343740c5d14mr1734712wrr.31.1712928457822; 
+ Fri, 12 Apr 2024 06:27:37 -0700 (PDT)
 Received: from localhost.localdomain ([79.132.235.33])
  by smtp.gmail.com with ESMTPSA id
- s4-20020a5d6a84000000b00343a66f6be4sm4288163wru.24.2024.04.12.06.27.39
+ s4-20020a5d6a84000000b00343a66f6be4sm4288163wru.24.2024.04.12.06.27.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Apr 2024 06:27:39 -0700 (PDT)
+ Fri, 12 Apr 2024 06:27:37 -0700 (PDT)
 X-Google-Original-From: Thomas Perale <thomas.perale@mind.be>
 To: buildroot@buildroot.org
-Date: Fri, 12 Apr 2024 15:26:55 +0200
-Message-ID: <20240412132659.1168317-4-thomas.perale@mind.be>
+Date: Fri, 12 Apr 2024 15:26:52 +0200
+Message-ID: <20240412132659.1168317-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240412132659.1168317-1-thomas.perale@mind.be>
-References: <20240412132659.1168317-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=essensium.com; s=google; t=1712928460; x=1713533260; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=3zR/3BoWJ/B5etW1tCI0GFmfYtBkoqPOnBmQI2pKCSE=;
- b=O3w6LsITWsEEvEPa/2inUjVW6jFHcmLp44hfMN3dWfp5IaAKRShh+Xx15qhWGYqrqo
- z/kH94Qy0lPDzVWZE/hpkXHt9EpbP5SnWskLVPBp/BTXvZvYQ85krflU2OxsNS0d/Za8
- aCNUanLf82QWUdZ2XgTDS+i0T1BfAeng60sH00vXHXtcu32Uv/vFu06HW08xuN4Kg+Wx
- HaQUty69eX3wc263gkpVx1pcggpxkjTUfj+s9u6i232Bss/bfQ9ILgx6xUNSEFYMv0ur
- GEWaJzo2rBrwrptFFPyZpzEEN+Sf+zpEVWqukncfJ95DAkFqdssZWwn3pGoYh81a5WqZ
- 4L+Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=essensium.com; s=google; t=1712928458; x=1713533258; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=75UEMKxW3PENqC1yVV06gj0fYqrizarhnJJGgz8j1PE=;
+ b=LgVHALkrQqymeEPmvAxGXdpme9/nUg2f8GtxXRo4Xe2Qa77CSeZwxPdZ1YYjCqOzw/
+ tfVTkkZenFNSnxELoZ7cyTPqH88j3lAb8ixTTlOOpzdxYFa65r/o5kCtOED4qpPFgdXL
+ UtBJ/WqAlMJv8yJCEXneK69+ayCAGQVM2vouE6FtXSzgE7jp2NgBxztniBhV8gsIsZCE
+ UcPBgfa0quxyapD3FED1/NMST0MMfCxFC+XjDu+seV5g0VieFHgevfpnpLKxpCzIS9NN
+ Q7W4SeZHY6scdb2HvD24ZK7tqe8z7uRnBK9zYuv8YvZr6BXMWgWCqPabeFsRy9G72RNM
+ 9tGw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=essensium.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=essensium.com header.i=@essensium.com
- header.a=rsa-sha256 header.s=google header.b=O3w6LsIT
-Subject: [Buildroot] [PATCH 3/6] package/go: make host package a virtual
- package
+ header.a=rsa-sha256 header.s=google header.b=LgVHALkr
+Subject: [Buildroot] [PATCH 0/6]  support for a pre-built Go compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,189 +111,110 @@ Cc: Christian Stewart <christian@aperture.us>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Romain Naour <romain.naour@gmail.com>, Fabio Estevam <festevam@gmail.com>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Turns host-go into a virtual package, which has two providers:
-
- - host-go-src, which builds host-go from source based on the same logic
-   that was previously used in package/go/go/go.mk, now moved to
-   package/go/go-src/go-src.mk to remove any ambiguity on the role of
-   the package.
-
- - host-go-bin, which will be introduced in the next commit and installs
-   a pre-built Go compiler.
-
-The usage of a virtual package enables support for pre-built Go
-compiler, which reduces the build time for of host-go.
-A similar solution is proposed for host-rust.
-
-By default, host-go is built from sources to keep the same behavior as
-the former version.
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- .checkpackageignore                           |  2 +-
- package/go/Config.in.host                     | 32 +++++++++++++++++++
- ...explicit-option-for-crosscompilation.patch |  0
- ...ldvcs-false-when-building-go-bootstr.patch |  0
- package/go/{go/go.hash => go-src/go-src.hash} |  0
- package/go/{go/go.mk => go-src/go-src.mk}     | 25 ++++++++-------
- package/go/go.mk                              |  2 ++
- 7 files changed, 48 insertions(+), 13 deletions(-)
- rename package/go/{go => go-src}/0001-build.go-explicit-option-for-crosscompilation.patch (100%)
- rename package/go/{go => go-src}/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch (100%)
- rename package/go/{go/go.hash => go-src/go-src.hash} (100%)
- rename package/go/{go/go.mk => go-src/go-src.mk} (68%)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b3eab26071..69681bfeaa 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -465,7 +465,7 @@ package/glorytun/0002-aegis256.c-fix-aarch64-build-with-uclibc.patch lib_patch.U
- package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch lib_patch.Upstream
- package/gnupg/0001-build-Always-use-EXTERN_UNLESS_MAIN_MODULE-pattern.patch lib_patch.Upstream
- package/gnuplot/0001-configure-add-without-demo-option.patch lib_patch.Upstream
--package/go/go/0001-build.go-explicit-option-for-crosscompilation.patch lib_patch.Upstream
-+package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch lib_patch.Upstream
- package/gob2/0001-dont-include-from-prefix.patch lib_patch.Upstream
- package/gobject-introspection/0001-disable-tests.patch lib_patch.Upstream
- package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 7edf45850d..a213ee94bf 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -32,6 +32,38 @@ config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
- 	default y
- 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
- 
-+config BR2_PACKAGE_HOST_GO
-+	bool "host go compiler"
-+	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	help
-+	  Compiler for the Go language
-+
-+	  https://go.dev
-+
-+if BR2_PACKAGE_HOST_GO
-+
-+choice
-+	prompt "Go compiler variant"
-+	default BR2_PACKAGE_HOST_GO_SRC
-+	help
-+	  Select a Go compiler variant.
-+
-+	  Default to 'host-go-src'.
-+
-+config BR2_PACKAGE_HOST_GO_SRC
-+	bool "host go (source)"
-+	help
-+	  This package will build the go compiler for the host.
-+
-+endchoice
-+
-+config BR2_PACKAGE_PROVIDES_HOST_GO
-+	string
-+	# Default to host-go-src
-+	default "host-go-src" if BR2_PACKAGE_HOST_GO_SRC
-+
-+endif
-+
- source "package/go/go-bootstrap-stage1/Config.in.host"
- source "package/go/go-bootstrap-stage2/Config.in.host"
- source "package/go/go-bootstrap-stage3/Config.in.host"
-diff --git a/package/go/go/0001-build.go-explicit-option-for-crosscompilation.patch b/package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch
-similarity index 100%
-rename from package/go/go/0001-build.go-explicit-option-for-crosscompilation.patch
-rename to package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch
-diff --git a/package/go/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch b/package/go/go-src/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-similarity index 100%
-rename from package/go/go/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-rename to package/go/go-src/0002-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
-diff --git a/package/go/go/go.hash b/package/go/go-src/go-src.hash
-similarity index 100%
-rename from package/go/go/go.hash
-rename to package/go/go-src/go-src.hash
-diff --git a/package/go/go/go.mk b/package/go/go-src/go-src.mk
-similarity index 68%
-rename from package/go/go/go.mk
-rename to package/go/go-src/go-src.mk
-index c3c40922f4..9d73c7c692 100644
---- a/package/go/go/go.mk
-+++ b/package/go/go-src/go-src.mk
-@@ -1,21 +1,22 @@
- ################################################################################
- #
--# go
-+# go-src
- #
- ################################################################################
- 
--GO_SITE = https://storage.googleapis.com/golang
--GO_SOURCE = go$(GO_VERSION).src.tar.gz
-+GO_SRC_SITE = https://storage.googleapis.com/golang
-+GO_SRC_SOURCE = go$(GO_VERSION).src.tar.gz
- 
--GO_LICENSE = BSD-3-Clause
--GO_LICENSE_FILES = LICENSE
--GO_CPE_ID_VENDOR = golang
-+GO_SRC_LICENSE = BSD-3-Clause
-+GO_SRC_LICENSE_FILES = LICENSE
-+GO_SRC_CPE_ID_VENDOR = golang
- 
--HOST_GO_DEPENDENCIES = host-go-bootstrap-stage3
-+HOST_GO_SRC_PROVIDES = host-go
-+HOST_GO_SRC_DEPENDENCIES = host-go-bootstrap-stage3
- 
- ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
- 
--HOST_GO_CROSS_ENV = \
-+HOST_GO_SRC_CROSS_ENV = \
- 	CC_FOR_TARGET="$(TARGET_CC)" \
- 	CXX_FOR_TARGET="$(TARGET_CXX)" \
- 	GOOS="linux" \
-@@ -28,7 +29,7 @@ endif
- 
- # The go build system is not compatible with ccache, so use
- # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
--HOST_GO_MAKE_ENV = \
-+HOST_GO_SRC_MAKE_ENV = \
- 	GO111MODULE=off \
- 	GOCACHE=$(HOST_GO_HOST_CACHE) \
- 	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE3_ROOT) \
-@@ -41,12 +42,12 @@ HOST_GO_MAKE_ENV = \
- 	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
- 	$(HOST_GO_CROSS_ENV)
- 
--define HOST_GO_BUILD_CMDS
-+define HOST_GO_SRC_BUILD_CMDS
- 	cd $(@D)/src && \
--		$(HOST_GO_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
-+		$(HOST_GO_SRC_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
- endef
- 
--define HOST_GO_INSTALL_CMDS
-+define HOST_GO_SRC_INSTALL_CMDS
- 	$(GO_BINARIES_INSTALL)
- endef
- 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 104a4a73fb..21cdb29f8f 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -129,4 +129,6 @@ define GO_BINARIES_INSTALL
- 	find $(HOST_GO_ROOT) -type f -exec touch -r $(@D)/bin/go {} \;
- endef
- 
-+$(eval $(host-virtual-package))
-+
- include $(sort $(wildcard package/go/*/*.mk))
--- 
-2.44.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SW1wcm92ZW1lbnQgc3VnZ2VzdGVkIG9uIHRoZSBidWlsZHJvb3QgVE9ETyBsaXN0IChodHRwczov
+L3d3dy5lbGludXgub3JnL0J1aWxkcm9vdCNUb2RvX2xpc3QpLgpUaGlzIHBhdGNoIGFkZHMgc3Vw
+cG9ydCBmb3IgYSBwcmUtYnVpbHQgdmVyc2lvbiBvZiB0aGUgR28gY29tcGlsZXIgdGhhdApkb2Vz
+bid0IHJlcXVpcmUgdXNlcnMgdG8gZ28gdGhyb3VnaCB0aGUgZGlmZmVyZW50IGNvbXBpbGF0aW9u
+IHN0YWdlcyBvZgp0aGUgR28gY29tcGlsZXIgYW5kIHNwZWVkcyB1cCB0aGUgb3ZlcmFsbCBidWls
+ZCB0aW1lLgoKVGhpcyBwYXRjaCBpcyBhIG5ldyB2ZXJzaW9uIG9mIHRoZSBwcm9wb3NhbCBJIG1h
+ZGUgbGFzdCB5ZWFyCihzZWUgaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290L0NBK2g4
+UjJwTlJyQnNDaEtTM1BIUXRUMF9yc1ZGM1dpM0x3TVREOWpLRm9LZjFvdDItQUBtYWlsLmdtYWls
+LmNvbS8jYikKYW5kIGEgcmViYXNlIG9mIG15IHByZXZpb3VzIHBhdGNoIChodHRwczovL2xvcmUu
+a2VybmVsLm9yZy9idWlsZHJvb3QvMjAyMzEwMDQxNDIzMDMuMjAzNTIwLTUtdGhvbWFzLnBlcmFs
+ZUBlc3NlbnNpdW0uY29tL1QvKQp0byBzdXBwb3J0IG5ldyBHbyAxLjIyIHRoYXQgcmVxdWlyZSBh
+IDNyZCBib290c3RyYXAgc3RhZ2UuCgpJdCBpbnRyb2R1Y2VzIGEgbmV3IGRpcmVjdG9yeSBzdHJ1
+Y3R1cmUgZm9yIGhvc3QgY29tcGlsZXJzIHdpdGggZGlmZmVyZW50CnByb3ZpZGVyczoKCiAgICBw
+YWNrYWdlLwogICAg4pSc4pSAIGdvLyAgICAgICAgICAgICAgICAgICAgIDwtLSBWaXJ0dWFsIHBh
+Y2thZ2UKICAgIOKUgiAg4pSc4pSAIGdvLXNyYy8gICAgICAgICAgICAgIDwtLSBCdWlsZCBmcm9t
+IHNvdXJjZSBvcHRpb24KICAgIOKUgiAg4pSc4pSAIGdvLWJpbi8gICAgICAgICAgICAgIDwtLSBE
+b3dubG9hZCBwcmUtYnVpbHQgb3B0aW9uCiAgICDilIIgIOKUnOKUgCBnby1ib290c3RyYXAtc3Rh
+Z2UxLyA8LS0gRGVwZW5kZW5jeSBmb3IgZ28tYm9vdHN0cmFwLXN0YWdlMgogICAg4pSCICDilJzi
+lIAgZ28tYm9vdHN0cmFwLXN0YWdlMi8gPC0tIERlcGVuZGVuY3kgZm9yIGdvLWJvb3RzdHJhcC1z
+dGFnZTMKICAgIOKUgiAg4pSc4pSAIGdvLWJvb3RzdHJhcC1zdGFnZTMvIDwtLSBEZXBlbmRlbmN5
+IGZvciBnby1zcmMKICAgIOKUgiAg4pSc4pSAIGdvLm1rICAgICAgICAgICAgICAgIDwtLSBDb21t
+b24gdmFyaWFibGVzCiAgICDilIIgIOKUnOKUgCBDb25maWcuaW4gICAgICAgICAgICA8LS0gQ29t
+bW9uIHZhcmlhYmxlcy92aXJ0dWFsIHBhY2thZ2UgZGVmaW5pdGlvbgoKVGhlIHN1YmRpcmVjdG9y
+eSBzdHJ1Y3R1cmUgaXMgdXNlZCB0byBwdXQgdGhlIGBHT19WRVJTSU9OYCB2YXJpYWJsZSBpbgpj
+b21tb24gYmV0d2VlbiB0aGUgZGlmZmVyZW50IHByb3ZpZGVycy4KClRoaXMgc3ViZGlyZWN0b3J5
+IHByb3Bvc2FsIHNob3VsZCBiZSBleHRlbmRlZCB0byB0aGUgUnVzdCBjb21waWxlciBjYXNlIGFu
+ZApOb2RlSlMgcHJvcG9zYWwgVGhvbWFzIFBldGF6em9uaSBkaWQgKGh0dHBzOi8vcGF0Y2h3b3Jr
+Lm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvbGlzdC8/c2VyaWVzPTMxOTk2NykKdG8gdW5p
+ZnkgdGhlIG5hbWluZyBvZiB0aGUgZGlmZmVyZW50IGNvbXBpbGVycyBvcHRpb25zLgoKVGhvbWFz
+IFBlcmFsZSAoNik6CiAgREVWRUxPUEVSUzogYWRkIFRob21hcyBQZXJhbGUgZm9yICdnbycKICBw
+YWNrYWdlL2dvOiBuZXcgc3ViZGlyZWN0b3J5IGZvciBnbyB2YXJpYW50cwogIHBhY2thZ2UvZ286
+IG1ha2UgaG9zdCBwYWNrYWdlIGEgdmlydHVhbCBwYWNrYWdlCiAgcGFja2FnZS9wa2ctZ29sYW5n
+OiBzZWxlY3QgZ28gY29tcGlsZXIKICBwYWNrYWdlL2dvL2dvLWJpbjogbmV3IGdvIHByb3ZpZGVy
+CiAgc3VwcG9ydC90ZXN0aW5nOiBhZGQgdGVzdHMgZm9yIEdvIHByb3ZpZGVycwoKIC5jaGVja3Bh
+Y2thZ2VpZ25vcmUgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCiBERVZFTE9QRVJT
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgNiArLS0KIHBhY2thZ2UvQ29u
+ZmlnLmluLmhvc3QgICAgICAgICAgICAgICAgICAgICAgICB8ICAzIC0tCiBwYWNrYWdlL2JhbGVu
+YS1lbmdpbmUvQ29uZmlnLmluICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2NuaS1wbHVn
+aW5zL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2NvbnRhaW5lcmQv
+Q29uZmlnLmluICAgICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2NydWNpYmxlL0NvbmZp
+Zy5pbiAgICAgICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2RlbHZlL0NvbmZpZy5pbiAg
+ICAgICAgICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2RlbHZlL0NvbmZpZy5pbi5ob3N0
+ICAgICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2RvY2tlci1jbGkvQ29uZmlnLmluICAg
+ICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2RvY2tlci1jb21wb3NlL0NvbmZpZy5pbiAg
+ICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2RvY2tlci1lbmdpbmUvQ29uZmlnLmluICAgICAg
+ICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2VtYmlnZ2VuLWRpc2svQ29uZmlnLmluICAgICAgICAg
+ICAgICAgfCAgMSArCiBwYWNrYWdlL2ZsYW5uZWwvQ29uZmlnLmluICAgICAgICAgICAgICAgICAg
+ICAgfCAgMSArCiBwYWNrYWdlL2dpdGxhYi1ydW5uZXIvQ29uZmlnLmluICAgICAgICAgICAgICAg
+fCAgMSArCiBwYWNrYWdlL2dvL0NvbmZpZy5pbi5ob3N0ICAgICAgICAgICAgICAgICAgICAgfCA0
+NiArKysrKysrKysrKysrKysrCiBwYWNrYWdlL2dvL2dvLWJpbi9Db25maWcuaW4uaG9zdCAgICAg
+ICAgICAgICAgfCAxNCArKysrKwogcGFja2FnZS9nby9nby1iaW4vZ28tYmluLmhhc2ggICAgICAg
+ICAgICAgICAgIHwgIDggKysrCiBwYWNrYWdlL2dvL2dvLWJpbi9nby1iaW4ubWsgICAgICAgICAg
+ICAgICAgICAgfCAxOSArKysrKysrCiAuLi4vZ28tYm9vdHN0cmFwLXN0YWdlMS9Db25maWcuaW4u
+aG9zdCAgICAgICAgfCAgMAogLi4uL2dvLWJvb3RzdHJhcC1zdGFnZTEuaGFzaCAgICAgICAgICAg
+ICAgICAgIHwgIDAKIC4uLi9nby1ib290c3RyYXAtc3RhZ2UxLm1rICAgICAgICAgICAgICAgICAg
+ICB8ICAwCiAuLi4vZ28tYm9vdHN0cmFwLXN0YWdlMi9Db25maWcuaW4uaG9zdCAgICAgICAgfCAg
+MAogLi4uL2dvLWJvb3RzdHJhcC1zdGFnZTIuaGFzaCAgICAgICAgICAgICAgICAgIHwgIDAKIC4u
+Li9nby1ib290c3RyYXAtc3RhZ2UyLm1rICAgICAgICAgICAgICAgICAgICB8ICAwCiAuLi4vZ28t
+Ym9vdHN0cmFwLXN0YWdlMy9Db25maWcuaW4uaG9zdCAgICAgICAgfCAgMAogLi4uL2dvLWJvb3Rz
+dHJhcC1zdGFnZTMuaGFzaCAgICAgICAgICAgICAgICAgIHwgIDAKIC4uLi9nby1ib290c3RyYXAt
+c3RhZ2UzLm1rICAgICAgICAgICAgICAgICAgICB8ICAwCiAuLi5leHBsaWNpdC1vcHRpb24tZm9y
+LWNyb3NzY29tcGlsYXRpb24ucGF0Y2ggfCAgMAogLi4ubGR2Y3MtZmFsc2Utd2hlbi1idWlsZGlu
+Zy1nby1ib290c3RyLnBhdGNoIHwgIDAKIHBhY2thZ2UvZ28ve2dvLmhhc2ggPT4gZ28tc3JjL2dv
+LXNyYy5oYXNofSAgICB8ICAwCiBwYWNrYWdlL2dvL2dvLXNyYy9nby1zcmMubWsgICAgICAgICAg
+ICAgICAgICAgfCA1NCArKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL2dvL2dvLm1rICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCA0MiArKy0tLS0tLS0tLS0tLS0KIHBhY2thZ2UvZ29j
+cnlwdGZzL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvbWVuZGVy
+LWFydGlmYWN0L0NvbmZpZy5pbi5ob3N0ICAgICAgICB8ICAxICsKIHBhY2thZ2UvbWVuZGVyLWNv
+bm5lY3QvQ29uZmlnLmluICAgICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvbWVuZGVyL0NvbmZp
+Zy5pbiAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvbW9ieS1idWlsZGtpdC9D
+b25maWcuaW4gICAgICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvbW9ieS1idWlsZGtpdC9Db25m
+aWcuaW4uaG9zdCAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvbmVyZGN0bC9Db25maWcuaW4gICAg
+ICAgICAgICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvcnVuYy9Db25maWcuaW4gICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvcnVuYy9Db25maWcuaW4uaG9zdCAgICAgICAg
+ICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvdGluaWZpZXIvQ29uZmlnLmluICAgICAgICAgICAg
+ICAgICAgICB8ICAxICsKIHBhY2thZ2Uvd3RmdXRpbC9Db25maWcuaW4gICAgICAgICAgICAgICAg
+ICAgICB8ICAxICsKIHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfZ28ucHkgICAg
+ICB8IDQxICsrKysrKysrKysrKysrCiA0NSBmaWxlcyBjaGFuZ2VkLCAyMTMgaW5zZXJ0aW9ucygr
+KSwgNDUgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nby9nby1iaW4v
+Q29uZmlnLmluLmhvc3QKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2dvL2dvLWJpbi9nby1i
+aW4uaGFzaAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ28vZ28tYmluL2dvLWJpbi5tawog
+cmVuYW1lIHBhY2thZ2UveyA9PiBnb30vZ28tYm9vdHN0cmFwLXN0YWdlMS9Db25maWcuaW4uaG9z
+dCAoMTAwJSkKIHJlbmFtZSBwYWNrYWdlL3sgPT4gZ299L2dvLWJvb3RzdHJhcC1zdGFnZTEvZ28t
+Ym9vdHN0cmFwLXN0YWdlMS5oYXNoICgxMDAlKQogcmVuYW1lIHBhY2thZ2UveyA9PiBnb30vZ28t
+Ym9vdHN0cmFwLXN0YWdlMS9nby1ib290c3RyYXAtc3RhZ2UxLm1rICgxMDAlKQogcmVuYW1lIHBh
+Y2thZ2UveyA9PiBnb30vZ28tYm9vdHN0cmFwLXN0YWdlMi9Db25maWcuaW4uaG9zdCAoMTAwJSkK
+IHJlbmFtZSBwYWNrYWdlL3sgPT4gZ299L2dvLWJvb3RzdHJhcC1zdGFnZTIvZ28tYm9vdHN0cmFw
+LXN0YWdlMi5oYXNoICgxMDAlKQogcmVuYW1lIHBhY2thZ2UveyA9PiBnb30vZ28tYm9vdHN0cmFw
+LXN0YWdlMi9nby1ib290c3RyYXAtc3RhZ2UyLm1rICgxMDAlKQogcmVuYW1lIHBhY2thZ2UveyA9
+PiBnb30vZ28tYm9vdHN0cmFwLXN0YWdlMy9Db25maWcuaW4uaG9zdCAoMTAwJSkKIHJlbmFtZSBw
+YWNrYWdlL3sgPT4gZ299L2dvLWJvb3RzdHJhcC1zdGFnZTMvZ28tYm9vdHN0cmFwLXN0YWdlMy5o
+YXNoICgxMDAlKQogcmVuYW1lIHBhY2thZ2UveyA9PiBnb30vZ28tYm9vdHN0cmFwLXN0YWdlMy9n
+by1ib290c3RyYXAtc3RhZ2UzLm1rICgxMDAlKQogcmVuYW1lIHBhY2thZ2UvZ28veyA9PiBnby1z
+cmN9LzAwMDEtYnVpbGQuZ28tZXhwbGljaXQtb3B0aW9uLWZvci1jcm9zc2NvbXBpbGF0aW9uLnBh
+dGNoICgxMDAlKQogcmVuYW1lIHBhY2thZ2UvZ28veyA9PiBnby1zcmN9LzAwMDItY21kLWRpc3Qt
+c2V0LWJ1aWxkdmNzLWZhbHNlLXdoZW4tYnVpbGRpbmctZ28tYm9vdHN0ci5wYXRjaCAoMTAwJSkK
+IHJlbmFtZSBwYWNrYWdlL2dvL3tnby5oYXNoID0+IGdvLXNyYy9nby1zcmMuaGFzaH0gKDEwMCUp
+CiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nby9nby1zcmMvZ28tc3JjLm1rCiBjcmVhdGUg
+bW9kZSAxMDA2NDQgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9nby5weQoKLS0K
+Mi40NC4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
