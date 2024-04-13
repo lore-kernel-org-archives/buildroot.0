@@ -4,73 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 587CDC4345F
-	for <buildroot@archiver.kernel.org>; Sat, 13 Apr 2024 19:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2BC9C4345F
+	for <buildroot@archiver.kernel.org>; Sat, 13 Apr 2024 19:56:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB5CA406C5;
-	Sat, 13 Apr 2024 19:44:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8213440725;
+	Sat, 13 Apr 2024 19:56:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EoD0CLlBtORb; Sat, 13 Apr 2024 19:44:09 +0000 (UTC)
+ id Lc44yL4EsnSq; Sat, 13 Apr 2024 19:56:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4FE940604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC9A540832
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4FE940604;
-	Sat, 13 Apr 2024 19:44:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CB81D1BF297
- for <buildroot@lists.busybox.net>; Sat, 13 Apr 2024 19:44:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC9A540832;
+	Sat, 13 Apr 2024 19:56:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D519C1BF297
+ for <buildroot@lists.busybox.net>; Sat, 13 Apr 2024 19:56:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7908405D2
- for <buildroot@lists.busybox.net>; Sat, 13 Apr 2024 19:44:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C1F23606C6
+ for <buildroot@lists.busybox.net>; Sat, 13 Apr 2024 19:56:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8L_uxUWOP61y for <buildroot@lists.busybox.net>;
- Sat, 13 Apr 2024 19:44:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A3E14405A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3E14405A6
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A3E14405A6
- for <buildroot@buildroot.org>; Sat, 13 Apr 2024 19:44:04 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 8B15F13F880;
- Sat, 13 Apr 2024 21:43:56 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 13 Apr 2024 21:43:56 +0200
-Date: Sat, 13 Apr 2024 21:43:56 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <ZhrgfO4MqypDjkOK@landeda>
-References: <20240413131757.3627575-1-dario.binacchi@amarulasolutions.com>
- <20240413131757.3627575-2-dario.binacchi@amarulasolutions.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MU83QuCgflr4 for <buildroot@lists.busybox.net>;
+ Sat, 13 Apr 2024 19:56:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E06E6065C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E06E6065C
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E06E6065C
+ for <buildroot@buildroot.org>; Sat, 13 Apr 2024 19:56:31 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 84B3DB0053D;
+ Sat, 13 Apr 2024 21:56:27 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 13 Apr 2024 21:56:12 +0200
+Message-ID: <20240413195612.11925-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240413131757.3627575-2-dario.binacchi@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1713037440;
- bh=/cokIoiADzKCa3LVV0Zc+d5pVClxQcTAlxkDRQ9p9cw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=jmcXCCb8yBAQ+l0We4TP8a9uOrBVB0VGj5iKOibHhj6/HmM7FOFVwTQQU+wcGzagT
- qQ45HPWkl0I5jMxL+DFXtcQ2ArXk6+8UYO+ImsKbkYNX51K2RowRQbbi2Irh7bNKTG
- m4F9EcKUKXHlA5T3MBhsS06QZQJ0zn+PRexzl+UeAhTFvmHKoY/8WVaT2Egk4wJUk1
- ECrdiBiWYfW/D0qqrgMbcZqykOIMK7nKS11i8/C7N8CRT4NUcZsoaMdFHgchAwRAy8
- XNUWF7kh9E/xU8IEWXK0/ty1ujIeHTT7RetZipwfaQEa4eOfu+ATWOjLgNRdRmfxWN
- iInaWlFEcp6ZQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1713038189;
+ bh=kf8EQb/9Us4BUxePvwUzAGUuHTQW/UsfyKlo3o8rrIg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=SByMEdibZ8Sa4Kpf0czkOEntVnzi0MqCSNdaRxxirtl65kxRv8BrNHEwCvPRDc1rm
+ fr6HefmtA5DgzOhxWgISeoQpflrsUYydIiAbwXh7qw66qZcTyILGc7OaxFabC9Pr3h
+ SZgOaaeUs3ofnq4xcTGzMBIEeVb5qtYLtvZ6/O3d/LSGu3y84UUx6Jf7+imFpc1XNL
+ tSU0vxAT63Uba8hiAWAXJedOZLUpkxAp6FQUjQCUSwe8s8f3CVBSQorf0Wr2bd9Tlq
+ 9Tx18Rlt91UIXvtNV9LzjozhdA35mieVzm48WPcTPll60ILuC8Nt+P1+qomTKrzJxi
+ 0xL3NSML7t/Bw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=jmcXCCb8
-Subject: Re: [Buildroot] [PATCH 2/3] package/bmap-tools: rename to bmaptool
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=SByMEdib
+Subject: [Buildroot] [PATCH v2 1/1] configs/warpboard: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,271 +75,273 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Dario, All,
+As suggested by Fabio in [1], this commit removes the defconfig and all
+other associated files.
 
-On 2024-04-13 15:17 +0200, Dario Binacchi spake thusly:
-> The patch aligns the package name in Buildroot with the current one on
-> GitHub.
-> The bmaptool (previously bmap-tools) has been moved under the Yocto Project
-> umbrella and is now hosted at https://github.com/yoctoproject/bmaptool.
+The U-Boot support for the Warpboard has been removed upstream in
+commit [2], first included in version 2022.10.
 
-This rename is a bit of churn, just to get rid of a dash. Maybe just
-drop it in the package prompt, with a comment explaining it, lie so:
+For reference, at the time of this commit, the latest Kernel is 6.8.6
+and still has support for this board. See [3].
 
-    +# Historically, the package was named bmap-tools, and that's the name
-    +# under which it was introduced in Buildroot. Since then, it has moved
-    +# to a new home, and got renamed to bmaptool. To avoid useless churn,
-    +# we keep the old symbols, and just refer to bmaptools in the prompt.
-     config BR2_PACKAGE_BMAP_TOOLS
-    -       bool "bmap-tools"
-    +       bool "bmaptool (formerly bmap-tools)"
-            depends on BR2_PACKAGE_PYTHON3
-            select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
-            select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime, pkg_resources
+The reason of this removal is because this defconfig fail to build with
+recent toolchains. See [4].
 
-Note that the description on the github reprository is still:
+Fixes: [4]
 
-    BMAP Tools
+[1] https://lists.buildroot.org/pipermail/buildroot/2024-April/689596.html
+[2] https://source.denx.de/u-boot/u-boot/-/commit/c50ff4a933d5617415221bbb85b0bfa5247b697a
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/arm/boot/dts/nxp/imx/imx6sl-warp.dts?h=v6.8.6
+[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/6609466749
 
-Also note that, even before the move to the yocto umbrella, the tol
-itself was already "bmaptool".
+Suggested-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Changes v1 -> v2:
+- The v2 totally removes the defconfig and associated files, whereas
+  the v1 was fixing the build issue by bumping component the last
+  known supported versions of upstream.
+---
+ DEVELOPERS                                    |  2 -
+ board/freescale/warpboard/README              | 77 -------------------
+ board/freescale/warpboard/linux.fragment      |  1 -
+ .../lib/firmware/brcm/brcmfmac4330-sdio.txt   | 40 ----------
+ configs/warpboard_defconfig                   | 58 --------------
+ 5 files changed, 178 deletions(-)
+ delete mode 100644 board/freescale/warpboard/README
+ delete mode 100644 board/freescale/warpboard/linux.fragment
+ delete mode 100644 board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+ delete mode 100644 configs/warpboard_defconfig
 
-So I don't think a full rename is waranted...
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->  Config.in.legacy                                     |  7 +++++++
->  DEVELOPERS                                           |  8 ++++----
->  package/Config.in                                    |  2 +-
->  package/Config.in.host                               |  2 +-
->  package/{bmap-tools => bmaptool}/Config.in           |  4 ++--
->  package/{bmap-tools => bmaptool}/Config.in.host      |  4 ++--
->  .../bmap-tools.hash => bmaptool/bmaptool.hash}       |  2 +-
->  .../bmap-tools.mk => bmaptool/bmaptool.mk}           | 12 ++++++------
->  .../{sample_bmap_tools.sh => sample_bmaptool.sh}     |  0
->  .../package/{test_bmap_tools.py => test_bmaptool.py} |  6 +++---
->  10 files changed, 27 insertions(+), 20 deletions(-)
->  rename package/{bmap-tools => bmaptool}/Config.in (96%)
->  rename package/{bmap-tools => bmaptool}/Config.in.host (88%)
->  rename package/{bmap-tools/bmap-tools.hash => bmaptool/bmaptool.hash} (51%)
->  rename package/{bmap-tools/bmap-tools.mk => bmaptool/bmaptool.mk} (51%)
->  rename support/testing/tests/package/{sample_bmap_tools.sh => sample_bmaptool.sh} (100%)
->  rename support/testing/tests/package/{test_bmap_tools.py => test_bmaptool.py} (95%)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 76af1da3488f..ced76d072b79 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,13 @@ endif
->  
->  comment "Legacy options removed in 2024.05"
->  
-> +config BR2_PACKAGE_BMAP_TOOLS
-> +	bool "bmap_tools has been renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_BMAPTOOL
-> +	help
-> +	  The bmap-tools package has been renamed to bmaptool.
-> +
->  config BR2_TARGET_TI_K3_IMAGE_GEN
->  	bool "ti-k3-image-gen removed"
->  	select BR2_LEGACY
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 399b2931ff3d..8e3b7a464c26 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2316,7 +2316,7 @@ F:	board/intel/galileo/
->  F:	configs/galileo_defconfig
->  
->  N:	Nicolas Carrier <nicolas.carrier@orolia.com>
-> -F:	package/bmap-tools/
-> +F:	package/bmaptool/
->  F:	package/composer/
->  F:	package/libdbi/
->  F:	package/libdbi-drivers/
-> @@ -2331,12 +2331,12 @@ F:	package/python-augeas/
->  F:	package/python-flask-expects-json/
->  F:	package/python-git/
->  F:	package/python-unittest-xml-reporting/
-> -F:	support/testing/tests/package/sample_bmap_tools.sh
-> +F:	support/testing/tests/package/sample_bmaptool.sh
->  F:	support/testing/tests/package/sample_python_augeas.py
->  F:	support/testing/tests/package/sample_python_flask_expects_json.py
->  F:	support/testing/tests/package/sample_python_git.py
->  F:	support/testing/tests/package/sample_python_unittest_xml_reporting.py
-> -F:	support/testing/tests/package/test_bmap_tools.py
-> +F:	support/testing/tests/package/test_bmaptool.py
->  F:	support/testing/tests/package/test_lua_augeas.py
->  F:	support/testing/tests/package/test_php_apcu.py
->  F:	support/testing/tests/package/test_php_pecl_dbus.py
-> @@ -2992,7 +2992,7 @@ F:	configs/stm32mp157c_dk2_defconfig
->  F:	package/android-tools/
->  F:	package/b43-firmware/
->  F:	package/b43-fwcutter/
-> -F:	package/bmap-tools/
-> +F:	package/bmaptool/
->  F:	package/c-periphery/
->  F:	package/cdrkit/
->  F:	package/cifs-utils/
-> diff --git a/package/Config.in b/package/Config.in
-> index 1935077f0f45..a47a75331014 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -213,7 +213,7 @@ menu "Filesystem and flash utilities"
->  	source "package/aufs/Config.in"
->  	source "package/aufs-util/Config.in"
->  	source "package/autofs/Config.in"
-> -	source "package/bmap-tools/Config.in"
-> +	source "package/bmaptool/Config.in"
->  	source "package/btrfs-progs/Config.in"
->  	source "package/cifs-utils/Config.in"
->  	source "package/cpio/Config.in"
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 9543a22ffc6a..2f8a95933b3b 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -7,7 +7,7 @@ menu "Host utilities"
->  	source "package/android-tools/Config.in.host"
->  	source "package/asn1c/Config.in.host"
->  	source "package/babeltrace2/Config.in.host"
-> -	source "package/bmap-tools/Config.in.host"
-> +	source "package/bmaptool/Config.in.host"
->  	source "package/bootgen/Config.in.host"
->  	source "package/btrfs-progs/Config.in.host"
->  	source "package/cbootimage/Config.in.host"
-> diff --git a/package/bmap-tools/Config.in b/package/bmaptool/Config.in
-> similarity index 96%
-> rename from package/bmap-tools/Config.in
-> rename to package/bmaptool/Config.in
-> index 425b7dfb9e07..821508b35665 100644
-> --- a/package/bmap-tools/Config.in
-> +++ b/package/bmaptool/Config.in
-> @@ -1,5 +1,5 @@
-> -config BR2_PACKAGE_BMAP_TOOLS
-> -	bool "bmap-tools"
-> +config BR2_PACKAGE_BMAPTOOL
-> +	bool "bmaptool"
->  	depends on BR2_PACKAGE_PYTHON3
->  	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
->  	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime, pkg_resources
-> diff --git a/package/bmap-tools/Config.in.host b/package/bmaptool/Config.in.host
-> similarity index 88%
-> rename from package/bmap-tools/Config.in.host
-> rename to package/bmaptool/Config.in.host
-> index cb4d35a437fa..9a341d38775a 100644
-> --- a/package/bmap-tools/Config.in.host
-> +++ b/package/bmaptool/Config.in.host
-> @@ -1,5 +1,5 @@
-> -config BR2_PACKAGE_HOST_BMAP_TOOLS
-> -	bool "host bmap-tools"
-> +config BR2_PACKAGE_HOST_BMAPTOOL
-> +	bool "host bmaptool"
->  	select BR2_PACKAGE_HOST_PYTHON_SIX # runtime
->  	help
->  	  Tool to flash image files to block devices using the block map
-> diff --git a/package/bmap-tools/bmap-tools.hash b/package/bmaptool/bmaptool.hash
-> similarity index 51%
-> rename from package/bmap-tools/bmap-tools.hash
-> rename to package/bmaptool/bmaptool.hash
-> index 82a570ecacdb..9d621e76a52a 100644
-> --- a/package/bmap-tools/bmap-tools.hash
-> +++ b/package/bmaptool/bmaptool.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  0658afb972e7221aa16fece3f84e29e5102e901c929253d7fb6040bde28243f7  bmap-tools-3.6.tar.gz
-> +sha256  7a2e1305bf7e06bc4a580cc719f0facf9d99af8d41659b57c0acae4ad93ff45a  bmaptool-3.6.tar.gz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmaptool/bmaptool.mk
-> similarity index 51%
-> rename from package/bmap-tools/bmap-tools.mk
-> rename to package/bmaptool/bmaptool.mk
-> index 69a22c4745ab..34664d13b37f 100644
-> --- a/package/bmap-tools/bmap-tools.mk
-> +++ b/package/bmaptool/bmaptool.mk
-> @@ -1,14 +1,14 @@
->  ################################################################################
->  #
-> -# bmap-tools
-> +# bmaptool
->  #
->  ################################################################################
->  
-> -BMAP_TOOLS_VERSION = 3.6
-> -BMAP_TOOLS_SITE = $(call github,yoctoproject,bmaptool,v$(BMAP_TOOLS_VERSION))
-> -BMAP_TOOLS_LICENSE = GPL-2.0
-> -BMAP_TOOLS_LICENSE_FILES = COPYING
-> -BMAP_TOOLS_SETUP_TYPE = setuptools
-> +BMAPTOOL_VERSION = 3.6
-> +BMAPTOOL_SITE = $(call github,yoctoproject,bmaptool,v$(BMAPTOOL_VERSION))
-> +BMAPTOOL_LICENSE = GPL-2.0
-> +BMAPTOOL_LICENSE_FILES = COPYING
-> +BMAPTOOL_SETUP_TYPE = setuptools
->  
->  $(eval $(python-package))
->  $(eval $(host-python-package))
-> diff --git a/support/testing/tests/package/sample_bmap_tools.sh b/support/testing/tests/package/sample_bmaptool.sh
-> similarity index 100%
-> rename from support/testing/tests/package/sample_bmap_tools.sh
-> rename to support/testing/tests/package/sample_bmaptool.sh
-> diff --git a/support/testing/tests/package/test_bmap_tools.py b/support/testing/tests/package/test_bmaptool.py
-> similarity index 95%
-> rename from support/testing/tests/package/test_bmap_tools.py
-> rename to support/testing/tests/package/test_bmaptool.py
-> index a179027633df..f88239ecf81e 100644
-> --- a/support/testing/tests/package/test_bmap_tools.py
-> +++ b/support/testing/tests/package/test_bmaptool.py
-> @@ -7,7 +7,7 @@ from infra.basetest import BRTest
->  
->  class TestBmapTools(BRTest):
->      __test__ = False
-> -    sample_script = "tests/package/sample_bmap_tools.sh"
-> +    sample_script = "tests/package/sample_bmaptool.sh"
->      copy_script = 'tests/package/copy-sample-script-to-target.sh'
->      config = \
->          """
-> @@ -15,7 +15,7 @@ class TestBmapTools(BRTest):
->          BR2_cortex_a8=y
->          BR2_TOOLCHAIN_EXTERNAL=y
->          BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> -        BR2_PACKAGE_BMAP_TOOLS=y
-> +        BR2_PACKAGE_BMAPTOOL=y
->          BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
->          BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
->          BR2_TARGET_ROOTFS_EXT2=y
-> @@ -56,7 +56,7 @@ class TestPy3BmapTools(TestBmapTools):
->  class TestHostBmapTools(BRTest):
->      config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
->          """
-> -        BR2_PACKAGE_HOST_BMAP_TOOLS=y
-> +        BR2_PACKAGE_HOST_BMAPTOOL=y
->          # BR2_TARGET_ROOTFS_TAR is not set
->          BR2_TARGET_ROOTFS_EXT2=y
->          """
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 399b2931ff3..4d10e3dbacd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -942,7 +942,6 @@ F:	package/openbox/
+ F:	package/supertuxkart/
+ 
+ N:	Fabio Estevam <festevam@gmail.com>
+-F:	board/freescale/warpboard/
+ F:	board/warp7/
+ F:	configs/freescale_imx*
+ F:	configs/imx23evk_defconfig
+@@ -963,7 +962,6 @@ F:	configs/mx6sx_udoo_neo_defconfig
+ F:	configs/mx6udoo_defconfig
+ F:	configs/wandboard_defconfig
+ F:	configs/warp7_defconfig
+-F:	configs/warpboard_defconfig
+ F:	package/atest/
+ F:	package/crucible/
+ F:	package/kmscube/
+diff --git a/board/freescale/warpboard/README b/board/freescale/warpboard/README
+deleted file mode 100644
+index 67d4e044e98..00000000000
+--- a/board/freescale/warpboard/README
++++ /dev/null
+@@ -1,77 +0,0 @@
+-Build
+-=====
+-
+-First, configure Buildroot for your WarpBoard.
+-  make warpboard_defconfig
+-
+-Build all components:
+-  make
+-
+-You will find in ./output/images/ the following files:
+-  - imx6sl-warp.dtb
+-  - rootfs.ext4
+-  - rootfs.tar
+-  - sdcard.img
+-  - u-boot.imx
+-  - zImage
+-
+-Update uboot
+-============
+-
+-- Put warpboard in USB download mode by closing the j2 jumper on the
+-  daugther board
+-
+-- Load u-boot.imx in the WarpBoard by using the imx-usb-loader host utility:
+-
+-  $ ./output/host/bin/imx_usb -c output/host/etc/imx-loader.d/ output/images/u-boot.imx
+-
+-- U-Boot will appear in minicom
+-
+-- Reset the U-Boot environment to its default:
+- => env default -f -a
+- => saveenv
+-
+-- Run the DFU command in U-Boot:
+- => dfu 0 mmc 0
+-
+-- Transfer U-Boot into flash by running this command in host side:
+-
+- $ sudo ./output/host/bin/dfu-util -D output/images/u-boot.imx -a boot
+-
+-- remove power and put the WarpBoard back into normal boot mode by
+-  opening the j2 jumper.
+-
+-Update linux & rootfs
+-=====================
+-
+-Run the 'ums' command from the U-Boot prompt to mount the eMMC as USB mass
+-storage:
+-
+-=> ums 0 mmc 0
+-
+-And then flash the sdcard.img into the eMMC:
+-
+-  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
+-
+-*** WARNING! This will destroy all the eMMC content. Use it with care! ***
+-
+-Using bluetooth
+-================
+-
+-Enable the bluez_utils or bluez5_utils package, and then run:
+-
+-$ hciattach /dev/ttymxc4 any
+-$ hciconfig hci0 up
+-
+-Using Wifi
+-==========
+-
+-# modprobe brcmfmac
+-# iwconfig wlan0 essid ACCESSPOINTNAME
+-# wpa_passphrase ACCESSPOINTNAME > /etc/wpa.conf
+-(enter the wifi password and press enter)
+-# wpa_supplicant -Dwext -iwlan0 -c /etc/wpa.conf &
+-# udhcpc -i wlan0
+-# ping buildroot.org
+-
+-Enjoy!
+diff --git a/board/freescale/warpboard/linux.fragment b/board/freescale/warpboard/linux.fragment
+deleted file mode 100644
+index 892d0cb7b99..00000000000
+--- a/board/freescale/warpboard/linux.fragment
++++ /dev/null
+@@ -1 +0,0 @@
+-CONFIG_CFG80211_WEXT=y
+diff --git a/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+deleted file mode 100644
+index 9546246b918..00000000000
+--- a/board/freescale/warpboard/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
++++ /dev/null
+@@ -1,40 +0,0 @@
+-# bcm94330wlsdgb.txt
+-manfid=0x2d0
+-prodid=0x0552
+-vendid=0x14e4
+-devid=0x4360
+-boardtype=0x0552
+-boardrev=0x11
+-# this design has 2.4GHz SP3T switch
+-boardflags=0x00080200
+-nocrc=1
+-xtalfreq=37400
+-boardnum=22
+-macaddr=00:90:4c:c5:12:38
+-ag0=255
+-aa2g=1
+-ccode=CN
+-pa0b0=0x14d0
+-pa0b1=0xfd98
+-pa0b2=0xff78
+-rssismf2g=0xa
+-rssismc2g=0x3
+-rssisav2g=0x7
+-maxp2ga0=0x50
+-sromrev=3
+-il0macaddr=00:90:4c:c5:12:38
+-wl0id=0x431b
+-cckPwrOffset=5
+-ofdm2gpo=0x66666666
+-mcs2gpo0=0x6666
+-mcs2gpo1=0x6666
+-swctrlmap_2g=0x04040404,0x02020202,0x02020404,0x10202,0x1ff
+-swctrlmap_5g=0x00100010,0x00280020,0x00200010,0x14202,0x2f8
+-rfreg033=0x19
+-rfreg033_cck=0x1f
+-dacrate2g=160
+-txalpfbyp2g=1
+-bphyscale=17
+-cckPwrIdxCorr=-15
+-pacalidx2g=45
+-txgaintbl=1
+diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
+deleted file mode 100644
+index 1655381aa63..00000000000
+--- a/configs/warpboard_defconfig
++++ /dev/null
+@@ -1,58 +0,0 @@
+-# architecture
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_FPU_VFPV3=y
+-
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+-
+-# system
+-BR2_TARGET_GENERIC_HOSTNAME="warpboard"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+-
+-# rootfs overlay
+-BR2_ROOTFS_OVERLAY="board/freescale/warpboard/rootfs_overlay"
+-
+-# kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/warpboard/linux.fragment"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-warp"
+-
+-# wifi firmware for brcm4330
+-BR2_PACKAGE_LINUX_FIRMWARE=y
+-BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
+-
+-# For automatic firmware loading
+-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+-
+-# wireless packages
+-BR2_PACKAGE_WIRELESS_TOOLS=y
+-BR2_PACKAGE_WPA_SUPPLICANT=y
+-BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+-
+-# uboot
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="warp"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
+-BR2_TARGET_UBOOT_FORMAT_IMX=y
+-
+-# host utility
+-BR2_PACKAGE_HOST_DFU_UTIL=y
+-BR2_PACKAGE_HOST_IMX_USB_LOADER=y
+-
+-# Filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-
+-# required tools to create the eMMC image
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.44.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
