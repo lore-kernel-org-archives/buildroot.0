@@ -1,70 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 102C1C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 14 Apr 2024 21:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 690ADC4345F
+	for <buildroot@archiver.kernel.org>; Sun, 14 Apr 2024 22:24:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8447B81854;
-	Sun, 14 Apr 2024 21:42:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A0EF400AB;
+	Sun, 14 Apr 2024 22:24:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tI-gDMgbf94l; Sun, 14 Apr 2024 22:24:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A4B340189
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A4B340189;
+	Sun, 14 Apr 2024 22:24:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F3C81BF83C
+ for <buildroot@lists.busybox.net>; Sun, 14 Apr 2024 22:24:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F08EE8186E
+ for <buildroot@lists.busybox.net>; Sun, 14 Apr 2024 22:24:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JHavNpMdVlaS; Sun, 14 Apr 2024 21:42:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62E9781858
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62E9781858;
-	Sun, 14 Apr 2024 21:42:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 34E6D1BF2BF
- for <buildroot@lists.busybox.net>; Sun, 14 Apr 2024 21:42:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 21A2B60655
- for <buildroot@lists.busybox.net>; Sun, 14 Apr 2024 21:42:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IYd_Y9Hh5nDN for <buildroot@lists.busybox.net>;
- Sun, 14 Apr 2024 21:42:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8F3416061F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F3416061F
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8F3416061F
- for <buildroot@buildroot.org>; Sun, 14 Apr 2024 21:42:20 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id D1768B00579;
- Sun, 14 Apr 2024 23:42:15 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 14 Apr 2024 23:42:04 +0200
-Message-ID: <20240414214204.1038212-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.44.0
+ id EiLJx1KG9WHU for <buildroot@lists.busybox.net>;
+ Sun, 14 Apr 2024 22:24:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::532; helo=mail-pg1-x532.google.com;
+ envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0DC368179D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DC368179D
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com
+ [IPv6:2607:f8b0:4864:20::532])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0DC368179D
+ for <buildroot@buildroot.org>; Sun, 14 Apr 2024 22:24:41 +0000 (UTC)
+Received: by mail-pg1-x532.google.com with SMTP id
+ 41be03b00d2f7-5d862e8b163so541315a12.1
+ for <buildroot@buildroot.org>; Sun, 14 Apr 2024 15:24:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1713133481; x=1713738281;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=olH9GVzw1Ak5sFHVBGZ5ynYyASPvqkzgKGa+DjNMppY=;
+ b=J5q5Vr0uG2Q1ufKyxm0gvlma9ZpgUrNV4thCNqGKU04IOYx1++p+gVeDrzwMaa8o1v
+ c/vXx5hIf6yoFZMmc79k3dhFygvEHGjHte6bfnhxeVihuNsLtl9najBNjPyjd2WJ6eVt
+ 7VS2C58PJVYwYAx/OnZAwKSTJ0n3iaYJTiGEGpO7ZSnT0nwft3fFoQqTzernq9RXQjlT
+ iT22N21eP1N81oxVKQV7oXaTXPBjhoAxUzCsRLhuuL7iO322UfAcFQ2mG4ixC86/kz8O
+ pUIkGPPkPhEHZDOl/FjAmwDtdA/G5Sh3ssXip2ERk7XiPjWUM8FxPssfZyQvi6gxh7yn
+ JwZA==
+X-Gm-Message-State: AOJu0YyNPpka1nKIL9zGdFgrOBaRvJcZIFKVyE4T3QNSnjUNOYq6tHbP
+ 9jL8nADAu/IWPvXBK4l2NSFbhCU45MWBTJkxkojZkZYqXg1IS9zXRlUAX4Dx/eAKqvjpg/Mcvqe
+ 7kBkw1p02P2CQ0ogG1/6hHKy9+K7v1w==
+X-Google-Smtp-Source: AGHT+IGlTbkXT6DGy9HJf5VMLWfGtrssrqABT5A60ySIuxpSeZ3tlLEzFY8ObS4cUeufv5/5QO3fFvL5GM0FXcFJGNk=
+X-Received: by 2002:a17:90a:c16:b0:2a2:83b0:5fad with SMTP id
+ 22-20020a17090a0c1600b002a283b05fadmr7645484pjs.2.1713133481226; Sun, 14 Apr
+ 2024 15:24:41 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1713130937;
- bh=TuPQA1S21FepEOwWdGjWYqiJMBoj93Shvft1OHY4+Ok=;
- h=From:To:Cc:Subject:Date:From;
- b=rafX/EZZlrx3mdri1BGS5t4AkctFkdDjmCzqDOFyiNIWDIBIEa5q64gct2NUimBRF
- n5ObOQHfSUELUz/msdWEqUGvx+gtfyYGVKQHzF4+/gMsavISDCpdVMNhtQlOIab/E1
- xWjw6l7ra+cJMVPxaGcXmwp/+gqCP6qM1fxChyRQiUZQPl98YsGxH8VHaQgcZuh70H
- GKhrnDUjpBZ8WtFeNwQXTk9qTdtOig1r3T7LJ8/cL2E3Mrp1V+glQ9iyshwclKKGUy
- VwkKm69KT/VNh9vy8Wuf5EoCumXWGJJQDyVlIpkH5kW2JlGsl9kAawR0ohTSjT5VFj
- ftG1Sd5AFSs3w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+References: <20240413195612.11925-1-ju.o@free.fr>
+In-Reply-To: <20240413195612.11925-1-ju.o@free.fr>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 14 Apr 2024 19:24:30 -0300
+Message-ID: <CAOMZO5BkgZr5B9Sjsk3YJCVazZeLE0wJbzaVkd1=71LxjNYG4Q@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1713133481; x=1713738281; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=olH9GVzw1Ak5sFHVBGZ5ynYyASPvqkzgKGa+DjNMppY=;
+ b=K8kYLY3yG+VTtyY1wBOWIrknOOE9YALGZgd2LIHkiyKq5ScQ+1+KslSErV7ZUTHRxF
+ ICtZ/4Wax3tV6HeftSJlOlmo9Da7STL/Jy+YFd+JU9TjraB8Z0bye8BMqNqarO2NDLrS
+ TKEDo4TwnBpJAIaeeig8HAei4xMGXlmQzjJPhLK8J6o+D4CN1SW4qifLs6wxuT9TX15v
+ RM0iNZp44e2Ovj/c7OFJ+zLGWCYokRukYAWxePG633V7e9EnjbMHP5RqcmCA4GHm82JM
+ Buc7n5H3FbSNjQlWyoUEKhk0jw/DYDjaxR47ITW/3kmweKVvd5xiJagCPAhj5dcqfQep
+ AYKA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=rafX/EZZ
-Subject: [Buildroot] [PATCH 1/1] support/testing: add wine runtime test
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=K8kYLY3y
+Subject: Re: [Buildroot] [PATCH v2 1/1] configs/warpboard: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,129 +98,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                 |  1 +
- support/testing/tests/package/test_wine.py | 88 ++++++++++++++++++++++
- 2 files changed, 89 insertions(+)
- create mode 100644 support/testing/tests/package/test_wine.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 399b2931ff3..b8beb1bd565 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1872,6 +1872,7 @@ F:	support/testing/tests/package/test_usbutils.py
- F:	support/testing/tests/package/test_usbutils/
- F:	support/testing/tests/package/test_weston.py
- F:	support/testing/tests/package/test_weston/
-+F:	support/testing/tests/package/test_wine.py
- F:	support/testing/tests/package/test_xz.py
- F:	support/testing/tests/package/test_z3.py
- F:	support/testing/tests/package/test_z3/
-diff --git a/support/testing/tests/package/test_wine.py b/support/testing/tests/package/test_wine.py
-new file mode 100644
-index 00000000000..4e5b4a8b111
---- /dev/null
-+++ b/support/testing/tests/package/test_wine.py
-@@ -0,0 +1,88 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestWine(infra.basetest.BRTest):
-+    # Wine depends on i386 architecture. The pre-build runtime test
-+    # Kernel (for armv5) cannot be used. The config also uses a ext4
-+    # rootfs due to the larger Wine footprint. We also enable NLS,
-+    # which is required for cmd.exe shell to work.
-+    config = \
-+        """
-+        BR2_i386=y
-+        BR2_x86_pentium4=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.27"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-+        BR2_PACKAGE_WINE=y
-+        BR2_SYSTEM_ENABLE_NLS=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "bzImage")
-+        self.emulator.boot(arch="i386",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyS0"],
-+                           options=["-M", "pc", "-m", "256M",
-+                                    "-drive", f"file={drive},if=virtio,format=raw"])
-+        self.emulator.login()
-+
-+        # Check the program can run.
-+        self.assertRunOk("wine --version")
-+
-+        # Remove the Wine directory to make this test idempotent. This
-+        # is because we use a persistent storage. This is useful only
-+        # when the run-tests script is used with the "-k" option.
-+        self.assertRunOk("rm -rf ~/.wine")
-+
-+        # Wine usually prints lots of debug messages. We disable all
-+        # logs for this test. For debugging, this line can be
-+        # commented, or extra log can also be added. "WINEDEBUG=+all"
-+        # enable all logs and generates a lot of messages.
-+        # See: https://wiki.winehq.org/Debug_Channels
-+        self.assertRunOk("export WINEDEBUG=-all")
-+
-+        # We force the initialization of the WINEPREFIX
-+        # directory. This operation can take some time. This will make
-+        # subsequent wine invocation execution time more stable.
-+        self.assertRunOk("wineboot --init", timeout=45)
-+
-+        # We check we can list files in the Windows OS directory.
-+        cmd = "wine cmd.exe /C 'DIR C:\\WINDOWS\\'"
-+        self.assertRunOk(cmd, timeout=10)
-+
-+        # We check we can read a Windows OS specific environment
-+        # variable. We use "assertIn" rather than "assertEqual"
-+        # because the cmd.exe shell write extra control characters.
-+        cmd = "wine cmd.exe /C 'ECHO %OS%'"
-+        out, ret = self.emulator.run(cmd, timeout=10)
-+        self.assertEqual(ret, 0)
-+        self.assertIn("Windows_NT", out[0])
-+
-+        # We check we can print an arbitrary string with the
-+        # cmd.exe shell.
-+        string = "Hello Buildroot !"
-+        cmd = f"wine cmd.exe /C 'ECHO {string}'"
-+        out, ret = self.emulator.run(cmd, timeout=10)
-+        self.assertEqual(ret, 0)
-+        self.assertIn(string, out[0])
-+
-+        # We check the VER command reports a Windows OS version.
-+        cmd = "wine cmd.exe /C 'VER'"
-+        out, ret = self.emulator.run(cmd, timeout=10)
-+        self.assertEqual(ret, 0)
-+        self.assertIn("Microsoft Windows", "\n".join(out))
-+
-+        # We run the ping.exe command.
-+        self.assertRunOk("wine ping.exe 127.0.0.1", timeout=10)
--- 
-2.44.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSnVsaWVuLAoKT24gU2F0LCBBcHIgMTMsIDIwMjQgYXQgNDo1NuKAr1BNIEp1bGllbiBPbGl2
+YWluIDxqdS5vQGZyZWUuZnI+IHdyb3RlOgo+Cj4gQXMgc3VnZ2VzdGVkIGJ5IEZhYmlvIGluIFsx
+XSwgdGhpcyBjb21taXQgcmVtb3ZlcyB0aGUgZGVmY29uZmlnIGFuZCBhbGwKPiBvdGhlciBhc3Nv
+Y2lhdGVkIGZpbGVzLgo+Cj4gVGhlIFUtQm9vdCBzdXBwb3J0IGZvciB0aGUgV2FycGJvYXJkIGhh
+cyBiZWVuIHJlbW92ZWQgdXBzdHJlYW0gaW4KPiBjb21taXQgWzJdLCBmaXJzdCBpbmNsdWRlZCBp
+biB2ZXJzaW9uIDIwMjIuMTAuCj4KPiBGb3IgcmVmZXJlbmNlLCBhdCB0aGUgdGltZSBvZiB0aGlz
+IGNvbW1pdCwgdGhlIGxhdGVzdCBLZXJuZWwgaXMgNi44LjYKPiBhbmQgc3RpbGwgaGFzIHN1cHBv
+cnQgZm9yIHRoaXMgYm9hcmQuIFNlZSBbM10uCj4KPiBUaGUgcmVhc29uIG9mIHRoaXMgcmVtb3Zh
+bCBpcyBiZWNhdXNlIHRoaXMgZGVmY29uZmlnIGZhaWwgdG8gYnVpbGQgd2l0aAo+IHJlY2VudCB0
+b29sY2hhaW5zLiBTZWUgWzRdLgo+Cj4gRml4ZXM6IFs0XQo+Cj4gWzFdIGh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9waXBlcm1haWwvYnVpbGRyb290LzIwMjQtQXByaWwvNjg5NTk2Lmh0bWwK
+PiBbMl0gaHR0cHM6Ly9zb3VyY2UuZGVueC5kZS91LWJvb3QvdS1ib290Ly0vY29tbWl0L2M1MGZm
+NGE5MzNkNTYxNzQxNTIyMWJiYjg1YjBiZmE1MjQ3YjY5N2EKPiBbM10gaHR0cHM6Ly9naXQua2Vy
+bmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc3RhYmxlL2xpbnV4LmdpdC90cmVlL2Fy
+Y2gvYXJtL2Jvb3QvZHRzL254cC9pbXgvaW14NnNsLXdhcnAuZHRzP2g9djYuOC42Cj4gWzRdIGh0
+dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvNjYwOTQ2Njc0
+OQo+Cj4gU3VnZ2VzdGVkLWJ5OiBGYWJpbyBFc3RldmFtIDxmZXN0ZXZhbUBnbWFpbC5jb20+Cj4g
+U2lnbmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KClllcywgbGV0J3Mg
+cmVtb3ZlIGl0IGFzIEkgZG9uJ3QgaGF2ZSBhY2Nlc3MgdG8gdGhpcyBib2FyZCBhbnltb3JlLCB0
+aGFua3MuCgpSZXZpZXdlZC1ieTogRmFiaW8gRXN0ZXZhbSA8ZmVzdGV2YW1AZ21haWwuY29tPgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
