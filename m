@@ -4,92 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 374D1C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 14 Apr 2024 07:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8FCDC4345F
+	for <buildroot@archiver.kernel.org>; Sun, 14 Apr 2024 07:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C87E980E3E;
-	Sun, 14 Apr 2024 07:40:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92BEA80BD9;
+	Sun, 14 Apr 2024 07:48:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UZ5hvdBxOq1y; Sun, 14 Apr 2024 07:40:31 +0000 (UTC)
+ id edVqQo8gVoaG; Sun, 14 Apr 2024 07:48:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C785881E38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87B2F80BCD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C785881E38;
-	Sun, 14 Apr 2024 07:40:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 163851BF40B
- for <buildroot@lists.busybox.net>; Sun, 14 Apr 2024 07:40:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87B2F80BCD;
+	Sun, 14 Apr 2024 07:48:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B82D1BF40B
+ for <buildroot@lists.busybox.net>; Sun, 14 Apr 2024 07:48:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00F5781E38
- for <buildroot@lists.busybox.net>; Sun, 14 Apr 2024 07:40:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1FA67400E5
+ for <buildroot@lists.busybox.net>; Sun, 14 Apr 2024 07:48:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J1lNgZQMqjuD for <buildroot@lists.busybox.net>;
- Sun, 14 Apr 2024 07:40:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rec_gV5hlsSu for <buildroot@lists.busybox.net>;
+ Sun, 14 Apr 2024 07:48:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42d; helo=mail-pf1-x42d.google.com;
- envelope-from=huntchr@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1F39280E3E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F39280E3E
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com
- [IPv6:2607:f8b0:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F39280E3E
- for <buildroot@buildroot.org>; Sun, 14 Apr 2024 07:40:28 +0000 (UTC)
-Received: by mail-pf1-x42d.google.com with SMTP id
- d2e1a72fcca58-6ef9bd94d81so1207119b3a.3
- for <buildroot@buildroot.org>; Sun, 14 Apr 2024 00:40:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1713080428; x=1713685228;
- h=to:date:message-id:subject:mime-version:from:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=PT6hb8m161d+YYVayuq9ip+Aj3DG0Nvko3cCOqUlv/g=;
- b=tnppGeR2n0sINIfxIi6Q/AWxHag3jQaKmzBVlNAXgRHJB7DNJ6V4QQZ3IMb2WGkehh
- 24cxPl6tMlIWuGul4cRrt4pjSPIiyOvb59raxM2W6G7vKrShcCFtIuFt2PxpHnSRBfTm
- 7SFUHcAT5gPhtrp8QnZCV/OErCrlwfDV9T5iIZhZbuP6jYvEFsPXv1TOmbif//LpLGYa
- oxIJfYveB8M8YtS3xRXpnmkjeNv5PfCLCtS4RMVk7C2zo9XPsmdpPwsD/kt0cw0b2AGu
- NYpJh+edVQedFTdgSuwjNBcoC57lHnkct4CAw7GMzmAwm2oMPxUBoe6Zp1jFAvs1J3TR
- CelQ==
-X-Gm-Message-State: AOJu0YxPaWq5+aUi9waBVd47adLI6NNtrbUAuvNAzAJpFhDHaLA5jutH
- 8slApQYsrMK0BxIiwsq81pRHXyELrNAb7OYabrYmg6zXBgoPGOi9faKGJg==
-X-Google-Smtp-Source: AGHT+IHFprsNUb3l7VbzmY6MypRJsUP6F+Q+O8DzTWsh6TEcGH3Tv0YzfTE5eRsotcbpIIx1OShbVQ==
-X-Received: by 2002:a05:6a00:1953:b0:6ea:f026:4003 with SMTP id
- s19-20020a056a00195300b006eaf0264003mr6927523pfk.3.1713080428025; 
- Sun, 14 Apr 2024 00:40:28 -0700 (PDT)
-Received: from smtpclient.apple
- (2001-44b8-3127-3500-28b2-af57-fcf6-271d.static.ipv6.internode.on.net.
- [2001:44b8:3127:3500:28b2:af57:fcf6:271d])
- by smtp.gmail.com with ESMTPSA id
- lr48-20020a056a0073b000b006e724ccdc3esm5249225pfb.55.2024.04.14.00.40.26
- for <buildroot@buildroot.org>
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Sun, 14 Apr 2024 00:40:27 -0700 (PDT)
-From: Christopher Hunt <huntchr@gmail.com>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6\))
-Message-Id: <8A84B636-FF5F-4B7A-8771-D4D299F8784F@gmail.com>
-Date: Sun, 14 Apr 2024 17:40:14 +1000
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 10462400C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10462400C7
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 10462400C7
+ for <buildroot@buildroot.org>; Sun, 14 Apr 2024 07:48:42 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 12245352110F; Sun, 14 Apr 2024 09:48:40 +0200 (CEST)
+Date: Sun, 14 Apr 2024 09:48:40 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-X-Mailer: Apple Mail (2.3731.700.6)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1713080428; x=1713685228; darn=buildroot.org;
- h=to:date:message-id:subject:mime-version:from:from:to:cc:subject
- :date:message-id:reply-to;
- bh=PT6hb8m161d+YYVayuq9ip+Aj3DG0Nvko3cCOqUlv/g=;
- b=ntRatwvn1jzn3Bvc+M7MKhL9tZPibnpZQsaSi4JWNfn9V3ZD4eaCSSwi0qx3HieG0O
- HLlF6hF7IaE6croE2nfIDTtQ/59cqLBTz654qcWCj9qG9gAOY4If4QXlqZZBmDXUdPiA
- QPq1e2dDBvWEU9I/BXEPnoNpuYB6++Er2G7+xVrZrEOBtTb21xlOwq7l4xIL7TRQupht
- iKy1UpXRz//01XqVr0t6Reark2VH4EOuNFnDL3Ek6dVV5Zpx5nbUky/CBaa8iWC1ufGD
- 6FYZQQCq5J90kd6KTeGnP6aNntN1XeBJynv+FWotsPicYk1mmYFBZtHzffRMjJjheYGK
- 7eiA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ntRatwvn
-Subject: [Buildroot] Custom DTS declaration
+Message-ID: <ZhuKWDZALDt+xUcI@waldemar-brodkorb.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-27-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1713080921; bh=tjzM5DGI5MD663wVW1wW2eCU1wo+Xr8zIuBeQsnJua8=;
+ h=Date:From:To:Subject:From;
+ b=qPm1V6pa3S9PlzLiFfehx/fGaF/hq+Vpk8VOww3totOvTAO5oxCt24bkq4UPJ3MzR
+ 6WxmkSEgJzJO6kLlMtT/mnI54RLhDzC0r0lkjk4sgpeShhyf4Qe1pz7hegaGmE0usQ
+ 0RcczHpkyPbFeKwHdMU9vvNEImAZ6r6B0o6AwsK52d1PrX0THQL0J9uwgEIlqNas0M
+ aCzOZXmocA5LN/IugFknRiuL0PGFJk+2NjZmJ7ayZnZi3GN1ZqD/FkKXnmXKtVbtBX
+ hRHj+Je0MlKcVtdOCHM27tWU677S/1apVx0TT+oh1wGkfT/zcfUjHO9n1LH6Jei5y1
+ JiehGhYmhCGxg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=openadk.org header.i=@openadk.org
+ header.a=rsa-sha256 header.s=2022 header.b=qPm1V6pa
+Subject: [Buildroot] [PATCH] package/asterisk: bump to 20.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,103 +75,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5315168781445204862=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+See here for changes:
+https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-20-current.md
 
---===============5315168781445204862==
-Content-Type: multipart/alternative;
-	boundary="Apple-Mail=_61EFF643-5616-4FCF-A7A4-7014A5C8DAD9"
+There is still an open issue reported upstream:
+https://github.com/asterisk/asterisk/issues/671
 
+But it seems it is not reproducible by the asterisk developers, so
+update the package so others can make use of it.
 
---Apple-Mail=_61EFF643-5616-4FCF-A7A4-7014A5C8DAD9
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
+Use the external pjsip package, instead of the bundled one.
 
-Hi there,
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/asterisk/Config.in     |  2 ++
+ package/asterisk/asterisk.hash |  2 +-
+ package/asterisk/asterisk.mk   | 11 +++++++----
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-I=E2=80=99m somewhat confused about the device-tree that I can view from =
-the Linux CLI vs what I=E2=80=99m supplying to buildroot.
-
-If I look at /proc/device-tree/model then I see "Microchip SAMA5D27 =
-WLSOM1 EK=E2=80=9D. However, my =
-board/cuprous/gw/linux/dts/at91-sama5d27_wlsom1_cuprous_gw.dts declares, =
-"Microchip SAMA5D27 WLSOM1 Cuprous Gateway=E2=80=9D. I=E2=80=99m =
-declaring the use of that DTS via =
-configs/microchip_sama5d27_wlsom1_cuprous_gw_defconfig with:
-
-	=
-BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"at91-sama5d27_wlsom1_cuprous_gw=E2=80=9D=
-
-	=
-BR2_LINUX_KERNEL_CUSTOM_DTS_PATH=3D"board/cuprous/gw/linux/dts/at91-sama5d=
-27_wlsom1_cuprous_gw.dts"
-
-Uboot is configured to use its own DTS with the name of "Microchip =
-SAMA5D27 WLSOM1 EK=E2=80=9D, so it could be that, or it could just be =
-that I=E2=80=99ve not declared my custom Linux DTS correctly.
-
-Anything obvious?
-
-Full repo here: https://github.com/cuprous-au/buildroot/tree/2022.05.x
-
-Thanks for any help.
-
-Cheers,
--C=
-
---Apple-Mail=_61EFF643-5616-4FCF-A7A4-7014A5C8DAD9
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/html;
-	charset=utf-8
-
-<html><head><meta http-equiv=3D"content-type" content=3D"text/html; =
-charset=3Dutf-8"></head><body style=3D"overflow-wrap: break-word; =
--webkit-nbsp-mode: space; line-break: after-white-space;">Hi =
-there,<div><br></div><div>I=E2=80=99m somewhat confused about the =
-device-tree that I can view from the Linux CLI vs what I=E2=80=99m =
-supplying to buildroot.</div><div><br></div><div>If I look at =
-/proc/device-tree/model then I see "Microchip SAMA5D27 WLSOM1 EK=E2=80=9D.=
- However, =
-my&nbsp;board/cuprous/gw/linux/dts/at91-sama5d27_wlsom1_cuprous_gw.dts =
-declares, "Microchip SAMA5D27 WLSOM1 Cuprous Gateway=E2=80=9D. I=E2=80=99m=
- declaring the use of that DTS =
-via&nbsp;configs/microchip_sama5d27_wlsom1_cuprous_gw_defconfig =
-with:</div><div><br></div><div><div><span class=3D"Apple-tab-span" =
-style=3D"white-space:pre">	=
-</span>BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"at91-sama5d27_wlsom1_cuprous_gw=
-=E2=80=9D</div><div><span class=3D"Apple-tab-span" =
-style=3D"white-space:pre">	=
-</span>BR2_LINUX_KERNEL_CUSTOM_DTS_PATH=3D"board/cuprous/gw/linux/dts/at91=
--sama5d27_wlsom1_cuprous_gw.dts"</div></div><div><br></div><div>Uboot is =
-configured to use its own DTS with the name of&nbsp;<font =
-color=3D"#000000"><span style=3D"caret-color: rgb(0, 0, 0);">"Microchip =
-SAMA5D27 WLSOM1 EK=E2=80=9D, so it could be that, or it could just be =
-that I=E2=80=99ve not declared my custom Linux DTS =
-correctly.</span></font></div><div><font color=3D"#000000"><span =
-style=3D"caret-color: rgb(0, 0, 0);"><br></span></font></div><div><font =
-color=3D"#000000"><span style=3D"caret-color: rgb(0, 0, 0);">Anything =
-obvious?</span></font></div><div><br></div><div><font =
-color=3D"#000000"><span style=3D"caret-color: rgb(0, 0, 0);">Full repo =
-here:&nbsp;</span></font><a =
-href=3D"https://github.com/cuprous-au/buildroot/tree/2022.05.x">https://gi=
-thub.com/cuprous-au/buildroot/tree/2022.05.x</a></div><div><br></div><div>=
-Thanks for any =
-help.</div><div><br></div><div>Cheers,</div><div>-C</div></body></html>=
-
---Apple-Mail=_61EFF643-5616-4FCF-A7A4-7014A5C8DAD9--
-
---===============5315168781445204862==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
+index c52456f8fc..ba5a574042 100644
+--- a/package/asterisk/Config.in
++++ b/package/asterisk/Config.in
+@@ -10,6 +10,8 @@ config BR2_PACKAGE_ASTERISK
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBEDIT
+ 	select BR2_PACKAGE_LIBILBC
++	select BR2_PACKAGE_LIBJWT
++	select BR2_PACKAGE_LIBPJSIP
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_UTIL_LINUX
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 246f4219aa..8cb5468249 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  9def260ac8745a5eac7aceabe1c22f84a283b7812f0eccd760f87ce9eb991d22  asterisk-20.5.2.tar.gz
++sha256  62adff44f5bc415627e16957e6bd528e1782a892e116ff261c46f96ca87c342b  asterisk-20.7.0.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index d1f3ea82d3..33d2e78bcf 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 20.5.2
++ASTERISK_VERSION = 20.7.0
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+@@ -27,7 +27,7 @@ ASTERISK_SELINUX_MODULES = asterisk
+ 
+ # For patches 0002 and 0003
+ ASTERISK_AUTORECONF = YES
+-ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson
++ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson -Ithird-party/libjwt
+ 
+ ASTERISK_DEPENDENCIES = \
+ 	host-asterisk \
+@@ -35,6 +35,8 @@ ASTERISK_DEPENDENCIES = \
+ 	jansson \
+ 	libcurl \
+ 	libedit \
++	libjwt \
++	libpjsip \
+ 	libxml2 \
+ 	sqlite \
+ 	util-linux
+@@ -89,10 +91,11 @@ ASTERISK_CONF_OPTS = \
+ 	--with-jansson \
+ 	--with-libcurl \
+ 	--with-ilbc \
++	--with-libjwt="$(STAGING_DIR)/usr" \
+ 	--with-libxml2 \
+ 	--with-libedit="$(STAGING_DIR)/usr" \
+-	--with-pjproject \
+-	--with-pjproject-bundled \
++	--without-pjproject-bundled \
++	--with-pjproject="$(STAGING_DIR)/usr" \
+ 	--with-sqlite3="$(STAGING_DIR)/usr" \
+ 	--with-sounds-cache=$(ASTERISK_DL_DIR)
+ 
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5315168781445204862==--
