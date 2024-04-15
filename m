@@ -1,75 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 745D6C4345F
-	for <buildroot@archiver.kernel.org>; Mon, 15 Apr 2024 12:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88939C4345F
+	for <buildroot@archiver.kernel.org>; Mon, 15 Apr 2024 12:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26CB6605D4;
-	Mon, 15 Apr 2024 12:38:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id soLNkj0VlpRI; Mon, 15 Apr 2024 12:38:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 265596061A
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 265596061A;
-	Mon, 15 Apr 2024 12:38:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EB53D1BF38E
- for <buildroot@lists.busybox.net>; Mon, 15 Apr 2024 12:38:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFF5B402BB
- for <buildroot@lists.busybox.net>; Mon, 15 Apr 2024 12:38:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F2F4403B4;
+	Mon, 15 Apr 2024 12:46:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dayewAoX5nym for <buildroot@lists.busybox.net>;
- Mon, 15 Apr 2024 12:38:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4778640296
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4778640296
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4778640296
- for <buildroot@buildroot.org>; Mon, 15 Apr 2024 12:38:54 +0000 (UTC)
-Received: from [192.168.178.36] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id B4CEB2C80CDB;
- Mon, 15 Apr 2024 14:38:51 +0200 (CEST)
-Message-ID: <aa627e66-c932-42fc-a5f4-aaff35449bf9@bubu1.eu>
-Date: Mon, 15 Apr 2024 14:38:50 +0200
+ id Kcuav5ru7zfW; Mon, 15 Apr 2024 12:46:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04EF24040B
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04EF24040B;
+	Mon, 15 Apr 2024 12:46:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF95E1BF38E
+ for <buildroot@lists.busybox.net>; Mon, 15 Apr 2024 12:46:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 996FB4040B
+ for <buildroot@lists.busybox.net>; Mon, 15 Apr 2024 12:46:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zoQmkFdk7mN6 for <buildroot@lists.busybox.net>;
+ Mon, 15 Apr 2024 12:46:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 055BF403B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 055BF403B4
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 055BF403B4
+ for <buildroot@buildroot.org>; Mon, 15 Apr 2024 12:46:23 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4187731a6e1so2810775e9.2
+ for <buildroot@buildroot.org>; Mon, 15 Apr 2024 05:46:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1713185182; x=1713789982;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=1bwo8VEWnFasWaF+GbGUpayXuEAV2zTdZbmV/mMnI7k=;
+ b=UPHlJw1sLEp72CynU8cFSS0/OJ2u5aWXO8gW0h9k6pkxPLYgELo6xac82Jpn+bS57l
+ irs2Y0Ylaz6JOqY+tvUJplIXacZWWRvj5H6eswfAqXIEEcnJWRoxrQWqxrfANeQDcHhf
+ JOkl7oxOq2cP87glbsUL38atCdVIaVLM35YeqX723m3Lwhn6+j3q5f8fKPzri07LERhd
+ sZt5/hH9ewS4uzJW7/0VFLbx7KTGEfx2RFq0sZ3KKl5PiRTiDzUgUTo7/hiA6FVql4x/
+ oYjRYrDhVwZhjoSqsi/Invj3dH7BNE6MHx6l2+Al16O2/qSHFs9l5pA1gqEVsxPIZeHo
+ XfLg==
+X-Gm-Message-State: AOJu0Yw0WOZXEpu+dYYfs63ei5bHcDT/kO2O7NKplbfM7ntRo5LEYMOz
+ AXlC2YAequylONrj9GP06P9QAhFty4/Rw9ntj04lXRbBII2Or9s5Jd6y2d9ll3XSwEM5ZrXIjbn
+ FYJA=
+X-Google-Smtp-Source: AGHT+IHSb9AAISzaGwwHonMMCCgQFrYAvvltzxZY3aLfWDpn6kuFNFoqfgKA9OaH0hDEDJ1ZIlJ2Mg==
+X-Received: by 2002:a05:600c:1f93:b0:416:bc18:2a00 with SMTP id
+ je19-20020a05600c1f9300b00416bc182a00mr7468033wmb.38.1713185181732; 
+ Mon, 15 Apr 2024 05:46:21 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
+ ([176.201.31.28]) by smtp.gmail.com with ESMTPSA id
+ fc16-20020a05600c525000b00417f65fb982sm13106579wmb.6.2024.04.15.05.46.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 15 Apr 2024 05:46:21 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Mon, 15 Apr 2024 14:46:16 +0200
+Message-ID: <20240415124616.3817152-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-References: <20240328110058.2037303-1-buildroot@bubu1.eu>
- <20240410232520.20172e60@windsurf>
-Content-Language: en-US
-In-Reply-To: <20240410232520.20172e60@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1713184731; bh=8XLAubJgi5NaS0gpej7dAvyWXvEKQ3MveiRTI73mqnc=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=ZdB1QszD4MNH2GPgQV7A+XOwqSglbNlKfMRUz0OoKLKVcqcsq0ou0CWr7taH70v69
- d9BalTuHC9U5c+6NlBiIAqUEiS5S5JoygdwALjAfpxXCvgJkdSBC1G5/00aeCqTE3K
- B2ydaThhjz0uTmqVpTMKiyN8XEhdXPZDUbo0pbePHUcmUs4/dQysXVMXKc64EWqUlX
- et1LRb7ZM862d+YWXrNftux2FqYTjEHEpuoAEm77iQN1anUS29P7m8uVtA+JiWJNAo
- PlPEN79kn2WoJ5ihUYI9fvve+pD69/W6SDP/aEDNW2jEpOWIvQZm39VtgigZ6EWKAn
- UtJY9MFY1u/xQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1713185182; x=1713789982;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=1bwo8VEWnFasWaF+GbGUpayXuEAV2zTdZbmV/mMnI7k=;
+ b=OwPgAAsvBUeygVrJGGyWDbAd/Tq2D/jJte4p1ODv+Eankf2a2JcANYKAfUlZe5UXAV
+ R9a3SOMxAoVnuatqhzdFv9B6KbZq3Q7wXg+WSgbfmxiIGe2W6L1mXc46tlo7nkrpE7uW
+ JODNwBSdPuw91P+Deg3HqrcyFp1Y8RA9bH8D0=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=ZdB1QszD
-Subject: Re: [Buildroot] [PATCH] package/nodejs: bump to 20.12.0
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=OwPgAAsv
+Subject: [Buildroot] [PATCH 1/1] configs/ti_am62x_sk_defconfig: reorder
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,59 +100,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Martin Bark <martin@barkynet.com>, Daniel Price <daniel.price@gmail.com>
+Cc: Xuanhao Shi <X15000177@gmail.com>, Romain Naour <romain.naour@smile.fr>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+The patch doesn't introduce any functional changes but reorganizes the
+code to prevent the execution of the commands:
 
-On 10.04.24 23:25, Thomas Petazzoni wrote:
-> Hello Marcus,
-> 
-> On Thu, 28 Mar 2024 12:00:58 +0100
-> Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
-> 
->> Release Notes: https://nodejs.org/en/blog/release/v20.12.0
->>
->> LICENSE hash changed due to changes in vendored components:
->>
->> * copyright year updates [1][2]
->> * version name update [3]
->> * change from "Unicode, Inc. License - Data Files and Software"
->>    to the "Unicode License v3" [4]. This is in the icu vendored
->>    dependency which is unused in buildroot.
->> * new build tooling script [5] under BSD style license
->>
->> [1] https://github.com/nodejs/node/commit/347e1dd06a5f927d9fd64ce72d776c56d5101910
->> [2] https://github.com/nodejs/node/commit/b88170d602791fa62fc45ac80ca9953bc1bdd25b
->> [3] https://github.com/nodejs/node/commit/c8233912e9fd7464898b549d6762130722bf0bf4
->> [4] https://github.com/nodejs/node/commit/625fd69b76b5a8f59152f803b31941c8986d924b
->> [5] https://github.com/nodejs/node/commit/b5bc597871ca701bab750c46d31ed626decd7f89
->>
->> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-> 
-> Thanks for this bump. Did you run our NodeJS tests after this bump? In
-> particular one aspect about which we need to be careful is that we
-> offer two ways of installing NodeJS: install a pre-compiled binary, or
-> build entirely from source. Running our NodeJS tests ensures that both
-> situations have been verified after a bump.
+make ti_am62x_sk_defconfig
+make savedefconfig
 
-I did not (yet, will do now when I don't need my PC for day ;-)). What I 
-did was build nodejs for our target which uses host-nodejs prebuilt and 
-target nodejs from source. That continued to work as expected.
+from showing a change in the defconfig.
 
-I'll report back about the tests once I get around to it.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ configs/ti_am62x_sk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> Thanks!
-> 
-> Thomas
+diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
+index 5c7b97b3b0b1..405016818438 100644
+--- a/configs/ti_am62x_sk_defconfig
++++ b/configs/ti_am62x_sk_defconfig
+@@ -3,8 +3,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_GLOBAL_PATCH_DIR="board/ti/am62x-sk/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/common/am6xx/post-build.sh"
+-BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -l am62x-sk-buildroot -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -l am62x-sk-buildroot -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/ti/am62x-sk/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-- 
+2.43.0
 
-Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
