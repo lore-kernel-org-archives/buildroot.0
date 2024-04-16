@@ -1,70 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E8EBC4345F
-	for <buildroot@archiver.kernel.org>; Tue, 16 Apr 2024 21:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EA68C4345F
+	for <buildroot@archiver.kernel.org>; Tue, 16 Apr 2024 23:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1362C81434;
-	Tue, 16 Apr 2024 21:40:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB446400D3;
+	Tue, 16 Apr 2024 23:23:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SZxFLLaAZND1; Tue, 16 Apr 2024 21:40:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FgDQgIlRbnY1; Tue, 16 Apr 2024 23:23:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDC5B81E19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 067BA400D8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDC5B81E19;
-	Tue, 16 Apr 2024 21:40:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 067BA400D8;
+	Tue, 16 Apr 2024 23:23:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D02711BF4E2
- for <buildroot@lists.busybox.net>; Tue, 16 Apr 2024 21:40:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D5F61BF4E7
+ for <buildroot@lists.busybox.net>; Tue, 16 Apr 2024 23:23:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BCC734114E
- for <buildroot@lists.busybox.net>; Tue, 16 Apr 2024 21:40:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0946D4114E
+ for <buildroot@lists.busybox.net>; Tue, 16 Apr 2024 23:23:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w6QOK9H9XDMU for <buildroot@lists.busybox.net>;
- Tue, 16 Apr 2024 21:40:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 258EE40C53
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 258EE40C53
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 258EE40C53
- for <buildroot@buildroot.org>; Tue, 16 Apr 2024 21:40:07 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 38C1BB0055E;
- Tue, 16 Apr 2024 23:40:03 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+ id fjB7bilJxYDn for <buildroot@lists.busybox.net>;
+ Tue, 16 Apr 2024 23:23:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::630; helo=mail-pl1-x630.google.com;
+ envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 157B840167
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 157B840167
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com
+ [IPv6:2607:f8b0:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 157B840167
+ for <buildroot@buildroot.org>; Tue, 16 Apr 2024 23:23:26 +0000 (UTC)
+Received: by mail-pl1-x630.google.com with SMTP id
+ d9443c01a7336-1e825c6c10fso25425ad.3
+ for <buildroot@buildroot.org>; Tue, 16 Apr 2024 16:23:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1713309806; x=1713914606;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9c6NBiYZY/B7bos8tdHJGVYrf/vW32ks6XMHR+EB9ZE=;
+ b=MnQcn2Y/lHNJDhFgl6zEaTnMEY2LixphuSPsyigOzALQKzwpAblzbjjMzhAxfhfT35
+ Gho4NJPqX7TnhCSdb0O8BhA5LoKGEu3heebvtelmNU9I1ZYc9oEHL7Vt2j2mPr0JqKNH
+ LvDM2pHbDnK9Neorq9JZL3de8pqdVq1M0nppYt9zaeVIoBeLfxqa0TCUfYZ5qPGx/E6m
+ IDROEWQH7TSILXvVu2qD19rS+uyJzjfQ7KIMmV2QqICxptlESsMCVaJkrmEVWlB52NtU
+ 6ik0wKfDOqB8oMkxArNlWS0VwJJ6zLag5fuBfZZfZ9XorOI+0WghWzR/4ASaPl/lUyhQ
+ 7nKw==
+X-Gm-Message-State: AOJu0Yxc6fvPMTir5BKfpN/0Cpqn6KZshETuKRle7bfW60bLPZifKAB7
+ oieiQxOBSnfCFWjO6H2Yk6BaAT7bK7b+nwbaH8G0KhZH8Yzr8KqnbgXfMA==
+X-Google-Smtp-Source: AGHT+IETXtoGq/b4OxaUlsgA3VdJX+aa82ffgZZg2F1Q/+XebSpnhGJVYclS29ga4cDUkKlWM1tNRA==
+X-Received: by 2002:a17:903:41cf:b0:1dd:85eb:b11 with SMTP id
+ u15-20020a17090341cf00b001dd85eb0b11mr18041483ple.1.1713309805595; 
+ Tue, 16 Apr 2024 16:23:25 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:2b0d:9a9d:d5e1:50da])
+ by smtp.gmail.com with ESMTPSA id
+ 4-20020a170902c24400b001dd578121d4sm10312089plg.204.2024.04.16.16.23.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Apr 2024 16:23:24 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Apr 2024 23:39:58 +0200
-Message-ID: <20240416213958.782150-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.44.0
+Date: Tue, 16 Apr 2024 20:23:17 -0300
+Message-Id: <20240416232317.580780-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1713303604;
- bh=QkJM1e7AhmV+5c4C+iuivqZwLeouob2WJrpFz0hT0jU=;
- h=From:To:Cc:Subject:Date:From;
- b=gzsx1wBrtKZzlA/gWL88c6lIHVU0q+hk9rbvS8QpXnxdSv2SQ9vbrpLCShc1e+hAM
- trWLoMlcnRWT9HRU9JgMgsVAbq+77anm2Tpm5vN9by8k7Wf56kxvEJlAWMRiDyid7K
- ewlf2O64S2j3W+keFpsUUktsUmubRIdnYMJwsks+9oM79XP2OicxvYDtPw345bRDBH
- wdhYm0ENag4spitnjL6Q8MJiL/N8Cpzc+xKXiqYjpauBg8toLZCgeXGhk+xcDeQipU
- UWy+1ubFmk8Jt1uGjBwbQ0BX/QLnQOWLuGNFbcO1YCBILzjycIE1/P3ACClbF0BZPR
- O3ja1BbM4/SAA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1713309806; x=1713914606; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9c6NBiYZY/B7bos8tdHJGVYrf/vW32ks6XMHR+EB9ZE=;
+ b=HLhU1wgMn7K4CyV/97pFB8MLmaMajMm8T+wlDIFqHoMYBzZPjnNPIQ5AN43P5SRJNr
+ UCLkQb+wofzj9k4S+oSfyowhg40MnPiEEfzXnjvRT9IVMezPRPLB5EBc2Oz3MGqG97y9
+ j9klrlwptwRmma9KIOlCUL0Bg38EzkrMFnTiS/31UdvjRZhtjPw9Ia/VXKKHRvHkDH8a
+ BGsaLDuxcnP9hGIF9ZJoMr01N2jY/qH38vwskXTf1J1SppLCMLqaH4755esk0gsfiKrg
+ yVQVVR6d4OzSAD6b/xLJQ0qzVCvVMhd5+GPox6dk1a138V8qFxPS5K/kx2J4kzADj3Jd
+ w3Fw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=gzsx1wBr
-Subject: [Buildroot] [PATCH 1/1] support/testing: add ethtool runtime test
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=HLhU1wgM
+Subject: [Buildroot] [PATCH] configs/wandboard: update U-Boot and kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,120 +100,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                    |  2 +
- support/testing/tests/package/test_ethtool.py | 71 +++++++++++++++++++
- .../test_ethtool/linux-e1000e.fragment        |  1 +
- 3 files changed, 74 insertions(+)
- create mode 100644 support/testing/tests/package/test_ethtool.py
- create mode 100644 support/testing/tests/package/test_ethtool/linux-e1000e.fragment
+Update to U-Boot 2024.04 and kernel 6.6.27 versions.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 399b2931ff3..a1b87b363eb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1784,6 +1784,8 @@ F:	support/testing/tests/package/test_ddrescue.py
- F:	support/testing/tests/package/test_ddrescue/
- F:	support/testing/tests/package/test_dos2unix.py
- F:	support/testing/tests/package/test_ed.py
-+F:	support/testing/tests/package/test_ethtool.py
-+F:	support/testing/tests/package/test_ethtool/
- F:	support/testing/tests/package/test_file.py
- F:	support/testing/tests/package/test_file/
- F:	support/testing/tests/package/test_fluidsynth.py
-diff --git a/support/testing/tests/package/test_ethtool.py b/support/testing/tests/package/test_ethtool.py
-new file mode 100644
-index 00000000000..7a2627c6e9e
---- /dev/null
-+++ b/support/testing/tests/package/test_ethtool.py
-@@ -0,0 +1,71 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestEthtool(infra.basetest.BRTest):
-+    # This ethtool test uses an emulated Intel e1000e adapted (which
-+    # is well supported by Qemu, the Kernel and ethtool). We are not
-+    # using the usual virtio_net because it's not supporting some
-+    # ethtool features like adapter testing. For that reason, we need
-+    # to compile a Kernel.
-+    kernel_fragment = \
-+        infra.filepath("tests/package/test_ethtool/linux-e1000e.fragment")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.27"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
-+        BR2_PACKAGE_ETHTOOL=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
-+                           options=["-M", "virt",
-+                                    "-cpu", "cortex-a57",
-+                                    "-m", "256M",
-+                                    "-netdev", "user,id=test_net",
-+                                    "-net", "nic,model=e1000e,netdev=test_net",
-+                                    "-drive", f"file={drive},if=virtio,format=raw"])
-+        self.emulator.login()
-+
-+        # We check the program can run.
-+        self.assertRunOk("ethtool --version")
-+
-+        # We check a simple query runs correctly.
-+        self.assertRunOk("ethtool eth0")
-+
-+        # We query the driver name and check it's the expected e1000e.
-+        out, ret = self.emulator.run("ethtool -i eth0")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], "driver: e1000e")
-+
-+        # We request an adapter online self test.
-+        self.assertRunOk("ethtool -t eth0 online", timeout=30)
-+
-+        # We query offload parameters and check TSO are enabled (this
-+        # is the driver default).
-+        out, ret = self.emulator.run("ethtool -k eth0")
-+        self.assertEqual(ret, 0)
-+        self.assertIn("tcp-segmentation-offload: on", out)
-+
-+        # We request to disable TSO.
-+        self.assertRunOk("ethtool -K eth0 tcp-segmentation-offload off")
-+
-+        # We check again. TSO should now be disabled.
-+        out, ret = self.emulator.run("ethtool -k eth0")
-+        self.assertEqual(ret, 0)
-+        self.assertIn("tcp-segmentation-offload: off", out)
-diff --git a/support/testing/tests/package/test_ethtool/linux-e1000e.fragment b/support/testing/tests/package/test_ethtool/linux-e1000e.fragment
-new file mode 100644
-index 00000000000..cc3fe0047ee
---- /dev/null
-+++ b/support/testing/tests/package/test_ethtool/linux-e1000e.fragment
-@@ -0,0 +1 @@
-+CONFIG_E1000E=y
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/wandboard_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 522173b8ed91..40d8254242cf 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -23,7 +23,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="wandboard"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.12"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.27"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-wandboard nxp/imx/imx6dl-wandboard nxp/imx/imx6q-wandboard-revb1 nxp/imx/imx6dl-wandboard-revb1 nxp/imx/imx6q-wandboard-revd1 nxp/imx/imx6dl-wandboard-revd1 nxp/imx/imx6qp-wandboard-revd1"
 -- 
-2.44.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
