@@ -4,93 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C3A0C4345F
-	for <buildroot@archiver.kernel.org>; Wed, 17 Apr 2024 08:06:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79A23C4345F
+	for <buildroot@archiver.kernel.org>; Wed, 17 Apr 2024 08:06:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3A6A405EC;
-	Wed, 17 Apr 2024 08:06:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE8E3407F0;
+	Wed, 17 Apr 2024 08:06:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QGrIVN0jGm3F; Wed, 17 Apr 2024 08:06:26 +0000 (UTC)
+ id PwttDOsmIdJE; Wed, 17 Apr 2024 08:06:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB073405F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69B334062D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB073405F7;
-	Wed, 17 Apr 2024 08:06:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C46761BF341
- for <buildroot@lists.busybox.net>; Wed, 17 Apr 2024 08:06:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69B334062D;
+	Wed, 17 Apr 2024 08:06:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AE9E1BF341
+ for <buildroot@lists.busybox.net>; Wed, 17 Apr 2024 08:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B066560AF3
- for <buildroot@lists.busybox.net>; Wed, 17 Apr 2024 08:06:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 17E2440AF7
+ for <buildroot@lists.busybox.net>; Wed, 17 Apr 2024 08:06:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zmsz_mtJRXwV for <buildroot@lists.busybox.net>;
- Wed, 17 Apr 2024 08:06:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Nwo9dtJtj8MY for <buildroot@lists.busybox.net>;
+ Wed, 17 Apr 2024 08:06:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12a; helo=mail-lf1-x12a.google.com;
+ client-ip=2a00:1450:4864:20::22b; helo=mail-lj1-x22b.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 41C7460AEE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41C7460AEE
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 41C7460AEE
- for <buildroot@buildroot.org>; Wed, 17 Apr 2024 08:06:20 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id
- 2adb3069b0e04-516cdb21b34so6856524e87.1
- for <buildroot@buildroot.org>; Wed, 17 Apr 2024 01:06:20 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 98E0E4015A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98E0E4015A
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
+ [IPv6:2a00:1450:4864:20::22b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 98E0E4015A
+ for <buildroot@buildroot.org>; Wed, 17 Apr 2024 08:06:21 +0000 (UTC)
+Received: by mail-lj1-x22b.google.com with SMTP id
+ 38308e7fff4ca-2d858501412so68029331fa.0
+ for <buildroot@buildroot.org>; Wed, 17 Apr 2024 01:06:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1713341178; x=1713945978;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=64HZOsOjo4c3gvZOUkU6Skq7TW7vCyRnm7Rc7gX0ZMY=;
- b=dlMECIs4SdDhPRnRULrqvymIk5UAki4tqwIATLcnjnW7UH6uCrr2xnv5Dlugt/04zN
- qVOmZQ4tO46BinHMMwN7Z9t6OUV5jzWAM8b0EEk/3uTM2MQeT0s4W9oe2bKQV17fYN1Y
- lAgXUrbYlhbA0MReTqK3yHIbM2Hf7oN8XAx/Gk6FJxpvEYL5sFBIXUZ9d/5oNhbERNqP
- vTZvECxNK6bNyhQozbO4hWA5zb5MfRhttb1cue5XMYFYzkx99bR5dPS9zliC/wZ8EvBx
- 8Qy2muTWlrRwNOeZODEakUbXHBMgsLNwcveqNhV5xpon+K8BCVTwLgIP4FFwf1s08tan
- tIdA==
-X-Gm-Message-State: AOJu0YyrI1HKNRe/Mp/FTYKXAx88i0j5nONHsKrqPD9YBnOd0/g3wa9/
- +aXPSTHnHS1wjdIGcjuvo2XlyON0Qq5BDylAA3l/g7agvDdvIQK6NE3ql2GH
-X-Google-Smtp-Source: AGHT+IG5O0Z6256z+DzayNUkdW2sqsdRClyQ3OgntYbCZZJjm/QoTJ87Oxga0FqSWGi4MtNk8a3yew==
-X-Received: by 2002:a2e:9818:0:b0:2da:bbb5:283b with SMTP id
- a24-20020a2e9818000000b002dabbb5283bmr3485008ljj.35.1713341177635; 
- Wed, 17 Apr 2024 01:06:17 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1713341179; x=1713945979;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=2qYKypuCZ2c1uszEBnEIvhfXD6Jk4ZOr12oBvuA8bJs=;
+ b=lNiAeOSHhG4xNUSuLgttCy1cRmpO4c6shlhZcLsp8W3GibAdrKE34ToaN52POpU9a8
+ 9aCOvYEyQugJfpbqS6GviqteUKs7jgxAhF8rvQnAQ0CtD6hxNu6091S53d/NcZWgVSuu
+ 6cJ5As5Y9LSxcbAUJ1uH+ECzIuLe47OteUmOmzdqBB6BVS1Uy9if64010sp/WOb8/uH4
+ oOJ/K+OXGmGTof82eSrNR5H9T7lMX0SodMcN87DV4OuSvWg8DQv4H5HvVPDUBlMAVCde
+ LGD3ZjTnLTU5IkquaxHlHhV1MOey0fg19Rw48hD79zJsKUnP7S8RSWI/tuqtNfNAJfJ+
+ qEdA==
+X-Gm-Message-State: AOJu0YzAQ0K6udpnQcHcr2rYzkN+DlCWKI1hDJPKhfCQV5BWyaeX+lCV
+ Q/Bxm0c+m7LZ9GNIVDn2Q1tj9XKv30rFXe9HuPN1tctJrIwrWYQYICXGXXrY
+X-Google-Smtp-Source: AGHT+IEvXk3DuEUkDy5fZrsNqK1eBdHKq8+sMe56Y8rxAukXbazPm+anMfMFhnf/S2EIu9UUd+Q70Q==
+X-Received: by 2002:a2e:88cd:0:b0:2db:196a:a8d2 with SMTP id
+ a13-20020a2e88cd000000b002db196aa8d2mr868035ljk.17.1713341179375; 
+ Wed, 17 Apr 2024 01:06:19 -0700 (PDT)
 Received: from precision7530-arch-roy.lan ([79.161.254.12])
  by smtp.gmail.com with ESMTPSA id
- d18-20020a2e8912000000b002d2191e20e1sm1830254lji.92.2024.04.17.01.06.16
+ d18-20020a2e8912000000b002d2191e20e1sm1830254lji.92.2024.04.17.01.06.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 17 Apr 2024 01:06:17 -0700 (PDT)
+ Wed, 17 Apr 2024 01:06:18 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 X-Google-Original-From: Roy Kollen Svendsen
  <roy.kollen.svendsen@akersolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Apr 2024 10:05:22 +0200
-Message-ID: <20240417080538.3451923-1-roy.kollen.svendsen@akersolutions.com>
+Date: Wed, 17 Apr 2024 10:05:23 +0200
+Message-ID: <20240417080538.3451923-2-roy.kollen.svendsen@akersolutions.com>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240417080538.3451923-1-roy.kollen.svendsen@akersolutions.com>
+References: <20240417080538.3451923-1-roy.kollen.svendsen@akersolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1713341178; x=1713945978; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=64HZOsOjo4c3gvZOUkU6Skq7TW7vCyRnm7Rc7gX0ZMY=;
- b=cYnyza0UfHkcYctMttU3RdZcDKPStvo8nE+Q8qrGRPTnpojo1Rj3cE3S5fCsLm2oOx
- pM06UiZtQGe+nRf5qQuU2bwk6Aa84ZXpntvU/Po8+YiThGOUaMtUCKfPYWPeQrxjVdte
- JpjuWruEJSID7J+331aKbOskQpLdLWW9FSbFQRFfX0qZqzydEO0hUHv7Pb1rewGA/qNT
- 0owlgxsQTX5uXgdM+jlOIGtBaX6fMUGbKGjOEsnNo/XUDXv2Nm9NvQlmZRUA2m2H7Qai
- g5Blv2bgZVAo2DNvxNCGNQ1L4ohw5O72JcCXZPLkWPfZ/Uwe+7WcVSGN3EkhHEwb2SZF
- 3c/w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1713341179; x=1713945979; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=2qYKypuCZ2c1uszEBnEIvhfXD6Jk4ZOr12oBvuA8bJs=;
+ b=mqec/rO74LkOWjZ8d65o2T+nWK1aZCfedUj3zxjlqGxC1jE96uFC8inIiDSqh7szKO
+ w6hWyuRhwpeqJ2BO0fRr5/dxSMITQR55Iktz3X4P6j67WLhSYnHIrl4yZBu21+KosJhX
+ OIluksQT0ENGa9WuxJsSTN5esIxdlMzZG3ZF5gP19C9KHVtrmGe5qYj5ZCxMsMffRu3R
+ fY+wLA9SEx0zgk6kKYbzvoZXMb4fYywUpfrOD7iT9FtifchtrbosUX6XHEHpbc6+fEbX
+ k/cNcYyb+2rmoiqb/xw8/2rc4HkTZRHv7qwY8EEtk41N5OWzQzp7kZuN9q7kOtLpeCPB
+ zyvQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=cYnyza0U
-Subject: [Buildroot] [PATCH v2 01/11] package/qt6: bump version to 6.7.0
+ header.s=20230601 header.b=mqec/rO7
+Subject: [Buildroot] [PATCH v2 02/11] package/qt6base: avoid enabling both
+ desktop and es2 opengl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,105 +115,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For details see [1], [2], [3], [4], [5], [6], [7], [8] and [9].
+Fixes the following error:
 
-[1] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.0/release-note.md
-[2] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.1/release-note.md
-[3] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.2/release-note.md
-[4] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.3/release-note.md
+ERROR: Feature "opengles2": Forcing to "ON" breaks its condition:
+    NOT WIN32 AND NOT WATCHOS AND NOT QT_FEATURE_opengl_desktop AND GLESv2_FOUND
+Condition values dump:
+    WIN32 = ""
+    WATCHOS = "0"
+    QT_FEATURE_opengl_desktop = "ON"
+    GLESv2_FOUND = "TRUE"
 
-[5] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.0/release-note.md
-[6] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.1/release-note.md
-[7] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.2/release-note.md
-[8] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.3/release-note.md
-
-[9] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.0/release-note.md
+CMake Error at cmake/QtBuildInformation.cmake:209 (message):
+  Check the configuration messages for an error that has occurred.
+Call Stack (most recent call first):
+  cmake/QtBuildInformation.cmake:39 (qt_configure_print_summary)
+  cmake/QtBuildRepoHelpers.cmake:332 (qt_print_feature_summary)
+  CMakeLists.txt:208 (qt_build_repo_end)
 
 Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
 ---
- package/qt6/qt6.mk                             | 4 ++--
- package/qt6/qt6base/qt6base.hash               | 4 ++--
- package/qt6/qt6core5compat/qt6core5compat.hash | 4 ++--
- package/qt6/qt6serialbus/qt6serialbus.hash     | 4 ++--
- package/qt6/qt6serialport/qt6serialport.hash   | 4 ++--
- package/qt6/qt6svg/qt6svg.hash                 | 4 ++--
- 6 files changed, 12 insertions(+), 12 deletions(-)
+ package/qt6/qt6base/qt6base.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
-index 1edb252c96..b87cb6748d 100644
---- a/package/qt6/qt6.mk
-+++ b/package/qt6/qt6.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 6857725ef5..211808d2af 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -259,10 +259,15 @@ QT6BASE_CONF_OPTS += -DFEATURE_eglfs=OFF
+ endif
  
--QT6_VERSION_MAJOR = 6.4
--QT6_VERSION = $(QT6_VERSION_MAJOR).3
-+QT6_VERSION_MAJOR = 6.7
-+QT6_VERSION = $(QT6_VERSION_MAJOR).0
- QT6_SOURCE_TARBALL_PREFIX = everywhere-src
- QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
- 
-diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
-index cb111bd405..0f45826a45 100644
---- a/package/qt6/qt6base/qt6base.hash
-+++ b/package/qt6/qt6base/qt6base.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtbase-everywhere-src-6.4.3.tar.xz.sha256
--sha256  5087c9e5b0165e7bc3c1a4ab176b35d0cd8f52636aea903fa377bdba00891a60  qtbase-everywhere-src-6.4.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.0/submodules/qtbase-everywhere-src-6.7.0.tar.xz.sha256
-+sha256  11b2e29e2e52fb0e3b453ea13bbe51a10fdff36e1c192d8868c5a40233b8b254  qtbase-everywhere-src-6.7.0.tar.xz
- 
- # Hashes for license files
- sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
-diff --git a/package/qt6/qt6core5compat/qt6core5compat.hash b/package/qt6/qt6core5compat/qt6core5compat.hash
-index 0735df3af2..1eb0b5b460 100644
---- a/package/qt6/qt6core5compat/qt6core5compat.hash
-+++ b/package/qt6/qt6core5compat/qt6core5compat.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz.sha256
--sha256  d4b249abb823d575eee9045c24d924ba8d1276e6be7735b287689991d998aa7a  qt5compat-everywhere-src-6.4.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.0/submodules/qt5compat-everywhere-src-6.7.0.tar.xz.sha256
-+sha256  9d49d4fd8345d8a40b63e0b65cd49c1d8286e33a7f1409bf1316763f654e19f5  qt5compat-everywhere-src-6.7.0.tar.xz
- 
- # Hashes for license files:
- sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-diff --git a/package/qt6/qt6serialbus/qt6serialbus.hash b/package/qt6/qt6serialbus/qt6serialbus.hash
-index 98c8931962..17d5090076 100644
---- a/package/qt6/qt6serialbus/qt6serialbus.hash
-+++ b/package/qt6/qt6serialbus/qt6serialbus.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialbus-everywhere-src-6.4.3.tar.xz.sha256
--sha256  b6446a7516d1f04e561c00f9c50ce4d39dad72150f067722ba759f00b4b34366  qtserialbus-everywhere-src-6.4.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.0/submodules/qtserialbus-everywhere-src-6.7.0.tar.xz.sha256
-+sha256  498193a9860664f8a55f676656c45af179ac13d48184af43fc58ddf795bb76dd  qtserialbus-everywhere-src-6.7.0.tar.xz
- 
- # Hashes for license files:
- sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-diff --git a/package/qt6/qt6serialport/qt6serialport.hash b/package/qt6/qt6serialport/qt6serialport.hash
-index 9341978d86..cd51fbe435 100644
---- a/package/qt6/qt6serialport/qt6serialport.hash
-+++ b/package/qt6/qt6serialport/qt6serialport.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz.sha256
--sha256  5f97ad9067efa39a8a2a39fbbc1e03d2191f305733d9c2f3060f8017ecfc95de  qtserialport-everywhere-src-6.4.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.0/submodules/qtserialport-everywhere-src-6.7.0.tar.xz.sha256
-+sha256  b1f02a3d8c9cc8ba2ffa7cca3749f1f147d327e8dfc633fd4ec3cb770d7981c9  qtserialport-everywhere-src-6.7.0.tar.xz
- 
- # Hashes for license files:
- sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-diff --git a/package/qt6/qt6svg/qt6svg.hash b/package/qt6/qt6svg/qt6svg.hash
-index bb239cb012..32c1a79a5c 100644
---- a/package/qt6/qt6svg/qt6svg.hash
-+++ b/package/qt6/qt6svg/qt6svg.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtsvg-everywhere-src-6.4.3.tar.xz.sha256
--sha256  88315f886cf81898705e487cedba6e6160724359d23c518c92c333c098879a4a  qtsvg-everywhere-src-6.4.3.tar.xz
-+# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.0/submodules/qtsvg-everywhere-src-6.7.0.tar.xz.sha256
-+sha256  1518f40e08ff5e6153a6e26e5b95b033413ac143b70795dc1317e7f73ebf922d  qtsvg-everywhere-src-6.7.0.tar.xz
- 
- # Hashes for license files:
- sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+ ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_DESKTOP),y)
+-QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengl_desktop=ON
++QT6BASE_CONF_OPTS += \
++	-DFEATURE_opengl=ON \
++	-DFEATURE_opengl_desktop=ON
+ QT6BASE_DEPENDENCIES += libgl
+ else ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_ES2),y)
+-QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengles2=ON
++QT6BASE_CONF_OPTS += \
++	-DFEATURE_opengl=ON \
++	-DFEATURE_opengles2=ON \
++	-DFEATURE_opengl_desktop=OFF
+ QT6BASE_DEPENDENCIES += libgles
+ else
+ QT6BASE_CONF_OPTS += -DFEATURE_opengl=OFF -DINPUT_opengl=no
 -- 
 2.44.0
 
