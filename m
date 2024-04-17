@@ -4,78 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 795C1C4345F
-	for <buildroot@archiver.kernel.org>; Wed, 17 Apr 2024 21:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE24AC4345F
+	for <buildroot@archiver.kernel.org>; Wed, 17 Apr 2024 21:17:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A087400D3;
-	Wed, 17 Apr 2024 21:10:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39664404DC;
+	Wed, 17 Apr 2024 21:17:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YFDHy71_cQvX; Wed, 17 Apr 2024 21:10:27 +0000 (UTC)
+ id vYRo5NdiBtty; Wed, 17 Apr 2024 21:17:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3FDD400F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1853C4052D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3FDD400F4;
-	Wed, 17 Apr 2024 21:10:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 06A501BF267
- for <buildroot@lists.busybox.net>; Wed, 17 Apr 2024 21:10:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1853C4052D;
+	Wed, 17 Apr 2024 21:17:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CC28D1BF267
+ for <buildroot@lists.busybox.net>; Wed, 17 Apr 2024 21:17:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6F94400F4
- for <buildroot@lists.busybox.net>; Wed, 17 Apr 2024 21:10:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B746F81EE0
+ for <buildroot@lists.busybox.net>; Wed, 17 Apr 2024 21:17:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GxQTCZQlyrpQ for <buildroot@lists.busybox.net>;
- Wed, 17 Apr 2024 21:10:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.67.36.65;
- helo=mout01.posteo.de; envelope-from=gero.schwaericke@posteo.de;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xe-97HJmcc8R for <buildroot@lists.busybox.net>;
+ Wed, 17 Apr 2024 21:17:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.67.36.66;
+ helo=mout02.posteo.de; envelope-from=gero.schwaericke@posteo.de;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E32FD400D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E32FD400D3
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E32FD400D3
- for <buildroot@buildroot.org>; Wed, 17 Apr 2024 21:10:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BC61381EDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC61381EDE
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BC61381EDE
+ for <buildroot@buildroot.org>; Wed, 17 Apr 2024 21:17:04 +0000 (UTC)
 Received: from submission (posteo.de [185.67.36.169]) 
- by mout01.posteo.de (Postfix) with ESMTPS id CDD6B240028
- for <buildroot@buildroot.org>; Wed, 17 Apr 2024 23:10:19 +0200 (CEST)
+ by mout02.posteo.de (Postfix) with ESMTPS id DE944240101
+ for <buildroot@buildroot.org>; Wed, 17 Apr 2024 23:17:01 +0200 (CEST)
 Received: from customer (localhost [127.0.0.1])
- by submission (posteo.de) with ESMTPSA id 4VKYTR1QGYz9rxL;
- Wed, 17 Apr 2024 23:10:19 +0200 (CEST)
-Date: Wed, 17 Apr 2024 21:10:17 +0000
-From: Gero =?utf-8?Q?Schw=C3=A4ricke?= <gero.schwaericke@posteo.de>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20240417211017.GA3300@Apollo>
-Mail-Followup-To: Arnout Vandecappelle <arnout@mind.be>,
- buildroot@buildroot.org
-References: <20240305070452.183573-1-karthikeyan@linumiz.com>
- <9b60fd4d-7a0e-47da-a37a-9690b4ac84db@mind.be>
- <20240407203807.GB13509@Apollo>
- <f76b797d-b9f3-4a40-bc99-8ef057b9aaeb@mind.be>
+ by submission (posteo.de) with ESMTPSA id 4VKYd91Gh5z6tvy;
+ Wed, 17 Apr 2024 23:17:01 +0200 (CEST)
+From: =?UTF-8?q?Gero=20Schw=C3=A4ricke?= <gero.schwaericke@posteo.de>
+To: buildroot@buildroot.org
+Date: Wed, 17 Apr 2024 21:16:30 +0000
+Message-ID: <20240417211654.959611-1-gero.schwaericke@posteo.de>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <f76b797d-b9f3-4a40-bc99-8ef057b9aaeb@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=posteo.de; s=2017; 
- t=1713388219; bh=I8Z91E73b8qQgq1RzyQmoutpAqhMtOv6OMc/AO20Ztg=;
- h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
- Content-Disposition:Content-Transfer-Encoding:From;
- b=ouVFJGj9kWXMQBdfMKM8uSaMJk/N952NxAeGkgWRsZ3+sLRX6r20QnQYrVssMMnMn
- XMrB2QgGHuycgxV2RhWn40/kYl34G9yr8ESra2NiVEH1N2NVQ2ioVBlmTkrEH4QStj
- N9JUw++BAvlaUZdpoIP+Tz8G/MKcsTNGExwubdm1Jyf0BmIrAmVvhH0oGyK0dh/WwS
- 02OnvU/57+BNwOjeQGbsPZ3iKp/4Y6mpdmN2XY94ZtyoHTLLWXnMbmBos8bGSYHvvP
- z1468MmnZnrjjEjT1YQF4Z8fI99NT7vNbmu2RipCfzI7RaCGsPwTri6agxJ6cIi9W5
- oVYQQovKT4nEA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1713388621; bh=y8G1gFrkpacmQ0/hvoUgYKMk5r3PZH+1b0SCplbz1t4=;
+ h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
+ Content-Transfer-Encoding:From;
+ b=YGq7Q4S2oJP9GXRjJE9TlISoJKkuExSc2argmQGoRESPCVHk6QuCVKGywcnxoBYMu
+ uF3Fw+8ZrLlBm+qUXd3GIDGEuFg9/ShHszAPkJJuZFKkv6PLNF8H48b4yrrjH/pd9+
+ ObFsEtbNTCzG2oL0R2kXMcde8omB9wDImaZgjR09vMsrCYvPHqfFpj2xFXM3Vluny9
+ G8F+PgXDsRrBqZjP2cW9R0LVJleET+1dgo6/RuX2Lp57kqODxH6xb9IO2aTmBPsLrr
+ e+IbTm3F8q7cmM0VdKc8qjhXikUWAvFSXFrjzrMT0minSsw3/ApbZz6scvij0I/Na/
+ 6AK0PuSobo0Og==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=posteo.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=posteo.de header.i=@posteo.de header.a=rsa-sha256
- header.s=2017 header.b=ouVFJGj9
-Subject: Re: [Buildroot] [PATCH] package: linux-firmware: update linux fw
- bluetooth package for rtl88xx
+ header.s=2017 header.b=YGq7Q4S2
+Subject: [Buildroot] [PATCH] package/linux-firmware: RTL_88XX_BT: remove
+ listing of specific module names
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,35 +79,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd@kuhls.net>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ =?UTF-8?q?Gero=20Schw=C3=A4ricke?= <gero.schwaericke@posteo.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LAoKT24gV2VkLCBBcHIgMTAsIDIwMjQgYXQgMTA6MDY6MDhBTSArMDIwMCwgQXJu
-b3V0IFZhbmRlY2FwcGVsbGUgdmlhIGJ1aWxkcm9vdCB3cm90ZToKPiAKPiBPbiAwNy8wNC8yMDI0
-IDIyOjM4LCBHZXJvIFNjaHfDpHJpY2tlIHdyb3RlOgpbc25pcF0KPiA+IAo+ID4ganVzdCBzYXcg
-dGhpcyBjb21taXQuIEluIGVmZmVjdCBpdCBhZGRlZCBuZXcgZmlybXdhcmUgYmxvYnMgZm9yCj4g
-PiBydGw4ODIxY3MgYW5kIHJ0bDg4NTJidHUsIGJ1dCBhbHNvIHJlbW92ZWQgb25lIGZvciBydGw4
-ODUyY3UsIHdhcyB0aGlzCj4gPiBpbnRlbnRpb25hbD8KPiA+IAo+ID4gICAgJCBkaWZmIG9sZCBu
-ZXcKPiA+ICAgIDRhNSw2Cj4gPiAgICA+IHJ0bDg4MjFjc19jb25maWcuYmluCj4gPiAgICA+IHJ0
-bDg4MjFjc19mdy5iaW4KPiA+ICAgIDE0YTE3LDE4Cj4gPiAgICA+IHJ0bDg4NTJidHVfY29uZmln
-LmJpbgo+ID4gICAgPiBydGw4ODUyYnR1X2Z3LmJpbgo+IAo+ICBUaGlzIGlzIHRoZSBwdXJwb3Nl
-IG9mIHRoZSBwYXRjaC4KPiAKPiA+ICAgIDE4ZDIxCj4gPiAgICA8IHJ0bDg4NTJjdV9md192Mi5i
-aW4KPiAKPiAgVGhpcyBpcyBkZWZpbml0ZWx5IG5vdCBpbnRlbnRpb25hbC4gSSBjbGVhcmx5IGRp
-ZG4ndCB0ZXN0IHRoZSBwYXRjaCBlbm91Z2gKPiBiZWZvcmUgYXBwbHlpbmcgOi0oCj4gCj4gIENh
-cmUgdG8gc2VuZCBhIGZpeD8gIEkgdGhpbmsgdGhlIGVhc2llc3QgaXMgdG8gY2hhbmdlIHRoZSBw
-YXR0ZXJuIHRvCj4gcnRsODgqLmJpbiwgYnV0IGl0IG5lZWRzIHRvIGJlIHZlcmlmaWVkLgoKSSBq
-dXN0IHNlbmQgdGhlIHBhdGNoLiBGb3IgdGVzdGluZyBJIHJlY29yZGVkIHRoZSBmaXJtd2FyZSBw
-YWNrYWdlIHdpdGgKCiAgdGFyIC0tbGlzdCAtLWZpbGUgb3V0cHV0L2J1aWxkL2xpbnV4LWZpcm13
-YXJlLTIwMjQwMTE1L2JyLWZpcm13YXJlLnRhciB8IHNvcnQgPiAvdG1wLy5vbGQgICMgYW5kIC90
-bXAvLm5ldwoKVGhlIGRpZmYgaXMgdGhlbgoKICAkIGRpZmYgL3RtcC8ub2xkIC90bXAvLm5ldyAK
-ICAyMmEyMwogID4gcnRsX2J0L3J0bDg4NTJjdV9md192Mi5iaW4KClNlZW1zIHRvIHdvcmsgYXMg
-aW50ZW5kZWQuCgpJIG5vdGljZWQgdGhvdWdoIHRoYXQgZHVlIHRvIHRoZSBuZXcgZ2xvYmJpbmcg
-YXBwcm9hY2ggdGhlIGtjb25maWcgaGVscApzdHJpbmcgaXMgb3V0ZGF0ZWQuIEknbGwgc2VuZCB0
-aGF0IGFzIGEgc2VwYXJhdGUgcGF0Y2guCgpCZXN0LApHZXJvCgo+IAo+ICBSZWdhcmRzLAo+ICBB
-cm5vdXQKPiAKPiA+IAo+ID4gQmVzdCwKPiA+IEdlcm8KW3NuaXBdCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Replace description of specific module names with generic help string
+because the implementation switched to globbing to collect all rtl88*
+blobs.
+---
+ package/linux-firmware/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 920c0a2ef1..59cafc14ce 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -107,7 +107,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX_BT
+ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX_BT
+ 	bool "Realtek 88xx Bluetooth"
+ 	help
+-	  Realtek 8821a/8821c/8822b/8822cs/8822cu/8852au
++	  Firmware files for Realtek Bluetooth modules 88xx.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_TI_CC2560
+ 	bool "TI CC2560"
+-- 
+2.43.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
