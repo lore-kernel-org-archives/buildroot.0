@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B25B8C4345F
-	for <buildroot@archiver.kernel.org>; Thu, 18 Apr 2024 14:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EEA2C4345F
+	for <buildroot@archiver.kernel.org>; Thu, 18 Apr 2024 14:08:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48B74410B9;
-	Thu, 18 Apr 2024 14:03:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20F2A401BA;
+	Thu, 18 Apr 2024 14:08:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JTVEtzSD-OrN; Thu, 18 Apr 2024 14:03:13 +0000 (UTC)
+ id OhvtafitMzrN; Thu, 18 Apr 2024 14:08:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B63F4410AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68EE1400FF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B63F4410AE;
-	Thu, 18 Apr 2024 14:03:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2BD7D1BF3AD
- for <buildroot@lists.busybox.net>; Thu, 18 Apr 2024 14:03:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68EE1400FF;
+	Thu, 18 Apr 2024 14:08:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 98EA41BF38A
+ for <buildroot@lists.busybox.net>; Thu, 18 Apr 2024 14:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 17E8941702
- for <buildroot@lists.busybox.net>; Thu, 18 Apr 2024 14:03:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 91C22400D0
+ for <buildroot@lists.busybox.net>; Thu, 18 Apr 2024 14:08:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yarGjAHPg8kY for <buildroot@lists.busybox.net>;
- Thu, 18 Apr 2024 14:03:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.149;
- helo=smtpdh19-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SdY577cYtBqF for <buildroot@lists.busybox.net>;
+ Thu, 18 Apr 2024 14:08:26 +0000 (UTC)
+X-Greylist: delayed 1204 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 18 Apr 2024 14:08:25 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 94315400AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94315400AE
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.53.149;
+ helo=2.mo560.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1B61E416D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B61E416D3
-Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1B61E416D3
- for <buildroot@buildroot.org>; Thu, 18 Apr 2024 14:03:05 +0000 (UTC)
-Received: from [192.168.50.221] ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id xSLurMvcPEZuWxSLvrhFQO; Thu, 18 Apr 2024 16:03:03 +0200
-Message-ID: <fc33f5e4-094a-4cab-b6b1-c9212fea6e37@benettiengineering.com>
-Date: Thu, 18 Apr 2024 16:03:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+Received: from 2.mo560.mail-out.ovh.net (2.mo560.mail-out.ovh.net
+ [188.165.53.149])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 94315400AE
+ for <buildroot@buildroot.org>; Thu, 18 Apr 2024 14:08:25 +0000 (UTC)
+Received: from director9.ghost.mail-out.ovh.net (unknown [10.109.139.16])
+ by mo560.mail-out.ovh.net (Postfix) with ESMTP id 4VKzDg44lfz1MP9
+ for <buildroot@buildroot.org>; Thu, 18 Apr 2024 13:30:43 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-qsftx (unknown [10.110.113.89])
+ by director9.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 338FC1FEAC;
+ Thu, 18 Apr 2024 13:30:43 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.96])
+ by ghost-submission-6684bf9d7b-qsftx with ESMTPSA
+ id mMI/CYMgIWatKgAA+KpgKg
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Thu, 18 Apr 2024 13:30:43 +0000
+X-OVh-ClientIp: 92.148.253.243
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
 To: buildroot@buildroot.org
-References: <20240207214729.115691-1-giulio.benetti@benettiengineering.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20240207214729.115691-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfBvnbp84bWp1P+lgvFmNIbwltfuZFFWpknymzahPDATlXHBs4C6yPyk+2+SwZVQcQ3wAcmxBqICJZ7R3l+p8zqzmLi+NlO4dDM/5rSZ+8FgpilPfa2gf
- Gjt8DrrZjw72AiEZdXTelDtsIpCWf8jtZEnGcdSJS7w4Lrs1ZbQd0Q8K/292wkP5snf/ab/OLvzMRJ5gPWjWzkCmaF6K8EHjGg0CydcwLcpQuUxHgK8yaBCb
- /mulJnYLMl+T086d24GfFg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1713448983; bh=JTvWeO0BX8hx19TosU/8wFvIeGPYdU1GnQFlO970ywc=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=dQTSeBrdrNQrG/XTCHdfpljL8x8IgPsXre1fhw7c6UOpZiiyonbcue0u0R6vRS0cV
- 3bMs9EBZzfmwH7C8Wodz49sUE7bdi8KrCyZi7/4409E/hfPQFHi9hb/s4vmGD7CjA5
- LZWDDT3AaDgEAcFRN+CH9xuyXQVqi7QHoWK3C/R8GZEd/muJhhlMT1gSngkqV+BDAD
- dhtRJatBln4dhiGkfHMks4VGzQlMSSc4FUCyXXbqadj/xSFGGNSbU6tBXbTN9vAd4u
- vyf6CgxzuYwO7OXJmjIjBYUDVgfb1HqjgcaCYvbxWANtnVqddk9xHWSlMw4ohc6JcL
- splPj3A+oASQQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=dQTSeBrd
-Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: bump to 2024-02-06
- version on v5.2.2.4 branch
+Date: Thu, 18 Apr 2024 15:30:35 +0200
+Message-ID: <20240418133035.30749-1-sebastien.szymanski@armadeus.com>
+X-Mailer: git-send-email 2.43.2
+MIME-Version: 1.0
+X-Ovh-Tracer-Id: 2342716233658395627
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudektddgieehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeffueffgfevieffleetlefgteejffeuffeuhfffieekhfekgffhjeejueefudetgeenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheeitddpmhhouggvpehsmhhtphhouhht
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=armadeus.com
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-96R001660e74f1-9c03-488d-810b-a83abba761d6,
+ 31C41825992BF42792DF6AF3D249BD517F6A2ED9)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for Armadeus boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,52 +81,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Julien Boibessot <julien.boibessot@armadeus.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/02/24 22:47, Giulio Benetti wrote:
-> This version allows to build with Linux 6.8
-
-Fixes:
-http://autobuild.buildroot.net/results/c2524c7580d97f7387ec22da62be71d77f2ed8ec
-
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/rtl8188eu/rtl8188eu.hash | 2 +-
->   package/rtl8188eu/rtl8188eu.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
-> index eb28e6cf0a..4f8f83e78c 100644
-> --- a/package/rtl8188eu/rtl8188eu.hash
-> +++ b/package/rtl8188eu/rtl8188eu.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  8cb10a047d39f13c776b0097ef1290f6b3c63590fd57bc0827e8638c878819f0  rtl8188eu-306f3e62cf7cddf8cee74f70f88a7a7b3af46f56.tar.gz
-> +sha256  507d32eb91d3d407c7758319c81a36a9dc69e2b89378cabcd382411153927b7b  rtl8188eu-f42fc9c45d2086c415dce70d3018031b54a7beef.tar.gz
->   sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-> diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-> index 36a84d34de..eca0fb8007 100644
-> --- a/package/rtl8188eu/rtl8188eu.mk
-> +++ b/package/rtl8188eu/rtl8188eu.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -RTL8188EU_VERSION = 306f3e62cf7cddf8cee74f70f88a7a7b3af46f56
-> +RTL8188EU_VERSION = f42fc9c45d2086c415dce70d3018031b54a7beef
->   RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
->   RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
->   RTL8188EU_LICENSE_FILES = COPYING
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogU8OpYmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lA
+YXJtYWRldXMuY29tPgotLS0KIERFVkVMT1BFUlMgfCAyICsrCiAxIGZpbGUgY2hhbmdlZCwgMiBp
+bnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5kZXgg
+Mzk5YjI5MzFmZjNkLi43YTFmYTQzZjRiMGQgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIv
+REVWRUxPUEVSUwpAQCAtMjc3Nyw2ICsyNzc3LDggQEAgRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3Rz
+L3BhY2thZ2Uvc2FtcGxlX251Lm51CiBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90
+ZXN0X251LnB5CiAKIE46CVPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tp
+QGFybWFkZXVzLmNvbT4KK0Y6CWJvYXJkL2FybWFkZXVzLworRjoJY29uZmlncy9hcm1hZGV1cyoK
+IEY6CXBhY2thZ2UvbW1jLXV0aWxzLwogRjoJcGFja2FnZS9weXRob24tZmxhc2stanNvbnJwYy8K
+IEY6CXBhY2thZ2UvcHl0aG9uLWZsYXNrLWxvZ2luLwotLSAKMi40My4yCgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
