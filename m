@@ -4,91 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35708C4345F
-	for <buildroot@archiver.kernel.org>; Fri, 19 Apr 2024 21:27:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53D0BC4345F
+	for <buildroot@archiver.kernel.org>; Fri, 19 Apr 2024 21:28:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F131940B9A;
-	Fri, 19 Apr 2024 21:27:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B234241ACC;
+	Fri, 19 Apr 2024 21:28:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W5M4ljKTtS-F; Fri, 19 Apr 2024 21:27:56 +0000 (UTC)
+ id j5qdvRBWe3SC; Fri, 19 Apr 2024 21:27:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 021A141A52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DFE541ACE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 021A141A52;
-	Fri, 19 Apr 2024 21:27:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 35F781BF977
- for <buildroot@lists.busybox.net>; Fri, 19 Apr 2024 21:27:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8DFE541ACE;
+	Fri, 19 Apr 2024 21:27:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 755DD1BF977
+ for <buildroot@lists.busybox.net>; Fri, 19 Apr 2024 21:27:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21A5141E56
- for <buildroot@lists.busybox.net>; Fri, 19 Apr 2024 21:27:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F74F8228F
+ for <buildroot@lists.busybox.net>; Fri, 19 Apr 2024 21:27:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h56orG2ILzjw for <buildroot@lists.busybox.net>;
- Fri, 19 Apr 2024 21:27:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7zEm-aoQImGL for <buildroot@lists.busybox.net>;
+ Fri, 19 Apr 2024 21:27:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8EE7341E55
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EE7341E55
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8EE7341E55
- for <buildroot@buildroot.org>; Fri, 19 Apr 2024 21:27:51 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id
- a640c23a62f3a-a526d381d2fso623771566b.0
- for <buildroot@buildroot.org>; Fri, 19 Apr 2024 14:27:51 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2288D8220B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2288D8220B
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2288D8220B
+ for <buildroot@buildroot.org>; Fri, 19 Apr 2024 21:27:53 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-346359c8785so1998519f8f.0
+ for <buildroot@buildroot.org>; Fri, 19 Apr 2024 14:27:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1713562069; x=1714166869;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=C5gS+DwiHt5B3Xx2/cixTHYNFD5nw+gBTlPt19lzPTU=;
- b=n0U6DYGNuiuU62GHmuSHjk4EpTOxr5Erl0/5Mhy6hKnPCXMnbRuG572wm8bQtH6d92
- R1bv+k6GPuJrZmCFIe9bgsYNi+IDLo2ZhsCdJc10AmnrWaGJS0liNPJyHtPRpT9qNL4W
- QXnYouklKy61BIuhz7M6S+31iCSgHRhxtR83nNE+mB34cOVbqXqAxs/bkUmiZQhJIZSH
- kqQOPS3ISKwpswezE6KnXv8VMF649LYc2svmI8khissLBDfq38b1X4wlvzx7OoxIojLR
- bVf2rwNlx/M8HX0OeTxWTfr6majyypY3LtU96Py/rMUYJTIX8gxUPBv1ivgbJ/7QLcHs
- sd5A==
-X-Gm-Message-State: AOJu0YzUHjVg+83af+5XT/qu3Kmai1pwAD7Nye6wuVgTxLFZBJMOYPyI
- 4ByPFg6GHpOYCBKqKZlRwj+eyQt9a4rgtBQ4dcxQ1iSj0Ev7ryz183zNWA==
-X-Google-Smtp-Source: AGHT+IGRZYuau8tXq9ZW55a+qk7dJOCR27kD6Kr29E7srNzKSwbehgL79ZMti19rT553TusH8ci53Q==
-X-Received: by 2002:a17:907:7e9a:b0:a55:92f2:5cae with SMTP id
- qb26-20020a1709077e9a00b00a5592f25caemr1033733ejc.21.1713562068758; 
- Fri, 19 Apr 2024 14:27:48 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1713562071; x=1714166871;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=aELWl515npyjWEWt6U6j7bdKXD9uouxrLtny6bf6QaM=;
+ b=kwPGAQ/lWOIcH1y3xO/nc/x6+KZ0mkNFZeALIfWTYlr/3En3ke0DlbE/DfjBHi4o5M
+ 674PEmagQwlrsW8rZU8apsw2ExIYP9shVtM8fJ219aV0F0M3yKvpxRC/7gFmJYnVIvFn
+ /+sll/eLiFrKxOVpH/bGv7pht8/dx0ppdGjnP9G2sQYr1dV4n+GPirmVrYbrXCvfjx0p
+ r864jn1EIHZckNeYA5rfHBiGiATCrjFevGEZ+TNmLIqYxAXEyEO/RLX0GfQH6HPnP4Ix
+ dQwXGRMu9lVEXyAtebwVsiNjpIylO7wpZfMFi5IY8rjf6kHFVw0Ck3CbCP6bUE+Z7I6l
+ nimQ==
+X-Gm-Message-State: AOJu0YxRJ9spgHtMx0ukiyvh8AqInrmq5L5dr7g2joBuPlHxev1/nwuK
+ FybgBmgY1QlCw/RLrmofy93KH0+MVDboe6BKAHFEViQuxZWzCJ8Gk7JRKA==
+X-Google-Smtp-Source: AGHT+IE9P0bbGbat4aoKysg9BW2GaOwPKgFDzJteLDcnshIU0+oFcK8HsHpDrif6YBoSw5bothZQWQ==
+X-Received: by 2002:a5d:4e0a:0:b0:346:4d41:8d24 with SMTP id
+ p10-20020a5d4e0a000000b003464d418d24mr2057679wrt.0.1713562070949; 
+ Fri, 19 Apr 2024 14:27:50 -0700 (PDT)
 Received: from localhost.localdomain ([212.22.152.70])
  by smtp.gmail.com with ESMTPSA id
- s8-20020a170906500800b00a4e24d259edsm2596766ejj.167.2024.04.19.14.27.47
+ s8-20020a170906500800b00a4e24d259edsm2596766ejj.167.2024.04.19.14.27.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 19 Apr 2024 14:27:47 -0700 (PDT)
+ Fri, 19 Apr 2024 14:27:49 -0700 (PDT)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 19 Apr 2024 23:27:43 +0200
-Message-Id: <20240419212745.512436-1-angelo.compagnucci@gmail.com>
+Date: Fri, 19 Apr 2024 23:27:44 +0200
+Message-Id: <20240419212745.512436-2-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240419212745.512436-1-angelo.compagnucci@gmail.com>
+References: <20240419212745.512436-1-angelo.compagnucci@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1713562069; x=1714166869; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=C5gS+DwiHt5B3Xx2/cixTHYNFD5nw+gBTlPt19lzPTU=;
- b=JhbW9tVzLhlgXjkdX2K6Kdy7rDlIaw7A4ofhBw3t2pp9vydp/H4gT/5fTFNbGJwwj8
- xQqPqpUKwqtG4p5RmvSi/79BnOofwjMiS3ijmPNjmQuBSeawYo2elY4QPc+e6NeWTPth
- clroXIPI/8Qy9qJ+2UhXhZyVq76XX6vpt1/MX44ntbYFf26JsyXMnF36cRwWh6+Bc6bp
- 75zNAs7Bhm9acDHSKq0UrlVWIhsPwDAZN4E0puO/hC5IbyCeY8rIC6Y9OsC5qLFf4T42
- sY7d1IU4Sb0Oyo0fvf8ImHi7z8vzCV4eDvVmrcLknKeS9UbrxpgkVwR/OWDWPpvlqJmF
- Vq/g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1713562071; x=1714166871; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=aELWl515npyjWEWt6U6j7bdKXD9uouxrLtny6bf6QaM=;
+ b=GFb3u48lyFZkSDMPuhNAuUPpb2trKIMpFMBzh1/aYvxdgPZe9XEPWnA1S8xzl/yvwa
+ W1mWVZt9paM2uWcj/ltNBbIGWfRjLDWjvtjMJ7tHOLHxCCWnKjyCscH4jb9Z8ubS6ymP
+ QAH+4ZEOR48WP+vleZQFz8dqzoyhAbo6rw4cCuYUH813cTXlhpqKvWCzxqMAhtPsbw8m
+ SQmZ/wxoHHDmJRhLkcGOoIOl7p5m5955QKkACE0QUojIzlg72kCaA84WuicYqi3ZF2mU
+ HDvY+JSMIrGZLPpS9erqRw1Tjwi+dfAchANYb20a/+2OtcG5iBfDF3O63ki1iH9GtSnR
+ t/Sg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=JhbW9tVz
-Subject: [Buildroot] [PATCH 0/2] Fix fail2ban
+ header.s=20230601 header.b=GFb3u48l
+Subject: [Buildroot] [PATCH 1/2] package/fail2ban: fix data_files
+ installation path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,43 +107,73 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Angelo Compagnucci <angelo@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-
-This series fixes fail2ban not installing configuration files in /etc anymore.
-While fixing the problem, I discovered a bug in the way we invoke the
-pyinstaller.py in pep517 compatibility.
-Basically, pyinstaller.py will install data_files defined in setup.py
-and tarballed in the wheel inside the directory pointed by the --data parameter,
-which is nowadays pointing to /usr of TARGET/STAGING directory.
-
-I consider this wrong, because the data folder shall point to the
-TARGET_DIR/STAGING_DIR to be correct and we shall trust the destination path
-expressed in the setup.py.
-
-In the case of fail2ban, configuration files end up being installed in
-/usr/etc/fail2ban instead of /etc/fail2ban.
-
-v1 -> v2:
-Fix signed off with correct email.
-
-Angelo Compagnucci (2):
-  package/fail2ban: fix data_files installation path
-  package/pkg-python: fix pep517 data files installation
-
- ...001-setup.py-fix-data-relative-paths.patch | 73 +++++++++++++++++++
- package/pkg-python.mk                         |  4 +-
- 2 files changed, 75 insertions(+), 2 deletions(-)
- create mode 100644 package/fail2ban/0001-setup.py-fix-data-relative-paths.patch
-
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTogQW5nZWxvIENvbXBhZ251Y2NpIDxhbmdlbG9AYW1hcnVsYXNvbHV0aW9ucy5jb20+CgpX
+aGVuIHBhY2thZ2luZyBkYXRhX2ZpbGVzIGluIGEgd2hlZWwsIHRob3NlIGZpbGVzIHNoYWxsIGhh
+dmUgdGhlIGRlc3RpbmF0aW9uCnBhdGggZXhwcmVzc2VkIGFzIHJlbGF0aXZlIHRvIHRoZSB3aGVl
+bCBpbnN0YWxsYXRpb24uClRoZSByZWFzb24gZm9yIHRoYXQgaXMgdGhlIHdoZWVsIGluc3RhbGxh
+dGlvbiBzaGFsbCBiZSBjb250YWluZWQgaW5zaWRlIGEKc3BlY2lmaWMgZm9sZGVyIGFuZC9vciBp
+biBzaXRlLXBhY2thZ2VzLgpXaGVuIGJ1aWxkaW5nIHRoZSB3aGVlbCBmaWxlIGJ5IHRoZSBiZGlz
+dF93aGVlbCBjb21tYW5kLCBweXRob24gd2lsbCBwYWNrYWdlCmZpbGVzIHdpdGggYWJzb2x1dGUg
+cGF0cyBhcyBweXRob24gZmlsZXMgZW5kaW5nIHVwIGluc3RhbGxpbmcgdGhlbSBpbgpzaXRlLXBh
+Y2thZ2VzLgoKRml4ZXM6Cmh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzM2
+YWM1Mjc4ZDE5MTk1YTIxYzNkMDJkMDg3OTY1ZTA4ZjQ5MjI4ZWYKClNpZ25lZC1vZmYtYnk6IEFu
+Z2VsbyBDb21wYWdudWNjaSA8YW5nZWxvLmNvbXBhZ251Y2NpQGdtYWlsLmNvbT4KLS0tCiAuLi4w
+MDEtc2V0dXAucHktZml4LWRhdGEtcmVsYXRpdmUtcGF0aHMucGF0Y2ggfCA3MyArKysrKysrKysr
+KysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgNzMgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUg
+MTAwNjQ0IHBhY2thZ2UvZmFpbDJiYW4vMDAwMS1zZXR1cC5weS1maXgtZGF0YS1yZWxhdGl2ZS1w
+YXRocy5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZmFpbDJiYW4vMDAwMS1zZXR1cC5weS1m
+aXgtZGF0YS1yZWxhdGl2ZS1wYXRocy5wYXRjaCBiL3BhY2thZ2UvZmFpbDJiYW4vMDAwMS1zZXR1
+cC5weS1maXgtZGF0YS1yZWxhdGl2ZS1wYXRocy5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NApp
+bmRleCAwMDAwMDAwMDAwLi5lMWI1YmM0OTBiCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9m
+YWlsMmJhbi8wMDAxLXNldHVwLnB5LWZpeC1kYXRhLXJlbGF0aXZlLXBhdGhzLnBhdGNoCkBAIC0w
+LDAgKzEsNzMgQEAKK0Zyb20gN2I3ZmEzYzAyZDQ1NzVjMDkzNjIzMzZiYzMxMDgzNWMzNzg1OWYx
+YSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IEFuZ2VsbyBDb21wYWdudWNjaSA8YW5n
+ZWxvLmNvbXBhZ251Y2NpQGdtYWlsLmNvbT4KK0RhdGU6IEZyaSwgMTkgQXByIDIwMjQgMjI6NDc6
+MjAgKzAyMDAKK1N1YmplY3Q6IFtQQVRDSF0gc2V0dXAucHk6IGZpeCBkYXRhIHJlbGF0aXZlIHBh
+dGhzCitNSU1FLVZlcnNpb246IDEuMAorQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0
+PVVURi04CitDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0CisKK0FzIHBlciBkaXN0dXRp
+bHMgZG9jdW1lbnRhdGlvbjoKKworVGhlIGRpcmVjdG9yeSBzaG91bGQgYmUgYSByZWxhdGl2ZSBw
+YXRoLiBJdCBpcyBpbnRlcnByZXRlZCByZWxhdGl2ZSB0byB0aGUKK2luc3RhbGxhdGlvbiBwcmVm
+aXggKFB5dGhvbuKAmXMgc3lzLnByZWZpeCBmb3Igc3lzdGVtIGluc3RhbGxhdGlvbnM7CitzaXRl
+LlVTRVJfQkFTRSBmb3IgdXNlciBpbnN0YWxsYXRpb25zKS4gRGlzdHV0aWxzIGFsbG93cyBkaXJl
+Y3RvcnkgdG8gYmUgYW4KK2Fic29sdXRlIGluc3RhbGxhdGlvbiBwYXRoLCBidXQgdGhpcyBpcyBk
+aXNjb3VyYWdlZCBzaW5jZSBpdCBpcyBpbmNvbXBhdGlibGUKK3dpdGggdGhlIHdoZWVsIHBhY2th
+Z2luZyBmb3JtYXQgWzFdLgorCitXaGVuIHBhY2thZ2luZyB0byBhIGJkaXN0X3doZWVsIGluZGVl
+ZCwgdGhlIGZpbGVzIGluIHRoZSAiZGF0YV9maWxlcyIgZGljdGlvbmFyeQorYXJlIG5vdCBwaWNr
+ZWQgYXQgYWxsIGFzIGRhdGEgZmlsZXMgaWYgdGhleSBoYXZlIGFuIGFic29sdXRlIHBhdGgsCiti
+dXQgdGhleSBhcmUgaW5zdGVhZCBhZGRlZCB0byB0aGUgd2hlZWwgYXMgcHl0aG9uIGZpbGVzLgor
+VGhpcyBoYXMgdGhlIGVmZmVjdCBvZiBpbnN0YWxsaW5nIHRoZW0gYXMgcGFydCBvZiBweXRob24g
+ZmlsZXMgaW4gdGhlCitzaXRlLXBhY2thZ2VzIGZvbGRlciB3aGVuIHRoZSB3aGVlbCBpcyBpbnN0
+YWxsZWQuCisKK1RoaXMgcGF0Y2ggY2Fubm90IGJlIHNlbnQgdXBzdHJlYW0gYmVjYXVzZSBpdCBi
+cmVha3MgdGhlIGxlZ2FjeSB3YXkgb2YKK2luc3RhbGxpbmcgdGhlIHBhY2thZ2Ugd2l0aCAqcHl0
+aG9uIHNldHVwLnB5IGluc3RhbGwqIGFuZCBpdCBpcyBuZWVkZWQgb25seSB0bworY29tcGx5IHdp
+dGggdGhlIHBlcDUxNyBidWlsZHJvb3QgY29tcGF0aWJpbGl0eSBsYXllci4KKworWzFdIGh0dHBz
+Oi8vZG9jcy5weXRob24ub3JnLzMuMTAvZGlzdHV0aWxzL3NldHVwc2NyaXB0Lmh0bWwjaW5zdGFs
+bGluZy1hZGRpdGlvbmFsLWZpbGVzCitTaWduZWQtb2ZmLWJ5OiBBbmdlbG8gQ29tcGFnbnVjY2kg
+PGFuZ2Vsby5jb21wYWdudWNjaUBnbWFpbC5jb20+CistLS0KKyBzZXR1cC5weSB8IDE0ICsrKysr
+KystLS0tLS0tCisgMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMo
+LSkKKworZGlmZiAtLWdpdCBhL3NldHVwLnB5IGIvc2V0dXAucHkKK2luZGV4IDkxZjcxY2YyLi45
+OWJhMmUzMiAxMDA3NTUKKy0tLSBhL3NldHVwLnB5CisrKysgYi9zZXR1cC5weQorQEAgLTIzOCwy
+NiArMjM4LDI2IEBAIHNldHVwKAorIAkJCQlmb3IgZiBpbiB3WzJdXQorIAl9IGlmIHdpdGhfdGVz
+dHMgZWxzZSB7fSwKKyAJZGF0YV9maWxlcyA9IFsKKy0JCSgnL2V0Yy9mYWlsMmJhbicsCisrCQko
+J2V0Yy9mYWlsMmJhbicsCisgCQkJZ2xvYigiY29uZmlnLyouY29uZiIpCisgCQkpLAorLQkJKCcv
+ZXRjL2ZhaWwyYmFuL2ZpbHRlci5kJywKKysJCSgnZXRjL2ZhaWwyYmFuL2ZpbHRlci5kJywKKyAJ
+CQlnbG9iKCJjb25maWcvZmlsdGVyLmQvKi5jb25mIikKKyAJCSksCistCQkoJy9ldGMvZmFpbDJi
+YW4vZmlsdGVyLmQvaWdub3JlY29tbWFuZHMnLAorKwkJKCdldGMvZmFpbDJiYW4vZmlsdGVyLmQv
+aWdub3JlY29tbWFuZHMnLAorIAkJCVtwIGZvciBwIGluIGdsb2IoImNvbmZpZy9maWx0ZXIuZC9p
+Z25vcmVjb21tYW5kcy8qIikgaWYgaXNmaWxlKHApXQorIAkJKSwKKy0JCSgnL2V0Yy9mYWlsMmJh
+bi9hY3Rpb24uZCcsCisrCQkoJ2V0Yy9mYWlsMmJhbi9hY3Rpb24uZCcsCisgCQkJZ2xvYigiY29u
+ZmlnL2FjdGlvbi5kLyouY29uZiIpICsKKyAJCQlnbG9iKCJjb25maWcvYWN0aW9uLmQvKi5weSIp
+CisgCQkpLAorLQkJKCcvZXRjL2ZhaWwyYmFuL2ZhaWwyYmFuLmQnLAorKwkJKCdldGMvZmFpbDJi
+YW4vZmFpbDJiYW4uZCcsCisgCQkJJycKKyAJCSksCistCQkoJy9ldGMvZmFpbDJiYW4vamFpbC5k
+JywKKysJCSgnZXRjL2ZhaWwyYmFuL2phaWwuZCcsCisgCQkJJycKKyAJCSksCistCQkoJy92YXIv
+bGliL2ZhaWwyYmFuJywKKysJCSgndmFyL2xpYi9mYWlsMmJhbicsCisgCQkJJycKKyAJCSksCisg
+CV0gKyBkYXRhX2ZpbGVzX2V4dHJhLAorLS0gCisyLjM0LjEKKwotLSAKMi4zNC4xCgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
