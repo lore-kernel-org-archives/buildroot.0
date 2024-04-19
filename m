@@ -4,95 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FAA1C04FF6
-	for <buildroot@archiver.kernel.org>; Fri, 19 Apr 2024 21:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FC19C4345F
+	for <buildroot@archiver.kernel.org>; Fri, 19 Apr 2024 21:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2756341AB2;
-	Fri, 19 Apr 2024 21:32:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C701840B9A;
+	Fri, 19 Apr 2024 21:52:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IxoNvO7ge_zn; Fri, 19 Apr 2024 21:32:39 +0000 (UTC)
+ id rG_Iv1k_V6nB; Fri, 19 Apr 2024 21:52:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1021B41AEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE43641A52
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1021B41AEF;
-	Fri, 19 Apr 2024 21:32:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE43641A52;
+	Fri, 19 Apr 2024 21:52:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1AA0D1BF977
- for <buildroot@lists.busybox.net>; Fri, 19 Apr 2024 21:32:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D56A91BF977
+ for <buildroot@lists.busybox.net>; Fri, 19 Apr 2024 21:52:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14A4C60A42
- for <buildroot@lists.busybox.net>; Fri, 19 Apr 2024 21:32:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C1E44606D0
+ for <buildroot@lists.busybox.net>; Fri, 19 Apr 2024 21:52:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CUb91qpG0gUH for <buildroot@lists.busybox.net>;
- Fri, 19 Apr 2024 21:32:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::236; helo=mail-lj1-x236.google.com;
- envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 973A860737
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 973A860737
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 973A860737
- for <buildroot@buildroot.org>; Fri, 19 Apr 2024 21:32:31 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id
- 38308e7fff4ca-2d6ff0422a2so31630581fa.2
- for <buildroot@buildroot.org>; Fri, 19 Apr 2024 14:32:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1713562349; x=1714167149;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=bsp11k5RSBwND3eBlBT3u+QMzN+e8MVAwtez1k43L0M=;
- b=B2jyHiyGsfqTNxg9oNLts2ZFFLykP/J0P9pcDJqDgu8ilIgAfj0WFt17JC+jVcyTus
- FlbYZwcuCHB/J5rS8OW7bzew4AsI7ru4CaFo7j7igOMUPWHJ+S08/PcoOftWUpQnbgfD
- ncmZkMtinbFfLKPg0jACo78B63LWczD3NWm5axl7gQe874WhLmN+v0DVstEZ1hJoZdHy
- US51jnwBDGGVGRmu6wvYfsAqQB8IYX85aXEgm2ZepXFf7oXVCikVakJb8v2u4ZyX0swD
- 98I0BEDU2tMIeu6I5WgiM5Rn3KHJczbV3YBezSatxePqr1PrRsbJJNSx8/rr9RbxRVZ4
- tPIA==
-X-Gm-Message-State: AOJu0Ywnyl+s0PQ2IlMV4JfNL1fa4CFQgCuU1lpgIeTbmuyEESwPGu1Z
- XnGMFTLgFeMPW1BqRQKiBrgz40sRPxX/yc/o8R4jfThwhEv95py4MgdxaA==
-X-Google-Smtp-Source: AGHT+IGWVUY7EaNDuaQH4L6DSlWRpz9F7YLjITow+Y8CXgrjc7+BduruNK8InPwQqKRK/a0GqKV7HQ==
-X-Received: by 2002:a2e:a419:0:b0:2d8:144e:c464 with SMTP id
- p25-20020a2ea419000000b002d8144ec464mr2318076ljn.36.1713562348561; 
- Fri, 19 Apr 2024 14:32:28 -0700 (PDT)
-Received: from localhost.localdomain ([212.22.152.70])
- by smtp.gmail.com with ESMTPSA id
- h25-20020a0564020e9900b0056bc0c44f02sm2529297eda.96.2024.04.19.14.32.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 19 Apr 2024 14:32:27 -0700 (PDT)
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ id HCvuH65NeqlQ for <buildroot@lists.busybox.net>;
+ Fri, 19 Apr 2024 21:52:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6015160680
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6015160680
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6015160680
+ for <buildroot@buildroot.org>; Fri, 19 Apr 2024 21:52:23 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 9A8FFB0037C;
+ Fri, 19 Apr 2024 23:52:18 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 19 Apr 2024 23:32:16 +0200
-Message-Id: <20240419213216.518041-3-angelo.compagnucci@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240419213216.518041-1-angelo.compagnucci@gmail.com>
-References: <20240419213216.518041-1-angelo.compagnucci@gmail.com>
+Date: Fri, 19 Apr 2024 23:52:12 +0200
+Message-ID: <20240419215212.1025654-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1713562349; x=1714167149; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=bsp11k5RSBwND3eBlBT3u+QMzN+e8MVAwtez1k43L0M=;
- b=LF65kQE1QKcjpohTVOk6T35Ooyi+kbE8YBHGJjVRLerQKiCb5UbMUum1upS6sWB3bm
- waBLrVFutPUG1zk/Qb4G7xZbULCvbyoV3p3B1QiGSS6UQxKZvt0V+YtHHSP95tOuzYmP
- mTiIyrJuFRrUHFtx8tSMnxqrWKqA1xJZux5NqfZep/zCI8TMvLjPKQGESOrqg4P2msFQ
- Jx7IvAqDeAjTw+HQUwnUVZZ442sxoCnXhrZ8H0r1XcX2Uq11UkDNpWYTrYwQKT9JRL3H
- +Hovn0ZE/7iIFgGDOIulw4d25N+nZCZMZBdy4pegT7QJDOEQHWgViJhC2AVOR7AQByIo
- iZxA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1713563540;
+ bh=b+XWthabHO1dGWNe1ocpGcRFX9NQ6mSoc6TvGY558C0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=vD7svOBEs+ZRfS8CKkiO/MpAOSMXkzl5trdNFkp1HAtbJm5bBQVg0EkQV7/odE9hQ
+ 58SdEK1vTOx7YJebi3mu9WPcEaZSHYmSeasNrG+wiIrfg3dVhuv4dflQhPwePyqkLq
+ q1mZ4WmSVgNPQFI/NSGBJC8IdA31+C/n05SGhRSb3omnmNpCZFQfV9ndRCbXA7G2/j
+ Vaopzm3qPWNs3sIO7o7GAcL5vp2v4QfPm4W1ycuhE4mYfq2rqCm+4nUn8lzSEbN0/l
+ cv2il7KptTh5iR4uNmEwZnkbzZ5KwfNnjzejIf2IV4Qsz9BwPgyv6ozuiB4zM6SmG9
+ c/+1TAqFDy78Q==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=LF65kQE1
-Subject: [Buildroot] [PATCH 2/2] package/pkg-python: fix pep517 data files
- installation
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=vD7svOBE
+Subject: [Buildroot] [PATCH 1/1] package/acpica: bump to version 20240321
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,54 +76,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When installing a wheel in pep517 compatibility mode, the pyinstaller.py is
-invoked with the --data parameter which point to the directory in which data
-files should be installed.
-Actually the --data parameter points to the /usr subdirectory which is indeed
-wrong cause it shall point to the root directory where the wheel will be
-installed.
-This fixes the problem of having configuration files installed in /usr/etc
-instead of /etc.
+For change log since 20230628, see [1].
 
-Fixes:
-http://autobuild.buildroot.net/results/36ac5278d19195a21c3d02d087965e08f49228ef
+License file hash changed in [2], due to year update.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+The upstream download page also changed the published hash from sha1
+to sha256. This change is reflected in the hash file.
+
+[1] https://github.com/acpica/acpica/blob/G20240322/documents/changes.txt
+[2] https://github.com/acpica/acpica/commit/c18edfb1abfb50521a363f811bc8e1e64213bd00
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pkg-python.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Patch tested on master branch at commit 256aa8e with commands:
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 839f728e2f..4f9bee4b90 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -70,7 +70,7 @@ PKG_PYTHON_PEP517_INSTALL_TARGET_CMD = \
- 	--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
- 	--scripts=$(TARGET_DIR)/usr/bin \
--	--data=$(TARGET_DIR)/usr
-+	--data=$(TARGET_DIR)
+    make check-package
+    ...
+    0 warnings generated
+
+    utils/test-pkg -a -p acpica
+    ...
+    42 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_acpica
+    ...
+    OK
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.boot.test_edk2
+    ...
+    OK
+---
+ package/acpica/acpica.hash | 5 ++---
+ package/acpica/acpica.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index dd9f8a1d22b..4170587f3a3 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
+@@ -1,5 +1,4 @@
+ # From: https://www.intel.com/content/www/us/en/download/776303/acpi-component-architecture-downloads-unix-format-source-code-and-build-environment-with-an-intel-license.html
+-sha1  3b893fb771cf3fbd3531de3036e1a5bfc624c9d2  acpica-unix-20230628.tar.gz
++sha256  54a299487925fd3e0551c95f9d5cee4f4984930273983eff67aa5cd46f8f338b  acpica-unix-20240321.tar.gz
+ # locally computed hash
+-sha256  86876a745e3d224dcfd222ed3de465b47559e85811df2db9820ef09a9dff5cce  acpica-unix-20230628.tar.gz
+-sha256  905d6f191f3c29aa673602d9c66eb8df00f7e1b35064a081e0de81284ff17ee6  source/include/acpi.h
++sha256  b28f54dc421531bbe269afd8c28bf6fdfd6affbe50c2831464f777ec1766d4a5  source/include/acpi.h
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index bbabd9de69a..a3d682257d6 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- PKG_PYTHON_PEP517_INSTALL_STAGING_CMD = \
- 	$(TOPDIR)/support/scripts/pyinstaller.py \
-@@ -79,7 +79,7 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_CMD = \
- 	--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
- 	--scripts=$(STAGING_DIR)/usr/bin \
--	--data=$(STAGING_DIR)/usr
-+	--data=$(STAGING_DIR)
- 
- PKG_PYTHON_PEP517_DEPENDENCIES = \
- 	host-python-pypa-build \
+-ACPICA_VERSION = 20230628
++ACPICA_VERSION = 20240321
+ ACPICA_SOURCE = acpica-unix-$(ACPICA_VERSION).tar.gz
+-ACPICA_SITE = https://downloadmirror.intel.com/783534
++ACPICA_SITE = https://downloadmirror.intel.com/819451
+ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+ ACPICA_LICENSE_FILES = source/include/acpi.h
+ ACPICA_DEPENDENCIES = host-bison host-flex
 -- 
-2.34.1
+2.44.0
 
 _______________________________________________
 buildroot mailing list
