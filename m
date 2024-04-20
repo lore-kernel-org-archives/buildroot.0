@@ -4,76 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19832C4345F
-	for <buildroot@archiver.kernel.org>; Sat, 20 Apr 2024 18:59:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 440E3C4345F
+	for <buildroot@archiver.kernel.org>; Sat, 20 Apr 2024 18:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8837F80C04;
-	Sat, 20 Apr 2024 18:59:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4097780D41;
+	Sat, 20 Apr 2024 18:59:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0hC0Ksevl34C; Sat, 20 Apr 2024 18:59:02 +0000 (UTC)
+ id 5f3bbk_FzPeT; Sat, 20 Apr 2024 18:59:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8667D80C35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4913580E74
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8667D80C35;
-	Sat, 20 Apr 2024 18:59:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 346711BF3C5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4913580E74;
+	Sat, 20 Apr 2024 18:59:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F1AFE1BF271
  for <buildroot@lists.busybox.net>; Sat, 20 Apr 2024 18:59:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CAF04023B
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB57E600D4
  for <buildroot@lists.busybox.net>; Sat, 20 Apr 2024 18:59:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GncYmlq2kkPu for <buildroot@lists.busybox.net>;
- Sat, 20 Apr 2024 18:59:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.53;
- helo=mail-wm1-f53.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DGbEUTifTnRM for <buildroot@lists.busybox.net>;
+ Sat, 20 Apr 2024 18:59:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.43;
+ helo=mail-wm1-f43.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EB2F640010
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB2F640010
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com
- [209.85.128.53])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EB2F640010
- for <buildroot@buildroot.org>; Sat, 20 Apr 2024 18:58:59 +0000 (UTC)
-Received: by mail-wm1-f53.google.com with SMTP id
- 5b1f17b1804b1-4196c62bb4eso11256115e9.2
- for <buildroot@buildroot.org>; Sat, 20 Apr 2024 11:58:59 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2E0C86000A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E0C86000A
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com
+ [209.85.128.43])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2E0C86000A
+ for <buildroot@buildroot.org>; Sat, 20 Apr 2024 18:59:01 +0000 (UTC)
+Received: by mail-wm1-f43.google.com with SMTP id
+ 5b1f17b1804b1-41a22d34c5eso553335e9.1
+ for <buildroot@buildroot.org>; Sat, 20 Apr 2024 11:59:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1713639536; x=1714244336;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=nAUi+WGkJHujr4eh06vdnUozH8B2TJ4BU1YI62DzNFU=;
- b=WCi9egi6/I1b+FlCZ9gOnuPmzfOo7bGTLWjntg61JUQeD+5XFpJFe+sDcnqvWVaUAq
- QjlgAPc7iuzCQ93Z39S1kG5JxdDVpEeFFFsBndBl/OQZW0akQZU77StkRZoXPtqlHsUw
- WbCWFp9/uShgdaPOoQujiakaiL6G1j8/23F090Zr9G7OVLe8IRh+FnWd4ntanS3gr12p
- eGPkniZlgazutBEP6yZ+2LyAbDWpwt9jxct1NLwrYXPvON7MDYFnF89enKlcdTppxSj0
- tgPtg/CJBreLtfLcl6CBLsOcanpgxi9Ncb6YbMluKfMYIlx/koTG4wIVLWX4kr9kQe5K
- O7NA==
-X-Gm-Message-State: AOJu0Yzyv+AO+sYAlJUbvaJNT6JjZZ0vUsMcvSvZsxYpa/Cb53w9Yuvx
- VHZPb2ayW7u1j+PL0LfPAUz2fi779AVzuYVVC2tY+AqKyM4oZ9r+rEe49VGT
-X-Google-Smtp-Source: AGHT+IGpnoogT/IkwlttCXaAGtSMUDDgE9ijwnIxvapUSnpneTD6DbJzauOOU3PG1SN6lYAnJxciPQ==
-X-Received: by 2002:a5d:6ace:0:b0:343:78a6:ff with SMTP id
- u14-20020a5d6ace000000b0034378a600ffmr4006818wrw.48.1713639536337; 
- Sat, 20 Apr 2024 11:58:56 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1713639538; x=1714244338;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=dJi7IVA5wZ33v6bQjl/8t7qWG7U/EOI71aA7T06XY3U=;
+ b=bGj3/zIFyXtalIEy7l7PFOMhIHbGLxMFLBW/rkniKF+vYW1TaqLp/t7P3r8A00VNS8
+ Y5WOaSvpczOlyypS/N8oGm8JtQ3A8coIuZ1MbnsplKU8LnGAd5ZhlrWhbaqnYDnSZJFY
+ 7V2RKtgVbuK1nH2v/kHbOKXASDZJ9Lo9iWHnCJTpIwFRQmks6YkMxoWy5HLixOqPLcN/
+ Hju2VTip7ivz0OOrjvRfR5tn2T9Vznc5FQPg/+3pN+ScYCI6+ZIFUMlWihEjfUiSEHTA
+ 4ywxmfvJ0euEnP/jAAi1LIZ5A6C5+tPQuasmPWPgZcvXH33RmrYSAo2f9nabDiKVo6bX
+ 6d5w==
+X-Gm-Message-State: AOJu0YyACE3Mo0o0sknQ6SHTa+IOcFi2Sf3ytR7gUzO3vx+/KnUNcZwT
+ Hr7Wg4YKi3xrAiuVJIcPd+JWSTaWeOHLu65JYB/1VlSVAbV30rTHySnkL0zJ
+X-Google-Smtp-Source: AGHT+IHO956a1hJR6zR2UtiVTZVlwd42WIs1g5xjRr6rinkNM8cos7fo94Gb3HXLDAxy5weRELQ0gg==
+X-Received: by 2002:a5d:58ee:0:b0:349:eb59:c177 with SMTP id
+ f14-20020a5d58ee000000b00349eb59c177mr3714766wrd.11.1713639538080; 
+ Sat, 20 Apr 2024 11:58:58 -0700 (PDT)
 Received: from localhost.localdomain ([2a02:a03f:eb68:2f00:2033:ef69:f14:1bd2])
  by smtp.gmail.com with ESMTPSA id
- cs7-20020a056000088700b00346cdf48262sm7573981wrb.2.2024.04.20.11.58.55
+ cs7-20020a056000088700b00346cdf48262sm7573981wrb.2.2024.04.20.11.58.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 Apr 2024 11:58:55 -0700 (PDT)
+ Sat, 20 Apr 2024 11:58:57 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Sat, 20 Apr 2024 20:58:46 +0200
-Message-Id: <20240420185853.4134260-1-thomas@devoogdt.com>
+Date: Sat, 20 Apr 2024 20:58:47 +0200
+Message-Id: <20240420185853.4134260-2-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240420185853.4134260-1-thomas@devoogdt.com>
+References: <20240420185853.4134260-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1 1/8] package/libsoup3: fix reference to atomic
+Subject: [Buildroot] [PATCH v1 2/8] package/gssdp: fix reference to atomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,30 +100,29 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 gthread-posix.c:(.text+0x137c): undefined reference to `__atomic_compare_exchange_4'
 collect2: error: ld returned 1 exit status
 
-Fixes:
- - http://autobuild.buildroot.net/results/4fb9f4c49777dde3abc30bb9f324816d3ed87567
-
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/libsoup3/libsoup3.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/gssdp/gssdp.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
-index 10caa5bea4..99eee466b3 100644
---- a/package/libsoup3/libsoup3.mk
-+++ b/package/libsoup3/libsoup3.mk
-@@ -30,6 +30,11 @@ LIBSOUP3_CONF_OPTS = \
- 	-Dtests=false \
- 	-Dtls_check=false
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index 3b446496ea..0ba8672ac7 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -18,6 +18,13 @@ GSSDP_CONF_OPTS = \
+ 	-Dmanpages=false \
+ 	-Dsniffer=false
  
++GSSDP_LDFLAGS = $(TARGET_LDFLAGS)
++
 +# Uses __atomic_compare_exchange_4
 +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBSOUP3_LDFLAGS += -latomic
++GSSDP_LDFLAGS += -latomic
 +endif
 +
- ifeq ($(BR2_PACKAGE_BROTLI),y)
- LIBSOUP3_CONF_OPTS += -Dbrotli=enabled
- LIBSOUP3_DEPENDENCIES += brotli
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ GSSDP_CONF_OPTS += -Dintrospection=true -Dvapi=true
+ GSSDP_DEPENDENCIES += host-vala gobject-introspection
 -- 
 2.34.1
 
