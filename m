@@ -1,70 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69A70C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 21 Apr 2024 11:31:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB536C4345F
+	for <buildroot@archiver.kernel.org>; Sun, 21 Apr 2024 13:11:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D2064031B;
-	Sun, 21 Apr 2024 11:31:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 806A0605C3;
+	Sun, 21 Apr 2024 13:11:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KTjob0OazOPV; Sun, 21 Apr 2024 11:31:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t1Z-FnYzqCoD; Sun, 21 Apr 2024 13:11:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1005406CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96A46605C4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1005406CF;
-	Sun, 21 Apr 2024 11:31:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DAAAA1BF41F
- for <buildroot@lists.busybox.net>; Sun, 21 Apr 2024 11:31:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96A46605C4;
+	Sun, 21 Apr 2024 13:11:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D65C11BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 21 Apr 2024 13:11:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C300B406E5
- for <buildroot@lists.busybox.net>; Sun, 21 Apr 2024 11:31:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC17E605C4
+ for <buildroot@lists.busybox.net>; Sun, 21 Apr 2024 13:11:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6zSFbajvv36K for <buildroot@lists.busybox.net>;
- Sun, 21 Apr 2024 11:31:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 262BD4031B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 262BD4031B
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 262BD4031B
- for <buildroot@buildroot.org>; Sun, 21 Apr 2024 11:31:30 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E480DB00539;
- Sun, 21 Apr 2024 13:31:25 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1qpm-2gFzCD3 for <buildroot@lists.busybox.net>;
+ Sun, 21 Apr 2024 13:11:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E387605C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E387605C3
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E387605C3
+ for <buildroot@buildroot.org>; Sun, 21 Apr 2024 13:11:30 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-416a8ec0239so19130355e9.0
+ for <buildroot@buildroot.org>; Sun, 21 Apr 2024 06:11:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1713705088; x=1714309888;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=CbUCzRopC9gb60GqgoEzroYRAdkkTVXxUP9p3is5Pr8=;
+ b=rFRyBfZG26YUUwZuCK0zrciZ6Z8J2igrg9radwCfWRqOckl7LPWwvwjqFG/MvS75IB
+ tvw/tgHqCBU1iFQuH/KubI6/TpxKWKU+kzI6gqVGYw6awigcQneWoo35IFFFa/3Y7udj
+ nrkgR4zmy0p0czk8eXVrnZSP7xw6QrjXcAHVUCzqQkfsCuNQ5aJYEs6yp/4TY6OnNtI1
+ UUa3mgQrKKGtNQ0XlyKMhtdddpaHsHM19eaBZMuPGya5SjM7KfyptdwwvDHQII7l6FYZ
+ DlTH0MVqdnTtwiOsecurvq/KWWfdy5xVQST2ceeCsoRkFBPCukvrG7AA69yPwoiovJOr
+ /Yiw==
+X-Gm-Message-State: AOJu0YxkBeTXJ4CbUhtMsjSY3od3NpA4zLofHej3kj0kEzzoLHha9LQB
+ 1UhRU6TCKUPHbOj7pWswrkR7xWcATprFIsElytk1QZA/VHgFkHCd9LSh8A==
+X-Google-Smtp-Source: AGHT+IHMvcuzshLq26FIAsWxAbmQW4oF7sRbS5rMlookjSHjDSTgw5jo55WlmIcNa8Q8zUvNraU64A==
+X-Received: by 2002:a05:600c:524f:b0:415:ff48:59fc with SMTP id
+ fc15-20020a05600c524f00b00415ff4859fcmr7868356wmb.8.1713705087620; 
+ Sun, 21 Apr 2024 06:11:27 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ v14-20020a5d4a4e000000b0034625392416sm9302849wrs.104.2024.04.21.06.11.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 21 Apr 2024 06:11:27 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Apr 2024 13:31:20 +0200
-Message-ID: <20240421113120.82861-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.44.0
+Date: Sun, 21 Apr 2024 15:10:29 +0200
+Message-ID: <20240421131029.18829-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1713699087;
- bh=ieVf8OBFORQv1v/nSr4pVTmanQAD70IMOEa2hzdkmaw=;
- h=From:To:Cc:Subject:Date:From;
- b=ol5Ut7GST/bJas+yIc7FJnluC0yn79uRAspigoDfgYta0S+Deuv8eSOQD8eMx7DYx
- Ck1Fpc6YkARRioSYINakBkIuRqolsVtWXEZcx40Aawmr2wBIXdCy3kDJWMsbKm0yH/
- BTwBrRqxskIp9ttqGT3WBt6+GVbYTvhHzp4vb9Lwbs4gx2K9EdKsX+Iv6k9nizkt6b
- hUuw3UcwV2kWB+5z5+EVn5PSB7oqbyacldIV1fq2PHsxTtBABWeyc1Q4EpSD0/IJT7
- 8WfBv6x8khcAf3nbsh5pD+i1/lFoVx+srBCA/9TYh0a0qDebZwmzuuZxy1yDrpXUqE
- zfP6dcqtqaydQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1713705088; x=1714309888; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=CbUCzRopC9gb60GqgoEzroYRAdkkTVXxUP9p3is5Pr8=;
+ b=UQJaE0n/2Va/45syEkw2Xe8Q4RAhKvd8b6ou4JRlFcd2tcfZpBd55CkpwTb+H+/JiO
+ f9CVMUa3jhOLFAPK+FlBrlDMa53pa8zFlE1Zg6slz8OSHGX64+Krfw60Rkibdsf8BnCC
+ L1eOMIwX2CTTjGcR+8ezEHYmH7xkX7+khiN1UpLJAZiKVdTHrCzHfa9BJfEa0ckwCpPm
+ 6FCPQgtSYSWGTN6KAEjxnpxUb8kDiBp2DycQDj3tOSGFhmP5vWKMUzEnsVoe7LmZ0QQE
+ dsdRNcLmpYtsoJ2zAaDduMj8h1Hn+FSbHh9mSYuOQVOWKdsMOTJr51Wn2SwMjLQ41nYq
+ uVpg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ol5Ut7GS
-Subject: [Buildroot] [PATCH 1/1] support/testing: add 4th runtime test
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=UQJaE0n/
+Subject: [Buildroot] [PATCH 1/1] package/checksec: bump to version 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,94 +100,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                |  1 +
- support/testing/tests/package/test_4th.py | 55 +++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 support/testing/tests/package/test_4th.py
+https://github.com/slimm609/checksec.sh/releases/tag/2.7.0
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 399b2931ff3..cabb181d758 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1768,6 +1768,7 @@ F:	support/testing/tests/package/sample_python_midiutil.py
- F:	support/testing/tests/package/sample_python_ml_dtypes.py
- F:	support/testing/tests/package/sample_python_pyalsa.py
- F:	support/testing/tests/package/sample_python_spake2.py
-+F:	support/testing/tests/package/test_4th.py
- F:	support/testing/tests/package/test_acl.py
- F:	support/testing/tests/package/test_acpica.py
- F:	support/testing/tests/package/test_acpica/
-diff --git a/support/testing/tests/package/test_4th.py b/support/testing/tests/package/test_4th.py
-new file mode 100644
-index 00000000000..c020c825b31
---- /dev/null
-+++ b/support/testing/tests/package/test_4th.py
-@@ -0,0 +1,55 @@
-+import os
-+from math import sqrt
-+
-+import infra.basetest
-+
-+
-+class Test4th(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_4TH=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We set the DIR4TH variable where 4th demos and libraries are
-+        # installed.
-+        self.assertRunOk("export DIR4TH=/usr/share/4th/")
-+
-+        # We run a simple "hello world" demo.
-+        out, ret = self.emulator.run("4th cxq demo/hello.4th")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], "Hello world!")
-+
-+        # We run a demo doing some square root maths.
-+        out, ret = self.emulator.run("4th cxq demo/squares.4th")
-+        self.assertEqual(ret, 0)
-+        self.assertTrue(len(out) > 1)
-+        for line in out[1:]:
-+            columns = line.split()
-+            value = float(columns[0])
-+            value_sqrt = float(columns[1])
-+            result_check = sqrt(value)
-+            self.assertAlmostEqual(value_sqrt, result_check, delta=0.1)
-+
-+        # We run a word count demo and the 4th source file. We save
-+        # the word count for a later check.
-+        out, ret = self.emulator.run("4th cxq wc.4th /usr/share/4th/wc.4th")
-+        self.assertEqual(ret, 0)
-+        wc_out = out[0].split()
-+
-+        # We run the same command using system "wc" command. We expect
-+        # the same numbers.
-+        out, ret = self.emulator.run("wc /usr/share/4th/wc.4th")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0].split(), wc_out)
-+
-+        # We run a slightly more complex computation example.
-+        self.assertRunOk("4th cxq fractals.4th")
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/checksec/checksec.hash | 2 +-
+ package/checksec/checksec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/checksec/checksec.hash b/package/checksec/checksec.hash
+index a29866ba07..a53d39caca 100644
+--- a/package/checksec/checksec.hash
++++ b/package/checksec/checksec.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  39d4158f96bdc7533ad6595703375c0046951fe4f6367b831ef92d9c66c1a307  checksec-2.6.0.tar.gz
++sha256  0f8b37741bec40756da6801cf243405f4adfc5534242c9d0f3095b566b6b176a  checksec-2.7.0.tar.gz
+ sha256  55154b4be6dfcb3ff29d1e3648d0d07b3943a5fcc3af7c2e0e799b074734f722  LICENSE.txt
+diff --git a/package/checksec/checksec.mk b/package/checksec/checksec.mk
+index ed9846ac2d..431640fe8e 100644
+--- a/package/checksec/checksec.mk
++++ b/package/checksec/checksec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CHECKSEC_VERSION = 2.6.0
++CHECKSEC_VERSION = 2.7.0
+ CHECKSEC_SITE = $(call github,slimm609,checksec.sh,$(CHECKSEC_VERSION))
+ CHECKSEC_LICENSE = BSD-3-Clause
+ CHECKSEC_LICENSE_FILES = LICENSE.txt
 -- 
-2.44.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
