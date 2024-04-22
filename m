@@ -1,78 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFE3CC07E8F
-	for <buildroot@archiver.kernel.org>; Mon, 22 Apr 2024 09:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C10A3C4345F
+	for <buildroot@archiver.kernel.org>; Mon, 22 Apr 2024 10:46:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 83B4240133;
-	Mon, 22 Apr 2024 09:46:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sc2TbmjW5k7Y; Mon, 22 Apr 2024 09:46:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9892C40175
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9892C40175;
-	Mon, 22 Apr 2024 09:46:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B2A611BF5DD
- for <buildroot@lists.busybox.net>; Mon, 22 Apr 2024 09:46:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D65F81E74
- for <buildroot@lists.busybox.net>; Mon, 22 Apr 2024 09:46:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65BA281E30;
+	Mon, 22 Apr 2024 10:46:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LpFgL50oRPTf for <buildroot@lists.busybox.net>;
- Mon, 22 Apr 2024 09:46:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E34B381E6F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E34B381E6F
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E34B381E6F
- for <buildroot@buildroot.org>; Mon, 22 Apr 2024 09:46:07 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 80C7FC6366
- for <buildroot@buildroot.org>; Mon, 22 Apr 2024 09:40:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 156DFC0011;
- Mon, 22 Apr 2024 09:40:20 +0000 (UTC)
-Date: Mon, 22 Apr 2024 11:40:19 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20240422114019.0e8ac84e@booty>
-In-Reply-To: <fc33f5e4-094a-4cab-b6b1-c9212fea6e37@benettiengineering.com>
-References: <20240207214729.115691-1-giulio.benetti@benettiengineering.com>
- <fc33f5e4-094a-4cab-b6b1-c9212fea6e37@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+ id khS1G-zuP4ZO; Mon, 22 Apr 2024 10:46:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8244681E41
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8244681E41;
+	Mon, 22 Apr 2024 10:46:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CCD61BF337
+ for <buildroot@lists.busybox.net>; Mon, 22 Apr 2024 10:46:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66AF181E30
+ for <buildroot@lists.busybox.net>; Mon, 22 Apr 2024 10:46:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xvpEg5hGP2-M for <buildroot@lists.busybox.net>;
+ Mon, 22 Apr 2024 10:46:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::235; helo=mail-lj1-x235.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 520B281E2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 520B281E2D
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
+ [IPv6:2a00:1450:4864:20::235])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 520B281E2D
+ for <buildroot@buildroot.org>; Mon, 22 Apr 2024 10:46:19 +0000 (UTC)
+Received: by mail-lj1-x235.google.com with SMTP id
+ 38308e7fff4ca-2db6f5977e1so56329871fa.2
+ for <buildroot@buildroot.org>; Mon, 22 Apr 2024 03:46:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1713782776; x=1714387576;
+ h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=UCIDx85rJqLct8uqde5Ub3BCH9NlKU5/wCSgtHAy/tM=;
+ b=dioE96OxDeHae4kcukox/SCXeWp1+78g+n54xj/oh1SqT0E+ncq0RM8qXYVC0HWEjI
+ NSkAe06csLPzI/IAEwwSBkd8C4aHZc/unX8sYUMAMtLnFpf9U7hCSPomRM98p+/U7hjn
+ uYM07cjjoMOwIvQ/jHGskgVPrv8glco7fciqDFd6MTR0a5WNqD306HyWoWhUEbhPZ0OW
+ r1GKJTuX/OUg+RIlkVHyios3YDEpcmjBPcLBGqQE/uXsNI8TO0/1vVGmNmK3MVHq1FtY
+ UfLMZ82lgEJIDB+caLVm5oxSQ5ByvboPDo/IADVregzwHyft5b/v682oxMiCeBH/RXkv
+ NzOQ==
+X-Gm-Message-State: AOJu0Yz1959umIiQ3OEKRaPKSKWYNVmxTHIBYdFEyxsDbFT+typVc5QV
+ iJ9QA6qLkzEWbS6nWESPWVY6mZaZIQLkhxVIINLx1Ig4WYlmMb0buHCQiZRaJyvq9Q8R9tTrC+K
+ fvDSa9iBS03fRyKg3saVQ+hNrs9ONfFy+
+X-Google-Smtp-Source: AGHT+IFQNHD9rePJD2MnvGciXt6x33J1aX6ziMn8ju2SttgKdT1HnGL7Niwko3gT6nXAxWLf+6+UZtF4oJXj8159sFA=
+X-Received: by 2002:a05:651c:8a:b0:2d4:9201:d505 with SMTP id
+ 10-20020a05651c008a00b002d49201d505mr5239722ljq.51.1713782775961; Mon, 22 Apr
+ 2024 03:46:15 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: luca.ceresoli@bootlin.com
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 22 Apr 2024 12:46:04 +0200
+Message-ID: <CAGm1_kv4F+h1KZOiYTJ2ZActM6FMekfUc-OSQYt+ABEjdCsncA@mail.gmail.com>
+To: buildroot <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1713778821;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=IOZLkIjzeLDSuEsDZcRE3gMclsDJccOd5V9Mrn+9wbA=;
- b=OOTDMB0xiBsufr/wMy8Jt+gOk2x/m4eWEhsl0bvNJhH9dY9q/2hTLdpCGJ1ELgplZ5e5lK
- jSe9b1fSiUO2aqaaoI0Db1CvNLMuQhNT+OgqWxx+ra8Yq7pagopPu/B8cgySF6UZN5vbCT
- kT8yx/22x8GZyyFI0TZgSESzObQvXA/j8qLLYqAaVHl6+HCIEaceHcYv3wgWKW+9WN5ULZ
- zUg0JA2bAoyreSEs33Zqqg23g7bqUEtqsm126u2ThltVeRW0nYKoXpgdGe+wFmZZKZ6zez
- TTkyDsom7PlHPZzraprd28QWhXJIQP901uRImfeos1Depws8DIDnZF12GnAN/A==
+ d=googlemail.com; s=20230601; t=1713782776; x=1714387576; darn=buildroot.org; 
+ h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=UCIDx85rJqLct8uqde5Ub3BCH9NlKU5/wCSgtHAy/tM=;
+ b=al/sQc0Th007Ak8Z6ogZIy/VErhEG4ZROsgnQEG8B8no+G/IsSD5wK3gO/Hz0aV5Qg
+ XlQGQuVgSFhnegrelfWC5dGqWDegZpbj7yoQBKrFm+sK22P1/yT6FdDVXxJ3VWU0/syg
+ TysDtFXpAPvxedvVa69ysMFDd+QYE/41+ZTj4nl4gO7DVXJ2xGyGW4mPSnPFjWVSt7GQ
+ 6GDCu9Pt1V9/oweC7pQrWSxaf7E+lFnvsJ5CBC09BLt+ov1lXnZZYPc2RuUBy0wUIdPU
+ zMvZfuWwuRCP+Wb4ruIwysmzMr0woEglmWX6uCeQMPRc55YR+HjdB41o9YTN4Fb7TdJ2
+ 59zw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=googlemail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OOTDMB0x
-Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: bump to 2024-02-06
- version on v5.2.2.4 branch
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=al/sQc0T
+Subject: [Buildroot] pkg-meson.mk: support for the host python packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,33 +93,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
+libglib2 2.80.0 requires host-python-packaging to build the library [1].
 
-On Thu, 18 Apr 2024 16:03:02 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+What is the best way to tell meson/ninja where to look for our host
+python packages?
 
-> On 07/02/24 22:47, Giulio Benetti wrote:
-> > This version allows to build with Linux 6.8  
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c2524c7580d97f7387ec22da62be71d77f2ed8ec
+[1] https://gitlab.gnome.org/GNOME/glib/-/commit/fc6f06127cff9fe3e464b5be8c92ea08a679b620
 
-Ouch, had missed this!
-
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+Yegor
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
