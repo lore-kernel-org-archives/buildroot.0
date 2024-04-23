@@ -4,78 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD0D2C4345F
-	for <buildroot@archiver.kernel.org>; Tue, 23 Apr 2024 16:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FBA6C4345F
+	for <buildroot@archiver.kernel.org>; Tue, 23 Apr 2024 17:11:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 400CF40733;
-	Tue, 23 Apr 2024 16:50:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2392A40191;
+	Tue, 23 Apr 2024 17:11:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i6yWlJQ_JU1s; Tue, 23 Apr 2024 16:50:56 +0000 (UTC)
+ id jCyZ6yfLrXf3; Tue, 23 Apr 2024 17:11:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1379B406A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEA15401E4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1379B406A4;
-	Tue, 23 Apr 2024 16:50:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 657C51BF20D
- for <buildroot@lists.busybox.net>; Tue, 23 Apr 2024 16:50:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEA15401E4;
+	Tue, 23 Apr 2024 17:11:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C7B441BF3AA
+ for <buildroot@lists.busybox.net>; Tue, 23 Apr 2024 17:11:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52711608EA
- for <buildroot@lists.busybox.net>; Tue, 23 Apr 2024 16:50:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4224401E4
+ for <buildroot@lists.busybox.net>; Tue, 23 Apr 2024 17:11:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 07GWqcZIgKXf for <buildroot@lists.busybox.net>;
- Tue, 23 Apr 2024 16:50:53 +0000 (UTC)
-X-Greylist: delayed 303 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 23 Apr 2024 16:50:51 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3EEB3606BF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EEB3606BF
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.136.65.131;
- helo=mta-65-131.flowmailer.net;
- envelope-from=fm-32642-2024042316454638a76fed21d3a8dc75-kb_qaw@errorhandling.siemens-energy.com;
- receiver=<UNKNOWN> 
-Received: from mta-65-131.flowmailer.net (mta-65-131.flowmailer.net
- [185.136.65.131])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3EEB3606BF
- for <buildroot@buildroot.org>; Tue, 23 Apr 2024 16:50:51 +0000 (UTC)
-Received: by mta-65-131.flowmailer.net with ESMTPSA id
- 2024042316454638a76fed21d3a8dc75 for <buildroot@buildroot.org>;
- Tue, 23 Apr 2024 18:45:46 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ngJU5UKUoEnf for <buildroot@lists.busybox.net>;
+ Tue, 23 Apr 2024 17:11:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6CEB140191
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CEB140191
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6CEB140191
+ for <buildroot@buildroot.org>; Tue, 23 Apr 2024 17:11:34 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id C465DB0054E;
+ Tue, 23 Apr 2024 19:11:26 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 23 Apr 2024 18:45:37 +0200
-Message-ID: <fm-32642-2024042316454638a76fed21d3a8dc75-KB_QAw@errorhandling.siemens-energy.com>
+Date: Tue, 23 Apr 2024 19:11:18 +0200
+Message-ID: <20240423171118.230359-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; s=s1; d=flowmailer.net;
- h=from:from:sender:to:to:cc:cc:subject:subject:content-type:content-type:content-transfer-encoding:content-transfer-encoding:Date:Message-ID:MIME-Version;
- bh=U3gOGDJUned0Iv0xEqYBPuGVwXomd+V9JVV2WE5ILpk=;
- b=i4QHnX3/caDWU3nTinDWa0Dv/TreYTxltkn7fILT00CEIs5wFTTikCEgauTeJzgMmZ3EeN
- tOY9/45pfGagolsuhwFBWtXMJ4yiXSmQAi0AsQQEhJaQWjaE68Gs/H9O7c3s3xc2dANSMZm6
- 1rxWRLbTJek/sf8CXrvkBEPP+IMtg=;
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; s=fm3; 
- d=siemens-energy.com; i=moritz.struebe@siemens-energy.com;
- h=from:from:sender:to:to:cc:cc:subject:subject:content-type:content-type:content-transfer-encoding:content-transfer-encoding:Date:Message-ID:MIME-Version;
- bh=U3gOGDJUned0Iv0xEqYBPuGVwXomd+V9JVV2WE5ILpk=;
- b=LGBZKyaEwa1rv7RDJc4t84nmsduEKEo3zv33MMen+fJMFK2oLJc++h87f27nFwnHMBL9qj
- pTiMEAu5oqUZo60WsGkMLIqBe1gliuVHByWSLKu61iU+Hr7Ra+EnPAi4b2CU0dud25CdPK8R
- SHizMnUMr5lOcehxh2Zl+kkSdVFQ3NLzN32h3gPANnsIqvF5aupOFuVbntdDQQE6Pgs2ZYWM
- JgLtxcY0Q7PZ8jYUwu3JvhHyiw69dGSC+KjP8WnPpReRnNPkxpbU9fl1wQyfS1HAi1ubCvo2
- RrjhDFAvWQn50aohaLPJI3yTuVlyZ+MCbzab2PIWXcgOIY5OCdzvUUoQ==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=siemens-energy.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key, unprotected) header.d=flowmailer.net
- header.i=@flowmailer.net header.a=rsa-sha256 header.s=s1 header.b=i4QHnX3/; 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1713892287;
+ bh=E6ATcMt4jKvUJ2Z00xvQcYJv80vMebSL8yALFclgwrE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=H/G4U5m12v7LxBmN6QHtCX8PVEOpup+8dPRiSsl53+x/18/sr1x73+ZsmGMQdtwZi
+ vBl6KOv/QuiajnCR+3EFxz5sYghXjTmksBP5mWuFLTbMsVIIRJaiJFp5c231KF3vh7
+ lo4YLWT1rHD487YHmvzkgxaF2S5JfV1QenSOmpkR2Fd01uCDT7Y29PO4RY69HLuWa/
+ yHe8anP27TgYwuwPGJdtZ7tc3wwrOvpwdVdatt6CS1Zh2fUQX1Te87FJFR0UyUJWd7
+ yXjyGsl6tPQ4/bxm9icvoDlY0jMsAXDn/cr2i0JO6US92pU3IarCO2kgvNjSTqKqmj
+ v3lot7aVJV4aA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=siemens-energy.com
- header.i=moritz.struebe@siemens-energy.com header.a=rsa-sha256 header.s=fm3
- header.b=LGBZKyaE
-Subject: [Buildroot] [PATCH 1/1] linux: add Linux 6.1 CIP-Kernel
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=H/G4U5m1
+Subject: [Buildroot] [PATCH 1/1] support/testing: add socat runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,106 +76,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Moritz_Str=C3=BCbe_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Moritz=20Str=C3=BCbe?= <moritz.struebe@siemens-energy.com>
-Cc: moritz.struebe@siemens-energy.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBhZGRzIHN1cHBvcnQgZm9yIHRoZSA2LjEgQ0lQLUtlcm5lbC4gQXMgdGhlIDUuOCBrZXJu
-ZWwgaXMgcGxhbm5lZAp0byBiZSBtZWFpbnRhaW5lZCB1bnRpbCAyMDIzIEkgYWRkZWQgYWRkaXRp
-b25hbCBvcHRpb25zIGZvciB0aG9zZQpzdGFydGluZyBuZXcgcHJvamVjdHMuCkFsc28gdXBkYXRl
-IHRoZSBkb2N1bWVudGF0aW9uIHRvIHJlZmxlY3QgdGhlIGN1cnJlbnQgRU9MIGRhdGUgaW5zdGVh
-ZCBvZgpqdXN0IHN0YXRpbmcgdGhhdCBpdCB3aWxsIGJlIG1lYWludGFpbmVkIGZvciAxMCB5ZWFy
-cy4KClNpZ25lZC1vZmYtYnk6IE1vcml0eiBTdHLDvGJlIDxtb3JpdHouc3RydWViZUBzaWVtZW5z
-LWVuZXJneS5jb20+Ci0tLQogbGludXgvQ29uZmlnLmV4dC5pbiB8ICAyICsrCiBsaW51eC9Db25m
-aWcuaW4gICAgIHwgMzMgKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tCiBsaW51eC9s
-aW51eC5oYXNoICAgIHwgIDIgKysKIGxpbnV4L2xpbnV4Lm1rICAgICAgfCAgMiArLQogNCBmaWxl
-cyBjaGFuZ2VkLCAzNCBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBh
-L2xpbnV4L0NvbmZpZy5leHQuaW4gYi9saW51eC9Db25maWcuZXh0LmluCmluZGV4IDNjYmY0MmQz
-NDQuLjM3NGMwYTEwNjAgMTAwNjQ0Ci0tLSBhL2xpbnV4L0NvbmZpZy5leHQuaW4KKysrIGIvbGlu
-dXgvQ29uZmlnLmV4dC5pbgpAQCAtNTEsNiArNTEsOCBAQCBjb25maWcgQlIyX0xJTlVYX0tFUk5F
-TF9FWFRfUlRBSQogCWRlcGVuZHMgb24gIUJSMl9MSU5VWF9LRVJORUxfTEFURVNUX1ZFUlNJT04K
-IAlkZXBlbmRzIG9uICFCUjJfTElOVVhfS0VSTkVMX0xBVEVTVF9DSVBfVkVSU0lPTgogCWRlcGVu
-ZHMgb24gIUJSMl9MSU5VWF9LRVJORUxfTEFURVNUX0NJUF9SVF9WRVJTSU9OCisJZGVwZW5kcyBv
-biAhQlIyX0xJTlVYX0tFUk5FTF9MQVRFU1RfQ0lQX1ZFUlNJT05fNl8xCisJZGVwZW5kcyBvbiAh
-QlIyX0xJTlVYX0tFUk5FTF9MQVRFU1RfQ0lQX1JUX1ZFUlNJT05fNl8xCiAJc2VsZWN0IEJSMl9Q
-QUNLQUdFX1JUQUkKIAloZWxwCiAJICBSVEFJIEtlcm5lbCBwYXJ0LgpkaWZmIC0tZ2l0IGEvbGlu
-dXgvQ29uZmlnLmluIGIvbGludXgvQ29uZmlnLmluCmluZGV4IDI3NjdiNzA5ZDQuLmM3NmMzNjM3
-N2UgMTAwNjQ0Ci0tLSBhL2xpbnV4L0NvbmZpZy5pbgorKysgYi9saW51eC9Db25maWcuaW4KQEAg
-LTMyLDcgKzMyLDcgQEAgY29uZmlnIEJSMl9MSU5VWF9LRVJORUxfTEFURVNUX1ZFUlNJT04KIAlz
-ZWxlY3QgQlIyX1RPT0xDSEFJTl9IRUFERVJTX0FUX0xFQVNUXzZfOCBpZiBCUjJfS0VSTkVMX0hF
-QURFUlNfQVNfS0VSTkVMCiAKIGNvbmZpZyBCUjJfTElOVVhfS0VSTkVMX0xBVEVTVF9DSVBfVkVS
-U0lPTgotCWJvb2wgIkxhdGVzdCBDSVAgU0xUUyB2ZXJzaW9uICg1LjEwLjE2Mi1jaXAyNCkiCisJ
-Ym9vbCAiTGF0ZXN0IENJUCBTTFRTIHZlcnNpb24gNS4xMCAoNS4xMC4xNjItY2lwMjQpIgogCXNl
-bGVjdCBCUjJfVE9PTENIQUlOX0hFQURFUlNfQVRfTEVBU1RfNV8xMCBpZiBCUjJfS0VSTkVMX0hF
-QURFUlNfQVNfS0VSTkVMCiAJaGVscAogCSAgQ0lQIGxhdW5jaGVkIGluIHRoZSBzcHJpbmcgb2Yg
-MjAxNiB0byBhZGRyZXNzIHRoZSBuZWVkcyBvZgpAQCAtNDcsMTkgKzQ3LDQyIEBAIGNvbmZpZyBC
-UjJfTElOVVhfS0VSTkVMX0xBVEVTVF9DSVBfVkVSU0lPTgogCSAgdGhlc2UgcmVxdWlyZW1lbnRz
-LgogCiAJICBUaGUgQ0lQIGNvbW11bml0eSBwbGFucyB0byBtYWludGFpbiA1LjEwIGZvciBzZWN1
-cml0eSBhbmQKLQkgIGJ1ZyBmaXhlcyBmb3IgbW9yZSB0aGFuIDEwIHllYXJzLgorCSAgYnVnIGZp
-eGVzIHVudGlsIDIwMzEtMDEuCiAKIAkgIGh0dHBzOi8vd3d3LmNpcC1wcm9qZWN0Lm9yZwogCiBj
-b25maWcgQlIyX0xJTlVYX0tFUk5FTF9MQVRFU1RfQ0lQX1JUX1ZFUlNJT04KLQlib29sICJMYXRl
-c3QgQ0lQIFJUIFNMVFMgdmVyc2lvbiAoNS4xMC4xNjItY2lwMjQtcnQxMCkiCisJYm9vbCAiTGF0
-ZXN0IENJUCBSVCBTTFRTIHZlcnNpb24gNS4xMCAoNS4xMC4xNjItY2lwMjQtcnQxMCkiCiAJc2Vs
-ZWN0IEJSMl9UT09MQ0hBSU5fSEVBREVSU19BVF9MRUFTVF81XzEwIGlmIEJSMl9LRVJORUxfSEVB
-REVSU19BU19LRVJORUwKIAloZWxwCiAJICBTYW1lIGFzIHRoZSBDSVAgdmVyc2lvbiwgYnV0IHRo
-aXMgaXMgdGhlIFBSRUVNUFRfUlQgcmVhbHRpbWUKIAkgIHZhcmlhbnQuCiAKIAkgIFRoZSBDSVAg
-Y29tbXVuaXR5IHBsYW5zIHRvIG1haW50YWluIDUuMTAgZm9yIHNlY3VyaXR5IGFuZAotCSAgYnVn
-IGZpeGVzIGZvciBtb3JlIHRoYW4gMTAgeWVhcnMuCisJICBidWcgZml4ZXMgdW50aWwgMjAzMS0w
-MS4KKworCSAgaHR0cHM6Ly93d3cuY2lwLXByb2plY3Qub3JnCisKK2NvbmZpZyBCUjJfTElOVVhf
-S0VSTkVMX0xBVEVTVF9DSVBfVkVSU0lPTl82XzEKKwlib29sICJMYXRlc3QgQ0lQIFNMVFMgdmVy
-c2lvbiA2LjEgKDYuMS44My1jaXAxOCkiCisJc2VsZWN0IEJSMl9UT09MQ0hBSU5fSEVBREVSU19B
-VF9MRUFTVF82XzEgaWYgQlIyX0tFUk5FTF9IRUFERVJTX0FTX0tFUk5FTAorCWhlbHAKKwkgIFNh
-bWUgYXMgdGhlIENJUCB2ZXJzaW9uLCBidXQgdGhpcyBpcyB0aGUgNi4xIHZlcnNpb24uCisKKwkg
-IFRoZSBDSVAgY29tbXVuaXR5IHBsYW5zIHRvIG1haW50YWluIDYuMSBmb3Igc2VjdXJpdHkgYW5k
-CisJICBidWcgZml4ZXMgdW50aWwgMjAzMy0wOC4KKworCSAgaHR0cHM6Ly93d3cuY2lwLXByb2pl
-Y3Qub3JnCisKK2NvbmZpZyBCUjJfTElOVVhfS0VSTkVMX0xBVEVTVF9DSVBfUlRfVkVSU0lPTl82
-XzEKKwlib29sICJMYXRlc3QgQ0lQIFJUIFNMVFMgdmVyc2lvbiA2LjEgKDYuMS44My1jaXAxOC1y
-dDEwKSIKKwlzZWxlY3QgQlIyX1RPT0xDSEFJTl9IRUFERVJTX0FUX0xFQVNUXzZfMSBpZiBCUjJf
-S0VSTkVMX0hFQURFUlNfQVNfS0VSTkVMCisJaGVscAorCSAgU2FtZSBhcyB0aGUgQ0lQIHZlcnNp
-b24sIGJ1dCB0aGlzIGlzIHRoZSA2LjEgUFJFRU1QVF9SVAorCSAgcmVhbHRpbWUgdmFyaWFudC4K
-KworCSAgVGhlIENJUCBjb21tdW5pdHkgcGxhbnMgdG8gbWFpbnRhaW4gNi4xIGZvciBzZWN1cml0
-eSBhbmQKKwkgIGJ1ZyBmaXhlcyB1bnRpbCAyMDMzLTA4IC4KIAogCSAgaHR0cHM6Ly93d3cuY2lw
-LXByb2plY3Qub3JnCiAKQEAgLTEzMSw2ICsxNTQsOCBAQCBjb25maWcgQlIyX0xJTlVYX0tFUk5F
-TF9WRVJTSU9OCiAJZGVmYXVsdCAiNi44LjEiIGlmIEJSMl9MSU5VWF9LRVJORUxfTEFURVNUX1ZF
-UlNJT04KIAlkZWZhdWx0ICI1LjEwLjE2Mi1jaXAyNCIgaWYgQlIyX0xJTlVYX0tFUk5FTF9MQVRF
-U1RfQ0lQX1ZFUlNJT04KIAlkZWZhdWx0ICI1LjEwLjE2Mi1jaXAyNC1ydDEwIiBpZiBCUjJfTElO
-VVhfS0VSTkVMX0xBVEVTVF9DSVBfUlRfVkVSU0lPTgorCWRlZmF1bHQgIjYuMS44My1jaXAxOCIg
-aWYgQlIyX0xJTlVYX0tFUk5FTF9MQVRFU1RfQ0lQX1ZFUlNJT05fNl8xCisJZGVmYXVsdCAiNi4x
-LjgzLWNpcDE4LXJ0MTAiIGlmIEJSMl9MSU5VWF9LRVJORUxfTEFURVNUX0NJUF9SVF9WRVJTSU9O
-XzZfMQogCWRlZmF1bHQgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRSBcCiAJ
-CWlmIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT04KIAlkZWZhdWx0ICJjdXN0b20iIGlm
-IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTEwKZGlmZiAtLWdpdCBhL2xpbnV4L2xpbnV4
-Lmhhc2ggYi9saW51eC9saW51eC5oYXNoCmluZGV4IDRmYTlmNzAxY2QuLjkwZWY4YTAyOWMgMTAw
-NjQ0Ci0tLSBhL2xpbnV4L2xpbnV4Lmhhc2gKKysrIGIvbGludXgvbGludXguaGFzaApAQCAtMTIs
-NiArMTIsOCBAQCBzaGEyNTYgIDk1ZWM5NGM0YWI4ZjQ2ZDhhNTQ0MzA4OTNmOWJkNjUzYzQ2YjBm
-MTU4N2QyMTY4MThhYThmNTJmZDMxM2RlNjkgIGxpbnV4LQogIyBMb2NhbGx5IGNvbXB1dGVkCiBz
-aGEyNTYgIGZiMGVkYzNjMThlNDdkMmI2OTc0Y2IwODgwYTBhZmI1YzNmYTA4ZjUwZWU4N2RmZGYy
-NDM0OTQwNWVhNWY4YWUgIGxpbnV4LWNpcC01LjEwLjE2Mi1jaXAyNC50YXIuZ3oKIHNoYTI1NiAg
-YjU1MzkyNDNmMTg3ZTNkNDc4ZDc2ZDQ0YWUxM2FhYjgzOTUyYzk0Yjg4NWFkODg5ZGY2ZmE5OTk3
-ZTE2YTQ0MSAgbGludXgtY2lwLTUuMTAuMTYyLWNpcDI0LXJ0MTAudGFyLmd6CitzaGEyNTYgIDI0
-MTczZDg2M2Q5M2FlNzVmMTk3YzAyMTFjZmI2MDY1M2MwZGYzZmI5NmFiN2ExNGIxMGYyNjI3YjU0
-NzEzM2IgIGxpbnV4LWNpcC02LjEuODMtY2lwMTgtcnQxMC50YXIuZ3oKK3NoYTI1NiAgNWE1MDdi
-NTY4NzU2M2JhMjg1ZGMwNGI0NDg3Nzg4ZDA5YWQ2Mzk3N2JjZDA0YjhkMDg3ZjY0N2UxOTYxYzky
-ZiAgbGludXgtY2lwLTYuMS44My1jaXAxOC50YXIuZ3oKIAogIyBMaWNlbnNlcyBoYXNoZXMKIHNo
-YTI1NiAgZmI1YTQyNWJkM2IzY2Q2MDcxYTNhOWFmZjk5MDlhODU5ZTdjMTE1OGQ1NGQzMmUwNzY1
-ODM5OGNkNjdlYjZhMCAgQ09QWUlORwpkaWZmIC0tZ2l0IGEvbGludXgvbGludXgubWsgYi9saW51
-eC9saW51eC5tawppbmRleCA0ZTEyYjM2YzFmLi42NDA5ZTA1ZTI1IDEwMDY0NAotLS0gYS9saW51
-eC9saW51eC5taworKysgYi9saW51eC9saW51eC5tawpAQCAtMzAsNyArMzAsNyBAQCBMSU5VWF9T
-SVRFX01FVEhPRCA9IGhnCiBlbHNlIGlmZXEgKCQoQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fU1ZO
-KSx5KQogTElOVVhfU0lURSA9ICQoY2FsbCBxc3RyaXAsJChCUjJfTElOVVhfS0VSTkVMX0NVU1RP
-TV9SRVBPX1VSTCkpCiBMSU5VWF9TSVRFX01FVEhPRCA9IHN2bgotZWxzZSBpZmVxICgkKEJSMl9M
-SU5VWF9LRVJORUxfTEFURVNUX0NJUF9WRVJTSU9OKSQoQlIyX0xJTlVYX0tFUk5FTF9MQVRFU1Rf
-Q0lQX1JUX1ZFUlNJT04pLHkpCitlbHNlIGlmZXEgKCQoQlIyX0xJTlVYX0tFUk5FTF9MQVRFU1Rf
-Q0lQX1ZFUlNJT04pJChCUjJfTElOVVhfS0VSTkVMX0xBVEVTVF9DSVBfUlRfVkVSU0lPTikkKEJS
-Ml9MSU5VWF9LRVJORUxfTEFURVNUX0NJUF9WRVJTSU9OXzZfMSkkKEJSMl9MSU5VWF9LRVJORUxf
-TEFURVNUX0NJUF9SVF9WRVJTSU9OXzZfMSkseSkKIExJTlVYX1NPVVJDRSA9IGxpbnV4LWNpcC0k
-KExJTlVYX1ZFUlNJT04pLnRhci5negogTElOVVhfU0lURSA9IGh0dHBzOi8vZ2l0Lmtlcm5lbC5v
-cmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2NpcC9saW51eC1jaXAuZ2l0L3NuYXBzaG90CiBl
-bHNlIGlmbmVxICgkKGZpbmRzdHJpbmcgLXJjLCQoTElOVVhfVkVSU0lPTikpLCkKLS0gCjIuMzAu
-MgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                  |  1 +
+ support/testing/tests/package/test_socat.py | 56 +++++++++++++++++++++
+ 2 files changed, 57 insertions(+)
+ create mode 100644 support/testing/tests/package/test_socat.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 399b2931ff3..104588136f2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1857,6 +1857,7 @@ F:	support/testing/tests/package/test_rdma_core.py
+ F:	support/testing/tests/package/test_rdma_core/
+ F:	support/testing/tests/package/test_screen.py
+ F:	support/testing/tests/package/test_sed.py
++F:	support/testing/tests/package/test_socat.py
+ F:	support/testing/tests/package/test_sox.py
+ F:	support/testing/tests/package/test_sqlite.py
+ F:	support/testing/tests/package/test_strace.py
+diff --git a/support/testing/tests/package/test_socat.py b/support/testing/tests/package/test_socat.py
+new file mode 100644
+index 00000000000..67b32448435
+--- /dev/null
++++ b/support/testing/tests/package/test_socat.py
+@@ -0,0 +1,56 @@
++import os
++import time
++
++import infra.basetest
++
++
++class TestSoCat(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_NETCAT=y
++        BR2_PACKAGE_SOCAT=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Some values, for the test.
++        msg = "Hello Buildroot!"
++        out_file = "output.txt"
++        port1 = 11111
++        port2 = 22222
++
++        # Check the program can execute.
++        self.assertRunOk("socat -V")
++
++        # We start the receiver netcat on tcp/port2.
++        cmd = f"nc -n -l -p {port2} > {out_file} 2> /dev/null &"
++        self.assertRunOk(cmd)
++
++        time.sleep(2 * self.timeout_multiplier)
++
++        # We start socat in background to listen on tcp/port1 and
++        # forward to tcp/port2.
++        cmd = f"socat TCP4-LISTEN:{port1} TCP4:127.0.0.1:{port2} &"
++        self.assertRunOk(cmd)
++
++        time.sleep(2 * self.timeout_multiplier)
++
++        # We write a message on tcp/port1. Socat is expected to
++        # forward the message to the receiver on tcp/port2, and write
++        # our message in a file.
++        cmd = f"echo '{msg}' | nc -n -c 127.0.0.1 {port1}"
++        self.assertRunOk(cmd)
++
++        # We check the output file contains our message.
++        cmd = f"cat {out_file}"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], msg)
+-- 
+2.44.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
