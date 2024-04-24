@@ -4,89 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C4BCC4345F
-	for <buildroot@archiver.kernel.org>; Wed, 24 Apr 2024 12:23:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69FD7C4345F
+	for <buildroot@archiver.kernel.org>; Wed, 24 Apr 2024 12:38:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9936B80BBC;
-	Wed, 24 Apr 2024 12:23:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17CA682079;
+	Wed, 24 Apr 2024 12:38:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A5g2PEesfarI; Wed, 24 Apr 2024 12:23:47 +0000 (UTC)
+ id SvcwQVmB2Udy; Wed, 24 Apr 2024 12:38:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84D6680BBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DD808206D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84D6680BBE;
-	Wed, 24 Apr 2024 12:23:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DD808206D;
+	Wed, 24 Apr 2024 12:38:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D3F0C1BF580
- for <buildroot@lists.busybox.net>; Wed, 24 Apr 2024 12:23:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 75C921BF580
+ for <buildroot@lists.busybox.net>; Wed, 24 Apr 2024 12:38:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF9C380BBB
- for <buildroot@lists.busybox.net>; Wed, 24 Apr 2024 12:23:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5DC0F8206D
+ for <buildroot@lists.busybox.net>; Wed, 24 Apr 2024 12:38:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WjK8lShkN6AQ for <buildroot@lists.busybox.net>;
- Wed, 24 Apr 2024 12:23:45 +0000 (UTC)
+ id PQVoKfByy-JD for <buildroot@lists.busybox.net>;
+ Wed, 24 Apr 2024 12:38:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 99C4580B72
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99C4580B72
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 99C4580B72
- for <buildroot@buildroot.org>; Wed, 24 Apr 2024 12:23:44 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-a55b78510bbso377733566b.0
- for <buildroot@buildroot.org>; Wed, 24 Apr 2024 05:23:44 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::230; helo=mail-lj1-x230.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CFD108205E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFD108205E
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
+ [IPv6:2a00:1450:4864:20::230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CFD108205E
+ for <buildroot@buildroot.org>; Wed, 24 Apr 2024 12:38:17 +0000 (UTC)
+Received: by mail-lj1-x230.google.com with SMTP id
+ 38308e7fff4ca-2da0b3f7ad2so98623571fa.2
+ for <buildroot@buildroot.org>; Wed, 24 Apr 2024 05:38:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1713961422; x=1714566222;
+ d=1e100.net; s=20230601; t=1713962295; x=1714567095;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=QrxPhrA5wrzhnLufPZasW9JsmcYpFx4ZUx7FpecD1VU=;
- b=K1B/5GF50PM4gP4wD8WdatQFgROQZlZtsTXWxZh2Fkrejxs/BN7DjkHwXbXQfFh6AN
- 5o1RcW0XLBLoGWAkQOKdHp+sJwp7Bsv1TN/UocyQzc6OPn+Y+wxuMJceynb67App411X
- 4leqe1lgkpXR10LH92HGqWiNLnyg6Nhc6ExjroF03z58MQsiH/5BW0ibXCt6iIeUqHDf
- 3IS3mfpliFaue8jtBAvpUYOV6cgchJ7Folj2Dtds6yr80Om7Bxw1WnENstyTDFbugOf/
- 1jHJ1RYTyFdl6Is0Cejk8bNPq4XR7rP9K6BN1mRqj7OUojdHKIUrSFdUbZMCxowjBHVM
- UIYg==
-X-Gm-Message-State: AOJu0YycR6huPr8AeOXfZEaP46OEyewHbSSnS03Z7gLmiFgMHGB4mSxQ
- 7QzUfUKhgHd5EiwLnzn7fDeigWaq15R4M9OIpu0A5x+AOMr596kt89FdAQ==
-X-Google-Smtp-Source: AGHT+IG6gemdvQdVxWKcCK7uv0ko/759xGW/NesLC1FlPQn/Vx2M6UH2omXSv7l3I6Q3tMm4bgnVcg==
-X-Received: by 2002:a17:907:3f1b:b0:a55:5b1f:52fd with SMTP id
- hq27-20020a1709073f1b00b00a555b1f52fdmr1872660ejc.3.1713961421812; 
- Wed, 24 Apr 2024 05:23:41 -0700 (PDT)
-Received: from development2.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- qt11-20020a170906eceb00b00a55ab2630c3sm4547410ejb.38.2024.04.24.05.23.40
+ bh=WbVS60EcMtTIURKuf62qkfmNRpkq9dgDKeqew2kK1W8=;
+ b=KnehNbce0XD5uXRDtRGbHBzVx1zsZlC5rTwKmdDLPuGqIhIENcpQgnychS6b3/IKWo
+ zH+CD0kn3hPerc3VxwJAE9dKJGILL8djmxh0lSMIbw9OsxdG4Pp41h2tJFxVWlZRqqTw
+ D7ShPIh4eaX2L5EGkhaOibyASylG57pdBhUEW2rD2lV2wCYcj8/A//ms6TcAd4RqZsvC
+ wJv9OGJDELUAXU+cQJhNUzqZJKtvsun5egbx5Z/kkQVjX2sfuy0GnFXcK4c4UCASOz6H
+ J8NSy0kvnC5wkE84aDMe5hQ9kj13XCpxJ4WQ1bTRy93EC8WTpAaVDeKkOrP+v9eRcDAp
+ lwsg==
+X-Gm-Message-State: AOJu0YyvjhgBIrpiJdihF8AZwuGRm3F7dH3Fr5/nK8q+pEMXzLuFZkNm
+ Zuf2wwHfvlYnurKQp8hbUWOrTMKUcaDksOObZDExzBlQepFEAgHOXdc4pM5S9ajkXpWaiv/jcbD
+ e
+X-Google-Smtp-Source: AGHT+IH5JWfEyY/MVc01xp86DzuPLhfAQ4+x4eBycbGjtX5hoG8IsP3LyF04vm3VnkqUJ2VObr8OXA==
+X-Received: by 2002:a2e:b784:0:b0:2d8:901f:7f4d with SMTP id
+ n4-20020a2eb784000000b002d8901f7f4dmr1406201ljo.29.1713962294662; 
+ Wed, 24 Apr 2024 05:38:14 -0700 (PDT)
+Received: from P-NTS-Evian.. ([2a04:cec0:1029:8401:c161:55f0:60f6:3bba])
+ by smtp.gmail.com with ESMTPSA id
+ r14-20020a05600c458e00b00417e5b71188sm23741231wmo.34.2024.04.24.05.38.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Apr 2024 05:23:40 -0700 (PDT)
+ Wed, 24 Apr 2024 05:38:14 -0700 (PDT)
+From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Wed, 24 Apr 2024 14:22:40 +0200
-Message-Id: <20240424122240.136386-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Wed, 24 Apr 2024 14:38:08 +0200
+Message-ID: <20240424123809.406447-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1713961422; x=1714566222; darn=buildroot.org; 
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1713962295; x=1714567095;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=QrxPhrA5wrzhnLufPZasW9JsmcYpFx4ZUx7FpecD1VU=;
- b=giGHKPUS8A/zIwblvlxlZTmzrIw2hJSd4BdR+1vUdTqKEXF1FI6HrVXFgR0tJ6CdgG
- Q3SY/S8s/+prCvF8tvPMr/r2r6ONyALiwdeCbkZs8IdxGUqT6tvuP2ElCAeJjYZTZT9g
- rOLp87dP6mdYjGISv/HAcGIDJ//t9xUmIGAGFwH+0a04yo2BCazCRej5WWMhQo/bUau7
- yePtX182yD2RaWQ5qgs3ONqadV4CZkGz9O/dec1y5vX6DLqOSPr9bTPF1nP2MzT32Gxs
- 8QTrtRCldGfEpxbPycDBdMZQ+/yGQtviEXD4MQaQN0QzY7z0AXo60/CPEfcsBNugoMHc
- x+2g==
+ bh=WbVS60EcMtTIURKuf62qkfmNRpkq9dgDKeqew2kK1W8=;
+ b=fSNLhb5nECK3S4EQqvr3bjFJu17YDsyFumoY7rh9O8SdoQEXQj72M1Vq+6hzm0eEvL
+ 5Q9l1/+W5RgcgOkunT1+wTuVaFRC9S4Qq+J4WHmbnThOmejMe/Pmw9xKm+RJaUAhst5q
+ 8VpwSd2lTpuKbA3Q1gNdgkgmiI2+Pwdy3tiwxzbZQPbNVlVSyfLVOaoyit9wMafegVe1
+ akj4Pbl1lKmvGZ2ZSAS4d/IN0X/FCIn/GbmOIis3Dr+hJ3twhru4AVs6bGqNvjGkTsVY
+ nC7VGBPk/bAMkTRplnU2wUvJJDwReJibMXppR0Xrb4M2+np9RVcZBt0dxfWS1PmytgRv
+ 2AVg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
+ dmarc=pass (p=none dis=none)
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=giGHKPUS
-Subject: [Buildroot] [PATCH] package/libxmlb: new package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=fSNLhb5n
+Subject: [Buildroot] [PATCH 1/2] configs/qemu_arm_{versatile,
+ vexpress}_defconfig: update devicetree path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,129 +104,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
+Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+The last kernel version bump broke qemu ARM defconfigs [1] since
+all devicetree where moved to to vendor sub-directories in 6.5 [2].
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[1] 9982e0b5a6 ("configs/qemu: update defconfigs to Linux 6.6.18")
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=724ba6751532055db75992fc6ae21c3e322e94a7
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6655119888 (qemu_arm_versatile_defconfig)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6655119890 (qemu_arm_vexpress_defconfig)
+
+Reported-by: Waldemar Brodkorb on IRC
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/libxmlb/Config.in    | 18 ++++++++++++++++++
- package/libxmlb/libxmlb.hash |  4 ++++
- package/libxmlb/libxmlb.mk   | 36 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 60 insertions(+)
- create mode 100644 package/libxmlb/Config.in
- create mode 100644 package/libxmlb/libxmlb.hash
- create mode 100644 package/libxmlb/libxmlb.mk
+ configs/qemu_arm_versatile_defconfig | 2 +-
+ configs/qemu_arm_vexpress_defconfig  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 399b2931ff..276ad8a27a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3284,6 +3284,7 @@ F:	package/libsoc/
- F:	package/libsocketcan/
- F:	package/libubox/
- F:	package/libuci/
-+F:	package/libxmlb/
- F:	package/linux-firmware/
- F:	package/linux-serial-test/
- F:	package/modem-manager/
-diff --git a/package/Config.in b/package/Config.in
-index 1935077f0f..02ed24c6b5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1860,6 +1860,7 @@ menu "JSON/XML"
- 	source "package/libroxml/Config.in"
- 	source "package/libucl/Config.in"
- 	source "package/libxml2/Config.in"
-+	source "package/libxmlb/Config.in"
- 	source "package/libxmlpp/Config.in"
- 	source "package/libxmlrpc/Config.in"
- 	source "package/libxslt/Config.in"
-diff --git a/package/libxmlb/Config.in b/package/libxmlb/Config.in
-new file mode 100644
-index 0000000000..702cc3d6f2
---- /dev/null
-+++ b/package/libxmlb/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBXMLB
-+	bool "libxmlb"
-+	depends on !BR2_STATIC_LIBS # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_USE_MMU # glib2
-+	depends on BR2_USE_WCHAR # glib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBSOUP
-+	help
-+	  The libxmlb library takes XML source, and converts it
-+	  to a structured binary representation with a deduplicated
-+	  string table where the strings have the NULs included.
-+
-+	  https://github.com/hughsie/libxmlb
-+
-+comment "libxmlb needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libxmlb/libxmlb.hash b/package/libxmlb/libxmlb.hash
-new file mode 100644
-index 0000000000..6f364d1e04
---- /dev/null
-+++ b/package/libxmlb/libxmlb.hash
-@@ -0,0 +1,4 @@
-+# Locally computed:
-+sha256  7050a3e43c4e1f53020cfbdfcb6fd5dc664c6c240faceb5ae3c8830423918262  libxmlb-0.3.19.tar.gz
-+sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  LICENSE
-+
-diff --git a/package/libxmlb/libxmlb.mk b/package/libxmlb/libxmlb.mk
-new file mode 100644
-index 0000000000..1d5d339e4f
---- /dev/null
-+++ b/package/libxmlb/libxmlb.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# libxmlb
-+#
-+################################################################################
-+
-+LIBXMLB_VERSION = 0.3.19
-+LIBXMLB_SITE = $(call github,hughsie,libxmlb,$(LIBXMLB_VERSION))
-+LIBXMLB_LICENSE = LGPL-2.1+
-+LIBXMLB_LICENSE_FILES = LICENSE
-+LIBXMLB_INSTALL_STAGING = YES
-+LIBXMLB_DEPENDENCIES = libglib2
-+LIBXMLB_CONF_OPTS = -Dgtkdoc=false -Dtests=false
-+
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBXMLB_CONF_OPTS += -Dintrospection=true
-+LIBXMLB_DEPENDENCIES += gobject-introspection
-+else
-+LIBXMLB_CONF_OPTS += -Dintrospection=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+LIBXMLB_DEPENDENCIES += zstd
-+LIBXMLB_CONF_OPTS += -Dzstd=enabled
-+else
-+LIBXMLB_CONF_OPTS += -Dzstd=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+LIBXMLB_DEPENDENCIES += xz
-+LIBXMLB_CONF_OPTS += -Dlzma=enabled
-+else
-+LIBXMLB_CONF_OPTS += -Dlzma=disabled
-+endif
-+
-+$(eval $(meson-package))
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 2c73090d5d..a48e437278 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -24,7 +24,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="versatile"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-versatile/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/versatile-pb"
+ 
+ # host-qemu for gitlab testing
+ BR2_PACKAGE_HOST_QEMU=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 12ec33ed7a..439c299752 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -28,7 +28,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.18"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/vexpress-v2p-ca9"
+ 
+ # host-qemu for gitlab testing
+ BR2_PACKAGE_HOST_QEMU=y
 -- 
-2.34.1
+2.44.0
 
 _______________________________________________
 buildroot mailing list
