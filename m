@@ -4,49 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88FEBC4345F
-	for <buildroot@archiver.kernel.org>; Wed, 24 Apr 2024 19:42:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4499C4345F
+	for <buildroot@archiver.kernel.org>; Wed, 24 Apr 2024 19:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3ECB560D88;
-	Wed, 24 Apr 2024 19:42:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B13B660D88;
+	Wed, 24 Apr 2024 19:43:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n9fIa-2u5HjY; Wed, 24 Apr 2024 19:42:21 +0000 (UTC)
+ id jsnKgiimDmAD; Wed, 24 Apr 2024 19:43:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D80760D8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B97EE60D8C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D80760D8C;
-	Wed, 24 Apr 2024 19:42:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EC27E1BF34A
- for <buildroot@lists.busybox.net>; Wed, 24 Apr 2024 19:42:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B97EE60D8C;
+	Wed, 24 Apr 2024 19:43:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BD201BF34A
+ for <buildroot@lists.busybox.net>; Wed, 24 Apr 2024 19:43:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8583822CD
- for <buildroot@lists.busybox.net>; Wed, 24 Apr 2024 19:42:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 57E45405E2
+ for <buildroot@lists.busybox.net>; Wed, 24 Apr 2024 19:43:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g_iysWaMIbfY for <buildroot@lists.busybox.net>;
- Wed, 24 Apr 2024 19:42:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B038A82254
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B038A82254
- for <buildroot@buildroot.org>; Wed, 24 Apr 2024 19:42:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A6C498610F; Wed, 24 Apr 2024 19:42:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hyT7TVvanqH7 for <buildroot@lists.busybox.net>;
+ Wed, 24 Apr 2024 19:43:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 625FB40449
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 625FB40449
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 625FB40449
+ for <buildroot@buildroot.org>; Wed, 24 Apr 2024 19:43:23 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-41a7ae25d53so1452335e9.1
+ for <buildroot@buildroot.org>; Wed, 24 Apr 2024 12:43:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1713987801; x=1714592601;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=JbItiWfQOArQX9m9zU/8SPupXT7iltGPuBdDZIelx14=;
+ b=uXgJ3ijJm84174EFPifmkWDDvZnZ3an4XU8IK9V1KZhh7kddKhOwQpg7sw3RguxmYa
+ 9jBToOe7U2OmGnTizbfUO8qmuC/3YIcf/FV+c6Q5cBOnqZoTNptCiIjcgj3JX662UcIr
+ ItRIIFGVN7PB31QNRGsrgdbnYizLmc5Vgd6kBZuiHd0c4L+htEjZ1lZ9MWEVAALAmuXx
+ zzWeiGtUBCpLvWSjmDc8wsaull6GeL+MgCmBl7HhZxnF+MouiuxIhmFNkVMslHDEwdnR
+ cdAuhblcadnZsFuc7KEKpB5q4J4Hn88w2uCnrwWtrgwE5+atSRSHTeCn7rB1Stvbd6KF
+ AqOw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW29dJgFOAxXDYJ4r5sJbz2JUoWHk9SpIvEerOd4phPeg3qBbQgeNdUNDF0sxYg9ofK+o1vo9QPPSYjq8UixupbSxv5c9Q02w==
+X-Gm-Message-State: AOJu0YxFGgZUeUdI2gC0Y9wOEvK+l81G7N3aYUy9Zl7SA0lwb6X0ISqI
+ mcBAuxU0IVbFgK48FeNEtePbaU5cai0cBAd8B/M/KqavzwiCGT7Z+EHuJwUy7hTMwPXJTarPb1v
+ E
+X-Google-Smtp-Source: AGHT+IHa2cqiqIcjGzWT981Ad3rW09LVzX1qSfjQ2gxbf8g6njW4dt03OmCaGEQzIZA3NLBdabx13w==
+X-Received: by 2002:a05:600c:4fc3:b0:419:87ab:f6da with SMTP id
+ o3-20020a05600c4fc300b0041987abf6damr2679273wmq.3.1713987801016; 
+ Wed, 24 Apr 2024 12:43:21 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:e3ef:2d7a:4131:71f?
+ (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
+ by smtp.gmail.com with ESMTPSA id
+ bg5-20020a05600c3c8500b00419f419236fsm16487755wmb.41.2024.04.24.12.43.20
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 24 Apr 2024 12:43:20 -0700 (PDT)
+Message-ID: <ce9b7b50-6635-41bb-be28-0de747daa5d7@smile.fr>
+Date: Wed, 24 Apr 2024 21:43:20 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
+References: <ZikvOACQEGe9oG7x@waldemar-brodkorb.de>
+Content-Language: en-US
 From: Romain Naour <romain.naour@smile.fr>
-To: buildroot@buildroot.org
-Date: Wed, 24 Apr 2024 21:39:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 256aa8ed85f8fd65ea0f0f242adb55f95a13eb2b
-X-Git-Newrev: 8d366dbf562a959a3dca3ee6972d5a67f67aa885
-X-Patchwork-Hint: ignore
-Message-Id: <20240424194217.A6C498610F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elf2flt: fix riscv64 noMMU build
+In-Reply-To: <ZikvOACQEGe9oG7x@waldemar-brodkorb.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1713987801; x=1714592601;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=JbItiWfQOArQX9m9zU/8SPupXT7iltGPuBdDZIelx14=;
+ b=VmlPL9iFTQOyw4koYwSVV4B8cY6kajgrUp9wJ4KGEcbX+WS3alIV2A15Oo/fnYqLGF
+ hsmRbr8dyyS1h3ytkUpq4VL6elz2LqTAkb/JGX0bMBQygt9TRFesqkL/u9yR2lTZ2aTy
+ LQZzxjoWNJtGt2tihEKfVgR6rsOKP0rt4MBcnkGWv1GsOQbeL7EMwWYw4oM5efRlzlNP
+ CP4h4MgcXUxKNDXi2m2M0kAxw11XSFyXlxJYRuyuxN3plE3pCOdqTf8cK9nCVw5WDviD
+ k4LrnID19UgG7xo4ilU+5nDUQLrFZ//H2PoBwIaXkOGj2G8Jz+zsU57m2BkW86gW96jm
+ 06uQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=VmlPL9iF
+Subject: Re: [Buildroot] [PATCH] package/elf2flt: fix riscv64 noMMU build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,65 +111,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d366dbf562a959a3dca3ee6972d5a67f67aa885
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/6655119961
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- ...nt-for-new-style-ctors-when-using-riscv64.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
-
-diff --git a/package/elf2flt/0001-fix-alignment-for-new-style-ctors-when-using-riscv64.patch b/package/elf2flt/0001-fix-alignment-for-new-style-ctors-when-using-riscv64.patch
-new file mode 100644
-index 0000000000..fea726dab2
---- /dev/null
-+++ b/package/elf2flt/0001-fix-alignment-for-new-style-ctors-when-using-riscv64.patch
-@@ -0,0 +1,34 @@
-+From eead8d5e9f3911243182311f16178c25c6ea03c4 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 23 Mar 2024 07:23:45 +0100
-+Subject: [PATCH] fix alignment for new-style ctors when using riscv64
-+
-+Recently uClibc-ng enabled UCLIBC_CTOR_DTOR for riscv64, so
-+that f.e. C++ applications are running fine. As a side effect
-+this breaks noMMU support. The problem is the alignment for
-+the ctors in elf2flt. This patch fixes it.
-+
-+Tested with Qemu for ARM, M68k and Xtensa with no regressions.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://github.com/uclinux-dev/elf2flt/commit/eead8d5e9f3911243182311f16178c25c6ea03c4
-+---
-+ elf2flt.ld.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/elf2flt.ld.in b/elf2flt.ld.in
-+index a99c69e..230c382 100644
-+--- a/elf2flt.ld.in
-++++ b/elf2flt.ld.in
-+@@ -139,7 +139,7 @@ R_RODAT:	*(.gnu.linkonce.r*)
-+ 		@SYMBOL_PREFIX@_ssro_size = @SYMBOL_PREFIX@_essro - @SYMBOL_PREFIX@_ssro;
-+ 		PROVIDE(@SYMBOL_PREFIX@_SDA2_BASE_ = @SYMBOL_PREFIX@_ssro + (@SYMBOL_PREFIX@_ssro_size / 2));
-+ 
-+-		. = ALIGN(4) ;
-++		. = ALIGN(8) ;
-+ TOR:		@SYMBOL_PREFIX@__CTOR_LIST__ = .;
-+ TOR:		LONG((@SYMBOL_PREFIX@__CTOR_END__ - @SYMBOL_PREFIX@__CTOR_LIST__) / 4 - 2)
-+ SINGLE_LINK:	/* gcc uses crtbegin.o to find the start of
-+-- 
-+2.30.2
-+
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gV2FsZGVtYXIsCgpMZSAyNC8wNC8yMDI0IMOgIDE4OjExLCBXYWxkZW1hciBCcm9ka29y
+YiBhIMOpY3JpdMKgOgo+IFNpZ25lZC1vZmYtYnk6IFdhbGRlbWFyIEJyb2Rrb3JiIDx3YnhAb3Bl
+bmFkay5vcmc+CgpJIGFkZGVkIHRoZSBsaW5rIHRvIGdpdGxhYiBpc3N1ZSBiZWZvcmUgYXBwbHlp
+bmcuCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+
+IC0tLQo+ICAuLi5yLW5ldy1zdHlsZS1jdG9ycy13aGVuLXVzaW5nLXJpc2N2NjQucGF0Y2ggfCAz
+NCArKysrKysrKysrKysrKysrKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCAzNCBpbnNlcnRpb25zKCsp
+Cj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2VsZjJmbHQvMDAwMS1maXgtYWxpZ25tZW50
+LWZvci1uZXctc3R5bGUtY3RvcnMtd2hlbi11c2luZy1yaXNjdjY0LnBhdGNoCj4gCj4gZGlmZiAt
+LWdpdCBhL3BhY2thZ2UvZWxmMmZsdC8wMDAxLWZpeC1hbGlnbm1lbnQtZm9yLW5ldy1zdHlsZS1j
+dG9ycy13aGVuLXVzaW5nLXJpc2N2NjQucGF0Y2ggYi9wYWNrYWdlL2VsZjJmbHQvMDAwMS1maXgt
+YWxpZ25tZW50LWZvci1uZXctc3R5bGUtY3RvcnMtd2hlbi11c2luZy1yaXNjdjY0LnBhdGNoCj4g
+bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi5mZWE3MjZkYWIyCj4gLS0t
+IC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvZWxmMmZsdC8wMDAxLWZpeC1hbGlnbm1lbnQtZm9y
+LW5ldy1zdHlsZS1jdG9ycy13aGVuLXVzaW5nLXJpc2N2NjQucGF0Y2gKPiBAQCAtMCwwICsxLDM0
+IEBACj4gK0Zyb20gZWVhZDhkNWU5ZjM5MTEyNDMxODIzMTFmMTYxNzhjMjVjNmVhMDNjNCBNb24g
+U2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogV2FsZGVtYXIgQnJvZGtvcmIgPHdieEBvcGVu
+YWRrLm9yZz4KPiArRGF0ZTogU2F0LCAyMyBNYXIgMjAyNCAwNzoyMzo0NSArMDEwMAo+ICtTdWJq
+ZWN0OiBbUEFUQ0hdIGZpeCBhbGlnbm1lbnQgZm9yIG5ldy1zdHlsZSBjdG9ycyB3aGVuIHVzaW5n
+IHJpc2N2NjQKPiArCj4gK1JlY2VudGx5IHVDbGliYy1uZyBlbmFibGVkIFVDTElCQ19DVE9SX0RU
+T1IgZm9yIHJpc2N2NjQsIHNvCj4gK3RoYXQgZi5lLiBDKysgYXBwbGljYXRpb25zIGFyZSBydW5u
+aW5nIGZpbmUuIEFzIGEgc2lkZSBlZmZlY3QKPiArdGhpcyBicmVha3Mgbm9NTVUgc3VwcG9ydC4g
+VGhlIHByb2JsZW0gaXMgdGhlIGFsaWdubWVudCBmb3IKPiArdGhlIGN0b3JzIGluIGVsZjJmbHQu
+IFRoaXMgcGF0Y2ggZml4ZXMgaXQuCj4gKwo+ICtUZXN0ZWQgd2l0aCBRZW11IGZvciBBUk0sIE02
+OGsgYW5kIFh0ZW5zYSB3aXRoIG5vIHJlZ3Jlc3Npb25zLgo+ICsKPiArU2lnbmVkLW9mZi1ieTog
+V2FsZGVtYXIgQnJvZGtvcmIgPHdieEBvcGVuYWRrLm9yZz4KPiArVXBzdHJlYW06IGh0dHBzOi8v
+Z2l0aHViLmNvbS91Y2xpbnV4LWRldi9lbGYyZmx0L2NvbW1pdC9lZWFkOGQ1ZTlmMzkxMTI0MzE4
+MjMxMWYxNjE3OGMyNWM2ZWEwM2M0Cj4gKy0tLQo+ICsgZWxmMmZsdC5sZC5pbiB8IDIgKy0KPiAr
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+ICsKPiArZGlm
+ZiAtLWdpdCBhL2VsZjJmbHQubGQuaW4gYi9lbGYyZmx0LmxkLmluCj4gK2luZGV4IGE5OWM2OWUu
+LjIzMGMzODIgMTAwNjQ0Cj4gKy0tLSBhL2VsZjJmbHQubGQuaW4KPiArKysrIGIvZWxmMmZsdC5s
+ZC5pbgo+ICtAQCAtMTM5LDcgKzEzOSw3IEBAIFJfUk9EQVQ6CSooLmdudS5saW5rb25jZS5yKikK
+PiArIAkJQFNZTUJPTF9QUkVGSVhAX3Nzcm9fc2l6ZSA9IEBTWU1CT0xfUFJFRklYQF9lc3NybyAt
+IEBTWU1CT0xfUFJFRklYQF9zc3JvOwo+ICsgCQlQUk9WSURFKEBTWU1CT0xfUFJFRklYQF9TREEy
+X0JBU0VfID0gQFNZTUJPTF9QUkVGSVhAX3Nzcm8gKyAoQFNZTUJPTF9QUkVGSVhAX3Nzcm9fc2l6
+ZSAvIDIpKTsKPiArIAo+ICstCQkuID0gQUxJR04oNCkgOwo+ICsrCQkuID0gQUxJR04oOCkgOwo+
+ICsgVE9SOgkJQFNZTUJPTF9QUkVGSVhAX19DVE9SX0xJU1RfXyA9IC47Cj4gKyBUT1I6CQlMT05H
+KChAU1lNQk9MX1BSRUZJWEBfX0NUT1JfRU5EX18gLSBAU1lNQk9MX1BSRUZJWEBfX0NUT1JfTElT
+VF9fKSAvIDQgLSAyKQo+ICsgU0lOR0xFX0xJTks6CS8qIGdjYyB1c2VzIGNydGJlZ2luLm8gdG8g
+ZmluZCB0aGUgc3RhcnQgb2YKPiArLS0gCj4gKzIuMzAuMgo+ICsKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
