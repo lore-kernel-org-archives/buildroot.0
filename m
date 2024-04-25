@@ -4,60 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50709C4345F
-	for <buildroot@archiver.kernel.org>; Thu, 25 Apr 2024 17:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC0C0C4345F
+	for <buildroot@archiver.kernel.org>; Thu, 25 Apr 2024 17:22:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AC2E82219;
-	Thu, 25 Apr 2024 17:22:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 785C2822ED;
+	Thu, 25 Apr 2024 17:22:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5A7OE3wAuVjM; Thu, 25 Apr 2024 17:22:01 +0000 (UTC)
+ id E1O04NE2k9ZR; Thu, 25 Apr 2024 17:22:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30CFF822DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81D5E8232D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30CFF822DE;
-	Thu, 25 Apr 2024 17:22:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A816B1BF39A
- for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 17:21:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81D5E8232D;
+	Thu, 25 Apr 2024 17:22:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CC66D1BF39A
+ for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 17:22:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A17E441D92
- for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 17:21:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B8BCD8232D
+ for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 17:22:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zhPc1_8PhD-O for <buildroot@lists.busybox.net>;
- Thu, 25 Apr 2024 17:21:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IOHEEzXu6FhX for <buildroot@lists.busybox.net>;
+ Thu, 25 Apr 2024 17:22:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7DBC141DEC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DBC141DEC
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7DBC141DEC
- for <buildroot@buildroot.org>; Thu, 25 Apr 2024 17:21:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 808A21BF20C;
- Thu, 25 Apr 2024 17:21:56 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s02nD-0005VN-2w;
- Thu, 25 Apr 2024 19:21:55 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00657822ED
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 00657822ED
+ for <buildroot@buildroot.org>; Thu, 25 Apr 2024 17:22:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DEB3086102; Thu, 25 Apr 2024 17:22:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-References: <20240417161915.727361-1-peter@korsgaard.com>
-Date: Thu, 25 Apr 2024 19:21:55 +0200
-In-Reply-To: <20240417161915.727361-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 17 Apr 2024 18:19:14 +0200")
-Message-ID: <87msph9x3g.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/tinycbor: override prefix at build
- time as well
+Date: Thu, 25 Apr 2024 19:19:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dfaa34ddd3398f22718f7361d617d98d53b51630
+X-Git-Newrev: b5b927881daf3023ad38b4e910ab79ad081f7ee4
+X-Patchwork-Hint: ignore
+Message-Id: <20240425172230.DEB3086102@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: security bump version to 8.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,35 +58,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b5b927881daf3023ad38b4e910ab79ad081f7ee4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > To ensure the correct prefix is used in the generated tinycbor.pc instead of
- > /usr/local:
+Fixes CVE-2024-1874, CVE-2024-2756, CVE-2024-2757 & CVE-2024-3096.
 
- >>>> tinycbor 0.6.0 Building
- > ..
- > sed > tinycbor.pc < tinycbor.pc.in \
- >         -e 's,@prefix@,/usr/local,' \
- >         -e 's,@exec_prefix@,/usr/local,' \
- >         -e 's,@libdir@,/usr/local/lib,' \
- >         -e 's,@includedir@,/usr/local/include,' \
- >         -e 's,@version@,0.6.0,'
- >>>> tinycbor 0.6.0 Installing to staging directory
- > ..
- > install -m 644 tinycbor.pc /path/to/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/tinycbor.pc
+Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
+Release notes: https://news-web.php.net/php.announce/424
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 96f16ff2a7..4378d7ed07 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  39a337036a546e5c28aea76cf424ac172db5156bd8a8fd85252e389409a5ba63  php-8.3.4.tar.xz
++sha256  53c8386b2123af97626d3438b3e4058e0c5914cb74b048a6676c57ac647f5eae  php-8.3.6.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 99dbec9de7..5b26ec90e2 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.3.4
++PHP_VERSION = 8.3.6
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
