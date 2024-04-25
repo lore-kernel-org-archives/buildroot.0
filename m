@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5EB2C4345F
-	for <buildroot@archiver.kernel.org>; Thu, 25 Apr 2024 20:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68687C4345F
+	for <buildroot@archiver.kernel.org>; Thu, 25 Apr 2024 20:37:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 940C76136B;
-	Thu, 25 Apr 2024 20:37:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 270946136F;
+	Thu, 25 Apr 2024 20:37:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Bu5rHYQyVgO; Thu, 25 Apr 2024 20:37:47 +0000 (UTC)
+ id R0pSlsFKSzQT; Thu, 25 Apr 2024 20:37:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C99F613A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EF5E613B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C99F613A9;
-	Thu, 25 Apr 2024 20:37:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EF5E613B3;
+	Thu, 25 Apr 2024 20:37:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A2A41BF388
- for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 20:37:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2C44D1BF388
+ for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 20:37:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C803C82FA5
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE44782F8A
  for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 20:37:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9gMm7nNuyOG0 for <buildroot@lists.busybox.net>;
- Thu, 25 Apr 2024 20:37:37 +0000 (UTC)
+ id XLk8BfK1i1Yp for <buildroot@lists.busybox.net>;
+ Thu, 25 Apr 2024 20:37:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 082DF82F8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC29482F57
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 082DF82F8A
- for <buildroot@buildroot.org>; Thu, 25 Apr 2024 20:37:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC29482F57
+ for <buildroot@buildroot.org>; Thu, 25 Apr 2024 20:37:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F33EF8618B; Thu, 25 Apr 2024 20:37:36 +0000 (UTC)
+ id C143A86189; Thu, 25 Apr 2024 20:37:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 25 Apr 2024 22:37:06 +0200
+Date: Thu, 25 Apr 2024 22:35:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c7ec640ec22dc19e76631ab8ca7446cc69653241
-X-Git-Newrev: db37b0e27d3c54d27b854edbc3253d29f512a6ee
+X-Git-Oldrev: ff36bc68cdba30f2a76da2b9f2047aa9a514e07e
+X-Git-Newrev: 1989b1a0ab0c867dfc95cf9e1ce55c19ccd02e31
 X-Patchwork-Hint: ignore
-Message-Id: <20240425203736.F33EF8618B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-dkjson: bump to version 2.7
+Message-Id: <20240425203736.C143A86189@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/solidrun_clearfog: bump kernel to
+ 6.6.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +60,68 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============9017543596450735573=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db37b0e27d3c54d27b854edbc3253d29f512a6ee
+--===============9017543596450735573==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=1989b1a0ab0c867dfc95cf9e1ce55c19ccd02e31
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Adjust DTS_NAME to current kernel source tree location of DTs in
+per-vendor directories.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6665749909
+
+Cc: Jan Kundrát <jan.kundrat@cesnet.cz>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lua-dkjson/lua-dkjson.hash | 4 ++--
- package/lua-dkjson/lua-dkjson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/solidrun_clearfog_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lua-dkjson/lua-dkjson.hash b/package/lua-dkjson/lua-dkjson.hash
-index 8f1a6f6a2f..2f210e497d 100644
---- a/package/lua-dkjson/lua-dkjson.hash
-+++ b/package/lua-dkjson/lua-dkjson.hash
-@@ -1,5 +1,5 @@
- # computed by luarocks/buildroot
--sha256  e4ba15f2a85f84ffc7f628157a4ad16b2b04ba05eb44a2e5956fa46bd104125e  dkjson-2.6-1.src.rock
-+sha256  f6101a0e77ca857ec20799f6b998a600b04c8dd09b27c445ea09f29695bfffb0  dkjson-2.7-1.src.rock
+diff --git a/configs/solidrun_clearfog_defconfig b/configs/solidrun_clearfog_defconfig
+index b73b9e8ecb..7f633d30d5 100644
+--- a/configs/solidrun_clearfog_defconfig
++++ b/configs/solidrun_clearfog_defconfig
+@@ -5,8 +5,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_NEON=y
  
- # locally computed
--sha256  7fd6585e9776c1cf2930e8ce660b3116c8a9b4b676929d45078870a42f16aa65  dkjson-2.6/readme.txt
-+sha256  9d46e06db7feb8fd68f73bd024c8a2c04807629e16f396880860d151b60a3ed1  dkjson-2.7/readme.txt
-diff --git a/package/lua-dkjson/lua-dkjson.mk b/package/lua-dkjson/lua-dkjson.mk
-index 718c47f50e..2b110f8f1e 100644
---- a/package/lua-dkjson/lua-dkjson.mk
-+++ b/package/lua-dkjson/lua-dkjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-# Linux headers same as kernel, a 4.20 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
  
--LUA_DKJSON_VERSION = 2.6-1
-+LUA_DKJSON_VERSION = 2.7-1
- LUA_DKJSON_NAME_UPSTREAM = dkjson
- LUA_DKJSON_LICENSE = MIT
- LUA_DKJSON_LICENSE_FILES = $(LUA_DKJSON_SUBDIR)/readme.txt
+ # System configuration
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/clearfog/post-build.sh"
+@@ -16,11 +16,11 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/solidrun/clearfog/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.28"
+ BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="armada-388-clearfog-base"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-388-clearfog-base"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+ # Filesystem
+
+--===============9017543596450735573==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9017543596450735573==--
