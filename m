@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBBC2C4345F
-	for <buildroot@archiver.kernel.org>; Thu, 25 Apr 2024 20:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 154F5C4345F
+	for <buildroot@archiver.kernel.org>; Thu, 25 Apr 2024 21:16:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A710460657;
-	Thu, 25 Apr 2024 20:44:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5ABD40F4A;
+	Thu, 25 Apr 2024 21:16:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6AApORKwvnl5; Thu, 25 Apr 2024 20:44:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cd0SbnNHfE-p; Thu, 25 Apr 2024 21:16:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B273F612C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FBC8410C6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B273F612C5;
-	Thu, 25 Apr 2024 20:44:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C566F1BF388
- for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 20:44:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FBC8410C6;
+	Thu, 25 Apr 2024 21:16:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 346961BF375
+ for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 21:16:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1DDC80FAF
- for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 20:44:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FD7D410C6
+ for <buildroot@lists.busybox.net>; Thu, 25 Apr 2024 21:16:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U5RhuIA0q3xA for <buildroot@lists.busybox.net>;
- Thu, 25 Apr 2024 20:44:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id te8zdxk8LoKY for <buildroot@lists.busybox.net>;
+ Thu, 25 Apr 2024 21:16:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E04DF80F6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37B3540F4A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E04DF80F6B
- for <buildroot@uclibc.org>; Thu, 25 Apr 2024 20:44:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37B3540F4A
+ for <buildroot@uclibc.org>; Thu, 25 Apr 2024 21:16:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id CA071819B1; Thu, 25 Apr 2024 20:44:07 +0000 (UTC)
+ id 1715083E37; Thu, 25 Apr 2024 21:16:45 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 25 Apr 2024 20:44:07 +0000
+Date: Thu, 25 Apr 2024 21:16:44 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -50,14 +50,14 @@ X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
 X-Bugzilla-Who: hirosh@dabui.de
-X-Bugzilla-Status: NEW
+X-Bugzilla-Status: ASSIGNED
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc attachments.created
-Message-ID: <bug-15676-163-qgkSGsLWkR@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_status
+Message-ID: <bug-15676-163-2NG5DailRI@https.bugs.busybox.net/>
 In-Reply-To: <bug-15676-163@https.bugs.busybox.net/>
 References: <bug-15676-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -87,15 +87,7 @@ hirosh@dabui.de changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-                 CC|                            |hirosh@dabui.de
-
---- Comment #1 from hirosh@dabui.de ---
-Created attachment 9739
-  --> https://bugs.busybox.net/attachment.cgi?id=9739&action=edit
-This fix addresses potential issues where OpenSBI make environment variables
-were not being correctly recognized
-
-Does this solve your problem?
+             Status|NEW                         |ASSIGNED
 
 -- 
 You are receiving this mail because:
