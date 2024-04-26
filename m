@@ -4,62 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84F15C4345F
-	for <buildroot@archiver.kernel.org>; Fri, 26 Apr 2024 11:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1182C4345F
+	for <buildroot@archiver.kernel.org>; Fri, 26 Apr 2024 11:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20F8B61403;
-	Fri, 26 Apr 2024 11:36:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A498613E6;
+	Fri, 26 Apr 2024 11:38:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ijwJ1b3hDm7v; Fri, 26 Apr 2024 11:36:06 +0000 (UTC)
+ id 2U3ohzg5WmoN; Fri, 26 Apr 2024 11:38:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6B36613E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19D2B61403
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6B36613E3;
-	Fri, 26 Apr 2024 11:36:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 633E91BF5E6
- for <buildroot@lists.busybox.net>; Fri, 26 Apr 2024 11:36:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19D2B61403;
+	Fri, 26 Apr 2024 11:38:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7968D1BF5E6
+ for <buildroot@lists.busybox.net>; Fri, 26 Apr 2024 11:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4EF7F41F2A
- for <buildroot@lists.busybox.net>; Fri, 26 Apr 2024 11:36:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6684F40108
+ for <buildroot@lists.busybox.net>; Fri, 26 Apr 2024 11:38:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p5BmxcVA2n2v for <buildroot@lists.busybox.net>;
- Fri, 26 Apr 2024 11:36:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
- envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7CB4741F28
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CB4741F28
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7CB4741F28
- for <buildroot@buildroot.org>; Fri, 26 Apr 2024 11:36:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 8C2691814B9; Fri, 26 Apr 2024 13:35:55 +0200 (CEST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NIRR2lIyjMLR for <buildroot@lists.busybox.net>;
+ Fri, 26 Apr 2024 11:38:08 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=198.175.65.9;
+ helo=mgamail.intel.com; envelope-from=mika.westerberg@linux.intel.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 457F8400AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 457F8400AB
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 457F8400AB
+ for <buildroot@buildroot.org>; Fri, 26 Apr 2024 11:38:08 +0000 (UTC)
+X-CSE-ConnectionGUID: RrT6+YOfQTC8Ok92GIqSaQ==
+X-CSE-MsgGUID: G83kysL3TImI2MoLDzIv5w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11055"; a="32361587"
+X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; d="scan'208";a="32361587"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+ by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 26 Apr 2024 04:38:07 -0700
+X-CSE-ConnectionGUID: nNeXQV3BTOGaFRO0C3+yvw==
+X-CSE-MsgGUID: cBc2SAoaTL2782l5pJTp6Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,232,1708416000"; d="scan'208";a="30035002"
+Received: from black.fi.intel.com ([10.237.72.28])
+ by fmviesa004.fm.intel.com with ESMTP; 26 Apr 2024 04:37:57 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+ id 9097E1CB; Fri, 26 Apr 2024 14:37:56 +0300 (EEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Apr 2024 13:35:38 +0200
-Message-Id: <20240426113540.534475-1-buildroot@heine.tech>
-X-Mailer: git-send-email 2.34.1
+Date: Fri, 26 Apr 2024 14:37:56 +0300
+Message-ID: <20240426113756.3962234-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1714131357; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=4E/yxc0xH7YqEHAtpIRj3StHunfx1fA+8GAqsyck3us=;
- b=N1DIQMiR6klmODo3YMBC6g1R4PCypTeQ69Kubrz7tpjhtwa8S9i7654OP+vdTAqN9jposE
- JySjUpmryYtn2ftq/4IQ2PAvOwTJT9qYEAK3ddfugMxItAMzVEvM75DAm5nZwtvqYzemVw
- f8Kc2Zsd8dyxn5qzO4Gsa2wCq0bn3Cs=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=N1DIQMiR
-Subject: [Buildroot] [PATCH] package/spdlog: bump to version 1.14.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+ t=1714131488; x=1745667488;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=nvzP+sGVWpuLxjCaYjZdI8v+uhVc0tb8oB/D1SOGj88=;
+ b=Uc5Qo8XXfRTMZbSxr7gp0Hc3cKFpqBNG6UjApWsBx2dYsoTaERWVxP//
+ dkuPgnzp4oTmokc9m8rqYecxGvA9qOckHg1MfC+36p5ZiSujJeqbsCUtb
+ NNcCRLyrD/m/5OfeMLo8B9N3sJ1ZzSpmla0+sGBsCGT6M8z9ScqyodcAE
+ sYkvTbdamBZ/UQRPpEBgpE+9E62tj1FAnf+u1lDox/qfu2SUYGLhSQXZS
+ 3PXuqxNwrrzkHUrG1FYT2Z3Gii9jKM18SFTuLrWV3G4f6o3SJPs6NFfYI
+ oiAJG7IJQk3eSE2SF7nSdxYLQpgX8PNk5QVC7YUo0eHjoFdHBt05DNiXn
+ w==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=linux.intel.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com
+ header.a=rsa-sha256 header.s=Intel header.b=Uc5Qo8XX
+Subject: [Buildroot] [PATCH] package/tbtools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,44 +89,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/spdlog/spdlog.hash | 2 +-
- package/spdlog/spdlog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This is a collection of tools for Linux Thunderbolt/USB4 development,
+debugging and validation.
 
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-index 3dbe43ac2d..7a0f442ab0 100644
---- a/package/spdlog/spdlog.hash
-+++ b/package/spdlog/spdlog.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  534f2ee1a4dcbeb22249856edfb2be76a1cf4f708a20b0ac2ed090ee24cfdbc9  spdlog-1.13.0.tar.gz
-+sha256  429a6b73ade8285cb21f83bacf89e2821dd1720ea7faa3cb518ffe04b4e00efc  spdlog-1.14.0.tar.gz
- sha256  4ccecab18d1ff0b61174fe3d6c430541625d3ddb865b0d5887db296f883c76e7  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-index b45ae0a17d..c435633f41 100644
---- a/package/spdlog/spdlog.mk
-+++ b/package/spdlog/spdlog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPDLOG_VERSION = 1.13.0
-+SPDLOG_VERSION = 1.14.0
- SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
- SPDLOG_LICENSE = MIT
- SPDLOG_LICENSE_FILES = LICENSE
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ package/Config.in          |  1 +
+ package/tbtools/Config.in  |  9 +++++++++
+ package/tbtools/tbtools.mk | 12 ++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/tbtools/Config.in
+ create mode 100644 package/tbtools/tbtools.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index cdbf3577f8e1..e346917649a8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -157,6 +157,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/stress-ng/Config.in"
+ 	source "package/sysdig/Config.in"
+ 	source "package/sysprof/Config.in"
++	source "package/tbtools/Config.in"
+ 	source "package/tcf-agent/Config.in"
+ 	source "package/trace-cmd/Config.in"
+ 	source "package/trinity/Config.in"
+diff --git a/package/tbtools/Config.in b/package/tbtools/Config.in
+new file mode 100644
+index 000000000000..d2a1405eb5e8
+--- /dev/null
++++ b/package/tbtools/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_TBTOOLS
++	bool "tbtools"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  tbtools is a collection of tools for Linux Thunderbolt/USB4
++	  development, debugging and validation.
++
++	  https://github.com/intel/tbtools
+diff --git a/package/tbtools/tbtools.mk b/package/tbtools/tbtools.mk
+new file mode 100644
+index 000000000000..61986ca8d311
+--- /dev/null
++++ b/package/tbtools/tbtools.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# tbtools
++#
++################################################################################
++
++TBTOOLS_VERSION = v0.3.2
++TBTOOLS_SITE = $(call github,intel,tbtools,$(TBTOOLS_VERSION))
++TBTOOLS_LICENSE = MIT
++TBTOOLS_LICENSE_FILES = LICENSE
++
++$(eval $(cargo-package))
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
