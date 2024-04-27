@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56CCEC4345F
-	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 11:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1F8DC4345F
+	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 11:20:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18C4440493;
-	Sun, 28 Apr 2024 11:19:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A7B3407BE;
+	Sun, 28 Apr 2024 11:20:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ufq97sz2Np6G; Sun, 28 Apr 2024 11:19:49 +0000 (UTC)
+ id 4UQpppe9u4NF; Sun, 28 Apr 2024 11:20:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7DC9407BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46405407C3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7DC9407BE;
-	Sun, 28 Apr 2024 11:19:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D88EB1BF5DF
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 11:19:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46405407C3;
+	Sun, 28 Apr 2024 11:20:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F33211BF5DF
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 11:20:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C4A4C407BE
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 11:19:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED5B260635
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 11:20:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0yUnlMJupWR1 for <buildroot@lists.busybox.net>;
- Sun, 28 Apr 2024 11:19:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OPmqRuhNebaX for <buildroot@lists.busybox.net>;
+ Sun, 28 Apr 2024 11:20:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C2F5740493
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2F5740493
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C2F5740493
- for <buildroot@buildroot.org>; Sun, 28 Apr 2024 11:19:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 42B8F1C0003;
- Sun, 28 Apr 2024 11:19:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s12ZH-003IU4-32;
- Sun, 28 Apr 2024 13:19:39 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A43F60619
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A43F60619
+ for <buildroot@buildroot.org>; Sun, 28 Apr 2024 11:20:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 20EA58612B; Sun, 28 Apr 2024 11:20:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-References: <20240221195520.1762497-1-bernd@kuhls.net>
- <CAHDQB6M6ruLtu-hg3cWBXUZfzbvd4yNj8QkrH8tWJoDxqjKh+g@mail.gmail.com>
-Date: Sun, 28 Apr 2024 13:19:39 +0200
-In-Reply-To: <CAHDQB6M6ruLtu-hg3cWBXUZfzbvd4yNj8QkrH8tWJoDxqjKh+g@mail.gmail.com>
- (Adam Duskett's message of "Sat, 23 Mar 2024 14:37:09 -0600")
-Message-ID: <877cghenuc.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libffi: bump version to 3.4.6
+To: buildroot@buildroot.org
+Date: Sat, 27 Apr 2024 19:28:51 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 9a3d34139b018bf79ac1c37b0212b5b775e3ae77
+X-Git-Newrev: 70c699ec7f8fc2e05083ce44a95b2b09bc2af9e9
+X-Patchwork-Hint: ignore
+Message-Id: <20240428112005.20EA58612B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x]
+ package/go-bootstrap-stage2: bump version to go1.19.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,26 +59,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Adam" == Adam Duskett <adam.duskett@amarulasolutions.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=70c699ec7f8fc2e05083ce44a95b2b09bc2af9e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > All:
- > Reviewed-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- > Tested-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Update to the latest 1.19.x version available.
 
- > This is needed for host builds with gcc14.
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit e999c9fbaec0ab3f31fb3058b3f6e37c4cad9abe)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go-bootstrap-stage2/go-bootstrap-stage2.hash | 2 +-
+ package/go-bootstrap-stage2/go-bootstrap-stage2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Host builds of what package exactly? I don't directly see any references
-to any gcc-14 related fixes?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/go-bootstrap-stage2/go-bootstrap-stage2.hash b/package/go-bootstrap-stage2/go-bootstrap-stage2.hash
+index 6d4c718a40..d61663cac9 100644
+--- a/package/go-bootstrap-stage2/go-bootstrap-stage2.hash
++++ b/package/go-bootstrap-stage2/go-bootstrap-stage2.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  e25c9ab72d811142b7f41ff6da5165fec2d1be5feec3ef2c66bc0bdecb431489  go1.19.11.src.tar.gz
++sha256  ccf36b53fb0024a017353c3ddb22c1f00bc7a8073c6aac79042da24ee34434d3  go1.19.13.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go-bootstrap-stage2/go-bootstrap-stage2.mk b/package/go-bootstrap-stage2/go-bootstrap-stage2.mk
+index 72f3200a2e..98bf624b57 100644
+--- a/package/go-bootstrap-stage2/go-bootstrap-stage2.mk
++++ b/package/go-bootstrap-stage2/go-bootstrap-stage2.mk
+@@ -6,7 +6,7 @@
+ 
+ # Use last Go version that go-bootstrap-stage1 can build: v1.19.x
+ # See https://golang.org/doc/install/source#bootstrapFromSource
+-GO_BOOTSTRAP_STAGE2_VERSION = 1.19.11
++GO_BOOTSTRAP_STAGE2_VERSION = 1.19.13
+ GO_BOOTSTRAP_STAGE2_SITE = https://storage.googleapis.com/golang
+ GO_BOOTSTRAP_STAGE2_SOURCE = go$(GO_BOOTSTRAP_STAGE2_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
