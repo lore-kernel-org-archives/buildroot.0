@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A8EAC4345F
-	for <buildroot@archiver.kernel.org>; Sat, 27 Apr 2024 18:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D0EBC4345F
+	for <buildroot@archiver.kernel.org>; Sat, 27 Apr 2024 18:39:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81A9C607AD;
-	Sat, 27 Apr 2024 18:38:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 532A56088D;
+	Sat, 27 Apr 2024 18:39:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HnxYZ9AekuUN; Sat, 27 Apr 2024 18:38:53 +0000 (UTC)
+ id 5qmDeu2fVC8l; Sat, 27 Apr 2024 18:39:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E627A60859
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D75EE60A7E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E627A60859;
-	Sat, 27 Apr 2024 18:38:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ECB391BF3C1
- for <buildroot@lists.busybox.net>; Sat, 27 Apr 2024 18:38:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D75EE60A7E;
+	Sat, 27 Apr 2024 18:38:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 18A441BF86D
+ for <buildroot@lists.busybox.net>; Sat, 27 Apr 2024 18:38:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2739482CDE
- for <buildroot@lists.busybox.net>; Sat, 27 Apr 2024 18:38:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D4A360833
+ for <buildroot@lists.busybox.net>; Sat, 27 Apr 2024 18:38:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wbb35luuE_Vy for <buildroot@lists.busybox.net>;
- Sat, 27 Apr 2024 18:38:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D8YKQdF4MrUr for <buildroot@lists.busybox.net>;
+ Sat, 27 Apr 2024 18:38:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 01F9482CEC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01F9482CEC
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01F9482CEC
- for <buildroot@buildroot.org>; Sat, 27 Apr 2024 18:38:07 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-346406a5fb9so2486612f8f.1
- for <buildroot@buildroot.org>; Sat, 27 Apr 2024 11:38:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B6864605D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6864605D8
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B6864605D8
+ for <buildroot@buildroot.org>; Sat, 27 Apr 2024 18:38:09 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-34b3374ae22so3507344f8f.0
+ for <buildroot@buildroot.org>; Sat, 27 Apr 2024 11:38:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714243086; x=1714847886;
+ d=1e100.net; s=20230601; t=1714243088; x=1714847888;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=mUGGBxqQTHpZlb7Nq73Jl9sb/L6CYe7+VhBlJbe5kt8=;
- b=wgHR9n6Zm4rsWOfY1ol8c2vhpCIeqswwI0JXIr6PC3DlZQCoXAbSt3lrqQS/JzQyR/
- bw9Csl0h4U8I6Kg6rMrz5Sr16dVXYXxF1mXZ8OsvEWbx99CKUdryKd9CChT5wMZfT8+D
- r6s9xuG4NLkr+HYDjxEWdikE828bx4ImeXXUMY6cUqAU0dI1pIwJWxplGEs7rDZEsAu0
- MWAv8/Bk284TEVYNMiYbfN62f+OGGEg4IC5XkJr0rJsV6CfqRCVttESw49Rc46fz4AKB
- DI8SHdNGDvFqRKNGVCIfTUajv7DlHEvIbQnhnEj85zBPYQ7HzFBYYKpJaneIoryPznHP
- x1zA==
-X-Gm-Message-State: AOJu0YyXFJ7kKPQVfRMsK1T/zs5GUKEPqB1hpzyxDXsIaXcpmdGueEfD
- u51uHcmmIlTrmtjc5vqJQoNe9xoekCJgmIoiF1x3N3WpVx5yK8pM7s7YvQ==
-X-Google-Smtp-Source: AGHT+IHx2vzKJ8wysu3E4kK9C0M3vetKZGcrgnz6w5rB1uH8c7EiLoAmjS8LL/6i3wWB1Em1D7cAPA==
-X-Received: by 2002:adf:9dc4:0:b0:34c:9809:93ac with SMTP id
- q4-20020adf9dc4000000b0034c980993acmr1408713wre.24.1714243085764; 
- Sat, 27 Apr 2024 11:38:05 -0700 (PDT)
+ bh=DvAEe4RbTLej5w3p05/wWBmLVaTnBTHsNkBss+8HUB0=;
+ b=EgXz5kT5EdVAk2HrWKl+T0Q2mNeQvHHihXKuOY5ddya9KYegIXtt0AX8x/m53PMkBT
+ lphuRIrtfkQXY71wWHQuMVjI9oPqFCMpavqlAnbO+C2gyCawkSW243P+H+EcRztZYUQt
+ 6FwBMrOJbTr4fCzFOyG1ORBoO6aTY64WxnjjxTmWzzgEnGiscEgFGw+ztt5EqXacF88B
+ eqyJWHqK5s61K08c+6swpj7tDm5re2S1nY3ftSt2vMyOtG/xaoWSp4QxhkFfn6vuiCS8
+ h0nWjRqq/KrhD3HNCALmiKntVpuV/pp8tHFevvaGWW2qWRvL7SEudMWPPTmKYpVbDJuh
+ G3ZQ==
+X-Gm-Message-State: AOJu0YyrbzCBUdrKeHpc4bxapIzdbB0fuLHuvLFXTo88ERhYzhfBxMkF
+ 0lbbr3Qk7gQDmjzjJ95abuAVQcNzWl4Hd1o/wfPTWHhBWNeR6kuuzIoCbA==
+X-Google-Smtp-Source: AGHT+IH4fFOmHeb0L1MRiakMVSeWgOOIV82sZjy333si9uZp1/sR76YZKyd4OmKEcMQSePcTlht4+A==
+X-Received: by 2002:adf:fac4:0:b0:33e:69db:bf9e with SMTP id
+ a4-20020adffac4000000b0033e69dbbf9emr5963206wrs.67.1714243087853; 
+ Sat, 27 Apr 2024 11:38:07 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- k21-20020adfb355000000b0034c6b368aecsm4136589wrd.26.2024.04.27.11.38.05
+ k21-20020adfb355000000b0034c6b368aecsm4136589wrd.26.2024.04.27.11.38.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Apr 2024 11:38:05 -0700 (PDT)
+ Sat, 27 Apr 2024 11:38:07 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 27 Apr 2024 20:37:53 +0200
-Message-ID: <41552f4a1dc68983bb3edfd6a2b466581f5f91e5.1714243078.git.yann.morin.1998@free.fr>
+Date: Sat, 27 Apr 2024 20:37:58 +0200
+Message-ID: <6b86df23cd0a56320c04e232d5f30e8d4e7fe645.1714243078.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <cover.1714243078.git.yann.morin.1998@free.fr>
 References: <cover.1714243078.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1714243086; x=1714847886; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1714243088; x=1714847888; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=mUGGBxqQTHpZlb7Nq73Jl9sb/L6CYe7+VhBlJbe5kt8=;
- b=VCD+HzmRyDDEKG4BaQubmUnRfgtg3YXfOb8QARXQOIQRRoiAgBQgCnQIit7prwHGdM
- sN/4jSo+U+Oqf5ZHkvuQgr16e98xfL1xFdWO+iAi6Ilu35oQs/RoZGZNk8tkhf8y0yzA
- IxsQL6R7is1OA24eTsLXzDWA3fbe5bolkExwwx3SjMCeWebNtdqu+/8yYGohHeoqD10w
- V5s52enpglLqGripjFuNTdo/uETuVE1hKoD9M9R4SyYTa66jQQUEIzf6YWIB2t1Oj2w/
- bkJPj/q4a9LSQoRasVk4+CIQpjJapRcUdU03Ti4mOaXrZ269gvPipQondg4E1SjeoCn1
- SIhA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=DvAEe4RbTLej5w3p05/wWBmLVaTnBTHsNkBss+8HUB0=;
+ b=Jm8FRI4QGdwdR5He7hYh05hTAGTT3Y1lTBl3vse7n2p1t2MZwsQQ/XH/S9/ceiM5tw
+ f5+QHBXNd+PmhycwXznUqP5uzmlixJtb8F9tRN4j+j+NI+cvhUMhOHpMKchRCMBQdTuS
+ scDTWFxE2RGeFao3h8mEVRMrELnU8rUF186I97XDeMmH8fKlArN9XBj7XB6G5Xt6ZpYp
+ 8JufaO4Z2J2kQnqe3nSMdrz8lG5EtmIj/Y3SoFMWz6vNegct0fPEqE/PutZFiHEgBrS/
+ c6TSTc5bHlueRlN4AHNPl51qVtZ9y9XRibA1g9F3OS97cI31XvGdii/XuzAltTizyCUR
+ GOOA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=VCD+HzmR
-Subject: [Buildroot] [PATCH 06/15 v2] package/luajit: use the git download
- for known-reproducible tarball
+ header.a=rsa-sha256 header.s=20230601 header.b=Jm8FRI4Q
+Subject: [Buildroot] [PATCH 11/15 v2] support/download: even more
+ reproducible archives (until next time)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,64 +103,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Francois Perrad <fperrad@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since version 2.1, LuaJIT follows a rolling-release scheme, which means
-that any commit is as good as any other; LuaJIT uses the comitter's UNIX
-timestamp as its semver patch level. It uses the git-attribute
-export-subst for the .relver file that contains the %ct placeholderfor
-git-archive to expand it.
+Currently, when we generate archives, we rely on a few assumptions and
+mechanisms to ensure reproducilibity. So far, we mostly accounted for
+the content (i.e. content, filenames, and path) of the files we
+archived, and this is OK (git and svn should provide reproducilbe
+content by design, and cargo and go vendoring are also supposed to be
+generating reproducible content.
 
-We have had various instances of GitHub changing the way it generates
-archives on the fly, and although it is hard to foresee a way the UNIX
-timestamp could change (it's clearly defined as the number of seconds
-elapsed since 1970-01-01T00:00:00Z), it's not inconceivable that GitHub
-may decide to no longer expand the export-subst attributes in the
-future...
+However, tarballs do not only contain the content of the files; they
+also have a few metadata about those files. Beyond filenames and paths,
+which are already reproducible, there is the timestamp, the user and
+group names and id. Those are also accounted for and made reproducible.
 
-To avoid any confusion, and to be future-proof, switch over to using the
-git download helper, which now has support for handling export-subst in
-a reproducible way. Drop the post-extract hooks as they are not needed.
+The final touch (so far!) is that files have access rights (aka mode),
+and those too are stored in tarballs. So far we accounted for those by
+ensuring that Buildroot would always run under a known umask, thus
+generating files with reproducible modes.
 
+That falls short in one case that we did not envision, though: a shared
+download directory, where extended attributes are set to provide a
+default ACL that is permissive, to allow two or more users (with
+fdifferent uid and gid) to all read and write to such a directory. This
+is trivially (although slightly uncommon) achieved with something like:
+
+    $ mkdir -p "${BR2_DL_DIR}"
+    $ setfacl -m 'defaut:user::rwx' "${BR2_DL_DIR}"
+    $ setfacl -m 'defaut:group::rwx' "${BR2_DL_DIR}"
+    $ setfacl -m 'defaut:other::rwx' "${BR2_DL_DIR}"
+
+This has the effect that:
+
+  - files below BR2_DL_DIR are all set with user, group, and world read
+    and write access,
+  - files executalbe tby the owner will also be group and world
+    executable,
+  - directories are user, group, and world readable, writable, and
+    searchabe.
+
+This means that all the archives we generate from files in BR2_DL_DIR
+will have modes that are different as those generated on other systems,
+where the traditional umask is used.
+
+There are various solutions to solve that issue:
+
+  - detect the situation and abort: that's not nice, because users have
+    a legitimiate reason to want to share that directory,
+
+  - find a solution for each affected download mechanism: git, svn, hg,
+    cvs, bzr... and for each of the affected vendoring mechanism: go and
+    cargo [0]; this is not nice, because it means a lot of repetition,
+    with the risk that they diverge over time (e.e one is fixed for a
+    newer issue, while the others are left out due to an oversight...)
+
+  - find a single, common solution that works in all cases, whatever the
+    download mechanism and/or vendoring: this is the best, because we
+    can extend and fix it once and eveything else benefits from it.
+
+We obviously go for the third option.
+
+This implies that we must bump the version-suffix for the download
+backends [1] and for the vendoring post-processes.
+
+[0] Note however that the vendoring is currently not done in a
+sub-directory of BR2_DL_DIR, but the cargo and go caches are located
+there. Files that get copied from there to the vendoring area would be
+tainted a swell, and thus we want to address that situation as well.
+
+[1] we currently do not have a CVS version suffix, because we do not
+guarantee the reproducilibity of CVS archives (we can't); for hg, we are
+currently using hg's own archive tool, and presumably that does not have
+the mode issue because it is not using the checked-out files. Still,
+doing the mode fix in a single location will help extend thos etwo
+backends in the future (if that ever happens...).
+
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Francois Perrad <fperrad@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luajit/luajit.hash | 2 +-
- package/luajit/luajit.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/pkg-download.mk  | 8 +++++---
+ support/download/helpers | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index 578bb7a3e2..da243d8c2a 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  b518721280390e4cec1af30f6819d86756ce4234d82410a55a4e121855f64e08  luajit-41fb94defa8f830ce69a8122b03f6ac3216d392a.tar.gz
-+sha256  df50bfe78919691ce9a630c8312386a8cb6ca49f327922a833e77656e82ef6c6  luajit-41fb94defa8f830ce69a8122b03f6ac3216d392a-br2.tar.gz
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 9047e99f86..61e565b002 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -19,9 +19,11 @@ export SFTP := $(call qstrip,$(BR2_SFTP))
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
- # Locally calculated
- sha256  1130331ac861a4b4520e9c8ad0814efdc6f1e79ea55ea9c460c73733d13ccb5f  COPYRIGHT
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 693e22630b..6b1c6b3386 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+ # Version of the format of the archives we generate in the corresponding
+-# download backend:
+-BR_FMT_VERSION_git = -br2
+-BR_FMT_VERSION_svn = -br3
++# download backend and post-process:
++BR_FMT_VERSION_git = -git3
++BR_FMT_VERSION_svn = -svn4
++BR_FMT_VERSION_go = -go1
++BR_FMT_VERSION_cargo = -cargo1
  
- LUAJIT_VERSION = 41fb94defa8f830ce69a8122b03f6ac3216d392a
--LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
-+LUAJIT_SITE = https://github.com/LuaJIT/LuaJIT
-+LUAJIT_SITE_METHOD = git
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
- LUAJIT_CPE_ID_VENDOR = luajit
+ DL_WRAPPER = support/download/dl-wrapper
+ 
+diff --git a/support/download/helpers b/support/download/helpers
+index 90a7d6c1ec..823e4d2f91 100755
+--- a/support/download/helpers
++++ b/support/download/helpers
+@@ -61,7 +61,7 @@ mk_tar_gz() {
+     # Create POSIX tarballs, since that's the format the most reproducible
+     tar cf - --transform="s#^\./#${base_dir}/#S" \
+              --numeric-owner --owner=0 --group=0 --mtime="${date}" \
+-             --format=posix --pax-option="${pax_options}" \
++             --format=posix --pax-option="${pax_options}" --mode='go=u,go-w' \
+              -T "${tmp}.sorted" >"${tmp}.tar"
+ 
+     # Compress the archive
 -- 
 2.44.0
 
