@@ -4,94 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDF8C4345F
-	for <buildroot@archiver.kernel.org>; Sat, 27 Apr 2024 18:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38F11C4345F
+	for <buildroot@archiver.kernel.org>; Sat, 27 Apr 2024 18:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC780607D3;
-	Sat, 27 Apr 2024 18:38:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F14A6606DC;
+	Sat, 27 Apr 2024 18:38:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZJTaZszsULCT; Sat, 27 Apr 2024 18:38:27 +0000 (UTC)
+ id y7_qMxDwXgOu; Sat, 27 Apr 2024 18:38:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D7D4608CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDA23607D8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D7D4608CB;
-	Sat, 27 Apr 2024 18:38:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDA23607D8;
+	Sat, 27 Apr 2024 18:38:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B1DBC1BF3C1
- for <buildroot@lists.busybox.net>; Sat, 27 Apr 2024 18:38:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 673E41BF3C1
+ for <buildroot@lists.busybox.net>; Sat, 27 Apr 2024 18:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8EE61414C9
- for <buildroot@lists.busybox.net>; Sat, 27 Apr 2024 18:38:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 54135414C9
+ for <buildroot@lists.busybox.net>; Sat, 27 Apr 2024 18:38:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7r2YHaRk7Ukg for <buildroot@lists.busybox.net>;
- Sat, 27 Apr 2024 18:38:08 +0000 (UTC)
+ id l0oN0RSSoVjR for <buildroot@lists.busybox.net>;
+ Sat, 27 Apr 2024 18:38:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2313740771
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2313740771
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2313740771
- for <buildroot@buildroot.org>; Sat, 27 Apr 2024 18:38:07 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-343b7c015a8so2458102f8f.1
- for <buildroot@buildroot.org>; Sat, 27 Apr 2024 11:38:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2E6AC40771
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E6AC40771
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2E6AC40771
+ for <buildroot@buildroot.org>; Sat, 27 Apr 2024 18:38:11 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-41a1d2a7b81so23714045e9.0
+ for <buildroot@buildroot.org>; Sat, 27 Apr 2024 11:38:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714243086; x=1714847886;
+ d=1e100.net; s=20230601; t=1714243089; x=1714847889;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=yST1gVvUmeyo8xLGurFNAw+RXjNK7snMe8V7C8/Jpx8=;
- b=n0CwpllBe6U4ilwhNWn5lZgRaM415AwBnZFFdHj11jvMxqEdJJ2k5Za1EjGJ4L2UXx
- mQKr53uXPtzSpZPX2IlNIE72dqD2IHh8+9P32bcIpJVDMK/BivcD+dzLRdAHxqUyFv56
- CoO87ltUsWyuAXKOA9qSlklWsUQARF6TliJH3/jlwmrzJMDf2YxALvNbBXJZMWcIpxbu
- rCgZGENAVYBTibnj8hcp8TMdVrlvq62Tq/UCI9iSv1omxjAJoW+mZYsF3OgUzq0r1AJ0
- bzfkzW01Syysv3XY6rnCBw9vQTQMaVuH6tATSQEhH82/cno1jhXuQsvKRPZz2No1CfdF
- UnFQ==
-X-Gm-Message-State: AOJu0YzymOB2mpqbyC0pNWKsfkzKkbBTbX5WuFoL/yYF98/Cjme5AsrS
- fI6duLTUS1/prWOVHQXKTZvAy2CAYwomvVBnQIaCBwpAZN7+mC5fozJQ7g==
-X-Google-Smtp-Source: AGHT+IF+DwB4NFizlWAtLyq7Fg4dbp+A84Tck1AZtJsPCBYWFNMjff6Tw4/H6CGc8rMhLoCrKmRS+w==
-X-Received: by 2002:adf:f04e:0:b0:34c:b8fa:9768 with SMTP id
- t14-20020adff04e000000b0034cb8fa9768mr1176210wro.51.1714243086177; 
- Sat, 27 Apr 2024 11:38:06 -0700 (PDT)
+ bh=opM4GsfBHmp66auy8rCijPkmvwsWKbdWjoBLvyCKWlg=;
+ b=VrfWI0QPwo8V/sNZ0gfsrLDXIqrvTJtTvt9SYiRiM37ywfTYdfBDcQsSvnmAVN4dOw
+ 4QRWB9MP+oQ4yxXUgRC7lUb+YOgbKAcjwlbj5eusVkiWDFr0uR9MwmHuhLjTQbbLSugA
+ RbUhNZQcJAevJH52T2f3SuX3m4LI+IK1ujprLB9nMuEQMml+eYidkbq/ixLSY8TobgQE
+ Msndi5Q0swSH3caaIaiyaPe1q3Yy26qk1wLzPXqUADdaYzxuec1aqCugrIUkXp4VXy0Z
+ gfVeCQVbxb/p3ilyaw6OZuDIgI5/NV0pNt2tZXV7eZP35NjeHj82LYnawXvVh7cmkcqd
+ lqrg==
+X-Gm-Message-State: AOJu0Yw1Ra1eiCXxRPthk7h4TKJ6KFrMEO/cAN2JLtLZ9A+Va5r6NMgZ
+ 6K8BlAQ/sOSE6MWWLyqihW8WvwgaAU90rj3rGftAPl+fDgPYd3EQU+4aDg==
+X-Google-Smtp-Source: AGHT+IEcK3EmeMO3PaqrJTq3MiktUdSvg7H9yIJXvlG0W7xsqPIT/r34G+wDprnK0dJ4mve1y54sKw==
+X-Received: by 2002:a05:6000:237:b0:34c:5f07:45b1 with SMTP id
+ l23-20020a056000023700b0034c5f0745b1mr4916022wrz.25.1714243089230; 
+ Sat, 27 Apr 2024 11:38:09 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- k21-20020adfb355000000b0034c6b368aecsm4136589wrd.26.2024.04.27.11.38.05
+ k21-20020adfb355000000b0034c6b368aecsm4136589wrd.26.2024.04.27.11.38.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Apr 2024 11:38:06 -0700 (PDT)
+ Sat, 27 Apr 2024 11:38:09 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 27 Apr 2024 20:37:54 +0200
-Message-ID: <fac4dda319388b1d32d2f105ba29d47e68c41f4f.1714243078.git.yann.morin.1998@free.fr>
+Date: Sat, 27 Apr 2024 20:38:01 +0200
+Message-ID: <deae1dd16e9b9ec1a1843467cfac5aeda237db32.1714243078.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <cover.1714243078.git.yann.morin.1998@free.fr>
 References: <cover.1714243078.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1714243086; x=1714847886; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1714243089; x=1714847889; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=yST1gVvUmeyo8xLGurFNAw+RXjNK7snMe8V7C8/Jpx8=;
- b=Vf/I8Yq7ji/083Wy5QIwf4bZ9Mdcy+hyBVZPxxZgu++oHMOtmuonBkOGl+dlx4+ZOE
- O/5o4urDwjOGxareV/A938i4jFy/B/6BaQc3EUBx6PHSmlT0OWH6/MeIMpEN/HxRtgXB
- WoBu0WbgBH+rv94wNDFiED6BjHed3NPfDY/yYkgAY/c0ua/hRDUfw2hGMAa1/FH5P2gc
- lTPrjYzPsOhF/pSAEv59WV87O50c8rBDGCWoPqQQKbp2nWyBaEcPG+dVbmBPwJ2aMcRk
- 4RmsFmH+sKt+npZk/W1uEfx5KbRo6mkze111Pq71wUgcUmvnz0DLpC+EPv+gmVnriADX
- PS/A==
+ bh=opM4GsfBHmp66auy8rCijPkmvwsWKbdWjoBLvyCKWlg=;
+ b=eQx8Wqb8DJHms3TgtjhC9Q5fBRzbLeA4cV9dwKODDOsqsSGZnJXOmerIlBvYfRyWav
+ H+mali32XEbNtCmtYBpt6/vp3xk8Ld5+McqMeOYFBbYstr01xGjtIk+phFQhx23yt2cI
+ 8hwkhXn7o9LMUfirkb9r4sepT/plf9KC27fnDy6J5VM4LcDrpiIXOjtqi+hKYQRyxgxz
+ WwyahzjhiCxI2bszRFmII0dv6HAGukO/tPVlujqoKPWFySGSV+IL9nZRob2ug6cAdXDZ
+ F7Q498G2wjE3KeD/QHtrQr9p7sTCg7ENgXNR99pIIeGF54GFiCQ8HhK+z5c4cSRuS9aM
+ TzPg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Vf/I8Yq7
-Subject: [Buildroot] [PATCH 07/15 v2] support/testing: add test for
- export-subst support in git-download
+ header.a=rsa-sha256 header.s=20230601 header.b=eQx8Wqb8
+Subject: [Buildroot] [PATCH 14/15 v2] board: update hashes of git archives
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,112 +110,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../package/export-subst/export-subst.hash        |   1 +
- .../git-hash/package/export-subst/export-subst.mk |  10 ++++++++++
- .../05/482df734b3715b849ef4a3147a9b1b1f8cca38     | Bin 0 -> 35 bytes
- .../0f/db95cf4f3c5ed4003287649cabb33c5f843e26     | Bin 0 -> 197 bytes
- .../68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8     | Bin 0 -> 28 bytes
- .../6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0     | Bin 0 -> 112 bytes
- .../git-remote/repo.git/refs/heads/master         |   2 +-
- support/testing/tests/download/test_git.py        |   4 ++++
- 8 files changed, 16 insertions(+), 1 deletion(-)
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/05/482df734b3715b849ef4a3147a9b1b1f8cca38
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/0f/db95cf4f3c5ed4003287649cabb33c5f843e26
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0
+ board/radxa/rock5b/patches/linux/linux.hash        | 2 +-
+ board/toradex/apalis-imx6/patches/linux/linux.hash | 2 +-
+ board/toradex/apalis-imx6/patches/uboot/uboot.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash b/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash
-new file mode 100644
-index 0000000000..1926236993
---- /dev/null
-+++ b/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash
-@@ -0,0 +1 @@
-+sha256  9d359f9ae9a9e65dd4ccfe7170aa6fda24e17dfc81238972957b4b7fe97168a7  export-subst-0fdb95cf4f3c5ed4003287649cabb33c5f843e26-br2.tar.gz
-diff --git a/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk b/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk
-new file mode 100644
-index 0000000000..8d7d3ff970
---- /dev/null
-+++ b/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk
-@@ -0,0 +1,10 @@
-+################################################################################
-+#
-+# export-subst
-+#
-+################################################################################
-+
-+EXPORT_SUBST_VERSION = 0fdb95cf4f3c5ed4003287649cabb33c5f843e26
-+EXPORT_SUBST_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/download/git-remote/repo.git/objects/05/482df734b3715b849ef4a3147a9b1b1f8cca38 b/support/testing/tests/download/git-remote/repo.git/objects/05/482df734b3715b849ef4a3147a9b1b1f8cca38
-new file mode 100644
-index 0000000000000000000000000000000000000000..404bb1397cf8ec58f5e21a86e311e3b3884a55d5
-GIT binary patch
-literal 35
-rcmb<m^geacKgeK9ipS|Qo~A(_Yc)>jYhBdU^VQOO$iz_nm{Sb^1FsEl
-
-literal 0
-HcmV?d00001
-
-diff --git a/support/testing/tests/download/git-remote/repo.git/objects/0f/db95cf4f3c5ed4003287649cabb33c5f843e26 b/support/testing/tests/download/git-remote/repo.git/objects/0f/db95cf4f3c5ed4003287649cabb33c5f843e26
-new file mode 100644
-index 0000000000000000000000000000000000000000..3a4cc4ead6ce5a7e90a38e025896bc66da85a242
-GIT binary patch
-literal 197
-zcmV;$06PD80j18pN(3<!Kw;}V#qDK=<mP`7v9YjFK`YBl?#(*jBugd>?%TWg1cK#h
-z4qtBDwhqwJ-;B--j*`L!t!LwllOZ~Vg`-cw8%Ibno17#|aY~)*fP^|Mib|${mW-#M
-zO)5HDL~WGM!6-#hl1S(A**birTH$eq=hwHV7r47zbKY8C>#Sl759Ml@OTP!@qOn#-
-z6W~^&lp_B^2mfOs%KF84fWi9!{yw!nrv1F^Lx}hFSed3)%CuY#e^rVfqgY-S2z_Jg
-
-literal 0
-HcmV?d00001
-
-diff --git a/support/testing/tests/download/git-remote/repo.git/objects/68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8 b/support/testing/tests/download/git-remote/repo.git/objects/68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8
-new file mode 100644
-index 0000000000000000000000000000000000000000..fdc4a37651a4ad195f8f106f3496d5df0b3bb6a5
-GIT binary patch
-literal 28
-kcmb<m^geacKghr&DWLGQ{wZIbjX_@n9x^f5#jv&l0Hs3<3;+NC
-
-literal 0
-HcmV?d00001
-
-diff --git a/support/testing/tests/download/git-remote/repo.git/objects/6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0 b/support/testing/tests/download/git-remote/repo.git/objects/6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0
-new file mode 100644
-index 0000000000000000000000000000000000000000..932f73602f5927ae985829cdd301b1ed40350137
-GIT binary patch
-literal 112
-zcmV-$0FVE80V^p=O;s>7FlR6{FfcPQQP4}zEJ-XWDauSLElDkAVD-@bZnC*Bx@F#%
-z#UfR+rR950SwK~$W#*(ZJf9QSKh0&bCYQsEj;oGV#dUqLSCQn67&0_|^q%JH*m1VF
-S>l%yCbKk02!Y2Svbu0l+hckcx
-
-literal 0
-HcmV?d00001
-
-diff --git a/support/testing/tests/download/git-remote/repo.git/refs/heads/master b/support/testing/tests/download/git-remote/repo.git/refs/heads/master
-index b6bccc1c17..b6e37260fb 100644
---- a/support/testing/tests/download/git-remote/repo.git/refs/heads/master
-+++ b/support/testing/tests/download/git-remote/repo.git/refs/heads/master
-@@ -1 +1 @@
--a238b1dfcd825d47d834af3c5223417c8411d90d
-+0fdb95cf4f3c5ed4003287649cabb33c5f843e26
-diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
-index ec5b8f3fdd..ba52e03ef5 100644
---- a/support/testing/tests/download/test_git.py
-+++ b/support/testing/tests/download/test_git.py
-@@ -56,6 +56,10 @@ class TestGitHash(GitTestBase):
-             self.check_hash("bad")
-         self.check_hash("good")
-         self.check_hash("nohash")
-+        self.check_hash("export-subst")
-+        with open(os.path.join(self.builddir, "dl", "export-subst", "git", "file2"), "r") as f:
-+            blob = f.read()
-+        self.assertEqual(blob, "0fdb95cf4f3c5ed4003287649cabb33c5f843e26\n")
- 
- 
- class TestGitRefs(GitTestBase):
+diff --git a/board/radxa/rock5b/patches/linux/linux.hash b/board/radxa/rock5b/patches/linux/linux.hash
+index 8797d29f68..18074c0aee 100644
+--- a/board/radxa/rock5b/patches/linux/linux.hash
++++ b/board/radxa/rock5b/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  a5eca7b8f929a1918125e2e4fbd7ab4ea5b3910b5ae4547e81c794b47373ffb5  linux-52f51a2b5ba178f331af62260d2da86d7472c14b-br2.tar.gz
++sha256  255961f7ea8ea82c42f19be049f94a690f9cb171fe8562ea87868ac5cabc3eb9  linux-52f51a2b5ba178f331af62260d2da86d7472c14b-git3.tar.gz
+diff --git a/board/toradex/apalis-imx6/patches/linux/linux.hash b/board/toradex/apalis-imx6/patches/linux/linux.hash
+index ff2b1ea287..277abc20aa 100644
+--- a/board/toradex/apalis-imx6/patches/linux/linux.hash
++++ b/board/toradex/apalis-imx6/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  9c69a1c283db6ee8042cc6f013a159473f257e71751887312c7dd2902f01bec8  linux-d899927728beca8357a5b4120b690cb3c1d80844-br2.tar.gz
++sha256  41551a4f44bdfe18f68bedc0fd9c644d8657d2ee63215cc348a708cfd5b7e6f2  linux-d899927728beca8357a5b4120b690cb3c1d80844-git3.tar.gz
+diff --git a/board/toradex/apalis-imx6/patches/uboot/uboot.hash b/board/toradex/apalis-imx6/patches/uboot/uboot.hash
+index 80cad35849..d451219cb4 100644
+--- a/board/toradex/apalis-imx6/patches/uboot/uboot.hash
++++ b/board/toradex/apalis-imx6/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  9a540b08ccb7e8a0252f86d0bad5d676d0964725a7f2a06d798225c2a3024878  uboot-30a1208727729dae22cb42f9ba9ba17efe5e6f77-br2.tar.gz
++sha256  2fa23d10559c17362ef92e5d7e636b388e9af3784c9b03e86c702a71df100f36  uboot-30a1208727729dae22cb42f9ba9ba17efe5e6f77-git3.tar.gz
 -- 
 2.44.0
 
