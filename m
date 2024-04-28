@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3AE7C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 19:34:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B788C4345F
+	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 19:35:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B2BD80FB3;
-	Sun, 28 Apr 2024 19:34:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C8518123E;
+	Sun, 28 Apr 2024 19:35:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hUTfb1-0IQBU; Sun, 28 Apr 2024 19:34:11 +0000 (UTC)
+ id pnN6bmNZJgWL; Sun, 28 Apr 2024 19:35:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62A4181204
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19F41814B8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62A4181204;
-	Sun, 28 Apr 2024 19:34:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C83481BF3DB
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:34:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19F41814B8;
+	Sun, 28 Apr 2024 19:35:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8704E1BF3DB
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0A5581204
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:34:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72E0C40657
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:35:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q_u69EArARoL for <buildroot@lists.busybox.net>;
- Sun, 28 Apr 2024 19:34:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CysG4R4VoWB8 for <buildroot@lists.busybox.net>;
+ Sun, 28 Apr 2024 19:35:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CBDCA80FB3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBDCA80FB3
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CBDCA80FB3
- for <buildroot@buildroot.org>; Sun, 28 Apr 2024 19:34:07 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4B283FF803;
- Sun, 28 Apr 2024 19:34:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F1B9C402F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1B9C402F8
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F1B9C402F8
+ for <buildroot@buildroot.org>; Sun, 28 Apr 2024 19:35:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B0D1460003;
+ Sun, 28 Apr 2024 19:35:35 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s1AHj-006VpD-0Z;
- Sun, 28 Apr 2024 21:34:03 +0200
+ (envelope-from <peter@korsgaard.com>) id 1s1AJD-006Vuy-03;
+ Sun, 28 Apr 2024 21:35:35 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240331085319.8585-1-fontaine.fabrice@gmail.com>
-Date: Sun, 28 Apr 2024 21:34:03 +0200
-In-Reply-To: <20240331085319.8585-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 31 Mar 2024 10:53:19 +0200")
-Message-ID: <877cghcmdw.fsf@dell.be.48ers.dk>
+References: <20240331164354.94483-1-fontaine.fabrice@gmail.com>
+Date: Sun, 28 Apr 2024 21:35:35 +0200
+In-Reply-To: <20240331164354.94483-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 31 Mar 2024 18:43:54 +0200")
+Message-ID: <8734r5cmbc.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/lxc: fix m68k build with gcc 12
+Subject: Re: [Buildroot] [PATCH 1/1] package/giflib: fix host build without
+ convert
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,8 +69,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
- buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -77,18 +77,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following m68k build failure with gcc 12:
- > In file included from ../src/lxc/syscall_wrappers.h:19,
- >                  from ../src/lxc/mount_utils.h:15,
- >                  from ../src/lxc/conf.h:24,
- >                  from ../src/lxc/log.h:19,
- >                  from ../src/lxc/storage/btrfs.c:20:
- > ../src/lxc/syscall_numbers.h:423:25: error: macro names must be identifiers
- >   423 |                 #define -1
- >       |                         ^
+ > Do not build docs for host-giflib to avoid the following build failure
+ > without convert on host raised since bump to version 5.2.2 in commit
+ > f98239dada59270efe19de9d9fae50ec9ab9d28c and
+ > https://sourceforge.net/p/giflib/code/ci/d565f6fa04be8973425bd7cd3f169908ac9e95c2:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/f40a517eba86838b11b4b1d6a8a05b8233a3394d
+ > convert ../pic/gifgrid.gif -resize 50x50 giflib-logo.gif
+ > make[2]: convert: No such file or directory
+
+ > Fixes: f98239dada59270efe19de9d9fae50ec9ab9d28c
+ >  - http://autobuild.buildroot.org/results/04dd54f5060881cb8aa030de34edb4ceea863fa6
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
