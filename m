@@ -4,98 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AD72C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 18:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 121AEC4345F
+	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 18:20:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB1F360633;
-	Sun, 28 Apr 2024 18:15:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C388A60633;
+	Sun, 28 Apr 2024 18:20:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TPUFBhcNUqBW; Sun, 28 Apr 2024 18:15:07 +0000 (UTC)
+ id T7IG6xFNI74b; Sun, 28 Apr 2024 18:20:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6F3560635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD84260635
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6F3560635;
-	Sun, 28 Apr 2024 18:15:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6873F1BF344
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:15:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD84260635;
+	Sun, 28 Apr 2024 18:20:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 161F61BF344
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:20:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5FBCB81EF9
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:15:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 030824016F
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:20:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NLccbEgwn6XW for <buildroot@lists.busybox.net>;
- Sun, 28 Apr 2024 18:15:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SGdt1AzURXQ7 for <buildroot@lists.busybox.net>;
+ Sun, 28 Apr 2024 18:20:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 32F6B81EF2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32F6B81EF2
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 32F6B81EF2
- for <buildroot@buildroot.org>; Sun, 28 Apr 2024 18:15:02 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-34ce52fb920so587639f8f.3
- for <buildroot@buildroot.org>; Sun, 28 Apr 2024 11:15:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A15C340105
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A15C340105
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A15C340105
+ for <buildroot@buildroot.org>; Sun, 28 Apr 2024 18:20:18 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-34d2178fc7fso57760f8f.0
+ for <buildroot@buildroot.org>; Sun, 28 Apr 2024 11:20:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714328101; x=1714932901;
+ d=1e100.net; s=20230601; t=1714328416; x=1714933216;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=cEJj8epRRJxIupESiCb729NsE30d8ik8ha3lw1+erkY=;
- b=W4LwoNqHJqTET7u0mT3fE8qWEG2iejjigjzoBdMiYbrj2rruyG62nkeODMXRmGnvp8
- XkqmiH37qcLKuBLlKG+71GP3qxuSJUz/WGfQ0Ev2R4hz1v/3xD4oQKPDSHnfLfbpKQTV
- C6W/bTZtXevknVaKF9YHY0eBGDLUkkwvudXNSaBcU2Jl+mA9hFHaqk+GUBuhQbd60JzB
- XRJY6FHTZdAd+KdmE34/1lK0XXlZ097RkH0SRLS+IziX3WquhnYxgRmetTFfDS1AYRoL
- nTsgiWulegVX99IjbyZpTWrtqwPFdGai9SX5QWLYB1xDfzz1Q+SGmRALpy6g1LTyeV+G
- gp8Q==
+ bh=mHbD+cPU8PurLDx1ZlbBkWOjCXQ32j+a2dFhJZ+AzUs=;
+ b=Qx1weO3nMm4LwinUbR9ESr8lB6QfAFDrxcVl5CRh4E4HpNvJtpiPDcpcICkNKYveqd
+ 1FQyCCFWHodALiS3hb6qIWEfCSOBLjUUqUKuLdNb6J4+FhSsLTNzrZgGOAZvlKxVtu0p
+ 3m05Xbvg+NR3iMKrkKc5GrA9tPeL3cBOyw3Dav6ExccP09efuo/rXIODswyVGbSAyZLx
+ ZeNz77nte06G+MBCvUSZta9wKWFufgFeAho5/FXTNx6nhUdX4qZt53aJxlt4PhcousSz
+ P+t4DtW6avu9zSu1BfPwJi8KdBcZbq5Qrybg74pJp42NW7PKZKHPH6TFWXSlwAu10hL4
+ UoNA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWo/8c7ReJBCS0xy0JKhpFfCH11rWHMOj6OMCkn5GeYfiNwfYq6RMoGxkYmB5wYiUHsPK5WZ+v95vkKcLzBxbOMDoc65bZrDA==
-X-Gm-Message-State: AOJu0Yxpw/08RdgHpMVG1mM+aP4+WgpBXHbwi0kNwIVvou1aoo6Tkmvz
- AHsbN0SvJtusGjmsIS9DUbcolnBMT/wm6VRXn+8y/lqUt0o6OSNusa+vIkJVFRsIgv8Wz/1TqC2
- l
-X-Google-Smtp-Source: AGHT+IHUg7xmJhOoQ8DyVVdxpmMHLqp4MZGM0ZdxE7FPSmk6TwSGijEfnYf+LSyI/sw+qx/Jnq4MPg==
-X-Received: by 2002:adf:9bc6:0:b0:34c:11fb:3820 with SMTP id
- e6-20020adf9bc6000000b0034c11fb3820mr4851016wrc.54.1714328100489; 
- Sun, 28 Apr 2024 11:15:00 -0700 (PDT)
+ AJvYcCVhgTy3HEhxbvA7CPipdsVvBK3y2hQGpPqmPNz6aAxdAWQTrlm7+WdCTRHrFnWjPvfD1wxRRa9iwyEA5QG9rfQqatFLZp6zoA==
+X-Gm-Message-State: AOJu0YwGj7AK4DyAs7gLucvLjMqvNXBFh/DzbE08CbGCGyxOBPgnjInq
+ SWS40ClnuVt+4HQF43pmMHCeORAKG0biV4oEvrMfA3S/Z5apMvrypqJyc9HLvYTd2EfXGnxuzkA
+ V
+X-Google-Smtp-Source: AGHT+IEvyKkfUZou/cZ20T7hhtcGKlUuwhY9yAKQ6wl2nGPlfVsyGij1dbu7NdnbxyevlP/9mHImEw==
+X-Received: by 2002:a05:6000:4e8:b0:349:f220:a1cd with SMTP id
+ cr8-20020a05600004e800b00349f220a1cdmr6314530wrb.27.1714328416149; 
+ Sun, 28 Apr 2024 11:20:16 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- df15-20020a5d5b8f000000b0034cee43238fsm1771406wrb.27.2024.04.28.11.14.59
+ bh18-20020a05600c3d1200b0041bd920d41csm6221232wmb.1.2024.04.28.11.20.15
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 28 Apr 2024 11:15:00 -0700 (PDT)
-Message-ID: <5564d3cd-faa1-4dd4-8edf-e4224a2c2f9e@mind.be>
-Date: Sun, 28 Apr 2024 20:14:57 +0200
+ Sun, 28 Apr 2024 11:20:15 -0700 (PDT)
+Message-ID: <59f91e64-5418-4c2f-a8ff-9bd3b26511f3@mind.be>
+Date: Sun, 28 Apr 2024 20:20:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20240414141653.1376138-1-bernd@kuhls.net>
+To: Lukasz Tekieli <tekieli.lukasz@gmail.com>, buildroot@buildroot.org
+References: <20240414190644.1059171-1-tekieli.lukasz@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <20240414141653.1376138-1-bernd@kuhls.net>
+In-Reply-To: <20240414190644.1059171-1-tekieli.lukasz@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1714328101; x=1714932901; darn=buildroot.org;
+ d=mind.be; s=google; t=1714328416; x=1714933216; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=cEJj8epRRJxIupESiCb729NsE30d8ik8ha3lw1+erkY=;
- b=Kqj/X6Hdp6nDQPfCQsfCmNZxGDrZt3D6KLK4HRPB9sRtsLvD4cvkp4YhXkq3ib37WM
- z40eWBWyTyIVn2kGKFXIZzLDc+Be9NZxNxGsnlkVhb9fywpdxPeREcdlD5ioiOr1c/DP
- RFmH2Wx9QMk1AsGsFVRqb4NINksSUhqs1k4s2Lz+Bl+IFQFJiOwQtObmk9wCjJ5xXzKT
- DGrVlqNyzlooPpL8ocTxBrlujA7U6uwj8L2nDUyGS6Z/CFKAcG7h/ZtnkaxVRbhwHeGJ
- HIXvrqJaSp3tCZVqk6TN9vyp7oTwn/fwuzeyk2iRtJdrZhcUQYPyTpMjS5/wUoQEkaao
- 6adg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=mHbD+cPU8PurLDx1ZlbBkWOjCXQ32j+a2dFhJZ+AzUs=;
+ b=MEUo77ErKvPGL+inXL3D+HWpQSscvuB604dnjTgkMPjiAtbF61Zux8FnNED9qAca75
+ 0aK4IEK+gI3iW2Z1jONbWPfcvY6dFHElD8Ggw2z2aS2hq4Xg10QLelgxKmUp2WrljfDh
+ d/0BiXtBLNzU8HJ7fyAjih6NPy9bvazm8MSiIfWvK9tELlYAtFLfPPTzH/74RoZAC2l9
+ ixDXrVYgUJskVQ8pZC9zuoKE/KOPnv5n0HNVexvX78UsctR0lLpMzytNS9VUU4oL5mMy
+ O72hNidC+gY0xbvgo4O7tPtLKyKKuluO/zsIdibE3hrqF6wjwKT+SiddTSjYLQfxHrO8
+ uZPQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Kqj/X6Hd
-Subject: Re: [Buildroot] [PATCH 1/2] package/linux-headers: drop 6.7.x option
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=MEUo77Er
+Subject: Re: [Buildroot] [PATCH 1/1] board/visionfive2: add spi-nor image
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,6 +110,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Francois Dugast <francois.dugast.foss@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -116,75 +118,150 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/04/2024 16:16, Bernd Kuhls wrote:
-> The 6.7.x series is now EOL upstream, so drop the linux-headers option
-> and add legacy handling for it.
+On 14/04/2024 21:06, Lukasz Tekieli wrote:
+> Builds the spi-nor.img together with the sdcard.img.
+> Readme is extended with SPI NOR flash writing instructions
+> and recovery.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> The spi-nor.img layout is based on the following document:
+> 
+> https://doc-en.rvspace.org/VisionFive2/Boot_UG/JH7110_SDK/boot_address_allocation.html
+> 
+> Signed-off-by: Lukasz Tekieli <tekieli.lukasz@gmail.com>
 
-  Applied both to master, thanks.
+  Applied to master, thanks.
+
+  I've added the following paragraph to the readme:
+
+Note that Buildroot puts the bootloader both in SPI NOR and on the SD card,
+so after flashing as instructed above, either boot mode should work.
+
+  If this is not correct, could you please send a correction?
 
   Regards,
   Arnout
 
 > ---
->   Config.in.legacy                     | 7 +++++++
->   linux/linux.hash                     | 1 -
->   package/linux-headers/Config.in.host | 5 -----
->   3 files changed, 7 insertions(+), 6 deletions(-)
+>   board/visionfive2/genimage_spi-nor.cfg | 36 ++++++++++++++++++++++++++
+>   board/visionfive2/post-image.sh        |  4 +++
+>   board/visionfive2/readme.txt           | 25 +++++++++++++++---
+>   configs/visionfive2_defconfig          |  3 +--
+>   4 files changed, 62 insertions(+), 6 deletions(-)
+>   create mode 100644 board/visionfive2/genimage_spi-nor.cfg
+>   create mode 100755 board/visionfive2/post-image.sh
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 76af1da348..98a4125f4b 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,13 @@ endif
->   
->   comment "Legacy options removed in 2024.05"
->   
-> +config BR2_KERNEL_HEADERS_6_7
-> +	bool "kernel headers version 6.7.x are no longer supported"
-> +	select BR2_LEGACY
-> +	help
-> +	  Version 6.7.x of the Linux kernel headers are no longer
-> +	  maintained upstream and are now removed.
+> diff --git a/board/visionfive2/genimage_spi-nor.cfg b/board/visionfive2/genimage_spi-nor.cfg
+> new file mode 100644
+> index 0000000000..8b1d13989a
+> --- /dev/null
+> +++ b/board/visionfive2/genimage_spi-nor.cfg
+> @@ -0,0 +1,36 @@
+> +flash nor-16M-256 {
+> +	pebsize = 4K
+> +	minimum-io-unit-size = 256
+> +	numpebs = 4096
+> +}
 > +
->   config BR2_TARGET_TI_K3_IMAGE_GEN
->   	bool "ti-k3-image-gen removed"
->   	select BR2_LEGACY
-> diff --git a/linux/linux.hash b/linux/linux.hash
-> index 4fa9f701cd..d66bb54b5e 100644
-> --- a/linux/linux.hash
-> +++ b/linux/linux.hash
-> @@ -1,6 +1,5 @@
->   # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
->   sha256  8d0c8936e3140a0fbdf511ad7a9f21121598f3656743898f47bb9052d37cff68  linux-6.8.1.tar.xz
-> -sha256  a9b99fb376f9fcd699c7c252aeef3bb5ba26280eb049711ac091b2eb2b487c03  linux-6.7.10.tar.xz
->   sha256  23e3e7b56407250f5411bdab95763d0bc4e3a19dfa431d951df7eacabd61a2f4  linux-6.6.22.tar.xz
->   sha256  d150d2d9d416877668d8b56f75759f166168d192419eefaa942ed67225cbec06  linux-6.1.82.tar.xz
->   # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index 4c3651450e..78ba644c95 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -48,10 +48,6 @@ config BR2_KERNEL_HEADERS_6_6
->   	bool "Linux 6.6.x kernel headers"
->   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
+> +image spi-nor.img {
+> +	size = 16M
+> +
+> +	flash {
+> +	}
+> +
+> +	flashtype = "nor-16M-256"
+> +
+> +	partition spl {
+> +		image = "u-boot-spl.bin.normal.out"
+> +		offset = 0K
+> +		size = 512K
+> +	}
+> +
+> +	partition uboot-env {
+> +		offset = 960K
+> +		size = 64K
+> +	}
+> +
+> +	partition uboot {
+> +		image = "u-boot.itb"
+> +		offset = 1M
+> +		size = 4M
+> +	}
+> +
+> +	partition reserved-data {
+> +		offset = 6M
+> +		size = 10M
+> +	}
+> +}
+> diff --git a/board/visionfive2/post-image.sh b/board/visionfive2/post-image.sh
+> new file mode 100755
+> index 0000000000..3da106dc26
+> --- /dev/null
+> +++ b/board/visionfive2/post-image.sh
+> @@ -0,0 +1,4 @@
+> +#!/bin/bash
+> +
+> +support/scripts/genimage.sh -c board/visionfive2/genimage.cfg
+> +support/scripts/genimage.sh -c board/visionfive2/genimage_spi-nor.cfg
+> diff --git a/board/visionfive2/readme.txt b/board/visionfive2/readme.txt
+> index 85be1d5dfc..31edef02e4 100644
+> --- a/board/visionfive2/readme.txt
+> +++ b/board/visionfive2/readme.txt
+> @@ -12,12 +12,27 @@ How to build
+>   $ make visionfive2_defconfig
+>   $ make
 >   
-> -config BR2_KERNEL_HEADERS_6_7
-> -	bool "Linux 6.7.x kernel headers"
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_7
+> +Once the build process is finished you will have two images
+> +in the output/images/ directory:
+> +- sdcard.img
+> +- spi-nor.img
+> +
+> +How to write the SPI NOR flash
+> +=============================
+> +
+> +If you have a booting device use u-boot and tftp:
+> +
+> +  # tftpboot 0x82000000 spi-nor.img
+> +  # sf probe
+> +  # sf update 0x82000000 0x0 {filesize}
+> +
+> +Otherwise, follow the recovery instruction:
+> +
+> +https://doc-en.rvspace.org/VisionFive2/Quick_Start_Guide/VisionFive2_SDK_QSG/recovering_bootloader%20-%20vf2.html
+> +
+>   How to write the SD card
+>   ========================
+>   
+> -Once the build process is finished you will have an image called "sdcard.img"
+> -in the output/images/ directory.
 > -
->   config BR2_KERNEL_HEADERS_6_8
->   	bool "Linux 6.8.x kernel headers"
->   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_8
-> @@ -425,7 +421,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
->   	default "5.15.152"	if BR2_KERNEL_HEADERS_5_15
->   	default "6.1.82"	if BR2_KERNEL_HEADERS_6_1
->   	default "6.6.22"	if BR2_KERNEL_HEADERS_6_6
-> -	default "6.7.10"	if BR2_KERNEL_HEADERS_6_7
->   	default "6.8.1"		if BR2_KERNEL_HEADERS_6_8
->   	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
->   	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+>   Copy the bootable "sdcard.img" onto an SD card with "dd":
+>   
+>     $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+> @@ -27,7 +42,9 @@ Preparing the board
+>   
+>   Connect a TTL UART cable to pin 6 (GND), 8 (TX) and 10 (RX).
+>   
+> -Change the boot mode pins to SD card booting (RGPIO_0=1, GRPIO_1=0):
+> +Use the correct mode for booting:
+> +- SD card RGPIO_0=1, GRPIO_1=0
+> +- SPI NOR flash RGPIO_0=1, GRPIO_1=1
+>   
+>   https://doc-en.rvspace.org/VisionFive2/Quick_Start_Guide/VisionFive2_SDK_QSG/boot_mode_settings.html
+>   
+> diff --git a/configs/visionfive2_defconfig b/configs/visionfive2_defconfig
+> index c8576a35a7..699ea8dd4b 100644
+> --- a/configs/visionfive2_defconfig
+> +++ b/configs/visionfive2_defconfig
+> @@ -2,8 +2,7 @@ BR2_riscv=y
+>   BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+>   BR2_SYSTEM_DHCP="eth0"
+>   BR2_ROOTFS_OVERLAY="board/visionfive2/overlay"
+> -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> -BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/visionfive2/genimage.cfg"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/visionfive2/post-image.sh"
+>   BR2_LINUX_KERNEL=y
+>   BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+>   BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,linux,05533e9c31d6f0da20efc2d436a3b0f6d516ed4b)/linux-05533e9c31d6f0da20efc2d436a3b0f6d516ed4b.tar.gz"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
