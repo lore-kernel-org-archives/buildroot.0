@@ -4,98 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78D27C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 18:12:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AD72C4345F
+	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 18:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 106D360686;
-	Sun, 28 Apr 2024 18:12:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB1F360633;
+	Sun, 28 Apr 2024 18:15:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X0481i46n9to; Sun, 28 Apr 2024 18:12:22 +0000 (UTC)
+ id TPUFBhcNUqBW; Sun, 28 Apr 2024 18:15:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23FD360633
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6F3560635
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23FD360633;
-	Sun, 28 Apr 2024 18:12:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AB36A1BF344
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:12:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6F3560635;
+	Sun, 28 Apr 2024 18:15:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6873F1BF344
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:15:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E02A40318
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:12:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5FBCB81EF9
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:15:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t1-S1oSLJHWn for <buildroot@lists.busybox.net>;
- Sun, 28 Apr 2024 18:12:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NLccbEgwn6XW for <buildroot@lists.busybox.net>;
+ Sun, 28 Apr 2024 18:15:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2BE1C40304
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BE1C40304
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2BE1C40304
- for <buildroot@buildroot.org>; Sun, 28 Apr 2024 18:12:18 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4196c62bb4eso29182945e9.2
- for <buildroot@buildroot.org>; Sun, 28 Apr 2024 11:12:18 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 32F6B81EF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32F6B81EF2
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 32F6B81EF2
+ for <buildroot@buildroot.org>; Sun, 28 Apr 2024 18:15:02 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-34ce52fb920so587639f8f.3
+ for <buildroot@buildroot.org>; Sun, 28 Apr 2024 11:15:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714327937; x=1714932737;
+ d=1e100.net; s=20230601; t=1714328101; x=1714932901;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=568hY82jbMpT2OG2BiplJ9fp0xPMGszapBjNzoceatU=;
- b=dTDI21oyxg1WA4mHih9t123wVQ13s0+V/dYXU1dTgO4uV4+uRVdZ58ueU4eI5uqXAg
- R6RK2NDSgqDx7MhOIWVEkJBOS1apNG4VTySQMN5mlo1lNPbflOPN5ctrb/xNcBfy+bpW
- X3t0jjsl+rFA7p0y/OTajhPsStTnUvXIc06jVBaMoRHtZdxL0be0DOMHUQYZ+NCQlcMs
- lvhhY9NSIl7gYCYLT24SfYbMPp5XO77+kyIXovgWMUw40QZ6yIvsdv4DXQNokbq1eX/o
- v9Y1OW0fTnCpc4m53rqW/9bc2iQWgETOqk6iUkwPGwV2+SnvbJ7iMy7tA+/RyTguk01a
- rIXQ==
+ bh=cEJj8epRRJxIupESiCb729NsE30d8ik8ha3lw1+erkY=;
+ b=W4LwoNqHJqTET7u0mT3fE8qWEG2iejjigjzoBdMiYbrj2rruyG62nkeODMXRmGnvp8
+ XkqmiH37qcLKuBLlKG+71GP3qxuSJUz/WGfQ0Ev2R4hz1v/3xD4oQKPDSHnfLfbpKQTV
+ C6W/bTZtXevknVaKF9YHY0eBGDLUkkwvudXNSaBcU2Jl+mA9hFHaqk+GUBuhQbd60JzB
+ XRJY6FHTZdAd+KdmE34/1lK0XXlZ097RkH0SRLS+IziX3WquhnYxgRmetTFfDS1AYRoL
+ nTsgiWulegVX99IjbyZpTWrtqwPFdGai9SX5QWLYB1xDfzz1Q+SGmRALpy6g1LTyeV+G
+ gp8Q==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXgZApjzwRnyAxPTWh3ZMyVHybNxP9/VmJR2m9WHSFR8BluGm2TpFNfiXAlFpDYvp1CYJEQXXGHp8cVkiY6KG73kDXWCtF9IA==
-X-Gm-Message-State: AOJu0YygOpSpgyoJJV3k8Sjeemw9nxehK96pZEuCPqVm5PrKA3q4fFr7
- rT7NRGYpU0G3gb7FMPacnWZLowTeZFL35JihgDLdkxCEgPt+cYHJCzxkT+fgRemB+hVy9BIPI9Y
+ AJvYcCWo/8c7ReJBCS0xy0JKhpFfCH11rWHMOj6OMCkn5GeYfiNwfYq6RMoGxkYmB5wYiUHsPK5WZ+v95vkKcLzBxbOMDoc65bZrDA==
+X-Gm-Message-State: AOJu0Yxpw/08RdgHpMVG1mM+aP4+WgpBXHbwi0kNwIVvou1aoo6Tkmvz
+ AHsbN0SvJtusGjmsIS9DUbcolnBMT/wm6VRXn+8y/lqUt0o6OSNusa+vIkJVFRsIgv8Wz/1TqC2
  l
-X-Google-Smtp-Source: AGHT+IEsCnBNnHW93cGkCYIhX3+Aall67kAE9O9iveLEdFMNYYHGd5lkuLaEd/NB9UlzIvL9XcM/sA==
-X-Received: by 2002:a05:600c:3548:b0:41b:bb90:4b9 with SMTP id
- i8-20020a05600c354800b0041bbb9004b9mr4214380wmq.4.1714327936920; 
- Sun, 28 Apr 2024 11:12:16 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHUg7xmJhOoQ8DyVVdxpmMHLqp4MZGM0ZdxE7FPSmk6TwSGijEfnYf+LSyI/sw+qx/Jnq4MPg==
+X-Received: by 2002:adf:9bc6:0:b0:34c:11fb:3820 with SMTP id
+ e6-20020adf9bc6000000b0034c11fb3820mr4851016wrc.54.1714328100489; 
+ Sun, 28 Apr 2024 11:15:00 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- i4-20020a05600c354400b0041902ebc87esm35378206wmq.35.2024.04.28.11.12.15
+ df15-20020a5d5b8f000000b0034cee43238fsm1771406wrb.27.2024.04.28.11.14.59
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 28 Apr 2024 11:12:16 -0700 (PDT)
-Message-ID: <92d508a4-ce55-4eb2-a7cd-2a64729ce20c@mind.be>
-Date: Sun, 28 Apr 2024 20:12:14 +0200
+ Sun, 28 Apr 2024 11:15:00 -0700 (PDT)
+Message-ID: <5564d3cd-faa1-4dd4-8edf-e4224a2c2f9e@mind.be>
+Date: Sun, 28 Apr 2024 20:14:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
-References: <ZhuKWDZALDt+xUcI@waldemar-brodkorb.de>
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+References: <20240414141653.1376138-1-bernd@kuhls.net>
 Content-Language: en-GB
-In-Reply-To: <ZhuKWDZALDt+xUcI@waldemar-brodkorb.de>
+In-Reply-To: <20240414141653.1376138-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1714327937; x=1714932737; darn=buildroot.org;
+ d=mind.be; s=google; t=1714328101; x=1714932901; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:to:subject:user-agent:mime-version:date:message-id:from
  :to:cc:subject:date:message-id:reply-to;
- bh=568hY82jbMpT2OG2BiplJ9fp0xPMGszapBjNzoceatU=;
- b=EqwkLCYoxfLC21fC+WtiwiCJTeo5HyiTRFX6GWcWAkr9wqQVCI+YBDOVXDg2n2Lfm+
- 6JOEaadsIQMcvfOdgO4kCKpeNEwO56m8joKZhLpNzZAbD3al7EB5DmIUnr9PKKtW9H9n
- TE08wak7Jw4A2WxEeu/fnr2JFpouu/PS5ruhy/YlpBpdG+4SYMNXdnDp8WVm7pn1ruDj
- p2T9wES9CYjr1xNr6x0jiKAA+4Fy1fsJDAAR01of7jFKyJqkb4LuCtJGGZ598hOv7c87
- JOAoAxotuj+bgy3vKIZxnyQ5aCxGT3K8iiv5X5nnqMA4REYt0mZNH4zuQY7ybvSTX2tj
- SIAg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=cEJj8epRRJxIupESiCb729NsE30d8ik8ha3lw1+erkY=;
+ b=Kqj/X6Hdp6nDQPfCQsfCmNZxGDrZt3D6KLK4HRPB9sRtsLvD4cvkp4YhXkq3ib37WM
+ z40eWBWyTyIVn2kGKFXIZzLDc+Be9NZxNxGsnlkVhb9fywpdxPeREcdlD5ioiOr1c/DP
+ RFmH2Wx9QMk1AsGsFVRqb4NINksSUhqs1k4s2Lz+Bl+IFQFJiOwQtObmk9wCjJ5xXzKT
+ DGrVlqNyzlooPpL8ocTxBrlujA7U6uwj8L2nDUyGS6Z/CFKAcG7h/ZtnkaxVRbhwHeGJ
+ HIXvrqJaSp3tCZVqk6TN9vyp7oTwn/fwuzeyk2iRtJdrZhcUQYPyTpMjS5/wUoQEkaao
+ 6adg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=EqwkLCYo
-Subject: Re: [Buildroot] [PATCH] package/asterisk: bump to 20.7.0
+ header.a=rsa-sha256 header.s=google header.b=Kqj/X6Hd
+Subject: Re: [Buildroot] [PATCH 1/2] package/linux-headers: drop 6.7.x option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -116,100 +116,75 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/04/2024 09:48, Waldemar Brodkorb wrote:
-> See here for changes:
-> https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-20-current.md
+On 14/04/2024 16:16, Bernd Kuhls wrote:
+> The 6.7.x series is now EOL upstream, so drop the linux-headers option
+> and add legacy handling for it.
 > 
-> There is still an open issue reported upstream:
-> https://github.com/asterisk/asterisk/issues/671
-> 
-> But it seems it is not reproducible by the asterisk developers, so
-> update the package so others can make use of it.
-> 
-> Use the external pjsip package, instead of the bundled one.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-  Applied to master, thanks.
+  Applied both to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/asterisk/Config.in     |  2 ++
->   package/asterisk/asterisk.hash |  2 +-
->   package/asterisk/asterisk.mk   | 11 +++++++----
->   3 files changed, 10 insertions(+), 5 deletions(-)
+>   Config.in.legacy                     | 7 +++++++
+>   linux/linux.hash                     | 1 -
+>   package/linux-headers/Config.in.host | 5 -----
+>   3 files changed, 7 insertions(+), 6 deletions(-)
 > 
-> diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
-> index c52456f8fc..ba5a574042 100644
-> --- a/package/asterisk/Config.in
-> +++ b/package/asterisk/Config.in
-> @@ -10,6 +10,8 @@ config BR2_PACKAGE_ASTERISK
->   	select BR2_PACKAGE_LIBCURL
->   	select BR2_PACKAGE_LIBEDIT
->   	select BR2_PACKAGE_LIBILBC
-> +	select BR2_PACKAGE_LIBJWT
-> +	select BR2_PACKAGE_LIBPJSIP
->   	select BR2_PACKAGE_LIBXML2
->   	select BR2_PACKAGE_SQLITE
->   	select BR2_PACKAGE_UTIL_LINUX
-> diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-> index 246f4219aa..8cb5468249 100644
-> --- a/package/asterisk/asterisk.hash
-> +++ b/package/asterisk/asterisk.hash
-> @@ -1,5 +1,5 @@
->   # Locally computed
-> -sha256  9def260ac8745a5eac7aceabe1c22f84a283b7812f0eccd760f87ce9eb991d22  asterisk-20.5.2.tar.gz
-> +sha256  62adff44f5bc415627e16957e6bd528e1782a892e116ff261c46f96ca87c342b  asterisk-20.7.0.tar.gz
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 76af1da348..98a4125f4b 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,13 @@ endif
 >   
->   # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
->   # sha256 locally computed
-> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-> index d1f3ea82d3..33d2e78bcf 100644
-> --- a/package/asterisk/asterisk.mk
-> +++ b/package/asterisk/asterisk.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+>   comment "Legacy options removed in 2024.05"
 >   
-> -ASTERISK_VERSION = 20.5.2
-> +ASTERISK_VERSION = 20.7.0
->   # Use the github mirror: it's an official mirror maintained by Digium, and
->   # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
->   ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
-> @@ -27,7 +27,7 @@ ASTERISK_SELINUX_MODULES = asterisk
+> +config BR2_KERNEL_HEADERS_6_7
+> +	bool "kernel headers version 6.7.x are no longer supported"
+> +	select BR2_LEGACY
+> +	help
+> +	  Version 6.7.x of the Linux kernel headers are no longer
+> +	  maintained upstream and are now removed.
+> +
+>   config BR2_TARGET_TI_K3_IMAGE_GEN
+>   	bool "ti-k3-image-gen removed"
+>   	select BR2_LEGACY
+> diff --git a/linux/linux.hash b/linux/linux.hash
+> index 4fa9f701cd..d66bb54b5e 100644
+> --- a/linux/linux.hash
+> +++ b/linux/linux.hash
+> @@ -1,6 +1,5 @@
+>   # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+>   sha256  8d0c8936e3140a0fbdf511ad7a9f21121598f3656743898f47bb9052d37cff68  linux-6.8.1.tar.xz
+> -sha256  a9b99fb376f9fcd699c7c252aeef3bb5ba26280eb049711ac091b2eb2b487c03  linux-6.7.10.tar.xz
+>   sha256  23e3e7b56407250f5411bdab95763d0bc4e3a19dfa431d951df7eacabd61a2f4  linux-6.6.22.tar.xz
+>   sha256  d150d2d9d416877668d8b56f75759f166168d192419eefaa942ed67225cbec06  linux-6.1.82.tar.xz
+>   # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> index 4c3651450e..78ba644c95 100644
+> --- a/package/linux-headers/Config.in.host
+> +++ b/package/linux-headers/Config.in.host
+> @@ -48,10 +48,6 @@ config BR2_KERNEL_HEADERS_6_6
+>   	bool "Linux 6.6.x kernel headers"
+>   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6
 >   
->   # For patches 0002 and 0003
->   ASTERISK_AUTORECONF = YES
-> -ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson
-> +ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson -Ithird-party/libjwt
->   
->   ASTERISK_DEPENDENCIES = \
->   	host-asterisk \
-> @@ -35,6 +35,8 @@ ASTERISK_DEPENDENCIES = \
->   	jansson \
->   	libcurl \
->   	libedit \
-> +	libjwt \
-> +	libpjsip \
->   	libxml2 \
->   	sqlite \
->   	util-linux
-> @@ -89,10 +91,11 @@ ASTERISK_CONF_OPTS = \
->   	--with-jansson \
->   	--with-libcurl \
->   	--with-ilbc \
-> +	--with-libjwt="$(STAGING_DIR)/usr" \
->   	--with-libxml2 \
->   	--with-libedit="$(STAGING_DIR)/usr" \
-> -	--with-pjproject \
-> -	--with-pjproject-bundled \
-> +	--without-pjproject-bundled \
-> +	--with-pjproject="$(STAGING_DIR)/usr" \
->   	--with-sqlite3="$(STAGING_DIR)/usr" \
->   	--with-sounds-cache=$(ASTERISK_DL_DIR)
->   
+> -config BR2_KERNEL_HEADERS_6_7
+> -	bool "Linux 6.7.x kernel headers"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_7
+> -
+>   config BR2_KERNEL_HEADERS_6_8
+>   	bool "Linux 6.8.x kernel headers"
+>   	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_8
+> @@ -425,7 +421,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+>   	default "5.15.152"	if BR2_KERNEL_HEADERS_5_15
+>   	default "6.1.82"	if BR2_KERNEL_HEADERS_6_1
+>   	default "6.6.22"	if BR2_KERNEL_HEADERS_6_6
+> -	default "6.7.10"	if BR2_KERNEL_HEADERS_6_7
+>   	default "6.8.1"		if BR2_KERNEL_HEADERS_6_8
+>   	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+>   	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
