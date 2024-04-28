@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41158C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 14:18:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDB66C4345F
+	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 14:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26BA1400DF;
-	Sun, 28 Apr 2024 14:18:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BAFB40514;
+	Sun, 28 Apr 2024 14:22:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1y2LTaxOr8wG; Sun, 28 Apr 2024 14:18:33 +0000 (UTC)
+ id NKVoiYN4NUue; Sun, 28 Apr 2024 14:22:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA036400D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08F7640520
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA036400D0;
-	Sun, 28 Apr 2024 14:18:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08F7640520;
+	Sun, 28 Apr 2024 14:22:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DB6221BF5B4
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 14:18:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 41FFA1BF5B4
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 14:22:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C84E840147
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 14:18:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2ED64401DD
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 14:22:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZDMf2lW-frgf for <buildroot@lists.busybox.net>;
- Sun, 28 Apr 2024 14:18:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id h_vkbJPLwlEh for <buildroot@lists.busybox.net>;
+ Sun, 28 Apr 2024 14:22:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6DDED40025
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DDED40025
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6DDED40025
- for <buildroot@buildroot.org>; Sun, 28 Apr 2024 14:18:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1113AFF805;
- Sun, 28 Apr 2024 14:18:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s15MG-003NA5-0P;
- Sun, 28 Apr 2024 16:18:24 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B66740025
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B66740025
+ for <buildroot@buildroot.org>; Sun, 28 Apr 2024 14:22:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 55EA985E62; Sun, 28 Apr 2024 14:22:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Peter Seiderer via buildroot <buildroot@buildroot.org>
-References: <20240401112421.27763-1-ps.report@gmx.net>
-Date: Sun, 28 Apr 2024 16:18:24 +0200
-In-Reply-To: <20240401112421.27763-1-ps.report@gmx.net> (Peter Seiderer via
- buildroot's message of "Mon, 1 Apr 2024 13:24:21 +0200")
-Message-ID: <87ttjld0zz.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1] package/zic: fix host compile (needs
- CC/HOST_CONFIGURE_OPTS set)
+To: buildroot@buildroot.org
+Date: Sun, 28 Apr 2024 16:17:49 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 39643530f54e8ef0b7dc685b5a2259bf5935df63
+X-Git-Newrev: b300a1ed8548c96fd1448d1a9c819f443d15e341
+X-Patchwork-Hint: ignore
+Message-Id: <20240428142249.55EA985E62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/zic: fix host
+ compile (needs CC/HOST_CONFIGURE_OPTS set)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,51 +59,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, Kadambini Nema <kadambini.nema@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>, Martin Bark <martin@barkynet.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Seiderer via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b300a1ed8548c96fd1448d1a9c819f443d15e341
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Host compile of zic needs CC defined since version bump to 2024a (given by
- > HOST_CONFIGURE_OPTS).
+zic needs CC defined since version bump to 2024a, and upstream commit
+c3ebd8e98846 (make Makefile more compatible with POSIX).
 
- > 	$ diff -ru build/host-zic-2023c/Makefile build/host-zic-2024a/Makefile
- >   --- build/host-zic-2023c/Makefile	2024-04-01 12:44:14.515490354 +0200
- >   +++ build/host-zic-2024a/Makefile	2024-04-01 13:10:50.138333771 +0200
- >   [...]
- >   +# To affect how this Makefile works, you can run a shell script like this:
- >   +#
- >   +#	#!/bin/sh
- >   +#	make CC='gcc -std=gnu11' "$@"
- >   +#
- >   +# This example script is appropriate for a pre-2017 GNU/Linux system
- >   +# where a non-default setting is needed to support this package's use of C99.
- >   +#
- >   +# Alternatively, you can simply edit this Makefile to tailor the following
- >   +# macro definitions.
- >   +
- >   +###############################################################################
- >   +# Start of macros that one plausibly might want to tailor.
- >   [...]
- >   -cc=		cc
- >   -CC=		$(cc) -DTZDIR='"$(TZDIR)"'
- >   [...]
+Use HOST_CONFIGURE_OPTS which contains the appropriate host CC setting,
+as well as our host CFLAGS and LDFLAGS.
 
- > Fixes:
+Fixes:
 
- >   c99 -O1   -c -o zic.o zic.c
- >   make[2]: c99: No such file or directory
+  c99 -O1   -c -o zic.o zic.c
+  make[2]: c99: No such file or directory
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998@free.fr: reword commit log, refer to upstream commit]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 9139159d3917d8d5f1db0c7e84562c0ba4922048)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/zic/zic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2024.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 95fa1eaa96..8abcec9360 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -12,7 +12,7 @@ ZIC_LICENSE = Public domain
+ ZIC_LICENSE_FILES = LICENSE
+ 
+ define HOST_ZIC_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) zic
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) zic
+ endef
+ 
+ define HOST_ZIC_INSTALL_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
