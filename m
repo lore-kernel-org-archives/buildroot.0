@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30737C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 12:12:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0362C4345F
+	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 12:12:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F34760669;
-	Sun, 28 Apr 2024 12:12:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E51C6065D;
+	Sun, 28 Apr 2024 12:12:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HccDwr3G4-lX; Sun, 28 Apr 2024 12:12:33 +0000 (UTC)
+ id IBK7gYxtGbod; Sun, 28 Apr 2024 12:12:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3235760621
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 715C760663
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3235760621;
-	Sun, 28 Apr 2024 12:12:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5BADA1BF399
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 12:12:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 715C760663;
+	Sun, 28 Apr 2024 12:12:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E77A1BF399
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 12:12:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4877960621
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 12:12:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07E0B40555
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 12:12:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WXFY_0f89g10 for <buildroot@lists.busybox.net>;
- Sun, 28 Apr 2024 12:12:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oMDtPPvzCGBW for <buildroot@lists.busybox.net>;
+ Sun, 28 Apr 2024 12:12:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F50C605F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFD4340552
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F50C605F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFD4340552
  for <buildroot@buildroot.org>; Sun, 28 Apr 2024 12:12:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6239786127; Sun, 28 Apr 2024 12:12:30 +0000 (UTC)
+ id 448098613F; Sun, 28 Apr 2024 12:12:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Apr 2024 14:11:15 +0200
+Date: Sun, 28 Apr 2024 14:07:55 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: a2ce536193d828f023b7315263143d2aa119a87d
-X-Git-Newrev: 39643530f54e8ef0b7dc685b5a2259bf5935df63
+X-Git-Oldrev: 8a9ca36ec6246742931ec3fffc84b069c0113e90
+X-Git-Newrev: a2ce536193d828f023b7315263143d2aa119a87d
 X-Patchwork-Hint: ignore
-Message-Id: <20240428121230.6239786127@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] utils/check-package:
- don't ignore check-package
+Message-Id: <20240428121230.448098613F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] system: expose
+ BR2_ROOTFS_POST_SCRIPT_ARGS for PRE_BUILD scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,50 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39643530f54e8ef0b7dc685b5a2259bf5935df63
+commit: https://git.buildroot.net/buildroot/commit/?id=a2ce536193d828f023b7315263143d2aa119a87d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Commit 32934b526b64 (utils/checkpackagelib: check for Upstream trailers)
-introduced a new python module to check Upstream tags in patch files. In
-doing so, it introduced a flake8 coding style issue. That was not caught
-when applying the change, and neither was it caught by our daily checks,
-because the .checkpackagefile was regenerated right just in the next
-commit, to apply ignore patterns to existing patch files.
+Currently, we pass BR2_ROOTFS_POST_SCRIPT_ARGS to each of the scripts in
+BR2_ROOTFS_PRE_BUILD_SCRIPT, but the option is not exposed in menuconfig
+when only pre-build scripts are used.
 
-It is a bit sad that one of our checks does not itself passes all our
-checks...
+Add the pre-build scripts to the condition exposing the extra args
+option.
 
-Fix that trivial issue now.
-
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 81bb14a93535da0fbf02ca715ac9ebdca3486732)
+(cherry picked from commit 96b3295ca1fc00973fa2754dafb80fe6db23f48f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                | 1 -
- utils/checkpackagelib/lib_patch.py | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ system/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index e678d64498..829fd7d0f1 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1471,4 +1471,3 @@ support/scripts/setlocalversion Shellcheck
- support/testing/tests/core/post-build.sh Shellcheck
- support/testing/tests/package/test_opkg/post-build.sh Shellcheck
- support/testing/tests/utils/test_get_developers/0001-package-binutils-change-.mk.patch NumberedSubject Upstream
--utils/checkpackagelib/lib_patch.py Flake8
-diff --git a/utils/checkpackagelib/lib_patch.py b/utils/checkpackagelib/lib_patch.py
-index 1909d3acd0..b01d28a7e7 100644
---- a/utils/checkpackagelib/lib_patch.py
-+++ b/utils/checkpackagelib/lib_patch.py
-@@ -62,6 +62,7 @@ class Sob(_CheckFunction):
-                     "({}#_format_and_licensing_of_the_package_patches)"
-                     .format(self.filename, self.url_to_manual)]
+diff --git a/system/Config.in b/system/Config.in
+index 33ca69b933..e590a8a3ff 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -695,12 +695,13 @@ config BR2_ROOTFS_POST_IMAGE_SCRIPT
  
-+
- class Upstream(_CheckFunction):
-     UPSTREAM_ENTRY = re.compile(r"^Upstream: .*$")
+ config BR2_ROOTFS_POST_SCRIPT_ARGS
+ 	string "Extra arguments passed to custom scripts"
+-	depends on BR2_ROOTFS_POST_BUILD_SCRIPT != "" \
++	depends on BR2_ROOTFS_PRE_BUILD_SCRIPT != "" \
++	        || BR2_ROOTFS_POST_BUILD_SCRIPT != "" \
+ 		|| BR2_ROOTFS_POST_FAKEROOT_SCRIPT != "" \
+ 		|| BR2_ROOTFS_POST_IMAGE_SCRIPT != ""
+ 	help
+-	  Pass these additional arguments to each post-build or
+-	  post-image scripts.
++	  Pass these additional arguments to each pre-build, post-build,
++	  post-fakeroot and post-image scripts.
  
+ 	  Note that all the post-build and post-image scripts will be
+ 	  passed the same set of arguments, you can not pass different
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
