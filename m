@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6BDFC4345F
-	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 18:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56839C4345F
+	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 18:28:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6F3B60679;
-	Sun, 28 Apr 2024 18:28:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2688C60666;
+	Sun, 28 Apr 2024 18:28:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mN_g0D5lBqwU; Sun, 28 Apr 2024 18:28:00 +0000 (UTC)
+ id 1MFj0Vh_ZJv9; Sun, 28 Apr 2024 18:28:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D6CD6074A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7F9960761
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D6CD6074A;
-	Sun, 28 Apr 2024 18:28:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F15201BF344
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:27:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7F9960761;
+	Sun, 28 Apr 2024 18:28:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 26A031BF5A8
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C717340105
+ by smtp1.osuosl.org (Postfix) with ESMTP id E063881F6E
  for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 18:27:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QefQhwtNtM5Y for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NraZ6GdMTw60 for <buildroot@lists.busybox.net>;
  Sun, 28 Apr 2024 18:27:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1B3F4016F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 010FF81FC4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1B3F4016F
- for <buildroot@buildroot.org>; Sun, 28 Apr 2024 18:27:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 010FF81FC4
+ for <buildroot@buildroot.org>; Sun, 28 Apr 2024 18:27:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3CD6861F6; Sun, 28 Apr 2024 18:27:41 +0000 (UTC)
+ id EC230861F5; Sun, 28 Apr 2024 18:27:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 28 Apr 2024 20:12:55 +0200
+Date: Sun, 28 Apr 2024 20:19:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2a2a1c3831fc8b6224097e2e1ecc299da3516c34
-X-Git-Newrev: 9c592ecd3e599598856668736468b3ee54d8ceee
+X-Git-Oldrev: 917078b57af0bca879bfa34be0f86cd9a0629534
+X-Git-Newrev: 517f032992158d8f3aaee7d68cb417adf3d8fac7
 X-Patchwork-Hint: ignore
-Message-Id: <20240428182741.C3CD6861F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 10, 15}.x / 6.{1, 6, 8}.x series
+Message-Id: <20240428182741.EC230861F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/visionfive2: add spi-nor image
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,80 +65,142 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c592ecd3e599598856668736468b3ee54d8ceee
+commit: https://git.buildroot.net/buildroot/commit/?id=517f032992158d8f3aaee7d68cb417adf3d8fac7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Builds the spi-nor.img together with the sdcard.img.
+Readme is extended with SPI NOR flash writing instructions
+and recovery.
+
+The spi-nor.img layout is based on the following document:
+
+https://doc-en.rvspace.org/VisionFive2/Boot_UG/JH7110_SDK/boot_address_allocation.html
+
+Signed-off-by: Lukasz Tekieli <tekieli.lukasz@gmail.com>
+[Arnout: extend readme.txt with paragraph that either boot mode works.]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ board/visionfive2/genimage_spi-nor.cfg | 36 ++++++++++++++++++++++++++++++++++
+ board/visionfive2/post-image.sh        |  4 ++++
+ board/visionfive2/readme.txt           | 28 ++++++++++++++++++++++----
+ configs/visionfive2_defconfig          |  3 +--
+ 4 files changed, 65 insertions(+), 6 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 2767b709d4..e8dc79c822 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/board/visionfive2/genimage_spi-nor.cfg b/board/visionfive2/genimage_spi-nor.cfg
+new file mode 100644
+index 0000000000..8b1d13989a
+--- /dev/null
++++ b/board/visionfive2/genimage_spi-nor.cfg
+@@ -0,0 +1,36 @@
++flash nor-16M-256 {
++	pebsize = 4K
++	minimum-io-unit-size = 256
++	numpebs = 4096
++}
++
++image spi-nor.img {
++	size = 16M
++
++	flash {
++	}
++
++	flashtype = "nor-16M-256"
++
++	partition spl {
++		image = "u-boot-spl.bin.normal.out"
++		offset = 0K
++		size = 512K
++	}
++
++	partition uboot-env {
++		offset = 960K
++		size = 64K
++	}
++
++	partition uboot {
++		image = "u-boot.itb"
++		offset = 1M
++		size = 4M
++	}
++
++	partition reserved-data {
++		offset = 6M
++		size = 10M
++	}
++}
+diff --git a/board/visionfive2/post-image.sh b/board/visionfive2/post-image.sh
+new file mode 100755
+index 0000000000..3da106dc26
+--- /dev/null
++++ b/board/visionfive2/post-image.sh
+@@ -0,0 +1,4 @@
++#!/bin/bash
++
++support/scripts/genimage.sh -c board/visionfive2/genimage.cfg
++support/scripts/genimage.sh -c board/visionfive2/genimage_spi-nor.cfg
+diff --git a/board/visionfive2/readme.txt b/board/visionfive2/readme.txt
+index 85be1d5dfc..cc4fece6e9 100644
+--- a/board/visionfive2/readme.txt
++++ b/board/visionfive2/readme.txt
+@@ -12,12 +12,27 @@ How to build
+ $ make visionfive2_defconfig
+ $ make
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.8.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.8.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index d66bb54b5e..7154fc75bf 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  8d0c8936e3140a0fbdf511ad7a9f21121598f3656743898f47bb9052d37cff68  linux-6.8.1.tar.xz
--sha256  23e3e7b56407250f5411bdab95763d0bc4e3a19dfa431d951df7eacabd61a2f4  linux-6.6.22.tar.xz
--sha256  d150d2d9d416877668d8b56f75759f166168d192419eefaa942ed67225cbec06  linux-6.1.82.tar.xz
-+sha256  9e723232d603ab45ebf043c34714c48f277ab195c29abcb8472f2a4c3a5a1995  linux-6.8.6.tar.xz
-+sha256  639e50060e3c8f23ed017cb10cfeacc6ba88ff5583812bb76859b4cc6a128291  linux-6.6.27.tar.xz
-+sha256  d3d3c8c44f0f0a870a95bd2823f9d91979d1aa6f266da5d8cccd0c4b15e3115b  linux-6.1.86.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  f0805225f4a5b24d0bba9302c2c2f261c04f737ac5dd931da9b112e9f3e4a47e  linux-5.15.152.tar.xz
--sha256  84cf30223239ec3333a5f7b2a7fba2042bba70d1582a139f7543956af871ad80  linux-5.10.213.tar.xz
--sha256  3599d5959a403e64be407d7f05e56cb270d6ddd154e89a596609919ab1e2e366  linux-5.4.272.tar.xz
-+sha256  c85859b86d2e6d1fc91ca1be8b44f24a9b5bb9f86869b04a8665a3a6559126e4  linux-5.15.155.tar.xz
-+sha256  879ca159c34ea9d3a6775f292cc59c2d3931d57dca00f0bebe2675ea0c82c6a9  linux-5.10.215.tar.xz
-+sha256  eac7b421a43cd46a3dbebf7c85d075faa7e164d80d215d31fcd35544b6f79ed4  linux-5.4.274.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  95ec94c4ab8f46d8a54430893f9bd653c46b0f1587d216818aa8f52fd313de69  linux-4.19.310.tar.xz
-+sha256  a394fa5ffe321ee43dae9cccc724572f49fbb289875d39ea695adf712e51f74a  linux-4.19.312.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 78ba644c95..5fe34456de 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -415,13 +415,13 @@ endchoice
++Once the build process is finished you will have two images
++in the output/images/ directory:
++- sdcard.img
++- spi-nor.img
++
++How to write the SPI NOR flash
++=============================
++
++If you have a booting device use u-boot and tftp:
++
++  # tftpboot 0x82000000 spi-nor.img
++  # sf probe
++  # sf update 0x82000000 0x0 {filesize}
++
++Otherwise, follow the recovery instruction:
++
++https://doc-en.rvspace.org/VisionFive2/Quick_Start_Guide/VisionFive2_SDK_QSG/recovering_bootloader%20-%20vf2.html
++
+ How to write the SD card
+ ========================
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.19.310"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.272"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.213"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.152"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.82"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.22"	if BR2_KERNEL_HEADERS_6_6
--	default "6.8.1"		if BR2_KERNEL_HEADERS_6_8
-+	default "4.19.312"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.274"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.215"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.155"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.86"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.27"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.8.6"		if BR2_KERNEL_HEADERS_6_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+ Copy the bootable "sdcard.img" onto an SD card with "dd":
+ 
+   $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+@@ -27,7 +42,12 @@ Preparing the board
+ 
+ Connect a TTL UART cable to pin 6 (GND), 8 (TX) and 10 (RX).
+ 
+-Change the boot mode pins to SD card booting (RGPIO_0=1, GRPIO_1=0):
++Use the correct mode for booting:
++- SD card RGPIO_0=1, GRPIO_1=0
++- SPI NOR flash RGPIO_0=1, GRPIO_1=1
++
++Note that Buildroot puts the bootloader both in SPI NOR and on the SD card,
++so after flashing as instructed above, either boot mode should work.
+ 
+ https://doc-en.rvspace.org/VisionFive2/Quick_Start_Guide/VisionFive2_SDK_QSG/boot_mode_settings.html
+ 
+diff --git a/configs/visionfive2_defconfig b/configs/visionfive2_defconfig
+index ff738cc3a3..69c44dfbdd 100644
+--- a/configs/visionfive2_defconfig
++++ b/configs/visionfive2_defconfig
+@@ -1,8 +1,7 @@
+ BR2_riscv=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/visionfive2/overlay"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/visionfive2/genimage.cfg"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/visionfive2/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.2"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
