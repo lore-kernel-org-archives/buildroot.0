@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 973B6C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 19:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F414DC4345F
+	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 19:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6775D60647;
-	Sun, 28 Apr 2024 19:46:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C09EC606E2;
+	Sun, 28 Apr 2024 19:46:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WO38Nf5WqZVt; Sun, 28 Apr 2024 19:46:48 +0000 (UTC)
+ id uYy_IDC-QfBL; Sun, 28 Apr 2024 19:46:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E2E460665
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0EF0606B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E2E460665;
-	Sun, 28 Apr 2024 19:46:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7F8211BF870
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0EF0606B3;
+	Sun, 28 Apr 2024 19:46:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E03D1BF3DB
  for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7828740433
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A5A481F94
  for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:46:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yDjnuhCgHToH for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Oie7qvsBrFZx for <buildroot@lists.busybox.net>;
  Sun, 28 Apr 2024 19:46:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C77A4016F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1A1181F71
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8C77A4016F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1A1181F71
  for <buildroot@buildroot.org>; Sun, 28 Apr 2024 19:46:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7565186230; Sun, 28 Apr 2024 19:46:30 +0000 (UTC)
+ id 9822886238; Sun, 28 Apr 2024 19:46:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Apr 2024 21:33:25 +0200
+Date: Sun, 28 Apr 2024 21:38:14 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: e14d5578d603cfbc776c94fbbf8f318d307c52ac
-X-Git-Newrev: 00da8187cd21a5526ae521d537b69a7cbe984e5e
+X-Git-Oldrev: 9b689f8f5ccb7c6d3c7437d9ae94de9b911346a3
+X-Git-Newrev: 3c2463c9cf50dd32930f0d577a5863da99eb2921
 X-Patchwork-Hint: ignore
-Message-Id: <20240428194630.7565186230@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/lxc: fix m68k
- build with gcc 12
+Message-Id: <20240428194630.9822886238@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add ed
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,170 +65,134 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00da8187cd21a5526ae521d537b69a7cbe984e5e
+commit: https://git.buildroot.net/buildroot/commit/?id=3c2463c9cf50dd32930f0d577a5863da99eb2921
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Fix the following m68k build failure with gcc 12:
-
-In file included from ../src/lxc/syscall_wrappers.h:19,
-                 from ../src/lxc/mount_utils.h:15,
-                 from ../src/lxc/conf.h:24,
-                 from ../src/lxc/log.h:19,
-                 from ../src/lxc/storage/btrfs.c:20:
-../src/lxc/syscall_numbers.h:423:25: error: macro names must be identifiers
-  423 |                 #define -1
-      |                         ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/f40a517eba86838b11b4b1d6a8a05b8233a3394d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f6453835d69f6a5bc9c2794464c3e4599f6c9fa0)
+(cherry picked from commit dc101babfd5fd36062b8c7551e41cace84192a70)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-src-lxc-syscall_numbers.h-drop-define-1.patch | 133 +++++++++++++++++++++
- 1 file changed, 133 insertions(+)
+ DEVELOPERS                               |  1 +
+ support/testing/tests/package/test_ed.py | 98 ++++++++++++++++++++++++++++++++
+ 2 files changed, 99 insertions(+)
 
-diff --git a/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index bb1dfb023a..a38b681a8a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1771,6 +1771,7 @@ F:	support/testing/tests/package/test_cryptsetup/
+ F:	support/testing/tests/package/test_ddrescue.py
+ F:	support/testing/tests/package/test_ddrescue/
+ F:	support/testing/tests/package/test_dos2unix.py
++F:	support/testing/tests/package/test_ed.py
+ F:	support/testing/tests/package/test_file.py
+ F:	support/testing/tests/package/test_file/
+ F:	support/testing/tests/package/test_fluidsynth.py
+diff --git a/support/testing/tests/package/test_ed.py b/support/testing/tests/package/test_ed.py
 new file mode 100644
-index 0000000000..4a944e35b1
+index 0000000000..eee5f8c4fc
 --- /dev/null
-+++ b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
-@@ -0,0 +1,133 @@
-+From 82fe01821cd5cb8548598d7d93b07d6ef3f6b604 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 30 Mar 2024 16:50:46 +0100
-+Subject: [PATCH] src/lxc/syscall_numbers.h: drop define -1
++++ b/support/testing/tests/package/test_ed.py
+@@ -0,0 +1,98 @@
++import os
 +
-+Drop "#define -1" to avoid the following m68k build failure with gcc 12:
++import infra.basetest
 +
-+In file included from ../src/lxc/syscall_wrappers.h:19,
-+                 from ../src/lxc/mount_utils.h:15,
-+                 from ../src/lxc/conf.h:24,
-+                 from ../src/lxc/log.h:19,
-+                 from ../src/lxc/storage/btrfs.c:20:
-+../src/lxc/syscall_numbers.h:423:25: error: macro names must be identifiers
-+  423 |                 #define -1
-+      |                         ^
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/f40a517eba86838b11b4b1d6a8a05b8233a3394d
++class TestEd(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_ED=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/lxc/lxc/commit/82fe01821cd5cb8548598d7d93b07d6ef3f6b604
-+---
-+ src/lxc/syscall_numbers.h | 13 -------------
-+ 1 file changed, 13 deletions(-)
++    def run_ed_cmds(self, ed_cmds):
++        cmd = "ed <<EOF\n"
++        cmd += "\n".join(ed_cmds)
++        cmd += "\nEOF"
++        self.assertRunOk(cmd)
 +
-+diff --git a/src/lxc/syscall_numbers.h b/src/lxc/syscall_numbers.h
-+index 58840a5981..5e659d1b81 100644
-+--- a/src/lxc/syscall_numbers.h
-++++ b/src/lxc/syscall_numbers.h
-+@@ -53,7 +53,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_keyctl 219
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_keyctl not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -92,7 +91,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_memfd_create 279
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_memfd_create not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -129,7 +127,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_pivot_root 41
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_pivot_root not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -166,7 +163,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_setns 268
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_setns not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -203,7 +199,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_sethostname 161
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_sethostname not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -272,7 +267,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_signalfd4 74
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_signalfd4 not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -309,7 +303,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_unshare 97
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_unshare not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -346,7 +339,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_bpf 280
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_bpf not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -383,7 +375,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_faccessat 48
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_faccessat not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -440,7 +431,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_seccomp 277
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_seccomp not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -477,7 +467,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_gettid 178
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_gettid not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -518,7 +507,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_execveat 281
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_execveat not defined for your architecture"
-+ 	#endif
-+ #endif
-+@@ -759,7 +747,6 @@
-+ 	#elif defined __loongarch64
-+ 		#define __NR_personality 92
-+ 	#else
-+-		#define -1
-+ 		#warning "__NR_personality not defined for your architecture"
-+ 	#endif
-+ #endif
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # We check the program can run. This also check we have the
++        # actual GNU ed, rather than the Busybox ed, which does not
++        # recognize the --version option.
++        self.assertRunOk("ed --version")
++
++        test_fname = "test.txt"
++        input_text_lines = [
++            "Hello World",
++            "Embedded Linux is Hard."
++        ]
++        output_expected_text = [
++            "Hello Buildroot",
++            "---------------",
++            "Making Embedded Linux Easy."
++        ]
++
++        # We define few "ed" command sequences, creating and editing a
++        # text file. The final output of this sequence is expected to
++        # match the expected text previously defined.
++        create_file = ["a"]
++        create_file += input_text_lines
++        create_file += [
++            ".",
++            f"w {test_fname}",
++            "q"
++        ]
++
++        edit_file = [
++            f"r {test_fname}",
++            "1",
++            "s/World/Buildroot/",
++            "2",
++            "s/is Hard/Easy/",
++            "s/^/Making /",
++            "w",
++            "q"
++        ]
++
++        insert_txt = [
++            f"r {test_fname}",
++            "2",
++            "i",
++            "This is a new line",
++            ".",
++            "w",
++            "q"
++        ]
++
++        change_txt = [
++            f"r {test_fname}",
++            "2",
++            "c",
++            "---------------",
++            ".",
++            "w"
++            "q"
++        ]
++
++        # We execute all "ed" command batches.
++        ed_cmd_batches = [
++            create_file,
++            edit_file,
++            insert_txt,
++            change_txt
++        ]
++        for ed_cmd_batch in ed_cmd_batches:
++            self.run_ed_cmds(ed_cmd_batch)
++
++        # The final test file should contain the expected text.
++        out, ret = self.emulator.run(f"cat {test_fname}")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out, output_expected_text)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
