@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B788C4345F
-	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 19:35:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E684AC4345F
+	for <buildroot@archiver.kernel.org>; Sun, 28 Apr 2024 19:36:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C8518123E;
-	Sun, 28 Apr 2024 19:35:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B19C181583;
+	Sun, 28 Apr 2024 19:36:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pnN6bmNZJgWL; Sun, 28 Apr 2024 19:35:42 +0000 (UTC)
+ id rQ1TsO1g1dXY; Sun, 28 Apr 2024 19:36:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19F41814B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1C0F814B8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19F41814B8;
-	Sun, 28 Apr 2024 19:35:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8704E1BF3DB
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:35:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1C0F814B8;
+	Sun, 28 Apr 2024 19:36:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 461F31BF3DB
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:36:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72E0C40657
- for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:35:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31A7E40429
+ for <buildroot@lists.busybox.net>; Sun, 28 Apr 2024 19:36:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CysG4R4VoWB8 for <buildroot@lists.busybox.net>;
- Sun, 28 Apr 2024 19:35:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0lgS71WXivrn for <buildroot@lists.busybox.net>;
+ Sun, 28 Apr 2024 19:36:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F1B9C402F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1B9C402F8
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F1B9C402F8
- for <buildroot@buildroot.org>; Sun, 28 Apr 2024 19:35:38 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B0D1460003;
- Sun, 28 Apr 2024 19:35:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1BD204016F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BD204016F
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1BD204016F
+ for <buildroot@buildroot.org>; Sun, 28 Apr 2024 19:36:21 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 15D5C240002;
+ Sun, 28 Apr 2024 19:36:18 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s1AJD-006Vuy-03;
- Sun, 28 Apr 2024 21:35:35 +0200
+ (envelope-from <peter@korsgaard.com>) id 1s1AJu-006Vwh-13;
+ Sun, 28 Apr 2024 21:36:18 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240331164354.94483-1-fontaine.fabrice@gmail.com>
-Date: Sun, 28 Apr 2024 21:35:35 +0200
-In-Reply-To: <20240331164354.94483-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 31 Mar 2024 18:43:54 +0200")
-Message-ID: <8734r5cmbc.fsf@dell.be.48ers.dk>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20240331065931.12195-1-christian@aperture.us>
+ <Zgqygdv46BMeq29-@landeda>
+Date: Sun, 28 Apr 2024 21:36:18 +0200
+In-Reply-To: <Zgqygdv46BMeq29-@landeda> (Yann E. MORIN's message of "Mon, 1
+ Apr 2024 15:11:29 +0200")
+Message-ID: <87y18xb7pp.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/giflib: fix host build without
- convert
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/containerd: bump version to
+ v1.7.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,26 +70,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Do not build docs for host-giflib to avoid the following build failure
- > without convert on host raised since bump to version 5.2.2 in commit
- > f98239dada59270efe19de9d9fae50ec9ab9d28c and
- > https://sourceforge.net/p/giflib/code/ci/d565f6fa04be8973425bd7cd3f169908ac9e95c2:
+ > Christian, All,
+ > On 2024-03-30 23:59 -0700, Christian Stewart via buildroot spake thusly:
+ >> Updates containerd to v1.7.14.
+ >> 
+ >> Highlights
+ >> 
+ >> Fix various timing issues with docker pusher
+ >> Register imagePullThroughput and count with MiB
+ >> Move high volume event logs to Trace level
+ >> 
+ >> Container Runtime Interface (CRI)
+ >> 
+ >> Handle pod transition states gracefully while listing pod stats
+ >> 
+ >> Runtime
+ >> 
+ >> Update runc-shim to process exec exits before init
+ >> 
+ >> https://github.com/containerd/containerd/releases/tag/1.7.14
+ >> 
+ >> Signed-off-by: Christian Stewart <christian@aperture.us>
 
- > convert ../pic/gifgrid.gif -resize 50x50 giflib-logo.gif
- > make[2]: convert: No such file or directory
-
- > Fixes: f98239dada59270efe19de9d9fae50ec9ab9d28c
- >  - http://autobuild.buildroot.org/results/04dd54f5060881cb8aa030de34edb4ceea863fa6
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Applied to master, thanks.
 
 Committed to 2024.02.x, thanks.
 
