@@ -1,102 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48380C4345F
-	for <buildroot@archiver.kernel.org>; Mon, 29 Apr 2024 15:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CD54C4345F
+	for <buildroot@archiver.kernel.org>; Mon, 29 Apr 2024 17:05:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9F2940146;
-	Mon, 29 Apr 2024 15:38:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0EedZSzbZLcZ; Mon, 29 Apr 2024 15:38:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0310402BC
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F0310402BC;
-	Mon, 29 Apr 2024 15:38:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 270F41BF419
- for <buildroot@lists.busybox.net>; Mon, 29 Apr 2024 15:38:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 203C881CA7
- for <buildroot@lists.busybox.net>; Mon, 29 Apr 2024 15:38:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1550181374;
+	Mon, 29 Apr 2024 17:05:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 15vVB5HomsBj for <buildroot@lists.busybox.net>;
- Mon, 29 Apr 2024 15:38:37 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::534; helo=mail-pg1-x534.google.com;
- envelope-from=gsmecher@threespeedlogic.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9ED8980E84
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ED8980E84
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com
- [IPv6:2607:f8b0:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9ED8980E84
- for <buildroot@buildroot.org>; Mon, 29 Apr 2024 15:38:36 +0000 (UTC)
-Received: by mail-pg1-x534.google.com with SMTP id
- 41be03b00d2f7-5e42b4bbfa4so2802704a12.1
- for <buildroot@buildroot.org>; Mon, 29 Apr 2024 08:38:36 -0700 (PDT)
+ id zPjDy8wiQk9G; Mon, 29 Apr 2024 17:05:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27EAC81396
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27EAC81396;
+	Mon, 29 Apr 2024 17:05:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 635D51BF215
+ for <buildroot@lists.busybox.net>; Mon, 29 Apr 2024 17:05:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5DDB1600CC
+ for <buildroot@lists.busybox.net>; Mon, 29 Apr 2024 17:05:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OVC8eCtcqqzG for <buildroot@lists.busybox.net>;
+ Mon, 29 Apr 2024 17:05:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12d; helo=mail-lf1-x12d.google.com;
+ envelope-from=bobrofon@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DA308600CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA308600CA
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
+ [IPv6:2a00:1450:4864:20::12d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DA308600CA
+ for <buildroot@buildroot.org>; Mon, 29 Apr 2024 17:05:03 +0000 (UTC)
+Received: by mail-lf1-x12d.google.com with SMTP id
+ 2adb3069b0e04-51acb95b892so5814494e87.2
+ for <buildroot@buildroot.org>; Mon, 29 Apr 2024 10:05:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714405115; x=1715009915;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=tANiMishe/mYcEjgwuhXrLxVZUPsQ3pPEGw0rmPqlic=;
- b=iLxDVxMJs8Zok9NmLSH8oWJWQ7wgQf8jqo0rSvJqohfQT09zHijoa03t0Je2Y07h62
- TT/Y0U365wpVzRkiDrlIAqliMhKWqOfkKzYZPBjaqIGn5Bt/bCdERq6nibhta0H9tpg7
- xsIEKCHtyQ/ZOgGBJauh+7lYTtuSdeUAOAhmBGewYc1qpwPq+XE1M0hVXzGRr0D057Di
- aa+80fgLfd5t38TpG3wKoGNlm1aRMWwfFx/Nest5B0VwJO/W0iGx5bW41U9ReLTD0O/n
- UIcmmn0XKWCSVib2dGZmGM43ypiumxmLXVTqQ9DQwx07QsIjyO0mAfo+uTyJcS8L+Ctx
- 9E7Q==
-X-Gm-Message-State: AOJu0YzCJMwCP+4qiqsY8c3SWsMy8/aFHdgpUmeOlRD/orRwHCY3dRh+
- /krfTVmBjp9g6TEHHwDsX5RGaRQGzArFDAZnhG9Rzgb8fu20IzqLbD6+gj1UWVkIPz9+mMtq0RP
- xJ2g=
-X-Google-Smtp-Source: AGHT+IF686eiyQJMa4JTIGU/zpRWGMbmqy60aAnOb3Jm2Ae7bQBGuUX0sbPdvIFWFIPbNoDRH5sWPw==
-X-Received: by 2002:a05:6a20:438f:b0:1ad:8335:1a45 with SMTP id
- i15-20020a056a20438f00b001ad83351a45mr14350683pzl.55.1714405115243; 
- Mon, 29 Apr 2024 08:38:35 -0700 (PDT)
-Received: from [192.168.0.172] (d172-218-135-26.bchsia.telus.net.
- [172.218.135.26]) by smtp.gmail.com with ESMTPSA id
- p38-20020a056a0026e600b006f3f0c79aa4sm3976853pfw.51.2024.04.29.08.38.34
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 29 Apr 2024 08:38:34 -0700 (PDT)
-Message-ID: <63379d62-658b-12a9-1e17-bb18675ca168@threespeedlogic.com>
-Date: Mon, 29 Apr 2024 08:38:34 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
+ d=1e100.net; s=20230601; t=1714410301; x=1715015101;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=cq8Mfj0H3SRvJSO1s/6CI8rcsO/Juxnukuv3HCdHoa0=;
+ b=QaoGHGnk0UFgxaTuHO0Fx3v25wwRxN54d96Jz+fA7Pbc3kEqyJHK8GcgNysJjPrzIi
+ R8C8oJq62f/6bvslOwTx/MT1M+ZMmJr0zkjpbj1NsDaD+TGCp119D+8y3l1tRRe0gnNj
+ rO4xTzgdLgJVzJhgJYrm7EJXOcrZoAOjY8LgDz5IVCd1QJOU5XudElFAHIQrIAGOgVA8
+ /3U4DVfUPoRUZLSA+YmSqiLekx7KSbdsGO7LD9ANCvoHBfEX0BHMfr2eb/mY3MEaO+Kx
+ 1TfHQmvAzXJGBNZMDYdQVcKdQS+DYRnhB1ngjs0w1COOuCTR45wu6gGBWBEjxvA2uxrs
+ udvw==
+X-Gm-Message-State: AOJu0YyHL9oKW3rxk1FV4T11g7tO99fc6lKGl+fvrumx0Xl3dh0RdV31
+ XMcfrFxC1Bo1UcWdl1uVy0lQtlM5YsaYoqnVmX+Wav42h8a1HvNsSXVXGQ==
+X-Google-Smtp-Source: AGHT+IGku2Tos/g/zMjS+YtGk/M4j/RJnqt+MG/AtxDmI2j6NtnM6jzZOfI3EInfr/mL7FEPyoJfiw==
+X-Received: by 2002:a19:9106:0:b0:51b:1e76:4ea9 with SMTP id
+ t6-20020a199106000000b0051b1e764ea9mr9388811lfd.4.1714410301070; 
+ Mon, 29 Apr 2024 10:05:01 -0700 (PDT)
+Received: from nibiru.. ([2a00:1370:8186:6f6:6cad:b799:adf2:268c])
+ by smtp.gmail.com with ESMTPSA id
+ t8-20020a199108000000b00515b1b2c17csm4226326lfd.262.2024.04.29.10.04.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 29 Apr 2024 10:05:00 -0700 (PDT)
+From: Sergey Bobrenok <bobrofon@gmail.com>
 To: buildroot@buildroot.org
-References: <20240418222607.1487698-1-gsmecher@threespeedlogic.com>
-From: Graeme Smecher <gsmecher@threespeedlogic.com>
-In-Reply-To: <20240418222607.1487698-1-gsmecher@threespeedlogic.com>
+Date: Mon, 29 Apr 2024 20:04:41 +0300
+Message-ID: <20240429170441.996821-1-bobrofon@gmail.com>
+X-Mailer: git-send-email 2.44.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=threespeedlogic-com.20230601.gappssmtp.com; s=20230601; t=1714405115;
- x=1715009915; darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=tANiMishe/mYcEjgwuhXrLxVZUPsQ3pPEGw0rmPqlic=;
- b=qWwxb9pUBbmV5etw/xT+446xoaWWoYPFOdrSbuXkXqEQgHJnMdSi+xZNc9N+VBSw7k
- xN4+atfajYXkr11viSN5o/TuMQK99qVkZq7l52cbJH65xhScVW3dOwp4uBu+pVOkDogM
- UvM5ARytuTfngNPPPPpb7Lx0Wpblm6X/HYWKaS8L9nFHa6xm8JEwcuDQDap/Sj9/kRA2
- 3ZmpLEO6F8bKvpuNdlDQ3+PAD+/tttBmMbBqrwjMWsTNnchAQrrMoPOtf3IQw7KlwcvC
- iTdZHkbaRvabVgv6J3NBuR9ZGt0n0fCbbEyPbGA0G5nTlFRvE7RczbAPVEaVLDVoGu0q
- 0Fbg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=threespeedlogic.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1714410301; x=1715015101; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=cq8Mfj0H3SRvJSO1s/6CI8rcsO/Juxnukuv3HCdHoa0=;
+ b=GZCBK/oE+EVVox8aDYX624vI68xPwa5f8sWM2lS7CYGNrtZffPl9Qs8kSVGVGMl/pF
+ hfqjGO43dNNgBUIEkPpzJH9hLKSD6zT+qLS9BxpZuXEYdY+RAsAOAEF0MLd8TcnNq5LU
+ 8dphS8kuGLh290oRrsxFp7tchtgb89KtKBs8D5KoK9MUGqxxHB/uANcwWZ+ixHNJyolP
+ jPWmR6UXrJJdCAdlR+Ug4qQjU4Ecioozo/nJfZr6tqqiA4BK4vYA4MWbCP/ivCCqzf2E
+ C1IQJ94NdhYiCNfQOutS8S//elfUdgPAc0I4t1hoEZC/ImrswLA2P+Bdw2HinKLbsJkz
+ 5ndg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=threespeedlogic-com.20230601.gappssmtp.com
- header.i=@threespeedlogic-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=qWwxb9pU
-Subject: Re: [Buildroot] [RFC PATCH 1/1] jupyterlab: new package
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=GZCBK/oE
+Subject: [Buildroot] [PATCH 1/1] package/sdbus-cpp: bump to version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,46 +100,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
- Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Sergey Bobrenok <bobrofon@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Changelog:
+https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v2.0.0
 
-On 4/18/24 15:26, Graeme Smecher wrote:
-> JupyterLab is a "web-based interactive development environment for
-> notebooks, code, and data. Its flexible interface allows users to
-> configure and arrange workflows in data science, scientific computing,
-> computational journalism, and machine learning." [1]
-> 
-> Why BuildRoot? JupyterLab makes a great
-> interactive front-end for embedded instrumentation:
-> they replace web-based interfaces, encourage open scriptability, and
-> bridge the gap between interactive and scripted use-cases. High-end lab
-> gear (think: oscilloscopes) generally comes with some of these ingredients
-> but it's usually vendor-specific, often half-hearted, and usually
-> inherit its ergonomics from IEEE-488 (no thanks).
-> 
-> For example: JupyterLab is already used in Xilinx's PYNQ framework [2],
-> which uses Yocto as a distribution builder.
+Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
+---
+ package/sdbus-cpp/sdbus-cpp.hash | 2 +-
+ package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I haven't heard any comments back yet - I realize this is a large patchset
-and is going to take some time to settle out.
+diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
+index b5ca7ecdff..1350fc6781 100644
+--- a/package/sdbus-cpp/sdbus-cpp.hash
++++ b/package/sdbus-cpp/sdbus-cpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  577986929f911320fb9ef6a3e2badd464dc38411ebc25d2966f5cb85c39f0897  sdbus-cpp-1.5.0.tar.gz
++sha256  88af4569161a0d0192f0f4a94582a1af4e75722499d06984fb7f91f638f5afb3  sdbus-cpp-2.0.0.tar.gz
+ sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
+ sha256  a1c9e75e25d8f2ce18017c88978edab2f0dbc7814ad0697d4ff2e5e59959f657  COPYING-LGPL-Exception
+diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
+index 18fc6a88a9..675ed1fa1f 100644
+--- a/package/sdbus-cpp/sdbus-cpp.mk
++++ b/package/sdbus-cpp/sdbus-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDBUS_CPP_VERSION = 1.5.0
++SDBUS_CPP_VERSION = 2.0.0
+ SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
+ SDBUS_CPP_INSTALL_STAGING = YES
+ SDBUS_CPP_DEPENDENCIES = host-pkgconf systemd
+-- 
+2.44.0
 
-Comments welcome. Please also let me know if there's anyone missing from CC
-who should weigh in.
-
-There is some earlier discussion here:
-
-	https://lore.kernel.org/buildroot/ed1bff77-5934-f09a-ab39-ca4eea6b4b12@threespeedlogic.com/T/
-
-best,
-Graeme
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
