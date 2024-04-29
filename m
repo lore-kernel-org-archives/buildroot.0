@@ -1,76 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71FC3C4345F
-	for <buildroot@archiver.kernel.org>; Mon, 29 Apr 2024 08:57:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27FDEC25B10
+	for <buildroot@archiver.kernel.org>; Mon, 29 Apr 2024 09:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12B8740342;
-	Mon, 29 Apr 2024 08:57:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4677181255;
+	Mon, 29 Apr 2024 09:39:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NO-SPgx54QB2; Mon, 29 Apr 2024 08:57:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x67FwIDEiGpz; Mon, 29 Apr 2024 09:39:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53BCA40439
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96B4181214
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53BCA40439;
-	Mon, 29 Apr 2024 08:57:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DD6F91BF315
- for <buildroot@lists.busybox.net>; Mon, 29 Apr 2024 08:57:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96B4181214;
+	Mon, 29 Apr 2024 09:39:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 812A61BF32A
+ for <buildroot@lists.busybox.net>; Mon, 29 Apr 2024 09:39:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6E1240439
- for <buildroot@lists.busybox.net>; Mon, 29 Apr 2024 08:57:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7944081214
+ for <buildroot@lists.busybox.net>; Mon, 29 Apr 2024 09:39:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hArSTNP_QYM2 for <buildroot@lists.busybox.net>;
- Mon, 29 Apr 2024 08:57:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C166A402C3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C166A402C3
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C166A402C3
- for <buildroot@buildroot.org>; Mon, 29 Apr 2024 08:57:03 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id A74C213F846;
- Mon, 29 Apr 2024 10:56:55 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 29 Apr 2024 10:56:55 +0200
-Date: Mon, 29 Apr 2024 10:56:55 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <Zi9g19sCVPBE8Oin@landeda>
-References: <20240428024210.11950-1-vfazio@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 38CTv8Dk6uVu for <buildroot@lists.busybox.net>;
+ Mon, 29 Apr 2024 09:39:14 +0000 (UTC)
+X-Greylist: delayed 764 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 29 Apr 2024 09:39:13 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9D954811FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D954811FC
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.248;
+ helo=lelv0143.ext.ti.com; envelope-from=p-bhagat@ti.com; receiver=<UNKNOWN> 
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9D954811FC
+ for <buildroot@buildroot.org>; Mon, 29 Apr 2024 09:39:13 +0000 (UTC)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+ by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 43T9QRNp122381;
+ Mon, 29 Apr 2024 04:26:27 -0500
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+ by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 43T9QR4n110336
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Mon, 29 Apr 2024 04:26:27 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 29
+ Apr 2024 04:26:27 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 29 Apr 2024 04:26:27 -0500
+Received: from localhost (ula0502350.dhcp.ti.com [172.24.227.38])
+ by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 43T9QQxv128393;
+ Mon, 29 Apr 2024 04:26:27 -0500
+To: <buildroot@buildroot.org>
+Date: Mon, 29 Apr 2024 14:53:26 +0530
+Message-ID: <20240429092326.3247116-1-p-bhagat@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240428024210.11950-1-vfazio@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1714381020;
- bh=YEbBrby2kjy9ZYKdNz8i+b9SCBy+ACCZk48YJNJmWiM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ikQS7tP3Nnjd+Cq5ixWW2UgXhsVSI2Q16Da+8ECtTUElU91SYWreFJaEJ0eFG4MVR
- dQ2qqohhgvqDhr5eS6SPvBoQGxnd/cbiTfsgYKwd+kxIsariGPXNr1xCqV+kRcUYig
- IoANyVyqKk3q0pK9SHlwl8y78iyu7CJfSCGceOePHQtGElHlCQw4z2Fw+TbY4aATcm
- GuKToN2PjHm/brqZV6elpduWtPn6kNUX/CtjABpizaukLLQD0kgZ4QzVmTSoGe20mI
- lbwtnne/e3Y/k+bX4GciIDPx7iKdBOGyzbitLxGFUnk2indInUV6Xoh0LZ3V8N7BAY
- jxl6QmQICRZEQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ikQS7tP3
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: drop unnecessary
- patches
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=ti.com; s=ti-com-17Q1; t=1714382787;
+ bh=80WBb4CP5Jfdy2M2J6utZ2gJ9gCJ/NBeDuI7mzovAB4=;
+ h=From:To:CC:Subject:Date;
+ b=MVONry4MzRma1YKX9TItCUqeD2R25lReLF/+yJZYhkSAtC40og+vvd0SrgwcABtQL
+ p+cBaWP1YqDSq8She2WXn4WsYGCdq5X+g+vJF7JSCU3w1UNEHCaTZ5i3YnTL16QbiG
+ 39Jzl1jqH9AkXzMTSLGb2dy5RWq8camrduoZVQzE=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=MVONry4M
+Subject: [Buildroot] [RFC,
+ 1/1] configs/am62x-sk: Add fragment for TI tree integration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,583 +89,677 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+From: Paresh Bhagat via buildroot <buildroot@buildroot.org>
+Reply-To: Paresh Bhagat <p-bhagat@ti.com>
+Cc: Chirag Shilwant <c-shilwant@ti.com>, Gyan Gupta <g-gupta@ti.com>,
+ Xuanhao Shi <X15000177@gmail.com>, Paresh Bhagat <p-bhagat@ti.com>,
+ Syed Mohammed Khasim <khasim@ti.com>, Sai Sree Kartheek Adivi <s-adivi@ti.com>,
+ Anand Gadiyar <gadiyar@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Vincent, All, 
+This commit introduces a new fragment config aimed at integration of TI trees
+into the existing configuration for am62x-sk. The fragment config is designed 
+to be merged with the current ti_am62x_sk_defconfig, enabling transition from 
+mainline to TI versions for U-boot and kernel.
 
-Thanks for tackling this python mess!
+The fragment config will be merged with existing ti_my_am62x_sk_defconfig
+using merge-config.sh script present in support/kconfig using following
+command.
 
-On 2024-04-27 21:42 -0500, Vincent Fazio spake thusly:
-> Patches 0004 and 0009 relied upon environment variables that were no
-> longer set after python3-010-distutils-cross-compilation-support.patch
-> was dropped during the transition to Python 3.4 in commit 0d327c26.
+./support/kconfig/merge-config.sh configs/ti_am62x_sk_defconfig configs/ti_am62x_sk.config
 
-0004 and 0009 use the _python_sysroot env variable, and it is still set
-in the environment when we build python packages:
+It effectively changes uboot and kernel source from mainline version to TI 
+version hosted here
 
-    $ git grep -n _python_sysroot
-    package/pkg-python.mk:45:       _python_sysroot=$(STAGING_DIR) \ 
+https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/?h=ti-linux-6.1.y
+https://git.ti.com/cgit/ti-u-boot/ti-u-boot/?h=ti-u-boot-2023.04
 
-It is totally possible that those patches are no longer needed for other
-reasons, though, but not that one.
+Furthermore, as ti-uboot 2023.04 is used, kernel Image and dtb is expected 
+in rootfs/boot/ and rootfs/boot/dtb/ti respectively. So add a new post-build
+script to copy these files to desired location. 
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Paresh Bhagat <p-bhagat@ti.com>
+---
+ board/ti/common/am6xx/genimage_ti.cfg       |  28 ++
+ board/ti/common/am6xx/post-build-ti.sh      |  33 ++
+ board/ti/common/am6xx/ti_arm64_prune.config | 485 ++++++++++++++++++++
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.hash   |   1 +
+ boot/uboot/uboot.hash                       |   1 +
+ configs/ti_am62x_sk.config                  |  24 +
+ linux/linux.hash                            |   1 +
+ 7 files changed, 573 insertions(+)
+ create mode 100644 board/ti/common/am6xx/genimage_ti.cfg
+ create mode 100755 board/ti/common/am6xx/post-build-ti.sh
+ create mode 100644 board/ti/common/am6xx/ti_arm64_prune.config
+ create mode 100644 configs/ti_am62x_sk.config
 
-> Patches 0010 and 0026 (see [0] [1] [2]) can be removed due to a fix
-> introduced in 3.7 [3].
-> 
-> Patch 0029 can be dropped since commit 3fed4245 removed the dependency
-> on a host provided python to build host-python3.
-> 
-> [0]: https://github.com/python/cpython/issues/67096
-> [1]: https://github.com/python/cpython/issues/75894
-> [2]: https://github.com/python/cpython/issues/66338
-> [3]: https://github.com/python/cpython/commit/14086cfc5eed8c5e78342d79e5db87a135d75fa8
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-> ---
->  .checkpackageignore                           | 51 +++++++-------
->  ...y-header-paths-for-cross-compilation.patch | 69 -------------------
->  ...ok-in-usr-lib-termcap-for-libraries.patch} |  0
->  ...h => 0005-Don-t-add-multiarch-paths.patch} |  0
->  ...> 0006-Abort-on-failed-module-build.patch} |  0
->  ...tch => 0007-Serial-ioctl-workaround.patch} |  0
->  ...0008-Add-an-option-to-disable-pydoc.patch} |  0
->  ...09-Add-an-option-to-disable-lib2to3.patch} |  0
->  ...e-shebang-of-Python-scripts-for-cros.patch | 35 ----------
->  ...ption-to-disable-the-sqlite3-module.patch} |  0
->  ...ig.sh.in-ensure-sed-invocations-only.patch | 67 ------------------
->  ...-an-option-to-disable-the-tk-module.patch} |  0
->  ...option-to-disable-the-curses-module.patch} |  0
->  ...0013-Add-an-option-to-disable-expat.patch} |  0
->  ...Add-an-option-to-disable-CJK-codecs.patch} |  0
->  ...> 0015-Add-an-option-to-disable-NIS.patch} |  0
->  ...dd-an-option-to-disable-unicodedata.patch} |  0
->  ... 0017-Add-an-option-to-disable-IDLE.patch} |  0
->  ...18-Add-an-option-to-disable-decimal.patch} |  0
->  ...n-to-disable-the-ossaudiodev-module.patch} |  0
->  ...n-option-to-disable-openssl-support.patch} |  0
->  ...tion-to-disable-the-readline-module.patch} |  0
->  ...o-disable-zlib-bzip2-and-xz-modules.patch} |  0
->  ...dd-an-option-to-disable-uuid-module.patch} |  0
->  ...p-CC-print-multiarch-output-for-mus.patch} |  0
->  ...on-to-disable-the-berkeleydb-module.patch} |  0
->  ...ng-doesn-t-set-errno-when-encryptio.patch} |  0
->  ...thon-config.sh-don-t-reassign-prefix.patch | 53 --------------
->  ...ss-compiles-when-host-and-target-us.patch} |  0
->  ...-fix-building-on-older-distributions.patch | 47 -------------
->  30 files changed, 23 insertions(+), 299 deletions(-)
->  delete mode 100644 package/python3/0004-Adjust-library-header-paths-for-cross-compilation.patch
->  rename package/python3/{0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch => 0004-Don-t-look-in-usr-lib-termcap-for-libraries.patch} (100%)
->  rename package/python3/{0006-Don-t-add-multiarch-paths.patch => 0005-Don-t-add-multiarch-paths.patch} (100%)
->  rename package/python3/{0007-Abort-on-failed-module-build.patch => 0006-Abort-on-failed-module-build.patch} (100%)
->  rename package/python3/{0008-Serial-ioctl-workaround.patch => 0007-Serial-ioctl-workaround.patch} (100%)
->  rename package/python3/{0011-Add-an-option-to-disable-pydoc.patch => 0008-Add-an-option-to-disable-pydoc.patch} (100%)
->  rename package/python3/{0012-Add-an-option-to-disable-lib2to3.patch => 0009-Add-an-option-to-disable-lib2to3.patch} (100%)
->  delete mode 100644 package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
->  rename package/python3/{0013-Add-option-to-disable-the-sqlite3-module.patch => 0010-Add-option-to-disable-the-sqlite3-module.patch} (100%)
->  delete mode 100644 package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch
->  rename package/python3/{0014-Add-an-option-to-disable-the-tk-module.patch => 0011-Add-an-option-to-disable-the-tk-module.patch} (100%)
->  rename package/python3/{0015-Add-an-option-to-disable-the-curses-module.patch => 0012-Add-an-option-to-disable-the-curses-module.patch} (100%)
->  rename package/python3/{0016-Add-an-option-to-disable-expat.patch => 0013-Add-an-option-to-disable-expat.patch} (100%)
->  rename package/python3/{0017-Add-an-option-to-disable-CJK-codecs.patch => 0014-Add-an-option-to-disable-CJK-codecs.patch} (100%)
->  rename package/python3/{0018-Add-an-option-to-disable-NIS.patch => 0015-Add-an-option-to-disable-NIS.patch} (100%)
->  rename package/python3/{0019-Add-an-option-to-disable-unicodedata.patch => 0016-Add-an-option-to-disable-unicodedata.patch} (100%)
->  rename package/python3/{0020-Add-an-option-to-disable-IDLE.patch => 0017-Add-an-option-to-disable-IDLE.patch} (100%)
->  rename package/python3/{0021-Add-an-option-to-disable-decimal.patch => 0018-Add-an-option-to-disable-decimal.patch} (100%)
->  rename package/python3/{0022-Add-an-option-to-disable-the-ossaudiodev-module.patch => 0019-Add-an-option-to-disable-the-ossaudiodev-module.patch} (100%)
->  rename package/python3/{0023-Add-an-option-to-disable-openssl-support.patch => 0020-Add-an-option-to-disable-openssl-support.patch} (100%)
->  rename package/python3/{0024-Add-an-option-to-disable-the-readline-module.patch => 0021-Add-an-option-to-disable-the-readline-module.patch} (100%)
->  rename package/python3/{0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch => 0022-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch} (100%)
->  rename package/python3/{0027-Add-an-option-to-disable-uuid-module.patch => 0023-Add-an-option-to-disable-uuid-module.patch} (100%)
->  rename package/python3/{0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch => 0024-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch} (100%)
->  rename package/python3/{0030-Add-an-option-to-disable-the-berkeleydb-module.patch => 0025-Add-an-option-to-disable-the-berkeleydb-module.patch} (100%)
->  rename package/python3/{0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch => 0026-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch} (100%)
->  delete mode 100644 package/python3/0026-python-config.sh-don-t-reassign-prefix.patch
->  rename package/python3/{0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch => 0027-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch} (100%)
->  delete mode 100644 package/python3/0028-fix-building-on-older-distributions.patch
-> 
-> diff --git a/.checkpackageignore b/.checkpackageignore
-> index 1b336ce7a3..eec47fdaa4 100644
-> --- a/.checkpackageignore
-> +++ b/.checkpackageignore
-> @@ -1045,34 +1045,29 @@ package/python-ws4py/0001-Adjust-ws4py-for-Python-3.7-syntax.patch lib_patch.Ups
->  package/python3/0001-Make-the-build-of-pyc-files-conditional.patch lib_patch.Upstream
->  package/python3/0002-Disable-buggy_getaddrinfo-configure-test-when-cross-.patch lib_patch.Upstream
->  package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch lib_patch.Upstream
-> -package/python3/0004-Adjust-library-header-paths-for-cross-compilation.patch lib_patch.Upstream
-> -package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch lib_patch.Upstream
-> -package/python3/0006-Don-t-add-multiarch-paths.patch lib_patch.Upstream
-> -package/python3/0007-Abort-on-failed-module-build.patch lib_patch.Upstream
-> -package/python3/0008-Serial-ioctl-workaround.patch lib_patch.Upstream
-> -package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch lib_patch.Upstream
-> -package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch lib_patch.Upstream
-> -package/python3/0011-Add-an-option-to-disable-pydoc.patch lib_patch.Upstream
-> -package/python3/0012-Add-an-option-to-disable-lib2to3.patch lib_patch.Upstream
-> -package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch lib_patch.Upstream
-> -package/python3/0014-Add-an-option-to-disable-the-tk-module.patch lib_patch.Upstream
-> -package/python3/0015-Add-an-option-to-disable-the-curses-module.patch lib_patch.Upstream
-> -package/python3/0016-Add-an-option-to-disable-expat.patch lib_patch.Upstream
-> -package/python3/0017-Add-an-option-to-disable-CJK-codecs.patch lib_patch.Upstream
-> -package/python3/0018-Add-an-option-to-disable-NIS.patch lib_patch.Upstream
-> -package/python3/0019-Add-an-option-to-disable-unicodedata.patch lib_patch.Upstream
-> -package/python3/0020-Add-an-option-to-disable-IDLE.patch lib_patch.Upstream
-> -package/python3/0021-Add-an-option-to-disable-decimal.patch lib_patch.Upstream
-> -package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch lib_patch.Upstream
-> -package/python3/0023-Add-an-option-to-disable-openssl-support.patch lib_patch.Upstream
-> -package/python3/0024-Add-an-option-to-disable-the-readline-module.patch lib_patch.Upstream
-> -package/python3/0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch lib_patch.Upstream
-> -package/python3/0026-python-config.sh-don-t-reassign-prefix.patch lib_patch.Upstream
-> -package/python3/0027-Add-an-option-to-disable-uuid-module.patch lib_patch.Upstream
-> -package/python3/0028-fix-building-on-older-distributions.patch lib_patch.Upstream
-> -package/python3/0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch lib_patch.Upstream
-> -package/python3/0030-Add-an-option-to-disable-the-berkeleydb-module.patch lib_patch.Upstream
-> -package/python3/0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch lib_patch.Upstream
-> +package/python3/0004-Don-t-look-in-usr-lib-termcap-for-libraries.patch lib_patch.Upstream
-> +package/python3/0005-Don-t-add-multiarch-paths.patch lib_patch.Upstream
-> +package/python3/0006-Abort-on-failed-module-build.patch lib_patch.Upstream
-> +package/python3/0007-Serial-ioctl-workaround.patch lib_patch.Upstream
-> +package/python3/0008-Add-an-option-to-disable-pydoc.patch lib_patch.Upstream
-> +package/python3/0009-Add-an-option-to-disable-lib2to3.patch lib_patch.Upstream
-> +package/python3/0010-Add-option-to-disable-the-sqlite3-module.patch lib_patch.Upstream
-> +package/python3/0011-Add-an-option-to-disable-the-tk-module.patch lib_patch.Upstream
-> +package/python3/0012-Add-an-option-to-disable-the-curses-module.patch lib_patch.Upstream
-> +package/python3/0013-Add-an-option-to-disable-expat.patch lib_patch.Upstream
-> +package/python3/0014-Add-an-option-to-disable-CJK-codecs.patch lib_patch.Upstream
-> +package/python3/0015-Add-an-option-to-disable-NIS.patch lib_patch.Upstream
-> +package/python3/0016-Add-an-option-to-disable-unicodedata.patch lib_patch.Upstream
-> +package/python3/0017-Add-an-option-to-disable-IDLE.patch lib_patch.Upstream
-> +package/python3/0018-Add-an-option-to-disable-decimal.patch lib_patch.Upstream
-> +package/python3/0019-Add-an-option-to-disable-the-ossaudiodev-module.patch lib_patch.Upstream
-> +package/python3/0020-Add-an-option-to-disable-openssl-support.patch lib_patch.Upstream
-> +package/python3/0021-Add-an-option-to-disable-the-readline-module.patch lib_patch.Upstream
-> +package/python3/0022-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch lib_patch.Upstream
-> +package/python3/0023-Add-an-option-to-disable-uuid-module.patch lib_patch.Upstream
-> +package/python3/0024-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch lib_patch.Upstream
-> +package/python3/0025-Add-an-option-to-disable-the-berkeleydb-module.patch lib_patch.Upstream
-> +package/python3/0026-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch lib_patch.Upstream
->  package/qemu/0001-tests-fp-disable-fp-bench-build-by-default.patch lib_patch.Upstream
->  package/qemu/0002-softmmu-qemu-seccomp.c-add-missing-header-for-CLONE_.patch lib_patch.Upstream
->  package/qextserialport/0001-Create-a-main-include-file-QExtSerialPort.patch lib_patch.Upstream
-> diff --git a/package/python3/0004-Adjust-library-header-paths-for-cross-compilation.patch b/package/python3/0004-Adjust-library-header-paths-for-cross-compilation.patch
-> deleted file mode 100644
-> index 9a55d2582d..0000000000
-> --- a/package/python3/0004-Adjust-library-header-paths-for-cross-compilation.patch
-> +++ /dev/null
-> @@ -1,69 +0,0 @@
-> -From 132b9dca3bb4d4682f7e318648ce11e1abb31b62 Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Date: Wed, 23 Dec 2015 11:33:14 +0100
-> -Subject: [PATCH] Adjust library/header paths for cross-compilation
-> -
-> -When cross-compiling third-party extensions, the get_python_inc() or
-> -get_python_lib() can be called, to return the path to headers or
-> -libraries. However, they use the sys.prefix of the host Python, which
-> -returns incorrect paths when cross-compiling (paths pointing to host
-> -headers and libraries).
-> -
-> -In order to fix this, we introduce the _python_sysroot, _python_prefix
-> -and _python_exec_prefix variables, that allow to override these
-> -values, and get correct header/library paths when cross-compiling
-> -third-party Python modules.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> -Refresh for 3.10.0
-> ----
-> - Lib/distutils/command/build_ext.py |  5 ++++-
-> - Lib/sysconfig.py                   | 15 +++++++++++----
-> - 2 files changed, 15 insertions(+), 5 deletions(-)
-> -
-> -diff --git a/Lib/distutils/command/build_ext.py b/Lib/distutils/command/build_ext.py
-> -index f287b34998..298234d6a1 100644
-> ---- a/Lib/distutils/command/build_ext.py
-> -+++ b/Lib/distutils/command/build_ext.py
-> -@@ -234,7 +234,10 @@ def finalize_options(self):
-> -         if (sysconfig.get_config_var('Py_ENABLE_SHARED')):
-> -             if not sysconfig.python_build:
-> -                 # building third party extensions
-> --                self.library_dirs.append(sysconfig.get_config_var('LIBDIR'))
-> -+                libdir = sysconfig.get_config_var('LIBDIR')
-> -+                if "_python_sysroot" in os.environ:
-> -+                    libdir = os.environ.get("_python_sysroot") + libdir
-> -+                self.library_dirs.append(libdir)
-> -             else:
-> -                 # building python standard extensions
-> -                 self.library_dirs.append('.')
-> -diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
-> -index ebe3711827..6328ec41af 100644
-> ---- a/Lib/sysconfig.py
-> -+++ b/Lib/sysconfig.py
-> -@@ -168,10 +168,17 @@ def joinuser(*args):
-> - _PY_VERSION = sys.version.split()[0]
-> - _PY_VERSION_SHORT = f'{sys.version_info[0]}.{sys.version_info[1]}'
-> - _PY_VERSION_SHORT_NO_DOT = f'{sys.version_info[0]}{sys.version_info[1]}'
-> --_PREFIX = os.path.normpath(sys.prefix)
-> --_BASE_PREFIX = os.path.normpath(sys.base_prefix)
-> --_EXEC_PREFIX = os.path.normpath(sys.exec_prefix)
-> --_BASE_EXEC_PREFIX = os.path.normpath(sys.base_exec_prefix)
-> -+if "_python_sysroot" in os.environ:
-> -+    _sysroot=os.environ.get('_python_sysroot')
-> -+    _PREFIX = os.path.normpath(_sysroot + os.environ.get('_python_prefix'))
-> -+    _EXEC_PREFIX = os.path.normpath(_sysroot + os.environ.get('_python_exec_prefix'))
-> -+    _BASE_PREFIX = _PREFIX
-> -+    _BASE_EXEC_PREFIX = _EXEC_PREFIX
-> -+else:
-> -+    _PREFIX = os.path.normpath(sys.prefix)
-> -+    _EXEC_PREFIX = os.path.normpath(sys.exec_prefix)
-> -+    _BASE_PREFIX = os.path.normpath(sys.base_prefix)
-> -+    _BASE_EXEC_PREFIX = os.path.normpath(sys.base_exec_prefix)
-> - _CONFIG_VARS = None
-> - _USER_BASE = None
-> - 
-> --- 
-> -2.34.1
-> -
-> diff --git a/package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch b/package/python3/0004-Don-t-look-in-usr-lib-termcap-for-libraries.patch
-> similarity index 100%
-> rename from package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch
-> rename to package/python3/0004-Don-t-look-in-usr-lib-termcap-for-libraries.patch
-> diff --git a/package/python3/0006-Don-t-add-multiarch-paths.patch b/package/python3/0005-Don-t-add-multiarch-paths.patch
-> similarity index 100%
-> rename from package/python3/0006-Don-t-add-multiarch-paths.patch
-> rename to package/python3/0005-Don-t-add-multiarch-paths.patch
-> diff --git a/package/python3/0007-Abort-on-failed-module-build.patch b/package/python3/0006-Abort-on-failed-module-build.patch
-> similarity index 100%
-> rename from package/python3/0007-Abort-on-failed-module-build.patch
-> rename to package/python3/0006-Abort-on-failed-module-build.patch
-> diff --git a/package/python3/0008-Serial-ioctl-workaround.patch b/package/python3/0007-Serial-ioctl-workaround.patch
-> similarity index 100%
-> rename from package/python3/0008-Serial-ioctl-workaround.patch
-> rename to package/python3/0007-Serial-ioctl-workaround.patch
-> diff --git a/package/python3/0011-Add-an-option-to-disable-pydoc.patch b/package/python3/0008-Add-an-option-to-disable-pydoc.patch
-> similarity index 100%
-> rename from package/python3/0011-Add-an-option-to-disable-pydoc.patch
-> rename to package/python3/0008-Add-an-option-to-disable-pydoc.patch
-> diff --git a/package/python3/0012-Add-an-option-to-disable-lib2to3.patch b/package/python3/0009-Add-an-option-to-disable-lib2to3.patch
-> similarity index 100%
-> rename from package/python3/0012-Add-an-option-to-disable-lib2to3.patch
-> rename to package/python3/0009-Add-an-option-to-disable-lib2to3.patch
-> diff --git a/package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch b/package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
-> deleted file mode 100644
-> index eff8fc7694..0000000000
-> --- a/package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -From 2439bd2ed5dbdd7e5fda15adefd0f6f1b047ec1b Mon Sep 17 00:00:00 2001
-> -From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> -Date: Wed, 23 Dec 2015 11:44:30 +0100
-> -Subject: [PATCH] Do not adjust the shebang of Python scripts for
-> - cross-compilation
-> -
-> -The copy_scripts() method in distutils copies the scripts listed in
-> -the setup file and adjusts the first line to refer to the current
-> -Python interpreter. When cross-compiling, this means that the adjusted
-> -shebang refers to the host Python interpreter.
-> -
-> -This patch modifies copy_scripts() to preserve the shebang when
-> -cross-compilation is detected.
-> -
-> -Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> ----
-> - Lib/distutils/command/build_scripts.py | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/Lib/distutils/command/build_scripts.py b/Lib/distutils/command/build_scripts.py
-> -index ccc70e6465..d6d54195c1 100644
-> ---- a/Lib/distutils/command/build_scripts.py
-> -+++ b/Lib/distutils/command/build_scripts.py
-> -@@ -91,7 +91,7 @@ def copy_scripts(self):
-> -                     adjust = True
-> -                     post_interp = match.group(1) or b''
-> - 
-> --            if adjust:
-> -+            if adjust and not '_python_sysroot' in os.environ:
-> -                 log.info("copying and adjusting %s -> %s", script,
-> -                          self.build_dir)
-> -                 updated_files.append(outfile)
-> --- 
-> -2.34.1
-> -
-> diff --git a/package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch b/package/python3/0010-Add-option-to-disable-the-sqlite3-module.patch
-> similarity index 100%
-> rename from package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch
-> rename to package/python3/0010-Add-option-to-disable-the-sqlite3-module.patch
-> diff --git a/package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch b/package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch
-> deleted file mode 100644
-> index f26ee85b61..0000000000
-> --- a/package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch
-> +++ /dev/null
-> @@ -1,67 +0,0 @@
-> -From 55ef5552e4ee60266e3299f253bec3b13785e585 Mon Sep 17 00:00:00 2001
-> -From: Peter Korsgaard <peter@korsgaard.com>
-> -Date: Thu, 20 Nov 2014 13:24:59 +0100
-> -Subject: [PATCH] Misc/python-config.sh.in: ensure sed invocations only match
-> - beginning of strings
-> -
-> -The build/real prefix handling using sed breaks if build != real and the
-> -standard include / lib directories are used ($prefix/include and $prefix/lib).
-> -
-> -E.G.
-> -
-> -prefix_build="/usr", libdir="$prefix/lib", includedir="$prefix/include".
-> -
-> -If this gets installed with make DESTDIR="/foo" install, then we end up with
-> -prefix_real = prefix = "/foo/usr" as expected, but
-> -includedir="/foo/foo/usr/include" and libdir="/foo/foo/usr/lib" because of
-> -the double sed invocation (prefix is already expanded).  Work around it by
-> -ensuring we only match the beginning of the string.
-> -
-> -Submitted upstream: http://bugs.python.org/issue22907
-> -
-> -Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ----
-> - Misc/python-config.sh.in | 13 +++++++------
-> - 1 file changed, 7 insertions(+), 6 deletions(-)
-> -
-> -diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
-> -index 2602fe24c0..a1bc3cd5f7 100644
-> ---- a/Misc/python-config.sh.in
-> -+++ b/Misc/python-config.sh.in
-> -@@ -24,18 +24,19 @@ installed_prefix ()
-> -     echo $RESULT
-> - }
-> - 
-> -+prefix_build="@prefix@"
-> - prefix_real=$(installed_prefix "$0")
-> - 
-> - # Use sed to fix paths from their built-to locations to their installed-to
-> - # locations. Keep prefix & exec_prefix using their original values in case
-> - # they are referenced in other configure variables, to prevent double
-> - # substitution, issue #22140.
-> --prefix="@prefix@"
-> --exec_prefix="@exec_prefix@"
-> -+prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
-> -+exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
-> - exec_prefix_real=${prefix_real}
-> --includedir=$(echo "@includedir@" | sed "s#$prefix#$prefix_real#")
-> --libdir=$(echo "@libdir@" | sed "s#$prefix#$prefix_real#")
-> --CFLAGS=$(echo "@CFLAGS@" | sed "s#$prefix#$prefix_real#")
-> -+includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
-> -+libdir=$(echo "@libdir@" | sed "s#^$prefix_build#$prefix_real#")
-> -+CFLAGS=$(echo "@CFLAGS@" | sed "s#^$prefix_build#$prefix_real#")
-> - VERSION="@VERSION@"
-> - LIBM="@LIBM@"
-> - LIBC="@LIBC@"
-> -@@ -49,7 +50,7 @@ OPT="@OPT@"
-> - PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
-> - LDVERSION="@LDVERSION@"
-> - LIBDEST=${prefix_real}/lib/python${VERSION}
-> --LIBPL=$(echo "@LIBPL@" | sed "s#$prefix#$prefix_real#")
-> -+LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
-> - SO="@EXT_SUFFIX@"
-> - PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-> - INCDIR="-I$includedir/python${VERSION}${ABIFLAGS}"
-> --- 
-> -2.34.1
-> -
-> diff --git a/package/python3/0014-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0011-Add-an-option-to-disable-the-tk-module.patch
-> similarity index 100%
-> rename from package/python3/0014-Add-an-option-to-disable-the-tk-module.patch
-> rename to package/python3/0011-Add-an-option-to-disable-the-tk-module.patch
-> diff --git a/package/python3/0015-Add-an-option-to-disable-the-curses-module.patch b/package/python3/0012-Add-an-option-to-disable-the-curses-module.patch
-> similarity index 100%
-> rename from package/python3/0015-Add-an-option-to-disable-the-curses-module.patch
-> rename to package/python3/0012-Add-an-option-to-disable-the-curses-module.patch
-> diff --git a/package/python3/0016-Add-an-option-to-disable-expat.patch b/package/python3/0013-Add-an-option-to-disable-expat.patch
-> similarity index 100%
-> rename from package/python3/0016-Add-an-option-to-disable-expat.patch
-> rename to package/python3/0013-Add-an-option-to-disable-expat.patch
-> diff --git a/package/python3/0017-Add-an-option-to-disable-CJK-codecs.patch b/package/python3/0014-Add-an-option-to-disable-CJK-codecs.patch
-> similarity index 100%
-> rename from package/python3/0017-Add-an-option-to-disable-CJK-codecs.patch
-> rename to package/python3/0014-Add-an-option-to-disable-CJK-codecs.patch
-> diff --git a/package/python3/0018-Add-an-option-to-disable-NIS.patch b/package/python3/0015-Add-an-option-to-disable-NIS.patch
-> similarity index 100%
-> rename from package/python3/0018-Add-an-option-to-disable-NIS.patch
-> rename to package/python3/0015-Add-an-option-to-disable-NIS.patch
-> diff --git a/package/python3/0019-Add-an-option-to-disable-unicodedata.patch b/package/python3/0016-Add-an-option-to-disable-unicodedata.patch
-> similarity index 100%
-> rename from package/python3/0019-Add-an-option-to-disable-unicodedata.patch
-> rename to package/python3/0016-Add-an-option-to-disable-unicodedata.patch
-> diff --git a/package/python3/0020-Add-an-option-to-disable-IDLE.patch b/package/python3/0017-Add-an-option-to-disable-IDLE.patch
-> similarity index 100%
-> rename from package/python3/0020-Add-an-option-to-disable-IDLE.patch
-> rename to package/python3/0017-Add-an-option-to-disable-IDLE.patch
-> diff --git a/package/python3/0021-Add-an-option-to-disable-decimal.patch b/package/python3/0018-Add-an-option-to-disable-decimal.patch
-> similarity index 100%
-> rename from package/python3/0021-Add-an-option-to-disable-decimal.patch
-> rename to package/python3/0018-Add-an-option-to-disable-decimal.patch
-> diff --git a/package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch b/package/python3/0019-Add-an-option-to-disable-the-ossaudiodev-module.patch
-> similarity index 100%
-> rename from package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch
-> rename to package/python3/0019-Add-an-option-to-disable-the-ossaudiodev-module.patch
-> diff --git a/package/python3/0023-Add-an-option-to-disable-openssl-support.patch b/package/python3/0020-Add-an-option-to-disable-openssl-support.patch
-> similarity index 100%
-> rename from package/python3/0023-Add-an-option-to-disable-openssl-support.patch
-> rename to package/python3/0020-Add-an-option-to-disable-openssl-support.patch
-> diff --git a/package/python3/0024-Add-an-option-to-disable-the-readline-module.patch b/package/python3/0021-Add-an-option-to-disable-the-readline-module.patch
-> similarity index 100%
-> rename from package/python3/0024-Add-an-option-to-disable-the-readline-module.patch
-> rename to package/python3/0021-Add-an-option-to-disable-the-readline-module.patch
-> diff --git a/package/python3/0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch b/package/python3/0022-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
-> similarity index 100%
-> rename from package/python3/0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
-> rename to package/python3/0022-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
-> diff --git a/package/python3/0027-Add-an-option-to-disable-uuid-module.patch b/package/python3/0023-Add-an-option-to-disable-uuid-module.patch
-> similarity index 100%
-> rename from package/python3/0027-Add-an-option-to-disable-uuid-module.patch
-> rename to package/python3/0023-Add-an-option-to-disable-uuid-module.patch
-> diff --git a/package/python3/0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch b/package/python3/0024-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-> similarity index 100%
-> rename from package/python3/0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-> rename to package/python3/0024-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-> diff --git a/package/python3/0030-Add-an-option-to-disable-the-berkeleydb-module.patch b/package/python3/0025-Add-an-option-to-disable-the-berkeleydb-module.patch
-> similarity index 100%
-> rename from package/python3/0030-Add-an-option-to-disable-the-berkeleydb-module.patch
-> rename to package/python3/0025-Add-an-option-to-disable-the-berkeleydb-module.patch
-> diff --git a/package/python3/0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch b/package/python3/0026-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-> similarity index 100%
-> rename from package/python3/0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-> rename to package/python3/0026-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-> diff --git a/package/python3/0026-python-config.sh-don-t-reassign-prefix.patch b/package/python3/0026-python-config.sh-don-t-reassign-prefix.patch
-> deleted file mode 100644
-> index b6bfb010a0..0000000000
-> --- a/package/python3/0026-python-config.sh-don-t-reassign-prefix.patch
-> +++ /dev/null
-> @@ -1,53 +0,0 @@
-> -From 755fb526a62df2a73560f42184db8aadb6899bb0 Mon Sep 17 00:00:00 2001
-> -From: Matt Weber <matthew.weber@rockwellcollins.com>
-> -Date: Fri, 6 Oct 2017 09:54:15 -0500
-> -Subject: [PATCH] python-config.sh: don't reassign ${prefix}
-> -
-> -When prefix is set to a path like /usr during crossbuild
-> -the sed operations end up executing twice, once for the prefix
-> -reassignment and another for includedir if it is set as a string
-> -including the ${prefix} variable.  This results in an issue
-> -when the build directory is under /usr.
-> -
-> -This patch updates the remaining location which uses the prefix
-> -variable to also sed and update to use the real path.
-> -
-> -Upstream bug report:
-> -https://bugs.python.org/issue31713
-> -
-> -Buildroot bug:
-> -https://bugs.busybox.net/show_bug.cgi?id=10361
-> -
-> -Fixes failures like the following:
-> -dbus-python-1.2.4 | NOK | http://autobuild.buildroot.net/results/758858efa97b6273c1b470513f5492258a6d8853
-> -
-> -Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ----
-> - Misc/python-config.sh.in | 4 ++--
-> - 1 file changed, 2 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/Misc/python-config.sh.in b/Misc/python-config.sh.in
-> -index a1bc3cd5f7..164d2d3603 100644
-> ---- a/Misc/python-config.sh.in
-> -+++ b/Misc/python-config.sh.in
-> -@@ -31,7 +31,7 @@ prefix_real=$(installed_prefix "$0")
-> - # locations. Keep prefix & exec_prefix using their original values in case
-> - # they are referenced in other configure variables, to prevent double
-> - # substitution, issue #22140.
-> --prefix=$(echo "$prefix_build" | sed "s#^$prefix_build#$prefix_real#")
-> -+prefix=$prefix_build
-> - exec_prefix=$(echo "$exec_prefix_build" | sed "s#^$exec_prefix_build#$prefix_real#")
-> - exec_prefix_real=${prefix_real}
-> - includedir=$(echo "@includedir@" | sed "s#^$prefix_build#$prefix_real#")
-> -@@ -49,7 +49,7 @@ LDLIBRARY="@LDLIBRARY@"
-> - OPT="@OPT@"
-> - PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
-> - LDVERSION="@LDVERSION@"
-> --LIBDEST=${prefix_real}/lib/python${VERSION}
-> -+LIBDEST=$( echo "${prefix}/lib/python${VERSION}" | sed "s#^$prefix_build#$prefix_real#")
-> - LIBPL=$(echo "@LIBPL@" | sed "s#^$prefix_build#$prefix_real#")
-> - SO="@EXT_SUFFIX@"
-> - PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-> --- 
-> -2.34.1
-> -
-> diff --git a/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch b/package/python3/0027-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-> similarity index 100%
-> rename from package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-> rename to package/python3/0027-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-> diff --git a/package/python3/0028-fix-building-on-older-distributions.patch b/package/python3/0028-fix-building-on-older-distributions.patch
-> deleted file mode 100644
-> index 4541b31c5f..0000000000
-> --- a/package/python3/0028-fix-building-on-older-distributions.patch
-> +++ /dev/null
-> @@ -1,47 +0,0 @@
-> -From e52e2c5e3df4bc3d2ff07ecb3b8e2a9099ea1631 Mon Sep 17 00:00:00 2001
-> -From: Adam Duskett <aduskett@gmail.com>
-> -Date: Thu, 16 Aug 2018 14:52:37 -0700
-> -Subject: [PATCH] fix building on older distributions
-> -
-> -Python > 3.6.3 calls os.replace in the update_file.py script, during the
-> -regen-importlib phase of the build process.
-> -
-> -According to Doc/whatsnew/3.3.rst line 1631, os.replace acts in the same
-> -way as os.rename, however, it is now cross-platform compatible for Windows.
-> -
-> -Because BuildRoot is guaranteed only to be built in  POSIX environment, it is
-> -safe to change os.replace back to os.rename.
-> -
-> -This change fixes building on older systems such as CentOS7, that only come
-> -with python 2.
-> -
-> -Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ----
-> - Tools/scripts/update_file.py | 4 ++--
-> - 1 file changed, 2 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/Tools/scripts/update_file.py b/Tools/scripts/update_file.py
-> -index b4182c1d0c..ab443cb1a6 100644
-> ---- a/Tools/scripts/update_file.py
-> -+++ b/Tools/scripts/update_file.py
-> -@@ -53,7 +53,7 @@ def update_file_with_tmpfile(filename, tmpfile, *, create=False):
-> -         if not create:
-> -             raise  # re-raise
-> -         outcome = 'created'
-> --        os.replace(tmpfile, filename)
-> -+        os.rename(tmpfile, filename)
-> -     else:
-> -         with targetfile:
-> -             old_contents = targetfile.read()
-> -@@ -62,7 +62,7 @@ def update_file_with_tmpfile(filename, tmpfile, *, create=False):
-> -         # Now compare!
-> -         if old_contents != new_contents:
-> -             outcome = 'updated'
-> --            os.replace(tmpfile, filename)
-> -+            os.rename(tmpfile, filename)
-> -         else:
-> -             outcome = 'same'
-> -             os.unlink(tmpfile)
-> --- 
-> -2.34.1
-> -
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/board/ti/common/am6xx/genimage_ti.cfg b/board/ti/common/am6xx/genimage_ti.cfg
+new file mode 100644
+index 0000000000..a1c7edb614
+--- /dev/null
++++ b/board/ti/common/am6xx/genimage_ti.cfg
+@@ -0,0 +1,28 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"tiboot3.bin",
++			"tispl.bin",
++			"u-boot.img"
++		}
++	}
++
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++
++}
+diff --git a/board/ti/common/am6xx/post-build-ti.sh b/board/ti/common/am6xx/post-build-ti.sh
+new file mode 100755
+index 0000000000..3f699c27b9
+--- /dev/null
++++ b/board/ti/common/am6xx/post-build-ti.sh
+@@ -0,0 +1,33 @@
++#!/bin/sh -x
++
++dtb_file=""
++
++while [ $# -gt 0 ]; do
++    case "$1" in
++        -d)
++            # Check if the next argument exists and is not another flag
++            if [ -n "$2" ] && [ "${2#-}" = "$2" ]; then
++                dtb_file="$2"
++                shift
++            else
++                echo "Error: Missing or invalid filename after -d flag"
++                exit 1
++            fi
++            ;;
++        *)
++            ;;
++    esac
++    shift
++done
++
++if [ -n "$dtb_file" ]; then
++    echo "dtb file provided : $dtb_file"
++else
++    echo "No dtb file provided with -d flag"
++	exit 1
++fi
++
++mkdir -p $TARGET_DIR/boot/dtb/ti
++
++cp $BINARIES_DIR/Image $TARGET_DIR/boot
++cp $BINARIES_DIR/$dtb_file $TARGET_DIR/boot/dtb/ti
+diff --git a/board/ti/common/am6xx/ti_arm64_prune.config b/board/ti/common/am6xx/ti_arm64_prune.config
+new file mode 100644
+index 0000000000..ad41cda81c
+--- /dev/null
++++ b/board/ti/common/am6xx/ti_arm64_prune.config
+@@ -0,0 +1,485 @@
++# Add config flags here that appear in the multi_v7_defconfig but are not
++# used by a kernel targetting only the currently supported TI EVMs
++
++# Non-TI Architectures
++CONFIG_ARCH_ACTIONS=n
++CONFIG_ARCH_SUNXI=n
++CONFIG_ARCH_AGILEX=n
++CONFIG_ARCH_ALPINE=n
++CONFIG_ARCH_APPLE=n
++CONFIG_ARCH_BCM=n
++CONFIG_ARCH_BCM2835=n
++CONFIG_ARCH_BCM_IPROC=n
++CONFIG_ARCH_BCMBCA=n
++CONFIG_ARCH_BERLIN=n
++CONFIG_ARCH_BRCMSTB=n
++CONFIG_ARCH_EXYNOS=n
++CONFIG_ARCH_LAYERSCAPE=n
++CONFIG_ARCH_LG1K=n
++CONFIG_ARCH_HISI=n
++CONFIG_ARCH_KEEMBAY=n
++CONFIG_ARCH_MEDIATEK=n
++CONFIG_ARCH_MESON=n
++CONFIG_ARCH_MVEBU=n
++CONFIG_ARCH_NXP=n
++CONFIG_ARCH_MXC=n
++CONFIG_ARCH_NPCM=n
++CONFIG_ARCH_QCOM=n
++CONFIG_ARCH_ROCKCHIP=n
++CONFIG_ARCH_SEATTLE=n
++CONFIG_ARCH_RENESAS=n
++CONFIG_ARCH_R8A7795=n
++CONFIG_ARCH_R8A7796=n
++CONFIG_ARCH_S32=n
++CONFIG_ARCH_STRATIX10=n
++CONFIG_ARCH_INTEL_SOCFPGA=n
++CONFIG_ARCH_SYNQUACER=n
++CONFIG_ARCH_TEGRA=n
++CONFIG_ARCH_SPRD=n
++CONFIG_ARCH_THUNDER=n
++CONFIG_ARCH_THUNDER2=n
++CONFIG_ARCH_UNIPHIER=n
++CONFIG_ARCH_VEXPRESS=n
++CONFIG_ARCH_VISCONTI=n
++CONFIG_ARCH_XGENE=n
++CONFIG_ARCH_ZX=n
++CONFIG_ARCH_ZYNQMP=n
++CONFIG_ARCH_TEGRA_132_SOC=n
++CONFIG_ARCH_TEGRA_210_SOC=n
++CONFIG_ARCH_TEGRA_186_SOC=n
++
++CONFIG_QCOM_FALKOR_ERRATUM_1003=n
++CONFIG_QCOM_FALKOR_ERRATUM_1009=n
++CONFIG_QCOM_QDF2400_ERRATUM_0065=n
++CONFIG_QCOM_FALKOR_ERRATUM_E1041=n
++
++CONFIG_CAVIUM_ERRATUM_22375=n
++CONFIG_CAVIUM_ERRATUM_23144=n
++CONFIG_CAVIUM_ERRATUM_23154=n
++CONFIG_CAVIUM_ERRATUM_27456=n
++CONFIG_CAVIUM_ERRATUM_30115=n
++
++CONFIG_HISILICON_ERRATUM_161600802=n
++
++# Disable Errata fixes not relevant for Cortex A53 and Cortext A72 cores.
++# The Socionext Synquacer GICv3 pre-ITS workaround is used on K3 devices
++# as well, thats why its left enabled.
++CONFIG_AMPERE_ERRATUM_AC03_CPU_38=n
++CONFIG_ARM64_ERRATUM_832075=n
++CONFIG_ARM64_ERRATUM_1024718=n
++CONFIG_ARM64_ERRATUM_1418040=n
++CONFIG_ARM64_ERRATUM_1165522=n
++CONFIG_ARM64_ERRATUM_1530923=n
++CONFIG_ARM64_ERRATUM_2441007=n
++CONFIG_ARM64_ERRATUM_1286807=n
++CONFIG_ARM64_ERRATUM_1463225=n
++CONFIG_ARM64_ERRATUM_1542419=n
++CONFIG_ARM64_ERRATUM_1508412=n
++CONFIG_ARM64_ERRATUM_2051678=n
++CONFIG_ARM64_ERRATUM_2077057=n
++CONFIG_ARM64_ERRATUM_2658417=n
++CONFIG_ARM64_ERRATUM_2054223=n
++CONFIG_ARM64_ERRATUM_2067961=n
++CONFIG_ARM64_ERRATUM_2441009=n
++CONFIG_CAVIUM_TX2_ERRATUM_219=n
++CONFIG_FUJITSU_ERRATUM_010001=n
++CONFIG_NVIDIA_CARMEL_CNP_ERRATUM=n
++
++# Serial
++CONFIG_SERIAL_8250_FSL=n
++CONFIG_SERIAL_8250_DW=n
++CONFIG_SERIAL_AMBA_PL011=n
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=n
++CONFIG_SERIAL_XILINX_PS_UART=n
++CONFIG_SERIAL_XILINX_PS_UART_CONSOLE=n
++
++CONFIG_ARM_SCPI_PROTOCOL=n
++CONFIG_ARM_SCPI_POWER_DOMAIN=n
++CONFIG_ARM_SCPI_CPUFREQ=n
++CONFIG_SENSORS_ARM_SCPI=n
++CONFIG_COMMON_CLK_SCPI=n
++
++CONFIG_ARM_MHU=n
++CONFIG_PLATFORM_MHU=n
++
++CONFIG_ACPI=n
++
++CONFIG_NUMA=n
++
++CONFIG_XEN=n
++CONFIG_KVM=n
++
++CONFIG_ARM_BIG_LITTLE_CPUFREQ=n
++
++CONFIG_PCI_XGENE=n
++CONFIG_PCI_HISI=n
++CONFIG_PCIE_KIRIN=n
++
++# DRM
++CONFIG_DRM_NOUVEAU=n
++CONFIG_DRM_I2C_ADV7511=n
++CONFIG_DRM_ETNAVIV=n
++CONFIG_DRM_HISI_HIBMC=n
++CONFIG_DRM_HISI_KIRIN=n
++CONFIG_DRM_MXSFB=n
++CONFIG_DRM_PL111=n
++CONFIG_DRM_LIMA=n
++CONFIG_DRM_PANFROST=n
++
++# Video
++CONFIG_VGA_ARB=n
++CONFIG_FB_EFI=n
++
++# V4L2
++CONFIG_RC_CORE=n
++
++# Sound
++CONFIG_SND_SPI=n
++CONFIG_SND_SOC_FSL_SAI=n
++CONFIG_SND_SOC_AK4613=n
++CONFIG_SND_SOC_ES7134=n
++CONFIG_SND_SOC_ES7241=n
++CONFIG_SND_SOC_TAS571X=n
++
++# USB
++CONFIG_USB_MUSB_HDRC=n
++CONFIG_USB_DWC2=n
++CONFIG_USB_CHIPIDEA=n
++CONFIG_USB_ISP1760=n
++CONFIG_USB_HSIC_USB3503=n
++
++# Generic kernel
++
++# We recommend to turn off Real-Time group scheduling in the
++# kernel when using systemd. RT group scheduling effectively
++# makes RT scheduling unavailable for most userspace, since it
++# requires explicit assignment of RT budgets to each unit whose
++# processes making use of RT. As there's no sensible way to
++# assign these budgets automatically this cannot really be
++# fixed, and it's best to disable group scheduling hence.
++CONFIG_RT_GROUP_SCHED=n
++
++# Remove debug features.
++CONFIG_SLUB_DEBUG=n
++
++# We are not a crash kernel
++CONFIG_CRASH_DUMP=n
++
++# ARM Scalable Vector Extension (SVE) is available only with ARMv8.2-A
++# and above. Since current TI SoCs are based on ARMv8.0, disable SVE
++CONFIG_ARM64_SVE=n
++
++# Plan 9 is a distributed resource sharing protocol thats not
++# typically used on TI processors
++CONFIG_NET_9P=n
++
++# Non-TI hardware vendor specific drivers
++CONFIG_KEYBOARD_CROS_EC=n
++CONFIG_I2C_CROS_EC_TUNNEL=n
++CONFIG_QRTR=n
++CONFIG_SPI_NXP_FLEXSPI=n
++CONFIG_GPIO_ALTERA=n
++CONFIG_GPIO_DWAPB=n
++CONFIG_GPIO_MB86S7X=n
++CONFIG_GPIO_PL061=n
++CONFIG_GPIO_XGENE=n
++CONFIG_POWER_RESET_XGENE=n
++CONFIG_ARM_SP805_WATCHDOG=n
++CONFIG_ARM_SBSA_WATCHDOG=n
++CONFIG_DW_WATCHDOG=n
++CONFIG_MFD_SEC_CORE=n
++CONFIG_REGULATOR_QCOM_SPMI=n
++CONFIG_DRM_MALI_DISPLAY=n
++CONFIG_DRM_RCAR_DW_HDMI=n
++CONFIG_DRM_DW_HDMI_AHB_AUDIO=n
++CONFIG_DRM_DW_HDMI_CEC=n
++CONFIG_FB_SSD1307=n
++CONFIG_MMC_ARMMMCI=n
++CONFIG_MMC_SDHCI_XENON=n
++CONFIG_RTC_DRV_S5M=n
++CONFIG_RTC_DRV_CROS_EC=n
++CONFIG_RTC_DRV_PL031=n
++CONFIG_FSL_EDMA=n
++CONFIG_MV_XOR_V2=n
++CONFIG_PL330_DMA=n
++CONFIG_QCOM_HIDMA_MGMT=n
++CONFIG_QCOM_HIDMA=n
++CONFIG_CHROME_PLATFORMS=n
++CONFIG_CROS_EC=n
++CONFIG_CROS_EC_I2C=n
++CONFIG_CROS_EC_SPI=n
++CONFIG_CROS_EC_CHARDEV=n
++CONFIG_SURFACE_PLATFORMS=n
++CONFIG_COMMON_CLK_S2MPS11=n
++CONFIG_COMMON_CLK_VC5=n
++CONFIG_COMMON_CLK_BD718XX=n
++CONFIG_FSL_ERRATUM_A008585=n
++CONFIG_HISILICON_ERRATUM_161010101=n
++CONFIG_RPMSG_QCOM_GLINK_RPM=n
++CONFIG_SOUNDWIRE_QCOM=n
++CONFIG_EXTCON_USBC_CROS_EC=n
++CONFIG_QCOM_SPMI_ADC5=n
++CONFIG_IIO_CROS_EC_SENSORS_CORE=n
++CONFIG_IIO_CROS_EC_SENSORS=n
++CONFIG_IIO_CROS_EC_LIGHT_PROX=n
++CONFIG_IIO_CROS_EC_BARO=n
++CONFIG_PWM_CROS_EC=n
++CONFIG_SLIM_QCOM_CTRL=n
++CONFIG_SPI_PL022=n
++CONFIG_SLIMBUS=n
++CONFIG_REGMAP_SLIMBUS=n
++CONFIG_SCSI_HISI_SAS=n
++CONFIG_AHCI_CEVA=n
++CONFIG_AHCI_XGENE=n
++CONFIG_AHCI_QORIQ=n
++CONFIG_SATA_SIL24=n
++CONFIG_BCMGENET=n
++CONFIG_SYSTEMPORT=n
++CONFIG_HNS_DSAF=n
++CONFIG_HNS_ENET=n
++CONFIG_HNS3=n
++CONFIG_NET_VENDOR_NVIDIA=n
++CONFIG_NET_VENDOR_RENESAS=n
++CONFIG_NET_VENDOR_SAMSUNG=n
++CONFIG_NET_VENDOR_STMICRO=n
++CONFIG_NET_VENDOR_XILINX=n
++CONFIG_BROADCOM_PHY=n
++CONFIG_BCM54140_PHY=n
++CONFIG_ROCKCHIP_PHY=n
++CONFIG_PCS_XPCS=n
++CONFIG_HW_RANDOM_ARM_SMCCC_TRNG=n
++CONFIG_HW_RANDOM_CN10K=n
++CONFIG_I2C_CADENCE=n
++CONFIG_I2C_DESIGNWARE_SLAVE=n
++CONFIG_I2C_DESIGNWARE_PLATFORM=n
++CONFIG_I2C_RK3X=n
++CONFIG_PINCTRL_MAX77620=n
++CONFIG_DRM_RCAR_USE_LVDS=n
++CONFIG_DRM_RCAR_USE_MIPI_DSI=n
++CONFIG_SND_SOC_FSL_ASRC=n
++CONFIG_SND_SOC_FSL_AUDMIX=n
++CONFIG_SND_SOC_FSL_SSI=n
++CONFIG_SND_SOC_FSL_SPDIF=n
++CONFIG_SND_SOC_FSL_ESAI=n
++CONFIG_SND_SOC_FSL_MICFIL=n
++CONFIG_SND_SOC_IMX_AUDMUX=n
++CONFIG_MMC_SDHCI_OF_DWCMSHC=n
++CONFIG_MMC_SDHCI_CADENCE=n
++CONFIG_MMC_SDHCI_F_SDH30=n
++CONFIG_MMC_DW=n
++CONFIG_MMC_MTK=n
++CONFIG_PCIE_ALTERA=n
++CONFIG_PCI_HOST_THUNDER_PEM=n
++CONFIG_PCI_HOST_THUNDER_ECAM=n
++CONFIG_PCI_MESON=n
++CONFIG_BRCMSTB_GISB_ARB=n
++CONFIG_VEXPRESS_CONFIG=n
++CONFIG_MTD_NAND_DENALI_DT=n
++CONFIG_MTD_NAND_BRCMNAND=n
++CONFIG_B53=n
++CONFIG_NET_DSA_BCM_SF2=n
++CONFIG_CAN_FLEXCAN=n
++CONFIG_SPI_DESIGNWARE=n
++CONFIG_SPI_ROCKCHIP=n
++CONFIG_DRM_HDLCD=n
++CONFIG_DRM_KOMEDA=n
++CONFIG_COMMON_CLK_RK808=n
++CONFIG_COMMON_CLK_XGENE=n
++CONFIG_SOC_BRCMSTB=n
++CONFIG_NET_VENDOR_ALACRITECH=n
++CONFIG_NET_VENDOR_AMAZON=n
++CONFIG_NET_VENDOR_AMD=n
++CONFIG_NET_VENDOR_AQUANTIA=n
++CONFIG_NET_VENDOR_ARC=n
++CONFIG_NET_VENDOR_ASIX=n
++CONFIG_NET_VENDOR_CORTINA=n
++CONFIG_NET_VENDOR_DAVICOM=n
++CONFIG_NET_VENDOR_ENGLEDER=n
++CONFIG_NET_VENDOR_EZCHIP=n
++CONFIG_NET_VENDOR_GOOGLE=n
++CONFIG_NET_VENDOR_HISILICON=n
++CONFIG_NET_VENDOR_LITEX=n
++CONFIG_NET_VENDOR_MICREL=n
++CONFIG_NET_VENDOR_MICROCHIP=n
++CONFIG_NET_VENDOR_MICROSEMI=n
++CONFIG_NET_VENDOR_NATSEMI=n
++CONFIG_NET_VENDOR_NI=n
++CONFIG_NET_VENDOR_QUALCOMM=n
++CONFIG_NET_VENDOR_ROCKER=n
++CONFIG_NET_VENDOR_SEEQ=n
++CONFIG_NET_VENDOR_SMSC=n
++CONFIG_NET_VENDOR_SOCIONEXT=n
++CONFIG_NET_VENDOR_SOLARFLARE=n
++CONFIG_NET_VENDOR_SYNOPSYS=n
++CONFIG_NET_VENDOR_VERTEXCOM=n
++CONFIG_NET_VENDOR_VIA=n
++CONFIG_NET_VENDOR_WANGXUN=n
++CONFIG_NET_VENDOR_WIZNET=n
++CONFIG_NET_VENDOR_BROADCOM=n
++CONFIG_NET_VENDOR_MICROSOFT=n
++CONFIG_NET_VENDOR_FUNGIBLE=n
++CONFIG_NET_VENDOR_CAVIUM=n
++CONFIG_NET_VENDOR_PENSANDO=n
++CONFIG_NET_VENDOR_CADENCE=n
++CONFIG_NET_VENDOR_MELLANOX=n
++CONFIG_NET_VENDOR_NETRONOME=n
++CONFIG_NET_VENDOR_MARVELL=n
++CONFIG_NET_VENDOR_INTEL=n
++CONFIG_NET_VENDOR_HUAWEI=n
++
++# Serial Power Management Interface (SPMI) has not been used on TI
++# platforms (yet)
++CONFIG_SPMI=n
++
++# DVB and TV tuner cards are rarely used on TI platforms, if at all
++CONFIG_CXD2880_SPI_DRV=n
++CONFIG_MEDIA_TUNER_E4000=n
++CONFIG_MEDIA_TUNER_FC0011=n
++CONFIG_MEDIA_TUNER_FC0012=n
++CONFIG_MEDIA_TUNER_FC0013=n
++CONFIG_MEDIA_TUNER_FC2580=n
++CONFIG_MEDIA_TUNER_IT913X=n
++CONFIG_MEDIA_TUNER_M88RS6000T=n
++CONFIG_MEDIA_TUNER_MAX2165=n
++CONFIG_MEDIA_TUNER_MC44S803=n
++CONFIG_MEDIA_TUNER_MSI001=n
++CONFIG_MEDIA_TUNER_MT2060=n
++CONFIG_MEDIA_TUNER_MT2063=n
++CONFIG_MEDIA_TUNER_MT20XX=n
++CONFIG_MEDIA_TUNER_MT2131=n
++CONFIG_MEDIA_TUNER_MT2266=n
++CONFIG_MEDIA_TUNER_MXL301RF=n
++CONFIG_MEDIA_TUNER_MXL5005S=n
++CONFIG_MEDIA_TUNER_MXL5007T=n
++CONFIG_MEDIA_TUNER_QM1D1B0004=n
++CONFIG_MEDIA_TUNER_QM1D1C0042=n
++CONFIG_MEDIA_TUNER_QT1010=n
++CONFIG_MEDIA_TUNER_R820T=n
++CONFIG_MEDIA_TUNER_SI2157=n
++CONFIG_MEDIA_TUNER_SIMPLE=n
++CONFIG_MEDIA_TUNER_TDA18212=n
++CONFIG_MEDIA_TUNER_TDA18218=n
++CONFIG_MEDIA_TUNER_TDA18250=n
++CONFIG_MEDIA_TUNER_TDA18271=n
++CONFIG_MEDIA_TUNER_TDA827X=n
++CONFIG_MEDIA_TUNER_TDA8290=n
++CONFIG_MEDIA_TUNER_TDA9887=n
++CONFIG_MEDIA_TUNER_TEA5761=n
++CONFIG_MEDIA_TUNER_TEA5767=n
++CONFIG_MEDIA_TUNER_TUA9001=n
++CONFIG_MEDIA_TUNER_XC2028=n
++CONFIG_MEDIA_TUNER_XC4000=n
++CONFIG_MEDIA_TUNER_XC5000=n
++CONFIG_DVB_M88DS3103=n
++CONFIG_DVB_MXL5XX=n
++CONFIG_DVB_STB0899=n
++CONFIG_DVB_STB6100=n
++CONFIG_DVB_STV090x=n
++CONFIG_DVB_STV0910=n
++CONFIG_DVB_STV6110x=n
++CONFIG_DVB_STV6111=n
++CONFIG_DVB_DRXK=n
++CONFIG_DVB_MN88472=n
++CONFIG_DVB_MN88473=n
++CONFIG_DVB_SI2165=n
++CONFIG_DVB_TDA18271C2DD=n
++CONFIG_DVB_CX24110=n
++CONFIG_DVB_CX24116=n
++CONFIG_DVB_CX24117=n
++CONFIG_DVB_CX24120=n
++CONFIG_DVB_CX24123=n
++CONFIG_DVB_DS3000=n
++CONFIG_DVB_MB86A16=n
++CONFIG_DVB_MT312=n
++CONFIG_DVB_S5H1420=n
++CONFIG_DVB_SI21XX=n
++CONFIG_DVB_STB6000=n
++CONFIG_DVB_STV0288=n
++CONFIG_DVB_STV0299=n
++CONFIG_DVB_STV0900=n
++CONFIG_DVB_STV6110=n
++CONFIG_DVB_TDA10071=n
++CONFIG_DVB_TDA10086=n
++CONFIG_DVB_TDA8083=n
++CONFIG_DVB_TDA8261=n
++CONFIG_DVB_TDA826X=n
++CONFIG_DVB_TS2020=n
++CONFIG_DVB_TUA6100=n
++CONFIG_DVB_TUNER_CX24113=n
++CONFIG_DVB_TUNER_ITD1000=n
++CONFIG_DVB_VES1X93=n
++CONFIG_DVB_ZL10036=n
++CONFIG_DVB_ZL10039=n
++CONFIG_DVB_AF9013=n
++CONFIG_DVB_CX22700=n
++CONFIG_DVB_CX22702=n
++CONFIG_DVB_CXD2820R=n
++CONFIG_DVB_CXD2841ER=n
++CONFIG_DVB_DIB3000MB=n
++CONFIG_DVB_DIB3000MC=n
++CONFIG_DVB_DIB7000M=n
++CONFIG_DVB_DIB7000P=n
++CONFIG_DVB_DIB9000=n
++CONFIG_DVB_DRXD=n
++CONFIG_DVB_EC100=n
++CONFIG_DVB_L64781=n
++CONFIG_DVB_MT352=n
++CONFIG_DVB_NXT6000=n
++CONFIG_DVB_RTL2830=n
++CONFIG_DVB_RTL2832=n
++CONFIG_DVB_RTL2832_SDR=n
++CONFIG_DVB_S5H1432=n
++CONFIG_DVB_SI2168=n
++CONFIG_DVB_SP887X=n
++CONFIG_DVB_STV0367=n
++CONFIG_DVB_TDA10048=n
++CONFIG_DVB_TDA1004X=n
++CONFIG_DVB_ZD1301_DEMOD=n
++CONFIG_DVB_ZL10353=n
++CONFIG_DVB_CXD2880=n
++CONFIG_DVB_STV0297=n
++CONFIG_DVB_TDA10021=n
++CONFIG_DVB_TDA10023=n
++CONFIG_DVB_VES1820=n
++CONFIG_DVB_AU8522_DTV=n
++CONFIG_DVB_AU8522_V4L=n
++CONFIG_DVB_BCM3510=n
++CONFIG_DVB_LG2160=n
++CONFIG_DVB_LGDT3305=n
++CONFIG_DVB_LGDT3306A=n
++CONFIG_DVB_LGDT330X=n
++CONFIG_DVB_MXL692=n
++CONFIG_DVB_NXT200X=n
++CONFIG_DVB_OR51132=n
++CONFIG_DVB_OR51211=n
++CONFIG_DVB_S5H1409=n
++CONFIG_DVB_S5H1411=n
++CONFIG_DVB_DIB8000=n
++CONFIG_DVB_MB86A20S=n
++CONFIG_DVB_S921=n
++CONFIG_DVB_MN88443X=n
++CONFIG_DVB_TC90522=n
++CONFIG_DVB_PLL=n
++CONFIG_DVB_TUNER_DIB0070=n
++CONFIG_DVB_TUNER_DIB0090=n
++CONFIG_DVB_A8293=n
++CONFIG_DVB_AF9033=n
++CONFIG_DVB_ASCOT2E=n
++CONFIG_DVB_ATBM8830=n
++CONFIG_DVB_HELENE=n
++CONFIG_DVB_HORUS3A=n
++CONFIG_DVB_ISL6405=n
++CONFIG_DVB_ISL6421=n
++CONFIG_DVB_ISL6423=n
++CONFIG_DVB_IX2505V=n
++CONFIG_DVB_LGS8GL5=n
++CONFIG_DVB_LGS8GXX=n
++CONFIG_DVB_LNBH25=n
++CONFIG_DVB_LNBH29=n
++CONFIG_DVB_LNBP21=n
++CONFIG_DVB_LNBP22=n
++CONFIG_DVB_M88RS2000=n
++CONFIG_DVB_TDA665x=n
++CONFIG_DVB_DRX39XYJ=n
++CONFIG_DVB_CXD2099=n
++CONFIG_DVB_SP2=n
+diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+index fbe5d21540..fb2fbeb545 100644
+--- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
++++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+@@ -1,3 +1,4 @@
+ # Locally computed:
+ sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
++sha256  62c2e7ab8420260554a448a660cfde7305487701e405d01e1a875910c5a5c82c  ti-k3-r5-loader-ti-u-boot-2023.04-br1.tar.gz
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index fbe5d21540..3baa2f5e2e 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,3 +1,4 @@
+ # Locally computed:
+ sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
++sha256  5c3ce409901b8b16204b02d538833dcb6c66729c0316b53848d0f15642a49266  uboot-ti-u-boot-2023.04-br1.tar.gz
+diff --git a/configs/ti_am62x_sk.config b/configs/ti_am62x_sk.config
+new file mode 100644
+index 0000000000..fdb48d3758
+--- /dev/null
++++ b/configs/ti_am62x_sk.config
+@@ -0,0 +1,24 @@
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++
++#kernel
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.ti.com/git/ti-linux-kernel/ti-linux-kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ti-linux-6.1.y"
++
++#fragment defconfig
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/ti/common/am6xx/ti_arm64_prune.config"
++
++#uboot
++BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_GIT=y
++BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_URL="https://git.ti.com/git/ti-u-boot/ti-u-boot.git"
++BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_VERSION="ti-u-boot-2023.04"
++
++#ubootr5
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.ti.com/git/ti-u-boot/ti-u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ti-u-boot-2023.04"
++
++#post-build
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/common/am6xx/post-build-ti.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-d k3-am625-sk.dtb"
++BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/ti/common/am6xx/genimage_ti.cfg"
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 4fa9f701cd..9c0d26aa71 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -17,3 +17,4 @@ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/preferred/GPL-2.0
+ sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
++sha256  3256bbd9eb9b3ffec10e8e013ed433e79adf83cf731677be7fcdd53e25d1db98  linux-ti-linux-6.1.y-br1.tar.gz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
