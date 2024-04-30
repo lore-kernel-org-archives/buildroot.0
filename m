@@ -4,92 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 492BFC4345F
-	for <buildroot@archiver.kernel.org>; Tue, 30 Apr 2024 20:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BB21C4345F
+	for <buildroot@archiver.kernel.org>; Tue, 30 Apr 2024 20:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF5E241561;
-	Tue, 30 Apr 2024 20:37:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF78D40179;
+	Tue, 30 Apr 2024 20:47:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZAe9SR4hInVX; Tue, 30 Apr 2024 20:37:22 +0000 (UTC)
+ id jItQVvWsGi5Y; Tue, 30 Apr 2024 20:47:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60A404028D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAE764028D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60A404028D;
-	Tue, 30 Apr 2024 20:37:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5E66D1BF3E1
- for <buildroot@lists.busybox.net>; Tue, 30 Apr 2024 20:37:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DAE764028D;
+	Tue, 30 Apr 2024 20:47:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C8141BF3E1
+ for <buildroot@lists.busybox.net>; Tue, 30 Apr 2024 20:47:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 560EA81FDB
- for <buildroot@lists.busybox.net>; Tue, 30 Apr 2024 20:37:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 88550402FB
+ for <buildroot@lists.busybox.net>; Tue, 30 Apr 2024 20:47:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mE8IPDcadBAn for <buildroot@lists.busybox.net>;
- Tue, 30 Apr 2024 20:37:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iB2zr_4bfp9J for <buildroot@lists.busybox.net>;
+ Tue, 30 Apr 2024 20:47:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=jesseevg@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EF7F981FD9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF7F981FD9
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EF7F981FD9
- for <buildroot@buildroot.org>; Tue, 30 Apr 2024 20:37:18 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-34da35cd01cso727687f8f.2
- for <buildroot@buildroot.org>; Tue, 30 Apr 2024 13:37:18 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8946C402DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8946C402DC
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8946C402DC
+ for <buildroot@buildroot.org>; Tue, 30 Apr 2024 20:47:50 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-41adf155cffso44508025e9.2
+ for <buildroot@buildroot.org>; Tue, 30 Apr 2024 13:47:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714509436; x=1715114236;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=msQPvhMgeC7tcxbBtO4KP4mrbUvKk3Y229UMUbaiEfg=;
- b=OmD0ch8exLCfx8TtCN46BIrF+XsNO9wFaESr75Rj9ljX2tpWm9GVEzlSVLTOpl5WwS
- hoVpQ/kbcXmeLZcl5DPwI1J/ybZih/1W5qB2mme2+WXw4QGnscqPVyPO9srpu+Jd4xS+
- nKy4eG0fONm4HQ/Qtif3VgJVpVAxQdJzH3EnUvIxnJna7/pd8lqyo9DiYddajJvFJMua
- E1SFk3Hp/ntUtFWCbM9nHUaGdd3KIs5pzZJ+nwxnaMFyl07V5DvZ4LfKleykpAsWxaBh
- zeFoJXTlOI4ox5jNu6L2oti2hAw+DgoSpNUqMsDSyopv1VgIOnNwnUUZuThHuzESPIQ0
- HNuw==
-X-Gm-Message-State: AOJu0YzhSNP755c0olSPM/fJnMX06UZBWzplrQSLujDUIPllwKvtbV6Z
- MlBJtIdW7Q1xYBOrR+PQlrzF7UiJBMA9RqZIaBvhrZLS8iCzrhVr7g0PDAhu
-X-Google-Smtp-Source: AGHT+IEQZIbhxWcWxkR/bAoKJN/Rcj3Z2F6mq/bV2zXVOLqK66DNFSaUIY/szLscYugO2vAC6LaiQg==
-X-Received: by 2002:a05:6000:1205:b0:34b:e34b:3187 with SMTP id
- e5-20020a056000120500b0034be34b3187mr600851wrx.54.1714509436293; 
- Tue, 30 Apr 2024 13:37:16 -0700 (PDT)
-Received: from KJKCLT3928.esterline.net
- (192.234-180-91.adsl-dyn.isp.belgacom.be. [91.180.234.192])
+ d=1e100.net; s=20230601; t=1714510068; x=1715114868;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Krq1lCR9Oc7ss/1Ae/XGIxI73qYgz9XGUeFKrZRqerc=;
+ b=oZ5toCUWe4Y50Mk/WUQSp8YHo3ttDVY0l1zYEx2Qmk5H6TRNP+zCY7CeEurlExSrWF
+ B4rTvaYcXT3Ln/boh9o3IZEwU5l6Pz2XZr0geSXF3fMA/gn/Q89+xNHkHG+J/szhH8fg
+ CP5eSb17toz5zxbAGY1OjSXl/t6yxT5vh5f5NG9MM9YvgeYhaSkqDxrH2ZonkB9T98+p
+ VztuzYkRqfwnPYXG40UK2TwPB2JNG/2z+AACOvz661SmFcqwTVAjZad4yTYwfIN6YxVr
+ 37bnIr11ZIaZJEj9f252wGbt/fY1ddVigKKzoHKtHLVgJrs4p3jsRO4fRJ3jdzrYgJBj
+ ZuaQ==
+X-Gm-Message-State: AOJu0YxJVf7qCLjZj0NvT5pl50RwM8lihGLyNY2lPwXAxmiYYhmS65fZ
+ NfJsqhEjY6ERHwfs7Ibx0VjHUhAw68Eyy+eF8nTswIcRP8IMQnFN5HUpx8DRzdKTwTd4ioUm+np
+ 8
+X-Google-Smtp-Source: AGHT+IGYYbp7BL7Z9GZy4oEib+7hrMtn2Rt60YepmMMrV+Mw3M1bzZ2n7neTz7sswxXYAdtbswzUug==
+X-Received: by 2002:a05:600c:1988:b0:418:f5a9:b91c with SMTP id
+ t8-20020a05600c198800b00418f5a9b91cmr376358wmq.33.1714510068321; 
+ Tue, 30 Apr 2024 13:47:48 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
  by smtp.gmail.com with ESMTPSA id
- t15-20020adfa2cf000000b0034c5be9fb6dsm12009819wra.65.2024.04.30.13.37.15
+ g10-20020a05600c308a00b00418f7605249sm47346wmn.24.2024.04.30.13.47.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 30 Apr 2024 13:37:16 -0700 (PDT)
-From: Jesse Van Gavere <jesseevg@gmail.com>
+ Tue, 30 Apr 2024 13:47:48 -0700 (PDT)
+From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 30 Apr 2024 22:37:08 +0200
-Message-Id: <20240430203708.75367-1-jesseevg@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue, 30 Apr 2024 22:47:44 +0200
+Message-ID: <20240430204744.1014238-2-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240430204744.1014238-1-romain.naour@smile.fr>
+References: <20240430204744.1014238-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1714509436; x=1715114236; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=msQPvhMgeC7tcxbBtO4KP4mrbUvKk3Y229UMUbaiEfg=;
- b=klNzHOo/NbMxwSe+Hl67S5v1egWKyRSI87bNwkxM0EifLKKiiYXHboEeehH/vIUO73
- lkzBdsJOy2yTJGBxpRBE7buuRRA46ZdEHTEiMylzEd+fn2l2TT7uhcMESKuKZM/NCAAK
- l4WYletz9IUtZSQftl7skIuVQs06jioTGqF3gVtZP52A5G74L4+UO5edCUmHrRBS08TX
- I8GgmxbXhNQKM3J1F8dMTAIivWKMZjixQpvFbOKuv8lVlTriVL0pJN1E5A+rC8YgGMM2
- L3FOeEdXxh0luz3Cgemnlw4Wm/vh84mdNv4aSuLTrXYUBl7YaDujWepvKRnBKAvGHa27
- 51uQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1714510068; x=1715114868;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Krq1lCR9Oc7ss/1Ae/XGIxI73qYgz9XGUeFKrZRqerc=;
+ b=Cs7ycWsKZ0S4YBbMQRbBOwrqQlc7QYecGTSOvi+ySya8//kVIaNOcSe3YD2+ajCgEk
+ OSJCxFfU4AJYQcEWjZy8Pp6cfzTzFXIh+Od/oODRJHVpN84+slE1GSVP0XLS05qBwN5C
+ /dVwWlwOcDYiO22w69GqEbHi74RyW/OtHp3WPNdB9LKjVK+cHmJsK9knNkzwSTm0a12E
+ aRoLFpvGxURpHajOKGF/9tcIOp/FS3WiwMbF9tZveMuq8cVjucF4Wlg6Qql8P2QFu5rW
+ O14B20TQStSv20KVJ5LbFvueZTOHfAU7pN8aJ29iixuR321v2u5D85Qg/paYKGiPionB
+ XK3w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=klNzHOo/
-Subject: [Buildroot] [PATCH 1/1] package/snmppp: bump to version 3.5.1
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=Cs7ycWsK
+Subject: [Buildroot] [PATCH 2/2] package/perl-dbd-mysql: fix runtime issue
+ with MariaDB
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,96 +109,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop non-v3 fix patch as this was upstreamed
+Now that the TestPerlDBDmysql can be run normally, a new runtime issue
+appear due to switch from oracle-mysql to MariaDB:
 
-Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+  # perl -MDBI -e '1'
+  # echo $?
+  0
+
+  # perl -MDBD::mysql -e '1'
+  Can't load '/usr/lib/perl5/site_perl/5.38.2/arm-linux/auto/DBD/mysql/mysql.so'
+  for module DBD::mysql: /usr/lib/perl5/site_perl/5.38.2/arm-linux/auto/DBD/mysql/mysql.so:
+  undefined symbol: net_buffer_length at /usr/lib/perl5/5.38.2/arm-linux/DynaLoader.pm line 206.
+
+This is fixed by an upstream commit [1] from 4.046_01 release.
+
+[1] https://github.com/perl5-dbi/DBD-mysql/commit/0f0cebe87fab335873fd3701bc304922da826940
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6735654506
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- .../snmppp/0001-fix-build-without-v3.patch    | 43 -------------------
- package/snmppp/snmppp.hash                    |  2 +-
- package/snmppp/snmppp.mk                      |  2 +-
- 3 files changed, 2 insertions(+), 45 deletions(-)
- delete mode 100644 package/snmppp/0001-fix-build-without-v3.patch
+ ...net_buffer_length-macro-if-available.patch | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/perl-dbd-mysql/0001-Use-net_buffer_length-macro-if-available.patch
 
-diff --git a/package/snmppp/0001-fix-build-without-v3.patch b/package/snmppp/0001-fix-build-without-v3.patch
-deleted file mode 100644
-index 4e81f7bfc1..0000000000
---- a/package/snmppp/0001-fix-build-without-v3.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--fix build without v3
--
--Fix the following build failure without version3 raised since version
--3.5.0:
--
--msgqueue.cpp: In member function 'int Snmp_pp::CSNMPMessage::ResendMessage()':
--msgqueue.cpp:263:34: error: 'version3' was not declared in this scope; did you mean 'version1'?
--  263 |   if (m_target->get_version() == version3) {
--      |                                  ^~~~~~~~
--      |                                  version1
--
--Fixes:
-- - http://autobuild.buildroot.org/results/8ef3e4407a51c53c15e530606227338761dd905b
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: sent to katz.agentpp.com@magenta.de]
--
--diff -Nura snmp++-3.5.0.orig/src/msgqueue.cpp snmp++-3.5.0/src/msgqueue.cpp
----- snmp++-3.5.0.orig/src/msgqueue.cpp	2023-03-20 10:49:30.629000853 +0100
--+++ snmp++-3.5.0/src/msgqueue.cpp	2023-03-20 10:51:36.880664304 +0100
--@@ -260,18 +260,20 @@
--   m_target->set_retry(m_target->get_retry() - 1);
--   SetSendTime();
--   int status;
---  if (m_target->get_version() == version3) {
-- #ifdef _SNMPv3
--+  if (m_target->get_version() == version3) {
--     // delete entry in cache
--     if (m_snmp->get_mpv3())
-- 	    m_snmp->get_mpv3()->delete_from_cache(m_pdu.get_request_id());
---#endif
--     status = m_snmp->snmp_engine(m_pdu, m_pdu.get_error_status(), m_pdu.get_error_index(),
-- 		    *m_target, m_callBack, m_callData, m_socket, 0, this);
--   }
--   else {
--+#endif
--     status = send_snmp_request(m_socket, m_rawPdu, m_rawPduLen, *m_address);
--+#ifdef _SNMPv3
--   }
--+#endif
--   if (status != 0)
--     return SNMP_CLASS_TL_FAILED;
-- 
-diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
-index 74c6a3e98f..b66056ef40 100644
---- a/package/snmppp/snmppp.hash
-+++ b/package/snmppp/snmppp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  43a433bd5f6fd67add5a26add6521ca664c41aead438405658ed57483664b4bf  snmp++-3.5.0.tar.gz
-+sha256  034553f7cb75d7ce1fe70cb3ba06e88587b6bca4fa062d10344ce4555a1395f7  snmp++-3.5.1.tar.gz
- sha256  61337e799c8274e596e5783b22607beea8073ee296c6b27fc5c7487296e56851  src/v3.cpp
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 9f1916dd66..966bb340fd 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNMPPP_VERSION = 3.5.0
-+SNMPPP_VERSION = 3.5.1
- SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
- SNMPPP_SITE = http://www.agentpp.com/download
- SNMPPP_DEPENDENCIES = host-pkgconf
+diff --git a/package/perl-dbd-mysql/0001-Use-net_buffer_length-macro-if-available.patch b/package/perl-dbd-mysql/0001-Use-net_buffer_length-macro-if-available.patch
+new file mode 100644
+index 0000000000..d7767c1f42
+--- /dev/null
++++ b/package/perl-dbd-mysql/0001-Use-net_buffer_length-macro-if-available.patch
+@@ -0,0 +1,41 @@
++From 9189ef77679c22de3bbd2142031858373236520b Mon Sep 17 00:00:00 2001
++From: Michiel Beijen <michiel.beijen@gmail.com>
++Date: Fri, 23 Feb 2018 07:52:33 +0000
++Subject: [PATCH] Use net_buffer_length macro if available
++
++Upstream: https://github.com/perl5-dbi/DBD-mysql/commit/0f0cebe87fab335873fd3701bc304922da826940
++
++(cherry picked from commit 0f0cebe87fab335873fd3701bc304922da826940)
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ mysql.xs | 11 +++++------
++ 1 file changed, 5 insertions(+), 6 deletions(-)
++
++diff --git a/mysql.xs b/mysql.xs
++index 8edee55..9b4d60f 100644
++--- a/mysql.xs
+++++ b/mysql.xs
++@@ -819,15 +819,14 @@ dbd_mysql_get_info(dbh, sql_info_type)
++ 	    retsv = newSVpvn("`", 1);
++ 	    break;
++ 	case SQL_MAXIMUM_STATEMENT_LENGTH:
++-#if !defined(MARIADB_BASE_VERSION) && MYSQL_VERSION_ID >= 50709
++-        /* MariaDB 10 is not MySQL source level compatible so this
++-           only applies to MySQL*/
++-	    /* mysql_get_option() was added in mysql 5.7.3 */
++-	    /* MYSQL_OPT_NET_BUFFER_LENGTH was added in mysql 5.7.9 */
+++        /* net_buffer_length macro is not defined in MySQL 5.7 and some MariaDB
+++        versions - if it is not available, use newer mysql_get_option */
+++#if !defined(net_buffer_length)
+++            ;
+++	    unsigned long buffer_len;
++ 	    mysql_get_option(NULL, MYSQL_OPT_NET_BUFFER_LENGTH, &buffer_len);
++ 	    retsv = newSViv(buffer_len);
++ #else
++-	    /* before mysql 5.7.9 use net_buffer_length macro */
++ 	    retsv = newSViv(net_buffer_length);
++ #endif
++ 	    break;
++-- 
++2.44.0
++
 -- 
-2.34.1
+2.44.0
 
 _______________________________________________
 buildroot mailing list
