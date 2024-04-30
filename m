@@ -4,90 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BB21C4345F
-	for <buildroot@archiver.kernel.org>; Tue, 30 Apr 2024 20:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF978C4345F
+	for <buildroot@archiver.kernel.org>; Tue, 30 Apr 2024 20:48:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF78D40179;
-	Tue, 30 Apr 2024 20:47:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DDCDA41558;
+	Tue, 30 Apr 2024 20:47:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jItQVvWsGi5Y; Tue, 30 Apr 2024 20:47:55 +0000 (UTC)
+ id NAq8mv3PFYGf; Tue, 30 Apr 2024 20:47:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAE764028D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CD894155E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DAE764028D;
-	Tue, 30 Apr 2024 20:47:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CD894155E;
+	Tue, 30 Apr 2024 20:47:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9C8141BF3E1
- for <buildroot@lists.busybox.net>; Tue, 30 Apr 2024 20:47:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D70DB1BF3E1
+ for <buildroot@lists.busybox.net>; Tue, 30 Apr 2024 20:47:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 88550402FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC628402DC
  for <buildroot@lists.busybox.net>; Tue, 30 Apr 2024 20:47:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iB2zr_4bfp9J for <buildroot@lists.busybox.net>;
+ id Z_vdf2tunCyT for <buildroot@lists.busybox.net>;
  Tue, 30 Apr 2024 20:47:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8946C402DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8946C402DC
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8946C402DC
- for <buildroot@buildroot.org>; Tue, 30 Apr 2024 20:47:50 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-41adf155cffso44508025e9.2
- for <buildroot@buildroot.org>; Tue, 30 Apr 2024 13:47:50 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 92318402F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92318402F8
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 92318402F8
+ for <buildroot@buildroot.org>; Tue, 30 Apr 2024 20:47:49 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-418e4cd2196so48564765e9.1
+ for <buildroot@buildroot.org>; Tue, 30 Apr 2024 13:47:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1714510068; x=1715114868;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Krq1lCR9Oc7ss/1Ae/XGIxI73qYgz9XGUeFKrZRqerc=;
- b=oZ5toCUWe4Y50Mk/WUQSp8YHo3ttDVY0l1zYEx2Qmk5H6TRNP+zCY7CeEurlExSrWF
- B4rTvaYcXT3Ln/boh9o3IZEwU5l6Pz2XZr0geSXF3fMA/gn/Q89+xNHkHG+J/szhH8fg
- CP5eSb17toz5zxbAGY1OjSXl/t6yxT5vh5f5NG9MM9YvgeYhaSkqDxrH2ZonkB9T98+p
- VztuzYkRqfwnPYXG40UK2TwPB2JNG/2z+AACOvz661SmFcqwTVAjZad4yTYwfIN6YxVr
- 37bnIr11ZIaZJEj9f252wGbt/fY1ddVigKKzoHKtHLVgJrs4p3jsRO4fRJ3jdzrYgJBj
- ZuaQ==
-X-Gm-Message-State: AOJu0YxJVf7qCLjZj0NvT5pl50RwM8lihGLyNY2lPwXAxmiYYhmS65fZ
- NfJsqhEjY6ERHwfs7Ibx0VjHUhAw68Eyy+eF8nTswIcRP8IMQnFN5HUpx8DRzdKTwTd4ioUm+np
- 8
-X-Google-Smtp-Source: AGHT+IGYYbp7BL7Z9GZy4oEib+7hrMtn2Rt60YepmMMrV+Mw3M1bzZ2n7neTz7sswxXYAdtbswzUug==
-X-Received: by 2002:a05:600c:1988:b0:418:f5a9:b91c with SMTP id
- t8-20020a05600c198800b00418f5a9b91cmr376358wmq.33.1714510068321; 
- Tue, 30 Apr 2024 13:47:48 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=5eg6ejHqapp2t2I6Iv04Mbrac0tqogmudYYuP4zvnfs=;
+ b=lOJA4mchIEZj2P6jpgr0zD08a1A4hHZXSpbrEbQf4SBBPlcJBDxQhB4Z1QnXEF1ZR5
+ eoezuQl2SYXc+FhjlKDaBrCeB62YSvsT7f8eP1xZaQIhFNqe5s04JG2Bz1QuIBDZL9k0
+ lMAYwZGT0E5IMAjM6/h3NDNKppGN+IuE0PM7dCGRIzmJ5+rUPKQS/YVO25l1FNdqnNa/
+ qEUOnD6cB0liG3R4wSW61ES/gM8XTifRo6YcZMECjVJo21Y6utyvgC2Ssv4pEs/2gjrG
+ PKNj9m3Wt2GSRt9H8H5ZovBkxE1JC6jaUovCvSXaWJtwfEVbVSzAyRTy+FB/Ge3qnnID
+ RFfw==
+X-Gm-Message-State: AOJu0YzesiciJD3eQmPhzwEfqx2kAR538TIEQpD+jf90VkP5eBmX5NCi
+ y+2Yn08YH8B5ZGLzH5e+izT0QIhMiXSWq5suoDqYforEglTzr7vQq6vVZUP9q/ukHS6DdHQiQ88
+ L
+X-Google-Smtp-Source: AGHT+IEJVKlxbijKtCXb5I4+YgpTmFKVMb5AAcenOIbhAhuO61jAsXyQrB9ZJ32kqWKB3dnxfnOapw==
+X-Received: by 2002:a05:600c:4f0f:b0:41b:ca45:8263 with SMTP id
+ l15-20020a05600c4f0f00b0041bca458263mr517319wmq.12.1714510067794; 
+ Tue, 30 Apr 2024 13:47:47 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
  by smtp.gmail.com with ESMTPSA id
  g10-20020a05600c308a00b00418f7605249sm47346wmn.24.2024.04.30.13.47.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 30 Apr 2024 13:47:48 -0700 (PDT)
+ Tue, 30 Apr 2024 13:47:47 -0700 (PDT)
 From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 30 Apr 2024 22:47:44 +0200
-Message-ID: <20240430204744.1014238-2-romain.naour@smile.fr>
+Date: Tue, 30 Apr 2024 22:47:43 +0200
+Message-ID: <20240430204744.1014238-1-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240430204744.1014238-1-romain.naour@smile.fr>
-References: <20240430204744.1014238-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1714510068; x=1715114868;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Krq1lCR9Oc7ss/1Ae/XGIxI73qYgz9XGUeFKrZRqerc=;
- b=Cs7ycWsKZ0S4YBbMQRbBOwrqQlc7QYecGTSOvi+ySya8//kVIaNOcSe3YD2+ajCgEk
- OSJCxFfU4AJYQcEWjZy8Pp6cfzTzFXIh+Od/oODRJHVpN84+slE1GSVP0XLS05qBwN5C
- /dVwWlwOcDYiO22w69GqEbHi74RyW/OtHp3WPNdB9LKjVK+cHmJsK9knNkzwSTm0a12E
- aRoLFpvGxURpHajOKGF/9tcIOp/FS3WiwMbF9tZveMuq8cVjucF4Wlg6Qql8P2QFu5rW
- O14B20TQStSv20KVJ5LbFvueZTOHfAU7pN8aJ29iixuR321v2u5D85Qg/paYKGiPionB
- XK3w==
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=5eg6ejHqapp2t2I6Iv04Mbrac0tqogmudYYuP4zvnfs=;
+ b=KNCk4T6yPnlEMnxJEP9LN92m9+9S+ijUC/anBczbJ3vTg6jwHJVDYMlzZje8rzYHNF
+ rNWdWL+GyplG7iPxafzwX1l4AyHBHhPWKlSiRfeEg32xhtxYGuzM4ZThSLC0aMGOpuyp
+ uCyqLh2AHuvAZqt0yHSJTiy75bYxteDS9Mg4l4jhmoe3VIGyT13sE91v5f7K3sqVdX41
+ Bzqy4iBzDfQXoQ3Daarew5ZVcp0Bgj3DFSg1vHDJAEwlA33ggD1ME2To4oMNbL/C7mTS
+ dvg83Sjt10V85DxhMpIc8cOeJi1rJMxnLsOjvpvwNNA9jSmZqvKkqkWrUDdDva45TWxp
+ HUSw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=smile.fr
@@ -95,9 +92,9 @@ X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=Cs7ycWsK
-Subject: [Buildroot] [PATCH 2/2] package/perl-dbd-mysql: fix runtime issue
- with MariaDB
+ header.s=20230601 header.b=KNCk4T6y
+Subject: [Buildroot] [PATCH 1/2] support/testing: TestPerlDBDmysql: use ext2
+ instead of cpio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,78 +112,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Now that the TestPerlDBDmysql can be run normally, a new runtime issue
-appear due to switch from oracle-mysql to MariaDB:
+The CPIO filesystem generated by TestPerlDBDmysql is too large, and
+doesn't fit as an initramfs in the 256MB of RAM available in the
+versatilepb machine. This causes a failure while running a basic
+test "perl -MDBI -e '1'" since "/usr/lib/perl5", and many files
+being missing from the root filesystem, ultimately causing the test
+to fail.
 
-  # perl -MDBI -e '1'
-  # echo $?
-  0
+Can't locate DBI.pm in @INC (you may need to install the DBI module)
+(@INC entries checked: /usr/lib/perl5/site_perl/5.38.2/arm-linux
+/usr/lib/perl5/site_perl/5.38.2 /usr/lib/perl5/5.38.2/arm-linux
+/usr/lib/perl5/5.38.2).
 
-  # perl -MDBD::mysql -e '1'
-  Can't load '/usr/lib/perl5/site_perl/5.38.2/arm-linux/auto/DBD/mysql/mysql.so'
-  for module DBD::mysql: /usr/lib/perl5/site_perl/5.38.2/arm-linux/auto/DBD/mysql/mysql.so:
-  undefined symbol: net_buffer_length at /usr/lib/perl5/5.38.2/arm-linux/DynaLoader.pm line 206.
-
-This is fixed by an upstream commit [1] from 4.046_01 release.
-
-[1] https://github.com/perl5-dbi/DBD-mysql/commit/0f0cebe87fab335873fd3701bc304922da826940
+It would make sense to switch all test cases to use ext2 + a
+hard-drive, but for now, let's fix the few test cases that are causing
+problems.
 
 Fixes:
 https://gitlab.com/buildroot.org/buildroot/-/jobs/6735654506
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- ...net_buffer_length-macro-if-available.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/perl-dbd-mysql/0001-Use-net_buffer_length-macro-if-available.patch
+ support/testing/tests/package/test_perl_dbd_mysql.py | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/perl-dbd-mysql/0001-Use-net_buffer_length-macro-if-available.patch b/package/perl-dbd-mysql/0001-Use-net_buffer_length-macro-if-available.patch
-new file mode 100644
-index 0000000000..d7767c1f42
---- /dev/null
-+++ b/package/perl-dbd-mysql/0001-Use-net_buffer_length-macro-if-available.patch
-@@ -0,0 +1,41 @@
-+From 9189ef77679c22de3bbd2142031858373236520b Mon Sep 17 00:00:00 2001
-+From: Michiel Beijen <michiel.beijen@gmail.com>
-+Date: Fri, 23 Feb 2018 07:52:33 +0000
-+Subject: [PATCH] Use net_buffer_length macro if available
+diff --git a/support/testing/tests/package/test_perl_dbd_mysql.py b/support/testing/tests/package/test_perl_dbd_mysql.py
+index f8fe832b41..93551b420f 100644
+--- a/support/testing/tests/package/test_perl_dbd_mysql.py
++++ b/support/testing/tests/package/test_perl_dbd_mysql.py
+@@ -1,4 +1,5 @@
+ from tests.package.test_perl import TestPerlBase
++import os
+ 
+ 
+ class TestPerlDBDmysql(TestPerlBase):
+@@ -13,8 +14,18 @@ class TestPerlDBDmysql(TestPerlBase):
+         """
+         BR2_PACKAGE_PERL=y
+         BR2_PACKAGE_PERL_DBD_MYSQL=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+         """
+ 
++    def login(self):
++        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-drive", "file=%s,if=scsi,format=raw" % ext2_file],
++                           kernel_cmdline=["rootwait", "root=/dev/sda"])
++        self.emulator.login()
 +
-+Upstream: https://github.com/perl5-dbi/DBD-mysql/commit/0f0cebe87fab335873fd3701bc304922da826940
-+
-+(cherry picked from commit 0f0cebe87fab335873fd3701bc304922da826940)
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ mysql.xs | 11 +++++------
-+ 1 file changed, 5 insertions(+), 6 deletions(-)
-+
-+diff --git a/mysql.xs b/mysql.xs
-+index 8edee55..9b4d60f 100644
-+--- a/mysql.xs
-++++ b/mysql.xs
-+@@ -819,15 +819,14 @@ dbd_mysql_get_info(dbh, sql_info_type)
-+ 	    retsv = newSVpvn("`", 1);
-+ 	    break;
-+ 	case SQL_MAXIMUM_STATEMENT_LENGTH:
-+-#if !defined(MARIADB_BASE_VERSION) && MYSQL_VERSION_ID >= 50709
-+-        /* MariaDB 10 is not MySQL source level compatible so this
-+-           only applies to MySQL*/
-+-	    /* mysql_get_option() was added in mysql 5.7.3 */
-+-	    /* MYSQL_OPT_NET_BUFFER_LENGTH was added in mysql 5.7.9 */
-++        /* net_buffer_length macro is not defined in MySQL 5.7 and some MariaDB
-++        versions - if it is not available, use newer mysql_get_option */
-++#if !defined(net_buffer_length)
-++            ;
-++	    unsigned long buffer_len;
-+ 	    mysql_get_option(NULL, MYSQL_OPT_NET_BUFFER_LENGTH, &buffer_len);
-+ 	    retsv = newSViv(buffer_len);
-+ #else
-+-	    /* before mysql 5.7.9 use net_buffer_length macro */
-+ 	    retsv = newSViv(net_buffer_length);
-+ #endif
-+ 	    break;
-+-- 
-+2.44.0
-+
+     def test_run(self):
+         self.login()
+         self.module_test("DBI")
 -- 
 2.44.0
 
