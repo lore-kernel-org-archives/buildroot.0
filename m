@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50DBAC4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:46:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 079C8C25B4F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:46:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14141417AF;
-	Wed,  1 May 2024 20:46:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C85AD417E1;
+	Wed,  1 May 2024 20:46:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MikUBPMfDTPN; Wed,  1 May 2024 20:46:31 +0000 (UTC)
+ id E0B8XTQ8WldV; Wed,  1 May 2024 20:46:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DA1D41833
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9678741869
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DA1D41833;
-	Wed,  1 May 2024 20:46:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9678741869;
+	Wed,  1 May 2024 20:46:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4CFEE1BF983
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:46:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 682671BF400
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 372F040712
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5D97A40580
  for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:46:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K0NSLQgsBRia for <buildroot@lists.busybox.net>;
+ id Pq5XdJ2mYN5p for <buildroot@lists.busybox.net>;
  Wed,  1 May 2024 20:46:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17F7E40580
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E796405FD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17F7E40580
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E796405FD
  for <buildroot@buildroot.org>; Wed,  1 May 2024 20:46:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 086F0864D1; Wed,  1 May 2024 20:46:17 +0000 (UTC)
+ id 26036864D0; Wed,  1 May 2024 20:46:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 May 2024 22:06:37 +0200
+Date: Wed, 1 May 2024 22:06:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 05a4e5d5a5a4c6f9fabcf65bb1b46840dc305e29
-X-Git-Newrev: 4d9a3f1a32e743fd5bb267442be98b4e0a2d0e14
+X-Git-Oldrev: 6317f6c9a4107d3409530b653c5900bff17ffb6e
+X-Git-Newrev: 7c1faf997f868586a40a9cb6f03166d85a67b8f8
 X-Patchwork-Hint: ignore
-Message-Id: <20240501204617.086F0864D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iperf: bump to version 2.2.0
+Message-Id: <20240501204617.26036864D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add fwts runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +65,101 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d9a3f1a32e743fd5bb267442be98b4e0a2d0e14
+commit: https://git.buildroot.net/buildroot/commit/?id=7c1faf997f868586a40a9cb6f03166d85a67b8f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For release note, see after the file list at:
-https://sourceforge.net/projects/iperf2/files/
-
-Note: the md5 file hash is also added, because it is published on
-download page.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iperf/iperf.hash | 5 +++--
- package/iperf/iperf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/package/test_fwts.py | 67 ++++++++++++++++++++++++++++++
+ 2 files changed, 68 insertions(+)
 
-diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-index eb6088649d..e4d40d5940 100644
---- a/package/iperf/iperf.hash
-+++ b/package/iperf/iperf.hash
-@@ -1,6 +1,7 @@
- # From https://sourceforge.net/projects/iperf2/files/
--sha1  e7b669c2e8747df95b59956e83ff53d3971d7a5f  iperf-2.1.9.tar.gz
-+md5  34bb6ac1abeb801bf3f729794dc5ac36  iperf-2.2.0.tar.gz
-+sha1  bcbd101ab36f3faacaab1a765a96806ca49a1495  iperf-2.2.0.tar.gz
- 
- # Locally computed:
--sha256  5c0771aab00ef14520013aef01675977816e23bb8f5d9fde016f90eb2f1be788  iperf-2.1.9.tar.gz
-+sha256  16810a9575e4c6dd65e4a18ab5df3cdac6730b3c832cf080a8990f132f68364a  iperf-2.2.0.tar.gz
- sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
-diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
-index 1347f766d1..303614668a 100644
---- a/package/iperf/iperf.mk
-+++ b/package/iperf/iperf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPERF_VERSION = 2.1.9
-+IPERF_VERSION = 2.2.0
- IPERF_SITE = https://downloads.sourceforge.net/project/iperf2
- IPERF_LICENSE = MIT-like
- IPERF_LICENSE_FILES = COPYING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6bfad23442..726641b513 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1787,6 +1787,7 @@ F:	support/testing/tests/package/test_file/
+ F:	support/testing/tests/package/test_fluidsynth.py
+ F:	support/testing/tests/package/test_fluidsynth/
+ F:	support/testing/tests/package/test_fping.py
++F:	support/testing/tests/package/test_fwts.py
+ F:	support/testing/tests/package/test_gawk.py
+ F:	support/testing/tests/package/test_ghostscript.py
+ F:	support/testing/tests/package/test_ghostscript/
+diff --git a/support/testing/tests/package/test_fwts.py b/support/testing/tests/package/test_fwts.py
+new file mode 100644
+index 0000000000..ef792136c2
+--- /dev/null
++++ b/support/testing/tests/package/test_fwts.py
+@@ -0,0 +1,67 @@
++import os
++
++import infra.basetest
++
++
++class TestFwts(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++        BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/aarch64-sbsa/assemble-flash-images support/scripts/genimage.sh"
++        BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/aarch64-sbsa/genimage.cfg"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.28"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++        BR2_TARGET_EDK2=y
++        BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y
++        BR2_TARGET_GRUB2=y
++        BR2_TARGET_GRUB2_ARM64_EFI=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu_sbsa"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++        BR2_PACKAGE_FWTS=y
++        BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE=y
++        BR2_PACKAGE_HOST_GENIMAGE=y
++        BR2_PACKAGE_HOST_DOSFSTOOLS=y
++        BR2_PACKAGE_HOST_MTOOLS=y
++        """
++
++    def test_run(self):
++        hda = os.path.join(self.builddir, "images", "disk.img")
++        flash0 = os.path.join(self.builddir, "images", "SBSA_FLASH0.fd")
++        flash1 = os.path.join(self.builddir, "images", "SBSA_FLASH1.fd")
++        self.emulator.boot(arch="aarch64",
++                           options=["-M", "sbsa-ref",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "512M",
++                                    "-pflash", flash0,
++                                    "-pflash", flash1,
++                                    "-hda", hda])
++        self.emulator.login()
++
++        # Check the program can execute.
++        self.assertRunOk("fwts --version")
++
++        # We run a simple UEFI runtime service variable interface test
++        # suite. Those tests are using the fwts efi_runtime kernel
++        # module.
++        self.assertRunOk("fwts -q uefirtvariable", timeout=30)
++
++        # The previous fwts invocation is expected to have created a
++        # "results.log" report. We check the file exists and contains
++        # a known header string.
++        expected_str = "Results generated by fwts:"
++        cmd = f"grep -F '{expected_str}' results.log"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertTrue(out[0].startswith(expected_str))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
