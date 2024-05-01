@@ -1,93 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65648C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 15:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7FDDC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 15:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EF2060A9D;
-	Wed,  1 May 2024 15:05:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C00DF40493;
+	Wed,  1 May 2024 15:27:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pVzdK0QKs3h9; Wed,  1 May 2024 15:05:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UAPCIxt0dRIS; Wed,  1 May 2024 15:27:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D8E860BCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68AA240677
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D8E860BCA;
-	Wed,  1 May 2024 15:05:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 86A651BF297
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 15:05:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68AA240677;
+	Wed,  1 May 2024 15:27:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 510CC1BF297
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 15:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73E5260A9D
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 15:05:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 370AD4029F
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 15:27:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tBaZhC_l0ut8 for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 15:05:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 58F5160BDF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58F5160BDF
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 58F5160BDF
- for <buildroot@buildroot.org>; Wed,  1 May 2024 15:05:12 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-34db6a299b2so806229f8f.3
- for <buildroot@buildroot.org>; Wed, 01 May 2024 08:05:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714575910; x=1715180710;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=1Ko+HP0VxsJtqpDwxi0N1LymhE2nPegZd2UW0NBn74g=;
- b=B1zgqH66v3GmXJ0+gmh9dcXK+FrFeIcgtvsmb128jAO57ojvEK838O5DlPTwhylVSX
- /qkOZ/bynGyFGl9VRF3NpM8sWcJfx+uFl+AuZE7n920HvXNLBoqPxSx0ENovX7SPRmpU
- ohEcniNnUZPiOgUs7pTVWehea/SR6Q+n0m4qH75Wcecd9NCwyTqb6a9xw6FyWkchjjbt
- c7/n7eLlnYkx+Rt2RNQgYNGy30jKHemPOB91LA7FdTyHVNDRAafK5X5Q0FIfNNC1GrsQ
- E4MJglgZtTd7xgDvbJXm+bc0uZenSyZ1xVhaJnkzSY2PDTOS04I9cQGymEO4vH/QXDZ6
- lr5A==
-X-Gm-Message-State: AOJu0YxREBC5Iar45mn7JItCCyuLg8DZ4jpd4jK/HJJhRV1Q8ww/ZvMF
- yxNDyGU7ZMEy9i3Br2kqSknR0A4IfabcKAtMQlVcPZfklAvP1HwKbREN8w==
-X-Google-Smtp-Source: AGHT+IEWkjyteXHdXII66z3QJlKhOYrXKONNBZ/6GRo7Ga/Z4wONJy2HVh/OLBozctTn+2WE0rUGcQ==
-X-Received: by 2002:a05:6000:ace:b0:349:c40c:393 with SMTP id
- di14-20020a0560000ace00b00349c40c0393mr1775585wrb.3.1714575909774; 
- Wed, 01 May 2024 08:05:09 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- y18-20020adff152000000b0034d7a555047sm4315354wro.96.2024.05.01.08.05.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 May 2024 08:05:09 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  1 May 2024 17:05:07 +0200
-Message-ID: <20240501150507.284189-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0EmFLre0XvPs for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 15:27:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.141;
+ helo=fllv0015.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 15F9B40139
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15F9B40139
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 15F9B40139
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 15:27:40 +0000 (UTC)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+ by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 441FRdr2004122;
+ Wed, 1 May 2024 10:27:39 -0500
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+ by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 441FRdIC052907
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Wed, 1 May 2024 10:27:39 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 1
+ May 2024 10:27:39 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 1 May 2024 10:27:39 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+ by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 441FRdgA070261;
+ Wed, 1 May 2024 10:27:39 -0500
+Date: Wed, 1 May 2024 10:27:23 -0500
+Message-ID: <20240430-optee-update-v1-0-6f73c4903ec3@ti.com>
 MIME-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAFtfMmYC/x2NQQrDIBQFrxL+uoKxbuxVShdqnvVDMKJJCUjun
+ k+XMzDMoI7G6PSaBjX8uPNWBObHRDH78oXiRZiMNlbbp1Zb3QF11MXvUMHFOUQLl4wjSYLvIps
+ vMUtUjnUVWRsSn//H+3NdN+WWUElzAAAA
+To: Bryan Brattlof <bb@ti.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2759; i=bb@ti.com;
+ h=from:subject:message-id; bh=lRiGKL1MgWA+iL/7Q6pfZ3HLx/mArxvtGOzMfalhj+w=;
+ b=owNCWmg5MUFZJlNZLnp+fwAAbf////7r/zXuO/b9+9f8/Tu7n2072V7/2Vr9W35v8lx/+/ewA
+ RloIepoyMjTRpoaAAyaAAAADQ0Bo0AANPUNAaGho0aGhoMmgDEAepk0xNGTT0CaeogAyNDJo0yN
+ A00NNGhoaYgAxGQNGJkyNGE0GQBk0aNADTQaBoNAGjNINMmgBoGUGRk0002po0AaNGmgA0GQGmg
+ yBkyBhADRkAMmgxAYQ9QaMgBiaGg0NAZAAYMcFHA6R7GTFM/g+EuFHiMZjgLpbrTIAgTG5EDwPZ
+ RDqOgBhlPQeANOI1jJN3GqPeF3TREO3fEWf33tnJcyZHahB8YHadz2UMnrjPEIvk8NrN4fEfd1g
+ OaBVlSq07/EPg0gOfQul7GQZhSRZd+qySoS5YRamVPbYanFAhaSEunPzkyMUFBxuIPvhfMMM/bb
+ Zvy/D7CZpbTvUf9iEjYu1vwDqKEP7z1US6dABltL+pHz3K0eByaUEzyvTg9vAme4zLDzSroJoxO
+ E0bgx0yw0Gxec9qpJRMDC4qk6vboQrdRolPJwLbBCEBAGKarMCsBGrBM/gM6raOFFogWbiI4sRL
+ WO8GTqe1dQj154MNnhS4bUA0ULOSQCrY51Tdr1mLOKAaNeFsqSaAz1ERht0kXdhMIcfQDiMHetx
+ JP9KuQHLAquEEqjasT/F3JFOFCQLnp+fw==
+X-Developer-Key: i=bb@ti.com; a=openpgp;
+ fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1714575910; x=1715180710; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=1Ko+HP0VxsJtqpDwxi0N1LymhE2nPegZd2UW0NBn74g=;
- b=bDmeYCj8jjq2aRwwIGyqoTzL4dPQYQZ+pEA2MUZhknrY7JOJTvhhZArrSTGKx+KHNA
- 167PkEUSme6rqaNVVrIZGaaQvynTYkniezxk6zdpuHS4y8Zm09lUwaiB8zCiOkP12i7a
- s9nV7DY/IKfN3IO9FY+5dfXr+FYg21r08eEZOC8wIDWGT8b0UCvmrwACco6Jxlo8rnz8
- I/YPdYxqNiYCPuG3nFY8VQT/2UFftMVVloPM4dUhJjLdDwaqB0i7ZY09HAwoapZPxF5r
- whsMR7EnYWLCZaKnAGqe2AFRj5Djwe3L6L2uqBOmeNLiKVX6CZ/EW6/VN+t48ULxTeFc
- buYg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=bDmeYCj8
-Subject: [Buildroot] [PATCH 1/1] package/libjwt: add CPE variables
+ d=ti.com; s=ti-com-17Q1; t=1714577259;
+ bh=sItceLM6cGNSBG3NEXjy7TbxQk3TImA1OmLwcvhKjqI=;
+ h=From:Subject:Date:To:CC;
+ b=bbH2oKMkdlGD/8msAY+pnhV/t7v4pROhaCz93vbbL46O2jxrXyhj3zyqeeO6bKjSy
+ Ukd13uivO23bnrg6+4Q4PrTLm8P3xjVznOh3hG/bXft1mlq/UhaNosCVwA+DHvHLXu
+ au9CGxKBY0RD0kfD5+BcnctvMZJIipUe8yluTzNQ=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=bbH2oKMk
+Subject: [Buildroot] [PATCH 00/11] update bsp binaries for TI SoCs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,37 +103,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>,
+ Andreas Dannenberg <dannenberg@ti.com>,
+ Bryan Brattlof via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:bencollins:jwt_c_library is a valid CPE identifier for this
-package:
+Hello everyone!
 
-  https://nvd.nist.gov/products/cpe/detail/6335E595-6F38-4837-83BB-C78B687BB75B
+This series updates all the boot binaries (U-Boot, OP-TEE, TF-A, and 
+Linux) to their latest versions to pull in all bug fixes and new 
+features additions in these projects.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This also includes a patch I send out a while ago just to keep things 
+organized. 
+
+  https://lore.kernel.org/buildroot/20240402153328.1859642-1-bb@ti.com/
+
+and finally some proof I didn't completely break something ;)
+
+  https://paste.sr.ht/~bryanb/b666adef7da412de76efb5e4a68e68e0651f7928
+
+Thanks for reviewing
+~Bryan
+
+Signed-off-by: Bryan Brattlof <bb@ti.com>
 ---
- package/libjwt/libjwt.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Bryan Brattlof (10):
+      boot/optee-os: bump to release v4.2.0
+      boot/uboot: bump to latest v2024.04 release of U-Boot
+      boot/ti-k3-r5-loader: bump to latest U-Boot release
+      configs/ti_am62x_sk_defconfig: update TFA to latest lts release
+      configs/ti_am64x_sk_defconfig: update TFA to latest lts release
+      configs/ti_am62x_sk_defconfig: update uboot to latest release
+      configs/ti_am64x_sk_defconfig: update uboot to latest release
+      configs/ti_am62x_sk_defconfig: update to latest kernel
+      configs/ti_am64x_sk_defconfig: update to latest kernel
+      DEVELOPERS: add myself to TI's packages and reference boards
 
-diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
-index 1643aa7b7a..8929904d10 100644
---- a/package/libjwt/libjwt.mk
-+++ b/package/libjwt/libjwt.mk
-@@ -11,6 +11,8 @@ LIBJWT_AUTORECONF = YES
- LIBJWT_INSTALL_STAGING = YES
- LIBJWT_LICENSE = MPL-2.0
- LIBJWT_LICENSE_FILES = LICENSE
-+LIBJWT_CPE_ID_VENDOR = bencollins
-+LIBJWT_CPE_ID_PRODUCT = jwt_c_library
- LIBJWT_CONF_OPTS = --without-examples
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+Bryan Brattlof via buildroot (1):
+      boot/ti-k3-boot-firmware: bump to latest version
+
+ DEVELOPERS                                                       | 8 ++++++++
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash       | 2 +-
+ board/ti/am62x-sk/patches/linux/linux.hash                       | 2 +-
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash       | 2 +-
+ board/ti/am64x-sk/patches/linux/linux.hash                       | 2 +-
+ boot/optee-os/Config.in                                          | 4 ++--
+ boot/optee-os/optee-os.hash                                      | 4 ++--
+ boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash                | 2 +-
+ boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk                  | 4 +---
+ boot/ti-k3-r5-loader/Config.in                                   | 4 ++--
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.hash                        | 2 +-
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk                          | 1 +
+ boot/uboot/Config.in                                             | 6 +++---
+ boot/uboot/uboot.hash                                            | 2 +-
+ configs/ti_am62x_sk_defconfig                                    | 9 ++++-----
+ configs/ti_am64x_sk_defconfig                                    | 9 ++++-----
+ 16 files changed, 34 insertions(+), 29 deletions(-)
+---
+base-commit: 39ed602169ecf7677328d1387d30869baeb28cea
+change-id: 20240430-optee-update-b9c1bc4e9f29
+
+Best regards,
 -- 
-2.43.0
+Bryan Brattlof <bb@ti.com>
 
 _______________________________________________
 buildroot mailing list
