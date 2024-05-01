@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EB44C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 19:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0346DC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 19:53:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F41E581206;
-	Wed,  1 May 2024 19:52:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4EFD820FC;
+	Wed,  1 May 2024 19:53:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pUbsZqMgeHR1; Wed,  1 May 2024 19:52:59 +0000 (UTC)
+ id j3IMPfuTaSHi; Wed,  1 May 2024 19:53:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BBC28128A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C89568128A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BBC28128A;
-	Wed,  1 May 2024 19:52:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C89568128A;
+	Wed,  1 May 2024 19:53:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 151391BF2C9
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:52:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A7B111BF2C9
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:53:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0004D60BCC
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:52:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A209F60BC7
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:53:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QWrqBs81Lde2 for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 19:52:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id CpvjmUHpUgOc for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 19:53:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B4D760602
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B4D760602
- for <buildroot@buildroot.org>; Wed,  1 May 2024 19:52:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35BC68641F; Wed,  1 May 2024 19:52:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 1 May 2024 21:51:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7931f78c16f08f7a850181ce4b316e2be7522f26
-X-Git-Newrev: 16463a00affa0ba4814e583bcd544174528f371e
-X-Patchwork-Hint: ignore
-Message-Id: <20240501195256.35BC68641F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/coreutils: drop gmp optional
- dependency
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7C5D260602
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C5D260602
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7C5D260602
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 19:53:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8E17DFF804;
+ Wed,  1 May 2024 19:52:59 +0000 (UTC)
+Date: Wed, 1 May 2024 21:52:58 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240501215258.2d29767e@windsurf>
+In-Reply-To: <20240419215212.1025654-1-ju.o@free.fr>
+References: <20240419215212.1025654-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1714593179;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6XGVODQ4eefrxn+OGUI5uiS6zOKWze6+FqiaF3Vnzn8=;
+ b=I9INYbRLqQZSCsAys8CcjHpN9mUBfjowK3v5neB+0U0j+bI4ZAG/FwhWGveJfi3FQnJCYB
+ UzUBdd4Mexvns2ZkJwZ8XPTciWESgD2IiEUAW3q5Iw19iT6U8lDU8GbXYFHYwucdKHN1MM
+ G9YUL8PjVtz4XpfyvzdmS8KnT2DmdEvw9qV9EsVYy0rFgYGqAxefKm2cBa5+/XvAsufI2k
+ bv2xggd9XUEn1wQNSvgvN3Nt9zTj7NFtnnvUJ34jPie0zxEFHsSL+Z25ZygM8U3QI1RRft
+ U0Uce5o3q77xnDEC9CK8v5ie7cbGaQdvxCC/4XH4pQuoOwhn087UorksPzNtzA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=I9INYbRL
+Subject: Re: [Buildroot] [PATCH 1/1] package/acpica: bump to version 20240321
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,46 +82,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16463a00affa0ba4814e583bcd544174528f371e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 19 Apr 2024 23:52:12 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-libgmp is included in coreutils (through bootstrap.conf) since bump to
-version 9.0 in commit 2ee43bad85693d1c96e14f5b39ccb13a8982f50a and
-https://git.savannah.gnu.org/cgit/coreutils.git/commit/?id=13046444888a7e96f48d28fdd5a6ffe03d4ab036:
+> For change log since 20230628, see [1].
+> 
+> License file hash changed in [2], due to year update.
+> 
+> The upstream download page also changed the published hash from sha1
+> to sha256. This change is reflected in the hash file.
+> 
+> [1] https://github.com/acpica/acpica/blob/G20240322/documents/changes.txt
+> [2] https://github.com/acpica/acpica/commit/c18edfb1abfb50521a363f811bc8e1e64213bd00
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Patch tested on master branch at commit 256aa8e with commands:
 
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --enable-static, --enable-shared, --without-gmp
+Applied to master, thanks.
 
-Fixes: 2ee43bad85693d1c96e14f5b39ccb13a8982f50a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/coreutils/coreutils.mk | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index e9cb7b67cb..846d4fa567 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -75,12 +75,6 @@ ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
- COREUTILS_CONF_OPTS += --with-libintl-prefix=$(STAGING_DIR)/usr
- endif
- 
--ifeq ($(BR2_PACKAGE_GMP),y)
--COREUTILS_DEPENDENCIES += gmp
--else
--COREUTILS_CONF_OPTS += --without-gmp
--endif
--
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- COREUTILS_DEPENDENCIES += libcap
- else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
