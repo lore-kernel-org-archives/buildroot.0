@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E14B9C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:44:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4681C4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B104181E63;
-	Wed,  1 May 2024 21:44:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8173581767;
+	Wed,  1 May 2024 21:52:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EsVLL6VGErbD; Wed,  1 May 2024 21:44:47 +0000 (UTC)
+ id VtzNGvWjfInR; Wed,  1 May 2024 21:52:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 954F582000
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FBA48176D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 954F582000;
-	Wed,  1 May 2024 21:44:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AD1C01BF384
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:44:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FBA48176D;
+	Wed,  1 May 2024 21:52:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 80A921BF384
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97C1181E63
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:44:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D36F40811
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:52:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iwsYDRwLjrhx for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 21:44:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rWbZNrCpEeuY for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 21:52:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8DAEE813D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DAEE813D0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8DAEE813D0
- for <buildroot@buildroot.org>; Wed,  1 May 2024 21:44:45 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C3F7813F880;
- Wed,  1 May 2024 23:44:40 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 01 May 2024 23:44:40 +0200
-Date: Wed, 1 May 2024 23:44:40 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Reza Arbab <arbab@linux.ibm.com>
-Message-ID: <ZjK3yArA-YSkrSOI@landeda>
-References: <20240416144818.681220-1-arbab@linux.ibm.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240416144818.681220-1-arbab@linux.ibm.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1714599883;
- bh=mR2R+8A8zkDaKBLRmyT5jduu3biWj9eoq5IVENpqPNM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=QRy6Ig+yghfTdmy/WgyNFPms1toE8SiRD3HXsITYdZ9SbNAlDlHFn8j89zCZIvnD9
- k4qKcOBdw3qC34IjAPMVQGPoP9khXTUkLT46iB09rZkapeOphatS3HqE/9pPmTx+er
- GEzFFkfUBdENrO/AG8YSaR7vjAj6us6LokAAuCb8SF5dY8Lr1q+2aZGWmNzvorMY2A
- HDFPXxfkdZzvlKf1ijvzeHmzJM8i1T4mZNWzjtTO/AeKtZcBPREXc7xSO4UWBEs170
- H4e9xYRWknbv3eewn89gsu79iMXZ7hAqb6XTq5vpUEfOrPUlzZnomKypC8iSkQSNqe
- 6wHUd/xgiXNcw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=QRy6Ig+y
-Subject: Re: [Buildroot] [PATCH] package/petitboot: add libxcrypt optional
- dependency
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 638EC4077D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 638EC4077D
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 21:52:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4C41586542; Wed,  1 May 2024 21:52:06 +0000 (UTC)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Wed, 1 May 2024 23:50:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4d57014449e6e5b32e5373aa2afd4fd8cd3a9883
+X-Git-Newrev: e4981d6756c711e2034072247912bc85d3edae02
+X-Patchwork-Hint: ignore
+Message-Id: <20240501215206.4C41586542@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] ti-k3-r5-loader: support devicetree
+ customization
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,74 +59,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Laurent Vivier <laurent@vivier.eu>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1140990684963500279=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Reza, All,
+--===============1140990684963500279==
+Content-Type: text/plain
 
-On 2024-04-16 09:48 -0500, Reza Arbab spake thusly:
-> Fix the following build failure raised since bump of glibc to version
-> 2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
-> 
->   checking for crypt in -lcrypt... no
->   configure: error: in `/home/arbab/src/buildroot/output/build/petitboot-1.15':
->   configure: error: shadow/crypt libs required
-> 
-> Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=e4981d6756c711e2034072247912bc85d3edae02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+This is duplicated from the U-Boot makefile & Kconfig.
 
-Regards,
-Yann E. MORIN.
+Similarly to U-Boot custom boards sometimes need to adjust the U-Boot
+devicetree. For example, the AM64x SDRAM controller supports inline ECC
+which needs to be enabled in the R5 loader devicetree.
 
-> ---
->  package/petitboot/Config.in    | 1 +
->  package/petitboot/petitboot.mk | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
-> index 533c7a9f2980..66836f31acd8 100644
-> --- a/package/petitboot/Config.in
-> +++ b/package/petitboot/Config.in
-> @@ -14,6 +14,7 @@ config BR2_PACKAGE_PETITBOOT
->  	# run-time dependencies
->  	select BR2_PACKAGE_KEXEC if !BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS
->  	select BR2_PACKAGE_KEXEC_LITE if BR2_PACKAGE_KEXEC_LITE_ARCH_SUPPORTS && !BR2_PACKAGE_KEXEC
-> +	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
->  	select BR2_PACKAGE_NVME if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
->  	select BR2_PACKAGE_POWERPC_UTILS if ( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le )
->  	help
-> diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-> index cd7631fa5cae..2eb6461144cd 100644
-> --- a/package/petitboot/petitboot.mk
-> +++ b/package/petitboot/petitboot.mk
-> @@ -14,6 +14,7 @@ PETITBOOT_DEPENDENCIES = \
->  	host-bison \
->  	host-flex \
->  	lvm2 \
-> +	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
->  	$(TARGET_NLS_DEPENDENCIES)
->  PETITBOOT_LICENSE = GPL-2.0
->  PETITBOOT_LICENSE_FILES = COPYING
-> -- 
-> 2.39.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Please note that some versions of U-Boot have broken external devicetree
+support and may require manual patching to build. See commit [1]
+in the U-Boot tree.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[1] https://source.denx.de/u-boot/u-boot/-/commit/3609e1dc5f4d4c238dcd23e045ba6223310feffa
+
+Signed-off-by: Patrick Oppenlander <patrick.oppenlander@gmail.com>
+Signed-off-by: Gero Schwäricke <gero.schwaericke@grandcentrix.net>
+[Romain: add gitlab URL]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ boot/ti-k3-r5-loader/Config.in          | 10 ++++++++++
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk |  5 +++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
+index 6d1adbeac3..df885cc2af 100644
+--- a/boot/ti-k3-r5-loader/Config.in
++++ b/boot/ti-k3-r5-loader/Config.in
+@@ -95,6 +95,16 @@ config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_CONFIG_FILE
+ 	help
+ 	  Path to the TI K3 R5 Loader configuration file.
+ 
++config BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_DTS_PATH
++	string "Device Tree Source file paths"
++	help
++	  Space-separated list of paths to device tree source files
++	  that will be copied to arch/arm/dts/ before starting the
++	  build.
++
++	  To use this device tree source file, the U-Boot configuration
++	  file must refer to it.
++
+ config BR2_TARGET_TI_K3_R5_LOADER_TIBOOT3_BIN
+ 	string "tiboot3.bin binary name"
+ 	default "tiboot3.bin"
+diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+index 891783e40f..98a6d473f1 100644
+--- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
++++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+@@ -88,7 +88,12 @@ define TI_K3_R5_LOADER_INSTALL_SWSFW_ITB
+ 	fi
+ endef
+ 
++TI_K3_R5_LOADER_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_DTS_PATH))
++
+ define TI_K3_R5_LOADER_BUILD_CMDS
++	$(if $(TI_K3_R5_LOADER_CUSTOM_DTS_PATH),
++		cp -f $(TI_K3_R5_LOADER_CUSTOM_DTS_PATH) $(@D)/arch/arm/dts/
++	)
+ 	$(TARGET_CONFIGURE_OPTS) $(TI_K3_R5_LOADER_MAKE) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)
+ endef
+ 
+
+--===============1140990684963500279==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1140990684963500279==--
