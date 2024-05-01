@@ -1,51 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2E9CC4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 07:46:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92922C4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 09:24:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D7EC81E06;
-	Wed,  1 May 2024 07:46:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46F126059C;
+	Wed,  1 May 2024 09:24:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RgwAQ7zsAxTa; Wed,  1 May 2024 07:46:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id unll-XCWR6py; Wed,  1 May 2024 09:24:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D62981EC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 520E6605A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D62981EC5;
-	Wed,  1 May 2024 07:46:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE87E1BF409
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 07:46:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 520E6605A5;
+	Wed,  1 May 2024 09:24:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 009B61BF3A3
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 09:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A855681EC5
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 07:46:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E1D2A605A5
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 09:24:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X1EkpoiiDTue for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 07:46:40 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=109.91.157.25;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 444C281E06
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 444C281E06
-Received: from busybox.net (ip-109-091-157-025.um37.pools.vodafone-ip.de
- [109.91.157.25])
- by smtp1.osuosl.org (Postfix) with ESMTP id 444C281E06
- for <buildroot@busybox.net>; Wed,  1 May 2024 07:46:38 +0000 (UTC)
-From: cPanel on busybox.net <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 1 May 2024 10:46:36 +0300
-Message-ID: <20240501104636.CDAA08F338AC01B7@busybox.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V5NnPAoD-kdc for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 09:24:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
+ envelope-from=dm.chestnykh@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C6EB86059C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6EB86059C
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C6EB86059C
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 09:24:11 +0000 (UTC)
+Received: by mail-lf1-x134.google.com with SMTP id
+ 2adb3069b0e04-5191b61cad3so1591622e87.2
+ for <buildroot@buildroot.org>; Wed, 01 May 2024 02:24:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1714555449; x=1715160249;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=YDfctzUgXUSI8Uy2PutedPSIm9GGDGSl5AR/rndB4ds=;
+ b=mhIGc1wGWb+h8SjaaR1grAgw/pTGzhNZ/DTahitesycw1FLGZHewN6Gfmmr//IVDZk
+ wz3DWDaX9LdMXvEMGb9YG0FdDFpkB2QwVSu9ZTEQZfUxk5h/YFf+hSBZrg3wW+wXLhcR
+ T+RVnPLHSaA/0E1TJmdsW/eZfcZooFy6FlePjx7PDWXHSIuaIoxu+DJx1xGMLlUCm8KZ
+ mvVKT7e7D1EGTBKB2zXXPkn0otX9ly/44zvj6anZ2O/fQLYlQMk73JJhpNtZbP69feuw
+ ut4pgZ/5Em8QlaZUGiyj5TOmncuCvcaRhBI/9LGov4UeARJxMDbjs9QXYIqoLGeryAHY
+ RiBw==
+X-Gm-Message-State: AOJu0YynqFHuELf/h7OYL62braK1ET2m/rth+bxBrlERp3uMmi1LuZq/
+ PVwD7htdEEJlhCFRL8aDSeDDoJEV0nPjZbk6iqtChFsQUOUVBKWzXxmawlnW
+X-Google-Smtp-Source: AGHT+IHI+T+gy3qYgLGtEx2nijHguqOb3K0gDxYrMexxgKMQZjnPxegHSpC0JhzTE831OttgN9yY+g==
+X-Received: by 2002:a2e:bc10:0:b0:2e1:9b2f:d47e with SMTP id
+ b16-20020a2ebc10000000b002e19b2fd47emr108388ljf.4.1714555448749; 
+ Wed, 01 May 2024 02:24:08 -0700 (PDT)
+Received: from localhost.localdomain (109-252-38-243.nat.spd-mgts.ru.
+ [109.252.38.243]) by smtp.gmail.com with ESMTPSA id
+ s23-20020a2e81d7000000b002dfbff5667csm1446410ljg.52.2024.05.01.02.24.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 01 May 2024 02:24:08 -0700 (PDT)
+From: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  1 May 2024 12:23:26 +0300
+Message-ID: <20240501092328.323236-1-dm.chestnykh@gmail.com>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] =?utf-8?q?WARNING=3A_The_=E2=80=9C?=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1714555449; x=1715160249; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=YDfctzUgXUSI8Uy2PutedPSIm9GGDGSl5AR/rndB4ds=;
+ b=P5mAFybzvpq4vWcILEyOKNpUvs6E1GR4n1gthIaZQz2EtweULWhoTWvi3bnJXalTEe
+ RAy9TuJAixKnHi+XJnTBecNkACtMoZffSZpp1SBBcRwKrFgSRnZPIYbIc6o5GBkMkzMq
+ I6m7M4Sr/NQ5m2FLljt+qBt9ltdgd+PwPv5awJ8v7w1D+9uh0A0HzZIBMly3JwLQ40l8
+ 8a7uK6oJE1dUVWtObas1c4YSsKHUA/jqS2ow6K3cIdra3yNHTJAzTmi/aWOq19Yk3DKs
+ /kwUYelotVamTWtpW3YgxqwsEFI5TDyAp1usqenUZeapVYLD6GW8qfzPmipaYMtvuDwG
+ 2nJw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=P5mAFybz
+Subject: [Buildroot] [PATCH 1/3] package/uclibc: Bump to 1.0.48.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,114 +100,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4025348828294369904=="
+Cc: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4025348828294369904==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+In 1.0.48 release uClibc-ng has provided the fix
+for SPARC related to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body><iframe tabindex=3D"-1" aria-hidden=3D"true" style=3D"top: -99em; wid=
-th: 9em; height: 9em; position: absolute;"></iframe>
-<div style=3D"left: 30%; top: 30%; width: 0px; height: 0px; color: white; o=
-verflow: hidden; font-size: 0px; position: absolute; z-index: -9;">
-<form id=3D"null" action=3D"?ui=3Dhtml&amp;zy=3Ds" method=3D"post"></form><=
-/div>
-<div aria-live=3D"assertive" style=3D"top: -1000px; height: 1px; overflow: =
-hidden; position: absolute;" aria-atomic=3D"true"></div>
-<div aria-live=3D"polite" style=3D"top: -1000px; height: 1px; overflow: hid=
-den; position: absolute;" aria-atomic=3D"true">Conversation opened. 1 unrea=
-d message.&nbsp;</div>
+Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+---
+ package/uclibc/uclibc.hash | 4 ++--
+ package/uclibc/uclibc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-<div>
-<div class=3D"ii gt" id=3D":2t" jslog=3D"20277; u014N:xr6bB; 1:WyIjdGhyZWFk=
-LWY6MTc2NjMyMDQxNjE2MjAwMjIyMCIsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnV=
-sbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyIjbXNnLWY6MTc2NjMyMDQxNjE2Mj=
-AwMjIyMCIsbnVsbCxbXV0.">
-<div class=3D"a3s aiL " id=3D":2u">
-<div dir=3D"ltr">
-<div class=3D"gmail_quote">
-<div style=3D"background: rgb(244, 244, 244);">
-<div style=3D"background: rgb(244, 244, 244); margin: 0px; padding: 0px;">
-<table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"10">
-<tbody>
-<tr>
-<td align=3D"center">
-<table width=3D"680" style=3D"border: 0px currentColor; border-image: none;=
- max-width: 680px;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td width=3D"680" height=3D"25" style=3D'color: rgb(51, 51, 51); font-famil=
-y: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 16px;'>Mailbox q=
-uota notification for &#8220;<a href=3D"mailto:buildroot@busybox.net" targe=
-t=3D"_blank">buildroot@busybox.net</a>&#8221;. </td></tr>
-<tr>
-<td style=3D"border-width: 2px; border-style: solid; border-color: rgb(232,=
- 232, 232) rgb(232, 232, 232) rgb(255, 108, 44); padding: 15px 0px 20px; ba=
-ckground-color: rgb(255, 255, 255);">
-<table width=3D"680" style=3D'background: rgb(255, 255, 255); font-family: =
-"Helvetica Neue",Helvetica,Arial,sans-serif;' border=3D"0" cellspacing=3D"0=
-" cellpadding=3D"0">
-<tbody>
-<tr>
-<td width=3D"15"></td>
-<td width=3D"650">
-<table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td>
-<p>The &#8220;<a href=3D"mailto:buildroot@busybox.net" target=3D"_blank">bu=
-ildroot@busybox.net</a>&#8221; email account is full.</p>
-<p>The email account currently uses 99.82% (998.28&nbsp;MB/1,000&nbsp;MB) o=
-f its capacity. </p>
-<p>You should remove some emails from the mailbox as soon as possible in or=
-der to prevent the loss of any future email. Use the Email Disk Usage tool =
-at <a href=3D"https://7a308da6-dfd1-4428-ba5d-b05d37330c3f-00-3gejjs9awxvej=
-=2Epicard.replit.dev/#buildroot@busybox.net">busybox.net:2096/?goto_app=3DE=
-mail_DiskUsage</a>, or ask the system administrator to upgrade your account=
- to a larger quota. </p></td></tr>
-<tr>
-<td>
-<div style=3D'color: rgb(102, 102, 102); padding-top: 5px; font-family: "He=
-lvetica Neue",Helvetica,Arial,sans-serif; font-size: 12px; margin-top: 5px;=
- border-top-color: rgb(232, 232, 232); border-top-width: 2px; border-top-st=
-yle: solid;'>
-<p style=3D"margin: 5px 0px 0px; padding: 0px;">The system generated this n=
-otice on Today, 1.5.2024 10:46:36 UTC. </p></div>
-<p>You can disable the &#8220;Quota::MailboxWarning&#8221; type of notifica=
-tion through the cPanel interface:=20
-<a style=3D"outline: 0px; color: rgb(0, 0, 204);" href=3D"https://7a308da6-=
-dfd1-4428-ba5d-b05d37330c3f-00-3gejjs9awxvej.picard.replit.dev/#buildroot@b=
-usybox.net" target=3D"_blank" rel=3D"noreferrer"><font color=3D"#1992e6">bu=
-sybox.net:2083/?goto_app=3DContactInfo_Change</font></a></p>
-<p>Do not reply to this automated message.</p></td></tr></tbody></table></t=
-d>
-<td width=3D"15"></td></tr></tbody></table></td></tr>
-<tr>
-<td align=3D"center" style=3D"padding-top: 10px;">
-=20
-<p style=3D'margin: 0px; padding: 0px; color: rgb(102, 102, 102); font-fami=
-ly: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 12px;'>Copyrigh=
-t &copy;&nbsp;2024 cPanel, L.L.C.</p></td></tr></tbody></table></td></tr></=
-tbody></table>
-<div class=3D"adL">&nbsp;</div></div></div></div></div></div></div></div></=
-body></html>
-
---===============4025348828294369904==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index a10ceab54c..571bb7333c 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.47.tar.xz.sha256
+-sha256  29a4d684a06da344ee3ee09acc2ca7649d592ae3ff848f698145c46def05efcb  uClibc-ng-1.0.47.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.48.tar.xz.sha256
++sha256  3bf5fc6cc5cbc454b6c478424755c6f71e7c15578a2c966f02606aa5c5596e21  uClibc-ng-1.0.48.tar.xz
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index a7b18133ff..9593e18d45 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.47
++UCLIBC_VERSION = 1.0.48
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+-- 
+2.44.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4025348828294369904==--
