@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C5C5C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1900C4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:06:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3C30E41719;
-	Wed,  1 May 2024 20:54:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 829C340165;
+	Wed,  1 May 2024 21:06:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FXDaAfc-OSnN; Wed,  1 May 2024 20:54:58 +0000 (UTC)
+ id XeK2RtXnZxIU; Wed,  1 May 2024 21:06:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CAA041774
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 976EA4016B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4CAA041774;
-	Wed,  1 May 2024 20:54:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B94DA1BF400
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:54:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 976EA4016B;
+	Wed,  1 May 2024 21:06:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AD0DE1BF384
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:06:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5D9781DF9
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:54:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9888660805
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:06:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SmhVTrYaAvJf for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 20:54:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xZo_JWdiaMVu for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 21:06:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9CA1281D34
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CA1281D34
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9CA1281D34
- for <buildroot@busybox.net>; Wed,  1 May 2024 20:54:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C37FF1BF203;
- Wed,  1 May 2024 20:54:53 +0000 (UTC)
-Date: Wed, 1 May 2024 22:54:52 +0200
-To: Francois Perrad <francois.perrad@gadz.org>
-Message-ID: <20240501225452.790225c7@windsurf>
-In-Reply-To: <20240426180217.20885-1-francois.perrad@gadz.org>
-References: <20240426180217.20885-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1714596894;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=IqspD5VJPHYxEiEgCpqCk1v+ZlEMsjue8C10lLcX2P8=;
- b=jUwZOo/KJmD6p2eS1NtfxWsiUF3IBYMXq6tk50xdp5G/7+GEkpd1wyWahY3gTo+WPXxzx1
- vUqbclXjQLpKCv+Ye6gun+AN+SKFRrpctPIK/dNVXvRJfzn+eUPD2Wi/99tBUoMhrqoN5B
- xnA+p1ecYmgv0CDuMgoV9tUJ62PpwZj3rQ0trjOSG6JkwNoUIOu7xNm55BFfJc2aNYDjyB
- PPcQW/boaOtZD9mw3ZcNjNzKzF3ovnPopIxQI4iqDgX3ACA/W7IJ5dIBOWNRyw2pecCOOP
- 2Dro+CJBy2QLF8CdgZW/j01nx2tRINxo1b3lL1nVfRklWfC1cZJQ47m5zOuIKw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jUwZOo/K
-Subject: Re: [Buildroot] [PATCH] package/dropbear: bump to version 2024.85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5CAA60750
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5CAA60750
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 21:06:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CD0EB864F2; Wed,  1 May 2024 21:06:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 1 May 2024 22:58:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2fbffc610ef9d54b38fefd171fde93de136f7477
+X-Git-Newrev: 804abf536e5f8ab86160cc4f2066b42eeeb4ec39
+X-Patchwork-Hint: ignore
+Message-Id: <20240501210602.CD0EB864F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bats-core: bump to version 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,28 +59,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 26 Apr 2024 20:02:17 +0200
-Francois Perrad <francois.perrad@gadz.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=804abf536e5f8ab86160cc4f2066b42eeeb4ec39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/dropbear/dropbear.hash | 2 +-
->  package/dropbear/dropbear.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+https://github.com/bats-core/bats-core/releases/tag/v1.11.0
+https://github.com/bats-core/bats-core/releases/tag/v1.10.0
+https://github.com/bats-core/bats-core/releases/tag/v1.9.0
 
-Applied to master, thanks.
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bats-core/bats-core.hash | 2 +-
+ package/bats-core/bats-core.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bats-core/bats-core.hash b/package/bats-core/bats-core.hash
+index 81c0229af4..25b2b60339 100644
+--- a/package/bats-core/bats-core.hash
++++ b/package/bats-core/bats-core.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  0f2df311a536e625a72bff64c838e67c7b5032e6ea9edcdf32758303062b2f3b  bats-core-1.8.2.tar.gz
++sha256  aeff09fdc8b0c88b3087c99de00cf549356d7a2f6a69e3fcec5e0e861d2f9063  bats-core-1.11.0.tar.gz
+ 
+ # License files
+ sha256  55074b2b3b87809105034e1468e59076554d76a80c67bcc592000cc3d929852d  LICENSE.md
+diff --git a/package/bats-core/bats-core.mk b/package/bats-core/bats-core.mk
+index e172445930..716b167c00 100644
+--- a/package/bats-core/bats-core.mk
++++ b/package/bats-core/bats-core.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BATS_CORE_VERSION = 1.8.2
++BATS_CORE_VERSION = 1.11.0
+ BATS_CORE_SITE = $(call github,bats-core,bats-core,v$(BATS_CORE_VERSION))
+ BATS_CORE_LICENSE = MIT
+ BATS_CORE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
