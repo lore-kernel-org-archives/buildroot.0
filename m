@@ -4,48 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90258C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 978A2C4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E1E3417A6;
-	Wed,  1 May 2024 20:48:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C744741710;
+	Wed,  1 May 2024 20:53:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rcCDX1L1TTig; Wed,  1 May 2024 20:48:06 +0000 (UTC)
+ id 1d67HoSSoazC; Wed,  1 May 2024 20:53:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F267417C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6305D4016B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F267417C5;
-	Wed,  1 May 2024 20:48:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C6411BF983
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:48:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6305D4016B;
+	Wed,  1 May 2024 20:53:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C69731BF400
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:53:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08E9F4179E
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:48:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B17CD80BDB
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:53:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i33_2j6yyxAY for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 20:48:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A5F941779
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A5F941779
- for <buildroot@buildroot.org>; Wed,  1 May 2024 20:48:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C4A7864DF; Wed,  1 May 2024 20:48:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 1 May 2024 22:46:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b890206876588ed0d16187abf49d35a45177cc3d
-X-Git-Newrev: 0d394c39b8f26ba6e65771cd4afdcc4fac0ed0e8
-X-Patchwork-Hint: ignore
-Message-Id: <20240501204801.0C4A7864DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-pam: bump to version 1.6.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bC5TeAOXkfqi for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 20:53:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 91F8F80BCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91F8F80BCC
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 91F8F80BCC
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 20:53:51 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-34db9a38755so1109618f8f.1
+ for <buildroot@buildroot.org>; Wed, 01 May 2024 13:53:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1714596829; x=1715201629;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=q38+rkE2RLywfzZDhyj5WkG2rVCabzOeVLo5KR9oyJI=;
+ b=ivAkvlpjO7+TYgPxiqziqRIdVFFfaZNVTp8PWotirCGXQTHRMlsVWTBo9XC4s8re61
+ SZKXxxrqBUL9aV2umrrMltRIgKVyN5hl988q0GNeqTZUnDM6I8vAcjn3ZvQHGaYzCjE+
+ 3/l3tBNhoLaA1vCak+s4Yg135vsGq24Pln8LgUnHRZy77Gc0gBD86zH2YfwwSxzcQRha
+ bPBo8xsrLRfAUp0Fvq5EtDLwlG19uRP9Lp1dDphBta3R6SrZq9F5a25i/QnV1lR2VuDJ
+ hthvdjK/ySkJWQ/9gDAQa+GKYIduFzB3zeKmOM1+wKb6RcupP49FzCMhSmBjOyAZWJHs
+ pHXw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVikQNYUk4HCOKEwEd1jRIHWHur1Nq0HgbsNEF3gaoe/qjZEfOG4fxznoaQT3fPbgxpiGAZyFIj+pr+Xig+t9k6DVOjvBUzBg==
+X-Gm-Message-State: AOJu0Yw0ftSjM3DAqkb3t6Ge/YFPkxoF0hrmMomhDyiz6pLVoicuB67t
+ hP+0HO62Rjlqwq6eqWDRaOQhovuoi6Xtl4ZmDn8idKv/S08/CfdkKpsftyxpkHw=
+X-Google-Smtp-Source: AGHT+IGts35YpGI81nOxPk8KKxRDhJQwH3FSAsBezpj2VVUQGleoWlie3g3xZ/aVuABeYPe1mBmtEQ==
+X-Received: by 2002:a5d:46d0:0:b0:34d:1b4c:d014 with SMTP id
+ g16-20020a5d46d0000000b0034d1b4cd014mr3213181wrs.57.1714596828971; 
+ Wed, 01 May 2024 13:53:48 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ p1-20020adfcc81000000b0034d8c60c10bsm4559371wrj.92.2024.05.01.13.53.48
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 01 May 2024 13:53:48 -0700 (PDT)
+Message-ID: <fc1cd1f1-de23-44a5-b27f-471d468445df@mind.be>
+Date: Wed, 1 May 2024 22:53:46 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+References: <cover.1714243078.git.yann.morin.1998@free.fr>
+ <41552f4a1dc68983bb3edfd6a2b466581f5f91e5.1714243078.git.yann.morin.1998@free.fr>
+Content-Language: en-GB
+In-Reply-To: <41552f4a1dc68983bb3edfd6a2b466581f5f91e5.1714243078.git.yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1714596829; x=1715201629; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=q38+rkE2RLywfzZDhyj5WkG2rVCabzOeVLo5KR9oyJI=;
+ b=WjUKM1S//pXctX6019TAEjwDFLk0/+wWjLdImJkOSAb8FD/icXUndvb/bp9+VdN/jk
+ E+SIM+3L07dylUVlY/U6i6FHtNFYxz2h21XSm2nTkEPtARDxyjaN7iooRzyFHHXwKe0C
+ tzh9nBt4BogCv1vDYF8Q5L2KaaK2/zHUwNCMtiixwfaehGZh57WflYCx1lOUtQuwJuRl
+ vzBxt7oBomKisgI4h9uMSmle5r0CMKfy+1XULzA4hXb7Ix30DpOEXiirUePigxY7rCqM
+ CEsXlgSrryzIAylo7zxNxIhUnAPR4OlQzO05ygXzdos5vtdC1acJqGROikO2/oIlips0
+ Si/w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=WjUKM1S/
+Subject: Re: [Buildroot] [PATCH 06/15 v2] package/luajit: use the git
+ download for known-reproducible tarball
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,116 +109,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7549326934501862604=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Francois Perrad <fperrad@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7549326934501862604==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d394c39b8f26ba6e65771cd4afdcc4fac0ed0e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to latest version, fixing couple of bugs. Remove patch already
-included in this release.
+On 27/04/2024 20:37, Yann E. MORIN wrote:
+> Since version 2.1, LuaJIT follows a rolling-release scheme, which means
+> that any commit is as good as any other; LuaJIT uses the comitter's UNIX
+> timestamp as its semver patch level. It uses the git-attribute
+> export-subst for the .relver file that contains the %ct placeholderfor
+> git-archive to expand it.
+> 
+> We have had various instances of GitHub changing the way it generates
+> archives on the fly, and although it is hard to foresee a way the UNIX
+> timestamp could change (it's clearly defined as the number of seconds
+> elapsed since 1970-01-01T00:00:00Z), it's not inconceivable that GitHub
+> may decide to no longer expand the export-subst attributes in the
+> future...
 
-https://github.com/linux-pam/linux-pam/releases/tag/v1.6.1
+  Although I don't really disagree with the principle, I think we should instead 
+stop using github-generated tarballs entirely. Or, put differently: I think the 
+risk of a github-generated tarball to change hash for _other_ reasons is much 
+higher than that it would stop expanding export-subst.
 
-Signed-off-by: Jan Čermák <sairon@sairon.cz>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-pam_namespace-include-stdint-h.patch      | 42 ----------------------
- package/linux-pam/linux-pam.hash                   |  4 +--
- package/linux-pam/linux-pam.mk                     |  2 +-
- 3 files changed, 3 insertions(+), 45 deletions(-)
+  So I will not apply this patch of the series.
 
-diff --git a/package/linux-pam/0001-pam_namespace-include-stdint-h.patch b/package/linux-pam/0001-pam_namespace-include-stdint-h.patch
-deleted file mode 100644
-index 5eda619505..0000000000
---- a/package/linux-pam/0001-pam_namespace-include-stdint-h.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13 Mon Sep 17 00:00:00 2001
--From: Jacob Heider <jacob@pkgx.dev>
--Date: Wed, 17 Jan 2024 11:49:26 -0500
--Subject: [PATCH] pam_namespace: include stdint.h
--
--pam_namespace.c makes use of SIZE_MAX but doesn't include stdint.h,
--resulting in the following build failures on 1.6.0:
--
--  pam_namespace.c: In function 'process_line':
--  pam_namespace.c:649:41: error: 'SIZE_MAX' undeclared (first use in this function)
--    649 |         if (count > UINT_MAX || count > SIZE_MAX / sizeof(uid_t)) {
--        |                                         ^~~~~~~~
--  pam_namespace.c:41:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
--     40 | #include "argv_parse.h"
--    +++ |+#include <stdint.h>
--     41 |
--  pam_namespace.c:649:41: note: each undeclared identifier is reported only once for each function it appears in
--    649 |         if (count > UINT_MAX || count > SIZE_MAX / sizeof(uid_t)) {
--        |                                         ^~~~~~~~
--
--Fixes: v1.6.0~100 ("pam_namespace: validate amount of uids in config")
--Resolves: https://github.com/linux-pam/linux-pam/issues/733
--
--Upstream: https://github.com/linux-pam/linux-pam/commit/cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- modules/pam_namespace/pam_namespace.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/modules/pam_namespace/pam_namespace.c b/modules/pam_namespace/pam_namespace.c
--index f72d67189..b16731c22 100644
----- a/modules/pam_namespace/pam_namespace.c
--+++ b/modules/pam_namespace/pam_namespace.c
--@@ -34,6 +34,8 @@
-- 
-- #define _ATFILE_SOURCE
-- 
--+#include "config.h"
--+#include <stdint.h>
-- #include "pam_cc_compat.h"
-- #include "pam_inline.h"
-- #include "pam_namespace.h"
-diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
-index cd882715cb..353613e6e6 100644
---- a/package/linux-pam/linux-pam.hash
-+++ b/package/linux-pam/linux-pam.hash
-@@ -1,6 +1,6 @@
- # Locally computed hashes after checking signature at
--# https://github.com/linux-pam/linux-pam/releases/download/v1.6.0/Linux-PAM-1.6.0.tar.xz.asc
-+# https://github.com/linux-pam/linux-pam/releases/download/v1.6.1/Linux-PAM-1.6.1.tar.xz.asc
- # signed with the key 8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB
--sha256  fff4a34e5bbee77e2e8f1992f27631e2329bcbf8a0563ddeb5c3389b4e3169ad  Linux-PAM-1.6.0.tar.xz
-+sha256  f8923c740159052d719dbfc2a2f81942d68dd34fcaf61c706a02c9b80feeef8e  Linux-PAM-1.6.1.tar.xz
- # Locally computed
- sha256  133d98e7a2ab3ffd330b4debb0bfc10fea21e4b2b5a5b09de2e924293be5ff08  Copyright
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 89a46e81df..a205d67c54 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUX_PAM_VERSION = 1.6.0
-+LINUX_PAM_VERSION = 1.6.1
- LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.xz
- LINUX_PAM_SITE = https://github.com/linux-pam/linux-pam/releases/download/v$(LINUX_PAM_VERSION)
- LINUX_PAM_INSTALL_STAGING = YES
+  Regards,
+  Arnout
 
---===============7549326934501862604==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> 
+> To avoid any confusion, and to be future-proof, switch over to using the
+> git download helper, which now has support for handling export-subst in
+> a reproducible way. Drop the post-extract hooks as they are not needed.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Francois Perrad <fperrad@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>   package/luajit/luajit.hash | 2 +-
+>   package/luajit/luajit.mk   | 3 ++-
+>   2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+> index 578bb7a3e2..da243d8c2a 100644
+> --- a/package/luajit/luajit.hash
+> +++ b/package/luajit/luajit.hash
+> @@ -1,5 +1,5 @@
+>   # Locally calculated
+> -sha256  b518721280390e4cec1af30f6819d86756ce4234d82410a55a4e121855f64e08  luajit-41fb94defa8f830ce69a8122b03f6ac3216d392a.tar.gz
+> +sha256  df50bfe78919691ce9a630c8312386a8cb6ca49f327922a833e77656e82ef6c6  luajit-41fb94defa8f830ce69a8122b03f6ac3216d392a-br2.tar.gz
+>   
+>   # Locally calculated
+>   sha256  1130331ac861a4b4520e9c8ad0814efdc6f1e79ea55ea9c460c73733d13ccb5f  COPYRIGHT
+> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+> index 693e22630b..6b1c6b3386 100644
+> --- a/package/luajit/luajit.mk
+> +++ b/package/luajit/luajit.mk
+> @@ -5,7 +5,8 @@
+>   ################################################################################
+>   
+>   LUAJIT_VERSION = 41fb94defa8f830ce69a8122b03f6ac3216d392a
+> -LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
+> +LUAJIT_SITE = https://github.com/LuaJIT/LuaJIT
+> +LUAJIT_SITE_METHOD = git
+>   LUAJIT_LICENSE = MIT
+>   LUAJIT_LICENSE_FILES = COPYRIGHT
+>   LUAJIT_CPE_ID_VENDOR = luajit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7549326934501862604==--
