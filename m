@@ -4,96 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7516C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EB5CC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:13:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0D25405E9;
-	Wed,  1 May 2024 21:13:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E195141773;
+	Wed,  1 May 2024 21:13:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NK6YGpNjPhZ2; Wed,  1 May 2024 21:13:15 +0000 (UTC)
+ id p1uRsCUpwF-T; Wed,  1 May 2024 21:13:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B94A041799
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 949DF40185
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B94A041799;
-	Wed,  1 May 2024 21:13:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CD2781BF384
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:13:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 949DF40185;
+	Wed,  1 May 2024 21:13:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B78901BF384
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B986E41719
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:13:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A490760805
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:13:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A_e8efNKvUje for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 21:13:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id to-imtgHN5Db for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 21:13:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CF7D7401D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF7D7401D8
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CF7D7401D8
- for <buildroot@buildroot.org>; Wed,  1 May 2024 21:13:12 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-34e0d47bd98so127657f8f.0
- for <buildroot@buildroot.org>; Wed, 01 May 2024 14:13:12 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5DA9E6078C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DA9E6078C
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5DA9E6078C
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 21:13:43 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-41b5e74fa83so48610765e9.0
+ for <buildroot@buildroot.org>; Wed, 01 May 2024 14:13:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714597990; x=1715202790;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=O19mkPwHoQ/hkzKsPvEhEDOkQjPfFbfKC+/Lc4NxmxI=;
- b=R1YXu3ObOFSKtnXKHqccFcyobIo+RvUsMYFwWlLiNC0kR2toj4+kvTdsIkYl4qPiHr
- rxOOmU+xuj4DmHgPe41cnKRvimJBJRfIWlw2u4a07BFHOK4WBANRKvY8Xi6/j2YWjnyr
- hTHnlqUFYDF9s+T45XnNOxD02WwXKKA9YhoE1WySgl4KdaEYfsNUX01nJ0n85izqisQS
- o/uGhiwHXQB6JocDkg+72Nth62FIEthPX+0k4czVGTXGjQTGJEdM7tGMdLuWO2fZat5J
- Ql94fNz1ZVBQzruSmrWyCsRTqUpcGccBGwzB5h2Cqa/F9mKX1UcU7nKQsqw63WYPVJIv
- rhRw==
-X-Gm-Message-State: AOJu0YyF5sfFYdgyxwG2xt6eGGNVAeEq6yuMI4BqaSv6Dkk39PjOnwLq
- mVqWvtzHhFxcH31rgZtLmT2Ws5qLA398v5Q6Csu3TfE53/dnN8fG6aZ8kYGzxH+d0PwgwApmDrY
- x
-X-Google-Smtp-Source: AGHT+IHHig88h5tUlxGKFQL6ZSX4d5NIVl1bYV4RgGTmAQu6rW7sswu6EjbdjEnYaDM3iwnVubrpAQ==
-X-Received: by 2002:a5d:61cb:0:b0:34d:a19b:56af with SMTP id
- q11-20020a5d61cb000000b0034da19b56afmr599329wrv.5.1714597990653; 
- Wed, 01 May 2024 14:13:10 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
+ d=1e100.net; s=20230601; t=1714598021; x=1715202821;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=7a7ad8cHI0vcIAdSYvNwRAJZWveFqDRU1vSZ/rBWqHE=;
+ b=ny/ScwPf6SGXXNJFy5LnLyGjya2e7YSA9ywefapsMkDnqJgxYBTHFZeuNxetdBUVGG
+ o/dQCtq8aQ2QQEp804RJ11khZhFJUZGEYKeHS8O7XzBoQ22drbZCEJxp3kw0uda9JwP7
+ 63M0Tac+dXA/mnPBUZaIBj34aMdDBY5deIkShZTyFgVUbOXrs6nRdVwb48NW4B6gHLBa
+ X8V7+eKJba3tUtS5hAGHZgbUuVNarEGuSPtIxiF29HVBwlvzFvA7cUaMBEnyNMCA/iy/
+ LThZaUFl0OqDyLUoKvLGZS5nVEePUaVnQH2voiDoItp9DZo4EwRPgPmqvRyHJktLEv0Y
+ y/fA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXuL07HEvgdKmZbPhwXV9ED2t/3546BYyufCoH/o5n9WvRwPS2RzmaH6PY6BskGseraJE5pIhzCaNYPm1Yi0RcuHPDzV9Odsg==
+X-Gm-Message-State: AOJu0Yy4pA0L1kIa8E8VXTC2ntiQJGwE+XtPxV5WY40v3mbiz5ergM9R
+ yajEO8vx5omGG3p19tgdp5hiZ0TF77JihYNjUSU74Poc88qFhiCMSy9AmehOX/g=
+X-Google-Smtp-Source: AGHT+IHkhsK6ukFRyv/Ig2WICNroCSxEP2GrhG7DTP4SQC/LGc3lhXhawWRS+Jf6qLgU4brrnsUNIA==
+X-Received: by 2002:a05:600c:2294:b0:41c:f64:2f5 with SMTP id
+ 20-20020a05600c229400b0041c0f6402f5mr2491307wmf.36.1714598021070; 
+ Wed, 01 May 2024 14:13:41 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- bg33-20020a05600c3ca100b0041c14e42e2bsm3313766wmb.44.2024.05.01.14.13.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 May 2024 14:13:10 -0700 (PDT)
-From: Romain Naour <romain.naour@smile.fr>
-To: buildroot@buildroot.org
-Date: Wed,  1 May 2024 23:12:43 +0200
-Message-ID: <20240501211300.1590881-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.44.0
+ r10-20020a05600c458a00b0041c130520fbsm3345710wmo.46.2024.05.01.14.13.40
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 01 May 2024 14:13:40 -0700 (PDT)
+Message-ID: <c346128b-2e45-4e71-8adc-6754e1629a5a@mind.be>
+Date: Wed, 1 May 2024 23:13:38 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+References: <cover.1714243078.git.yann.morin.1998@free.fr>
+ <fac4dda319388b1d32d2f105ba29d47e68c41f4f.1714243078.git.yann.morin.1998@free.fr>
+Content-Language: en-GB
+In-Reply-To: <fac4dda319388b1d32d2f105ba29d47e68c41f4f.1714243078.git.yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1714597990; x=1715202790;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=O19mkPwHoQ/hkzKsPvEhEDOkQjPfFbfKC+/Lc4NxmxI=;
- b=r4mBXOSYinyFcM+gd2qJI9ib23kJsnTw7ODi3UnAUX/10D65Q8Y96/fE2oVRrFIv8N
- tP7P564Qe997jAPJsdAtfshnuzR9ICll0t4XP2Qo/s/UMteqtarmbw9vkmLkGmCKmY3v
- 6AphEW+y1XGyeAkaMk8nrPjzBh1WbEiHYvDc2pWav74JwMtyJLn5QOHREeqfqvGiS0XT
- Z5zxP8nJ7Of3iQF+VMkyjVeoNDicYyte6l+gTHkIVYhsu4zV7LURkeHcI1gQ2ny6Csv5
- XFgjVWrUFLAqh9Mp3ig7I3EE3jQNaoEpmWmOBdtxPuT6X0dZFRQsBptZuS6Fzkmr5Jbh
- wD5Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=mind.be; s=google; t=1714598021; x=1715202821; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=7a7ad8cHI0vcIAdSYvNwRAJZWveFqDRU1vSZ/rBWqHE=;
+ b=DTmYyUIi9TuucZoT/Zi13jer4tDQlCqJkIu7YrMIsmp+CJYXwrdTX4NtDZx4iL+8dL
+ W3A75wYsO+fuEohdl8iTaq3xUKJ7e6saV3x8NFfgsPhxRetsVGUpoRY2rIao+L5DAWc2
+ hrA015m6Ajv7ksd1wfyuTPfDmw8hIRAP0p9Ti+mGYvaEjui3QS9xYMjFWwJS2zEHOP7N
+ O4jbvXoUPVD17cC+KmHTPRLv+A2MfztZmdBanOSocvF5ih2VV5JPIsQ9AYQxIUrY3p+c
+ a97fMh7owVFCU7CKMO1Dksh0uiGq5NRDxpAK++ob4/PEOhfjQTLbR0hJKhfrd7L2djIZ
+ x0Bw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=r4mBXOSY
-Subject: [Buildroot] [PATCH] DEVELOPERS: remove Sebastian Weyer
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=DTmYyUIi
+Subject: Re: [Buildroot] [PATCH 07/15 v2] support/testing: add test for
+ export-subst support in git-download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,26 +109,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2ViYXN0aWFuIGVtYWlsIGFkZHJlc3MgYXQgU21pbGUgaXMgYm91bmNpbmcsIHNvIGRyb3AgaXQK
-ZnJvbSB0aGUgREVWRUxPUEVSUyBmaWxlLgoKU2lnbmVkLW9mZi1ieTogUm9tYWluIE5hb3VyIDxy
-b21haW4ubmFvdXJAc21pbGUuZnI+Ci0tLQogREVWRUxPUEVSUyB8IDggLS0tLS0tLS0KIDEgZmls
-ZSBjaGFuZ2VkLCA4IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZF
-TE9QRVJTCmluZGV4IDExZmZlMTdmOTIuLjVkMTk4NTY3ZDggMTAwNjQ0Ci0tLSBhL0RFVkVMT1BF
-UlMKKysrIGIvREVWRUxPUEVSUwpAQCAtMjc2OSwxNCArMjc2OSw2IEBAIEY6CXN1cHBvcnQvbWlz
-Yy90b29sY2hhaW5maWxlLmNtYWtlLmluCiBOOglTYW0gVm9zcyA8c2FtLnZvc3NAZ21haWwuY29t
-PgogRjoJcGFja2FnZS9yaXBncmVwLwogCi1OOglTZWJhc3RpYW4gV2V5ZXIgPHNlYmFzdGlhbi53
-ZXllckBzbWlsZS5mcj4KLUY6ICAgICAgcGFja2FnZS9hbWxvZ2ljLWJvb3QtZmlwLwotRjoJcGFj
-a2FnZS9udXNoZWxsLwotRjoJcGFja2FnZS9ydXN0LWJpbmRnZW4vCi1GOglwYWNrYWdlL3NwaXJ2
-LWhlYWRlcnMvCi1GOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfbnUubnUK
-LUY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfbnUucHkKLQogTjoJU8OpYmFz
-dGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgogRjoJYm9h
-cmQvYXJtYWRldXMvCiBGOgljb25maWdzL2FybWFkZXVzKgotLSAKMi40NC4wCgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 27/04/2024 20:37, Yann E. MORIN wrote:
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>   .../package/export-subst/export-subst.hash        |   1 +
+>   .../git-hash/package/export-subst/export-subst.mk |  10 ++++++++++
+>   .../05/482df734b3715b849ef4a3147a9b1b1f8cca38     | Bin 0 -> 35 bytes
+>   .../0f/db95cf4f3c5ed4003287649cabb33c5f843e26     | Bin 0 -> 197 bytes
+>   .../68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8     | Bin 0 -> 28 bytes
+>   .../6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0     | Bin 0 -> 112 bytes
+
+  Since the git repo is included as binary, we can't see what is in there. It's 
+basically the following commit:
+
+ From 0fdb95cf4f3c5ed4003287649cabb33c5f843e26 Mon Sep 17 00:00:00 2001
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Tue, 12 Sep 2023 23:25:48 +0200
+Subject: [PATCH] file2: test export-subst
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+  .gitattributes | 1 +
+  file2          | 1 +
+  2 files changed, 2 insertions(+)
+  create mode 100644 .gitattributes
+  create mode 100644 file2
+
+diff --git a/.gitattributes b/.gitattributes
+new file mode 100644
+index 0000000..05482df
+--- /dev/null
++++ b/.gitattributes
+@@ -0,0 +1 @@
++file2 export-subst
+diff --git a/file2 b/file2
+new file mode 100644
+index 0000000..6828f88
+--- /dev/null
++++ b/file2
+@@ -0,0 +1 @@
++$Format:%H$
+-- 
+2.44.0
+
+
+  I think it would be worth to change is in order to test that no recursive 
+expansion takes place. I.e., use this as the commit message:
+
+Subject: [PATCH] file2: test export-subst
+
+Test that strings like $Format:%H$ are expanded when the export-subst attribute 
+is set on a file.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+
+And in the file, put this:
+
+$Format:%B$
+
+
+  I haven't made this change though.
+
+
+  (BTW, another nice change would be to generate the git repository on the fly 
+from the test infrastructure, based on a series of patches that are git-am'ed 
+and with GIT_COMMITTER_NAME, GIT_COMMITER_EMAIL and GIT_COMMITTER_DATE values 
+set to fixed values.)
+
+  Regards,
+  Arnout
+>   .../git-remote/repo.git/refs/heads/master         |   2 +-
+>   support/testing/tests/download/test_git.py        |   4 ++++
+>   8 files changed, 16 insertions(+), 1 deletion(-)
+>   create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash
+>   create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk
+>   create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/05/482df734b3715b849ef4a3147a9b1b1f8cca38
+>   create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/0f/db95cf4f3c5ed4003287649cabb33c5f843e26
+>   create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8
+>   create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0
+> 
+> diff --git a/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash b/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash
+> new file mode 100644
+> index 0000000000..1926236993
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash
+> @@ -0,0 +1 @@
+> +sha256  9d359f9ae9a9e65dd4ccfe7170aa6fda24e17dfc81238972957b4b7fe97168a7  export-subst-0fdb95cf4f3c5ed4003287649cabb33c5f843e26-br2.tar.gz
+> diff --git a/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk b/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk
+> new file mode 100644
+> index 0000000000..8d7d3ff970
+> --- /dev/null
+> +++ b/support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk
+> @@ -0,0 +1,10 @@
+> +################################################################################
+> +#
+> +# export-subst
+> +#
+> +################################################################################
+> +
+> +EXPORT_SUBST_VERSION = 0fdb95cf4f3c5ed4003287649cabb33c5f843e26
+> +EXPORT_SUBST_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
+> +
+> +$(eval $(generic-package))
+> diff --git a/support/testing/tests/download/git-remote/repo.git/objects/05/482df734b3715b849ef4a3147a9b1b1f8cca38 b/support/testing/tests/download/git-remote/repo.git/objects/05/482df734b3715b849ef4a3147a9b1b1f8cca38
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..404bb1397cf8ec58f5e21a86e311e3b3884a55d5
+> GIT binary patch
+> literal 35
+> rcmb<m^geacKgeK9ipS|Qo~A(_Yc)>jYhBdU^VQOO$iz_nm{Sb^1FsEl
+> 
+> literal 0
+> HcmV?d00001
+> 
+> diff --git a/support/testing/tests/download/git-remote/repo.git/objects/0f/db95cf4f3c5ed4003287649cabb33c5f843e26 b/support/testing/tests/download/git-remote/repo.git/objects/0f/db95cf4f3c5ed4003287649cabb33c5f843e26
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..3a4cc4ead6ce5a7e90a38e025896bc66da85a242
+> GIT binary patch
+> literal 197
+> zcmV;$06PD80j18pN(3<!Kw;}V#qDK=<mP`7v9YjFK`YBl?#(*jBugd>?%TWg1cK#h
+> z4qtBDwhqwJ-;B--j*`L!t!LwllOZ~Vg`-cw8%Ibno17#|aY~)*fP^|Mib|${mW-#M
+> zO)5HDL~WGM!6-#hl1S(A**birTH$eq=hwHV7r47zbKY8C>#Sl759Ml@OTP!@qOn#-
+> z6W~^&lp_B^2mfOs%KF84fWi9!{yw!nrv1F^Lx}hFSed3)%CuY#e^rVfqgY-S2z_Jg
+> 
+> literal 0
+> HcmV?d00001
+> 
+> diff --git a/support/testing/tests/download/git-remote/repo.git/objects/68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8 b/support/testing/tests/download/git-remote/repo.git/objects/68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..fdc4a37651a4ad195f8f106f3496d5df0b3bb6a5
+> GIT binary patch
+> literal 28
+> kcmb<m^geacKghr&DWLGQ{wZIbjX_@n9x^f5#jv&l0Hs3<3;+NC
+> 
+> literal 0
+> HcmV?d00001
+> 
+> diff --git a/support/testing/tests/download/git-remote/repo.git/objects/6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0 b/support/testing/tests/download/git-remote/repo.git/objects/6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..932f73602f5927ae985829cdd301b1ed40350137
+> GIT binary patch
+> literal 112
+> zcmV-$0FVE80V^p=O;s>7FlR6{FfcPQQP4}zEJ-XWDauSLElDkAVD-@bZnC*Bx@F#%
+> z#UfR+rR950SwK~$W#*(ZJf9QSKh0&bCYQsEj;oGV#dUqLSCQn67&0_|^q%JH*m1VF
+> S>l%yCbKk02!Y2Svbu0l+hckcx
+> 
+> literal 0
+> HcmV?d00001
+> 
+> diff --git a/support/testing/tests/download/git-remote/repo.git/refs/heads/master b/support/testing/tests/download/git-remote/repo.git/refs/heads/master
+> index b6bccc1c17..b6e37260fb 100644
+> --- a/support/testing/tests/download/git-remote/repo.git/refs/heads/master
+> +++ b/support/testing/tests/download/git-remote/repo.git/refs/heads/master
+> @@ -1 +1 @@
+> -a238b1dfcd825d47d834af3c5223417c8411d90d
+> +0fdb95cf4f3c5ed4003287649cabb33c5f843e26
+> diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
+> index ec5b8f3fdd..ba52e03ef5 100644
+> --- a/support/testing/tests/download/test_git.py
+> +++ b/support/testing/tests/download/test_git.py
+> @@ -56,6 +56,10 @@ class TestGitHash(GitTestBase):
+>               self.check_hash("bad")
+>           self.check_hash("good")
+>           self.check_hash("nohash")
+> +        self.check_hash("export-subst")
+> +        with open(os.path.join(self.builddir, "dl", "export-subst", "git", "file2"), "r") as f:
+> +            blob = f.read()
+> +        self.assertEqual(blob, "0fdb95cf4f3c5ed4003287649cabb33c5f843e26\n")
+>   
+>   
+>   class TestGitRefs(GitTestBase):
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
