@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92C59C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB021C4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 629D94031F;
-	Wed,  1 May 2024 20:18:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D17641777;
+	Wed,  1 May 2024 20:18:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jcEXruIo4pKd; Wed,  1 May 2024 20:18:14 +0000 (UTC)
+ id ZNgDS-mletGn; Wed,  1 May 2024 20:18:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B62940598
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B77441715
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B62940598;
-	Wed,  1 May 2024 20:18:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4B72C1BF3D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9B77441715;
+	Wed,  1 May 2024 20:18:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 712791BF983
  for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:18:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37DE34170B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5DC2081DF9
  for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:18:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WVtrt8C5qpJO for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id et53C36A73Cy for <buildroot@lists.busybox.net>;
  Wed,  1 May 2024 20:18:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D4BC4031F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89B5481BFA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D4BC4031F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89B5481BFA
  for <buildroot@buildroot.org>; Wed,  1 May 2024 20:18:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6F2348649C; Wed,  1 May 2024 20:18:12 +0000 (UTC)
+ id 80BD67FE0C; Wed,  1 May 2024 20:18:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 1 May 2024 22:15:00 +0200
+Date: Wed, 1 May 2024 22:15:29 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 81764dcfc66f5f50444994fd8706e887c4026153
-X-Git-Newrev: 907bbae1e4b146c47c4e48fbd43ecd12a55c7b1a
+X-Git-Oldrev: 907bbae1e4b146c47c4e48fbd43ecd12a55c7b1a
+X-Git-Newrev: 2acbf5f16776e372c37b857ada883348640ee5f6
 X-Patchwork-Hint: ignore
-Message-Id: <20240501201812.6F2348649C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/gnupg2: bump to
- version 2.4.5
+Message-Id: <20240501201812.80BD67FE0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libassuan: bump
+ to version 2.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=907bbae1e4b146c47c4e48fbd43ecd12a55c7b1a
+commit: https://git.buildroot.net/buildroot/commit/?id=2acbf5f16776e372c37b857ada883348640ee5f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e5d0543292817341b0ca2e9d2f4486954f1f3dac)
+(cherry picked from commit 439525ced972299c8fa60d5e68e710075b9dce79)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/gnupg2.hash | 4 ++--
- package/gnupg2/gnupg2.mk   | 2 +-
+ package/libassuan/libassuan.hash | 4 ++--
+ package/libassuan/libassuan.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index c821afb55e..8bb64c9eda 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
+index 084a09848c..6bb5022d13 100644
+--- a/package/libassuan/libassuan.hash
++++ b/package/libassuan/libassuan.hash
+@@ -1,6 +1,6 @@
  # From https://www.gnupg.org/download/integrity_check.html
--sha1  228b3984325fdeebc5e3f2d165c6419a5ebc28de  gnupg-2.4.4.tar.bz2
--sha256  67ebe016ca90fa7688ce67a387ebd82c6261e95897db7b23df24ff335be85bc6  gnupg-2.4.4.tar.bz2
-+sha1  ae0935ead29a2dfa34d6b48d70808652bc3ca73b  gnupg-2.4.5.tar.bz2
-+sha256  f68f7d75d06cb1635c336d34d844af97436c3f64ea14bcb7c869782f96f44277  gnupg-2.4.5.tar.bz2
+-sha1  b1e8754dbf89b3a3eb175f5df75048dbca1fce57  libassuan-2.5.6.tar.bz2
+-sha256  e9fd27218d5394904e4e39788f9b1742711c3e6b41689a31aa3380bd5aa4f426  libassuan-2.5.6.tar.bz2
++sha1  b6ccd955085dac902a09871f94a3d41a7667d0c8  libassuan-2.5.7.tar.bz2
++sha256  0103081ffc27838a2e50479153ca105e873d3d65d8a9593282e9c94c7e6afb76  libassuan-2.5.7.tar.bz2
  # Locally calculated
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 986da4790c..39b0a066f6 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+index fb95a6fd67..9553c630a2 100644
+--- a/package/libassuan/libassuan.mk
++++ b/package/libassuan/libassuan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.4.4
-+GNUPG2_VERSION = 2.4.5
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-LIBASSUAN_VERSION = 2.5.6
++LIBASSUAN_VERSION = 2.5.7
+ LIBASSUAN_SITE = https://gnupg.org/ftp/gcrypt/libassuan
+ LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
+ LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
