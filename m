@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C39C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 16:27:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D188EC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 16:28:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27315416DB;
-	Wed,  1 May 2024 16:27:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E08E416DB;
+	Wed,  1 May 2024 16:28:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9jTTk9xGCHkU; Wed,  1 May 2024 16:27:32 +0000 (UTC)
+ id palsq6lQJMxa; Wed,  1 May 2024 16:28:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 044F6416DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85983416EA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 044F6416DF;
-	Wed,  1 May 2024 16:27:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 793CD1BF28C
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 16:27:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 85983416EA;
+	Wed,  1 May 2024 16:28:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F1D0E1BF28C
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 16:28:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6485981FC2
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 16:27:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE644416DF
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 16:28:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wFPWmSD2Gx0f for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 16:27:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 01BQ5TBkfrXh for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 16:28:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3D0D781FB6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D0D781FB6
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D0D781FB6
- for <buildroot@buildroot.org>; Wed,  1 May 2024 16:27:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CC98B400FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC98B400FB
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CC98B400FB
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 16:27:59 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id B34BB13F899;
- Wed,  1 May 2024 18:27:22 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2523D13F81D;
+ Wed,  1 May 2024 18:27:56 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 01 May 2024 18:27:22 +0200
-Date: Wed, 1 May 2024 18:27:22 +0200
+ Wed, 01 May 2024 18:27:55 +0200
+Date: Wed, 1 May 2024 18:27:55 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZjJtakh3yfIwXOhG@landeda>
-References: <20240501150042.281549-1-fontaine.fabrice@gmail.com>
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <ZjJti-jB5kNg511a@landeda>
+References: <ZjI4anypCjkVxtjO@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240501150042.281549-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <ZjI4anypCjkVxtjO@waldemar-brodkorb.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1714580844;
- bh=5Tn46w4DgzRd6fRLUxYnb22R8r2T5RaHNQohAKR4XiY=;
+ d=free.fr; s=smtp-20201208; t=1714580878;
+ bh=4+YJZwqvKlSvJx7/GSFZmafWztaEWkvig8j4M6jamrY=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gkWdJ3zw6eaTeluhX7KlDQxmhtgqcvcuPHLR2blAAEyys1jEbjHGW6IeAMqPSGcei
- Of9O0GWm3BtaTYEQXpliBTLgF8p+fekqnGbtB9dbSbw/sPZD77ULRMLbptyF1WyDFZ
- x7QTWYG4U4vNe+TTpj1o8BoUmJa5QxBYczUcExhkEBO2Lc4grHChS8MWrd1/9SsI6P
- Gqw2Qbr/rEeAcVTtbwQfYuO+8nMWse/kHSyEaHBgw1TRb4TbY2QttBlBVfndYu0Wmc
- vhkjrMjB9fKsnxFwL6SUMWdScdFi7RHH+NS0IHSTz3Vzs0VCfbYEldIhoEFel7PXoU
- 3hxytnfoevlrw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=CMQT1NCVoH1a1xSt5+QiGL9DdUcTtDF33cfaMmAvlAbNPF18/0IUhZ7IMXwBzt888
+ DUG7c3sJ9u2G4hNuF0aTcIEvXYO2SnbBz7hZVNIQdaBoJti+l1BFhhqomRWUbVZcRZ
+ Be84vVMauAXOSBT5bjq6zoBlvwCEJhDRspdyhFpxXnHiZQ4GNRi51XISO7hwgpwtsm
+ 1/wbK0tm+P2xoaQAo9r5qemkbx/2h5TdV35qL57lGxVspfvthlTxc0WNuWkWpPpDCU
+ jaMN8qMo6Ufdm5JBnznvk7U8ea4VOaeJVQtgqwj+3c0hBBGWEZ6DFf0de5hRAz3YEA
+ duiv6a+XMpuyQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gkWdJ3zw
-Subject: Re: [Buildroot] [PATCH 1/1] package/asterisk: fix uclibc-ng build
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=CMQT1NCV
+Subject: Re: [Buildroot] [PATCH v2] package/asterisk: fix compile issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,26 +86,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Waldemar, All,
 
-On 2024-05-01 17:00 +0200, Fabrice Fontaine spake thusly:
-> Fix the following uclibc-ng build failure raised since bump to version
-> 20.7.0 in commit 0e6d4d2171ce70d3aa6693f860a36ff08fc4d2b3 and
-> https://github.com/asterisk/asterisk/commit/2694792e13c7f3ab1911c4a69fba0df32c544177:
+On 2024-05-01 14:41 +0200, Waldemar Brodkorb spake thusly:
+> Fix a compile issue when libyuv and libjpeg is enabled.
+> Detection of following function fails:
+> checking for pjsip_dlg_create_uas_and_inc_lock in -lpjsip... no
 > 
-> stasis/control.c: In function 'exec_command_on_condition':
-> stasis/control.c:313:3: warning: implicit declaration of function 'pthread_kill'; did you mean 'pthread_yield'? [-Wimplicit-function-declaration]
->   313 |   pthread_kill(control->control_thread, SIGURG);
->       |   ^~~~~~~~~~~~
->       |   pthread_yield
-> stasis/control.c:313:41: error: 'SIGURG' undeclared (first use in this function)
->   313 |   pthread_kill(control->control_thread, SIGURG);
->       |                                         ^~~~~~
+> In config.log you see that libjpeg is missing.
 > 
-> Fixes: 0e6d4d2171ce70d3aa6693f860a36ff08fc4d2b3
->  - http://autobuild.buildroot.org/results/d16e4ca4bd26234f84d17da24c04a8c19faba6c5
+> Fixes:
+>  http://autobuild.buildroot.net/results/7bed9fc68fc9331ad12942c3eab9742ee8a7a4c4
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
 Applied to master, thanks.
 
@@ -113,61 +106,34 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  ...es-stasis-control.c-include-signal.h.patch | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/asterisk/0005-res-stasis-control.c-include-signal.h.patch
+>  v1->v2: package libjpeg must be enabled, too
+> ---
+>  package/asterisk/asterisk.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/asterisk/0005-res-stasis-control.c-include-signal.h.patch b/package/asterisk/0005-res-stasis-control.c-include-signal.h.patch
-> new file mode 100644
-> index 0000000000..fc615c4a19
-> --- /dev/null
-> +++ b/package/asterisk/0005-res-stasis-control.c-include-signal.h.patch
-> @@ -0,0 +1,43 @@
-> +From 8391dc3891337ecff8becefe1927a30d3922b848 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Wed, 1 May 2024 16:50:50 +0200
-> +Subject: [PATCH] res/stasis/control.c: include signal.h
+> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+> index 33d2e78bcf..c37aa5ec9d 100644
+> --- a/package/asterisk/asterisk.mk
+> +++ b/package/asterisk/asterisk.mk
+> @@ -113,9 +113,15 @@ ASTERISK_CONF_ENV = \
+>  
+>  # Uses __atomic_fetch_add_4
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> -ASTERISK_CONF_ENV += LIBS="-latomic"
+> +ASTERISK_LIBS += -latomic
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBYUV)$(BR2_PACKAGE_JPEG),yy)
+> +ASTERISK_LIBS += -ljpeg
+> +endif
 > +
-> +Include signal.h to avoid the following build failure with uclibc-ng
-> +raised since
-> +https://github.com/asterisk/asterisk/commit/2694792e13c7f3ab1911c4a69fba0df32c544177:
+> +ASTERISK_CONF_ENV += LIBS="$(ASTERISK_LIBS)"
 > +
-> +stasis/control.c: In function 'exec_command_on_condition':
-> +stasis/control.c:313:3: warning: implicit declaration of function 'pthread_kill'; did you mean 'pthread_yield'? [-Wimplicit-function-declaration]
-> +  313 |   pthread_kill(control->control_thread, SIGURG);
-> +      |   ^~~~~~~~~~~~
-> +      |   pthread_yield
-> +stasis/control.c:313:41: error: 'SIGURG' undeclared (first use in this function)
-> +  313 |   pthread_kill(control->control_thread, SIGURG);
-> +      |                                         ^~~~~~
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/d16e4ca4bd26234f84d17da24c04a8c19faba6c5
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Upstream: https://github.com/asterisk/asterisk/pull/728
-> +---
-> + res/stasis/control.c | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/res/stasis/control.c b/res/stasis/control.c
-> +index 360f20790..4ed0e2af1 100644
-> +--- a/res/stasis/control.c
-> ++++ b/res/stasis/control.c
-> +@@ -41,6 +41,8 @@
-> + #include "asterisk/musiconhold.h"
-> + #include "asterisk/app.h"
-> + 
-> ++#include <signal.h>
-> ++
-> + AST_LIST_HEAD(app_control_rules, stasis_app_control_rule);
-> + 
-> + /*!
-> +-- 
-> +2.43.0
-> +
+>  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+>  ASTERISK_CONF_OPTS += --with-execinfo
+>  else
 > -- 
-> 2.43.0
+> 2.39.2
 > 
 > _______________________________________________
 > buildroot mailing list
