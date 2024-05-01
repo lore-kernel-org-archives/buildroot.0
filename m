@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB874C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5372DC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:33:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA90F81583;
-	Wed,  1 May 2024 21:32:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2014F82136;
+	Wed,  1 May 2024 21:33:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cJgB5RL6ffK5; Wed,  1 May 2024 21:32:58 +0000 (UTC)
+ id Eto9Jxz-eYP5; Wed,  1 May 2024 21:33:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1E6782124
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 189148213C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1E6782124;
-	Wed,  1 May 2024 21:32:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 189148213C;
+	Wed,  1 May 2024 21:33:28 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4BAFE1BF384
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:32:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A989E1BF384
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 366924040D
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:32:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A32AA405E9
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:33:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QkFb2KN8h9tu for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 21:32:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ id WO-uMLMuH-5p for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 21:33:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0ED7C4031F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ED7C4031F
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0ED7C4031F
- for <buildroot@buildroot.org>; Wed,  1 May 2024 21:32:55 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 07CAC13F8A9;
- Wed,  1 May 2024 23:32:51 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 01 May 2024 23:32:51 +0200
-Date: Wed, 1 May 2024 23:32:51 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <ZjK1A_gYjr5Dctp6@landeda>
-References: <20240501211300.1590881-1-romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240501211300.1590881-1-romain.naour@smile.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1714599174;
- bh=y5IeALS8dn/JUH46eoiaEJ2PLJGCQSIAWXvzebbp4ws=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=OH+LgEpkzbdVHLoshh52xEggagqfQPO/J8Kx4zqUSHVr7u3QjaVM9f25Ly2U1i82Q
- LJa+YJYqWLz4sKleFBdVQkF+XYY7tNGl4Jh8MEKLytEhDVWYDZDl3q17ZWo2ZK1nuI
- MS6qnTBsTNHTK8bA5NxijoxICHdWWlc8RbIjRmStr3V8HVa/EZzUJrKNnzIY834mz7
- 3NCvJ2lb/5BgCwJHJKAEPQdFp41OjFOBNYb8N+jbq8lsxn7Opd2W79KYnNbb8ZyKIY
- 6SvUXg3+e0wapS5fhqIh7+EezTwf6F5kZSgTlNMVn2ahPH93ZvzWCBO1/SzhLN7JnY
- sF23YKxsrg5JQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=OH+LgEpk
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: remove Sebastian Weyer
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0DF54031F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0DF54031F
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 21:33:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CB68C86521; Wed,  1 May 2024 21:33:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 1 May 2024 23:32:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7b973daac3f24ffce0246c5bbf80541499d86189
+X-Git-Newrev: 566eb38bdff666a11034e6543c42647d655e1e73
+X-Patchwork-Hint: ignore
+Message-Id: <20240501213325.CB68C86521@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libarchive: bump to version 3.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,41 +57,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Um9tYWluLCBBbGwsCgpPbiAyMDI0LTA1LTAxIDIzOjEyICswMjAwLCBSb21haW4gTmFvdXIgc3Bh
-a2UgdGh1c2x5Ogo+IFNlYmFzdGlhbiBlbWFpbCBhZGRyZXNzIGF0IFNtaWxlIGlzIGJvdW5jaW5n
-LCBzbyBkcm9wIGl0Cj4gZnJvbSB0aGUgREVWRUxPUEVSUyBmaWxlLgo+IAo+IFNpZ25lZC1vZmYt
-Ynk6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQHNtaWxlLmZyPgoKQXBwbGllZCB0byBtYXN0
-ZXIsIHRoYW5rcy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IC0tLQo+ICBERVZFTE9QRVJT
-IHwgOCAtLS0tLS0tLQo+ICAxIGZpbGUgY2hhbmdlZCwgOCBkZWxldGlvbnMoLSkKPiAKPiBkaWZm
-IC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKPiBpbmRleCAxMWZmZTE3ZjkyLi41ZDE5
-ODU2N2Q4IDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BFUlMKPiArKysgYi9ERVZFTE9QRVJTCj4gQEAg
-LTI3NjksMTQgKzI3NjksNiBAQCBGOglzdXBwb3J0L21pc2MvdG9vbGNoYWluZmlsZS5jbWFrZS5p
-bgo+ICBOOglTYW0gVm9zcyA8c2FtLnZvc3NAZ21haWwuY29tPgo+ICBGOglwYWNrYWdlL3JpcGdy
-ZXAvCj4gIAo+IC1OOglTZWJhc3RpYW4gV2V5ZXIgPHNlYmFzdGlhbi53ZXllckBzbWlsZS5mcj4K
-PiAtRjogICAgICBwYWNrYWdlL2FtbG9naWMtYm9vdC1maXAvCj4gLUY6CXBhY2thZ2UvbnVzaGVs
-bC8KPiAtRjoJcGFja2FnZS9ydXN0LWJpbmRnZW4vCj4gLUY6CXBhY2thZ2Uvc3BpcnYtaGVhZGVy
-cy8KPiAtRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX251Lm51Cj4gLUY6
-CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfbnUucHkKPiAtCj4gIE46CVPDqWJh
-c3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KPiAgRjoJ
-Ym9hcmQvYXJtYWRldXMvCj4gIEY6CWNvbmZpZ3MvYXJtYWRldXMqCj4gLS0gCj4gMi40NC4wCj4g
-Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWls
-ZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0tLS0t
-LS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
-LS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8
-IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1
-NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAg
-ICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJ
-TlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVr
-Lm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAon
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0t
-Xi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=566eb38bdff666a11034e6543c42647d655e1e73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0002-autotools-do-not-add-iconv-for-Requires.private.patch          | 2 +-
+ package/libarchive/libarchive.hash                                      | 2 +-
+ package/libarchive/libarchive.mk                                        | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch b/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
+index 338dad46e0..3cbd304109 100644
+--- a/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
++++ b/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
+@@ -17,7 +17,7 @@ diff --git a/configure.ac b/configure.ac
+ index 99bff20d1..f245d0c55 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -378,7 +378,6 @@ if test "x$with_iconv" != "xno"; then
++@@ -434,7 +434,6 @@ if test "x$with_iconv" != "xno"; then
+      AC_CHECK_HEADERS([localcharset.h])
+      am_save_LIBS="$LIBS"
+      LIBS="${LIBS} ${LIBICONV}"
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index 818113585e..ab6813686e 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,4 +1,4 @@
+ # From https://www.libarchive.de/downloads/sha256sums
+-sha256  04357661e6717b6941682cde02ad741ae4819c67a260593dfb2431861b251acb  libarchive-3.7.2.tar.xz
++sha256  63e7a7174638fc7d6b79b4c8b0ad954e0f4f45abe7239c1ecb200232aa9a43d2  libarchive-3.7.3.tar.xz
+ # Locally computed:
+ sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 136f7a9c09..9c35856ff9 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBARCHIVE_VERSION = 3.7.2
++LIBARCHIVE_VERSION = 3.7.3
+ LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
