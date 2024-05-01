@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 503EAC4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:46:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BDC8C10F1A
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:46:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F3CE3417A6;
-	Wed,  1 May 2024 20:46:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 381E5417C6;
+	Wed,  1 May 2024 20:46:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3FS_KIhaSkIF; Wed,  1 May 2024 20:46:21 +0000 (UTC)
+ id Ypwt7sJ4yvGP; Wed,  1 May 2024 20:46:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C6FB4178B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E79434181B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C6FB4178B;
-	Wed,  1 May 2024 20:46:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0A3CF1BF983
+	by smtp2.osuosl.org (Postfix) with ESMTP id E79434181B;
+	Wed,  1 May 2024 20:46:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 219591BF98E
  for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:46:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E99EC81EE2
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:46:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F22A60BE9
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:46:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j-PJnRLgukAA for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JA45akeIL5lb for <buildroot@lists.busybox.net>;
  Wed,  1 May 2024 20:46:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CB088193E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CF6760BEC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CB088193E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4CF6760BEC
  for <buildroot@buildroot.org>; Wed,  1 May 2024 20:46:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15FF9864D4; Wed,  1 May 2024 20:46:17 +0000 (UTC)
+ id 3412E864D1; Wed,  1 May 2024 20:46:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 May 2024 22:06:38 +0200
+Date: Wed, 1 May 2024 22:06:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4d9a3f1a32e743fd5bb267442be98b4e0a2d0e14
-X-Git-Newrev: 6317f6c9a4107d3409530b653c5900bff17ffb6e
+X-Git-Oldrev: 7c1faf997f868586a40a9cb6f03166d85a67b8f8
+X-Git-Newrev: 2aa3a23bbe755ef73af7dfbb65dd8ec60c8c1865
 X-Patchwork-Hint: ignore
-Message-Id: <20240501204617.15FF9864D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add iperf runtime test
+Message-Id: <20240501204617.3412E864D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fwts: update _SITE url to use https
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,57 +65,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6317f6c9a4107d3409530b653c5900bff17ffb6e
+commit: https://git.buildroot.net/buildroot/commit/?id=2aa3a23bbe755ef73af7dfbb65dd8ec60c8c1865
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The http URL redirects to https. This commit updates this URL to
+directly use https.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                  |  1 +
- support/testing/tests/package/test_iperf.py | 23 +++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+ package/fwts/fwts.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c132b61f2a..6bfad23442 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1799,6 +1799,7 @@ F:	support/testing/tests/package/test_gzip.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
- F:	support/testing/tests/package/test_iozone.py
-+F:	support/testing/tests/package/test_iperf.py
- F:	support/testing/tests/package/test_iperf3.py
- F:	support/testing/tests/package/test_iptables.py
- F:	support/testing/tests/package/test_jailhouse.py
-diff --git a/support/testing/tests/package/test_iperf.py b/support/testing/tests/package/test_iperf.py
-new file mode 100644
-index 0000000000..31f04d9896
---- /dev/null
-+++ b/support/testing/tests/package/test_iperf.py
-@@ -0,0 +1,23 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestIperf(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_IPERF=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        self.assertRunOk("iperf --version")
-+        self.assertRunOk("iperf -s -D")
-+        self.assertRunOk("iperf -c 127.0.0.1 -t 3")
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index f06609777d..a3f91ee495 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
+@@ -6,7 +6,7 @@
+ 
+ FWTS_VERSION = 23.07.00
+ FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
+-FWTS_SITE = http://fwts.ubuntu.com/release
++FWTS_SITE = https://fwts.ubuntu.com/release
+ FWTS_STRIP_COMPONENTS = 0
+ FWTS_LICENSE = GPL-2.0, LGPL-2.1, Custom
+ FWTS_LICENSE_FILES = debian/copyright
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
