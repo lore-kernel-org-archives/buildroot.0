@@ -4,91 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92922C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 09:24:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 197DFC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 09:24:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46F126059C;
-	Wed,  1 May 2024 09:24:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2C6A6059C;
+	Wed,  1 May 2024 09:24:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id unll-XCWR6py; Wed,  1 May 2024 09:24:14 +0000 (UTC)
+ id gd2c0uDKueWH; Wed,  1 May 2024 09:24:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 520E6605A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA34F607E3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 520E6605A5;
-	Wed,  1 May 2024 09:24:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 009B61BF3A3
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 09:24:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA34F607E3;
+	Wed,  1 May 2024 09:24:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 822361BF3A3
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 09:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E1D2A605A5
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 09:24:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E76B40677
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 09:24:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V5NnPAoD-kdc for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 09:24:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PLuJkxkfZVE9 for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 09:24:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
+ client-ip=2a00:1450:4864:20::136; helo=mail-lf1-x136.google.com;
  envelope-from=dm.chestnykh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C6EB86059C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6EB86059C
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C6EB86059C
- for <buildroot@buildroot.org>; Wed,  1 May 2024 09:24:11 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-5191b61cad3so1591622e87.2
- for <buildroot@buildroot.org>; Wed, 01 May 2024 02:24:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 249B440360
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 249B440360
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
+ [IPv6:2a00:1450:4864:20::136])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 249B440360
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 09:24:39 +0000 (UTC)
+Received: by mail-lf1-x136.google.com with SMTP id
+ 2adb3069b0e04-51d9af6bf36so504270e87.3
+ for <buildroot@buildroot.org>; Wed, 01 May 2024 02:24:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714555449; x=1715160249;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=YDfctzUgXUSI8Uy2PutedPSIm9GGDGSl5AR/rndB4ds=;
- b=mhIGc1wGWb+h8SjaaR1grAgw/pTGzhNZ/DTahitesycw1FLGZHewN6Gfmmr//IVDZk
- wz3DWDaX9LdMXvEMGb9YG0FdDFpkB2QwVSu9ZTEQZfUxk5h/YFf+hSBZrg3wW+wXLhcR
- T+RVnPLHSaA/0E1TJmdsW/eZfcZooFy6FlePjx7PDWXHSIuaIoxu+DJx1xGMLlUCm8KZ
- mvVKT7e7D1EGTBKB2zXXPkn0otX9ly/44zvj6anZ2O/fQLYlQMk73JJhpNtZbP69feuw
- ut4pgZ/5Em8QlaZUGiyj5TOmncuCvcaRhBI/9LGov4UeARJxMDbjs9QXYIqoLGeryAHY
- RiBw==
-X-Gm-Message-State: AOJu0YynqFHuELf/h7OYL62braK1ET2m/rth+bxBrlERp3uMmi1LuZq/
- PVwD7htdEEJlhCFRL8aDSeDDoJEV0nPjZbk6iqtChFsQUOUVBKWzXxmawlnW
-X-Google-Smtp-Source: AGHT+IHI+T+gy3qYgLGtEx2nijHguqOb3K0gDxYrMexxgKMQZjnPxegHSpC0JhzTE831OttgN9yY+g==
-X-Received: by 2002:a2e:bc10:0:b0:2e1:9b2f:d47e with SMTP id
- b16-20020a2ebc10000000b002e19b2fd47emr108388ljf.4.1714555448749; 
- Wed, 01 May 2024 02:24:08 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1714555477; x=1715160277;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=vwKPFkpkPJf1MGT4CQJFqVP3qNR6bVa4AGuQi3n62Q8=;
+ b=ZxE+5ZbEyK8ax7ZRljGk4o4zPzmvKCMSX5n9nBUwa5tyM3KCSMyjFCy8Ldnmi2MVaZ
+ MowA7pqqny4TUNDG/ugivk2X+0TmRYFJVlabL2WdHvBDeTpxq2qw4wxlVAabLC09OydL
+ 0xvMRJvmsJCT1Q9FypvKfLPkTqX/PziB3I/gG1k38eHIA08oVF6ll4dxlKSC+sFY2jYK
+ yGYD2i03LuJZ7mqX3pdNfEuDAYNAKSMLRwClXc5XgitAhACWGbGGKnp0MEdQlMP6Vf0N
+ ox7FCnkgCqyPhPWdyB5Ey4BQRORX+XgE/tSBEXYqqWxETK1bz/YOo3WjDZnEaGSWqm7L
+ 2pCg==
+X-Gm-Message-State: AOJu0Yx0XpiPX8GaQSHu35B7n1j+e40EgF5T/LViceRD8sk5a55PUvrg
+ fgGEK6RWjkAvWNskyqOMI6AXeCLFVbxInjVAcWiJAqIhtotOX1vUZW6Vrok4
+X-Google-Smtp-Source: AGHT+IEQukyjJQGJPHjNItjQLzge3KgaIl29oCGCL/IhzAgGyZQDfx6GbXXjp7jsGkF7OF5Nm4EnAA==
+X-Received: by 2002:a2e:8004:0:b0:2de:1218:af30 with SMTP id
+ j4-20020a2e8004000000b002de1218af30mr1376014ljg.1.1714555477170; 
+ Wed, 01 May 2024 02:24:37 -0700 (PDT)
 Received: from localhost.localdomain (109-252-38-243.nat.spd-mgts.ru.
  [109.252.38.243]) by smtp.gmail.com with ESMTPSA id
- s23-20020a2e81d7000000b002dfbff5667csm1446410ljg.52.2024.05.01.02.24.07
+ s23-20020a2e81d7000000b002dfbff5667csm1446410ljg.52.2024.05.01.02.24.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 01 May 2024 02:24:08 -0700 (PDT)
+ Wed, 01 May 2024 02:24:36 -0700 (PDT)
 From: Dmitry Chestnykh <dm.chestnykh@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  1 May 2024 12:23:26 +0300
-Message-ID: <20240501092328.323236-1-dm.chestnykh@gmail.com>
+Date: Wed,  1 May 2024 12:23:27 +0300
+Message-ID: <20240501092328.323236-2-dm.chestnykh@gmail.com>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240501092328.323236-1-dm.chestnykh@gmail.com>
+References: <20240501092328.323236-1-dm.chestnykh@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1714555449; x=1715160249; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=YDfctzUgXUSI8Uy2PutedPSIm9GGDGSl5AR/rndB4ds=;
- b=P5mAFybzvpq4vWcILEyOKNpUvs6E1GR4n1gthIaZQz2EtweULWhoTWvi3bnJXalTEe
- RAy9TuJAixKnHi+XJnTBecNkACtMoZffSZpp1SBBcRwKrFgSRnZPIYbIc6o5GBkMkzMq
- I6m7M4Sr/NQ5m2FLljt+qBt9ltdgd+PwPv5awJ8v7w1D+9uh0A0HzZIBMly3JwLQ40l8
- 8a7uK6oJE1dUVWtObas1c4YSsKHUA/jqS2ow6K3cIdra3yNHTJAzTmi/aWOq19Yk3DKs
- /kwUYelotVamTWtpW3YgxqwsEFI5TDyAp1usqenUZeapVYLD6GW8qfzPmipaYMtvuDwG
- 2nJw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1714555477; x=1715160277; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=vwKPFkpkPJf1MGT4CQJFqVP3qNR6bVa4AGuQi3n62Q8=;
+ b=nVldxBvuCbRkC4096t2MVcgwab7bx/F9EJ9Xck40ad3SQFbTEHTDyF8umSAeRWo066
+ e9NIX71PgeiV5ijIIa+YcF7cjoIxnHL78o4x8OkBp53DOV4n0QSTawd3orfiyXA57sOy
+ shFFF2PWB04q9wF4ziRvRo1Y06JifbX8mQPIjGSAnC1cCFtv0EbIEWAMjwpceFx32Mp0
+ BC+C/9e5JbwgzXGT7OjAJR9e2VRu+gqu1ff/v8LTktLjI53gu05VlozeCRpklu7iRJXo
+ NXIEXiDr4upS3bbQ1AHUqS0URn8NB9Y1RrrWoG7UHFAxsLxX5vsZfupI6jvwupSgFxDp
+ 3qXg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=P5mAFybz
-Subject: [Buildroot] [PATCH 1/3] package/uclibc: Bump to 1.0.48.
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=nVldxBvu
+Subject: [Buildroot] [PATCH 2/3] configs/qemu_sparc_ss10_defconfig: Restore.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,39 +108,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In 1.0.48 release uClibc-ng has provided the fix
-for SPARC related to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+With uClibc-ng-1.0.48 we can restore this config
+because now sparc systems work without reverting GCC commits.
 
 Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
 ---
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ arch/Config.in                    |  5 -----
+ configs/qemu_sparc_ss10_defconfig | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+), 5 deletions(-)
+ create mode 100644 configs/qemu_sparc_ss10_defconfig
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index a10ceab54c..571bb7333c 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.47.tar.xz.sha256
--sha256  29a4d684a06da344ee3ee09acc2ca7649d592ae3ff848f698145c46def05efcb  uClibc-ng-1.0.47.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.48.tar.xz.sha256
-+sha256  3bf5fc6cc5cbc454b6c478424755c6f71e7c15578a2c966f02606aa5c5596e21  uClibc-ng-1.0.48.tar.xz
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index a7b18133ff..9593e18d45 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.47
-+UCLIBC_VERSION = 1.0.48
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+diff --git a/arch/Config.in b/arch/Config.in
+index 9912f9fce6..e7349e83ae 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -216,11 +216,6 @@ config BR2_sh
+ config BR2_sparc
+ 	bool "SPARC"
+ 	select BR2_USE_MMU
+-	# uClibc-ng broken on sparc due to recent gcc changes
+-	# that need to be reverted since gcc 8.4, 9.3 and 10.1.
+-	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+-	# gcc <= 10.x has been removed from Buildroot.
+-	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+ 	help
+ 	  SPARC (from Scalable Processor Architecture) is a RISC
+ 	  instruction set architecture (ISA) developed by Sun
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+new file mode 100644
+index 0000000000..a8e3df9180
+--- /dev/null
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -0,0 +1,28 @@
++# Architecture
++BR2_sparc=y
++BR2_sparc_v8=y
++
++# System
++BR2_SYSTEM_DHCP="eth0"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Image
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
++
++# Linux headers same as kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_AS_KERNEL=y
++
++# Linux kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.6"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
++
++# host-qemu for gitlab testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 -- 
 2.44.0
 
