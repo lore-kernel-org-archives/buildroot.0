@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B2A4C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 19:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A547AC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 19:02:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E44C605E2;
-	Wed,  1 May 2024 19:00:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 752BA60BE9;
+	Wed,  1 May 2024 19:02:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OkQzlHN1h874; Wed,  1 May 2024 19:00:36 +0000 (UTC)
+ id XScoZ1rpgKqZ; Wed,  1 May 2024 19:02:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EE5060BE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BCC560BF1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EE5060BE9;
-	Wed,  1 May 2024 19:00:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CED6B1BF418
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:00:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BCC560BF1;
+	Wed,  1 May 2024 19:02:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 92B1C1BF418
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C8999401EB
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:00:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E45D820A4
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o1gsqsH4pYmt for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 19:00:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UxS4OnSU_QZ1 for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 19:02:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBB934011C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BBB934011C
- for <buildroot@buildroot.org>; Wed,  1 May 2024 19:00:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B03F1863C9; Wed,  1 May 2024 19:00:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 1 May 2024 20:56:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 35635cdc5b59a146928b82812d1c3c6db40b09f1
-X-Git-Newrev: 119cfd836ed11c2fcdf9d7de32ad5803402b79b1
-X-Patchwork-Hint: ignore
-Message-Id: <20240501190033.B03F1863C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-lsdbus: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6A01482078
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A01482078
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6A01482078
+ for <buildroot@busybox.net>; Wed,  1 May 2024 19:02:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BD704C0005;
+ Wed,  1 May 2024 19:02:03 +0000 (UTC)
+Date: Wed, 1 May 2024 21:02:02 +0200
+To: Francois Perrad <francois.perrad@gadz.org>
+Message-ID: <20240501210202.03f37cf8@windsurf>
+In-Reply-To: <20240403085524.1650692-1-francois.perrad@gadz.org>
+References: <20240403085524.1650692-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1714590124;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=M9SVw2CWNNhBw9RCMwibq1SU4BguOT2MNyvU+vTBois=;
+ b=ldq6tj71WcGO1CfLxa8unslDthtt6OM3iMNa/veLfYFSkez2ea9imKeiWD4RkWq6bL0WRU
+ lKOCrZwgE4tHqQC9leSXNn7NsTcKrsnr/yVc1t+H69K1cq2I20G01REwU2rR11673/Wrk4
+ glX8rRJcVWCVYZgGFXLugGLTs7PWIh57WRrduswgIZ16+h+t/qo1HZXS7u8fC+NaGohroS
+ f5kEAXEPam4GZQjFlR+Dk9/u32NtB5+twERC9yORPFcykpMuur1xnMtWudPudENRv983uA
+ NImWLceiHUJA9nmCEpnyB/7ALgBdyxLYR/Ru6oQYzF2RT8mgc9jDcaZk448dEQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ldq6tj71
+Subject: Re: [Buildroot] [PATCH] package/lua-lsdbus: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,86 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=119cfd836ed11c2fcdf9d7de32ad5803402b79b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  3 Apr 2024 10:55:24 +0200
+Francois Perrad <francois.perrad@gadz.org> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                  |  1 +
- package/lua-lsdbus/Config.in       | 12 ++++++++++++
- package/lua-lsdbus/lua-lsdbus.hash |  3 +++
- package/lua-lsdbus/lua-lsdbus.mk   | 17 +++++++++++++++++
- 4 files changed, 33 insertions(+)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/Config.in                  |  1 +
+>  package/lua-lsdbus/Config.in       | 12 ++++++++++++
+>  package/lua-lsdbus/lua-lsdbus.hash |  3 +++
+>  package/lua-lsdbus/lua-lsdbus.mk   | 17 +++++++++++++++++
+>  4 files changed, 33 insertions(+)
+>  create mode 100644 package/lua-lsdbus/Config.in
+>  create mode 100644 package/lua-lsdbus/lua-lsdbus.hash
+>  create mode 100644 package/lua-lsdbus/lua-lsdbus.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 1935077f0f..38e9c94198 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -751,6 +751,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-livr/Config.in"
- 	source "package/lua-livr-extra/Config.in"
- 	source "package/lua-lpeg-patterns/Config.in"
-+	source "package/lua-lsdbus/Config.in"
- 	source "package/lua-lunitx/Config.in"
- 	source "package/lua-lunix/Config.in"
- 	source "package/lua-lyaml/Config.in"
-diff --git a/package/lua-lsdbus/Config.in b/package/lua-lsdbus/Config.in
-new file mode 100644
-index 0000000000..f4eda20d6e
---- /dev/null
-+++ b/package/lua-lsdbus/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LUA_LSDBUS
-+	bool "lua-lsdbus"
-+	depends on BR2_PACKAGE_SYSTEMD
-+	select BR2_PACKAGE_MXML
-+	select BR2_PACKAGE_LUA_COMPAT53 if BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-+	help
-+	  Lua D-Bus bindings based on sd-bus and sd-event
-+
-+	  https://github.com/kmarkus/lsdbus
-+
-+comment "lua-lsdbus needs systemd"
-+	depends on !BR2_PACKAGE_SYSTEMD
-diff --git a/package/lua-lsdbus/lua-lsdbus.hash b/package/lua-lsdbus/lua-lsdbus.hash
-new file mode 100644
-index 0000000000..369370d63a
---- /dev/null
-+++ b/package/lua-lsdbus/lua-lsdbus.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  b515cd00c844abc80993e9552d884c71a80a680e47b90a628f1f7bd18b9b821a  lua-lsdbus-d132f8b2bd390d0b1c7d17b300190279f92bd494.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/lua-lsdbus/lua-lsdbus.mk b/package/lua-lsdbus/lua-lsdbus.mk
-new file mode 100644
-index 0000000000..cbd7ee9d4b
---- /dev/null
-+++ b/package/lua-lsdbus/lua-lsdbus.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# lua-lsdbus
-+#
-+################################################################################
-+
-+LUA_LSDBUS_VERSION = d132f8b2bd390d0b1c7d17b300190279f92bd494
-+LUA_LSDBUS_SITE = $(call github,kmarkus,lsdbus,$(LUA_LSDBUS_VERSION))
-+LUA_LSDBUS_DEPENDENCIES = luainterpreter mxml systemd
-+LUA_LSDBUS_LICENSE = LGPL-2.1
-+LUA_LSDBUS_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_LUA_COMPAT53),y)
-+LUA_LSDBUS_DEPENDENCIES += lua-compat53
-+endif
-+
-+$(eval $(cmake-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
