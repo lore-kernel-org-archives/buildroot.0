@@ -4,71 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE352C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:36:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DCA1C4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E10781337;
-	Wed,  1 May 2024 21:36:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D773C80BB7;
+	Wed,  1 May 2024 21:42:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dSfA3G397iLt; Wed,  1 May 2024 21:36:00 +0000 (UTC)
+ id Jtax4w8Vj5VD; Wed,  1 May 2024 21:42:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 880C981348
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E944F813F1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 880C981348;
-	Wed,  1 May 2024 21:36:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E944F813F1;
+	Wed,  1 May 2024 21:42:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 618E81BF384
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:35:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BBCF91BF384
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:42:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B73060BCC
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:35:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A99D560BCF
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:42:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Wlmzp7Zcxfo for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 21:35:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id qcwEZH1Eh_Bh for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 21:42:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3321C60BCA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3321C60BCA
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3321C60BCA
- for <buildroot@buildroot.org>; Wed,  1 May 2024 21:35:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 14F2D1BF204;
- Wed,  1 May 2024 21:35:53 +0000 (UTC)
-Date: Wed, 1 May 2024 23:35:53 +0200
-To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Message-ID: <20240501233553.3ee07ef3@windsurf>
-In-Reply-To: <20240415120820.465163-1-buildroot@heine.tech>
-References: <20240415120820.465163-1-buildroot@heine.tech>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1714599354;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=qQ6z0HRSiARWWNZ9IIP8M4Sf5ssaNyobntznbLKzhZc=;
- b=oaz+mTZKrW2gVergrev9gEBVMXCVTbpo5I+INbF4rt9Q/mLA2vJTIv0Mkl9yR1ahmpZv5n
- HJaZ/WHne+bhczBGEuFnud0YZ4iwPldpfNxH4hOwMhqsOhhPf27rie4QnJzqG/2RO/y22h
- 8OZbU5hIbIVo4/zxAxtb8SD6NX3JFlp4P8HfOPKY5MzAP+2MX4fB/q2E1OcNjGXMNOtFOr
- vOnNvcXq2lfXNKE7DPZ5O4ubh+//QhzvCRG6GW1LLTnhYh8AOvgZ2ywrVKIc8AHifNvfvb
- lC93u+J0jhLz0z9WPz6xCSH6/dHbBO5GNkr0wuM3LqUV3wz9tcmp/6aeTThSJA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oaz+mTZK
-Subject: Re: [Buildroot] [PATCH] package/catch2: bump to version 3.5.4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC35F60BCA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC35F60BCA
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 21:42:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D6DED8653A; Wed,  1 May 2024 21:42:37 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 1 May 2024 23:39:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 20ddf2fe65e8ed29c661a949c5d535d2983fe561
+X-Git-Newrev: 4d57014449e6e5b32e5373aa2afd4fd8cd3a9883
+X-Patchwork-Hint: ignore
+Message-Id: <20240501214237.D6DED8653A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnetconf2: add libxcrypt
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,29 +59,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 15 Apr 2024 14:08:19 +0200
-Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4d57014449e6e5b32e5373aa2afd4fd8cd3a9883
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> ---
->  package/catch2/catch2.hash | 2 +-
->  package/catch2/catch2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fix the following build failure raised since bump of glibc to version
+2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
 
-Applied to master, thanks.
+/home/buildroot/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/12.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: cannot find -lcrypt: No such file or directory
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes: b5680f53d60acf8ff6010082f873438a39bd5d97
+ - http://autobuild.buildroot.org/results/c84e27815cc607ad78a1901cb2be591df2686ac7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libnetconf2/Config.in      | 1 +
+ package/libnetconf2/libnetconf2.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
+index 7865f9e487..34934325fa 100644
+--- a/package/libnetconf2/Config.in
++++ b/package/libnetconf2/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBNETCONF2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBYANG
+ 	help
+ 	  libnetconf2 is a NETCONF library in C intended for building
+diff --git a/package/libnetconf2/libnetconf2.mk b/package/libnetconf2/libnetconf2.mk
+index e349c1bce4..88163926c0 100644
+--- a/package/libnetconf2/libnetconf2.mk
++++ b/package/libnetconf2/libnetconf2.mk
+@@ -30,6 +30,10 @@ else
+ LIBNETCONF2_CONF_OPTS += -DENABLE_TLS=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
++LIBNETCONF2_DEPENDENCIES += libxcrypt
++endif
++
+ HOST_LIBNETCONF2_CONF_OPTS = \
+ 	-DENABLE_TESTS=OFF \
+ 	-DENABLE_VALGRIND_TESTS=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
