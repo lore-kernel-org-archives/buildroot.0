@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8A78C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:33:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3841BC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 21:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79AB180A75;
-	Wed,  1 May 2024 21:33:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 070EF80BB7;
+	Wed,  1 May 2024 21:34:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U3-jZms84B0F; Wed,  1 May 2024 21:33:40 +0000 (UTC)
+ id LJDE6H3IOUkO; Wed,  1 May 2024 21:34:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7349282154
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DB088131F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7349282154;
-	Wed,  1 May 2024 21:33:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DB088131F;
+	Wed,  1 May 2024 21:34:32 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3FDD01BF384
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:33:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 763CB1BF384
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C12C82156
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:33:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6024781339
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 21:34:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7j4dQzAykdvV for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 21:33:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id KQ1Aj5oRGO4N for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 21:34:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 82EEE82151
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82EEE82151
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 82EEE82151
- for <buildroot@buildroot.org>; Wed,  1 May 2024 21:33:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 74286E0005;
- Wed,  1 May 2024 21:33:34 +0000 (UTC)
-Date: Wed, 1 May 2024 23:33:33 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240501233333.7bf8f247@windsurf>
-In-Reply-To: <20240415220237.333222-1-ju.o@free.fr>
-References: <20240415220237.333222-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1714599214;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=8mLiAmVy3rb9nBl2F52tm3SW3E6ldf/T0koOUYHcn0I=;
- b=kePzxKE7BQqlkuWHZElLjlZLNNys/P2/BcXqWwqvdZMmjjDmjf2C4CiRohVQ1VEvsrZp1g
- Jx6dNs0oOYqbXSW7lBot+rWKGDrXYhGxY44Yr0JYoQGK5RgnbKhK3KA/YDixmWkzwuXgU5
- BOmlbntYd1fG0gtRlquqsHKeXn5OlSqEeXzHCqWSp3NibA2SpScLy6VM7feRCwW7RPj8uH
- IRnTECWt79jL7HdTHQNiqC4q7JSgAThFsDQf41O5kLg90cUJQjVuPL155ojXx3F4rxryoR
- WGC+5VdujPHzNHpNswYi454WG2kAVFvRzchwRldXf7Yo7b0Lh0agARqjQ73A+A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kePzxKE7
-Subject: Re: [Buildroot] [PATCH 1/1] package/gnu-efi: add BR2_RISCV_64 in
- _ARCH_SUPPORTS
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91EBE8131F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 91EBE8131F
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 21:34:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8D62486527; Wed,  1 May 2024 21:34:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 1 May 2024 23:34:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1f7c58145497ed01d566e08734a62feef1696807
+X-Git-Newrev: 00522a5022a11a05b21a9e3690c093e3aecb4753
+X-Patchwork-Hint: ignore
+Message-Id: <20240501213429.8D62486527@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/mx6cubox: update U-Boot and kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,40 +59,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 16 Apr 2024 00:02:37 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=00522a5022a11a05b21a9e3690c093e3aecb4753
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> gnu-efi RISC-V 64bit support was introduced in commit [1], first
-> included in version 3.0.14.
-> 
-> This commit adds this architecture in _ARCH_SUPPORTS.
-> 
-> [1] https://sourceforge.net/p/gnu-efi/code/ci/b95f138fa1550040e68ac3dd34cfce7d148d7984
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  package/gnu-efi/Config.in  | 1 +
->  package/gnu-efi/gnu-efi.mk | 2 ++
->  2 files changed, 3 insertions(+)
+Update to U-Boot 2024.04 and kernel 6.6.27 versions.
 
-Applied to master after changing the commit title to "enable on RISC-V
-64-bit". Indeed your title "add BR2_RISCV_64 in _ARCH_SUPPORTS" is how
-we do this, but really the aim of the commit is to make the package
-available on RISC-V 64-bit.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/mx6cubox_defconfig | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index cbd9378064..46a1400d9f 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -6,8 +6,8 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+ # Toolchain
+-# Linux headers same as kernel, a 5.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -17,10 +17,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.71"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.27"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-cubox-i imx6dl-cubox-i-emmc-som-v15 imx6dl-cubox-i-som-v15 imx6dl-hummingboard imx6dl-hummingboard-emmc-som-v15 imx6dl-hummingboard-som-v15 imx6q-cubox-i imx6q-cubox-i-emmc-som-v15 imx6q-cubox-i-som-v15 imx6q-hummingboard imx6q-hummingboard-emmc-som-v15 imx6q-hummingboard-som-v15"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6dl-cubox-i nxp/imx/imx6dl-cubox-i-emmc-som-v15 nxp/imx/imx6dl-cubox-i-som-v15 nxp/imx/imx6dl-hummingboard nxp/imx/imx6dl-hummingboard-emmc-som-v15 nxp/imx/imx6dl-hummingboard-som-v15 nxp/imx/imx6q-cubox-i nxp/imx/imx6q-cubox-i-emmc-som-v15 nxp/imx/imx6q-cubox-i-som-v15 nxp/imx/imx6q-hummingboard nxp/imx/imx6q-hummingboard-emmc-som-v15 nxp/imx/imx6q-hummingboard-som-v15"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+@@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6cuboxi"
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
