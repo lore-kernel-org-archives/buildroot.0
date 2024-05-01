@@ -4,71 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EF07C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 19:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D8CEC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 19:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C86480B38;
-	Wed,  1 May 2024 19:57:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BA7680B38;
+	Wed,  1 May 2024 19:58:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id olhK0nCAQ7zL; Wed,  1 May 2024 19:57:06 +0000 (UTC)
+ id 9MOXqxAgitFb; Wed,  1 May 2024 19:58:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76A6380B52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2902180EA4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76A6380B52;
-	Wed,  1 May 2024 19:57:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B13C21BF2C9
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:57:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2902180EA4;
+	Wed,  1 May 2024 19:58:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 16B321BF2C9
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:58:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A89DC80B52
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:57:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CB85404C6
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 19:58:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LYucrDJqJcWm for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 19:57:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jEcFRbika--l for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 19:58:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A40DF80B38
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A40DF80B38
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A40DF80B38
- for <buildroot@buildroot.org>; Wed,  1 May 2024 19:57:03 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CAE00FF803;
- Wed,  1 May 2024 19:57:01 +0000 (UTC)
-Date: Wed, 1 May 2024 21:57:01 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240501215701.7b2ce70e@windsurf>
-In-Reply-To: <20240420132817.1352847-1-ju.o@free.fr>
-References: <20240420132817.1352847-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1714593422;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=A5gKKdjXs6hya048vRHPRe74fjVXGKz9dWrX97doT3E=;
- b=hX++hVkPD3ivQhJofOsL7tGGjjQwfKNJmMlnZabQwbjUZVNKQ11dgA+y9E3g5cV+eFwcCm
- kHB8o4hTY1e7C9fhNFTd2+i/MzpblVp/XiVVpbeasoz3jLiaWQDOvSrQNaxJJsfTelBfsJ
- tQEul8w2EyjUkh5N/IDI1bdeBYXfprp0YhKY95wjXvPVqsMcvamq+6SoWYJtfet78jl9ys
- jBSPsX6K8kd+3IhOnRRzZpjvtnfJRxqZJrJ479BrOSGIrB/fuRLQPYsfLaVwUNMrN6X3QT
- 7+GaT5TSuPrVlEYwqZMmX45oAMgwFGnm+s9hpxWApASkbu0YRpoTxJtcFDdL6Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hX++hVkP
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add fwts runtime test
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24609407B3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24609407B3
+ for <buildroot@buildroot.org>; Wed,  1 May 2024 19:58:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0CDD886484; Wed,  1 May 2024 19:58:24 +0000 (UTC)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Wed, 1 May 2024 21:54:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 16463a00affa0ba4814e583bcd544174528f371e
+X-Git-Newrev: 65fe2a8f02c694975065c890c0e6038619c025ff
+X-Patchwork-Hint: ignore
+Message-Id: <20240501195824.0CDD886484@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/config-fragments: remove
+ sourcery-nios2.config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,31 +59,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 20 Apr 2024 15:28:17 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=65fe2a8f02c694975065c890c0e6038619c025ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  DEVELOPERS                                 |  1 +
->  support/testing/tests/package/test_fwts.py | 67 ++++++++++++++++++++++
->  2 files changed, 68 insertions(+)
->  create mode 100644 support/testing/tests/package/test_fwts.py
+The Sourcery CodeBench Nios-II 2018.05 external toolchain will be
+removed, first remove it from toolchain-configs.csv used by test-pkg
+and genrandconfig scripts.
 
-Applied to master, thanks.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ support/config-fragments/autobuild/sourcery-nios2.config | 3 ---
+ support/config-fragments/autobuild/toolchain-configs.csv | 1 -
+ 2 files changed, 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/config-fragments/autobuild/sourcery-nios2.config b/support/config-fragments/autobuild/sourcery-nios2.config
+deleted file mode 100644
+index d58407d513..0000000000
+--- a/support/config-fragments/autobuild/sourcery-nios2.config
++++ /dev/null
+@@ -1,3 +0,0 @@
+-BR2_nios2=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 2c4fa45fe7..47d5fddfbd 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -65,4 +65,3 @@ support/config-fragments/autobuild/linaro-aarch64-be.config,x86
+ support/config-fragments/autobuild/linaro-arm.config,x86
+ support/config-fragments/autobuild/sourcery-mips64.config,x86
+ support/config-fragments/autobuild/sourcery-mips.config,x86
+-support/config-fragments/autobuild/sourcery-nios2.config,x86
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
