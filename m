@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEF25C4345F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 07:26:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 168AEC4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 09:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BCF581A1C;
-	Wed,  1 May 2024 07:26:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C361C60A8E;
+	Wed,  1 May 2024 09:53:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OFtSNyQUHkJ6; Wed,  1 May 2024 07:26:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JyHVVDBi4FDf; Wed,  1 May 2024 09:53:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 946E081EFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C46C160AEC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 946E081EFB;
-	Wed,  1 May 2024 07:26:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 699201BF409
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 07:25:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C46C160AEC;
+	Wed,  1 May 2024 09:53:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AFED71BF977
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 09:53:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56AD0402EB
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 07:25:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BFEE4019E
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 09:53:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qbtG7Os-09ry for <buildroot@lists.busybox.net>;
- Wed,  1 May 2024 07:25:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GiUhnf4ROu7v for <buildroot@lists.busybox.net>;
+ Wed,  1 May 2024 09:53:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8ED32400C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6885C40108
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8ED32400C4
- for <buildroot@uclibc.org>; Wed,  1 May 2024 07:25:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6885C40108
+ for <buildroot@uclibc.org>; Wed,  1 May 2024 09:53:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 7A0EA82670; Wed,  1 May 2024 07:25:58 +0000 (UTC)
+ id 5E9CF81D2A; Wed,  1 May 2024 09:53:51 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 01 May 2024 07:25:58 +0000
+Date: Wed, 01 May 2024 09:53:51 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -49,15 +49,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stsp2@yandex.ru
+X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: REOPENED
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-16027-163-VH4KNClFFd@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-16027-163-moKpfGvHdE@https.bugs.busybox.net/>
 In-Reply-To: <bug-16027-163@https.bugs.busybox.net/>
 References: <bug-16027-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -82,12 +82,45 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=16027
 
---- Comment #7 from stsp <stsp2@yandex.ru> ---
-Ah, completely forgot about this one!
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Since menuconfig now works, please navigate
-to "Build options" -> "Commands" -> "Wget command"
-and remove "passive-ftp" from there.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998@free.fr
+
+--- Comment #8 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+stsp, All,
+
+Thanks for the report.
+
+The menuconfig issue has been fixed with commit a6210d28db (kconfig/lxdialog:
+fix check() with GCC14).
+
+As for the wget issue, please refer to the release notes of your distribution:
+
+    https://docs.fedoraproject.org/en-US/fedora/latest/release-notes/
+
+Quoting:
+    The wget command in Fedora 40 uses Wget2.
+
+Amd a little trivial web-search turns up:
+    https://fedoraproject.org/wiki/Changes/Wget2asWget
+
+And of course, it all quickly leads to:
+    https://gitlab.com/gnuwget/wget2/-/wikis/Home#different-behavior-of-wget2
+
+The current workaround is indeed to remove --passive-ftp from the wget command
+line, but thisis not a vial long-term solution, because it means it is no
+longer
+possible to do ftp downloads (which although legacy, still exist). The proper
+solution would be to contribute a patch that solves the issue.
+
+I think a good solution would be two fold:
+  - introduce a new download backend specifically for ftp
+  - drop --passive-ftp from the default wget command line
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
