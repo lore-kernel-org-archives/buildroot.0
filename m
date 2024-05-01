@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 079C8C25B4F
-	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA443C4345F
+	for <buildroot@archiver.kernel.org>; Wed,  1 May 2024 20:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C85AD417E1;
-	Wed,  1 May 2024 20:46:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53C274195B;
+	Wed,  1 May 2024 20:46:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E0B8XTQ8WldV; Wed,  1 May 2024 20:46:35 +0000 (UTC)
+ id axYdBpoojh3c; Wed,  1 May 2024 20:46:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9678741869
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AA0041831
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9678741869;
-	Wed,  1 May 2024 20:46:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2AA0041831;
+	Wed,  1 May 2024 20:46:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 682671BF400
- for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:46:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 798CF1BF400
+ for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D97A40580
+ by smtp4.osuosl.org (Postfix) with ESMTP id A9273405FD
  for <buildroot@lists.busybox.net>; Wed,  1 May 2024 20:46:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pq5XdJ2mYN5p for <buildroot@lists.busybox.net>;
+ id Qx6f4cEHk5Rr for <buildroot@lists.busybox.net>;
  Wed,  1 May 2024 20:46:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E796405FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DDFE4067C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E796405FD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5DDFE4067C
  for <buildroot@buildroot.org>; Wed,  1 May 2024 20:46:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 26036864D0; Wed,  1 May 2024 20:46:17 +0000 (UTC)
+ id 5A219864D4; Wed,  1 May 2024 20:46:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 1 May 2024 22:06:39 +0200
+Date: Wed, 1 May 2024 22:21:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6317f6c9a4107d3409530b653c5900bff17ffb6e
-X-Git-Newrev: 7c1faf997f868586a40a9cb6f03166d85a67b8f8
+X-Git-Oldrev: 17a04da7d4fdfe44547e9b50a62c2f4af49e9ae8
+X-Git-Newrev: b890206876588ed0d16187abf49d35a45177cc3d
 X-Patchwork-Hint: ignore
-Message-Id: <20240501204617.26036864D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add fwts runtime test
+Message-Id: <20240501204617.5A219864D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.75
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,107 +61,130 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1199494227070851047=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c1faf997f868586a40a9cb6f03166d85a67b8f8
+--===============1199494227070851047==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b890206876588ed0d16187abf49d35a45177cc3d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Bump to version 5.75 containing various fixes. Added a patch to fix
+build with disabled CUPS (failing since 5.73, waiting to be reviewed and
+merged) and enabled autoreconf which is needed for that patch.
+
+Changelog:
+https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog
+
+Signed-off-by: Jan Čermák <sairon@sairon.cz>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  1 +
- support/testing/tests/package/test_fwts.py | 67 ++++++++++++++++++++++++++++++
- 2 files changed, 68 insertions(+)
+ .../bluez5_utils-headers/bluez5_utils-headers.mk   |  2 +-
+ .../0001-configure.ac-Fix-disable-cups.patch       | 41 ++++++++++++++++++++++
+ package/bluez5_utils/bluez5_utils.hash             |  2 +-
+ package/bluez5_utils/bluez5_utils.mk               |  4 ++-
+ 4 files changed, 46 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6bfad23442..726641b513 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1787,6 +1787,7 @@ F:	support/testing/tests/package/test_file/
- F:	support/testing/tests/package/test_fluidsynth.py
- F:	support/testing/tests/package/test_fluidsynth/
- F:	support/testing/tests/package/test_fping.py
-+F:	support/testing/tests/package/test_fwts.py
- F:	support/testing/tests/package/test_gawk.py
- F:	support/testing/tests/package/test_ghostscript.py
- F:	support/testing/tests/package/test_ghostscript/
-diff --git a/support/testing/tests/package/test_fwts.py b/support/testing/tests/package/test_fwts.py
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 74b385e110..2f07a7b422 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.72
++BLUEZ5_UTILS_HEADERS_VERSION = 5.75
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/0001-configure.ac-Fix-disable-cups.patch b/package/bluez5_utils/0001-configure.ac-Fix-disable-cups.patch
 new file mode 100644
-index 0000000000..ef792136c2
+index 0000000000..2c6c46f6fd
 --- /dev/null
-+++ b/support/testing/tests/package/test_fwts.py
-@@ -0,0 +1,67 @@
-+import os
++++ b/package/bluez5_utils/0001-configure.ac-Fix-disable-cups.patch
+@@ -0,0 +1,41 @@
++From cb0de49bc6f8a6bf8f01a24599b499aa4bf18032 Mon Sep 17 00:00:00 2001
++From: Lars Wendler <polynomial-c@gmx.de>
++Date: Tue, 16 Apr 2024 07:26:04 +0200
++Subject: [PATCH] configure.ac: Fix --disable-cups
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+import infra.basetest
++or else we get:
++  configure: error: conditional "CUPS_SERVERBIN" was never defined.
++  Usually this means the macro was only invoked conditionally.
 +
++Fixes: https://github.com/bluez/bluez/issues/773
 +
-+class TestFwts(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+        BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/aarch64-sbsa/assemble-flash-images support/scripts/genimage.sh"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/aarch64-sbsa/genimage.cfg"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.28"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+        BR2_TARGET_EDK2=y
-+        BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_ARM64_EFI=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu_sbsa"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+        BR2_PACKAGE_FWTS=y
-+        BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE=y
-+        BR2_PACKAGE_HOST_GENIMAGE=y
-+        BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+        BR2_PACKAGE_HOST_MTOOLS=y
-+        """
++Upstream: https://patchwork.kernel.org/project/bluetooth/list/?series=844910
++Signed-off-by: Jan Čermák <sairon@sairon.cz>
++---
++ configure.ac | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
 +
-+    def test_run(self):
-+        hda = os.path.join(self.builddir, "images", "disk.img")
-+        flash0 = os.path.join(self.builddir, "images", "SBSA_FLASH0.fd")
-+        flash1 = os.path.join(self.builddir, "images", "SBSA_FLASH1.fd")
-+        self.emulator.boot(arch="aarch64",
-+                           options=["-M", "sbsa-ref",
-+                                    "-cpu", "cortex-a57",
-+                                    "-m", "512M",
-+                                    "-pflash", flash0,
-+                                    "-pflash", flash1,
-+                                    "-hda", hda])
-+        self.emulator.login()
-+
-+        # Check the program can execute.
-+        self.assertRunOk("fwts --version")
-+
-+        # We run a simple UEFI runtime service variable interface test
-+        # suite. Those tests are using the fwts efi_runtime kernel
-+        # module.
-+        self.assertRunOk("fwts -q uefirtvariable", timeout=30)
-+
-+        # The previous fwts invocation is expected to have created a
-+        # "results.log" report. We check the file exists and contains
-+        # a known header string.
-+        expected_str = "Results generated by fwts:"
-+        cmd = f"grep -F '{expected_str}' results.log"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertTrue(out[0].startswith(expected_str))
++diff --git a/configure.ac b/configure.ac
++index 9dea70d..dbba759 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -249,12 +249,12 @@ AM_CONDITIONAL(CUPS, test "${enable_cups}" != "no")
++ if (test "${enable_cups}" != "no"); then
++ 	AC_MSG_CHECKING([cups directory])
++ 	cups_serverbin=`$PKG_CONFIG cups --variable=cups_serverbin`
++-	AM_CONDITIONAL(CUPS_SERVERBIN, test "${cups_serverbin}" != "")
++-	if (test "${cups_serverbin}" != ""); then
++-		AC_SUBST(CUPS_SERVERBIN, ${cups_serverbin})
++-	fi
++ 	AC_MSG_RESULT([${cups_serverbin}])
++ fi
+++AM_CONDITIONAL(CUPS_SERVERBIN, test "${cups_serverbin}" != "")
+++AS_IF([test "${cups_serverbin}" != ""],[
+++	AC_SUBST(CUPS_SERVERBIN, ${cups_serverbin})
+++])
++ 
++ AC_ARG_ENABLE(mesh, AS_HELP_STRING([--enable-mesh],
++ 		[enable Mesh profile support]), [enable_mesh=${enableval}])
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 46680cf3c9..9cc19f87dd 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  499d7fa345a996c1bb650f5c6749e1d929111fa6ece0be0e98687fee6124536e  bluez-5.72.tar.xz
++sha256  988cb3c4551f6e3a667708a578f5ca9f93fc896508f98f08709be4f8ab033c2f  bluez-5.75.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 3ccb63948c..26f0f4afd4 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,9 +5,11 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.72
++BLUEZ5_UTILS_VERSION = 5.75
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
++# 0001-configure.ac-Fix-disable-cups.patch
++BLUEZ5_UTILS_AUTORECONF = YES
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
+ BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
+ BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
+
+--===============1199494227070851047==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1199494227070851047==--
