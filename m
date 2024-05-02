@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02FDDC4345F
-	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 08:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F49DC4345F
+	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 08:37:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8728541552;
-	Thu,  2 May 2024 08:37:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AEB741586;
+	Thu,  2 May 2024 08:37:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hwrOLiuZje16; Thu,  2 May 2024 08:37:15 +0000 (UTC)
+ id s1ZChj56jVC0; Thu,  2 May 2024 08:37:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF46641589
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9EAE415AE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF46641589;
-	Thu,  2 May 2024 08:37:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9EAE415AE;
+	Thu,  2 May 2024 08:37:17 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D58C11BF990
- for <buildroot@lists.busybox.net>; Thu,  2 May 2024 08:36:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D95841BF47A
+ for <buildroot@lists.busybox.net>; Thu,  2 May 2024 08:36:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9966E60E46
+ by smtp3.osuosl.org (Postfix) with ESMTP id B19B460E48
  for <buildroot@lists.busybox.net>; Thu,  2 May 2024 08:36:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BSulMdrX-jWR for <buildroot@lists.busybox.net>;
- Thu,  2 May 2024 08:36:54 +0000 (UTC)
+ id ojYxjTskeVhK for <buildroot@lists.busybox.net>;
+ Thu,  2 May 2024 08:36:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1DA660E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E97FC60E4B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1DA660E48
+ by smtp3.osuosl.org (Postfix) with ESMTP id E97FC60E4B
  for <buildroot@buildroot.org>; Thu,  2 May 2024 08:36:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE55286608; Thu,  2 May 2024 08:36:54 +0000 (UTC)
+ id E26068660B; Thu,  2 May 2024 08:36:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 2 May 2024 10:28:22 +0200
+Date: Thu, 2 May 2024 10:29:58 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 330386fef9179b169d3619818a6c692098f3f0e4
-X-Git-Newrev: aefc8730aaed3639692de8e0f93715d846a1100e
+X-Git-Oldrev: b788c8cd0ae3a36d9f1cc3cd325b5e0e6d38f977
+X-Git-Newrev: 02ff38a44ac38b98ce7b15dedd7af82d1315ca90
 X-Patchwork-Hint: ignore
-Message-Id: <20240502083654.BE55286608@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] DEVELOPERS: remove Thomas
- De Schampheleire
+Message-Id: <20240502083654.E26068660B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/tiff: explicitly
+ disable jbig support for host and target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,72 +65,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aefc8730aaed3639692de8e0f93715d846a1100e
+commit: https://git.buildroot.net/buildroot/commit/?id=02ff38a44ac38b98ce7b15dedd7af82d1315ca90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-No longer active in Buildroot. Keeping my name in the list sets the wrong
-expectation regarding package updates or support.
+BR2_PACKAGE_TIFF_JBIG did actually not do anything, as no explicit
+--enable-jbig was passed to configure and there is no libjbig in Buildroot,
+so drop it and instead explicitly disable jbig support.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Also add --disable-jbig for the host build, which was missed when host
+support was added in commit 91b16fbbf9db (tiff: add host variant).
+
+As the TIFF_JBIG option was a noop, do not add legacy handling for it.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1a015540278ba742b5a77e90e80e2f858af14f04)
+(cherry picked from commit a7d491b0ffc5c0876053cc94c4112e73096aa5c2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 41 -----------------------------------------
- 1 file changed, 41 deletions(-)
+ package/tiff/Config.in | 4 ----
+ package/tiff/tiff.mk   | 6 ++----
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8ccf6ff46c..a2a2c56a13 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2949,47 +2949,6 @@ F:	package/openlayers/
- F:	package/vuejs/
- F:	package/vuejs-router/
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index d1004d6668..d357d08406 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -63,10 +63,6 @@ config BR2_PACKAGE_TIFF_OLD_JPEG
+ 	bool "Old JPEG decompression"
+ 	default y
  
--N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
--F:	docs/manual/
--F:	package/cereal/
--F:	package/chartjs/
--F:	package/datatables/
--F:	package/datatables-buttons/
--F:	package/datatables-fixedcolumns/
--F:	package/datatables-responsive/
--F:	package/jszip/
--F:	package/libtelnet/
--F:	package/opkg-utils/
--F:	package/perl-convert-asn1/
--F:	package/perl-crypt-blowfish/
--F:	package/perl-crypt-cbc/
--F:	package/perl-crypt-openssl-aes/
--F:	package/perl-devel-cycle/
--F:	package/perl-devel-size/
--F:	package/perl-i18n/
--F:	package/perl-locale-maketext-lexicon/
--F:	package/perl-lwp-protocol-https/
--F:	package/perl-math-int64/
--F:	package/perl-math-prime-util/
--F:	package/perl-mime-base64-urlsafe/
--F:	package/perl-mojolicious-plugin-authentication/
--F:	package/perl-mojolicious-plugin-authorization/
--F:	package/perl-mojolicious-plugin-cspheader/
--F:	package/perl-mojolicious-plugin-i18n/
--F:	package/perl-mojolicious-plugin-securityheader/
--F:	package/perl-mozilla-ca/
--F:	package/perl-net-snmp/
--F:	package/perl-net-ssh2/
--F:	package/perl-net-telnet/
--F:	package/perl-path-class/
--F:	package/pigz/
--F:	package/popperjs/
--F:	package/xenomai/
--F:	support/scripts/size-stats
--F:	support/testing/tests/package/test_perl_lwp_protocol_https.py
--F:	utils/size-stats-compare
--F:	toolchain/
+-config BR2_PACKAGE_TIFF_JBIG
+-	bool "JBIG compression"
+-	default y
 -
- N:	Thomas Devoogdt <thomas@devoogdt.com>
- F:	package/fluent-bit/
- F:	package/libsoup3/
+ config BR2_PACKAGE_TIFF_UTILITIES
+ 	bool "tiff utilities"
+ 	help
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 8ec53d4fe1..0e5e0dd48a 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -17,6 +17,7 @@ TIFF_INSTALL_STAGING = YES
+ TIFF_CONF_OPTS = \
+ 	--disable-contrib \
+ 	--disable-lerc \
++	--disable-jbig \
+ 	--disable-tests \
+ 	--disable-webp
+ 
+@@ -28,6 +29,7 @@ HOST_TIFF_CONF_OPTS = \
+ 	--disable-lerc \
+ 	--disable-libdeflate \
+ 	--disable-lzma \
++	--disable-jbig \
+ 	--disable-jpeg \
+ 	--disable-tests \
+ 	--disable-webp \
+@@ -101,10 +103,6 @@ ifneq ($(BR2_PACKAGE_TIFF_OLD_JPEG),y)
+ TIFF_CONF_OPTS += --disable-old-jpeg
+ endif
+ 
+-ifneq ($(BR2_PACKAGE_TIFF_JBIG),y)
+-TIFF_CONF_OPTS += --disable-jbig
+-endif
+-
+ ifeq ($(BR2_PACKAGE_TIFF_UTILITIES),y)
+ TIFF_CONF_OPTS += --enable-tools
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
