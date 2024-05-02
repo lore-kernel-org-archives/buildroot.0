@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A03BC4345F
-	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 16:34:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97F88C4345F
+	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 16:34:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F18A741741;
-	Thu,  2 May 2024 16:34:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E86141764;
+	Thu,  2 May 2024 16:34:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gi-3VIw-3FrY; Thu,  2 May 2024 16:34:02 +0000 (UTC)
+ id waD6N-OFwAE8; Thu,  2 May 2024 16:34:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0D5A40701
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01F3641772
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0D5A40701;
-	Thu,  2 May 2024 16:34:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 91B661BF990
- for <buildroot@lists.busybox.net>; Thu,  2 May 2024 16:33:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01F3641772;
+	Thu,  2 May 2024 16:34:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B8151BF296
+ for <buildroot@lists.busybox.net>; Thu,  2 May 2024 16:33:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DFCF41B5A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7804740205
  for <buildroot@lists.busybox.net>; Thu,  2 May 2024 16:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CFCxudPnUPzk for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 78b8npXst2LM for <buildroot@lists.busybox.net>;
  Thu,  2 May 2024 16:33:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 529E2409F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4631D4021D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 529E2409F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4631D4021D
  for <buildroot@buildroot.org>; Thu,  2 May 2024 16:33:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A7D786636; Thu,  2 May 2024 16:33:55 +0000 (UTC)
+ id 2C71386635; Thu,  2 May 2024 16:33:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 2 May 2024 18:28:38 +0200
+Date: Thu, 2 May 2024 18:27:55 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 81deca8719c0fd5cd707df040dee7c525106c5ed
-X-Git-Newrev: 59c153dbcd0b47e35f65dc911ee2bfb1bca0b895
+X-Git-Oldrev: 344bcb651b944105cea6b5c3b7c442a1f135f9f2
+X-Git-Newrev: 81deca8719c0fd5cd707df040dee7c525106c5ed
 X-Patchwork-Hint: ignore
-Message-Id: <20240502163355.3A7D786636@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- support/scripts/pkg-stats: fix bug when sorting by hashfile
+Message-Id: <20240502163355.2C71386635@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/tcf-agent: fix
+ x86 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59c153dbcd0b47e35f65dc911ee2bfb1bca0b895
+commit: https://git.buildroot.net/buildroot/commit/?id=81deca8719c0fd5cd707df040dee7c525106c5ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Because the div_class variable was not reassigned a value,
-cells in the latest_version column were still being assigned
-hash_file classes and so were being picked up as elements in
-the hash_file sort. This lead to execessive grid gap elements
-stacking up and creating huge blank spaces at the top of the page.
-This is very noticable on pages with a large number of packages,
-like the ones the autobuilder creates.
+Fix the following x86 build failure raised since bump to version 1.8.0
+in commit 81802e263a12e173e0e1028449d1e1e11b2e5974 and
+https://gitlab.eclipse.org/eclipse/tcf/tcf.agent/-/commit/8df5540c53b862d516ac25f908c2fff4a547b4a6:
 
-original behaviour(click the "Hash file" column label twice):
-http://autobuild.buildroot.org/stats/master.html
+/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'unpack_elf_symbol_info':
+/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: error: 'STT_ARM_16BIT' undeclared (first use in this function)
+ 2079 |         if (info->type == STT_ARM_16BIT) {
+      |                           ^~~~~~~~~~~~~
+/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: note: each undeclared identifier is reported only once for each function it appears in
+/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'create_symbol_addr_search_index':
+/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2228:78: error: 'STT_ARM_16BIT' undeclared (first use in this function)
+ 2228 |                     if (type == STT_FUNC || type == STT_ARM_TFUNC || type == STT_ARM_16BIT) {
+      |                                                                              ^~~~~~~~~~~~~
 
-demo of fixed behaviour:
-https://sen-h.codeberg.page/pkg-stats-demos/@pages/fix-bug-when-sorting-by-hash-file.html
+Fixes: 81802e263a12e173e0e1028449d1e1e11b2e5974
+ - http://autobuild.buildroot.org/results/8388acf59689ed7e621bdf158483e3df1cf9bef7
 
-Signed-off-by: Sen Hastings <sen@hastings.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 6e3d79f52ef0e1b2b6fe1e660820cabdca6179c2)
+(cherry picked from commit dd595d3b06a355f58efcc547ff1f001dd55c99c6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 1 +
- 1 file changed, 1 insertion(+)
+ ...gent-tcf-services-tcf_elf.c-fix-x86-build.patch | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 53898a36f2..3295eb7a48 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -977,6 +977,7 @@ def dump_html_pkg(f, pkg):
- 
-     # Latest version
-     data_field_id = f'latest_version__{pkg_css_class}'
-+    div_class = ["centered"]
-     div_class.append(f'_{pkg_css_class}')
-     div_class.append("latest_version data")
-     if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+diff --git a/package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch b/package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch
+new file mode 100644
+index 0000000000..5f08fa485e
+--- /dev/null
++++ b/package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch
+@@ -0,0 +1,60 @@
++From 0a847ca035113540ee44d17f364bf4701fe78355 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 1 Mar 2024 22:31:05 +0100
++Subject: [PATCH] agent/tcf/services/tcf_elf.c: fix x86 build
++
++Fix the following x86 build failure raised since version 1.8.0 and
++https://gitlab.eclipse.org/eclipse/tcf/tcf.agent/-/commit/8df5540c53b862d516ac25f908c2fff4a547b4a6:
++
++/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'unpack_elf_symbol_info':
++/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: error: 'STT_ARM_16BIT' undeclared (first use in this function)
++ 2079 |         if (info->type == STT_ARM_16BIT) {
++      |                           ^~~~~~~~~~~~~
++/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: note: each undeclared identifier is reported only once for each function it appears in
++/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'create_symbol_addr_search_index':
++/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2228:78: error: 'STT_ARM_16BIT' undeclared (first use in this function)
++ 2228 |                     if (type == STT_FUNC || type == STT_ARM_TFUNC || type == STT_ARM_16BIT) {
++      |                                                                              ^~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8388acf59689ed7e621bdf158483e3df1cf9bef7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://gitlab.eclipse.org/eclipse/tcf/tcf.agent/-/merge_requests/1
++---
++ agent/tcf/services/tcf_elf.c | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/agent/tcf/services/tcf_elf.c b/agent/tcf/services/tcf_elf.c
++index 1b3900ec..b0b948e4 100644
++--- a/agent/tcf/services/tcf_elf.c
+++++ b/agent/tcf/services/tcf_elf.c
++@@ -2076,10 +2076,12 @@ void unpack_elf_symbol_info(ELF_Section * sym_sec, U4_T index, ELF_SymbolInfo *
++     }
++ 
++     if (file->machine == EM_ARM) {
+++#ifdef STT_ARM_16BIT
++         if (info->type == STT_ARM_16BIT) {
++             info->type = STT_OBJECT;
++             info->type16bit = 1;
++         }
+++#endif
++         if (info->type == STT_ARM_TFUNC) {
++             info->type = STT_FUNC;
++             info->type16bit = 1;
++@@ -2225,7 +2227,11 @@ static void create_symbol_addr_search_index(ELF_Section * sec) {
++                 }
++                 add = add && type != STT_GNU_IFUNC;
++                 if (add && file->machine == EM_ARM) {
++-                    if (type == STT_FUNC || type == STT_ARM_TFUNC || type == STT_ARM_16BIT) {
+++                    if (type == STT_FUNC || type == STT_ARM_TFUNC
+++#ifdef STT_ARM_16BIT
+++                     || type == STT_ARM_16BIT
+++#endif
+++                     ) {
++                         addr = addr & ~(U8_T)1;
++                     }
++                 }
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
