@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 168B6C4345F
-	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 07:48:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6551FC4345F
+	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 07:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8A1A4015A;
-	Thu,  2 May 2024 07:48:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C034440362;
+	Thu,  2 May 2024 07:48:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k6aC7Nf3lWwM; Thu,  2 May 2024 07:48:43 +0000 (UTC)
+ id gFSqAH_PdSls; Thu,  2 May 2024 07:48:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 839804015C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41530402A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 839804015C;
-	Thu,  2 May 2024 07:48:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 600731BF83C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41530402A5;
+	Thu,  2 May 2024 07:48:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C1C151BF83C
  for <buildroot@lists.busybox.net>; Thu,  2 May 2024 07:48:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C8A341A04
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD03C4015C
  for <buildroot@lists.busybox.net>; Thu,  2 May 2024 07:48:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hpXQpWX2ax8h for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rhQX5j1zQ2vf for <buildroot@lists.busybox.net>;
  Thu,  2 May 2024 07:48:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DAB041773
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A18F54015A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8DAB041773
+ by smtp4.osuosl.org (Postfix) with ESMTP id A18F54015A
  for <buildroot@buildroot.org>; Thu,  2 May 2024 07:48:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 81842865E2; Thu,  2 May 2024 07:48:41 +0000 (UTC)
+ id 9486386586; Thu,  2 May 2024 07:48:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 2 May 2024 09:45:19 +0200
+Date: Thu, 2 May 2024 09:45:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f1723c93b59c021f16181b3ac62397b128cb9677
-X-Git-Newrev: d476d2e7e53a92d4e2c038875cb3255dfb11d167
+X-Git-Oldrev: d476d2e7e53a92d4e2c038875cb3255dfb11d167
+X-Git-Newrev: ce486bf62ad4e6f00a6e2bab16b55a960cbbc079
 X-Patchwork-Hint: ignore
-Message-Id: <20240502074841.81842865E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
- 22.3.19
+Message-Id: <20240502074841.9486386586@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcap-ng: bump version to 0.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,38 +65,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d476d2e7e53a92d4e2c038875cb3255dfb11d167
+commit: https://git.buildroot.net/buildroot/commit/?id=ce486bf62ad4e6f00a6e2bab16b55a960cbbc079
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Switched _SITE to https.
+
+Changelog: https://people.redhat.com/sgrubb/libcap-ng/ChangeLog
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcap-ng/Config.in      | 2 +-
+ package/libcap-ng/libcap-ng.hash | 2 +-
+ package/libcap-ng/libcap-ng.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index d9cad026c4..aadf01a169 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  381f7ad104e3d0d8dd6c3ec0c8304e410a479c439e72db35c83fb7e2b0ec556f  intel-gmmlib-22.3.18.tar.gz
-+sha256  ea9c418b0fd84a982850f230cb2d783dfe2e1f9923065f54b2fcaad1e9b33417  intel-gmmlib-22.3.19.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index 94a07ebfb8..74e19e93fd 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
+index 46f0b69ca4..bee66b3357 100644
+--- a/package/libcap-ng/Config.in
++++ b/package/libcap-ng/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_LIBCAP_NG
+ 	  running applications and print out any capabilities and
+ 	  whether or not it has an open ended bounding set.
+ 
+-	  http://people.redhat.com/sgrubb/libcap-ng/
++	  https://people.redhat.com/sgrubb/libcap-ng/
+diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
+index bb4280368d..022dd1f895 100644
+--- a/package/libcap-ng/libcap-ng.hash
++++ b/package/libcap-ng/libcap-ng.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  68581d3b38e7553cb6f6ddf7813b1fc99e52856f21421f7b477ce5abd2605a8a  libcap-ng-0.8.4.tar.gz
++sha256  3ba5294d1cbdfa98afaacfbc00b6af9ed2b83e8a21817185dfd844cc8c7ac6ff  libcap-ng-0.8.5.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index 2ec88810b4..9c8012b238 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--INTEL_GMMLIB_VERSION = 22.3.18
-+INTEL_GMMLIB_VERSION = 22.3.19
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+-LIBCAP_NG_VERSION = 0.8.4
+-LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
++LIBCAP_NG_VERSION = 0.8.5
++LIBCAP_NG_SITE = https://people.redhat.com/sgrubb/libcap-ng
+ LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+ LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
+ LIBCAP_NG_CPE_ID_VALID = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
