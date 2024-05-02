@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAD4FC4345F
-	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 16:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A03BC4345F
+	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 16:34:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B690F402D6;
-	Thu,  2 May 2024 16:33:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F18A741741;
+	Thu,  2 May 2024 16:34:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XgtpPhFDz68L; Thu,  2 May 2024 16:33:58 +0000 (UTC)
+ id Gi-3VIw-3FrY; Thu,  2 May 2024 16:34:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98BC140339
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0D5A40701
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98BC140339;
-	Thu,  2 May 2024 16:33:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80D831BF296
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0D5A40701;
+	Thu,  2 May 2024 16:34:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 91B661BF990
  for <buildroot@lists.busybox.net>; Thu,  2 May 2024 16:33:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E48B60EAE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7DFCF41B5A
  for <buildroot@lists.busybox.net>; Thu,  2 May 2024 16:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DFHG7EpWRnZW for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CFCxudPnUPzk for <buildroot@lists.busybox.net>;
  Thu,  2 May 2024 16:33:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67FA260909
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 529E2409F1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 67FA260909
+ by smtp2.osuosl.org (Postfix) with ESMTP id 529E2409F1
  for <buildroot@buildroot.org>; Thu,  2 May 2024 16:33:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 544F586639; Thu,  2 May 2024 16:33:55 +0000 (UTC)
+ id 3A7D786636; Thu,  2 May 2024 16:33:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 2 May 2024 18:31:43 +0200
+Date: Thu, 2 May 2024 18:28:38 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 7a5eda5009b13bd434521436f9a3fa68d25e29b2
-X-Git-Newrev: e5c204820dcfec70e15ae904f7c629eecc732127
+X-Git-Oldrev: 81deca8719c0fd5cd707df040dee7c525106c5ed
+X-Git-Newrev: 59c153dbcd0b47e35f65dc911ee2bfb1bca0b895
 X-Patchwork-Hint: ignore
-Message-Id: <20240502163355.544F586639@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/dmenu-wayland:
- fix uclibc build
+Message-Id: <20240502163355.3A7D786636@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x]
+ support/scripts/pkg-stats: fix bug when sorting by hashfile
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5c204820dcfec70e15ae904f7c629eecc732127
+commit: https://git.buildroot.net/buildroot/commit/?id=59c153dbcd0b47e35f65dc911ee2bfb1bca0b895
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Set -std=gnu99 to fix the following uclibc build failure raised since
-the addition of the package in commit
-2f6b1b8e6893003efcc72185cd468dcb0b088b2d:
+Because the div_class variable was not reassigned a value,
+cells in the latest_version column were still being assigned
+hash_file classes and so were being picked up as elements in
+the hash_file sort. This lead to execessive grid gap elements
+stacking up and creating huge blank spaces at the top of the page.
+This is very noticable on pages with a large number of packages,
+like the ones the autobuilder creates.
 
-../draw.c:37:23: error: 'CLOCK_REALTIME' undeclared (first use in this function)
-   37 |         clock_gettime(CLOCK_REALTIME, &ts);
-      |                       ^~~~~~~~~~~~~~
+original behaviour(click the "Hash file" column label twice):
+http://autobuild.buildroot.org/stats/master.html
 
-Fixes: 2f6b1b8e6893003efcc72185cd468dcb0b088b2d
- - http://autobuild.buildroot.org/results/4b9db67fb444ec35d741e5d3e74263ac0c4d4a7d
+demo of fixed behaviour:
+https://sen-h.codeberg.page/pkg-stats-demos/@pages/fix-bug-when-sorting-by-hash-file.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sen Hastings <sen@hastings.org>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 46bb598f1a67ed2bf7acef8b17ea09ee0f425d8e)
+(cherry picked from commit 6e3d79f52ef0e1b2b6fe1e660820cabdca6179c2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dmenu-wayland/dmenu-wayland.mk | 1 +
+ support/scripts/pkg-stats | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/dmenu-wayland/dmenu-wayland.mk b/package/dmenu-wayland/dmenu-wayland.mk
-index 33a73c0153..fec984194c 100644
---- a/package/dmenu-wayland/dmenu-wayland.mk
-+++ b/package/dmenu-wayland/dmenu-wayland.mk
-@@ -8,6 +8,7 @@ DMENU_WAYLAND_VERSION = a380201dff5bfac2dace553d7eaedb6cea6855f9
- DMENU_WAYLAND_SITE = $(call github,nyyManni,dmenu-wayland,$(DMENU_WAYLAND_VERSION))
- DMENU_WAYLAND_LICENSE = MIT
- DMENU_WAYLAND_LICENSE_FILES = LICENSE
-+DMENU_WAYLAND_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 53898a36f2..3295eb7a48 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -977,6 +977,7 @@ def dump_html_pkg(f, pkg):
  
- # host-wayland is for wayland-scanner
- DMENU_WAYLAND_DEPENDENCIES = \
+     # Latest version
+     data_field_id = f'latest_version__{pkg_css_class}'
++    div_class = ["centered"]
+     div_class.append(f'_{pkg_css_class}')
+     div_class.append("latest_version data")
+     if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
