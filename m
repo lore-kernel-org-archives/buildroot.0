@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74948C04FFE
-	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 08:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88F9DC4345F
+	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 08:37:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64141414C2;
-	Thu,  2 May 2024 08:37:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E631A41576;
+	Thu,  2 May 2024 08:37:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wpzto77s9H4N; Thu,  2 May 2024 08:37:04 +0000 (UTC)
+ id TJNmQt3qUy9Z; Thu,  2 May 2024 08:37:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AE41414EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CB7D4154A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AE41414EA;
-	Thu,  2 May 2024 08:37:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AEB6F1BF990
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CB7D4154A;
+	Thu,  2 May 2024 08:37:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C8C331BF995
  for <buildroot@lists.busybox.net>; Thu,  2 May 2024 08:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B805414C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id C0381405E8
  for <buildroot@lists.busybox.net>; Thu,  2 May 2024 08:36:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id blYuakIY-Pyl for <buildroot@lists.busybox.net>;
- Thu,  2 May 2024 08:36:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PAHnrjrqqBzG for <buildroot@lists.busybox.net>;
+ Thu,  2 May 2024 08:36:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABD9F414C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEE5C40578
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABD9F414C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEE5C40578
  for <buildroot@buildroot.org>; Thu,  2 May 2024 08:36:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 97C4786609; Thu,  2 May 2024 08:36:54 +0000 (UTC)
+ id CB12F86609; Thu,  2 May 2024 08:36:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 2 May 2024 09:49:45 +0200
+Date: Thu, 2 May 2024 10:28:37 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 7045d2905e67158f5fe2ae5e497bc923c114e4d5
-X-Git-Newrev: 99f6397a80d92bbaf64a07816a555d531655d799
+X-Git-Oldrev: aefc8730aaed3639692de8e0f93715d846a1100e
+X-Git-Newrev: f658e8c9f8ce715a225318fa6c58feeaace30d44
 X-Patchwork-Hint: ignore
-Message-Id: <20240502083654.97C4786609@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- board/freescale/common/imx/imx8-bootloader-prepare.sh: enable error
- checking
+Message-Id: <20240502083654.CB12F86609@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/apache: security
+ bump version to 2.4.59
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,37 +65,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99f6397a80d92bbaf64a07816a555d531655d799
+commit: https://git.buildroot.net/buildroot/commit/?id=f658e8c9f8ce715a225318fa6c58feeaace30d44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Run script with 'errexit' bash option to detect any errors from
-subcommands.
+Changelog: https://dlcdn.apache.org/httpd/CHANGES_2.4.59
 
-It will fix situation where 'ddr_fw.bin' was missing but successfull
-build created broken boot image. Post image script report this by:
+Fixes CVE-2023-38709, CVE-2024-27316 & CVE-2024-24795.
 
-cat: /home/user/buildroot/output/images/ddr_fw.bin: No such file or directory
+Removed patch which is included in this release.
 
-and build finish with success.
+Updated _SITE and hash file URLs according to
+https://httpd.apache.org/download.cgi#apache24
 
-Signed-off-by: Wojciech Nizinski <wojciech.nizinski@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4a1bcbe17e83c78de31a4cdf9161c1342d1021ae)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e0bbfaea0e983c1ce42a9c3085f3ca3dd796852f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/freescale/common/imx/imx8-bootloader-prepare.sh | 1 +
- 1 file changed, 1 insertion(+)
+ ...enc-remove-dependency-on-xmlstring-header.patch | 47 ----------------------
+ package/apache/apache.hash                         |  6 +--
+ package/apache/apache.mk                           |  4 +-
+ 3 files changed, 5 insertions(+), 52 deletions(-)
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index 7ebf15b6ff..a9ee154e9c 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -73,4 +73,5 @@ main ()
- 	exit $?
- }
+diff --git a/package/apache/0004-mod_xml2enc-remove-dependency-on-xmlstring-header.patch b/package/apache/0004-mod_xml2enc-remove-dependency-on-xmlstring-header.patch
+deleted file mode 100644
+index 8ff7076589..0000000000
+--- a/package/apache/0004-mod_xml2enc-remove-dependency-on-xmlstring-header.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 27a68e54b7c6d2ae80dca396fd2727852897dab1 Mon Sep 17 00:00:00 2001
+-From: Eric Covener <covener@apache.org>
+-Date: Tue, 21 Nov 2023 12:58:47 +0000
+-Subject: [PATCH] mod_xml2enc: remove dependency on xmlstring header
+-
+-Submitted by: ttachi <tachihara@hotmail.com>
+-
+-Github: closes #393
+-
+-git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk@1914013 13f79535-47bb-0310-9956-ffa450edef68
+-
+-Upstream: https://github.com/apache/httpd/commit/27a68e54b7c6d2ae80dca396fd2727852897dab1
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- changes-entries/xmlchar.txt   | 2 ++
+- modules/filters/mod_xml2enc.c | 6 +++---
+- 2 files changed, 5 insertions(+), 3 deletions(-)
+- create mode 100644 changes-entries/xmlchar.txt
+-
+-diff --git a/changes-entries/xmlchar.txt b/changes-entries/xmlchar.txt
+-new file mode 100644
+-index 00000000000..d0e06300411
+---- /dev/null
+-+++ b/changes-entries/xmlchar.txt
+-@@ -0,0 +1,2 @@
+-+ *) mod_xml2enc: Tolerate libxml2 2.12.0 and later.
+-+    [ttachi <tachihara AT hotmail.com>]
+-diff --git a/modules/filters/mod_xml2enc.c b/modules/filters/mod_xml2enc.c
+-index 34f8e8ee090..e8ee2647955 100644
+---- a/modules/filters/mod_xml2enc.c
+-+++ b/modules/filters/mod_xml2enc.c
+-@@ -206,11 +206,11 @@ static void sniff_encoding(request_rec* r, xml2ctx* ctx)
+-             }
+-         }
+-     }
+--  
+-+
+-     /* to sniff, first we look for BOM */
+-     if (ctx->xml2enc == XML_CHAR_ENCODING_NONE) {
+--        ctx->xml2enc = xmlDetectCharEncoding((const xmlChar*)ctx->buf,
+--                                             ctx->bytes); 
+-+        ctx->xml2enc = xmlDetectCharEncoding((const unsigned char*)ctx->buf,
+-+                                             ctx->bytes);
+-         if (HAVE_ENCODING(ctx->xml2enc)) {
+-             ap_log_rerror(APLOG_MARK, APLOG_INFO, 0, r, APLOGNO(01432)
+-                           "Got charset from XML rules.") ;
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 854bc85dcc..84248761b9 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+-# From https://archive.apache.org/dist/httpd/httpd-2.4.58.tar.bz2.{sha256,sha512}
+-sha256  fa16d72a078210a54c47dd5bef2f8b9b8a01d94909a51453956b3ec6442ea4c5  httpd-2.4.58.tar.bz2
+-sha512  d6e73bf413a507ec16b621ff635e178206207a9e9810ce3944b3dc98d39cde8f225307110167fc9da5822175796c8cb66f98be5b9f0d8b76dcd83a401d39b2c1  httpd-2.4.58.tar.bz2
++# From https://downloads.apache.org/httpd/httpd-2.4.59.tar.bz2.{sha256,sha512}
++sha256  ec51501ec480284ff52f637258135d333230a7d229c3afa6f6c2f9040e321323  httpd-2.4.59.tar.bz2
++sha512  209da0bbac5e2564d4590302515b35495be6402273ff4024aa93e85e44554c95e053201d606383936425a41e1b5b97e6b40055dcbb385eb691a5029a6f3158c2  httpd-2.4.59.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 3efa6b0ac1..1b095c5eb1 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+set -e
- main $@
+-APACHE_VERSION = 2.4.58
++APACHE_VERSION = 2.4.59
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+-APACHE_SITE = https://downloads.apache.org/httpd
++APACHE_SITE = https://dlcdn.apache.org/httpd
+ APACHE_LICENSE = Apache-2.0
+ APACHE_LICENSE_FILES = LICENSE
+ APACHE_CPE_ID_VENDOR = apache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
