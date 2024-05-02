@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C386C4345F
-	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 20:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70388C4345F
+	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 20:26:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DFBF0400AB;
-	Thu,  2 May 2024 20:25:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FD2C400AB;
+	Thu,  2 May 2024 20:26:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c76OHXoc2TAa; Thu,  2 May 2024 20:25:34 +0000 (UTC)
+ id pEzSOHaXEH5i; Thu,  2 May 2024 20:26:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBA6941BF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54D6B41BA5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBA6941BF5;
-	Thu,  2 May 2024 20:25:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5FBDB1BF3FF
- for <buildroot@lists.busybox.net>; Thu,  2 May 2024 20:25:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54D6B41BA5;
+	Thu,  2 May 2024 20:26:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EC091BF3FF
+ for <buildroot@lists.busybox.net>; Thu,  2 May 2024 20:26:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56BA641BC3
- for <buildroot@lists.busybox.net>; Thu,  2 May 2024 20:25:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFB4560FFF
+ for <buildroot@lists.busybox.net>; Thu,  2 May 2024 20:26:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VwqhIiQjWdoY for <buildroot@lists.busybox.net>;
- Thu,  2 May 2024 20:25:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ai8wN_PexFxf for <buildroot@lists.busybox.net>;
+ Thu,  2 May 2024 20:26:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
  helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 34C3D41BA5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34C3D41BA5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E853C605D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E853C605D7
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 34C3D41BA5
- for <buildroot@buildroot.org>; Thu,  2 May 2024 20:25:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B66DB1C0002;
- Thu,  2 May 2024 20:25:27 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E853C605D7
+ for <buildroot@buildroot.org>; Thu,  2 May 2024 20:26:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B4F301C0002;
+ Thu,  2 May 2024 20:26:33 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s2cze-00B3w9-2S;
- Thu, 02 May 2024 22:25:26 +0200
+ (envelope-from <peter@korsgaard.com>) id 1s2d0j-00B42O-0T;
+ Thu, 02 May 2024 22:26:33 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240407131649.1416942-1-fontaine.fabrice@gmail.com>
-Date: Thu, 02 May 2024 22:25:26 +0200
-In-Reply-To: <20240407131649.1416942-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Apr 2024 15:16:49 +0200")
-Message-ID: <87h6fg3qrt.fsf@dell.be.48ers.dk>
+References: <20240407161339.2439456-1-fontaine.fabrice@gmail.com>
+Date: Thu, 02 May 2024 22:26:33 +0200
+In-Reply-To: <20240407161339.2439456-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 7 Apr 2024 18:13:39 +0200")
+Message-ID: <87cyq43qpy.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/inih: bump to version 58
+Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: fix CLAMAV_LIBS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,7 +68,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -76,22 +76,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > This bump will fix the following build failure with gcc 5 raised since
- > bump to version 57 in commit 65c8a9b6626de83365865dea6fff1749466a36aa
- > thanks to
- > https://github.com/benhoyt/inih/commit/4e618f77d4bae216865c5abd972d99b1ba5031e2:
+ > CLAMAV_LIBS is ignored since bump to version 1.0.1 and switch to
+ > cmake build system in commit 203725a46bc6b61ed7e4fdb3d76f62327d3e47fa
+ > resulting in the following build failure:
 
- > In file included from /home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/cstdint:35:0,
- >                  from ../cpp/INIReader.h:17,
- >                  from ../cpp/INIReader.cpp:16:
- > /home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support is currently experimental, and must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
- >  #error This file requires compiler and library support for the \
- >   ^
+ > /home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/12.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld:
+ > CMakeFiles/clamonacc.dir/inotif/hash.c.o: in function
+ > `onas_ht_add_hierarchy':
+ > hash.c:(.text+0xa84): undefined reference to `fts_open'
 
- > https://github.com/benhoyt/inih/releases/tag/r58
-
- > Fixes: 65c8a9b6626de83365865dea6fff1749466a36aa
- >  - http://autobuild.buildroot.org/results/7a5ba516cde536e103669a0422d336dd8a3b1dbc
+ > Fixes: 203725a46bc6b61ed7e4fdb3d76f62327d3e47fa
+ >  - http://autobuild.buildroot.org/results/fe71ab29d02caeed609f1a181fccbd46b6feff65
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
