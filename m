@@ -4,91 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C63DC4345F
-	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 09:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2E8AC4345F
+	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 10:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3F8D8234C;
-	Thu,  2 May 2024 09:09:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11389825DF;
+	Thu,  2 May 2024 10:02:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RbS1S6P1Kktp; Thu,  2 May 2024 09:09:55 +0000 (UTC)
+ id ct24sdXvvj5Y; Thu,  2 May 2024 10:02:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E87C28146C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59DE3825E8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E87C28146C;
-	Thu,  2 May 2024 09:09:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59DE3825E8;
+	Thu,  2 May 2024 10:02:45 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E3EB21BF863
- for <buildroot@lists.busybox.net>; Thu,  2 May 2024 09:09:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 348741BF863
+ for <buildroot@lists.busybox.net>; Thu,  2 May 2024 10:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDF8D60829
- for <buildroot@lists.busybox.net>; Thu,  2 May 2024 09:09:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 206A260879
+ for <buildroot@lists.busybox.net>; Thu,  2 May 2024 10:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xzpvNw5F7umF for <buildroot@lists.busybox.net>;
- Thu,  2 May 2024 09:09:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4862060725
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4862060725
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4862060725
- for <buildroot@buildroot.org>; Thu,  2 May 2024 09:09:51 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-571be483ccaso9219364a12.2
- for <buildroot@buildroot.org>; Thu, 02 May 2024 02:09:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714640989; x=1715245789;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ExyApp9g7DjZ36XC43wSdGQvgnXLfGj8KUz8Tum+1ys=;
- b=cXk6EgqMzHU2B3ab9OhDO7IUoLU/a2TF2NR0GorVF5TY7a/hDi3eTeW0+lN3TflgID
- FHC/PpeeP5VmffZXdnWLMYn0E1bdhAjdwS3Wp7Vbq87I3B37w/d7oAHcovG83rZD67yL
- f4lFB7XKYQyCODN16FghLntaCY1b3xD1EBtO9wEX88mdVhgIkS9tzH02SGXnWY2ktPH0
- 3gKvKSrb0dPVylEWcijzlfqPzvpZ9cGFas+MqRT9hsjRj2LOuA11yEdBu5dwkZHizc1c
- Sy1glecL5fClenhSbrocZdTvCMM6N9Y/4vK69JlTEKSyC931FJTrNIB3EbsDxUTseBQ5
- qm8w==
-X-Gm-Message-State: AOJu0YzeTVaRfgk1QMzRpTUM9ks11Dwb6eOXZeXHK5nOskp136V23f2e
- N6N/6ChqbSQzk+XN7ktxvXzj7jKgo+TWiSr2jvLpcfhXpPailhp0s4RsetEEtkG7nVSZZQjeFl9
- DtM8=
-X-Google-Smtp-Source: AGHT+IH/vfa4ZrGtbjZIhM4su/aX3xADaLDdN2pSNOYY3Tu0D0W6AQuukgbNLdalnDCwKwuH41fZhg==
-X-Received: by 2002:a50:ab57:0:b0:572:9a52:6696 with SMTP id
- t23-20020a50ab57000000b005729a526696mr2975158edc.12.1714640989020; 
- Thu, 02 May 2024 02:09:49 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
- ([176.201.29.159]) by smtp.gmail.com with ESMTPSA id
- c17-20020a50f611000000b00572b239c79esm311542edn.31.2024.05.02.02.09.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 02 May 2024 02:09:48 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu,  2 May 2024 11:09:39 +0200
-Message-ID: <20240502090939.748610-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ id fAwOyQMhSVuE for <buildroot@lists.busybox.net>;
+ Thu,  2 May 2024 10:02:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 02E8F6084F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02E8F6084F
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 02E8F6084F
+ for <buildroot@buildroot.org>; Thu,  2 May 2024 10:02:40 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 615D62003EE;
+ Thu,  2 May 2024 12:02:36 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:36278])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 02 May 2024 12:02:36 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1714640989; x=1715245789;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ExyApp9g7DjZ36XC43wSdGQvgnXLfGj8KUz8Tum+1ys=;
- b=XxL2Hff9oqlPWbqe0pOr6giEjiIsGLTLJVH6ggvx2fyzYhgYGY9o70Sj8fljMKT0Kk
- T/xAqboQm5qm8C0xEeDrR+O5mIqSBY1E+tV28kWXdwGB8BMKD2mtfFfxqFDkqbhdz3pT
- BD2nMp/iXnKlXH1mm2JeV24FQLp04slQVDHew=
+Date: Thu, 02 May 2024 12:02:36 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <f5ecc25e82957dfe5938eb52af816eaf@free.fr>
+References: <20240420132251.1349622-1-ju.o@free.fr>
+ <20240501215523.5bc7ce23@windsurf>
+ <f5ecc25e82957dfe5938eb52af816eaf@free.fr>
+User-Agent: Webmail Free/1.6.5
+Message-ID: <df3e5518e98e13c79a52bf3e9fdccb38@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1714644157;
+ bh=08/YGw5DB7EPGK7vr294xzEoVZpYxMEhPJabF+THOqo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=lEDPuRGgBxQNfam9E/0rkF62G3WbqO3HJhvoWOM3OiRIKTierIZsbcKepseSumYsy
+ r8LHcw/vdv31+cS0Jzw5FLIRQUG/gDGNJQLljnc9nVRwRdTZT7y0zq6WsmPS4zQ2Yk
+ S0MxSiOiGJvHROaCv6Of9LIiznzKnnJ/jKSDFyCfNNxgsXLZZRpBmYNocCxVs0JIjv
+ OMpmQcVs+TcCA2qH3RTmaUOiWGE9TqiDhZcpMZxj3sRF4V1HgtWKci6zrwxziJu+xJ
+ zdKWOf8Fk0lZZai25kpLw6BRZXci0FbJSdNgmts3eVA3ixpOUA7K1tOKVpcmGRpxGP
+ AQap7U8K40fcA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=XxL2Hff9
-Subject: [Buildroot] [RFC PATCH 1/1] support/scripts/apply-patches.sh: set
- the maximum fuzz factor to 1
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=lEDPuRGg
+Subject: Re: [Buildroot] [PATCH 1/1] package/fwts: disable parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,80 +83,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch was created as a fix to a problem that occurred during the
-compilation of QEMU:
+Hi again Thomas,
 
->>> qemu 8.1.1 Patching
+On 01/05/2024 22:27, Julien Olivain wrote:
+> Hi Thomas,
+> 
+> On 01/05/2024 21:55, Thomas Petazzoni wrote:
+>> On Sat, 20 Apr 2024 15:22:51 +0200
+>> Julien Olivain <ju.o@free.fr> wrote:
+>> 
+>>> fwts randomly fail to build in parallel with error:
+>>> 
+>>>     mv: cannot stat 'dtcompilerparser.tab.c': No such file or 
+>>> directory
+>>>     mv: cannot stat 'prparser.tab.c': No such file or directory
+>>> 
+>>> This is a known upstream issue. See:
+>>> https://github.com/fwts/fwts/issues/7
+>>> 
+>>> This commit workaround this issue by disabling parallel builds.
+>>> 
+>>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+>>> ---
+>>>  package/fwts/fwts.mk | 3 +++
+>>>  1 file changed, 3 insertions(+)
+>> 
+>> Hm, I don't see any failures in the autobuilders. Did you encounter
+>> this issue personally? Why don't we see it in the autobuilders?
+> 
+> On my side, I see those failures on systems with with 20 cores and more 
+> on an
+> idle system doing only the Buildroot build. Maybe the autobuilders have 
+> a
+> different load, or less cores?
 
-Applying 0001-tests-fp-disable-fp-bench-build-by-default.patch using patch:
-patching file tests/fp/meson.build
-Hunk #1 succeeded at 138 with fuzz 2 (offset -502 lines).
+After testing a bit more, it appears the build always fail with
+GNU make 4.4.1. Testing in the Buildroot docker reference image with
+the same conditions (20+ cores, idle system), and which includes GNU
+make 4.3 does not fail.
 
-Applying 0002-softmmu-qemu-seccomp.c-add-missing-header-for-CLONE_.patch using patch:
-patching file softmmu/qemu-seccomp.c
+Looking at the host load, it seems GNU make 4.3 serializes some part of
+the build, whereas GNU make 4.4.1 parallelize most of the build (and 
+fail).
 
-Applying 0004-tracing-install-trace-events-file-only-if-necessary.patch using patch:
-patching file trace/meson.build
+FWTS uses the .NOTPARALLEL special target with prerequisites:
+https://github.com/fwts/fwts/blob/V24.03.00/src/libfwtsiasl/Makefile.am#L67
 
-With the bump to version 8.1.1, the patch that disabled the compilation
-of the fp-bench test does not report any errors, even though the patch
-itself is no longer applicable. The only noticeable message is:
+It seems the two versions of GNU make are not honoring this the same 
+way.
+It also seems the .NOTPARALLEL _with_ prerequisites is a feature added
+in GNU make 4.4. See:
+https://git.savannah.gnu.org/cgit/make.git/commit/?id=f6ea899d83bf00fe9201fde0ca9cf7af8e443677
+https://lists.gnu.org/archive/html/help-make/2022-10/msg00020.html
 
-"Hunk #1 succeeded at 138 with fuzz 2 (offset -502 lines)."
+Finally, the FWTS Makefile rules might also be incorrect, at:
+https://github.com/fwts/fwts/blob/V24.03.00/src/libfwtsiasl/Makefile.am#L67
 
-As reported by the patch man page:
+Quoting the Make manual:
+https://www.gnu.org/software/make/manual/html_node/Parallel-Disable.html
+"""
+If the .NOTPARALLEL special target has prerequisites, then each of those
+prerequisites will be considered a target and all prerequisites of these
+targets will be run serially.
+"""
 
-"With context diffs, and to a lesser extent with normal diffs, patch can
-detect when the line numbers mentioned in the patch are incorrect, and
-attempts to find the correct place to apply each hunk of the patch.
-As a first guess, it takes the line number mentioned for the hunk, plus
-or minus any offset used in applying the previous hunk. If that is not
-the correct place, patch scans both forwards and backwards for a set of
-lines matching the context given in the hunk. First patch looks for a
-place where all lines of the context match. If no such place is found,
-and it's a context diff, and the maximum fuzz factor is set to 1 or more,
-then another scan takes place ignoring the first and last line of
-context. If that fails, and the maximum fuzz factor is set to 2 or more,
-the first two and last two lines of context are ignored, and another
-scan is made. The default maximum fuzz factor is 2.
+Note the serialization will happen on the prerequisites of the target
+set as prerequisites of .NOTPARALLEL.
 
-If the hunk is installed at a different line from the line number
-specified in the diff, you are told the offset. A single large offset
-may indicate that a hunk was installed in the wrong place. You are also
-told if a fuzz factor was used to make the match, in which case you
-should also be slightly suspicious."
+My current understanding is that GNU Make 4.3 just ignores the
+prerequisites of the .NOTPARALLEL and interprets it as if there
+was none, which makes it serialize a bigger part of the build.
 
-By setting the maximum fuzz factor to 1, we reduce the possibility that
-patches which cannot be applied are incorrectly reported as valid.
+With this analysis, I may have an idea of a patch in the FWTS
+Makefile.am. I'll do some more tests and propose a new patch.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- support/scripts/apply-patches.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Best regards,
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 6da83f6826e9..999384cbbd5b 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -114,7 +114,7 @@ function apply_patch {
-         exit 1
-     fi
-     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
--    ${uncomp} "${path}/$patch" | patch -g0 -p1 --no-backup-if-mismatch -d "${builddir}" -t -N $silent
-+    ${uncomp} "${path}/$patch" | patch -F1 -g0 -p1 --no-backup-if-mismatch -d "${builddir}" -t -N $silent
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
-         exit 1
--- 
-2.43.0
-
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
