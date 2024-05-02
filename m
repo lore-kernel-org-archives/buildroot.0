@@ -1,53 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0644C04FFE
-	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 08:37:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C63DC4345F
+	for <buildroot@archiver.kernel.org>; Thu,  2 May 2024 09:09:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9052E414D6;
-	Thu,  2 May 2024 08:37:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3F8D8234C;
+	Thu,  2 May 2024 09:09:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yp4DUszQqci7; Thu,  2 May 2024 08:37:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RbS1S6P1Kktp; Thu,  2 May 2024 09:09:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34294415BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E87C28146C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34294415BB;
-	Thu,  2 May 2024 08:37:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E87C28146C;
+	Thu,  2 May 2024 09:09:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DD8BE1BF47A
- for <buildroot@lists.busybox.net>; Thu,  2 May 2024 08:36:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E3EB21BF863
+ for <buildroot@lists.busybox.net>; Thu,  2 May 2024 09:09:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C0A2960E4B
- for <buildroot@lists.busybox.net>; Thu,  2 May 2024 08:36:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DDF8D60829
+ for <buildroot@lists.busybox.net>; Thu,  2 May 2024 09:09:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tB_yc8To8jL3 for <buildroot@lists.busybox.net>;
- Thu,  2 May 2024 08:36:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F31C360E4D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F31C360E4D
- for <buildroot@buildroot.org>; Thu,  2 May 2024 08:36:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEC1786608; Thu,  2 May 2024 08:36:54 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id xzpvNw5F7umF for <buildroot@lists.busybox.net>;
+ Thu,  2 May 2024 09:09:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4862060725
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4862060725
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4862060725
+ for <buildroot@buildroot.org>; Thu,  2 May 2024 09:09:51 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-571be483ccaso9219364a12.2
+ for <buildroot@buildroot.org>; Thu, 02 May 2024 02:09:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1714640989; x=1715245789;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ExyApp9g7DjZ36XC43wSdGQvgnXLfGj8KUz8Tum+1ys=;
+ b=cXk6EgqMzHU2B3ab9OhDO7IUoLU/a2TF2NR0GorVF5TY7a/hDi3eTeW0+lN3TflgID
+ FHC/PpeeP5VmffZXdnWLMYn0E1bdhAjdwS3Wp7Vbq87I3B37w/d7oAHcovG83rZD67yL
+ f4lFB7XKYQyCODN16FghLntaCY1b3xD1EBtO9wEX88mdVhgIkS9tzH02SGXnWY2ktPH0
+ 3gKvKSrb0dPVylEWcijzlfqPzvpZ9cGFas+MqRT9hsjRj2LOuA11yEdBu5dwkZHizc1c
+ Sy1glecL5fClenhSbrocZdTvCMM6N9Y/4vK69JlTEKSyC931FJTrNIB3EbsDxUTseBQ5
+ qm8w==
+X-Gm-Message-State: AOJu0YzeTVaRfgk1QMzRpTUM9ks11Dwb6eOXZeXHK5nOskp136V23f2e
+ N6N/6ChqbSQzk+XN7ktxvXzj7jKgo+TWiSr2jvLpcfhXpPailhp0s4RsetEEtkG7nVSZZQjeFl9
+ DtM8=
+X-Google-Smtp-Source: AGHT+IH/vfa4ZrGtbjZIhM4su/aX3xADaLDdN2pSNOYY3Tu0D0W6AQuukgbNLdalnDCwKwuH41fZhg==
+X-Received: by 2002:a50:ab57:0:b0:572:9a52:6696 with SMTP id
+ t23-20020a50ab57000000b005729a526696mr2975158edc.12.1714640989020; 
+ Thu, 02 May 2024 02:09:49 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
+ ([176.201.29.159]) by smtp.gmail.com with ESMTPSA id
+ c17-20020a50f611000000b00572b239c79esm311542edn.31.2024.05.02.02.09.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 02 May 2024 02:09:48 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 2 May 2024 10:36:23 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 02ff38a44ac38b98ce7b15dedd7af82d1315ca90
-X-Git-Newrev: fe8897edff7da06e71eb7abddd96aa69b30a4071
-X-Patchwork-Hint: ignore
-Message-Id: <20240502083654.EEC1786608@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/gdb: bump 14.x
- series from 14.1 to 14.2
+Date: Thu,  2 May 2024 11:09:39 +0200
+Message-ID: <20240502090939.748610-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1714640989; x=1715245789;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ExyApp9g7DjZ36XC43wSdGQvgnXLfGj8KUz8Tum+1ys=;
+ b=XxL2Hff9oqlPWbqe0pOr6giEjiIsGLTLJVH6ggvx2fyzYhgYGY9o70Sj8fljMKT0Kk
+ T/xAqboQm5qm8C0xEeDrR+O5mIqSBY1E+tV28kWXdwGB8BMKD2mtfFfxqFDkqbhdz3pT
+ BD2nMp/iXnKlXH1mm2JeV24FQLp04slQVDHew=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=XxL2Hff9
+Subject: [Buildroot] [RFC PATCH 1/1] support/scripts/apply-patches.sh: set
+ the maximum fuzz factor to 1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,58 +100,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe8897edff7da06e71eb7abddd96aa69b30a4071
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+This patch was created as a fix to a problem that occurred during the
+compilation of QEMU:
 
-According to https://www.sourceware.org/gdb/:
+>>> qemu 8.1.1 Patching
 
- This is a minor corrective release over GDB 14.1, fixing the following issues:
+Applying 0001-tests-fp-disable-fp-bench-build-by-default.patch using patch:
+patching file tests/fp/meson.build
+Hunk #1 succeeded at 138 with fuzz 2 (offset -502 lines).
 
-    PR symtab/31112 (DLL export forwarding is broken)
-    PR c++/31128 (gdb crashes when trying to print a global variable stub without a running inferior)
-    PR tdep/31254 ([gdb/tdep, arm] FAIL: gdb.threads/staticthreads.exp: up 10)
-    PR gdb/31256 (Crash with basic 'list .')
-    PR python/31366 (Frame.static_link() segfaults)
+Applying 0002-softmmu-qemu-seccomp.c-add-missing-header-for-CLONE_.patch using patch:
+patching file softmmu/qemu-seccomp.c
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit bfefed17a9e5a421b3217685003d3b22c99de4ab)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Applying 0004-tracing-install-trace-events-file-only-if-necessary.patch using patch:
+patching file trace/meson.build
+
+With the bump to version 8.1.1, the patch that disabled the compilation
+of the fp-bench test does not report any errors, even though the patch
+itself is no longer applicable. The only noticeable message is:
+
+"Hunk #1 succeeded at 138 with fuzz 2 (offset -502 lines)."
+
+As reported by the patch man page:
+
+"With context diffs, and to a lesser extent with normal diffs, patch can
+detect when the line numbers mentioned in the patch are incorrect, and
+attempts to find the correct place to apply each hunk of the patch.
+As a first guess, it takes the line number mentioned for the hunk, plus
+or minus any offset used in applying the previous hunk. If that is not
+the correct place, patch scans both forwards and backwards for a set of
+lines matching the context given in the hunk. First patch looks for a
+place where all lines of the context match. If no such place is found,
+and it's a context diff, and the maximum fuzz factor is set to 1 or more,
+then another scan takes place ignoring the first and last line of
+context. If that fails, and the maximum fuzz factor is set to 2 or more,
+the first two and last two lines of context are ignored, and another
+scan is made. The default maximum fuzz factor is 2.
+
+If the hunk is installed at a different line from the line number
+specified in the diff, you are told the offset. A single large offset
+may indicate that a hunk was installed in the wrong place. You are also
+told if a fuzz factor was used to make the match, in which case you
+should also be slightly suspicious."
+
+By setting the maximum fuzz factor to 1, we reduce the possibility that
+patches which cannot be applied are incorrectly reported as valid.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/gdb/Config.in.host | 2 +-
- package/gdb/gdb.hash       | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/apply-patches.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 891e45948e..53706cd3ee 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -67,5 +67,5 @@ config BR2_GDB_VERSION
- 	default "13.2"     if BR2_GDB_VERSION_13 || !BR2_PACKAGE_HOST_GDB
- 	# When making 14.x the default, or 14.x becomes the oldest version,
- 	# be sure to update the target variant to properly select mpfr.
--	default "14.1"     if BR2_GDB_VERSION_14
-+	default "14.2"     if BR2_GDB_VERSION_14
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index c62da28cbf..144f6da296 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -3,7 +3,7 @@ sha512  3653762ac008e065c37cd641653184c9ff7ce51ee2222ade1122bec9d6cc64dffd4fb748
- sha512  07e9026423438049b11f4f784d57401ece4e940570f613bd6958b3714fe7fbc2c048470bcce3e7d7d9f93331cdf3881d30dcc964cb113a071143a02b28e5b127  gdb-11.2.tar.xz
- sha512  425568d2e84672177d0fb87b1ad7daafdde097648d605e30cf0656970f66adc6a82ca2d83375ea4be583e9683a340e5bfdf5819668ddf66728200141ae50ff2d  gdb-12.1.tar.xz
- sha512  8185d3e11ab60dafff5860a5016577bfe7dd7547ef01ebc867bc247603d82b74ff74c4f29492c7d2aee57076f52be33e289f4c6b414a4b870d4b3004909f4c34  gdb-13.2.tar.xz
--sha512  575e198105076fc4a88f68591aa114ab9c1196e84386a3f7b9b58fe5f30cdeed33f6a5f957b68f08c47284ec922bb60c964627e238471419673fd913575ce427  gdb-14.1.tar.xz
-+sha512  7e07941f1fe661288cc571b4964012ceabc1760624fce20320db2f470c01439b2386f859b5288da13204b758e2e3b22a74c68c012178db93b9529b06f1e22ede  gdb-14.2.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  gdb-arc-2023.09-release.tar.gz
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 6da83f6826e9..999384cbbd5b 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -114,7 +114,7 @@ function apply_patch {
+         exit 1
+     fi
+     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+-    ${uncomp} "${path}/$patch" | patch -g0 -p1 --no-backup-if-mismatch -d "${builddir}" -t -N $silent
++    ${uncomp} "${path}/$patch" | patch -F1 -g0 -p1 --no-backup-if-mismatch -d "${builddir}" -t -N $silent
+     if [ $? != 0 ] ; then
+         echo "Patch failed!  Please fix ${patch}!"
+         exit 1
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
