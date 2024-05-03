@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 221DDC4345F
-	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 18:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFCF2C10F16
+	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 18:50:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 95ECA41D79;
-	Fri,  3 May 2024 18:31:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6402C41D7A;
+	Fri,  3 May 2024 18:50:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O82USwlHSdpD; Fri,  3 May 2024 18:31:42 +0000 (UTC)
+ id nWffHeXzmXNt; Fri,  3 May 2024 18:50:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69D6A41D7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDBFC40586
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69D6A41D7A;
-	Fri,  3 May 2024 18:31:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 62C2C1BF311
- for <buildroot@lists.busybox.net>; Fri,  3 May 2024 18:31:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDBFC40586;
+	Fri,  3 May 2024 18:50:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C5B031BF311
+ for <buildroot@lists.busybox.net>; Fri,  3 May 2024 18:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5020660663
- for <buildroot@lists.busybox.net>; Fri,  3 May 2024 18:31:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BEB7683B2A
+ for <buildroot@lists.busybox.net>; Fri,  3 May 2024 18:50:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yLtHshRRJ-bL for <buildroot@lists.busybox.net>;
- Fri,  3 May 2024 18:31:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l9N_3R2Rmcvj for <buildroot@lists.busybox.net>;
+ Fri,  3 May 2024 18:50:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::231; helo=mail-lj1-x231.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E3BE160659
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3BE160659
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
- [IPv6:2a00:1450:4864:20::231])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E3BE160659
- for <buildroot@buildroot.org>; Fri,  3 May 2024 18:31:38 +0000 (UTC)
-Received: by mail-lj1-x231.google.com with SMTP id
- 38308e7fff4ca-2e0933d3b5fso68650301fa.2
- for <buildroot@buildroot.org>; Fri, 03 May 2024 11:31:38 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7575683B18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7575683B18
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7575683B18
+ for <buildroot@buildroot.org>; Fri,  3 May 2024 18:50:16 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-41c7ac73fddso267635e9.3
+ for <buildroot@buildroot.org>; Fri, 03 May 2024 11:50:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714761096; x=1715365896;
+ d=1e100.net; s=20230601; t=1714762214; x=1715367014;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=GRwI4pp42JC8WxU/q1qC/58G+zuG8cX8iluRGYSodRg=;
- b=IXPc99AGcnxguYmZAjHtVszsaJ72izAZMGxV4z6YmEqRG1q9OUm8k9fRVNdSubKB9N
- dgSyf8QZQkjnpGT8AB5NkUS75mX/EEkwp5czm6N30nnf2IPLpR4BLzI5xBAMxSKGK/le
- Q+bu8S4Jx9ImePTMeWi+TUpOWv7f+/BkIn/vp/zZj0NeCjN7hZpCDKNaeSADvUsv1vi3
- GwTIeePKLm/3xPYV86Y7n9lLqcq3428ZhdnOMJtQ+YUxvZ9vjVyuhZTNTrs0c/I5ELr/
- wuAyQ7SqrU7ztGMt3fmSAGD9QmSL0+GOisZtqMPZO6JtvRorB/1iKNsC6fHCBdNER7Zs
- /5BQ==
-X-Gm-Message-State: AOJu0YzTD7J5iAqnznjgez3tKpNGbf0shgdVe1OpXgk9rZtxsAEyAY4g
- bQRH+m7NqtVzaWbMS/ie6kalWCg3k0La837bwgz/7Wb327lyn8ittj/smw==
-X-Google-Smtp-Source: AGHT+IG86rIRVU1L2MfTT5+01RwjvcLcoE1jk14vYb2krRLIKIlYOKePgnIgk4bRNbXLXPm7OT8nUQ==
-X-Received: by 2002:a2e:9b17:0:b0:2e0:42db:df7f with SMTP id
- u23-20020a2e9b17000000b002e042dbdf7fmr2258205lji.0.1714761095862; 
- Fri, 03 May 2024 11:31:35 -0700 (PDT)
+ bh=VuQor3hwd1jD1hpoaaUA9s2HeBIEt/0QA/qmhlbnZOk=;
+ b=TjqmOQbF8XQgzUDB6acYAWu00So/tcn4MhiB314tciKy7IE3v2qFyoj0qqxUFbd6Oc
+ MpODP8WsFpkbQtA38FkFbMFBxmJjR2TnYiVMG7S3IJSqNUdtY/7JesPSOy+/Dopz3ZT+
+ GGNVOMTY9Van/nqo7EdfnOwNsbM3IrMagtFPMVBBfEhqg8sc+wyrgkAeCbvgs75eyXkg
+ DjbJaSFAVDT43tYycQNk9BHuFHHYX8xhRGAUPAUOeWcbED+3UWCyBtNT4G72YURNiyce
+ LbfKO5+2yOeEAcKKRhy6AW++8qlSdveYqBnjx9KneVhd1YaXkUHhkrCYNhyH8Pz8l2fP
+ JrIg==
+X-Gm-Message-State: AOJu0YwWZtUanfvpGnYLvtlIq354Z70kx6c8SBBYHuIU5KFvVttlc0ZO
+ N5Na/5dtmP1ScjAiH71W4QawIZmAl4URs9Dk7LMbrJQVDmzupNfy2xo35g==
+X-Google-Smtp-Source: AGHT+IGfzSg5xQO+Mvh3XKUsCiUpNFkqiX3NsPpImHDkcstPDgt+b6BK837KuEBWxY32FVa2F2cURA==
+X-Received: by 2002:a05:600c:1f94:b0:419:f911:680a with SMTP id
+ je20-20020a05600c1f9400b00419f911680amr3524417wmb.1.1714762213659; 
+ Fri, 03 May 2024 11:50:13 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- s7-20020a05600c384700b0041c12324eb6sm10333128wmr.22.2024.05.03.11.31.35
+ je16-20020a05600c1f9000b0041c7ac6b0ffsm10362470wmb.37.2024.05.03.11.50.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 May 2024 11:31:35 -0700 (PDT)
+ Fri, 03 May 2024 11:50:13 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  3 May 2024 20:31:32 +0200
-Message-ID: <20240503183132.915691-1-fontaine.fabrice@gmail.com>
+Date: Fri,  3 May 2024 20:50:08 +0200
+Message-ID: <20240503185008.930881-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1714761096; x=1715365896; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1714762214; x=1715367014; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GRwI4pp42JC8WxU/q1qC/58G+zuG8cX8iluRGYSodRg=;
- b=GLwY023ACcm7H/98MzFG1TKwsk5IUwuwb3PQ83hW8sxbFscdW3BpK1ff0AOlUVIxdZ
- uGwKxse+Y8bfeHrsU6nltp1V98vX2mIhrrpT2GMGxG7sX/SjtHEB+f6dvYsQK66sOvbU
- i+z0TfppCNE9fxdfe+5Wh64trWl3qc5UBXGjNpBPIOjfbHXvxlnhr6Hk3mR4s0EcI+yX
- mYrbF1SAdh3tQjEueC668qa6CGHNkEEiRTpv4v8KWtPsj1pxZwK5vWHDmZFibfePd6D6
- RHT4FEC38gIrz9yHLwWov5cjhHDReLsgHzuNgEs7hanyUrU7Em/CE8ktjJVIv05Slaal
- PMDg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=VuQor3hwd1jD1hpoaaUA9s2HeBIEt/0QA/qmhlbnZOk=;
+ b=WbWLj4AM3vH0ufzoaM7ofK9wtGcFTu4PDF/CNrz9M0GSQxNWHuZLcMUgyNw9YqnCdk
+ FifgI4nscTA3OVkymbOhnjSNnJTfkdWgpUGuovZLx4Zyoub4QXYoSxQeozH0EnUypcrU
+ HrfN2t6P88CnjcyXmCBuaFBPMhFlIwUF9lDEIKkFFo2FppSDrsIB/6CAct6EQEcYbOcj
+ w0NEY8zjgAQo6jqox93Xu9txiEk+k5Tpo9Vu++WOoqbx/3opcGUnwzTr4UFAeqpkpoan
+ YXl9A6PoPohPgUgX868CbVQ6Af+6MioqOd2DTyQ6VMBM/VGX44YseQF47lVicTMVQOwJ
+ Fx2A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=GLwY023A
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: update atomic patch
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=WbWLj4AM
+Subject: [Buildroot] [PATCH 1/1] package/gptfdisk: bump to version 1.0.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,141 +100,231 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 929bffbf4bf8fcb91bda446777f907f32c782656 forgot to update patch
-number
-Moreover, replace it with a new iteration to follow upstream request [1]
-and avoid the following build host build failure with br-autobuild-1:
+Drop second to fourth patches (already in version)
 
-/usr/bin/ld: cannot find /usr/lib64/libatomic.so.1.2.0: No such file or directory
-
-Fixes: 929bffbf4bf8fcb91bda446777f907f32c782656
- - http://autobuild.buildroot.org/results/a12b9c4436594818f4ce128595b429adf7d90e31
-
-[1]: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3606
+https://sourceforge.net/p/gptfdisk/code/ci/53ac725a88a616b9f3395500d6e520aa04742fa5/tree/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0005-link-with-latomic-when-needed.patch  | 45 ----------------
- .../0006-link-with-latomic-when-needed.patch  | 52 +++++++++++++++++++
- 2 files changed, 52 insertions(+), 45 deletions(-)
- delete mode 100644 package/libglib2/0005-link-with-latomic-when-needed.patch
- create mode 100644 package/libglib2/0006-link-with-latomic-when-needed.patch
+ .checkpackageignore                           |  1 -
+ ...h-of-sgdisk-when-compiled-with-lates.patch | 60 -------------------
+ ...ence-when-duplicating-string-argumen.patch | 44 --------------
+ ...to-deal-with-minor-change-in-libuuid.patch | 41 -------------
+ package/gptfdisk/gptfdisk.hash                |  6 +-
+ package/gptfdisk/gptfdisk.mk                  |  2 +-
+ 6 files changed, 4 insertions(+), 150 deletions(-)
+ delete mode 100644 package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch
+ delete mode 100644 package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
+ delete mode 100644 package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch
 
-diff --git a/package/libglib2/0005-link-with-latomic-when-needed.patch b/package/libglib2/0005-link-with-latomic-when-needed.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index c600978cf2..d809f3396b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -765,7 +765,6 @@ package/gpm/0005-fix-building-w-newer-glibc.patch lib_patch.Upstream
+ package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch lib_patch.Upstream
+ package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
+-package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch lib_patch.Upstream
+ package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
+ package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch lib_patch.Upstream
+ package/grpc/0003-host-grpc-only-cpp-plugin.patch lib_patch.Upstream
+diff --git a/package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch b/package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch
 deleted file mode 100644
-index 275d86032b..0000000000
---- a/package/libglib2/0005-link-with-latomic-when-needed.patch
+index bdeedd95cc..0000000000
+--- a/package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From d1814dbd3a88c95a43d4c9805bb4a523cf62d97b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 17 Sep 2023 20:42:00 +0200
--Subject: [PATCH] link with -latomic when needed
+@@ -1,60 +0,0 @@
+-From 5d5e76d369a412bfb3d2cebb5fc0a7509cef878d Mon Sep 17 00:00:00 2001
+-From: Rod Smith <rodsmith@rodsbooks.com>
+-Date: Fri, 15 Apr 2022 18:10:14 -0400
+-Subject: [PATCH] Fix failure & crash of sgdisk when compiled with latest
+- popt (commit 740; presumably eventually release 1.19)
 -
--Some architecture such as sparc and some flavors of arm needs -latomic
--to avoid the following build failure:
--
--gthread-posix.c:(.text+0xda8): undefined reference to `__atomic_compare_exchange_4'
--
+-[Retrieved from:
+-https://sourceforge.net/p/gptfdisk/code/ci/5d5e76d369a412bfb3d2cebb5fc0a7509cef878d/]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3586
 ----
-- glib/meson.build | 1 +
-- meson.build      | 2 ++
-- 2 files changed, 3 insertions(+)
+- NEWS      | 8 ++++++++
+- gptcl.cc  | 2 +-
+- support.h | 2 +-
+- 3 files changed, 10 insertions(+), 2 deletions(-)
 -
--diff --git a/glib/meson.build b/glib/meson.build
--index c26a35e42..7a761306b 100644
----- a/glib/meson.build
--+++ b/glib/meson.build
--@@ -426,6 +426,7 @@ libglib = library('glib-2.0',
--     pcre2,
--     platform_deps,
--     thread_dep,
--+    atomic_dep
--   ],
--   c_args : glib_c_args,
--   objc_args : glib_c_args,
--diff --git a/meson.build b/meson.build
--index 25ae10fc2..5ae84b3b3 100644
----- a/meson.build
--+++ b/meson.build
--@@ -2130,6 +2130,8 @@ libffi_dep = dependency('libffi', version : '>= 3.0.0')
-- 
-- libz_dep = dependency('zlib')
-- 
--+atomic_dep = cc.find_library('atomic', required: false)
+-diff --git a/NEWS b/NEWS
+-index c7add56..9e153fd 100644
+---- a/NEWS
+-+++ b/NEWS
+-@@ -1,3 +1,11 @@
+-+1.0.10 (?/??/2022):
+-+-------------------
 -+
-- # First check in libc, fallback to libintl, and as last chance build
-- # proxy-libintl subproject.
-- # FIXME: glib-gettext.m4 has much more checks to detect broken/uncompatible
+-+- Fixed problem that caused sgdisk to crash with errors about being unable
+-+  to read the disk's partition table when compiled with the latest popt
+-+  (commit 740, which is pre-release as I type; presumably version 1.19 and
+-+  later once released).
+-+
+- 1.0.9 (4/14/2022):
+- ------------------
+- 
+-diff --git a/gptcl.cc b/gptcl.cc
+-index 34c9421..0d578eb 100644
+---- a/gptcl.cc
+-+++ b/gptcl.cc
+-@@ -155,7 +155,7 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
+-    } // while
+- 
+-    // Assume first non-option argument is the device filename....
+--   device = (char*) poptGetArg(poptCon);
+-+   device = strdup((char*) poptGetArg(poptCon));
+-    poptResetContext(poptCon);
+- 
+-    if (device != NULL) {
+-diff --git a/support.h b/support.h
+-index 8ba9ad1..f91f1bc 100644
+---- a/support.h
+-+++ b/support.h
+-@@ -8,7 +8,7 @@
+- #include <stdlib.h>
+- #include <string>
+- 
+--#define GPTFDISK_VERSION "1.0.9"
+-+#define GPTFDISK_VERSION "1.0.9.1"
+- 
+- #if defined (__FreeBSD__) || defined (__FreeBSD_kernel__) || defined (__APPLE__)
+- // Darwin (Mac OS) & FreeBSD: disk IOCTLs are different, and there is no lseek64
 --- 
--2.40.1
+-2.35.1
 -
-diff --git a/package/libglib2/0006-link-with-latomic-when-needed.patch b/package/libglib2/0006-link-with-latomic-when-needed.patch
-new file mode 100644
-index 0000000000..5ac0744cbf
---- /dev/null
-+++ b/package/libglib2/0006-link-with-latomic-when-needed.patch
-@@ -0,0 +1,52 @@
-+From 4e6dc4dee0e1c6407113597180d9616b4f275f94 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 2 May 2024 14:02:17 +0200
-+Subject: [PATCH] link with -latomic when needed
-+
-+Some architecture such as sparc and some flavors of arm needs -latomic
-+to avoid the following build failure:
-+
-+gthread-posix.c:(.text+0xda8): undefined reference to `__atomic_compare_exchange_4'
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4034
-+---
-+ glib/meson.build | 1 +
-+ meson.build      | 9 +++++++++
-+ 2 files changed, 10 insertions(+)
-+
-+diff --git a/glib/meson.build b/glib/meson.build
-+index 24cbb664d..b2dd569e1 100644
-+--- a/glib/meson.build
-++++ b/glib/meson.build
-+@@ -419,6 +419,7 @@ libglib = library('glib-2.0',
-+   include_directories : configinc,
-+   link_with: [charset_lib, gnulib_lib],
-+   dependencies : [
-++    atomic_dep,
-+     gnulib_libm_dependency,
-+     libiconv,
-+     libintl_deps,
-+diff --git a/meson.build b/meson.build
-+index 46c5aa200..8b4294055 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -2233,6 +2233,15 @@ libffi_dep = dependency('libffi', version : '>= 3.0.0')
-+ 
-+ libz_dep = dependency('zlib')
-+ 
-++libatomic_test_code = '''
-++  int main (int argc, char ** argv) {
-++    return 0;
-++  }'''
-++atomic_dep = []
-++if cc.links(libatomic_test_code, args : '-latomic', name : 'check for -latomic')
-++  atomic_dep = cc.find_library('atomic')
-++endif
-++
-+ # First check in libc, fallback to libintl, and as last chance build
-+ # proxy-libintl subproject.
-+ # FIXME: glib-gettext.m4 has much more checks to detect broken/uncompatible
-+-- 
-+2.43.0
-+
+diff --git a/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
+deleted file mode 100644
+index 250c071582..0000000000
+--- a/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From f5de3401b974ce103ffd93af8f9d43505a04aaf9 Mon Sep 17 00:00:00 2001
+-Message-Id: <f5de3401b974ce103ffd93af8f9d43505a04aaf9.1680094621.git.stefan@agner.ch>
+-From: Damian Kurek <starfire24680@gmail.com>
+-Date: Thu, 7 Jul 2022 03:39:16 +0000
+-Subject: [PATCH] Fix NULL dereference when duplicating string argument
+-
+-poptGetArg can return NULL if there are no additional arguments, which
+-makes strdup dereference NULL on strlen
+-
+-Signed-off-by: Stefan Agner <stefan@agner.ch>
+-Upstream: https://sourceforge.net/p/gptfdisk/code/ci/f5de3401b974ce103ffd93af8f9d43505a04aaf9
+----
+- gptcl.cc | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/gptcl.cc b/gptcl.cc
+-index 0d578eb..ab95239 100644
+---- a/gptcl.cc
+-+++ b/gptcl.cc
+-@@ -155,10 +155,11 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
+-    } // while
+- 
+-    // Assume first non-option argument is the device filename....
+--   device = strdup((char*) poptGetArg(poptCon));
+--   poptResetContext(poptCon);
+-+   device = (char*) poptGetArg(poptCon);
+- 
+-    if (device != NULL) {
+-+      device = strdup(device);
+-+      poptResetContext(poptCon);
+-       JustLooking(); // reset as necessary
+-       BeQuiet(); // Tell called functions to be less verbose & interactive
+-       if (LoadPartitions((string) device)) {
+-@@ -498,6 +499,7 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
+-          cerr << "Error encountered; not saving changes.\n";
+-          retval = 4;
+-       } // if
+-+      free(device);
+-    } // if (device != NULL)
+-    poptFreeContext(poptCon);
+-    return retval;
+--- 
+-2.40.0
+-
+diff --git a/package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch b/package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch
+deleted file mode 100644
+index 22c34ced6f..0000000000
+--- a/package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 6a8416cbd12d55f882bb751993b94f72d338d96f Mon Sep 17 00:00:00 2001
+-From: Rod Smith <rodsmith@rodsbooks.com>
+-Date: Sat, 16 Apr 2022 09:32:04 -0400
+-Subject: [PATCH] Updated guid.cc to deal with minor change in libuuid
+-
+-Upstream: https://sourceforge.net/p/gptfdisk/code/ci/6a8416cbd12d55f882bb751993b94f72d338d96f
+-Signed-off-by: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+----
+- NEWS    | 2 ++
+- guid.cc | 2 +-
+- 2 files changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/NEWS b/NEWS
+-index 9e153fd..9ec7e63 100644
+---- a/NEWS
+-+++ b/NEWS
+-@@ -6,6 +6,8 @@
+-   (commit 740, which is pre-release as I type; presumably version 1.19 and
+-   later once released).
+- 
+-+- Updated guid.cc to deal with minor change in libuuid.
+-+
+- 1.0.9 (4/14/2022):
+- ------------------
+- 
+-diff --git a/guid.cc b/guid.cc
+-index 1e73ab7..d3e4fd5 100644
+---- a/guid.cc
+-+++ b/guid.cc
+-@@ -141,7 +141,7 @@ void GUIDData::Zero(void) {
+- void GUIDData::Randomize(void) {
+-    int i, uuidGenerated = 0;
+- 
+--#ifdef _UUID_UUID_H
+-+#if defined (_UUID_UUID_H) || defined (_UL_LIBUUID_UUID_H)
+-    uuid_generate(uuidData);
+-    ReverseBytes(&uuidData[0], 4);
+-    ReverseBytes(&uuidData[4], 2);
+--- 
+-2.42.0
+-
+diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
+index 0b98677afb..14a8d59a08 100644
+--- a/package/gptfdisk/gptfdisk.hash
++++ b/package/gptfdisk/gptfdisk.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.9/
+-sha1  284bd000edaf7874b472bd01719c6a71a8030e13  gptfdisk-1.0.9.tar.gz
++# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.10/
++sha1  70c0bfe4290c2893fc957ef7f6156c5e74e469fc  gptfdisk-1.0.10.tar.gz
+ # Locally computed
+-sha256  dafead2693faeb8e8b97832b23407f6ed5b3219bc1784f482dd855774e2d50c2  gptfdisk-1.0.9.tar.gz
++sha256  2abed61bc6d2b9ec498973c0440b8b804b7a72d7144069b5a9209b2ad693a282  gptfdisk-1.0.10.tar.gz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index 393ea9469a..b35899bf9b 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GPTFDISK_VERSION = 1.0.9
++GPTFDISK_VERSION = 1.0.10
+ GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
+ GPTFDISK_LICENSE = GPL-2.0+
+ GPTFDISK_LICENSE_FILES = COPYING
 -- 
 2.43.0
 
