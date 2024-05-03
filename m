@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AE7AC4345F
-	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 07:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83455C4345F
+	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 07:13:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3B8140527;
-	Fri,  3 May 2024 07:13:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 500F940A00;
+	Fri,  3 May 2024 07:13:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KaETDJvtWDOf; Fri,  3 May 2024 07:13:33 +0000 (UTC)
+ id iUhWaYKSURxw; Fri,  3 May 2024 07:13:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63E0D406D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05080409B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63E0D406D5;
-	Fri,  3 May 2024 07:13:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05080409B1;
+	Fri,  3 May 2024 07:13:35 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 638AC1BF2AF
- for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7465A1BF2AF
+ for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 34FFB6079F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F12660866
  for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id muCjm7HYLeSm for <buildroot@lists.busybox.net>;
+ id CeVKi1ywmUuj for <buildroot@lists.busybox.net>;
  Fri,  3 May 2024 07:13:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6172C60866
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72398612B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6172C60866
+ by smtp3.osuosl.org (Postfix) with ESMTP id 72398612B1
  for <buildroot@buildroot.org>; Fri,  3 May 2024 07:13:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 08325864F6; Fri,  3 May 2024 07:13:21 +0000 (UTC)
+ id 2BC03864FA; Fri,  3 May 2024 07:13:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 3 May 2024 09:07:47 +0200
+Date: Fri, 3 May 2024 09:10:15 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: a1bb09101e283c53eb0314d6881c7483628df4d8
-X-Git-Newrev: bb94d3d0fba4d59c43c19c3a00df909831e1a7af
+X-Git-Oldrev: 8c2144727c93b8dc209c95825b36fdbfaf3b641d
+X-Git-Newrev: 04b72604bc0c96b2a78fe90b46c165d1808ab460
 X-Patchwork-Hint: ignore
-Message-Id: <20240503071321.08325864F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/wolfssl: security
- bump to version 5.7.0
+Message-Id: <20240503071321.2BC03864FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/systemd: fix
+ build with gcc >= 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,75 +60,98 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1870392569298909245=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb94d3d0fba4d59c43c19c3a00df909831e1a7af
+--===============1870392569298909245==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=04b72604bc0c96b2a78fe90b46c165d1808ab460
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Vulnerabilities
- - [High] CVE-2024-0901 Potential denial of service and out of bounds
-   read. Affects TLS 1.3 on the server side when accepting a connection
-   from a malicious TLS 1.3 client. If using TLS 1.3 on the server side
-   it is recommended to update the version of wolfSSL used.
- - [Med] CVE-2024-1545 Fault Injection vulnerability in
-   RsaPrivateDecryption function that potentially allows an attacker
-   that has access to the same system with a victims process to perform
-   a Rowhammer fault injection.
- - [Med] Fault injection attack with EdDSA signature operations. This
-   affects ed25519 sign operations where the system could be susceptible
-   to Rowhammer attacks.
+Fix the following build failure with gcc >= 13:
 
-No official tarball provided so switch to github and set autoreconf
+In file included from ../src/basic/macro.h:446,
+                 from ../src/basic/alloc-util.h:10,
+                 from ../src/shared/install.c:12:
+../src/shared/install.c: In function ‘install_changes_dump’:
+../src/shared/install.c:444:64: error: ‘%s’ directive argument is null [-Werror=format-overflow=]
+  444 |                         err = log_error_errno(changes[i].type, "Failed to %s unit, unit %s does not exist.",
+      |                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-https://github.com/wolfSSL/wolfssl/releases/tag/v5.7.0-stable
+Fixes:
+ - http://autobuild.buildroot.org/results/e0d6b7d41fefec539a17a3ef5c89c192ce29fd04
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 3a2891621c35fea394b135256c7a0846ece442aa)
+(cherry picked from commit 066c3e67d7f117f7810597e1ab36e2346fe8f7c2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ ...er-warning-about-empty-directive-argument.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 59e42e98b9..e705bba9fd 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  75aaafe3b8c776d1ac417288116c8d444115f9fac5acb382a39a7d163dfd618d  wolfssl-5.6.6.tar.gz
-+sha256  2de93e8af588ee856fe67a6d7fce23fc1b226b74d710b0e3946bc8061f6aa18f  wolfssl-5.7.0.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 68c69afd59..893408eca4 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,14 +4,16 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 5.6.6
--WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/releases/download/v$(WOLFSSL_VERSION)-stable
-+WOLFSSL_VERSION = 5.7.0
-+WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
- WOLFSSL_LICENSE = GPL-2.0+
- WOLFSSL_LICENSE_FILES = COPYING LICENSING
- WOLFSSL_CPE_ID_VENDOR = wolfssl
- WOLFSSL_CONFIG_SCRIPTS = wolfssl-config
-+# From git
-+WOLFSSL_AUTORECONF = YES
- WOLFSSL_DEPENDENCIES = host-pkgconf
- 
- WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
+diff --git a/package/systemd/0001-install-fix-compiler-warning-about-empty-directive-argument.patch b/package/systemd/0001-install-fix-compiler-warning-about-empty-directive-argument.patch
+new file mode 100644
+index 0000000000..9408a6da0e
+--- /dev/null
++++ b/package/systemd/0001-install-fix-compiler-warning-about-empty-directive-argument.patch
+@@ -0,0 +1,45 @@
++From 8040fa55a1cbc34dede3205a902095ecd26c21e3 Mon Sep 17 00:00:00 2001
++From: Luca Boccassi <bluca@debian.org>
++Date: Sat, 24 Feb 2024 12:05:44 +0000
++Subject: [PATCH] install: fix compiler warning about empty directive argument
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++On ppc64el with gcc 13.2 on Ubuntu 24.04:
++
++3s In file included from ../src/basic/macro.h:386,
++483s                  from ../src/basic/alloc-util.h:10,
++483s                  from ../src/shared/install.c:12:
++483s ../src/shared/install.c: In function ‘install_changes_dump’:
++483s ../src/shared/install.c:432:64: error: ‘%s’ directive argument is null [-Werror=format-overflow=]
++483s   432 |                         err = log_error_errno(changes[i].type, "Failed to %s unit, unit %s does not exist.",
++483s       |                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++483s ../src/shared/install.c:432:75: note: format string is defined here
++483s   432 |                         err = log_error_errno(changes[i].type, "Failed to %s unit, unit %s does not exist.",
++
++Upstream: https://github.com/systemd/systemd/commit/8040fa55a1cbc34dede3205a902095ecd26c21e3
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/shared/install.c | 7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/src/shared/install.c b/src/shared/install.c
++index fabf5db7ed2e1..c3a94d1912165 100644
++--- a/src/shared/install.c
+++++ b/src/shared/install.c
++@@ -340,9 +340,12 @@ void install_changes_dump(int r, const char *verb, const InstallChange *changes,
++         assert(verb || r >= 0);
++ 
++         for (size_t i = 0; i < n_changes; i++) {
++-                if (changes[i].type < 0)
++-                        assert(verb);
++                 assert(changes[i].path);
+++                /* This tries to tell the compiler that it's safe to use 'verb' in a string format if there
+++                 * was an error, but the compiler doesn't care and fails anyway, so strna(verb) is used
+++                 * too. */
+++                assert(verb || changes[i].type >= 0);
+++                verb = strna(verb);
++ 
++                 /* When making changes here, make sure to also change install_error() in dbus-manager.c. */
++ 
+
+--===============1870392569298909245==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1870392569298909245==--
