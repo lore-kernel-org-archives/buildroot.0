@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7C76C25B10
-	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 07:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AE7AC4345F
+	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 07:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91BFD40248;
-	Fri,  3 May 2024 07:13:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3B8140527;
+	Fri,  3 May 2024 07:13:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VbcIdlW7vNhz; Fri,  3 May 2024 07:13:29 +0000 (UTC)
+ id KaETDJvtWDOf; Fri,  3 May 2024 07:13:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4406B402D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63E0D406D5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4406B402D9;
-	Fri,  3 May 2024 07:13:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4C9931BF997
- for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63E0D406D5;
+	Fri,  3 May 2024 07:13:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 638AC1BF2AF
+ for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3868241558
+ by smtp3.osuosl.org (Postfix) with ESMTP id 34FFB6079F
  for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P-63_AdqwR7y for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id muCjm7HYLeSm for <buildroot@lists.busybox.net>;
  Fri,  3 May 2024 07:13:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31D74408E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6172C60866
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31D74408E0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6172C60866
  for <buildroot@buildroot.org>; Fri,  3 May 2024 07:13:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C5A08637F; Fri,  3 May 2024 07:13:21 +0000 (UTC)
+ id 08325864F6; Fri,  3 May 2024 07:13:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 3 May 2024 09:08:21 +0200
+Date: Fri, 3 May 2024 09:07:47 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: bb94d3d0fba4d59c43c19c3a00df909831e1a7af
-X-Git-Newrev: 8c2144727c93b8dc209c95825b36fdbfaf3b641d
+X-Git-Oldrev: a1bb09101e283c53eb0314d6881c7483628df4d8
+X-Git-Newrev: bb94d3d0fba4d59c43c19c3a00df909831e1a7af
 X-Patchwork-Hint: ignore
-Message-Id: <20240503071321.1C5A08637F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/botan: security
- bump to version 3.3.0
+Message-Id: <20240503071321.08325864F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/wolfssl: security
+ bump to version 5.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +65,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c2144727c93b8dc209c95825b36fdbfaf3b641d
+commit: https://git.buildroot.net/buildroot/commit/?id=bb94d3d0fba4d59c43c19c3a00df909831e1a7af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-- Fix a potential denial of service caused by accepting arbitrary
-  length primes as potential elliptic curve parameters in ASN.1
-  encodings. With very large inputs the primality verification
-  can become computationally expensive. Now any prime field larger
-  than 1024 bits is rejected immediately.
+Vulnerabilities
+ - [High] CVE-2024-0901 Potential denial of service and out of bounds
+   read. Affects TLS 1.3 on the server side when accepting a connection
+   from a malicious TLS 1.3 client. If using TLS 1.3 on the server side
+   it is recommended to update the version of wolfSSL used.
+ - [Med] CVE-2024-1545 Fault Injection vulnerability in
+   RsaPrivateDecryption function that potentially allows an attacker
+   that has access to the same system with a victims process to perform
+   a Rowhammer fault injection.
+ - [Med] Fault injection attack with EdDSA signature operations. This
+   affects ed25519 sign operations where the system could be susceptible
+   to Rowhammer attacks.
 
-https://botan.randombit.net/news.html#version-3-3-0-2024-02-20
+No official tarball provided so switch to github and set autoreconf
+
+https://github.com/wolfSSL/wolfssl/releases/tag/v5.7.0-stable
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 2fcc74594c457bed7f0f2a4826ada265861be6bf)
+(cherry picked from commit 3a2891621c35fea394b135256c7a0846ece442aa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 840191aa4b..37e00ea9cc 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,4 +1,4 @@
- # From https://botan.randombit.net/releases/sha256sums.txt
--sha256  049c847835fcf6ef3a9e206b33de05dd38999c325e247482772a5598d9e5ece3  Botan-3.2.0.tar.xz
-+sha256  368f11f426f1205aedb9e9e32368a16535dc11bd60351066e6f6664ec36b85b9  Botan-3.3.0.tar.xz
- # Locally computed
- sha256  1833cde7c7cc03296b1ef2ddc178b1cd7fd1c476840f32cf6aedb09ab0bc9004  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 95352ea41b..e0bd258f57 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index 59e42e98b9..e705bba9fd 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  75aaafe3b8c776d1ac417288116c8d444115f9fac5acb382a39a7d163dfd618d  wolfssl-5.6.6.tar.gz
++sha256  2de93e8af588ee856fe67a6d7fce23fc1b226b74d710b0e3946bc8061f6aa18f  wolfssl-5.7.0.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 68c69afd59..893408eca4 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,14 +4,16 @@
  #
  ################################################################################
  
--BOTAN_VERSION = 3.2.0
-+BOTAN_VERSION = 3.3.0
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
+-WOLFSSL_VERSION = 5.6.6
+-WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/releases/download/v$(WOLFSSL_VERSION)-stable
++WOLFSSL_VERSION = 5.7.0
++WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
+ WOLFSSL_INSTALL_STAGING = YES
+ 
+ WOLFSSL_LICENSE = GPL-2.0+
+ WOLFSSL_LICENSE_FILES = COPYING LICENSING
+ WOLFSSL_CPE_ID_VENDOR = wolfssl
+ WOLFSSL_CONFIG_SCRIPTS = wolfssl-config
++# From git
++WOLFSSL_AUTORECONF = YES
+ WOLFSSL_DEPENDENCIES = host-pkgconf
+ 
+ WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
