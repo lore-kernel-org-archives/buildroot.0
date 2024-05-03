@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FA82C4345F
-	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 07:13:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7C76C25B10
+	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 07:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AA5440199;
-	Fri,  3 May 2024 07:13:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91BFD40248;
+	Fri,  3 May 2024 07:13:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yuu4HF-7YhSl; Fri,  3 May 2024 07:13:26 +0000 (UTC)
+ id VbcIdlW7vNhz; Fri,  3 May 2024 07:13:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B874E40048
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4406B402D9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B874E40048;
-	Fri,  3 May 2024 07:13:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F1DA1BF995
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4406B402D9;
+	Fri,  3 May 2024 07:13:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C9931BF997
  for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B3D1612BD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3868241558
  for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VAI04PqJBN5n for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P-63_AdqwR7y for <buildroot@lists.busybox.net>;
  Fri,  3 May 2024 07:13:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5534A6079F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31D74408E0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5534A6079F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31D74408E0
  for <buildroot@buildroot.org>; Fri,  3 May 2024 07:13:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 41E238652D; Fri,  3 May 2024 07:13:21 +0000 (UTC)
+ id 1C5A08637F; Fri,  3 May 2024 07:13:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 3 May 2024 09:12:05 +0200
+Date: Fri, 3 May 2024 09:08:21 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 98a1ed7ae3557ac2522f48c23b21a65708630720
-X-Git-Newrev: 2ebf2a85c0fe64384660def2621e37d7ee04c603
+X-Git-Oldrev: bb94d3d0fba4d59c43c19c3a00df909831e1a7af
+X-Git-Newrev: 8c2144727c93b8dc209c95825b36fdbfaf3b641d
 X-Patchwork-Hint: ignore
-Message-Id: <20240503071321.41E238652D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/opensc: openssl
- is optional, not mandatory
+Message-Id: <20240503071321.1C5A08637F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/botan: security
+ bump to version 3.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,54 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ebf2a85c0fe64384660def2621e37d7ee04c603
+commit: https://git.buildroot.net/buildroot/commit/?id=8c2144727c93b8dc209c95825b36fdbfaf3b641d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-openssl is optional, not mandatory since the addition of the package in
-commit 8aaa7ecbce1d10cbcd880c3da5e429988f96176a
+- Fix a potential denial of service caused by accepting arbitrary
+  length primes as potential elliptic curve parameters in ASN.1
+  encodings. With very large inputs the primality verification
+  can become computationally expensive. Now any prime field larger
+  than 1024 bits is rejected immediately.
+
+https://botan.randombit.net/news.html#version-3-3-0-2024-02-20
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit b097ed3a4b32c074130c4f4c6b97ce9983fa675a)
+(cherry picked from commit 2fcc74594c457bed7f0f2a4826ada265861be6bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opensc/Config.in | 1 -
- package/opensc/opensc.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opensc/Config.in b/package/opensc/Config.in
-index 8c6a95a41d..13b085f389 100644
---- a/package/opensc/Config.in
-+++ b/package/opensc/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_OPENSC
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pcsc-lite
- 	select BR2_PACKAGE_PCSC_LITE
--	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
- 	help
-diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
-index aa82bd18da..f4dc2206ea 100644
---- a/package/opensc/opensc.mk
-+++ b/package/opensc/opensc.mk
-@@ -9,8 +9,15 @@ OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSIO
- OPENSC_LICENSE = LGPL-2.1+
- OPENSC_LICENSE_FILES = COPYING
- OPENSC_CPE_ID_VALID = YES
--OPENSC_DEPENDENCIES = openssl pcsc-lite
-+OPENSC_DEPENDENCIES = pcsc-lite
- OPENSC_INSTALL_STAGING = YES
- OPENSC_CONF_OPTS = --disable-cmocka --disable-strict --disable-tests
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index 840191aa4b..37e00ea9cc 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,4 @@
+ # From https://botan.randombit.net/releases/sha256sums.txt
+-sha256  049c847835fcf6ef3a9e206b33de05dd38999c325e247482772a5598d9e5ece3  Botan-3.2.0.tar.xz
++sha256  368f11f426f1205aedb9e9e32368a16535dc11bd60351066e6f6664ec36b85b9  Botan-3.3.0.tar.xz
+ # Locally computed
+ sha256  1833cde7c7cc03296b1ef2ddc178b1cd7fd1c476840f32cf6aedb09ab0bc9004  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 95352ea41b..e0bd258f57 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+OPENSC_DEPENDENCIES += openssl
-+OPENSC_CONF_OPTS += --enable-openssl
-+else
-+OPENSC_CONF_OPTS += --disable-openssl
-+endif
-+
- $(eval $(autotools-package))
+-BOTAN_VERSION = 3.2.0
++BOTAN_VERSION = 3.3.0
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
