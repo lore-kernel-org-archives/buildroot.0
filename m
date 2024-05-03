@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0030C4345F
-	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 19:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B3BDC4345F
+	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 19:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3ECA260611;
-	Fri,  3 May 2024 19:28:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E1BE607B9;
+	Fri,  3 May 2024 19:53:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zNhzh1oKd-D3; Fri,  3 May 2024 19:28:48 +0000 (UTC)
+ id VF5VpBYxY4tZ; Fri,  3 May 2024 19:53:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A317560613
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A69C60824
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A317560613;
-	Fri,  3 May 2024 19:28:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 770BC1BF41B
- for <buildroot@lists.busybox.net>; Fri,  3 May 2024 19:28:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A69C60824;
+	Fri,  3 May 2024 19:53:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CE5CC1BF41B
+ for <buildroot@lists.busybox.net>; Fri,  3 May 2024 19:53:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6468C60613
- for <buildroot@lists.busybox.net>; Fri,  3 May 2024 19:28:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C659A83BC4
+ for <buildroot@lists.busybox.net>; Fri,  3 May 2024 19:53:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id csGn1xPlXKqz for <buildroot@lists.busybox.net>;
- Fri,  3 May 2024 19:28:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wScd2pA17OKd for <buildroot@lists.busybox.net>;
+ Fri,  3 May 2024 19:53:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8E35360611
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E35360611
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8E35360611
- for <buildroot@buildroot.org>; Fri,  3 May 2024 19:28:45 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-41ba1ba5591so615795e9.1
- for <buildroot@buildroot.org>; Fri, 03 May 2024 12:28:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3CC7A83BC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CC7A83BC0
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3CC7A83BC0
+ for <buildroot@buildroot.org>; Fri,  3 May 2024 19:53:09 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-41adf155cffso829105e9.2
+ for <buildroot@buildroot.org>; Fri, 03 May 2024 12:53:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714764523; x=1715369323;
+ d=1e100.net; s=20230601; t=1714765987; x=1715370787;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=y6k8QnPwSbJluMgtmbkar9sSi3apeC5ZDB2Nbt7rJR4=;
- b=qf7K+4VwVV3l6mpMUPJw2BRxjOENRYUThOdiwTtlZtvTmUVk7x/5R35TPJLabBbmSc
- /kzQhhrbtYKN4W0mT6iOXS0RKAXnkBIujo1wJRsAXLNl6XIwx7SzN97zHpOsG6i152AH
- KPHwGmE3uAuU4ZPAY2dE/9axWId5NP7Ugfw0XRV9NfHm2+KNoFqtTA+TB8heij/Z1fcB
- GXxSFrQDQ868fWwM778vHgwEiu0Kr9LGFUM/j+xP0qZOjl1TbiBk9uGfgoClEWGWBsz/
- eHyYvFmVeor6wFYSkSCdNsPiA+WnwV2H0ZFczcCSEkM3gJMhVXDSNByEaG9/5VuSrpzd
- Dw8g==
-X-Gm-Message-State: AOJu0Yz2pB1UdKoj0TwMTTj0dWojX7mrq9W5BDPSb+6ZPzedNH8XI52t
- wxIPmFnPZjlf6ty+4f+Upaqg4289PePZ86+tswsmW/2/n0a9uZjV+iguIA==
-X-Google-Smtp-Source: AGHT+IGnEvSjwOGvPgveeF1APp1ECvRU1iiM5EktWcIq38ZNALoIelcFDzCTDc0aXuRWaz2Dt90fNA==
-X-Received: by 2002:a05:600c:3d86:b0:419:fd49:5d46 with SMTP id
- bi6-20020a05600c3d8600b00419fd495d46mr2770914wmb.38.1714764522849; 
- Fri, 03 May 2024 12:28:42 -0700 (PDT)
+ bh=AbcentWWq543elPtFZtJ1asxK1+kiC0lpYxsFHOSmEg=;
+ b=UBkCF0M7EO+RP+P5jvmAKk8dZ+358T3jJa6e0mrc9mKoJ5VOtZ7aF2lzal7tfIZ5DB
+ bFKzLSXqceD5RqgDDUDDuX/2Ek6wO/qqn0V0Nq/fdjucjla1XzK+/YA7TtRvPPe8xB1k
+ 0uw/7INDNyIqYgG9zCWyjw6NzLCuX3BonbAEQ/GdjCnAjtGyNSYF5e+PQrEANt9EEKnx
+ V3kZZO4N5vneboR4jUu+f6ZQochDekBfZnn7UOgTwuoBIXT88wI3uVMs64Sah+7zYAXp
+ yFdl85Vd3pUQVYHyFNxg8wvaX3yRr6cUF/gBpLLBBOZ/tf/9iS+tvMTmX81XSOUi/zmR
+ kqeQ==
+X-Gm-Message-State: AOJu0YxVucPuOSMZEiY1enDvbHeF4XuMbqUi95qXv+FnOnCcsoNwDWYg
+ wZDxVSAHAsJZFxOQv8B/OOtHlzPaSBuxGufmugN2RlxNSlIrmHO30aWS/A==
+X-Google-Smtp-Source: AGHT+IH3pUFLnGn1xCgRkqBvWx2LQXCdfs0G14RuiQ39mQOgFTtpmm2t0MyU9nxiNATypsTM/f+UYA==
+X-Received: by 2002:a7b:cd9a:0:b0:41c:14a4:7b34 with SMTP id
+ y26-20020a7bcd9a000000b0041c14a47b34mr2562548wmj.27.1714765986457; 
+ Fri, 03 May 2024 12:53:06 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- l30-20020a05600c1d1e00b0041b086d664fsm6676847wms.6.2024.05.03.12.28.42
+ jq22-20020a05600c55d600b0041c9238d907sm6894762wmb.1.2024.05.03.12.53.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 03 May 2024 12:28:42 -0700 (PDT)
+ Fri, 03 May 2024 12:53:05 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  3 May 2024 21:28:39 +0200
-Message-ID: <20240503192840.1240802-1-fontaine.fabrice@gmail.com>
+Date: Fri,  3 May 2024 21:53:04 +0200
+Message-ID: <20240503195304.1277312-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1714764523; x=1715369323; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1714765987; x=1715370787; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=y6k8QnPwSbJluMgtmbkar9sSi3apeC5ZDB2Nbt7rJR4=;
- b=BLv1XMSaSyzlXP6mDfWRLXM1M1ib6Klam+R3MBybYs36HP0Q5hMkWKk/A9iT3JAyA+
- cEq8cY6G+g+CnPM3Wai2uiNsYNab4hvU/Dm5EIC5FvUqTwcxUvqTmOX+zhd5dILwPmFn
- ROcE7vIGxMceiuh3tkOzJaw7FHL8Ixd2gnqmuLioecw1vD0hd8b8dYGCO9gl9i9UnRO5
- DLf2F4F106mHlcdMErX+gMsZZHza+mw/LgjLCl9UiJdxJvM8u2flo7/kUbgtrfKmfvTU
- 1xNoDYSRQpOUdhN0/SaZ7UcfCCZzg/UKye/JArD80o8RnUGJyHVE2TtX7tfjPBBtt/mg
- UktQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=AbcentWWq543elPtFZtJ1asxK1+kiC0lpYxsFHOSmEg=;
+ b=VBL8GhRh2MR76T+Rf+7LDD376TY7C1AdadoryWK1HK0uasR+5s4MVqD0djsxQ9/OEc
+ a+a5lHhMbmIA0Zne11r7u6Xm+sFdfr4+IU6LBX0QRm4vnCxUWF8+0OWnaXirBxqBKRJq
+ BhvUSkWHOTF2klomZcgAnCU8T33iG59bxkllmhbOLvxBJdutCZsDbPdRSb7kK2WV60OG
+ jlpfvMT0BHhEWTq2x/lBWf0aLXXm9tInPqyYRyykmmXzXGiCIA+YgOKWZ/S5yoGe4YpL
+ klbr48VwSwGzeiQXWF3dccHXUWkKVDz8NbYQ5Gc53wqTza9gGS0Mgosm9h/PKm3zc5JG
+ uKaQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=BLv1XMSa
-Subject: [Buildroot] [PATCH 1/1] package/ledmon: bump to version 1.0.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=VBL8GhRh
+Subject: [Buildroot] [PATCH 1/1] package/zziplib: bump to version 0.13.74
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,251 +100,234 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maksim Kiselev <bigunclemax@gmail.com>,
+Cc: Romain Naour <romain.naour@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSBBZGQgaG9zdC1hdXRvY29uZi1hcmNoaXZlIG1hbmRhdG9yeSBkZXBlbmRlbmN5Ci0gRHJvcCBw
-YXRjaGVzIChhbHJlYWR5IGluIHZlcnNpb24pCgpodHRwczovL2dpdGh1Yi5jb20vaW50ZWwvbGVk
-bW9uL3JlbGVhc2VzL3RhZy92MS4wLjAKClNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUg
-PGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgotLS0KIC4uLm5zdGFuZGFyZC1vbl9leGl0LWZ1
-bmN0aW9uLWJ5LWF0ZXhpdC5wYXRjaCB8IDIyMyAtLS0tLS0tLS0tLS0tLS0tLS0KIC4uLi1GaXgt
-dW5rbm93bi10eXBlLW5hbWUtc3NpemVfdC1lcnJvci5wYXRjaCB8ICA0NCAtLS0tCiAuLi4vbGVk
-bW9uLzAwMDMtQWRkLWRpc2FibGUtZG9jLW9wdGlvbi5wYXRjaCAgfCAgNjMgLS0tLS0KIHBhY2th
-Z2UvbGVkbW9uL2xlZG1vbi5oYXNoICAgICAgICAgICAgICAgICAgICB8ICAgMiArLQogcGFja2Fn
-ZS9sZWRtb24vbGVkbW9uLm1rICAgICAgICAgICAgICAgICAgICAgIHwgICA3ICstCiA1IGZpbGVz
-IGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMzM0IGRlbGV0aW9ucygtKQogZGVsZXRlIG1vZGUg
-MTAwNjQ0IHBhY2thZ2UvbGVkbW9uLzAwMDEtUmVwbGFjZS1ub25zdGFuZGFyZC1vbl9leGl0LWZ1
-bmN0aW9uLWJ5LWF0ZXhpdC5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGVkbW9u
-LzAwMDItRml4LXVua25vd24tdHlwZS1uYW1lLXNzaXplX3QtZXJyb3IucGF0Y2gKIGRlbGV0ZSBt
-b2RlIDEwMDY0NCBwYWNrYWdlL2xlZG1vbi8wMDAzLUFkZC1kaXNhYmxlLWRvYy1vcHRpb24ucGF0
-Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xlZG1vbi8wMDAxLVJlcGxhY2Utbm9uc3RhbmRhcmQt
-b25fZXhpdC1mdW5jdGlvbi1ieS1hdGV4aXQucGF0Y2ggYi9wYWNrYWdlL2xlZG1vbi8wMDAxLVJl
-cGxhY2Utbm9uc3RhbmRhcmQtb25fZXhpdC1mdW5jdGlvbi1ieS1hdGV4aXQucGF0Y2gKZGVsZXRl
-ZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDdhODljM2YxYTQuLjAwMDAwMDAwMDAKLS0tIGEvcGFj
-a2FnZS9sZWRtb24vMDAwMS1SZXBsYWNlLW5vbnN0YW5kYXJkLW9uX2V4aXQtZnVuY3Rpb24tYnkt
-YXRleGl0LnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsMjIzICswLDAgQEAKLUZyb20gZTU3YWQ0
-YzcxY2NlNzM0ZGU3ZjhhYTc1ZTg0ZmNlOTdiYzE0OGMyYiBNb24gU2VwIDE3IDAwOjAwOjAwIDIw
-MDEKLUZyb206IE1ha3NpbSBLaXNlbGV2IDxiaWd1bmNsZW1heEBnbWFpbC5jb20+Ci1EYXRlOiBN
-b24sIDE1IE1heSAyMDIzIDE0OjQ2OjU2ICswMzAwCi1TdWJqZWN0OiBbUEFUQ0hdIFJlcGxhY2Ug
-bm9uc3RhbmRhcmQgb25fZXhpdCgpIGZ1bmN0aW9uIGJ5IGF0ZXhpdCgpCi0KLW9uX2V4aXQoKSBp
-cyBub3QgcG9ydGFibGUgYW5kIG5vdCBhdmFpbGFibGUgb24gdGhlIEMgbGlicmFyaWVzIG11c2wK
-LWFuZCB1Q2xpYmMuCi0KLVNvIGxldCdzIHJlcGxhY2UgaXQgd2l0aCBzdGFuZGFyZCBhdGV4aXQo
-KSBmdW5jdGlvbi4KLQotVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC9sZWRtb24v
-cHVsbC8xMzkKLQotU2lnbmVkLW9mZi1ieTogTWFrc2ltIEtpc2VsZXYgPGJpZ3VuY2xlbWF4QGdt
-YWlsLmNvbT4KLS0tLQotIHNyYy9sZWRjdGwuYyB8IDEyICsrKystLS0tLS0tCi0gc3JjL2xlZG1v
-bi5jIHwgNTkgKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLQotIDIgZmlsZXMgY2hhbmdlZCwgMzUgaW5zZXJ0aW9ucygrKSwgMzYgZGVsZXRpb25zKC0p
-Ci0KLWRpZmYgLS1naXQgYS9zcmMvbGVkY3RsLmMgYi9zcmMvbGVkY3RsLmMKLWluZGV4IDdhODlh
-MjQuLjEwZmQ1N2EgMTAwNjQ0Ci0tLS0gYS9zcmMvbGVkY3RsLmMKLSsrKyBiL3NyYy9sZWRjdGwu
-YwotQEAgLTIxNCwxNSArMjE0LDExIEBAIHN0YXRpYyB2b2lkIGlicGlfc3RhdGVfZmluaShzdHJ1
-Y3QgaWJwaV9zdGF0ZSAqcCkKLSAgKgotICAqIFRoaXMgaXMgaW50ZXJuYWwgZnVuY3Rpb24gb2Yg
-bGVkY3RsIHV0aWxpdHkuIFRoZSBmdW5jdGlvbiBjbGVhbnMgdXAgYSBtZW1vcnkKLSAgKiBhbGxv
-Y2F0ZWQgZm9yIHRoZSBhcHBsaWNhdGlvbiBhbmQgY2xvc2VzIGFsbCBvcGVuZWQgaGFuZGxlcy4g
-VGhpcyBmdW5jdGlvbiBpcwotLSAqIGRlc2lnbiB0byBiZSByZWdpc3RlcmVkIGFzIG9uX2V4aXQo
-KSBoYW5kbGVyIGZ1bmN0aW9uLgotLSAqCi0tICogQHBhcmFtW2luXSAgICAgIHN0YXR1cyAgICAg
-ICAgIGV4aXQgc3RhdHVzIG9mIHRoZSBsZWRjdGwgYXBwbGljYXRpb24uCi0tICogQHBhcmFtW2lu
-XSAgICAgIGlnbm9yZWQgICAgICAgIGZ1bmN0aW9uIGlnbm9yZXMgdGhpcyBhcmd1bWVudC4KLSsg
-KiBkZXNpZ24gdG8gYmUgcmVnaXN0ZXJlZCBhcyBhdGV4aXQoKSBoYW5kbGVyIGZ1bmN0aW9uLgot
-ICAqCi0gICogQHJldHVybiBUaGUgZnVuY3Rpb24gZG9lcyBub3QgcmV0dXJuIGEgdmFsdWUuCi0g
-ICovCi0tc3RhdGljIHZvaWQgX2xlZGN0bF9maW5pKGludCBzdGF0dXMgX19hdHRyaWJ1dGVfXyAo
-KHVudXNlZCkpLAotLQkJCSB2b2lkICppZ25vcmUgX19hdHRyaWJ1dGVfXyAoKHVudXNlZCkpKQot
-K3N0YXRpYyB2b2lkIF9sZWRjdGxfZmluaSh2b2lkKQotIHsKLSAJc3lzZnNfcmVzZXQoKTsKLSAJ
-bGlzdF9lcmFzZSgmaWJwaV9saXN0KTsKLUBAIC05NDgsNyArOTQ0LDcgQEAgc3RhdGljIGNoYXIg
-KmxlZGN0bF9zdHJzdGF0dXMobGVkY3RsX3N0YXR1c19jb2RlX3QgcykKLSAgKiBAYnJpZWYgQXBw
-bGljYXRpb24ncyBlbnRyeSBwb2ludC4KLSAgKgotICAqIFRoaXMgaXMgdGhlIGVudHJ5IHBvaW50
-IG9mIGxlZGN0bCB1dGlsaXR5LiBUaGlzIGZ1bmN0aW9uIGRvZXMgYWxsIHRoZSB3b3JrLgotLSAq
-IEl0IGFsbG9jYXRlcyBhbmQgaW5pdGlhbGl6ZXMgYWxsIHVzZWQgc3RydWN0dXJlcy4gUmVnaXN0
-ZXJzIG9uX2V4aXQoKQotKyAqIEl0IGFsbG9jYXRlcyBhbmQgaW5pdGlhbGl6ZXMgYWxsIHVzZWQg
-c3RydWN0dXJlcy4gUmVnaXN0ZXJzIGF0ZXhpdCgpCi0gICogaGFuZGxlcnMuCi0gICogVGhlbiB0
-aGUgZnVuY3Rpb24gcGFyc2VzIGNvbW1hbmQgbGluZSBvcHRpb25zIGFuZCBjb21tYW5kcyBnaXZl
-biBhbmQgc2NhbnMKLSAgKiBzeXNmcyB0cmVlIGZvciBjb250cm9sbGVycywgYmxvY2sgZGV2aWNl
-cyBhbmQgUkFJRCBkZXZpY2VzLiBJZiBubyBlcnJvciBpcwotQEAgLTk4Myw3ICs5NzksNyBAQCBp
-bnQgbWFpbihpbnQgYXJnYywgY2hhciAqYXJndltdKQotIAlzdGF0dXMgPSBfaW5pdF9sZWRjdGxf
-Y29uZigpOwotIAlpZiAoc3RhdHVzICE9IExFRENUTF9TVEFUVVNfU1VDQ0VTUykKLSAJCXJldHVy
-biBzdGF0dXM7Ci0tCWlmIChvbl9leGl0KF9sZWRjdGxfZmluaSwgcHJvZ25hbWUpKQotKwlpZiAo
-YXRleGl0KF9sZWRjdGxfZmluaSkpCi0gCQlleGl0KExFRENUTF9TVEFUVVNfT05FWElUX0VSUk9S
-KTsKLSAJc2xvdF9yZXF1ZXN0X2luaXQoJnNsb3RfcmVxKTsKLSAJc3RhdHVzID0gX2NtZGxpbmVf
-cGFyc2UoYXJnYywgYXJndiwgJnNsb3RfcmVxKTsKLWRpZmYgLS1naXQgYS9zcmMvbGVkbW9uLmMg
-Yi9zcmMvbGVkbW9uLmMKLWluZGV4IDZmNTJmZDYuLjEzMjkyOTUgMTAwNjQ0Ci0tLS0gYS9zcmMv
-bGVkbW9uLmMKLSsrKyBiL3NyYy9sZWRtb24uYwotQEAgLTU3LDYgKzU3LDE5IEBACi0gI2luY2x1
-ZGUgInV0aWxzLmgiCi0gI2luY2x1ZGUgInZtZHNzZC5oIgotIAotKy8qKgotKyAqIFRoaXMgbWFj
-cm8gaXMgdGhlIGFsdGVybmF0aXZlIHdheSB0byBnZXQgZXhpdCBzdGF0dXMKLSsgKiBpbiBhdGV4
-aXQoKSBjYWxsYmFjayBmdW5jdGlvbgotKyAqLwotKyNkZWZpbmUgRVhJVCh4KSAoKGV4aXQpKGV4
-aXRfc3RhdHVzID0gKHgpKSkKLSsKLStzdGF0aWMgaW50IGV4aXRfc3RhdHVzOwotKwotKy8qKgot
-KyAqIEZsYWcgdG8gcHJpbnQgZXhpdCBzdGF0dXMKLSsgKi8KLStzdGF0aWMgaW50IGlnbm9yZTsK
-LSsKLSAvKioKLSAgKiBAYnJpZWYgTGlzdCBvZiBhY3RpdmUgYmxvY2sgZGV2aWNlcy4KLSAgKgot
-QEAgLTE1MSwyMCArMTY0LDE2IEBAIHN0YXRpYyBpbnQgcG9zc2libGVfcGFyYW1zX3NpemUgPSBB
-UlJBWV9TSVpFKHBvc3NpYmxlX3BhcmFtcyk7Ci0gICoKLSAgKiBUaGlzIGlzIGludGVybmFsIGZ1
-bmN0aW9uIG9mIG1vbml0b3Igc2VydmljZS4gSXQgaXMgdXNlZCB0byBmaW5hbGl6ZSBkYWVtb24K
-LSAgKiBwcm9jZXNzIGkuZS4gZnJlZSBhbGxvY2F0ZWQgbWVtb3J5LCB1bmxvY2sgYW5kIHJlbW92
-ZSBwaWRmaWxlIGFuZCBjbG9zZSBsb2cKLS0gKiBmaWxlIGFuZCBzeXNsb2cuIFRoZSBmdW5jdGlv
-biBpcyByZWdpc3RlcmVkIGFzIG9uX2V4aXQoKSBoYW5kbGVyLgotLSAqCi0tICogQHBhcmFtW2lu
-XSAgICAgc3RhdHVzICAgICAgICAgIFRoZSBmdW5jdGlvbiBpZ25vcmVzIHRoaXMgcGFyYW1ldGVy
-LgotLSAqIEBwYXJhbVtpbl0gICAgIHByb2dyYW1fbmFtZSAgICBUaGUgbmFtZSBvZiB0aGUgYmlu
-YXJ5IGZpbGUuIFRoaXMgYXJndW1lbnQKLS0gKiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgaXMgcGFzc2VkIHZpYSBvbl9leGl0KCkgZnVuY3Rpb24uCi0rICogZmlsZSBhbmQgc3lzbG9n
-LiBUaGUgZnVuY3Rpb24gaXMgcmVnaXN0ZXJlZCBhcyBhdGV4aXQoKSBoYW5kbGVyLgotICAqCi0g
-ICogQHJldHVybiBUaGUgZnVuY3Rpb24gZG9lcyBub3QgcmV0dXJuIGEgdmFsdWUuCi0gICovCi0t
-c3RhdGljIHZvaWQgX2xlZG1vbl9maW5pKGludCBfX2F0dHJpYnV0ZV9fICgodW51c2VkKSkgc3Rh
-dHVzLCB2b2lkICpwcm9ncmFtX25hbWUpCi0rc3RhdGljIHZvaWQgX2xlZG1vbl9maW5pKHZvaWQp
-Ci0gewotIAlzeXNmc19yZXNldCgpOwotIAlsaXN0X2VyYXNlKCZsZWRtb25fYmxvY2tfbGlzdCk7
-Ci0gCWxvZ19jbG9zZSgpOwotLQlwaWRmaWxlX3JlbW92ZShwcm9ncmFtX25hbWUpOwotKwlwaWRm
-aWxlX3JlbW92ZShwcm9nbmFtZSk7Ci0gfQotIAotIHR5cGVkZWYgZW51bSB7Ci1AQCAtMjA3LDMw
-ICsyMTYsMjUgQEAgc3RhdGljIGNoYXIgKmxlZG1vbl9zdHJzdGF0dXMobGVkbW9uX3N0YXR1c19j
-b2RlX3QgcykKLSAgKgotICAqIFRoaXMgaXMgaW50ZXJuYWwgZnVuY3Rpb24gb2YgbW9uaXRvciBz
-ZXJ2aWNlLiBJdCBpcyB1c2VkIHRvIHJlcG9ydCBhbiBleGl0Ci0gICogc3RhdHVzIG9mIHRoZSBt
-b25pdG9yIHNlcnZpY2UuIFRoZSBtZXNzYWdlIGlzIGxvZ2dlZCBpbiB0byBzeXNsb2cgYW5kIHRv
-IGxvZwotLSAqIGZpbGUuIFRoZSBmdW5jdGlvbiBpcyByZWdpc3RlcmVkIGFzIG9uX2V4aXQoKSBo
-YW5kZXIuCi0tICoKLS0gKiBAcGFyYW1baW5dICAgICBzdGF0dXMgICAgICAgICAgICBTdGF0dXMg
-Z2l2ZW4gaW4gdGhlIGxhc3QgY2FsbCB0byBleGl0KCkKLS0gKiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBmdW5jdGlvbi4KLS0gKiBAcGFyYW1baW5dICAgICBhcmcgICAgICAgICAg
-ICAgICBBcmd1bWVudCBwYXNzZWQgdG8gb25fZXhpdCgpLgotKyAqIGZpbGUuIFRoZSBmdW5jdGlv
-biBpcyByZWdpc3RlcmVkIGFzIGF0ZXhpdCgpIGhhbmRsZXIuCi0gICoKLSAgKiBAcmV0dXJuIFRo
-ZSBmdW5jdGlvbiBkb2VzIG5vdCByZXR1cm4gYSB2YWx1ZS4KLSAgKi8KLS1zdGF0aWMgdm9pZCBf
-bGVkbW9uX3N0YXR1cyhpbnQgc3RhdHVzLCB2b2lkICphcmcpCi0rc3RhdGljIHZvaWQgX2xlZG1v
-bl9zdGF0dXModm9pZCkKLSB7Ci0gCWludCBsb2dfbGV2ZWw7Ci0gCWNoYXIgbWVzc2FnZVs0MDk2
-XTsKLS0JaW50IGlnbm9yZSA9ICooKGludCAqKWFyZyk7Ci0gCi0gCWlmIChpZ25vcmUpCi0gCQly
-ZXR1cm47Ci0gCi0tCWlmIChzdGF0dXMgPT0gTEVETU9OX1NUQVRVU19TVUNDRVNTKQotKwlpZiAo
-ZXhpdF9zdGF0dXMgPT0gTEVETU9OX1NUQVRVU19TVUNDRVNTKQotIAkJbG9nX2xldmVsID0gTE9H
-X0xFVkVMX0lORk87Ci0gCWVsc2UKLSAJCWxvZ19sZXZlbCA9IExPR19MRVZFTF9FUlJPUjsKLSAK
-LSAJc25wcmludGYobWVzc2FnZSwgc2l6ZW9mKG1lc3NhZ2UpLCAiZXhpdCBzdGF0dXMgaXMgJXMu
-IiwKLS0JCSBsZWRtb25fc3Ryc3RhdHVzKHN0YXR1cykpOwotKwkJIGxlZG1vbl9zdHJzdGF0dXMo
-ZXhpdF9zdGF0dXMpKTsKLSAKLSAJaWYgKGdldF9sb2dfZmQoKSA+PSAwKQotIAkJX2xvZyhsb2df
-bGV2ZWwsIG1lc3NhZ2UpOwotQEAgLTM2NCwxMCArMzY4LDEwIEBAIHN0YXRpYyBsZWRtb25fc3Rh
-dHVzX2NvZGVfdCBfY21kbGluZV9wYXJzZV9ub25fZGFlbW9uaXNlKGludCBhcmdjLCBjaGFyICph
-cmd2W10pCi0gCQkJYnJlYWs7Ci0gCQljYXNlICdoJzoKLSAJCQlfbGVkbW9uX2hlbHAoKTsKLS0J
-CQlleGl0KEVYSVRfU1VDQ0VTUyk7Ci0rCQkJRVhJVChFWElUX1NVQ0NFU1MpOwotIAkJY2FzZSAn
-dic6Ci0gCQkJX2xlZG1vbl92ZXJzaW9uKCk7Ci0tCQkJZXhpdChFWElUX1NVQ0NFU1MpOwotKwkJ
-CUVYSVQoRVhJVF9TVUNDRVNTKTsKLSAJCWNhc2UgJzonOgotIAkJY2FzZSAnPyc6Ci0gCQkJcmV0
-dXJuIExFRE1PTl9TVEFUVVNfQ01ETElORV9FUlJPUjsKLUBAIC04OTAsMTQgKzg5NCwxMyBAQCBz
-dGF0aWMgdm9pZCBfY2xvc2VfcGFyZW50X2Zkcyh2b2lkKQotIGludCBtYWluKGludCBhcmdjLCBj
-aGFyICphcmd2W10pCi0gewotIAlsZWRtb25fc3RhdHVzX2NvZGVfdCBzdGF0dXMgPSBMRURNT05f
-U1RBVFVTX1NVQ0NFU1M7Ci0tCXN0YXRpYyBpbnQgaWdub3JlOwotIAotIAlzZXR1cF9vcHRpb25z
-KCZsb25nb3B0LCAmc2hvcnRvcHQsIHBvc3NpYmxlX3BhcmFtcywKLSAJCQlwb3NzaWJsZV9wYXJh
-bXNfc2l6ZSk7Ci0gCXNldF9pbnZvY2F0aW9uX25hbWUoYXJndlswXSk7Ci0gCW9wZW5sb2cocHJv
-Z25hbWUsIExPR19QSUQgfCBMT0dfUEVSUk9SLCBMT0dfREFFTU9OKTsKLSAKLS0JaWYgKG9uX2V4
-aXQoX2xlZG1vbl9zdGF0dXMsICZpZ25vcmUpKQotKwlpZiAoYXRleGl0KF9sZWRtb25fc3RhdHVz
-KSkKLSAJCXJldHVybiBMRURNT05fU1RBVFVTX09ORVhJVF9FUlJPUjsKLSAKLSAJaWYgKF9jbWRs
-aW5lX3BhcnNlX25vbl9kYWVtb25pc2UoYXJnYywgYXJndikgIT0gTEVETU9OX1NUQVRVU19TVUND
-RVNTKQotQEAgLTkzNSwxOCArOTM4LDE4IEBAIGludCBtYWluKGludCBhcmdjLCBjaGFyICphcmd2
-W10pCi0gCi0gCQlpZiAocGlkIDwgMCkgewotIAkJCWxvZ19kZWJ1ZygibWFpbigpOiBmb3JrKCkg
-ZmFpbGVkIChlcnJubz0lZCkuIiwgZXJybm8pOwotLQkJCWV4aXQoRVhJVF9GQUlMVVJFKTsKLSsJ
-CQlFWElUKEVYSVRfRkFJTFVSRSk7Ci0gCQl9Ci0gCQlpZiAocGlkID4gMCkgewotIAkJCWlnbm9y
-ZSA9IDE7IC8qIHBhcmVudDogZG9uJ3QgcHJpbnQgZXhpdCBzdGF0dXMgKi8KLS0JCQlleGl0KEVY
-SVRfU1VDQ0VTUyk7Ci0rCQkJRVhJVChFWElUX1NVQ0NFU1MpOwotIAkJfQotIAotIAkJcGlkX3Qg
-c2lkID0gc2V0c2lkKCk7Ci0gCi0gCQlpZiAoc2lkIDwgMCkgewotIAkJCWxvZ19kZWJ1ZygibWFp
-bigpOiBzZXRzaWQoKSBmYWlsZWQgKGVycm5vPSVkKS4iLCBlcnJubyk7Ci0tCQkJZXhpdChFWElU
-X0ZBSUxVUkUpOwotKwkJCUVYSVQoRVhJVF9GQUlMVVJFKTsKLSAJCX0KLSAKLSAJCV9jbG9zZV9w
-YXJlbnRfZmRzKCk7Ci1AQCAtOTYwLDE2ICs5NjMsMTYgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNo
-YXIgKmFyZ3ZbXSkKLSAKLSAJaWYgKGNoZGlyKCIvIikgPCAwKSB7Ci0gCQlsb2dfZGVidWcoIm1h
-aW4oKTogY2hkaXIoKSBmYWlsZWQgKGVycm5vPSVkKS4iLCBlcnJubyk7Ci0tCQlleGl0KEVYSVRf
-RkFJTFVSRSk7Ci0rCQlFWElUKEVYSVRfRkFJTFVSRSk7Ci0gCX0KLSAJaWYgKHBpZGZpbGVfY3Jl
-YXRlKHByb2duYW1lKSkgewotIAkJbG9nX2RlYnVnKCJtYWluKCk6IHBpZGZpbGVfY3JlYXQoKSBm
-YWlsZWQuIik7Ci0tCQlleGl0KEVYSVRfRkFJTFVSRSk7Ci0rCQlFWElUKEVYSVRfRkFJTFVSRSk7
-Ci0gCX0KLSAJX2xlZG1vbl9zZXR1cF9zaWduYWxzKCk7Ci0gCi0tCWlmIChvbl9leGl0KF9sZWRt
-b25fZmluaSwgcHJvZ25hbWUpKQotLQkJZXhpdChMRURNT05fU1RBVFVTX09ORVhJVF9FUlJPUik7
-Ci0rCWlmIChhdGV4aXQoX2xlZG1vbl9maW5pKSkKLSsJCUVYSVQoTEVETU9OX1NUQVRVU19PTkVY
-SVRfRVJST1IpOwotIAlsaXN0X2luaXQoJmxlZG1vbl9ibG9ja19saXN0LCAoaXRlbV9mcmVlX3Qp
-YmxvY2tfZGV2aWNlX2ZpbmkpOwotIAlzeXNmc19pbml0KCk7Ci0gCWxvZ19pbmZvKCJtb25pdG9y
-IHNlcnZpY2UgaGFzIGJlZW4gc3RhcnRlZC4uLiIpOwotQEAgLTk4Nyw1ICs5OTAsNSBAQCBpbnQg
-bWFpbihpbnQgYXJnYywgY2hhciAqYXJndltdKQotIAl9Ci0gCWxlZG1vbl9yZW1vdmVfc2hhcmVk
-X2NvbmYoKTsKLSAJc3RvcF91ZGV2X21vbml0b3IoKTsKLS0JZXhpdChFWElUX1NVQ0NFU1MpOwot
-KwlFWElUKEVYSVRfU1VDQ0VTUyk7Ci0gfQotLS0gCi0yLjM5LjIKLQpkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9sZWRtb24vMDAwMi1GaXgtdW5rbm93bi10eXBlLW5hbWUtc3NpemVfdC1lcnJvci5wYXRj
-aCBiL3BhY2thZ2UvbGVkbW9uLzAwMDItRml4LXVua25vd24tdHlwZS1uYW1lLXNzaXplX3QtZXJy
-b3IucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDRhZWFkYmJiZjguLjAwMDAw
-MDAwMDAKLS0tIGEvcGFja2FnZS9sZWRtb24vMDAwMi1GaXgtdW5rbm93bi10eXBlLW5hbWUtc3Np
-emVfdC1lcnJvci5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0xLDQ0ICswLDAgQEAKLUZyb20gYjlm
-NDU0Y2QyOWI2YjVhMDkyN2IzYzFlOTg4MDdkNTRmZmFjZDczZSBNb24gU2VwIDE3IDAwOjAwOjAw
-IDIwMDEKLUZyb206IE1ha3NpbSBLaXNlbGV2IDxiaWd1bmNsZW1heEBnbWFpbC5jb20+Ci1EYXRl
-OiBNb24sIDE1IE1heSAyMDIzIDE5OjI5OjQ1ICswMzAwCi1TdWJqZWN0OiBbUEFUQ0hdIEZpeCB1
-bmtub3duIHR5cGUgbmFtZSDigJhzc2l6ZV904oCZIGVycm9yCi0KLVRoaXMgZXJyb3Igb2NjdXJz
-IGZvciBidWlsZHMgd2l0aCBtdXNsIGxpYmMuCi1Nb3ZlIGluY2x1ZGUgPHN5cy90eXBlcy5oPiB0
-byB1dGlscyBoZWFkZXIgdG8KLXJlc29sdmUgdGhpcyBpc3N1ZS4KLQotVXBzdHJlYW06IGh0dHBz
-Oi8vZ2l0aHViLmNvbS9pbnRlbC9sZWRtb24vcHVsbC8xMzkKLQotU2lnbmVkLW9mZi1ieTogTWFr
-c2ltIEtpc2VsZXYgPGJpZ3VuY2xlbWF4QGdtYWlsLmNvbT4KLS0tLQotIHNyYy91dGlscy5jIHwg
-MSAtCi0gc3JjL3V0aWxzLmggfCAxICsKLSAyIGZpbGVzIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-LCAxIGRlbGV0aW9uKC0pCi0KLWRpZmYgLS1naXQgYS9zcmMvdXRpbHMuYyBiL3NyYy91dGlscy5j
-Ci1pbmRleCA4NmI5NTkzLi4wYjgzZDVhIDEwMDY0NAotLS0tIGEvc3JjL3V0aWxzLmMKLSsrKyBi
-L3NyYy91dGlscy5jCi1AQCAtMzMsNyArMzMsNiBAQAotICNpbmNsdWRlIDxzdHJpbmcuaD4KLSAj
-aW5jbHVkZSA8c3lzL3N0YXQuaD4KLSAjaW5jbHVkZSA8c3lzL3RpbWUuaD4KLS0jaW5jbHVkZSA8
-c3lzL3R5cGVzLmg+Ci0gI2luY2x1ZGUgPHRpbWUuaD4KLSAjaW5jbHVkZSA8dW5pc3RkLmg+Ci0g
-I2luY2x1ZGUgPGFzc2VydC5oPgotZGlmZiAtLWdpdCBhL3NyYy91dGlscy5oIGIvc3JjL3V0aWxz
-LmgKLWluZGV4IDVkNTkwYjkuLmQwMmRhOGYgMTAwNjQ0Ci0tLS0gYS9zcmMvdXRpbHMuaAotKysr
-IGIvc3JjL3V0aWxzLmgKLUBAIC0yMiw2ICsyMiw3IEBACi0gI2RlZmluZSBfVVRJTFNfSF9JTkNM
-VURFRF8KLSAKLSAjaW5jbHVkZSA8Z2V0b3B0Lmg+Ci0rI2luY2x1ZGUgPHN5cy90eXBlcy5oPgot
-ICNpbmNsdWRlICJjb25maWdfZmlsZS5oIgotICNpbmNsdWRlICJzdGRsaWIuaCIKLSAjaW5jbHVk
-ZSAic3RkaW50LmgiCi0tLSAKLTIuMzkuMgotCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xlZG1vbi8w
-MDAzLUFkZC1kaXNhYmxlLWRvYy1vcHRpb24ucGF0Y2ggYi9wYWNrYWdlL2xlZG1vbi8wMDAzLUFk
-ZC1kaXNhYmxlLWRvYy1vcHRpb24ucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
-IGFiN2EyNDIyODkuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9sZWRtb24vMDAwMy1BZGQtZGlz
-YWJsZS1kb2Mtb3B0aW9uLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsNjMgKzAsMCBAQAotRnJv
-bSAxNDE2Mjg1MTlkMjI3YjU5YmUzOTc3YjE2ZWJhYWIwZmViMjJiMjk1IE1vbiBTZXAgMTcgMDA6
-MDA6MDAgMjAwMQotRnJvbTogTWFrc2ltIEtpc2VsZXYgPGJpZ3VuY2xlbWF4QGdtYWlsLmNvbT4K
-LURhdGU6IFN1biwgMjAgQXVnIDIwMjMgMTE6MzU6NTcgKzAzMDAKLVN1YmplY3Q6IFtQQVRDSF0g
-QWRkICctLWRpc2FibGUtZG9jJyBvcHRpb24KLQotSW50cm9kdWNlIGEgY29uZmlndXJlIG9wdGlv
-biB0byBkaXNhYmxlIGRvY3VtZW50YXRpb24gaW5zdGFsbGF0aW9uCi1pbiBjYXNlIGlmIGl0IGlz
-IG5vdCByZXF1aXJlZC4KLQotVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC9sZWRt
-b24vcHVsbC8xNTQKLQotU2lnbmVkLW9mZi1ieTogTWFrc2ltIEtpc2VsZXYgPGJpZ3VuY2xlbWF4
-QGdtYWlsLmNvbT4KLS0tLQotIE1ha2VmaWxlLmFtICB8ICA4ICsrKysrKy0tCi0gY29uZmlndXJl
-LmFjIHwgMTEgKysrKysrKysrKy0KLSAyIGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyks
-IDMgZGVsZXRpb25zKC0pCi0KLWRpZmYgLS1naXQgYS9NYWtlZmlsZS5hbSBiL01ha2VmaWxlLmFt
-Ci1pbmRleCBkZGNkMjAwLi42NDRhOGQyIDEwMDY0NAotLS0tIGEvTWFrZWZpbGUuYW0KLSsrKyBi
-L01ha2VmaWxlLmFtCi1AQCAtMjAsNiArMjAsMTAgQEAgaWYgU1lTVEVNRF9DT05ESVRJT04KLSAg
-IE9QVElPTkFMX1NVQkRJUiA9IHN5c3RlbWQKLSBlbmRpZgotIAotLVNVQkRJUlMgPSBkb2Mgc3Jj
-ICQoT1BUSU9OQUxfU1VCRElSKQotK2lmIFdJVEhfRE9DCi0rICBET0NfU1VCRElSID0gZG9jCi0r
-ICBkaXN0X2RvY19EQVRBID0gUkVBRE1FLm1kCi0rZW5kaWYKLSsKLStTVUJESVJTID0gc3JjICQo
-RE9DX1NVQkRJUikgJChPUFRJT05BTF9TVUJESVIpCi0gRVhUUkFfRElTVCA9IGNvbmZpZy9jb25m
-aWcuaCBzeXN0ZW1kL2xlZG1vbi5zZXJ2aWNlLmluCi0tZGlzdF9kb2NfREFUQSA9IFJFQURNRS5t
-ZAotZGlmZiAtLWdpdCBhL2NvbmZpZ3VyZS5hYyBiL2NvbmZpZ3VyZS5hYwotaW5kZXggMDViYWE2
-Mi4uMTE0OTU3ZiAxMDA2NDQKLS0tLSBhL2NvbmZpZ3VyZS5hYwotKysrIGIvY29uZmlndXJlLmFj
-Ci1AQCAtNzQsNiArNzQsMTUgQEAgQU1fQ09ORElUSU9OQUwoW1NZU1RFTURfQ09ORElUSU9OXSwg
-W3Rlc3QgIiRTWVNURU1EX1NUUiIgPSB5ZXNdKQotICMgdGFyZ2V0IGRpcmVjdG9yeSBmb3IgbGVk
-bW9uIHNlcnZpY2UgZmlsZQotIEFDX1NVQlNUKFtTWVNURU1EX1BBVEhdLCAiJChwa2ctY29uZmln
-IHN5c3RlbWQgLS12YXJpYWJsZT1zeXN0ZW1kc3lzdGVtdW5pdGRpcikiKQotIAotKyMgQWRkIGNv
-bmZpZ3VyZSBvcHRpb24gdG8gZGlzYWJsZSBkb2N1bWVudGF0aW9uIGJ1aWxkaW5nCi0rQUNfQVJH
-X0VOQUJMRShbZG9jXSwKLSsgICAgW0FTX0hFTFBfU1RSSU5HKFstLWRpc2FibGUtZG9jXSwKLSsg
-ICAgICAgIFtkbyBub3QgaW5zdGFsbCBsZWRtb24gZG9jdW1lbnRhaW9uXSldLAotKyAgICBbd2l0
-aF9kb2M9JHtlbmFibGV2YWx9XSwKLSsgICAgW3dpdGhfZG9jPXllc10pCi0rCi0rQU1fQ09ORElU
-SU9OQUwoW1dJVEhfRE9DXSwgW3Rlc3QgIngkd2l0aF9kb2MiID0gInh5ZXMiXSkKLSsKLSBBQ19D
-T05GSUdfRklMRVMoW01ha2VmaWxlCi0gICAgICAgICAgICAgICAgICBkb2MvTWFrZWZpbGUKLSAg
-ICAgICAgICAgICAgICAgIHNyYy9NYWtlZmlsZQotQEAgLTg2LDUgKzk1LDUgQEAgJFBBQ0tBR0Vf
-TkFNRSAkVkVSU0lPTiBjb25maWd1cmF0aW9uOgotICAgUHJlcHJvY2Vzc29yIGZsYWdzOiAgICAg
-ICR7QU1fQ1BQRkxBR1N9ICR7Q1BQRkxBR1N9Ci0gICBDIGNvbXBpbGVyIGZsYWdzOiAgICAgICAg
-JHtBTV9DRkxBR1N9ICR7Q0ZMQUdTfQotICAgQ29tbW9uIGluc3RhbGwgbG9jYXRpb246ICR7cHJl
-Zml4fQotLSAgY29uZmlndXJlIHBhcmFtZXRlcnM6ICAgIC0tZW5hYmxlLXN5c3RlbWQ9JHtTWVNU
-RU1EX1NUUn0KLSsgIGNvbmZpZ3VyZSBwYXJhbWV0ZXJzOiAgICAtLWVuYWJsZS1zeXN0ZW1kPSR7
-U1lTVEVNRF9TVFJ9IC0tZW5hYmxlLWRvYz0ke3dpdGhfZG9jfQotIF0pCi0tLSAKLTIuMzkuMgot
-CmRpZmYgLS1naXQgYS9wYWNrYWdlL2xlZG1vbi9sZWRtb24uaGFzaCBiL3BhY2thZ2UvbGVkbW9u
-L2xlZG1vbi5oYXNoCmluZGV4IGRmYzVkNzQyNDIuLmU5Y2ZjYzYzY2IgMTAwNjQ0Ci0tLSBhL3Bh
-Y2thZ2UvbGVkbW9uL2xlZG1vbi5oYXNoCisrKyBiL3BhY2thZ2UvbGVkbW9uL2xlZG1vbi5oYXNo
-CkBAIC0xLDMgKzEsMyBAQAogIyBMb2NhbGx5IGNhbGN1bGF0ZWQKLXNoYTI1NiAgNDBlZTdlNDYy
-Yjc4Yzc3NDY4Y2MyZWYzNTZhMDZjNWI2ZGI0NDc0N2Q1OTZkYzExNTMyZjdiNmYzNzhkMmQ0YiAg
-bGVkbW9uLTAuOTcudGFyLmd6CitzaGEyNTYgIDI4MjY3ODZjZDVlN2ZlN2QzMmQyMmU5ZDIwOWIy
-MzEyNDgwMWZlYzljMzIyMGRjZDdmYjQ1NzA2ZjM4MThkYzUgIGxlZG1vbi0xLjAuMC50YXIuZ3oK
-IHNoYTI1NiAgZGNjMTAwZDQxNjFjYzBiNzE3NzU0NWFiNmU0NzIxNmY4NDg1N2NkYTM4NDM4NDdj
-NzkyYTI1Mjg5ODUyZGNhYSAgQ09QWUlORwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9sZWRtb24vbGVk
-bW9uLm1rIGIvcGFja2FnZS9sZWRtb24vbGVkbW9uLm1rCmluZGV4IDQ3M2QwZGU3YTMuLjcxMTUw
-YWQxZTQgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbGVkbW9uL2xlZG1vbi5taworKysgYi9wYWNrYWdl
-L2xlZG1vbi9sZWRtb24ubWsKQEAgLTQsMTYgKzQsMTcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjCiAKLUxFRE1PTl9WRVJTSU9OID0gMC45NworTEVETU9OX1ZFUlNJT04gPSAxLjAuMAog
-TEVETU9OX1NJVEUgPSAkKGNhbGwgZ2l0aHViLGludGVsLGxlZG1vbix2JChMRURNT05fVkVSU0lP
-TikpCi1MRURNT05fREVQRU5ERU5DSUVTID0gaG9zdC1wa2djb25mIHBjaXV0aWxzIHNnM191dGls
-cyB1ZGV2CitMRURNT05fREVQRU5ERU5DSUVTID0gaG9zdC1hdXRvY29uZi1hcmNoaXZlIGhvc3Qt
-cGtnY29uZiBwY2l1dGlscyBzZzNfdXRpbHMgdWRldgogIyBUaGUgY29kZSBiYXNlIGFsc28gaW5j
-bHVkZSBhIENPUFlJTkcuTElCIGZpbGUgd2l0aCB0aGUgTEdQTC0yLjEgdGV4dCwKICMgYW5kIHNv
-bWUgc291cmNlIGZpbGVzIGFyZSBwdWJsaXNoZWQgdW5kZXIgTEdQTC0yLjEsIGJ1dCBhbGwgb2Yg
-dGhlbSBhcmUKICMgYXQgc29tZSBwb2ludCBsaW5rZWQgd2l0aCBHUEwtMi4wIGNvZGUsIG1ha2lu
-ZyB0aGUgcmVzdWx0aW5nIGJpbmFyaWVzCiAjIEdQTC0yLjAgbGljZW5zZWQKIExFRE1PTl9MSUNF
-TlNFID0gR1BMLTIuMAogTEVETU9OX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HCi0jIDAwMDItRml4
-LXVua25vd24tdHlwZS1uYW1lLXNzaXplX3QtZXJyb3IucGF0Y2gKKyMgRnJvbSBnaXQKIExFRE1P
-Tl9BVVRPUkVDT05GID0gWUVTCitMRURNT05fQVVUT1JFQ09ORl9PUFRTID0gLS1pbmNsdWRlPSQo
-SE9TVF9ESVIpL3NoYXJlL2F1dG9jb25mLWFyY2hpdmUKIAogJChldmFsICQoYXV0b3Rvb2xzLXBh
-Y2thZ2UpKQotLSAKMi40My4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+- Drop patches (already in version)
+- docs/copying.htm renamed to docs/copying.htm.md with
+  https://github.com/gdraheim/zziplib/commit/b8138ba56ecb9d5d27c22d85fae37bdd594d2edb
+
+https://github.com/gdraheim/zziplib/blob/v0.13.74/ChangeLog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .checkpackageignore                           |  1 -
+ ...-implant-ZZIP_LIBLATEST-for-zzip_lib.patch | 75 -------------------
+ ...reate-symlinks-only-if-target-is-mis.patch | 72 ------------------
+ package/zziplib/zziplib.hash                  |  4 +-
+ package/zziplib/zziplib.mk                    |  4 +-
+ 5 files changed, 4 insertions(+), 152 deletions(-)
+ delete mode 100644 package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
+ delete mode 100644 package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index d809f3396b..9332d72ac4 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1697,7 +1697,6 @@ package/zip/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch lib_pat
+ package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch lib_patch.Upstream
+ package/zip/0008-fix-musl-static-build.patch lib_patch.Upstream
+ package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch lib_patch.Upstream
+-package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch lib_patch.Upstream
+ support/dependencies/check-host-asciidoc.sh Shellcheck
+ support/dependencies/check-host-cmake.sh Shellcheck
+ support/dependencies/check-host-gzip.sh Shellcheck
+diff --git a/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch b/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
+deleted file mode 100644
+index 780d990ab7..0000000000
+--- a/package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From 0e8d35f92efb680c81f6ec1fca9f11d173dce389 Mon Sep 17 00:00:00 2001
+-From: Guido Draheim <guidod@gmx.de>
+-Date: Sat, 22 May 2021 15:13:28 +0200
+-Subject: [PATCH] #117 implant ZZIP_LIBLATEST for zzip.lib
+-
+-[Andreas: Extract link creation for versioned libraries from commit
+-0e8d35f92efb680c81f6ec1fca9f11d173dce389.]
+-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+----
+- zzip/CMakeLists.txt | 57 +++++++++++++++++++++++++++++++++++----------
+- 1 file changed, 45 insertions(+), 12 deletions(-)
+-
+-diff --git a/zzip/CMakeLists.txt b/zzip/CMakeLists.txt
+-index a966d5f..ccd08b6 100644
+---- a/zzip/CMakeLists.txt
+-+++ b/zzip/CMakeLists.txt
+-@@ -28,6 +28,12 @@ option(ZZIP_LIBTOOL "Ensure binary compatibility with libtool" OFF)
+- option(ZZIP_PKGCONFIG "Generate pkg-config files for linking" OFF)
+- endif()
+- 
+-+if(ZZIP_LIBTOOL OR ZZIP_PKGCONFIG)
+-+option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" ON)
+-+else()
+-+option(ZZIP_LIBLATEST "Ensure libname.lib links to libname-REL.lib" OFF)
+-+endif()
+-+
+- # used in zzip/_config.h
+- set(ZZIP_PACKAGE "${PROJECT_NAME}lib")
+- set(ZZIP_VERSION "${PROJECT_VERSION}")
+-@@ -346,6 +340,45 @@ if(ZZIP_LIBTOOL)
+-   endif(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG)
+- endif(ZZIP_LIBTOOL)
+- 
+-+if(ZZIP_LIBLATEST)
+-+  if(BUILD_SHARED_LIBS)
+-+    set(lib ${CMAKE_SHARED_LIBRARY_PREFIX})
+-+    set(dll ${CMAKE_SHARED_LIBRARY_SUFFIX})
+-+  else()
+-+    set(lib ${CMAKE_STATIC_LIBRARY_PREFIX})
+-+    set(dll ${CMAKE_STATIC_LIBRARY_SUFFIX})
+-+  endif()
+-+    get_target_property(libname libzzip OUTPUT_NAME)
+-+    get_target_property(librelease libzzip RELEASE_POSTFIX)
+-+    add_custom_target(libzzip_latest ALL
+-+        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${dll}
+-+        )
+-+    install(FILES
+-+        ${outdir}/${lib}${libname}${dll}
+-+        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-+    if(ZZIPFSEEKO)
+-+    get_target_property(libname libzzipfseeko OUTPUT_NAME)
+-+    get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
+-+    add_custom_target(libzzipfseeko_latest ALL
+-+        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${dll}
+-+        )
+-+    install(FILES
+-+        ${outdir}/${lib}${libname}${dll}
+-+        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-+    endif(ZZIPFSEEKO)
+-+    if(ZZIPMMAPPED)
+-+    get_target_property(libname libzzipmmapped OUTPUT_NAME)
+-+    get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
+-+    add_custom_target(libzzipmmaped_latest ALL
+-+        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${dll}
+-+        )
+-+    install(FILES
+-+        ${outdir}/${lib}${libname}${dll}
+-+        DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-+    endif(ZZIPMMAPPED)
+-+endif(ZZIP_LIBLATEST)
+-+
+-+
+- ## messages ##############################################
+- 
+- message(STATUS "lib zzipfseeko  to be compiled: ${ZZIPFSEEKO}")
+diff --git a/package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch b/package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch
+deleted file mode 100644
+index c8ccd48dba..0000000000
+--- a/package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch
++++ /dev/null
+@@ -1,72 +0,0 @@
+-From 5977725ecea038f32a86938703ca1ed2b080b31c Mon Sep 17 00:00:00 2001
+-From: Andreas Ziegler <br015@umbiko.net>
+-Date: Fri, 29 Jul 2022 12:32:27 +0200
+-Subject: [PATCH] ZZIP_LIBLATEST: create symlinks only if target is missing
+-
+-zzip/CMakeList.txt uses custom build targets to create symlinks to the
+-(normally versioned) build results from unversioned file names. These
+-targets are executed unconditionally, every time a build is started,
+-regardless of the existence of the symlink.
+-
+-Debug builds, however, generate unversioned libraries. The build targets
+-therefore overwrite existing files with recursive links.
+-
+-Create custom targets depending on the target file plus custom build
+-commands containing the symlink creation, thereby ensuring that symlinks
+-are only created if the link target is missing.
+-
+-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+-Upstream: https://github.com/gdraheim/zziplib/pull/138
+----
+- zzip/CMakeLists.txt | 18 +++++++++++++++---
+- 1 file changed, 15 insertions(+), 3 deletions(-)
+-
+-diff --git a/zzip/CMakeLists.txt b/zzip/CMakeLists.txt
+-index 4fa6b9c..dd1e56a 100644
+---- a/zzip/CMakeLists.txt
+-+++ b/zzip/CMakeLists.txt
+-@@ -350,8 +350,12 @@ if(ZZIP_LIBLATEST)
+-   endif()
+-     get_target_property(libname libzzip OUTPUT_NAME)
+-     get_target_property(librelease libzzip RELEASE_POSTFIX)
+-+    set(libzzip_target "${lib}${libname}${dll}")
+-+    add_custom_command(OUTPUT ${libzzip_target} 
+-+        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${libzzip_target}
+-+        )
+-     add_custom_target(libzzip_latest ALL
+--        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${dll}
+-+        DEPENDS ${libzzip_target}
+-         )
+-     install(FILES
+-         ${outdir}/${lib}${libname}${dll}
+-@@ -359,8 +363,12 @@ if(ZZIP_LIBLATEST)
+-     if(ZZIPFSEEKO)
+-     get_target_property(libname libzzipfseeko OUTPUT_NAME)
+-     get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
+-+    set(libzzipfseeko_target "${lib}${libname}${dll}")
+-+    add_custom_command(OUTPUT ${libzzipfseeko_target} 
+-+        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${libzzipfseeko_target}
+-+        )
+-     add_custom_target(libzzipfseeko_latest ALL
+--        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${dll}
+-+        DEPENDS ${libzzipfseeko_target}
+-         )
+-     install(FILES
+-         ${outdir}/${lib}${libname}${dll}
+-@@ -369,8 +377,12 @@ if(ZZIP_LIBLATEST)
+-     if(ZZIPMMAPPED)
+-     get_target_property(libname libzzipmmapped OUTPUT_NAME)
+-     get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
+-+    set(libzzipmmapped_target "${lib}${libname}${dll}")
+-+    add_custom_command(OUTPUT ${libzzipmmapped_target} 
+-+        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${libzzipmmapped_target}
+-+        )
+-     add_custom_target(libzzipmmaped_latest ALL
+--        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${dll}
+-+        DEPENDS ${libzzipmmapped_target}
+-         )
+-     install(FILES
+-         ${outdir}/${lib}${libname}${dll}
+--- 
+-2.34.1
+-
+diff --git a/package/zziplib/zziplib.hash b/package/zziplib/zziplib.hash
+index b6a75ae0cb..3bff51f07f 100644
+--- a/package/zziplib/zziplib.hash
++++ b/package/zziplib/zziplib.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  93ef44bf1f1ea24fc66080426a469df82fa631d13ca3b2e4abaeab89538518dc  zziplib-0.13.72.tar.gz
++sha256  319093aa98d39453f3ea2486a86d8a2fab2d5632f6633a2665318723a908eecf  zziplib-0.13.74.tar.gz
+ sha256  94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  docs/COPYING.LIB
+ sha256  c2aa7d58cebd24cb877bbf11d6b13a4bb7cd08b9d7db5d3037ca06c46bf4cfd8  docs/COPYING.MPL
+-sha256  1c6da11efe8c43ee853fe5b21501dd72b81831ae84d58ea376bddc0620a5c361  docs/copying.htm
++sha256  9418aca218090f0bebfa91298c8145c7342de095eced3d72ea241c178df59368  docs/copying.htm.md
+diff --git a/package/zziplib/zziplib.mk b/package/zziplib/zziplib.mk
+index 6cb9dedce8..0ef53436d2 100644
+--- a/package/zziplib/zziplib.mk
++++ b/package/zziplib/zziplib.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-ZZIPLIB_VERSION = 0.13.72
++ZZIPLIB_VERSION = 0.13.74
+ ZZIPLIB_SITE = $(call github,gdraheim,zziplib,v$(ZZIPLIB_VERSION))
+ ZZIPLIB_LICENSE = LGPL-2.0+ or MPL-1.1
+-ZZIPLIB_LICENSE_FILES = docs/COPYING.LIB docs/COPYING.MPL docs/copying.htm
++ZZIPLIB_LICENSE_FILES = docs/COPYING.LIB docs/COPYING.MPL docs/copying.htm.md
+ ZZIPLIB_CPE_ID_VALID = YES
+ ZZIPLIB_INSTALL_STAGING = YES
+ ZZIPLIB_CONF_OPTS += \
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
