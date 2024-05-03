@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A66F3C10F16
-	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 07:12:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D9B4C4345F
+	for <buildroot@archiver.kernel.org>; Fri,  3 May 2024 07:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B3EE408E0;
-	Fri,  3 May 2024 07:12:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53509408E0;
+	Fri,  3 May 2024 07:13:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KXk5ZNxl1-Nk; Fri,  3 May 2024 07:12:22 +0000 (UTC)
+ id 1I8n9EDJ2AdA; Fri,  3 May 2024 07:13:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B03A41558
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0588141558
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B03A41558;
-	Fri,  3 May 2024 07:12:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0588141558;
+	Fri,  3 May 2024 07:13:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CAB1C1BF2AF
- for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:12:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 146371BF2AF
+ for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B7612401CE
- for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:12:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01105401CE
+ for <buildroot@lists.busybox.net>; Fri,  3 May 2024 07:13:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CjTsz4JYtAiM for <buildroot@lists.busybox.net>;
- Fri,  3 May 2024 07:12:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 1E9ESuP5pyaT for <buildroot@lists.busybox.net>;
+ Fri,  3 May 2024 07:13:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EB77140133
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB77140133
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EB77140133
- for <buildroot@buildroot.org>; Fri,  3 May 2024 07:12:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2C7A21C000A;
- Fri,  3 May 2024 07:12:18 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s2n5d-00BbTX-20;
- Fri, 03 May 2024 09:12:17 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B58D40133
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B58D40133
+ for <buildroot@buildroot.org>; Fri,  3 May 2024 07:13:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3746E86526; Fri,  3 May 2024 07:13:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240407192944.3335886-1-fontaine.fabrice@gmail.com>
-Date: Fri, 03 May 2024 09:12:17 +0200
-In-Reply-To: <20240407192944.3335886-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Apr 2024 21:29:44 +0200")
-Message-ID: <87r0ej2wtq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/opensc: openssl is optional,
- not mandatory
+To: buildroot@buildroot.org
+Date: Fri, 3 May 2024 09:11:08 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 04b72604bc0c96b2a78fe90b46c165d1808ab460
+X-Git-Newrev: 98a1ed7ae3557ac2522f48c23b21a65708630720
+X-Patchwork-Hint: ignore
+Message-Id: <20240503071321.3746E86526@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/oprofile: drop
+ unrecognized option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,23 +59,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=98a1ed7ae3557ac2522f48c23b21a65708630720
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > openssl is optional, not mandatory since the addition of the package in
- > commit 8aaa7ecbce1d10cbcd880c3da5e429988f96176a
+--enable-gui is unrecognized since bump to version 1.0.0 in commit
+7f7dc71cc8545dacf23f9a25f33c184d15bed65c and
+https://github.com/wcohen/oprofile/commit/0c142c3a096d3e9ec42cc9b0ddad994fea60d135:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls, --enable-gui
 
-Committed to 2024.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit caf3f7fb5dc289c0c25254af78dc655687ad4bec)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/oprofile/oprofile.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 265d6ebd18..512fbf9ea1 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -11,7 +11,6 @@ OPROFILE_LICENSE_FILES = COPYING
+ OPROFILE_CPE_ID_VENDOR = maynard_johnson
+ OPROFILE_CONF_OPTS = \
+ 	--disable-account-check \
+-	--enable-gui=no \
+ 	--with-kernel=$(STAGING_DIR)/usr
+ 
+ OPROFILE_DEPENDENCIES = popt binutils host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
