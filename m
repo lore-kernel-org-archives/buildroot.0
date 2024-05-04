@@ -4,92 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70194C4345F
-	for <buildroot@archiver.kernel.org>; Sat,  4 May 2024 21:40:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21951C4345F
+	for <buildroot@archiver.kernel.org>; Sat,  4 May 2024 21:40:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3ABB440189;
-	Sat,  4 May 2024 21:40:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B08F541568;
+	Sat,  4 May 2024 21:40:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OZd6hrp_QQy2; Sat,  4 May 2024 21:40:28 +0000 (UTC)
+ id OfE97JxUiOUZ; Sat,  4 May 2024 21:40:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF1474082E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33EA64082E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF1474082E;
-	Sat,  4 May 2024 21:40:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0FFFE1BF3C9
- for <buildroot@lists.busybox.net>; Sat,  4 May 2024 21:40:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33EA64082E;
+	Sat,  4 May 2024 21:40:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 78A6F1BF3C9
+ for <buildroot@lists.busybox.net>; Sat,  4 May 2024 21:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFBEE40300
- for <buildroot@lists.busybox.net>; Sat,  4 May 2024 21:40:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6372582CE4
+ for <buildroot@lists.busybox.net>; Sat,  4 May 2024 21:40:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WRewKvBwUVpC for <buildroot@lists.busybox.net>;
- Sat,  4 May 2024 21:40:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cHN-sBXAtbYD for <buildroot@lists.busybox.net>;
+ Sat,  4 May 2024 21:40:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 57C7E40189
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57C7E40189
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 57C7E40189
- for <buildroot@buildroot.org>; Sat,  4 May 2024 21:40:24 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-41b782405d5so7839935e9.2
- for <buildroot@buildroot.org>; Sat, 04 May 2024 14:40:24 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 699E582CC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 699E582CC7
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 699E582CC7
+ for <buildroot@buildroot.org>; Sat,  4 May 2024 21:40:28 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-41adf155cffso5274685e9.2
+ for <buildroot@buildroot.org>; Sat, 04 May 2024 14:40:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714858822; x=1715463622;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=QDDFbOkalblkMssJbVJd+oUzGIGkMSS5lpa4g6a+K8o=;
- b=VgJBk49/c2uGfTjEMjllm2P4XZNmSIOwEQuOSsBWl3gcuFUlaXohPXFlC3BhKkCGCI
- 4gipzGGAsvY4r6u0vljIb+xbKnCk02J4nPEYayc4L7flL0Z8DinQFquZyJE7ACBo8I7W
- mxace91dCQHP78Hv4hVBwmCFqTacPwIn0164OHfscW/uIIBXXFFywlgU3sm9As6allri
- 55L8M7MOedOqY+QzG8iQrK+t5Yi/mZlq+h2BO2iYk/uNKdmk5odqa4VhuxRi1ghcOGSb
- c4zQ7teIR01f4sbHDO9UpXVy1oGKEo2w+WFrvae1LSR3Z9O9tcvxTJ4HuU7eXqnwCdUc
- Axtw==
-X-Gm-Message-State: AOJu0YyUzdQ6VFXbz4M06BF8mnuiEG2rhhy2ganfuNSrmiU0RGG1YO7X
- y8k/Qcjn/LUjYt+8yxGgbhd7ufTaMdvWUctPBmrSEWFnp+9Z0dl3JwwJ6g==
-X-Google-Smtp-Source: AGHT+IG0xmi5iMU/tF/aX0iZoxxOQTdkrCGZ9hEVypLp7oMQQy4NLrGFPqOjroVkhffbufgLHogZBA==
-X-Received: by 2002:a05:600c:4e42:b0:41a:adc3:f777 with SMTP id
- e2-20020a05600c4e4200b0041aadc3f777mr6373893wmq.16.1714858822028; 
- Sat, 04 May 2024 14:40:22 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1714858826; x=1715463626;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=i84qJY1pWjBIkzk83IU5/uhuYbX5G0gndRA9yVuUGpE=;
+ b=eoxqAZFsYJb2hffgXI0cyQdmllxZAis45j2Ej+vfBEUMy9Owd9HUfMWCNRhDhl4qUB
+ XKTwXSsbXduUuzAr2I4loQi2YZ6XQi0UYdiXAXOUOnoxxEiJfLchJSYaLEuUJwVE2sFG
+ AG8xMSiW7T7bcLYMCsA9vE3RZ5CRacY5N7fKB0Sxzjq+O3fQTGagmuc6eUuKa9thkre9
+ eZ0buxsHi0n8uCPT1IhCcQoooo2aeB4Aa8gCMw9i2ECr+qOTmt3mwmoZSX6rJUqo0Y1A
+ uYVUd4rWfTYVBP8q1VmMdKCa+aCeykryKSeLaDG3bIXbPz+ui796gv63LHTLpylicigU
+ v1Kw==
+X-Gm-Message-State: AOJu0Yzjy/m5X+CcvSf0FvlyA7KWSUincTw+FT1vb5ZrnbTd6dQu4TFP
+ auOOnHgok5rNw3BY6bXfUpw1JWQGBBXhCRwIUU5FgpkGFznKjkzBKC2gbg==
+X-Google-Smtp-Source: AGHT+IH5vObg39m3CbInKQ81AaA+jcIj5WiXbmkzIYoo2l1AzzwxN0Vi+L+Y1KVQaY7J8wo3/8YE2Q==
+X-Received: by 2002:a05:600c:314e:b0:41e:ae29:c807 with SMTP id
+ h14-20020a05600c314e00b0041eae29c807mr137430wmo.29.1714858826327; 
+ Sat, 04 May 2024 14:40:26 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- a6-20020a05600c348600b0041c14e42e2bsm10368385wmq.44.2024.05.04.14.40.20
+ l3-20020a05600c4f0300b0041b43d2d745sm10464230wmq.7.2024.05.04.14.40.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 04 May 2024 14:40:21 -0700 (PDT)
+ Sat, 04 May 2024 14:40:25 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  4 May 2024 23:40:20 +0200
-Message-ID: <cover.1714858818.git.yann.morin.1998@free.fr>
+Date: Sat,  4 May 2024 23:40:04 +0200
+Message-ID: <b3890cc5eca37625cd2cb90056429d991229a0ff.1714858818.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <cover.1714858818.git.yann.morin.1998@free.fr>
+References: <cover.1714858818.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1714858822; x=1715463622; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=QDDFbOkalblkMssJbVJd+oUzGIGkMSS5lpa4g6a+K8o=;
- b=AqfMgb/lKEQLduJoty/baDQe9gSusH4CjszyznySo4LPJ4uA4Zdu4w8F7J7cLLJRJq
- ZJstZi7avXgJrSXOS8d9j+GIBXNY3hcB2xRlWdzYZbUFJEtiGYjCGM/yhmZjHQhMJPie
- 0jXW6SJFarWHrODlfAkIv2Dd6XjKWpK64ilZ4VkrYA+GH7MaCfiAGHlteu9+dR7KgzuH
- veh2tdIQpUeySl7VI3sYRxwKiYCmqdo5olQedXZX8MZvI1g3CsoPeYiCPKxjBL4j8sB+
- 1QO313cY7kPE9RjLXJNWCvQ9TXIgAOSXHBkBCyNuw4kjwDqEcBVKE3zveL3v+bT9PRFu
- nLXA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1714858826; x=1715463626; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=i84qJY1pWjBIkzk83IU5/uhuYbX5G0gndRA9yVuUGpE=;
+ b=fJmKoG2tJvs1LvMp912HCx4AsXq0jU8zmHwIYAWHXRe22VcufaLulmuMRKN0tfGcXB
+ SW9YQQNP7uuz1OzMKVHNtuNuKTDfFbFr3q2yI7g44Mk2U8oROIYJ2YkFi7Lz0FPbyRxp
+ PBhta7EZSqcE/gKpZYFwaABGOhoaoJ109jLHPQhQY5xc7aEmq+TSZLtBtwSHgMfnqTay
+ axj7i0Tp5hz3q4+Mgih48YetYI2mY57OD0ID7FGDS8tyLkX1c5GBPTFhscOoq679VeXE
+ h5A/sk5Ljk18oVwiKuZVKlQ4GpuoiwaJ/9Leq25Gh0XeGTcgEtjTinqgTbQTKl4+aGe5
+ T14w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=AqfMgb/l
-Subject: [Buildroot] [PATCH 00/22 v3] support/download: extend download
- features and reproducibility (branch yem/git-attributes-2)
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=fJmKoG2t
+Subject: [Buildroot] [PATCH 03/22 v3] package/flutter-packages: fix and
+ comment the shared _SOURCE variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,297 +104,77 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Woody Douglass <wdouglass@carnegierobotics.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Francois Perrad <fperrad@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+Commit 631647f4a7c5 (package/flutter-packages/flutter-markdown-example:
+new package) introduced a set of flutter packages, all sharing the same
+upstream location and sources, and thus introduced a set of shared
+variables (not unlike the qt5, qt6, and a few other similar packages).
 
-This series extends the download infra in three ways:
- 1. git attributes are emulated
- 2. download reproducibility is enhanced
- 3. bump tar
+Especially, it introduced the corresponding _SOURCE variable, that is
+referenced by each sub-package of flutter-packages. Defining this
+variable is required, because flutter-packages itself is not a package
+in Buildroot parlance: it does not call any of the *-package macro. As
+such, the default _SOURCE variable is not automatically generated.
 
-----------------------------------------
-1. git attributes
+The value for the variable was suffixed with the -br1 version-suffix as
+used for the archives generated by the git backend.
 
-Git attributes are very similar to the decades-old CVS-style keywords
-and placeholders; except they are acted on while generating an archive
-with git-archive, rather than on checkout.
+However, this archive is not generated with our git download backend,
+but is generated remotely by github, as the _SITE is computed with our
+github helper macro.
 
-Some packages (pcm-tools, luajit) use such markers for versioning
-information; pcm-tools needs a (short-)hash, while luajit uses the UNIX
-timestamp as its semver patch-level.
+So, the -br1 suffix is both superfluous and confusing.
 
-This series introduces support for git attributes in the git download
-backend, cleans up pcm-tools, converts luajit, and updates all other
-packages with the new -br2 git version suffix to filenames of generate
-archives.
+Drop the suffix to avoid any confusion in the future, and add a little
+blurb explaining the situation close to where the variable is set, and
+add a check-package disable line.
 
-----------------------------------------
-2. download reproducibility
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+[Arnout: use check-package disable comment instead of ignoring the file]
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/flutter-packages/flutter-packages.hash | 2 +-
+ package/flutter-packages/flutter-packages.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-We are going at great length to try and ensure that the archive we
-generate are reproducible, so that we can hash them and validat ethe
-hashes on further downloads. We so far had quite a strong reproducility,
-except for the mode of the files. This was thought to be OK, because
-Buildroot runs under a known umask, and thus files are expected to
-always be created with the same modes, whatever the actual umask of the
-user.
+diff --git a/package/flutter-packages/flutter-packages.hash b/package/flutter-packages/flutter-packages.hash
+index 994434e25c..ea30e7a36d 100644
+--- a/package/flutter-packages/flutter-packages.hash
++++ b/package/flutter-packages/flutter-packages.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8276276e050c1ea45787f74b0f8c915b8cf2162b6af8537ffa9886bd423f2828  flutter-packages-947e34ce9fedcdd6750b54eb1cc74b854b49ab48-br1.tar.gz
++sha256  8276276e050c1ea45787f74b0f8c915b8cf2162b6af8537ffa9886bd423f2828  flutter-packages-947e34ce9fedcdd6750b54eb1cc74b854b49ab48.tar.gz
+ sha256  89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9  LICENSE
+diff --git a/package/flutter-packages/flutter-packages.mk b/package/flutter-packages/flutter-packages.mk
+index 4beaa39325..0cc3bdff24 100644
+--- a/package/flutter-packages/flutter-packages.mk
++++ b/package/flutter-packages/flutter-packages.mk
+@@ -9,7 +9,14 @@ FLUTTER_PACKAGES_SITE = $(call github,flutter,packages,$(FLUTTER_PACKAGES_VERSIO
+ FLUTTER_PACKAGES_LICENSE = BSD-3-Clause
+ FLUTTER_PACKAGES_LICENSE_FILES = LICENSE
+ FLUTTER_PACKAGES_DL_SUBDIR = flutter-packages
+-FLUTTER_PACKAGES_SOURCE = flutter-packages-$(FLUTTER_PACKAGES_VERSION)-br1.tar.gz
++
++# This default value *is* required, because this file is not a package (it
++# does not call any of the *-package macros), so the _SOURCE variable is not
++# defined. However, we need a variable for the sub-packages to share the
++# same tarball name.
++# check-package disable lib_mk.RemoveDefaultPackageSourceVariable
++FLUTTER_PACKAGES_SOURCE = flutter-packages-$(FLUTTER_PACKAGES_VERSION).tar.gz
++
+ FLUTTER_PACKAGES_DEPENDENCIES = \
+ 	host-flutter-sdk-bin \
+ 	flutter-engine
+-- 
+2.44.0
 
-However, that does not account for ACLs, where two or more users can
-share a downlaod directory (e.g. on a shared build server), and set the
-ACLs with the 'default' xattr, like so:
-
-    $ setfacl -m default:user::rwx ${BR2_DL_DIR}
-    $ setfacl -m default:group::rwx ${BR2_DL_DIR}
-    $ setfacl -m default:other::rwx ${BR2_DL_DIR}
-
-This has the side effect that, whatever umaks is in use, all files and
-directories created in BR2_DL_DIR will be user, group and, and world
-redable and writable, and directories will additioanlly be ugo+x.
-Usually, i.e. group and others are not expected to have write
-permission.
-
-Thus, when we create an archive in that situation, the modes are not
-what is expected, and the hashes differ from the ones generated in a
-more traditional setup...
-
-This series addresses that in two ways:
-  - first, vendored archive gain a version suffix, like for git and svn
-  - second, when creating tarballs, the modes are forced to a sane and
-    reproducible value
-
-----------------------------------------
-3. bump tar version
-
-Currently, we are stuck to tar 1.34 (at least ofr the host variant),
-because tar 1.35 introduced a change in how devmajor/devminor fields are
-stored for non-dev files (empty instead of zero), which broke the
-reproducibility with the previous versions.
-
-Since we are regenerating all our generated archives, take that
-opportunity to also bump the tar version.
-
-----------------------------------------
-Changes v2 -> v3;
-  - bump tar version  (Arnout)
-  - drop luajit patch to switch to git-download  (Arnout)
-  - reorder patches (package fixes first)
-  - fix hashes for two missed packages
-
-Changes v1 -> v2;
-  - drop applied preparatory patches
-  - split the update of hash files and runtime test in separate patches
-  - convert luajit
-  - add migration section in the manual
-  - small coding style in awk script
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Fabrice Fontaine (1):
-      package/tar: security bump to version 1.35
-
-Yann E. MORIN (21):
-      package/docker-compose: bump version
-      package/am33x-cm3: switch upstream
-      package/flutter-packages: fix and comment the shared _SOURCE variable
-      package/luajit: drop useless post-extract hook
-      support/download/git: handle git attributes
-      support/testing: add test for export-subst support in git-download
-      package/*: update hashes for packages with export-subst git attibute
-      *: update filename for git-download packages
-      docs/manual: document git backend handling of export-subst attribute
-      package/pkg-utils: add vendoring mechanism into generated archive filename
-      support/download: even more reproducible archives (until next time)
-      support/testing: update git tests
-      {boot, package}: update hashes of git, svn, go, and cargo archives
-      board: update hashes of git archives
-      docs/manual: document new archive version suffix
-      support/dependencies: require tar >= 1.35
-      support/testing: update hashes for generated archives
-      board: update hashes for generated achives
-      {boot,package}: update hashes for generated archives
-      docs/manual: update archives version suffixes
-      support/download: force fetching tags
-
- board/radxa/rock5b/patches/linux/linux.hash        |   2 +-
- board/toradex/apalis-imx6/patches/linux/linux.hash |   2 +-
- board/toradex/apalis-imx6/patches/uboot/uboot.hash |   2 +-
- boot/edk2/edk2.hash                                |   2 +-
- boot/vexpress-firmware/vexpress-firmware.hash      |   2 +-
- docs/manual/migrating.adoc                         |  58 +++++++++++++++++++
- package/abootimg/abootimg.hash                     |   2 +-
- package/aer-inject/aer-inject.hash                 |   2 +-
- package/am33x-cm3/am33x-cm3.hash                   |   2 +-
- package/am33x-cm3/am33x-cm3.mk                     |   2 +-
- package/armbian-firmware/armbian-firmware.hash     |   2 +-
- package/azure-iot-sdk-c/azure-iot-sdk-c.hash       |   2 +-
- package/balena-engine/balena-engine.hash           |   2 +-
- package/bat/bat.hash                               |   2 +-
- package/bayer2rgb-neon/bayer2rgb-neon.hash         |   2 +-
- package/bpftool/bpftool.hash                       |   2 +-
- package/brickd/brickd.hash                         |   2 +-
- package/c-capnproto/c-capnproto.hash               |   2 +-
- package/cni-plugins/cni-plugins.hash               |   2 +-
- package/containerd/containerd.hash                 |   2 +-
- package/crucible/crucible.hash                     |   2 +-
- package/dbus-triggerd/dbus-triggerd.hash           |   2 +-
- package/delve/delve.hash                           |   2 +-
- package/depot-tools/depot-tools.hash               |   2 +-
- package/docker-cli/docker-cli.hash                 |   2 +-
- package/docker-compose/docker-compose.hash         |   2 +-
- package/docker-compose/docker-compose.mk           |   2 +-
- package/docker-engine/docker-engine.hash           |   2 +-
- package/dtv-scan-tables/dtv-scan-tables.hash       |   2 +-
- package/dust/dust.hash                             |   2 +-
- package/edid-decode/edid-decode.hash               |   2 +-
- package/embiggen-disk/embiggen-disk.hash           |   2 +-
- package/eza/eza.hash                               |   2 +-
- package/firmware-utils/firmware-utils.hash         |   2 +-
- package/flannel/flannel.hash                       |   2 +-
- package/flashbench/flashbench.hash                 |   2 +-
- package/flutter-packages/flutter-packages.hash     |   2 +-
- package/flutter-packages/flutter-packages.mk       |   9 ++-
- package/flutter-pi/flutter-pi.hash                 |   2 +-
- package/freescale-imx/imx-lib/imx-lib.hash         |   2 +-
- package/gitlab-runner/gitlab-runner.hash           |   2 +-
- package/gocryptfs/gocryptfs.hash                   |   2 +-
- package/google-breakpad/google-breakpad.hash       |   2 +-
- .../gstreamer1/gst1-interpipe/gst1-interpipe.hash  |   2 +-
- .../gst1-plugins-bayer2rgb-neon.hash               |   2 +-
- package/gstreamer1/gst1-shark/gst1-shark.hash      |   3 +-
- package/hyperfine/hyperfine.hash                   |   2 +-
- package/ibm-sw-tpm2/ibm-sw-tpm2.hash               |   2 +-
- package/ivi-homescreen/ivi-homescreen.hash         |   2 +-
- package/kvmtool/kvmtool.hash                       |   2 +-
- package/libbroadvoice/libbroadvoice.hash           |   2 +-
- package/libcamera/libcamera.hash                   |   2 +-
- package/libdbi-drivers/libdbi-drivers.hash         |   2 +-
- package/libdbi/libdbi.hash                         |   2 +-
- package/libg7221/libg7221.hash                     |   2 +-
- package/libilbc/libilbc.hash                       |   2 +-
- package/libsilk/libsilk.hash                       |   2 +-
- package/libsvgtiny/libsvgtiny.hash                 |   2 +-
- package/libubox/libubox.hash                       |   2 +-
- package/libuci/libuci.hash                         |   2 +-
- package/libxmlrpc/libxmlrpc.hash                   |   2 +-
- package/libyuv/libyuv.hash                         |   2 +-
- .../linux-syscall-support.hash                     |   2 +-
- package/luajit/luajit.mk                           |   9 ---
- package/mender-artifact/mender-artifact.hash       |   2 +-
- package/mender-connect/mender-connect.hash         |   2 +-
- package/mender/mender.hash                         |   2 +-
- package/mmc-utils/mmc-utils.hash                   |   2 +-
- package/moby-buildkit/moby-buildkit.hash           |   2 +-
- package/mxsldr/mxsldr.hash                         |   2 +-
- package/nerdctl/nerdctl.hash                       |   2 +-
- .../netsurf-buildsystem/netsurf-buildsystem.hash   |   2 +-
- package/nushell/nushell.hash                       |   2 +-
- package/odhcp6c/odhcp6c.hash                       |   2 +-
- package/ogre/ogre.hash                             |   2 +-
- package/open62541/open62541.hash                   |   2 +-
- package/opkg-utils/opkg-utils.hash                 |   2 +-
- package/pcm-tools/pcm-tools.hash                   |   2 +-
- package/pcm-tools/pcm-tools.mk                     |   8 ---
- package/piglit/piglit.hash                         |   2 +-
- package/pkg-download.mk                            |   8 ++-
- package/pkg-utils.mk                               |   2 +-
- package/prelink-cross/prelink-cross.hash           |   2 +-
- package/procs/procs.hash                           |   2 +-
- package/psplash/psplash.hash                       |   2 +-
- package/qt-webkit-kiosk/qt-webkit-kiosk.hash       |   2 +-
- package/qt5/qt5coap/qt5coap.hash                   |   2 +-
- package/qt5/qt5knx/qt5knx.hash                     |   2 +-
- package/qt5/qt5location/qt5location.hash           |   2 +-
- package/qt5/qt5mqtt/qt5mqtt.hash                   |   2 +-
- package/qt5/qt5opcua/qt5opcua.hash                 |   2 +-
- .../qt5webengine-chromium-catapult.hash            |   2 +-
- package/ripgrep/ripgrep.hash                       |   2 +-
- package/rockchip-rkbin/rockchip-rkbin.hash         |   2 +-
- package/rtc-tools/rtc-tools.hash                   |   2 +-
- package/rtmpdump/rtmpdump.hash                     |   2 +-
- package/runc/runc.hash                             |   2 +-
- package/rust-bindgen/rust-bindgen.hash             |   2 +-
- package/sentry-cli/sentry-cli.hash                 |   2 +-
- package/signal-estimator/signal-estimator.hash     |   2 +-
- package/sox/sox.hash                               |   2 +-
- ...Fix-boundary-checking-in-base-256-decoder.patch |  33 -----------
- package/tar/tar.hash                               |   6 +-
- package/tar/tar.mk                                 |  16 ++++--
- package/tealdeer/tealdeer.hash                     |   2 +-
- package/tftpd/tftpd.hash                           |   2 +-
- package/ti-sgx-demos/ti-sgx-demos.hash             |   2 +-
- package/ti-sgx-km/ti-sgx-km.hash                   |   2 +-
- package/ti-sgx-um/ti-sgx-um.hash                   |   2 +-
- package/tinifier/tinifier.hash                     |   2 +-
- package/tl-expected/tl-expected.hash               |   2 +-
- package/tremor/tremor.hash                         |   2 +-
- package/ubus/ubus.hash                             |   2 +-
- package/uclibc-ng-test/uclibc-ng-test.hash         |   2 +-
- package/uemacs/uemacs.hash                         |   2 +-
- package/uhttpd/uhttpd.hash                         |   2 +-
- package/uqmi/uqmi.hash                             |   2 +-
- package/ustream-ssl/ustream-ssl.hash               |   2 +-
- package/vboot-utils/vboot-utils.hash               |   2 +-
- package/wilink-bt-firmware/wilink-bt-firmware.hash |   2 +-
- package/wtfutil/wtfutil.hash                       |   2 +-
- .../xdriver_xf86-video-intel.hash                  |   2 +-
- .../xdriver_xf86-video-openchrome.hash             |   2 +-
- package/x264/x264.hash                             |   2 +-
- package/yavta/yavta.hash                           |   2 +-
- support/dependencies/check-host-tar.sh             |  19 ++-----
- support/download/git                               |  62 ++++++++++++++++++++-
- support/download/helpers                           |   2 +-
- .../br2-external/git-hash/package/bad/bad.hash     |   2 +-
- .../package/export-subst/export-subst.hash         |   1 +
- .../git-hash/package/export-subst/export-subst.mk  |  10 ++++
- .../br2-external/git-hash/package/good/good.hash   |   2 +-
- .../git-partial-sha1-branch-head.hash              |   2 +-
- .../git-partial-sha1-reachable-by-branch.hash      |   2 +-
- .../git-partial-sha1-reachable-by-tag.hash         |   2 +-
- .../git-partial-sha1-tag-itself.hash               |   2 +-
- .../git-partial-sha1-tag-points-to.hash            |   2 +-
- .../git-sha1-branch-head/git-sha1-branch-head.hash |   2 +-
- .../git-sha1-reachable-by-branch.hash              |   2 +-
- .../git-sha1-reachable-by-tag.hash                 |   2 +-
- .../git-sha1-tag-itself/git-sha1-tag-itself.hash   |   2 +-
- .../git-sha1-tag-points-to.hash                    |   2 +-
- .../git-submodule-disabled.hash                    |   2 +-
- .../git-submodule-enabled.hash                     |   2 +-
- .../git-refs/package/git-tag/git-tag.hash          |   2 +-
- .../git-wrong-content/git-wrong-content.hash       |   2 +-
- .../05/482df734b3715b849ef4a3147a9b1b1f8cca38      | Bin 0 -> 35 bytes
- .../0f/db95cf4f3c5ed4003287649cabb33c5f843e26      | Bin 0 -> 197 bytes
- .../68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8      | Bin 0 -> 28 bytes
- .../6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0      | Bin 0 -> 112 bytes
- .../download/git-remote/repo.git/refs/heads/master |   2 +-
- support/testing/tests/download/test_git.py         |   4 ++
- 152 files changed, 299 insertions(+), 215 deletions(-)
- delete mode 100644 package/tar/0002-Fix-boundary-checking-in-base-256-decoder.patch
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/05/482df734b3715b849ef4a3147a9b1b1f8cca38
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/0f/db95cf4f3c5ed4003287649cabb33c5f843e26
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0
-
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
