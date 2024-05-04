@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0049C4345F
-	for <buildroot@archiver.kernel.org>; Sat,  4 May 2024 19:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 374C2C4345F
+	for <buildroot@archiver.kernel.org>; Sat,  4 May 2024 19:54:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AB5C835D9;
-	Sat,  4 May 2024 19:54:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3EB583750;
+	Sat,  4 May 2024 19:54:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cbcxOj6PZSV1; Sat,  4 May 2024 19:54:49 +0000 (UTC)
+ id j7g9iLDaUmAX; Sat,  4 May 2024 19:54:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 333148364F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C39DA83705
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 333148364F;
-	Sat,  4 May 2024 19:54:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C39DA83705;
+	Sat,  4 May 2024 19:54:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 854361BF836
- for <buildroot@lists.busybox.net>; Sat,  4 May 2024 19:54:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EBF3D1BF836
+ for <buildroot@lists.busybox.net>; Sat,  4 May 2024 19:54:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7EC29407A5
- for <buildroot@lists.busybox.net>; Sat,  4 May 2024 19:54:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5CDE407A5
+ for <buildroot@lists.busybox.net>; Sat,  4 May 2024 19:54:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nny-DaP9q4Ut for <buildroot@lists.busybox.net>;
- Sat,  4 May 2024 19:54:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ id v7NMR4NuTFW5 for <buildroot@lists.busybox.net>;
+ Sat,  4 May 2024 19:54:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
  helo=relay7-d.mail.gandi.net; envelope-from=contact@artur-rojek.eu;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 52D5C40674
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52D5C40674
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E3BF840674
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3BF840674
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 52D5C40674
- for <buildroot@buildroot.org>; Sat,  4 May 2024 19:54:38 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D3D002000B;
- Sat,  4 May 2024 19:54:35 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E3BF840674
+ for <buildroot@buildroot.org>; Sat,  4 May 2024 19:54:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1CCC72000A;
+ Sat,  4 May 2024 19:54:36 +0000 (UTC)
 From: Artur Rojek <contact@artur-rojek.eu>
 To: buildroot@buildroot.org
-Date: Sat,  4 May 2024 21:54:06 +0200
-Message-ID: <20240504195407.1409466-4-contact@artur-rojek.eu>
+Date: Sat,  4 May 2024 21:54:07 +0200
+Message-ID: <20240504195407.1409466-5-contact@artur-rojek.eu>
 X-Mailer: git-send-email 2.45.0
 In-Reply-To: <20240504195407.1409466-1-contact@artur-rojek.eu>
 References: <20240504195407.1409466-1-contact@artur-rojek.eu>
@@ -52,7 +52,7 @@ X-GND-Sasl: contact@artur-rojek.eu
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=artur-rojek.eu
-Subject: [Buildroot] [PATCH 3/4] package/uclibc: reintroduce sh3 support
+Subject: [Buildroot] [PATCH 4/4] package/kexec: reintroduce sh3 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,33 +74,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Allow uclibc to build with sh3 variant of the SuperH ISA.
+Allow kexec to build with sh3 variant of the SuperH ISA.
 
 Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
 ---
- package/uclibc/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/kexec/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 2555487f06d2..2b5fc140ad22 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_UCLIBC_ARCH_SUPPORTS
- 	default y if BR2_powerpc
- 	# see libc/sysdeps/linux/riscv64/sys/asm.h
- 	default y if BR2_RISCV_64 && (BR2_RISCV_ABI_LP64 || BR2_RISCV_ABI_LP64D)
-+	default y if BR2_sh3
- 	default y if BR2_sh4
- 	default y if BR2_sh4eb
- 	default y if BR2_sparc
-@@ -155,6 +156,7 @@ config BR2_UCLIBC_MIPS_NAN
- config BR2_UCLIBC_SH_TYPE
- 	string
- 	default "SH4"  if BR2_sh4 || BR2_sh4eb
-+	default "SH3"  if BR2_sh3
- 	depends on BR2_UCLIBC_TARGET_ARCH = "sh"
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index 707f8663a45b..ede91b113058 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -4,7 +4,8 @@ config BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+ 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
+ 		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+-		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || BR2_m68k
++		BR2_sh3 || BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || \
++		BR2_m68k
  
- config BR2_UCLIBC_SPARC_TYPE
+ config BR2_PACKAGE_KEXEC
+ 	bool "kexec"
 -- 
 2.45.0
 
