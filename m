@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01437C4345F
-	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 09:21:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF106C4345F
+	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 09:54:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE27C4175A;
-	Sun,  5 May 2024 09:21:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 670676060E;
+	Sun,  5 May 2024 09:54:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eeYbEd5sYlkl; Sun,  5 May 2024 09:21:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zkJiFaqLkmuH; Sun,  5 May 2024 09:54:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32F8941E4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45C4760619
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32F8941E4E;
-	Sun,  5 May 2024 09:21:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45C4760619;
+	Sun,  5 May 2024 09:54:37 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9063F1BF4E7
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 09:21:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5688B1BF4E7
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 09:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7CFBA400F9
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 09:21:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50195400F9
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 09:54:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 965yLGZUcOrM for <buildroot@lists.busybox.net>;
- Sun,  5 May 2024 09:21:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ id rJnRx4V9iWTd for <buildroot@lists.busybox.net>;
+ Sun,  5 May 2024 09:54:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1A8AB40B3F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A8AB40B3F
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1A8AB40B3F
- for <buildroot@buildroot.org>; Sun,  5 May 2024 09:21:47 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E2E8C13F89C;
- Sun,  5 May 2024 11:21:40 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 May 2024 11:21:40 +0200
-Date: Sun, 5 May 2024 11:21:40 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Brandon Maier <brandon.maier@collins.com>
-Message-ID: <ZjdPpKQw4Z1sKwi9@landeda>
-References: <20240503020000.3168109-1-brandon.maier@collins.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240503020000.3168109-1-brandon.maier@collins.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1714900904;
- bh=knvI2sPJ/WfXMB94/l2KnBKjfh/ex+/LERG4/ksYkIg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=B6uT1pNjLMVW2fT28q+ajHybLJ8EwhnQDq4EFi8HwfwDXVQfjuYYD+87AYUEoqn9Z
- qfoVkKGhDDhEXx3/t882CHJFqwnVAMDKpFShxKHCrETQqBDILbsn4IiFd+UUpXpLxA
- MYci0dEMZcsNf7QBSbmwkmX8H00jzkIIHmaysyL5qN6BLes1eouQrpauPnyM0x/1Cf
- ylscFQnVy+qVcDbga2cIs+hgOWJp6ObCH0mCUkbGwpfiHKb6n8yCrN85jbSTy7IiaB
- OFv+GPBRGwV7Ao3vfpZStsSfbLmS/xXs8Htg0TdnqZ49Il/KYjMoeilrnqyFobu0H0
- zfxe0f5MhzTkg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=B6uT1pNj
-Subject: Re: [Buildroot] [PATCH v3 1/4] package/bats-support: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27D3A400DC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27D3A400DC
+ for <buildroot@buildroot.org>; Sun,  5 May 2024 09:54:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1076686619; Sun,  5 May 2024 09:54:34 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 5 May 2024 11:53:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5b016de048fb5fd09b68828d07726c098c74862a
+X-Git-Newrev: f5257789d6f088f1e2a0a8b00e1d21d32d2497ac
+X-Patchwork-Hint: ignore
+Message-Id: <20240505095434.1076686619@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libglib2: update atomic patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,146 +58,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Brandon, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f5257789d6f088f1e2a0a8b00e1d21d32d2497ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-05-03 01:59 +0000, Brandon Maier via buildroot spake thusly:
-> This library provides support functions needed by the bats-assert and
-> bats-file libraries.
-> 
-> This library does not provide an installer. Manually install the files
-> under /usr/lib/bats/bats-support which is what the Arch Linux package
-> does[1]. This makes the library loadable using `bats_load_library`[2].
-> 
-> [1] https://gitlab.archlinux.org/archlinux/packaging/packages/bats-support/-/blob/main/PKGBUILD?ref_type=heads
-> [2] https://bats-core.readthedocs.io/en/stable/writing-tests.html#bats-load-library-load-system-wide-libraries
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-> ---
-[--SNIP--]
-> diff --git a/package/Config.in b/package/Config.in
-> index 38e9c94198..f1da714418 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -170,6 +170,7 @@ endmenu
->  menu "Development tools"
->  	source "package/avocado/Config.in"
->  	source "package/bats-core/Config.in"
-> +	source "package/bats-support/Config.in"
+Commit 929bffbf4bf8fcb91bda446777f907f32c782656 forgot to update patch
+number
+Moreover, replace it with a new iteration to follow upstream request [1]
+and avoid the following build host build failure with br-autobuild-1:
 
-While this looks like the thing to do, including the bats sub-packages
-from here is sub-optimal. Indeed, when all the series is applied, the
-menuconfig will look something like:
+/usr/bin/ld: cannot find /usr/lib64/libatomic.so.1.2.0: No such file or directory
 
-    [ ] bats-assert (NEW)
-    [*] bats
-    [ ]   bats-file (NEW)
-    [ ]   bats-support (NEW)
+Fixes: 929bffbf4bf8fcb91bda446777f907f32c782656
+ - http://autobuild.buildroot.org/results/a12b9c4436594818f4ce128595b429adf7d90e31
 
-This is not very nice-looking.
+[1]: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3606
 
-Instead, I've moved the 'source' statements to the bats-core package
-itself (elided for brevity; check the actual package for exact code):
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr: mention upstream commit now it's merged]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0005-link-with-latomic-when-needed.patch       | 45 -------------------
+ .../0006-link-with-latomic-when-needed.patch       | 52 ++++++++++++++++++++++
+ 2 files changed, 52 insertions(+), 45 deletions(-)
 
-    config BR2_PACKAGE_BATS_CORE
-        bool "bats-core"
-
-    if BR2_PACKAGE_BATS_CORE
-
-    source "package/bats-assert/Config.in"
-    source "package/bats-file/Config.in"
-    source "package/bats-support/Config.in"
-
-    endif
-
-Now the menuconfig looks nicer:
-
-    [*] bats
-    [ ]   bats-assert (NEW)
-    [ ]   bats-file (NEW)
-    [ ]   bats-support (NEW)
-
-As a consequence of the includes now being guarded by the if-endif
-conditional block, the dependency on bats-core is no longer needed on
-each package, so I also dropped it.
-
-Series applied to master with this little cleanup, thanks!
-
-Regards,
-Yann E. MORIN.
-
->  	source "package/binutils/Config.in"
->  	source "package/bitwise/Config.in"
->  	source "package/bsdiff/Config.in"
-> diff --git a/package/bats-support/Config.in b/package/bats-support/Config.in
-> new file mode 100644
-> index 0000000000..24b49cee1d
-> --- /dev/null
-> +++ b/package/bats-support/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_BATS_SUPPORT
-> +	bool "bats-support"
-> +	depends on BR2_PACKAGE_BATS_CORE # runtime
-> +	help
-> +	  bats-support is a supporting library providing common
-> +	  functions to test helper libraries written for Bats.
-> +
-> +	  https://github.com/bats-core/bats-support
-> diff --git a/package/bats-support/bats-support.hash b/package/bats-support/bats-support.hash
-> new file mode 100644
-> index 0000000000..847f39e7c7
-> --- /dev/null
-> +++ b/package/bats-support/bats-support.hash
-> @@ -0,0 +1,5 @@
-> +# Locally calculated
-> +sha256  7815237aafeb42ddcc1b8c698fc5808026d33317d8701d5ec2396e9634e2918f  bats-support-0.3.0.tar.gz
-> +
-> +# License files
-> +sha256  36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673  LICENSE
-> diff --git a/package/bats-support/bats-support.mk b/package/bats-support/bats-support.mk
-> new file mode 100644
-> index 0000000000..765e08ffce
-> --- /dev/null
-> +++ b/package/bats-support/bats-support.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# bats-support
-> +#
-> +################################################################################
-> +
-> +BATS_SUPPORT_VERSION = 0.3.0
-> +BATS_SUPPORT_SITE = $(call github,bats-core,bats-support,v$(BATS_SUPPORT_VERSION))
-> +BATS_SUPPORT_LICENSE = CC0-1.0
-> +BATS_SUPPORT_LICENSE_FILES = LICENSE
-> +
-> +define BATS_SUPPORT_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/bats/bats-support/src
-> +	$(INSTALL) -m 0755 $(@D)/*.bash -t $(TARGET_DIR)/usr/lib/bats/bats-support
-> +	$(INSTALL) -m 0755 $(@D)/src/*.bash -t $(TARGET_DIR)/usr/lib/bats/bats-support/src
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 2.44.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libglib2/0005-link-with-latomic-when-needed.patch b/package/libglib2/0005-link-with-latomic-when-needed.patch
+deleted file mode 100644
+index 275d86032b..0000000000
+--- a/package/libglib2/0005-link-with-latomic-when-needed.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From d1814dbd3a88c95a43d4c9805bb4a523cf62d97b Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 17 Sep 2023 20:42:00 +0200
+-Subject: [PATCH] link with -latomic when needed
+-
+-Some architecture such as sparc and some flavors of arm needs -latomic
+-to avoid the following build failure:
+-
+-gthread-posix.c:(.text+0xda8): undefined reference to `__atomic_compare_exchange_4'
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3586
+----
+- glib/meson.build | 1 +
+- meson.build      | 2 ++
+- 2 files changed, 3 insertions(+)
+-
+-diff --git a/glib/meson.build b/glib/meson.build
+-index c26a35e42..7a761306b 100644
+---- a/glib/meson.build
+-+++ b/glib/meson.build
+-@@ -426,6 +426,7 @@ libglib = library('glib-2.0',
+-     pcre2,
+-     platform_deps,
+-     thread_dep,
+-+    atomic_dep
+-   ],
+-   c_args : glib_c_args,
+-   objc_args : glib_c_args,
+-diff --git a/meson.build b/meson.build
+-index 25ae10fc2..5ae84b3b3 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -2130,6 +2130,8 @@ libffi_dep = dependency('libffi', version : '>= 3.0.0')
+- 
+- libz_dep = dependency('zlib')
+- 
+-+atomic_dep = cc.find_library('atomic', required: false)
+-+
+- # First check in libc, fallback to libintl, and as last chance build
+- # proxy-libintl subproject.
+- # FIXME: glib-gettext.m4 has much more checks to detect broken/uncompatible
+--- 
+-2.40.1
+-
+diff --git a/package/libglib2/0006-link-with-latomic-when-needed.patch b/package/libglib2/0006-link-with-latomic-when-needed.patch
+new file mode 100644
+index 0000000000..3b5a071010
+--- /dev/null
++++ b/package/libglib2/0006-link-with-latomic-when-needed.patch
+@@ -0,0 +1,52 @@
++From 4e6dc4dee0e1c6407113597180d9616b4f275f94 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 2 May 2024 14:02:17 +0200
++Subject: [PATCH] link with -latomic when needed
++
++Some architecture such as sparc and some flavors of arm needs -latomic
++to avoid the following build failure:
++
++gthread-posix.c:(.text+0xda8): undefined reference to `__atomic_compare_exchange_4'
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://gitlab.gnome.org/GNOME/glib/-/commit/4e6dc4dee0e1c6407113597180d9616b4f275f94
++---
++ glib/meson.build | 1 +
++ meson.build      | 9 +++++++++
++ 2 files changed, 10 insertions(+)
++
++diff --git a/glib/meson.build b/glib/meson.build
++index 24cbb664d4..b2dd569e1e 100644
++--- a/glib/meson.build
+++++ b/glib/meson.build
++@@ -419,6 +419,7 @@ libglib = library('glib-2.0',
++   include_directories : configinc,
++   link_with: [charset_lib, gnulib_lib],
++   dependencies : [
+++    atomic_dep,
++     gnulib_libm_dependency,
++     libiconv,
++     libintl_deps,
++diff --git a/meson.build b/meson.build
++index 46c5aa200a..8b42940558 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -2233,6 +2233,15 @@ libffi_dep = dependency('libffi', version : '>= 3.0.0')
++
++ libz_dep = dependency('zlib')
++
+++libatomic_test_code = '''
+++  int main (int argc, char ** argv) {
+++    return 0;
+++  }'''
+++atomic_dep = []
+++if cc.links(libatomic_test_code, args : '-latomic', name : 'check for -latomic')
+++  atomic_dep = cc.find_library('atomic')
+++endif
+++
++ # First check in libc, fallback to libintl, and as last chance build
++ # proxy-libintl subproject.
++ # FIXME: glib-gettext.m4 has much more checks to detect broken/uncompatible
++--
++2.44.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
