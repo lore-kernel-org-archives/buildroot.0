@@ -4,94 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 680ABC4345F
-	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 11:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E30DC4345F
+	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 13:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4CA35404C3;
-	Sun,  5 May 2024 11:52:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0082F40544;
+	Sun,  5 May 2024 13:01:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2iy4QxXoyJve; Sun,  5 May 2024 11:52:19 +0000 (UTC)
+ id MOmCig1EwAhq; Sun,  5 May 2024 13:01:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95BC840B5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00AF9400F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 95BC840B5B;
-	Sun,  5 May 2024 11:52:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 09F6F1BF36C
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 11:52:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00AF9400F9;
+	Sun,  5 May 2024 13:01:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 534D11BF4E6
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 13:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E965882120
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 11:52:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4071E60765
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 13:01:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BkElW_qpSr_o for <buildroot@lists.busybox.net>;
- Sun,  5 May 2024 11:52:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AEC97821DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEC97821DD
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AEC97821DD
- for <buildroot@busybox.net>; Sun,  5 May 2024 11:52:14 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-41b869326daso7387005e9.0
- for <buildroot@busybox.net>; Sun, 05 May 2024 04:52:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714909933; x=1715514733;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=wBe8cTWAA/y3wzAk50ApOZUWujb90roWAEyH8v9abhM=;
- b=ExDMgWtXIZC5pKwXaoqgWBYMCtEPEDZ6PDMcjSyVPvKgcr86T6goPfEpO5QolQQkeA
- rDzGY1eNGE4eTlXa2ACQu5fmTMtA9pkrWEPprn9jSm+1zZZZgmZq/+bpsr0zKCzWpORq
- R3hZuNZZqje3/1IBEXNoh77e4FEQuEWDCU6p+tODkM/rZze6V7rnbwf9WZvuFEjrdqwK
- +I0RKTGeRPDPYvwLaH9/3ZpO/To7buWVaRKESqc4G0Om4TjVnA0l8h89VNO3UG0yhRUI
- obVBrnP9aFnnPCmb7VptJw6EJR4kSaeyRXun86VvOBV9QMO5ssC40wVWWE/Z6qWgMQ4e
- vVzg==
-X-Gm-Message-State: AOJu0Yzas+/dj4ZM1DWiTOPhxicLRzlYt0N8WUleEIGxcSxdJebReeWs
- iuu01TkP5oHUaJK8Mfiywdr3v0EMQuDeMponj19ObZYSFPyHHW4NLozvK97fyNeTUIeCubBpHJ1
- YeA==
-X-Google-Smtp-Source: AGHT+IGV9ej4Z2FK32nRwbUbuNdDozX3Z8EcqsaFge6OYB8m12jMkgPGf1CV36UdRVc2Shm0LMHYww==
-X-Received: by 2002:a05:600c:1d0a:b0:41c:2699:dd9d with SMTP id
- l10-20020a05600c1d0a00b0041c2699dd9dmr7326662wms.28.1714909932584; 
- Sun, 05 May 2024 04:52:12 -0700 (PDT)
-Received: from xubuntu-23.. ([37.65.6.74]) by smtp.gmail.com with ESMTPSA id
- bh10-20020a05600c3d0a00b0041c130520fbsm12254212wmb.46.2024.05.05.04.52.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 May 2024 04:52:12 -0700 (PDT)
-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sun,  5 May 2024 13:51:52 +0200
-Message-Id: <20240505115152.24857-2-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240505115152.24857-1-francois.perrad@gadz.org>
-References: <20240505115152.24857-1-francois.perrad@gadz.org>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GSlaQ7lGJKrY for <buildroot@lists.busybox.net>;
+ Sun,  5 May 2024 13:01:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.67.36.65;
+ helo=mout01.posteo.de; envelope-from=egorenar-dev@posteo.net;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 744DB6075B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 744DB6075B
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 744DB6075B
+ for <buildroot@buildroot.org>; Sun,  5 May 2024 13:01:01 +0000 (UTC)
+Received: from submission (posteo.de [185.67.36.169]) 
+ by mout01.posteo.de (Postfix) with ESMTPS id 80FB5240029
+ for <buildroot@buildroot.org>; Sun,  5 May 2024 15:00:58 +0200 (CEST)
+Received: from customer (localhost [127.0.0.1])
+ by submission (posteo.de) with ESMTPSA id 4VXPmT6wXXz9rxL;
+ Sun,  5 May 2024 15:00:57 +0200 (CEST)
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+To: buildroot@buildroot.org
+Date: Sun,  5 May 2024 13:00:51 +0000
+Message-ID: <20240505130051.17240-1-egorenar-dev@posteo.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1714909933; x=1715514733; darn=busybox.net;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=wBe8cTWAA/y3wzAk50ApOZUWujb90roWAEyH8v9abhM=;
- b=b/TwboQX4ZsZ5Sjo5aJ6w8W0+fdP/QrSE3uR3fHc4LBMQ2kr2Orjobo3+9F1+b1sGH
- icsmVIWoOEiBNUJWHKANYmt0JG8zSz7DfYLmYT67HdIlzJHvCBP5cOvcVvqzmUrR53A+
- bPZ5QCpnFuTGtqmPl67D8zEIhdqc7ObY3YYt7/mO71QfbWevMij+6IBGrLiZVgn1TgjB
- g9rMUEILubuG9gUbKzqSbtR/NME7XUu5Ed1dFfWFwDe3qPcgVgpljU1mz+ZFY6tM1g9W
- rIjbRvB1Yzp78654BcTya/FFzxEUvTDG8F2NaW02NX+C4wbHKOQKypSQL0Pv2AwG0us6
- 3LCQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=posteo.net; s=2017; 
+ t=1714914058; bh=f9yD3iNzKMfgIIab6o4CSFi8S1BJQXxcqPeyCimoNAQ=;
+ h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
+ Content-Transfer-Encoding:From;
+ b=EQHdAQT7Dxn749BCtozjIDYQ/A45sxugQeXSKAnGPVz9QhCxOakLCwREEJZG4XBPV
+ +/hHUvMxmFBq3SUKsALKXmNlOExnJ+K7VWlj1BW0eKA2PNNw/j78HDbhhI/n9x1a10
+ wP8glKRz/BEVf52WEGWQbBL+GnDvQXeJsPdKqbX85qip67HP9P6mKI6XqyoMRrWzDW
+ JoeyWDa+0dqV66JBbMVLRtCh4lbqhUAhyWGjiSECn2De9VZi1KofeIm7arD9u2V+mD
+ y2cBS2fPfMe8n7FHy7VgEK1fWgk4aCEFRL8QtF3Mg6kOWbJpyk4MHcIrcPoqC4KtDa
+ O4RXLJRgpm8gQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=b/TwboQX
-Subject: [Buildroot] [PATCH 2/2] configs/olimex_imx233_olinuxino: configure
- eth0 with DHCP
+ header.from=posteo.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=posteo.net header.i=@posteo.net header.a=rsa-sha256
+ header.s=2017 header.b=EQHdAQT7
+Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: bump version to
+ 0.9.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,30 +79,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Alexander Egorenkov <egorenar-dev@posteo.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 ---
- configs/olimex_imx233_olinuxino_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/multipath-tools/multipath-tools.hash | 2 +-
+ package/multipath-tools/multipath-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index 647292899..7049cfeac 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -7,6 +7,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index 03a2867144a7..03b36f008ec4 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  8f0a7ddc01137d0f90ac3ef5700131dfbd6cf3bbbccdcfa317e8379efa328d59  multipath-tools-0.9.7.tar.gz
++sha256  0f8cfe691d54192c7593cd932e3080bcd35d25454ae2ebb4043213b38eec34ab  multipath-tools-0.9.8.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index 164d85060046..7547f02dbe63 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+BR2_SYSTEM_DHCP="eth0"
+-MULTIPATH_TOOLS_VERSION = 0.9.7
++MULTIPATH_TOOLS_VERSION = 0.9.8
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
  
- # For automatic firmware loading
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ MULTIPATH_TOOLS_LICENSE = \
 -- 
-2.40.1
+2.45.0
 
 _______________________________________________
 buildroot mailing list
