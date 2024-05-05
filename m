@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80F4AC4345F
-	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 09:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D8F8C4345F
+	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 11:18:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08BA660619;
-	Sun,  5 May 2024 09:57:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A5194026E;
+	Sun,  5 May 2024 11:18:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hgc2qcIPN1Lp; Sun,  5 May 2024 09:57:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a8xCvwGxTLSh; Sun,  5 May 2024 11:18:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D65360626
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D5A240273
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D65360626;
-	Sun,  5 May 2024 09:57:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2EC081BF4E7
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 09:57:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D5A240273;
+	Sun,  5 May 2024 11:18:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CDD221BF36C
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 11:18:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B23A400F9
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 09:57:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C70064017F
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 11:18:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ik92KSPDfFL8 for <buildroot@lists.busybox.net>;
- Sun,  5 May 2024 09:57:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d9uVpjeskOq7 for <buildroot@lists.busybox.net>;
+ Sun,  5 May 2024 11:18:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B464A400DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B464A400DC
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B464A400DC
- for <buildroot@buildroot.org>; Sun,  5 May 2024 09:57:14 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5EA6413F8BA;
- Sun,  5 May 2024 11:57:09 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 May 2024 11:57:09 +0200
-Date: Sun, 5 May 2024 11:57:09 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <ZjdX9RhyxRyCVdbH@landeda>
-References: <20240503183132.915691-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240503183132.915691-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1714903031;
- bh=0/P4U4NuZkv3b/YxKZQYfSJoeHO+AQ68r+rMGfRWHrQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=O60vrIjnv7j2LIYE0ZNHs03qiuLQz0WpMPFqe/hGKOnc3ZhoEnqWF70zQoM8E1nfE
- povOJozm1H33ggLQ93iAXrAQ4oHidQK6YiBtVitX/IiE4LhQrGEWNEolZXScr/uIL8
- GmzoNC3Tv4DPRmdw3EFtNrOY1pDaznFFRbUoIvKOJmTcZRS3WtCpjL6Mpe4y82NE3E
- USqkejWtj41yA4dsz7AA5tCdlsjmXiQCOvOq9t2F2xsTg86FmT/YlWAwRzuNHnhZgc
- PHfOxpybVoh7hzpNKEGNiUzcUux7vhQnFskil+6qpD/02BjUr4Pov4nwIo/qh8n7Xz
- DwYzvKGM5u/Gg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=O60vrIjn
-Subject: Re: [Buildroot] [PATCH 1/1] package/libglib2: update atomic patch
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80E854015E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80E854015E
+ for <buildroot@buildroot.org>; Sun,  5 May 2024 11:18:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4D36D86639; Sun,  5 May 2024 11:18:34 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 5 May 2024 13:14:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f5257789d6f088f1e2a0a8b00e1d21d32d2497ac
+X-Git-Newrev: 4eeb69c9835450da8af8f55c776a7774914e2102
+X-Patchwork-Hint: ignore
+Message-Id: <20240505111834.4D36D86639@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/proj: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,40 +58,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4eeb69c9835450da8af8f55c776a7774914e2102
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-05-03 20:31 +0200, Fabrice Fontaine spake thusly:
-> Commit 929bffbf4bf8fcb91bda446777f907f32c782656 forgot to update patch
-> number
-> Moreover, replace it with a new iteration to follow upstream request [1]
-> and avoid the following build host build failure with br-autobuild-1:
-> 
-> /usr/bin/ld: cannot find /usr/lib64/libatomic.so.1.2.0: No such file or directory
-> 
-> Fixes: 929bffbf4bf8fcb91bda446777f907f32c782656
->  - http://autobuild.buildroot.org/results/a12b9c4436594818f4ce128595b429adf7d90e31
-> 
-> [1]: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3606
+NPTL is mandatory since bump to version 9.3.0 in commit
+57aba033e6cc81b95d006227c45a15eb3fc77d07 and
+https://github.com/OSGeo/PROJ/commit/ce080251225d16e11e139a5ebe07cf608fe022b2:
 
-This has now been merged, so I tweaked the patch to refer to the actual
-commit rather than the MR.
+/home/buildroot/instance-0/output-1/build/proj-9.3.0/src/iso19111/factory.cpp: In member function 'std::shared_ptr<osgeo::proj::io::SQLiteHandle> osgeo::proj::io::SQLiteHandleCache::getHandle(const std::string&, PJ_CONTEXT*)':
+/home/buildroot/instance-0/output-1/build/proj-9.3.0/src/iso19111/factory.cpp:622:9: error: 'pthread_atfork' was not declared in this scope; did you mean 'pthread_attr_t'?
+  622 |         pthread_atfork(nullptr, nullptr,
+      |         ^~~~~~~~~~~~~~
+      |         pthread_attr_t
 
-Regards,
-Yann E. MORIN.
+Fixes: 57aba033e6cc81b95d006227c45a15eb3fc77d07
+ - http://autobuild.buildroot.org/results/392664375c5bc5f047d39bff31534a226e8ea526
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gdal/Config.in       | 6 +++---
+ package/libgeotiff/Config.in | 6 +++---
+ package/postgis/Config.in    | 6 +++---
+ package/proj/Config.in       | 6 +++---
+ 4 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/package/gdal/Config.in b/package/gdal/Config.in
+index 839a1bd7ea..6ee088ce0c 100644
+--- a/package/gdal/Config.in
++++ b/package/gdal/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_GDAL
+ 	# configure can't find proj, when linking statically
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # proj
+ 	depends on BR2_USE_WCHAR # proj
+ 	select BR2_PACKAGE_GIFLIB
+ 	select BR2_PACKAGE_JPEG
+@@ -25,8 +25,8 @@ config BR2_PACKAGE_GDAL
+ 
+ 	  https://gdal.org/
+ 
+-comment "gdal needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
++comment "gdal needs a toolchain w/ C++, dynamic library, gcc >= 4.7, NPTL, wchar"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+diff --git a/package/libgeotiff/Config.in b/package/libgeotiff/Config.in
+index 7ed296fb25..f07c994361 100644
+--- a/package/libgeotiff/Config.in
++++ b/package/libgeotiff/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBGEOTIFF
+ 	bool "libgeotiff"
+ 	depends on BR2_INSTALL_LIBSTDCPP # proj
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # proj
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # proj
+ 	depends on BR2_USE_WCHAR # proj
+ 	select BR2_PACKAGE_PROJ
+ 	select BR2_PACKAGE_TIFF
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBGEOTIFF
+ 
+ 	  https://github.com/OSGeo/libgeotiff
+ 
+-comment "libgeotiff needs a toolchain w/ C++, gcc >= 4.7, threads, wchar"
++comment "libgeotiff needs a toolchain w/ C++, gcc >= 4.7, NPTL, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+diff --git a/package/postgis/Config.in b/package/postgis/Config.in
+index 78569d63be..593c0dc1f3 100644
+--- a/package/postgis/Config.in
++++ b/package/postgis/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_POSTGIS
+ 	depends on BR2_PACKAGE_POSTGRESQL_FULL
+ 	depends on BR2_INSTALL_LIBSTDCPP # libgeos, proj
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libgeos
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libgeos, proj
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # proj
+ 	depends on BR2_USE_WCHAR # libgeos, proj
+ 	select BR2_PACKAGE_LIBGEOS
+ 	select BR2_PACKAGE_PROJ
+@@ -17,6 +17,6 @@ config BR2_PACKAGE_POSTGIS
+ 
+ 	  https://postgis.net/
+ 
+-comment "postgis needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
++comment "postgis needs a toolchain w/ C++, NPTL, wchar, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+diff --git a/package/proj/Config.in b/package/proj/Config.in
+index 1952fc7d9a..6d172e2ee9 100644
+--- a/package/proj/Config.in
++++ b/package/proj/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PROJ
+ 	bool "proj"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_SQLITE
+ 	help
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_PROJ
+ 
+ 	  http://proj4.org/
+ 
+-comment "proj needs a toolchain w/ C++, gcc >= 4.7, threads, wchar"
++comment "proj needs a toolchain w/ C++, gcc >= 4.7, NPTL, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
