@@ -1,74 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE515C4345F
-	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 15:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9725EC4345F
+	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 15:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7936E4058A;
-	Sun,  5 May 2024 15:44:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p14Rt9tzyV4k; Sun,  5 May 2024 15:44:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F35CB40592
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F35CB40592;
-	Sun,  5 May 2024 15:44:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0BB7C1BF82D
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 15:44:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0674980BDA
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 15:44:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 582E780DCF;
+	Sun,  5 May 2024 15:53:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qx0uRq6juT9q for <buildroot@lists.busybox.net>;
- Sun,  5 May 2024 15:44:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EBBB08141F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBBB08141F
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EBBB08141F
- for <buildroot@buildroot.org>; Sun,  5 May 2024 15:44:26 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 101E713F8B5;
- Sun,  5 May 2024 17:44:23 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 05 May 2024 17:44:22 +0200
-Date: Sun, 5 May 2024 17:44:22 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Sergey Matyukevich <geomatsi@gmail.com>
-Message-ID: <ZjepViPtMWJL05DF@landeda>
-References: <20240505153103.2031941-1-geomatsi@gmail.com>
+ id C3_bqFzAjT1Y; Sun,  5 May 2024 15:53:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DF2280E7E
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DF2280E7E;
+	Sun,  5 May 2024 15:53:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 32DB71BF82D
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 15:53:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0930D80E70
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 15:53:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 28hsfaY1tpUY for <buildroot@lists.busybox.net>;
+ Sun,  5 May 2024 15:53:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 97E8A80DCF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97E8A80DCF
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 97E8A80DCF
+ for <buildroot@buildroot.org>; Sun,  5 May 2024 15:53:53 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-34d9c9f2cf0so927018f8f.3
+ for <buildroot@buildroot.org>; Sun, 05 May 2024 08:53:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1714924431; x=1715529231;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=I3yZWtqye8MOOUpn0ZH7L0s5ucvItoTmhTROMo/iGvk=;
+ b=qBRA/S1iAgqzr1JAwxt7GJc/WQesVtv1/2RQTBNwSf5ZszHyun/HVF3UsNUcl1ez7x
+ RvBQI4Mof3Pq8uxal6tUswidwesn+t+nkpX6JLPVtPCxIZvX2A1+BZrH8u6bnUkEa9GO
+ wHQEB6KsSreu/t9qIepXMYulj5GiupfxFvPqKZfNG0tEeQoYRY/ikr5NdQhhVzjuVBj1
+ zPWgYS/YdEmDxVCfdLG3oSpre32CLikjgHYvjfEH8JRfq0oOFZtzXVuHFDp2dyTfcmgS
+ qNJIwkNDNEqHD0xx1Nv4Ano6pN71njHsUeIrtz5gPut6JOzsoFoP9o1Dnzr2wuvrBWIL
+ K7Rw==
+X-Gm-Message-State: AOJu0Ywndr5dIsMHckJgwtHVum8ceYV2Qwh2lGM82G8YoNDHlluxwkRi
+ iWwCuWkei0NtU5fPfzel47ZORvOEuygr2MPnFsQwO6qHu/a99nGEQ9qUyw==
+X-Google-Smtp-Source: AGHT+IGLS6xbYYJQA9Pg32z1XyP622j+C6JPbGDUW4rnBG4kYyyxoaYdlDc3nvFlw5mrqwsXFuSluA==
+X-Received: by 2002:adf:fc44:0:b0:34c:fa08:791c with SMTP id
+ e4-20020adffc44000000b0034cfa08791cmr6349531wrs.45.1714924430974; 
+ Sun, 05 May 2024 08:53:50 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ h4-20020adff4c4000000b0034cee43238fsm8469951wrp.27.2024.05.05.08.53.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 05 May 2024 08:53:50 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  5 May 2024 17:53:49 +0200
+Message-ID: <20240505155349.1149835-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240505153103.2031941-1-geomatsi@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1714923865;
- bh=oRQrf1rxUxHiTuUjWr1XSRQDrnSq7ykrtKdmsH5ndfA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=j+XFPnHifzoF6LfVchStpdWMPOCPoboaxW8Zi99HZzD74lDXJRWEQqUSCOpRfwCTH
- EcNOF3ZpJpSXCGfp8kCHK7UwWRfVwOjELtFYh0Sb44M1isGwU72lPa3DgpiupMs0hN
- xDXAFUxaDwaFdVvgv7I1f8k4jW3TephRbQjq5QAYM88fAl0o5SZ2VRscoeNDlY4Jul
- GZmEdxshRP6eCq4RVY2NS3teqwxqM/OI0y9MTQDB2cxtNk3wEQWcewcW20dpsC0Xp8
- JGWZcF6j+UkkjbbMIHC3zgaxh46vKcJ7b+PnyMa0OBeMeVm+zQgSYdsR2itgeVHfsE
- Tt7eI43lsxHkg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1714924431; x=1715529231; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=I3yZWtqye8MOOUpn0ZH7L0s5ucvItoTmhTROMo/iGvk=;
+ b=SNZY2naH6ZLPQwLplJW0B33ngvbsFe7H0QfrnqC6CpKGIKAODrKMU7Rpcg7LqAAAcu
+ //nVezQpIaAnniF9oUTHAhpfr3q1XpHBJ6aAOxaAc8EfGXC3UUW56w4e5yoBYHDyRcJ0
+ s/kF5tCiLq0gkASuKjVYQBcMmHOXnnlWD+2/736hROia9j5DysHT9kkTfgG76ZG7+p0M
+ 0+iRtTdHPM8DLhV+G1jHJVLeSeS9kH2So3wZfl37RFj/u/6EISfMONj/rkjqocWd1Lgp
+ cdOQ5F7h0gOLoEiI+B+Ssn0qv1w1Mki+Tq+GUwe1iSP8DOKhmnaYhHkReVHWinDEPCKN
+ dk6g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=j+XFPnHi
-Subject: Re: [Buildroot] [PATCH 1/1] configs/orangepi_zero2w: new board
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=SNZY2naH
+Subject: [Buildroot] [PATCH 1/1] package/pppd: fix build with kernel < 4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,62 +100,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sergey, All,
+Fix the following build failure with kernel < 4.7 raised since bump to
+version 2.5.0 in commit 0c15169f5ae57d88a77df34cc896044a37c9597b and
+https://github.com/ppp-project/ppp/commit/81ad945630120cc1c27c8bb00503be42b76ff202:
 
-On 2024-05-05 18:30 +0300, Sergey Matyukevich spake thusly:
-> This patch adds basic support for the new OrangePi Zero2W board:
-> - http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Zero-2W.html
-> 
-> Brief summary of the board features:
-> - H618 Allwinner SoC
->   - Quad-Core ARM Cortex-A53 Processor 1.5GHz
->   - Mali G31 MP2 GPU
-> - LPDDR4: 1GB/2GB/4GB
-> - Wi-Fi5.0+BT 5.0
-> - 2x Type-C USB 2.0
-> - 1x Mini HDMI
-> - Wi-Fi 5.0 + BT 5.0
-> - 40-pin expansion interface (GPIO / UART / I2C / SPI / PWM)
-> - 24-pin expansion interface (2x USB 2.0 / ETH / IR / audio)
-> 
-> BSP includes the following components:
-> - mainline ATF v2.10
-> - mainline U-Boot v2024.04
-> - mainline Linux kernel v6.8
-> 
-> No custom scripts required: all is covered by common orangepi scripts.
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
->  DEVELOPERS                                |  1 +
->  board/orangepi/orangepi-zero2w/readme.txt | 32 +++++++++++++
->  configs/orangepi_zero2w_defconfig         | 55 +++++++++++++++++++++++
+sys-linux.c: In function 'get_ppp_stats_rtnetlink':
+sys-linux.c:1783:29: error: field 'ifsm' has incomplete type
+ 1783 |         struct if_stats_msg ifsm;
+      |                             ^~~~
 
-    $ ./utils/docker-run make check-package
-    configs/orangepi_zero2w_defconfig:0: missing BR2_DOWNLOAD_FORCE_CHECK_HASHES
+Fixes:
+ - http://autobuild.buildroot.org/results/82392df447f650f241f23e59e65131fb4a930010
 
-We're now requiring that defconfig files ensure that all downloads have
-their hashes checked, even for cutom versions.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...pile-with-older-Linux-kernel-headers.patch | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 package/pppd/0005-pppd-sys-linux-Fix-compile-with-older-Linux-kernel-headers.patch
 
-Please see my previous explanations to Francois earlier:
-    https://lore.kernel.org/buildroot/ZjeDWeQ-Jnutgk0G@landeda/
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/pppd/0005-pppd-sys-linux-Fix-compile-with-older-Linux-kernel-headers.patch b/package/pppd/0005-pppd-sys-linux-Fix-compile-with-older-Linux-kernel-headers.patch
+new file mode 100644
+index 0000000000..46c293103a
+--- /dev/null
++++ b/package/pppd/0005-pppd-sys-linux-Fix-compile-with-older-Linux-kernel-headers.patch
+@@ -0,0 +1,66 @@
++From 7a3f478a4b7128d4f70ea64d99fedec766b1c009 Mon Sep 17 00:00:00 2001
++From: Jaco Kroon <jaco@uls.co.za>
++Date: Tue, 31 Oct 2023 11:47:21 +0200
++Subject: [PATCH] pppd/sys-linux: Fix compile with older Linux kernel headers
++ (#452)
++
++When compiling pppd against kernel headers which don't provide
++the definitions for the NETLINK mechanisms, leave out the code
++which uses NETLINK, so as to avoid getting compile errors.
++
++Upstream commit in Linux refers.
++
++commit 10c9ead9f3c6bb24bddc9a96681f7d58e6623966
++Author: Roopa Prabhu <roopa@cumulusnetworks.com>
++Date:   Wed Apr 20 08:43:43 2016 -0700
++rtnetlink: add new RTM_GETSTATS message to dump link stats
++
++This commit adds the #defines and structs used, so simply not compiling
++this code if the required #defines isn't there should solve the problem.
++
++Closes: #450
++
++Signed-off-by: Jaco Kroon <jaco@uls.co.za>
++Upstream: https://github.com/ppp-project/ppp/commit/7a3f478a4b7128d4f70ea64d99fedec766b1c009
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ pppd/sys-linux.c | 12 ++----------
++ 1 file changed, 2 insertions(+), 10 deletions(-)
++
++diff --git a/pppd/sys-linux.c b/pppd/sys-linux.c
++index 561b150f2..a8d6cd95b 100644
++--- a/pppd/sys-linux.c
+++++ b/pppd/sys-linux.c
++@@ -131,16 +131,6 @@
++ #include <linux/netlink.h>
++ #include <linux/rtnetlink.h>
++ #include <linux/if_link.h>
++-
++-/* Attempt at retaining compile-support with older than 4.7 kernels, or kernels
++- * where RTM_NEWSTATS isn't defined for whatever reason.
++- */
++-#ifndef RTM_NEWSTATS
++-#define RTM_NEWSTATS 92
++-#define RTM_GETSTATS 94
++-#define IFLA_STATS_LINK_64 1
++-#endif
++-
++ #include <linux/if_addr.h>
++ 
++ /* glibc versions prior to 2.24 do not define SOL_NETLINK */
++@@ -1776,6 +1766,7 @@ get_ppp_stats_ioctl(int u, struct pppd_stats *stats)
++ static int
++ get_ppp_stats_rtnetlink(int u, struct pppd_stats *stats)
++ {
+++#ifdef RTM_NEWSTATS
++     static int fd = -1;
++ 
++     struct {
++@@ -1825,6 +1816,7 @@ get_ppp_stats_rtnetlink(int u, struct pppd_stats *stats)
++ err:
++     close(fd);
++     fd = -1;
+++#endif
++     return 0;
++ }
++ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
