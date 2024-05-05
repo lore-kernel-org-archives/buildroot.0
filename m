@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE131C4345F
-	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 15:38:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AE49C4345F
+	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 15:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70D8840105;
-	Sun,  5 May 2024 15:38:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA8D740690;
+	Sun,  5 May 2024 15:38:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gz0XI6jcj51w; Sun,  5 May 2024 15:38:30 +0000 (UTC)
+ id FFTsr2EsPJzT; Sun,  5 May 2024 15:38:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2261340181
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2226A40372
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2261340181;
-	Sun,  5 May 2024 15:38:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3206E1BF870
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2226A40372;
+	Sun,  5 May 2024 15:38:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CED811BF82D
  for <buildroot@lists.busybox.net>; Sun,  5 May 2024 15:38:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26266400B8
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 15:38:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7640605F1
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 15:38:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nggnsPFzjiaj for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O83EhGftFRzD for <buildroot@lists.busybox.net>;
  Sun,  5 May 2024 15:38:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C730C400A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD130605A4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C730C400A6
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD130605A4
  for <buildroot@buildroot.org>; Sun,  5 May 2024 15:38:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7A13866B9; Sun,  5 May 2024 15:38:17 +0000 (UTC)
+ id 98AF98666D; Sun,  5 May 2024 15:38:17 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 5 May 2024 17:28:41 +0200
+Date: Sun, 5 May 2024 17:28:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6534c7fb98edec8a0bde5e95a34987c1939f3761
-X-Git-Newrev: b3819b761f4a06bc75fe33b785e5ff2cecc5d211
+X-Git-Oldrev: a239b6440e90d7cdea3c1a3ef3ec1ff7b24ce52c
+X-Git-Newrev: 6534c7fb98edec8a0bde5e95a34987c1939f3761
 X-Patchwork-Hint: ignore
-Message-Id: <20240505153817.A7A13866B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ledmon: bump to version 1.0.0
+Message-Id: <20240505153817.98AF98666D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gptfdisk: bump to version 1.0.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,423 +59,231 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6217951481113774046=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6217951481113774046==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b3819b761f4a06bc75fe33b785e5ff2cecc5d211
+commit: https://git.buildroot.net/buildroot/commit/?id=6534c7fb98edec8a0bde5e95a34987c1939f3761
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Add host-autoconf-archive mandatory dependency
-- Drop patches (already in version)
+Drop second to fourth patches (already in version)
 
-https://github.com/intel/ledmon/releases/tag/v1.0.0
+https://sourceforge.net/p/gptfdisk/code/ci/53ac725a88a616b9f3395500d6e520aa04742fa5/tree/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ce-nonstandard-on_exit-function-by-atexit.patch | 223 ---------------------
- .../0002-Fix-unknown-type-name-ssize_t-error.patch |  44 ----
- package/ledmon/0003-Add-disable-doc-option.patch   |  63 ------
- package/ledmon/ledmon.hash                         |   2 +-
- package/ledmon/ledmon.mk                           |   7 +-
- 5 files changed, 5 insertions(+), 334 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...-crash-of-sgdisk-when-compiled-with-lates.patch | 60 ----------------------
+ ...reference-when-duplicating-string-argumen.patch | 44 ----------------
+ ...d.cc-to-deal-with-minor-change-in-libuuid.patch | 41 ---------------
+ package/gptfdisk/gptfdisk.hash                     |  6 +--
+ package/gptfdisk/gptfdisk.mk                       |  2 +-
+ 6 files changed, 4 insertions(+), 150 deletions(-)
 
-diff --git a/package/ledmon/0001-Replace-nonstandard-on_exit-function-by-atexit.patch b/package/ledmon/0001-Replace-nonstandard-on_exit-function-by-atexit.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 8dd76ac53e..fd39d6e0b6 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -762,7 +762,6 @@ package/gpm/0005-fix-building-w-newer-glibc.patch lib_patch.Upstream
+ package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch lib_patch.Upstream
+ package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
+-package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch lib_patch.Upstream
+ package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
+ package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch lib_patch.Upstream
+ package/grpc/0003-host-grpc-only-cpp-plugin.patch lib_patch.Upstream
+diff --git a/package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch b/package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch
 deleted file mode 100644
-index 7a89c3f1a4..0000000000
---- a/package/ledmon/0001-Replace-nonstandard-on_exit-function-by-atexit.patch
+index bdeedd95cc..0000000000
+--- a/package/gptfdisk/0002-Fix-failure-crash-of-sgdisk-when-compiled-with-lates.patch
 +++ /dev/null
-@@ -1,223 +0,0 @@
--From e57ad4c71cce734de7f8aa75e84fce97bc148c2b Mon Sep 17 00:00:00 2001
--From: Maksim Kiselev <bigunclemax@gmail.com>
--Date: Mon, 15 May 2023 14:46:56 +0300
--Subject: [PATCH] Replace nonstandard on_exit() function by atexit()
+@@ -1,60 +0,0 @@
+-From 5d5e76d369a412bfb3d2cebb5fc0a7509cef878d Mon Sep 17 00:00:00 2001
+-From: Rod Smith <rodsmith@rodsbooks.com>
+-Date: Fri, 15 Apr 2022 18:10:14 -0400
+-Subject: [PATCH] Fix failure & crash of sgdisk when compiled with latest
+- popt (commit 740; presumably eventually release 1.19)
 -
--on_exit() is not portable and not available on the C libraries musl
--and uClibc.
--
--So let's replace it with standard atexit() function.
--
--Upstream: https://github.com/intel/ledmon/pull/139
--
--Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+-[Retrieved from:
+-https://sourceforge.net/p/gptfdisk/code/ci/5d5e76d369a412bfb3d2cebb5fc0a7509cef878d/]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- src/ledctl.c | 12 ++++-------
-- src/ledmon.c | 59 +++++++++++++++++++++++++++-------------------------
-- 2 files changed, 35 insertions(+), 36 deletions(-)
+- NEWS      | 8 ++++++++
+- gptcl.cc  | 2 +-
+- support.h | 2 +-
+- 3 files changed, 10 insertions(+), 2 deletions(-)
 -
--diff --git a/src/ledctl.c b/src/ledctl.c
--index 7a89a24..10fd57a 100644
----- a/src/ledctl.c
--+++ b/src/ledctl.c
--@@ -214,15 +214,11 @@ static void ibpi_state_fini(struct ibpi_state *p)
--  *
--  * This is internal function of ledctl utility. The function cleans up a memory
--  * allocated for the application and closes all opened handles. This function is
--- * design to be registered as on_exit() handler function.
--- *
--- * @param[in]      status         exit status of the ledctl application.
--- * @param[in]      ignored        function ignores this argument.
--+ * design to be registered as atexit() handler function.
--  *
--  * @return The function does not return a value.
--  */
---static void _ledctl_fini(int status __attribute__ ((unused)),
---			 void *ignore __attribute__ ((unused)))
--+static void _ledctl_fini(void)
-- {
-- 	sysfs_reset();
-- 	list_erase(&ibpi_list);
--@@ -948,7 +944,7 @@ static char *ledctl_strstatus(ledctl_status_code_t s)
--  * @brief Application's entry point.
--  *
--  * This is the entry point of ledctl utility. This function does all the work.
--- * It allocates and initializes all used structures. Registers on_exit()
--+ * It allocates and initializes all used structures. Registers atexit()
--  * handlers.
--  * Then the function parses command line options and commands given and scans
--  * sysfs tree for controllers, block devices and RAID devices. If no error is
--@@ -983,7 +979,7 @@ int main(int argc, char *argv[])
-- 	status = _init_ledctl_conf();
-- 	if (status != LEDCTL_STATUS_SUCCESS)
-- 		return status;
---	if (on_exit(_ledctl_fini, progname))
--+	if (atexit(_ledctl_fini))
-- 		exit(LEDCTL_STATUS_ONEXIT_ERROR);
-- 	slot_request_init(&slot_req);
-- 	status = _cmdline_parse(argc, argv, &slot_req);
--diff --git a/src/ledmon.c b/src/ledmon.c
--index 6f52fd6..1329295 100644
----- a/src/ledmon.c
--+++ b/src/ledmon.c
--@@ -57,6 +57,19 @@
-- #include "utils.h"
-- #include "vmdssd.h"
-- 
--+/**
--+ * This macro is the alternative way to get exit status
--+ * in atexit() callback function
--+ */
--+#define EXIT(x) ((exit)(exit_status = (x)))
+-diff --git a/NEWS b/NEWS
+-index c7add56..9e153fd 100644
+---- a/NEWS
+-+++ b/NEWS
+-@@ -1,3 +1,11 @@
+-+1.0.10 (?/??/2022):
+-+-------------------
 -+
--+static int exit_status;
+-+- Fixed problem that caused sgdisk to crash with errors about being unable
+-+  to read the disk's partition table when compiled with the latest popt
+-+  (commit 740, which is pre-release as I type; presumably version 1.19 and
+-+  later once released).
 -+
--+/**
--+ * Flag to print exit status
--+ */
--+static int ignore;
--+
-- /**
--  * @brief List of active block devices.
--  *
--@@ -151,20 +164,16 @@ static int possible_params_size = ARRAY_SIZE(possible_params);
--  *
--  * This is internal function of monitor service. It is used to finalize daemon
--  * process i.e. free allocated memory, unlock and remove pidfile and close log
--- * file and syslog. The function is registered as on_exit() handler.
--- *
--- * @param[in]     status          The function ignores this parameter.
--- * @param[in]     program_name    The name of the binary file. This argument
--- *                                is passed via on_exit() function.
--+ * file and syslog. The function is registered as atexit() handler.
--  *
--  * @return The function does not return a value.
--  */
---static void _ledmon_fini(int __attribute__ ((unused)) status, void *program_name)
--+static void _ledmon_fini(void)
-- {
-- 	sysfs_reset();
-- 	list_erase(&ledmon_block_list);
-- 	log_close();
---	pidfile_remove(program_name);
--+	pidfile_remove(progname);
-- }
+- 1.0.9 (4/14/2022):
+- ------------------
 - 
-- typedef enum {
--@@ -207,30 +216,25 @@ static char *ledmon_strstatus(ledmon_status_code_t s)
--  *
--  * This is internal function of monitor service. It is used to report an exit
--  * status of the monitor service. The message is logged in to syslog and to log
--- * file. The function is registered as on_exit() hander.
--- *
--- * @param[in]     status            Status given in the last call to exit()
--- *                                  function.
--- * @param[in]     arg               Argument passed to on_exit().
--+ * file. The function is registered as atexit() handler.
--  *
--  * @return The function does not return a value.
--  */
---static void _ledmon_status(int status, void *arg)
--+static void _ledmon_status(void)
-- {
-- 	int log_level;
-- 	char message[4096];
---	int ignore = *((int *)arg);
+-diff --git a/gptcl.cc b/gptcl.cc
+-index 34c9421..0d578eb 100644
+---- a/gptcl.cc
+-+++ b/gptcl.cc
+-@@ -155,7 +155,7 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
+-    } // while
 - 
-- 	if (ignore)
-- 		return;
+-    // Assume first non-option argument is the device filename....
+--   device = (char*) poptGetArg(poptCon);
+-+   device = strdup((char*) poptGetArg(poptCon));
+-    poptResetContext(poptCon);
 - 
---	if (status == LEDMON_STATUS_SUCCESS)
--+	if (exit_status == LEDMON_STATUS_SUCCESS)
-- 		log_level = LOG_LEVEL_INFO;
-- 	else
-- 		log_level = LOG_LEVEL_ERROR;
+-    if (device != NULL) {
+-diff --git a/support.h b/support.h
+-index 8ba9ad1..f91f1bc 100644
+---- a/support.h
+-+++ b/support.h
+-@@ -8,7 +8,7 @@
+- #include <stdlib.h>
+- #include <string>
 - 
-- 	snprintf(message, sizeof(message), "exit status is %s.",
---		 ledmon_strstatus(status));
--+		 ledmon_strstatus(exit_status));
+--#define GPTFDISK_VERSION "1.0.9"
+-+#define GPTFDISK_VERSION "1.0.9.1"
 - 
-- 	if (get_log_fd() >= 0)
-- 		_log(log_level, message);
--@@ -364,10 +368,10 @@ static ledmon_status_code_t _cmdline_parse_non_daemonise(int argc, char *argv[])
-- 			break;
-- 		case 'h':
-- 			_ledmon_help();
---			exit(EXIT_SUCCESS);
--+			EXIT(EXIT_SUCCESS);
-- 		case 'v':
-- 			_ledmon_version();
---			exit(EXIT_SUCCESS);
--+			EXIT(EXIT_SUCCESS);
-- 		case ':':
-- 		case '?':
-- 			return LEDMON_STATUS_CMDLINE_ERROR;
--@@ -890,14 +894,13 @@ static void _close_parent_fds(void)
-- int main(int argc, char *argv[])
-- {
-- 	ledmon_status_code_t status = LEDMON_STATUS_SUCCESS;
---	static int ignore;
-- 
-- 	setup_options(&longopt, &shortopt, possible_params,
-- 			possible_params_size);
-- 	set_invocation_name(argv[0]);
-- 	openlog(progname, LOG_PID | LOG_PERROR, LOG_DAEMON);
-- 
---	if (on_exit(_ledmon_status, &ignore))
--+	if (atexit(_ledmon_status))
-- 		return LEDMON_STATUS_ONEXIT_ERROR;
-- 
-- 	if (_cmdline_parse_non_daemonise(argc, argv) != LEDMON_STATUS_SUCCESS)
--@@ -935,18 +938,18 @@ int main(int argc, char *argv[])
-- 
-- 		if (pid < 0) {
-- 			log_debug("main(): fork() failed (errno=%d).", errno);
---			exit(EXIT_FAILURE);
--+			EXIT(EXIT_FAILURE);
-- 		}
-- 		if (pid > 0) {
-- 			ignore = 1; /* parent: don't print exit status */
---			exit(EXIT_SUCCESS);
--+			EXIT(EXIT_SUCCESS);
-- 		}
-- 
-- 		pid_t sid = setsid();
-- 
-- 		if (sid < 0) {
-- 			log_debug("main(): setsid() failed (errno=%d).", errno);
---			exit(EXIT_FAILURE);
--+			EXIT(EXIT_FAILURE);
-- 		}
-- 
-- 		_close_parent_fds();
--@@ -960,16 +963,16 @@ int main(int argc, char *argv[])
-- 
-- 	if (chdir("/") < 0) {
-- 		log_debug("main(): chdir() failed (errno=%d).", errno);
---		exit(EXIT_FAILURE);
--+		EXIT(EXIT_FAILURE);
-- 	}
-- 	if (pidfile_create(progname)) {
-- 		log_debug("main(): pidfile_creat() failed.");
---		exit(EXIT_FAILURE);
--+		EXIT(EXIT_FAILURE);
-- 	}
-- 	_ledmon_setup_signals();
-- 
---	if (on_exit(_ledmon_fini, progname))
---		exit(LEDMON_STATUS_ONEXIT_ERROR);
--+	if (atexit(_ledmon_fini))
--+		EXIT(LEDMON_STATUS_ONEXIT_ERROR);
-- 	list_init(&ledmon_block_list, (item_free_t)block_device_fini);
-- 	sysfs_init();
-- 	log_info("monitor service has been started...");
--@@ -987,5 +990,5 @@ int main(int argc, char *argv[])
-- 	}
-- 	ledmon_remove_shared_conf();
-- 	stop_udev_monitor();
---	exit(EXIT_SUCCESS);
--+	EXIT(EXIT_SUCCESS);
-- }
+- #if defined (__FreeBSD__) || defined (__FreeBSD_kernel__) || defined (__APPLE__)
+- // Darwin (Mac OS) & FreeBSD: disk IOCTLs are different, and there is no lseek64
 --- 
--2.39.2
+-2.35.1
 -
-diff --git a/package/ledmon/0002-Fix-unknown-type-name-ssize_t-error.patch b/package/ledmon/0002-Fix-unknown-type-name-ssize_t-error.patch
+diff --git a/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch b/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
 deleted file mode 100644
-index 4aeadbbbf8..0000000000
---- a/package/ledmon/0002-Fix-unknown-type-name-ssize_t-error.patch
+index 250c071582..0000000000
+--- a/package/gptfdisk/0003-Fix-NULL-dereference-when-duplicating-string-argumen.patch
 +++ /dev/null
 @@ -1,44 +0,0 @@
--From b9f454cd29b6b5a0927b3c1e98807d54ffacd73e Mon Sep 17 00:00:00 2001
--From: Maksim Kiselev <bigunclemax@gmail.com>
--Date: Mon, 15 May 2023 19:29:45 +0300
--Subject: [PATCH] Fix unknown type name ‘ssize_t’ error
+-From f5de3401b974ce103ffd93af8f9d43505a04aaf9 Mon Sep 17 00:00:00 2001
+-Message-Id: <f5de3401b974ce103ffd93af8f9d43505a04aaf9.1680094621.git.stefan@agner.ch>
+-From: Damian Kurek <starfire24680@gmail.com>
+-Date: Thu, 7 Jul 2022 03:39:16 +0000
+-Subject: [PATCH] Fix NULL dereference when duplicating string argument
 -
--This error occurs for builds with musl libc.
--Move include <sys/types.h> to utils header to
--resolve this issue.
+-poptGetArg can return NULL if there are no additional arguments, which
+-makes strdup dereference NULL on strlen
 -
--Upstream: https://github.com/intel/ledmon/pull/139
--
--Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+-Signed-off-by: Stefan Agner <stefan@agner.ch>
+-Upstream: https://sourceforge.net/p/gptfdisk/code/ci/f5de3401b974ce103ffd93af8f9d43505a04aaf9
 ----
-- src/utils.c | 1 -
-- src/utils.h | 1 +
-- 2 files changed, 1 insertion(+), 1 deletion(-)
+- gptcl.cc | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
 -
--diff --git a/src/utils.c b/src/utils.c
--index 86b9593..0b83d5a 100644
----- a/src/utils.c
--+++ b/src/utils.c
--@@ -33,7 +33,6 @@
-- #include <string.h>
-- #include <sys/stat.h>
-- #include <sys/time.h>
---#include <sys/types.h>
-- #include <time.h>
-- #include <unistd.h>
-- #include <assert.h>
--diff --git a/src/utils.h b/src/utils.h
--index 5d590b9..d02da8f 100644
----- a/src/utils.h
--+++ b/src/utils.h
--@@ -22,6 +22,7 @@
-- #define _UTILS_H_INCLUDED_
+-diff --git a/gptcl.cc b/gptcl.cc
+-index 0d578eb..ab95239 100644
+---- a/gptcl.cc
+-+++ b/gptcl.cc
+-@@ -155,10 +155,11 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
+-    } // while
 - 
-- #include <getopt.h>
--+#include <sys/types.h>
-- #include "config_file.h"
-- #include "stdlib.h"
-- #include "stdint.h"
+-    // Assume first non-option argument is the device filename....
+--   device = strdup((char*) poptGetArg(poptCon));
+--   poptResetContext(poptCon);
+-+   device = (char*) poptGetArg(poptCon);
+- 
+-    if (device != NULL) {
+-+      device = strdup(device);
+-+      poptResetContext(poptCon);
+-       JustLooking(); // reset as necessary
+-       BeQuiet(); // Tell called functions to be less verbose & interactive
+-       if (LoadPartitions((string) device)) {
+-@@ -498,6 +499,7 @@ int GPTDataCL::DoOptions(int argc, char* argv[]) {
+-          cerr << "Error encountered; not saving changes.\n";
+-          retval = 4;
+-       } // if
+-+      free(device);
+-    } // if (device != NULL)
+-    poptFreeContext(poptCon);
+-    return retval;
 --- 
--2.39.2
+-2.40.0
 -
-diff --git a/package/ledmon/0003-Add-disable-doc-option.patch b/package/ledmon/0003-Add-disable-doc-option.patch
+diff --git a/package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch b/package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch
 deleted file mode 100644
-index ab7a242289..0000000000
---- a/package/ledmon/0003-Add-disable-doc-option.patch
+index 22c34ced6f..0000000000
+--- a/package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch
 +++ /dev/null
-@@ -1,63 +0,0 @@
--From 141628519d227b59be3977b16ebaab0feb22b295 Mon Sep 17 00:00:00 2001
--From: Maksim Kiselev <bigunclemax@gmail.com>
--Date: Sun, 20 Aug 2023 11:35:57 +0300
--Subject: [PATCH] Add '--disable-doc' option
+@@ -1,41 +0,0 @@
+-From 6a8416cbd12d55f882bb751993b94f72d338d96f Mon Sep 17 00:00:00 2001
+-From: Rod Smith <rodsmith@rodsbooks.com>
+-Date: Sat, 16 Apr 2022 09:32:04 -0400
+-Subject: [PATCH] Updated guid.cc to deal with minor change in libuuid
 -
--Introduce a configure option to disable documentation installation
--in case if it is not required.
--
--Upstream: https://github.com/intel/ledmon/pull/154
--
--Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+-Upstream: https://sourceforge.net/p/gptfdisk/code/ci/6a8416cbd12d55f882bb751993b94f72d338d96f
+-Signed-off-by: Ben Wolsieffer <ben.wolsieffer@hefring.com>
 ----
-- Makefile.am  |  8 ++++++--
-- configure.ac | 11 ++++++++++-
-- 2 files changed, 16 insertions(+), 3 deletions(-)
+- NEWS    | 2 ++
+- guid.cc | 2 +-
+- 2 files changed, 3 insertions(+), 1 deletion(-)
 -
--diff --git a/Makefile.am b/Makefile.am
--index ddcd200..644a8d2 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -20,6 +20,10 @@ if SYSTEMD_CONDITION
--   OPTIONAL_SUBDIR = systemd
-- endif
+-diff --git a/NEWS b/NEWS
+-index 9e153fd..9ec7e63 100644
+---- a/NEWS
+-+++ b/NEWS
+-@@ -6,6 +6,8 @@
+-   (commit 740, which is pre-release as I type; presumably version 1.19 and
+-   later once released).
 - 
---SUBDIRS = doc src $(OPTIONAL_SUBDIR)
--+if WITH_DOC
--+  DOC_SUBDIR = doc
--+  dist_doc_DATA = README.md
--+endif
+-+- Updated guid.cc to deal with minor change in libuuid.
 -+
--+SUBDIRS = src $(DOC_SUBDIR) $(OPTIONAL_SUBDIR)
-- EXTRA_DIST = config/config.h systemd/ledmon.service.in
---dist_doc_DATA = README.md
--diff --git a/configure.ac b/configure.ac
--index 05baa62..114957f 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -74,6 +74,15 @@ AM_CONDITIONAL([SYSTEMD_CONDITION], [test "$SYSTEMD_STR" = yes])
-- # target directory for ledmon service file
-- AC_SUBST([SYSTEMD_PATH], "$(pkg-config systemd --variable=systemdsystemunitdir)")
+- 1.0.9 (4/14/2022):
+- ------------------
 - 
--+# Add configure option to disable documentation building
--+AC_ARG_ENABLE([doc],
--+    [AS_HELP_STRING([--disable-doc],
--+        [do not install ledmon documentaion])],
--+    [with_doc=${enableval}],
--+    [with_doc=yes])
--+
--+AM_CONDITIONAL([WITH_DOC], [test "x$with_doc" = "xyes"])
--+
-- AC_CONFIG_FILES([Makefile
--                  doc/Makefile
--                  src/Makefile
--@@ -86,5 +95,5 @@ $PACKAGE_NAME $VERSION configuration:
--   Preprocessor flags:      ${AM_CPPFLAGS} ${CPPFLAGS}
--   C compiler flags:        ${AM_CFLAGS} ${CFLAGS}
--   Common install location: ${prefix}
---  configure parameters:    --enable-systemd=${SYSTEMD_STR}
--+  configure parameters:    --enable-systemd=${SYSTEMD_STR} --enable-doc=${with_doc}
-- ])
+-diff --git a/guid.cc b/guid.cc
+-index 1e73ab7..d3e4fd5 100644
+---- a/guid.cc
+-+++ b/guid.cc
+-@@ -141,7 +141,7 @@ void GUIDData::Zero(void) {
+- void GUIDData::Randomize(void) {
+-    int i, uuidGenerated = 0;
+- 
+--#ifdef _UUID_UUID_H
+-+#if defined (_UUID_UUID_H) || defined (_UL_LIBUUID_UUID_H)
+-    uuid_generate(uuidData);
+-    ReverseBytes(&uuidData[0], 4);
+-    ReverseBytes(&uuidData[4], 2);
 --- 
--2.39.2
+-2.42.0
 -
-diff --git a/package/ledmon/ledmon.hash b/package/ledmon/ledmon.hash
-index dfc5d74242..e9cfcc63cb 100644
---- a/package/ledmon/ledmon.hash
-+++ b/package/ledmon/ledmon.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  40ee7e462b78c77468cc2ef356a06c5b6db44747d596dc11532f7b6f378d2d4b  ledmon-0.97.tar.gz
-+sha256  2826786cd5e7fe7d32d22e9d209b23124801fec9c3220dcd7fb45706f3818dc5  ledmon-1.0.0.tar.gz
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/ledmon/ledmon.mk b/package/ledmon/ledmon.mk
-index 473d0de7a3..71150ad1e4 100644
---- a/package/ledmon/ledmon.mk
-+++ b/package/ledmon/ledmon.mk
-@@ -4,16 +4,17 @@
+diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
+index 0b98677afb..14a8d59a08 100644
+--- a/package/gptfdisk/gptfdisk.hash
++++ b/package/gptfdisk/gptfdisk.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.9/
+-sha1  284bd000edaf7874b472bd01719c6a71a8030e13  gptfdisk-1.0.9.tar.gz
++# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.10/
++sha1  70c0bfe4290c2893fc957ef7f6156c5e74e469fc  gptfdisk-1.0.10.tar.gz
+ # Locally computed
+-sha256  dafead2693faeb8e8b97832b23407f6ed5b3219bc1784f482dd855774e2d50c2  gptfdisk-1.0.9.tar.gz
++sha256  2abed61bc6d2b9ec498973c0440b8b804b7a72d7144069b5a9209b2ad693a282  gptfdisk-1.0.10.tar.gz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index 393ea9469a..b35899bf9b 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LEDMON_VERSION = 0.97
-+LEDMON_VERSION = 1.0.0
- LEDMON_SITE = $(call github,intel,ledmon,v$(LEDMON_VERSION))
--LEDMON_DEPENDENCIES = host-pkgconf pciutils sg3_utils udev
-+LEDMON_DEPENDENCIES = host-autoconf-archive host-pkgconf pciutils sg3_utils udev
- # The code base also include a COPYING.LIB file with the LGPL-2.1 text,
- # and some source files are published under LGPL-2.1, but all of them are
- # at some point linked with GPL-2.0 code, making the resulting binaries
- # GPL-2.0 licensed
- LEDMON_LICENSE = GPL-2.0
- LEDMON_LICENSE_FILES = COPYING
--# 0002-Fix-unknown-type-name-ssize_t-error.patch
-+# From git
- LEDMON_AUTORECONF = YES
-+LEDMON_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
- 
- $(eval $(autotools-package))
-
---===============6217951481113774046==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-GPTFDISK_VERSION = 1.0.9
++GPTFDISK_VERSION = 1.0.10
+ GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
+ GPTFDISK_LICENSE = GPL-2.0+
+ GPTFDISK_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6217951481113774046==--
