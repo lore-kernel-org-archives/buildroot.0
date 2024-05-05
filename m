@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A81A1C4345F
-	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 08:38:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 598FBC4345F
+	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 08:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 343784029B;
-	Sun,  5 May 2024 08:38:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97AE0403CC;
+	Sun,  5 May 2024 08:38:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RXlscmqBelI5; Sun,  5 May 2024 08:38:37 +0000 (UTC)
+ id ltEBj3pKHhNg; Sun,  5 May 2024 08:38:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2ED84013A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27F8E400F7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2ED84013A;
-	Sun,  5 May 2024 08:38:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27F8E400F7;
+	Sun,  5 May 2024 08:38:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B64801BF82F
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 08:38:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C6581BF82F
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 08:38:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A38F540457
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2AFE403CC
  for <buildroot@lists.busybox.net>; Sun,  5 May 2024 08:38:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j3bLBvae-0Cv for <buildroot@lists.busybox.net>;
+ id SSKnjRbp-U_A for <buildroot@lists.busybox.net>;
  Sun,  5 May 2024 08:38:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3A08400D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDCE54029B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3A08400D8
+ by smtp4.osuosl.org (Postfix) with ESMTP id CDCE54029B
  for <buildroot@buildroot.org>; Sun,  5 May 2024 08:38:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 99FE086391; Sun,  5 May 2024 08:38:34 +0000 (UTC)
+ id B5900863B6; Sun,  5 May 2024 08:38:34 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 5 May 2024 10:34:39 +0200
+Date: Sun, 5 May 2024 10:35:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 929bffbf4bf8fcb91bda446777f907f32c782656
-X-Git-Newrev: 5efa5e9023ba4e9858c5809c6dee00ba9b75d19f
+X-Git-Oldrev: f13651ed88944e3af60eedbaab9a983e6274c45b
+X-Git-Newrev: 09bcfb56962afddf29457953b5eedcd51e40333f
 X-Patchwork-Hint: ignore
-Message-Id: <20240505083834.99FE086391@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/armadeus_apf27: add hashes for
- Linux/U-Boot
+Message-Id: <20240505083834.B5900863B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/armadeus_apf51: activates
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,63 +65,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5efa5e9023ba4e9858c5809c6dee00ba9b75d19f
+commit: https://git.buildroot.net/buildroot/commit/?id=09bcfb56962afddf29457953b5eedcd51e40333f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES. As asked By Romain.
+As asked by Romain. Armadeus boards share Linux hashes.
 
 Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 [yann.morin.1998@free.fr: fix check-package]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                     | 1 -
- board/armadeus/patches/linux-headers/linux-headers.hash | 1 +
- board/armadeus/patches/linux/linux.hash                 | 2 ++
- board/armadeus/patches/uboot/uboot.hash                 | 2 ++
- configs/armadeus_apf27_defconfig                        | 4 ++++
- 5 files changed, 9 insertions(+), 1 deletion(-)
+ .checkpackageignore              | 1 -
+ configs/armadeus_apf51_defconfig | 4 ++++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index db23450f03..6a8ffe424f 100644
+index b7461c1cca..8dd76ac53e 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
 @@ -129,7 +129,6 @@ configs/andes_ae350_45_defconfig lib_defconfig.ForceCheckHash
  configs/arcturus_ucls1012a_defconfig lib_defconfig.ForceCheckHash
  configs/arcturus_ucp1020_defconfig lib_defconfig.ForceCheckHash
  configs/arm_foundationv8_defconfig lib_defconfig.ForceCheckHash
--configs/armadeus_apf27_defconfig lib_defconfig.ForceCheckHash
- configs/armadeus_apf28_defconfig lib_defconfig.ForceCheckHash
- configs/armadeus_apf51_defconfig lib_defconfig.ForceCheckHash
+-configs/armadeus_apf51_defconfig lib_defconfig.ForceCheckHash
  configs/aspeed_ast2500evb_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/armadeus/patches/linux-headers/linux-headers.hash b/board/armadeus/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/armadeus/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/armadeus/patches/linux/linux.hash b/board/armadeus/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..804920c10d
---- /dev/null
-+++ b/board/armadeus/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  879ca159c34ea9d3a6775f292cc59c2d3931d57dca00f0bebe2675ea0c82c6a9  linux-5.10.215.tar.xz
-diff --git a/board/armadeus/patches/uboot/uboot.hash b/board/armadeus/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..777e0adab2
---- /dev/null
-+++ b/board/armadeus/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  839bf23cfe8ce613a77e583a60375179d0ad324e92c82fbdd07bebf0fd142268  u-boot-2018.09.tar.bz2
-diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
-index a87d319729..782587e410 100644
---- a/configs/armadeus_apf27_defconfig
-+++ b/configs/armadeus_apf27_defconfig
-@@ -5,6 +5,10 @@ BR2_arm926t=y
+ configs/aspeed_ast2600evb_defconfig lib_defconfig.ForceCheckHash
+ configs/asus_tinker-s_rk3288_defconfig lib_defconfig.ForceCheckHash
+diff --git a/configs/armadeus_apf51_defconfig b/configs/armadeus_apf51_defconfig
+index af4562ce0f..8317dd7b8b 100644
+--- a/configs/armadeus_apf51_defconfig
++++ b/configs/armadeus_apf51_defconfig
+@@ -5,6 +5,10 @@ BR2_cortex_a8=y
  # Linux headers same as kernel, a 5.10 series
  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
  
@@ -130,7 +103,7 @@ index a87d319729..782587e410 100644
 +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
 +
  # System
- BR2_TARGET_GENERIC_HOSTNAME="apf27"
+ BR2_TARGET_GENERIC_HOSTNAME="apf51"
  BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
 _______________________________________________
 buildroot mailing list
