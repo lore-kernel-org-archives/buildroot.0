@@ -4,91 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18571C4345F
-	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 14:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1205C4345F
+	for <buildroot@archiver.kernel.org>; Sun,  5 May 2024 14:22:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 982E582125;
-	Sun,  5 May 2024 14:18:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AFBF820EE;
+	Sun,  5 May 2024 14:22:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5m7OgxmE5xIJ; Sun,  5 May 2024 14:18:10 +0000 (UTC)
+ id bo3gbIg_FWMW; Sun,  5 May 2024 14:22:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D2EA8212E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ACF882103
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D2EA8212E;
-	Sun,  5 May 2024 14:18:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4C04E1BF616
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 14:18:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6ACF882103;
+	Sun,  5 May 2024 14:22:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BB9CC1BF616
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 14:22:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44C528212E
- for <buildroot@lists.busybox.net>; Sun,  5 May 2024 14:18:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A589A400D0
+ for <buildroot@lists.busybox.net>; Sun,  5 May 2024 14:22:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qXX5lSQyuVFs for <buildroot@lists.busybox.net>;
- Sun,  5 May 2024 14:18:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::236; helo=mail-lj1-x236.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E6FEA82125
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6FEA82125
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E6FEA82125
- for <buildroot@buildroot.org>; Sun,  5 May 2024 14:18:07 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id
- 38308e7fff4ca-2dac77cdf43so14682661fa.2
- for <buildroot@buildroot.org>; Sun, 05 May 2024 07:18:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1714918685; x=1715523485;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=j4dFt+9V8sQKGFhqGB06aDkoadm5EVV2mHqwpmSXJ0w=;
- b=aZp4j5FkEpuc7ySBYqQZm+reh7rKtRF3NDECX7sU/Ce+oQEh0iTKy+TUYU3Uu6qBUc
- YBZLIiyVhCmvWZ8w1eOI8Fw641cxz2vtpG/VChkDYW5DEln8ybW47bgZ00qDNfgbySpT
- 4IufLx/yp/4v8LHYaWHUQePzAkK7MgR2iuvuPqKN/GkJdjyr+WCmn5IiOCUr1OwGn8j+
- 52vsIPVRakn9R8EMc163sk/eO/NXZioqs9/X8TMlS7nYBOtYg+DNQ6twgteIfJqr8WY8
- sDa4FUklxWkNOBkM0aAb1qpYBLGol+VrnEakSA1xfnwraw0iQab4g9COnxQ3obOoKQ0C
- 0Npw==
-X-Gm-Message-State: AOJu0YxR53CYxoJk7qP7MJsPLTXcQZOQKcrvo39m5xOtaB+K06/2KUuF
- oc5Q1lZLZZsbHJoMvPAm1oo8q33gjw0iVno88gYRMfHgxlMOyu/wCKo4Ig==
-X-Google-Smtp-Source: AGHT+IF3YALB8KC/AfoqFKALX8QZG0jSqZJfSIW3Q8q9RzSW8toIhn4sfiS76yVXW5+5f99Dwfq82A==
-X-Received: by 2002:a05:651c:104d:b0:2de:1457:9d27 with SMTP id
- x13-20020a05651c104d00b002de14579d27mr5321894ljm.0.1714918684906; 
- Sun, 05 May 2024 07:18:04 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- bg4-20020a05600c3c8400b0041bf29ab003sm16476137wmb.30.2024.05.05.07.18.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 05 May 2024 07:18:04 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iVwPmCthnJ6u for <buildroot@lists.busybox.net>;
+ Sun,  5 May 2024 14:22:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9141400B8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9141400B8
+ for <buildroot@buildroot.org>; Sun,  5 May 2024 14:22:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C377F8666E; Sun,  5 May 2024 14:22:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun,  5 May 2024 16:17:59 +0200
-Message-ID: <20240505141759.872371-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1714918685; x=1715523485; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=j4dFt+9V8sQKGFhqGB06aDkoadm5EVV2mHqwpmSXJ0w=;
- b=Ey44krV37fJSKBR0/SCc/+2AjsXUTtxiKWcXC1dPz2He1yIzMwZaOgWopmYVS4szHF
- 9yC/5AsKOzvc1nxGkQulT8fVk3FoNZh1rOABOl+tr1kufeX1ksXJim9XGV8EYsOCeyXz
- 4/H9GaBODSZzmLIkrtdNa0MwGFTEp7RcSHOWiTYu9QyIOPvO3nPkRCmITwcT+nPQM1ox
- E6oWj9DndE1WFu4PB8fOyimQrqb5HFXlCHBTAukz47uKSRikq6rLXIKGONXkOuQ116pF
- seCSOG0uROGRXsjvAtTC8+/ZfOzZ7LEWml7oaGNQ/noap4saqlH7kGfewM/8JWQ8HIz1
- TLlg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Ey44krV3
-Subject: [Buildroot] [PATCH 1/1] package/shadow: fix NLS build
+Date: Sun, 5 May 2024 16:22:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a8c7a53985a62fd8a25cbe803628c64527da21fc
+X-Git-Newrev: 5924a5c2c649c067a4bc434da5aa180170cbc30c
+X-Patchwork-Hint: ignore
+Message-Id: <20240505142233.C377F8666E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ti-sgx-km: needs BR2_ARM_EABIHF
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,43 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-NLS is an optional dependency since the addition of the package in
-commit f78c5cb5cae93a9e63dad4361d78e1787759382f:
+commit: https://git.buildroot.net/buildroot/commit/?id=5924a5c2c649c067a4bc434da5aa180170cbc30c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-/home/autobuild/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-musleabi/12.3.0/../../../../arm-buildroot-linux-musleabi/bin/ld: ../lib/.libs/libshadow.a(libshadow_la-alloc.o): in function `xcalloc':
-alloc.c:(.text+0x7c): undefined reference to `libintl_gettext'
+ti-sgx-km raises the following build failure without BR2_ARM_EABIHF:
 
-Fixes: f78c5cb5cae93a9e63dad4361d78e1787759382f
- - http://autobuild.buildroot.org/results/9f604d09745ffa1f4db3bdcfe0326c236effac0c
+eurasiacon/build/linux2/toplevel.mk:230: eurasiacon/build/linux2/moduledefs/target_armel.mk: No such file or directory
+
+Fixes:
+ - http://autobuild.buildroot.org/results/17e4da346d062570b9a84ab8eb1ce93c6d7384be
+ - http://autobuild.buildroot.org/results/04fd659472f1928c2621354bb0ea3b60c5dfadec
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/shadow/shadow.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/ti-sgx-km/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-index 491f271330..e4d8b67b8a 100644
---- a/package/shadow/shadow.mk
-+++ b/package/shadow/shadow.mk
-@@ -10,6 +10,8 @@ SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
- SHADOW_LICENSE = BSD-3-Clause
- SHADOW_LICENSE_FILES = COPYING
- SHADOW_CPE_ID_VENDOR = debian
-+SHADOW_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+SHADOW_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+diff --git a/package/ti-sgx-km/Config.in b/package/ti-sgx-km/Config.in
+index 964889ff40..3e8a41b755 100644
+--- a/package/ti-sgx-km/Config.in
++++ b/package/ti-sgx-km/Config.in
+@@ -1,10 +1,10 @@
+ comment "ti-sgx-km needs a Linux kernel to be built"
+-	depends on BR2_arm
++	depends on BR2_ARM_EABIHF
+ 	depends on !BR2_LINUX_KERNEL
  
- SHADOW_CONF_OPTS = \
- 	--disable-man \
--- 
-2.43.0
-
+ config BR2_PACKAGE_TI_SGX_KM
+ 	bool "ti-sgx-km"
+-	depends on BR2_LINUX_KERNEL && BR2_arm
++	depends on BR2_LINUX_KERNEL && BR2_ARM_EABIHF
+ 	select BR2_LINUX_NEEDS_MODULES
+ 	help
+ 	  Kernel modules for TI CPUs with SGX GPU.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
