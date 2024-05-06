@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94F89C25B4F
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 19:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02B56C25B5C
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 19:14:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6208940B9D;
-	Mon,  6 May 2024 19:06:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B826B40BE2;
+	Mon,  6 May 2024 19:14:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3x1khIkOEWDL; Mon,  6 May 2024 19:06:30 +0000 (UTC)
+ id QJt3yB459Tib; Mon,  6 May 2024 19:14:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CF0140BE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCA9B40C21
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7CF0140BE2;
-	Mon,  6 May 2024 19:06:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EFA6A1BF28B
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:06:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DCA9B40C21;
+	Mon,  6 May 2024 19:14:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 586AB1BF28B
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:14:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB7AF8201B
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:06:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 44A424057A
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:14:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jNs3NzKkLC7R for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 19:06:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AsdLoxpPGl6N for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 19:14:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 833EC81F63
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 833EC81F63
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 833EC81F63
- for <buildroot@busybox.net>; Mon,  6 May 2024 19:06:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D0E1940006;
- Mon,  6 May 2024 19:06:23 +0000 (UTC)
-Date: Mon, 6 May 2024 21:06:23 +0200
-To: Peter Seiderer via buildroot <buildroot@buildroot.org>
-Message-ID: <20240506210623.7c3b3065@windsurf>
-In-Reply-To: <20240506144555.31709-8-ps.report@gmx.net>
-References: <20240506144555.31709-1-ps.report@gmx.net>
- <20240506144555.31709-8-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715022384;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ZHZdpKREWosDYAaVz59dkK5hha1bk4xZ0RhFn7zJnwQ=;
- b=fhJAnDR50IG+QC4ZY43MqwDM/UvQ27D0ltkB/qOg5pwmlMxbb5XvjvUr5k0vpRZlKbmBdS
- zpGyw5MT1I+fkCgXi7N13VGh57ASertVOEPVAvdXCFYuBUYxKgc3Rp/WuGVaP9m6D0hoW7
- DsvE2gcfky5wmSENTQaHl9PumRixrAn+UakU96wxAKqumeO7xEBF7xwuJF+E9XGAcAvIaa
- C2g/4+Ksq5HKBuVWx2qkTsgU1WgjshSVwqfdK85qzbXPfaeUlkJeBF6iZwKMXHd0cD1LsR
- ydVKbd7rcoI9jOwbbzJ/EHEuaV3w3ULC8HZzMtZFSV4NjopbtfXk0dMIVbpALw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fhJAnDR5
-Subject: Re: [Buildroot] [PATCH v1 7/8] support/kconfig: reference
- environment variables directly (remove 'option env=')
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6838540552
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6838540552
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 19:14:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CC62E867AB; Mon,  6 May 2024 19:14:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 6 May 2024 21:14:00 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a214c4568b2b93984be39ff8d3f9f4acb6af898c
+X-Git-Newrev: 82ed4fb1c9348426c1e598b6d255dfe0e426be0d
+X-Patchwork-Hint: ignore
+Message-Id: <20240506191436.CC62E867AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ell: bump to version 0.65
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,43 +59,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net, Peter Seiderer <ps.report@gmx.net>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  6 May 2024 16:45:50 +0200
-Peter Seiderer via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=82ed4fb1c9348426c1e598b6d255dfe0e426be0d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->  config BR2_DEFCONFIG
->  	string "Location to save buildroot config"
-> -	default BR2_DEFCONFIG_FROM_ENV if BR2_DEFCONFIG_FROM_ENV != ""
-> +	default "$(BR2_DEFCONFIG)" if "$(BR2_DEFCONFIG)" != ""
->  	default "$(CONFIG_DIR)/defconfig"
->  	help
->  	  When running 'make savedefconfig', the defconfig file will be
-> @@ -197,7 +176,7 @@ config BR2_DEFCONFIG
->  
->  config BR2_DL_DIR
->  	string "Download dir"
-> -	default "$(TOPDIR)/dl"
-> +	default "\$(TOPDIR)/dl"
-
-So here the "\$(TOPDIR)" is because we actually don't want the "new"
-feature to kick in, and we want the value of this variable to be
-expanded not by kconfig, but by the makefile machinery?
-
-So this also means that when we do $(BR2_EXTERNAL_BLABLA_PATH) in our
-.config, it now also need to be \$(BR2_EXTERNAL_BLABLA_PATH) ? If so
-that's going to break a *lot* of things...
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index f5ded676c3..3adca75140 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
+-sha256  7397c76996d7646b9917ebf016cd67586b10166295af2e0e18cdb5b8f6659965  ell-0.63.tar.xz
++sha256  9ee7ac57b188d391cead705d3596a6d3240341786475149db297782a52269aa5  ell-0.65.tar.xz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index f43dbdb5f7..a682635539 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELL_VERSION = 0.63
++ELL_VERSION = 0.65
+ ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
+ ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+ ELL_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
