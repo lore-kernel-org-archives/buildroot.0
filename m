@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A65CC25B5C
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 19:14:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73AD6C25B5C
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 19:25:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4609341479;
-	Mon,  6 May 2024 19:14:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 309F44010D;
+	Mon,  6 May 2024 19:25:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5gVJ7zrQZ2C4; Mon,  6 May 2024 19:14:58 +0000 (UTC)
+ id Ak47NfKgjjzw; Mon,  6 May 2024 19:25:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64E6F41486
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 309E5408CA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64E6F41486;
-	Mon,  6 May 2024 19:14:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 309E5408CA;
+	Mon,  6 May 2024 19:25:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 434D51BF28B
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:14:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2C30C1BF28B
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:25:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3100D82084
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:14:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 247AC82094
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:25:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LaB9UkiOewSG for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 19:14:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 9IltDAsiSOxw for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 19:25:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1698981F97
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1698981F97
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1698981F97
- for <buildroot@buildroot.org>; Mon,  6 May 2024 19:14:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 163741BF207;
- Mon,  6 May 2024 19:14:52 +0000 (UTC)
-Date: Mon, 6 May 2024 21:14:52 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240506211452.3dc4b395@windsurf>
-In-Reply-To: <20240506185231.3470040-1-james.hilliard1@gmail.com>
-References: <20240506185231.3470040-1-james.hilliard1@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 09C8E80E9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09C8E80E9E
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 09C8E80E9E
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 19:25:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 34F5640004;
+ Mon,  6 May 2024 19:25:52 +0000 (UTC)
+Date: Mon, 6 May 2024 21:25:51 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240506212551.55d9132c@windsurf>
+In-Reply-To: <20240505084753.38281-1-fontaine.fabrice@gmail.com>
+References: <20240505084753.38281-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715022893;
+ d=bootlin.com; s=gm1; t=1715023552;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=kMiP2s5apcVnanVIYcQ9ZeYwn+lccHTLtuulfZYGJuM=;
- b=IljHnrwojvLIjouo8P19kyELVnUC79HqcTHa2ffV79pICDQomXdRVoNomAOOtzKFFYatIW
- Rj0zrkV3nMmm3+NeQ9BdebKRpASTcm9zIKnKy0qe+BA5DkWmt77I7bzaGmMvnJ7SpC7kFy
- IPaRIXxObpM8tgk6FTSDuGRb2Uw/c6X8jjR7xOYBJrSonF/JrdP5PJxbTJJFGuPznnngpx
- eT5qM3wt30r2qeZ3Jw/G8fq7ZuEYY+rbIdMMV3ysW46IEtUOG3SFenlNb2Tn38y4AUqyQ1
- jvUuxGY3EanAzc/hswmIvRFfCMla0VAgxFwq85z6s5zUKwHaUz7+ly7PHphfBg==
+ bh=o6qP9fVUPfivjFTqYrwPM9s+jBiVPjbcANGiWc4vU2w=;
+ b=MdHjF/iZulpyAVp9Kevw7yhxzgGlMkPA4GU99NBNjZ+64fvjiYohR0if4Fspv6k7Briby5
+ VsPCKOOSqAXxJI25oR7qaYFyryUwwEhUgRlS/APu30vURQRLokmvPUYl4B9UsBvROMtDZ+
+ aJyWaud+/Sx1wAqrGIBYYYKP5L/Kv64ATKqZvilE9vZ/jzQLFo9gsBLXxIPfl7Wt+Fs8AW
+ Cw1prxfDuUroX9GDfyUPt3r9oHllHEn5pq98Lz4jWyhtmMDCQgk+66ezxwM1vM2EqZsFaS
+ 7QuvhbJAohNl7KvhxmxmuEwYYmdpPgmrpQkVSz0JC0iBlNixZ3zR4hMlExSeRA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IljHnrwo
-Subject: Re: [Buildroot] [PATCH 1/2] package/ell: bump to version 0.65
+ header.s=gm1 header.b=MdHjF/iZ
+Subject: Re: [Buildroot] [PATCH 1/1] package/highway: fix build with powerpc7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,27 +82,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  6 May 2024 12:52:30 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Hello Fabrice,
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/ell/ell.hash | 2 +-
->  package/ell/ell.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun,  5 May 2024 10:47:53 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Both applied to master, thanks.
+> +ifeq ($(BR2_powerpc_power7),y)
+> +HIGHWAY_CXXFLAGS += -DHWY_DISABLE_PPC8_CRYPTO
+> +endif
+
+You're going to hate me, but this really shouldn't require a hack in
+Buildroot's packaging. It should be handled directly by the highway
+build system/conditional build logic.
+
+BTW, some stuff in hwy/detect_targets.h is weird:
+
+#if HWY_ARCH_PPC && HWY_COMPILER_GCC && defined(__ALTIVEC__) && \
+    defined(__VSX__) && defined(__POWER8_VECTOR__) &&           \
+    (defined(__CRYPTO__) || defined(HWY_DISABLE_PPC8_CRYPTO))
+#define HWY_BASELINE_PPC8 HWY_PPC8
+#else
+#define HWY_BASELINE_PPC8 0
+#endif
+
+Why is this defined(__CRYPTO__) || defined(HWY_DISABLE_PPC8_CRYPTO) ?
+
+So when you *disable* PPC8 crypto, it uses it? Or I am misunderstanding
+things?
+
+The problematic code starts with:
+
+  #if !HWY_S390X_HAVE_Z14 && !defined(HWY_DISABLE_PPC8_CRYPTO)
+
+I guess it needs some additional condition to not kick in on Power7.
+
+Could you have a look into this, or report the bug upstream?
+
+Best regards,
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
