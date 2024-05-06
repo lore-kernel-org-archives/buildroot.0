@@ -1,53 +1,184 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F027DC10F16
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 12:02:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19E8FC10F16
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 12:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD0E5406BF;
-	Mon,  6 May 2024 12:02:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBD7260819;
+	Mon,  6 May 2024 12:41:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yw7adRISy-N5; Mon,  6 May 2024 12:02:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uxr_pR-5GnCc; Mon,  6 May 2024 12:41:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D200A4070B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E199960825
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D200A4070B;
-	Mon,  6 May 2024 12:02:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DD85B1BF3A6
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 12:02:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E199960825;
+	Mon,  6 May 2024 12:41:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C48B31BF307
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 12:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B3E4680899
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 12:02:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0F5C40141
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 12:41:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z9RnvqiiIsWB for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 12:02:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BC2781975
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BC2781975
- for <buildroot@buildroot.org>; Mon,  6 May 2024 12:02:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 81DCD8673A; Mon,  6 May 2024 12:02:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 6 May 2024 13:47:15 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 1faf9b2987d4475e92778977651f58a0a278cdbb
-X-Git-Newrev: 58ba95b064267cd759d51a099cabfd9128d4151d
-X-Patchwork-Hint: ignore
-Message-Id: <20240506120209.81DCD8673A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/python3: fix
- cross builds when host and target use the same SOABI
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pTFTg9SJh35j for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 12:41:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:c213::1;
+ helo=zrap278cu002.outbound.protection.outlook.com;
+ envelope-from=stefan.mueller@rey-technology.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 79AB9400B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79AB9400B5
+Received: from ZRAP278CU002.outbound.protection.outlook.com
+ (mail-switzerlandnorthazlp170100001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c213::1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 79AB9400B5
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 12:41:23 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kI7EOBcKBtIDr1jp+2IAo5fMgXNxxot4HbiUlDvVW6OfvBEmuUs7+k/BsCANvaAg7BlBJ12HmximwwDQTDnFNOc+b5wkylk+D1hs8EUB22VYSR+zu5IJmrz9mj9xEfcck0sglKewTUQf4xKPKqNh5gzTHzzMiPy7i2jmeQgQ4YTnjpXzVekD/AiYxHN9Euk19npN91yqGA8t+jEMJhXZSnbEjT7EargNYXa2Y9iZWj54zru5KtBsGA2q1iyJKKX+KYG2rUVZE7D5hQevtapJ6gW8r9lG7yDjZl1FjctRfpRsA5I9BdwJy6VdqEzuUbfTDp3uviIHNKvrAJZY5ivuug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hz9UnescCIVztIt7Yq4eE1478DLgef/KabGtD9jmtQU=;
+ b=cKFLFHhTxRdhZUPacIqZxYwtMoY7PhRXjemeBMATYe0p3xtxhVSC9zNpCsY+mewKZgBI8B9kpUeKQP39W8dTEhYV7Pv0EPO2pa2FsU0Uh6ApSBdcYrn62lWmz6oyl6xtvzbuoz5RrKZv81aFcWpeKyJSZNgGIWnkAAxi78R+4qwdOHM48UaDbg35QfQ++ijIeG9+SqmjsEA3iAOxMQr7q5w2k+3t3y/r0ywd23VvWvrgN4DGSkt8Sakbdo1lrEmI203w8mX6Bp7J1FcEYKmcsLYemo9U4nja6gmT76fvoBhICY/roVcLryrqHcAUfDV77A5M3n6sY3Cn0q3aWMLZ1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=rey-technology.com; dmarc=pass action=none
+ header.from=rey-technology.com; dkim=pass header.d=rey-technology.com;
+ arc=none
+Received: from ZR0P278MB1168.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:55::14)
+ by GV0P278MB1300.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:5a::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.41; Mon, 6 May
+ 2024 12:41:19 +0000
+Received: from ZR0P278MB1168.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::21b0:e2c7:5163:8630]) by ZR0P278MB1168.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::21b0:e2c7:5163:8630%7]) with mapi id 15.20.7544.041; Mon, 6 May 2024
+ 12:41:18 +0000
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thread-Topic: [Buildroot] question: used wrong librarys to build packages
+Thread-Index: AdqdLSlQxVPJhkERS+iK1q9U+h9yWwAQelMAAIZ6sYAACgl6gA==
+Date: Mon, 6 May 2024 12:41:18 +0000
+Message-ID: <ZR0P278MB11686B31D2C51D21AA527C75BF1C2@ZR0P278MB1168.CHEP278.PROD.OUTLOOK.COM>
+References: <ZR0P278MB0201C028ACBF4BFB1CEE9FB0BF1F2@ZR0P278MB0201.CHEP278.PROD.OUTLOOK.COM>
+ <ZjUDfla_cDBWzc-I@landeda>
+ <ZR0P278MB116859A2D6446D0BB9AB54D4BF1C2@ZR0P278MB1168.CHEP278.PROD.OUTLOOK.COM>
+In-Reply-To: <ZR0P278MB116859A2D6446D0BB9AB54D4BF1C2@ZR0P278MB1168.CHEP278.PROD.OUTLOOK.COM>
+Accept-Language: de-CH, de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ZR0P278MB1168:EE_|GV0P278MB1300:EE_
+x-ms-office365-filtering-correlation-id: 2cdd4633-cce0-468f-33f2-08dc6dc9d3ca
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230031|366007|376005|1800799015|38070700009|41080700001; 
+x-microsoft-antispam-message-info: =?utf-8?B?S0FsN2JZdG16T2hIK3RzMmJOV1RwaFJoK3ZWZkNxWjc5WlVFL2psTGNsMXlK?=
+ =?utf-8?B?Q3V6SUlpV0hTWkpPSFdZOGNyWmFqa3IyeG40aWphMFFDaWlDbUFKWGJVU3VW?=
+ =?utf-8?B?SndZYWNueTRyRExlNms4T0xjTHlSZDBxSU5EQW1IUm9UQVdma1c2YzY2MmpP?=
+ =?utf-8?B?enRlbTRxSFEzRVo0RUhJRUJ1Q0NQVWdZYXNkN21VV1RHUTl0SEEzdzV0MEVz?=
+ =?utf-8?B?RmNEMjBJNW9FdDl3RThZUVo5N2hZUjZrZkEvRmR1Uy9ZVUpkcFE1T2loY2dJ?=
+ =?utf-8?B?c1pqcFZ4ZUU5ckZRRG9kNnRISjhnQ1NVbUFKUVNSanNHVnhhT3FlSlg2ZVNo?=
+ =?utf-8?B?RHkwS3NWQUVMREl4eFNVcGVTQnlTR1BadHFBYnZGQ0xFb2JwMHZLZGlWWXJm?=
+ =?utf-8?B?ejRJMGRrREVOamJvYUJQamhWMzZVTjdBb080QS9VVEIzVCsvYWc4VkptSkNS?=
+ =?utf-8?B?cTVVYzYza0J0NGxYZkptZ3BabFRkS1pROEdWZXQ2NEM1dXVybFlMWC9KaEor?=
+ =?utf-8?B?bitneFlBaHN2b3RLQWlRYVluSkZOTWY4ZlZsMCtVUncrUDdmTjBLSy9BV3Y2?=
+ =?utf-8?B?RHlya05IbWFJY1YwVUUyZ1hocjdyb3Y4V3c5SzcyVXNVMCtGa0VyMklGQU1q?=
+ =?utf-8?B?azhrYXBiaDNFcXRrNXRCMy9IdnVjY2hkcTlDbm5HQ29jMUd3bUpiVWFoSnFN?=
+ =?utf-8?B?RnJvRmlkbnNIRVlhaWZqWGIxcU1PVktrdUdwekY5d094OGVzV0c5WWFqNzNU?=
+ =?utf-8?B?MkNvZ1k2aWJRcHFXNVl6Zzc1M3dtUUE5NEc0T3B6SXpxRXBsaVJUdkZ2MEQ4?=
+ =?utf-8?B?Rk9Ia1V6NkV1NUZqR091SlhtL2pORno1Q09QenBlZmxWcFlveW5SUjNJVFhK?=
+ =?utf-8?B?OUFaU2R6N0FBSkhNaUhUNlZ2c2pNMzBRMW9xaFEvR3N5SVRMYVAxREdkRklw?=
+ =?utf-8?B?Nks5R3gxazNQK1RCMW14TFl3VVNIZ2JoMm02c2NWZ0ZNQVFQSUZ0UjQyM3JP?=
+ =?utf-8?B?WHFZNWlxWXBhSE51NlI3QVo2NjFOQmN1V1RVby8rUmI0YzVvdGhLRkwyMlJU?=
+ =?utf-8?B?ei90N2J5UmREYzgra0xhRDZ3eHBpVFJ1eVdXM0RKck1DRHFaeWVEWUJOZXRy?=
+ =?utf-8?B?SFJ0bFpEWFNkVW9qK1FVcVNXblV5MHBHbERhcE9adFprRDZmNUUvMlZHNm0x?=
+ =?utf-8?B?dFJaSUhna3dXc3lIaStuYUxlT1E1dWRjMVpiVkJldW5QMktBemhGdTNOV1FC?=
+ =?utf-8?B?YndQMGRFSjlodDlMajQrcW1rZ0kxSXdLQ1hKMDEwSUsrS1M4ZmQyTXo2MHo0?=
+ =?utf-8?B?cXV6eEt3MEZQaWUxQ2FVYXEya1IvbTBIWDRyUDE2RFBDOHFMc3FSZTVqeGZO?=
+ =?utf-8?B?Y2k1TlNUS3RqUktJbjRMUFlnc3pqREoxMVlPZnRxcEFPV0E1bngrdXk1SEZX?=
+ =?utf-8?B?b29TeldaQXVDQ0NJTnZ5aURpdkZvMEV1MkNSYkhHclp0aXB0VDVDSjJsYk5C?=
+ =?utf-8?B?NEFsaFBWUUVOQURwaStkMzRGS3cxc1NQZUQ0Wm1YWkVYOHZGaHlEZnNpUDMz?=
+ =?utf-8?B?bWg1dDhuVGdsYkFwMXc2L1RLRTFzSmNkN2ZmZ3g5bDhJSWVEbUxGaERLY3Vm?=
+ =?utf-8?B?VTJtOElORTNLM3NqSUZQSzZjTmtWelpXMXY1ZjgzbnBlZmRvUnJxWE5TdERm?=
+ =?utf-8?B?L3pndC9LVTUvSUJTclZmcW9mUEd0N0UvTFhZQ3BRV0ZhN3RtVFFBdXcydUZz?=
+ =?utf-8?B?L0E4bHpkMmxRWTZqOExLbExEYUp2V1ZNeVZvMFFiOE4xcTREUDBPM2F2cExZ?=
+ =?utf-8?Q?A3FizuYFLJy7q8zdNMIB9VSD/XVO6dh4raumI=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:ZR0P278MB1168.CHEP278.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(366007)(376005)(1800799015)(38070700009)(41080700001); DIR:OUT;
+ SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OUdFdVE1SkVieVo2a1cwT2loTFFUaWZ3dmNCcmgyNUlISVdaT3IxeWRJRDE5?=
+ =?utf-8?B?RURzbXAwZTBiUGxQYVNLa2pKUWtXWndYK09FM0ZyeWhkQUNrajk4MnlKQkRT?=
+ =?utf-8?B?c0VoQXF6TTI4UFdqRWtndDVmdHNLeGlOVmttbFpsQS9qN011b1dnT2srR1Rz?=
+ =?utf-8?B?Vm5OSGtBUEFUcldTNUpTam5CeWl3ckdlVFdsQXB5UXo0YllwM0taR2hRS3Ir?=
+ =?utf-8?B?M1NsblZkWWpwSTgyOVFNRkFGWUNkQ2cvM2FPUlAyOVZ3L24vbzRDMVRTaEFP?=
+ =?utf-8?B?NW5jckR3b3U1TUZKbFVDMXJhNEQ1TXA5bHBKaFJPemk5Y05zOE5Tbkh2TTBM?=
+ =?utf-8?B?NkJON0ljTVVNRVpacHVabU1ncnZrWCtUM2g0dDhoQXNvWEJFV2V4ZlBXaDgv?=
+ =?utf-8?B?eXhRbEZ3ZkNkQzlPMmVkOTVsY29ZNDBoc3RvOU1lRTRQbHBrL2hxMUM0cG05?=
+ =?utf-8?B?MUZ5bE1tR2dJY1lla0NqMlhYNTRRZmNPVDUya0QySm9XRVBNcTM4S3VlenVk?=
+ =?utf-8?B?R0hGNEVJanJZM1c2UFR0eC9FL3BpaHVpV3ozK1RqNGUzWllOVUxEVGRMc1lD?=
+ =?utf-8?B?VVR5TFd0bFRPK011N29WMGpUemZoVTlEZ1ZsNjVsT1YvcDRodEtPMmFpT3Rl?=
+ =?utf-8?B?ZnpxZWlNVE0xOHVWb3VlVjdOa3lqekc5RUh6ZjBWTnEyWENRSXdocDE2bFk1?=
+ =?utf-8?B?cWpRbTZpT0x1UDF1SlA2bkE2TU1EV3RoaG9EdTIrZGxoOXV0TGJTTmxReERW?=
+ =?utf-8?B?U1ZpdXBFQzFDd0YvanRvd0tJVmpmbmw2SThjZGRpUTJwdzdkaVlrTWNQUXFT?=
+ =?utf-8?B?ZUQ4YWJmdFBlOXFHSEttOVMxMjJZUzdUeCt5K3QzZmVjZzk0TUFXRFNnNnQ3?=
+ =?utf-8?B?WDlManhjZnloZFU4cjk0NGJxcm02R00ySm9MOUltR3JsT29XSmJGK0pmK2di?=
+ =?utf-8?B?SmQ3RWR3M2FJMm1ZcHpkd1JpUGZ0Snk4ckRyVXBpNlFwTTlKOFF3T3hScXNG?=
+ =?utf-8?B?dGpLUi9POHhKQnhHOHFXbkZINXBjMjJHRXdmSHpKcm1hYUwyYS9WY2pPNUhi?=
+ =?utf-8?B?dGpVTzBzVlRGY2pBTDA0NjNYcm1OVlo5TytSQ3RPMUpDTlhzekZJLzlML2Vx?=
+ =?utf-8?B?R0JSSy9oeldsRWxudHlEdlFrTlliRldwRXN2c25SRS91VTE1elI4QWs4N2kv?=
+ =?utf-8?B?Y2Z5M0ZGWEpKUTBmaWFNdDVnS3NYK0syUnUzOGtTWmtpV0FkOTBoNy9ROHFT?=
+ =?utf-8?B?dnVnZWNNVnJHNFg2cXl2eFVaUC93b3BrcnVvUzA4TVlkMzFIalpxWUM5ZnBO?=
+ =?utf-8?B?eW9NQ3p6SGZqZURwVzBNeU1xWnR4ZU44V2VtS1dGOFRmZERWSVpHMFBJejRR?=
+ =?utf-8?B?bG8yTDNEYUpXdnRHenJXRDdOaW9lNzNwQzI0c2x1ZXNEQXphZ1ZROUorQ0lK?=
+ =?utf-8?B?dzdqY04xZEF3czBkU0s0d1hoNUl6cWZTU1lsS2NEcHFzM1NlL0FmVG9XREF4?=
+ =?utf-8?B?WjhpWlBSV2lCZHdLWnhBcjJ0WXJqM2xaQjhUZEFGV1lvKzdyd0g5N1E2WnBt?=
+ =?utf-8?B?cUJUVWxRTU5WcUk0NmdLSmtldndySzE1SlQ5Wm1ibjlqUC8rSENuWTRtbjFE?=
+ =?utf-8?B?ajVYbFI5YkptRnhLNlNpekRtYnVXZ3ZjU0RIUnhTT3g1U05ha282VDdDeitU?=
+ =?utf-8?B?VEhaU0drR3lEaXdSRG1PeHpqbVZlUzBkdDV1Z1Q5U0ZGMFVpOWxrZWxBL2RG?=
+ =?utf-8?B?WEtYN2pHVmxqcmR4WlBMNklRRWRQZUszZ3pzaGp5aURZc3EvUnRjYUltY0FB?=
+ =?utf-8?B?ZzI2RHpNZE1lWDVuc29DU0xKbjhrOXVobktOSVBvQlJCZEdRZXZWY3V6ejhj?=
+ =?utf-8?B?bDNtNzZVUzUybTd4RlhtZnBlNDBWa1BiS2pGS3F6N1U1cmNlYVBPN1hSSDMv?=
+ =?utf-8?B?NTZMazRndkxqRVIxY21VSlltRXgrRUlaQlBPdDRxZStDeVFMaVlCdTh3Tk5R?=
+ =?utf-8?B?ZXBabENGcUdEU0dHcHlaZ0lldXpqR2dXV0lFMWVIcVlhSG9hQ2ZmTWFnQXVa?=
+ =?utf-8?B?UUNZM2J5c2tmNm90b1dCbWlNU3hOeDUxSDhNdXQrZkdiQ1JJZ0tFVW10ekJy?=
+ =?utf-8?B?UGtBc1g4WCt0VGFtVi9PbzRqOGJDcUFNdDAvRDU5VmM0bU5hdVUwVlZLV1lJ?=
+ =?utf-8?B?cFE9PQ==?=
+MIME-Version: 1.0
+X-OriginatorOrg: rey-technology.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB1168.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2cdd4633-cce0-468f-33f2-08dc6dc9d3ca
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2024 12:41:18.8422 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 7137cfb5-c814-4224-8896-1b4a6ff99146
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JgYCjuRV06hYjdUkxRGijqbMqfbOe9hJ+CDy/5Y2rp+kQEhNU/9t3b1/gQW2evO25IHTD4vQc4yGAfU7cFn65P2X4+3zeDo/wba+pjS86A5L9wwTagzhqS/3Zml3x+xE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB1300
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rey-technology.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hz9UnescCIVztIt7Yq4eE1478DLgef/KabGtD9jmtQU=;
+ b=qIF6dxWqa3ITc8s3vRrBsdKxb/czOYe/f5J74G4fTu60zx8PYg7JiZHbo2gFlfymAR++aNys+95VSMsv5OFjMqi2qmRXDcNR9su7eGBlcDy2GbBw2QJwjCTP/vaNRJVcuZIYELFRy7U4z/cuDGaCY3wNGPi8pWeqiMJL7gbw/l4JkMYy8iOvOterKDYnCDqkJ8RZljwUh3uR/aLxD/aXrIZCIv1UIrm6uinIjNXmiM/6gbuCfGogMBEsX6iSol7zHoJSj5cG6ZRmDP4cLDvue6iGZqAgeEHqLJmT7coANJa9+5mLs7oKw01j0m39+lniJQK1BG7W1qLRwKXxD08Thg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rey-technology.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rey-technology.com header.i=@rey-technology.com
+ header.a=rsa-sha256 header.s=selector1 header.b=qIF6dxWq
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=rey-technology.com;
+Subject: Re: [Buildroot] question: used wrong librarys to build packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,188 +190,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: =?utf-8?q?Stefan_M=C3=BCller_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?B?U3RlZmFuIE3DvGxsZXI=?= <stefan.mueller@rey-technology.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58ba95b064267cd759d51a099cabfd9128d4151d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+I have found the library problem.
+during the boot process my system-reconfiguration-script has overwritten the libcurl.so.4 with a wrong version.
 
-When python performs a cross compile, it uses a host interpreter to run
-steps on behalf of the foreign architecture to finalize the build.
 
-When performing these steps, foreign modules may be loaded if the SOABI
-matches that of the host. This can lead to issues if the modules are
-linked against a libc not available on the host or if the binaries
-include instructions unsupported by the host.
-
-For now, patch the foreign libraries out of PYTHONPATH and explicitly
-define the path to sysconfigdata so builds can complete without error.
-
-This method currently passes all upstream CI pipelines [0] and should
-also work (with some modifications) for the migration to 3.12 [1].
-
-Fixes: http://autobuild.buildroot.net/results/c854080e003e9a7d525325073190b472a8f982aa/
-[0]: https://github.com/python/cpython/pull/116294
-[1]: https://lists.buildroot.org/pipermail/buildroot/2024-February/685369.html
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d01e13c4d419ca2fc31d6300033eacb1d19cb615)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ix-cross-compiles-when-host-and-target-us.patch | 140 +++++++++++++++++++++
- 1 file changed, 140 insertions(+)
-
-diff --git a/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch b/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-new file mode 100644
-index 0000000000..4d5afeb3cb
---- /dev/null
-+++ b/package/python3/0032-gh-115382-Fix-cross-compiles-when-host-and-target-us.patch
-@@ -0,0 +1,140 @@
-+From 8d8cc9087fd44c097775ca0a9ebb6c877605baec Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <5265893+vfazio@users.noreply.github.com>
-+Date: Wed, 28 Feb 2024 13:55:04 -0600
-+Subject: [PATCH] gh-115382: Fix cross compiles when host and target use same
-+ SOABI
-+
-+Previously, when a build was configured to use a host interpreter via
-+--with-build-python, the PYTHON_FOR_BUILD config value included a path
-+in PYTHONPATH that pointed to the target's built external modules.
-+
-+For "normal" foreign architecture cross compiles, when loading compiled
-+external libraries, the target libraries were processed first due to
-+their precedence in sys.path. These libraries were then ruled out due to
-+a mismatch in the SOABI so the import mechanism continued searching
-+until it found the host's native modules.
-+
-+However, if the host interpreter and the target python were on the same
-+version + SOABI combination, the host interpreter would attempt to load
-+the target's external modules due to their precedence in sys.path.
-+
-+Despite the "match", the target build may have been linked against a
-+different libc or may include unsupported instructions so loading or
-+executing the target's external modules can lead to crashes.
-+
-+Now, the path to the target's external modules is no longer defined in
-+PYTHONPATH to prevent accidentally loading these foreign modules.
-+
-+One caveat is that during certain build stages, the target's sysconfig
-+module requires higher precedence than the host's version in order to
-+accurately query the target build's configuration.
-+
-+This worked previously due to the target's sysconfig data module having
-+precedence over the host's (see above). In order to keep this desired
-+behavior, a new environment variable, _PYTHON_SYSCONFIGDATA_PATH, has
-+been defined so sysconfig can search this directory for the target's
-+sysconfig data.
-+
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+Upstream-issue: https://github.com/python/cpython/issues/115382
-+Upstream: https://github.com/python/cpython/pull/116294
-+---
-+ Lib/sysconfig.py             | 15 ++++++++++++++-
-+ Lib/test/libregrtest/main.py |  1 +
-+ Lib/test/pythoninfo.py       |  1 +
-+ Tools/scripts/run_tests.py   |  1 +
-+ configure                    |  2 +-
-+ configure.ac                 |  2 +-
-+ 6 files changed, 19 insertions(+), 3 deletions(-)
-+
-+diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
-+index 6328ec41af..744f715fe2 100644
-+--- a/Lib/sysconfig.py
-++++ b/Lib/sysconfig.py
-+@@ -535,7 +535,20 @@ def _init_posix(vars):
-+     """Initialize the module as appropriate for POSIX systems."""
-+     # _sysconfigdata is generated at build time, see _generate_posix_vars()
-+     name = _get_sysconfigdata_name()
-+-    _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)
-++
-++    # For cross builds, the path to the target's sysconfigdata must be specified
-++    # so it can be imported. It cannot be in PYTHONPATH, as foreign modules in
-++    # sys.path can cause crashes when loaded by the host interpreter.
-++    # Rely on truthiness as a valueless env variable is still an empty string.
-++    # See OS X note in _generate_posix_vars re _sysconfigdata.
-++    if (path := os.environ.get('_PYTHON_SYSCONFIGDATA_PATH')):
-++        from importlib.machinery import FileFinder, SourceFileLoader, SOURCE_SUFFIXES
-++        from importlib.util import module_from_spec
-++        spec = FileFinder(path, (SourceFileLoader, SOURCE_SUFFIXES)).find_spec(name)
-++        _temp = module_from_spec(spec)
-++        spec.loader.exec_module(_temp)
-++    else:
-++        _temp = __import__(name, globals(), locals(), ['build_time_vars'], 0)
-+     build_time_vars = _temp.build_time_vars
-+     vars.update(build_time_vars)
-+ 
-+diff --git a/Lib/test/libregrtest/main.py b/Lib/test/libregrtest/main.py
-+index a9725fa967..121e2e7393 100644
-+--- a/Lib/test/libregrtest/main.py
-++++ b/Lib/test/libregrtest/main.py
-+@@ -519,6 +519,7 @@ def _add_cross_compile_opts(self, regrtest_opts):
-+                 '_PYTHON_PROJECT_BASE',
-+                 '_PYTHON_HOST_PLATFORM',
-+                 '_PYTHON_SYSCONFIGDATA_NAME',
-++                "_PYTHON_SYSCONFIGDATA_PATH",
-+                 'PYTHONPATH'
-+             }
-+             old_environ = os.environ
-+diff --git a/Lib/test/pythoninfo.py b/Lib/test/pythoninfo.py
-+index 74ebb5e5b8..fa7fbca34e 100644
-+--- a/Lib/test/pythoninfo.py
-++++ b/Lib/test/pythoninfo.py
-+@@ -326,6 +326,7 @@ def format_groups(groups):
-+         "_PYTHON_HOST_PLATFORM",
-+         "_PYTHON_PROJECT_BASE",
-+         "_PYTHON_SYSCONFIGDATA_NAME",
-++        "_PYTHON_SYSCONFIGDATA_PATH",
-+         "__PYVENV_LAUNCHER__",
-+ 
-+         # Sanitizer options
-+diff --git a/Tools/scripts/run_tests.py b/Tools/scripts/run_tests.py
-+index 445a34ae3e..4077a83424 100644
-+--- a/Tools/scripts/run_tests.py
-++++ b/Tools/scripts/run_tests.py
-+@@ -42,6 +42,7 @@ def main(regrtest_args):
-+             '_PYTHON_PROJECT_BASE',
-+             '_PYTHON_HOST_PLATFORM',
-+             '_PYTHON_SYSCONFIGDATA_NAME',
-++            "_PYTHON_SYSCONFIGDATA_PATH",
-+             'PYTHONPATH'
-+         }
-+         environ = {
-+diff --git a/configure b/configure
-+index a1ad0ae251..0657162d1a 100755
-+--- a/configure
-++++ b/configure
-+@@ -3262,7 +3262,7 @@ fi
-+     fi
-+         ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
-+     PYTHON_FOR_FREEZE="$with_build_python"
-+-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$with_build_python
-++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
-+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_build_python" >&5
-+ $as_echo "$with_build_python" >&6; }
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index e5fb8bd99e..d444f5ec09 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -162,7 +162,7 @@ AC_ARG_WITH(
-+     dnl Build Python interpreter is used for regeneration and freezing.
-+     ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
-+     PYTHON_FOR_FREEZE="$with_build_python"
-+-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$with_build_python
-++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
-+     AC_MSG_RESULT([$with_build_python])
-+   ], [
-+     AS_VAR_IF([cross_compiling], [yes],
-+-- 
-+2.34.1
-+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
