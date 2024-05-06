@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F78EC25B10
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:49:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 839DDC25B10
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:50:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2BA660A41;
-	Mon,  6 May 2024 20:49:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5402060A42;
+	Mon,  6 May 2024 20:50:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PkDsSuxvNQOU; Mon,  6 May 2024 20:49:57 +0000 (UTC)
+ id Z351PZ4JwCM2; Mon,  6 May 2024 20:50:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E96CA60A42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A8DC60A46
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E96CA60A42;
-	Mon,  6 May 2024 20:49:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 756371BF3E8
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:49:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A8DC60A46;
+	Mon,  6 May 2024 20:50:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ADB7B1BF3E8
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6291460A42
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:49:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7C7740323
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:50:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l9jNakwgi2SY for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 20:49:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eJaKNrhn1jyS for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 20:50:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A79560A41
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A79560A41
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A79560A41
- for <buildroot@buildroot.org>; Mon,  6 May 2024 20:49:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 166B81C0004;
- Mon,  6 May 2024 20:49:51 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s45HT-003jAQ-1G;
- Mon, 06 May 2024 22:49:51 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D83FB40217
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D83FB40217
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 20:50:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D0D118693E; Mon,  6 May 2024 20:50:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240326225031.224022-1-giulio.benetti@benettiengineering.com>
- <20240326225031.224022-3-giulio.benetti@benettiengineering.com>
- <20240410234613.205a7b78@windsurf>
-Date: Mon, 06 May 2024 22:49:51 +0200
-In-Reply-To: <20240410234613.205a7b78@windsurf> (Thomas Petazzoni via
- buildroot's message of "Wed, 10 Apr 2024 23:46:13 +0200")
-Message-ID: <87cypyzmvk.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/libblockdev: bump to version 3.1.1
+To: buildroot@buildroot.org
+Date: Mon, 6 May 2024 22:49:39 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 71e6b2765b0fec5cd55aab2fc2907d076a92ec17
+X-Git-Newrev: 233ba540f5c21a2305fcd29217a9767e819cfdd1
+X-Patchwork-Hint: ignore
+Message-Id: <20240506205017.D0D118693E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libblockdev: bump
+ to version 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +59,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Stewart <christian@aperture.us>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=233ba540f5c21a2305fcd29217a9767e819cfdd1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > On Tue, 26 Mar 2024 23:50:31 +0100
- > Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit dd79b8dd60ab6817f2d3a0db9eedc1526005c9be)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libblockdev/libblockdev.hash | 2 +-
+ package/libblockdev/libblockdev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- >> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
- >> ---
- >> package/libblockdev/libblockdev.hash | 2 +-
- >> package/libblockdev/libblockdev.mk   | 2 +-
- >> 2 files changed, 2 insertions(+), 2 deletions(-)
-
- > Applied to master, thanks.
-
-Committed to 2024.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
+index 79700a4996..1438fad741 100644
+--- a/package/libblockdev/libblockdev.hash
++++ b/package/libblockdev/libblockdev.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  41e4af66c9d78e795302d37825dfd88a4970f82da7b4ebe6487feba2afae44fb  libblockdev-3.1.0.tar.gz
++sha256  a5cb33a53ff5969067982704f45399d02555fdb2313ed0c56eac9555397dc2db  libblockdev-3.1.1.tar.gz
+ sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index ebf01acfb5..9ffa15a7a9 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBBLOCKDEV_VERSION = 3.1.0
++LIBBLOCKDEV_VERSION = 3.1.1
+ LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
+ LIBBLOCKDEV_LICENSE = LGPL-2.1
+ LIBBLOCKDEV_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
