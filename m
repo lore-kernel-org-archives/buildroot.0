@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2589C25B74
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:38:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E391FC25B10
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3655D608F6;
-	Mon,  6 May 2024 20:38:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B216760764;
+	Mon,  6 May 2024 20:39:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7YvxIwa-X2na; Mon,  6 May 2024 20:38:56 +0000 (UTC)
+ id vRXxBPVieSGa; Mon,  6 May 2024 20:39:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DA9A60A3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF53E608E3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DA9A60A3A;
-	Mon,  6 May 2024 20:38:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C3A31BF3E8
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:38:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF53E608E3;
+	Mon,  6 May 2024 20:39:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4234C1BF3E8
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:39:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 043D980C44
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:38:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A2FF405EE
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:39:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q6F8Iq_9DZTm for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 20:38:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NiaoEoH8gE8j for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 20:39:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0340480B88
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0340480B88
- for <buildroot@buildroot.org>; Mon,  6 May 2024 20:38:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E09EF86921; Mon,  6 May 2024 20:38:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 6 May 2024 22:31:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a2564e6880b70256c850a3fb54e9ec77d109d58
-X-Git-Newrev: 7e6098f9b487c5bc8ee6a36b5e14964c98ad2cb9
-X-Patchwork-Hint: ignore
-Message-Id: <20240506203847.E09EF86921@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: bump to 1.0.48
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 004EB405C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 004EB405C1
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 004EB405C1
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 20:39:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B4BBFF804;
+ Mon,  6 May 2024 20:39:14 +0000 (UTC)
+Date: Mon, 6 May 2024 22:39:13 +0200
+To: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+Message-ID: <20240506223913.31a83b67@windsurf>
+In-Reply-To: <20240502045518.4875-1-dm.chestnykh@gmail.com>
+References: <20240502045518.4875-1-dm.chestnykh@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715027954;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ISgyZyu94tFU56yHr0VcJ3K4YnE56rrktV65sC+0qe8=;
+ b=P0v5bVx1e5zHSyIRJ8hdy1nMkAa30B5XcT+o/M0flfiXTewpYVI1u2I0AiNdA5HZ++LeD0
+ UOm07xGZF98c3OAf9yfTtkIJdm45kBeSZyocv91a8gXJj2C1/lcGYOrjwA04nl3lDWCiP0
+ 3UICtz29ptiZ4ZSNxT+v0qw2YZx9XP4LSeccWbfh3GQR/T8nt506EIWz4m3FI7oou2M0fx
+ O248mMJeZAaOX7MSuoBCZfq/Pe0TvHBxFpoBQbBL/kBv+FhcqyrbmwV8FK5DssKUAEO0wZ
+ 7LtuuJe9b60YRn/ZWt5g8BrXvj0QxeiAPz3XIr0dNLkpRqU8H+9/Q6iAbZ7eIQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=P0v5bVx1
+Subject: Re: [Buildroot] [PATCH v2 1/3] package/uclibc: Bump to 1.0.48.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,54 +82,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e6098f9b487c5bc8ee6a36b5e14964c98ad2cb9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  2 May 2024 07:55:16 +0300
+Dmitry Chestnykh <dm.chestnykh@gmail.com> wrote:
 
-- The 1.0.48 release of uClibc-ng includes the fix for the SPARC
-  related issue discussed at
-  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+> - In 1.0.48 release uClibc-ng has provided the fix
+> for SPARC related to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+> - The hash for COPYING.LIB was changed because '^L' (0x0C) characters
+> were removed from COPYING.LIB in uClibc-ng repo.
+> 
+> Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+> ---
+> v1 -> v2:
+> - Describe the change of COPYING.LIB hash.
+> ---
+>  package/uclibc/uclibc.hash | 6 +++---
+>  package/uclibc/uclibc.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-- The hash for COPYING.LIB was changed because '^L' (0x0C) characters
-  were removed from COPYING.LIB in uClibc-ng repo.
+Applied to master, with minor commit log fixups. Thanks a lot!
 
-Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/uclibc/uclibc.hash | 6 +++---
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index a10ceab54c..7097bbf99a 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.47.tar.xz.sha256
--sha256  29a4d684a06da344ee3ee09acc2ca7649d592ae3ff848f698145c46def05efcb  uClibc-ng-1.0.47.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.48.tar.xz.sha256
-+sha256  3bf5fc6cc5cbc454b6c478424755c6f71e7c15578a2c966f02606aa5c5596e21  uClibc-ng-1.0.48.tar.xz
- # Locally calculated
--sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-+sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index a7b18133ff..9593e18d45 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.47
-+UCLIBC_VERSION = 1.0.48
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
