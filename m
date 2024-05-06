@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 765CFC10F16
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 11:36:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF959C10F16
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 11:36:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40D4740606;
-	Mon,  6 May 2024 11:36:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33F2B4060C;
+	Mon,  6 May 2024 11:36:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Oxv391ianD5G; Mon,  6 May 2024 11:36:10 +0000 (UTC)
+ id XOu9MZeGRRy1; Mon,  6 May 2024 11:36:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E52BB4060B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C97154073F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E52BB4060B;
-	Mon,  6 May 2024 11:36:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6FDE01BF947
+	by smtp4.osuosl.org (Postfix) with ESMTP id C97154073F;
+	Mon,  6 May 2024 11:36:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BCF11BF3A6
  for <buildroot@lists.busybox.net>; Mon,  6 May 2024 11:36:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C86560634
+ by smtp1.osuosl.org (Postfix) with ESMTP id 583C88124F
  for <buildroot@lists.busybox.net>; Mon,  6 May 2024 11:36:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2yBRP2ValojL for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SfY3lgIccHnf for <buildroot@lists.busybox.net>;
  Mon,  6 May 2024 11:36:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D41860621
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D05981214
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D41860621
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D05981214
  for <buildroot@buildroot.org>; Mon,  6 May 2024 11:36:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5778786734; Mon,  6 May 2024 11:36:07 +0000 (UTC)
+ id 3784186733; Mon,  6 May 2024 11:36:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 May 2024 13:21:56 +0200
+Date: Mon, 6 May 2024 13:21:21 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 69125a8fb8f0c87152be936c7816f5f83d3ee3ce
-X-Git-Newrev: 1faf9b2987d4475e92778977651f58a0a278cdbb
+X-Git-Oldrev: 6ea8073519718aa403977a8d9cc7061cc6ce0bd8
+X-Git-Newrev: 69125a8fb8f0c87152be936c7816f5f83d3ee3ce
 X-Patchwork-Hint: ignore
-Message-Id: <20240506113607.5778786734@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/crucible: update
- LICENSE information
+Message-Id: <20240506113607.3784186733@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/uuu: bump to
+ version 1.5.177
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1faf9b2987d4475e92778977651f58a0a278cdbb
+commit: https://git.buildroot.net/buildroot/commit/?id=69125a8fb8f0c87152be936c7816f5f83d3ee3ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Since crucible commit 7fe0bb96da65 ("move to BSD style license") the
-license has been changed to BSD-3. This changed happened for the
-2023.11.02 release of crucible, to which the Buildroot package was
-bumped in Buildroot commit be3f95ed14559f8a9739a12cff604add622b0416.
+- Support i.MX91
+- Fix a crash with -d option when change back file.
 
-Change the license type and hash accordingly.
+Release notes:
+https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.177
 
-Fixes:
-  - http://autobuild.buildroot.net/results/14dfa0a47be54929c527c12fe9b95f34c1d8c7f5/
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9f4cae383a061b52424bf37900aaa221e3a2f3c5)
+(cherry picked from commit dfe02734bfbbab680cd9ceb98e10d0344abbe058)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/crucible/crucible.hash | 2 +-
- package/crucible/crucible.mk   | 2 +-
+ package/uuu/uuu.hash | 2 +-
+ package/uuu/uuu.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/crucible/crucible.hash b/package/crucible/crucible.hash
-index d5fee0068d..3a9a716732 100644
---- a/package/crucible/crucible.hash
-+++ b/package/crucible/crucible.hash
-@@ -1,2 +1,2 @@
- sha256  d21842f050163765269290d72fe79d3f95005038e865138d94e247cb455098da  crucible-2023.11.02.tar.gz
--sha256  d88514630470aec9fa7abdc990a1e0a8751a752321bffa868188c49009d64d59  LICENSE
-+sha256  a89c50d83be30fe7ec75be69a07f6c1b5dfaae0a6b94a678d2394fff34acb69c  LICENSE
-diff --git a/package/crucible/crucible.mk b/package/crucible/crucible.mk
-index 2206663e24..5eedbca8ee 100644
---- a/package/crucible/crucible.mk
-+++ b/package/crucible/crucible.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
+index e45cbb8680..0f746a7633 100644
+--- a/package/uuu/uuu.hash
++++ b/package/uuu/uuu.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  6e65fc028afacc94b805ae376e3da3864dcb2570d425037820e716207ab70373  uuu_source-uuu_1.5.165.tar.gz
++sha256  fac38e93714181fbfb0ff52b9cd29395c7eb342def5c3857da87e5429beb3927  uuu_source-uuu_1.5.177.tar.gz
+ sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
+diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+index 5800277b10..b6611dc3d4 100644
+--- a/package/uuu/uuu.mk
++++ b/package/uuu/uuu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- CRUCIBLE_VERSION = 2023.11.02
- CRUCIBLE_SITE = $(call github,usbarmory,crucible,v$(CRUCIBLE_VERSION))
--CRUCIBLE_LICENSE = GPL-3.0
-+CRUCIBLE_LICENSE = BSD-3-Clause
- CRUCIBLE_LICENSE_FILES = LICENSE
- CRUCIBLE_GOMOD = ./cmd/crucible
- 
+-UUU_VERSION = 1.5.165
++UUU_VERSION = 1.5.177
+ UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
+ UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
+ UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
