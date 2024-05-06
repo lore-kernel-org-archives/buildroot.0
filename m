@@ -4,92 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B673EC25B10
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:02:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2CA9C25B4F
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EFB88133E;
-	Mon,  6 May 2024 20:02:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C39C82103;
+	Mon,  6 May 2024 20:02:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nEcBtxrSrL6q; Mon,  6 May 2024 20:02:15 +0000 (UTC)
+ id v01H2zm0A4Ku; Mon,  6 May 2024 20:02:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 792D882103
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A52E58213E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 792D882103;
-	Mon,  6 May 2024 20:02:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1B8CD1BF3CA
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:02:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A52E58213E;
+	Mon,  6 May 2024 20:02:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 49D0F1BF947
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05C3A82103
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:02:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35EAC40B9D
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:02:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ylf0gmq27Dx0 for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 20:02:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D07108133E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D07108133E
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D07108133E
- for <buildroot@buildroot.org>; Mon,  6 May 2024 20:02:11 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-41b21ed19f5so16174855e9.2
- for <buildroot@buildroot.org>; Mon, 06 May 2024 13:02:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715025729; x=1715630529;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=tLI038Mt7gNKJxFhYCz/ROLV5/lxtOqd6Rb9znXXMsw=;
- b=V0jJ6vJr5wiDq6ETkxaCd+1X47BlKGfFrTxmaVGzIfzmOARpyJaejQIXv4XLNUd15N
- f3oZ2RX9nU+jIgtraXJ3KBqhZe4DvQd1rk/aY12GPsKUrZYjGYqcIbz8hDTRm32H+28A
- OIoh/I5rsXxgl/AmocqK1T3v4XoWB0CEF+3gP2XISs44n3DRRX0NCiPKgX9NkZeCnoBM
- NZDG202YVrlp5cKwe+zJxrbcK2prZ3uWPEp8hqly/OOTCIJuvYxtUeO+a1Ob5pV71/HX
- R5x7GZSxqqDATks1DximDarnWfVNIsXcRxAt+wykcxTE1yuZWGyu4HkPE2jerhnzfLQj
- g1KA==
-X-Gm-Message-State: AOJu0YwTv+/FOPMBPeq2qruJ/DJXfGdRWziKyxsDoyaCDvpGOvYxZh9/
- Z70KqO8EnippUQZbDL6OQKuHQI0zAOJjFxSWao49NLiOB13gezNak7K2PA==
-X-Google-Smtp-Source: AGHT+IGgm3CwHr+eS6+x4Iir9ARYuzn1+XQDW4lUWa8/P7gABfOASGQ97GKUEbBfiDMgceWOUrNDQg==
-X-Received: by 2002:a05:600c:5111:b0:41c:14a4:7b05 with SMTP id
- o17-20020a05600c511100b0041c14a47b05mr8303083wms.8.1715025729075; 
- Mon, 06 May 2024 13:02:09 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- u21-20020a05600c139500b004190d7126c0sm20964992wmf.38.2024.05.06.13.02.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 May 2024 13:02:08 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  6 May 2024 22:02:06 +0200
-Message-ID: <20240506200206.111393-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iIrqaMmnfBje for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 20:02:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D46AD4057C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D46AD4057C
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D46AD4057C
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 20:02:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C596A1C0003;
+ Mon,  6 May 2024 20:02:24 +0000 (UTC)
+Date: Mon, 6 May 2024 22:02:24 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240506220224.4b53441a@windsurf>
+In-Reply-To: <20240505190821.1252791-1-fontaine.fabrice@gmail.com>
+References: <20240505190821.1252791-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715025729; x=1715630529; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tLI038Mt7gNKJxFhYCz/ROLV5/lxtOqd6Rb9znXXMsw=;
- b=kklycjUfVx4/4kr42iwUnd8qelfP9UTLQHTBfPBHCztpaq0kmoyUOX4uzSLenFNMJe
- tr9/3lm2/iuSOQgojVcnexebt3bShkPDSmp4sx+Y4laZgI54gsZpnxNkXOmKbVt5Jv4n
- o0fhT3RoxPQFx27Fr8i/+K+RGsHSPGBEiwRRpYpMvdWuz51D97NR/VuLkQeQE++h7EN7
- 6MD9QBogD9JxarzOdNSJrRTN/Ry5qCPPOm+tjUIAondSyBGtZ8bzb/CO3SDYgvx4026O
- T+UHBiPjwHgUPUTulzJIbRpWlutHMGC4vvZqxzGqVbcZ4uKT/L+9fs+//pbt02iYuMKg
- Mhww==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=bootlin.com; s=gm1; t=1715025745;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=8PLh2oWF4GwgRilMOVZRwSiWI81KGzCleZzebMs4nLI=;
+ b=Kja1N4ItGu4+0dYwSwp2vWDJfwp06cLOEIfUiUvKs41h4441KMgN8Is6Hrl6IKzKR+RlAK
+ uJW6JdXPOTCUPTnzflqjZLo5MxqaEHhquZtOn7WIE2VhlbQFnogYuftdgNtgosTowaoVHX
+ vaTml8CzotPn+Gvl5OgLVmXe5EZH9bzFuXKHmXmUdGUltN46RVK3DtYCmZ2GTxfZAmGPr7
+ sK9XGdkVZDtTK79m8YgBtfAfR4+t1SIDvbQEZUdWonzxbWCc0Sk7ttUWBRxG5cxoELW23R
+ KN9fW8H3M8kPHd1VzgtfzC7DqPj2rk39Gvq9lFGAM8AaA+8fWy+AcPVbnqTadQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=kklycjUf
-Subject: [Buildroot] [PATCH 1/1] package/pppd: add linux-pam optional
- dependency
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Kja1N4It
+Subject: Re: [Buildroot] [PATCH 1/1] package/liburiparser: security bump to
+ version 0.9.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,44 +81,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-linux-pam is an optional dependency which is enbled by default since
-bump to version 2.5.0 in commit 0c15169f5ae57d88a77df34cc896044a37c9597b
-and
-https://github.com/ppp-project/ppp/commit/2883dd07101bf851e2ea368f0c04c91aea85cff2
+On Sun,  5 May 2024 21:08:21 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/pppd/pppd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> - Fixed: [CVE-2024-34402]
+>     Protect against integer overflow in ComposeQueryEngine
+> - Fixed: [CVE-2024-34403]
+>     Protect against integer overflow in ComposeQueryMallocExMm
+> 
+> https://github.com/uriparser/uriparser/blob/uriparser-0.9.8/ChangeLog
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/liburiparser/liburiparser.hash | 2 +-
+>  package/liburiparser/liburiparser.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 616b843e3d..0a1eaf9209 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -17,6 +17,13 @@ PPPD_AUTORECONF = YES
- PPPD_INSTALL_STAGING = YES
- PPPD_CONF_OPTS = --enable-multilink
- 
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+PPPD_CONF_OPTS += --with-pam=$(STAGING_DIR)/usr
-+PPPD_DEPENDENCIES += linux-pam
-+else
-+PPPD_CONF_OPTS += --without-pam
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- PPPD_CONF_OPTS += \
- 	--enable-eaptls \
+Applied to master, thanks.
+
+Thomas
 -- 
-2.43.0
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
