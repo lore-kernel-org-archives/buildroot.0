@@ -4,56 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D10DCC4345F
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 07:40:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCB44C4345F
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 07:40:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80E0581991;
-	Mon,  6 May 2024 07:40:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C05F81CA7;
+	Mon,  6 May 2024 07:40:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uu77AP-1ZYRO; Mon,  6 May 2024 07:40:19 +0000 (UTC)
+ id kSf6VFUtEZY8; Mon,  6 May 2024 07:40:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A403F8199D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E800D81CD0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A403F8199D;
-	Mon,  6 May 2024 07:40:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AAB251BF276
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 07:40:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E800D81CD0;
+	Mon,  6 May 2024 07:40:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E93C41BF276
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 07:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A24C98199D
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 07:40:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5245404F4
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 07:40:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BnbgisKqGYq7 for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 07:40:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 66A8181991
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66A8181991
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 66A8181991
- for <buildroot@buildroot.org>; Mon,  6 May 2024 07:40:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BDDA51C0002;
- Mon,  6 May 2024 07:40:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8le9aPh6sGiS for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 07:40:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3534B4026C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3534B4026C
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3534B4026C
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 07:40:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6CDE21BF203;
+ Mon,  6 May 2024 07:40:15 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1s3sxK-0016Xc-0j;
+ (envelope-from <peko@dell.be.48ers.dk>) id 1s3sxK-0016Xi-2Z;
  Mon, 06 May 2024 09:40:14 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon,  6 May 2024 09:40:11 +0200
-Message-Id: <20240506074013.263439-1-peter@korsgaard.com>
+Date: Mon,  6 May 2024 09:40:12 +0200
+Message-Id: <20240506074013.263439-2-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240506074013.263439-1-peter@korsgaard.com>
+References: <20240506074013.263439-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: [Buildroot] [PATCH v2 1/2] configs/sheevaplug_defconfig: bump Linux
- to fix binutils 2.41 build
+Subject: [Buildroot] [PATCH v2 2/2] configs/sheevaplug_defconfig: add hashes
+ for u-boot and Linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +72,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/6761770801
+And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES.
 
-The Linux kernel fails to build since commit e88225ed882 (package/binutils:
-make 2.41 the default version):
-
-arch/arm/mm/proc-feroceon.S: Assembler messages:
-arch/arm/mm/proc-feroceon.S:587: Error: junk at end of line, first unrecognized character is `#'
-make[3]: *** [scripts/Makefile.build:430: arch/arm/mm/proc-feroceon.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-
-Fix the build by bumping the kernel to 4.14.336, which includes commit
-3ab03df64f77 (ARM: 8933/1: replace Sun/Solaris style flag on section
-directive):
-
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-4.14.y&id=3ab03df64f7754728a2257c47775a70a88428331
+Generated by utils/add-custom-hashes, with the (redundant)
+linux-headers.hash replaced by a symlink.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/sheevaplug_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/sheevaplug/patches/linux-headers/linux-headers.hash | 1 +
+ board/sheevaplug/patches/linux/linux.hash                 | 2 ++
+ board/sheevaplug/patches/uboot/uboot.hash                 | 2 ++
+ configs/sheevaplug_defconfig                              | 1 +
+ 4 files changed, 6 insertions(+)
+ create mode 120000 board/sheevaplug/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/sheevaplug/patches/linux/linux.hash
+ create mode 100644 board/sheevaplug/patches/uboot/uboot.hash
 
+diff --git a/board/sheevaplug/patches/linux-headers/linux-headers.hash b/board/sheevaplug/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/sheevaplug/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/sheevaplug/patches/linux/linux.hash b/board/sheevaplug/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..b207306a2b
+--- /dev/null
++++ b/board/sheevaplug/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  0820fdb7971c6974338081c11fbf2dc869870501e7bdcac4d0ed58ba1f57b61c  linux-4.14.336.tar.xz
+diff --git a/board/sheevaplug/patches/uboot/uboot.hash b/board/sheevaplug/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..d6818bac36
+--- /dev/null
++++ b/board/sheevaplug/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  9f10df88bc91b35642e461217f73256bbaeeca9ae2db8db56197ba5e89e1f6d4  u-boot-2018.07.tar.bz2
 diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
-index 7f186df22c..0879f17071 100644
+index 0879f17071..6b3719a507 100644
 --- a/configs/sheevaplug_defconfig
 +++ b/configs/sheevaplug_defconfig
-@@ -27,7 +27,7 @@ BR2_TARGET_UBOOT_FORMAT_KWB=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.253"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.336"
- BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
- BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+@@ -4,6 +4,7 @@ BR2_arm926t=y
+ 
+ # system
+ BR2_GLOBAL_PATCH_DIR="board/sheevaplug/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_SYSTEM_DHCP="eth0"
 -- 
 2.39.2
 
