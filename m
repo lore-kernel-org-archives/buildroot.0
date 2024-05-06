@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 010B2C25B4F
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 19:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EB68C25B4F
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 19:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C95B4116E;
-	Mon,  6 May 2024 19:02:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6FEF64148A;
+	Mon,  6 May 2024 19:02:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8L8QDPCR-4nL; Mon,  6 May 2024 19:02:26 +0000 (UTC)
+ id 0kfHTHQBYKdK; Mon,  6 May 2024 19:02:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14FC140B86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2ABC41190
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14FC140B86;
-	Mon,  6 May 2024 19:02:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 46CFD1BF951
+	by smtp2.osuosl.org (Postfix) with ESMTP id B2ABC41190;
+	Mon,  6 May 2024 19:02:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 44C621BF909
  for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:02:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F0E560885
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E7FC40B86
  for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:02:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id orRlywrDyKrg for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RczSFYzN9xDu for <buildroot@lists.busybox.net>;
  Mon,  6 May 2024 19:02:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FC0A60874
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77ED740B6F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FC0A60874
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77ED740B6F
  for <buildroot@buildroot.org>; Mon,  6 May 2024 19:02:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8909C8679D; Mon,  6 May 2024 19:02:23 +0000 (UTC)
+ id 7094B8679E; Mon,  6 May 2024 19:02:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 6 May 2024 20:59:38 +0200
+Date: Mon, 6 May 2024 20:59:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ff70f9ee4c7ea08471ce6aca948f5ae83e4e011d
-X-Git-Newrev: 9f8d3f47d7caa395aa7c528891455389b0f0109e
+X-Git-Oldrev: e86aec1663357a9f1f7de56129dfd1ab1c5d2cda
+X-Git-Newrev: 4abda655e6148cc3607101cb24933706fb2b6801
 X-Patchwork-Hint: ignore
-Message-Id: <20240506190223.8909C8679D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydal/Config.in: bool
- argument needs quotation marks
+Message-Id: <20240506190223.7094B8679E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cmocka/Config.in: bool argument
+ needs quotation marks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,33 +66,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f8d3f47d7caa395aa7c528891455389b0f0109e
+commit: https://git.buildroot.net/buildroot/commit/?id=4abda655e6148cc3607101cb24933706fb2b6801
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following error/warnings with kconfig from linux-6.9-rc5:
 
-  package/python-pydal/Config.in:2: syntax error
-  package/python-pydal/Config.in:2: invalid statement
-  package/python-pydal/Config.in:3: invalid statement
+  package/cmocka/Config.in:2: syntax error
+  package/cmocka/Config.in:2: invalid statement
+  package/cmocka/Config.in:3: invalid statement
+  package/cmocka/Config.in:4: invalid statement
   [...]
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pydal/Config.in | 2 +-
+ package/cmocka/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pydal/Config.in b/package/python-pydal/Config.in
-index f1c97f91a0..204b47a09a 100644
---- a/package/python-pydal/Config.in
-+++ b/package/python-pydal/Config.in
+diff --git a/package/cmocka/Config.in b/package/cmocka/Config.in
+index cf49d0f6be..80e29778d3 100644
+--- a/package/cmocka/Config.in
++++ b/package/cmocka/Config.in
 @@ -1,5 +1,5 @@
- config BR2_PACKAGE_PYTHON_PYDAL
--	bool python-pydal
-+	bool "python-pydal"
+ config BR2_PACKAGE_CMOCKA
+-	bool cmocka
++	bool "cmocka"
+ 	depends on !BR2_STATIC_LIBS
  	help
- 	  pyDAL is a pure Python Database Abstraction Layer.  It
- 	  dynamically generates the SQL in real time using the
+ 	  cmocka is an elegant unit testing framework for C with support
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
