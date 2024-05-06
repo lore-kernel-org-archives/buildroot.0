@@ -4,93 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 384B1C25B4F
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 18:52:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 047CEC25B5C
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 18:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9113F40B9D;
-	Mon,  6 May 2024 18:52:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 989C2408CA;
+	Mon,  6 May 2024 18:59:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JSCC_nbIZHvy; Mon,  6 May 2024 18:52:41 +0000 (UTC)
+ id vAJ3gUgF2ZTI; Mon,  6 May 2024 18:59:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4A904117B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A83140B6F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C4A904117B;
-	Mon,  6 May 2024 18:52:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8A83140B6F;
+	Mon,  6 May 2024 18:59:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C26111BF308
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 18:52:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ACFDF1BF308
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 18:59:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF14540B88
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 18:52:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A37A340B6F
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 18:59:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iDuGBLcp16-v for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 18:52:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2f; helo=mail-io1-xd2f.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9FCFD40600
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FCFD40600
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9FCFD40600
- for <buildroot@buildroot.org>; Mon,  6 May 2024 18:52:36 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id
- ca18e2360f4ac-7daa6bfe4c8so126012739f.1
- for <buildroot@buildroot.org>; Mon, 06 May 2024 11:52:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715021555; x=1715626355;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=AKVAUgJw3MogwdttAPaaPEDjtgooGGrLYGU+Q44zJjo=;
- b=pd6/C281nyUwNyyMmmkM4tisBu/aIK72KG2tV9rBA5r7j+Vr9GD/vQScgA2Kq5x2dR
- 2RUJenM90yCvb2TiTkEGFaw/7pZ3R01N53WYTY/egAA7rBKnpoLWYT7yHdGRiAyeJm1R
- 0by7Da+qiakpSs355/06zZEABU+xZZ55KEF82kGM7C91z8LZyYJ0Wuofu+mb/wl+hUJJ
- TydLCYsBYQ6f/unD9dwLohXX8bGXtV1Xkjd3D+QqBbADtr2tmzIalutk9v6P6nUNHi3o
- 8x9XaV8hREin1Kx8u9oeNiH/0YwAUHI+cxgdln9Jw/Cx5Lq9IntTW9wN9K8w8fvGZfJz
- Ncvg==
-X-Gm-Message-State: AOJu0Yy3oSe6GIMLsQCBpj1uueftizgRrQ+yPuxCZzcTzpQk9+wuYEH5
- k29wbKwocAOx5XuKfqMRlFeuu5sGS77+HQj/pumIjyf69fT57JqFNbLnDQ==
-X-Google-Smtp-Source: AGHT+IFN/a9uFhKZiqGrVb7uU68BtESeSTp7V5CHCJPfFgnBu3FVDftStNoDz8tsxFTZrh2WUyV01Q==
-X-Received: by 2002:a5e:dd44:0:b0:7de:cd30:a1a7 with SMTP id
- u4-20020a5edd44000000b007decd30a1a7mr12806351iop.20.1715021555334; 
- Mon, 06 May 2024 11:52:35 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-133-151.hlrn.qwest.net.
- [71.33.133.151]) by smtp.gmail.com with ESMTPSA id
- 21-20020a05660220d500b007d6c7f42890sm2149535ioz.53.2024.05.06.11.52.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 06 May 2024 11:52:34 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ id zTOvxEA0zHqx for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 18:59:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C52D3408CA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C52D3408CA
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 18:59:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AA7C98676E; Mon,  6 May 2024 18:59:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon,  6 May 2024 12:52:31 -0600
-Message-Id: <20240506185231.3470040-2-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240506185231.3470040-1-james.hilliard1@gmail.com>
-References: <20240506185231.3470040-1-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715021555; x=1715626355; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=AKVAUgJw3MogwdttAPaaPEDjtgooGGrLYGU+Q44zJjo=;
- b=Tg5//kXmkGMYYlWMXL6mb5MqkxXvwYIH371uS0OUcni+zGkJrXcHQu4q1eOt5QiFAP
- k1SkZTbdTJw9/b28AbDN6O3/aZimbnU99m1rLJaHwIjfbO2tmuAel+skZ2O6l9f0fHNo
- RlRDdzxJnvqI+sIcJan9uNqqtq0FLOHP5tx8atHkoqLAsLEJV11pGgY7dcacek9b/Y+k
- rl/NBK6V18J0lkt032+qBu/DAU1G5/rJehgsFCtTDtQpfM+MfZlXTV/6rG4nSUsyJfAZ
- IpPv4QjJ9zm4OSTqmGd1SHGRJC+q+is9L8Ha3ps82NPe4/lBxbMIGdb6zmfZRI9YadoV
- 5JbA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Tg5//kXm
-Subject: [Buildroot] [PATCH 2/2] package/iwd: bump to version 2.17
+Date: Mon, 6 May 2024 20:58:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: db57017f90ec7585c9fd898503897eb8cac1c945
+X-Git-Newrev: 7f5cd99dd7ee82d4b977a04b0809a77f89c853c1
+X-Patchwork-Hint: ignore
+Message-Id: <20240506185913.AA7C98676E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/acmesystems_acqua_a5_*: add hashes
+ for Linux/at91bootstrap3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,45 +58,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=7f5cd99dd7ee82d4b977a04b0809a77f89c853c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES.
+
+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iwd/iwd.hash | 2 +-
- package/iwd/iwd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                                                   | 2 --
+ board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash | 2 ++
+ board/acmesystems/acqua-a5/patches/linux-headers/linux-headers.hash   | 1 +
+ board/acmesystems/acqua-a5/patches/linux/linux.hash                   | 2 ++
+ configs/acmesystems_acqua_a5_256mb_defconfig                          | 2 ++
+ configs/acmesystems_acqua_a5_512mb_defconfig                          | 2 ++
+ 6 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index 3f18146e13..9f88b2d6f1 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
--sha256  c1a82032e994861e794cf3b5a16d07ae1aa03a6674f716c73408ffeae2a233ba  iwd-2.16.tar.xz
-+sha256  5901ab3fbb74bb75ec9adda35daeff595e4d238882fee7fc8c805b30ca79d943  iwd-2.17.tar.xz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index af6b2f849a..c516bab471 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IWD_VERSION = 2.16
-+IWD_VERSION = 2.17
- IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
- IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
- IWD_LICENSE = LGPL-2.1+
--- 
-2.34.1
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 870c286bcd..1135fa7175 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -117,8 +117,6 @@ boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch lib_p
+ boot/syslinux/0016-Workaround-multiple-definition-of-symbol-errors.patch lib_patch.Upstream
+ boot/syslinux/0017-Replace-builtin-strlen-that-appears-to-get-optimized.patch lib_patch.Upstream
+ configs/aarch64_efi_defconfig lib_defconfig.ForceCheckHash
+-configs/acmesystems_acqua_a5_256mb_defconfig lib_defconfig.ForceCheckHash
+-configs/acmesystems_acqua_a5_512mb_defconfig lib_defconfig.ForceCheckHash
+ configs/acmesystems_aria_g25_128mb_defconfig lib_defconfig.ForceCheckHash
+ configs/acmesystems_aria_g25_256mb_defconfig lib_defconfig.ForceCheckHash
+ configs/acmesystems_arietta_g25_128mb_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash b/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
+new file mode 100644
+index 0000000000..06a63d449d
+--- /dev/null
++++ b/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  cdc04cca9e811043efdea43ad203d70d897e23a8bd46f01896ba45c8df50f6ec  at91bootstrap3-v3.10.3-br1.tar.gz
+diff --git a/board/acmesystems/acqua-a5/patches/linux-headers/linux-headers.hash b/board/acmesystems/acqua-a5/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/acmesystems/acqua-a5/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/acmesystems/acqua-a5/patches/linux/linux.hash b/board/acmesystems/acqua-a5/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..6dbbeca57f
+--- /dev/null
++++ b/board/acmesystems/acqua-a5/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  1fd7ec8c3d9c4e4b3a41d11e2c6d151e5fbf875dd08b3577f73afd6ee6674605  linux-6.6.12.tar.xz
+diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
+index ef57734194..359b356cb4 100644
+--- a/configs/acmesystems_acqua_a5_256mb_defconfig
++++ b/configs/acmesystems_acqua_a5_256mb_defconfig
+@@ -3,6 +3,8 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
+diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
+index a69e2a2251..194de0b530 100644
+--- a/configs/acmesystems_acqua_a5_512mb_defconfig
++++ b/configs/acmesystems_acqua_a5_512mb_defconfig
+@@ -3,6 +3,8 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
