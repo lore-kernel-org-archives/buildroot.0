@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7FD1C25B10
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21989C25B10
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:30:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81E9B60863;
-	Mon,  6 May 2024 20:30:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E35F5608D9;
+	Mon,  6 May 2024 20:30:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nTDapS3IRoql; Mon,  6 May 2024 20:30:27 +0000 (UTC)
+ id r9aP1BHTjjmx; Mon,  6 May 2024 20:30:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85705608D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4D99608F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85705608D9;
-	Mon,  6 May 2024 20:30:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B91F31BF3E8
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:30:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4D99608F9;
+	Mon,  6 May 2024 20:30:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5379B1BF3E8
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5B95608D9
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:30:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4ADA481FCE
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:30:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xhGAoed6USPA for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 20:30:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u78zYHh9JvPU for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 20:30:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94AE360863
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94AE360863
- for <buildroot@buildroot.org>; Mon,  6 May 2024 20:30:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7ED3986906; Mon,  6 May 2024 20:30:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 6 May 2024 22:29:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e379f1c5dd51d46ce4f5979e5efcae09538b7e1f
-X-Git-Newrev: 0f5bb364c629dd7fc91f4295f872e46d89c0feef
-X-Patchwork-Hint: ignore
-Message-Id: <20240506203024.7ED3986906@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdbus-cpp: bump to version 2.0.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BBF3081FCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBF3081FCA
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BBF3081FCA
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 20:30:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E71FC240006;
+ Mon,  6 May 2024 20:30:26 +0000 (UTC)
+Date: Mon, 6 May 2024 22:30:26 +0200
+To: Sergey Bobrenok <bobrofon@gmail.com>
+Message-ID: <20240506223026.683c8af7@windsurf>
+In-Reply-To: <20240429170441.996821-1-bobrofon@gmail.com>
+References: <20240429170441.996821-1-bobrofon@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715027427;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=jbZYV7tJyI8z6+H/bNz+Eew3psUIeB1vCjRI0mGB80k=;
+ b=LHPdaq5W2foJIPyitHyaH6NfRf18V3HelHMB8F9Q7n80pDfSDyiiob0H05V5sQDYw0/IxN
+ gsCCaMVOQEL25pYxGQvhJQhZ7x10HDBdkjM80YvcaAgAQX+q6CXnnuXSwCvRaCwCjr4Q66
+ V5eIHV7ugSN9kemMLn5Y+rvymWxMMN8vJLoSuFZORNnjc4DpiZXki0Gt64JDNzROjg80d2
+ CxCYq5e3bI9g5VnLiRJF0NtAmUVWYfbsuLJ68gY8IgkPtKCSN1OZ3qaVOSfvkibXM9FeNC
+ evh6ETNM0d2IqMgY81fSb07W/Msh5T+CligmC7VsA+VWlOfzOfXMp9zgHVdDlg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LHPdaq5W
+Subject: Re: [Buildroot] [PATCH 1/1] package/sdbus-cpp: bump to version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,48 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f5bb364c629dd7fc91f4295f872e46d89c0feef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 29 Apr 2024 20:04:41 +0300
+Sergey Bobrenok <bobrofon@gmail.com> wrote:
 
-Changelog:
-https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v2.0.0
+> Changelog:
+> https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v2.0.0
+> 
+> Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
+> ---
+>  package/sdbus-cpp/sdbus-cpp.hash | 2 +-
+>  package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sdbus-cpp/sdbus-cpp.hash | 2 +-
- package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
-index b5ca7ecdff..1350fc6781 100644
---- a/package/sdbus-cpp/sdbus-cpp.hash
-+++ b/package/sdbus-cpp/sdbus-cpp.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  577986929f911320fb9ef6a3e2badd464dc38411ebc25d2966f5cb85c39f0897  sdbus-cpp-1.5.0.tar.gz
-+sha256  88af4569161a0d0192f0f4a94582a1af4e75722499d06984fb7f91f638f5afb3  sdbus-cpp-2.0.0.tar.gz
- sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
- sha256  a1c9e75e25d8f2ce18017c88978edab2f0dbc7814ad0697d4ff2e5e59959f657  COPYING-LGPL-Exception
-diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
-index 18fc6a88a9..675ed1fa1f 100644
---- a/package/sdbus-cpp/sdbus-cpp.mk
-+++ b/package/sdbus-cpp/sdbus-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDBUS_CPP_VERSION = 1.5.0
-+SDBUS_CPP_VERSION = 2.0.0
- SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
- SDBUS_CPP_INSTALL_STAGING = YES
- SDBUS_CPP_DEPENDENCIES = host-pkgconf systemd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
