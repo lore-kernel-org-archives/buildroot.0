@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 839DDC25B10
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:50:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FCE0C25B10
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:50:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5402060A42;
-	Mon,  6 May 2024 20:50:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E2B760A46;
+	Mon,  6 May 2024 20:50:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z351PZ4JwCM2; Mon,  6 May 2024 20:50:20 +0000 (UTC)
+ id NP4ZUr-ye1Vr; Mon,  6 May 2024 20:50:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A8DC60A46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D667D60A5E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A8DC60A46;
-	Mon,  6 May 2024 20:50:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ADB7B1BF3E8
+	by smtp3.osuosl.org (Postfix) with ESMTP id D667D60A5E;
+	Mon,  6 May 2024 20:50:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B285F1BF947
  for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7C7740323
+ by smtp1.osuosl.org (Postfix) with ESMTP id A653A81EFC
  for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:50:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eJaKNrhn1jyS for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZQfuOZorFjtF for <buildroot@lists.busybox.net>;
  Mon,  6 May 2024 20:50:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D83FB40217
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D64C581EF9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D83FB40217
+ by smtp1.osuosl.org (Postfix) with ESMTP id D64C581EF9
  for <buildroot@buildroot.org>; Mon,  6 May 2024 20:50:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D0D118693E; Mon,  6 May 2024 20:50:17 +0000 (UTC)
+ id C23ED8693D; Mon,  6 May 2024 20:50:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 6 May 2024 22:49:39 +0200
+Date: Mon, 6 May 2024 22:45:09 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 71e6b2765b0fec5cd55aab2fc2907d076a92ec17
-X-Git-Newrev: 233ba540f5c21a2305fcd29217a9767e819cfdd1
+X-Git-Oldrev: ba45833429c5d86a01917f68564ee9e620c771b2
+X-Git-Newrev: 71e6b2765b0fec5cd55aab2fc2907d076a92ec17
 X-Patchwork-Hint: ignore
-Message-Id: <20240506205017.D0D118693E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libblockdev: bump
- to version 3.1.1
+Message-Id: <20240506205017.C23ED8693D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/php-xdebug: add
+ zlib optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=233ba540f5c21a2305fcd29217a9767e819cfdd1
+commit: https://git.buildroot.net/buildroot/commit/?id=71e6b2765b0fec5cd55aab2fc2907d076a92ec17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+zlib is an optional dependency (enabled by default) since bump to
+version 3.2.0 in commit 8280400fbadde09e51ccff312d7a4ef6a386f589 and
+https://github.com/xdebug/xdebug/commit/3954e5cd9e48eec0a8a2a0c6a2fc120bbe562656
+
+Fixes: 8280400fbadde09e51ccff312d7a4ef6a386f589
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dd79b8dd60ab6817f2d3a0db9eedc1526005c9be)
+(cherry picked from commit 4b7aeee28ed2f62370084dac4a92bdef89046b41)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libblockdev/libblockdev.hash | 2 +-
- package/libblockdev/libblockdev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php-xdebug/php-xdebug.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
-index 79700a4996..1438fad741 100644
---- a/package/libblockdev/libblockdev.hash
-+++ b/package/libblockdev/libblockdev.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  41e4af66c9d78e795302d37825dfd88a4970f82da7b4ebe6487feba2afae44fb  libblockdev-3.1.0.tar.gz
-+sha256  a5cb33a53ff5969067982704f45399d02555fdb2313ed0c56eac9555397dc2db  libblockdev-3.1.1.tar.gz
- sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index ebf01acfb5..9ffa15a7a9 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-xdebug/php-xdebug.mk
+index 62ef3fa997..3bc197e556 100644
+--- a/package/php-xdebug/php-xdebug.mk
++++ b/package/php-xdebug/php-xdebug.mk
+@@ -25,4 +25,11 @@ endef
  
--LIBBLOCKDEV_VERSION = 3.1.0
-+LIBBLOCKDEV_VERSION = 3.1.1
- LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
- LIBBLOCKDEV_LICENSE = LGPL-2.1
- LIBBLOCKDEV_LICENSE_FILES = LICENSE
+ PHP_XDEBUG_PRE_CONFIGURE_HOOKS += PHP_XDEBUG_PHPIZE
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++PHP_XDEBUG_CONF_OPTS += --with-xdebug-compression
++PHP_XDEBUG_DEPENDENCIES += zlib
++else
++PHP_XDEBUG_CONF_OPTS += --without-xdebug-compression
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
