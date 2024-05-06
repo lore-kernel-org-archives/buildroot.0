@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F2ACC25B10
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:51:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E8C4C25B10
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:51:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E54A60A44;
-	Mon,  6 May 2024 20:51:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2113960A48;
+	Mon,  6 May 2024 20:51:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KOUnjMnmqrS6; Mon,  6 May 2024 20:51:38 +0000 (UTC)
+ id UwmWoG9NzDfK; Mon,  6 May 2024 20:51:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6421A60A48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 192ED60A4D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6421A60A48;
-	Mon,  6 May 2024 20:51:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 192ED60A4D;
+	Mon,  6 May 2024 20:51:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E17111BF3E8
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:51:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C6DB71BF3E8
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D9DB3406D1
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:51:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B288E406D1
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:51:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G-o4fbL6jJz2 for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 20:51:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id NJm8zHQWV2WJ for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 20:51:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A6C7D406CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6C7D406CF
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A6C7D406CF
- for <buildroot@buildroot.org>; Mon,  6 May 2024 20:51:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id ABD49C0003;
- Mon,  6 May 2024 20:51:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s45J6-003jHr-0W;
- Mon, 06 May 2024 22:51:32 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6FAF406CF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6FAF406CF
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 20:51:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A3E5486942; Mon,  6 May 2024 20:51:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@smile.fr>
-References: <20240327162319.149021-1-romain.naour@smile.fr>
-Date: Mon, 06 May 2024 22:51:32 +0200
-In-Reply-To: <20240327162319.149021-1-romain.naour@smile.fr> (Romain Naour's
- message of "Wed, 27 Mar 2024 17:23:19 +0100")
-Message-ID: <878r0mzmsr.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] support/testing: TestFileCapabilities:
- update kernel to 4.19.310
+To: buildroot@buildroot.org
+Date: Mon, 6 May 2024 22:50:57 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 233ba540f5c21a2305fcd29217a9767e819cfdd1
+X-Git-Newrev: 3948fb33272a5c013f0b76c2e1b57daf16f5eb26
+X-Patchwork-Hint: ignore
+Message-Id: <20240506205155.A3E5486942@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing:
+ TestFileCapabilities: update kernel to 4.19.310
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,37 +59,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3948fb33272a5c013f0b76c2e1b57daf16f5eb26
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Since the toolchain Bootlin update to 2023.11-1 [1], the arm Linux
- > kernel build is broken with binutils >= 2.41 with:
+Since the toolchain Bootlin update to 2023.11-1 [1], the arm Linux
+kernel build is broken with binutils >= 2.41 with:
 
- >   arch/arm/mm/proc-v7.S: Assembler messages:
- >   arch/arm/mm/proc-v7.S:640: Error: junk at end of line, first unrecognized character is `#'
+  arch/arm/mm/proc-v7.S: Assembler messages:
+  arch/arm/mm/proc-v7.S:640: Error: junk at end of line, first unrecognized character is `#'
 
- > A similar issue has already be fixed for qemu m68k [2].
+A similar issue has already be fixed for qemu m68k [2].
 
- > Bump to the latest kernel 4.19 that already include the backport
- > of 790756c7e022 ("ARM: 8933/1: replace Sun/Solaris style flag on section directive")
+Bump to the latest kernel 4.19 that already include the backport
+of 790756c7e022 ("ARM: 8933/1: replace Sun/Solaris style flag on section directive")
 
- > [1] 7e0e6e3b8618ab942f25b11ee72fbc5a4deefdf1
- > [2] a1ce9474e40f731f327035d8c0962abb16f00ff7
+[1] 7e0e6e3b8618ab942f25b11ee72fbc5a4deefdf1
+[2] a1ce9474e40f731f327035d8c0962abb16f00ff7
 
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/6414160106 (TestFileCapabilities)
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6414160106 (TestFileCapabilities)
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 07ef00df9bdff1486622fe8248168137aa531c9d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/testing/tests/core/test_file_capabilities.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2024.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/testing/tests/core/test_file_capabilities.py b/support/testing/tests/core/test_file_capabilities.py
+index fe21d76c94..e2600ae794 100644
+--- a/support/testing/tests/core/test_file_capabilities.py
++++ b/support/testing/tests/core/test_file_capabilities.py
+@@ -13,7 +13,7 @@ class TestFileCapabilities(infra.basetest.BRTest):
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.310"
+         BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
+         BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
