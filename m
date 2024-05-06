@@ -4,71 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC4C9C25B10
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 19:59:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B673EC25B10
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A49DB811F8;
-	Mon,  6 May 2024 19:59:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EFB88133E;
+	Mon,  6 May 2024 20:02:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bo6v11AaFy_9; Mon,  6 May 2024 19:59:19 +0000 (UTC)
+ id nEcBtxrSrL6q; Mon,  6 May 2024 20:02:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96CF18120D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 792D882103
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96CF18120D;
-	Mon,  6 May 2024 19:59:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 792D882103;
+	Mon,  6 May 2024 20:02:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ED12C1BF308
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:59:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B8CD1BF3CA
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA082811E7
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:59:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05C3A82103
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LClFAjk9oSCp for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 19:59:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9DB0B810CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DB0B810CC
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9DB0B810CC
- for <buildroot@buildroot.org>; Mon,  6 May 2024 19:59:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D5A891BF204;
- Mon,  6 May 2024 19:59:13 +0000 (UTC)
-Date: Mon, 6 May 2024 21:59:13 +0200
-To: Sergey Matyukevich <geomatsi@gmail.com>
-Message-ID: <20240506215913.43aa1fd3@windsurf>
-In-Reply-To: <20240505195427.3622027-1-geomatsi@gmail.com>
-References: <20240505195427.3622027-1-geomatsi@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+ id ylf0gmq27Dx0 for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 20:02:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D07108133E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D07108133E
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D07108133E
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 20:02:11 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-41b21ed19f5so16174855e9.2
+ for <buildroot@buildroot.org>; Mon, 06 May 2024 13:02:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715025729; x=1715630529;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=tLI038Mt7gNKJxFhYCz/ROLV5/lxtOqd6Rb9znXXMsw=;
+ b=V0jJ6vJr5wiDq6ETkxaCd+1X47BlKGfFrTxmaVGzIfzmOARpyJaejQIXv4XLNUd15N
+ f3oZ2RX9nU+jIgtraXJ3KBqhZe4DvQd1rk/aY12GPsKUrZYjGYqcIbz8hDTRm32H+28A
+ OIoh/I5rsXxgl/AmocqK1T3v4XoWB0CEF+3gP2XISs44n3DRRX0NCiPKgX9NkZeCnoBM
+ NZDG202YVrlp5cKwe+zJxrbcK2prZ3uWPEp8hqly/OOTCIJuvYxtUeO+a1Ob5pV71/HX
+ R5x7GZSxqqDATks1DximDarnWfVNIsXcRxAt+wykcxTE1yuZWGyu4HkPE2jerhnzfLQj
+ g1KA==
+X-Gm-Message-State: AOJu0YwTv+/FOPMBPeq2qruJ/DJXfGdRWziKyxsDoyaCDvpGOvYxZh9/
+ Z70KqO8EnippUQZbDL6OQKuHQI0zAOJjFxSWao49NLiOB13gezNak7K2PA==
+X-Google-Smtp-Source: AGHT+IGgm3CwHr+eS6+x4Iir9ARYuzn1+XQDW4lUWa8/P7gABfOASGQ97GKUEbBfiDMgceWOUrNDQg==
+X-Received: by 2002:a05:600c:5111:b0:41c:14a4:7b05 with SMTP id
+ o17-20020a05600c511100b0041c14a47b05mr8303083wms.8.1715025729075; 
+ Mon, 06 May 2024 13:02:09 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ u21-20020a05600c139500b004190d7126c0sm20964992wmf.38.2024.05.06.13.02.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 06 May 2024 13:02:08 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon,  6 May 2024 22:02:06 +0200
+Message-ID: <20240506200206.111393-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715025554;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=FMi52NfippwzjqMeQlt66URGuShas3PXfTOWhnipo1I=;
- b=m+sE6ktf0ucwJ18Ak/905hoi7GO+OtA/xP9ZujKdMMuybeyZakqQQn/9gJ1GhLMRKMsiIR
- Uz/v2gO48IovfeB+VHKY7goc4C+Kilnr2p25y0muEEIdL5EvgSX9Y2ULPSIybhhMv4CKC1
- v94qVarbm+DWz1Mrck2xzyFJL7AvaS6Dezlr2RBUjt3SrUjFU0+YFxm38UM32lNXR9vgFt
- Ickaajs6sNXEMgIxGHUakDEHHgSwr+1goaLOE+BnCsyeaaC06L6HW+1WM5A2p4pynLthJi
- AfTVHgiREdpV1hMk8/rukaWIjUDZ6QY8dHzPU+r6kg+9GOgnFKoCl/HhBfvGOQ==
+ d=gmail.com; s=20230601; t=1715025729; x=1715630529; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=tLI038Mt7gNKJxFhYCz/ROLV5/lxtOqd6Rb9znXXMsw=;
+ b=kklycjUfVx4/4kr42iwUnd8qelfP9UTLQHTBfPBHCztpaq0kmoyUOX4uzSLenFNMJe
+ tr9/3lm2/iuSOQgojVcnexebt3bShkPDSmp4sx+Y4laZgI54gsZpnxNkXOmKbVt5Jv4n
+ o0fhT3RoxPQFx27Fr8i/+K+RGsHSPGBEiwRRpYpMvdWuz51D97NR/VuLkQeQE++h7EN7
+ 6MD9QBogD9JxarzOdNSJrRTN/Ry5qCPPOm+tjUIAondSyBGtZ8bzb/CO3SDYgvx4026O
+ T+UHBiPjwHgUPUTulzJIbRpWlutHMGC4vvZqxzGqVbcZ4uKT/L+9fs+//pbt02iYuMKg
+ Mhww==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=m+sE6ktf
-Subject: Re: [Buildroot] [PATCH v2 1/1] configs/orangepi_zero2w: new board
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=kklycjUf
+Subject: [Buildroot] [PATCH 1/1] package/pppd: add linux-pam optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,53 +101,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  5 May 2024 22:54:19 +0300
-Sergey Matyukevich <geomatsi@gmail.com> wrote:
+linux-pam is an optional dependency which is enbled by default since
+bump to version 2.5.0 in commit 0c15169f5ae57d88a77df34cc896044a37c9597b
+and
+https://github.com/ppp-project/ppp/commit/2883dd07101bf851e2ea368f0c04c91aea85cff2
 
-> This patch adds basic support for the new OrangePi Zero2W board:
-> - http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Zero-2W.html
-> 
-> Brief summary of the board features:
-> - H618 Allwinner SoC
->   - Quad-Core ARM Cortex-A53 Processor 1.5GHz
->   - Mali G31 MP2 GPU
-> - LPDDR4: 1GB/2GB/4GB
-> - Wi-Fi5.0+BT 5.0
-> - 2x Type-C USB 2.0
-> - 1x Mini HDMI
-> - Wi-Fi 5.0 + BT 5.0
-> - 40-pin expansion interface (GPIO / UART / I2C / SPI / PWM)
-> - 24-pin expansion interface (2x USB 2.0 / ETH / IR / audio)
-> 
-> BSP includes the following components:
-> - mainline ATF v2.10
-> - mainline U-Boot v2024.04
-> - mainline Linux kernel v6.8
-> 
-> No custom scripts required: all is covered by common orangepi scripts.
-> However new option BR2_DOWNLOAD_FORCE_CHECK_HASHES requires checksums
-> for all the BSP components. They are added as board specific patches.
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/pppd/pppd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-You had forgotten to add board/orangepi/orangepi-zero2w/ to the
-DEVELOPERS file, so I did that when applying. Thanks for this
-contribution!
-
-Thomas
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 616b843e3d..0a1eaf9209 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -17,6 +17,13 @@ PPPD_AUTORECONF = YES
+ PPPD_INSTALL_STAGING = YES
+ PPPD_CONF_OPTS = --enable-multilink
+ 
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++PPPD_CONF_OPTS += --with-pam=$(STAGING_DIR)/usr
++PPPD_DEPENDENCIES += linux-pam
++else
++PPPD_CONF_OPTS += --without-pam
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ PPPD_CONF_OPTS += \
+ 	--enable-eaptls \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
