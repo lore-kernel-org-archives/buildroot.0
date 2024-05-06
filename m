@@ -4,71 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E391FC25B10
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56168C25B10
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B216760764;
-	Mon,  6 May 2024 20:39:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2884B608F6;
+	Mon,  6 May 2024 20:39:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vRXxBPVieSGa; Mon,  6 May 2024 20:39:19 +0000 (UTC)
+ id mdKf5Ft2VFhj; Mon,  6 May 2024 20:39:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF53E608E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 386A8608F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF53E608E3;
-	Mon,  6 May 2024 20:39:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4234C1BF3E8
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:39:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 386A8608F9;
+	Mon,  6 May 2024 20:39:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C98261BF947
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A2FF405EE
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:39:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6962608F6
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:39:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NiaoEoH8gE8j for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 20:39:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RlF_tDV6hv19 for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 20:39:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
  helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 004EB405C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 004EB405C1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B300D608E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B300D608E3
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 004EB405C1
- for <buildroot@buildroot.org>; Mon,  6 May 2024 20:39:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B4BBFF804;
- Mon,  6 May 2024 20:39:14 +0000 (UTC)
-Date: Mon, 6 May 2024 22:39:13 +0200
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B300D608E3
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 20:39:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 14F1DFF808;
+ Mon,  6 May 2024 20:39:25 +0000 (UTC)
+Date: Mon, 6 May 2024 22:39:24 +0200
 To: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-Message-ID: <20240506223913.31a83b67@windsurf>
-In-Reply-To: <20240502045518.4875-1-dm.chestnykh@gmail.com>
+Message-ID: <20240506223924.308ea7ba@windsurf>
+In-Reply-To: <20240502045518.4875-2-dm.chestnykh@gmail.com>
 References: <20240502045518.4875-1-dm.chestnykh@gmail.com>
+ <20240502045518.4875-2-dm.chestnykh@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715027954;
+ d=bootlin.com; s=gm1; t=1715027965;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ISgyZyu94tFU56yHr0VcJ3K4YnE56rrktV65sC+0qe8=;
- b=P0v5bVx1e5zHSyIRJ8hdy1nMkAa30B5XcT+o/M0flfiXTewpYVI1u2I0AiNdA5HZ++LeD0
- UOm07xGZF98c3OAf9yfTtkIJdm45kBeSZyocv91a8gXJj2C1/lcGYOrjwA04nl3lDWCiP0
- 3UICtz29ptiZ4ZSNxT+v0qw2YZx9XP4LSeccWbfh3GQR/T8nt506EIWz4m3FI7oou2M0fx
- O248mMJeZAaOX7MSuoBCZfq/Pe0TvHBxFpoBQbBL/kBv+FhcqyrbmwV8FK5DssKUAEO0wZ
- 7LtuuJe9b60YRn/ZWt5g8BrXvj0QxeiAPz3XIr0dNLkpRqU8H+9/Q6iAbZ7eIQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=0z8lFinJjviLg9wv72k6TJRsfVZxY5old4Ti74YDU3g=;
+ b=fg9+9d2aH+QElEZd6okmM5KsFZ2RVSNB98nMuI2mIQn00QxgV8n/ehYZYJlKEWko2Rqckd
+ 5z1EixoBU0sOUBvTNvsbUjqK6FH20SuRSRg7bqTAjoqkb5FEjZ8T97bm///y33/hJ1bNte
+ MQ/NywDIQNJI0eXn5n7jlem+URqwqW0sqCk4SCYEpw9o3G2YEUfLvivqNomGGWhVFc03sb
+ YyNyvR4TGA4PUMFDtvIyDEpGSV7bYsSkQR26mPnJ5xGFZl479hMyih9Cy413mo0wDZowAo
+ NyK23lH7GKMeH3elscfe9DerOpKZiaIYAM24P1Nmw/CjmHeMnlT0sn8CSFLAFA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=P0v5bVx1
-Subject: Re: [Buildroot] [PATCH v2 1/3] package/uclibc: Bump to 1.0.48.
+ header.s=gm1 header.b=fg9+9d2a
+Subject: Re: [Buildroot] [PATCH v2 2/3] arch/Config.in: Allow building
+ buildroot toolchain.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,24 +90,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  2 May 2024 07:55:16 +0300
+On Thu,  2 May 2024 07:55:17 +0300
 Dmitry Chestnykh <dm.chestnykh@gmail.com> wrote:
 
-> - In 1.0.48 release uClibc-ng has provided the fix
-> for SPARC related to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
-> - The hash for COPYING.LIB was changed because '^L' (0x0C) characters
-> were removed from COPYING.LIB in uClibc-ng repo.
+> With this patch series we allow it again because SPARC
+> was fixed in uClibc-ng so SPARC systems works fine now.
 > 
 > Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
 > ---
 > v1 -> v2:
-> - Describe the change of COPYING.LIB hash.
+> - Split the patch into two parts:
+> this part allows building buildroot toolchain
+> for SPARC.
 > ---
->  package/uclibc/uclibc.hash | 6 +++---
->  package/uclibc/uclibc.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  arch/Config.in | 5 -----
+>  1 file changed, 5 deletions(-)
 
-Applied to master, with minor commit log fixups. Thanks a lot!
+Applied to master, with minor commit title/log fixups, thanks a lot!
 
 Thomas
 -- 
