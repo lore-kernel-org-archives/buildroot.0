@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF959C10F16
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 11:36:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB159C25B5C
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 11:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33F2B4060C;
-	Mon,  6 May 2024 11:36:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DECE405EE;
+	Mon,  6 May 2024 11:47:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XOu9MZeGRRy1; Mon,  6 May 2024 11:36:13 +0000 (UTC)
+ id D3AVP9N7DixF; Mon,  6 May 2024 11:47:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C97154073F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 485B9405EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C97154073F;
-	Mon,  6 May 2024 11:36:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 485B9405EF;
+	Mon,  6 May 2024 11:47:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6BCF11BF3A6
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 11:36:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3496F1BF3A6
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 11:47:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 583C88124F
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 11:36:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F99980E78
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 11:47:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SfY3lgIccHnf for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 11:36:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id tB8bJ9qtCXQA for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 11:47:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D05981214
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6D05981214
- for <buildroot@buildroot.org>; Mon,  6 May 2024 11:36:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3784186733; Mon,  6 May 2024 11:36:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E29BA80C98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E29BA80C98
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E29BA80C98
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 11:47:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 445ECE0004;
+ Mon,  6 May 2024 11:47:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1s3won-001FuP-0Y;
+ Mon, 06 May 2024 13:47:41 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 6 May 2024 13:21:21 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 6ea8073519718aa403977a8d9cc7061cc6ce0bd8
-X-Git-Newrev: 69125a8fb8f0c87152be936c7816f5f83d3ee3ce
-X-Patchwork-Hint: ignore
-Message-Id: <20240506113607.3784186733@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/uuu: bump to
- version 1.5.177
+To: Vincent Fazio <vfazio@gmail.com>
+References: <20240403211805.3100506-1-vfazio@gmail.com>
+Date: Mon, 06 May 2024 13:47:41 +0200
+In-Reply-To: <20240403211805.3100506-1-vfazio@gmail.com> (Vincent Fazio's
+ message of "Wed, 3 Apr 2024 16:18:05 -0500")
+Message-ID: <875xvr17s2.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/python3: fix cross builds when
+ host and target use the same SOABI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +69,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69125a8fb8f0c87152be936c7816f5f83d3ee3ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Vincent" == Vincent Fazio <vfazio@gmail.com> writes:
 
-- Support i.MX91
-- Fix a crash with -d option when change back file.
+ > When python performs a cross compile, it uses a host interpreter to run
+ > steps on behalf of the foreign architecture to finalize the build.
 
-Release notes:
-https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.177
+ > When performing these steps, foreign modules may be loaded if the SOABI
+ > matches that of the host. This can lead to issues if the modules are
+ > linked against a libc not available on the host or if the binaries
+ > include instructions unsupported by the host.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dfe02734bfbbab680cd9ceb98e10d0344abbe058)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uuu/uuu.hash | 2 +-
- package/uuu/uuu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > For now, patch the foreign libraries out of PYTHONPATH and explicitly
+ > define the path to sysconfigdata so builds can complete without error.
 
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index e45cbb8680..0f746a7633 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  6e65fc028afacc94b805ae376e3da3864dcb2570d425037820e716207ab70373  uuu_source-uuu_1.5.165.tar.gz
-+sha256  fac38e93714181fbfb0ff52b9cd29395c7eb342def5c3857da87e5429beb3927  uuu_source-uuu_1.5.177.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 5800277b10..b6611dc3d4 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UUU_VERSION = 1.5.165
-+UUU_VERSION = 1.5.177
- UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+ > This method currently passes all upstream CI pipelines [0] and should
+ > also work (with some modifications) for the migration to 3.12 [1].
+
+ > Fixes: http://autobuild.buildroot.net/results/c854080e003e9a7d525325073190b472a8f982aa/
+ > [0]: https://github.com/python/cpython/pull/116294
+ > [1]: https://lists.buildroot.org/pipermail/buildroot/2024-February/685369.html
+
+ > Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+
+Committed to 2024.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
