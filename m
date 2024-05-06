@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A785C25B74
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7FD1C25B10
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 20:30:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5E4E6069D;
-	Mon,  6 May 2024 20:27:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81E9B60863;
+	Mon,  6 May 2024 20:30:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3VDOcrSUl59K; Mon,  6 May 2024 20:27:13 +0000 (UTC)
+ id nTDapS3IRoql; Mon,  6 May 2024 20:30:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFDD7608DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85705608D9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFDD7608DA;
-	Mon,  6 May 2024 20:27:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 912AE1BF3E8
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:27:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85705608D9;
+	Mon,  6 May 2024 20:30:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B91F31BF3E8
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7764F824DC
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:27:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5B95608D9
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 20:30:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sAwNKenJMjei for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 20:27:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xhGAoed6USPA for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 20:30:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4D9F7824C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D9F7824C1
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4D9F7824C1
- for <buildroot@buildroot.org>; Mon,  6 May 2024 20:27:10 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6B4F6E0006;
- Mon,  6 May 2024 20:27:07 +0000 (UTC)
-Date: Mon, 6 May 2024 22:27:06 +0200
-To: Geoff Levand <geoff@infradead.org>
-Message-ID: <20240506222706.157b4045@windsurf>
-In-Reply-To: <f6398ca5-a3b5-48a2-ade8-d31b363ca937@infradead.org>
-References: <f6398ca5-a3b5-48a2-ade8-d31b363ca937@infradead.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715027228;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=w+Xt9WrA7gJ+RLuieEit7SwmR1yj8kYxhOZMXz/f4IE=;
- b=ZFYMO8fX9cm904RTh6JQS5rg9AhXxOIBj6xEBmN76irR4tesfawO6SZJee/ltKLxvhJKBj
- KlXHLnqx0Uf6U12RWgZDB5hEadPy4JoLtouFamHpvjlNr2OgdkEF5y3a31xCeMwafxzbG4
- aNyt6mrSf4vAK0RyFjmUpKD3gizNWfcjPMC/1UPcT6R0GcCTGz8D0cxtGkPLFx6uueix22
- 4n5SMdaZQcOhaepNyGIjQaLfNyjgVuxGsy05rfolin2SxivM2Oix+yW4vPjg1dBPg//Lqm
- oTef2EzFHIz/ndIwYGbPP3izDlDMec1Ul/w86BGBcAlCTn7bMxNsJml5H04nEA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZFYMO8fX
-Subject: Re: [Buildroot] [PATCH] package/flannel: Bump to version 0.25.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94AE360863
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94AE360863
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 20:30:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7ED3986906; Mon,  6 May 2024 20:30:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 6 May 2024 22:29:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e379f1c5dd51d46ce4f5979e5efcae09538b7e1f
+X-Git-Newrev: 0f5bb364c629dd7fc91f4295f872e46d89c0feef
+X-Patchwork-Hint: ignore
+Message-Id: <20240506203024.7ED3986906@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sdbus-cpp: bump to version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,50 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 1 May 2024 11:53:05 +0900
-Geoff Levand <geoff@infradead.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0f5bb364c629dd7fc91f4295f872e46d89c0feef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Geoff Levand <geoff@infradead.org>
-> 
-> diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
-> index 2e0198debe..97700d37ec 100644
-> --- a/package/flannel/flannel.hash
-> +++ b/package/flannel/flannel.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256  98dde4eda016fec9aa6394cb4b283bdd972deda6ef9e1f2c3669dd2719ea1fe9  flannel-0.24.4.tar.gz
-> +sha256  c0de130efa2b14bc0f057a17df07bfd61154b30ce4a5eca24594c5b533ce661d  flannel-0.25.1.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-> index 5cdfa0e09e..aa24644764 100644
-> --- a/package/flannel/flannel.mk
-> +++ b/package/flannel/flannel.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -FLANNEL_VERSION = 0.24.4
-> +FLANNEL_VERSION = 0.25.1
+Changelog:
+https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v2.0.0
 
-This was not applying on master, because you created this commit on top
-of your previous 0.24.2 -> 0.24.4 bump, which still had not been
-applied to master. So when something like this happen, we ideally
-expect you to mark your previous patch as Changes Requested, and then
-submit a brand new patch that does the 0.24.2 -> 0.25.1 in one go.
+Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sdbus-cpp/sdbus-cpp.hash | 2 +-
+ package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I fixed up the conflicts when applying, and pushed to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
+index b5ca7ecdff..1350fc6781 100644
+--- a/package/sdbus-cpp/sdbus-cpp.hash
++++ b/package/sdbus-cpp/sdbus-cpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  577986929f911320fb9ef6a3e2badd464dc38411ebc25d2966f5cb85c39f0897  sdbus-cpp-1.5.0.tar.gz
++sha256  88af4569161a0d0192f0f4a94582a1af4e75722499d06984fb7f91f638f5afb3  sdbus-cpp-2.0.0.tar.gz
+ sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
+ sha256  a1c9e75e25d8f2ce18017c88978edab2f0dbc7814ad0697d4ff2e5e59959f657  COPYING-LGPL-Exception
+diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
+index 18fc6a88a9..675ed1fa1f 100644
+--- a/package/sdbus-cpp/sdbus-cpp.mk
++++ b/package/sdbus-cpp/sdbus-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDBUS_CPP_VERSION = 1.5.0
++SDBUS_CPP_VERSION = 2.0.0
+ SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
+ SDBUS_CPP_INSTALL_STAGING = YES
+ SDBUS_CPP_DEPENDENCIES = host-pkgconf systemd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
