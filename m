@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADC38C25B4F
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 19:45:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34337C25B10
+	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 19:46:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 768A082175;
-	Mon,  6 May 2024 19:45:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFFB68219F;
+	Mon,  6 May 2024 19:45:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g1ZMRn9rzMiA; Mon,  6 May 2024 19:45:30 +0000 (UTC)
+ id xfBilIQHiP07; Mon,  6 May 2024 19:45:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F87B82191
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E68F6821A9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F87B82191;
-	Mon,  6 May 2024 19:45:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E68F6821A9;
+	Mon,  6 May 2024 19:45:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C8FC31BF3CA
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:45:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B23B41BF3CA
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B666341481
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:45:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9EE1941481
+ for <buildroot@lists.busybox.net>; Mon,  6 May 2024 19:45:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KWpJNRZ9B83K for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 19:45:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id RmS2PzAwuEe7 for <buildroot@lists.busybox.net>;
+ Mon,  6 May 2024 19:45:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C18A4408CA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C18A4408CA
- for <buildroot@buildroot.org>; Mon,  6 May 2024 19:45:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B37D3867F1; Mon,  6 May 2024 19:45:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 6 May 2024 21:41:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a8e60c4600f42212cb8c42e5b288d6406bb80db4
-X-Git-Newrev: 5272c6bea1247e87a32947bd960757a19fdf8b90
-X-Patchwork-Hint: ignore
-Message-Id: <20240506194527.B37D3867F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/oprofile: fix static build with
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6DB5940B9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DB5940B9D
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6DB5940B9D
+ for <buildroot@buildroot.org>; Mon,  6 May 2024 19:45:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B9888FF804;
+ Mon,  6 May 2024 19:45:52 +0000 (UTC)
+Date: Mon, 6 May 2024 21:45:51 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240506214551.4fda91cf@windsurf>
+In-Reply-To: <20240506070049.137839-1-fontaine.fabrice@gmail.com>
+References: <20240506070049.137839-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715024752;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Oyo45U8Eq4WQ6IhIl+Zg1qXtrEXH6HDSweARJbUAb+c=;
+ b=b0QnXbiIg/SUx7E5POFnjE15/l9Zo9HtrIPytjABzhPHLX9LAd2Qo2E/Ypcd9vNVgyNZrg
+ pKkgts0OemvjOV08WdYqPg2fLhw81OHF/hx4u2t3Trgfx0e9J820N5HcBhcts8In9AiXc4
+ 0K+bg5rbbywZtaSIHEMbLkFatYcqCBli9RMPd603XkIX/jdAPznQadK8FBaQIOUXZ0lu8N
+ fH7opZpRAgH2feXXMHRDpkcXq/VKIeM2FGQQKJ4jueAkOPEB8Op7Jvs5y857U8aKsVKiaD
+ YtyZLOI4JT21czH3/58JmrtMBTp+cidLGJSghUrv/80Gy4PZ915QKh/r/g4laQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=b0QnXbiI
+Subject: Re: [Buildroot] [PATCH 1/1] package/oprofile: fix static build with
  binutils >= 2.40
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,121 +83,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5272c6bea1247e87a32947bd960757a19fdf8b90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  6 May 2024 09:00:49 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-sframe library was added by binutils 2.40 and
-https://github.com/bminor/binutils-gdb/commit/19e559f1c91bfaedbd2f91d85ee161f3f03fda3c
-resulting in the following static build failure:
+> sframe library was added by binutils 2.40 and
+> https://github.com/bminor/binutils-gdb/commit/19e559f1c91bfaedbd2f91d85ee161f3f03fda3c
+> resulting in the following static build failure:
+> 
+> /home/buildroot/autobuild/run/instance-1/output-1/build/binutils-2.41/bfd/elf-sframe.c:220: undefined reference to `sframe_decode'
+> 
+> [...]
+> 
+> configure: error: bfd library not found
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/a9f3e09e6543b3773440c011e93bd41e357691e4
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...-fix-static-build-with-binutils-2.40.patch | 62 +++++++++++++++++++
+>  package/oprofile/oprofile.mk                  |  7 +++
+>  2 files changed, 69 insertions(+)
+>  create mode 100644 package/oprofile/0002-fix-static-build-with-binutils-2.40.patch
 
-/home/buildroot/autobuild/run/instance-1/output-1/build/binutils-2.41/bfd/elf-sframe.c:220: undefined reference to `sframe_decode'
+Life would *really* be easier if binutils was installing a libbfd.pc,
+and oprofile would use it to detect libbfd and automatically know about
+its indirect dependencies.
 
-[...]
+But oh well, patch applied, thanks!
 
-configure: error: bfd library not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/a9f3e09e6543b3773440c011e93bd41e357691e4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0002-fix-static-build-with-binutils-2.40.patch | 62 ++++++++++++++++++++++
- package/oprofile/oprofile.mk                       |  7 +++
- 2 files changed, 69 insertions(+)
-
-diff --git a/package/oprofile/0002-fix-static-build-with-binutils-2.40.patch b/package/oprofile/0002-fix-static-build-with-binutils-2.40.patch
-new file mode 100644
-index 0000000000..3134363abc
---- /dev/null
-+++ b/package/oprofile/0002-fix-static-build-with-binutils-2.40.patch
-@@ -0,0 +1,62 @@
-+From 1e4cd78bca2bd6e0d17b6cb9caf1b172d7bac564 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 6 May 2024 08:41:49 +0200
-+Subject: [PATCH] fix static build with binutils >= 2.40
-+
-+sframe library was added by binutils 2.40 and
-+https://github.com/bminor/binutils-gdb/commit/19e559f1c91bfaedbd2f91d85ee161f3f03fda3c
-+resulting in the following static build failure:
-+
-+/home/buildroot/autobuild/run/instance-1/output-1/build/binutils-2.41/bfd/elf-sframe.c:220: undefined reference to `sframe_decode'
-+
-+[...]
-+
-+configure: error: bfd library not found
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a9f3e09e6543b3773440c011e93bd41e357691e4
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://sourceforge.net/p/oprofile/bugs/295
-+---
-+ configure.ac   | 2 +-
-+ m4/binutils.m4 | 7 +++++--
-+ 2 files changed, 6 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index dc447f89..72ef0a21 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -334,7 +334,7 @@ AX_CHECK_DOCBOOK
-+ dnl finally restore the original libs setting
-+ LIBS="$ORIG_SAVE_LIBS"
-+ LIBERTY_LIBS="-liberty $DL_LIB $INTL_LIB"
-+-BFD_LIBS="-lbfd -liberty $DL_LIB $INTL_LIB $Z_LIB"
-++BFD_LIBS="-lbfd -liberty $DL_LIB $INTL_LIB $SFRAME_LIB $Z_LIB"
-+ POPT_LIBS="-lpopt"
-+ AC_SUBST(LIBERTY_LIBS)
-+ AC_SUBST(BFD_LIBS)
-+diff --git a/m4/binutils.m4 b/m4/binutils.m4
-+index c50e2f3c..e1ccd8e7 100644
-+--- a/m4/binutils.m4
-++++ b/m4/binutils.m4
-+@@ -10,11 +10,14 @@ AC_CHECK_FUNCS(xmemdup)
-+ AC_CHECK_LIB(dl, dlopen, LIBS="$LIBS -ldl"; DL_LIB="-ldl", DL_LIB="")
-+ AC_CHECK_LIB(intl, main, LIBS="$LIBS -lintl"; INTL_LIB="-lintl", INTL_LIB="")
-+ 
-+-AC_CHECK_LIB(bfd, bfd_openr, LIBS="-lbfd $LIBS"; Z_LIB="",
-++AC_CHECK_LIB(bfd, bfd_openr, LIBS="-lbfd $LIBS"; SFRAME_LIB=""; Z_LIB="",
-+ 	[AC_CHECK_LIB(z, compress,
-+ dnl Use a different bfd function here so as not to use cached result from above
-+ 		[AC_CHECK_LIB(bfd, bfd_fdopenr, LIBS="-lbfd -lz $LIBS"; Z_LIB="-lz",
-+-			[AC_MSG_ERROR([bfd library not found])], -lz)
-++dnl Use a different bfd function here so as not to use cached result from above
-++			[AC_CHECK_LIB(bfd, bfd_close, LIBS="-lbfd -lsframe -lz $LIBS"; SFRAME_LIB="-lsframe"; Z_LIB="-lz",
-++				[AC_MSG_ERROR([bfd library not found])], -lsframe -lz)
-++			], -lz)
-+ 		],
-+ 		[AC_MSG_ERROR([libz library not found; required by libbfd])])
-+ 	]
-+-- 
-+2.43.0
-+
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 512fbf9ea1..590e63b4ac 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -12,6 +12,13 @@ OPROFILE_CPE_ID_VENDOR = maynard_johnson
- OPROFILE_CONF_OPTS = \
- 	--disable-account-check \
- 	--with-kernel=$(STAGING_DIR)/usr
-+# 0002-fix-static-build-with-binutils-2.40.patch
-+OPROFILE_AUTORECONF = YES
-+
-+define OPROFILE_CREATE_MISSING_FILES
-+	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog
-+endef
-+OPROFILE_POST_EXTRACT_HOOKS += OPROFILE_CREATE_MISSING_FILES
- 
- OPROFILE_DEPENDENCIES = popt binutils host-pkgconf
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
