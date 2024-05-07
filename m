@@ -1,81 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10494C25B10
-	for <buildroot@archiver.kernel.org>; Mon,  6 May 2024 23:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D65FC10F1A
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 04:16:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D58181DA0;
-	Mon,  6 May 2024 23:47:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ClgGPohDbCAc; Mon,  6 May 2024 23:47:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C66B81E5E
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C66B81E5E;
-	Mon,  6 May 2024 23:47:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7F99E1BF314
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 23:47:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C428414C2
- for <buildroot@lists.busybox.net>; Mon,  6 May 2024 23:47:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF2764010F;
+	Tue,  7 May 2024 04:16:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IVQGVvYRjrIf for <buildroot@lists.busybox.net>;
- Mon,  6 May 2024 23:47:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=78.46.223.134;
- helo=mx1.dismail.de; envelope-from=november@dismail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 00B4F41498
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00B4F41498
-Received: from mx1.dismail.de (mx1.dismail.de [78.46.223.134])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 00B4F41498
- for <buildroot@buildroot.org>; Mon,  6 May 2024 23:47:19 +0000 (UTC)
-Received: from mx1.dismail.de (localhost [127.0.0.1])
- by mx1.dismail.de (OpenSMTPD) with ESMTP id d74f21fd;
- Tue, 7 May 2024 01:47:16 +0200 (CEST)
-Received: from smtp1.dismail.de (<unknown> [10.240.26.11])
- by mx1.dismail.de (OpenSMTPD) with ESMTP id 2cd57e30;
- Tue, 7 May 2024 01:47:16 +0200 (CEST)
-Received: from smtp1.dismail.de (localhost [127.0.0.1])
- by smtp1.dismail.de (OpenSMTPD) with ESMTP id 75e2178b;
- Tue, 7 May 2024 01:47:16 +0200 (CEST)
-Received: by dismail.de (OpenSMTPD) with ESMTPSA id 8d45462c
- (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO); 
- Tue, 7 May 2024 01:47:15 +0200 (CEST)
-Date: Mon, 06 May 2024 19:47:03 -0400
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-Id: <FQ83DS.40R820KQ8A6J3@dismail.de>
-In-Reply-To: <c572d16c-4d9b-44db-808d-1aa1e0c61866@mind.be>
-References: <XWZ0DS.CUMWYFFCDVCQ2@dismail.de>
- <c9627c7b-f371-4c6a-8815-5ee3a3c1c190@mind.be>
- <JSA1DS.7U0E3BNQ9NS62@dismail.de>
- <c572d16c-4d9b-44db-808d-1aa1e0c61866@mind.be>
-X-Mailer: geary/40.0
+ id 3eeSTSWydCwm; Tue,  7 May 2024 04:16:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFD7D40201
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id CFD7D40201;
+	Tue,  7 May 2024 04:16:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF78B1BF389
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 04:16:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A49A34078D
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 04:16:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1Jk1iQfP1THD for <buildroot@lists.busybox.net>;
+ Tue,  7 May 2024 04:16:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12d; helo=mail-lf1-x12d.google.com;
+ envelope-from=dm.chestnykh@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1600B40255
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1600B40255
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
+ [IPv6:2a00:1450:4864:20::12d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1600B40255
+ for <buildroot@buildroot.org>; Tue,  7 May 2024 04:16:29 +0000 (UTC)
+Received: by mail-lf1-x12d.google.com with SMTP id
+ 2adb3069b0e04-51fa8f5269eso562616e87.0
+ for <buildroot@buildroot.org>; Mon, 06 May 2024 21:16:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715055387; x=1715660187;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=kYvN6b/El3j0CEVe2nxjWftHUTgZdcIOgShfKIQmoyI=;
+ b=rA6yrHdVtr+py5Z9N1t1r7KG3Y2PQxLFMH+9k74qIVIQ0Rwrsa84JMScUujxkwoqI9
+ MsFu+/9hEI0cUuy1gc+wk3yODnt0oz/UIEWTjjJ+R+HFEhDVPQ2TPS8lqytu1j1XhXNd
+ ozGyYKJngdOv8H8sxdpmoyXjloEN5GM+TH2VH3dhyDxqc6wPOUbIzOgjhsb7DplR5x9k
+ 3rGvW4JcJUVx6nKUwFVjX0Bp4kP7/ghqYai6RdChRDxAvOSEPWilZHBKVzcndi8w6jPb
+ K4RLiiWQqCO+t1noiygm7y4aUEjzf3KpNZLfwdjapMfe04Linh0CPI1f8r0S1CuiE17U
+ 6BWQ==
+X-Gm-Message-State: AOJu0Yyw7YDpuzVlU0aQ1Meo8ZOM/UqkKaGkONJYeY7Ks60NVorbq+bv
+ KGSAumGR2FxRKwG9MGPCH45ULkzoyOZfPOYXc5qwxqB/0iZIf32l7HAuTw==
+X-Google-Smtp-Source: AGHT+IFrDaZKsIOFt1veykLtipB0GvnBraOcYxz1Ad0pwOU6EKQhI0lGKHgtiHO4/P4fjdgM9yHjCA==
+X-Received: by 2002:a2e:3802:0:b0:2dd:c6c8:dff1 with SMTP id
+ f2-20020a2e3802000000b002ddc6c8dff1mr6877358lja.4.1715055386620; 
+ Mon, 06 May 2024 21:16:26 -0700 (PDT)
+Received: from localhost.localdomain (109-252-38-243.nat.spd-mgts.ru.
+ [109.252.38.243]) by smtp.gmail.com with ESMTPSA id
+ l13-20020a2ea30d000000b002dffca24d97sm1796273lje.119.2024.05.06.21.16.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 06 May 2024 21:16:26 -0700 (PDT)
+From: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  7 May 2024 07:15:48 +0300
+Message-ID: <20240507041548.382997-1-dm.chestnykh@gmail.com>
+X-Mailer: git-send-email 2.45.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=dismail.de;
- h=date:from
- :subject:to:cc:message-id:in-reply-to:references:mime-version
- :content-type; s=20190914; bh=ma8AkT8GyH4/Nd0pWlrkPY1jfdyr47VWaO
- 55qoRsuNo=; b=ETw8cfmvW001T4dQB3tgKZOpsCUd+iBKT2vX0LvczznSM0u/RM
- r0GGdqbaQZ7B3owDGcZDUAYMZXMa225OHyaOWeM/woUFwWVh/C6wyvbJzet4uUo+
- 04WGveEnhoalohkt3XZjSati4f8OOSOAykGy12uKDKQOeAgw1bjYvvzWISAABm1M
- aPDtbYO6ZXh1cJbxU5MUx3CyzFg0TkuPwUUWMmtNak7scHAP9wGa5EQU/BP6sQGg
- 3iwnC6Qb6TEXWxHiEF8DO3+ZVVpMCcu2+1aIgWNSaqzi0p6OvsLYw1l7Tkahl0Tr
- mN2CaOL3skjJE0rX2pTYCHDxVI0fd5/zZhcw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=dismail.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1715055387; x=1715660187; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=kYvN6b/El3j0CEVe2nxjWftHUTgZdcIOgShfKIQmoyI=;
+ b=Q5P7a7ZzTMSHDHpoGOQ5GwMQoY2DdG7Af3s8DF1ohf1Usa6Zrt0UghexnMpdTa6d3s
+ w5iyTwzTVUMyKz8NDXAYKXbRkYW6H6khtjy/2W0dHxYYGeJbpGGXW0qH3qRz9zGHI0m+
+ p92KPaogaQDaT1O/MeT3GUqOQKCGUA6Z4b5I33E7/UeroeBKAMzqoBk3qAyizlSmxvHS
+ Sa4+b6fgpRVSxbDZFcHq71fdOEnQlRmL+H8RijJ525jhNtGQTx/wNzoEAHprBYhRmGRA
+ 5XE4vlq6hV431tFuJ6WsUflmwlTzz1Kxfh75Q4La8oJMLh6OZRknKQGsy56gm8g5TQCJ
+ x2bw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=dismail.de header.i=@dismail.de header.a=rsa-sha256
- header.s=20190914 header.b=ETw8cfmv
-Subject: Re: [Buildroot] Issue Building New Package cmus
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Q5P7a7Zz
+Subject: [Buildroot] [PATCH v3] configs/qemu_sparc_ss10_defconfig:
+ Re-introduce.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,168 +101,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Dylan via buildroot <buildroot@buildroot.org>
-Reply-To: Dylan <november@dismail.de>
-Cc: buildroot@buildroot.org
+Cc: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout,
+- With uClibc-ng-1.0.48 we can restore this config
+because uClibc-ng was provided the fix for SPARC.
+- The instructions in board/qemu/sparc-ss10/readme.txt
+are still valid without any corrections.
+The system boots properly ang the login prompt appears.
 
-I will try that out. I appreciate your assistance!
+Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+---
+v2 -> v3:
+- The first two patches are merged.
+- It has been checked and it is written in commit message
+that the instructions in board/qemu/sparc-ss10/readme.txt don't require changes.
+- Add myself to DEVELOPERS for board/qemu/sparc-ss10/ and defconfig.
+---
+ DEVELOPERS                        |  4 ++++
+ configs/qemu_sparc_ss10_defconfig | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 configs/qemu_sparc_ss10_defconfig
 
-Thank you,
-Dylan
-
-On Mon, May 6 2024 at 09:01:13 AM +0200, Arnout Vandecappelle 
-<arnout@mind.be> wrote:
-> 
-> 
-> On 06/05/2024 00:36, Dylan wrote:
->> Hello Arnout,
->> 
->> Thank you for the prompt reply. I moved the $(TARGET_CONFIGURE_OPTS) 
->> variable behind the ./configure and MAKE invocations and it has 
->> solved that issue (pasted below).
->> 
->> define CMUS_CONFIGURE_CMDS
->> (cd $(@D); \
->> $(TARGET_CONFIGURE_OPTS) \
->> $(TARGET_CONFIGURE_ARGS) \
->> ./configure $(CMUS_CONFIGURE_OPTS))
->> endef
->> 
->> define CMUS_BUILD_CMDS
->> $(TARGET_MAKE_ENV) \
->> $(TARGET_CONFIGURE_OPTS) \
->> $(TARGET_CONFIGURE_ARGS) \
->> $(MAKE) -C $(@D) all
->> endef
->> 
->> define CMUS_INSTALL_TARGET_CMDS
->> $(TARGET_MAKE_ENV) \
->> $(TARGET_CONFIGURE_OPTS) \
->> $(TARGET_CONFIGURE_ARGS) \
->> $(MAKE) -C $(@D) install \
->> DESTDIR="$(TARGET_DIR)/usr/bin"
->> endef
->> 
->> 
->> I'm now receiving errors related to "undefined references", which by 
->> their names, seem rather essential:
->> 
->> main.c:(.text+0x4): undefined reference to `__stack_chk_guard'
->> buildroot/output/host/bin/aarch64-buildroot-linux-gnu-ld: 
->> main.c:(.text+0x14): undefined reference to `__stack_chk_guard'
->> buildroot/output/host/bin/aarch64-buildroot-linux-gnu-ld: 
->> main.c:(.text+0x4c): undefined reference to `read'
->> buildroot/output/host/bin/aarch64-buildroot-linux-gnu-ld: 
->> main.c:(.text+0x64): undefined reference to `__stack_chk_guard'
->> buildroot/output/host/bin/aarch64-buildroot-linux-gnu-ld: 
->> main.c:(.text+0x68): undefined reference to `__stack_chk_guard'
->> buildroot/output/host/bin/aarch64-buildroot-linux-gnu-ld: 
->> main.c:(.text+0x80): undefined reference to `__stack_chk_fail'
-> 
->  Sounds like the Makefile unconditionally enables stack smashing 
-> protection, but it's disabled in your Buildroot configuration. Check 
-> in the Makefile how it's done and then either patch it out, or give 
-> whatever config option is needed to disable it. If you disable it, it 
-> will still be enabled by Buildroot when it's enabled in the Buildroot 
-> configuration (through the CFLAGS that Buildroot passes in).
-> 
->> buildroot/output/host/bin/aarch64-buildroot-linux-gnu-ld: main.o: in 
->> function `write_line':
->> main.c:(.text+0x138): undefined reference to `strlen'
-> 
->  This is most likely a similar situation but with FORTIFY.
-> 
->  Regards,
->  Arnout
-> 
->> 
->> Specifically, right after the line,
->>      LD    cmus-remote
->> 
->> Do you have any suggestions for resources I could dive deeper into 
->> this? I've been combing through the buildroot and bootlin docs, but 
->> it seems there are some specifics that I am missing.
->> 
->> I have the full build log here, if you're so inclined: 
->> https://paste.ack.tf/f86eab
->> 
->> Thank you for your assistance!
->> Dylan
->> 
->> On Sun, May 5 2024 at 09:33:22 PM +0200, Arnout Vandecappelle 
->> <arnout@mind.be> wrote:
->>> 
->>> 
->>> On 05/05/2024 20:41, Dylan via buildroot wrote:
->>>> Hello,
->>>> 
->>>> I have added a new package, cmus, to my buildroot package list, 
->>>> but when I try to compile it during a full rebuild, it returns 
->>>> an error message,
->>>> 
->>>> input.c: In function 'do_http_get':
->>>> input.c:223:54: error: expected ')' before 'VERSION'
->>>> CC lib.o
->>>> make[2]: *** [scripts/lib.mk:66: input.o] Error 1
->>>> make[2]: *** Waiting for unfinished jobs....
->>>> make[1]: *** [package/pkg-generic.mk:283: 
->>>> buildroot/output/build/cmus-2.10.0/.stamp_built] Error 2
->>>> make: *** [Makefile:82: _all] Error 2
->>>> 
->>>> 
->>>> I can build the cmus package outside of buildroot, so I think it 
->>>> may be related to my cmus.mk file, but I am not sure what is 
->>>> wrong with the file.
->>>> 
->>>> I've uploaded the contents of the cmus.mk file here:
->>>> https://paste.ack.tf/8471de
->>> 
->>>  You have:
->>> 
->>> $(MAKE) $(TARGET_CONFIGURE_OPTS)
->>> 
->>>  This forces an override of all variables defined in 
->>> TARGET_CONFIGURE_OPTS. One of those is CFLAGS, and in the 
->>> Makefile itself the definition of VERSION is added to CFLAGS.
->>> 
->>>  The solution is typically to use
->>> 
->>> $(TARGET_CONFIGURE_OPTS) $(MAKE)
->>> 
->>> i.e. pass everything in the environment. But then you have to make 
->>> sure that the Makefile properly handles that - e.g. that it uses 
->>> += for CFLAGS (which it does).
->>> 
->>>  Regards,
->>>  Arnout
->>> 
->>>> 
->>>> If the mailing list supports it, I have the hash and config files 
->>>> attached, as well.
->>>> 
->>>> 
->>>> I'm using buildroot version 2024.02 and have tried running "make 
->>>> clean all".
->>>> Is anyone else able to reproduce the same error, or can tell me 
->>>> what I've done incorrectly?
->>>> 
->>>> Thank you,
->>>> Dylan
->>>> 
->>>> 
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot@buildroot.org
->>>> https://lists.buildroot.org/mailman/listinfo/buildroot
->> 
->> 
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1c5ad1e42a..4bd6c58d4a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3343,3 +3343,7 @@ F:	package/quazip/
+ F:	package/shapelib/
+ F:	package/simple-mail/
+ F:	package/tinc/
++
++N:	Dmitry Chestnykh <dm.chestnykh@gmail.com>
++F:	board/qemu/sparc-ss10/
++F:	configs/qemu_sparc_ss10_defconfig
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+new file mode 100644
+index 0000000000..a8e3df9180
+--- /dev/null
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -0,0 +1,28 @@
++# Architecture
++BR2_sparc=y
++BR2_sparc_v8=y
++
++# System
++BR2_SYSTEM_DHCP="eth0"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Image
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
++
++# Linux headers same as kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_AS_KERNEL=y
++
++# Linux kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.6"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
++
++# host-qemu for gitlab testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+-- 
+2.45.0
 
 _______________________________________________
 buildroot mailing list
