@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A724C10F1A
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 07:14:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68D89C10F1A
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 07:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D945F41560;
-	Tue,  7 May 2024 07:14:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17DEA40160;
+	Tue,  7 May 2024 07:48:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id si9IF6tXMh0y; Tue,  7 May 2024 07:14:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bfskwbK8TIfU; Tue,  7 May 2024 07:48:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF66241566
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BD9540136
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF66241566;
-	Tue,  7 May 2024 07:14:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BD9540136;
+	Tue,  7 May 2024 07:48:32 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 81B7A1BF32C
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:14:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 257431BF32C
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:48:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C0C981F16
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:14:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1DA1082092
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:48:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1wFWjiKA5J9N for <buildroot@lists.busybox.net>;
- Tue,  7 May 2024 07:14:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id jqwnPVT6AJkN for <buildroot@lists.busybox.net>;
+ Tue,  7 May 2024 07:48:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 473D181EEE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 473D181EEE
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 473D181EEE
- for <buildroot@buildroot.org>; Tue,  7 May 2024 07:14:46 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 66006240008;
- Tue,  7 May 2024 07:14:43 +0000 (UTC)
-Date: Tue, 7 May 2024 09:14:42 +0200
-To: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-Message-ID: <20240507091442.25a27b48@windsurf>
-In-Reply-To: <20240507041548.382997-1-dm.chestnykh@gmail.com>
-References: <20240507041548.382997-1-dm.chestnykh@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715066083;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=NAK7zfrrTeOBihYXpTsAspTBAcOpzmXRs2FmaCfcBF4=;
- b=kLIrfBZbFpjIgP0gWt6u0jPMef5/Nt6s6ezt+KMuVGgTZE/WNcSbgQkMntx0bzZMFBfquV
- u2sNzmaY1Xgyp9xv4v66WCBYOLEALc/O5BQqTlr5H2UEbsNQ4pCDJkgv+dfyg3rp3O15Th
- JMYY/gNiu3gCWMT0ibnhNfI5ZrE/eJBsuWV4ZItrok4FOhffId1oCk8NucsUZuoXxPdOwq
- 7VUPnk7e9Kh6OkVs6crkPVwBNxkUgkFlSjgV6Lv+HRXdskaJMEXo/hxoisZbpLCIHIWUGA
- A0uAdbvc6nT31igMrsmDIwtE/I+5kAPv56BVgldxZp5N3BXnlwnjA/lu4lGfZg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kLIrfBZb
-Subject: Re: [Buildroot] [PATCH v3] configs/qemu_sparc_ss10_defconfig:
- Re-introduce.
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C6988208F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C6988208F
+ for <buildroot@buildroot.org>; Tue,  7 May 2024 07:48:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0487686973; Tue,  7 May 2024 07:48:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 7 May 2024 09:48:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9b235e3cacb32b002a624cf47fb3393a875df968
+X-Git-Newrev: c6ef948f298dcfe68942787c0ce5040105f65395
+X-Patchwork-Hint: ignore
+Message-Id: <20240507074830.0487686973@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libusbgx: bump to recent git
+ version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,70 +60,191 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Dmitry,
+commit: https://git.buildroot.net/buildroot/commit/?id=c6ef948f298dcfe68942787c0ce5040105f65395
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this new iteration, which I have applied, after doing a few
-changes, see below.
+The current tagged version is more than 6 years old, and no new tags
+have been made upstream, so let's update to the latest git version.
 
-On Tue,  7 May 2024 07:15:48 +0300
-Dmitry Chestnykh <dm.chestnykh@gmail.com> wrote:
+The current version contains many fixes and improvements and supports
+several new types of USB gadgets.
 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 1c5ad1e42a..4bd6c58d4a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -3343,3 +3343,7 @@ F:	package/quazip/
->  F:	package/shapelib/
->  F:	package/simple-mail/
->  F:	package/tinc/
-> +
-> +N:	Dmitry Chestnykh <dm.chestnykh@gmail.com>
+The patch was a backport from upstream, so it can be dropped.
 
-This file is alphabetically sorted, by name of developers, so you
-should have added this entry in the "right" place rather than at the
-end of the file. I fixed that up.
+Also, upstream has changed from https://github.com/libusbgx/libusbgx
+to https://github.com/linux-usb-gadgets/libusbgx: the former is a
+redirect to the latter.
 
-> diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-> new file mode 100644
-> index 0000000000..a8e3df9180
-> --- /dev/null
-> +++ b/configs/qemu_sparc_ss10_defconfig
-> @@ -0,0 +1,28 @@
-> +# Architecture
-> +BR2_sparc=y
-> +BR2_sparc_v8=y
+Signed-off-by: Alexander Shiyan <eagle.alexander923@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                |  1 -
+ .../0001-Add-include-of-sys-sysmacro.h.patch       | 98 ----------------------
+ package/libusbgx/Config.in                         |  2 +-
+ package/libusbgx/libusbgx.hash                     |  2 +-
+ package/libusbgx/libusbgx.mk                       |  4 +-
+ 5 files changed, 4 insertions(+), 103 deletions(-)
 
-We now require (since just a week or two) hashes of custom packages to
-be checked as well, so I added:
-
-+# Hashes
-+BR2_GLOBAL_PATCH_DIR="board/qemu/sparc-ss10/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-
-as well as a board/qemu/sparc-ss10/patches/linux/linux.hash which
-contains the hash of the linux 6.8.6 tarball.
-
-> +# Linux headers same as kernel
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_AS_KERNEL=y
-
-This should have been:
-
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
-
-Again: patch applied with those fixes, thanks a lot for your
-contribution!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 2118269003..3be4f6a1df 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -982,7 +982,6 @@ package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.pa
+ package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch lib_patch.Upstream
+ package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch lib_patch.Upstream
+ package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch lib_patch.Upstream
+-package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch lib_patch.Upstream
+ package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch lib_patch.Upstream
+ package/libwebsock/0001-Switch-to-use-pkg-config-to-detect-libevent-and-open.patch lib_patch.Upstream
+ package/libwebsock/0002-fix-ssl.patch lib_patch.Upstream
+diff --git a/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch b/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
+deleted file mode 100644
+index 0f47454f7a..0000000000
+--- a/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
++++ /dev/null
+@@ -1,98 +0,0 @@
+-From 45c14ef4d5d7ced0fbf984208de44ced6d5ed898 Mon Sep 17 00:00:00 2001
+-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+-Date: Mon, 10 Sep 2018 15:52:09 +0200
+-Subject: [PATCH] libusbgx: fix build with glibc-2.28 since <sys/sysmacros.h>
+- is no more included by <sys/types.h>
+-
+-Since https://sourceware.org/ml/libc-alpha/2015-11/msg00253.html sys/sysmacros.h
+-must be explicitly included.
+-Without sys/sysmacros.h and with glibc-2.28 build fails with error like:
+-src/.libs/libusbgx.so: undefined reference to minor' src/.libs/libusbgx.so: undefined reference tomajor'
+-src/.libs/libusbgx.so: undefined reference to `makedev'
+-
+-Signed-off-by: Sid Spry <R030t1@gmail.com>
+-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+----
+- examples/gadget-acm-ecm.c              | 1 +
+- examples/gadget-import.c               | 1 +
+- examples/gadget-ms.c                   | 1 +
+- examples/show-gadgets.c                | 1 +
+- examples/show-udcs.c                   | 1 +
+- include/usbg/usbg_internal_libconfig.h | 1 +
+- 6 files changed, 6 insertions(+)
+-
+-diff --git a/examples/gadget-acm-ecm.c b/examples/gadget-acm-ecm.c
+-index 1c5e2ca..29360da 100644
+---- a/examples/gadget-acm-ecm.c
+-+++ b/examples/gadget-acm-ecm.c
+-@@ -20,6 +20,7 @@
+- 
+- #include <errno.h>
+- #include <stdio.h>
+-+#include <sys/sysmacros.h>
+- #include <linux/usb/ch9.h>
+- #include <usbg/usbg.h>
+- 
+-diff --git a/examples/gadget-import.c b/examples/gadget-import.c
+-index e684fdb..63df449 100644
+---- a/examples/gadget-import.c
+-+++ b/examples/gadget-import.c
+-@@ -25,6 +25,7 @@
+- #include <errno.h>
+- #include <string.h>
+- #include <stdio.h>
+-+#include <sys/sysmacros.h>
+- #include <usbg/usbg.h>
+- 
+- int main(int argc, char **argv)
+-diff --git a/examples/gadget-ms.c b/examples/gadget-ms.c
+-index 478c370..a5c6681 100644
+---- a/examples/gadget-ms.c
+-+++ b/examples/gadget-ms.c
+-@@ -23,6 +23,7 @@
+- 
+- #include <errno.h>
+- #include <stdio.h>
+-+#include <sys/sysmacros.h>
+- #include <linux/usb/ch9.h>
+- #include <usbg/usbg.h>
+- #include <usbg/function/ms.h>
+-diff --git a/examples/show-gadgets.c b/examples/show-gadgets.c
+-index 707d448..a2a21c8 100644
+---- a/examples/show-gadgets.c
+-+++ b/examples/show-gadgets.c
+-@@ -21,6 +21,7 @@
+- #include <errno.h>
+- #include <stdio.h>
+- #include <string.h>
+-+#include <sys/sysmacros.h>
+- #include <netinet/ether.h>
+- #include <usbg/usbg.h>
+- #include <usbg/function/ms.h>
+-diff --git a/examples/show-udcs.c b/examples/show-udcs.c
+-index 66e950f..2f5cc45 100644
+---- a/examples/show-udcs.c
+-+++ b/examples/show-udcs.c
+-@@ -23,6 +23,7 @@
+- 
+- #include <errno.h>
+- #include <stdio.h>
+-+#include <sys/sysmacros.h>
+- #include <usbg/usbg.h>
+- 
+- int main(void)
+-diff --git a/include/usbg/usbg_internal_libconfig.h b/include/usbg/usbg_internal_libconfig.h
+-index ac51758..3fa55c0 100644
+---- a/include/usbg/usbg_internal_libconfig.h
+-+++ b/include/usbg/usbg_internal_libconfig.h
+-@@ -12,6 +12,7 @@
+- #ifndef USBG_INTERNAL_LIBCONFIG_H
+- #define USBG_INTERNAL_LIBCONFIG_H
+- 
+-+#include <sys/sysmacros.h>
+- #include <libconfig.h>
+- #ifdef __cplusplus
+- extern "C" {
+--- 
+-2.16.4
+-
+diff --git a/package/libusbgx/Config.in b/package/libusbgx/Config.in
+index fcebf3cfaa..09a2b8f15e 100644
+--- a/package/libusbgx/Config.in
++++ b/package/libusbgx/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBUSBGX
+ 	  libusbgx is a C library encapsulating the kernel USB
+ 	  gadget-configfs userspace API functionality.
+ 
+-	  https://github.com/libusbgx/libusbgx
++	  https://github.com/linux-usb-gadgets/libusbgx
+ 
+ comment "libusbgx needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libusbgx/libusbgx.hash b/package/libusbgx/libusbgx.hash
+index dd43ec7b97..b18258978f 100644
+--- a/package/libusbgx/libusbgx.hash
++++ b/package/libusbgx/libusbgx.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  b15abc89a0ef82c6a650cc1d58b5ba50f7ce076db392add84caabcd86c608ee2  libusbgx-0.2.0.tar.gz
++sha256  d0b483d8b190a75a1f9b52d6db229de5580c78b201077361a524cf32c5aad517  libusbgx-a5bfa81017a9b2064bc449cf74f5f9d106445f62.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+diff --git a/package/libusbgx/libusbgx.mk b/package/libusbgx/libusbgx.mk
+index 516ad25970..03e8dff6bb 100644
+--- a/package/libusbgx/libusbgx.mk
++++ b/package/libusbgx/libusbgx.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBUSBGX_VERSION = 0.2.0
+-LIBUSBGX_SITE = $(call github,libusbgx,libusbgx,libusbgx-v$(LIBUSBGX_VERSION))
++LIBUSBGX_VERSION = a5bfa81017a9b2064bc449cf74f5f9d106445f62
++LIBUSBGX_SITE = $(call github,linux-usb-gadgets,libusbgx,$(LIBUSBGX_VERSION))
+ LIBUSBGX_LICENSE = GPL-2.0+ (examples), LGPL-2.1+ (library)
+ LIBUSBGX_LICENSE_FILES = COPYING COPYING.LGPL
+ LIBUSBGX_DEPENDENCIES = host-pkgconf libconfig
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
