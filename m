@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B715BC10F1A
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 07:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0122C10F1A
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 08:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA4EE406D4;
-	Tue,  7 May 2024 07:50:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88E1D404E8;
+	Tue,  7 May 2024 08:05:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PIJu6ZP-_iRl; Tue,  7 May 2024 07:50:56 +0000 (UTC)
+ id N-Ed4EuDv28z; Tue,  7 May 2024 08:05:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A723406AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D583C4078E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A723406AF;
-	Tue,  7 May 2024 07:50:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6F1C41BF32C
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:50:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D583C4078E;
+	Tue,  7 May 2024 08:05:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A283E1BF31B
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 08:05:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 582BE606AA
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:50:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E3834078E
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 08:05:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h8Is4qCaIG6a for <buildroot@lists.busybox.net>;
- Tue,  7 May 2024 07:50:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oiZOrppjuIuy for <buildroot@lists.busybox.net>;
+ Tue,  7 May 2024 08:05:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B6A246066F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6A246066F
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B6A246066F
- for <buildroot@buildroot.org>; Tue,  7 May 2024 07:50:52 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E35D01C0010;
- Tue,  7 May 2024 07:50:50 +0000 (UTC)
-Date: Tue, 7 May 2024 09:50:50 +0200
-To: Alexander Shiyan <eagle.alexander923@gmail.com>
-Message-ID: <20240507095050.0db0e77c@windsurf>
-In-Reply-To: <20240419061241.116608-1-eagle.alexander923@gmail.com>
-References: <20240419061241.116608-1-eagle.alexander923@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715068251;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=4h40kqrwAn/HYdI2luJAZCcryRpNrwmaU6uBz8WbuuQ=;
- b=AF45MEWg1Ek2rjLH27qiN8i7bm0wMvfxUxXCcCjZ5DNDLKQ206M/9IP5qubk9YiaeXeBJB
- 1ogApHTlOtDGOY03EuFSKe92908hsMUqAabIMl9vVYvv5o+mJA00Z9BAUy8YEqN0Sw5863
- QnVx2BhRYiPL68DyyjMQtyJk4VgK4wAa/5gS1F1rriJj7gs99w2AUSTNNdvPp4Hk6YiFxE
- GEBr1mh456oxyFR6vhGc/2Jx6s4SjygeQxwmGE/MxKsKYH/k4vwljFuz+SGgswVkZBnfZI
- 80Fl0FJJie9IbUE85DoIdvAzXtazkQcc9C5Pcb+mF5z+Affc1Qlo0fLATP1yeA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AF45MEWg
-Subject: Re: [Buildroot] [PATCH] libusbgx: Update package from git
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0CC3404E8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0CC3404E8
+ for <buildroot@buildroot.org>; Tue,  7 May 2024 08:05:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 03A0086920; Tue,  7 May 2024 08:05:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 7 May 2024 09:51:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c6ef948f298dcfe68942787c0ce5040105f65395
+X-Git-Newrev: 818b6270a845df43d03d85622d4dfc1d48248bf6
+X-Patchwork-Hint: ignore
+Message-Id: <20240507080516.03A0086920@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/batctl: update to 2023.1 to match
+ batman-adv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,60 +60,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexander,
+commit: https://git.buildroot.net/buildroot/commit/?id=818b6270a845df43d03d85622d4dfc1d48248bf6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 19 Apr 2024 09:12:41 +0300
-Alexander Shiyan <eagle.alexander923@gmail.com> wrote:
+Although the kernel interface has not changed, it is convenient to
+have the batctl match the batman-adv version. So, bump the package
+to match 01ec4a39f5ceb83c62b0040067ba53197a0a6843 batman-adv bump.
 
-> The current version is more than 6 years old. Update to the latest git
-> version.
-> The current version contains many fixes and improvements and supports
-> several new types of USB gadgets.
-> 
-> Signed-off-by: Alexander Shiyan <eagle.alexander923@gmail.com>
+Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/batctl/batctl.hash | 6 +++---
+ package/batctl/batctl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks for your patch. I have applied it, but after fixing a number of
-small things.
-
-First, the commit title should have been:
-
-	package/libusbgx: bump to recent git version
-
-i.e, "package/libusbgx" as prefix, no capital letter when starting the
-title.
-
->  .../0001-Add-include-of-sys-sysmacro.h.patch  | 98 -------------------
-
-The removal of this patch should have been explained in the commit log,
-and also the .checkpackageignore file in Buildroot should have been
-updated with the removal of this patch.
-
-> -LIBUSBGX_VERSION = 0.2.0
-> -LIBUSBGX_SITE = $(call github,libusbgx,libusbgx,libusbgx-v$(LIBUSBGX_VERSION))
-> +LIBUSBGX_VERSION = a5bfa81017a9b2064bc449cf74f5f9d106445f62
-> +LIBUSBGX_SITE = https://github.com/linux-usb-gadgets/libusbgx.git
-
-The change from https://github.com/libusbgx ->
-https://github.com/linux-usb-gadgets should have been explained in the
-commit log, and the Config.in file should have been updated as well.
-
-Also, there was not really any reason to switch to the git SITE_METHOD:
-you can use $(call github,...) also with an arbitrary commit like this.
-
-As said above: I fixed all those minor details when applying, and
-pushed to master. Thanks a lot for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
+index 56bea3c5da..7bc6fee67f 100644
+--- a/package/batctl/batctl.hash
++++ b/package/batctl/batctl.hash
+@@ -1,6 +1,6 @@
+-# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.0/batctl-2021.0.tar.gz.sha1
+-sha1  87d0bb34950cb70578a0ca5ce706513a8279a01c  batctl-2021.0.tar.gz
++# From https://downloads.open-mesh.org/batman/releases/batman-adv-2023.1/batctl-2023.1.tar.gz.sha1
++sha1  8d899c6323e228b9b370caf28e6d67621cb7d35d  batctl-2023.1.tar.gz
+ # Locally calculated
+-sha256  9cec8bf1952f885192749a9dc0318a54633b717aaf05c438d504efd83f5201e4  batctl-2021.0.tar.gz
++sha256  e5bf47305d955abb199244bd0e5fffab96108b1affabd0d9705533f8059395f1  batctl-2023.1.tar.gz
+ sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
+diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
+index 8ff591844d..197e4beb72 100644
+--- a/package/batctl/batctl.mk
++++ b/package/batctl/batctl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BATCTL_VERSION = 2021.0
++BATCTL_VERSION = 2023.1
+ BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
+ BATCTL_LICENSE = GPL-2.0, MIT (batman_adv.h, list.h)
+ BATCTL_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
