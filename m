@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E111C25B75
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 07:12:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4175AC10F1A
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 07:12:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6AC4741522;
-	Tue,  7 May 2024 07:12:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E4D24159B;
+	Tue,  7 May 2024 07:12:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id POpMGDyMdJ2A; Tue,  7 May 2024 07:12:07 +0000 (UTC)
+ id b0JiAk5Y8XLC; Tue,  7 May 2024 07:12:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94965415A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BC0041572
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94965415A3;
-	Tue,  7 May 2024 07:12:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2BC0041572;
+	Tue,  7 May 2024 07:12:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6796A1BF32C
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:11:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 02D001BF32C
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:12:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4501F41560
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:11:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3CC241585
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:12:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WLPPHdQruaOp for <buildroot@lists.busybox.net>;
- Tue,  7 May 2024 07:11:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id aeDfYiEsuAXQ for <buildroot@lists.busybox.net>;
+ Tue,  7 May 2024 07:12:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7905141522
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7905141522
- for <buildroot@buildroot.org>; Tue,  7 May 2024 07:11:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65123869B9; Tue,  7 May 2024 07:11:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 7 May 2024 09:10:18 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 26b054083d36a0fb16340b10a9df239879a2c573
-X-Git-Newrev: c3e17c407a39ee4d576540c86b4b3b0549e81136
-X-Patchwork-Hint: ignore
-Message-Id: <20240507071154.65123869B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/qemu_sparc_ss10: re-introduce
- defconfig
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AE5BF41572
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE5BF41572
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AE5BF41572
+ for <buildroot@buildroot.org>; Tue,  7 May 2024 07:12:32 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1580020002;
+ Tue,  7 May 2024 07:12:29 +0000 (UTC)
+Date: Tue, 7 May 2024 09:12:29 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240507091229.11ebe7d4@windsurf>
+In-Reply-To: <20240506202304.509499-1-fontaine.fabrice@gmail.com>
+References: <20240506202304.509499-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715065950;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=mslsgBWihdvft2hI0Ew2Zj8Wm3mZP4LlV/oFm8+8zf4=;
+ b=PPT5dP/drMZ554v8mIO3sJ0WQ/a6PovGBjoc57uFfK5wldEdJAJiVlVFL5y4WTKuUXI3C0
+ V7jeNG3Y3S9d3gcb77W98+PPesweoztPgvMLvSd6+BDoz7Uy8S2ZSLD+ki7maPjeCLNeet
+ UFr3243EpZs/q+QmP0f0PNBZpPFT1FwcnAxwkwUTMDheeb0Kgh6uMnDD5n2V40sC3i2sGD
+ ch4VV6whoKstjXaf8I0vKdwQPFHLEZsOnsJO3Pq+nbdjRPutYkY6A9+jqaObLtdfSSIOKh
+ 2mhYBXEWW+qso+ZSwTXhL60W4lizHXGj0visIuE+4ilEiQgQIGsemArAp/Wr+g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=PPT5dP/d
+Subject: Re: [Buildroot] [PATCH 1/1] package/suricata: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,91 +82,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3e17c407a39ee4d576540c86b4b3b0549e81136
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  6 May 2024 22:23:04 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-- With uClibc-ng-1.0.48 we can restore this defconfig because uClibc-ng
-  now provides the fix for SPARC.
+> Fix the following static build failure raised since bump to version
+> version 6.0.14 in commit ce17f93e828a07292e03653be04a49480250f23f and
+> https://github.com/OISF/suricata/commit/31ba4fd1522dd0d7f933767b9205c67a4e726fe5:
+> 
+> configure:22378: checking for pcap_open_dead in -lpcap
+> configure:22407: /home/buildroot/autobuild/run/instance-3/output-1/host/bin/x86_64-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0  -static -std=c11 -march=native -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -rdynamic conftest.c -lpcap  -ljansson -lpthread -lyaml -lpcre -latomic -lz >&5
+> /home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/12.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/lib/../lib64/libpcap.a(pcap-linux.o): in function `nl80211_init':
+> pcap-linux.c:(.text+0xc34): undefined reference to `nl_socket_alloc'
+> 
+> [...]
+> 
+> checking for pcap_open_dead in -lpcap... no
+> 
+> Fixes: ce17f93e828a07292e03653be04a49480250f23f
+>  - http://autobuild.buildroot.org/results/9e25c2508bd4100d2d1d3180e79060d762361213
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0002-configure.ac-fix-static-build.patch  | 52 +++++++++++++++++++
+>  package/suricata/suricata.mk                  |  1 +
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 package/suricata/0002-configure.ac-fix-static-build.patch
 
-- The instructions in board/qemu/sparc-ss10/readme.txt are still valid
-  without any corrections.  The system boots properly ang the login
-  prompt appears.
+Applied to master, thanks.
 
-Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                     |  4 ++++
- board/qemu/sparc-ss10/patches/linux/linux.hash |  2 ++
- configs/qemu_sparc_ss10_defconfig              | 32 ++++++++++++++++++++++++++
- 3 files changed, 38 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1c5ad1e42a..77971e03db 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -846,6 +846,10 @@ F:	package/wolftpm/
- N:	Dimitrios Siganos <dimitris@siganos.org>
- F:	package/wireless-regdb/
- 
-+N:	Dmitry Chestnykh <dm.chestnykh@gmail.com>
-+F:	board/qemu/sparc-ss10/
-+F:	configs/qemu_sparc_ss10_defconfig
-+
- N:	Dominik Faessler <faessler@was.ch>
- F:	package/logsurfer/
- 
-diff --git a/board/qemu/sparc-ss10/patches/linux/linux.hash b/board/qemu/sparc-ss10/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..762f8575e7
---- /dev/null
-+++ b/board/qemu/sparc-ss10/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  1973e6fc3e8617fc8b0e24b33180449f1a39fa6a607f8dba61cf91b4c5bba466  linux-6.8.6.tar.gz
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-new file mode 100644
-index 0000000000..67d6cf67f6
---- /dev/null
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -0,0 +1,32 @@
-+# Architecture
-+BR2_sparc=y
-+BR2_sparc_v8=y
-+
-+# Hashes
-+BR2_GLOBAL_PATCH_DIR="board/qemu/sparc-ss10/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+
-+# Linux headers same as kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
-+
-+# Linux kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.6"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
-+
-+# host-qemu for gitlab testing
-+BR2_PACKAGE_HOST_QEMU=y
-+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
