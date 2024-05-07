@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30E61C10F1A
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 20:49:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A04BCC10F1A
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 20:49:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F27CE80C68;
-	Tue,  7 May 2024 20:48:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AE9F80D41;
+	Tue,  7 May 2024 20:49:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LX7OC960xf-H; Tue,  7 May 2024 20:48:59 +0000 (UTC)
+ id zkOYAAt8gacI; Tue,  7 May 2024 20:49:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1218A80D41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE03580DA8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1218A80D41;
-	Tue,  7 May 2024 20:48:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4E99C1BF2C8
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE03580DA8;
+	Tue,  7 May 2024 20:49:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 708BE1BF95F
  for <buildroot@lists.busybox.net>; Tue,  7 May 2024 20:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 486A580C68
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D74B41771
  for <buildroot@lists.busybox.net>; Tue,  7 May 2024 20:48:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RJX1W5clQLXt for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hrLKi2xCenly for <buildroot@lists.busybox.net>;
  Tue,  7 May 2024 20:48:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D2DA80C32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 836AC405AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D2DA80C32
+ by smtp2.osuosl.org (Postfix) with ESMTP id 836AC405AE
  for <buildroot@buildroot.org>; Tue,  7 May 2024 20:48:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8779086A7C; Tue,  7 May 2024 20:48:56 +0000 (UTC)
+ id 6FEDF86A7D; Tue,  7 May 2024 20:48:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 7 May 2024 22:47:44 +0200
+Date: Tue, 7 May 2024 22:40:52 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: fe069fe639f5963882602a184841fa8235a22469
-X-Git-Newrev: 5e039782c36bf348436aeea850d46f57b7bdf40d
+X-Git-Oldrev: 6a9b7909bb3780c79625e3ca8d58f7494304a5cf
+X-Git-Newrev: 1f3d93d773d1d058016402624e0d73374625cfea
 X-Patchwork-Hint: ignore
-Message-Id: <20240507204856.8779086A7C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/docker-cli: bump
- version to 26.0.2
+Message-Id: <20240507204856.6FEDF86A7D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] {linux,
+ linux-headers}: bump 4.19.x / 5.{4, 10, 15}.x / 6.{1, 6, 8}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,42 +65,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e039782c36bf348436aeea850d46f57b7bdf40d
+commit: https://git.buildroot.net/buildroot/commit/?id=1f3d93d773d1d058016402624e0d73374625cfea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-https://github.com/moby/moby/releases/tag/v26.0.2
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 49c8154ee7bb2b6e720652af77961b230106ffa6)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 9c592ecd3e599598856668736468b3ee54d8ceee)
+[Peter: drop 6.8.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 26558814c1..d8bfb1d824 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  96ed5d7c33a12f505d13fa03fa48f94cb41cf871178df0df84aa0b76839ad321  docker-cli-26.0.0.tar.gz
-+sha256  b047e180c94452b4375f7e43997286e5a5712e66b1280574974b2e117b4e43bd  docker-cli-26.0.2.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 5f9242329a..69c6f12f3c 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index d520dc379f..0a73bb9d67 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--DOCKER_CLI_VERSION = 26.0.0
-+DOCKER_CLI_VERSION = 26.0.2
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.6.22" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.6.27" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 734ff27a58..ff681acbaf 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  23e3e7b56407250f5411bdab95763d0bc4e3a19dfa431d951df7eacabd61a2f4  linux-6.6.22.tar.xz
+-sha256  d150d2d9d416877668d8b56f75759f166168d192419eefaa942ed67225cbec06  linux-6.1.82.tar.xz
++sha256  639e50060e3c8f23ed017cb10cfeacc6ba88ff5583812bb76859b4cc6a128291  linux-6.6.27.tar.xz
++sha256  d3d3c8c44f0f0a870a95bd2823f9d91979d1aa6f266da5d8cccd0c4b15e3115b  linux-6.1.86.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  f0805225f4a5b24d0bba9302c2c2f261c04f737ac5dd931da9b112e9f3e4a47e  linux-5.15.152.tar.xz
+-sha256  84cf30223239ec3333a5f7b2a7fba2042bba70d1582a139f7543956af871ad80  linux-5.10.213.tar.xz
+-sha256  3599d5959a403e64be407d7f05e56cb270d6ddd154e89a596609919ab1e2e366  linux-5.4.272.tar.xz
++sha256  c85859b86d2e6d1fc91ca1be8b44f24a9b5bb9f86869b04a8665a3a6559126e4  linux-5.15.155.tar.xz
++sha256  879ca159c34ea9d3a6775f292cc59c2d3931d57dca00f0bebe2675ea0c82c6a9  linux-5.10.215.tar.xz
++sha256  eac7b421a43cd46a3dbebf7c85d075faa7e164d80d215d31fcd35544b6f79ed4  linux-5.4.274.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  95ec94c4ab8f46d8a54430893f9bd653c46b0f1587d216818aa8f52fd313de69  linux-4.19.310.tar.xz
++sha256  a394fa5ffe321ee43dae9cccc724572f49fbb289875d39ea695adf712e51f74a  linux-4.19.312.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f95fb703f0..70e4493a64 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -403,12 +403,12 @@ endchoice
  
- DOCKER_CLI_LICENSE = Apache-2.0
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.19.310"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.272"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.213"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.152"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.82"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.22"	if BR2_KERNEL_HEADERS_6_6
++	default "4.19.312"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.274"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.215"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.155"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.86"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.27"	if BR2_KERNEL_HEADERS_6_6
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
