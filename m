@@ -4,63 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EF75C10F1A
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 21:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C277C19F4F
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 21:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8AC3605BD;
-	Tue,  7 May 2024 21:08:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2109E60B71;
+	Tue,  7 May 2024 21:42:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yJVO9CgZHOZ8; Tue,  7 May 2024 21:08:15 +0000 (UTC)
+ id t-5fIrjECREo; Tue,  7 May 2024 21:42:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F177D60B74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17F5460B73
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F177D60B74;
-	Tue,  7 May 2024 21:08:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 740151BF36B
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 21:08:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17F5460B73;
+	Tue,  7 May 2024 21:42:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 44F081BF36B
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 21:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 614F4605BD
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 21:08:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31C424178C
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 21:42:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id usSuA-uvqaMQ for <buildroot@lists.busybox.net>;
- Tue,  7 May 2024 21:08:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F118860B74
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F118860B74
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F118860B74
- for <buildroot@buildroot.org>; Tue,  7 May 2024 21:08:10 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6CE4640004;
- Tue,  7 May 2024 21:08:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s4S2g-005Hyu-2b;
- Tue, 07 May 2024 23:08:06 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-References: <20240414130520.3647875-1-dario.binacchi@amarulasolutions.com>
- <87msp1wqqo.fsf@dell.be.48ers.dk>
- <CABGWkvq4K64XFUdck+v171DMad+QGzufq_TEWwv51NjE5hrhNg@mail.gmail.com>
- <871q6dwgvw.fsf@dell.be.48ers.dk>
- <CABGWkvrNG00oAH0mL7Qb5BoQ3WpCtbK=ywmJAMNPtJ+msvieHA@mail.gmail.com>
-Date: Tue, 07 May 2024 23:08:06 +0200
-In-Reply-To: <CABGWkvrNG00oAH0mL7Qb5BoQ3WpCtbK=ywmJAMNPtJ+msvieHA@mail.gmail.com>
- (Dario Binacchi's message of "Tue, 7 May 2024 22:10:28 +0200")
-Message-ID: <87v83ptjnt.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gk7UbYcSVjr7 for <buildroot@lists.busybox.net>;
+ Tue,  7 May 2024 21:42:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::632; helo=mail-pl1-x632.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 237B7400AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 237B7400AF
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
+ [IPv6:2607:f8b0:4864:20::632])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 237B7400AF
+ for <buildroot@buildroot.org>; Tue,  7 May 2024 21:42:37 +0000 (UTC)
+Received: by mail-pl1-x632.google.com with SMTP id
+ d9443c01a7336-1ee954e0aa6so6933665ad.3
+ for <buildroot@buildroot.org>; Tue, 07 May 2024 14:42:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715118157; x=1715722957;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=LCT4mW0mUsqoeolSRz6YZZqJI4mdBoUJOOsRvE/ULLQ=;
+ b=QCLEaneXNoYhSz7DI8pXUesdaPzEij1jbE+LOm++AZXLW1CG/piPNIbB/uxf9kopdy
+ jY+GV9kcG3W2YN467LYm2pcScz+DumFwE4XjcYhGsVB2C6Ee0jkrG28FZcH3RU0uKCXh
+ Hspeb7OzwfV7uEMYT84PZkuRoT4inlP7/vcYr94bu11ZLDg6qGJ1eX0mwU0fLWxi0wPt
+ yugVZ7kLsSyCeSvumNYWc6lr5QwrSdvfr/iCMx8HAuq/l5FgWmYpQjIgTzSGhzUKrp7p
+ WGKcBMDRiFMbzcEdCr8e6CfTdFNPUIlQzAua5j7HU0kfrIne5J2pX01b3Sk1K8G9I5jT
+ j/dw==
+X-Gm-Message-State: AOJu0YxtHSNtoe/AmoCqWa7UdMIbbSxVyIsrgThV5EKWIizB+Qef2zrF
+ DIThUyscISjnXdunVi9CApnpApTCzFo7wiQuyh5/VjxOLKy/GaK7PkdAuiIk28iDHzGe3tuFmQ8
+ 0
+X-Google-Smtp-Source: AGHT+IG7I4nIQipOkF4yxNSUfE7u8/rgy56su5MojPboPWk/t+dfzZ4Tzgvc8Mo6VAQreR8zlSjNkA==
+X-Received: by 2002:a17:902:daca:b0:1e3:c4c2:efa9 with SMTP id
+ d9443c01a7336-1eeb059745emr10689165ad.31.1715118156964; 
+ Tue, 07 May 2024 14:42:36 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ d10-20020a170902654a00b001e435350a7bsm6818402pln.259.2024.05.07.14.42.35
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Tue, 07 May 2024 14:42:36 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Tue,  7 May 2024 14:42:34 -0700
+Message-ID: <20240507214234.94186-1-christian@aperture.us>
+X-Mailer: git-send-email 2.45.0
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2 1/3] package/bmap-tools: update GitHub URL
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1715118157; x=1715722957; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=LCT4mW0mUsqoeolSRz6YZZqJI4mdBoUJOOsRvE/ULLQ=;
+ b=wO6eYDylf8fGEwEUb0qEfB1QyVIiopV03VqOPPdJbilx0JHGl8og6nBYUQY6/vrAGz
+ GCqWIpMQ5qq2G0s21ZJ1PPO4pmMegfUMYJYDj1tn+PLrEBunabmVNSZxo31AosjwF1/G
+ rqIes/TjGIRs61AllAqpumMj9YzK5wBv7VHaBs3hoqv1cOQ2kEAasQPjFUc6Rxygw8Ag
+ 7/p6fyGAAFu38DCJgrADW/P0eyztCX+DWWnIM/o9U0Z72+yOks+WcRqJmr87hp7lR1ll
+ RAjWGIFNdzeL4TzGtjJAW5O8YjzJuC7CMbfMfmkrHTtIf98zFaHFGcqRy68VsStr0Z9R
+ p05g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=wO6eYDyl
+Subject: [Buildroot] [PATCH v1 1/1] package/go: security bump version to
+ go1.22.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,27 +101,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com, "Yann E .
- Morin" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
+Fixes CVEs:
 
-Hi,
+CVE-2024-24787: cmd/go: arbitrary code execution during build on darwin
+CVE-2024-24788: net: malformed DNS message can cause infinite loop
 
- > Since this patch is the first in a series of 3, where the final patch
- > bumps the version to 3.8.0, what are your
- > thoughts on the 2024.02.x version?
- > Is there anything I need to do?
+https://go.dev/doc/devel/release#go1.22.3
 
-No, it is fine. I will just skip the patches for 2024.02.x.
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 81bd14baa8..6bbde5b589 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  374ea82b289ec738e968267cac59c7d5ff180f9492250254784b2044e90df5a9  go1.22.2.src.tar.gz
++sha256  80648ef34f903193d72a59c0dff019f5f98ae0c9aa13ade0b0ecbff991a76f68  go1.22.3.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 0e39ad9f8c..43dfe1eae5 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.22.2
++GO_VERSION = 1.22.3
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
-Bye, Peter Korsgaard
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
