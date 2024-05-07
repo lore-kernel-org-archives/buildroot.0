@@ -4,61 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2370BC10F1A
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 09:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ECACC10F1A
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 12:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA5804054D;
-	Tue,  7 May 2024 09:10:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8ACF7404BF;
+	Tue,  7 May 2024 12:25:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IEhwRGBFcwxz; Tue,  7 May 2024 09:10:20 +0000 (UTC)
+ id LUs5nfFKo9zi; Tue,  7 May 2024 12:25:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B534240276
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B95E8405B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B534240276;
-	Tue,  7 May 2024 09:10:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DF8001BF30C
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 09:10:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B95E8405B3;
+	Tue,  7 May 2024 12:25:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 931B41BF386
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 12:25:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC4A340284
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 09:10:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B6B340124
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 12:25:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RFF3kpHt14vW for <buildroot@lists.busybox.net>;
- Tue,  7 May 2024 09:10:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2D3294023E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D3294023E
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2D3294023E
- for <buildroot@buildroot.org>; Tue,  7 May 2024 09:10:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E33B120004;
- Tue,  7 May 2024 09:10:14 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s4Gpy-004GWq-0q;
- Tue, 07 May 2024 11:10:14 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240411152016.1185109-1-ben.hutchings@mind.be>
- <ZhgCNMQXfxPXuqvs@cephalopod> <Zjiv9wzmqtfy8DYr@cephalopod>
- <ZjkiIepSLogcd1zY@landeda>
-Date: Tue, 07 May 2024 11:10:14 +0200
-In-Reply-To: <ZjkiIepSLogcd1zY@landeda> (Yann E. MORIN's message of "Mon, 6
- May 2024 20:32:01 +0200")
-Message-ID: <87zft2vvgp.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eH1Zg_m75f_3 for <buildroot@lists.busybox.net>;
+ Tue,  7 May 2024 12:25:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12b; helo=mail-lf1-x12b.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D93034000B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D93034000B
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D93034000B
+ for <buildroot@buildroot.org>; Tue,  7 May 2024 12:25:30 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id
+ 2adb3069b0e04-51f0b6b682fso3170248e87.1
+ for <buildroot@buildroot.org>; Tue, 07 May 2024 05:25:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715084729; x=1715689529;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=UbOgusuaZNSzs781hy87PpQqNj7VqWvOBjbQgjHjQuY=;
+ b=kc1EMNYu5J6GR1g4uPxWdB58VsIQ9qcP1eFoHmz43EROyHUOGzJH8ggmr24zqWjciN
+ MEFfp4ASuFExB18Sot31xTjsvr1Yu7CxW052AydYFqD2dB2lLmMXpSzLeGiP/f4mSG4a
+ fMf1WVR2IzvhuCBt1xyWtHoLAn2y19Fm31bg9XDLMC3x2NnTYLZwxR4UUwxZzNwGGSKp
+ nKUvNN6ex1IwIMKYSmY2V47CtX3APdjFLx+5iMrNM2bMUmJD9EE4oVaEKqvMa7ayZ+0K
+ RGcyKFcGDct93opHcrOOhdLnKo6+ce4BnrZAtFrYZ9wl++lOim9cAzES5m8fPKqUQz9b
+ JgBg==
+X-Gm-Message-State: AOJu0Yz0CGOgoF3tsvk1+BGAogU7HQfZAblhjWFLlzvC5zpqJK6j2QrV
+ VUrTtG+Di3MUC+GsD3Ugr+fPdzskACSWH8/Jet9IrJIU94uX5xwIcc73QBcWVDcTv9ToCFlIAVn
+ l
+X-Google-Smtp-Source: AGHT+IGaAQEMPuwR6+FL689IYzGDvUMy3VmV4arqbwA4SIwFLmhHkYz4r4EtgMRRlj/oK8eQh+W4QQ==
+X-Received: by 2002:ac2:58fb:0:b0:51f:621:fdaa with SMTP id
+ v27-20020ac258fb000000b0051f0621fdaamr9729323lfo.18.1715084728657; 
+ Tue, 07 May 2024 05:25:28 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
+ by smtp.gmail.com with ESMTPSA id
+ s3-20020adfe003000000b0034e8a10039esm9814999wrh.10.2024.05.07.05.25.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 07 May 2024 05:25:28 -0700 (PDT)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Tue,  7 May 2024 14:25:13 +0200
+Message-ID: <20240507122513.724138-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] Buildroot: incorrect permissons on /dev/shm
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1715084729; x=1715689529;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=UbOgusuaZNSzs781hy87PpQqNj7VqWvOBjbQgjHjQuY=;
+ b=LrXOh95e1U8r03mlUhBKpw+OWjyj29z3aGoFW9oOzvzuBaPYE+ngd0YN2pGZ0SATwV
+ R/7W3UPOumFmxMyzzBi5FHihyeQeX2YYsqZuaNWR9z1DfpPw3bua00PmTjG90f9ST3WB
+ rVUs97iAsrrRqwh5aHMfo2W4Kj0LynqsyEwDQDCHJEecPM/n9bIM/OHqNeUTRuVywui1
+ +W9AkCFxfwvfXN0/ydr2KPG/n2rKV94tB4hxekh8eKZLDRYYpl9cG90MXPZcIzcfGv2A
+ H86bmyID1ma6kU6tR12T92G2xXeYLjKJSvyWBf0BktjHtNo15D4ybTKvMUejZSLeQZgM
+ RFaw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=LrXOh95e
+Subject: [Buildroot] [PATCH v3] configs/beagleboneai64_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +106,351 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: oss-security@lists.openwall.com, Ben Hutchings <ben.hutchings@mind.be>,
- buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Adds support for BeagleBone AI-64 board by introducing the
+beagleboneai64_defconfig file and related support files.
 
- > Ben, All,
- > On 2024-05-06 12:24 +0200, Ben Hutchings via buildroot spake thusly:
- >> On Thu, Apr 11, 2024 at 05:31:02PM +0200, Ben Hutchings wrote:
- >> > Buildroot is a Linux distribution and system builder for embedded
- >> > systems.  Starting in Buildroot 2011.08, its default /etc/fstab
- >> > included an entry for /dev/shm with incorrect permissons (sticky bit
- >> > not set). (CWE-276)
- >> > 
- >> > Buildroot 2017.08 removed this entry for systems using systemd, and it
- >> > has never been included for systems using OpenRC.  So this only
- >> > affects Buildroot-built systems that use sysvinit, and some older
- >> > systems that use systemd.
- >> [...]
- >> 
- >> This has been assigned CVE-2024-34455.
+The BeagleBone AI-64 uses the TI J721E SoC, also known as DRA829, also
+known as TDA4VM.
 
- > Thanks for th efeedback. The fix has already been committed, with commit
- > 0b2967e158 (package/skeleton-init-sysv: Set sticky bit on /dev/shm) that
- > I applied on 2024-04-11.
+Retrieve BSP settings from meta-ti (may be useful for other TI boards):
 
-And it is included in the recently released 2024.02.2 rlease:
+- This defconfig requires u-boot binman support added in u-boot since
+  2023.10.
+  See FOSDEM 2024 talk by TI folks about Binman and how it simplify
+  the overall boot-loader build flow [1].
 
-https://lore.kernel.org/buildroot/874jbaxb7g.fsf@dell.be.48ers.dk/T/#u
+- Set BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD = "generic"
+  meta-ti]$ git grep TFA_BOARD
+  meta-ti-bsp/conf/machine/beagleplay.conf:TFA_BOARD = "lite"
+  meta-ti-bsp/conf/machine/include/am62axx.inc:TFA_BOARD = "lite"
+  meta-ti-bsp/conf/machine/include/am62pxx.inc:TFA_BOARD = "lite"
+  meta-ti-bsp/conf/machine/include/am62xx.inc:TFA_BOARD = "lite"
+  meta-ti-bsp/conf/machine/include/am64xx.inc:TFA_BOARD = "lite"
+  meta-ti-bsp/conf/machine/include/am65xx.inc:TFA_BOARD = "generic"
+  meta-ti-bsp/conf/machine/include/j7200.inc:TFA_BOARD = "generic"
+  meta-ti-bsp/conf/machine/include/j721e.inc:TFA_BOARD = "generic"
+  meta-ti-bsp/conf/machine/include/j721s2.inc:TFA_BOARD = "generic"
+  meta-ti-bsp/conf/machine/include/j722s.inc:TFA_BOARD = "lite"
+  meta-ti-bsp/conf/machine/include/j784s4.inc:TFA_BOARD = "j784s4"
 
+- Set BR2_TARGET_UBOOT_NEEDS_ATF_BL31 to provide BL31 variable pointing
+  to ATF bl31.bin to the U-Boot build process [2].
+
+- Set BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE to OP-TEE as BL32
+  secure payload. meta-ti set "SPD=opteed" to build ATF [3].
+
+- Set BR2_TARGET_OPTEE_OS_PLATFORM to "k3-j721e".
+  meta-ti uses the OPTEEMACHINE to set optee-os platform [4].
+  meta-ti]$ git grep OPTEEMACHINE
+  meta-ti-bsp/conf/machine/am437x-hs-evm.conf:OPTEEMACHINE = "ti-am43xx"
+  meta-ti-bsp/conf/machine/am57xx-hs-evm.conf:OPTEEMACHINE = "ti-am57xx"
+  meta-ti-bsp/conf/machine/beagleplay.conf:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/dra7xx-hs-evm.conf:OPTEEMACHINE = "ti-dra7xx"
+  meta-ti-bsp/conf/machine/include/am62axx.inc:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/include/am62pxx.inc:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/include/am62xx.inc:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/include/am64xx.inc:OPTEEMACHINE = "k3-am64x"
+  meta-ti-bsp/conf/machine/include/am65xx.inc:OPTEEMACHINE = "k3-am65x"
+  meta-ti-bsp/conf/machine/include/j7200.inc:OPTEEMACHINE = "k3-j721e"
+  meta-ti-bsp/conf/machine/include/j721e.inc:OPTEEMACHINE = "k3-j721e"
+  meta-ti-bsp/conf/machine/include/j721s2.inc:OPTEEMACHINE = "k3-j784s4"
+  meta-ti-bsp/conf/machine/include/j722s.inc:OPTEEMACHINE = "k3-am62x"
+  meta-ti-bsp/conf/machine/include/j784s4.inc:OPTEEMACHINE = "k3-j784s4"
+
+- Use j721e_beagleboneai64_a72 and j721e_beagleboneai64_r5 u-boot
+  defconfigs introduced in u-boot v2024.04.
+
+- u-boot distroboot (bootflow) detect extlinux.conf file from the first
+  SDcard partition, se we have to install the kernel and its dtb file.
+  Use devicetreedir instead of devicetree in extlinux.conf file to
+  avoid hardcoding the devicetree file name. TI boards are able to
+  retrieve dtb file name from an EEPROM (see TI_I2C_BOARD_DETECT in
+  uboot).
+
+- Provide a hash file for all custom package version
+  (arm-trusted-firmware, linux, ti-k3-r5-loader, uboot) to enable
+  BR2_DOWNLOAD_FORCE_CHECK_HASHES.
+
+[1] https://fosdem.org/2024/schedule/event/fosdem-2024-3067-standardizing-the-generation-and-signing-of-boot-images/
+[2] https://git.yoctoproject.org/meta-ti/commit/?id=e74b9a1746d4d04757c87c1920a0f743e55ff096
+[3] https://git.yoctoproject.org/meta-ti/tree/meta-ti-bsp/recipes-bsp/trusted-firmware-a/trusted-firmware-a-ti.inc?h=09.02.00.004#n7
+[4] https://git.yoctoproject.org/meta-arm/tree/meta-arm/recipes-security/optee/optee-os.inc?h=4.0.3#n23
+
+More information about the board can be found at:
+https://www.beagleboard.org/boards/beaglebone-ai-64
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+Add "beagleboneai64" directory to board/beagleboard/ since we could
+move all other Beagleboard's boards (beagleboardx15, beaglebone,
+beagleboneai and beaglev) to the same subdirectory.
+
+v2: fix shellcheck warnings for post-build.sh
+    update to kernel 6.6.30 and update hash files using utils/add-custom-hashes.
+
+v3: Add missing BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y (Thomas)
+    Reveal the TI SoC name "J721E" used by the BeagleBone AI-64 in the commit log (Thomas)
+    Rework the post-image script to use distroboot bootflow (Thomas)
+    Remove BR2_LINUX_KERNEL_INSTALL_TARGET since the kernel image and dtb was moved
+    Use j721e_beagleboneai64_a72 and j721e_beagleboneai64_r5 u-boot defconfigs instead of
+    TI EVM one, otherwise the board detection failed and the wrong devicetree was used.
+    Update SPL file name since the Beagleboneai64 generate tispl.bin_unsigned while
+    the boot ROOM requires tispl.bin. Create a symlink in post-build.sh.
+    Remove TI SK-TDA4VM note since we are now using a board specific u-boot defconfig.
+---
+ DEVELOPERS                                    |  2 +
+ .../beagleboard/beagleboneai64/extlinux.conf  |  5 ++
+ board/beagleboard/beagleboneai64/genimage.cfg | 33 ++++++++++++
+ .../arm-trusted-firmware.hash                 |  2 +
+ .../patches/linux-headers/linux-headers.hash  |  1 +
+ .../beagleboneai64/patches/linux/linux.hash   |  2 +
+ .../ti-k3-r5-loader/ti-k3-r5-loader.hash      |  2 +
+ .../beagleboneai64/patches/uboot/uboot.hash   |  2 +
+ .../beagleboard/beagleboneai64/post-build.sh  |  7 +++
+ board/beagleboard/beagleboneai64/readme.txt   | 39 +++++++++++++++
+ configs/beagleboneai64_defconfig              | 50 +++++++++++++++++++
+ 11 files changed, 145 insertions(+)
+ create mode 100644 board/beagleboard/beagleboneai64/extlinux.conf
+ create mode 100644 board/beagleboard/beagleboneai64/genimage.cfg
+ create mode 100644 board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+ create mode 120000 board/beagleboard/beagleboneai64/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/beagleboard/beagleboneai64/patches/linux/linux.hash
+ create mode 100644 board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+ create mode 100644 board/beagleboard/beagleboneai64/patches/uboot/uboot.hash
+ create mode 100755 board/beagleboard/beagleboneai64/post-build.sh
+ create mode 100644 board/beagleboard/beagleboneai64/readme.txt
+ create mode 100644 configs/beagleboneai64_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 77971e03db..81868f6082 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2695,10 +2695,12 @@ F:	package/irssi/
+ F:	package/vnstat/
+ 
+ N:	Romain Naour <romain.naour@gmail.com>
++F:	board/beagleboard/beagleboneai64/
+ F:	board/qemu/
+ F:	board/ti/am574x-idk/
+ F:	configs/qemu_*
+ F:	configs/am574x_idk_defconfig
++F:	configs/beagleboneai64_defconfig
+ F:	package/alure/
+ F:	package/aubio/
+ F:	package/bcc/
+diff --git a/board/beagleboard/beagleboneai64/extlinux.conf b/board/beagleboard/beagleboneai64/extlinux.conf
+new file mode 100644
+index 0000000000..582d510b5d
+--- /dev/null
++++ b/board/beagleboard/beagleboneai64/extlinux.conf
+@@ -0,0 +1,5 @@
++default buildroot
++label buildroot
++   kernel /Image
++   devicetreedir /
++append root=/dev/mmcblk1p2 rootwait rw console=ttyS2,115200n8
+diff --git a/board/beagleboard/beagleboneai64/genimage.cfg b/board/beagleboard/beagleboneai64/genimage.cfg
+new file mode 100644
+index 0000000000..b5ba2d21db
+--- /dev/null
++++ b/board/beagleboard/beagleboneai64/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"sysfw.itb",
++			"tiboot3.bin",
++			"tispl.bin",
++			"u-boot.img",
++			"Image",
++			"ti",
++			"extlinux",
++		}
++
++		label = "boot"
++	}
++
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+new file mode 100644
+index 0000000000..02714d06a0
+--- /dev/null
++++ b/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
+diff --git a/board/beagleboard/beagleboneai64/patches/linux-headers/linux-headers.hash b/board/beagleboard/beagleboneai64/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/beagleboard/beagleboneai64/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/beagleboard/beagleboneai64/patches/linux/linux.hash b/board/beagleboard/beagleboneai64/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..4b20a009a7
+--- /dev/null
++++ b/board/beagleboard/beagleboneai64/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b66a5b863b0f8669448b74ca83bd641a856f164b29956e539bbcb5fdeeab9cc6  linux-6.6.30.tar.xz
+diff --git a/board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+new file mode 100644
+index 0000000000..97a2b4eaf9
+--- /dev/null
++++ b/board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
+diff --git a/board/beagleboard/beagleboneai64/patches/uboot/uboot.hash b/board/beagleboard/beagleboneai64/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..97a2b4eaf9
+--- /dev/null
++++ b/board/beagleboard/beagleboneai64/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
+diff --git a/board/beagleboard/beagleboneai64/post-build.sh b/board/beagleboard/beagleboneai64/post-build.sh
+new file mode 100755
+index 0000000000..2315ff393a
+--- /dev/null
++++ b/board/beagleboard/beagleboneai64/post-build.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++ln -sf tispl.bin_unsigned "$BINARIES_DIR"/tispl.bin
++
++install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$BINARIES_DIR"/extlinux/extlinux.conf
+diff --git a/board/beagleboard/beagleboneai64/readme.txt b/board/beagleboard/beagleboneai64/readme.txt
+new file mode 100644
+index 0000000000..fa4e189c44
+--- /dev/null
++++ b/board/beagleboard/beagleboneai64/readme.txt
+@@ -0,0 +1,39 @@
++BeagleBoard.org BeagleBone AI-64 Development Board
++
++Description
++===========
++
++This configuration will build a basic image for the BeagleBoard.org
++BeagleBone AI-64. For more details about the board, visit:
++
++https://www.beagleboard.org/boards/beaglebone-ai-64
++
++How to Build
++============
++
++Select the default configuration for the target:
++
++$ make beagleboneai64_defconfig
++
++Optional: modify the configuration:
++
++$ make menuconfig
++
++Build:
++
++$ make
++
++To copy the resultimg output image file to an SD card use dd:
++
++$ dd if=output/images/sdcard.img of=/dev/sdX bs=1M
++
++How to Run
++==========
++
++Insert the SD card into the BeagleBone AI-64 board, and power it up
++through the USB Type-C connector. The system should come up (make sure
++to boot from the SD card not from the eMMC). You can use a USB to
++serial adapter to connect to the connector labeled UART0 (J3) to
++communicate with the board.
++
++https://docs.beagleboard.org/latest/boards/beaglebone/ai-64/02-quick-start.html
+diff --git a/configs/beagleboneai64_defconfig b/configs/beagleboneai64_defconfig
+new file mode 100644
+index 0000000000..d4ba61cfab
+--- /dev/null
++++ b/configs/beagleboneai64_defconfig
+@@ -0,0 +1,50 @@
++BR2_aarch64=y
++BR2_cortex_a72=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_GLOBAL_PATCH_DIR="board/beagleboard/beagleboneai64/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/beagleboard/beagleboneai64/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beagleboneai64/genimage.cfg"
++BR2_SYSTEM_DHCP="eth0"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-j721e-beagleboneai64"
++BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.10"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="generic"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
++BR2_TARGET_OPTEE_OS=y
++BR2_TARGET_OPTEE_OS_PLATFORM="k3-j721e"
++BR2_TARGET_TI_K3_BOOT_FIRMWARE=y
++BR2_TARGET_TI_K3_R5_LOADER=y
++BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
++BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.04"
++BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="j721e_beagleboneai64_r5"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="j721e_beagleboneai64_a72"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="tispl.bin_unsigned"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="TEE=$(BINARIES_DIR)/tee-pager_v2.bin"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-Bye, Peter Korsgaard
+2.44.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
