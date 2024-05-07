@@ -1,100 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ECACC10F1A
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 12:25:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D290BC10F1A
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 14:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8ACF7404BF;
-	Tue,  7 May 2024 12:25:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6BB30821B4;
+	Tue,  7 May 2024 14:40:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LUs5nfFKo9zi; Tue,  7 May 2024 12:25:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2kN2TiP5UjxU; Tue,  7 May 2024 14:40:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B95E8405B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F42E821B5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B95E8405B3;
-	Tue,  7 May 2024 12:25:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F42E821B5;
+	Tue,  7 May 2024 14:40:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 931B41BF386
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 12:25:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0D38F1BF290
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 14:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B6B340124
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 12:25:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDD214090F
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 14:40:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eH1Zg_m75f_3 for <buildroot@lists.busybox.net>;
- Tue,  7 May 2024 12:25:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12b; helo=mail-lf1-x12b.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D93034000B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D93034000B
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
- [IPv6:2a00:1450:4864:20::12b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D93034000B
- for <buildroot@buildroot.org>; Tue,  7 May 2024 12:25:30 +0000 (UTC)
-Received: by mail-lf1-x12b.google.com with SMTP id
- 2adb3069b0e04-51f0b6b682fso3170248e87.1
- for <buildroot@buildroot.org>; Tue, 07 May 2024 05:25:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715084729; x=1715689529;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=UbOgusuaZNSzs781hy87PpQqNj7VqWvOBjbQgjHjQuY=;
- b=kc1EMNYu5J6GR1g4uPxWdB58VsIQ9qcP1eFoHmz43EROyHUOGzJH8ggmr24zqWjciN
- MEFfp4ASuFExB18Sot31xTjsvr1Yu7CxW052AydYFqD2dB2lLmMXpSzLeGiP/f4mSG4a
- fMf1WVR2IzvhuCBt1xyWtHoLAn2y19Fm31bg9XDLMC3x2NnTYLZwxR4UUwxZzNwGGSKp
- nKUvNN6ex1IwIMKYSmY2V47CtX3APdjFLx+5iMrNM2bMUmJD9EE4oVaEKqvMa7ayZ+0K
- RGcyKFcGDct93opHcrOOhdLnKo6+ce4BnrZAtFrYZ9wl++lOim9cAzES5m8fPKqUQz9b
- JgBg==
-X-Gm-Message-State: AOJu0Yz0CGOgoF3tsvk1+BGAogU7HQfZAblhjWFLlzvC5zpqJK6j2QrV
- VUrTtG+Di3MUC+GsD3Ugr+fPdzskACSWH8/Jet9IrJIU94uX5xwIcc73QBcWVDcTv9ToCFlIAVn
- l
-X-Google-Smtp-Source: AGHT+IGaAQEMPuwR6+FL689IYzGDvUMy3VmV4arqbwA4SIwFLmhHkYz4r4EtgMRRlj/oK8eQh+W4QQ==
-X-Received: by 2002:ac2:58fb:0:b0:51f:621:fdaa with SMTP id
- v27-20020ac258fb000000b0051f0621fdaamr9729323lfo.18.1715084728657; 
- Tue, 07 May 2024 05:25:28 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
- by smtp.gmail.com with ESMTPSA id
- s3-20020adfe003000000b0034e8a10039esm9814999wrh.10.2024.05.07.05.25.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 07 May 2024 05:25:28 -0700 (PDT)
-From: Romain Naour <romain.naour@smile.fr>
-To: buildroot@buildroot.org
-Date: Tue,  7 May 2024 14:25:13 +0200
-Message-ID: <20240507122513.724138-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.44.0
+ id yavrD4hZgZ0U for <buildroot@lists.busybox.net>;
+ Tue,  7 May 2024 14:40:23 +0000 (UTC)
+X-Greylist: delayed 428 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 07 May 2024 14:40:23 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9C80C408A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C80C408A8
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.153.233;
+ helo=esa.microchip.iphmx.com;
+ envelope-from=prvs=8508e6beb=jamie.gibbons@microchip.com; receiver=<UNKNOWN> 
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
+ [68.232.153.233])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9C80C408A8
+ for <buildroot@buildroot.org>; Tue,  7 May 2024 14:40:23 +0000 (UTC)
+X-CSE-ConnectionGUID: U8TyX3p0Rj+nbHm3lFiNng==
+X-CSE-MsgGUID: 9ICJPCK/QduEc6bHMZqZdA==
+X-IronPort-AV: E=Sophos;i="6.08,142,1712646000"; d="scan'208";a="23987795"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+ by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 07 May 2024 07:33:16 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 7 May 2024 07:33:03 -0700
+Received: from jamie-dev.microchip.com (10.10.85.11) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Tue, 7 May 2024 07:33:02 -0700
+To: <buildroot@buildroot.org>
+Date: Tue, 7 May 2024 15:34:09 +0100
+Message-ID: <20240507143409.230685-1-jamie.gibbons@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1715084729; x=1715689529;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=UbOgusuaZNSzs781hy87PpQqNj7VqWvOBjbQgjHjQuY=;
- b=LrXOh95e1U8r03mlUhBKpw+OWjyj29z3aGoFW9oOzvzuBaPYE+ngd0YN2pGZ0SATwV
- R/7W3UPOumFmxMyzzBi5FHihyeQeX2YYsqZuaNWR9z1DfpPw3bua00PmTjG90f9ST3WB
- rVUs97iAsrrRqwh5aHMfo2W4Kj0LynqsyEwDQDCHJEecPM/n9bIM/OHqNeUTRuVywui1
- +W9AkCFxfwvfXN0/ydr2KPG/n2rKV94tB4hxekh8eKZLDRYYpl9cG90MXPZcIzcfGv2A
- H86bmyID1ma6kU6tR12T92G2xXeYLjKJSvyWBf0BktjHtNo15D4ybTKvMUejZSLeQZgM
- RFaw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1715092823; x=1746628823;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=gqNN4KlP1Iw/V3f6trNIl1dj40OCbJVYDICyzUqUzMs=;
+ b=q9yaLXDTTSyPeM8M5a5JcBUa/KJFDdVO3/fn9MoT9wQ8J/wOvLkUkuee
+ MKFiPO/zp0WYnc0ur+Mx8OjTECNkOwg/2YWnNkmCMfP8KsBMGLd+wTEmN
+ J8t/8FPZWgfSlq+AiViRlKzp1o/HlGnBhOR1XcIX9htz2MprrR+yITD2O
+ JS032L8emony+9jFirpasArTc7wy3awjm/6Z0KxJQMj8cAaZ0OPu8ow9y
+ y4ism4D5L8Q1AINgZLicWhWMZOLrFDy6QZknoscvtFoFVSBW4wyvP7ezE
+ YKgjQMvt3cakskXYSiIcBe6c5QtKiVOdF+vISgNVs1mlnI53C3spgLnAq
+ A==;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=smile.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=microchip.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=smile-fr.20230601.gappssmtp.com
- header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=LrXOh95e
-Subject: [Buildroot] [PATCH v3] configs/beagleboneai64_defconfig: new
- defconfig
+ unprotected) header.d=microchip.com header.i=@microchip.com
+ header.a=rsa-sha256 header.s=mchp header.b=q9yaLXDT
+Subject: [Buildroot] [PATCH 1/1] configs/beaglev_fire: add support for
+ BeagleV Fire
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,350 +92,505 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>
+From: Jamie Gibbons via buildroot <buildroot@buildroot.org>
+Reply-To: Jamie Gibbons <jamie.gibbons@microchip.com>
+Cc: Conor Dooley <Conor.Dooley@microchip.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Valentina Fernandez <valentina.fernandezalanis@microchip.com>, Jamie
+ Gibbons <jamie.gibbons@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adds support for BeagleBone AI-64 board by introducing the
-beagleboneai64_defconfig file and related support files.
+Add support for the BeagleV Fire, the Beagleboard SBC powered by
+Microchip's PolarFire SoC.
 
-The BeagleBone AI-64 uses the TI J721E SoC, also known as DRA829, also
-known as TDA4VM.
+The configuration file is beaglev_fire_defconfig. It builds a
+bootable kernel image with an embedded root file system. The image
+built can be flashed to the board using the eMMC.
 
-Retrieve BSP settings from meta-ti (may be useful for other TI boards):
+The yaml configuration file is used by the hss payload generator. It
+maps the ELF binaries or binary blobs to the application hart.
 
-- This defconfig requires u-boot binman support added in u-boot since
-  2023.10.
-  See FOSDEM 2024 talk by TI folks about Binman and how it simplify
-  the overall boot-loader build flow [1].
+The image generator script sets the partitions of the image.
 
-- Set BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD = "generic"
-  meta-ti]$ git grep TFA_BOARD
-  meta-ti-bsp/conf/machine/beagleplay.conf:TFA_BOARD = "lite"
-  meta-ti-bsp/conf/machine/include/am62axx.inc:TFA_BOARD = "lite"
-  meta-ti-bsp/conf/machine/include/am62pxx.inc:TFA_BOARD = "lite"
-  meta-ti-bsp/conf/machine/include/am62xx.inc:TFA_BOARD = "lite"
-  meta-ti-bsp/conf/machine/include/am64xx.inc:TFA_BOARD = "lite"
-  meta-ti-bsp/conf/machine/include/am65xx.inc:TFA_BOARD = "generic"
-  meta-ti-bsp/conf/machine/include/j7200.inc:TFA_BOARD = "generic"
-  meta-ti-bsp/conf/machine/include/j721e.inc:TFA_BOARD = "generic"
-  meta-ti-bsp/conf/machine/include/j721s2.inc:TFA_BOARD = "generic"
-  meta-ti-bsp/conf/machine/include/j722s.inc:TFA_BOARD = "lite"
-  meta-ti-bsp/conf/machine/include/j784s4.inc:TFA_BOARD = "j784s4"
+The image tree souce file creates a FIT image.
 
-- Set BR2_TARGET_UBOOT_NEEDS_ATF_BL31 to provide BL31 variable pointing
-  to ATF bl31.bin to the U-Boot build process [2].
+The post image script creates the payload using the payload generator
+host package and finally, creates the FIT image using the ITS after the
+kernel build. It also creates the BMAP file for use with the BMAP
+command line tool to transfer the image to the board.
 
-- Set BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE to OP-TEE as BL32
-  secure payload. meta-ti set "SPD=opteed" to build ATF [3].
+The U-Boot script and additional U-Boot configurations ensure that
+U-Boot behaves as expected for the BeagleV-Fire and boots the FIT image.
 
-- Set BR2_TARGET_OPTEE_OS_PLATFORM to "k3-j721e".
-  meta-ti uses the OPTEEMACHINE to set optee-os platform [4].
-  meta-ti]$ git grep OPTEEMACHINE
-  meta-ti-bsp/conf/machine/am437x-hs-evm.conf:OPTEEMACHINE = "ti-am43xx"
-  meta-ti-bsp/conf/machine/am57xx-hs-evm.conf:OPTEEMACHINE = "ti-am57xx"
-  meta-ti-bsp/conf/machine/beagleplay.conf:OPTEEMACHINE = "k3-am62x"
-  meta-ti-bsp/conf/machine/dra7xx-hs-evm.conf:OPTEEMACHINE = "ti-dra7xx"
-  meta-ti-bsp/conf/machine/include/am62axx.inc:OPTEEMACHINE = "k3-am62x"
-  meta-ti-bsp/conf/machine/include/am62pxx.inc:OPTEEMACHINE = "k3-am62x"
-  meta-ti-bsp/conf/machine/include/am62xx.inc:OPTEEMACHINE = "k3-am62x"
-  meta-ti-bsp/conf/machine/include/am64xx.inc:OPTEEMACHINE = "k3-am64x"
-  meta-ti-bsp/conf/machine/include/am65xx.inc:OPTEEMACHINE = "k3-am65x"
-  meta-ti-bsp/conf/machine/include/j7200.inc:OPTEEMACHINE = "k3-j721e"
-  meta-ti-bsp/conf/machine/include/j721e.inc:OPTEEMACHINE = "k3-j721e"
-  meta-ti-bsp/conf/machine/include/j721s2.inc:OPTEEMACHINE = "k3-j784s4"
-  meta-ti-bsp/conf/machine/include/j722s.inc:OPTEEMACHINE = "k3-am62x"
-  meta-ti-bsp/conf/machine/include/j784s4.inc:OPTEEMACHINE = "k3-j784s4"
+The rootfs-overlay contains scripts for updating the BeagleV-Fire
+gateware.
 
-- Use j721e_beagleboneai64_a72 and j721e_beagleboneai64_r5 u-boot
-  defconfigs introduced in u-boot v2024.04.
+The README.txt documents how to build and boot the Beagle-V Fire with
+this configuration. It also explains how to program a custom bitstream.
 
-- u-boot distroboot (bootflow) detect extlinux.conf file from the first
-  SDcard partition, se we have to install the kernel and its dtb file.
-  Use devicetreedir instead of devicetree in extlinux.conf file to
-  avoid hardcoding the devicetree file name. TI boards are able to
-  retrieve dtb file name from an EEPROM (see TI_I2C_BOARD_DETECT in
-  uboot).
-
-- Provide a hash file for all custom package version
-  (arm-trusted-firmware, linux, ti-k3-r5-loader, uboot) to enable
-  BR2_DOWNLOAD_FORCE_CHECK_HASHES.
-
-[1] https://fosdem.org/2024/schedule/event/fosdem-2024-3067-standardizing-the-generation-and-signing-of-boot-images/
-[2] https://git.yoctoproject.org/meta-ti/commit/?id=e74b9a1746d4d04757c87c1920a0f743e55ff096
-[3] https://git.yoctoproject.org/meta-ti/tree/meta-ti-bsp/recipes-bsp/trusted-firmware-a/trusted-firmware-a-ti.inc?h=09.02.00.004#n7
-[4] https://git.yoctoproject.org/meta-arm/tree/meta-arm/recipes-security/optee/optee-os.inc?h=4.0.3#n23
-
-More information about the board can be found at:
-https://www.beagleboard.org/boards/beaglebone-ai-64
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
-Add "beagleboneai64" directory to board/beagleboard/ since we could
-move all other Beagleboard's boards (beagleboardx15, beaglebone,
-beagleboneai and beaglev) to the same subdirectory.
-
-v2: fix shellcheck warnings for post-build.sh
-    update to kernel 6.6.30 and update hash files using utils/add-custom-hashes.
-
-v3: Add missing BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y (Thomas)
-    Reveal the TI SoC name "J721E" used by the BeagleBone AI-64 in the commit log (Thomas)
-    Rework the post-image script to use distroboot bootflow (Thomas)
-    Remove BR2_LINUX_KERNEL_INSTALL_TARGET since the kernel image and dtb was moved
-    Use j721e_beagleboneai64_a72 and j721e_beagleboneai64_r5 u-boot defconfigs instead of
-    TI EVM one, otherwise the board detection failed and the wrong devicetree was used.
-    Update SPL file name since the Beagleboneai64 generate tispl.bin_unsigned while
-    the boot ROOM requires tispl.bin. Create a symlink in post-build.sh.
-    Remove TI SK-TDA4VM note since we are now using a board specific u-boot defconfig.
+Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
+Reviewed-by: Valentina Fernandez <valentina.fernandezalanis@microchip.com>
 ---
  DEVELOPERS                                    |  2 +
- .../beagleboard/beagleboneai64/extlinux.conf  |  5 ++
- board/beagleboard/beagleboneai64/genimage.cfg | 33 ++++++++++++
- .../arm-trusted-firmware.hash                 |  2 +
- .../patches/linux-headers/linux-headers.hash  |  1 +
- .../beagleboneai64/patches/linux/linux.hash   |  2 +
- .../ti-k3-r5-loader/ti-k3-r5-loader.hash      |  2 +
- .../beagleboneai64/patches/uboot/uboot.hash   |  2 +
- .../beagleboard/beagleboneai64/post-build.sh  |  7 +++
- board/beagleboard/beagleboneai64/readme.txt   | 39 +++++++++++++++
- configs/beagleboneai64_defconfig              | 50 +++++++++++++++++++
- 11 files changed, 145 insertions(+)
- create mode 100644 board/beagleboard/beagleboneai64/extlinux.conf
- create mode 100644 board/beagleboard/beagleboneai64/genimage.cfg
- create mode 100644 board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
- create mode 120000 board/beagleboard/beagleboneai64/patches/linux-headers/linux-headers.hash
- create mode 100644 board/beagleboard/beagleboneai64/patches/linux/linux.hash
- create mode 100644 board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
- create mode 100644 board/beagleboard/beagleboneai64/patches/uboot/uboot.hash
- create mode 100755 board/beagleboard/beagleboneai64/post-build.sh
- create mode 100644 board/beagleboard/beagleboneai64/readme.txt
- create mode 100644 configs/beagleboneai64_defconfig
+ board/beaglev_fire/README.txt                 | 90 +++++++++++++++++++
+ board/beaglev_fire/beaglev_fire.its           | 56 ++++++++++++
+ board/beaglev_fire/config.yaml                | 28 ++++++
+ board/beaglev_fire/genimage.cfg               | 36 ++++++++
+ board/beaglev_fire/post-image.sh              | 14 +++
+ board/beaglev_fire/rootfs-overlay/etc/motd    |  5 ++
+ .../beagleboard/gateware/change-gateware.sh   | 25 ++++++
+ .../usr/share/microchip/update-gateware.sh    | 36 ++++++++
+ board/beaglev_fire/uboot-env.txt              | 16 ++++
+ board/beaglev_fire/uboot-fragment.config      |  1 +
+ configs/beaglev_fire_defconfig                | 40 +++++++++
+ 12 files changed, 349 insertions(+)
+ create mode 100644 board/beaglev_fire/README.txt
+ create mode 100644 board/beaglev_fire/beaglev_fire.its
+ create mode 100644 board/beaglev_fire/config.yaml
+ create mode 100644 board/beaglev_fire/genimage.cfg
+ create mode 100755 board/beaglev_fire/post-image.sh
+ create mode 100644 board/beaglev_fire/rootfs-overlay/etc/motd
+ create mode 100644 board/beaglev_fire/rootfs-overlay/usr/share/beagleboard/gateware/change-gateware.sh
+ create mode 100644 board/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
+ create mode 100644 board/beaglev_fire/uboot-env.txt
+ create mode 100644 board/beaglev_fire/uboot-fragment.config
+ create mode 100644 configs/beaglev_fire_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 77971e03db..81868f6082 100644
+index 77971e03db..a99420c0bd 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2695,10 +2695,12 @@ F:	package/irssi/
- F:	package/vnstat/
+@@ -1484,7 +1484,9 @@ F:	package/swaybg/
+ F:	package/yad/
  
- N:	Romain Naour <romain.naour@gmail.com>
-+F:	board/beagleboard/beagleboneai64/
- F:	board/qemu/
- F:	board/ti/am574x-idk/
- F:	configs/qemu_*
- F:	configs/am574x_idk_defconfig
-+F:	configs/beagleboneai64_defconfig
- F:	package/alure/
- F:	package/aubio/
- F:	package/bcc/
-diff --git a/board/beagleboard/beagleboneai64/extlinux.conf b/board/beagleboard/beagleboneai64/extlinux.conf
+ N:	Jamie Gibbons <jamie.gibbons@microchip.com>
++F:	board/beaglev_fire/
+ F:	board/microchip/mpfs_icicle/
++F:	configs/beaglev_fire_defconfig
+ F:	configs/microchip_mpfs_icicle_defconfig
+ F:	package/microchip-hss-payload-generator/
+ 
+diff --git a/board/beaglev_fire/README.txt b/board/beaglev_fire/README.txt
 new file mode 100644
-index 0000000000..582d510b5d
+index 0000000000..ae6660f7ab
 --- /dev/null
-+++ b/board/beagleboard/beagleboneai64/extlinux.conf
-@@ -0,0 +1,5 @@
-+default buildroot
-+label buildroot
-+   kernel /Image
-+   devicetreedir /
-+append root=/dev/mmcblk1p2 rootwait rw console=ttyS2,115200n8
-diff --git a/board/beagleboard/beagleboneai64/genimage.cfg b/board/beagleboard/beagleboneai64/genimage.cfg
++++ b/board/beaglev_fire/README.txt
+@@ -0,0 +1,90 @@
++Beagle-V Fire
++==============
++
++BeagleV Fire is a low-cost RISC-V 64-bit based platform, powered by
++Microchip's PolarFire SoC. This file describes how to use the
++pre-defined Buildroot configuration for the Beagle-V Fire board.
++
++Further information about the Beagle-V Fire can be found at
++https://docs.beagleboard.org/latest/boards/beaglev/fire/index.html.
++
++
++Building
++========
++
++Configure Buildroot using the default board configuration:
++
++  '$ make beaglev_fire_defconfig'
++
++Customise the build as necessary:
++
++  '$ make menuconfig'
++
++Start the build:
++
++  '$ make'
++
++
++Result of the build
++===================
++
++Once the build has finished you will have the following files:
++
++    output/images/
++    +-- boot.scr
++    +-- boot.vfat
++    +-- Image
++    +-- beaglev_fire.itb
++    +-- beaglev_fire.its
++    +-- mpfs-beaglev-fire.dtb
++    +-- payload.bin
++    +-- rootfs.cpio
++    +-- rootfs.cpio.gz
++    +-- sdcard.img
++    +-- u-boot.bin
++
++
++Flashing the image to your eMMC
++===============================
++
++By default Buildroot builds a compatible image for you. The first partition
++of this image contains a U-Boot binary, embedded in a Hart Software
++Services (HSS) payload. The second partition contains a FAT filesystem
++with a U-Boot env and an ITB file containing the kernel and the device
++tree. The third partition contains the file system. This image can be
++written directly to the eMMC. All you need to do is dd the image to the eMMC,
++which can be done with the following command on your development host:
++
++  '$ sudo dd if=output/images/sdcard.img of=/dev/sdb bs=1M'
++
++
++Customize BeagleV-Fire Cape Gateware Using Verilog
++==================================================
++
++To customize your Beagle-V Fire gateware please follow the guide below to
++create your custom bitstream (steps 1 - 6):
++https://docs.beagleboard.org/latest/boards/beaglev/fire/demos-and-tutorials/gateware/customize-cape-gateware-verilog.html
++
++
++Program BeagleV-Fire With Your Custom Bitstream with Buildroot
++==============================================================
++
++Unzip the downloaded artifacts.zip file. 
++
++Go to the custom FPGA design directory:
++  'cd artifacts/bitstreams/my_custom_fpga_design'
++
++On your Linux host development computer, copy the bitstream to BeagleV-Fire
++board, replacing </path/to/your/> with the path to your BeagleV-Fire root file
++system.
++  'cp -r ./LinuxProgramming /path/to/your/buildroot/board/beaglev_fire/rootfs-overlay/etc/'
++
++On BeagleV-Fire,
++  1. Make your change gateware script executable
++    'chmod +x /usr/share/beagleboard/gateware/change-gateware.sh'
++  2. Create a firmware directory
++    'mkdir /lib/firmware'
++  3. initiate the reprogramming of the FPGA with your gateware bitstream:
++    '/usr/share/beagleboard/gateware/change-gateware.sh /etc/LinuxProgramming/'
++
++Wait for a couple of minutes for the BeagleV-Fire to reprogram itself.
+\ No newline at end of file
+diff --git a/board/beaglev_fire/beaglev_fire.its b/board/beaglev_fire/beaglev_fire.its
 new file mode 100644
-index 0000000000..b5ba2d21db
+index 0000000000..b1591c5342
 --- /dev/null
-+++ b/board/beagleboard/beagleboneai64/genimage.cfg
-@@ -0,0 +1,33 @@
++++ b/board/beaglev_fire/beaglev_fire.its
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Flattened Image Tree file for BVF
++ *
++ * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
++ * Author: Conor Dooley <conor.dooley@microchip.com>
++ *
++ */
++
++/dts-v1/;
++
++/ {
++	description = "U-Boot fitImage for the BeagleV-Fire";
++	#address-cells = <2>;
++
++		images {
++			kernel {
++				description = "Linux kernel";
++				data = /incbin/("./Image.gz");
++				type = "kernel";
++				arch = "riscv";
++				os = "linux";
++				compression = "gzip";
++				load = <0x80200000>;
++				entry = <0x80200000>;
++				hash-1 {
++					algo = "sha256";
++				};
++			};
++			base_fdt {
++				description = "Flattened Device Tree blob";
++				data = /incbin/("./mpfs-beaglev-fire.dtb");
++				type = "flat_dt";
++				arch = "riscv";
++				compression = "none";
++				load = <0x8a000000>;
++				hash-1 {
++					algo = "sha256";
++				};
++			};
++		};
++
++		configurations {
++			default = "kernel_dtb";
++			kernel_dtb {
++				description = "1 Linux kernel, FDT blob";
++				kernel = "kernel";
++				fdt = "base_fdt";
++			};
++
++			base_dtb {
++				description = "Base FDT blob for BeagleV-Fire board";
++				fdt = "base_fdt";
++			};
++		};
++};
+diff --git a/board/beaglev_fire/config.yaml b/board/beaglev_fire/config.yaml
+new file mode 100644
+index 0000000000..5fccdfd34f
+--- /dev/null
++++ b/board/beaglev_fire/config.yaml
+@@ -0,0 +1,28 @@
++#
++# HSS Payload Generator - buildroot configuration file
++#
++
++# First, we can optionally set a name for our image, otherwise one will be created dynamically
++set-name: 'PolarFire-SoC-HSS::U-Boot'
++
++#
++# Next, we'll define the entry point addresses for each hart, as follows:
++#
++hart-entry-points: {u54_1: '0x80200000', u54_2: '0x80200000', u54_3: '0x80200000', u54_4: '0x80200000'}
++#
++# Finally, we'll define a payloads (source binary file) that will be placed at certain regions in memory
++# The payload section is defined with the keyword payloads, and then a number of individual
++# payload descriptors.
++#
++# Each payload has a name (path to its ELF/bin file), an owner-hart, and optionally 1-3 secondary-harts.
++#
++# Additionally, it has a privilege mode in which it will start execution.
++#  * Valid privilege modes are PRV_M, PRV_S and PRV_U.
++#
++#
++# In this case, the only payload is the u-boot s-mode binary.
++#
++# Case only matters for the ELF path names, not the keywords.
++#
++payloads:
++  u-boot.bin: {exec-addr: '0x80200000', owner-hart: u54_1, secondary-hart: u54_2, secondary-hart: u54_3, secondary-hart: u54_4, priv-mode: prv_s}
+diff --git a/board/beaglev_fire/genimage.cfg b/board/beaglev_fire/genimage.cfg
+new file mode 100644
+index 0000000000..1ff2da68ff
+--- /dev/null
++++ b/board/beaglev_fire/genimage.cfg
+@@ -0,0 +1,36 @@
++# Image for eMMC boot on the Microchip PolarFire SOC BeagleV-Fire Board
++#
 +image boot.vfat {
 +	vfat {
 +		files = {
-+			"sysfw.itb",
-+			"tiboot3.bin",
-+			"tispl.bin",
-+			"u-boot.img",
-+			"Image",
-+			"ti",
-+			"extlinux",
++			 "beaglev_fire.itb",
 +		}
 +
-+		label = "boot"
++		file boot.scr {
++			image = "boot.scr"
++		}
 +	}
-+
-+	size = 64M
++	size = 60M
 +}
 +
 +image sdcard.img {
 +	hdimage {
++		gpt = true
 +	}
 +
-+	partition u-boot {
-+		partition-type = 0xC
++	partition uboot {
++		partition-type-uuid = 21686148-6449-6E6F-744E-656564454649
++		image = "payload.bin"
++	}
++
++	partition kernel {
++		partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
 +		bootable = "true"
 +		image = "boot.vfat"
 +	}
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
++	partition root {
++		partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
++		image = "rootfs.cpio"
 +	}
 +}
-diff --git a/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..02714d06a0
---- /dev/null
-+++ b/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
-diff --git a/board/beagleboard/beagleboneai64/patches/linux-headers/linux-headers.hash b/board/beagleboard/beagleboneai64/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/beagleboard/beagleboneai64/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/beagleboard/beagleboneai64/patches/linux/linux.hash b/board/beagleboard/beagleboneai64/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..4b20a009a7
---- /dev/null
-+++ b/board/beagleboard/beagleboneai64/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b66a5b863b0f8669448b74ca83bd641a856f164b29956e539bbcb5fdeeab9cc6  linux-6.6.30.tar.xz
-diff --git a/board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
-new file mode 100644
-index 0000000000..97a2b4eaf9
---- /dev/null
-+++ b/board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
-diff --git a/board/beagleboard/beagleboneai64/patches/uboot/uboot.hash b/board/beagleboard/beagleboneai64/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..97a2b4eaf9
---- /dev/null
-+++ b/board/beagleboard/beagleboneai64/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
-diff --git a/board/beagleboard/beagleboneai64/post-build.sh b/board/beagleboard/beagleboneai64/post-build.sh
+diff --git a/board/beaglev_fire/post-image.sh b/board/beaglev_fire/post-image.sh
 new file mode 100755
-index 0000000000..2315ff393a
+index 0000000000..43be1356cf
 --- /dev/null
-+++ b/board/beagleboard/beagleboneai64/post-build.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
++++ b/board/beaglev_fire/post-image.sh
+@@ -0,0 +1,14 @@
++#!/bin/bash
++set -e
 +
-+BOARD_DIR="$(dirname "$0")"
++HSS_PAYLOAD_GENERATOR="${HOST_DIR}"/bin/hss-payload-generator
++MKIMAGE="${HOST_DIR}"/bin/mkimage
++BOARD_DIR="$(pwd)"/"${0%/*}"
 +
-+ln -sf tispl.bin_unsigned "$BINARIES_DIR"/tispl.bin
-+
-+install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$BINARIES_DIR"/extlinux/extlinux.conf
-diff --git a/board/beagleboard/beagleboneai64/readme.txt b/board/beagleboard/beagleboneai64/readme.txt
++pushd "${BINARIES_DIR}"
++"${HSS_PAYLOAD_GENERATOR}" -c "${BOARD_DIR}"/config.yaml payload.bin
++cp "${BOARD_DIR}"/beaglev_fire.its "${BINARIES_DIR}"/beaglev_fire.its
++gzip -9 Image -c > Image.gz
++"${MKIMAGE}" -f beaglev_fire.its beaglev_fire.itb
++popd
++support/scripts/genimage.sh -c "${BOARD_DIR}"/genimage.cfg
+diff --git a/board/beaglev_fire/rootfs-overlay/etc/motd b/board/beaglev_fire/rootfs-overlay/etc/motd
 new file mode 100644
-index 0000000000..fa4e189c44
+index 0000000000..6c01ba7f96
 --- /dev/null
-+++ b/board/beagleboard/beagleboneai64/readme.txt
-@@ -0,0 +1,39 @@
-+BeagleBoard.org BeagleBone AI-64 Development Board
++++ b/board/beaglev_fire/rootfs-overlay/etc/motd
+@@ -0,0 +1,5 @@
 +
-+Description
-+===========
-+
-+This configuration will build a basic image for the BeagleBoard.org
-+BeagleBone AI-64. For more details about the board, visit:
-+
-+https://www.beagleboard.org/boards/beaglebone-ai-64
-+
-+How to Build
-+============
-+
-+Select the default configuration for the target:
-+
-+$ make beagleboneai64_defconfig
-+
-+Optional: modify the configuration:
-+
-+$ make menuconfig
-+
-+Build:
-+
-+$ make
-+
-+To copy the resultimg output image file to an SD card use dd:
-+
-+$ dd if=output/images/sdcard.img of=/dev/sdX bs=1M
-+
-+How to Run
-+==========
-+
-+Insert the SD card into the BeagleBone AI-64 board, and power it up
-+through the USB Type-C connector. The system should come up (make sure
-+to boot from the SD card not from the eMMC). You can use a USB to
-+serial adapter to connect to the connector labeled UART0 (J3) to
-+communicate with the board.
-+
-+https://docs.beagleboard.org/latest/boards/beaglebone/ai-64/02-quick-start.html
-diff --git a/configs/beagleboneai64_defconfig b/configs/beagleboneai64_defconfig
++This is version v2024.02 of PolarFire SoC Buildroot External.
++ 
++Updated images and documentation are available at:
++https://github.com/polarfire-soc/
+diff --git a/board/beaglev_fire/rootfs-overlay/usr/share/beagleboard/gateware/change-gateware.sh b/board/beaglev_fire/rootfs-overlay/usr/share/beagleboard/gateware/change-gateware.sh
 new file mode 100644
-index 0000000000..d4ba61cfab
+index 0000000000..0a35b6178b
 --- /dev/null
-+++ b/configs/beagleboneai64_defconfig
-@@ -0,0 +1,50 @@
-+BR2_aarch64=y
-+BR2_cortex_a72=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_GLOBAL_PATCH_DIR="board/beagleboard/beagleboneai64/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/beagleboard/beagleboneai64/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beagleboneai64/genimage.cfg"
++++ b/board/beaglev_fire/rootfs-overlay/usr/share/beagleboard/gateware/change-gateware.sh
+@@ -0,0 +1,25 @@
++#!/bin/bash
++
++if [ -d "$1" ]
++then
++    echo "Changing gateware."
++    if [ -e "$1"/mpfs_bitstream.spi ]
++    then
++        if [ -e "$1"/mpfs_dtbo.spi ]
++        then
++            if ! [ -d /lib/firmware ]
++            then
++                mkdir /lib/firmware
++            fi
++            cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
++            cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
++            . /usr/share/microchip/update-gateware.sh
++        else
++            echo "No device tree overlay file found."
++        fi
++    else
++        echo "No gateware file found."
++    fi
++else
++    echo "No directory found for this requested gateware."
++fi
+diff --git a/board/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh b/board/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
+new file mode 100644
+index 0000000000..2e91c0f4f9
+--- /dev/null
++++ b/board/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
+@@ -0,0 +1,36 @@
++#!/bin/bash
++echo "================================================================================"
++echo "|                            FPGA Gateware Update                              |"
++echo "|                                                                              |"
++echo "|   Please ensure that the mpfs_bitstream.spi file containing the gateware     |"
++echo "|   update has been copied to directory /lib/firmware.                         |"
++echo "|                                                                              |"
++echo "|                 !!! This will take a couple of minutes. !!!                  |"
++echo "|                                                                              |"
++echo "|               Give the system a few minutes to reboot itself                 |"
++echo "|                        after Linux has shutdown.                             |"
++echo "|                                                                              |"
++echo "================================================================================"
++
++read -rsp $'Press any key to continue...\n' -n1 key
++
++mount -t debugfs none /sys/kernel/debug
++
++# Trash exisitng device tree overlay in case the rest of the process fails:
++mtd_debug erase /dev/mtd0 0x0 0x10000
++
++# Write device tree overlay
++dtbo_ls=$(ls -l /lib/firmware/mpfs_dtbo.spi)
++dtbo_size=$(echo "$dtbo_ls" | cut -d " "  -f 5)
++
++mtd_debug write /dev/mtd0 0x400 "$dtbo_size" /lib/firmware/mpfs_dtbo.spi > /dev/zero
++
++# Fake the presence of a golden image for now.
++mtd_debug write /dev/mtd0 0 4 /dev/zero > /dev/zero
++
++# Initiate FPGA update.
++echo 1 > /sys/kernel/debug/fpga/microchip_exec_update
++
++# Reboot Linux for the gateware update to take effect.
++# FPGA reprogramming takes places between Linux shut-down and HSS restarting the board.
++reboot
+diff --git a/board/beaglev_fire/uboot-env.txt b/board/beaglev_fire/uboot-env.txt
+new file mode 100644
+index 0000000000..1b996ed76b
+--- /dev/null
++++ b/board/beaglev_fire/uboot-env.txt
+@@ -0,0 +1,16 @@
++# this assumes ${scriptaddr} is already set!!
++
++# Try to boot a fitImage from eMMC/SD
++
++setenv fdt_high 0xffffffffffffffff
++setenv initrd_high 0xffffffffffffffff
++
++load mmc 0:${distro_bootpart} ${scriptaddr} beaglev_fire.itb;
++bootm start ${scriptaddr}#kernel_dtb;
++bootm loados ${scriptaddr};
++# Try to load a ramdisk if available inside fitImage
++bootm ramdisk;
++bootm prep;
++fdt set /soc/ethernet@20112000 mac-address ${beaglevfire_mac_addr0};
++fdt set /soc/ethernet@20110000 mac-address ${beaglevfire_mac_addr1};
++bootm go;
+diff --git a/board/beaglev_fire/uboot-fragment.config b/board/beaglev_fire/uboot-fragment.config
+new file mode 100644
+index 0000000000..861593bd7e
+--- /dev/null
++++ b/board/beaglev_fire/uboot-fragment.config
+@@ -0,0 +1 @@
++CONFIG_MPFS_PRIORITISE_QSPI_BOOT=n
+diff --git a/configs/beaglev_fire_defconfig b/configs/beaglev_fire_defconfig
+new file mode 100644
+index 0000000000..3779658509
+--- /dev/null
++++ b/configs/beaglev_fire_defconfig
+@@ -0,0 +1,40 @@
++BR2_riscv=y
++BR2_RISCV_ISA_RVC=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="6.1.30"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
 +BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_OVERLAY="board/beaglev_fire/rootfs-overlay/"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglev_fire/post-image.sh"
 +BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux-6.1-mchp+fpga)/linux4microchip+fpga-2024.02.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="mpfs"
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-j721e-beagleboneai64"
-+BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.10"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="generic"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
-+BR2_TARGET_OPTEE_OS=y
-+BR2_TARGET_OPTEE_OS_PLATFORM="k3-j721e"
-+BR2_TARGET_TI_K3_BOOT_FIRMWARE=y
-+BR2_TARGET_TI_K3_R5_LOADER=y
-+BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
-+BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.04"
-+BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="j721e_beagleboneai64_r5"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="microchip/mpfs-beaglev-fire"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_MTD=y
++BR2_PACKAGE_DTC=y
++BR2_PACKAGE_DTC_PROGRAMS=y
++BR2_PACKAGE_BASH=y
++BR2_TARGET_ROOTFS_CPIO_GZIP=y
++BR2_TARGET_ROOTFS_INITRAMFS=y
++# BR2_TARGET_ROOTFS_TAR is not set
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="j721e_beagleboneai64_a72"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,polarfire-soc,u-boot)linux4microchip+fpga-2024.02.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="beaglev_fire"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/beaglev_fire/uboot-fragment.config"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_USE_BINMAN=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="tispl.bin_unsigned"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="TEE=$(BINARIES_DIR)/tee-pager_v2.bin"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENEXT2FS=y
 +BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_GPTFDISK=y
++BR2_PACKAGE_HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR=y
 +BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_SQUASHFS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/beaglev_fire/uboot-env.txt"
 -- 
-2.44.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
