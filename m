@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8045FC10F1A
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 07:12:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2E24C25B74
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 07:12:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 484D3415A1;
-	Tue,  7 May 2024 07:12:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2A84415D0;
+	Tue,  7 May 2024 07:12:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PvIVZPM9J_G3; Tue,  7 May 2024 07:12:48 +0000 (UTC)
+ id xKdU0bmsebYw; Tue,  7 May 2024 07:12:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EB0A415B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 388E2415B2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5EB0A415B7;
-	Tue,  7 May 2024 07:12:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D26161BF32C
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:12:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 388E2415B2;
+	Tue,  7 May 2024 07:12:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DCD81BF32C
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:12:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C7B1340507
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:12:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36F20415A3
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 07:12:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id azMmj5dV6dgE for <buildroot@lists.busybox.net>;
- Tue,  7 May 2024 07:12:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GYSPjtDnfSCw for <buildroot@lists.busybox.net>;
+ Tue,  7 May 2024 07:12:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BEC734050D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEC734050D
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BEC734050D
- for <buildroot@buildroot.org>; Tue,  7 May 2024 07:12:43 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DAFDC40007;
- Tue,  7 May 2024 07:12:40 +0000 (UTC)
-Date: Tue, 7 May 2024 09:12:40 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240507091240.39efce59@windsurf>
-In-Reply-To: <20240506210348.1285002-1-fontaine.fabrice@gmail.com>
-References: <20240506210348.1285002-1-fontaine.fabrice@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 35301415B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35301415B3
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 35301415B3
+ for <buildroot@buildroot.org>; Tue,  7 May 2024 07:12:47 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A4F661BF206;
+ Tue,  7 May 2024 07:12:44 +0000 (UTC)
+Date: Tue, 7 May 2024 09:12:44 +0200
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <20240507091244.45d6b5ba@windsurf>
+In-Reply-To: <20240506213038.418213-1-romain.naour@smile.fr>
+References: <20240506213038.418213-1-romain.naour@smile.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715065961;
+ d=bootlin.com; s=gm1; t=1715065964;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=/1jKsvCIqvyWiyH+OkhmnUchpHf/K0mH0dF0O3b4+Fg=;
- b=NHypuYtsbqQTQKeiNIRDHw9BipKgPbqQFpCBEvuDRJeQbWio0Wl7BuziYrkqXKK4jx7u7p
- 7FeQky40KYSEH3XXeTRxMO36I9nDcY6vtWqtOSFnMY/V95UyE9kAqQXYShhySjB7MPlAB5
- z3iCK+hSJFkhxb0njc44Zw7yInWWuxA7zH8QKjjJ9fh6N9QEocY5PBi8ADI0MwUOMi6FsO
- 36QbZDbSBKpwlOZn6UVadq9yjszHLR3WpDtVgWk//1lecNFuv5B6Oy30lYODwkIv9o6XNs
- xVM8+nlEYh5hW1Y/llkQONgcyPPCj/iTnNrxO6qeiws7hEoeTZKkcloFCyyrNQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=JKP2C5Hm7K/hrf25ndc+f/dnqgcnA3jPhVhQkbyy+oI=;
+ b=hBu+Yuu6CASQftDo7uMjdjnRj7rEVjDHSU1cvg4dL7JQ1barDb49TK/xDNJkiBGXp1gFd6
+ Jcco3Vd8YXIm2A1GGMO9wV2np5xflj2wPwKNPlqxZKMLE4nR1qI+9PePOez8UQySKKLNdr
+ lYH2RGLGCWyaSnecRjzsYKGz0G+9t93PhxhPOTQnwQfJ6Pj9SYxtjNFDQYVdheJFqeaO1C
+ aaGivrgHoh38ZMzQMpMQmWNJ50/460xHb0s+atR7Tyl5Ut/MyrQCbZ+hYrwW4KgZyGEork
+ ZcD6yHyCkzsG0Htd9wbfxRKQoZL9980qChdW3UGfnBFBMVPzotgNkGdYITkYXg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NHypuYts
-Subject: Re: [Buildroot] [PATCH 1/1] package/mdadm: fix uclibc and musl build
+ header.s=gm1 header.b=hBu+Yuu6
+Subject: Re: [Buildroot] [PATCH] package/python-rpds-py: bump to version
+ 0.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,50 +83,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Antoine Coutant <antoine.coutant@smile.fr>,
+ James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  6 May 2024 23:03:48 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon,  6 May 2024 23:30:38 +0200
+Romain Naour <romain.naour@smile.fr> wrote:
 
-> Fix following uclibc build failure raised since bump to version 4.3 in
-> commit 99e9ff08d0705279532ca0cf3de22ea54660cbdc and
-> https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/commit/?id=577fd10486d8d1472a6b559066f344ac30a3a391:
+> As reported by Antoine Coutant on the Buildroot mailing list [1]:
 > 
-> Create.c: In function 'write_zeroes_fork':
-> Create.c:155:35: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
->   155 |                 if (fallocate(fd, FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE,
->       |                                   ^~~~~~~~~~~~~~~~~~~~
+> rpds depends on the crate pyo3. This crate uses
 > 
-> as well as the following musl build failure:
+>   "std::sync::atomic::AtomicI64"
 > 
-> util.c: In function 'get_md_name':
-> util.c:1031:29: error: 'NAME_MAX' undeclared (first use in this function); did you mean 'MD_NAME_MAX'?
->  1031 |         static char devname[NAME_MAX];
->       |                             ^~~~~~~~
->       |                             MD_NAME_MAX
-> util.c:1031:29: note: each undeclared identifier is reported only once for each function it appears in
-> /home/buildroot/instance-0/output-1/host/bin/x86_64-linux-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0  -DNO_LIBUDEV -DSendmail=\""/usr/sbin/sendmail -t"\" -DCONFFILE=\"/etc/mdadm.conf\" -DCONFFILE2=\"/etc/mdadm/mdadm.conf\" -DMAP_DIR=\"/run/mdadm\" -DMAP_FILE=\"map\" -DMDMON_DIR=\"/run/mdadm\" -DFAILED_SLOTS_DIR=\"/run/mdadm/failed-slots\" -DNO_COROSYNC -DNO_DLM    -DUSE_PTHREADS -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DBINDIR=\"/sbin\"  -o Monitor.o -c Monitor.c
-> /home/buildroot/instance-0/output-1/host/bin/x86_64-linux-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0  -DNO_LIBUDEV -DSendmail=\""/usr/sbin/sendmail -t"\" -DCONFFILE=\"/etc/mdadm.conf\" -DCONFFILE2=\"/etc/mdadm/mdadm.conf\" -DMAP_DIR=\"/run/mdadm\" -DMAP_FILE=\"map\" -DMDMON_DIR=\"/run/mdadm\" -DFAILED_SLOTS_DIR=\"/run/mdadm/failed-slots\" -DNO_COROSYNC -DNO_DLM    -DUSE_PTHREADS -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DBINDIR=\"/sbin\"  -o dlink.o -c dlink.c
-> Create.c: In function 'write_zeroes_fork':
-> Create.c:155:35: error: 'FALLOC_FL_ZERO_RANGE' undeclared (first use in this function)
->   155 |                 if (fallocate(fd, FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE,
->       |                                   ^~~~~~~~~~~~~~~~~~~~
+> which doesn't exist for 32 bits targets.
+> That leads to an error as reported by Buildroot Gitlab-ci.
 > 
-> Fixes: 99e9ff08d0705279532ca0cf3de22ea54660cbdc
->  - http://autobuild.buildroot.org/results/0e04bcdb591ca5642053e1f7e31384f06581e989
->  - http://autobuild.buildroot.org/results/c77ee2615e9d473e93d95c778648c7e897b7f234
+> An issue have been opened on pyo3's github [2].
+> A fix have been accepted by pyo3 [3] and merged in pyo3 0.20.3 release
+> [4]. This pyo3 0.20.3 uses crate portable-atomic [5] to provide atomic
+> types and compare and swap operations for all targets that can use std.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> python-rpds-py 0.18.1 is the first release that use pyo3 0.20.3.
+> 
+> Before python-rpds-py 0.18.1 release fixing this issue would require
+> that we be able to patch a package during the Cargo vendoring step [6].
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2024-February/684867.html
+> [2]: https://github.com/PyO3/pyo3/issues/3614
+> [3]: https://github.com/PyO3/pyo3/pull/3619
+> [4]: https://github.com/PyO3/pyo3/blob/v0.20.3/CHANGELOG.md
+> [5]: https://github.com/taiki-e/portable-atomic
+> [6]: http://lists.busybox.net/pipermail/buildroot/2024-February/684886.html
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/6783811842 (TestPythonPy3Dtschema)
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/6783811860 (TestPythonPy3FlaskExpectsJson)
+> 
+> Reported-by: Antoine Coutant <antoine.coutant@smile.fr>
+> Cc: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 > ---
->  ...ts-h-include-for-NAME_MAX-definition.patch | 32 ++++++++++++++
->  .../0003-Create.c-fix-uclibc-build.patch      | 42 +++++++++++++++++++
->  2 files changed, 74 insertions(+)
->  create mode 100644 package/mdadm/0002-util-c-add-limits-h-include-for-NAME_MAX-definition.patch
->  create mode 100644 package/mdadm/0003-Create.c-fix-uclibc-build.patch
+>  package/python-rpds-py/python-rpds-py.hash | 2 +-
+>  package/python-rpds-py/python-rpds-py.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
