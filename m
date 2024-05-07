@@ -1,53 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E19CDC10F1A
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 20:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EF75C10F1A
+	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 21:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A52708131A;
-	Tue,  7 May 2024 20:50:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8cT7Bj7LGQLQ; Tue,  7 May 2024 20:50:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1636825C6
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1636825C6;
-	Tue,  7 May 2024 20:50:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F1451BF2C8
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 20:50:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C37260595
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 20:50:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8AC3605BD;
+	Tue,  7 May 2024 21:08:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KetshFHCJWxS for <buildroot@lists.busybox.net>;
- Tue,  7 May 2024 20:50:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id yJVO9CgZHOZ8; Tue,  7 May 2024 21:08:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F177D60B74
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F177D60B74;
+	Tue,  7 May 2024 21:08:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 740151BF36B
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 21:08:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 614F4605BD
+ for <buildroot@lists.busybox.net>; Tue,  7 May 2024 21:08:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id usSuA-uvqaMQ for <buildroot@lists.busybox.net>;
+ Tue,  7 May 2024 21:08:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5657A605C7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5657A605C7
- for <buildroot@buildroot.org>; Tue,  7 May 2024 20:50:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C14086A80; Tue,  7 May 2024 20:50:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F118860B74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F118860B74
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F118860B74
+ for <buildroot@buildroot.org>; Tue,  7 May 2024 21:08:10 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6CE4640004;
+ Tue,  7 May 2024 21:08:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1s4S2g-005Hyu-2b;
+ Tue, 07 May 2024 23:08:06 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 7 May 2024 22:49:41 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 5e039782c36bf348436aeea850d46f57b7bdf40d
-X-Git-Newrev: 0d9357b3ccadb96d9ff9bff829e582bed8b100a1
-X-Patchwork-Hint: ignore
-Message-Id: <20240507205056.3C14086A80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/speechd: set
- CPE_ID_VENDOR (to silence mismatched CVE warning)
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+References: <20240414130520.3647875-1-dario.binacchi@amarulasolutions.com>
+ <87msp1wqqo.fsf@dell.be.48ers.dk>
+ <CABGWkvq4K64XFUdck+v171DMad+QGzufq_TEWwv51NjE5hrhNg@mail.gmail.com>
+ <871q6dwgvw.fsf@dell.be.48ers.dk>
+ <CABGWkvrNG00oAH0mL7Qb5BoQ3WpCtbK=ywmJAMNPtJ+msvieHA@mail.gmail.com>
+Date: Tue, 07 May 2024 23:08:06 +0200
+In-Reply-To: <CABGWkvrNG00oAH0mL7Qb5BoQ3WpCtbK=ywmJAMNPtJ+msvieHA@mail.gmail.com>
+ (Dario Binacchi's message of "Tue, 7 May 2024 22:10:28 +0200")
+Message-ID: <87v83ptjnt.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/3] package/bmap-tools: update GitHub URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,42 +72,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: linux-amarula@amarulasolutions.com, "Yann E .
+ Morin" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d9357b3ccadb96d9ff9bff829e582bed8b100a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
 
-- set CPE_ID_VENDOR to silence mismatched CVE-2001-0956 ([1], [2]) warning
-  clearly aiming some other product/version ("speechd 0.54 with Festival or
-  rsynth speech synthesis package")
+Hi,
 
-[1] https://security-tracker.debian.org/tracker/CVE-2001-0956
-[2] https://github.com/advisories/GHSA-67cw-4jhh-3jm7
+ > Since this patch is the first in a series of 3, where the final patch
+ > bumps the version to 3.8.0, what are your
+ > thoughts on the 2024.02.x version?
+ > Is there anything I need to do?
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 206527347c1f63d24d871bf5dcb065861bd1c2a4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/speechd/speechd.mk | 1 +
- 1 file changed, 1 insertion(+)
+No, it is fine. I will just skip the patches for 2024.02.x.
 
-diff --git a/package/speechd/speechd.mk b/package/speechd/speechd.mk
-index 7d50f88c1d..669bec0634 100644
---- a/package/speechd/speechd.mk
-+++ b/package/speechd/speechd.mk
-@@ -8,6 +8,7 @@ SPEECHD_VERSION = 0.11.5
- SPEECHD_SITE = $(call github,brailcom,speechd,$(SPEECHD_VERSION))
- SPEECHD_LICENSE = GPL-2.0+, GPL-3.0+ (buildsystem), LGPL-2.1+
- SPEECHD_LICENSE_FILES = COPYING.GPL-2 COPYING.GPL-3 COPYING.LGPL
-+SPEECHD_CPE_ID_VENDOR = brailcom
- SPEECHD_INSTALL_STAGING = YES
- # speechd source code is released without configure script
- SPEECHD_AUTORECONF = YES
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
