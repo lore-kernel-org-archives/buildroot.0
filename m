@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49ECEC04FFE
-	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 16:34:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B423C19F4F
+	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 16:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BC4260D61;
-	Wed,  8 May 2024 16:34:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB99860D5C;
+	Wed,  8 May 2024 16:34:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y46JDdmrCtyd; Wed,  8 May 2024 16:34:35 +0000 (UTC)
+ id NfzYfdLWXDUR; Wed,  8 May 2024 16:34:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A626E60DF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3FE560E02
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A626E60DF1;
-	Wed,  8 May 2024 16:34:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3FE560E02;
+	Wed,  8 May 2024 16:34:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C2E581BF2B0
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:34:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4C6F71BF2B0
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4466E401F9
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:34:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38C294028B
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:34:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dB3tq2JTTi2S for <buildroot@lists.busybox.net>;
- Wed,  8 May 2024 16:34:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 9oT_qLVZrWhh for <buildroot@lists.busybox.net>;
+ Wed,  8 May 2024 16:34:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D0DF4028B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D0DF4028B
- for <buildroot@buildroot.org>; Wed,  8 May 2024 16:34:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4B49386ADB; Wed,  8 May 2024 16:34:29 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 8 May 2024 18:34:18 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8b1b43802419fabf19ac780f6106cccfb255718c
-X-Git-Newrev: 48badeaa44d68d41f8723b010d905cdfd10f14b8
-X-Patchwork-Hint: ignore
-Message-Id: <20240508163429.4B49386ADB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: enable riscv32
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E2025401F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2025401F9
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E2025401F9
+ for <buildroot@buildroot.org>; Wed,  8 May 2024 16:34:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B1CFC1BF208;
+ Wed,  8 May 2024 16:34:28 +0000 (UTC)
+Date: Wed, 8 May 2024 18:34:27 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240508183427.33d70e6d@windsurf>
+In-Reply-To: <Zjt2LJ9JGGPPWFu2@waldemar-brodkorb.de>
+References: <Zjt2LJ9JGGPPWFu2@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715186068;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=41WzYVGrGaV+vQ3bR80JmVRehpSWReaj2AXdfjyt9Co=;
+ b=iPdTImtbxR7tlUg1XT9BkWXapyXK3JEgubcndj8dsq3DRDh6dRZ5z5Vi25JSw1jidZ7tm1
+ Ckjuo6Z25QsGxFFtcB1HABopNC8ysIZQQ/1hkJfKfwc7KXn8yWvAle5Rs35sdPxvNjPae7
+ Ix/vB8AGbQ8J04367GGLnenTHpSy17NKoiE6rDfvbX2PsfMjICdSHE4FVJmUy+4605sqLA
+ rKM/KoeiJT9MJZsRF/4YNTi8bXC05qbkS0ylyb0H6s80bhGX+wVdIaHd+kdJ78mvMd/Ef0
+ SA6wShyr5ni/SifhPObm4bDtBUZDl4DD7l6VNV2FWn4g39kDKtcFDavQq5Nk/g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iPdTImtb
+Subject: Re: [Buildroot] [PATCH] package/uclibc: enable riscv32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +82,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48badeaa44d68d41f8723b010d905cdfd10f14b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 8 May 2024 14:55:08 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Tested with qemu_riscv32_virt_defconfig.
+> Tested with qemu_riscv32_virt_defconfig.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/uclibc/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/uclibc/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 2555487f06..9fd07400de 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -15,6 +15,8 @@ config BR2_PACKAGE_UCLIBC_ARCH_SUPPORTS
- 	default y if BR2_mips64el
- 	default y if BR2_or1k
- 	default y if BR2_powerpc
-+	# see libc/sysdeps/linux/riscv32/sys/asm.h
-+	default y if BR2_RISCV_32 && (BR2_RISCV_ABI_ILP32 || BR2_RISCV_ABI_ILP32D)
- 	# see libc/sysdeps/linux/riscv64/sys/asm.h
- 	default y if BR2_RISCV_64 && (BR2_RISCV_ABI_LP64 || BR2_RISCV_ABI_LP64D)
- 	default y if BR2_sh4
-@@ -138,6 +140,7 @@ config BR2_UCLIBC_TARGET_ARCH
- 	default "i386"	   if BR2_i386
- 	default "x86_64"   if BR2_x86_64
- 	default "riscv64"  if BR2_RISCV_64
-+	default "riscv32"  if BR2_RISCV_32
- 
- config BR2_UCLIBC_MIPS_ABI
- 	string
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
