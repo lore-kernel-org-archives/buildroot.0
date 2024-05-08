@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98CF6C19F4F
-	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 16:32:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01AB7C04FFE
+	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 16:32:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6989A60C01;
-	Wed,  8 May 2024 16:32:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDE6760C01;
+	Wed,  8 May 2024 16:32:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GYmlmcl04Lcn; Wed,  8 May 2024 16:32:21 +0000 (UTC)
+ id hAZIn0WQn6A6; Wed,  8 May 2024 16:32:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 842C460D55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFA7060D54
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 842C460D55;
-	Wed,  8 May 2024 16:32:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CBC841BF2B0
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:32:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFA7060D54;
+	Wed,  8 May 2024 16:32:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AD601BF2B0
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B50EA60D55
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:32:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CCB14088A
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:32:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ldqod6h6ahRv for <buildroot@lists.busybox.net>;
- Wed,  8 May 2024 16:32:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 070lsOfF1fYY for <buildroot@lists.busybox.net>;
+ Wed,  8 May 2024 16:32:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A426460D4F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A426460D4F
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A426460D4F
- for <buildroot@buildroot.org>; Wed,  8 May 2024 16:32:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BA6C024000A;
- Wed,  8 May 2024 16:32:16 +0000 (UTC)
-Date: Wed, 8 May 2024 18:32:16 +0200
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20240508183216.53a71af2@windsurf>
-In-Reply-To: <20240508071328.45346-1-heiko.thiery@gmail.com>
-References: <20240508071328.45346-1-heiko.thiery@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ACD9340882
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACD9340882
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ACD9340882
+ for <buildroot@buildroot.org>; Wed,  8 May 2024 16:32:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D3FB60007;
+ Wed,  8 May 2024 16:32:47 +0000 (UTC)
+Date: Wed, 8 May 2024 18:32:46 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240508183246.6e6b23da@windsurf>
+In-Reply-To: <20240508084918.472419-1-fontaine.fabrice@gmail.com>
+References: <20240508084918.472419-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715185936;
+ d=bootlin.com; s=gm1; t=1715185967;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=PMGNJQUjsnbcI8XFG0iFcgL4K8oK8ZpTXqnLdeX0aRM=;
- b=EPZ1nxQYHpGcpfo+nluT44V1PMRLa14nCqQSLcEsaZg4JfMqK1I2z6R/eqQfAf96sv/EbV
- e1T0wzTg9Dk3XOUWjhI+LJ3lHbLvBCfiN7DwcrAaF4Zx+7dLVaAZrtsM6J/BKfcrxj8LpP
- UTiRaNky+AAUpZH5KzGaueAe4wHWFA1vSqSdO8tqO3o6/MOzYdXPWfjd9i9yViddIul2J5
- ol3Y4JX3LstjgqdY4Pc48pbz3VasTxFVCZDaXOxWT6S5i5O5hQOKpovNyWrsWKMPDvDlNc
- wm+Kw8Y7pmV6dQOyK3HRUqNbrxQ9InwRnn97U3iNoZRViopiNTsSBP2aIoFRUg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=5fcd0B2gGwTUms5aaYB7UPymqZa//YDW/AoEW/WD5l8=;
+ b=YBQQDedC5TuF3rMf+Ouw9XRtYI0flf5dgP/sfYvnvbvTDQhHfJkj2lohc+Z/VAw76GjEGJ
+ W/gAjcCHKFholkl6bXO3E8/CQRKxDtiBS+KYsDShJediH7Q2KLpFEKzie2ZFWLM601Eudp
+ H/P20eLhLpY9Ndph8t+Q47w39Jg2usjVBBaFDp5d7or1fa2X1RmZrXzBJZrmPjFRzbkIal
+ XNawC5hCloLxuJkvXSmCjP0vPw1mAqbU9NmYGvr5Ehpq0cl2WWDUMbca4G6Px3Rnwi0B3k
+ KSmNbO8spqBCJTD+/9U7ddzg3UeqroEfGweYXmFBKVs38vnJqAE4ZGRvInbB2w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EPZ1nxQY
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add myself to python-yamllint
+ header.s=gm1 header.b=YBQQDedC
+Subject: Re: [Buildroot] [PATCH 1/1] package/igt-gpu-tools: disable chamelium
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,19 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  8 May 2024 09:13:29 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+On Wed,  8 May 2024 10:49:18 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Disable chamelium to avoid the following build failure if gsl is found
+> but not alsa-lib raised since the addition of the package in commit
+> d8a729d1731339da141612be33c5e59bc9928748:
+> 
+> In file included from ../lib/igt_audio.c:35:
+> ../lib/igt_audio.h:35:10: fatal error: alsa/asoundlib.h: No such file or directory
+>    35 | #include <alsa/asoundlib.h>
+>       |          ^~~~~~~~~~~~~~~~~~
+> 
+> Fixes: d8a729d1731339da141612be33c5e59bc9928748
+>  - http://autobuild.buildroot.org/results/a7818af881d9aafa9a36f87dc7c882a6880554e8
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  DEVELOPERS | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/igt-gpu-tools/igt-gpu-tools.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
 Applied to master, thanks.
 
