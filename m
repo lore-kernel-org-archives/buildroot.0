@@ -1,93 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAECDC04FFE
-	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 17:03:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED4F1C04FFE
+	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 18:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DB7460D6F;
-	Wed,  8 May 2024 17:03:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A0E24073C;
+	Wed,  8 May 2024 18:57:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2gM1Vp5Y4Wc1; Wed,  8 May 2024 17:03:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bHcsDxFeCEjf; Wed,  8 May 2024 18:57:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 495AE60D9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AEAC4075C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 495AE60D9D;
-	Wed,  8 May 2024 17:03:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 128FE1BF5A4
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 17:03:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AEAC4075C;
+	Wed,  8 May 2024 18:57:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F6841BF3D0
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 18:57:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F323841B1F
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 17:03:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A5CB833A7
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 18:57:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Utt-3L9ya4J for <buildroot@lists.busybox.net>;
- Wed,  8 May 2024 17:03:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C374941B40
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C374941B40
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C374941B40
- for <buildroot@buildroot.org>; Wed,  8 May 2024 17:03:12 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-41b782405d5so47447755e9.2
- for <buildroot@buildroot.org>; Wed, 08 May 2024 10:03:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715187790; x=1715792590;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=l6wk8wAqXdYl4ZzeQEVYcvI7YentU/GRyLAnpa+0fEM=;
- b=pDZ/q1J4+PwLM8KfSGT27aZQo/dV9c9Z+McJ0dGPBx+FxM/ciwjazGFdFCQUzc++AQ
- 5HZVa4xJZH6R37JJvsFO+QwlHxgUAi7xDB7FL/7P17Cd8vue2FhkGhE+iHlHh6Dx4vfw
- bKd3/K+JMJq+NhBxIn7lcv4wM26jqNf17sSgan6pz2feVkH5mYCcjGTw2veR7kNkJloE
- Up21llGXwu4SRGMRWSB+YnXJW59iprVvOYMt58y6BRW4cFVz0lcDGEuDsUQLM69RK3z5
- ZO9DkVFofGQcu8I8FFSqb7Ralz1vFxgyIcLhMg5Phc905VUcSXf0kT5pQnwOl5N93B0g
- H+Og==
-X-Gm-Message-State: AOJu0YzxdpXhQN15inEfROJvnHxDJ6o5XWK75GyuRaBM6v6ahlTABka3
- TxHKt/7VzV0Co+83xmMSkjxW/3xIFdj1HLlNAZ6l+H2cYvl1z9t7HecZ7w==
-X-Google-Smtp-Source: AGHT+IHQYX3RMIDZDwsuV9/QH/q7o4r+EGasYPCfMz/KkBwbEuAv3gSLZ1TvgTYcBxb4PmrcL4G5Ww==
-X-Received: by 2002:a5d:52cf:0:b0:34c:6382:290c with SMTP id
- ffacd0b85a97d-34fca244a13mr2775595f8f.39.1715187790086; 
- Wed, 08 May 2024 10:03:10 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- j3-20020a056000124300b0034de3098980sm15794555wrx.97.2024.05.08.10.03.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 08 May 2024 10:03:09 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  8 May 2024 19:03:07 +0200
-Message-ID: <20240508170307.31378-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zuwN3AO_eRAw for <buildroot@lists.busybox.net>;
+ Wed,  8 May 2024 18:57:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0FBB9833A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FBB9833A0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0FBB9833A0
+ for <buildroot@busybox.net>; Wed,  8 May 2024 18:57:23 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3A25513F8A9;
+ Wed,  8 May 2024 20:57:18 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 08 May 2024 20:57:18 +0200
+Date: Wed, 8 May 2024 20:57:17 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <ZjvLDd4kxr63OZGQ@landeda>
+References: <20240506144555.31709-1-ps.report@gmx.net>
+ <20240506144555.31709-9-ps.report@gmx.net>
+ <Zjk5YgT6u3PT_rIe@landeda> <20240508170718.6e5c9cc8@gmx.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715187790; x=1715792590; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=l6wk8wAqXdYl4ZzeQEVYcvI7YentU/GRyLAnpa+0fEM=;
- b=SWXsoZTPXSzhcSOuWSMzqDFjrW3EGbnp5ZwUzT8Pc4Us6khzit7Pw3lCXoSguC7u4N
- da9q70fokKr8byy3Xa6Q/vXG2PufBy5jIMdVLtfW7PNsTh8Tfo1F0pS38gHHuDS3RsGQ
- 2yA1gJdi5VO0152vItfOer4H194V3tAWKDi0fLs8y4Mxm05T9aXfsq2JumSJzHni0G/h
- zUS1Wutv45VbntG+deRJ/FY3gSm2OkHhhx1esCmk+4SbM30bt7/mJZEm9W39SRbVrMAG
- RNZ0q4nQXZ7vLqxgrWt/aKqNU/vdC/+TivtO+Q0vPWe+7rR8E9BZcDNVuLwRJiS9UX0h
- u06g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240508170718.6e5c9cc8@gmx.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1715194640;
+ bh=coVpXdO9m0wj9DN1r9yglYESWFnoXH1ZUFsUqvGHTZM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=fGlnMZJByv3MzaOf9ruOlZHSJGSPcTu8s/UyZNm+uCF51ruai9UY8ucBsuRac8OwO
+ R8yaHtK/Vfbcu30lvCLlSR8n7BYrrHgK+a04h6g2CDAJCE2nCimydTC+km/cIeUUPs
+ EqRAb1K1JHeO0k/u1S1/Bq1ovtvCWB1xooRhoQG9HMYlkSqOxYTKAPABRnlPuFQijK
+ zN9MEG5ijKoftjxueDEb02CmqnZPzK0g70gpnU4EC5ytD+F5dtA3hgEQ/FMvavgm9o
+ 4eL+r7yyC6t4KpglxPsF2I+Y9MwqLLb2mMgt52tba4y4Y1bRapxkKj6+MerNn37JcV
+ lvf1eiyn033xw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=SWXsoZTP
-Subject: [Buildroot] [PATCH 1/1] package/libunwind: bump to version 1.8.1
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=fGlnMZJB
+Subject: Re: [Buildroot] [PATCH v1 8/8] package/openssl: move
+ libopenssl/libressl source statemetns outside of the choice
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,55 +83,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switch site to get latest release
+Peter, All,
 
-https://github.com/libunwind/libunwind/releases/tag/v1.8.1
-https://github.com/libunwind/libunwind/releases/tag/v1.8.0
-https://github.com/libunwind/libunwind/releases/tag/v1.7.2
-https://github.com/libunwind/libunwind/releases/tag/v1.7.1
-https://github.com/libunwind/libunwind/releases/tag/v1.7.0
+On 2024-05-08 17:07 +0200, Peter Seiderer via buildroot spake thusly:
+> On Mon, 6 May 2024 22:11:14 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > On 2024-05-06 16:45 +0200, Peter Seiderer via buildroot spake thusly:
+[--SNIP--]
+> > > @@ -44,13 +42,14 @@ config BR2_PACKAGE_LIBRESSL
+> > >  source "$(BASE_DIR)/.br2-external.in.openssl"
+> > This leaves one 'source' statement in te choice, which is no longer
+> > accepted, AFAIU.
+> 'source' is accepted here, but not with all possible content...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libunwind/libunwind.hash | 2 +-
- package/libunwind/libunwind.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Ah, it is still accepted, because you introduced a patch that reverts
+the upstream change.
 
-diff --git a/package/libunwind/libunwind.hash b/package/libunwind/libunwind.hash
-index 1d532a7830..512cc7b9b5 100644
---- a/package/libunwind/libunwind.hash
-+++ b/package/libunwind/libunwind.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  4a6aec666991fb45d0889c44aede8ad6eb108071c3554fcdff671f9c94794976  libunwind-1.6.2.tar.gz
-+sha256  ddf0e32dd5fafe5283198d37e4bf9decf7ba1770b6e7e006c33e6df79e6a6157  libunwind-1.8.1.tar.gz
- 
- # Hash for license file
- sha256  6a0dbbdaec2b3136b7bf045586f4212bdf74e7af688bf9dfe9154607cf5ec156  COPYING
-diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
-index 94e9bbd1b8..3eb3b483d1 100644
---- a/package/libunwind/libunwind.mk
-+++ b/package/libunwind/libunwind.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBUNWIND_VERSION = 1.6.2
--LIBUNWIND_SITE = http://download.savannah.gnu.org/releases/libunwind
-+LIBUNWIND_VERSION = 1.8.1
-+LIBUNWIND_SITE = https://github.com/libunwind/libunwind/releases/download/v$(LIBUNWIND_VERSION)
- LIBUNWIND_INSTALL_STAGING = YES
- LIBUNWIND_LICENSE_FILES = COPYING
- LIBUNWIND_LICENSE = MIT
+I think that, if we update our kconfig, we do not want to switm against
+the current, and we should not try to reintroduce a feature that has
+been removed, otherwise, we'll have to carry that for ever...
+
+Instead, we should find a solution that allows us to be closer to
+upstream, to ease updating in the future...
+
+> > I think the best solution is to move the if-endif conditional block out
+> > of package/libopenssl/Config.in back into package/openssl/Config.in, and
+> > add a new choice entry, so that basically we end up with something lie;
+[--SNIP--]
+> Will test the proposed solution the next days..., alternative solution would be:
+> 
+>      choice
+>          bool "ssl library"
+> 
+>      config BR2_PACKAGE_LIBOPENSSL
+>          bool "openssl"
+> 
+>      config BR2_PACKAGE_LIBRESSL
+>          bool "libressl"
+> 
+>      source "$(BASE_DIR)/.br2-external.in.openssl-choice"
+
+That's still a source in a choice, and as statred above, we should not
+go that route if it is no longe rsupported upstream...
+
+>      endchoice
+> 
+>      source "package/libopenssl/Config.in"
+>      source "package/libressl/Config.in"
+>      source "$(BASE_DIR)/.br2-external.in.openssl"
+> 
+> Splitting the external content into two files (two lines), keeping the 'source'
+> of the empty files as default (the first with the choice content, the second
+> with the regarding configuration entries)...
+> 
+> But either way the content of '.br2-external.in.openssl' needs to be
+> changed/adjusted...
+
+Detail. We own those scripts, and ugly as they are (I wrote them, blame
+me), we can extend them as needed.
+
+Thanks for working on this! :-)
+
+Regards,
+Yann E. MORIN.
+
+> Regards,
+> Peter
+> 
+> 
+> >
+> > Basically, that would make for an uglier state, but that's the best we
+> > can do given the new limitsations introduced by upstream kconfig...
+> >
+> > Thoughts?
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > >  config BR2_PACKAGE_HAS_OPENSSL
+> > >  	bool
+> > >
+> > > --
+> > > 2.44.0
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot@buildroot.org
+> > > https://lists.buildroot.org/mailman/listinfo/buildroot
+> >
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.43.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
