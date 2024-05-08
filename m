@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12194C04FFE
-	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 16:38:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D41FC04FFE
+	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 16:38:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAD2060585;
-	Wed,  8 May 2024 16:38:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19A1060D61;
+	Wed,  8 May 2024 16:38:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UpW5jFU9Zr3d; Wed,  8 May 2024 16:38:02 +0000 (UTC)
+ id tlr9vSTCDgub; Wed,  8 May 2024 16:38:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E23D9605BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38AFA60D94
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E23D9605BD;
-	Wed,  8 May 2024 16:38:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EC4C51BF2B0
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:38:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38AFA60D94;
+	Wed,  8 May 2024 16:38:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D0F01BF97E
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:38:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1C7882E14
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:38:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 17F5B40147
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:38:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W8QbpcewHO7H for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BpMb9HZUUU7v for <buildroot@lists.busybox.net>;
  Wed,  8 May 2024 16:38:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2473D82D57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4462D40125
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2473D82D57
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4462D40125
  for <buildroot@buildroot.org>; Wed,  8 May 2024 16:38:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D21B86B12; Wed,  8 May 2024 16:38:00 +0000 (UTC)
+ id EBEF286B11; Wed,  8 May 2024 16:37:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 8 May 2024 18:37:18 +0200
+Date: Wed, 8 May 2024 18:37:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dc21afed0fec55b684be76b8d71d46a7177cf6f3
-X-Git-Newrev: b74cb51c0f3215199495b07c94e83c93a3517152
+X-Git-Oldrev: a70158eb1cb43e68d5ef6c7517d37d945f2c3a88
+X-Git-Newrev: dc21afed0fec55b684be76b8d71d46a7177cf6f3
 X-Patchwork-Hint: ignore
-Message-Id: <20240508163800.0D21B86B12@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: security bump version to
- go1.22.3
+Message-Id: <20240508163759.EBEF286B11@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: drop
+ CONTRIBUTING.md from license files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,45 +66,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b74cb51c0f3215199495b07c94e83c93a3517152
+commit: https://git.buildroot.net/buildroot/commit/?id=dc21afed0fec55b684be76b8d71d46a7177cf6f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVEs:
+This is irrelevant as of 402ad9fe5407 (package/network-manager: bump
+to version 1.22.10).
 
-CVE-2024-24787: cmd/go: arbitrary code execution during build on darwin
-CVE-2024-24788: net: malformed DNS message can cause infinite loop
+Details: https://lore.kernel.org/all/ZgXKrtfSjahxswtP@landeda/
 
-https://go.dev/doc/devel/release#go1.22.3
-
-Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/network-manager/network-manager.hash | 1 -
+ package/network-manager/network-manager.mk   | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 81bd14baa8..6bbde5b589 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  374ea82b289ec738e968267cac59c7d5ff180f9492250254784b2044e90df5a9  go1.22.2.src.tar.gz
-+sha256  80648ef34f903193d72a59c0dff019f5f98ae0c9aa13ade0b0ecbff991a76f68  go1.22.3.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 0e39ad9f8c..43dfe1eae5 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.22.2
-+GO_VERSION = 1.22.3
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 8a3c3895fe..952b0cea93 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -3,4 +3,3 @@ sha256  722649e25362693b334371473802a729b0ec9ee283375096905f868808e74068  Networ
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+-sha256  9f7f0d40116e5a0f1566b9da71e9c95738c99364e4b5437d8115aa614490372b  CONTRIBUTING.md
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 09bc6aed02..cbd2ba8839 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -10,7 +10,7 @@ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+-NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
++NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL
+ NETWORK_MANAGER_CPE_ID_VENDOR = gnome
+ NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+ NETWORK_MANAGER_SELINUX_MODULES = networkmanager
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
