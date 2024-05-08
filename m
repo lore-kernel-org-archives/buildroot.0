@@ -1,95 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C277C19F4F
-	for <buildroot@archiver.kernel.org>; Tue,  7 May 2024 21:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08CB7C25B4F
+	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 04:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2109E60B71;
-	Tue,  7 May 2024 21:42:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1509828F2;
+	Wed,  8 May 2024 04:02:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t-5fIrjECREo; Tue,  7 May 2024 21:42:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KvJuvMH8WbTb; Wed,  8 May 2024 04:02:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17F5460B73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8337828DD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17F5460B73;
-	Tue,  7 May 2024 21:42:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8337828DD;
+	Wed,  8 May 2024 04:02:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 44F081BF36B
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 21:42:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 80AD91BF386
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 04:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31C424178C
- for <buildroot@lists.busybox.net>; Tue,  7 May 2024 21:42:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B3BB401D2
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 04:02:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gk7UbYcSVjr7 for <buildroot@lists.busybox.net>;
- Tue,  7 May 2024 21:42:38 +0000 (UTC)
+ id HW2uXib5UaUF for <buildroot@lists.busybox.net>;
+ Wed,  8 May 2024 04:02:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::632; helo=mail-pl1-x632.google.com;
+ client-ip=2607:f8b0:4864:20::12c; helo=mail-il1-x12c.google.com;
  envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 237B7400AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 237B7400AF
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 237B7400AF
- for <buildroot@buildroot.org>; Tue,  7 May 2024 21:42:37 +0000 (UTC)
-Received: by mail-pl1-x632.google.com with SMTP id
- d9443c01a7336-1ee954e0aa6so6933665ad.3
- for <buildroot@buildroot.org>; Tue, 07 May 2024 14:42:37 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A000F40150
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A000F40150
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A000F40150
+ for <buildroot@buildroot.org>; Wed,  8 May 2024 04:02:24 +0000 (UTC)
+Received: by mail-il1-x12c.google.com with SMTP id
+ e9e14a558f8ab-36c6df3d735so16030835ab.0
+ for <buildroot@buildroot.org>; Tue, 07 May 2024 21:02:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715118157; x=1715722957;
+ d=1e100.net; s=20230601; t=1715140943; x=1715745743;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=LCT4mW0mUsqoeolSRz6YZZqJI4mdBoUJOOsRvE/ULLQ=;
- b=QCLEaneXNoYhSz7DI8pXUesdaPzEij1jbE+LOm++AZXLW1CG/piPNIbB/uxf9kopdy
- jY+GV9kcG3W2YN467LYm2pcScz+DumFwE4XjcYhGsVB2C6Ee0jkrG28FZcH3RU0uKCXh
- Hspeb7OzwfV7uEMYT84PZkuRoT4inlP7/vcYr94bu11ZLDg6qGJ1eX0mwU0fLWxi0wPt
- yugVZ7kLsSyCeSvumNYWc6lr5QwrSdvfr/iCMx8HAuq/l5FgWmYpQjIgTzSGhzUKrp7p
- WGKcBMDRiFMbzcEdCr8e6CfTdFNPUIlQzAua5j7HU0kfrIne5J2pX01b3Sk1K8G9I5jT
- j/dw==
-X-Gm-Message-State: AOJu0YxtHSNtoe/AmoCqWa7UdMIbbSxVyIsrgThV5EKWIizB+Qef2zrF
- DIThUyscISjnXdunVi9CApnpApTCzFo7wiQuyh5/VjxOLKy/GaK7PkdAuiIk28iDHzGe3tuFmQ8
- 0
-X-Google-Smtp-Source: AGHT+IG7I4nIQipOkF4yxNSUfE7u8/rgy56su5MojPboPWk/t+dfzZ4Tzgvc8Mo6VAQreR8zlSjNkA==
-X-Received: by 2002:a17:902:daca:b0:1e3:c4c2:efa9 with SMTP id
- d9443c01a7336-1eeb059745emr10689165ad.31.1715118156964; 
- Tue, 07 May 2024 14:42:36 -0700 (PDT)
+ bh=Y5nq85SwWh6KjU2zU57gpbQ8o+ReZj55oyEnhHRflMY=;
+ b=TAZL8nQYJUdRf/8RjgW544t93blaVELqdhkySZmj1M2Fm8gbmrkhH7VEiFaPK9f8U/
+ kVvllWrr7iXVBjR2YRqNJjbJsSX7cR4tDmNcV2y8u+lAb+t2xK5jMIIRC5R4Yb5Urql8
+ WkY6YFbMgSbUAQPQuiAiG6Jj1tbOrBjBo5KBLAZMPj6sjdG649cmopxA2L76ctbZN/JK
+ wNvIQVjXO2xrNGtqPtYwZDtpEmzgHu0hIIJT1qqXzrulTwiDDGCboRewYZiVpQX+gWQW
+ JPFE56g97Sw5vNkDdHP4h2pCjDY0/uDFvaNsk1qpGpoXwrBfr5xyX2idU8xFcq/xCLJM
+ QOOw==
+X-Gm-Message-State: AOJu0YzL88L9nejgDCvtbDAjA5Tk3yptYAQPwohCCQ3AHJSP3NZbZn5d
+ MluWgk9VyNlhqNwuO0jRs/n2Ca+UMpywo/eEn/MAZDB7vEmu4BAxFzNQz76H3jOEsCUwfCwfP4T
+ 4
+X-Google-Smtp-Source: AGHT+IFOzJFJEWAxLCEtVKfA2YtCIGkTUomQQmvdloOd/r9evHxmqmG1h2gE6SGmvX2nP0QJcAMHhA==
+X-Received: by 2002:a05:6e02:1fe8:b0:36b:3ac1:5853 with SMTP id
+ e9e14a558f8ab-36caed43a8amr15683245ab.27.1715140943140; 
+ Tue, 07 May 2024 21:02:23 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- d10-20020a170902654a00b001e435350a7bsm6818402pln.259.2024.05.07.14.42.35
+ z6-20020a056a00240600b006eac9eb84besm10142263pfh.204.2024.05.07.21.02.22
  (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Tue, 07 May 2024 14:42:36 -0700 (PDT)
+ Tue, 07 May 2024 21:02:22 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue,  7 May 2024 14:42:34 -0700
-Message-ID: <20240507214234.94186-1-christian@aperture.us>
+Date: Tue,  7 May 2024 21:02:20 -0700
+Message-ID: <20240508040220.28371-1-christian@aperture.us>
 X-Mailer: git-send-email 2.45.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1715118157; x=1715722957; darn=buildroot.org;
+ d=aperture.us; s=google; t=1715140943; x=1715745743; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LCT4mW0mUsqoeolSRz6YZZqJI4mdBoUJOOsRvE/ULLQ=;
- b=wO6eYDylf8fGEwEUb0qEfB1QyVIiopV03VqOPPdJbilx0JHGl8og6nBYUQY6/vrAGz
- GCqWIpMQ5qq2G0s21ZJ1PPO4pmMegfUMYJYDj1tn+PLrEBunabmVNSZxo31AosjwF1/G
- rqIes/TjGIRs61AllAqpumMj9YzK5wBv7VHaBs3hoqv1cOQ2kEAasQPjFUc6Rxygw8Ag
- 7/p6fyGAAFu38DCJgrADW/P0eyztCX+DWWnIM/o9U0Z72+yOks+WcRqJmr87hp7lR1ll
- RAjWGIFNdzeL4TzGtjJAW5O8YjzJuC7CMbfMfmkrHTtIf98zFaHFGcqRy68VsStr0Z9R
- p05g==
+ bh=Y5nq85SwWh6KjU2zU57gpbQ8o+ReZj55oyEnhHRflMY=;
+ b=iYS+GzyuxLE/ZtbQmSJygeb5AHew00u3aURAcAxhGergcTqznJ2ZWm6Q46T+ZdqMMy
+ qNvo9Z5t1flPb45dpkVLmGFHrwUCr7BYf0thPwny1J6tl6rYG597Fzs/qc6XMkN38N4H
+ /sTq6EROP6Y7JBZmnJAMIBAesEnb5jnq2i9hN1cVOsJKoFNL82K2Gs97FoyTzjfb9Czb
+ ItBmVly6kYNSNb/cV4t1ba7kHZ7PLvUzepRm7LdY5+oEKldWAJ+5fL4O9ocbO3uljQTr
+ Peb1Xi5CNThEGp/iMnhMYuRlJFGQQ5UrNa0bYlTqDfh6aXZSwn390qFUSQekAnV3RyXG
+ UZew==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=aperture.us
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=wO6eYDyl
-Subject: [Buildroot] [PATCH v1 1/1] package/go: security bump version to
- go1.22.3
+ header.s=google header.b=iYS+Gzyu
+Subject: [Buildroot] [PATCH v1 1/1] package/mdadm: add udev to ldlibs if
+ enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,41 +111,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVEs:
+Fixes a build failure where the udev_ functions are undefined.
 
-CVE-2024-24787: cmd/go: arbitrary code execution during build on darwin
-CVE-2024-24788: net: malformed DNS message can cause infinite loop
+-ludev needs to be added to LDLIBS.
 
-https://go.dev/doc/devel/release#go1.22.3
+The build failure was against the systemd version of udev.
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mdadm/mdadm.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 81bd14baa8..6bbde5b589 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  374ea82b289ec738e968267cac59c7d5ff180f9492250254784b2044e90df5a9  go1.22.2.src.tar.gz
-+sha256  80648ef34f903193d72a59c0dff019f5f98ae0c9aa13ade0b0ecbff991a76f68  go1.22.3.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 0e39ad9f8c..43dfe1eae5 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index 6de9467092..6365c4607a 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -12,6 +12,7 @@ MDADM_LICENSE_FILES = COPYING
+ MDADM_CPE_ID_VALID = YES
  
--GO_VERSION = 1.22.2
-+GO_VERSION = 1.22.3
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ MDADM_CXFLAGS = $(TARGET_CFLAGS)
++MDADM_LDLIBS = -ldl
  
+ MDADM_BUILD_OPTS = \
+ 	CC=$(TARGET_CC) \
+@@ -21,7 +22,7 @@ MDADM_BUILD_OPTS = \
+ 	CXFLAGS="$(MDADM_CXFLAGS)" \
+ 	CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
+ 	CHECK_RUN_DIR=0 \
+-	LDLIBS=-ldl
++	LDLIBS="$(MDADM_LDLIBS)"
+ 
+ MDADM_INSTALL_TARGET_OPTS = install-bin
+ 
+@@ -32,6 +33,7 @@ endif
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ MDADM_DEPENDENCIES += udev
+ MDADM_INSTALL_TARGET_OPTS += install-udev
++MDADM_LDLIBS += -ludev
+ else
+ MDADM_CXFLAGS += -DNO_LIBUDEV
+ endif
 -- 
 2.43.0
 
