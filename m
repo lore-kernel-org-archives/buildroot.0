@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A087C04FFE
-	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 16:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDBADC19F4F
+	for <buildroot@archiver.kernel.org>; Wed,  8 May 2024 16:30:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C27AF60D67;
-	Wed,  8 May 2024 16:30:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95B3060D5C;
+	Wed,  8 May 2024 16:30:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QcqVsaALVFTl; Wed,  8 May 2024 16:30:08 +0000 (UTC)
+ id eLy79SSxEUbT; Wed,  8 May 2024 16:30:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B326A60D54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8505E60D53
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B326A60D54;
-	Wed,  8 May 2024 16:30:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6A3191BF2B0
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:30:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8505E60D53;
+	Wed,  8 May 2024 16:30:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A5C1A1BF2B0
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:30:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63C2541B22
- for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:30:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F40940898
+ for <buildroot@lists.busybox.net>; Wed,  8 May 2024 16:30:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Zwi04NqRAwe for <buildroot@lists.busybox.net>;
- Wed,  8 May 2024 16:30:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6nLfS9Vjw6PQ for <buildroot@lists.busybox.net>;
+ Wed,  8 May 2024 16:30:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D3FB41AEC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D3FB41AEC
- for <buildroot@buildroot.org>; Wed,  8 May 2024 16:30:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 77B0F86A91; Wed,  8 May 2024 16:30:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 8 May 2024 18:29:49 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2e07cd5a1bc7f2b2d2db9702eca159729232b839
-X-Git-Newrev: f44b46c47bd6d961fdc0e0aa9476d32f508e091c
-X-Patchwork-Hint: ignore
-Message-Id: <20240508163005.77B0F86A91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mdadm: replace PIE workaround
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5D44D4088A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D44D4088A
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5D44D4088A
+ for <buildroot@buildroot.org>; Wed,  8 May 2024 16:30:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5560D240003;
+ Wed,  8 May 2024 16:30:23 +0000 (UTC)
+Date: Wed, 8 May 2024 18:30:22 +0200
+To: Christian Stewart <christian@aperture.us>
+Message-ID: <20240508183022.047dea30@windsurf>
+In-Reply-To: <20240508040220.28371-1-christian@aperture.us>
+References: <20240508040220.28371-1-christian@aperture.us>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715185823;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=i3JyAwdGEHPvVo4wgy1JK2DRffi6MLGAYOg+G+XsDTs=;
+ b=P8HZDNiprpoXN3S0Xve99tmyK+ShvOYGL/pfNVMHbhYUIANlxSo78jdc7libXAKoWvwINr
+ BPiyX7Y64ML18DqP/5D4XK/ysAcOi7tYgyIAzzHSi6ZP9rmNb/ZSrieKbH9WCU3VMl/4cJ
+ RMdrs74QbEdywxkH5eSbwjg3TNmibpdGvtn7bqOH9G9jnTsacFskMOMSQOSBRIBghBlkSD
+ q0/5gZ+SN8nPoTetHtdtiTk1DjvjlRm9uJUV0TqqG5pAORRw9G0eEnFi7YEh9QVMqSvkbA
+ 28JI9I+i5ZNYld5M3jYfzB8CJQl2kGKCBVLY+iVZLKkxnwlVxC5yPmWAReBHLw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=P8HZDNip
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/mdadm: add udev to ldlibs if
+ enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,84 +83,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E
+ . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f44b46c47bd6d961fdc0e0aa9476d32f508e091c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Replace PIE workaround added by commit
-826e0bc3360ac1daa3581232c52ee47697bfabc6 by an upstream patch
+On Tue,  7 May 2024 21:02:20 -0700
+Christian Stewart <christian@aperture.us> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../mdadm/0004-Makefile-Move-pie-to-LDFLAGS.patch  | 40 ++++++++++++++++++++++
- package/mdadm/mdadm.mk                             |  2 +-
- 2 files changed, 41 insertions(+), 1 deletion(-)
+> Fixes a build failure where the udev_ functions are undefined.
+> 
+> -ludev needs to be added to LDLIBS.
+> 
+> The build failure was against the systemd version of udev.
+> 
+> Signed-off-by: Christian Stewart <christian@aperture.us>
 
-diff --git a/package/mdadm/0004-Makefile-Move-pie-to-LDFLAGS.patch b/package/mdadm/0004-Makefile-Move-pie-to-LDFLAGS.patch
-new file mode 100644
-index 0000000000..4d46d58230
---- /dev/null
-+++ b/package/mdadm/0004-Makefile-Move-pie-to-LDFLAGS.patch
-@@ -0,0 +1,40 @@
-+From 893a55831e5abbcd15b171db66fa1f389fb61506 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 7 May 2024 19:32:16 +0200
-+Subject: Makefile: Move -pie to LDFLAGS
-+
-+Move -pie from LDLIBS to LDFLAGS and make LDFLAGS configurable to allow
-+the user to drop it by setting their own LDFLAGS (e.g. PIE could be
-+enabled or disabled by the buildsystem such as buildroot).
-+
-+Suggested-by: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: Mariusz Tkaczyk <mariusz.tkaczyk@linux.intel.com>
-+
-+Upstream: https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/commit/?id=893a55831e5abbcd15b171db66fa1f389fb61506
-+---
-+ Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 7c221a89..adac7905 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -132,12 +132,12 @@ CFLAGS += -DUSE_PTHREADS
-+ MON_LDFLAGS += -pthread
-+ endif
-+ 
-+-LDFLAGS = -Wl,-z,now,-z,noexecstack
-++LDFLAGS ?= -pie -Wl,-z,now,-z,noexecstack
-+ 
-+ # If you want a static binary, you might uncomment these
-+ # LDFLAGS += -static
-+ # STRIP = -s
-+-LDLIBS = -ldl -pie
-++LDLIBS = -ldl
-+ 
-+ # To explicitly disable libudev, set -DNO_LIBUDEV in CXFLAGS
-+ ifeq (, $(findstring -DNO_LIBUDEV,  $(CXFLAGS)))
-+-- 
-+cgit 1.2.3-korg
-+
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index 6de9467092..153395d32a 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
-@@ -21,7 +21,7 @@ MDADM_BUILD_OPTS = \
- 	CXFLAGS="$(MDADM_CXFLAGS)" \
- 	CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
- 	CHECK_RUN_DIR=0 \
--	LDLIBS=-ldl
-+	LDFLAGS=$(TARGET_LDFLAGS)
- 
- MDADM_INSTALL_TARGET_OPTS = install-bin
- 
+Thanks, but I've instead applied
+https://patchwork.ozlabs.org/project/buildroot/patch/20240508120057.791378-1-fontaine.fabrice@gmail.com/,
+which fixes the same issue.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
