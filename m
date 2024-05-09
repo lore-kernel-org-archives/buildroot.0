@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B3F0C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E21E1C10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 665DE61348;
-	Thu,  9 May 2024 21:09:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A07CF61315;
+	Thu,  9 May 2024 21:10:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0lXo_4vL4MM9; Thu,  9 May 2024 21:09:46 +0000 (UTC)
+ id CQxmYIk1zBNg; Thu,  9 May 2024 21:10:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56E9C61349
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98ED56133F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56E9C61349;
-	Thu,  9 May 2024 21:09:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D8271BF427
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:09:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98ED56133F;
+	Thu,  9 May 2024 21:10:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B64941BF427
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A3238354B
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:09:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEB79408F0
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:09:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UfgzaEuAmNBd for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 21:09:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4xEDlsW0FCzd for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 21:09:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13B5181308
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 13B5181308
- for <buildroot@buildroot.org>; Thu,  9 May 2024 21:09:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EC65486DE4; Thu,  9 May 2024 21:09:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 23:05:37 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8660d11b089ea628bbfb3ace61fd31a103bbd2c6
-X-Git-Newrev: 981d25e5bcedee0dee8efcfbaa1dedb466a5445f
-X-Patchwork-Hint: ignore
-Message-Id: <20240509210942.EC65486DE4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/privoxy: fix build with root
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2C3C640556
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C3C640556
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2C3C640556
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 21:09:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 26F3140003;
+ Thu,  9 May 2024 21:09:55 +0000 (UTC)
+Date: Thu, 9 May 2024 23:09:53 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240509230953.25eadfe5@windsurf>
+In-Reply-To: <20240404194723.1346001-1-fontaine.fabrice@gmail.com>
+References: <20240404194723.1346001-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715288995;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=jLxBnPYjS0lufkVF24cRh5yEC+ajigki+lAaoYBC5iY=;
+ b=NzXCvUCaoCESJ4pwV0KNDn0WfqV0LRdPIdSA64KX3hCthMrmI+PfIF8Z4IQ3J1ihUK0A9k
+ iRURAXikRQpcvIpqhkCI7ax8njCP33gWDJHiUtDEDMcAlJq/RT3se0tB0+Do6Na/JoSbPZ
+ NwhaggtRqr6FpsUiCvBTkpMUyn7ipIldjlGHUMrgBeF7Hi74jkdgGxT2HkgsH+Ktgpcgcj
+ bv69zVhdttMtg9W5nfCGGSyWV4fY3xI/aj+0nuVsuYN+cfPdg8Kb0/UxU71s4N3Tj7Gztp
+ KsTrBYBJ2aYeZ/8QjO9XXBcRq166qlIkl2+z9Y271itnVKoX1kRQ5ExwSwq8Qw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=NzXCvUCa
+Subject: Re: [Buildroot] [PATCH 1/1] package/privoxy: fix build with root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,71 +82,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=981d25e5bcedee0dee8efcfbaa1dedb466a5445f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  4 Apr 2024 21:47:23 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Set GROUP_T when installing configuration files as root to avoid the
-following build failure raised since commit
-b6816034ebddd522a8fef9daa454c28fa1230dd6:
+> Set GROUP_T when installing configuration files as root to avoid the
+> following build failure raised since commit
+> b6816034ebddd522a8fef9daa454c28fa1230dd6:
+> 
+> /usr/bin/install: missing destination file operand after '/home/buildroot/instance-0/output-1/target/etc'
+> 
+> Fixes: b6816034ebddd522a8fef9daa454c28fa1230dd6
+>  - http://autobuild.buildroot.org/results/eb4ccf248c9c5048e9b71058bb0311b1e0763883
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...0002-GNUMakefile.in-fix-root-install.patch | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 package/privoxy/0002-GNUMakefile.in-fix-root-install.patch
 
-/usr/bin/install: missing destination file operand after '/home/buildroot/instance-0/output-1/target/etc'
+Applied to master, thanks. Perhaps you can ping the upstream
+maintainer, because he ignored your patch it seems :-/
 
-Fixes: b6816034ebddd522a8fef9daa454c28fa1230dd6
- - http://autobuild.buildroot.org/results/eb4ccf248c9c5048e9b71058bb0311b1e0763883
+Thanks!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0002-GNUMakefile.in-fix-root-install.patch     | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/package/privoxy/0002-GNUMakefile.in-fix-root-install.patch b/package/privoxy/0002-GNUMakefile.in-fix-root-install.patch
-new file mode 100644
-index 0000000000..89347c214e
---- /dev/null
-+++ b/package/privoxy/0002-GNUMakefile.in-fix-root-install.patch
-@@ -0,0 +1,35 @@
-+From 25bd5ae1664f5603c05c72b2c38525602f33da0a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 31 Mar 2024 19:17:45 +0200
-+Subject: [PATCH] GNUMakefile.in: fix root install
-+
-+Set GROUP_T when installing configuration files as root to avoid the
-+following build failure since commit
-+4b3b267db159dc23314de3062859481b7c397e32:
-+
-+/usr/bin/install: missing destination file operand after '/home/buildroot/instance-0/output-1/target/etc'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/eb4ccf248c9c5048e9b71058bb0311b1e0763883
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://lists.privoxy.org/pipermail/privoxy-devel/2024-March/000760.html
-+---
-+ GNUmakefile.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/GNUmakefile.in b/GNUmakefile.in
-+index cf79aae1..db1bab59 100644
-+--- a/GNUmakefile.in
-++++ b/GNUmakefile.in
-+@@ -927,6 +927,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
-+ 					$(ECHO)  " and to install the config files as that user and/or group!" ;\
-+ 					$(ECHO)  " Please read INSTALL, and create a privoxy user and group!" ;\
-+ 					$(ECHO)  "*******************************************************************" ;\
-++					GROUP_T=$(GROUP) ;\
-+ 				fi ;\
-+ 			else \
-+ 				GROUP_T=$(GROUP) ;\
-+-- 
-+2.43.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
