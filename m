@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9D16C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:46:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0E7FC10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:46:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B0216135C;
-	Thu,  9 May 2024 20:46:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54C6061393;
+	Thu,  9 May 2024 20:46:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gv7xzqoEAyVn; Thu,  9 May 2024 20:46:53 +0000 (UTC)
+ id 49GJ5wHtz-hx; Thu,  9 May 2024 20:46:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04B8F61373
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4E6161379
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04B8F61373;
-	Thu,  9 May 2024 20:46:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4E6161379;
+	Thu,  9 May 2024 20:46:55 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 571131BF990
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:46:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 187F51BF31C
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20FA6612DC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4EED5612DE
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:46:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fYp2TUPU59Xl for <buildroot@lists.busybox.net>;
+ id AUIozd9VH0AJ for <buildroot@lists.busybox.net>;
  Thu,  9 May 2024 20:46:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A32C612DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91DB3612E2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A32C612DE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91DB3612E2
  for <buildroot@buildroot.org>; Thu,  9 May 2024 20:46:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15D6986C8F; Thu,  9 May 2024 20:46:28 +0000 (UTC)
+ id 7DDC986DD2; Thu,  9 May 2024 20:46:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 22:44:49 +0200
+Date: Thu, 9 May 2024 22:44:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b1977d933b4381e5b8b4f7d0a99ecadd17827b2e
-X-Git-Newrev: 4b5e1585961f5ceb0522246532c53844ce0a987c
+X-Git-Oldrev: a1155dc8f4d98c09eb1fe729c61238728c069394
+X-Git-Newrev: 1e87da9eab3db01210c9cb6fe5607140c81f980c
 X-Patchwork-Hint: ignore
-Message-Id: <20240509204628.15D6986C8F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/flutter-packages: fix and comment
- the shared _SOURCE variable
+Message-Id: <20240509204628.7DDC986DD2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-utils: add vendoring mechanism
+ into generated archive filename
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,71 +66,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b5e1585961f5ceb0522246532c53844ce0a987c
+commit: https://git.buildroot.net/buildroot/commit/?id=1e87da9eab3db01210c9cb6fe5607140c81f980c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 631647f4a7c5 (package/flutter-packages/flutter-markdown-example:
-new package) introduced a set of flutter packages, all sharing the same
-upstream location and sources, and thus introduced a set of shared
-variables (not unlike the qt5, qt6, and a few other similar packages).
+When we change the way we vendor packages, either because our download
+backend or helpers evolve, or when the vendoring tools themselves change,
+we must avoid generating new archives with the same name, or there would
+be confusion when using older archives with newer Buildroot versions, or
+the other way around (and that would mess with local caches, like the
+one we share on s.b.o).
 
-Especially, it introduced the corresponding _SOURCE variable, that is
-referenced by each sub-package of flutter-packages. Defining this
-variable is required, because flutter-packages itself is not a package
-in Buildroot parlance: it does not call any of the *-package macro. As
-such, the default _SOURCE variable is not automatically generated.
+This is going to be the case for example, when we enforce a better and
+more reproducible set of modes on archived files in the following
+commits.
 
-The value for the variable was suffixed with the -br1 version-suffix as
-used for the archives generated by the git backend.
-
-However, this archive is not generated with our git download backend,
-but is generated remotely by github, as the _SITE is computed with our
-github helper macro.
-
-So, the -br1 suffix is both superfluous and confusing.
-
-Drop the suffix to avoid any confusion in the future, and add a little
-blurb explaining the situation close to where the variable is set, and
-add a check-package disable line.
+Introduce a version suffix for post-processed downloads, that we can
+bump when needed.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Arnout: use check-package disable comment instead of ignoring the file]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/flutter-packages/flutter-packages.hash | 2 +-
- package/flutter-packages/flutter-packages.mk   | 9 ++++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ package/pkg-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/flutter-packages/flutter-packages.hash b/package/flutter-packages/flutter-packages.hash
-index 994434e25c..ea30e7a36d 100644
---- a/package/flutter-packages/flutter-packages.hash
-+++ b/package/flutter-packages/flutter-packages.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8276276e050c1ea45787f74b0f8c915b8cf2162b6af8537ffa9886bd423f2828  flutter-packages-947e34ce9fedcdd6750b54eb1cc74b854b49ab48-br1.tar.gz
-+sha256  8276276e050c1ea45787f74b0f8c915b8cf2162b6af8537ffa9886bd423f2828  flutter-packages-947e34ce9fedcdd6750b54eb1cc74b854b49ab48.tar.gz
- sha256  89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9  LICENSE
-diff --git a/package/flutter-packages/flutter-packages.mk b/package/flutter-packages/flutter-packages.mk
-index 4beaa39325..0cc3bdff24 100644
---- a/package/flutter-packages/flutter-packages.mk
-+++ b/package/flutter-packages/flutter-packages.mk
-@@ -9,7 +9,14 @@ FLUTTER_PACKAGES_SITE = $(call github,flutter,packages,$(FLUTTER_PACKAGES_VERSIO
- FLUTTER_PACKAGES_LICENSE = BSD-3-Clause
- FLUTTER_PACKAGES_LICENSE_FILES = LICENSE
- FLUTTER_PACKAGES_DL_SUBDIR = flutter-packages
--FLUTTER_PACKAGES_SOURCE = flutter-packages-$(FLUTTER_PACKAGES_VERSION)-br1.tar.gz
-+
-+# This default value *is* required, because this file is not a package (it
-+# does not call any of the *-package macros), so the _SOURCE variable is not
-+# defined. However, we need a variable for the sub-packages to share the
-+# same tarball name.
-+# check-package disable lib_mk.RemoveDefaultPackageSourceVariable
-+FLUTTER_PACKAGES_SOURCE = flutter-packages-$(FLUTTER_PACKAGES_VERSION).tar.gz
-+
- FLUTTER_PACKAGES_DEPENDENCIES = \
- 	host-flutter-sdk-bin \
- 	flutter-engine
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 6181ae7a99..d1964299af 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -48,7 +48,7 @@ pkgname = $(lastword $(subst /, ,$(pkgdir)))
+ # Helper to build the extension for a package archive, based on various
+ # conditions.
+ # $(1): upper-case package name
+-pkg_source_ext = $(BR_FMT_VERSION_$($(1)_SITE_METHOD)).tar.gz
++pkg_source_ext = $(BR_FMT_VERSION_$($(1)_SITE_METHOD))$(BR_FMT_VERSION_$($(1)_DOWNLOAD_POST_PROCESS)).tar.gz
+ 
+ # Define extractors for different archive suffixes
+ INFLATE.bz2  = $(BZCAT)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
