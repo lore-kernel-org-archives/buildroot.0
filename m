@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34A9BC25B10
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E1FFC10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:22:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F29A341E69;
-	Thu,  9 May 2024 16:22:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4ECCF409A3;
+	Thu,  9 May 2024 16:22:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9j6CYmLXrrTY; Thu,  9 May 2024 16:22:07 +0000 (UTC)
+ id 9uGYIfrC8X2t; Thu,  9 May 2024 16:22:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1B7041E61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF8DD41E71
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1B7041E61;
-	Thu,  9 May 2024 16:22:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 29AEE1BF337
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:22:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF8DD41E71;
+	Thu,  9 May 2024 16:22:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F9001BF337
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:22:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20FFA820A6
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:22:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0CCF160FF7
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:22:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id urmvNG0eXjtm for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 16:22:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xdk0kZ4ZczNW for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 16:22:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F47483E74
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F47483E74
- for <buildroot@buildroot.org>; Thu,  9 May 2024 16:22:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F39786C81; Thu,  9 May 2024 16:22:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 18:21:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 54a412d2c123849a32d9a5c01826f081671db58c
-X-Git-Newrev: dd45ac10d96b9a93be22a13dd3a4ac7973025008
-X-Patchwork-Hint: ignore
-Message-Id: <20240509162201.2F39786C81@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add lrzsz runtime test
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E913260FB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E913260FB4
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E913260FB4
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 16:22:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 433B41BF203;
+ Thu,  9 May 2024 16:22:01 +0000 (UTC)
+Date: Thu, 9 May 2024 18:22:00 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240509182200.4eab4770@windsurf>
+In-Reply-To: <20240422220632.506366-1-ju.o@free.fr>
+References: <20240422220632.506366-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715271721;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=az0iEsobL0fbvOW6nuIJnzwHsrJCOwv8uLqKWUvgNxE=;
+ b=hv6PvBLDwURZ3TN2XISxLwqrdCWUpRdGHQ+nVgjeKWYONlgni5wIOF1tLJXbKjqt/lx8Ec
+ rDOO1KgjbeKRrbx9PtPiL5HjOPr7PpshXglElGkojGM3K2Asv6p/XGY6DmA/327Zo2hrJr
+ Jqh3Z5hs78E7BL7ND6VEwYCVoqItlQJ+5Scuih81fpNQu0VBUrr7GrPKUh4XgSxUaC3GdV
+ eueKPj6Rz6yBxWSRJXGflyvtW+PUn9Vn+V4iGU/8Jz4VRwa4o78ygr+p80m3cM02/aoWju
+ +U5Cb3NmkbTpDh0E/1pYZW01+AVzuXEfNxGUsrc0SSffR+R04m7zXtCQ+bURlg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hv6PvBLD
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add lrzsz runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,82 +82,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd45ac10d96b9a93be22a13dd3a4ac7973025008
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 23 Apr 2024 00:06:32 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                  |  1 +
- support/testing/tests/package/test_lrzsz.py | 42 +++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+)
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  DEVELOPERS                                  |  1 +
+>  support/testing/tests/package/test_lrzsz.py | 42 +++++++++++++++++++++
+>  2 files changed, 43 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_lrzsz.py
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 76d76c981e..d6fec03dc9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1837,6 +1837,7 @@ F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_links.py
- F:	support/testing/tests/package/test_links/
- F:	support/testing/tests/package/test_lrzip.py
-+F:	support/testing/tests/package/test_lrzsz.py
- F:	support/testing/tests/package/test_ltrace.py
- F:	support/testing/tests/package/test_lvm2.py
- F:	support/testing/tests/package/test_lzip.py
-diff --git a/support/testing/tests/package/test_lrzsz.py b/support/testing/tests/package/test_lrzsz.py
-new file mode 100644
-index 0000000000..23b4cdc531
---- /dev/null
-+++ b/support/testing/tests/package/test_lrzsz.py
-@@ -0,0 +1,42 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestLrzsz(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_LRZSZ=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        fifo = "/tmp/return-fifo"
-+        data_fname = "data"
-+        data_path = f"/tmp/{data_fname}"
-+
-+        # We check a program can execute.
-+        self.assertRunOk("sz --version")
-+
-+        # We create a data file, to be transferred.
-+        cmd = f"dd if=/dev/urandom of={data_path} bs=1M count=1"
-+        self.assertRunOk(cmd)
-+
-+        # We create a fifo, used as a return fifo.
-+        self.assertRunOk(f"mkfifo {fifo}")
-+
-+        # We transfer the test data using ZMODEM over the pipe and our
-+        # return fifo.
-+        self.assertRunOk(f"sz {data_path} < {fifo} | rz > {fifo}")
-+
-+        # The rz command is supposed to have created the received file
-+        # in the current directory. We expect the received data to be
-+        # the same as the original input file.
-+        self.assertRunOk(f"cmp {data_path} {data_fname}")
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
