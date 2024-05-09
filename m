@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A44B9C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:46:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6F82C10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:48:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C0BB4023F;
-	Thu,  9 May 2024 16:46:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 982F1405B0;
+	Thu,  9 May 2024 16:48:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LTkJk5SRFHZp; Thu,  9 May 2024 16:46:55 +0000 (UTC)
+ id yCJReYeyD-6b; Thu,  9 May 2024 16:48:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35572405B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5859B41E87
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35572405B0;
-	Thu,  9 May 2024 16:46:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B43AA1BF337
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:46:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5859B41E87;
+	Thu,  9 May 2024 16:48:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E94451BF337
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:48:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A13F44039D
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:46:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4BD141E87
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:48:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FMGj_Vhy4FFh for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 16:46:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EeC1nao_7BCx for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 16:47:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 611484016D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 611484016D
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 611484016D
- for <buildroot@buildroot.org>; Thu,  9 May 2024 16:46:51 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D6FF1C0002;
- Thu,  9 May 2024 16:46:49 +0000 (UTC)
-Date: Thu, 9 May 2024 18:46:48 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240509184648.5a3719f4@windsurf>
-In-Reply-To: <CAPi7W828vTKG5W6=e9RvFMLC=0gge42GnQTNrr4m4qs2yNGfmQ@mail.gmail.com>
-References: <20240407115439.872167-1-fontaine.fabrice@gmail.com>
- <aba84998-3aca-4a42-b1ee-40ccf82fc80e@mind.be>
- <CAPi7W828vTKG5W6=e9RvFMLC=0gge42GnQTNrr4m4qs2yNGfmQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715273209;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=+lzcwiaefbEOpMeOE+k6miy2hI8OOoElCpwF2RUNmog=;
- b=F54S0AmNyVk8yhocmOGm5+Y8QHoZJXb92+7Nb/RfvT+2z+TNDWpuVQ/tzKMXVvGT1iZSxV
- oYtekGxbttZwoTK+4YrPWx8D54weYirYsua9cctiUUv+Ya3xZVvkwWBAi74YJ3+ZZ9BPQN
- JcSjrjSf9xjBw8ujZZBLWZpIwSkShQvD11SiFf9wOGw/9T1EC9Rjopc+bYF8oubDC09+GF
- pTRYjIklvlVRC+gTDvviJIbvCGmjjLt0JNiecS8G8Z+XZp8TGAwTo1hJd9WXvnq+7S2T/P
- wGP7iIvae+f+vfyG7S05vxnQx3KQm8uTr3QXnZ6XWT+O5aO3x4n2WRnyFy3DOw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=F54S0AmN
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-remi: fix pep517 build
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD438405B0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD438405B0
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 16:47:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A77B986CED; Thu,  9 May 2024 16:47:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 9 May 2024 18:47:30 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c89bec21dbebe5fe689aac5c0674b69634b52317
+X-Git-Newrev: 92117ac3915ec64f010781d93b05034b43e9e381
+X-Patchwork-Hint: ignore
+Message-Id: <20240509164759.A77B986CED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/aubio: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,46 +59,78 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- buildroot@buildroot.org, Vincent Fazio <vfazio@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=92117ac3915ec64f010781d93b05034b43e9e381
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Would be good to get some input from Python experts here. James? Vincent?
+The latest release from aubio dates back to 2019 while upstream is
+active: https://github.com/aubio/aubio/issues/381
 
-On Sun, 7 Apr 2024 21:58:45 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Current git HEAD includes support for ffmpeg 6.x:
+https://github.com/aubio/aubio/commits/master/src/io/source_avcodec.c
 
-> >   If the package _does_ build without setuptools_scm, it means that the
-> > setup.cfg is wrong. So an upstream patch to fix that would be better..  
-> 
-> From my understanding, upstream uses setuptools_scm to retrieve version since
-> https://github.com/rawpython/remi/pull/404/commits/f27630721d2bbcfbce515dc2e6be3167f6a06a34
-> 
-> So setuptools_scm is not "strictly" needed.
-> 
-> I used --skip-dependency-check because it is already done in 6 other
-> packages since commit 8937db8dd595e0988751e5dbb568e870b07b39cc
+and also removed the dependency to libavresample which was dropped in
+ffmpeg 6.0:
+https://github.com/aubio/aubio/commit/245deeadd81afc4ec5635b65d71646490c5c19fd
 
-But isn't it super crappy to skip the dependency checks? I mean the #1
-issue that Buildroot tries to deal with are dependencies of packages.
-So if we ask them to then skip their dependency checks, how will we
-make sure that all necessary dependencies are installed?
+so we can just depend on the ffmpeg package without suboptions, quoting
+configure log:
 
-I understand that setuptools_scm may not be strictly needed, but by
-passing --skip-dependency-check, don't we also skip checking other
-important/mandatory dependencies?
+Checking for 'libavcodec'                : yes
+Checking for 'libavformat'               : yes
+Checking for 'libavutil'                 : yes
+Checking for 'libswresample'             : yes
+Checking for all libav libraries         : yes
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/aubio/aubio.hash | 5 ++---
+ package/aubio/aubio.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/package/aubio/aubio.hash b/package/aubio/aubio.hash
+index 6195788327..dff02ffa9f 100644
+--- a/package/aubio/aubio.hash
++++ b/package/aubio/aubio.hash
+@@ -1,5 +1,4 @@
+-# From https://aubio.org/pub/aubio-0.4.9.tar.bz2.sha256
+-sha256  d48282ae4dab83b3dc94c16cf011bcb63835c1c02b515490e1883049c3d1f3da  aubio-0.4.9.tar.bz2
+-
++# Locally computed
++sha256  b0e20427750fbfbf017f2b54e41dc0d61ab61335b705bc056ca92a928b2bdd30  aubio-152d6819b360c2e7b379ee3f373d444ab3df0895.tar.gz
+ # Hash for license file:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
+index bfc627fa91..07634e41c6 100644
+--- a/package/aubio/aubio.mk
++++ b/package/aubio/aubio.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-AUBIO_VERSION = 0.4.9
+-AUBIO_SITE = https://aubio.org/pub
+-AUBIO_SOURCE = aubio-$(AUBIO_VERSION).tar.bz2
++AUBIO_VERSION = 152d6819b360c2e7b379ee3f373d444ab3df0895
++AUBIO_SITE = $(call github,aubio,aubio,$(AUBIO_VERSION))
+ AUBIO_LICENSE = GPL-3.0+
+ AUBIO_LICENSE_FILES = COPYING
+ AUBIO_CPE_ID_VENDOR = aubio
+@@ -59,7 +58,7 @@ else
+ AUBIO_CONF_OPTS += --disable-fftw3
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE),y)
++ifeq ($(BR2_PACKAGE_FFMPEG),y)
+ AUBIO_DEPENDENCIES += ffmpeg
+ AUBIO_CONF_OPTS += --enable-avcodec
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
