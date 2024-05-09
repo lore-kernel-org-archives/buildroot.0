@@ -4,71 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B55A1C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EAFEC10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:27:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83DF141FFC;
-	Thu,  9 May 2024 21:19:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCBA441E4F;
+	Thu,  9 May 2024 21:27:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H39LXW8Wg47x; Thu,  9 May 2024 21:19:42 +0000 (UTC)
+ id 8edGTVqlXLCT; Thu,  9 May 2024 21:27:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6790341FFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EB1141FA9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6790341FFD;
-	Thu,  9 May 2024 21:19:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D2601BF427
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:19:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EB1141FA9;
+	Thu,  9 May 2024 21:27:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CC3E51BF427
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0906181749
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:19:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B877941FA9
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:27:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QyKOgbi5GFYN for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 21:19:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9jLL22J-TRxD for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 21:27:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D373381587
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D373381587
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D373381587
- for <buildroot@buildroot.org>; Thu,  9 May 2024 21:19:38 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E523C1C0002;
- Thu,  9 May 2024 21:19:36 +0000 (UTC)
-Date: Thu, 9 May 2024 23:19:35 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240509231935.613ff05a@windsurf>
-In-Reply-To: <20240408202030.365656-1-fontaine.fabrice@gmail.com>
-References: <20240408202030.365656-1-fontaine.fabrice@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E6FC841E4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6FC841E4F
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E6FC841E4F
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 21:27:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C082E0003;
+ Thu,  9 May 2024 21:27:27 +0000 (UTC)
+Date: Thu, 9 May 2024 23:27:26 +0200
+To: <nick.whitlock@eizo.com>
+Message-ID: <20240509232726.54ff0818@windsurf>
+In-Reply-To: <TY2PR01MB4572A27ADF9451486BA9889084E62@TY2PR01MB4572.jpnprd01.prod.outlook.com>
+References: <20240509190028.693457-1-nick.whitlock@eizo.com>
+ <20240509215156.7185ff8f@windsurf>
+ <TY2PR01MB4572A27ADF9451486BA9889084E62@TY2PR01MB4572.jpnprd01.prod.outlook.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715289577;
+ d=bootlin.com; s=gm1; t=1715290049;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=WvDgt0wezZcTyTghEby2M7fJMNr7EsFaxK8jVOnC2FU=;
- b=hbz1xsYZuL4+Q9RdsI5yHDEypLEDgWjdcjiH+EcajLqin0WvESjLoQR1gz96Cz+jRqiT6N
- tNsBkF1QiiIk9RLuLc1xxXeDm4U0fKJSuHmiufirkNACyJ1Mm/sfPFbfIR+kXVXB1qPFMc
- UQKP03qzadPLnEeLuYICWs1UdDN8rToE1eA8ty7Jp3SFOior2SFuCG16pxjhyYw90zFEdI
- X6G0KP8KAl51A6G4WTmSe1PojmqGhJDLSPNF62eDfSxQpcwfNsg3RTYOkEz4yNuTKAachH
- IY8bZh4I5y2/9wfJUCgmq3H4H9qPDcN+do/A5QY/o9NNj1RIkdNBASNNDkjKpw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=cRt+zrsy661574sPFRmssXzSWszSqCMje5bZMwHE804=;
+ b=dIB/auXMgc4jnvs8qsc0y29W5wg/u/fswfSRODmXWW5yKHEOZKv0a0esYCKCmXNvtdJ+SV
+ h4SO6sH5zxMgjLXhwEjApw2krHR/+ioUM0PQi4xxTrSZ05UbBdjM/ED79rSTuZ9nn57Irq
+ VV02uP/pkj/pIyy/uBeGu6JaFaU9pCDuo37htTxKAHuT4Rowf/3P2q+18f1uuLozeJ7aXz
+ TZ6tbIV5CgQKK7IXNaJHuH1cN46m9YOMDiAQTBkXCdS0mr7oFMd61CXt/YkTNoEA72kuCg
+ FVRlzuTrxIdn/g9wrhXz9tPs25m2hdDMJL9Nqk8Z8ZkIXdulmP2FGbQsbs4uJQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hbz1xsYZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: really use system fmt
+ header.s=gm1 header.b=dIB/auXM
+Subject: Re: [Buildroot] [PATCH] package/nvidia-driver: bump version to
+ 550.78
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,55 +85,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: yann.morin.1998@free.fr, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  8 Apr 2024 22:20:30 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Nick,
 
-> Commit 821f9dee8112dc02fe58d60273d0dfdabbc46d1f wrongly used WITH_FMT
-> instead of WITH_LIBFMT resulting in the following build failure:
-> 
-> [  0%] Creating directories for 'libfmt'
-> [  0%] Performing download step (download, verify and extract) for 'libfmt'
-> make[3]: Leaving directory '/home/buildroot/autobuild/run/instance-0/output-1/build/mariadb-10.11.6'
-> make[3]: Leaving directory '/home/buildroot/autobuild/run/instance-0/output-1/build/mariadb-10.11.6'
-> -- Downloading...
->    dst='/home/buildroot/autobuild/run/instance-0/output-1/build/mariadb-10.11.6/extra/libfmt/src/8.0.1.zip'
->    timeout='none'
->    inactivity timeout='none'
-> -- Using src='https://github.com/fmtlib/fmt/archive/refs/tags/8.0.1.zip'
-> CMake Error at libfmt-stamp/download-libfmt.cmake:170 (message):
->   Each download failed!
-> 
->     error: downloading 'https://github.com/fmtlib/fmt/archive/refs/tags/8.0.1.zip' failed
->           status_code: 1
->           status_string: "Unsupported protocol"
->           log:
->           --- LOG BEGIN ---
->           Protocol "https" not supported or disabled in libcurl
-> 
->   Closing connection
-> 
->           --- LOG END ---
-> 
-> Fixes: 821f9dee8112dc02fe58d60273d0dfdabbc46d1f
->  - http://autobuild.buildroot.org/results/fbe3bc347a83a810ffbbbff93a45994963712bee
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mariadb/mariadb.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 9 May 2024 21:16:36 +0000
+<nick.whitlock@eizo.com> wrote:
 
-Applied to master, thanks.
+> > We need your patch to have your Signed-off-by line, otherwise we unfortunately cannot apply it.  
+> 
+> Is this mentioned somewhere in the documentation? I'm not sure how to apply this.
+
+See
+https://buildroot.org/downloads/manual/manual.html#submitting-patches.
+Extract from this:
+
+   Finally, the patch should be signed off. This is done by adding
+   Signed-off-by: Your Real Name <your@email.address> at the end of the
+   commit message. git commit -s does that for you, if configured
+   properly. The Signed-off-by tag means that you publish the patch
+   under the Buildroot license (i.e. GPL-2.0+, except for package
+   patches, which have the upstream license), and that you are allowed
+   to do so. See the Developer Certificate of Origin for details.
+
+So for once, our documentation does have the relevant details :-)
+
+> > Why does this have a depends on BR2_PACKAGE_NVIDIA_DRIVER_MODULE ?
+> > From what I can see in your patch, this option is merely installing
+> > more user-space libraries, so why do you make this depend on the
+> > driver module being enabled?  
+> 
+> Those libraries depend on the driver module, from my understanding.
+
+What makes you think this?
+
+> > - Are these hashes provided by some authoritative source upstream?
+> > If  
+>   so, indicate where. Otherwise, keeping the locally calculated sha256
+>   is sufficient.
+> 
+> To my knowledge, I'm not sure. I computed them locally using
+> `md5sum`, `sha1sum` and `sha256sum` and they seemed to take when I
+> built it.
+
+Then, only include the sha256, this is enough.
+
+Thanks a lot!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
