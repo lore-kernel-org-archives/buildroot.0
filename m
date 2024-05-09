@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18C28C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 17:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 766FEC10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 17:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E95741EC4;
-	Thu,  9 May 2024 17:01:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2438541ED5;
+	Thu,  9 May 2024 17:01:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JX1wg9sYWhhA; Thu,  9 May 2024 17:01:21 +0000 (UTC)
+ id 8m2NKW8ZF-5g; Thu,  9 May 2024 17:01:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CA1441ECD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A28E41ED8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CA1441ECD;
-	Thu,  9 May 2024 17:01:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DB6C61BF337
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A28E41ED8;
+	Thu,  9 May 2024 17:01:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F3C6D1BF990
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 17:01:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C69CF40198
+ by smtp1.osuosl.org (Postfix) with ESMTP id DF2DE83EC7
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 17:01:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PZWZpt5j8HOQ for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wlgeq9Lwzdly for <buildroot@lists.busybox.net>;
  Thu,  9 May 2024 17:01:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B637401B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 875B283EC1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B637401B7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 875B283EC1
  for <buildroot@buildroot.org>; Thu,  9 May 2024 17:01:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 449BA80262; Thu,  9 May 2024 17:01:12 +0000 (UTC)
+ id 7381E86D42; Thu,  9 May 2024 17:01:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 18:56:24 +0200
+Date: Thu, 9 May 2024 19:00:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b9b072f83c1f2a55b54405b2dc28e6586b59b74b
-X-Git-Newrev: fa36a6375dbeae131c596070570cec66c7bd2456
+X-Git-Oldrev: ee0ae230e431a20745ce2def5792f011321047af
+X-Git-Newrev: c61934611111cb3ea04604707052b1387bde5134
 X-Patchwork-Hint: ignore
-Message-Id: <20240509170112.449BA80262@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 6.1.1
+Message-Id: <20240509170112.7381E86D42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi: bump version to 21.0-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,390 +65,352 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa36a6375dbeae131c596070570cec66c7bd2456
+commit: https://git.buildroot.net/buildroot/commit/?id=c61934611111cb3ea04604707052b1387bde5134
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quoting Changelog:
-http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=b357f428abce2110904944c4cc066b8e297bb895;hb=3153c441e1d980ff9931ed26a0e01b4e366ac521
-"- ffmpeg now requires threading to be built"
+Added new dependency to libdisplay-info for gbm support:
+https://github.com/xbmc/xbmc/commit/ce9626479c1792210c7b7cc02c7dc4f819ace509
 
-Propagate threads to reserve dependencies.
-Rebased patches.
-Removed patch 0005 which is included in this release.
+Added new required dependency to tinyxml2:
+https://github.com/xbmc/xbmc/commit/9e983ed0449aaf3007d8bfa3261056b120d84188
+Please note that parts of kodi still use tinyxml so both dependencies
+are needed.
 
-Removed support for libavresample which was removed upstream.
-No legacy handling necessary for opencv3/4 because libavresample was
-an optional dependency.
+Added new required dependency to libudfread: Since upstream commit
+https://github.com/xbmc/xbmc/commit/5f9b9cfa26f274e381e92d73cfa33fb55582436e
+kodi does not build anymore without libudfread.
 
-Added upstream patch 0005 to fix build error with arm.
+Upstream removed the bundled groovy/apache commons binaries:
+https://github.com/xbmc/xbmc/commit/d6bc920e056baad7782f47b86cba85d1336bb134
 
-Drop configure options which were removed upstream.
+- JsonSchemaBuilder fixes:
+
+Upstream moved CMakeLists.txt to src/ subfolder:
+https://github.com/xbmc/xbmc/commit/7e87d98ca55c72fcbc9b8dadf2cb979a85732606
+
+- TexturePacker fixes:
+
+texturepacker now depends on c++17:
+https://github.com/xbmc/xbmc/commit/54bd6d7ab552a4ddc04d2595826457d8bfa864d5
+
+Since the host version of texturepacker is a build dependency of kodi:
+https://github.com/xbmc/xbmc/blob/Omega/CMakeLists.txt#L187
+https://github.com/xbmc/xbmc/blob/Omega/CMakeLists.txt#L472
+we add a new dependency to BR2_HOST_GCC_AT_LEAST_9.
+
+Upstream moved CMakeLists.txt to src/ subfolder
+https://github.com/xbmc/xbmc/commit/e336a75f42d9c4efd3433f3fa6edd05309689deb
+
+Due to this update we can remove all of our patches for texturepacker.
+
+- Kodi fixes:
+
+Set KODI_SOURCE_DIR variable to root directory of the source tarball.
+When building natively, outside of a meta buildsystem like Buildroot,
+kodi builds its own tools as part of its build process. TexturePacker
+needs cmake modules available from the top of the Kodi source tree, a
+source file in a sub-directory at the top-level source tree, which
+itself needs includes from the same sub-dir. The Kodi build process sets
+KODI_SOURCE_DIR so that TexturePacker can find those files.
+
+In Buildroot, as we cross-build, we build the tools explicitly, without
+using the Kodi build process, and thus we must set KODI_SOURCE_DIR to the
+root directory of the source tarball. LibreELEC added something similar:
+https://github.com/LibreELEC/LibreELEC.tv/commit/70abdd27a22b22547060fcb00a2c70ea61721465
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...scale-x86-yuv2rgb-Fix-build-without-SSSE3.patch |  4 +-
- package/ffmpeg/0003-libavutil-Fix-mips-build.patch |  6 +-
- ...-configure-add-extralibs-to-extralibs_xxx.patch |  6 +-
- ...05-Fixes-assembling-with-binutils-as-2.41.patch | 84 ----------------------
- .../0005-avcodec-mmaldec-Fix-build-error.patch     | 32 +++++++++
- package/ffmpeg/Config.in                           |  9 ++-
- package/ffmpeg/ffmpeg.hash                         |  2 +-
- package/ffmpeg/ffmpeg.mk                           | 12 +---
- package/gstreamer1/gst1-libav/Config.in            |  4 ++
- package/opencv3/Config.in                          |  1 -
- package/opencv4/Config.in                          |  1 -
- package/qt5/qt5webengine/Config.in                 |  2 +-
- 12 files changed, 51 insertions(+), 112 deletions(-)
+ .checkpackageignore                                |  2 --
+ .../kodi-jsonschemabuilder.mk                      |  6 ++---
+ .../kodi-texturepacker/0001-texturepacker.patch    | 16 -------------
+ .../0002-fix-texture-packer-cmake-source-dir.patch | 27 ----------------------
+ package/kodi-texturepacker/kodi-texturepacker.mk   |  9 ++++----
+ package/kodi/Config.in                             |  7 +++++-
+ package/kodi/kodi.hash                             |  6 ++++-
+ package/kodi/kodi.mk                               | 25 ++++++++++++--------
+ 8 files changed, 35 insertions(+), 63 deletions(-)
 
-diff --git a/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch b/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch
-index 9c1baaa651..aa56e5a9b4 100644
---- a/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch
-+++ b/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch
-@@ -22,7 +22,7 @@ diff --git a/libswscale/x86/yuv2rgb.c b/libswscale/x86/yuv2rgb.c
- index c12e88cbb5..4791e5b93a 100644
- --- a/libswscale/x86/yuv2rgb.c
- +++ b/libswscale/x86/yuv2rgb.c
--@@ -71,6 +71,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
-+@@ -70,6 +70,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
-  #if HAVE_X86ASM
-      int cpu_flags = av_get_cpu_flags();
-  
-@@ -30,7 +30,7 @@ index c12e88cbb5..4791e5b93a 100644
-      if (EXTERNAL_SSSE3(cpu_flags)) {
-          switch (c->dstFormat) {
-          case AV_PIX_FMT_RGB32:
--@@ -99,6 +100,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
-+@@ -98,6 +99,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
-              return yuv420_rgb15_ssse3;
-          }
-      }
-diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-index 8dd689f5d0..ee2d1db8bd 100644
---- a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-+++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-@@ -20,7 +20,7 @@ diff --git a/configure b/configure
- index 6bfd98b384..773a7d516c 100755
- --- a/configure
- +++ b/configure
--@@ -2135,6 +2135,7 @@ HEADERS_LIST="
-+@@ -2191,6 +2191,7 @@ HEADERS_LIST="
-      opencv2_core_core_c_h
-      OpenGL_gl3_h
-      poll_h
-@@ -28,9 +28,9 @@ index 6bfd98b384..773a7d516c 100755
-      sys_param_h
-      sys_resource_h
-      sys_select_h
--@@ -6182,6 +6183,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
-+@@ -6361,6 +6361,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
-+ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepareToEncodeFrames -framework VideoToolbox
-  check_headers windows.h
-- check_headers X11/extensions/XvMClib.h
-  check_headers asm/types.h
- +check_headers sys/auxv.h
-  
-diff --git a/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch b/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
-index 3247ab08fe..050b34fd89 100644
---- a/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
-+++ b/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
-@@ -9,6 +9,8 @@ applications such as motion to retrieve ffmpeg dependencies such as
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 55ca0f2b33..d3e0fbc471 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -835,8 +835,6 @@ package/kexec-lite/0001-clean-restart.patch lib_patch.Upstream
+ package/keyutils/0001-fix-install-rule.patch lib_patch.Upstream
+ package/keyutils/0002-cifs.patch lib_patch.Sob lib_patch.Upstream
+ package/kmod/0001-fix-O_CLOEXEC.patch lib_patch.Upstream
+-package/kodi-texturepacker/0001-texturepacker.patch lib_patch.Upstream
+-package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch lib_patch.Upstream
+ package/kodi/S50kodi Shellcheck lib_sysv.Variables
+ package/latencytop/0001-makefile.patch lib_patch.Upstream
+ package/lbase64/0001-retro-compatible-with-Lua-5.1.patch lib_patch.Upstream
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index a43ee57e00..ee94a52502 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,20 +6,20 @@
  
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Upstream status: not upstreamable]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[rebased for 6.0]
- ---
-  configure | 18 +++++++++---------
-  1 file changed, 9 insertions(+), 9 deletions(-)
-@@ -17,7 +19,7 @@ diff --git a/configure b/configure
- index 0bb3a7cf2b..3bda99e415 100755
- --- a/configure
- +++ b/configure
--@@ -7715,15 +7715,15 @@ rpath=$(enabled rpath && echo "-Wl,-rpath,\${libdir}")
-+@@ -7986,14 +7986,14 @@
-  source_path=${source_path}
-  LIBPREF=${LIBPREF}
-  LIBSUF=${LIBSUF}
-@@ -26,7 +28,6 @@ index 0bb3a7cf2b..3bda99e415 100755
- -extralibs_avformat="$avformat_extralibs"
- -extralibs_avdevice="$avdevice_extralibs"
- -extralibs_avfilter="$avfilter_extralibs"
---extralibs_avresample="$avresample_extralibs"
- -extralibs_postproc="$postproc_extralibs"
- -extralibs_swscale="$swscale_extralibs"
- -extralibs_swresample="$swresample_extralibs"
-@@ -35,7 +36,6 @@ index 0bb3a7cf2b..3bda99e415 100755
- +extralibs_avformat="$avformat_extralibs $extralibs"
- +extralibs_avdevice="$avdevice_extralibs $extralibs"
- +extralibs_avfilter="$avfilter_extralibs $extralibs"
--+extralibs_avresample="$avresample_extralibs $extralibs"
- +extralibs_postproc="$postproc_extralibs $extralibs"
- +extralibs_swscale="$swscale_extralibs $extralibs"
- +extralibs_swresample="$swresample_extralibs $extralibs"
-diff --git a/package/ffmpeg/0005-Fixes-assembling-with-binutils-as-2.41.patch b/package/ffmpeg/0005-Fixes-assembling-with-binutils-as-2.41.patch
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 20.5-Nexus
++KODI_JSONSCHEMABUILDER_VERSION = 21.0-Omega
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+ KODI_JSONSCHEMABUILDER_LICENSE = GPL-2.0
+ KODI_JSONSCHEMABUILDER_LICENSE_FILES = LICENSE.md
+-HOST_KODI_JSONSCHEMABUILDER_SUBDIR = tools/depends/native/JsonSchemaBuilder
++HOST_KODI_JSONSCHEMABUILDER_SUBDIR = tools/depends/native/JsonSchemaBuilder/src
+ 
+ HOST_KODI_JSONSCHEMABUILDER_CONF_OPTS = \
+ 	-DCMAKE_MODULE_PATH=$(@D)/project/cmake/modules
+ 
+ define HOST_KODI_JSONSCHEMABUILDER_INSTALL_CMDS
+ 	$(INSTALL) -m 755 -D \
+-		$(@D)/tools/depends/native/JsonSchemaBuilder/JsonSchemaBuilder \
++		$(@D)/tools/depends/native/JsonSchemaBuilder/src/JsonSchemaBuilder \
+ 		$(HOST_DIR)/bin/kodi-JsonSchemaBuilder
+ endef
+ 
+diff --git a/package/kodi-texturepacker/0001-texturepacker.patch b/package/kodi-texturepacker/0001-texturepacker.patch
 deleted file mode 100644
-index 6c81971cbe..0000000000
---- a/package/ffmpeg/0005-Fixes-assembling-with-binutils-as-2.41.patch
+index 8830b4c646..0000000000
+--- a/package/kodi-texturepacker/0001-texturepacker.patch
 +++ /dev/null
-@@ -1,84 +0,0 @@
--From effadce6c756247ea8bae32dc13bb3e6f464f0eb Mon Sep 17 00:00:00 2001
--From: =?utf8?q?R=C3=A9mi=20Denis-Courmont?= <remi@remlab.net>
--Date: Sun, 16 Jul 2023 18:18:02 +0300
--Subject: [PATCH] avcodec/x86/mathops: clip constants used with shift
-- instructions within inline assembly
+@@ -1,16 +0,0 @@
+-Fix host compile
 -
--Fixes assembling with binutils as >= 2.41
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
--Upstream: http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=effadce6c756247ea8bae32dc13bb3e6f464f0eb
--
--Bug reports for this change in binutils:
--https://fftrac-bg.ffmpeg.org/ticket/10405
--https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108941
--https://sourceware.org/bugzilla/show_bug.cgi?id=30578
--
--Signed-off-by: James Almer <jamrial@gmail.com>
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- libavcodec/x86/mathops.h | 26 +++++++++++++++++++++++---
-- 1 file changed, 23 insertions(+), 3 deletions(-)
--
--diff --git a/libavcodec/x86/mathops.h b/libavcodec/x86/mathops.h
--index 6298f5ed19..ca7e2dffc1 100644
----- a/libavcodec/x86/mathops.h
--+++ b/libavcodec/x86/mathops.h
--@@ -35,12 +35,20 @@
-- static av_always_inline av_const int MULL(int a, int b, unsigned shift)
-- {
--     int rt, dummy;
--+    if (__builtin_constant_p(shift))
--     __asm__ (
--         "imull %3               \n\t"
--         "shrdl %4, %%edx, %%eax \n\t"
--         :"=a"(rt), "=d"(dummy)
---        :"a"(a), "rm"(b), "ci"((uint8_t)shift)
--+        :"a"(a), "rm"(b), "i"(shift & 0x1F)
--     );
--+    else
--+        __asm__ (
--+            "imull %3               \n\t"
--+            "shrdl %4, %%edx, %%eax \n\t"
--+            :"=a"(rt), "=d"(dummy)
--+            :"a"(a), "rm"(b), "c"((uint8_t)shift)
--+        );
--     return rt;
-- }
+-diff -uNr xbmc-656cba5d5c7c5edb166196b48560825b9b1f03fd.org/tools/depends/native/TexturePacker/Makefile xbmc-656cba5d5c7c5edb166196b48560825b9b1f03fd/tools/depends/native/TexturePacker/Makefile
+---- xbmc-656cba5d5c7c5edb166196b48560825b9b1f03fd.org/tools/depends/native/TexturePacker/Makefile	2015-01-25 09:00:48.000000000 +0100
+-+++ xbmc-656cba5d5c7c5edb166196b48560825b9b1f03fd/tools/depends/native/TexturePacker/Makefile	2015-01-25 13:03:23.606140953 +0100
+-@@ -36,7 +36,7 @@
+- 	-rm -rf $(PLATFORM)/*; mkdir -p $(PLATFORM)
+- 	cd $(PLATFORM); cp -a $(SOURCE)/* .
+- 	cd $(PLATFORM); ./autogen.sh
+--	cd $(PLATFORM); ./configure --prefix=$(PREFIX) $(EXTRA_CONFIGURE) EXTRA_DEFINES="$(NATIVE_ARCH_DEFINES)"
+-+	cd $(PLATFORM); ./configure --prefix=$(PREFIX) EXTRA_DEFINES="$(NATIVE_ARCH_DEFINES)"
 - 
--@@ -113,19 +121,31 @@ __asm__ volatile(\
-- // avoid +32 for shift optimization (gcc should do that ...)
-- #define NEG_SSR32 NEG_SSR32
-- static inline  int32_t NEG_SSR32( int32_t a, int8_t s){
--+    if (__builtin_constant_p(s))
--     __asm__ ("sarl %1, %0\n\t"
--          : "+r" (a)
---         : "ic" ((uint8_t)(-s))
--+         : "i" (-s & 0x1F)
--     );
--+    else
--+        __asm__ ("sarl %1, %0\n\t"
--+               : "+r" (a)
--+               : "c" ((uint8_t)(-s))
--+        );
--     return a;
-- }
 - 
-- #define NEG_USR32 NEG_USR32
-- static inline uint32_t NEG_USR32(uint32_t a, int8_t s){
--+    if (__builtin_constant_p(s))
--     __asm__ ("shrl %1, %0\n\t"
--          : "+r" (a)
---         : "ic" ((uint8_t)(-s))
--+         : "i" (-s & 0x1F)
--     );
--+    else
--+        __asm__ ("shrl %1, %0\n\t"
--+               : "+r" (a)
--+               : "c" ((uint8_t)(-s))
--+        );
--     return a;
-- }
-- 
---- 
--2.30.2
+- $(APP): $(PLATFORM)
+diff --git a/package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch b/package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch
+deleted file mode 100644
+index ddd82439fe..0000000000
+--- a/package/kodi-texturepacker/0002-fix-texture-packer-cmake-source-dir.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-Fix stand-alone build
 -
-diff --git a/package/ffmpeg/0005-avcodec-mmaldec-Fix-build-error.patch b/package/ffmpeg/0005-avcodec-mmaldec-Fix-build-error.patch
-new file mode 100644
-index 0000000000..b3b901264f
---- /dev/null
-+++ b/package/ffmpeg/0005-avcodec-mmaldec-Fix-build-error.patch
-@@ -0,0 +1,32 @@
-+From e8a49b1424d405441fb23c2850274a84e95bd892 Mon Sep 17 00:00:00 2001
-+From: Zhao Zhili <zhilizhao@tencent.com>
-+Date: Tue, 21 Nov 2023 04:05:08 +0800
-+Subject: [PATCH] avcodec/mmaldec: Fix build error
-+
-+Fix #10670.
-+
-+Signed-off-by: Zhao Zhili <zhilizhao@tencent.com>
-+
-+Upstream: http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=e8a49b1424d405441fb23c2850274a84e95bd892
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libavcodec/mmaldec.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libavcodec/mmaldec.c b/libavcodec/mmaldec.c
-+index 4bb3eb22ef..2dc7bbee04 100644
-+--- a/libavcodec/mmaldec.c
-++++ b/libavcodec/mmaldec.c
-+@@ -843,7 +843,7 @@ static const AVClass ffmmal_dec_class = {
-+         .flush          = ffmmal_flush, \
-+         .p.priv_class   = &ffmmal_dec_class, \
-+         .p.capabilities = AV_CODEC_CAP_DELAY | AV_CODEC_CAP_HARDWARE, \
-+-        .caps_internal  = FF_CODEC_CAP_NOT_INIT_THREADSAFE \
-++        .caps_internal  = FF_CODEC_CAP_NOT_INIT_THREADSAFE, \
-+         .p.pix_fmts     = (const enum AVPixelFormat[]) { AV_PIX_FMT_MMAL, \
-+                                                          AV_PIX_FMT_YUV420P, \
-+                                                          AV_PIX_FMT_NONE}, \
-+-- 
-+2.30.2
-+
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 52029c2ade..599e1ddfc7 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
+-CMake Error at CMakeLists.txt:40 (add_executable):
+-  Cannot find source file:
+-
+-    /home/bernd/buildroot/output/build/host-kodi-texturepacker-18.4-Leia/tools/depends/native/TexturePacker/xbmc/guilib/XBTF.cpp
+-
+-  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .m .M .mm .h .hh .h++ .hm
+-  .hpp .hxx .in .txx
+-
+-CMake Error at CMakeLists.txt:40 (add_executable):
+-  No SOURCES given to target: TexturePacker
+-
+-Downloaded from
+-https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi/patches/kodi-100.25-hack-fix-texture-packer-cmake-source-dir.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -Naur a/tools/depends/native/TexturePacker/CMakeLists.txt b/tools/depends/native/TexturePacker/CMakeLists.txt
+---- a/tools/depends/native/TexturePacker/CMakeLists.txt	2016-12-23 17:10:28.593185862 +0000
+-+++ b/tools/depends/native/TexturePacker/CMakeLists.txt	2016-12-23 17:10:39.469253011 +0000
+-@@ -1,3 +1,5 @@
+-+set(CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/../../../..)
+-+
+- list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+- 
+- if(APPLE)
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index e640ab3a90..c3c06d0210 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,13 +6,13 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 20.5-Nexus
++KODI_TEXTUREPACKER_VERSION = 21.0-Omega
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+ KODI_TEXTUREPACKER_LICENSE = GPL-2.0
+ KODI_TEXTUREPACKER_LICENSE_FILES = LICENSE.md
+-HOST_KODI_TEXTUREPACKER_SUBDIR = tools/depends/native/TexturePacker
++HOST_KODI_TEXTUREPACKER_SUBDIR = tools/depends/native/TexturePacker/src
+ HOST_KODI_TEXTUREPACKER_DEPENDENCIES = \
+ 	host-giflib \
+ 	host-libjpeg \
+@@ -21,7 +21,7 @@ HOST_KODI_TEXTUREPACKER_DEPENDENCIES = \
+ 
+ HOST_KODI_TEXTUREPACKER_CXXFLAGS = \
+ 	$(HOST_CXXFLAGS) \
+-	-std=c++0x \
++	-std=c++17 \
+ 	-DTARGET_POSIX \
+ 	-DTARGET_LINUX \
+ 	-D_LINUX \
+@@ -30,11 +30,12 @@ HOST_KODI_TEXTUREPACKER_CXXFLAGS = \
+ HOST_KODI_TEXTUREPACKER_CONF_OPTS += \
+ 	-DCMAKE_CXX_FLAGS="$(HOST_KODI_TEXTUREPACKER_CXXFLAGS)" \
+ 	-DCMAKE_MODULE_PATH=$(@D)/cmake/modules \
++	-DKODI_SOURCE_DIR=$(@D) \
+ 	-Wno-dev
+ 
+ define HOST_KODI_TEXTUREPACKER_INSTALL_CMDS
+ 	$(INSTALL) -m 755 -D \
+-		$(@D)/tools/depends/native/TexturePacker/TexturePacker \
++		$(@D)/tools/depends/native/TexturePacker/src/TexturePacker \
+ 		$(HOST_DIR)/bin/kodi-TexturePacker
+ endef
+ 
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 8ad9fdae78..5710b0b31f 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -5,12 +5,13 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on !(BR2_i386 && !BR2_X86_CPU_HAS_SSE)
+ 	depends on BR2_USE_MMU # libcdio, and others
+ 
+-comment "kodi needs python3 w/ .py modules, a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 9.x"
++comment "kodi needs python3 w/ .py modules, a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 9.x, host gcc >= 9.x"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_9 \
++		|| !BR2_HOST_GCC_AT_LEAST_9 \
+ 		|| BR2_TOOLCHAIN_USES_MUSL \
+ 		|| !BR2_PACKAGE_PYTHON3 \
+ 		|| BR2_PACKAGE_PYTHON3_PYC_ONLY
+@@ -26,6 +27,7 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
+ 	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
+ 	depends on BR2_PACKAGE_HAS_UDEV # libinput
+ 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
++	select BR2_PACKAGE_LIBDISPLAY_INFO
+ 
+ comment "kodi needs udev support for gbm"
+ 	depends on !BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+@@ -56,6 +58,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # C++17
++	depends on BR2_HOST_GCC_AT_LEAST_9 # C++17
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_WCHAR
+@@ -103,6 +106,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_TAGLIB
+ 	select BR2_PACKAGE_TINYXML
++	select BR2_PACKAGE_TINYXML2
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
+ 	select BR2_PACKAGE_LIBINPUT if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
+@@ -162,6 +166,7 @@ config BR2_PACKAGE_KODI_EVENTCLIENTS
+ config BR2_PACKAGE_KODI_LIBBLURAY
+ 	bool "blu-ray"
+ 	select BR2_PACKAGE_LIBBLURAY
++	select BR2_PACKAGE_LIBUDFREAD
  	help
- 	  FFmpeg is a complete, cross-platform solution to record,
- 	  convert and stream audio and video.
-@@ -74,11 +75,6 @@ config BR2_PACKAGE_FFMPEG_XCBGRAB
- 	help
- 	  X11 screen grabbing using libxcb.
+ 	  Enable Blu-ray input support.
+ 	  Select this if you want to play back Blu-ray content.
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index b497ab7dca..15d1e471cd 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,9 @@
++# From https://github.com/xbmc/xbmc/blob/Omega/xbmc/interfaces/swig/CMakeLists.txt
++sha512  743698979c801f3cfb36545888b5303e1e25dae5692bb45cab7ebbe102a6eda31f09abc6978349ad90ecaf630416fc87eacba7781244855e7e771a3c44041fa0  apache-groovy-binary-4.0.16.zip
++sha512  8e7e62418a49ba810512c13a640a8bf35f878fcd54af32fdaab1111e37817f58b21b475980ba663fba4887e45ef8d88af8ff17796f20d202e929e8e2574546dc  commons-lang3-3.14.0-bin.tar.gz
++sha512  2e94877000dd270b69e2e8cbf49f258a90b4c628b6b6b0814e300a2f0e9c391f0816dceb0707e596ae3b7c9532f93e7a4917df47c77f44b3a810e14042ce5f3f  commons-text-1.11.0-bin.tar.gz
+ # Locally computed
+-sha256  9bf3257ebf251d20f276b7f90681985a270779150af2fb395d4b593c04002deb  kodi-20.5-Nexus.tar.gz
++sha256  7f54c1fd8456ac46221fbc85e447362bdc209163c6cb19fca98d106560071b7c  kodi-21.0-Omega.tar.gz
+ sha256  f38c4a4e7a4f4da6d8e83b8852489aa3bb6588a915dc41f5ee89d9aad305a06e  kodi-libdvdcss-1.4.3-Next-Nexus-Alpha2-2.tar.gz
+ sha256  584f62a3896794408d46368e2ecf2c6217ab9c676ce85921b2d68b8961f49dfc  kodi-libdvdnav-6.1.1-Next-Nexus-Alpha2-2.tar.gz
+ sha256  719130091e3adc9725ba72df808f24a14737a009dca5a4c38c601c0c76449b62  kodi-libdvdread-6.1.3-Next-Nexus-Alpha2-2.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 085169367d..b9931f9609 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,8 +6,8 @@
  
--config BR2_PACKAGE_FFMPEG_AVRESAMPLE
--	bool "Build libavresample"
--	help
--	  Avresample is a audio conversion library for compatibility.
--
- config BR2_PACKAGE_FFMPEG_POSTPROC
- 	bool "Build libpostproc"
- 	depends on BR2_PACKAGE_FFMPEG_GPL
-@@ -186,3 +182,6 @@ config BR2_PACKAGE_FFMPEG_EXTRACONF
- 	  ./configure commandline.
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION_MAJOR = 20.5
+-KODI_VERSION_NAME = Nexus
++KODI_VERSION_MAJOR = 21.0
++KODI_VERSION_NAME = Omega
+ KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPL-2.0
+@@ -45,6 +45,7 @@ KODI_DEPENDENCIES = \
+ 	libfribidi \
+ 	libplist \
+ 	libpng \
++	libudfread \
+ 	lzo \
+ 	openssl \
+ 	pcre \
+@@ -54,6 +55,7 @@ KODI_DEPENDENCIES = \
+ 	sqlite \
+ 	taglib \
+ 	tinyxml \
++	tinyxml2 \
+ 	zlib
  
- endif
+ # taken from tools/depends/target/*/*-VERSION
+@@ -61,10 +63,21 @@ KODI_LIBDVDCSS_VERSION = 1.4.3-Next-Nexus-Alpha2-2
+ KODI_LIBDVDNAV_VERSION = 6.1.1-Next-Nexus-Alpha2-2
+ KODI_LIBDVDREAD_VERSION = 6.1.3-Next-Nexus-Alpha2-2
+ KODI_EXTRA_DOWNLOADS += \
++	https://groovy.jfrog.io/artifactory/dist-release-local/groovy-zips/apache-groovy-binary-4.0.16.zip \
++	https://dlcdn.apache.org/commons/lang/binaries/commons-lang3-3.14.0-bin.tar.gz \
++	https://dlcdn.apache.org/commons/text/binaries/commons-text-1.11.0-bin.tar.gz \
+ 	$(call github,xbmc,libdvdcss,$(KODI_LIBDVDCSS_VERSION))/kodi-libdvdcss-$(KODI_LIBDVDCSS_VERSION).tar.gz \
+ 	$(call github,xbmc,libdvdnav,$(KODI_LIBDVDNAV_VERSION))/kodi-libdvdnav-$(KODI_LIBDVDNAV_VERSION).tar.gz \
+ 	$(call github,xbmc,libdvdread,$(KODI_LIBDVDREAD_VERSION))/kodi-libdvdread-$(KODI_LIBDVDREAD_VERSION).tar.gz
+ 
++define KODI_PROVIDE_JAVA_TARBALLS
++	mkdir -p $(@D)/buildroot-build/build/download
++	cp $(KODI_DL_DIR)/apache-groovy-binary-4.0.16.zip $(@D)/buildroot-build/build/download
++	cp $(KODI_DL_DIR)/commons-lang3-3.14.0-bin.tar.gz $(@D)/buildroot-build/build/download
++	cp $(KODI_DL_DIR)/commons-text-1.11.0-bin.tar.gz $(@D)/buildroot-build/build/download
++endef
++KODI_POST_EXTRACT_HOOKS = KODI_PROVIDE_JAVA_TARBALLS
 +
-+comment "ffmpeg needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index b18218cb48..f70ff5da83 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  e80b380d595c809060f66f96a5d849511ef4a76a26b76eacf5778b94c3570309  ffmpeg-4.4.4.tar.xz
-+sha256  8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968  ffmpeg-6.1.1.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index ce285bcc60..acd5a7d8b2 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ KODI_CONF_OPTS += \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(KODI_C_FLAGS)" \
+ 	-DENABLE_APP_AUTONAME=OFF \
+@@ -104,7 +117,7 @@ endif
  
--FFMPEG_VERSION = 4.4.4
-+FFMPEG_VERSION = 6.1.1
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = https://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -32,10 +32,6 @@ FFMPEG_CONF_OPTS = \
- 	--disable-gray \
- 	--enable-swscale-alpha \
- 	--disable-small \
--	--enable-dct \
--	--enable-fft \
--	--enable-mdct \
--	--enable-rdft \
- 	--disable-crystalhd \
- 	--disable-dxva2 \
- 	--enable-runtime-cpudetect \
-@@ -93,12 +89,6 @@ else
- FFMPEG_CONF_OPTS += --disable-libv4l2
+ ifeq ($(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM),y)
+ KODI_CORE_PLATFORM_NAME += gbm
+-KODI_DEPENDENCIES += libgbm libinput libxkbcommon
++KODI_DEPENDENCIES += libdisplay-info libgbm libinput libxkbcommon
  endif
  
--ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE),y)
--FFMPEG_CONF_OPTS += --enable-avresample
+ ifeq ($(BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND),y)
+@@ -368,12 +381,6 @@ else
+ KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
+-KODI_DEPENDENCIES += libudfread
 -else
--FFMPEG_CONF_OPTS += --disable-avresample
+-KODI_CONF_OPTS += -DENABLE_INTERNAL_UDFREAD=OFF
 -endif
 -
- ifeq ($(BR2_PACKAGE_FFMPEG_FFPROBE),y)
- FFMPEG_CONF_OPTS += --enable-ffprobe
- else
-diff --git a/package/gstreamer1/gst1-libav/Config.in b/package/gstreamer1/gst1-libav/Config.in
-index e58a3532f0..51bac04d5e 100644
---- a/package/gstreamer1/gst1-libav/Config.in
-+++ b/package/gstreamer1/gst1-libav/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GST1_LIBAV
- 	bool "gst1-libav"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # ffmpeg
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
-@@ -14,3 +15,6 @@ config BR2_PACKAGE_GST1_LIBAV
- 	  selected in the ffmpeg package.
- 
- 	  https://gstreamer.freedesktop.org/
-+
-+comment "gst1-libav needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index be0680084b..2ce548f095 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -246,7 +246,6 @@ config BR2_PACKAGE_OPENCV3_WITH_FFMPEG
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_FFMPEG
--	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	help
- 	  Use ffmpeg from the target system.
-diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
-index f1a2d02d50..f6976d8fb5 100644
---- a/package/opencv4/Config.in
-+++ b/package/opencv4/Config.in
-@@ -275,7 +275,6 @@ config BR2_PACKAGE_OPENCV4_WITH_FFMPEG
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_FFMPEG
--	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	help
- 	  Use ffmpeg from the target system.
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 99a2980a25..67c843e5f6 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -29,7 +29,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # qt5base-icu
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # re2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # ffmpeg, libglib2, libvpx, qt5base-dbus
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
- 	depends on BR2_PACKAGE_HAS_LIBEGL # qt5base-eglfs
+ # Remove versioncheck addon, updating Kodi is done by building a new
+ # buildroot image.
+ KODI_ADDON_MANIFEST = $(TARGET_DIR)/usr/share/kodi/system/addon-manifest.xml
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
