@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68116C25B10
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 17:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8601C25B74
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 17:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 208D740137;
-	Thu,  9 May 2024 17:23:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 646AC402F0;
+	Thu,  9 May 2024 17:23:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tf_Pl60nh8h4; Thu,  9 May 2024 17:23:47 +0000 (UTC)
+ id Ow7nYAV8L0aS; Thu,  9 May 2024 17:23:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0117402BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F157B4177D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0117402BD;
-	Thu,  9 May 2024 17:23:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D77581BF990
+	by smtp4.osuosl.org (Postfix) with ESMTP id F157B4177D;
+	Thu,  9 May 2024 17:23:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F3B801BF995
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 17:23:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1BE26064E
+ by smtp2.osuosl.org (Postfix) with ESMTP id EAC7A41DAC
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 17:23:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vMIzcuAjpusl for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ouzlZvS6onOU for <buildroot@lists.busybox.net>;
  Thu,  9 May 2024 17:23:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0657960608
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CF4141DA2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0657960608
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CF4141DA2
  for <buildroot@buildroot.org>; Thu,  9 May 2024 17:23:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5B2C86D3A; Thu,  9 May 2024 17:23:44 +0000 (UTC)
+ id 1BD3086D3A; Thu,  9 May 2024 17:23:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 19:03:10 +0200
+Date: Thu, 9 May 2024 19:03:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4947799a0452d9e6b23b252e9488054129fa4c44
-X-Git-Newrev: 49afbc1a19e66be92a8d91189fd5b321d1fecef4
+X-Git-Oldrev: 8f4c0ecd0ff1d9c18923c16fb34878ee126cd54a
+X-Git-Newrev: c5d0d4fad8698a97b696916048b68e08b0aeba89
 X-Patchwork-Hint: ignore
-Message-Id: <20240509172344.E5B2C86D3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 21.4.4-Omega
+Message-Id: <20240509172345.1BD3086D3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-peripheral-*: mass version
+ bump to Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,68 +66,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49afbc1a19e66be92a8d91189fd5b321d1fecef4
+commit: https://git.buildroot.net/buildroot/commit/?id=c5d0d4fad8698a97b696916048b68e08b0aeba89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added dependency to pugixml:
-https://github.com/xbmc/inputstream.adaptive/commit/31a51a8b0f265ffc5ac62e70c2447334d148c819
-
-Removed dependency to expat:
-https://github.com/xbmc/inputstream.adaptive/commit/8816b9089bb4cefc0bf2996db49c3bd1b81b42fe
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-adaptive/Config.in                      | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash   | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index 3efe3aa114..f1f98b8304 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
- 		|| BR2_mips64el || BR2_x86_64
- 	select BR2_PACKAGE_BENTO4
--	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_PUGIXML
- 	help
- 	  Kodi inputstream addon for several manifest types
- 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index e38191c0c4..b7a89a8a02 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index d4765d2b2c..a192ec62b5 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  f67cfef057f8842716db4521a8cd3966c37a1da8fc3fb297527f6f25be20688a  kodi-inputstream-adaptive-20.3.17-Nexus.tar.gz
-+sha256  0a1074fe04fb7e9500d578490b4cda12ecfcf433495e15e7bf65861527586167  kodi-inputstream-adaptive-21.4.4-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index ba4f6de61a..e1fe3f37ed 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+-sha256  7292431b26e3ea969967a02f42ce48cae7742398b148ca041470c17934d06272  kodi-peripheral-joystick-20.1.15-Nexus.tar.gz
++sha256  7a06470ba417758126fcb39701b95d0ae51a51951b68a2985d6ba444ab3e9106  kodi-peripheral-joystick-21.1.11-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index d81962562c..354932fd99 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.17-Nexus
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.4.4-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
-@@ -22,6 +22,6 @@ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = \
- 	LICENSES/GPL-2.0-or-later \
- 	LICENSES/RSA-MD
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 20.1.15-Nexus
++KODI_PERIPHERAL_JOYSTICK_VERSION = 21.1.11-Omega
+ KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+index 1d9579615b..5e960f2f46 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e6be386ebba44e214b91784ba6e1560020daac82024c18bea7be4719340b12bd  kodi-peripheral-xarcade-20.1.3-Nexus.tar.gz
++sha256  56f5e976c53f6911ce4179126807da82d8fec1ead092c2add1d97e48e3468d8a  kodi-peripheral-xarcade-21.0.0-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+index 3af3f2f4ff..3c89f0bb79 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = bento4 expat kodi
-+KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = bento4 kodi pugixml
- 
- $(eval $(cmake-package))
+-KODI_PERIPHERAL_XARCADE_VERSION = 20.1.3-Nexus
++KODI_PERIPHERAL_XARCADE_VERSION = 21.0.0-Omega
+ KODI_PERIPHERAL_XARCADE_SITE = $(call github,kodi-game,peripheral.xarcade,$(KODI_PERIPHERAL_XARCADE_VERSION))
+ KODI_PERIPHERAL_XARCADE_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_XARCADE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
