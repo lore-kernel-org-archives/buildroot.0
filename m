@@ -1,51 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D17D0C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FD6CC10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A012C6137E;
-	Thu,  9 May 2024 21:11:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3154541521;
+	Thu,  9 May 2024 21:14:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XqzjSf94YqVQ; Thu,  9 May 2024 21:11:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QHSq9byQZqZM; Thu,  9 May 2024 21:14:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 509D961349
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 079414154D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 509D961349;
-	Thu,  9 May 2024 21:11:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 56A741BF427
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:11:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 079414154D;
+	Thu,  9 May 2024 21:14:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DDCF1BF427
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:14:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D246835C6
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:11:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 664994154D
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:14:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8svV4MtaKlzb for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 21:11:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ijIFu1s3Epih for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 21:14:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DC708354B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DC708354B
- for <buildroot@buildroot.org>; Thu,  9 May 2024 21:11:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 25E7586DF0; Thu,  9 May 2024 21:11:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 23:10:59 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 981d25e5bcedee0dee8efcfbaa1dedb466a5445f
-X-Git-Newrev: 776dc1ed504421e0a67627eeff147840ff74503d
-X-Patchwork-Hint: ignore
-Message-Id: <20240509211139.25E7586DF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-mpmath: add CPE variables
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1709D41521
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1709D41521
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1709D41521
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 21:14:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 05C451C000A;
+ Thu,  9 May 2024 21:14:12 +0000 (UTC)
+Date: Thu, 9 May 2024 23:14:11 +0200
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20240509231411.07a42954@windsurf>
+In-Reply-To: <9e8a2daf-327b-4d22-88a6-fda7b38d4d78@mind.be>
+References: <20240407115439.872167-1-fontaine.fabrice@gmail.com>
+ <aba84998-3aca-4a42-b1ee-40ccf82fc80e@mind.be>
+ <CAPi7W828vTKG5W6=e9RvFMLC=0gge42GnQTNrr4m4qs2yNGfmQ@mail.gmail.com>
+ <20240509184648.5a3719f4@windsurf>
+ <9e8a2daf-327b-4d22-88a6-fda7b38d4d78@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715289253;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=eEaHqe4DQhJ2BYYfzrxTEGxgjKK6oedZ4zSZh1SxUWM=;
+ b=b8iYKST4T3w91hpkpTu4N31C7awYuAI4WsUkTHAhajLhdW8tf81mGkE200gtXySfmi/6vo
+ b/5sAv7DKiNi8Zm6rd/uAAVTmhmOF0cmPk932Om4FXbyDLBbEoqGlFr/ULgPkpEZkGT2e/
+ c7tN1B3kTwLk3/1UCS+gQtElHmTjrIMkbNco6GYNfZN8FOd96haF49QE+G3AvKJ/P1pynf
+ Yrfx/MgYeyGbLVcQWz/XzkxZypjgndKphKiEOb10sqPL7Fs4EFTgkxGyRj/qetgaUdR6yK
+ qacXhgr8TIqFXnjrj0gGTCJ2wsW8oETW7dmKYOoK0C212BnpB8ZiWpzKSvsKAQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=b8iYKST4
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-remi: fix pep517 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,49 +86,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8671479925681527695=="
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Vincent Fazio <vfazio@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8671479925681527695==
-Content-Type: text/plain
+On Thu, 9 May 2024 22:54:34 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=776dc1ed504421e0a67627eeff147840ff74503d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>   Theoretically I agree. However, IIUC, the dependencies that are checked are 
+> usually _runtime_ dependencies anyway, so we don't have it as an actual 
+> dependency.
 
-cpe:2.3:a:mpmath:mpmath is a valid CPE identifier for this package:
+Well, we do select them. But I guess you mean that since they are not
+guaranteed to be around at build time, there is no way to have a proper
+dependency check?
 
-  https://nvd.nist.gov/products/cpe/detail/2EF05D03-432D-470D-80AB-1àF50D308BD85
+If that's the case, then how are all the other packages that don't do
+--skip-dependency-check achieving a successful build?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-mpmath/python-mpmath.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/python-mpmath/python-mpmath.mk b/package/python-mpmath/python-mpmath.mk
-index caa6492961..cd19dd52be 100644
---- a/package/python-mpmath/python-mpmath.mk
-+++ b/package/python-mpmath/python-mpmath.mk
-@@ -10,5 +10,7 @@ PYTHON_MPMATH_SITE = https://mpmath.org/files
- PYTHON_MPMATH_SETUP_TYPE = setuptools
- PYTHON_MPMATH_LICENSE = BSD-3-Clause
- PYTHON_MPMATH_LICENSE_FILES = LICENSE
-+PYTHON_MPMATH_CPE_ID_VENDOR = mpmath
-+PYTHON_MPMATH_CPE_ID_PRODUCT = mpmath
- 
- $(eval $(python-package))
-
---===============8671479925681527695==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8671479925681527695==--
