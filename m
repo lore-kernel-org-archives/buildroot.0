@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 561D5C25B10
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:10:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C165FC10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 258D06129E;
-	Thu,  9 May 2024 21:10:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 955EF606A3;
+	Thu,  9 May 2024 21:11:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E9LBVAxS5PXH; Thu,  9 May 2024 21:10:57 +0000 (UTC)
+ id 1XHGW9xm1Dma; Thu,  9 May 2024 21:11:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32E4B612D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FC4C6129E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32E4B612D1;
-	Thu,  9 May 2024 21:10:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B70161BF427
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:10:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FC4C6129E;
+	Thu,  9 May 2024 21:11:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 11A241BF427
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A33E5612D1
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:10:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0BB9541E05
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:11:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R4t2WMx2SjXM for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 21:10:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JT8FUsm2_oel for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 21:11:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 86E656129E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86E656129E
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 86E656129E
- for <buildroot@buildroot.org>; Thu,  9 May 2024 21:10:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DAC3A1BF205;
- Thu,  9 May 2024 21:10:51 +0000 (UTC)
-Date: Thu, 9 May 2024 23:10:50 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240509231050.5365ecf0@windsurf>
-In-Reply-To: <20240509204218.77779-1-fontaine.fabrice@gmail.com>
-References: <20240509204218.77779-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715289052;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=hOnZHL+asNji5qv7k+y31TmKS1JgHDxcmphC2bne1HQ=;
- b=Nz8CKrwWMBDc3jKPHXRO0+F3lyCrm2Inrt/u1XFc5i5VGTCxVl6XVtbFM3kH8HuHnPTrQ+
- Li5FgAF7TobWBG4KRlPGidPetn45B4Pznt1JWpjF23vmfyz0z4IDiFNUovdsi9ewBXqnfb
- GfuyhhxX8CG41skMZKVLZSEpHpM+IrpQHYndMAPeQ+a8kZAw16s5gapi+EbOBFCwgXTfxy
- ycBqDXcrAlHL4GcRsDQ44YxGP836YBZNqV33wtLMMARNK+zPHI1Nbxq2fk/XnvJyIxA3do
- ftsRKe53mTHqc3dVoC3tYyqsb1yRbW5Ysk1pRZ3m6RNnNjLzuUsWA26u/XbRrA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Nz8CKrwW
-Subject: Re: [Buildroot] [PATCH 1/1] package/libp11: fix enginesdir
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DD9640491
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3DD9640491
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 21:11:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3408B86DF1; Thu,  9 May 2024 21:11:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 9 May 2024 23:11:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 776dc1ed504421e0a67627eeff147840ff74503d
+X-Git-Newrev: 21335682a1a8a2033047ffe59012c5946a1be9bd
+X-Patchwork-Hint: ignore
+Message-Id: <20240509211139.3408B86DF1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sdbus-cpp: fix required gcc version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,42 +59,68 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  9 May 2024 22:42:18 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=21335682a1a8a2033047ffe59012c5946a1be9bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> pkg-config doesn't return a libcrypto enginesdir prefixed with the
-> sysroot so drop unneeded call to xargs, readlink and sed
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libp11/libp11.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-> index cd4ed34297..dc489758aa 100644
-> --- a/package/libp11/libp11.mk
-> +++ b/package/libp11/libp11.mk
-> @@ -11,10 +11,8 @@ LIBP11_INSTALL_STAGING = YES
->  LIBP11_LICENSE = LGPL-2.1+
->  LIBP11_LICENSE_FILES = COPYING
->  
-> -# pkg-config returns a libcrypto enginesdir prefixed with the sysroot,
-> -# so let's rip it out.
+Since bump to version 2.0.0 in commit
+0f5bb364c629dd7fc91f4295f872e46d89c0feef sdbus-cpp package requires
+designated initializers support (C++20 feature), and fails to compile
+with gcc < 8:
 
-Well, this workaround was here for a reason. Since when it is no longer
-needed?
+/home/buildroot/autobuild/run/instance-2/output-1/build/host-sdbus-cpp-2.0.0/src/Proxy.cpp: In member function 'virtual sdbus::Slot sdbus::internal::Proxy::callMethodAsync(const sdbus::MethodCall&, sdbus::async_reply_handler, uint64_t, sdbus::return_slot_t)':
+/home/buildroot/autobuild/run/instance-2/output-1/build/host-sdbus-cpp-2.0.0/src/Proxy.cpp:146:90: sorry, unimplemented: non-trivial designated initializers not supported
+                                                                       , .floating = true });
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Fixes: 0f5bb364c629dd7fc91f4295f872e46d89c0feef
+ - http://autobuild.buildroot.net/results/1764ce0d48b390e430d2d8f54388013d3700e9d7
+
+Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sdbus-cpp/Config.in      | 6 +++---
+ package/sdbus-cpp/Config.in.host | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/sdbus-cpp/Config.in b/package/sdbus-cpp/Config.in
+index 85f149eaa1..010efaafcf 100644
+--- a/package/sdbus-cpp/Config.in
++++ b/package/sdbus-cpp/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_SDBUS_CPP
+ 	bool "sdbus-c++"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_SYSTEMD
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++20
+ 	help
+ 	  sdbus-c++ is a high-level C++ D-Bus library for Linux
+ 	  designed to provide expressive, easy-to-use API in modern C++.
+@@ -11,6 +11,6 @@ config BR2_PACKAGE_SDBUS_CPP
+ 
+ 	  https://github.com/Kistler-Group/sdbus-cpp
+ 
+-comment "sdbus-c++ needs systemd and a toolchain w/ C++, gcc >= 7"
++comment "sdbus-c++ needs systemd and a toolchain w/ C++, gcc >= 8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_SYSTEMD || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+diff --git a/package/sdbus-cpp/Config.in.host b/package/sdbus-cpp/Config.in.host
+index d62a65ae84..024a2e9a9c 100644
+--- a/package/sdbus-cpp/Config.in.host
++++ b/package/sdbus-cpp/Config.in.host
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_HOST_SDBUS_CPP
+ 	bool "host sdbus-c++"
+-	depends on BR2_HOST_GCC_AT_LEAST_7
++	depends on BR2_HOST_GCC_AT_LEAST_8 # C++20
+ 	help
+ 	  sdbus-c++ is a high-level C++ D-Bus library for Linux
+ 	  designed to provide expressive, easy-to-use API in modern C++.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
