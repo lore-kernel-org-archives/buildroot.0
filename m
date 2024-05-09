@@ -4,99 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C899DC10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93A7CC10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:58:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8551F6129E;
-	Thu,  9 May 2024 20:58:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6723661286;
+	Thu,  9 May 2024 20:58:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ewxKRzyoAZWd; Thu,  9 May 2024 20:58:04 +0000 (UTC)
+ id sukUFF9IB-QN; Thu,  9 May 2024 20:58:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80F9F61307
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FFA161307
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80F9F61307;
-	Thu,  9 May 2024 20:58:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4F2181BF31C
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:58:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FFA161307;
+	Thu,  9 May 2024 20:58:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6672C1BF31C
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4901D414A1
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:58:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6038584011
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:58:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZAtwrTgRPSst for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 20:58:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E28CA40491
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E28CA40491
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E28CA40491
- for <buildroot@buildroot.org>; Thu,  9 May 2024 20:58:00 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-34e0d47bd98so1320330f8f.0
- for <buildroot@buildroot.org>; Thu, 09 May 2024 13:58:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715288279; x=1715893079;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=CO3N6wiU7JKsrOp8IzkYvZWTvrNgn/c8C755qq8FyXE=;
- b=ua0LK4Av9QmSF3ZtC5COBDTzrQxrubgJ8CNWoQYnDa6+UO9nEKzfde9IYZoowIZ3um
- iB/UFLmsA1nydOKXKmVhFedkcDuzSYMl6qVaWB/pZzLnnsJ3Eoww+Nu0dmv/jdwtGJeH
- xglgtB5pz7WUkmRTHeWw3y0f1R7mV/Ihu31ybnfPxwvg0Kh+MZg/OuXLHYmwebggGDTj
- k93hjdjJzeJq95/OYEMlQWN6CN/q5x9TUqYFV70cenRr3Ud/+1lsfVy1giG+dQIL40Xv
- mQmZOb8y8+NS+0glxoTC0EIQwYuHS7vXUhlrlpgGSBIBqB+bnbGtXZglUzNVPsHnmTVG
- REDQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVSuYYP/njmfsqQSW0fu8QMqt2Rk3qRIe7e51hZXiwDTpI+5ZGwgkeAakrHRKCYhIQHwJ7OIUBfclHEpEfY+KWOmY5/Fil3ew==
-X-Gm-Message-State: AOJu0Yxq5edcSeSAb2ESIad7FVZcRDgwMNmthyeCcjS+OqIeZQamUPzP
- GZqv3rVI++rGthCFjJf1a6f4DkqzLUp2ZGqp/b9UFcSZ/QYuRFxQ6grmA57TOFg=
-X-Google-Smtp-Source: AGHT+IEcx4ujSHlMetLAtwHxF8LyCPC7IHSVyQ9TM+ubnNUfgpCDVWMPM/HKT0FrqmLG0Dq+iYGP9g==
-X-Received: by 2002:a5d:4452:0:b0:34d:a37d:d383 with SMTP id
- ffacd0b85a97d-350185d8857mr3063212f8f.22.1715288278324; 
- Thu, 09 May 2024 13:57:58 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-41fccbe8f9bsm37665605e9.6.2024.05.09.13.57.57
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 09 May 2024 13:57:57 -0700 (PDT)
-Message-ID: <f0d2f475-9fde-4437-9ea4-c3aee6752fa5@mind.be>
-Date: Thu, 9 May 2024 22:57:54 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 92jKLH9siqoT for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 20:58:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 358E48400F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 358E48400F
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 358E48400F
+ for <buildroot@busybox.net>; Thu,  9 May 2024 20:58:15 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6A7EF13F86A;
+ Thu,  9 May 2024 22:58:07 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 09 May 2024 22:58:07 +0200
+Date: Thu, 9 May 2024 22:58:07 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Baruch Siach <baruch@tkos.co.il>
+Message-ID: <Zj0432-NlSv5LYaa@landeda>
+References: <be7460b2010a5732e757b9cbc60b94d28b580273.1712568188.git.baruch@tkos.co.il>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Nayab Sayed via buildroot <buildroot@buildroot.org>
-References: <20240426-refresh-busybox-config-v1-1-c70cb5b60243@microchip.com>
- <20240501221838.07cb2684@windsurf>
-Content-Language: en-GB
-In-Reply-To: <20240501221838.07cb2684@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1715288279; x=1715893079; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=CO3N6wiU7JKsrOp8IzkYvZWTvrNgn/c8C755qq8FyXE=;
- b=AFWpMnWYdnfdvkc/OXeYaRiHOWScxhQP32mAjc+eWDNw2nGJb4zzzrwI5uKiu+gi7M
- NzidF4F4G2UDIlV7Ao8TCZZZ7LCKbsWPoICi8kvPJ9SMFhdHAQhH6ua68ZfL2zP8htH+
- c4+8Y78i0K/xIY41Ba490w4JyRhrdHY6hP8Q9f/KzWAJbWC6WUlEGl0j4ODOGu6BgjZA
- 55GcLnljLEqOhhZEyNxzHH15slK5KoVSrwoDi7fD9iUXygA5pZUb23djoQaQmuJjSvgi
- 5TwH7VrChkqZ3RwaPIEBSJikNWZmV/3LyP2RvfVpDcGscBcExEpsCTWkuldBOxA0vDg8
- HYYw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=AFWpMnWY
-Subject: Re: [Buildroot] [PATCH] package/busybox: refresh busybox.config
+Content-Disposition: inline
+In-Reply-To: <be7460b2010a5732e757b9cbc60b94d28b580273.1712568188.git.baruch@tkos.co.il>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1715288293;
+ bh=OPe92CQT/ykeD5CBc/nU4Ef9OuUFZy/dO6ozkvYUW/c=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=j/QmPa2QVMhNkDRWzqjzDIzHf0zwMDrepyFcB7EOwHzxwGst9uX0rrYL9XTU7zLUV
+ qIjOXKVYKh357xkEs66Y98wsJ6p25wzmzAwF6oPzG5KHC/yTIVpOoYghFkotWd7zm+
+ tFHmZjVizqtQHvFrs8/ilNDkA/ZInCT9KEUMBy2pNTXUWP5bycAVBMEwf7GSqyOOZN
+ oJCx8zGIgT6Ja7ltTYIAkdkW3ErgY6O0POGHCk2QJ5Akpwy+vIJ+9WOjpNHGtKcYl/
+ oloMtXzqBispJytmRVBW7o7saAn/70f+2MnBYbMQD/rHXckIvdpOuT43BZ8r3x4AgB
+ VMlgMiDB5xTLg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=j/QmPa2Q
+Subject: Re: [Buildroot] [PATCH] linux: add option to include git submodules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,79 +80,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Nayab Sayed <nayabbasha.sayed@microchip.com>
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Baruch, All,
 
+On 2024-04-08 12:23 +0300, Baruch Siach via buildroot spake thusly:
+> Some kernel users find it useful to store submodules in the kernel
+> source tree for cross source trees definitions. Add option to download
+> these submodules.
 
-On 01/05/2024 22:18, Thomas Petazzoni wrote:
-> Hello Nayab,
-> 
-> +Arnout in Cc (question below).
-> 
-> On Fri, 26 Apr 2024 14:10:58 +0530
-> Nayab Sayed via buildroot <buildroot@buildroot.org> wrote:
-> 
->> Refresh busybox.config to current version (1.36.1) default values.
->>
->> Signed-off-by: Nayab Sayed <nayabbasha.sayed@microchip.com>
->> ---
->> When `make busybox-update-config` is executed, the config
->> CONFIG_UDHCPC6_DEFAULT_SCRIPT became empty. But it's updated to reuse the
->> value from earlier bump as mentioned in the commit d68b617993bd
->> (package/busybox: update to 1.36.0).
-> 
-> Arnout: I don't really understand the reasoning in commit d68b617993bd.
+This is a litle odd, and Thomas and I were not very fan of such a patch,
+but we can see why it might be needed...
 
-  That's from a year ago, you expect too much from me :-)
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-> The commit log says:
-> 
->      Refresh busybox.config. All configs are set to the new defaults, except
->      for CONFIG_UDHCPC_DEFAULT_SCRIPT: for this one, reuse the script we also
->      use for DHCPv4. This is matches the behaviour previous to the bump,
->      where we had a single script handling both.
-> 
-> Did you mean to say CONFIG_UDHCPC6_DEFAULT_SCRIPT instead?
+Applied to master, thanks.
 
-  I guess... Although, CONFIG_UDHCPC_DEFAULT_SCRIPT's default value is 
-/usr/share/udhcpc/default.script and we set it to something different. Really 
-I'm not sure what I meant there.
+Regards,
+Yann E. MORIN.
 
+> ---
+>  linux/Config.in | 6 ++++++
+>  linux/linux.mk  | 3 +++
+>  2 files changed, 9 insertions(+)
 > 
-> In the commit, you do:
+> diff --git a/linux/Config.in b/linux/Config.in
+> index d520dc379f0e..3f5b088a193f 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -126,6 +126,12 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
+>  
+>  endif
+>  
+> +config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+> +	bool "Download also git submodules"
+> +	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
+> +	help
+> +	  Include git submodules in the kernel source tree.
+> +
+>  config BR2_LINUX_KERNEL_VERSION
+>  	string
+>  	default "6.6.22" if BR2_LINUX_KERNEL_LATEST_VERSION
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 4e12b36c1fd4..16d9f1947089 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -24,6 +24,9 @@ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
+>  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+>  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+>  LINUX_SITE_METHOD = git
+> +ifeq ($(BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES),y)
+> +LINUX_GIT_SUBMODULES = YES
+> +endif
+>  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
+>  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+>  LINUX_SITE_METHOD = hg
+> -- 
+> 2.43.0
 > 
-> +CONFIG_UDHCPC6_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
-> 
-> But then, why do we do that? udhcpc6 is not enabled in our
-> busybox.config. Due to this, when we refresh busybox.config, this
-> CONFIG_UDHCPC6_DEFAULT_SCRIPT gets dropped.
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-  Uh, I guess I didn't notice that udhcpc6 wasn't enabled?
-
-  Regards,
-  Arnout
-
-> 
->> @@ -336,7 +336,7 @@ CONFIG_TEST=y
->>   CONFIG_TEST1=y
->>   CONFIG_TEST2=y
->>   CONFIG_FEATURE_TEST_64=y
->> -# CONFIG_TIMEOUT is not set
->> +CONFIG_TIMEOUT=y
-> 
-> Nayab: this doesn't show up here when I refresh the file. Are you sure
-> this isn't a custom change on your side, unrelated to the Busybox file
-> refresh?
-> 
-> Best regards,
-> 
-> Thomas
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
