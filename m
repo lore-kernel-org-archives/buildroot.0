@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25E34C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:32:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 745E2C25B10
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:32:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DED54606DC;
-	Thu,  9 May 2024 20:32:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34FAF612F4;
+	Thu,  9 May 2024 20:32:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XXSRLlSKJMWT; Thu,  9 May 2024 20:32:11 +0000 (UTC)
+ id ARpmz-RRh45d; Thu,  9 May 2024 20:32:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA3EC612E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44DC26131A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA3EC612E6;
-	Thu,  9 May 2024 20:32:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D27871BF990
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:32:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44DC26131A;
+	Thu,  9 May 2024 20:32:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E0FA81BF31C
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:32:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD4A541FCE
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:32:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C8A8D61314
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:32:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id roIKE2W1YNm5 for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 20:32:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SaD--YGSPBOg for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 20:32:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8F1041FB9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8F1041FB9
- for <buildroot@buildroot.org>; Thu,  9 May 2024 20:32:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C1B3E86DCD; Thu,  9 May 2024 20:32:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 22:31:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d46b0936ce5a94f1f9867b3d4a19001c087bda99
-X-Git-Newrev: 0bab157dc835c1b304b0ba8773111914e9949447
-X-Patchwork-Hint: ignore
-Message-Id: <20240509203200.C1B3E86DCD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/s390-tools: bump version to 2.32.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 96DB3612CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96DB3612CE
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 96DB3612CE
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 20:32:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8360760004;
+ Thu,  9 May 2024 20:32:02 +0000 (UTC)
+Date: Thu, 9 May 2024 22:32:01 +0200
+To: Alexander Egorenkov <egorenar@linux.ibm.com>
+Message-ID: <20240509223201.2835ced1@windsurf>
+In-Reply-To: <20240429053410.57334-1-egorenar@linux.ibm.com>
+References: <20240429053410.57334-1-egorenar@linux.ibm.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715286722;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=CMG2hQUAmNAp0aI/LtjFInYrFn/eo/iCESVukARe9F0=;
+ b=IPbB9jnj8UR6iTaI96Yln3xXLoiQsMbIWx9rttKGMQhD6xQNDayG6XvYMMA3padg1E2Pug
+ /3z3lZ2MFINaSIxvp+h4uEc6peBY6zrafGtSPvsANFqb3qWnL9V4w6bI6jXQowFtOePIUZ
+ fqJUhB2LzVVBp/nb2nPgSU8LRgzqzcp+x1PFLTRHIwhw/tH8gi54+HOvrFC3fZbnzhbbyy
+ PbZPHKJHxKozluy8rR/9Cj4X1PGALAoEr4fZ70j+WccyLnA2T9VrcF9z6yE4KzhtrjY0mV
+ NDto6/1DCULQVvZ6QjMvL0i1hsA7sVHDzp7/6bLbUVR0l6bShU4GVB9nAsZc0Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IPbB9jnj
+Subject: Re: [Buildroot] [PATCH 1/1] package/s390-tools: bump version to
+ 2.32.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +83,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bab157dc835c1b304b0ba8773111914e9949447
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 29 Apr 2024 07:34:10 +0200
+Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
 
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/s390-tools/s390-tools.hash | 2 +-
- package/s390-tools/s390-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+> ---
+>  package/s390-tools/s390-tools.hash | 2 +-
+>  package/s390-tools/s390-tools.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
-index c70bf69f00..ccc86edd6a 100644
---- a/package/s390-tools/s390-tools.hash
-+++ b/package/s390-tools/s390-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  9e565701cc6df4808243027706ee0a76c5fc0c7f9aae0afce1479fd4ff68bcdf  s390-tools-2.30.0.tar.gz
-+sha256  f337c1898f243835fc187f21443266f05e3beb817b5fb09d555dc3887fe74b9b  s390-tools-2.32.0.tar.gz
- sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
-diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
-index 04d193a467..b0e156cc04 100644
---- a/package/s390-tools/s390-tools.mk
-+++ b/package/s390-tools/s390-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S390_TOOLS_VERSION = 2.30.0
-+S390_TOOLS_VERSION = 2.32.0
- S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
- S390_TOOLS_LICENSE = MIT
- S390_TOOLS_LICENSE_FILES = LICENSE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
