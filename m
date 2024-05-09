@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0846EC10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 14:32:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99CDCC25B4F
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 14:32:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E89C4156D;
-	Thu,  9 May 2024 14:31:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3CD741713;
+	Thu,  9 May 2024 14:32:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7jdDSI0sjAal; Thu,  9 May 2024 14:31:58 +0000 (UTC)
+ id cIhcGSMf8xoz; Thu,  9 May 2024 14:32:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7B9D41561
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6127741707
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7B9D41561;
-	Thu,  9 May 2024 14:31:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 21C531BF990
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:31:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6127741707;
+	Thu,  9 May 2024 14:32:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5805F1BF39C
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:31:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1BD98606D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36107400F5
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:31:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 43EcFtvP9Igz for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UDEB-uqNurQC for <buildroot@lists.busybox.net>;
  Thu,  9 May 2024 14:31:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B983606C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AC89402E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B983606C7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AC89402E4
  for <buildroot@buildroot.org>; Thu,  9 May 2024 14:31:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3389486BB8; Thu,  9 May 2024 14:31:47 +0000 (UTC)
+ id 54C8886BB7; Thu,  9 May 2024 14:31:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 16:15:18 +0200
+Date: Thu, 9 May 2024 16:15:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 69d06fda2aa1030b6ceb767ccec62ced1cc0c8b3
-X-Git-Newrev: 10a59697e9a05954380d8dfb440a1c22efd6edf2
+X-Git-Oldrev: 1a8676aa6e4b0e372a1a744eac6e53c90c03bf0e
+X-Git-Newrev: c65639ebd509cc6a9f6a616b6ef01a85ba32aff0
 X-Patchwork-Hint: ignore
-Message-Id: <20240509143147.3389486BB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/stress-ng: fix uclibc-ng build
+Message-Id: <20240509143147.54C8886BB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libjwt: security bump to version
+ 1.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,74 +66,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10a59697e9a05954380d8dfb440a1c22efd6edf2
+commit: https://git.buildroot.net/buildroot/commit/?id=c65639ebd509cc6a9f6a616b6ef01a85ba32aff0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following uclibc-ng build failure raised since bump to version
-0.17.07 in commit 6fb179b906a1755d77bda9e501c5335ac163f3cb and
-https://github.com/ColinIanKing/stress-ng/commit/e75ecbc8994e94b9e151b1191c1888bd2821fe72:
+- Use official tarball and so drop autoreconf
+- Update hash of LICENSE file, verbatim copy of the current MPL 2.0 with
+  https://github.com/benmcollins/libjwt/commit/ebebb5027f37a85c40c072a02681e206d31875ca
+- Fix CVE-2024-25189: libjwt 1.15.3 uses strcmp (which is not constant
+  time) to verify authentication, which makes it easier to bypass
+  authentication via a timing side channel.
 
-In file included from core-sched.c:25:
-core-sched.c: In function 'stress_set_sched':
-core-sched.c:170:22: error: 'struct shim_sched_attr' has no member named '__sched_priority'; did you mean 'sched_priority'?
-  170 |                 attr.sched_priority = (unsigned int)sched_priority;
-      |                      ^~~~~~~~~~~~~~
-
-Fixes: 6fb179b906a1755d77bda9e501c5335ac163f3cb
- - http://autobuild.buildroot.org/results/d7d38dbb10f7f188da8dccc44a84a3c46a720bed
+https://github.com/benmcollins/libjwt/compare/v1.15.3...v1.17.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-core-sched.c-fix-uclibc-ng-build.patch    | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/libjwt/libjwt.hash | 4 ++--
+ package/libjwt/libjwt.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/stress-ng/0002-core-sched.c-fix-uclibc-ng-build.patch b/package/stress-ng/0002-core-sched.c-fix-uclibc-ng-build.patch
-new file mode 100644
-index 0000000000..c9c4e22603
---- /dev/null
-+++ b/package/stress-ng/0002-core-sched.c-fix-uclibc-ng-build.patch
-@@ -0,0 +1,40 @@
-+From f8dc9f790251562c3a4635edd29d7674298cd5f7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 4 May 2024 17:52:32 +0200
-+Subject: [PATCH] core-sched.c: fix uclibc-ng build
-+
-+Since version 0.17.02 and commit
-+e75ecbc8994e94b9e151b1191c1888bd2821fe72, sched.h is not included before
-+including core-shim.h. The issue is that core-shim.h defines its own
-+sched_priority parameter in shim_sched_attr. When sched.h is included
-+after core-shim.h, the build will fail because __sched_priority will not
-+be found:
-+
-+In file included from core-sched.c:25:
-+core-sched.c: In function 'stress_set_sched':
-+core-sched.c:170:22: error: 'struct shim_sched_attr' has no member named '__sched_priority'; did you mean 'sched_priority'?
-+  170 |                 attr.sched_priority = (unsigned int)sched_priority;
-+      |                      ^~~~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/d7d38dbb10f7f188da8dccc44a84a3c46a720bed
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/ColinIanKing/stress-ng/commit/f8dc9f790251562c3a4635edd29d7674298cd5f7
-+---
-+ core-shim.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/core-shim.h b/core-shim.h
-+index bed4cf2f6..475aac512 100644
-+--- a/core-shim.h
-++++ b/core-shim.h
-+@@ -23,6 +23,8 @@
-+ #include <sys/uio.h>
-+ #endif
-+ 
-++#include <sched.h>
-++
-+ /*
-+  *  BeagleBoneBlack with 4.1.15 kernel does not
-+  *  define the following, these should be defined
+diff --git a/package/libjwt/libjwt.hash b/package/libjwt/libjwt.hash
+index 47e8b2c506..adc32c3a26 100644
+--- a/package/libjwt/libjwt.hash
++++ b/package/libjwt/libjwt.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  cb2fd95123689e7d209a3a8c060e02f68341c9a5ded524c0cd881a8cd20d711f  libjwt-1.15.3.tar.gz
+-sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
++sha256  b8b257da9b64ba9075fce3a3f670ae02dee7fc95ab7009a2e1ad60905e3f8d48  libjwt-1.17.0.tar.bz2
++sha256  3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04  LICENSE
+diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
+index 8929904d10..f143ba4b62 100644
+--- a/package/libjwt/libjwt.mk
++++ b/package/libjwt/libjwt.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-LIBJWT_VERSION = 1.15.3
+-LIBJWT_SITE = $(call github,benmcollins,libjwt,v$(LIBJWT_VERSION))
++LIBJWT_VERSION = 1.17.0
++LIBJWT_SITE = https://github.com/benmcollins/libjwt/releases/download/v$(LIBJWT_VERSION)
++LIBJWT_SOURCE = libjwt-$(LIBJWT_VERSION).tar.bz2
+ LIBJWT_DEPENDENCIES = host-pkgconf jansson
+-LIBJWT_AUTORECONF = YES
+ LIBJWT_INSTALL_STAGING = YES
+ LIBJWT_LICENSE = MPL-2.0
+ LIBJWT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
