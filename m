@@ -1,77 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65A6EC25B10
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 14:02:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79929C10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 14:07:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 17C7B61004;
-	Thu,  9 May 2024 14:02:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xL6mi_FU9d_r; Thu,  9 May 2024 14:02:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AE1060F9B
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9AE1060F9B;
-	Thu,  9 May 2024 14:02:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 456751BF3EE
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:02:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 307EE410B3
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:02:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1BFA402CA;
+	Thu,  9 May 2024 14:07:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HDo1LjeYsUD3 for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 14:02:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id PTZH0WgutOp7; Thu,  9 May 2024 14:07:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8183F40355
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8183F40355;
+	Thu,  9 May 2024 14:07:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 117A91BF39C
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:07:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F07C740355
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:07:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M4mft2lVX3Av for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 14:07:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 84A0F405A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84A0F405A1
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 84A0F405A1
- for <buildroot@buildroot.org>; Thu,  9 May 2024 14:02:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0F4F920002;
- Thu,  9 May 2024 14:02:15 +0000 (UTC)
-Date: Thu, 9 May 2024 16:02:15 +0200
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <20240509160215.363811c9@windsurf>
-In-Reply-To: <20240507162936.18729-2-vfazio@gmail.com>
-References: <20240428024210.11950-1-vfazio@gmail.com>
- <20240507162936.18729-1-vfazio@gmail.com>
- <20240507162936.18729-2-vfazio@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715263336;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=MCllmB81ouDc21txkE+O/gsTA7Ji4mRToRGxaGbivaw=;
- b=EOsdxgPa5q4WbT9caHwcXqXExmtboXiiFGKEPEza40TIlsbGFvmwfcyb/dK0m36Y8qW6jN
- FHdiHLra/MgiS+01NIDiboLtX1s3YfqkKQK6SNA8jpyDGeLLg4d3aDC+0FMUeoZQLet/zI
- CoKIKXvhRDWtf9a17j1Iz805pNViHnYQ65I1htjKUZf+tPXRk+2Ub273veSUgdskRhbOr3
- 1Syvu10SAFKvlPlotOrtV6wmS4L+PdrNUdwT/lKUZbMrnf0ZUlcryuaq0ea4Dj/G3honG6
- UN3/5pQDV9vpAtS6gDBXdOth/YexXxGokBx7F1jwJ3XxXq754msODfzWCAZ8Gw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EOsdxgPa
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/python3: drop unnecessary
- patches
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBD6C402CA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBD6C402CA
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 14:07:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C04E086B63; Thu,  9 May 2024 14:07:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 9 May 2024 16:02:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2a23bd9effcff987a512e1e437d7c7ae47b62985
+X-Git-Newrev: 00773beaafc4b490656fdb0b2b5073b4d929a05b
+X-Patchwork-Hint: ignore
+Message-Id: <20240509140752.C04E086B63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bluez5_utils: fix sixaxis build
+ without tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,67 +60,85 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  7 May 2024 11:29:36 -0500
-Vincent Fazio <vfazio@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=00773beaafc4b490656fdb0b2b5073b4d929a05b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Patches 0004 and 0009 relied upon environment variables that were used
-> to drive custom logic in distutils when executed by an external Python
-> interpreter. This issue should have been mostly addressed upstream [0],
-> but even if that was not the case, distutils is no longer a supported
-> installation method for packages to use for installation as of 09de823c.
-> As such, there shouldn't be a need to continue to patch it as setuptools
-> vendors its own distutils that supercedes the one provided by Python.
-> 
-> Patches 0010 and 0026 (see [1] [2] [3]) can be removed due to a fix
-> introduced in 3.7 [4].
-> 
-> Patch 0028 can be dropped since commit 3fed4245 removed the dependency
-> on a host provided python to build host-python3.
-> 
-> [0] https://github.com/python/cpython/commit/9731330d6f4d63d6d57c8e99c8d11ef1def42858
-> [1]: https://github.com/python/cpython/issues/67096
-> [2]: https://github.com/python/cpython/issues/75894
-> [3]: https://github.com/python/cpython/issues/66338
-> [4]: https://github.com/python/cpython/commit/14086cfc5eed8c5e78342d79e5db87a135d75fa8
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - reworded rationale for 0004 and 0009
-> ---
->  .checkpackageignore                           |  5 --
->  ...y-header-paths-for-cross-compilation.patch | 69 -------------------
->  ...e-shebang-of-Python-scripts-for-cros.patch | 35 ----------
->  ...ig.sh.in-ensure-sed-invocations-only.patch | 67 ------------------
->  ...thon-config.sh-don-t-reassign-prefix.patch | 53 --------------
->  ...-fix-building-on-older-distributions.patch | 47 -------------
->  6 files changed, 276 deletions(-)
->  delete mode 100644 package/python3/0004-Adjust-library-header-paths-for-cross-compilation.patch
->  delete mode 100644 package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
->  delete mode 100644 package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch
->  delete mode 100644 package/python3/0026-python-config.sh-don-t-reassign-prefix.patch
->  delete mode 100644 package/python3/0028-fix-building-on-older-distributions.patch
+Fix the following build failure raised since bump to version 5.75 in
+commit b890206876588ed0d16187abf49d35a45177cc3d and
+https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9f71892b63f6b65dab874a633d88ae2dcad93a16:
 
-Applied to master, thanks. I have also applied a follow-up patch that
-renumbers the remaining patches and refreshes them so they apply
-cleanly with "git am".
+/home/autobuild/autobuild/instance-2/output-1/host/lib/gcc/x86_64-buildroot-linux-musl/12.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: plugins/bluetoothd-sixaxis.o: in function `sixaxis_init':
+sixaxis.c:(.text.sixaxis_init+0x23): undefined reference to `udev_new'
 
-Thanks for all this work on the python3 integration, this is really
-great!
+Fixes: b890206876588ed0d16187abf49d35a45177cc3d
+ - http://autobuild.buildroot.org/results/c337d0f473c5fbb3e6cda1317ba06f5e2b16a43e
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...figure.ac-fix-sixaxis-build-without-tools.patch | 35 ++++++++++++++++++++++
+ package/bluez5_utils/bluez5_utils.mk               |  1 +
+ 2 files changed, 36 insertions(+)
+
+diff --git a/package/bluez5_utils/0002-configure.ac-fix-sixaxis-build-without-tools.patch b/package/bluez5_utils/0002-configure.ac-fix-sixaxis-build-without-tools.patch
+new file mode 100644
+index 0000000000..1e0e34cb8f
+--- /dev/null
++++ b/package/bluez5_utils/0002-configure.ac-fix-sixaxis-build-without-tools.patch
+@@ -0,0 +1,35 @@
++From f4795bf64dbf8778fc765b7dad1b1bfb365b48d7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 8 May 2024 19:54:16 +0200
++Subject: configure.ac: fix sixaxis build without tools
++
++Fix the following build failure with --enable-sixaxis --enable-udev
++--disable-tools raised since version 5.73 and
++9f71892b63f6b65dab874a633d88ae2dcad93a16:
++
++sixaxis.c:(.text.sixaxis_init+0x23): undefined reference to `udev_new'
++
++Fixes: http://autobuild.buildroot.org/results/c337d0f473c5fbb3e6cda1317ba06f5e2b16a43e
++
++Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=f4795bf64dbf8778fc765b7dad1b1bfb365b48d7
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 9dea70ddc1..8b3cdb4e8f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -226,7 +226,7 @@ AM_CONDITIONAL(MONITOR, test "${enable_monitor}" != "no")
++ 
++ AC_ARG_ENABLE(udev, AS_HELP_STRING([--disable-udev],
++ 		[disable udev device support]), [enable_udev=${enableval}])
++-if (test "${enable_tools}" != "no" && test "${enable_udev}" != "no"); then
+++if (test "${enable_udev}" != "no"); then
++ 	PKG_CHECK_MODULES(UDEV, libudev >= 196)
++ 	AC_DEFINE(HAVE_UDEV, 1, [Define to 1 if udev is required])
++ fi
++-- 
++cgit 1.2.3-korg
++
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 26f0f4afd4..d386ad57f0 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -9,6 +9,7 @@ BLUEZ5_UTILS_VERSION = 5.75
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ # 0001-configure.ac-Fix-disable-cups.patch
++# 0002-configure.ac-fix-sixaxis-build-without-tools.patch
+ BLUEZ5_UTILS_AUTORECONF = YES
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
+ BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
