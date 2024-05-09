@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9D3C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B3F0C10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 21:09:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C68D61331;
-	Thu,  9 May 2024 21:05:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 665DE61348;
+	Thu,  9 May 2024 21:09:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p_Ckti6sNwd9; Thu,  9 May 2024 21:05:25 +0000 (UTC)
+ id 0lXo_4vL4MM9; Thu,  9 May 2024 21:09:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70D926133B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56E9C61349
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70D926133B;
-	Thu,  9 May 2024 21:05:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ABB941BF427
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:05:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56E9C61349;
+	Thu,  9 May 2024 21:09:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D8271BF427
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:09:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A49B741606
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:05:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A3238354B
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 21:09:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cT46l6VuYOPF for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 21:05:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UfgzaEuAmNBd for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 21:09:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 02D97415E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02D97415E7
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 02D97415E7
- for <buildroot@buildroot.org>; Thu,  9 May 2024 21:05:21 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2688FC0003;
- Thu,  9 May 2024 21:05:19 +0000 (UTC)
-Date: Thu, 9 May 2024 23:05:18 +0200
-To: yegorslists--- via buildroot <buildroot@buildroot.org>
-Message-ID: <20240509230518.67b8e9b0@windsurf>
-In-Reply-To: <20240424122240.136386-1-yegorslists@googlemail.com>
-References: <20240424122240.136386-1-yegorslists@googlemail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715288719;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=VReXlUq9XxouhwLlxSACVXOAtSNAdLDnvW64YhB99Kk=;
- b=B25j7MUc0beWLvv7S8MggyiQlmaGqPJoXOerQKpWHvvQXVkTomYoPNLMI1TMOer7cG0sli
- NQLVC/kFYwUwc+M0L4z/eGMYSUQBEaeinw+7ESV5InYYjN79T8THnyJxwuesS7QYY3Ab82
- agIDFeN7uiueWgZfFepYcHsBqDLHp1mCWvbrVkrB+oJd5TBieQCsB9qo8pwLXF6UgJTdD5
- Kn2rleC2ZE4xaPClWKqtDXl1EaAOQKYP7YLONPtkNzBUxsK0NUz19nCTs7+UU8zq+wBbK0
- lJuOA0JwjpcioLypWwzPe6Jo6UlJdxKoplpnT+/J95bhnhEUW8S3uWetmo/yig==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=B25j7MUc
-Subject: Re: [Buildroot] [PATCH] package/libxmlb: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13B5181308
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 13B5181308
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 21:09:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EC65486DE4; Thu,  9 May 2024 21:09:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 9 May 2024 23:05:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8660d11b089ea628bbfb3ace61fd31a103bbd2c6
+X-Git-Newrev: 981d25e5bcedee0dee8efcfbaa1dedb466a5445f
+X-Patchwork-Hint: ignore
+Message-Id: <20240509210942.EC65486DE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/privoxy: fix build with root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,64 +59,71 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yegor,
+commit: https://git.buildroot.net/buildroot/commit/?id=981d25e5bcedee0dee8efcfbaa1dedb466a5445f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 24 Apr 2024 14:22:40 +0200
-yegorslists--- via buildroot <buildroot@buildroot.org> wrote:
+Set GROUP_T when installing configuration files as root to avoid the
+following build failure raised since commit
+b6816034ebddd522a8fef9daa454c28fa1230dd6:
 
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+/usr/bin/install: missing destination file operand after '/home/buildroot/instance-0/output-1/target/etc'
 
-I've applied, after fixing two things, one small, one more important.
+Fixes: b6816034ebddd522a8fef9daa454c28fa1230dd6
+ - http://autobuild.buildroot.org/results/eb4ccf248c9c5048e9b71058bb0311b1e0763883
 
-> diff --git a/package/libxmlb/Config.in b/package/libxmlb/Config.in
-> new file mode 100644
-> index 0000000000..702cc3d6f2
-> --- /dev/null
-> +++ b/package/libxmlb/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_LIBXMLB
-> +	bool "libxmlb"
-> +	depends on !BR2_STATIC_LIBS # glib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> +	depends on BR2_USE_MMU # glib2
-> +	depends on BR2_USE_WCHAR # glib2
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_LIBSOUP
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0002-GNUMakefile.in-fix-root-install.patch     | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-You select BR2_PACKAGE_LIBSOUP here, but you have no dependency on
-libsoup in the .mk file, I don't see any traces of libsoup being used
-in the libxmlb code base, and it builds just fine with only libglib2 as
-a dependency, so I dropped this (apparently bogus?) select of
-BR2_PACKAGE_LIBSOUP.
-
-
-> diff --git a/package/libxmlb/libxmlb.hash b/package/libxmlb/libxmlb.hash
-> new file mode 100644
-> index 0000000000..6f364d1e04
-> --- /dev/null
-> +++ b/package/libxmlb/libxmlb.hash
-> @@ -0,0 +1,4 @@
-> +# Locally computed:
-> +sha256  7050a3e43c4e1f53020cfbdfcb6fd5dc664c6c240faceb5ae3c8830423918262  libxmlb-0.3.19.tar.gz
-> +sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  LICENSE
-> +
-
-This extra line in the hash file caused a check-package warning, so I dropped it.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/privoxy/0002-GNUMakefile.in-fix-root-install.patch b/package/privoxy/0002-GNUMakefile.in-fix-root-install.patch
+new file mode 100644
+index 0000000000..89347c214e
+--- /dev/null
++++ b/package/privoxy/0002-GNUMakefile.in-fix-root-install.patch
+@@ -0,0 +1,35 @@
++From 25bd5ae1664f5603c05c72b2c38525602f33da0a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 31 Mar 2024 19:17:45 +0200
++Subject: [PATCH] GNUMakefile.in: fix root install
++
++Set GROUP_T when installing configuration files as root to avoid the
++following build failure since commit
++4b3b267db159dc23314de3062859481b7c397e32:
++
++/usr/bin/install: missing destination file operand after '/home/buildroot/instance-0/output-1/target/etc'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/eb4ccf248c9c5048e9b71058bb0311b1e0763883
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://lists.privoxy.org/pipermail/privoxy-devel/2024-March/000760.html
++---
++ GNUmakefile.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/GNUmakefile.in b/GNUmakefile.in
++index cf79aae1..db1bab59 100644
++--- a/GNUmakefile.in
+++++ b/GNUmakefile.in
++@@ -927,6 +927,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
++ 					$(ECHO)  " and to install the config files as that user and/or group!" ;\
++ 					$(ECHO)  " Please read INSTALL, and create a privoxy user and group!" ;\
++ 					$(ECHO)  "*******************************************************************" ;\
+++					GROUP_T=$(GROUP) ;\
++ 				fi ;\
++ 			else \
++ 				GROUP_T=$(GROUP) ;\
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
