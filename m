@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57B92C25B10
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:42:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 486FDC10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:43:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22DA640606;
-	Thu,  9 May 2024 16:42:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4009E41E8C;
+	Thu,  9 May 2024 16:42:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oh7vQbAxjL7G; Thu,  9 May 2024 16:42:40 +0000 (UTC)
+ id y1oyQ5Fwr8SB; Thu,  9 May 2024 16:42:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB21D406D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F5FA41E90
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB21D406D5;
-	Thu,  9 May 2024 16:42:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 450721BF337
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:42:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F5FA41E90;
+	Thu,  9 May 2024 16:42:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BDBE1BF337
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:42:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F0DA83ECB
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:42:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6999B41D91
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:42:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jxQe8QTkIOhk for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 16:42:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ws2Jf_7-CL2b for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 16:42:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20C8C83E68
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20C8C83E68
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 20C8C83E68
- for <buildroot@buildroot.org>; Thu,  9 May 2024 16:42:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A13920002;
- Thu,  9 May 2024 16:42:34 +0000 (UTC)
-Date: Thu, 9 May 2024 18:42:33 +0200
-To: cp0613@linux.alibaba.com
-Message-ID: <20240509184233.25d27458@windsurf>
-In-Reply-To: <20240409111635.5181-1-cp0613@linux.alibaba.com>
-References: <20240409111635.5181-1-cp0613@linux.alibaba.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2D8734039D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D8734039D
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2D8734039D
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 16:42:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F1A1C1BF203;
+ Thu,  9 May 2024 16:42:50 +0000 (UTC)
+Date: Thu, 9 May 2024 18:42:50 +0200
+To: Ludovic Desroches via buildroot <buildroot@buildroot.org>
+Message-ID: <20240509184250.0fa25dbb@windsurf>
+In-Reply-To: <20240409122233.2529454-1-ludovic.desroches@microchip.com>
+References: <20240409122233.2529454-1-ludovic.desroches@microchip.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715272955;
+ d=bootlin.com; s=gm1; t=1715272971;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=qhH4b4s+2RziwnQt4rfoSuti/p1V1HIvP+Z2YWn+3tE=;
- b=THiQ1qX9a+Bnb0T450/4JP4oyAWxARivUu5yEWXgufSNvOpL0eH4WYCsM6fT+i7tPpf9It
- efOXdqp5IgfSKzYFi33Hb+4KajVkIAaKH4OFF+w4H4r0KGNAphUseWH5LP+ru/jsF30ueE
- wWkB/U7k3GgwocAHIRtSnOXCvGlX0E/LV4/o7VT2AiccaAmhnAkkyX5xTXWne6uw5/Oa+h
- L4dLK6eey/+XUxOoShZYLFoAVGWnp0NNWuURxfiPzsMiwCAaaLTNIXyl+Yj3r9gWiplWDt
- WNrulEyGktaHhYG5Ro9lMjYv9u5eTHkzTa7dz9ZR0xfjyyiKA+qUDiC/JHUmBA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=scU/vUktAJ1K2CA2jbVMbWiDtUUhAIrNWhODB5qo3y8=;
+ b=o8epC2lpbFzAQGlnfVyAtCrg7iKG2PKBfYjofnoljeORukGvcd6bUKxCoj31p+wu7KwBVK
+ Db0v74C+nnE6WGFXY7xhbUoU5z0xz+GlOxpz6/+uag4F202PMOr20QTzsKPlkbuAsxoXEd
+ hXY6TEok0hBH53945ZeWD8jnSCwEGX66YK/UKup5IK8/xBqRs8KTcKQrEs/LCkTRtq6DVN
+ Li/PB3fMXufDTNkaIf2DxC2qOmG/QEZ0JWh9dayESjDRa3fEcCdm+7WomUqC9Usm35XEan
+ OnKBBvx/T5yCE9LPbx5IN6yPMURgYIZ8yMhT7qZNQTr0PckOMBhfVj0SJjujUQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=THiQ1qX9
-Subject: Re: [Buildroot] [PATCH] package/bpftool: fix riscv support
+ header.s=gm1 header.b=o8epC2lp
+Subject: Re: [Buildroot] [PATCH] package/evemu: add staging installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,30 +82,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Naumann Andreas <ANaumann@ultratronik.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  9 Apr 2024 19:16:35 +0800
-cp0613@linux.alibaba.com wrote:
+On Tue, 9 Apr 2024 14:22:33 +0200
+Ludovic Desroches via buildroot <buildroot@buildroot.org> wrote:
 
-> From: Chen Pei <cp0613@linux.alibaba.com>
+> To make the evdev library available for other packages, install it to the
+> staging directory.
 > 
-> bpftool already supports riscv, including rv64 and rv32, so support is enabled.
-> 
-> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@microchip.com>
 > ---
->  package/bpftool/Config.in | 1 +
+>  package/evemu/evemu.mk | 1 +
 >  1 file changed, 1 insertion(+)
 
-Thanks for your contribution, I've applied to our master branch, after
-adjusting the commit title. Indeed your commit is not "fixing riscv
-support", it is merely allowing the bpftool package to be enabled on
-riscv.
-
-Thanks again!
+Applied to master, thanks.
 
 Thomas
 -- 
