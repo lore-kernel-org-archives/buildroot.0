@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3561EC10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17BB2C25B10
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3CAF41EA4;
-	Thu,  9 May 2024 16:48:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54CDE40119;
+	Thu,  9 May 2024 16:48:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kWGU9t_Wa5iL; Thu,  9 May 2024 16:48:06 +0000 (UTC)
+ id nnJiBTjWlepN; Thu,  9 May 2024 16:48:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8625B41EB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F86640128
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8625B41EB0;
-	Thu,  9 May 2024 16:48:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ACF701BF337
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:48:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F86640128;
+	Thu,  9 May 2024 16:48:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B76D71BF337
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:48:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6A7B83ED2
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:48:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B21796125F
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:48:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id epFSfmptNL3g for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 16:48:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GYQeAjy7ok3p for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 16:48:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
  helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8A87883ED0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A87883ED0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AC97161002
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC97161002
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
  [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8A87883ED0
- for <buildroot@buildroot.org>; Thu,  9 May 2024 16:48:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7DF4040002;
- Thu,  9 May 2024 16:47:58 +0000 (UTC)
-Date: Thu, 9 May 2024 18:47:57 +0200
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AC97161002
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 16:48:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8950E40002;
+ Thu,  9 May 2024 16:48:28 +0000 (UTC)
+Date: Thu, 9 May 2024 18:48:27 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240509184757.1c3ead34@windsurf>
-In-Reply-To: <20240407114445.683504-2-bernd@kuhls.net>
+Message-ID: <20240509184827.61f436ec@windsurf>
+In-Reply-To: <20240407114445.683504-3-bernd@kuhls.net>
 References: <20240407114445.683504-1-bernd@kuhls.net>
- <20240407114445.683504-2-bernd@kuhls.net>
+ <20240407114445.683504-3-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715273279;
+ d=bootlin.com; s=gm1; t=1715273309;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=XwNKrx0ak+jhgT5mCXX+zCpUBrMZgShLqK90jRYI7KE=;
- b=PjE7Pu9V0Ddlh8YPeV7dmvqNjYpN/zd1XW5flZqzwm12IdcBSNUmGgTeB//OpSufhT8iPY
- 46avG9T31rrt3QCo6fXdkaaOuzrE1eAIzJIsHru1gPmFyEVZBlPnE/xj5O8GUgULLkZE3a
- SrOcMJATBC0ZhvUB3q1DknzqlliFZJdzVHpaqL5GmWeiNaQoUXt/938YVWnnOeKONW7tMV
- EClV0DaXXf9vMvG0G+lvmvelMX3XdFrXgv4o1Q3uzXfywaOzrsOpMqlkElIer1XFDf2f5E
- rCxwGWNLe3TYRiDCYYzconI/IXsOFXab2tWFQlcLh6TL9LvUI6knvRLqa03TfQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=yikBGYdLyBzlCWwmro1EQeON4PYtTBvp4xtbWn13CSI=;
+ b=HhbLRdbKkhP6YyJpVlEll6ts9dOk59JRnRkH+KaRgq1S2JBE10lLVQiK09KHYblfq/qocn
+ 6KZWmY3i1t6a9of+gDseQnJeoM9YirjKdfKMHsXgD6Zr5rz3yV1Eifp0NlbO1O31iCkLCe
+ +lBLKi19T6ijn1AqZ5KVwQqfmHZzg+6fskq88Q6Tr5KdM/4P2jutw1wBq+rBAk+Y0paxbt
+ J2tPX+6Tu9TDDEtu2mm7PpU6n25tMcBkw047fGHM5orYAs+8Sm4ZH2a8gmpa36jheSJ+S2
+ 9Y5q6mgdujsJ8nb7HdMCAxWHb66dzgKBkx2yQJrtt2a4TOXevjW/QR69NU8H1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PjE7Pu9V
-Subject: Re: [Buildroot] [PATCH v2 01/20] package/aubio: bump version
+ header.s=gm1 header.b=HhbLRdbK
+Subject: Re: [Buildroot] [PATCH v2 02/20] package/freeswitch: fix build with
+ ffmpeg 6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,33 +95,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  7 Apr 2024 13:44:26 +0200
+On Sun,  7 Apr 2024 13:44:27 +0200
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> The latest release from aubio dates back to 2019 while upstream is
-> active: https://github.com/aubio/aubio/issues/381
-> 
-> Current git HEAD includes support for ffmpeg 6.x:
-> https://github.com/aubio/aubio/commits/master/src/io/source_avcodec.c
-> 
-> and also removed the dependency to libavresample which was dropped in
-> ffmpeg 6.0:
-> https://github.com/aubio/aubio/commit/245deeadd81afc4ec5635b65d71646490c5c19fd
-> 
-> so we can just depend on the ffmpeg package without suboptions, quoting
-> configure log:
-> 
-> Checking for 'libavcodec'                : yes
-> Checking for 'libavformat'               : yes
-> Checking for 'libavutil'                 : yes
-> Checking for 'libswresample'             : yes
-> Checking for all libav libraries         : yes
-> 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  package/aubio/aubio.hash | 5 ++---
->  package/aubio/aubio.mk   | 7 +++----
->  2 files changed, 5 insertions(+), 7 deletions(-)
+>  ...002-mod_av-fix-build-with-ffmpeg-6.0.patch | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 package/freeswitch/0002-mod_av-fix-build-with-ffmpeg-6.0.patch
 
 Applied to master, thanks.
 
