@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F75C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:11:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61EBAC10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 566E041FB8;
-	Thu,  9 May 2024 20:11:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED44E40811;
+	Thu,  9 May 2024 20:11:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qiPf1iamul9M; Thu,  9 May 2024 20:11:53 +0000 (UTC)
+ id PECv3hZIyGV2; Thu,  9 May 2024 20:11:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4087B40309
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8310B41FC9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4087B40309;
-	Thu,  9 May 2024 20:11:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1BCA81BF31C
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:11:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8310B41FC9;
+	Thu,  9 May 2024 20:11:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BC84F1BF31C
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:11:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12F2740309
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:11:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A834241DEA
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:11:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JA2YamhgwZg9 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g3QIS16v9VSP for <buildroot@lists.busybox.net>;
  Thu,  9 May 2024 20:11:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDE7A40242
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D3B402C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDE7A40242
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46D3B402C3
  for <buildroot@buildroot.org>; Thu,  9 May 2024 20:11:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D61C486D77; Thu,  9 May 2024 20:11:50 +0000 (UTC)
+ id DFD5386D78; Thu,  9 May 2024 20:11:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 22:10:18 +0200
+Date: Thu, 9 May 2024 22:10:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 85f0941532c424df2d7b1cfc153546d02dd3cd12
-X-Git-Newrev: 157b9d1199f9f1101e76aedc552cfa524990acd6
+X-Git-Oldrev: 157b9d1199f9f1101e76aedc552cfa524990acd6
+X-Git-Newrev: 415398960f3d1c48d3610ce1b47bb8d37d17bfa3
 X-Patchwork-Hint: ignore
-Message-Id: <20240509201150.D61C486D77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/weston: bump to 13.0.1
+Message-Id: <20240509201150.DFD5386D78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wayland-protocols: bump to 1.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=157b9d1199f9f1101e76aedc552cfa524990acd6
+commit: https://git.buildroot.net/buildroot/commit/?id=415398960f3d1c48d3610ce1b47bb8d37d17bfa3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Announce:
-  https://lists.freedesktop.org/archives/wayland-devel/2024-April/043575.html
+  http://lists.freedesktop.org/archives/wayland-devel/2024-March/043537.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-April/043572.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-April/043581.html
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/weston/weston.hash | 6 +++---
- package/weston/weston.mk   | 2 +-
+ package/wayland-protocols/wayland-protocols.hash | 6 +++---
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index ded5d35275..5fa0c9d2be 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index 58c432e365..93d40a919c 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
 @@ -1,4 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2023-November/043326.html
--sha256  52ff1d4aa2394a2e416c85a338b627ce97fa71d43eb762fd4aaf145d36fc795a  weston-13.0.0.tar.xz
--sha512  8c656cdf24ec9429c76c64ebd2d58351991f5990a6d4b5900ac913243ad8e2c9c0fb1a748f018d177fbfd7e0a8836d0434d97acec287a8f977d47335ae30eacc  weston-13.0.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2024-April/043575.html
-+sha256  ea1566ab4f5ffce7e9fd4f7a1fca5b30caae4d50023bf459213994094e02b29a  weston-13.0.1.tar.xz
-+sha512  4a0fd0b1aec823219421d701030bc534576be64b71ede70c7d33f131e9e64c0e0dc209e62f75cecb9368df7604c1d5b2321932eccc818b529d246ec2e3114122  weston-13.0.1.tar.xz
- sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 5ae9c22973..499cf45fab 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
+-# From https://lists.freedesktop.org/archives/wayland-devel/2024-January/043400.html
+-sha256  94f0c50b090d6e61a03f62048467b19abbe851be4e11ae7b36f65f8b98c3963a  wayland-protocols-1.33.tar.xz
+-sha512  4584f6ac86367655f9db5d0c0ed0681efa31e73f984e4b620fbe5317df21790927f4f5317ecbbc194ac31eaf88caebc431bcc52c23d9dc0098c71de3cb4a9fef  wayland-protocols-1.33.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2024-April/043581.html
++sha256  71fd4de05e79f9a1ca559fac30c1f8365fa10346422f9fe795f74d77b9ef7e92  wayland-protocols-1.36.tar.xz
++sha512  5448b9aedc953ce6be0f378da900c195c8743cb6001f615823b5fc9cab3e3ee54271132055743278e10decef7f8e9dcdeef31593a2a12062575fb90eb0084be0  wayland-protocols-1.36.tar.xz
+ sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index 50a08d1988..c0dfe69401 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WESTON_VERSION = 13.0.0
-+WESTON_VERSION = 13.0.1
- WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
+-WAYLAND_PROTOCOLS_VERSION = 1.33
++WAYLAND_PROTOCOLS_VERSION = 1.36
+ WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
