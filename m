@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28C74C25B10
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73B2DC25B10
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:32:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E61341E60;
-	Thu,  9 May 2024 16:31:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38A0841E40;
+	Thu,  9 May 2024 16:32:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CpONOqBYLgGc; Thu,  9 May 2024 16:31:21 +0000 (UTC)
+ id 1zKdfjyELJBv; Thu,  9 May 2024 16:32:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF41841E65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7C3441E57
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF41841E65;
-	Thu,  9 May 2024 16:31:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DE2541BF337
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:31:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7C3441E57;
+	Thu,  9 May 2024 16:32:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D4B021BF337
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6AF941E61
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:31:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE75E83EC1
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:32:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wHMCjb40lD_6 for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 16:31:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id srFSDwpCjpQ0 for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 16:32:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2E0F041734
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0F041734
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2E0F041734
- for <buildroot@buildroot.org>; Thu,  9 May 2024 16:31:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F964FF808;
- Thu,  9 May 2024 16:31:15 +0000 (UTC)
-Date: Thu, 9 May 2024 18:31:14 +0200
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Message-ID: <20240509183114.37dde90e@windsurf>
-In-Reply-To: <20240423172653.349839-1-angelo.compagnucci@gmail.com>
-References: <20240423172653.349839-1-angelo.compagnucci@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715272275;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Mwl8i7NA/yE8OlKJRKHkekwrBc7J0GZuRJTRKtrPglM=;
- b=VJuC+3rVgyoFVvBt4tIlt0poLv6xhpB/Norw12PneGs+mb7oll0GIYoYViwKFxdKULFIQ1
- eSxtAxaDFpQJVm9RwFYyhQXf7lfe6Q25HoNYKZTLkIPIQLQQzaUjhLO0YeG9Ivis+aIDFN
- 65mTJh7PQiVO77k5lO4ncyeAWiruuDRn5fgx0+QOrJAnbK0er4NzJ6P4aaWCUsCnqhUHVJ
- Ltaqrxjbpn9bHbB8yUnTtgXnSvMPHIt6B4wex3293ajC9wiXmQErTD9VBHh3aUMNOuueRX
- JYUKw/BXt3+lRVqrYXNYWjSVuoml99oSCbArsBpSXVV6aCfKQVZbqyProEMQ3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VJuC+3rV
-Subject: Re: [Buildroot] [PATCH] package/libapparmor: bump to version 3.1.7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A1D483EBC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A1D483EBC
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 16:32:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 026F086CAE; Thu,  9 May 2024 16:32:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 9 May 2024 18:31:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5649202ddccdbc4d6e2a6aca8330c0846d9cd999
+X-Git-Newrev: 0c9ea82ea805fe00ca69836b0ca785af2728ec08
+X-Patchwork-Hint: ignore
+Message-Id: <20240509163227.026F086CAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/imagemagick: bump to version
+ 7.1.1-31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,34 +60,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 23 Apr 2024 19:26:53 +0200
-Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0c9ea82ea805fe00ca69836b0ca785af2728ec08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Bump also apparmor relative package.
-> Change also the download URL to gitlab where the development
-> activities were moved.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/apparmor/apparmor.hash       | 4 ++--
->  package/apparmor/apparmor.mk         | 5 +++--
->  package/libapparmor/libapparmor.hash | 4 ++--
->  package/libapparmor/libapparmor.mk   | 6 +++---
->  4 files changed, 10 insertions(+), 9 deletions(-)
+For change log, see [1].
 
-Applied to master, thanks.
+License hash file changed, due to the addition of an URL. See [2].
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes: [3]
+
+Some 32 bit architectures were failing at runtime with the message:
+
+    FATAL: time limit exceeded 'file.png' @ fatal/cache.c/GetImagePixelCache/1702
+
+The fix is included in 7.1.1-23.
+
+[1] https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
+[2] https://github.com/ImageMagick/ImageMagick/commit/2c87d7da1b1db4573a37bd7933dfbf772ac3eecf
+[3] https://github.com/ImageMagick/ImageMagick/issues/6891
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/imagemagick/imagemagick.hash | 4 ++--
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index fd80316ec5..30a12220dd 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  09402e5f17c6575ef9f010bb2e21ae1710f1f3426f115ad4317ee9129c32608e  imagemagick-7.1.1-21.tar.gz
+-sha256  8cceeb67d4e783cb63075c7311fdb990fa0369ee80fbd0f481064cd02386ca2d  LICENSE
++sha256  c82210ea3fdbd044b656ba3d5b42df1da9a18e78fc0e500169bad70d3b0d9ba3  imagemagick-7.1.1-31.tar.gz
++sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 53cf02abf4..b2d3e755a6 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.1.1-21
++IMAGEMAGICK_VERSION = 7.1.1-31
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
