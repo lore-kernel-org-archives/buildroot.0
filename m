@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17631C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 14:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBE12C25B4F
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 14:32:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D55EB418D2;
-	Thu,  9 May 2024 14:32:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B027241C5E;
+	Thu,  9 May 2024 14:32:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KB1R8ZPEHP1G; Thu,  9 May 2024 14:32:17 +0000 (UTC)
+ id Ze-Um56KZQIt; Thu,  9 May 2024 14:32:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12137418CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08B8041B93
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12137418CE;
-	Thu,  9 May 2024 14:32:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 316301BF990
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:32:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08B8041B93;
+	Thu,  9 May 2024 14:32:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D0AA1BF39C
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:32:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50C4783D6F
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:32:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86B8741574
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 14:32:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6NdpPFi1JJPJ for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 14:32:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2gXgIizuA3Vw for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 14:32:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1A4C483D9D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A4C483D9D
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1A4C483D9D
- for <buildroot@buildroot.org>; Thu,  9 May 2024 14:32:08 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5FFEC60003;
- Thu,  9 May 2024 14:32:05 +0000 (UTC)
-Date: Thu, 9 May 2024 16:32:04 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F14B041736
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F14B041736
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F14B041736
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 14:32:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 66223E0007;
+ Thu,  9 May 2024 14:32:09 +0000 (UTC)
+Date: Thu, 9 May 2024 16:32:08 +0200
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240509163204.46e17d5c@windsurf>
-In-Reply-To: <20240508201130.706168-1-fontaine.fabrice@gmail.com>
-References: <20240508201130.706168-1-fontaine.fabrice@gmail.com>
+Message-ID: <20240509163208.04cd9231@windsurf>
+In-Reply-To: <20240508170307.31378-1-fontaine.fabrice@gmail.com>
+References: <20240508170307.31378-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715265125;
+ d=bootlin.com; s=gm1; t=1715265129;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=1FyMZTziHY0tV5+OejMS+EhoCWWLKaJsfKkUqxu+olM=;
- b=oeC/mMUTp39hsAvBIZseHiReNG4REXKLCRN2W3dErKPUOIRCmuV2utT7mH2/euUoIBJ4YY
- TVsB9mJ3DudkY0aWeqncfVszRA+Ykt6AJwk6zUxln6PZ7JWtQDGMWeH3SocC4cTOcziKqM
- n2e8w3xi9yumWfwGO2AkUeH9hwAj8JKJ1MR/qv4Y7nyfNtedMnvmyshhOLY7FLKzCelf7X
- PV2FlA0xshrrHyDPOsDkhS0b345tX2mg7IfBQiLNwAbLJ9Q3GsNckAK7rsj4dViRJS14ig
- UKmJLjq2WMWn6Hikoz+F0RjtFpFD08DghIMtLLqLLI+wHVg4TmS9ZLa8iw/f/A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=6UrASqE+55VvDID4l+LbHmgNK2RRoxQ4qR8uYVpxDJo=;
+ b=VA3foHRAOqSgNqBf1DxrQlm/tktY3R3hyw3nyTe0MqTnuivArZpR1sEwxBOoC2rxgeTyZ1
+ 09pb1POdjCkHZY1axOPAEXVNIvz3MwnuVCXh+b1BADi/I8DsN6z01OLykSrk5KPUJYM858
+ bMu1B34MnhiZHSXQM6I4E0SAjGyWOeEllwpRUmdTKSc/uInsG8HwhsdP8Wzlow4pOxSoSc
+ ZY/3ZGdUgXhrEkgbPdIzfeC6QiKTPFyDLZTNJ/wN0Wz/IXqaxG7GXDcYT1fXujAEciyLwd
+ Pnb1ssSqfUl6FHONQLJU9QlM4Mf0D0ril791++ARb2bRebb5bc359zUbC5gcwQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oeC/mMUT
-Subject: Re: [Buildroot] [PATCH 1/1] package/stress-ng: fix uclibc-ng build
+ header.s=gm1 header.b=VA3foHRA
+Subject: Re: [Buildroot] [PATCH 1/1] package/libunwind: bump to version 1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,33 +82,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  8 May 2024 22:11:30 +0200
+On Wed,  8 May 2024 19:03:07 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix the following uclibc-ng build failure raised since bump to version
-> 0.17.07 in commit 6fb179b906a1755d77bda9e501c5335ac163f3cb and
-> https://github.com/ColinIanKing/stress-ng/commit/e75ecbc8994e94b9e151b1191c1888bd2821fe72:
+> Switch site to get latest release
 > 
-> In file included from core-sched.c:25:
-> core-sched.c: In function 'stress_set_sched':
-> core-sched.c:170:22: error: 'struct shim_sched_attr' has no member named '__sched_priority'; did you mean 'sched_priority'?
->   170 |                 attr.sched_priority = (unsigned int)sched_priority;
->       |                      ^~~~~~~~~~~~~~
-> 
-> Fixes: 6fb179b906a1755d77bda9e501c5335ac163f3cb
->  - http://autobuild.buildroot.org/results/d7d38dbb10f7f188da8dccc44a84a3c46a720bed
+> https://github.com/libunwind/libunwind/releases/tag/v1.8.1
+> https://github.com/libunwind/libunwind/releases/tag/v1.8.0
+> https://github.com/libunwind/libunwind/releases/tag/v1.7.2
+> https://github.com/libunwind/libunwind/releases/tag/v1.7.1
+> https://github.com/libunwind/libunwind/releases/tag/v1.7.0
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...002-core-sched.c-fix-uclibc-ng-build.patch | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/stress-ng/0002-core-sched.c-fix-uclibc-ng-build.patch
+>  package/libunwind/libunwind.hash | 2 +-
+>  package/libunwind/libunwind.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
