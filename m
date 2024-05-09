@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CFD5C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B098C25B77
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:46:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BE666131B;
-	Thu,  9 May 2024 20:46:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01FE961348;
+	Thu,  9 May 2024 20:46:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w14-VapyqVAt; Thu,  9 May 2024 20:46:46 +0000 (UTC)
+ id 1lMJTTQNBtHg; Thu,  9 May 2024 20:46:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0168561356
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D7A461355
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0168561356;
-	Thu,  9 May 2024 20:46:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 42DA61BF98E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D7A461355;
+	Thu,  9 May 2024 20:46:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FCAD1BF995
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67128408A5
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7E4241FDE
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:46:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PbwBsReqhWMm for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 20:46:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iwJgRMwNJsDA for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 20:46:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DF3541E06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 008FA41FE0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DF3541E06
+ by smtp4.osuosl.org (Postfix) with ESMTP id 008FA41FE0
  for <buildroot@buildroot.org>; Thu,  9 May 2024 20:46:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2089C86A98; Thu,  9 May 2024 20:46:28 +0000 (UTC)
+ id F111F86ADA; Thu,  9 May 2024 20:46:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 22:44:50 +0200
+Date: Thu, 9 May 2024 22:45:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b5e1585961f5ceb0522246532c53844ce0a987c
-X-Git-Newrev: 1bcb51517ccbe79e5c37f211a20d1d02689298e0
+X-Git-Oldrev: 8eea9f5783c6ba3e2cba245fcca71dd4017c2fdc
+X-Git-Newrev: 5b847f88fef768c8e79422db4193533b3a7488ea
 X-Patchwork-Hint: ignore
-Message-Id: <20240509204628.2089C86A98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luajit: drop useless post-extract
- hook
+Message-Id: <20240509204628.F111F86ADA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board: update hashes for generated achives
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,58 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bcb51517ccbe79e5c37f211a20d1d02689298e0
+commit: https://git.buildroot.net/buildroot/commit/?id=5b847f88fef768c8e79422db4193533b3a7488ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 2.1, LuaJIT follows a rolling-release scheme, which means
-that any commit is as good as any other; LuaJIT uses the comitter's UNIX
-timestamp as its semver patch level. It uses the git-attribute
-export-subst for the .relver file that contains the %ct placeholder for
-git-archive to expand it.
-
-In c9dcd9e459d6 (package/luajit: bump to version 41fb94defa8f...), we
-switched to such an upstream version. There was some confusion around
-the handling of the git-attribute and where/when it is generated, and
-the first revision of the patch used the git download method, so had to
-use post-extract hooks to do the replacement, but the second iteration
-kept retrieving the archive generated by github, which has the
-replacement already done, but the post-extract hooks were not dropped
-although now useless...
-
-With the current code, it is easy to bump the LuaJit version and forget
-to update the timestamp stored in the .relver file, which would override
-the value that was generated on the github side.
-
-Since the post-extract hook is useless, drop it.
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Francois Perrad <fperrad@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Arnout: also update acmesystems/acqua-a5]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/luajit/luajit.mk | 9 ---------
- 1 file changed, 9 deletions(-)
+ board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ board/radxa/rock5b/patches/linux/linux.hash                           | 2 +-
+ board/toradex/apalis-imx6/patches/linux/linux.hash                    | 2 +-
+ board/toradex/apalis-imx6/patches/uboot/uboot.hash                    | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 06c8993391..693e22630b 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -33,15 +33,6 @@ LUAJIT_HOST_CC = $(HOSTCC) -m32
- LUAJIT_XCFLAGS += -DLUAJIT_DISABLE_GC64
- endif
- 
--# emulation of git archive with .gitattributes & export-subst
--# Timestamp of the $(LUAJIT_VERSION) commit, obtained in the LuaJit
--# repo, with:   git show -s --format=%ct $(LUAJIT_VERSION)
--define LUAJIT_GEN_RELVER_FILE
--	echo 1693350652 >$(@D)/.relver
--endef
--LUAJIT_POST_EXTRACT_HOOKS = LUAJIT_GEN_RELVER_FILE
--HOST_LUAJIT_POST_EXTRACT_HOOKS = LUAJIT_GEN_RELVER_FILE
--
- # We unfortunately can't use TARGET_CONFIGURE_OPTS, because the luajit
- # build system uses non conventional variable names.
- define LUAJIT_BUILD_CMDS
+diff --git a/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash b/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
+index 659be67590..3734f22c95 100644
+--- a/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
++++ b/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  fef34111a07d9e5aa97b0840355a367f806a17e029583830e9deaa747ce47824  at91bootstrap3-v3.10.3-git3.tar.gz
++sha256  fef34111a07d9e5aa97b0840355a367f806a17e029583830e9deaa747ce47824  at91bootstrap3-v3.10.3-git4.tar.gz
+diff --git a/board/radxa/rock5b/patches/linux/linux.hash b/board/radxa/rock5b/patches/linux/linux.hash
+index 18074c0aee..7cf26c66d2 100644
+--- a/board/radxa/rock5b/patches/linux/linux.hash
++++ b/board/radxa/rock5b/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  255961f7ea8ea82c42f19be049f94a690f9cb171fe8562ea87868ac5cabc3eb9  linux-52f51a2b5ba178f331af62260d2da86d7472c14b-git3.tar.gz
++sha256  41c0ee93d8751e4bdb85fae24b3e84fc6904a6755c485244eff2e6f8ca38a0c7  linux-52f51a2b5ba178f331af62260d2da86d7472c14b-git4.tar.gz
+diff --git a/board/toradex/apalis-imx6/patches/linux/linux.hash b/board/toradex/apalis-imx6/patches/linux/linux.hash
+index 277abc20aa..0697228724 100644
+--- a/board/toradex/apalis-imx6/patches/linux/linux.hash
++++ b/board/toradex/apalis-imx6/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  41551a4f44bdfe18f68bedc0fd9c644d8657d2ee63215cc348a708cfd5b7e6f2  linux-d899927728beca8357a5b4120b690cb3c1d80844-git3.tar.gz
++sha256  722ece80ee8dbcc04309c89139da8b1df6974e1ab4bb66d04c1906a576fa46fa  linux-d899927728beca8357a5b4120b690cb3c1d80844-git4.tar.gz
+diff --git a/board/toradex/apalis-imx6/patches/uboot/uboot.hash b/board/toradex/apalis-imx6/patches/uboot/uboot.hash
+index d451219cb4..6132435fed 100644
+--- a/board/toradex/apalis-imx6/patches/uboot/uboot.hash
++++ b/board/toradex/apalis-imx6/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2fa23d10559c17362ef92e5d7e636b388e9af3784c9b03e86c702a71df100f36  uboot-30a1208727729dae22cb42f9ba9ba17efe5e6f77-git3.tar.gz
++sha256  f8d3e45d7944c9620ecacbd8f8824db42134c70e3b55efd6dab127bf763e48c2  uboot-30a1208727729dae22cb42f9ba9ba17efe5e6f77-git4.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
