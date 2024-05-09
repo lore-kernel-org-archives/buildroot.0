@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA0EBC10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87875C10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A40F613BA;
-	Thu,  9 May 2024 20:47:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 164206139E;
+	Thu,  9 May 2024 20:47:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 29iKdisvhqQD; Thu,  9 May 2024 20:47:12 +0000 (UTC)
+ id ueLVj_TEC2Ep; Thu,  9 May 2024 20:47:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A009613BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07FA7613BB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A009613BB;
-	Thu,  9 May 2024 20:47:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 134501BF98E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07FA7613BB;
+	Thu,  9 May 2024 20:47:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E8471BF990
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:46:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B36F6612E2
+ by smtp1.osuosl.org (Postfix) with ESMTP id A146A83FFD
  for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:46:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I5YqxkBm2qFk for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cBOH33KNp_Te for <buildroot@lists.busybox.net>;
  Thu,  9 May 2024 20:46:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1688612F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D3C383FF4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D1688612F3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D3C383FF4
  for <buildroot@buildroot.org>; Thu,  9 May 2024 20:46:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD84886ADA; Thu,  9 May 2024 20:46:28 +0000 (UTC)
+ id 88CC086DD1; Thu,  9 May 2024 20:46:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 22:45:06 +0200
+Date: Thu, 9 May 2024 22:44:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c316a83a8e8272cb3e039eb6902042b9468cddf2
-X-Git-Newrev: c68d67bfad9223bba5eb1da2a50c80f775c71c39
+X-Git-Oldrev: 1e87da9eab3db01210c9cb6fe5607140c81f980c
+X-Git-Newrev: 3035fc23dec383ddcbbc32a605c029c337f7c5c7
 X-Patchwork-Hint: ignore
-Message-Id: <20240509204628.CD84886ADA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tar: security bump to version 1.35
+Message-Id: <20240509204628.88CC086DD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/download: even more reproducible
+ archives (until next time)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,136 +66,148 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c68d67bfad9223bba5eb1da2a50c80f775c71c39
+commit: https://git.buildroot.net/buildroot/commit/?id=3035fc23dec383ddcbbc32a605c029c337f7c5c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2022-48303: GNU Tar through 1.34 has a one-byte out-of-bounds
-read that results in use of uninitialized memory for a conditional
-jump. Exploitation to change the flow of control has not been
-demonstrated. The issue occurs in from_header in list.c via a V7
-archive in which mtime has approximately 11 whitespace characters.
+Currently, when we generate archives, we rely on a few assumptions and
+mechanisms to ensure reproducilibity. So far, we mostly accounted for
+the content (i.e. content, filenames, and path) of the files we
+archived, and this is OK (git and svn should provide reproducilbe
+content by design, and cargo and go vendoring are also supposed to be
+generating reproducible content.
 
-With the bump to 1.35, the build will fail on systems that are not
-Y2038, such as some uClibc configurations.
+However, tarballs do not only contain the content of the files; they
+also have a few metadata about those files. Beyond filenames and paths,
+which are already reproducible, there is the timestamp, the user and
+group name and ID. Those are also accounted for and made reproducible.
 
-In order to preserve the previous behavior, pass --disable-year2038.
-See the gnulib documentation for details [1]. Contrary to what the
-option name might suggest, it doesn't really disable Y2038 support,
-but only the check that the system is Y2038 compliant. So even with
---disable-year2038, if the system is Y2038 compliant (uses a 64-bit
-arch, uses the musl C library, or uses the glibc C library with
-BR2_TIME_BITS_64=y), tar will be Y2038 compliant.
+The final touch (so far!) is that files have access rights (aka mode),
+and those too are stored in tarballs. So far we accounted for those by
+ensuring that Buildroot would always run under a known umask, thus
+generating files with reproducible modes.
 
-Update hash of COPYING (http replaced by https)
+That falls short in one case that we did not envision, though: a shared
+download directory, where extended attributes are set to provide a
+default ACL that is permissive, to allow two or more users (with
+different uid and gid) to all read and write to such a directory. This
+is trivially achieved with something like:
 
-[0] https://lists.gnu.org/archive/html/info-gnu/2023-07/msg00005.html
-[1] https://www.gnu.org/software/gnulib/manual/html_node/Avoiding-the-year-2038-problem.html
+    $ mkdir -p "${BR2_DL_DIR}"
+    $ setfacl -m 'default:user::rwx' "${BR2_DL_DIR}"
+    $ setfacl -m 'default:group::rwx' "${BR2_DL_DIR}"
+    $ setfacl -m 'default:other::rwx' "${BR2_DL_DIR}"
 
-For the version bump:
+This has the effect that:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d4d483451f0a305781b94b96c15a6cf4b489cd84)
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+  - files below BR2_DL_DIR are all set with user, group, and world read
+    and write access,
+  - files executable by the owner will also be group and world
+    executable,
+  - directories are user, group, and world readable, writable, and
+    searchable.
 
-For the Y2038 fix:
+This means that all the archives we generate from files in BR2_DL_DIR
+will have modes that are different from those generated on other systems,
+where only the traditional umask is used.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7f1088f9cae9f191740423a0084bb31f94af2e75)
+There are various solutions to solve that issue:
+
+  - detect the situation and abort: that's not nice, because users have
+    a legitimiate reason to want to share that directory,
+
+  - find a solution for each affected download mechanism: git, svn, hg,
+    cvs, bzr... and for each of the affected vendoring mechanism: go and
+    cargo [0]; this is not nice, because it means a lot of repetition,
+    with the risk that they diverge over time (e.g. one is fixed for a
+    newer issue, while the others are left out due to an oversight...)
+
+  - find a single, common solution that works in all cases, whatever the
+    download mechanism and/or vendoring: this is the best, because we
+    can extend and fix it once and everything else benefits from it.
+
+We obviously go for the third option.
+
+The common solution is rather simple. When creating the tarball in
+support/download/helpers, give an option to tar to set the group and
+other permissions to those of the user, but without write permission.
+
+This implies that we must bump the version-suffix for the download
+backends [1] and for the vendoring post-processes. It also implies that
+the hash may change, under the following circumstances:
+
+- Symlinks normally have permissions 0777 (because symlink permissions
+  are in fact meaningless). They will now have permission 0755 in the
+  tarball.
+- If the original tarball (for vendored go and cargo packages) contained
+  files that are readable or executable by owner but not by group or
+  other, they will now be readable resp. executable by group and other
+  too. Note that for writeable it is not the case, because those were
+  already handled by our 0022 umask (which makes them not writeable by
+  group and other).
+
+Because the hash may change, we need to update the BR_FMT_VERSION for
+everything that creates tarballs. Go and cargo didn't have one up to
+now, the the previous commit added the possibility to give one. The ones
+for git and svn have to be updated. Since it is now possible to have a
+suffix for both the VCS and the post-processing, change the suffix to
+something more descriptive than "-brX", i.e. -git3 for git, -go1 for
+golang, etc.
+
+The hash updates and filename changes will be handled in a follow-up
+commit.
+
+[0] Note however that the vendoring is currently not done in a
+sub-directory of BR2_DL_DIR, but the cargo and go caches are located
+there. Files that get copied from there to the vendoring area would be
+tainted as well, and thus we want to address that situation as well.
+
+[1] we currently do not have a CVS version suffix, because we do not
+guarantee the reproducilibity of CVS archives (we can't); for hg, we are
+currently using hg's own archive tool, and presumably that does not have
+the mode issue because it is not using the checked-out files. Still,
+doing the mode fix in a single location will help extend those two
+backends in the future (if that ever happens...).
+
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...Fix-boundary-checking-in-base-256-decoder.patch | 33 ----------------------
- package/tar/tar.hash                               |  6 ++--
- package/tar/tar.mk                                 | 16 +++++++----
- 3 files changed, 13 insertions(+), 42 deletions(-)
+ package/pkg-download.mk  | 8 +++++---
+ support/download/helpers | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/tar/0002-Fix-boundary-checking-in-base-256-decoder.patch b/package/tar/0002-Fix-boundary-checking-in-base-256-decoder.patch
-deleted file mode 100644
-index 7bad339fe0..0000000000
---- a/package/tar/0002-Fix-boundary-checking-in-base-256-decoder.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 3da78400eafcccb97e2f2fd4b227ea40d794ede8 Mon Sep 17 00:00:00 2001
--From: Sergey Poznyakoff <gray@gnu.org>
--Date: Sat, 11 Feb 2023 11:57:39 +0200
--Subject: [PATCH] Fix boundary checking in base-256 decoder
--
--* src/list.c (from_header): Base-256 encoding is at least 2 bytes
--long.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--Upstream: https://git.savannah.gnu.org/cgit/tar.git/commit/?id=3da78400eafcccb97e2f2fd4b227ea40d794ede8
-----
-- src/list.c | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/src/list.c b/src/list.c
--index 9fafc425..86bcfdd1 100644
----- a/src/list.c
--+++ b/src/list.c
--@@ -881,8 +881,9 @@ from_header (char const *where0, size_t digs, char const *type,
-- 	  where++;
-- 	}
--     }
---  else if (*where == '\200' /* positive base-256 */
---	   || *where == '\377' /* negative base-256 */)
--+  else if (where <= lim - 2
--+	   && (*where == '\200' /* positive base-256 */
--+	       || *where == '\377' /* negative base-256 */))
--     {
--       /* Parse base-256 output.  A nonnegative number N is
-- 	 represented as (256**DIGS)/2 + N; a negative number -N is
---- 
--2.39.2
--
-diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-index 1914a9f3b4..108a95ee62 100644
---- a/package/tar/tar.hash
-+++ b/package/tar/tar.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking signature
--sha256  63bebd26879c5e1eea4352f0d03c991f966aeb3ddeb3c7445c902568d5411d28  tar-1.34.tar.xz
--sha256  51337b19c71df92cd4f51c50efe4dc6ddc267d31fd54679be9e9bc2e6ce8132b  tar-1.34.cpio.gz
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  4d62ff37342ec7aed748535323930c7cf94acf71c3591882b26a7ea50f3edc16  tar-1.35.tar.xz
-+sha256  c77a38fcf25b21fd8209d20d35638744344ded239cfc7df80138bf46d3c6b16d  tar-1.35.cpio.gz
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index d57d63970d..a7e85afb72 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -4,20 +4,24 @@
- #
- ################################################################################
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 9047e99f86..61e565b002 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -19,9 +19,11 @@ export SFTP := $(call qstrip,$(BR2_SFTP))
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
--TAR_VERSION = 1.34
-+TAR_VERSION = 1.35
- TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
- TAR_SITE = $(BR2_GNU_MIRROR)/tar
--# busybox installs in /bin, so we need tar to install as well in /bin
--# so that we don't end up with two different tar
--TAR_CONF_OPTS = --exec-prefix=/
- TAR_LICENSE = GPL-3.0+
- TAR_LICENSE_FILES = COPYING
- TAR_CPE_ID_VENDOR = gnu
- TAR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- TAR_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ # Version of the format of the archives we generate in the corresponding
+-# download backend:
+-BR_FMT_VERSION_git = -br2
+-BR_FMT_VERSION_svn = -br3
++# download backend and post-process:
++BR_FMT_VERSION_git = -git3
++BR_FMT_VERSION_svn = -svn4
++BR_FMT_VERSION_go = -go1
++BR_FMT_VERSION_cargo = -cargo1
  
--# 0002-Fix-boundary-checking-in-base-256-decoder.patch
--TAR_IGNORE_CVES += CVE-2022-48303
-+# busybox installs in /bin, so we need tar to install as well in /bin
-+# so that we don't end up with two different tar
-+#
-+# --disable-year2038: tells the configure script to not abort if the
-+# system is not Y2038 compliant. tar will support year2038 if the
-+# system is compliant even with this option passed
-+TAR_CONF_OPTS = \
-+	--exec-prefix=/ \
-+	--disable-year2038
+ DL_WRAPPER = support/download/dl-wrapper
  
- ifeq ($(BR2_PACKAGE_ACL),y)
- TAR_DEPENDENCIES += acl
+diff --git a/support/download/helpers b/support/download/helpers
+index 90a7d6c1ec..823e4d2f91 100755
+--- a/support/download/helpers
++++ b/support/download/helpers
+@@ -61,7 +61,7 @@ mk_tar_gz() {
+     # Create POSIX tarballs, since that's the format the most reproducible
+     tar cf - --transform="s#^\./#${base_dir}/#S" \
+              --numeric-owner --owner=0 --group=0 --mtime="${date}" \
+-             --format=posix --pax-option="${pax_options}" \
++             --format=posix --pax-option="${pax_options}" --mode='go=u,go-w' \
+              -T "${tmp}.sorted" >"${tmp}.tar"
+ 
+     # Compress the archive
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
