@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27878C10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 397E3C10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 16:19:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E650E40937;
-	Thu,  9 May 2024 16:19:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04283407DD;
+	Thu,  9 May 2024 16:19:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q-l8YlEDEXL2; Thu,  9 May 2024 16:19:03 +0000 (UTC)
+ id MU48s-XzPuWn; Thu,  9 May 2024 16:19:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6256409A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B88440937
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6256409A3;
-	Thu,  9 May 2024 16:19:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 724D71BF337
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:19:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B88440937;
+	Thu,  9 May 2024 16:19:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A6611BF337
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:19:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F4EB606A3
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:19:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EACD340937
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 16:19:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jqLHQkPtu-Xz for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 16:19:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OrL2UmzP6lqf for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 16:19:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4BDF760073
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BDF760073
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4BDF760073
- for <buildroot@buildroot.org>; Thu,  9 May 2024 16:19:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 123F3C0003;
- Thu,  9 May 2024 16:18:58 +0000 (UTC)
-Date: Thu, 9 May 2024 18:18:58 +0200
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <20240509181858.6db00f5e@windsurf>
-In-Reply-To: <20240422175944.449122-1-thomas@devoogdt.com>
-References: <20240422175944.449122-1-thomas@devoogdt.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715271539;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=o9TbJJOhb3FhcVkKkeQoX8pXMd94s00GSrX6PiyRa+8=;
- b=UWS7G32tylxJ8MtrtkwPkoF0assmKhyG/tbZIPCaLp0rhB56IWQEyFgrg841PXH94b+tzk
- Wuz3LCyPRrmTmlY7SrRWinXi24oqjwoud1j3HFi/TDEmIBE6W+ShlMGuqG3ohuV65SeEM3
- s7RZsWWGEmvSgFVsFPW+ErSaATvVVPp5G4h/VjzEEaWQwvfLH7zsuTRgvLPhtI8bSJTSDT
- dnssIKLSNL1JO9go5GH9T1dFNOrhvyGK9pPZbCMJgsrGjn8/TeTrICSswm1JMn8+TNOFXZ
- c6O1AQiWfqg7m4/OQRys54J9F6zJhgrWASeaESijTjVqPbSeNBamTvrCUEzpbw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UWS7G32t
-Subject: Re: [Buildroot] [PATCH v1] package/syslog-ng: bump to 4.7.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15AC3407DD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15AC3407DD
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 16:19:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 87F7586C78; Thu,  9 May 2024 16:19:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 9 May 2024 18:19:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 105f0398c76f3288b2668e0b3ec722b2ebe55a0b
+X-Git-Newrev: 571eceed7aac268d8ce2bbf2c6993b4a4e4a2b5d
+X-Patchwork-Hint: ignore
+Message-Id: <20240509161946.87F7586C78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pymodbus: bump to version
+ 3.6.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,65 +60,74 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Chris Packham <judge.packham@gmail.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=571eceed7aac268d8ce2bbf2c6993b4a4e4a2b5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 22 Apr 2024 19:59:44 +0200
-Thomas Devoogdt <thomas@devoogdt.com> wrote:
+License hash changed due to year range update:
+https://github.com/pymodbus-dev/pymodbus/commit/131d30391efd9c64f1fec857ae0372746374e6d2
 
-> From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Drop no longer required python-six runtime dependency.
 
-Thanks for the patch!
+Drop no longer required python-serial runtime dependency.
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-pymodbus/Config.in            | 6 ++----
+ package/python-pymodbus/python-pymodbus.hash | 6 +++---
+ package/python-pymodbus/python-pymodbus.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-> diff --git a/package/syslog-ng/Config.in b/package/syslog-ng/Config.in
-> index aa1e71d225..c06a7221bf 100644
-> --- a/package/syslog-ng/Config.in
-> +++ b/package/syslog-ng/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_SYSLOG_NG
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> +	select BR2_PACKAGE_JSON_C
-
-When you add a new select like this, you need to be careful. Indeed, if
-the option you're selecting has some "depends on", you need to
-replicate them in your package. Here, JSON_C has a "depends on
-BR2_TOOLCHAIN_HAS_SYNC_4", which needs to be replicated:
-
-index aa1e71d225..1302e6ac46 100644
---- a/package/syslog-ng/Config.in
-+++ b/package/syslog-ng/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_SYSLOG_NG
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-        depends on BR2_USE_MMU # fork()
-        depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+       depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+       select BR2_PACKAGE_JSON_C
-        select BR2_PACKAGE_LIBGLIB2
-        select BR2_PACKAGE_PCRE2
-        select BR2_PACKAGE_OPENSSL
-@@ -16,5 +18,6 @@ config BR2_PACKAGE_SYSLOG_NG
+diff --git a/package/python-pymodbus/Config.in b/package/python-pymodbus/Config.in
+index 0ba6fb88f0..dac6716b87 100644
+--- a/package/python-pymodbus/Config.in
++++ b/package/python-pymodbus/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYMODBUS
+ 	bool "python-pymodbus"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+-	select BR2_PACKAGE_PYTHON_SERIAL # runtime
+ 	help
+-	  Pymodbus is a full Modbus protocol implementation.
++	  A fully featured modbus protocol stack in python.
  
- comment "syslog-ng needs a toolchain w/ wchar, threads"
-        depends on BR2_USE_MMU
-+       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-        depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-
-I fixed that up when applying. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+-	  https://github.com/riptideio/pymodbus
++	  https://github.com/pymodbus-dev/pymodbus/
+diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
+index d9337ffe84..4595246efc 100644
+--- a/package/python-pymodbus/python-pymodbus.hash
++++ b/package/python-pymodbus/python-pymodbus.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pymodbus/json
+-md5  89da6585b27b8c4b3887eb9f7d1e950b  pymodbus-3.0.2.tar.gz
+-sha256  704cb7fb90631c45f9c3a70b89d0c990fe0e208ac56f14a5c449e21bebd1e201  pymodbus-3.0.2.tar.gz
++md5  809260ecaaef548c7ac327755d7d2d25  pymodbus-3.6.8.tar.gz
++sha256  abb214716b56fc62bc0d5d9d964e2249439341746287e918d175f0e3ee241407  pymodbus-3.6.8.tar.gz
+ # Locally computed sha256 checksums
+-sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  LICENSE
++sha256  47f904249172e795a6b32de91f471073297befffd74e17cafc288d348a55972e  LICENSE
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+index 54879d38e9..a96edecc54 100644
+--- a/package/python-pymodbus/python-pymodbus.mk
++++ b/package/python-pymodbus/python-pymodbus.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYMODBUS_VERSION = 3.0.2
++PYTHON_PYMODBUS_VERSION = 3.6.8
+ PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
+-PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/94/f7/6149a1b107fa54378a7adec83db7cd3679bf02216a6f5c83b37f55335897
++PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/62/c1/f18b090dcc45d34b6a0e3563acde71b407ef96a36fa965c508a84f755355
+ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+ PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+ PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
