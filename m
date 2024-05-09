@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08B8AC10F1A
-	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:18:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88209C10F1A
+	for <buildroot@archiver.kernel.org>; Thu,  9 May 2024 20:19:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9D46612F9;
-	Thu,  9 May 2024 20:18:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A88F612DC;
+	Thu,  9 May 2024 20:19:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cQ9qEtliZ9p4; Thu,  9 May 2024 20:18:12 +0000 (UTC)
+ id rVIYy6QjyQHg; Thu,  9 May 2024 20:19:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64250612F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58F88606DF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64250612F6;
-	Thu,  9 May 2024 20:18:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED1A91BF990
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:18:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58F88606DF;
+	Thu,  9 May 2024 20:19:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 150431BF31C
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:19:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA2EA41DEA
- for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:18:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 00FC541E44
+ for <buildroot@lists.busybox.net>; Thu,  9 May 2024 20:19:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EYqvdZ5vVSCV for <buildroot@lists.busybox.net>;
- Thu,  9 May 2024 20:18:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZayAmaZGLixT for <buildroot@lists.busybox.net>;
+ Thu,  9 May 2024 20:19:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2826A41DFD
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2826A41DFD
- for <buildroot@buildroot.org>; Thu,  9 May 2024 20:18:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14C5386D9A; Thu,  9 May 2024 20:18:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 9 May 2024 22:17:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f6542cf10b80a0e44d1301ab7ef9a78c6f24e1d0
-X-Git-Newrev: dabd983c0d8f019a9b285bd3a1a843cbd5ed9d4d
-X-Patchwork-Hint: ignore
-Message-Id: <20240509201804.14C5386D9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hidapi: fixup Config.in comment
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B1E7241E1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1E7241E1E
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B1E7241E1E
+ for <buildroot@buildroot.org>; Thu,  9 May 2024 20:19:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F1691BF205;
+ Thu,  9 May 2024 20:19:00 +0000 (UTC)
+Date: Thu, 9 May 2024 22:18:59 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20240509221859.21465e96@windsurf>
+In-Reply-To: <20240427140941.381333-1-peter@korsgaard.com>
+References: <20240427140941.381333-1-peter@korsgaard.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715285940;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=azmRhppk/orlrDSleZWesRJ/o5R9k/w0RvKAddSVBtQ=;
+ b=Wnur5QUtX3hOQxQ7KZmBebWnQB9Kr9HCc+RZEDH/lUjlOZfDOrkd0Ikf9QIJDAWFRZmmqd
+ otxMk3xeWGy2OyUwA4PbY2R7gop2tAdzVUjGgSpriZEGmNeqnmzcVi1RRtFvw0gxZ4Ad58
+ iWWKppSCEdA1mfreDndZLcf66VqtVx8KYCe9n3p0KL78eDCZieVZ3+8EAIelpC/JLZ/r0c
+ JEqjnTjy0FVqNnVockKso0mr3/D+Do5BSptSLP6BiMmULEovBns8GWJtbkE2YmXUw/hVlB
+ 3iXvt5tbI6CjqrhcZqIDT9XxBOQFe9bUE1GR9hqzxLlbDSflwQwhPlQcZ+hiKw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Wnur5QUt
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-hid: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,36 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dabd983c0d8f019a9b285bd3a1a843cbd5ed9d4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 27 Apr 2024 16:09:39 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-The Config.in comment was mentioning both "NPTL" and "threads" as
-dependencies, while mentioning only the former is sufficient.
+> A python wrapper for the hidapi library.  Hidapi has fairly complicated
+> dependencies, so use a select rather than a depends on.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/hidapi/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You actually did the opposite :-)
 
-diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
-index 061c7883f7..1d3c86b677 100644
---- a/package/hidapi/Config.in
-+++ b/package/hidapi/Config.in
-@@ -15,7 +15,7 @@ config BR2_PACKAGE_HIDAPI
- 
- 	  http://github.com/libusb/hidapi/
- 
--comment "hidapi needs udev /dev management and a toolchain w/ NPTL, threads, gcc >= 4.9"
-+comment "hidapi needs udev /dev management and a toolchain w/ NPTL, gcc >= 4.9"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_PACKAGE_HAS_UDEV || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+But in fact, there were only 3 depends, so not that much to propagate,
+so I stuck to our normal way: a select BR2_PACKAGE_HIDAPI + propagation
+of the depends on. Otherwise people will start using that as a counter
+example and use "depends on" where "select" should be used.
+
+Applied with this change. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
