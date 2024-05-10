@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3DFEC25B10
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:24:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33132C25B5F
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:24:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACAE642432;
-	Fri, 10 May 2024 11:24:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDCF141F9B;
+	Fri, 10 May 2024 11:24:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LpFHhPVuVB0j; Fri, 10 May 2024 11:24:37 +0000 (UTC)
+ id bUPOgrHXwOaB; Fri, 10 May 2024 11:24:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6936C41FF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2DCF42437
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6936C41FF2;
-	Fri, 10 May 2024 11:24:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2DCF42437;
+	Fri, 10 May 2024 11:24:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5316D1BF2A1
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 191361BF2A1
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3EE1C42431
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1087B42432
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sHw1z3LeR7vM for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 11:24:35 +0000 (UTC)
+ id aWed0vh3Wnen for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 11:24:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
  helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 08B0C40316
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08B0C40316
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C903D42409
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C903D42409
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 08B0C40316
- for <buildroot@buildroot.org>; Fri, 10 May 2024 11:24:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8BB0EC0002;
- Fri, 10 May 2024 11:24:31 +0000 (UTC)
-Date: Fri, 10 May 2024 13:24:30 +0200
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C903D42409
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 11:24:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2209CC0002;
+ Fri, 10 May 2024 11:24:52 +0000 (UTC)
+Date: Fri, 10 May 2024 13:24:51 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240510132430.193acf94@windsurf>
-In-Reply-To: <20240427083939.13278-1-bernd@kuhls.net>
-References: <20240427083939.13278-1-bernd@kuhls.net>
+Message-ID: <20240510132451.432db032@windsurf>
+In-Reply-To: <20240427084019.13312-1-bernd@kuhls.net>
+References: <20240427084019.13312-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715340272;
+ d=bootlin.com; s=gm1; t=1715340292;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=U3UZi5Hi8JpVpdBenSDl1zyRA8+iPgEHTK6gnW1uKCI=;
- b=JVNq8wvdEPgRtHIwS6cAI+3O7Zq+P8JNPftmcjSsAgDEI2JWrE1UKYFiT93OSp+qUBsVgW
- 6uglUbHFFZrzcDcTVL7ZrSKZoHGCHX25K+p19h91KJV6mO19OEPbOitocnakefyfSt8AX3
- 5qWy01v3ASbMCtw92Zk/r9ydkVObUNLWlFRWuAchVk2tq6WgUoXKH9PMGBMVmnz6OhpBEZ
- TMEwDQj0dfbbqY//fhY57UNnAg/mAkmFAUquqfflZIdj3bKsrkvAT9SK4U7Y2Q5+7tPSZq
- E6QmUblQOJwnt3H6Ajo+ibwwSNVa7QE7uH1cG/RKJDeKurwGSc13aw9YuHi3sQ==
+ bh=xP1xdMRWn6/4ByUPy4O9PfpYvnvyLRVBM9lgquGej3E=;
+ b=kQ0nvice90eFeTrcRSqpMqOCGIM8vSo0jUjcNKtWJvLjfPPG/DpJIPicKSMW402PUWU05i
+ hhakC5mrnyPTr9Jj2SrbZZNuq6KtCFnKy9qv+5vzr0rwBVYV4RIVZCb960vKNLJr77u1WC
+ DoXXhzl03m7FFMV/cPrrqgmEfTt3irmeto7FYxUOEfeG1EBH8MZRmyQ56p4JeyToCwUvxK
+ mq+v4JLITy+bK2IlSCkwxcO4YzDAyJINoe7bM1G+Q7ppCoO/V4AFpgLKpZnBEQ3CavRh1u
+ /UcOK75z55lkApYWJK25rQVtmzHr/UWJHy/DwBH9wjelgoTr6uIXXylE45T/Cg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JVNq8wvd
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 24.0.6
+ header.s=gm1 header.b=kQ0nvice
+Subject: Re: [Buildroot] [PATCH 1/2] package/onevpl-intel-gpu: bump version
+ to 24.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,25 +83,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, "Yann E
- . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 27 Apr 2024 10:39:39 +0200
+On Sat, 27 Apr 2024 10:40:18 +0200
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Release notes:
-> https://lists.freedesktop.org/archives/mesa-announce/2024-April/000754.html
-> https://lists.freedesktop.org/archives/mesa-announce/2024-April/000755.html
-> 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
-> v2: squashed bump to 24.0.5
+>  package/onevpl-intel-gpu/onevpl-intel-gpu.hash | 2 +-
+>  package/onevpl-intel-gpu/onevpl-intel-gpu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Both applied to master, thanks.
 
 Thomas
 -- 
