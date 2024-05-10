@@ -4,48 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89AEEC25B10
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:21:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29197C25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3518C423F9;
-	Fri, 10 May 2024 11:21:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF45740A02;
+	Fri, 10 May 2024 11:22:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hEwDuNjAwlck; Fri, 10 May 2024 11:21:23 +0000 (UTC)
+ id S5yk8uoMlgGj; Fri, 10 May 2024 11:22:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7F53423FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF96B423F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7F53423FA;
-	Fri, 10 May 2024 11:21:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E3B291BF2A1
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:21:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF96B423F9;
+	Fri, 10 May 2024 11:22:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EAA301BF2A1
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CE1F684521
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:21:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6FC742A00
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:21:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n6tGWjXphXxx for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 11:21:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ju4jl5T6_89E for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 11:21:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1FB084520
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F1FB084520
- for <buildroot@buildroot.org>; Fri, 10 May 2024 11:21:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5C2086E14; Fri, 10 May 2024 11:21:19 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 10 May 2024 13:20:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2cf2491a23e70dd38f037726551ed6df7a9ac340
-X-Git-Newrev: 20373e0be847e1396b01ab3eba69b9ca96f6a70f
-X-Patchwork-Hint: ignore
-Message-Id: <20240510112119.D5C2086E14@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pcsc-lite: bump version to 2.1.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7534940B76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7534940B76
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7534940B76
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 11:21:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4801960003;
+ Fri, 10 May 2024 11:21:53 +0000 (UTC)
+Date: Fri, 10 May 2024 13:21:53 +0200
+To: Zenichi Amano <zenichi.amano@gahojin.co.jp>
+Message-ID: <20240510132153.2aa426e2@windsurf>
+In-Reply-To: <20240510024350.566581-2-zenichi.amano@gahojin.co.jp>
+References: <20240509180732.23542b3f@windsurf>
+ <20240510024350.566581-2-zenichi.amano@gahojin.co.jp>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715340114;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=J4M3E3DJEz+z14XGhuf0LLKYa1oUaDLilmkfqjONgTg=;
+ b=FUczzj222CbeVY4yjZUBWSNFRFNV68B1KLsmcyKowYC6B8kCkcGSXGO2rat7LI73xEjmPs
+ iXoFSeVBlRus6jsHpumpt/ZwiDNpzTEJ8pojCN7LQCVqdTY0qyiczwFVjMkt11NRZlVUZm
+ i47X751TxQ9Teo3Dxs9aVwr3emhw38XnEX2lcM69M8J9w7DVaLvuRI79jrmlwL4uajwmPR
+ 4hjzSF0gaB3TPmBYgSRtGwG70wyRiJpqRO5Ic+feYpOU0ZLCFHnrNvveKQwX5H59YAakxi
+ BxfG81V/+L5msjjDVePcJEkYamkomvfQh876/WSU2YGSi6Xr0TAawanTUQETdg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=FUczzj22
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/pcsc-lite: bump version to
+ 2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,66 +84,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20373e0be847e1396b01ab3eba69b9ca96f6a70f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 10 May 2024 11:43:51 +0900
+Zenichi Amano <zenichi.amano@gahojin.co.jp> wrote:
 
-add configuration to disable polkit if it is not available since polkit is enabled by default in 2.0.1.
+> add configuration to disable polkit if it is not available since polkit is enabled by default in 2.0.1.
+> 
+> https://github.com/LudovicRousseau/PCSC/releases/tag/2.1.0
+> https://github.com/LudovicRousseau/PCSC/releases/tag/2.0.3
+> https://github.com/LudovicRousseau/PCSC/releases/tag/2.0.2
+> https://github.com/LudovicRousseau/PCSC/releases/tag/2.0.1
+> 
+> Signed-off-by: Zenichi Amano <zenichi.amano@gahojin.co.jp>
+> ---
+>  package/pcsc-lite/pcsc-lite.hash | 2 +-
+>  package/pcsc-lite/pcsc-lite.mk   | 9 ++++++++-
+>  2 files changed, 9 insertions(+), 2 deletions(-)
 
-https://github.com/LudovicRousseau/PCSC/releases/tag/2.1.0
-https://github.com/LudovicRousseau/PCSC/releases/tag/2.0.3
-https://github.com/LudovicRousseau/PCSC/releases/tag/2.0.2
-https://github.com/LudovicRousseau/PCSC/releases/tag/2.0.1
+Applied to master, thanks.
 
-Signed-off-by: Zenichi Amano <zenichi.amano@gahojin.co.jp>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pcsc-lite/pcsc-lite.hash | 2 +-
- package/pcsc-lite/pcsc-lite.mk   | 9 ++++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
-index e0face9ddb..806792faee 100644
---- a/package/pcsc-lite/pcsc-lite.hash
-+++ b/package/pcsc-lite/pcsc-lite.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  d6c3e2b64510e5ed6fcd3323febf2cc2a8e5fda5a6588c7671f2d77f9f189356  pcsc-lite-2.0.0.tar.bz2
-+sha256  85cab61cc744c81e2bc432656863293b8428d0136f079e3b12a84b335b5b35aa  pcsc-lite-2.1.0.tar.bz2
- sha256  40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
-diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-index 2b2114835e..8418d6a32a 100644
---- a/package/pcsc-lite/pcsc-lite.mk
-+++ b/package/pcsc-lite/pcsc-lite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCSC_LITE_VERSION = 2.0.0
-+PCSC_LITE_VERSION = 2.1.0
- PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
- PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
- PCSC_LITE_INSTALL_STAGING = YES
-@@ -45,6 +45,13 @@ ifeq ($(BR2_PACKAGE_PCSC_LITE_EMBEDDED),y)
- PCSC_LITE_CONF_OPTS += --enable-embedded
- endif
- 
-+ifeq ($(BR2_PACKAGE_POLKIT),y)
-+PCSC_LITE_CONF_OPTS += --enable-polkit
-+PCSC_LITE_DEPENDENCIES += polkit
-+else
-+PCSC_LITE_CONF_OPTS += --disable-polkit
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- PCSC_LITE_CONF_ENV += LIBS=-latomic
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
