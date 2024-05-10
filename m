@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D600C25B74
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 20:19:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 052BAC25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 20:19:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB13A4246D;
-	Fri, 10 May 2024 20:19:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6492424A3;
+	Fri, 10 May 2024 20:19:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F9VifXUed01x; Fri, 10 May 2024 20:19:53 +0000 (UTC)
+ id dQbyMOwZjWsk; Fri, 10 May 2024 20:19:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 908D24249C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A74CA42540
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 908D24249C;
-	Fri, 10 May 2024 20:19:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE0ED1BF28A
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 20:19:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A74CA42540;
+	Fri, 10 May 2024 20:19:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AE3211BF28A
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 20:19:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C063784658
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 20:19:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B79E40635
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 20:19:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wMInMRwL2Kle for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 20:19:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jh8OQ_gDW0an for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 20:19:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B6D7C84665
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6D7C84665
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B6D7C84665
- for <buildroot@buildroot.org>; Fri, 10 May 2024 20:19:49 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B4E2E0004;
- Fri, 10 May 2024 20:19:44 +0000 (UTC)
-Date: Fri, 10 May 2024 22:19:43 +0200
-To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Message-ID: <20240510221943.0f81cce5@windsurf>
-In-Reply-To: <20240325152247.179206-1-buildroot@bubu1.eu>
-References: <20240325152247.179206-1-buildroot@bubu1.eu>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715372387;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=KPPmdtmwpBzfSI5BEx2QVOGYgkwHlJw5JBERikvL8nU=;
- b=Dgc36ag9JvANyC6gjSfHxPsU+wFFh0L8LNYoGjS2YHIwWpy0bqlCRw2ZosQtSA6FQamYzM
- 6UeMz7mXvSWfs+MWDrzjfH83uzq4bu8y4G9VYhMgC6zRL2t6q0a6TFrJF7bNd+6hhdk6iU
- Atx4SsP9nqAoW33WulJbVbBLdjZolcPG8uJWDZP9Zd5TV2xnw788Tuvg04qA5Whn7QMXYN
- rHAwA66gacdpmO/2AQAASAqlnnxddVibWWgqHQt0AM6cS0rmL4qmYAtoJUDJUr9gNBkCT1
- ozGV0MdvNBqG2OpODW+ZH86V/1QVMq1dCYQSwuknmXCX62xnfAigGyHO/9+4fg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Dgc36ag9
-Subject: Re: [Buildroot] [PATCH] package/python-jc: bump to version 1.25.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFCAB4040A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFCAB4040A
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 20:19:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B8E5C86F06; Fri, 10 May 2024 20:19:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 10 May 2024 22:12:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 95d6e3ddadb8757dd30670cf145b56bd234a0043
+X-Git-Newrev: 5067e14191616a8e523d4b96064898774014feb0
+X-Patchwork-Hint: ignore
+Message-Id: <20240510201955.B8E5C86F06@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jc: bump to version 1.25.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,32 +59,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>,
- Marcus Hoffmann <buildroot@bubu1.eu>, Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 25 Mar 2024 16:22:47 +0100
-Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5067e14191616a8e523d4b96064898774014feb0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Changelog:
-> https://github.com/kellyjonbrazil/jc/releases/tag/v1.25.2
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-> ---
->  package/python-jc/python-jc.hash | 4 ++--
->  package/python-jc/python-jc.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Changelog:
+https://github.com/kellyjonbrazil/jc/releases/tag/v1.25.2
 
-Applied to master, thanks.
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-jc/python-jc.hash | 4 ++--
+ package/python-jc/python-jc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
+index f54e69eaeb..6bcb886a47 100644
+--- a/package/python-jc/python-jc.hash
++++ b/package/python-jc/python-jc.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jc/json
+-md5  80e4c7d46ec856255577c6b364e7f931  jc-1.25.1.tar.gz
+-sha256  683352e903ece9a86eae0c3232188e40178139e710c740a466ef91ed87c4cc7e  jc-1.25.1.tar.gz
++md5  e042a82acf978e5dc16dd1ac9371e97a  jc-1.25.2.tar.gz
++sha256  97ada193495f79550f06fe0cbfb119ff470bcca57c1cc593a5cdb0008720e0b3  jc-1.25.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
+diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
+index ec8826d1c2..c57c9e8acc 100644
+--- a/package/python-jc/python-jc.mk
++++ b/package/python-jc/python-jc.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JC_VERSION = 1.25.1
++PYTHON_JC_VERSION = 1.25.2
+ PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
+-PYTHON_JC_SITE = https://files.pythonhosted.org/packages/53/a6/065f0796a0a21bc040bc88c8a33410c12729a2a6f4c269d0349f685796da
++PYTHON_JC_SITE = https://files.pythonhosted.org/packages/39/2e/c0d557b2ee673e2e0aef24a01e732aa232f6b1e180f339058f674f391ab8
+ PYTHON_JC_SETUP_TYPE = setuptools
+ PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
+ PYTHON_JC_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
