@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B0ABC25B10
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 20:07:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6481CC25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 20:08:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AADEF423FA;
-	Fri, 10 May 2024 20:07:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0DCA4244D;
+	Fri, 10 May 2024 20:08:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kEtbMLqsxnFA; Fri, 10 May 2024 20:07:08 +0000 (UTC)
+ id kcm-NJ84U6mD; Fri, 10 May 2024 20:08:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 241D842435
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7A08423FA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 241D842435;
-	Fri, 10 May 2024 20:07:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BAAA01BF995
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 20:07:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7A08423FA;
+	Fri, 10 May 2024 20:08:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DC1451BF28A
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 20:08:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A71F040492
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 20:07:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D220D846F0
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 20:08:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qtVnwiFN69bJ for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 20:07:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NOOwvf2jl1FO for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 20:08:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D420940327
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D420940327
- for <buildroot@buildroot.org>; Fri, 10 May 2024 20:07:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C04EC86EC4; Fri, 10 May 2024 20:07:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 10 May 2024 22:01:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eb60c4054c25129d78651a66d1e7554aff04767f
-X-Git-Newrev: 9f841969867fcd14a204780dd03403b66731d9b2
-X-Patchwork-Hint: ignore
-Message-Id: <20240510200701.C04EC86EC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-lightningmdb: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BBF60846EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBF60846EE
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BBF60846EE
+ for <buildroot@busybox.net>; Fri, 10 May 2024 20:08:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FD3D1C0002;
+ Fri, 10 May 2024 20:08:00 +0000 (UTC)
+Date: Fri, 10 May 2024 22:07:59 +0200
+To: Francois Perrad <francois.perrad@gadz.org>
+Message-ID: <20240510220759.2e69c748@windsurf>
+In-Reply-To: <20240404162938.33317-1-francois.perrad@gadz.org>
+References: <20240404162938.33317-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715371681;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=bL9hGX17iHkLlYUX8Qq7LkFA5GJgiXkRII6Yl5pYTqU=;
+ b=Mzzwgmzs+o+9NlU0mXyvABhbTdnIQAkQdYRQHubwxsGLUPGVWI65mIFAZ+Auq9OYBebkKR
+ Wn78G977WNbczQpAb9mXp5T47MsooCrwgGMZUdHf9IUBwlpQsUygn6ebu6HwjC3pFAaAaW
+ 8EwjhSAtoANeChsMnd6lSS5m/INuI2tJ10A8nIl/cQEkfUndvxJGi8jaUJ+JsgfQZ5Lnel
+ GQCU89uLMru2jy9z8Z/aUYqiDjxmNKnJ0tEqUr7Dd7Qi/YQN469wr0Ap+g3JmDibwYHV9g
+ q8wwdd9JH/SUB3+SjoZn+cUqktDZCu2XpbnH2aGWqyZH9e3Yi4Uz8qRUuTvkOQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Mzzwgmzs
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/lmdb: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,104 +82,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f841969867fcd14a204780dd03403b66731d9b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  4 Apr 2024 18:29:37 +0200
+Francois Perrad <francois.perrad@gadz.org> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                                      |  1 +
- package/lua-lightningmdb/Config.in                     | 13 +++++++++++++
- package/lua-lightningmdb/lua-lightningmdb.hash         |  3 +++
- package/lua-lightningmdb/lua-lightningmdb.mk           | 14 ++++++++++++++
- support/testing/tests/package/test_lua_lightningmdb.py | 13 +++++++++++++
- 5 files changed, 44 insertions(+)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  DEVELOPERS             |  1 +
+>  package/Config.in      |  1 +
+>  package/lmdb/Config.in | 13 +++++++++++++
+>  package/lmdb/lmdb.hash |  3 +++
+>  package/lmdb/lmdb.mk   | 32 ++++++++++++++++++++++++++++++++
+>  5 files changed, 50 insertions(+)
+>  create mode 100644 package/lmdb/Config.in
+>  create mode 100644 package/lmdb/lmdb.hash
+>  create mode 100644 package/lmdb/lmdb.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 14e016daf3..190b100609 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -747,6 +747,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-iconv/Config.in"
- 	source "package/lua-inotify/Config.in"
- 	source "package/lua-lgdbm/Config.in"
-+	source "package/lua-lightningmdb/Config.in"
- 	source "package/lua-livr/Config.in"
- 	source "package/lua-livr-extra/Config.in"
- 	source "package/lua-lpeg-patterns/Config.in"
-diff --git a/package/lua-lightningmdb/Config.in b/package/lua-lightningmdb/Config.in
-new file mode 100644
-index 0000000000..cd08cfbe79
---- /dev/null
-+++ b/package/lua-lightningmdb/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LUA_LIGHTNINGMDB
-+	bool "lua-lightningmdb"
-+	depends on !BR2_PACKAGE_LUAJIT
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lmdb
-+	select BR2_PACKAGE_LMDB
-+	help
-+	  A thin wrapper around OpenLDAP Lightning Memory-Mapped
-+	  Database (LMDB).
-+
-+	  https://github.com/shmul/lightningmdb
-+
-+comment "lua-lightningmdb needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lua-lightningmdb/lua-lightningmdb.hash b/package/lua-lightningmdb/lua-lightningmdb.hash
-new file mode 100644
-index 0000000000..49ac7ea09c
---- /dev/null
-+++ b/package/lua-lightningmdb/lua-lightningmdb.hash
-@@ -0,0 +1,3 @@
-+# computed by luarocks/buildroot
-+sha256  d836709e8a1374eb8913f0e9787bb3f0fc4d49b29e01112691b619f7d1355f8c  lightningmdb-0.9.22.1-1.src.rock
-+sha256  3d0562e11bc52bf45a735e1d60c6f8522886927a8bcfbe7dee219a61ec30b07a  lightningmdb-0.9.22.1-1/LICENSE
-diff --git a/package/lua-lightningmdb/lua-lightningmdb.mk b/package/lua-lightningmdb/lua-lightningmdb.mk
-new file mode 100644
-index 0000000000..f70cbc4b06
---- /dev/null
-+++ b/package/lua-lightningmdb/lua-lightningmdb.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# lua-lightningmdb
-+#
-+################################################################################
-+
-+LUA_LIGHTNINGMDB_VERSION = 0.9.22.1-1
-+LUA_LIGHTNINGMDB_NAME_UPSTREAM = Lightningmdb
-+LUA_LIGHTNINGMDB_SUBDIR = lightningmdb-$(LUA_LIGHTNINGMDB_VERSION)
-+LUA_LIGHTNINGMDB_LICENSE = MIT
-+LUA_LIGHTNINGMDB_LICENSE_FILES = $(LUA_LIGHTNINGMDB_SUBDIR)/LICENSE
-+LUA_LIGHTNINGMDB_DEPENDENCIES = lmdb
-+
-+$(eval $(luarocks-package))
-diff --git a/support/testing/tests/package/test_lua_lightningmdb.py b/support/testing/tests/package/test_lua_lightningmdb.py
-new file mode 100644
-index 0000000000..cc5b82043b
---- /dev/null
-+++ b/support/testing/tests/package/test_lua_lightningmdb.py
-@@ -0,0 +1,13 @@
-+from tests.package.test_lua import TestLuaBase
-+
-+
-+class TestLuaLightningmdb(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_LIGHTNINGMDB=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("lightningmdb")
+Series applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
