@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E864C25B10
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87EDBC25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 12:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E9F742A4F;
-	Fri, 10 May 2024 11:57:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4597942A4F;
+	Fri, 10 May 2024 12:01:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9yYskAPLuckV; Fri, 10 May 2024 11:57:44 +0000 (UTC)
+ id SzLuWDP1PkLA; Fri, 10 May 2024 12:01:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43D9B42A75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AD8D42A57
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 43D9B42A75;
-	Fri, 10 May 2024 11:57:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 48DA71BF2A1
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:57:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AD8D42A57;
+	Fri, 10 May 2024 12:01:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B293A1BF2A1
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 12:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35D4561430
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:57:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A013742A57
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 12:01:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w0123gztAA9O for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 11:57:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j89kzxx7Zk7m for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 12:01:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 27D706081A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27D706081A
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 27D706081A
- for <buildroot@buildroot.org>; Fri, 10 May 2024 11:57:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B65361C0007;
- Fri, 10 May 2024 11:57:37 +0000 (UTC)
-Date: Fri, 10 May 2024 13:57:36 +0200
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20240510135736.05c2cd9a@windsurf>
-In-Reply-To: <20240324212441.526544-3-adam.duskett@amarulasolutions.com>
-References: <20240324212441.526544-1-adam.duskett@amarulasolutions.com>
- <20240324212441.526544-3-adam.duskett@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715342258;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Bqu86UmERDVRH5ox9LqwekpXFCf89cTXD5+nvCdkC8Q=;
- b=IGLriQjQMiGh86KqIYIRCNWsOprq9129/Yd4xViN+QpNcG8QqGjVDrJFkJylkuuciLxFEp
- UUXU1Bt5ErGqesQtAgvtGiUMds3AQ3mO6z4Gw11tjFiwH5Vd5MpZWhNr58x5wvJJUPh2Er
- R6gr8GK5IXETeTtX/x4OIoWI9YxE92Qyn4W6O78OGLVnkfEbYEX1eBbIfQLpqjZBHSA7Ya
- KGK0pfeHhRRoTEOx9/DYU0rmk2LYRFNGW903DufwtQ2cwlR6tVx6+0Fhe2We/Fk3bEJHub
- q6UdFqTzL74joza49dv4ERLiBAff4oxv6OXtVYWHUF59tsdxmOe8GTNwTryEsA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IGLriQjQ
-Subject: Re: [Buildroot] [PATCH v2 3/9] package/libselinux: bump version to
- 3.6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C4B442A4F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C4B442A4F
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 12:01:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 86C2C86E8C; Fri, 10 May 2024 12:01:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 10 May 2024 14:00:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 35cecc4408482ea58407074bdba6fe09bfca0561
+X-Git-Newrev: f1f926adc7f2af1aee3ce018243ee8580471ab8c
+X-Patchwork-Hint: ignore
+Message-Id: <20240510120129.86C2C86E8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/paho-mqtt-cpp: bump to version
+ 1.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,35 +60,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=f1f926adc7f2af1aee3ce018243ee8580471ab8c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 24 Mar 2024 15:24:34 -0600
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+License updated to EPL-2.0 with
+https://github.com/eclipse/paho.mqtt.cpp/commit/a7e9b1204296b16ddf2b5dbe23bc150cb1a04d5e
 
->  .checkpackageignore                           |  3 +-
->  ...-and-rely-on-the-installed-file-nam.patch} |  4 +-
->  package/libselinux/0001-fix-musl-build.patch  | 38 ----------------
->  ...inux-set-CFLAGS-for-pip-installation.patch | 43 -------------------
->  4 files changed, 3 insertions(+), 85 deletions(-)
+https://github.com/eclipse/paho.mqtt.cpp/blob/v1.3.2/CHANGELOG.md
 
-This patch claims to bump to version 3.6... but it actually doesn't do
-it at all. So I took the 3.6 bump from your v1 to adjust the patch so
-that it really does a version bump. I guess this change has probably
-been lost some rebase on your side, or something like that.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/paho-mqtt-cpp/paho-mqtt-cpp.hash | 4 ++--
+ package/paho-mqtt-cpp/paho-mqtt-cpp.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
+index d9b86ce207..a35cd102b3 100644
+--- a/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
++++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  435e97e4d5b1da13daa26cadd3e83fe9d154930abaa78b8ff1b8c854b5345d8b  paho-mqtt-cpp-1.2.0.tar.gz
++sha256  c271d521287f417102b447b3d1e8d17be0e0f6a3b0b653334ebcd2ccd20d1e46  paho-mqtt-cpp-1.3.2.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+-sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
++sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
+diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
+index 827946605a..2e0f409b96 100644
+--- a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
++++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PAHO_MQTT_CPP_VERSION = 1.2.0
++PAHO_MQTT_CPP_VERSION = 1.3.2
+ PAHO_MQTT_CPP_SITE = $(call github,eclipse,paho.mqtt.cpp,v$(PAHO_MQTT_CPP_VERSION))
+-PAHO_MQTT_CPP_LICENSE = EPL-1.0 or BSD-3-Clause
+-PAHO_MQTT_CPP_LICENSE_FILES = epl-v10 edl-v10
++PAHO_MQTT_CPP_LICENSE = EPL-2.0 or BSD-3-Clause
++PAHO_MQTT_CPP_LICENSE_FILES = epl-v20 edl-v10
+ PAHO_MQTT_CPP_INSTALL_STAGING = YES
+ PAHO_MQTT_CPP_DEPENDENCIES = paho-mqtt-c
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
