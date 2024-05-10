@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 551F8C25B5F
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:25:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 345C4C25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:49:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19D884244F;
-	Fri, 10 May 2024 11:25:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC88E42A1E;
+	Fri, 10 May 2024 11:49:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id se5JcgBOo9HT; Fri, 10 May 2024 11:49:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E77F642A4D
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E77F642A4D;
+	Fri, 10 May 2024 11:49:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0964A1BF2A1
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:49:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E93EC41F2A
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:49:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B2fXph4W8rzg; Fri, 10 May 2024 11:25:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5E2642445
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5E2642445;
-	Fri, 10 May 2024 11:24:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 719A01BF2A1
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EC17615EF
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HzCQp9TiqqVx for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 11:24:55 +0000 (UTC)
+ id vTAEiA-TUWgX for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 11:49:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC09F615E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05C7E410B2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC09F615E8
- for <buildroot@uclibc.org>; Fri, 10 May 2024 11:24:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05C7E410B2
+ for <buildroot@uclibc.org>; Fri, 10 May 2024 11:49:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 9856E86E37; Fri, 10 May 2024 11:24:55 +0000 (UTC)
+ id D6BBB86E35; Fri, 10 May 2024 11:49:36 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 10 May 2024 11:24:55 +0000
+Date: Fri, 10 May 2024 11:49:36 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -49,7 +49,7 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2024.02.1
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ps.report@gmx.net
+X-Bugzilla-Who: lists1@afach.de
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -57,7 +57,7 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-16060-163-7oi9c7HEzT@https.bugs.busybox.net/>
+Message-ID: <bug-16060-163-Xg8nFFnxtF@https.bugs.busybox.net/>
 In-Reply-To: <bug-16060-163@https.bugs.busybox.net/>
 References: <bug-16060-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -83,19 +83,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=16060
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-diff -u /etc/ssh/sshd_config_orig /etc/ssh/sshd_config
---- /etc/ssh/sshd_config_orig
-+++ /etc/ssh/sshd_config
-@@ -29,7 +29,7 @@
- # Authentication:
+--- Comment #2 from Sam <lists1@afach.de> ---
+Thank you, this fixes the issue.
 
- #LoginGraceTime 2m
--#PermitRootLogin prohibit-password
-+PermitRootLogin yes
- #StrictModes yes
- #MaxAuthTries 6
- #MaxSessions 10
+I'm surprised though, because on failure, I got this message:
+
+```
+root@buildroot: Permission denied (publickey,password,keyboard-interactive).
+```
+
+which means that password was tried. I probably misunderstood the error message
+in ssh.
+
+Apologies for the false alarm. Though I have to say that the default not
+accepting a password can be a problem, since this is a simple system.
 
 -- 
 You are receiving this mail because:
