@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B7FAC25B10
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:56:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 316F5C25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:56:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4FD7E42ACA;
-	Fri, 10 May 2024 11:56:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F001D42AD7;
+	Fri, 10 May 2024 11:56:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2-MxVWy6xmcH; Fri, 10 May 2024 11:56:12 +0000 (UTC)
+ id M6_VwX3SoDI8; Fri, 10 May 2024 11:56:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F376742AC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB57A42AD2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F376742AC9;
-	Fri, 10 May 2024 11:56:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2C2E11BF99A
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:55:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB57A42AD2;
+	Fri, 10 May 2024 11:56:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 25BEE1BF2A1
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17C6F6081A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 16B3E4056F
  for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:55:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id df3EFW_Yy5kS for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eKeOQ6OZBrU6 for <buildroot@lists.busybox.net>;
  Fri, 10 May 2024 11:55:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53B1661430
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 645F742A4D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53B1661430
+ by smtp2.osuosl.org (Postfix) with ESMTP id 645F742A4D
  for <buildroot@buildroot.org>; Fri, 10 May 2024 11:55:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 41BF686E44; Fri, 10 May 2024 11:55:54 +0000 (UTC)
+ id 12E8986E88; Fri, 10 May 2024 11:55:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 May 2024 13:48:36 +0200
+Date: Fri, 10 May 2024 13:48:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4c11ee14fdb14edf14f0267c3e54c28a3360f053
-X-Git-Newrev: 35cecc4408482ea58407074bdba6fe09bfca0561
+X-Git-Oldrev: 5342d40cbde7911a8f7a9f145afccb5cdfd3d64e
+X-Git-Newrev: 7412d99e8fe37c72e3d147258ee8a316d8af901f
 X-Patchwork-Hint: ignore
-Message-Id: <20240510115554.41BF686E44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/setools: bump version to 4.4.4
+Message-Id: <20240510115554.12E8986E88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/restorecond: bump version to 3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,54 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35cecc4408482ea58407074bdba6fe09bfca0561
+commit: https://git.buildroot.net/buildroot/commit/?id=7412d99e8fe37c72e3d147258ee8a316d8af901f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch     | 2 +-
- package/setools/setools.hash                                            | 2 +-
- package/setools/setools.mk                                              | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/restorecond/restorecond.hash | 2 +-
+ package/restorecond/restorecond.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch b/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-index 36063a4e13..67c306e99c 100644
---- a/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-+++ b/package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-@@ -59,7 +59,7 @@ index 5f4e764..a27b781 100755
-  import argparse
-  import sys
-  import logging
--@@ -91,8 +92,8 @@ elif args.booleans is not None:
-+@@ -94,8 +95,8 @@ elif args.booleans is not None:
-  try:
-      p = setools.SELinuxPolicy(args.policy)
-      m = setools.PermissionMap(args.map)
-diff --git a/package/setools/setools.hash b/package/setools/setools.hash
-index 6a61fc2809..bb98231de9 100644
---- a/package/setools/setools.hash
-+++ b/package/setools/setools.hash
+diff --git a/package/restorecond/restorecond.hash b/package/restorecond/restorecond.hash
+index 215c9192f4..5b86afdcc0 100644
+--- a/package/restorecond/restorecond.hash
++++ b/package/restorecond/restorecond.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  29f5e7d98764a6942b2e32c8aa44da6a618882818c79599ade967ece0cf1dace  setools-4.4.3.tar.gz
-+sha256  92afeea2f2433cbb981ff47f6ce4e2485d9202b530842f7f5d95f905b2ddaea4  setools-4.4.4.tar.gz
- sha256  0e58d74751e394f39748c7b7b4039d6a883b5def9711160668ba962b52e69e01  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index efb3869e5b..1ffc2852d2 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  f00d8caddb6aba2793c65e69154d04671b52f3d37e081b0e96c1b443fe23c2fe  restorecond-3.5.tar.gz
++sha256  8f8aa2c6c66bcc6d91c6edd63913e5d738de6428928f27d1019d89c31cf347b1  restorecond-3.6.tar.gz
+ 
+ # Hash for license file
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
+index 96ef8d2a50..93495d8b7f 100644
+--- a/package/restorecond/restorecond.mk
++++ b/package/restorecond/restorecond.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SETOOLS_VERSION = 4.4.3
-+SETOOLS_VERSION = 4.4.4
- SETOOLS_SITE = $(call github,SELinuxProject,setools,$(SETOOLS_VERSION))
- SETOOLS_DEPENDENCIES = libselinux libsepol python-setuptools host-bison host-flex host-python-cython host-swig
- SETOOLS_INSTALL_STAGING = YES
+-RESTORECOND_VERSION = 3.5
++RESTORECOND_VERSION = 3.6
+ RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(RESTORECOND_VERSION)
+ RESTORECOND_LICENSE = GPL-2.0
+ RESTORECOND_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
