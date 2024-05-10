@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33132C25B5F
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:24:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E87A1C25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDCF141F9B;
-	Fri, 10 May 2024 11:24:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9BD1040232;
+	Fri, 10 May 2024 11:25:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bUPOgrHXwOaB; Fri, 10 May 2024 11:24:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TFxIMi1gPGqP; Fri, 10 May 2024 11:25:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2DCF42437
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9F544035D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2DCF42437;
-	Fri, 10 May 2024 11:24:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 191361BF2A1
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9F544035D;
+	Fri, 10 May 2024 11:25:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A5F211BF2A1
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:25:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1087B42432
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 93453615F1
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:25:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aWed0vh3Wnen for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 11:24:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XRTk6WhIFxKk for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 11:25:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C903D42409
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C903D42409
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C903D42409
- for <buildroot@buildroot.org>; Fri, 10 May 2024 11:24:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2209CC0002;
- Fri, 10 May 2024 11:24:52 +0000 (UTC)
-Date: Fri, 10 May 2024 13:24:51 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240510132451.432db032@windsurf>
-In-Reply-To: <20240427084019.13312-1-bernd@kuhls.net>
-References: <20240427084019.13312-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715340292;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=xP1xdMRWn6/4ByUPy4O9PfpYvnvyLRVBM9lgquGej3E=;
- b=kQ0nvice90eFeTrcRSqpMqOCGIM8vSo0jUjcNKtWJvLjfPPG/DpJIPicKSMW402PUWU05i
- hhakC5mrnyPTr9Jj2SrbZZNuq6KtCFnKy9qv+5vzr0rwBVYV4RIVZCb960vKNLJr77u1WC
- DoXXhzl03m7FFMV/cPrrqgmEfTt3irmeto7FYxUOEfeG1EBH8MZRmyQ56p4JeyToCwUvxK
- mq+v4JLITy+bK2IlSCkwxcO4YzDAyJINoe7bM1G+Q7ppCoO/V4AFpgLKpZnBEQ3CavRh1u
- /UcOK75z55lkApYWJK25rQVtmzHr/UWJHy/DwBH9wjelgoTr6uIXXylE45T/Cg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kQ0nvice
-Subject: Re: [Buildroot] [PATCH 1/2] package/onevpl-intel-gpu: bump version
- to 24.2.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3CB8615EF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D3CB8615EF
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 11:25:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C05EA86E45; Fri, 10 May 2024 11:25:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 10 May 2024 13:23:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e1e4237dc7bd182709b9e28ccb2cc451da157f49
+X-Git-Newrev: 9d54712fabdb08af56616b60db0c21dd8c279bd7
+X-Patchwork-Hint: ignore
+Message-Id: <20240510112552.C05EA86E45@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/onevpl-intel-gpu: bump version to
+ 24.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,28 +60,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 27 Apr 2024 10:40:18 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9d54712fabdb08af56616b60db0c21dd8c279bd7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/onevpl-intel-gpu/onevpl-intel-gpu.hash | 2 +-
->  package/onevpl-intel-gpu/onevpl-intel-gpu.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/onevpl-intel-gpu/onevpl-intel-gpu.hash | 2 +-
+ package/onevpl-intel-gpu/onevpl-intel-gpu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+index e2b1eaf032..59b1c5a23c 100644
+--- a/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
++++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  34438637670b13140153c8a6be6b32d755ba72f68b2bbb01a8ec630c3e453900  onevpl-intel-gpu-24.2.0.tar.gz
++sha256  b261d87d91a56a6a462f6a129ddd97945a49637995ee6aa67ebd9b26c0a3c1a0  onevpl-intel-gpu-24.2.1.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+index a9dcda8014..a68e628182 100644
+--- a/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
++++ b/package/onevpl-intel-gpu/onevpl-intel-gpu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ONEVPL_INTEL_GPU_VERSION = 24.2.0
++ONEVPL_INTEL_GPU_VERSION = 24.2.1
+ ONEVPL_INTEL_GPU_SITE = $(call github,oneapi-src,oneVPL-intel-gpu,intel-onevpl-$(ONEVPL_INTEL_GPU_VERSION))
+ ONEVPL_INTEL_GPU_LICENSE = MIT
+ ONEVPL_INTEL_GPU_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
