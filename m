@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A1A5C25B10
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B83DC25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:56:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCAEC4058B;
-	Fri, 10 May 2024 11:55:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 270F34056F;
+	Fri, 10 May 2024 11:56:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bqiLN5MmtAJ1; Fri, 10 May 2024 11:55:56 +0000 (UTC)
+ id 47bxHsGHeIvo; Fri, 10 May 2024 11:55:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D896C42A4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E610A42A80
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D896C42A4D;
-	Fri, 10 May 2024 11:55:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 94AA71BF2A1
+	by smtp2.osuosl.org (Postfix) with ESMTP id E610A42A80;
+	Fri, 10 May 2024 11:55:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DD7131BF2A1
  for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C1828457F
+ by smtp2.osuosl.org (Postfix) with ESMTP id D770542A4F
  for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:55:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QQVZph3Dsuie for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 11:55:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0rLycx2FqDQI for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 11:55:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D02F084574
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FF544056F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D02F084574
- for <buildroot@buildroot.org>; Fri, 10 May 2024 11:55:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0FF544056F
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 11:55:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B80B786E86; Fri, 10 May 2024 11:55:53 +0000 (UTC)
+ id F091286E86; Fri, 10 May 2024 11:55:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 May 2024 13:44:49 +0200
+Date: Fri, 10 May 2024 13:48:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8ca56912abaae8ccfa77e744277315dde848234d
-X-Git-Newrev: 1cc8a1b21143714440d1c5c8eeafd8fbf72830ce
+X-Git-Oldrev: 5f7275787ab1520c3d3f7eb9d2bd1b9f5ff41443
+X-Git-Newrev: a4023ae75d9295803104dbd6bde35fdfd3c39bce
 X-Patchwork-Hint: ignore
-Message-Id: <20240510115553.B80B786E86@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsepol: bump to version 3.6
+Message-Id: <20240510115553.F091286E86@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/policycoreutils: bump version to
+ 3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +66,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cc8a1b21143714440d1c5c8eeafd8fbf72830ce
+commit: https://git.buildroot.net/buildroot/commit/?id=a4023ae75d9295803104dbd6bde35fdfd3c39bce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+setsebool/Makefile now unconditionally links against libsepol.
+As such, it is now a new dependency.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsepol/libsepol.hash | 2 +-
- package/libsepol/libsepol.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/policycoreutils/Config.in            | 5 +++--
+ package/policycoreutils/policycoreutils.hash | 2 +-
+ package/policycoreutils/policycoreutils.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
-index c243aaae2b..1369d820e1 100644
---- a/package/libsepol/libsepol.hash
-+++ b/package/libsepol/libsepol.hash
-@@ -1,5 +1,5 @@
- # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  78fdaf69924db780bac78546e43d9c44074bad798c2c415d0b9bb96d065ee8a2  libsepol-3.5.tar.gz
-+sha256  c9dc585ea94903d784d597c861cd5dce6459168f95e22b31a0eab1cdd800975a  libsepol-3.6.tar.gz
- 
- # Hash for license file
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index f7782542ec..6361cc66bc 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
+index 499aaf531d..07e171a53f 100644
+--- a/package/policycoreutils/Config.in
++++ b/package/policycoreutils/Config.in
+@@ -6,10 +6,11 @@ comment "policycoreutils needs a toolchain w/ threads, dynamic library, gcc >= 5
+ config BR2_PACKAGE_POLICYCOREUTILS
+ 	bool "policycoreutils"
+ 	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # libsemanage
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
+-	depends on !BR2_STATIC_LIBS # libsemanage
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage, libsepol
++	depends on !BR2_STATIC_LIBS # libsemanage, libsepol
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # libsemanage -> libselinux -> libsepol
+ 	select BR2_PACKAGE_LIBSEMANAGE
++	select BR2_PACKAGE_LIBSEPOL
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
+index e29d192b13..ea45116912 100644
+--- a/package/policycoreutils/policycoreutils.hash
++++ b/package/policycoreutils/policycoreutils.hash
+@@ -1,3 +1,3 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  78453e1529fbbf800e88860094d555e781ce1fba11a7ef77b5aabb43e1173276  policycoreutils-3.5.tar.gz
++sha256  a76ac431ea40a35a83164ce9007909c1c6c12fd1056627f622144e4a705c0a2c  policycoreutils-3.6.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 3152fb6b67..714e2d7ad6 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--LIBSEPOL_VERSION = 3.5
-+LIBSEPOL_VERSION = 3.6
- LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEPOL_VERSION)
- LIBSEPOL_LICENSE = LGPL-2.1+
- LIBSEPOL_LICENSE_FILES = LICENSE
+-POLICYCOREUTILS_VERSION = 3.5
++POLICYCOREUTILS_VERSION = 3.6
+ POLICYCOREUTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(POLICYCOREUTILS_VERSION)
+ POLICYCOREUTILS_LICENSE = GPL-2.0
+ POLICYCOREUTILS_LICENSE_FILES = LICENSE
+ POLICYCOREUTILS_CPE_ID_VENDOR = selinuxproject
+ 
+-POLICYCOREUTILS_DEPENDENCIES = libsemanage libcap-ng $(TARGET_NLS_DEPENDENCIES)
++POLICYCOREUTILS_DEPENDENCIES = libsemanage libsepol libcap-ng $(TARGET_NLS_DEPENDENCIES)
+ POLICYCOREUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) LDLIBS=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
