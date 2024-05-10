@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B229BC25B5F
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 12:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1950AC25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 12:02:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 82AF642A8E;
-	Fri, 10 May 2024 12:01:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C632E42A7E;
+	Fri, 10 May 2024 12:02:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y2l25WL5NFZf; Fri, 10 May 2024 12:01:40 +0000 (UTC)
+ id bYSwcePpkBKK; Fri, 10 May 2024 12:02:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 792F642A94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88E6D42AA3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 792F642A94;
-	Fri, 10 May 2024 12:01:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AB89F1BF2A1
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 12:01:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88E6D42AA3;
+	Fri, 10 May 2024 12:02:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3BF111BF995
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 12:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9751142462
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 12:01:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2889B84599
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 12:02:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D5V8Qwuafm1N for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 12:01:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mMK4V8a9qhSj for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 12:02:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 110F442459
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 110F442459
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 110F442459
- for <buildroot@buildroot.org>; Fri, 10 May 2024 12:01:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7F44724000B;
- Fri, 10 May 2024 12:01:32 +0000 (UTC)
-Date: Fri, 10 May 2024 14:01:31 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240510140131.2f7e8431@windsurf>
-In-Reply-To: <20240324173519.61770-1-fontaine.fabrice@gmail.com>
-References: <20240324173519.61770-1-fontaine.fabrice@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 66ED9845C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66ED9845C8
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 66ED9845C8
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 12:02:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A5771FF802;
+ Fri, 10 May 2024 12:02:06 +0000 (UTC)
+Date: Fri, 10 May 2024 14:02:05 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20240510140205.2df335fb@windsurf>
+In-Reply-To: <20240324174523.1770994-1-bernd@kuhls.net>
+References: <20240324174523.1770994-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715342492;
+ d=bootlin.com; s=gm1; t=1715342526;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=TJ8JztP1Q66MwVOl0ASrOEau1NvHrNUqYYSWmaq4hrI=;
- b=M99K9cQNcQIEne9qdUA//xldhM7S3V7MDvA/eADjqYxAzbKfg0hQBMLwQKMEsDna9icg1O
- 5lcb2bw+FaKFPL65Vn61ZyqqnpTEQpiJVNYgP+Yqc7O+waNhzI3Wz+7ER0ntm4yFIhXMUi
- 2JWP07/VqKdod/gn9Pdf+Qi7weqNhuQbVNXjUnMl+dDQwZQEwR0xvfhsUNFtGECMr3tQQg
- 8tIxeM7UwBb015meUu3a5ytV3Ia/2K2+6c6p//YKLGhNv+qLY1AdqiZ2hUXoFp1fUahnGn
- 0r1IWuwLsQWPGjyB2fxjWONF88d1k2EJ+gKzLknfePG3kNd1SxNZjFcbTYuj5A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=FzkRnPcw04eGuwgu6GPazbWAEbBrT6OYIUnbxHGaNcs=;
+ b=dCFgUx4tRziq+bV8AfjcqFrslO+P7tWiAnlOu/rzjaWTsnPz8sT2076S0I4iNeRIGdOfko
+ omnT0vLryk2/6udFPqIpVVOCmR+Dl5uWI8Hfl8wD0TjtNphNDJ7xxthdHPivAtRtHREK1M
+ 7Hw3zDqyIWdyeLRwfB5Mm7uqHMQomUWEBO8GCRpt7V01BaAluWs/W0ztSEj9J2ADZE06FZ
+ 0iUMx0CmBPYA6juESz786gSibPu/NR6VzlJdVMbgKQ2YPlbYX23CtbLWqqnuND3zoEBOeh
+ FLv7hdcWzJNdsiH7q9lNDE93znUyFQwR3TZtnQ/3qHxduCiF/LR6epQRcFxQGA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=M99K9cQN
-Subject: Re: [Buildroot] [PATCH 1/1] package/paho-mqtt-cpp: bump to version
- 1.3.2
+ header.s=gm1 header.b=dCFgUx4t
+Subject: Re: [Buildroot] [PATCH 1/1] package/libdrm: fix install of test
+ programs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,26 +83,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Refik Tuzakli <tuzakli.refik@gmail.com>, Daniel Lang <dalang@gmx.at>,
- Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 24 Mar 2024 18:35:19 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 24 Mar 2024 18:45:23 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> License updated to EPL-2.0 with
-> https://github.com/eclipse/paho.mqtt.cpp/commit/a7e9b1204296b16ddf2b5dbe23bc150cb1a04d5e
+> Buildroot commit f95069814bd68cfc10ccf2dbc41efa6f1e127495 disabled the
+> build of test programs unconditionally without considering the option
+> BR2_PACKAGE_LIBDRM_INSTALL_TESTS.
 > 
-> https://github.com/eclipse/paho.mqtt.cpp/blob/v1.3.2/CHANGELOG.md
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  package/paho-mqtt-cpp/paho-mqtt-cpp.hash | 4 ++--
->  package/paho-mqtt-cpp/paho-mqtt-cpp.mk   | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/libdrm/libdrm.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
