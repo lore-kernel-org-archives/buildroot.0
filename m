@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E2FC25B10
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 21:32:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4893EC25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 21:32:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9059140B7F;
-	Fri, 10 May 2024 21:32:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1640342C2A;
+	Fri, 10 May 2024 21:32:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NBOFDPl5yQgX; Fri, 10 May 2024 21:32:12 +0000 (UTC)
+ id 1NAonrG1Q3AM; Fri, 10 May 2024 21:32:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96024404A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29F2C42C2C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96024404A3;
-	Fri, 10 May 2024 21:32:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 29F2C42C2C;
+	Fri, 10 May 2024 21:32:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A9C601BF36A
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 21:32:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6F0B21BF36A
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 21:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A116F614FD
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 21:32:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5BEB9614FD
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 21:32:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2U48qiO0BoGS for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 21:32:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id fTav4V1Vg5Cn for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 21:32:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 433A66148F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 433A66148F
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 433A66148F
- for <buildroot@buildroot.org>; Fri, 10 May 2024 21:32:08 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7121740002;
- Fri, 10 May 2024 21:32:07 +0000 (UTC)
-Date: Fri, 10 May 2024 23:32:06 +0200
-To: Brian Mayer <bleemayer@gmail.com>
-Message-ID: <20240510233206.04122516@windsurf>
-In-Reply-To: <CAB3eKoBtu8-9ch_k9k=-tHocLE8SjYanSotPOM1HOTUsU-eGOQ@mail.gmail.com>
-References: <CAB3eKoBtu8-9ch_k9k=-tHocLE8SjYanSotPOM1HOTUsU-eGOQ@mail.gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5E7566148F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E7566148F
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5E7566148F
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 21:32:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C57A6FF802;
+ Fri, 10 May 2024 21:32:24 +0000 (UTC)
+Date: Fri, 10 May 2024 23:32:24 +0200
+To: =?UTF-8?B?QW5kcsOp?= Zwing <nerv@dawncrow.de>
+Message-ID: <20240510233224.7682c02d@windsurf>
+In-Reply-To: <20240326172822.1820862-1-nerv@dawncrow.de>
+References: <20240326172822.1820862-1-nerv@dawncrow.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715376727;
+ d=bootlin.com; s=gm1; t=1715376745;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=1OY+5QPKsZZt5r07JFvX/HqAeljPUbI6D+mXTW7nkjU=;
- b=Rd0b2rZNIIOb+WdRS4OXI2KiMX76oHKcRUjnmKPvnBndxQtrkD8lueZE7IPXM/L12TmwoD
- vab5CdG+45c3UYcYPU61RJtU3tueouIZ7/mYZkiRrIX9MJAQsF767EIRQGqrKCANVj8xcl
- wLJo0lQybT0oKGrgbCiAel8lxx/wvh3qqxy3d/JKEBEkhT2kMnCmrwj3wPNOBj/9Bm9LA8
- T61Mwh9cSenkaJS8Zn3E3KePiZaLN4yerlfyFILsV0mDNeZ1nBzmf1ExlGAAkh2uAlgPI0
- 6KZdUWljuC1LPZxGtv1qFM6xs31mI4VmL1upn2DYTuXP2hA1OEeZ3Q8wg1cEmQ==
+ bh=nqeR6KYrQiCNOQyXYO/D7YUAkjPhiWTZB+eP+90uqBs=;
+ b=f2U1kDl6BxoKtZhqkiz+eeOm5EDtAXyNEf4UnJLi0G8DApY/ZCI3Y4+Olr+keNnRIcyVLs
+ mVnl0CfvmzwwFVIDUF6OSp2t2eCKTan3oUDXs9Ie0oVyM49ucfMrAFNeQQmh2U0aXO8Rk6
+ Re/4Qq5+JMlSto73n1VDoA5w1i836IopYRJUls0WMq3uoM7EwdkKxJdVpu1gl8PP1hoLK8
+ LCRP1WOByykYHpJldR4U3otce3REYStAxb1JA3k5K/zEvSraxIhavIhxgafYmp8rPXwTIu
+ aQ+1nWLZ2N2TScWqKlImb5ef5SYyg0/c3OaW5tno5VcN0a52G5ErSac5YwDbVQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Rd0b2rZN
-Subject: Re: [Buildroot] [PATCH v2] package/sbase: new package
+ header.s=gm1 header.b=f2U1kDl6
+Subject: Re: [Buildroot] [PATCH] package/libkrb5: bump to 1.21.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,50 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Brian,
-
-On Tue, 26 Mar 2024 11:36:18 -0300
-Brian Mayer <bleemayer@gmail.com> wrote:
-
-> sbase is a collection of unix tools that are inherently portable across
-> UNIX and UNIX-like systems.
-> 
-> Signed-off-by: brian <brian@myr.sh>
-
-Aside from the wrapping issue, we also need your Signed-off-by to use
-your full name, and to match (in terms of e-mail address) the Author of
-the commit. Right now, there is discrepancy between:
-
-  From: Brian Mayer <bleemayer@gmail.com>
-
-and:
-
-  Signed-off-by: brian <brian@myr.sh>
-
-Could you fix this this in your v3 ?
-
-Also, a few more comments:
-
-- Please add an entry in the DEVELOPERS file for this new package
-
-- Please add hashes for the license files in sbase.hash
-
-- Make sure using utils/test-pkg that your packages builds reasonably
-  fine on a selection of Buildroot configurations
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVHVlLCAyNiBNYXIgMjAyNCAxODoyODoyMiArMDEwMApBbmRyw6kgWndpbmcgPG5lcnZAZGF3
+bmNyb3cuZGU+IHdyb3RlOgoKPiBTaWduZWQtb2ZmLWJ5OiBBbmRyw6kgWndpbmcgPG5lcnZAZGF3
+bmNyb3cuZGU+Cj4gLS0tCj4gIHBhY2thZ2UvbGlia3JiNS9saWJrcmI1Lmhhc2ggfCAyICstCj4g
+IHBhY2thZ2UvbGlia3JiNS9saWJrcmI1Lm1rICAgfCA1ICsrKy0tCj4gIDIgZmlsZXMgY2hhbmdl
+ZCwgNCBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKQXBwbGllZCB0byBtYXN0ZXIsIHRo
+YW5rcy4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVk
+IExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
