@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88B16C25B5F
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74571C25B5F
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:24:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51FCF40316;
-	Fri, 10 May 2024 11:24:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1249941FF2;
+	Fri, 10 May 2024 11:24:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ogrkTxJdEBEv; Fri, 10 May 2024 11:24:01 +0000 (UTC)
+ id XLkVHPbNceGp; Fri, 10 May 2024 11:24:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17EF241724
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 056A441EAE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17EF241724;
-	Fri, 10 May 2024 11:24:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 056A441EAE;
+	Fri, 10 May 2024 11:24:04 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 943CA1BF2A1
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:23:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3A1671BF2A1
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 796368194A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DA97817B1
  for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:23:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gKckpRitUr6I for <buildroot@lists.busybox.net>;
+ id kB7chB03la0Q for <buildroot@lists.busybox.net>;
  Fri, 10 May 2024 11:23:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC858817B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6EC8817F5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC858817B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id B6EC8817F5
  for <buildroot@buildroot.org>; Fri, 10 May 2024 11:23:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9715186E37; Fri, 10 May 2024 11:23:58 +0000 (UTC)
+ id A358186E38; Fri, 10 May 2024 11:23:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 10 May 2024 13:22:09 +0200
+Date: Fri, 10 May 2024 13:22:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 20373e0be847e1396b01ab3eba69b9ca96f6a70f
-X-Git-Newrev: c4f8728e70b8ca2dde109801bb8ecaaff4dfbf51
+X-Git-Oldrev: c4f8728e70b8ca2dde109801bb8ecaaff4dfbf51
+X-Git-Newrev: e1e4237dc7bd182709b9e28ccb2cc451da157f49
 X-Patchwork-Hint: ignore
-Message-Id: <20240510112358.9715186E37@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/clamav: bump version to 1.0.6
+Message-Id: <20240510112358.A358186E38@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 24.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +66,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4f8728e70b8ca2dde109801bb8ecaaff4dfbf51
+commit: https://git.buildroot.net/buildroot/commit/?id=e1e4237dc7bd182709b9e28ccb2cc451da157f49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://blog.clamav.net/2024/04/clamav-131-123-106-patch-versions.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-April/000754.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-April/000755.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index cd03a11840..b2b7bfb987 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 0756296a01..e1f6211e17 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 24.0.4
++MESA3D_HEADERS_VERSION = 24.0.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index e2e0be2641..fb3df96555 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  aa67ee9679f747af3c492353d768464c27d614b3fed62eb7f988b6776d4aedbb  clamav-1.0.5.tar.gz
-+sha256  12dcd842b6c46e5a9fdf2f5c16304efafe53310ac4605990465651b0c42227b2  clamav-1.0.6.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index c548897c37..eb3abaa21c 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://lists.freedesktop.org/archives/mesa-dev/2024-March/226176.html
+-sha256  90febd30a098cbcd97ff62ecc3dcf5c93d76f7fa314de944cfce81951ba745f0  mesa-24.0.4.tar.xz
+-sha512  1d05b07026417fbe9cf18f7b18f2db9fe5fe327555c590283d87f69bbdd51f64135928a1dbe155d750187fc268bbdbb070bc1ae9ffc3e013b8707b391969d515  mesa-24.0.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2024-April/000755.html
++sha256  8b7a92dbe6468c18f2383700135b5fe9de836cdf0cc8fd7dbae3c7110237d604  mesa-24.0.6.tar.xz
++sha512  60fcc77132c3cb0c98e650d97d3324bfd18abe7f8f8a3aa5209f71b2fddd94510f939bbf5272b2241749307184d5badde9da4842be57ce13f5760875885ea6fc  mesa-24.0.6.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index c2343488ed..39cbb4c23b 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CLAMAV_VERSION = 1.0.5
-+CLAMAV_VERSION = 1.0.6
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = \
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 24.0.4
++MESA3D_VERSION = 24.0.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
