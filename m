@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18BF3C25B10
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 09:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 551F8C25B5F
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 11:25:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DE96613EA;
-	Fri, 10 May 2024 09:24:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19D884244F;
+	Fri, 10 May 2024 11:25:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B2fXph4W8rzg; Fri, 10 May 2024 11:25:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5E2642445
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5E2642445;
+	Fri, 10 May 2024 11:24:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 719A01BF2A1
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5EC17615EF
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 11:24:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DpmWY8NEWdp7; Fri, 10 May 2024 09:24:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F01D61431
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F01D61431;
-	Fri, 10 May 2024 09:24:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6DE301BF2F8
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 09:24:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64D2C8187F
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 09:24:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a4JW3PJF2V-8 for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 09:24:02 +0000 (UTC)
+ id HzCQp9TiqqVx for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 11:24:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 949BD8183D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC09F615E8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 949BD8183D
- for <buildroot@uclibc.org>; Fri, 10 May 2024 09:24:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC09F615E8
+ for <buildroot@uclibc.org>; Fri, 10 May 2024 11:24:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 7329F83D48; Fri, 10 May 2024 09:24:02 +0000 (UTC)
+ id 9856E86E37; Fri, 10 May 2024 11:24:55 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 10 May 2024 09:24:02 +0000
+Date: Fri, 10 May 2024 11:24:55 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2024.02.1
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Jorgen.Pihlflyckt@ajeco.fi
+X-Bugzilla-Who: ps.report@gmx.net
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-16066-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-16060-163-7oi9c7HEzT@https.bugs.busybox.net/>
+In-Reply-To: <bug-16060-163@https.bugs.busybox.net/>
+References: <bug-16060-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 16066] New: buildroot toolchain fails to build on
- arm if BR2_TIME_BITS_64=Y
+Subject: [Buildroot] [Bug 16060] For Raspberry Pi 4, 64-bit,
+ OpenSSH password authentication doesn't work for root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,35 +81,21 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=16066
+https://bugs.busybox.net/show_bug.cgi?id=16060
 
-            Bug ID: 16066
-           Summary: buildroot toolchain fails to build on arm if
-                    BR2_TIME_BITS_64=Y
-           Product: buildroot
-           Version: 2024.02.1
-          Hardware: Other
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: Jorgen.Pihlflyckt@ajeco.fi
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+diff -u /etc/ssh/sshd_config_orig /etc/ssh/sshd_config
+--- /etc/ssh/sshd_config_orig
++++ /etc/ssh/sshd_config
+@@ -29,7 +29,7 @@
+ # Authentication:
 
-This is a problem cased by the dreaded Y2038 issue.
-
-The toolchain build fails when compiling libsanitizer at the host-final build
-stage. The following post on gcc-patches seems to fix the problem:
-
-https://gcc.gnu.org/pipermail/gcc-patches/2024-February/646317.html
-
-However, this patch is not yet included in the gcc versions included with the
-buildroot toolchain in version 2024.02.2
------
-Cheers. Jorgen.Pihlflyckt@ajeco.fi
+ #LoginGraceTime 2m
+-#PermitRootLogin prohibit-password
++PermitRootLogin yes
+ #StrictModes yes
+ #MaxAuthTries 6
+ #MaxSessions 10
 
 -- 
 You are receiving this mail because:
