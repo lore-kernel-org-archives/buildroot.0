@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22A15C25B10
-	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 21:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7349C25B10
+	for <buildroot@archiver.kernel.org>; Fri, 10 May 2024 21:35:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E6869404A3;
-	Fri, 10 May 2024 21:34:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 73A15404A3;
+	Fri, 10 May 2024 21:35:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LK_Xad1oPSdk; Fri, 10 May 2024 21:34:05 +0000 (UTC)
+ id xqo6c3CDDIGU; Fri, 10 May 2024 21:35:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04F744060D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B87242C1F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 04F744060D;
-	Fri, 10 May 2024 21:34:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6A8BA1BF36A
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 21:34:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B87242C1F;
+	Fri, 10 May 2024 21:35:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 422A81BF36A
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 21:35:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 644214060D
- for <buildroot@lists.busybox.net>; Fri, 10 May 2024 21:34:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A0DD61645
+ for <buildroot@lists.busybox.net>; Fri, 10 May 2024 21:35:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6kkSgVbOnKCE for <buildroot@lists.busybox.net>;
- Fri, 10 May 2024 21:34:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gs9TWHcpdtl2 for <buildroot@lists.busybox.net>;
+ Fri, 10 May 2024 21:34:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5DC73404A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DC73404A3
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5DC73404A3
- for <buildroot@buildroot.org>; Fri, 10 May 2024 21:34:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 79A0F240002;
- Fri, 10 May 2024 21:34:00 +0000 (UTC)
-Date: Fri, 10 May 2024 23:33:59 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240510233359.1d023b58@windsurf>
-In-Reply-To: <20240307103848.27961-1-fontaine.fabrice@gmail.com>
-References: <20240307103848.27961-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715376840;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=8XFy3qYMYfwHljKkJ+ML/ZXGbIympovzxnEA0CSwmQA=;
- b=Bbgeqt1oerWw/juxDgd9/YfD6g1jKR4YC+OjTnhOlSMJAbMgGbeiAerj9k8wd5fFP7ZvmD
- 2IXi7hGgGMoWw2bUGAhbxlPMqUlOSKNq1jPz5Eq2xzvY/aoNLeN9iUstm/VBcvrI5gVtnf
- Y6v9J6cOJibR4QinCGApNwJfnyerhId9+5BZuwq6KOzusxGP2P3x1daXfsiXTSATqOV9nD
- pdKtTFoZGT94TStI8YN5oaNsKUkAElFeBv1+ohdJcDh5zClhXLrC6fhsPmvQJf0WFBaJF+
- syTeoGqBCDcwcshBTJbez6FLLLvcEzosXPQUORITwUJdjcY4cWKXiDCND2AplA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Bbgeqt1o
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/binutils-bare-metal: fix CPE ID
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FC976162B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6FC976162B
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 21:34:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6841786F8E; Fri, 10 May 2024 21:34:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 10 May 2024 23:34:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0daf2fc73d82ccb7c3e4018fd1b863232dc35fe5
+X-Git-Newrev: 4c40af98382feda648ff54b8e733eb7307f86164
+X-Patchwork-Hint: ignore
+Message-Id: <20240510213459.6841786F8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zxing-cpp: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,31 +59,70 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>,
- Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  7 Mar 2024 11:38:48 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4c40af98382feda648ff54b8e733eb7307f86164
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Commit 11b439ce1bd28506051fff14646f8bbdbbbe58d8 forgot to set
-> HOST_BINUTILS_BARE_METAL_CPE_ID_PRODUCT
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - Move product after vendor
+threads are mandatory since switch to an active fork in commit
+456a7398316655ad0b669635f580e4887c24a700:
 
-Applied to master, thanks.
+CMake Error at /home/buildroot/autobuild/run/instance-1/output-1/host/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
+  Could NOT find Threads (missing: Threads_FOUND)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes: 456a7398316655ad0b669635f580e4887c24a700
+ - http://autobuild.buildroot.org/results/b600582d9c5407c7324af70d61fa5c1f96d929f6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in | 5 +++--
+ package/zxing-cpp/Config.in                   | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index d2c60ec9ce..e85ec16784 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -746,11 +746,12 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_ZXING
+ 	depends on !BR2_STATIC_LIBS # zxing-cpp
+ 	depends on BR2_USE_WCHAR # zxing-cpp
+ 	depends on BR2_INSTALL_LIBSTDCPP # zxing-cpp
++	depends on BR2_TOOLCHAIN_HAS_THREADS # zxing-cpp
+ 	select BR2_PACKAGE_ZXING_CPP
+ 
+-comment "zxing plugin needs a toolchain w/ C++, wchar, dynamic library"
++comment "zxing plugin needs a toolchain w/ C++, wchar, dynamic library, threads"
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
+-		!BR2_INSTALL_LIBSTDCPP
++		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ endif
+ 
+diff --git a/package/zxing-cpp/Config.in b/package/zxing-cpp/Config.in
+index 0d8b79538d..b72a00ec35 100644
+--- a/package/zxing-cpp/Config.in
++++ b/package/zxing-cpp/Config.in
+@@ -1,12 +1,13 @@
+-comment "zxing-cpp needs a toolchain w/ C++, wchar, dynamic library"
++comment "zxing-cpp needs a toolchain w/ C++, wchar, dynamic library, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		BR2_STATIC_LIBS
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_ZXING_CPP
+ 	bool "zxing-cpp"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_STB
+ 	select BR2_PACKAGE_PYTHON_PYBIND if BR2_PACKAGE_PYTHON3
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
