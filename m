@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CA09C04FFE
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 06:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C538AC04FFE
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 06:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8340961632;
-	Sat, 11 May 2024 06:19:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8167161656;
+	Sat, 11 May 2024 06:22:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9rce6M8H3FfI; Sat, 11 May 2024 06:19:42 +0000 (UTC)
+ id AWPaxiN6-UBB; Sat, 11 May 2024 06:22:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3338B614EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73056615E9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3338B614EA;
-	Sat, 11 May 2024 06:19:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0D6B01BF398
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:19:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73056615E9;
+	Sat, 11 May 2024 06:22:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A92FF1BF398
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE76E8305A
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:19:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94F444259D
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:22:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Q96QbdZrjrL for <buildroot@lists.busybox.net>;
- Sat, 11 May 2024 06:19:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SuH-VzaATPuQ for <buildroot@lists.busybox.net>;
+ Sat, 11 May 2024 06:22:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22d; helo=mail-lj1-x22d.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BE56483409
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE56483409
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
- [IPv6:2a00:1450:4864:20::22d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BE56483409
- for <buildroot@buildroot.org>; Sat, 11 May 2024 06:19:39 +0000 (UTC)
-Received: by mail-lj1-x22d.google.com with SMTP id
- 38308e7fff4ca-2e0b2ddc5d1so36323031fa.3
- for <buildroot@buildroot.org>; Fri, 10 May 2024 23:19:39 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EDDEC4257C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDDEC4257C
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EDDEC4257C
+ for <buildroot@buildroot.org>; Sat, 11 May 2024 06:22:01 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-41fc2f7fbb5so14080525e9.1
+ for <buildroot@buildroot.org>; Fri, 10 May 2024 23:22:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715408376; x=1716013176;
+ d=1e100.net; s=20230601; t=1715408519; x=1716013319;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=MPNeNF5yCS0I2cuYvK0luMvQUl5rhY0tL9v42Q7CWvQ=;
- b=VBdWGvfB+McpxFZh7dz5RWzNAr8dVqSAJUel/q5m+5zGBgdVn7BrcUcZwuL3i5Tk+T
- kBZnLbjJ66z8b7r+A1AVdY/U0QDyQOy4azukbyQHz11hyJaEpZcWWZwD1t4wZAKNFP/b
- QquuZ+SyezMFe4+duSq5l04NGVeglrfdUkdNmRh+c4WmPU/IyPovWVhbLzbXgiPIB4gO
- j8ERRuE/kIxZFByYJChu2oiDPrr+3x4JhppzPETokY4ps+vubEKQHvn4O0i7fjUkLuGW
- lQgrJJ5RvbEcIGEyJbeWi1ROAejuqKacWhLiU9i4O1V7S0OBrn1VchNoYEwy5ikPxonT
- l3pw==
-X-Gm-Message-State: AOJu0Yz/8BfwvL9d/TOzGfyppJPX9V/CzKHrX2LavKHZpfIUTBID6J0T
- pd50+B1YYJGzyRJ7SLTdpmibT4f3zX+jfWNDEhQERoa33kyFhHPX6nLDOg==
-X-Google-Smtp-Source: AGHT+IGQFubcu4TEd6b7oJUNFFPLYVepC8ElAVAOLlshqHiFe4u5FgkRPP51EPR2UFUXs0pHi9Y8yQ==
-X-Received: by 2002:a2e:9d05:0:b0:2e3:2d6a:debe with SMTP id
- 38308e7fff4ca-2e5204cd089mr26726461fa.51.1715408376096; 
- Fri, 10 May 2024 23:19:36 -0700 (PDT)
+ bh=ASAxpmkOSqGf7RasqwTF3EG3xRJzsV0V+QaG6pFvDrM=;
+ b=frESJBV+FgsHW4mYW1Inj2bToBMOY5k7LhoAAlRv3ktuaboGHe45nFrqSocMqFXfz/
+ oJpApyr7TixMDN4lERU92oOkU5IlTaNZfLzdVBxuNiW2r1RR0NDTgWdvuL2JziugJA1i
+ iEoJIO6MAuVm8joQcxiS/Zu1zt5t+JSVd4ON03I+WA8290tXMUlcm8wmFmB1TT8Qhs3H
+ +/62uJvr3sSSA+aIkUyx8zzo8wjxYAntriIHQrgmVlJdMsz0fr5wEf3cEEoFZcmcpsQP
+ SDEcWt5/Alz39NLFDTK0r1JVuJeYOyKER9xN+gB+RUFExCuW0tKHGK95tYeO6xWJpbMZ
+ mMTQ==
+X-Gm-Message-State: AOJu0Yw2QtnZwT/0P9up16Xi7Cl/Mm+uXVUmwxA29QVrm2PRh/Q94fJb
+ LnxrnNEzwzWQXD5G4CqUIz+T8Cm/Nxw7LWQoivwXf5NCCrMrddU6ROFhCg==
+X-Google-Smtp-Source: AGHT+IEAJMgaxp5J06kxNVGI4NnSbyqYK5Ncwd330mvsq2CjhXVA1LYJXcm/3WlRw8toA5V27963iA==
+X-Received: by 2002:adf:ff8c:0:b0:34c:e0d6:bea6 with SMTP id
+ ffacd0b85a97d-35049bbf670mr4131718f8f.29.1715408518706; 
+ Fri, 10 May 2024 23:21:58 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-41fccee94dasm87220625e9.32.2024.05.10.23.19.35
+ ffacd0b85a97d-3502baad0casm6256103f8f.86.2024.05.10.23.21.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 10 May 2024 23:19:35 -0700 (PDT)
+ Fri, 10 May 2024 23:21:58 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 11 May 2024 08:19:31 +0200
-Message-ID: <20240511061931.143405-1-fontaine.fabrice@gmail.com>
+Date: Sat, 11 May 2024 08:21:56 +0200
+Message-ID: <20240511062156.145055-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715408376; x=1716013176; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1715408519; x=1716013319; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=MPNeNF5yCS0I2cuYvK0luMvQUl5rhY0tL9v42Q7CWvQ=;
- b=ABLiHzR6rFPubD5bSv828c5r7VcHqVhAPvD7WN9mYC1LHg9uHpTLei2v1OohS/DKkD
- mNK6hCuOXZehp0qEalxIjo5jahsVaOpxzJeizHfR33mbM+tLzOipRlJKxo3J1bFU6sVu
- +YM3gWzlEvA/7aS0aZBEKP3JQ85EOmxLIgi8q5/BT56WeCDCxQUs8E2/cFcO6vRzeh4m
- v7SMkwDJ0CKeSNA4eW+9O1VE2ih7MVdRU7vd0BoJ+e+p+N65VMSmm6GnYAInHMb26WbD
- h9fZG4hy5AoAIq+MEirNwOokiIxhwQ3NDEre3Pu+uoqgvyLJ2g36jEscxMWEz6/7kNcY
- 3fTg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=ASAxpmkOSqGf7RasqwTF3EG3xRJzsV0V+QaG6pFvDrM=;
+ b=nbsZVyTUEki+rGxdFvr2Ls8mnFQYsreooZcqTgQQ7uip/p2OkLrHtojDSh4hNbBB32
+ gWHnM0kY7umSAgsLDilCXN9VjNKe0TZ3o3A2lVCHjNzIoOVl+KMrRCpZBJQeem+U4mNL
+ PGFmPNoXSNmFcMoDpAiHhCc0LApVmU3Q1wGiUgNZNNomLhcEmFxqtvYT154n2a5UUFTW
+ 7uhDEBSImwQeUpjkpOoLmK4ls4gMPhKixm77Gp9sMYvZYQh9C05X63mS/OSNA5Z9mNCa
+ pqaJdCM0UZSeYYTC7OjWw5EW2C4wMLJxCcjHTjOkd98qo6dBEQ4HoRDS6pLrd8pnwf82
+ nmPg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=ABLiHzR6
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix uclibc build
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=nbsZVyTU
+Subject: [Buildroot] [PATCH 1/1] package/ledmon: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,90 +99,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Antoine Tenart <atenart@kernel.org>,
+Cc: Maksim Kiselev <bigunclemax@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following uclibc build failure raised since bump to version 3.6
-in commit 5f7275787ab1520c3d3f7eb9d2bd1b9f5ff41443 and
-https://github.com/SELinuxProject/selinux/commit/cb8289c2b237e5f66e4a7608ecc6c68abeaeaf55:
+Fix the following musl build failure raised since bump to version 1.0.0
+in commit b3819b761f4a06bc75fe33b785e5ff2cecc5d211 and
+https://github.com/intel/ledmon/commit/bcb90426a156fcb3147b5722ed78ac8cf26f2976:
 
-selinux_internal.c: In function 'reallocarray':
-selinux_internal.c:25:29: error: 'SIZE_MAX' undeclared (first use in this function)
-   25 |         if (size && nmemb > SIZE_MAX / size) {
-      |                             ^~~~~~~~
-selinux_internal.c:6:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-    5 | #include <string.h>
-  +++ |+#include <stdint.h>
-    6 |
-selinux_internal.c:25:29: note: each undeclared identifier is reported only once for each function it appears in
-   25 |         if (size && nmemb > SIZE_MAX / size) {
-      |                             ^~~~~~~~
+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-musleabi/12.3.0/../../../../arm-buildroot-linux-musleabi/bin/ld: ledctl-ledctl.o: in function `main':
+ledctl.c:(.text.startup+0x140): undefined reference to `on_exit'
 
-Fixes: 5f7275787ab1520c3d3f7eb9d2bd1b9f5ff41443
- - http://autobuild.buildroot.org/results/7e627744beaa4f7fdfd488dfacbaafc074a999f7
+Fixes: b3819b761f4a06bc75fe33b785e5ff2cecc5d211
+ - http://autobuild.buildroot.org/results/d535e03f6ee0f43ecea34fb29ea148a4cdc01169
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...se_linux_internal.c-include-stdint.h.patch | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/libselinux/0002-libselinux-src-se_linux_internal.c-include-stdint.h.patch
+ ...l-ledctl.c-replace-on_exit-by-atexit.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/ledmon/0001-src-ledctl-ledctl.c-replace-on_exit-by-atexit.patch
 
-diff --git a/package/libselinux/0002-libselinux-src-se_linux_internal.c-include-stdint.h.patch b/package/libselinux/0002-libselinux-src-se_linux_internal.c-include-stdint.h.patch
+diff --git a/package/ledmon/0001-src-ledctl-ledctl.c-replace-on_exit-by-atexit.patch b/package/ledmon/0001-src-ledctl-ledctl.c-replace-on_exit-by-atexit.patch
 new file mode 100644
-index 0000000000..a626370a1b
+index 0000000000..4e1536df4f
 --- /dev/null
-+++ b/package/libselinux/0002-libselinux-src-se_linux_internal.c-include-stdint.h.patch
-@@ -0,0 +1,45 @@
-+From f6143706e2fc0f1ae16cb3667722deb9cc51c244 Mon Sep 17 00:00:00 2001
++++ b/package/ledmon/0001-src-ledctl-ledctl.c-replace-on_exit-by-atexit.patch
+@@ -0,0 +1,40 @@
++From ff6f5cd263da4683b3ea07d4ef8afdbf95e2a401 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 11 May 2024 08:09:38 +0200
-+Subject: [PATCH] libselinux/src/se_linux_internal.c: include stdint.h
++Date: Thu, 9 May 2024 10:04:38 +0200
++Subject: [PATCH] ledctl: replace on_exit() by atexit()
 +
-+Include stdint.h to avoid the following uclibc build failure raised
-+since version 3.6 and
-+https://github.com/SELinuxProject/selinux/commit/cb8289c2b237e5f66e4a7608ecc6c68abeaeaf55:
++Replace on_exit() by atexit() to avoid the following musl build failure
++raised since bcb9042 ("ledctl: Remove enum ledctl_status_code_t")
++which partially reverted f08dd2c ("Fix build with Musl libc (#139)")
 +
-+selinux_internal.c: In function 'reallocarray':
-+selinux_internal.c:25:29: error: 'SIZE_MAX' undeclared (first use in this function)
-+   25 |         if (size && nmemb > SIZE_MAX / size) {
-+      |                             ^~~~~~~~
-+selinux_internal.c:6:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-+    5 | #include <string.h>
-+  +++ |+#include <stdint.h>
-+    6 |
-+selinux_internal.c:25:29: note: each undeclared identifier is reported only once for each function it appears in
-+   25 |         if (size && nmemb > SIZE_MAX / size) {
-+      |                             ^~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7e627744beaa4f7fdfd488dfacbaafc074a999f7
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-musleabi/12.3.0/../../../../arm-buildroot-linux-musleabi/bin/ld: ledctl-ledctl.o: in function `main':
++ledctl.c:(.text.startup+0x140): undefined reference to `on_exit'
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/SELinuxProject/selinux/pull/435
++Upstream: https://github.com/intel/ledmon/commit/ff6f5cd263da4683b3ea07d4ef8afdbf95e2a401
 +---
-+ libselinux/src/selinux_internal.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/ledctl/ledctl.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/selinux_internal.c b/src/selinux_internal.c
-+index 06852359..f6385908 100644
-+--- a/src/selinux_internal.c
-++++ b/src/selinux_internal.c
-+@@ -1,6 +1,7 @@
-+ #include "selinux_internal.h"
++diff --git a/src/ledctl/ledctl.c b/src/ledctl/ledctl.c
++index 231253dc..95db2d86 100644
++--- a/src/ledctl/ledctl.c
+++++ b/src/ledctl/ledctl.c
++@@ -230,7 +230,7 @@ static void ibpi_state_fini(struct ibpi_state *p)
++  *
++  * @return The function does not return a value.
++  */
++-static void _ledctl_fini(int _i, void *_arg)
+++static void _ledctl_fini(void)
++ {
++ 	led_free(ctx);
++ 	list_erase(&ibpi_list);
++@@ -1101,7 +1101,7 @@ int main(int argc, char *argv[])
++ 	if (status != LED_STATUS_SUCCESS)
++ 		return status;
 + 
-+ #include <errno.h>
-++#include <stdint.h>
-+ #include <stdlib.h>
-+ #include <string.h>
++-	if (on_exit(_ledctl_fini, progname))
+++	if (atexit(_ledctl_fini))
++ 		exit(LED_STATUS_ONEXIT_ERROR);
 + 
-+-- 
-+2.43.0
-+
++ 	status = _read_shared_conf();
 -- 
 2.43.0
 
