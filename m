@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7B97C04FFE
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 06:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64F69C25B5F
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 06:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9155D61632;
-	Sat, 11 May 2024 06:56:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CAF561431;
+	Sat, 11 May 2024 06:57:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id McoBPaoDDqOe; Sat, 11 May 2024 06:56:25 +0000 (UTC)
+ id 7dT0e2UoAo1p; Sat, 11 May 2024 06:57:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 956B36168C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2360361632
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 956B36168C;
-	Sat, 11 May 2024 06:56:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 79A561BF398
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:56:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2360361632;
+	Sat, 11 May 2024 06:57:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EC2E1BF398
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 666866168C
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:56:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E90E78468E
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:57:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GuXQRCQ4WFFX for <buildroot@lists.busybox.net>;
- Sat, 11 May 2024 06:56:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6L-PPkW6kZrE for <buildroot@lists.busybox.net>;
+ Sat, 11 May 2024 06:57:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4A2DC61632
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A2DC61632
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4A2DC61632
- for <buildroot@buildroot.org>; Sat, 11 May 2024 06:56:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3999B60002;
- Sat, 11 May 2024 06:56:20 +0000 (UTC)
-Date: Sat, 11 May 2024 08:56:19 +0200
-To: Brandon Maier via buildroot <buildroot@buildroot.org>
-Message-ID: <20240511085619.304cff8f@windsurf>
-In-Reply-To: <20240510235510.2454216-2-brandon.maier@collins.com>
-References: <20240510235510.2454216-1-brandon.maier@collins.com>
- <20240510235510.2454216-2-brandon.maier@collins.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715410580;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=U3XpEgZuWP0U80p+pBKkOPG88kCfjADCUQM62+e/3b0=;
- b=D4dtOjCAYJqQ84PviEcaQfZ03ZePhiwHX/P1+LKYnROdYT6lSCkiolEQSKR8CqHhNucTJ/
- 2LwhgAwMUmeTbTTdknxXKXfZbRwG8Ieh6dC+yNv+e3k1xWSHVvR+Aa2DaMiarYpDHjAbVH
- jQUxB5Ucvdbz0IxJrkFmn1ejWe3gmcJTIJrc4fLTWpO4sRdyzHyhuumXCOlFogdLUQUETY
- o4U360Is66JzPoJUUF5crWs6h+AOpNo0S3P0VKKO+GHAlG3ZKxIFLvd11G04KDyBLs+7SX
- gtOahwY1fJOTwdbouoJq8/p33KdTZOYTJkTXYU8TaNYgFD0+qcwMt+Vn+l+OVA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=D4dtOjCA
-Subject: Re: [Buildroot] [PATCH 2/2] package/zip: fix build with GCC 14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 224BE8468D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 224BE8468D
+ for <buildroot@buildroot.org>; Sat, 11 May 2024 06:57:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 193E686E37; Sat, 11 May 2024 06:57:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 11 May 2024 08:56:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 29c6fe13d37ab1a3305005b42441a49afe4d1895
+X-Git-Newrev: 8fa9ad7e4f2212e3ff934695eb36e9dc2cb9c2b8
+X-Patchwork-Hint: ignore
+Message-Id: <20240511065706.193E686E37@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: add patch to fix gcc 11 build
+ warning
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,50 +60,74 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jan Pedersen <jp@jp-embedded.com>,
- Brandon Maier <brandon.maier@collins.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 10 May 2024 23:55:10 +0000
-Brandon Maier via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8fa9ad7e4f2212e3ff934695eb36e9dc2cb9c2b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Builds with GCC 14 print the following error
-> 
-> > zip.h:726:10: error: conflicting types for 'memset'; have 'char *(char *, int,  unsigned int)'  
-> 
-> This is because with GCC 14, Zip incorrectly detects that the memset functions
-> exist. Which enables the ZMEM flag and declares its own version of memset.
-> 
-> This is because the ./unix/configure script attempts to compile a C file using
-> 'memset' but it does not include the <string.h>. This was allowed in gnu89, but
-> in GCC 14 -Werror=implicit-function-declaration is enabled by default[1].
-> 
-> We forcefully set '-std=gnu89' so that Zip will compile everything against
-> gnu89, which suppresses the warning.
-> 
-> [1] https://gcc.gnu.org/gcc-14/porting_to.html#warnings-as-errors
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-> ---
->  package/zip/zip.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+When building GCC 11 with GCC 14 the following error occurs
 
-My first thought was that this should be fixed with a patch, that we
-send upstream. However, it seems like the zip 3.0 release we're using
-dates back from 2008, and despite an announce of zip 3.1 on the
-website, this still hasn't happened. As it's not clear how active
-upstream is, I've applied your solution that doesn't involve a patch.
+> ../../../libiberty/simple-object-mach-o.c:1231:17: error: passing argument 1 of 'set_32' from incompatible pointer type [-Wincompatible-pointer-types]
 
-Thanks!
+This was fixed upstream in GCC12[1]. It is applied to the GCC 11 release
+branch[2], but has not been officially released yet.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=38757aa88735ab2e511bc428e2407a5a5e9fa0be
+[2] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=02cd761eb1198df50453b2e39653f48053609ffc
+
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...0009-libiberty-Darwin-Fix-a-build-warning.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/package/gcc/11.4.0/0009-libiberty-Darwin-Fix-a-build-warning.patch b/package/gcc/11.4.0/0009-libiberty-Darwin-Fix-a-build-warning.patch
+new file mode 100644
+index 0000000000..3c694a89fa
+--- /dev/null
++++ b/package/gcc/11.4.0/0009-libiberty-Darwin-Fix-a-build-warning.patch
+@@ -0,0 +1,37 @@
++From d1fc3505cc09d0ee02abbb732eafc91967c3ac07 Mon Sep 17 00:00:00 2001
++From: Iain Sandoe <iain@sandoe.co.uk>
++Date: Mon, 23 Aug 2021 17:34:43 +0100
++Subject: [PATCH] libiberty, Darwin: Fix a build warning.
++
++r12-3005-g220c410162ebece4f missed a cast for the set_32 call.
++Fixed thus.
++
++Signed-off-by: Iain Sandoe <iain@sandoe.co.uk>
++
++libiberty/ChangeLog:
++
++	* simple-object-mach-o.c (simple_object_mach_o_write_segment):
++	Cast the first argument to set_32 as needed.
++
++Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=38757aa88735ab2e511bc428e2407a5a5e9fa0be
++Signed-off-by: Brandon Maier <brandon.maier@collins.com>
++---
++ libiberty/simple-object-mach-o.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libiberty/simple-object-mach-o.c b/libiberty/simple-object-mach-o.c
++index 72b69d19c21..a8869e7c639 100644
++--- a/libiberty/simple-object-mach-o.c
+++++ b/libiberty/simple-object-mach-o.c
++@@ -1228,7 +1228,7 @@ simple_object_mach_o_write_segment (simple_object_write *sobj, int descriptor,
++       /* Swap the indices, if required.  */
++ 
++       for (i = 0; i < (nsects_in * 4); ++i)
++-	set_32 (&index[i], index[i]);
+++	set_32 ((unsigned char *) &index[i], index[i]);
++ 
++       sechdr_offset += sechdrsize;
++ 
++-- 
++2.45.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
