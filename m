@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57C0BC04FFE
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 20:11:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 342CCC04FFE
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 20:11:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AAF5141498;
-	Sat, 11 May 2024 20:11:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8B6E42378;
+	Sat, 11 May 2024 20:11:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iAZAPvS9Xtpg; Sat, 11 May 2024 20:11:23 +0000 (UTC)
+ id G7w_4ezzNjM7; Sat, 11 May 2024 20:11:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51BA141F2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAE1F42396
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51BA141F2A;
-	Sat, 11 May 2024 20:11:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 188511BF57C
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:11:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAE1F42396;
+	Sat, 11 May 2024 20:11:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B2121BF57C
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:11:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0021241F2A
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:11:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 07580607E0
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:11:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CWO5aelO3jqA for <buildroot@lists.busybox.net>;
- Sat, 11 May 2024 20:11:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x3ly7vQ7_T0O for <buildroot@lists.busybox.net>;
+ Sat, 11 May 2024 20:11:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02A7541498
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02A7541498
- for <buildroot@buildroot.org>; Sat, 11 May 2024 20:11:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED55386FAB; Sat, 11 May 2024 20:11:19 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 11 May 2024 22:08:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 142fec6cbd8f6af0eb21cdf38ebbdf8dbea8724c
-X-Git-Newrev: 23d71be5a985a03a3cc29f2507243488889c244c
-X-Patchwork-Hint: ignore
-Message-Id: <20240511201119.ED55386FAB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elf2flt: update to 2024.02
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C8E16607B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8E16607B2
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C8E16607B2
+ for <buildroot@buildroot.org>; Sat, 11 May 2024 20:11:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6C3F91C0002;
+ Sat, 11 May 2024 20:11:28 +0000 (UTC)
+Date: Sat, 11 May 2024 22:11:27 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240511221127.7a485875@windsurf>
+In-Reply-To: <Zj8eCPC1/IXZ6X9Z@waldemar-brodkorb.de>
+References: <Zj8eCPC1/IXZ6X9Z@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715458288;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1AH+XbGT0zMPPZECLRDVbURrTyCc+eOSh1YBYv4t898=;
+ b=I25xSVwjiUqbIABbxbN/W9KGDc8E1U4hOKeHNaQYDXaV4KocvNwe2ToM38kgOjD+jfrj+Y
+ a4LGY6YgF73/vzP/PLSNdSZpKmZbAhFJ3PHBrLjAb3r5eP9ZJ0pkCBeiJc4jeDC9a+7xUA
+ bx6aY2zb6KMK6Q889g2EdZXS7YjMtB30mlacn45TXLwkKkUWJibdY8uIr7VTJAXo4gJTme
+ QXAScHuBWhHFUsRvpWsqR4vQ6etCFo+nAPE0pb0i976qiO6hCVVEMqyZz96JvmAp+Pmm0M
+ TvBf+7Z6RtML9rQPyhqMQhNFAgb1pXqEKCHSfbigFjDLwUlKraY4HJ/2PQyv9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=I25xSVwj
+Subject: Re: [Buildroot] [PATCH] package/elf2flt: update to 2024.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +82,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23d71be5a985a03a3cc29f2507243488889c244c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 11 May 2024 09:28:08 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Upstream added riscv32 support.
+> Upstream added riscv32 support.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/elf2flt/elf2flt.hash | 2 +-
+>  package/elf2flt/elf2flt.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/elf2flt/elf2flt.hash | 2 +-
- package/elf2flt/elf2flt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
-index 4dc040645e..e338ff6780 100644
---- a/package/elf2flt/elf2flt.hash
-+++ b/package/elf2flt/elf2flt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  735482d8c5fd76191e86ff2d6985dd68c232a7b8bdac11fdb480385c6a75ca8f  elf2flt-2023.09.tar.gz
-+sha256  e1d419c463431ff1af7fdc76a402f628744ad10dff063bea76a386942255119c  elf2flt-2024.02.tar.gz
- sha256  f20bc5007904094e3a4e9fbcc3526cdd40893f91d458c3139b308e5c4c0899c6  LICENSE.TXT
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index aa5595843f..d5a7b9b5fd 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ELF2FLT_VERSION = 2023.09
-+ELF2FLT_VERSION = 2024.02
- ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,v$(ELF2FLT_VERSION))
- ELF2FLT_LICENSE = GPL-2.0+
- ELF2FLT_LICENSE_FILES = LICENSE.TXT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
