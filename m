@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07AE2C25B5F
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 20:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFD2CC04FFE
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 22:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B528B40497;
-	Sat, 11 May 2024 20:52:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 570B983EB2;
+	Sat, 11 May 2024 22:18:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2LK3-Zc-hTHD; Sat, 11 May 2024 20:52:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f8f9FexPQePr; Sat, 11 May 2024 22:18:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A406640BD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B3F683EB5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A406640BD9;
-	Sat, 11 May 2024 20:52:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B3F683EB5;
+	Sat, 11 May 2024 22:18:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7C13F1BF57C
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:52:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 301C11BF575
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 22:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A445403F9
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:52:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 29E4B40328
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 22:18:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ln24pFo9KSMt for <buildroot@lists.busybox.net>;
- Sat, 11 May 2024 20:52:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id T2q5Yow1umDj for <buildroot@lists.busybox.net>;
+ Sat, 11 May 2024 22:18:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B003440BD1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B003440BD1
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B003440BD1
- for <buildroot@buildroot.org>; Sat, 11 May 2024 20:52:38 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 616AAFF804;
- Sat, 11 May 2024 20:52:35 +0000 (UTC)
-Date: Sat, 11 May 2024 22:52:33 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240511225233.63ae5325@windsurf>
-In-Reply-To: <Zj9dqE81OyLJmnGa@waldemar-brodkorb.de>
-References: <Zj9dqE81OyLJmnGa@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715460755;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=wrXhNiLVyMb/Oa+D7UWAxGvaMIzMfGkrJK4rEMWGhVg=;
- b=WWgK7cxrs6HsGYJl05YALfeCLI0aUUoJE6a1n6BAB4kbZeXFE9H0kUvaO7FE/4ZK2Lvn4O
- 1jPH094+eML4xddk6RXiX5Jo4SNx3BybKJ1m3N0AeWFGxmAv0Ul6UyP2HCvvosR0GVxzVE
- Qkub+I/ex3KrvxphPcCWZFv6tVq1JvYZPXjP7fkJGBof5hHOluGkgSRTqZYss7LC4iOFfQ
- O83pSncyDBdIq7q4CqAoSjmhHhbKYuByTF8ZxqpsYIU5oOFmgCTHbcJlPbgvHa7VFvGJgi
- wur0++htCZyJLRoFeQ8CzxILH8WhPvCz1Ty8zqMWOV9cCcZN/DFyVxvQfSTOXg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WWgK7cxr
-Subject: Re: [Buildroot] [PATCH 3/3] package/gcc: remove version 11.x
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A8EA400F2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A8EA400F2
+ for <buildroot@buildroot.org>; Sat, 11 May 2024 22:18:17 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6024B87000; Sat, 11 May 2024 22:18:17 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 12 May 2024 00:17:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1680e491d8aea0ba0d294873ff3722390b9923af
+X-Git-Newrev: 3e3bcd633875db0e1f366e86fe8763b5b2d9112e
+X-Patchwork-Hint: ignore
+Message-Id: <20240511221817.6024B87000@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website/index.html: refer to Gitlab
+ and lore
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,51 +60,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 11 May 2024 13:59:36 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3e3bcd633875db0e1f366e86fe8763b5b2d9112e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Now that gcc 14 was added, we can remove the oldest version of gcc.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  .checkpackageignore                           |   2 -
->  ...-mcmodel-option-to-handle-large-GOTs.patch | 204 ------------------
->  ...-cmodel-large-when-building-crtstuff.patch |  64 ------
->  ...TRANT-for-OpenRISC-when-pthread-is-p.patch |  35 ---
->  ...le-split-stack-for-non-thread-builds.patch |  26 ---
->  ...-machine-names-in-__has_include-.-PR.patch | 124 -----------
->  ...ine-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch |  49 -----
->  ...add-.note.GNU-stack-section-on-linux.patch | 105 ---------
->  ...emove-crypt-and-crypt_r-interceptors.patch | 140 ------------
->  ...libiberty-Darwin-Fix-a-build-warning.patch |  37 ----
->  package/gcc/Config.in.host                    |  11 -
->  package/gcc/gcc.hash                          |   2 -
->  12 files changed, 799 deletions(-)
->  delete mode 100644 package/gcc/11.4.0/0001-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
->  delete mode 100644 package/gcc/11.4.0/0002-or1k-Use-cmodel-large-when-building-crtstuff.patch
->  delete mode 100644 package/gcc/11.4.0/0003-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
->  delete mode 100644 package/gcc/11.4.0/0004-disable-split-stack-for-non-thread-builds.patch
->  delete mode 100644 package/gcc/11.4.0/0005-fixinc-don-t-fix-machine-names-in-__has_include-.-PR.patch
->  delete mode 100644 package/gcc/11.4.0/0006-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
->  delete mode 100644 package/gcc/11.4.0/0007-xtensa-add-.note.GNU-stack-section-on-linux.patch
->  delete mode 100644 package/gcc/11.4.0/0008-Remove-crypt-and-crypt_r-interceptors.patch
->  delete mode 100644 package/gcc/11.4.0/0009-libiberty-Darwin-Fix-a-build-warning.patch
+Our index.html page still points to git.buildroot.net as the Git
+repository, and to the defunct gmane for the mailing list
+activity. Fix these by pointing to Gitlab and lore respectively.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/website/index.html | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/website/index.html b/docs/website/index.html
+index 300adbb83d..d68436c721 100644
+--- a/docs/website/index.html
++++ b/docs/website/index.html
+@@ -133,14 +133,14 @@
+   <div class="row">
+     <div class="col-sm-6">
+       <div class="panel panel-primary">
+-	<div class="panel-heading"><a href="http://git.buildroot.net/buildroot"><h5>Recent commits</h5></a></div>
++	<div class="panel-heading"><a href="https://gitlab.com/buildroot.org/buildroot/"><h5>Recent commits</h5></a></div>
+ 	<div class="panel-box panel-body ellipsis" id="commit-activity">
+ 	</div>
+       </div>
+     </div>
+     <div class="col-sm-6" >
+       <div class="panel panel-primary">
+-	<div class="panel-heading"><a href="http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot"><h5>Recent discussions</h5></a></div>
++	<div class="panel-heading"><a href="https://lore.kernel.org/buildroot/"><h5>Recent discussions</h5></a></div>
+ 	<div class="panel-box panel-body ellipsis" id="mailing-list-activity">
+ 	</div>
+       </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
