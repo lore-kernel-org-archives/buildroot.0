@@ -1,75 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05CCBC04FFE
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 10:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F7FDC04FFE
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 11:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7FD0820FD;
-	Sat, 11 May 2024 10:44:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3ECD84235A;
+	Sat, 11 May 2024 11:43:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v29r39ppliRC; Sat, 11 May 2024 10:44:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dd6SkceiGIPG; Sat, 11 May 2024 11:43:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA1D98127D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DE2541620
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA1D98127D;
-	Sat, 11 May 2024 10:44:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 228C91BF2F1
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 10:44:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DE2541620;
+	Sat, 11 May 2024 11:43:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 03C501BF5A5
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 11:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BC2682045
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 10:44:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E4A2C400C7
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 11:43:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dETep-1wssN7 for <buildroot@lists.busybox.net>;
- Sat, 11 May 2024 10:43:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 801448201D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 801448201D
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 801448201D
- for <buildroot@buildroot.org>; Sat, 11 May 2024 10:43:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6A8CEFF804;
- Sat, 11 May 2024 10:43:56 +0000 (UTC)
-Date: Sat, 11 May 2024 12:43:55 +0200
-To: Kadambini Nema <kadambini.nema@gmail.com>
-Message-ID: <20240511124355.751d6cd8@windsurf>
-In-Reply-To: <20240219195911.43452-1-kadambini.nema@gmail.com>
-References: <ba5719b0-9b18-4148-bdfe-8a16ef06c4ee@benettiengineering.com>
- <20240219195911.43452-1-kadambini.nema@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yZSSmj9EoDwn for <buildroot@lists.busybox.net>;
+ Sat, 11 May 2024 11:43:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 658A0400BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 658A0400BA
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 658A0400BA
+ for <buildroot@buildroot.org>; Sat, 11 May 2024 11:43:05 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 235CB352111B; Sat, 11 May 2024 13:43:03 +0200 (CEST)
+Date: Sat, 11 May 2024 13:43:02 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <Zj9Zxueq6fFSbCt8@waldemar-brodkorb.de>
+References: <20240509170112.7381E86D42@busybox.osuosl.org>
+ <20240511090009.11809921@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715424236;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=W5OJY5yoE+NWITS8q8eJhnoN8xXFJ1cKdfjg2WRZkeU=;
- b=eDRu4DpHZSXXrWCZ7kGb/7K7Zu3Qh2i+YoQ3Izd2cNEwjHgF0PEfe3jDBJdsmvnkzbI7PS
- Z+WoYNvR6Rrv9Ty3DAeoGgfSjxRW6Q/dFfVc1iETSRf69JQ3KpGCbwZ0Izl2Qt5K64ZD2R
- Ly15KcamZHzxnlxd0NFGvPHMv34gJcDLLhDcaut2FCoVVPb3DnNoixyjMMajerz0m6kAe6
- m+oGQqCrB2TvKUafdI2ManC5J7MZMtbUywkhyGPNI8DCZEhrVJl4yloxJydCd2svTRFLBX
- hFuBiUMeudL/mws3setFkfPYetaEdr1JjDMhN56nXI1cz4FxiWvmK8mbUJEODA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240511090009.11809921@windsurf>
+X-Operating-System: Linux 5.10.0-27-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1715427783; bh=u09yvrH6LCF9tiAynNK6bbOdoBjpRndv/0L86UVJlyM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=nMIRDi/YdBfaw+TvlrX/MbEYTWpuUZcLQwxSKxuVobDUzhuubc5xDzPqp5EpkH5nU
+ Gl0i8jkxYLGUsjzvvBUzrR42o7OMvfsCXch+i4EQwEN2Vh9h7UZgPNtrxnSy6rm4Hm
+ nh01NMZ/vzfCqSeID0EvC+Pa9XcWvKhcaYLakU6xnZeoGZUyPAOe2LQYNegi4qbhhh
+ TVpRoZC0OuPvEVdrtv/b+zOqWqPf+z0ZO2SMKVSoPoPqSmAXyUIV3pYELppVcuU1d+
+ dobrpLCjbQ3oiUESQwI/6M+3gqYhzlNdl2+gM1Yx626gqiS9U4H1rUEbXitM90XnoH
+ jJDVcmQmKvS1w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=eDRu4DpH
-Subject: Re: [Buildroot] [PATCH 1/2] package/libyang: bump version to 2.1.148
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=nMIRDi/Y
+Subject: Re: [Buildroot] [git commit] package/kodi: bump version to
+ 21.0-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,32 +80,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: giulio.benetti@benettiengineering.com,
- Jan =?UTF-8?B?S3VuZHLDoXQ=?= <jan.kundrat@cesnet.cz>,
- Heiko Thiery <heiko.thiery@gmail.com>, buildroot@buildroot.org
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 19 Feb 2024 11:59:10 -0800
-Kadambini Nema <kadambini.nema@gmail.com> wrote:
+Hello Bernd,
 
-> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-> ---
->  package/libyang/libyang.hash | 2 +-
->  package/libyang/libyang.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+I have another build issue when compiling for uClibc-ng:
 
-Both applied to master, thanks.
+/home/wbx/buildroot/output/host/lib/gcc/aarch64-buildroot-linux-uclibc/12.3.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld:
+build/utils/utils.a(CharsetConverter.cpp.o): undefined reference to symbol 'libiconv_open'
+/home/wbx/buildroot/output/host/lib/gcc/aarch64-buildroot-linux-uclibc/12.3.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld:
+/home/wbx/buildroot/output/host/aarch64-buildroot-linux-uclibc/sysroot/usr/lib64/libiconv.so.2:
+error adding symbols: DSO missing from command line
+collect2: error: ld returned 1 exit status
+make[3]: *** [CMakeFiles/kodi.dir/build.make:535: kodi.bin] Error 1
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+What is the best fix for adding -liconv to the target LDFLAGS?
+
+> Hello Bernd,
+> 
+> On Thu, 9 May 2024 19:00:54 +0200
+> Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
+> 
+> > Added new required dependency to libudfread: Since upstream commit
+> > https://github.com/xbmc/xbmc/commit/5f9b9cfa26f274e381e92d73cfa33fb55582436e
+> > kodi does not build anymore without libudfread.
+> 
+> There is a mistake in your patch on this, causing a build failure, see
+> below.
+> 
+> >  	depends on !BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+> > @@ -56,6 +58,7 @@ menuconfig BR2_PACKAGE_KODI
+> >  	depends on BR2_INSTALL_LIBSTDCPP
+> >  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
+> >  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # C++17
+> > +	depends on BR2_HOST_GCC_AT_LEAST_9 # C++17
+> >  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> >  	depends on !BR2_TOOLCHAIN_USES_MUSL
+> >  	depends on BR2_USE_WCHAR
+> > @@ -103,6 +106,7 @@ menuconfig BR2_PACKAGE_KODI
+> >  	select BR2_PACKAGE_SQLITE
+> >  	select BR2_PACKAGE_TAGLIB
+> >  	select BR2_PACKAGE_TINYXML
+> > +	select BR2_PACKAGE_TINYXML2
+> >  	select BR2_PACKAGE_ZLIB
+> >  	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
+> >  	select BR2_PACKAGE_LIBINPUT if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
+> > @@ -162,6 +166,7 @@ config BR2_PACKAGE_KODI_EVENTCLIENTS
+> >  config BR2_PACKAGE_KODI_LIBBLURAY
+> >  	bool "blu-ray"
+> >  	select BR2_PACKAGE_LIBBLURAY
+> > +	select BR2_PACKAGE_LIBUDFREAD
+> 
+> You're indeed adding the "select" on BR2_PACKAGE_LIBUDFREAD, but in a
+> sub-option of kodi, BR2_PACKAGE_KODI_LIBBLURAY, while...
+> 
+> >  KODI_LICENSE = GPL-2.0
+> > @@ -45,6 +45,7 @@ KODI_DEPENDENCIES = \
+> >  	libfribidi \
+> >  	libplist \
+> >  	libpng \
+> > +	libudfread \
+> 
+> here you're adding libudfread to the unconditional dependencies,
+> unrelated to the sub-option.
+> 
+> Which one is correct? Having a sub-option, or marking libudfread a
+> mandatory dependency whenever kodi is enabled?
+
+Thanks
+ Waldemar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
