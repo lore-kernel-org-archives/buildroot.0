@@ -4,72 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62BE9C25B75
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 20:45:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 478E1C04FFE
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 20:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A90F400E5;
-	Sat, 11 May 2024 20:45:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA657400E5;
+	Sat, 11 May 2024 20:48:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gMHGkBhUa1mB; Sat, 11 May 2024 20:45:43 +0000 (UTC)
+ id 54yufysM8Yho; Sat, 11 May 2024 20:48:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18351403F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB9B7403F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18351403F9;
-	Sat, 11 May 2024 20:45:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB9B7403F9;
+	Sat, 11 May 2024 20:48:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B76051BF57C
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:45:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1AA771BF57C
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E786403F9
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:45:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 066E9403F9
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:48:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vNpdkMzkfOta for <buildroot@lists.busybox.net>;
- Sat, 11 May 2024 20:45:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ id q4lnmKDNh5vU for <buildroot@lists.busybox.net>;
+ Sat, 11 May 2024 20:48:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.42;
+ helo=smtpcmd0642.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 51482400E5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51482400E5
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 51482400E5
- for <buildroot@buildroot.org>; Sat, 11 May 2024 20:45:38 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id D241713F86A;
- Sat, 11 May 2024 22:45:32 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 11 May 2024 22:45:32 +0200
-Date: Sat, 11 May 2024 22:45:32 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <Zj_Y7J1PakY72dJg@landeda>
-References: <20240511125829.158446-1-bernd@kuhls.net>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A1AF8400E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1AF8400E5
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A1AF8400E5
+ for <buildroot@buildroot.org>; Sat, 11 May 2024 20:48:44 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id 5te5sOUGHmFXq5te5sc8ze; Sat, 11 May 2024 22:48:42 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Sat, 11 May 2024 22:48:40 +0200
+Message-Id: <20240511204840.203789-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240511125829.158446-1-bernd@kuhls.net>
+X-CMAE-Envelope: MS4xfBcAXGT/9uh/6vBo3ToSstbuC5ORem6kn2DUGU0Ssdjew6wNVfDUA+5FBzvneKHVRqvwXNWQv19uC/D2ylKHEVo1Aa4t38y8oi8pix/6QE+Pv2h0OCtd
+ rhHOfU7xbDeY23O2lfJ2ST/SZHkD5VU6lLLR3jsfLvggt+hwlhTBCBCK+bknyvbaVVyd6I2aWR12NC0H53kRRAa3L/qYFJiEnfhIaETkpU76A+1T4z/iQ/N9
+ yMeg+xxYu6hB2xBjPAnGtS9vNjS2cQjhNMpN7Dgp8eBdDyBBOqPXJ+EaMR29BOf24LLGCkaXlKllLCsU8HjvdA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1715460336;
- bh=bwOZb6nmq0KR0RX4oIz8glXgA1XdGDrrhZb5cF2Vk80=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=PnLGe1vue8/zj9XVZKvc5XsEjyEId+TjpJHpsiLeCsdV5tFxYOYbb274dgSdr/+Kp
- 0TaR8Gldh7qhszYe3rsunHxdKnguZtfcp/SNfKZQK78suP9kM9KIgb3luAvimONiSN
- o9UvG46bfno2W6wLbE4WxKfpfaCCnRPK5ZT4ZhwWEnUcKemfiKilqQfYwddUCoAFFh
- SvspNckdw9yP2oc6uSaWjTdU+mpT4T1uNDI+xC3qrKE22RIfPgUbAqylujhhEXU6xV
- BJWHrWeH/eUA5py6uUnxZi2Up1P/5cY7Eq+H+UA02znqmYsv5WgFVRWqfbNFLG5Hws
- R0jXd4UPCTo9g==
+ d=aruba.it; s=a1; 
+ t=1715460522; bh=gLaV1SKr1VbVLMy3kwQKPTiyYd0fUVHnI3gvx+hCZ/E=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=Xv7udKI4gJpIcJ/odrAuiL48AMcR2/cPd14C+wKaMLy9gRSVgUSV+Ht7f5NOXbjFZ
+ elunP8Uk9DUAfZiZ6oLYQSfzYoxr790FoWAl6gUQKwbZt/x3coDCc1WFld1ZNnUpj6
+ vvSjUMKLPbckEXlYVaz2H3erZiYKMLb3pnlDw5BqPm081hMErGbK3R+LTP2m8hcTc1
+ J6g+SRUJlenqKaDhO8XUZtBhajRPf34wgB83R3eHSKcaavGLiUwaXaDqVCDKYbDSew
+ RHWgPQ3/PelSBJlgJcyHirbHf6KtukRX2hqaidw2CDoB7/R52JiSCxSOyf0Jqq6s5Z
+ cTVuNFfJuvU+A==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=PnLGe1vu
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: fix libudfread dependency
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=Xv7udKI4
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.100
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,91 +78,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2024-05-11 14:58 +0200, Bernd Kuhls spake thusly:
-> Buildroot c61934611111cb3ea04604707052b1387bde5134 commit added a broken
-> dependency to libudfread. In fact libudfread is still an optional
-> dependency, just the configure options changes due to upstream
-> commit https://github.com/xbmc/xbmc/commit/5f9b9cfa26f274e381e92d73cfa33fb55582436e
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-Applied to master, thanks.
-
-It looks like it is a correct patch, and the c onfigure step succeeds
-in detecting whther udefread is needed and present, or not needed.
-
-However, I was not able to test-build, because of the libatomic issue I
-already mentioned earlier.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/kodi/Config.in | 1 -
->  package/kodi/kodi.mk   | 8 +++++++-
->  2 files changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index 10f46802a8..6c48168bf8 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -166,7 +166,6 @@ config BR2_PACKAGE_KODI_EVENTCLIENTS
->  config BR2_PACKAGE_KODI_LIBBLURAY
->  	bool "blu-ray"
->  	select BR2_PACKAGE_LIBBLURAY
-> -	select BR2_PACKAGE_LIBUDFREAD
->  	help
->  	  Enable Blu-ray input support.
->  	  Select this if you want to play back Blu-ray content.
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index 09342ea1f0..62463b731e 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -45,7 +45,6 @@ KODI_DEPENDENCIES = \
->  	libfribidi \
->  	libplist \
->  	libpng \
-> -	libudfread \
->  	lzo \
->  	openssl \
->  	pcre \
-> @@ -388,6 +387,13 @@ else
->  KODI_CONF_OPTS += -DENABLE_PULSEAUDIO=OFF
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
-> +KODI_CONF_OPTS += -DENABLE_UDFREAD=ON
-> +KODI_DEPENDENCIES += libudfread
-> +else
-> +KODI_CONF_OPTS += -DENABLE_UDFREAD=OFF
-> +endif
-> +
->  # Remove versioncheck addon, updating Kodi is done by building a new
->  # buildroot image.
->  KODI_ADDON_MANIFEST = $(TARGET_DIR)/usr/share/kodi/system/addon-manifest.xml
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 8c7c807f79..1a69398f0d 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_99_RTM/src/SHA256SUMS
+-sha256  5cd5c2c8406a376686e6fa4b9c2de38aa280bea07bf927c0d521ba07c88b09bd  nss-3.99.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_100_RTM/src/SHA256SUMS
++sha256  1e35373ce9cb5b776f678bb341b0625c437520d09ebd91d1abd622e072e38d88  nss-3.100.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 0d8b4dc592..5cdc494b16 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.99
++LIBNSS_VERSION = 3.100
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
