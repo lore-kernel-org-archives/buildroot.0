@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3207C04FFE
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 20:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACDAAC04FFE
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 20:15:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C9B1423A6;
-	Sat, 11 May 2024 20:15:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7913942343;
+	Sat, 11 May 2024 20:15:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RY32G7x97CIR; Sat, 11 May 2024 20:15:30 +0000 (UTC)
+ id 8N_ZicosRG5k; Sat, 11 May 2024 20:15:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46614423A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58341423B5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46614423A9;
-	Sat, 11 May 2024 20:15:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8C9731BF57C
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:15:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58341423B5;
+	Sat, 11 May 2024 20:15:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 971CB1BF57C
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:15:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7986F40449
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:15:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83542423E8
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 20:15:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0JG0CpsY_MJc for <buildroot@lists.busybox.net>;
- Sat, 11 May 2024 20:15:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 65fEDrTSVXN3 for <buildroot@lists.busybox.net>;
+ Sat, 11 May 2024 20:15:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A025E400E5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A025E400E5
- for <buildroot@buildroot.org>; Sat, 11 May 2024 20:15:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 963ED86FB4; Sat, 11 May 2024 20:15:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 11 May 2024 22:15:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 23d71be5a985a03a3cc29f2507243488889c244c
-X-Git-Newrev: 8d5b3aac435880333833d4a3909b1818fe8af045
-X-Patchwork-Hint: ignore
-Message-Id: <20240511201528.963ED86FB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tbtools: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 29366423DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29366423DC
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 29366423DC
+ for <buildroot@buildroot.org>; Sat, 11 May 2024 20:15:32 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F354A60004;
+ Sat, 11 May 2024 20:15:29 +0000 (UTC)
+Date: Sat, 11 May 2024 22:15:28 +0200
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Message-ID: <20240511221528.107deaa0@windsurf>
+In-Reply-To: <20240511080612.2602362-1-mika.westerberg@linux.intel.com>
+References: <20240511080612.2602362-1-mika.westerberg@linux.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715458530;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=cZt0lyFz1qU4IBtdYUTel1fL7Bq7jBiJNzAO6wdTTMw=;
+ b=HuUa5bCJGIJY+o9iivg1X1AkgpGO8sPYVo6/quD3I3A0WneMLONKWDSjdBK6+WDa2eEIvE
+ O7jgiT/WsT+sgL8CmniXLZQjpwlGqSls44f6tj5YinWRQjoSQni4PUCV3H/wDnRcanIGJ2
+ feyJlyJ0wRDg6Isvo64MjByR6DM6ADH4G7Hqvznw3bdGJkG5OyCS5CthM67DI9hTf2n4/x
+ iNMouYlquUbZvwUZr5gPXr/v71N0kc31emgmdjajaByvffReUsaftfpW1nRcAjVn4tD69V
+ Y8Lc9nnWi49wKnHWI/miQ62P7m896NZFas6pL2qA+d1B9bxGCQtaJo6pW6UL6w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HuUa5bCJ
+Subject: Re: [Buildroot] [PATCH v3] package/tbtools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,97 +82,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Aapo Vienamo <aapo.vienamo@linux.intel.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d5b3aac435880333833d4a3909b1818fe8af045
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 11 May 2024 11:06:12 +0300
+Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
 
-This is a collection of tools for Linux Thunderbolt/USB4 development,
-debugging and validation.
+> This is a collection of tools for Linux Thunderbolt/USB4 development,
+> debugging and validation.
+> 
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Reviewed-by: Aapo Vienamo <aapo.vienamo@linux.intel.com>
+> ---
+> Changes from v2:
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Reviewed-by: Aapo Vienamo <aapo.vienamo@linux.intel.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                 |  3 +++
- package/Config.in          |  1 +
- package/tbtools/Config.in  | 18 ++++++++++++++++++
- package/tbtools/tbtools.mk | 13 +++++++++++++
- 4 files changed, 35 insertions(+)
+Applied to master, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1c0cd336ca..67ce43e9cc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2300,6 +2300,9 @@ N:	Michel Stempin <michel.stempin@wanadoo.fr>
- F:	board/sipeed/licheepi_zero/
- F:	configs/sipeed_licheepi_zero_defconfig
- 
-+N:	Mika Westerberg <mika.westerberg@linux.intel.com>
-+F:	package/tbtools/
-+
- N:	Mike Frampton <mikeframpo@gmail.com>
- F:	package/qcom-db410c-firmware/
- 
-diff --git a/package/Config.in b/package/Config.in
-index edc56290ea..2af63c124e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -156,6 +156,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/stress-ng/Config.in"
- 	source "package/sysdig/Config.in"
- 	source "package/sysprof/Config.in"
-+	source "package/tbtools/Config.in"
- 	source "package/tcf-agent/Config.in"
- 	source "package/trace-cmd/Config.in"
- 	source "package/trinity/Config.in"
-diff --git a/package/tbtools/Config.in b/package/tbtools/Config.in
-new file mode 100644
-index 0000000000..9c27bf0e30
---- /dev/null
-+++ b/package/tbtools/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_TBTOOLS
-+	bool "tbtools"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	# Fails to build on 32-bit systems
-+	depends on BR2_ARCH_IS_64
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  tbtools is a collection of tools for Linux Thunderbolt/USB4
-+	  development, debugging and validation.
-+
-+	  https://github.com/intel/tbtools
-+
-+comment "tbtools needs udev /dev management w/ glibc toolchain"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	depends on BR2_ARCH_IS_64
-+	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/tbtools/tbtools.mk b/package/tbtools/tbtools.mk
-new file mode 100644
-index 0000000000..94340616db
---- /dev/null
-+++ b/package/tbtools/tbtools.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# tbtools
-+#
-+################################################################################
-+
-+TBTOOLS_VERSION = v0.3.2
-+TBTOOLS_SITE = $(call github,intel,tbtools,$(TBTOOLS_VERSION))
-+TBTOOLS_LICENSE = MIT
-+TBTOOLS_LICENSE_FILES = LICENSE
-+TBTOOLS_DEPENDENCIES = udev
-+
-+$(eval $(cargo-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
