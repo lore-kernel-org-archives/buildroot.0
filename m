@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 465E4C04FFE
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 06:58:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FE03C04FFE
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 06:58:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DBD161431;
-	Sat, 11 May 2024 06:58:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFE39616BA;
+	Sat, 11 May 2024 06:58:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A4xBnyrl9OFq; Sat, 11 May 2024 06:58:26 +0000 (UTC)
+ id L2R3SkK4wKJI; Sat, 11 May 2024 06:58:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01A8F61632
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A14F6169E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01A8F61632;
-	Sat, 11 May 2024 06:58:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 12E921BF398
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A14F6169E;
+	Sat, 11 May 2024 06:58:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B60F1BF868
  for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:58:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0023C40132
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1803761632
  for <buildroot@lists.busybox.net>; Sat, 11 May 2024 06:58:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jSeFPC5XYsCu for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bkpYRSKXQMLK for <buildroot@lists.busybox.net>;
  Sat, 11 May 2024 06:58:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 293A4400F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B60261431
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 293A4400F9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B60261431
  for <buildroot@buildroot.org>; Sat, 11 May 2024 06:58:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 17B2986E89; Sat, 11 May 2024 06:58:24 +0000 (UTC)
+ id 2701486E8A; Sat, 11 May 2024 06:58:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 11 May 2024 08:57:31 +0200
+Date: Sat, 11 May 2024 08:58:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8fa9ad7e4f2212e3ff934695eb36e9dc2cb9c2b8
-X-Git-Newrev: 01f2a530e2c73aba7c0aaaeded4fc160d560707f
+X-Git-Oldrev: 01f2a530e2c73aba7c0aaaeded4fc160d560707f
+X-Git-Newrev: 28d37d34acaa50f4095fbf0ec96ca3cd8261fed7
 X-Patchwork-Hint: ignore
-Message-Id: <20240511065824.17B2986E89@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libselinux: fix uclibc build
+Message-Id: <20240511065824.2701486E8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ledmon: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,85 +65,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01f2a530e2c73aba7c0aaaeded4fc160d560707f
+commit: https://git.buildroot.net/buildroot/commit/?id=28d37d34acaa50f4095fbf0ec96ca3cd8261fed7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following uclibc build failure raised since bump to version 3.6
-in commit 5f7275787ab1520c3d3f7eb9d2bd1b9f5ff41443 and
-https://github.com/SELinuxProject/selinux/commit/cb8289c2b237e5f66e4a7608ecc6c68abeaeaf55:
+Fix the following musl build failure raised since bump to version 1.0.0
+in commit b3819b761f4a06bc75fe33b785e5ff2cecc5d211 and
+https://github.com/intel/ledmon/commit/bcb90426a156fcb3147b5722ed78ac8cf26f2976:
 
-selinux_internal.c: In function 'reallocarray':
-selinux_internal.c:25:29: error: 'SIZE_MAX' undeclared (first use in this function)
-   25 |         if (size && nmemb > SIZE_MAX / size) {
-      |                             ^~~~~~~~
-selinux_internal.c:6:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-    5 | #include <string.h>
-  +++ |+#include <stdint.h>
-    6 |
-selinux_internal.c:25:29: note: each undeclared identifier is reported only once for each function it appears in
-   25 |         if (size && nmemb > SIZE_MAX / size) {
-      |                             ^~~~~~~~
+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-musleabi/12.3.0/../../../../arm-buildroot-linux-musleabi/bin/ld: ledctl-ledctl.o: in function `main':
+ledctl.c:(.text.startup+0x140): undefined reference to `on_exit'
 
-Fixes: 5f7275787ab1520c3d3f7eb9d2bd1b9f5ff41443
- - http://autobuild.buildroot.org/results/7e627744beaa4f7fdfd488dfacbaafc074a999f7
+Fixes: b3819b761f4a06bc75fe33b785e5ff2cecc5d211
+ - http://autobuild.buildroot.org/results/d535e03f6ee0f43ecea34fb29ea148a4cdc01169
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-src-se_linux_internal.c-include-stdint.h.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ ...ledctl-ledctl.c-replace-on_exit-by-atexit.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/libselinux/0002-libselinux-src-se_linux_internal.c-include-stdint.h.patch b/package/libselinux/0002-libselinux-src-se_linux_internal.c-include-stdint.h.patch
+diff --git a/package/ledmon/0001-src-ledctl-ledctl.c-replace-on_exit-by-atexit.patch b/package/ledmon/0001-src-ledctl-ledctl.c-replace-on_exit-by-atexit.patch
 new file mode 100644
-index 0000000000..a626370a1b
+index 0000000000..4e1536df4f
 --- /dev/null
-+++ b/package/libselinux/0002-libselinux-src-se_linux_internal.c-include-stdint.h.patch
-@@ -0,0 +1,45 @@
-+From f6143706e2fc0f1ae16cb3667722deb9cc51c244 Mon Sep 17 00:00:00 2001
++++ b/package/ledmon/0001-src-ledctl-ledctl.c-replace-on_exit-by-atexit.patch
+@@ -0,0 +1,40 @@
++From ff6f5cd263da4683b3ea07d4ef8afdbf95e2a401 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 11 May 2024 08:09:38 +0200
-+Subject: [PATCH] libselinux/src/se_linux_internal.c: include stdint.h
++Date: Thu, 9 May 2024 10:04:38 +0200
++Subject: [PATCH] ledctl: replace on_exit() by atexit()
 +
-+Include stdint.h to avoid the following uclibc build failure raised
-+since version 3.6 and
-+https://github.com/SELinuxProject/selinux/commit/cb8289c2b237e5f66e4a7608ecc6c68abeaeaf55:
++Replace on_exit() by atexit() to avoid the following musl build failure
++raised since bcb9042 ("ledctl: Remove enum ledctl_status_code_t")
++which partially reverted f08dd2c ("Fix build with Musl libc (#139)")
 +
-+selinux_internal.c: In function 'reallocarray':
-+selinux_internal.c:25:29: error: 'SIZE_MAX' undeclared (first use in this function)
-+   25 |         if (size && nmemb > SIZE_MAX / size) {
-+      |                             ^~~~~~~~
-+selinux_internal.c:6:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
-+    5 | #include <string.h>
-+  +++ |+#include <stdint.h>
-+    6 |
-+selinux_internal.c:25:29: note: each undeclared identifier is reported only once for each function it appears in
-+   25 |         if (size && nmemb > SIZE_MAX / size) {
-+      |                             ^~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7e627744beaa4f7fdfd488dfacbaafc074a999f7
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-musleabi/12.3.0/../../../../arm-buildroot-linux-musleabi/bin/ld: ledctl-ledctl.o: in function `main':
++ledctl.c:(.text.startup+0x140): undefined reference to `on_exit'
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/SELinuxProject/selinux/pull/435
++Upstream: https://github.com/intel/ledmon/commit/ff6f5cd263da4683b3ea07d4ef8afdbf95e2a401
 +---
-+ libselinux/src/selinux_internal.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ src/ledctl/ledctl.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/selinux_internal.c b/src/selinux_internal.c
-+index 06852359..f6385908 100644
-+--- a/src/selinux_internal.c
-++++ b/src/selinux_internal.c
-+@@ -1,6 +1,7 @@
-+ #include "selinux_internal.h"
++diff --git a/src/ledctl/ledctl.c b/src/ledctl/ledctl.c
++index 231253dc..95db2d86 100644
++--- a/src/ledctl/ledctl.c
+++++ b/src/ledctl/ledctl.c
++@@ -230,7 +230,7 @@ static void ibpi_state_fini(struct ibpi_state *p)
++  *
++  * @return The function does not return a value.
++  */
++-static void _ledctl_fini(int _i, void *_arg)
+++static void _ledctl_fini(void)
++ {
++ 	led_free(ctx);
++ 	list_erase(&ibpi_list);
++@@ -1101,7 +1101,7 @@ int main(int argc, char *argv[])
++ 	if (status != LED_STATUS_SUCCESS)
++ 		return status;
 + 
-+ #include <errno.h>
-++#include <stdint.h>
-+ #include <stdlib.h>
-+ #include <string.h>
++-	if (on_exit(_ledctl_fini, progname))
+++	if (atexit(_ledctl_fini))
++ 		exit(LED_STATUS_ONEXIT_ERROR);
 + 
-+-- 
-+2.43.0
-+
++ 	status = _read_shared_conf();
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
