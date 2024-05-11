@@ -4,66 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD5B8C04FFE
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 07:46:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CEFEC04FFE
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 07:52:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8AFA36082A;
-	Sat, 11 May 2024 07:46:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA3F0607D9;
+	Sat, 11 May 2024 07:52:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CEqcZfvtOOMS; Sat, 11 May 2024 07:46:14 +0000 (UTC)
+ id 5GYdtvMW25vV; Sat, 11 May 2024 07:52:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AA89614EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6CEF6082A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AA89614EA;
-	Sat, 11 May 2024 07:46:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C1F9F1BF47E
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 07:46:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6CEF6082A;
+	Sat, 11 May 2024 07:52:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1572D1BF47E
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 07:52:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB2904014D
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 07:46:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01CD56082A
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 07:52:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1tEUTMsoz_Vj for <buildroot@lists.busybox.net>;
- Sat, 11 May 2024 07:46:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 900E2400F9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 900E2400F9
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 900E2400F9
- for <buildroot@buildroot.org>; Sat, 11 May 2024 07:46:09 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 35908352828B; Sat, 11 May 2024 09:46:07 +0200 (CEST)
-Date: Sat, 11 May 2024 09:46:07 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <Zj8iP0Dx8Q/TWeNM@waldemar-brodkorb.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s6NP4sMHHzTp for <buildroot@lists.busybox.net>;
+ Sat, 11 May 2024 07:52:02 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=198.175.65.15;
+ helo=mgamail.intel.com; envelope-from=mika.westerberg@linux.intel.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D1431607D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1431607D9
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D1431607D9
+ for <buildroot@buildroot.org>; Sat, 11 May 2024 07:52:01 +0000 (UTC)
+X-CSE-ConnectionGUID: Y612y/KQRxi0TDLzRgq/nw==
+X-CSE-MsgGUID: QnVDu4msRj6H2cOISCJEoQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11069"; a="15207539"
+X-IronPort-AV: E=Sophos;i="6.08,153,1712646000"; d="scan'208";a="15207539"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+ by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 11 May 2024 00:52:01 -0700
+X-CSE-ConnectionGUID: pcO4FCudRHS2VWqH+2Tk3A==
+X-CSE-MsgGUID: 1d8cnHWkQxK2DzvqLgA8LQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,153,1712646000"; d="scan'208";a="61025499"
+Received: from black.fi.intel.com ([10.237.72.28])
+ by fmviesa001.fm.intel.com with ESMTP; 11 May 2024 00:51:59 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+ id 85AC7142; Sat, 11 May 2024 10:51:58 +0300 (EEST)
+Date: Sat, 11 May 2024 10:51:58 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20240511075158.GF4162345@black.fi.intel.com>
+References: <20240430045945.2164313-1-mika.westerberg@linux.intel.com>
+ <20240510134411.27f5639b@windsurf>
 MIME-Version: 1.0
 Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-27-amd64 x86_64
+In-Reply-To: <20240510134411.27f5639b@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1715413567; bh=drkVsxmOrzPB7aQnrdHmnA7GbYGk+oiiLlXSam3nCgs=;
- h=Date:From:To:Subject:From;
- b=XX0h6u4l9Oh5NccaCr53SPleSXI+T8ETIFYytTbtK+Lv2t4L3HhBgLZWIEhfXiqtY
- CgJ0vKSt1qKVE6/FvmSPWUvl6Pzp76DrDtSwXVyMMP5NZVA1iDa95k04R8VqGVsmEP
- Hrj8zznwj7xmBpl2AFwtru4BEXaTLj6blFxQ2s2rP47I997Gh4IQRfh9ozimDE+H3M
- biotUBm/tHI4XRmwoczwixYoqndi/RubdDAH5Bthx36xl/1dBcgsXEk+VtNeZz87cH
- grfj6TZVk7DIE4qOK6qTxV5tQq7cHXmMSyCM8go7ngsXy5jHLfw6sy1oMat9F9fZMK
- cabBNdFCPYplg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+ t=1715413922; x=1746949922;
+ h=date:from:to:cc:subject:message-id:references:
+ mime-version:in-reply-to;
+ bh=apFiiVPthxCz/h6Ifj053+ltuGui/4cpN3R+ucAdJGQ=;
+ b=eN6Y6Qiv2ITUdyCVEgB+sjrIoqV3Y9FgFCY3Su1c8thAV5LIqwAzg5+T
+ 6dFd1S7hF7a77o3wtt2vOdd+dig6lIDZCzZ4236CMWiDn0Aj3wvkQspai
+ nUe95f0sE1CSiZjgU7bL9J1mcJYNJamSJs6EwVyY6iWrX4ES7rZ4fgMET
+ 8yIupGgET51CdpdPBhZQ9riICpilDTQRVmrtGxZJHi32TbgkzDJMlOCrj
+ KgUkn+5puBEiYyvMcx+CZ2W8Pcx9SxiPuA7axW3QnpJgJG09c7j3+IT2+
+ uhz8IoBz0zrckMS27CjsN+RNK6oNmMXYmXDnmLzlP7tr+AtHSQPDXrq+L
+ g==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=linux.intel.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=XX0h6u4l
-Subject: [Buildroot] [PATCH] configs/qemu_riscv32_nommu_virt_defconfig: New
- defconfig
+ unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256
+ header.s=Intel header.b=eN6Y6Qiv
+Subject: Re: [Buildroot] [PATCH v2] package/tbtools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,158 +93,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Aapo Vienamo <aapo.vienamo@linux.intel.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new defconfig for Qemu RISCV32 w/o MMU.
+Hi,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- DEVELOPERS                                 |  2 ++
- arch/Config.in.riscv                       |  3 +--
- board/qemu/riscv32-virt/linux-nommu.config | 21 +++++++++++++++
- board/qemu/riscv32-virt/readme.txt         |  2 ++
- configs/qemu_riscv32_nommu_virt_defconfig  | 30 ++++++++++++++++++++++
- package/Makefile.in                        |  4 +--
- 6 files changed, 58 insertions(+), 4 deletions(-)
- create mode 100644 board/qemu/riscv32-virt/linux-nommu.config
- create mode 100644 configs/qemu_riscv32_nommu_virt_defconfig
+On Fri, May 10, 2024 at 01:44:11PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Thanks for your patch. I fixed up a few things, wanted to apply... but
+> it fails to build for me. See below a number of comments, and details
+> about the build failure.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cb8a69a36a..3f14ce338b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3192,6 +3192,8 @@ N:	Wade Berrier <wberrier@gmail.com>
- F:	package/ngrep/
- 
- N:	Waldemar Brodkorb <wbx@openadk.org>
-+F:	board/qemu/riscv32-virt/
-+F:	configs/qemu_riscv32_nommu_virt_defconfig
- F:	package/asterisk/
- F:	package/libjwt/
- F:	package/mksh/
-diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
-index d62e4ebc6c..3461f75800 100644
---- a/arch/Config.in.riscv
-+++ b/arch/Config.in.riscv
-@@ -51,7 +51,6 @@ choice
- 
- config BR2_RISCV_32
- 	bool "32-bit"
--	select BR2_USE_MMU
- 
- config BR2_RISCV_64
- 	bool "64-bit"
-@@ -62,7 +61,7 @@ endchoice
- config BR2_RISCV_USE_MMU
- 	bool "MMU support"
- 	default y
--	depends on BR2_RISCV_64
-+	depends on BR2_RISCV_64 || BR2_RISCV_32
- 	select BR2_USE_MMU
- 	help
- 	  Enable this option if your RISC-V core has a MMU (Memory
-diff --git a/board/qemu/riscv32-virt/linux-nommu.config b/board/qemu/riscv32-virt/linux-nommu.config
-new file mode 100644
-index 0000000000..784b12f18a
---- /dev/null
-+++ b/board/qemu/riscv32-virt/linux-nommu.config
-@@ -0,0 +1,21 @@
-+CONFIG_BLK_DEV_INITRD=y
-+# CONFIG_MMU is not set
-+CONFIG_SOC_VIRT=y
-+CONFIG_NONPORTABLE=y
-+CONFIG_ARCH_RV32I=y
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_SLOB=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_VIRTIO_MMIO=y
-+CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_EXT2_FS=y
-+CONFIG_PRINTK_TIME=y
-diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-index 32b4333512..555924f949 100644
---- a/board/qemu/riscv32-virt/readme.txt
-+++ b/board/qemu/riscv32-virt/readme.txt
-@@ -2,4 +2,6 @@ Run Linux in emulation with:
- 
-   qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
- 
-+  qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -nographic -cpu rv32,mmu=off -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 # qemu_riscv32_nommu_virt_defconfig
-+
- The login prompt will appear in the terminal that started Qemu.
-diff --git a/configs/qemu_riscv32_nommu_virt_defconfig b/configs/qemu_riscv32_nommu_virt_defconfig
-new file mode 100644
-index 0000000000..4225a1b3b9
---- /dev/null
-+++ b/configs/qemu_riscv32_nommu_virt_defconfig
-@@ -0,0 +1,30 @@
-+# Architecture
-+BR2_riscv=y
-+BR2_RISCV_32=y
-+# BR2_RISCV_USE_MMU is not set
-+
-+# Linux headers same as kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_TARGET_GENERIC_GETTY=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
-+# Image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.18"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux-nommu.config"
-+BR2_LINUX_KERNEL_IMAGE=y
-+
-+# host-qemu for gitlab testing
-+BR2_PACKAGE_HOST_QEMU=y
-+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 3e276d23d6..2d9908b199 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -43,7 +43,7 @@ GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
- 
- # FLAT binary format needs uclinux, except RISC-V 64-bits which needs
- # the regular linux name.
--ifeq ($(BR2_BINFMT_FLAT):$(BR2_RISCV_64),y:)
-+ifeq ($(BR2_BINFMT_FLAT):$(BR2_riscv),y:)
- TARGET_OS = uclinux
- else
- TARGET_OS = linux
-@@ -181,7 +181,7 @@ TARGET_CXXFLAGS += -fno-dwarf2-cfi-asm
- endif
- 
- ifeq ($(BR2_BINFMT_FLAT),y)
--ifeq ($(BR2_RISCV_64),y)
-+ifeq ($(BR2_riscv),y)
- TARGET_CFLAGS += -fPIC
- endif
- ifeq ($(BR2_BINFMT_FLAT_ONE),y)
--- 
-2.30.2
+Thanks for looking into it!
 
+> On Tue, 30 Apr 2024 07:59:44 +0300
+> Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> 
+> > This is a collection of tools for Linux Thunderbolt/USB4 development,
+> > debugging and validation.
+> > 
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Reviewed-by: Aapo Vienamo <aapo.vienamo@linux.intel.com>
+> > ---
+> > Changes from v1:
+> > 
+> > - Added dependency to udev (libudev) and 64-bit builds.
+> > - Added tag from Aapo.
+> > 
+> >  package/Config.in          |  1 +
+> >  package/tbtools/Config.in  | 11 +++++++++++
+> >  package/tbtools/tbtools.mk | 12 ++++++++++++
+> >  3 files changed, 24 insertions(+)
+> 
+> You need to add an entry to the DEVELOPERS file, like this:
+> 
+> +N:     Mika Westerberg <mika.westerberg@linux.intel.com>
+> +F:     package/tbtools/
+> 
+> (make sure to respect alphabetic ordering of developers)
+> 
+> > diff --git a/package/tbtools/Config.in b/package/tbtools/Config.in
+> > new file mode 100644
+> > index 000000000000..2627ea8bfcca
+> > --- /dev/null
+> > +++ b/package/tbtools/Config.in
+> > @@ -0,0 +1,11 @@
+> > +config BR2_PACKAGE_TBTOOLS
+> > +	bool "tbtools"
+> > +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> > +	depends on BR2_PACKAGE_HAS_UDEV
+> > +	depends on BR2_ARCH_IS_64
+> 
+> I think it was worth adding a comment about this:
+> 
+> +       # Fails to build on 32-bit systems
+> 
+> > +	select BR2_PACKAGE_HOST_RUSTC
+> > +	help
+> > +	  tbtools is a collection of tools for Linux Thunderbolt/USB4
+> > +	  development, debugging and validation.
+> > +
+> > +	  https://github.com/intel/tbtools
+> 
+> You need a Config.in comment:
+> 
+> +comment "tbtools needs udev /dev management"
+> +       depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> +       depends on BR2_ARCH_IS_64
+> +       depends on !BR2_PACKAGE_HAS_UDEV
+> 
+> 
+> > diff --git a/package/tbtools/tbtools.mk b/package/tbtools/tbtools.mk
+> > new file mode 100644
+> > index 000000000000..61986ca8d311
+> > --- /dev/null
+> > +++ b/package/tbtools/tbtools.mk
+> > @@ -0,0 +1,12 @@
+> > +################################################################################
+> > +#
+> > +# tbtools
+> > +#
+> > +################################################################################
+> > +
+> > +TBTOOLS_VERSION = v0.3.2
+> > +TBTOOLS_SITE = $(call github,intel,tbtools,$(TBTOOLS_VERSION))
+> > +TBTOOLS_LICENSE = MIT
+> > +TBTOOLS_LICENSE_FILES = LICENSE
+> 
+> You're missing:
+> 
+> +TBTOOLS_DEPENDENCIES = udev
+> 
+> without which udev is not built before tbtools. Without this, it fails
+> with a pkg-config detection issue.
+> 
+> But even with udev built before, I get a build failure:
+> 
+>   = note: /home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-linux-musl/12.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: cannot find -ludev: No such file or directory
+>           collect2: error: ld returned 1 exit status
+> 
+> You can reproduce the following defconfig:
+> 
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_STABLE=y
+> BR2_INIT_NONE=y
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_TBTOOLS=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
+> Could you have a look and submit a v2 ?
+
+I think Rust udev wants to have glibc as the C library. I will add
+dependency to that as well.
+
+I'll fix these up in the next version.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
