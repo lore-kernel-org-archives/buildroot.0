@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF9E8C04FFE
-	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 07:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60DFBC04FFE
+	for <buildroot@archiver.kernel.org>; Sat, 11 May 2024 07:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C76861694;
-	Sat, 11 May 2024 07:01:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E6D360782;
+	Sat, 11 May 2024 07:01:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lLPdOTByeSrA; Sat, 11 May 2024 07:01:15 +0000 (UTC)
+ id BY6BT6owDcxl; Sat, 11 May 2024 07:01:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 880846169C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32B8D61632
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 880846169C;
-	Sat, 11 May 2024 07:01:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32B8D61632;
+	Sat, 11 May 2024 07:01:36 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 518BB1BF398
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 07:01:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AA2981BF398
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 07:01:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4921D8428D
- for <buildroot@lists.busybox.net>; Sat, 11 May 2024 07:01:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 91A04843EA
+ for <buildroot@lists.busybox.net>; Sat, 11 May 2024 07:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IQI9Cod2t2mA for <buildroot@lists.busybox.net>;
- Sat, 11 May 2024 07:01:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id ZTdOhIUowj98 for <buildroot@lists.busybox.net>;
+ Sat, 11 May 2024 07:01:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CE6D8423E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CE6D8423E
- for <buildroot@buildroot.org>; Sat, 11 May 2024 07:01:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 606D586EA3; Sat, 11 May 2024 07:01:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 11 May 2024 09:00:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 28d37d34acaa50f4095fbf0ec96ca3cd8261fed7
-X-Git-Newrev: dfb6b104eabf9cbdb1b8d17cfb609c84f1fad3c6
-X-Patchwork-Hint: ignore
-Message-Id: <20240511070113.606D586EA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/swupdate: bump to version 2023.12.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 93DFD84395
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93DFD84395
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 93DFD84395
+ for <buildroot@buildroot.org>; Sat, 11 May 2024 07:01:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A48FD1C0004;
+ Sat, 11 May 2024 07:01:31 +0000 (UTC)
+Date: Sat, 11 May 2024 09:01:30 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240511090130.3bd51e9a@windsurf>
+In-Reply-To: <20240221224617.1672544-1-fontaine.fabrice@gmail.com>
+References: <20240221224617.1672544-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715410891;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=GaSxZcZjk44XLdLyNLPSDOoyTJHFfYr76t+meCapDyI=;
+ b=Mhp26S8VXkEHd74UM8XnknwtJJUJEME+PqVH+pXaLU+keYWcoRoSPLWG5MdkN8jT6/1Yi/
+ rsZdaGVJeGOZml+m5/Vl9HHeTRuZYPe0K6nBUtqs2XBd0qPSIVMHYJ9Z7r4NCnhqWU1E7j
+ 179m/DE1U3nsNLLnGEKI/D2GKJiHORMWJSmCiqBs/Dsp4B5L7UozaKs94YzqfSApVLTObO
+ N94Dnh0wDYkXyrFk821+9fdI0nhNA1BfXFnIpu3iP37e443Tz3AP96nCyEI3bG6VB3UOWX
+ qB2DkmWgcKZo83kVLClcwkMFpDxdCVYosdKbLIbs1bFHoM+4AOeLGvWQ7Wg6tA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Mhp26S8V
+Subject: Re: [Buildroot] [PATCH 1/1] package/libxmlpp: bump to version 5.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +82,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfb6b104eabf9cbdb1b8d17cfb609c84f1fad3c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 21 Feb 2024 23:46:17 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/swupdate/swupdate.hash | 2 +-
- package/swupdate/swupdate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Drop patch (already in version)
+> 
+> https://github.com/libxmlplusplus/libxmlplusplus/blob/5.2.0/NEWS
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...e-it-compatible-with-libxml2--2-12-0.patch | 145 ------------------
+>  package/libxmlpp/libxmlpp.hash                |   4 +-
+>  package/libxmlpp/libxmlpp.mk                  |   4 +-
+>  3 files changed, 4 insertions(+), 149 deletions(-)
+>  delete mode 100644 package/libxmlpp/0001-Make-it-compatible-with-libxml2--2-12-0.patch
 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index c19a82304f..19ef3a2724 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  ce24032300e2b6a6faa3d22e49f981fd90f04ac6f5d7e802166824b0cd5ca669  swupdate-2023.12.tar.gz
-+sha256  89ec8926d66627255fe689ed96ad8d30f5c539315956dacf9890e308095dee3b  swupdate-2023.12.1.tar.gz
- sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
- sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index a2b0995227..467e4f22ea 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2023.12
-+SWUPDATE_VERSION = 2023.12.1
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
- SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
