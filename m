@@ -4,57 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA964C25B4F
-	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 17:53:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DBABC25B4F
+	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 18:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8AC44606B4;
-	Sun, 12 May 2024 17:53:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEB0B605EE;
+	Sun, 12 May 2024 18:35:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I86ELhuAZwMY; Sun, 12 May 2024 17:53:15 +0000 (UTC)
+ id vPVI0a-4h1NS; Sun, 12 May 2024 18:35:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1D8C6073E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C52E06061D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1D8C6073E;
-	Sun, 12 May 2024 17:53:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6FA001BF421
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 17:53:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C52E06061D;
+	Sun, 12 May 2024 18:35:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D7CE61BF868
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 18:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A05B83BEB
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 17:53:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD553409DE
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 18:35:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3XWAEw0SwZzQ for <buildroot@lists.busybox.net>;
- Sun, 12 May 2024 17:53:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HzBg1vJLY7XL for <buildroot@lists.busybox.net>;
+ Sun, 12 May 2024 18:35:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6BDEA83BE6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BDEA83BE6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6AF94409C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AF94409C6
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6BDEA83BE6
- for <buildroot@uclibc.org>; Sun, 12 May 2024 17:53:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6AF94409C6
+ for <buildroot@uclibc.org>; Sun, 12 May 2024 18:35:10 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1s6DNl-00021l-Q4
- for buildroot@uclibc.org; Sun, 12 May 2024 19:53:09 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1s6E2N-0002tV-1q
+ for buildroot@uclibc.org; Sun, 12 May 2024 20:35:07 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sun, 12 May 2024 19:52:19 +0200
-Message-ID: <pan$4019$2f782a59$c1e00d30$9c9496ad@ID-313208.user.individual.net>
-References: <20240509170112.7381E86D42@busybox.osuosl.org>
- <20240511090009.11809921@windsurf>
- <Zj9Zxueq6fFSbCt8__49299.8394578294$1715427808$gmane$org@waldemar-brodkorb.de>
+Date: Sun, 12 May 2024 20:34:52 +0200
+Message-ID: <pan$8d15f$ef3c4419$4b44d83b$64066675@ID-313208.user.individual.net>
+References: <20240512175117.2096550-1-bernd@kuhls.net>
+ <ZkEFe-dn3GSQ2bdK__38180.5847677001$1715537302$gmane$org@landeda>
 Mime-Version: 1.0
 User-Agent: Pan/0.154 (Izium; 517acf4)
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=kuhls.net
-Subject: Re: [Buildroot] [git commit] package/kodi: bump version to
- 21.0-Omega
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: Link to libiconv when
+ needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,16 +70,21 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sat, 11 May 2024 13:43:02 +0200 schrieb Waldemar Brodkorb:
+Am Sun, 12 May 2024 20:07:55 +0200 schrieb Yann E. MORIN:
 
-> What is the best fix for adding -liconv to the target LDFLAGS?
+>>  ifeq ($(BR2_ENABLE_LOCALE),)
+>> +KODI_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-liconv
+> 
+> I don't understand how this is related: the defconfig you provide in the
+> commit log does _not_ have BR2_ENABLE_LOCALE=y, so it can't exercise
+> this code-path...
 
-Hi Waldemar,
+Hi Yann,
 
-please try this patch: https://patchwork.ozlabs.org/project/buildroot/
-patch/20240512175117.2096550-1-bernd@kuhls.net/
+the if-clause does not contain the letter "y" ;)
+Libconv is only needed when locale support is not present.
 
-Regards, Bernd
+Regards, bernd
 
 _______________________________________________
 buildroot mailing list
