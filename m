@@ -4,76 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3E94C10F1A
-	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 08:15:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26525C10F1A
+	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 08:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E43E4214F;
-	Sun, 12 May 2024 08:15:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D44754220B;
+	Sun, 12 May 2024 08:20:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Re8CFlmdUYr; Sun, 12 May 2024 08:15:15 +0000 (UTC)
+ id ZbEpriJHbWOU; Sun, 12 May 2024 08:20:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30023421B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83C7F4220D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30023421B5;
-	Sun, 12 May 2024 08:15:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 916351BF3F6
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 08:15:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83C7F4220D;
+	Sun, 12 May 2024 08:20:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 627441BF3F6
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 08:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E20B40BBB
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 08:15:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E5766075B
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 08:20:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wFU_byjFNhVK for <buildroot@lists.busybox.net>;
- Sun, 12 May 2024 08:15:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R_rDsLadHhSL for <buildroot@lists.busybox.net>;
+ Sun, 12 May 2024 08:19:59 +0000 (UTC)
+X-Greylist: delayed 2082 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 12 May 2024 08:19:58 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DF04760790
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF04760790
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=60.248.80.70;
+ helo=atcsqr.andestech.com; envelope-from=peterlin@andestech.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DE52F40015
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE52F40015
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DE52F40015
- for <buildroot@buildroot.org>; Sun, 12 May 2024 08:15:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 35DB51BF203;
- Sun, 12 May 2024 08:15:08 +0000 (UTC)
-Date: Sun, 12 May 2024 10:15:07 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240512101507.5b678cd4@windsurf>
-In-Reply-To: <CAPi7W808FakSM3CDpHEDrVh4HgHgfbZjd0SzK0W-pav1ub=3ww@mail.gmail.com>
-References: <20240307122806.102726-1-fontaine.fabrice@gmail.com>
- <20240307134916.32738b5e@windsurf>
- <CAPi7W803mjZL9-rRu2wdcG=5t=D1wtDJET2S_SHfjCc_uvViVA@mail.gmail.com>
- <20240311123512.09c1c77d@windsurf>
- <CAPi7W808FakSM3CDpHEDrVh4HgHgfbZjd0SzK0W-pav1ub=3ww@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
+ [60.248.80.70])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DF04760790
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 08:19:57 +0000 (UTC)
+Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
+ by Atcsqr.andestech.com with ESMTP id 44C7jOOI086864
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 15:45:24 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
+Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
+ by Atcsqr.andestech.com with ESMTP id 44C7j937086819
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 15:45:09 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
+Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS16.andestech.com
+ (10.0.1.222) with Microsoft SMTP Server id 14.3.498.0;
+ Sun, 12 May 2024 15:45:09 +0800
+To: <buildroot@buildroot.org>
+Date: Sun, 12 May 2024 15:44:59 +0800
+Message-ID: <20240512074459.1360700-1-peterlin@andestech.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715501709;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=+7pV/6GGAZpv5ptyjDwR1hsQu5XlCqUdNb6x69a7ggA=;
- b=Eb7n3IEJYsdQMS96kdjtyrFby7LtGi49jJe1f57t0c2yLQLAXgDddXidlt8gEJrHDfOv9h
- ZYIzmIBscK2oLTYBqk3yANEkr2WLbEFKHPWR+M1/wk9Pon82tJhtPichgUpXGzu/RW7ocf
- DpDA6ugT3Skwpe2Qd7lYGdnZ9xI9lGdRZr2oBttYp9yxvQyc5SVU0TRTzaNSSIXhcLl8rR
- j8aj+3KNUI0uxGsx/zcaGGu6S0iQmbhl8JgFEfxDRxMGR5QzyhtMgMjP54jzvAezfT9bIW
- rTRxlGiifbu0kDtZvb6WTx3ERwLSN9H5gpvTHGm0EjsU34Y0j3SeR96/CMOdrw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Eb7n3IEJ
-Subject: Re: [Buildroot] [PATCH 1/1] toolchain/Config.in: enable libatomic
- with BR2_BINFMT_FLAT
+X-Originating-IP: [10.0.15.183]
+X-DNSRBL: 
+X-MAIL: Atcsqr.andestech.com 44C7jOOI086864
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=andestech.com
+Subject: [Buildroot] [PATCH] package/kmon: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,47 +74,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+From: Yu Chien Peter Lin via buildroot <buildroot@buildroot.org>
+Reply-To: Yu Chien Peter Lin <peterlin@andestech.com>
+Cc: Yu Chien Peter Lin <peterlin@andestech.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+Add Kmon, a Rust-based, text-UI tool for managing Linux kernel
+modules and monitoring kernel activities, providing a single
+interface for various tools like dmesg and kmod.
 
-On Tue, 12 Mar 2024 08:18:35 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+---
+ package/Config.in      |  1 +
+ package/kmon/Config.in |  9 +++++++++
+ package/kmon/kmon.hash |  4 ++++
+ package/kmon/kmon.mk   | 12 ++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/kmon/Config.in
+ create mode 100644 package/kmon/kmon.hash
+ create mode 100644 package/kmon/kmon.mk
 
-> How should I proceed for my v2?
-> Should I replace !BR2_BINFMT_FLAT by (!BR2_BINFMT_FLAT=y ||
-> (BR2_TOOLCHAIN_GCC_AT_LEAST_10 && BR2_arm))?
-> An other option would be to add default y if
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE (more simple but
-> ugly).
-
-The latter is indeed ugly. Something like the below?
-
-config BR2_TOOLCHAIN_HAS_LIBATOMIC
-	bool
-	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-	depends on BR2_TOOLCHAIN_HAS_THREADS
-	depends on BR2_BINFMT_ELF || (BR2_BINFMT_FLAT && BR2_arm && BR2_TOOLCHAIN_GCC_AT_LEAST_10)
-
-What do you think ? The comment above the BR2_TOOLCHAIN_HAS_LIBATOMIC
-would need to be updated accordingly, of course.
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 0c17154877..f17547775e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2753,6 +2753,7 @@ menu "System tools"
+ 	source "package/jailhouse/Config.in"
+ 	source "package/keyutils/Config.in"
+ 	source "package/kmod/Config.in"
++	source "package/kmon/Config.in"
+ 	source "package/kvmtool/Config.in"
+ 	source "package/libostree/Config.in"
+ 	source "package/libvirt/Config.in"
+diff --git a/package/kmon/Config.in b/package/kmon/Config.in
+new file mode 100644
+index 0000000000..7c56f387fa
+--- /dev/null
++++ b/package/kmon/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_KMON
++	bool "kmon"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  kmon provides a terminal UI for managing kernel modules
++	  and monitoring kernel activities.
++
++	  https://github.com/orhun/kmon
+diff --git a/package/kmon/kmon.hash b/package/kmon/kmon.hash
+new file mode 100644
+index 0000000000..87b7ab5986
+--- /dev/null
++++ b/package/kmon/kmon.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256  bc2d495bfca48cdfe4d4e3cab1dafd887ebbca9310a99613182b4f26c530acc5  kmon-v1.6.5.tar.gz
++sha256  f1d7ca1381b10a10523fbde322ffcd54245328b1b442a9d3e348c800279a29de  kmon-v1.6.5-cargo2.tar.gz
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
+diff --git a/package/kmon/kmon.mk b/package/kmon/kmon.mk
+new file mode 100644
+index 0000000000..5208124223
+--- /dev/null
++++ b/package/kmon/kmon.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# kmon
++#
++################################################################################
++
++KMON_VERSION = v1.6.5
++KMON_SITE = $(call github,orhun,kmon,$(KMON_VERSION))
++KMON_LICENSE = GPL-3.0
++KMON_LICENSE_FILES = LICENSE
++
++$(eval $(cargo-package))
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
