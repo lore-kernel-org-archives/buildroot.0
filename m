@@ -4,66 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBC76C10F1A
-	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 10:07:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74401C10F1A
+	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 10:11:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9635F4213C;
-	Sun, 12 May 2024 10:07:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FFC14214C;
+	Sun, 12 May 2024 10:11:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PImQKZrxFdth; Sun, 12 May 2024 10:07:21 +0000 (UTC)
+ id hfObn9RLbgQg; Sun, 12 May 2024 10:11:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54C624213D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE6F5421B8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54C624213D;
-	Sun, 12 May 2024 10:07:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5E3A71BF27A
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:07:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE6F5421B8;
+	Sun, 12 May 2024 10:11:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E4771BF27A
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:11:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5711F4213D
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:07:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B5AA40175
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:11:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GfTmEJjnzqYw for <buildroot@lists.busybox.net>;
- Sun, 12 May 2024 10:07:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7BC474213C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BC474213C
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7BC474213C
- for <buildroot@buildroot.org>; Sun, 12 May 2024 10:07:17 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 5C2EA35282A0; Sun, 12 May 2024 12:07:15 +0200 (CEST)
-Date: Sun, 12 May 2024 12:07:15 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WZI0dXFb0OoJ for <buildroot@lists.busybox.net>;
+ Sun, 12 May 2024 10:11:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50DE140104
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50DE140104
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 10:11:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4A78F8707B; Sun, 12 May 2024 10:11:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-ID: <ZkCU03+ru07pxr5d@waldemar-brodkorb.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-27-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1715508435; bh=D6wYdc48qQbF7G6tQu32Pvxvj/2SPQze7E8qQrb/+2g=;
- h=Date:From:To:Subject:From;
- b=ulBqS21NamQBcH8P/3xKrIZk21Ww7wnKpp9SwrhIS6mL1dFrA789kZ3kF2Wuajq0I
- zH9wC/Di3pRL8qQHQ75HcuNbVV2BMnDjh3+mJw+/lSx1HjkKsDqdoPiQYA3u7UqWyy
- G+SKmSswh/tx0vzaFHQInxsvXpos7yR+jjL7NFvx7zIIKDcBKIQTK9FXJf4DdIbcnM
- 14RjI4ALex1rIVSL/w0/LIPhnuCtQAmXBTfj5uyYZ4GiW7UOFAJcLh26BOuI6rsC1l
- Ni0Z4WKkQ8UwXZ5acn6+Wn6ZIJS6WNEdbJNmcKEfVFsb859CwMiaVvWKx0nSE/QyUC
- ZAL97c2ElrKBw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=ulBqS21N
-Subject: [Buildroot] [PATCH 2/2] configs/qemu_riscv32_nommu_virt: new
- defconfig
+Date: Sun, 12 May 2024 12:10:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7760e9a1d8c53968b9d88d8dcac25306fa639bfa
+X-Git-Newrev: 4d7cf1c1e2bbf4dde178cadf88f94afd226d75f4
+X-Patchwork-Hint: ignore
+Message-Id: <20240512101123.4A78F8707B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-fastui: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,137 +57,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new defconfig for Qemu RISCV32 w/o MMU.
+commit: https://git.buildroot.net/buildroot/commit/?id=4d7cf1c1e2bbf4dde178cadf88f94afd226d75f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                    |  2 ++
- board/qemu/riscv32-virt/linux-nommu.config    | 21 ++++++++++++
- .../patches/linux-headers/linux-headers.hash  |  2 ++
- .../riscv32-virt/patches/linux/linux.hash     |  2 ++
- board/qemu/riscv32-virt/readme.txt            |  2 ++
- configs/qemu_riscv32_nommu_virt_defconfig     | 34 +++++++++++++++++++
- 6 files changed, 63 insertions(+)
- create mode 100644 board/qemu/riscv32-virt/linux-nommu.config
- create mode 100644 board/qemu/riscv32-virt/patches/linux-headers/linux-headers.hash
- create mode 100644 board/qemu/riscv32-virt/patches/linux/linux.hash
- create mode 100644 configs/qemu_riscv32_nommu_virt_defconfig
+ package/Config.in                        |  1 +
+ package/python-fastui/Config.in          |  9 +++++++++
+ package/python-fastui/python-fastui.hash |  5 +++++
+ package/python-fastui/python-fastui.mk   | 15 +++++++++++++++
+ 4 files changed, 30 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 67ce43e9cc..2991c51455 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3198,6 +3198,8 @@ N:	Wade Berrier <wberrier@gmail.com>
- F:	package/ngrep/
- 
- N:	Waldemar Brodkorb <wbx@openadk.org>
-+F:	board/qemu/riscv32-virt/
-+F:	configs/qemu_riscv32_nommu_virt_defconfig
- F:	package/asterisk/
- F:	package/libjwt/
- F:	package/mksh/
-diff --git a/board/qemu/riscv32-virt/linux-nommu.config b/board/qemu/riscv32-virt/linux-nommu.config
+diff --git a/package/Config.in b/package/Config.in
+index 053baa292f..c29b4a5101 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1093,6 +1093,7 @@ menu "External python modules"
+ 	source "package/python-falcon/Config.in"
+ 	source "package/python-fastapi/Config.in"
+ 	source "package/python-fastapi-sessions/Config.in"
++	source "package/python-fastui/Config.in"
+ 	source "package/python-filelock/Config.in"
+ 	source "package/python-fire/Config.in"
+ 	source "package/python-flask/Config.in"
+diff --git a/package/python-fastui/Config.in b/package/python-fastui/Config.in
 new file mode 100644
-index 0000000000..784b12f18a
+index 0000000000..9b73544dab
 --- /dev/null
-+++ b/board/qemu/riscv32-virt/linux-nommu.config
-@@ -0,0 +1,21 @@
-+CONFIG_BLK_DEV_INITRD=y
-+# CONFIG_MMU is not set
-+CONFIG_SOC_VIRT=y
-+CONFIG_NONPORTABLE=y
-+CONFIG_ARCH_RV32I=y
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_SLOB=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_VIRTIO_MMIO=y
-+CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_EXT2_FS=y
-+CONFIG_PRINTK_TIME=y
-diff --git a/board/qemu/riscv32-virt/patches/linux-headers/linux-headers.hash b/board/qemu/riscv32-virt/patches/linux-headers/linux-headers.hash
++++ b/package/python-fastui/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_FASTUI
++	bool "python-fastui"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
++	select BR2_PACKAGE_PYTHON_EMAIL_VALIDATOR # runtime
++	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
++	help
++	  Build better UIs faster.
++
++	  https://github.com/pydantic/FastUI
+diff --git a/package/python-fastui/python-fastui.hash b/package/python-fastui/python-fastui.hash
 new file mode 100644
-index 0000000000..a6c777192c
+index 0000000000..50f49824e0
 --- /dev/null
-+++ b/board/qemu/riscv32-virt/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1,2 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  4e43d8c5fba14f7c82597838011648056487b7550fd83276ad534559e8499b1d  linux-6.6.18.tar.xz
-diff --git a/board/qemu/riscv32-virt/patches/linux/linux.hash b/board/qemu/riscv32-virt/patches/linux/linux.hash
++++ b/package/python-fastui/python-fastui.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/fastui/json
++md5  c8e7d060c0ad3a7ad1237dac3555b83e  fastui-0.5.2.tar.gz
++sha256  854a7a7fce4c08efd9caff1a331d222007b3708b133d996528e3f40996c96091  fastui-0.5.2.tar.gz
++# Locally computed sha256 checksums
++sha256  1c39900853b2c98a5c98e1acc10e54ef06ba2693cdf85e8b28e3ede658888d79  LICENSE
+diff --git a/package/python-fastui/python-fastui.mk b/package/python-fastui/python-fastui.mk
 new file mode 100644
-index 0000000000..a6c777192c
+index 0000000000..e143c9978c
 --- /dev/null
-+++ b/board/qemu/riscv32-virt/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  4e43d8c5fba14f7c82597838011648056487b7550fd83276ad534559e8499b1d  linux-6.6.18.tar.xz
-diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-index 32b4333512..555924f949 100644
---- a/board/qemu/riscv32-virt/readme.txt
-+++ b/board/qemu/riscv32-virt/readme.txt
-@@ -2,4 +2,6 @@ Run Linux in emulation with:
- 
-   qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
- 
-+  qemu-system-riscv32 -M virt -bios none -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -nographic -cpu rv32,mmu=off -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 # qemu_riscv32_nommu_virt_defconfig
++++ b/package/python-fastui/python-fastui.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-fastui
++#
++################################################################################
 +
- The login prompt will appear in the terminal that started Qemu.
-diff --git a/configs/qemu_riscv32_nommu_virt_defconfig b/configs/qemu_riscv32_nommu_virt_defconfig
-new file mode 100644
-index 0000000000..3634260899
---- /dev/null
-+++ b/configs/qemu_riscv32_nommu_virt_defconfig
-@@ -0,0 +1,34 @@
-+# Architecture
-+BR2_riscv=y
-+BR2_RISCV_32=y
-+# BR2_RISCV_USE_MMU is not set
++PYTHON_FASTUI_VERSION = 0.5.2
++PYTHON_FASTUI_SOURCE = fastui-$(PYTHON_FASTUI_VERSION).tar.gz
++PYTHON_FASTUI_SITE = https://files.pythonhosted.org/packages/64/11/515c9b5cb6e885f4ba8c325f75b95a754d99b8296bdc9f134dc90a79019f
++PYTHON_FASTUI_SETUP_TYPE = pep517
++PYTHON_FASTUI_LICENSE = MIT
++PYTHON_FASTUI_LICENSE_FILES = LICENSE
++PYTHON_FASTUI_DEPENDENCIES = host-python-hatchling
 +
-+# Hashes
-+BR2_GLOBAL_PATCH_DIR="board/qemu/riscv32-virt/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+
-+# Linux headers same as kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_TARGET_GENERIC_GETTY=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
-+# Image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.18"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv32-virt/linux-nommu.config"
-+BR2_LINUX_KERNEL_IMAGE=y
-+
-+# host-qemu for gitlab testing
-+BR2_PACKAGE_HOST_QEMU=y
-+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
--- 
-2.30.2
-
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
