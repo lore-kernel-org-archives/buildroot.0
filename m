@@ -4,73 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5ED8C10F1A
-	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 10:16:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5BB5C10F1A
+	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 10:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 955E040354;
-	Sun, 12 May 2024 10:16:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98FA140217;
+	Sun, 12 May 2024 10:20:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ou3higOBdpOw; Sun, 12 May 2024 10:16:22 +0000 (UTC)
+ id 3dVHxVnzNaa6; Sun, 12 May 2024 10:20:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BF5B4044A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B327D4046B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9BF5B4044A;
-	Sun, 12 May 2024 10:16:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B33511BF232
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:16:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B327D4046B;
+	Sun, 12 May 2024 10:20:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C0291BF86C
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD11340516
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:16:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9487984041
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:20:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wnvs-9T3MYR6 for <buildroot@lists.busybox.net>;
- Sun, 12 May 2024 10:16:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vwUplZuE-vGV for <buildroot@lists.busybox.net>;
+ Sun, 12 May 2024 10:20:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 90A0A40354
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90A0A40354
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 90A0A40354
- for <buildroot@buildroot.org>; Sun, 12 May 2024 10:16:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D13320002;
- Sun, 12 May 2024 10:16:16 +0000 (UTC)
-Date: Sun, 12 May 2024 12:16:15 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240512121615.35c7e1f9@windsurf>
-In-Reply-To: <20240512100524.15346-1-fontaine.fabrice@gmail.com>
-References: <20240512100524.15346-1-fontaine.fabrice@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 898E284037
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 898E284037
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 898E284037
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 10:20:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B942CE0006;
+ Sun, 12 May 2024 10:20:13 +0000 (UTC)
+Date: Sun, 12 May 2024 12:20:12 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240512122012.206b2a29@windsurf>
+In-Reply-To: <ZkCUo5vHs4Mc3cQx@waldemar-brodkorb.de>
+References: <ZkCUo5vHs4Mc3cQx@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715508976;
+ d=bootlin.com; s=gm1; t=1715509213;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=cwKEPuVtgIf42IE3WLVjXcMByIlE0o6o/8oWM3/jgk8=;
- b=DdKSNMCAcCrIxqBv0nw+riJBZVPuBO2AFDeHBQ5Aeb6fqdjs1t3Ltc/z5OL9MMb3y/dOXO
- KqkglObDSpPj5X0Oe87r75NZrK7WLBIZc/iw0BSCZmakoniSuPPohPI6j4Moi0XiL19rFL
- iHsR0FKJ1B3ALxmq/alSj5CN3USHqcJyB+Qfl8P0ZXPl3eK/IMXjex0Jfkg3sqtQj646GK
- kalUjx4KQ8YeGge7hiEiJPbOa7VoSwrG45j29QzWOD9NcA/z7Sd31p7f05ABZ/FrdEDQ3C
- 1XOHg45zxSPpLJx2omLzoIpG2nUsGDFg1YcJwdJ719uHsGCK4mBsxxaWwOHy1w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=J6qcL/CzvGvt3uA7ob0wIKay4M8JNY+e2wOc+7W+cyE=;
+ b=jjI7YpVZS6liT6qOWBlSlwdawd5mn+weTGK2FzS8KlsR/heWDGKKQrDemMbipR+VqtAiwR
+ dZe0GZk7MtxJVolbSp2x9gGrlJ4/PoGUQqwwCOzo0xTl78cbl1xq42WMeGmo8Kvqnr3nvQ
+ 0z9m2xWe0uhLOO31bIeDoxD49u6+fG/kccAoxxw5Ajzq9nalZ0ga3G1RrzpqY8zyqNyy4w
+ RC2KAi3BiNVHzZaOviJT3yX8DiXCvayEpZXNI2+GUWo3wPWfzHxTQ+TfZliHEqz2L2UxS3
+ KSYI+eFzsTW/FfNYc+Hg2hCjRdE6Y2apT6I4QAXegFkDs3ypr8pFjWNP3ZWfVA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DdKSNMCA
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] toolchain/Config.in: update BR2_TOOLCHAIN_HAS_LIBATOMIC
- dependencies
+ header.s=gm1 header.b=jjI7YpVZ
+Subject: Re: [Buildroot] [PATCH 1/2] arch: allow riscv32 noMMU configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,32 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Sun, 12 May 2024 12:06:27 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-On Sun, 12 May 2024 12:05:24 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>  config BR2_RISCV_64
+>  	bool "64-bit"
+> @@ -62,7 +61,7 @@ endchoice
+>  config BR2_RISCV_USE_MMU
+>  	bool "MMU support"
+>  	default y
+> -	depends on BR2_RISCV_64
+> +	depends on BR2_RISCV_64 || BR2_RISCV_32
 
-> Update BR2_TOOLCHAIN_HAS_LIBATOMIC dependencies to avoid the following
-> build failure with libopenssl and
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE:
-> 
-> /home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: ./libcrypto.a(libcrypto-lib-threads_pthread.o): in function `CRYPTO_atomic_or':
-> threads_pthread.c:(.text+0xfa): undefined reference to `__atomic_is_lock_free'
+This depends on was no longer needed. When RISC-V is selected, you are
+sure that either BR2_RISCV_32 or BR2_RISCV_64 is enabled, so the
+depends on does not make sense.
 
-Thanks, I have applied because the patch makes sense. However, what
-about other noMMU architectures that use BR2_BINFMT_FLAT, but don't
-produce a libatomic? For example m68k noMMU? Won't they still be broken
-with this undefined reference to `__atomic_is_lock_free' ?
+>  # FLAT binary format needs uclinux, except RISC-V 64-bits which needs
 
-Thanks,
+                                                     ^^^^^^  this comment needed an updated
+
+Applied with both issues fixed. Thanks!
 
 Thomas
 -- 
