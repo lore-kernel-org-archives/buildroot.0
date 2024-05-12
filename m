@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92EF5C25B4F
-	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 17:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F5EFC25B4F
+	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 18:08:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 588CB60600;
-	Sun, 12 May 2024 17:55:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 352E960665;
+	Sun, 12 May 2024 18:08:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 231TYj-q93p0; Sun, 12 May 2024 17:55:08 +0000 (UTC)
+ id dMijhUEblp95; Sun, 12 May 2024 18:08:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DA0A60750
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A9E260750
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DA0A60750;
-	Sun, 12 May 2024 17:55:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 631721BF421
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 17:55:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A9E260750;
+	Sun, 12 May 2024 18:08:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8393F1BF2F3
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 18:08:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 507E4403AC
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 17:55:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7068A410A6
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 18:08:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pzLHjWYnigVa for <buildroot@lists.busybox.net>;
- Sun, 12 May 2024 17:55:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sj7AGg41JcZR for <buildroot@lists.busybox.net>;
+ Sun, 12 May 2024 18:08:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1AA4E40382
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AA4E40382
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 00E1740801
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00E1740801
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1AA4E40382
- for <buildroot@buildroot.org>; Sun, 12 May 2024 17:55:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 00E1740801
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 18:07:59 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0437513F8B3;
- Sun, 12 May 2024 19:54:59 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id CDDC813F88D;
+ Sun, 12 May 2024 20:07:55 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 12 May 2024 19:54:59 +0200
-Date: Sun, 12 May 2024 19:54:59 +0200
+ Sun, 12 May 2024 20:07:55 +0200
+Date: Sun, 12 May 2024 20:07:55 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <ZkECc28IHqXbph99@landeda>
-References: <20240512163159.999251-1-bernd@kuhls.net>
+Message-ID: <ZkEFe-dn3GSQ2bdK@landeda>
+References: <20240512175117.2096550-1-bernd@kuhls.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240512163159.999251-1-bernd@kuhls.net>
+In-Reply-To: <20240512175117.2096550-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1715536502;
- bh=3wJi+kKyjIWZvDjmRP0c5ARV4L2gU8scjbvCgPBFUlE=;
+ d=free.fr; s=smtp-20201208; t=1715537277;
+ bh=jhUE/Atv/yUlIjHxirRHfFi3gn1R2dZ6Uqma3fL8wN0=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Yh9fU3UicuXN3NniGyLlkng6s0gi/vaeVIVGswkt4uY2Zy00bA0in9TOqOe9nxuwg
- 1DNXCYhRaSzzaD4zM+GHXjnhFUVhPSOCmKlKXA1VAOIQx3v0xuxXG+G/YU87onCe/S
- 41ealH8Xwd75PpziHmQ2DbU7iQ5eHGcrmUx6AXwqtxvLnsqvTNgyrcpS7y1Xv8LzYo
- 3tosbWsDoFDq8kSbi+43nMFmzIzqkjpfs/oRk5i0MtAGuz+Z0FbqNpYJw6mrdyu5g+
- lWY1QaBZLMFoSFSSQOGPTD4kRKFkmXJcHKS1hdXu2zBvMxx8S48agG+uhkiiDwi6dK
- L0tPfBCqsh3RQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=jxMQU6xjYfta5o+9tHAJsiBpB6+pIz61Uv6tdQkoFE/1E23mSlKiQ42XcQSf3ZSST
+ 8xJKUAXU6Wh/9Lxpo5b4UwKRvC6XkkQMn4vP4JCC70DOWpAML3RG+mU7qnEdDyOIIt
+ cmE7XyhsN7Lfas5eIy0iMD+AS+hLhcL1iPcAvgAkS8Pv0C/OiK4KdL7w7+vmRMb4kG
+ T0YaySi5U4LLO41HbnV/U+fI396CN39eTmyUwGVhksmpvOGWyBlvPv2891DDHRgGWc
+ tVZoolqVEaXyJ1hS8aqyDXheyld1OYR1Cf4x4pFl2HcLIx3YcJ4FIG/WTju3vRN+3w
+ 5u+2bHgFt9HxA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Yh9fU3Ui
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: remove libatomic from
- linker flags
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=jxMQU6xj
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: Link to libiconv when
+ needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,38 +90,59 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Bernd, All,
 
-On 2024-05-12 18:31 +0200, Bernd Kuhls spake thusly:
-> Kodi added detection for atomic/libatomic with commit
-> https://github.com/xbmc/xbmc/commit/1673f476b802da1da942cef256cae6272fdf9a4b
-> so we can remove our own code to handle the dependency.
+On 2024-05-12 19:51 +0200, Bernd Kuhls spake thusly:
+> Fixes build error
+> 
+> /home/wbx/buildroot/output/host/lib/gcc/aarch64-buildroot-linux-uclibc/12.3.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld:
+> build/utils/utils.a(CharsetConverter.cpp.o): undefined reference to symbol 'libiconv_open'
+> /home/wbx/buildroot/output/host/lib/gcc/aarch64-buildroot-linux-uclibc/12.3.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld:
+> /home/wbx/buildroot/output/host/aarch64-buildroot-linux-uclibc/sysroot/usr/lib64/libiconv.so.2:
+> error adding symbols: DSO missing from command line
+> 
+> reported by Waldemar:
+> http://lists.busybox.net/pipermail/buildroot/2024-May/690952.html
+> 
+> Reproduced and fixed the build error using this defconfig:
+> 
+> BR2_x86_64=y
+> BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PER_PACKAGE_DIRECTORIES=y
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> BR2_PACKAGE_KODI=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> BR2_PACKAGE_PYTHON3=y
+> BR2_PACKAGE_PYTHON3_PY_ONLY=y
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/kodi/kodi.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 94cab237dc..301330a574 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -138,6 +138,7 @@ endif
+>  KODI_CONF_OPTS += -DCORE_PLATFORM_NAME="$(KODI_CORE_PLATFORM_NAME)"
+>  
+>  ifeq ($(BR2_ENABLE_LOCALE),)
+> +KODI_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-liconv
 
-Applied to master, thanks for the quick fix!
+I don't understand how this is related: the defconfig you provide in the
+commit log does _not_ have BR2_ENABLE_LOCALE=y, so it can't exercise
+this code-path...
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/kodi/kodi.mk | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index 62463b731e..94cab237dc 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -217,11 +217,6 @@ else
->  KODI_CONF_OPTS += -D_AVX2_OK=OFF -D_AVX2_TRUE=OFF
+>  KODI_DEPENDENCIES += libiconv
 >  endif
 >  
-> -# mips: uses __atomic_load_8
-> -ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -KODI_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-> -endif
-> -
->  ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
->  KODI_C_FLAGS += -std=gnu99
->  endif
 > -- 
 > 2.39.2
 > 
