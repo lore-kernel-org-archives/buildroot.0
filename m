@@ -4,97 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0192C25B4F
-	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 20:19:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2AD7C25B74
+	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 20:19:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D14D820A7;
-	Sun, 12 May 2024 20:19:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D19482163;
+	Sun, 12 May 2024 20:19:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IGsXM5KmkC2l; Sun, 12 May 2024 20:19:17 +0000 (UTC)
+ id YcVKHH70aNPe; Sun, 12 May 2024 20:19:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC12C81F8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AC288139F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC12C81F8E;
-	Sun, 12 May 2024 20:19:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BFB621BF3E0
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 20:19:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AC288139F;
+	Sun, 12 May 2024 20:19:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CD1F61BF3E0
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 20:19:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD40060616
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 20:19:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B978E402F7
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 20:19:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I_Q88H4Y8nLH for <buildroot@lists.busybox.net>;
- Sun, 12 May 2024 20:19:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Mb1GWMBhzcHD for <buildroot@lists.busybox.net>;
+ Sun, 12 May 2024 20:19:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22b; helo=mail-lj1-x22b.google.com;
+ client-ip=2a00:1450:4864:20::230; helo=mail-lj1-x230.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 82A2B60600
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82A2B60600
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
- [IPv6:2a00:1450:4864:20::22b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 82A2B60600
- for <buildroot@buildroot.org>; Sun, 12 May 2024 20:19:11 +0000 (UTC)
-Received: by mail-lj1-x22b.google.com with SMTP id
- 38308e7fff4ca-2e1fa1f1d9bso65778461fa.0
- for <buildroot@buildroot.org>; Sun, 12 May 2024 13:19:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7E3DC400D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E3DC400D8
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
+ [IPv6:2a00:1450:4864:20::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E3DC400D8
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 20:19:14 +0000 (UTC)
+Received: by mail-lj1-x230.google.com with SMTP id
+ 38308e7fff4ca-2e0933d3b5fso53255261fa.2
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 13:19:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715545149; x=1716149949;
+ d=1e100.net; s=20230601; t=1715545152; x=1716149952;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=f+4eW0GfLoMZpazdr6dtKioijZzsmFDGkAmpEkHCBKk=;
- b=IedgTH7iiTuKaZ6Knc0exf7HXnM0z2c/d02w8ovLn28L1+YilShxvVptaz2s7n39D8
- kwmpMhAGAhuulfhMoCJXlyBwGo9KVzxUGXG+tNYlD11R15pz0Ku+wfMuwAqatW/wuN29
- 6APTUOGE2O7yO04BRtMaFnr+S9kOi7b7b3dz/16LvZkZx53U165IHRisVjvTAUQe+Ff0
- xNRaFHeBr4X1oiaPuKDTmRQlkRXxvuDbVeMy49LF4SKFS1npTWWRBTThX6uNyM4yXqNp
- R25Ml0iNTabNsqmUQgLn622F3tlvdFVuorRs43gc82rzN/pE7tmC33K8NKAKqEUb/6oy
- KtnQ==
-X-Gm-Message-State: AOJu0YwKNLbxNipI373urnl3HPVrW7mXhDQXY+5l15MGj/b9Dxht+hrq
- tr5kqEQL6dk634Q4E/NvBfHKug5OKNSSIZZW87FEEy4UcTYrwBF+XffkrK1k
-X-Google-Smtp-Source: AGHT+IHUW2AaZOcVrvcrdH2/XFhF5cnTkHGKeai3jORjh+JCb5moZHisRwPr7OAQzInOj8lozgv/UA==
-X-Received: by 2002:a05:651c:149:b0:2e2:9842:a9d3 with SMTP id
- 38308e7fff4ca-2e52039dc3emr62702911fa.46.1715545149043; 
- Sun, 12 May 2024 13:19:09 -0700 (PDT)
+ bh=p6CKh6y0vOPd5zniW0x5s6NdHu7gKQCA+F2tJBHbA2Y=;
+ b=VMM6Y1d43Ddq08JaiOn2GW4p6jbhbESeb5n2FO5/7jk7z/DX7mtWF4I+4N+VeSc3bt
+ ol51m3i7BOBMIiaqlMSxt6dDaRfrjWV69YoyfaGmzUOppRoMY1tWQnQqp6trR+7aD8Ob
+ y63f2sF4nvFxTImWq5U/2ZPheQbJvCBR7YPsdWGTW+xk2ftzWH3pge+n2HsjUJkR9Xc6
+ f1Bu10SylEh+1c1O0QJ44xGO2pr+nYWDjiJlXfCnIUzSp71CsvANwDjUe+LMQTP/CWh7
+ RBw0xuLREfSwsFzwTkT0W5SH8Y8TzIB79KhxjNUWbbje/uVd+vrjcCU+z5hgIgX6L2qf
+ UunQ==
+X-Gm-Message-State: AOJu0Yy8PUQK6If/VS/as+t7O/dXqzCGRyi98nOWCgltLsdQgC6HKY0M
+ dzAsKC1z0qQYdgUNtWnIbWtw9EZSLEhXxYWdpRLRBsBw2WHHzw6dHjetNbfl
+X-Google-Smtp-Source: AGHT+IFux6R3QK6rFFnxhwl72ab/y2err78NkbZ+dEJxKIelWRwwhetrdVQv7ju4x/gPMImoOCLcsw==
+X-Received: by 2002:a2e:9650:0:b0:2e1:d747:8c0 with SMTP id
+ 38308e7fff4ca-2e51fe54086mr59587901fa.21.1715545150879; 
+ Sun, 12 May 2024 13:19:10 -0700 (PDT)
 Received: from precision7530-arch-roy.lan
  ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
  by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-2e4d1515580sm11400791fa.79.2024.05.12.13.19.08
+ 38308e7fff4ca-2e4d1515580sm11400791fa.79.2024.05.12.13.19.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 12 May 2024 13:19:08 -0700 (PDT)
+ Sun, 12 May 2024 13:19:10 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 12 May 2024 13:45:50 +0200
-Message-ID: <20240512114617.2564569-3-roykollensvendsen@gmail.com>
+Date: Sun, 12 May 2024 13:45:51 +0200
+Message-ID: <20240512114617.2564569-4-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.45.0
 In-Reply-To: <20240512114617.2564569-1-roykollensvendsen@gmail.com>
 References: <1924535>
  <20240512114617.2564569-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715545149; x=1716149949; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1715545152; x=1716149952; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=f+4eW0GfLoMZpazdr6dtKioijZzsmFDGkAmpEkHCBKk=;
- b=HfoWwq2fN+rc/tWxtoNdS9pfynfg0xzSdiRzc75rX7O5YpxqYObHUlArN/m9K05+bG
- W0xAi6yaYE7Ea9Yj3/TxiXGsCdowScfQFGf7STrE6PnpC/JOBGLpXeIWwpeOLI2r9P9t
- HM9v4iAgxYOdIWYkqW+6n1YAZ09OfbtjYaHA/JsL+LLaQXGWWZPYDbhsRBMM5QF0LtQn
- 5tx3tovJfdgJ3PvVK8XFpSfRtpJROsVCKG6eN/XDh2kvxOpdB1iv80nIbn4Cj9wgCt/7
- yEo9OVtWMTBITF9CHGhYL4fVIE/OHbDPDhzSVyxYR8ubiXxEg/FabTmv+6D7kJYlrsN2
- evig==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=p6CKh6y0vOPd5zniW0x5s6NdHu7gKQCA+F2tJBHbA2Y=;
+ b=ZU1uj0k5m1o0aYEQcZ9Z7f4/uv+zqrVoAR7A2y/peiSIoxceGXtecv+e8s7chVSRf2
+ jr8encrWJ7Qbqs9rasz76HFcYOQobf+kHoTddghghkC8RO9HigfMPioiX5xiE7n0iuTB
+ lN3l+tceVGOJ+d3SRODzzYsL9Ay+Tj0ItZW58MZYtmMzOA62lZwpO16uNeYoIWCjzipT
+ V/eZtRGSpE0caN5xEjpQbDVUjIuipbDj+JphijipLfv4qTPaMneWMU6q7lzyiOcEMk2n
+ CIKkZwtZvcbwHC9OijaC8SS2ZGGX0J+ilS+z76XG2JRzYUUXxMY8xfN4LpM5e2YpMWoE
+ VMnw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=HfoWwq2f
-Subject: [Buildroot] [PATCH v3 03/14] package/qt6/qt6base: add blind option
- to enable GUI support on host
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=ZU1uj0k5
+Subject: [Buildroot] [PATCH v3 04/14] package/qt6/qt6shadertools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -119,93 +117,112 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
 
-The Qt6::Gui module is needed when building the 'Qt Shader Baker'
-(qsb) host tool.
-
-Qsb is needed for converting the Qt6 Vulkan GLSL source code to
-platform specific shader languages which is then later copied to
-target.
-
-For more details take a look at:
-
-https://doc.qt.io/qt-6/qtshadertools-overview.html
-
-and
-
-https://doc.qt.io/qt-6/qshaderbaker.html
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
 Changes v2 -> v3:
-  - Add explanation for why this option is necessary. (suggested by Thomas)
-  - Move blind host option into Config.in.host (suggested by maintainers)
-  - Move this change to separate patch. (suggested by Yann)
+  - Move part of this change to a separte commit (3/14). (suggested by Yann)
 
- package/Config.in.host             | 1 +
- package/qt6/Config.in.host         | 5 +++++
- package/qt6/qt6base/Config.in.host | 4 ++++
- package/qt6/qt6base/qt6base.mk     | 7 ++++++-
- 4 files changed, 16 insertions(+), 1 deletion(-)
- create mode 100644 package/qt6/Config.in.host
- create mode 100644 package/qt6/qt6base/Config.in.host
+ package/qt6/Config.in                         |  1 +
+ package/qt6/qt6shadertools/Config.in          | 13 +++++++
+ .../qt6/qt6shadertools/qt6shadertools.hash    | 10 +++++
+ package/qt6/qt6shadertools/qt6shadertools.mk  | 39 +++++++++++++++++++
+ 4 files changed, 63 insertions(+)
+ create mode 100644 package/qt6/qt6shadertools/Config.in
+ create mode 100644 package/qt6/qt6shadertools/qt6shadertools.hash
+ create mode 100644 package/qt6/qt6shadertools/qt6shadertools.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 986b2854d0..cbf54f5752 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -95,6 +95,7 @@ menu "Host utilities"
- 	source "package/python3/Config.in.host"
- 	source "package/qemu/Config.in.host"
- 	source "package/qoriq-rcw/Config.in.host"
-+	source "package/qt6/Config.in.host"
- 	source "package/raspberrypi-usbboot/Config.in.host"
- 	source "package/rauc/Config.in.host"
- 	source "package/riscv-isa-sim/Config.in.host"
-diff --git a/package/qt6/Config.in.host b/package/qt6/Config.in.host
-new file mode 100644
-index 0000000000..dfe7865c57
---- /dev/null
-+++ b/package/qt6/Config.in.host
-@@ -0,0 +1,5 @@
-+if BR2_PACKAGE_QT6
-+
-+source "package/qt6/qt6base/Config.in.host"
-+
-+endif
-diff --git a/package/qt6/qt6base/Config.in.host b/package/qt6/qt6base/Config.in.host
-new file mode 100644
-index 0000000000..326c06278e
---- /dev/null
-+++ b/package/qt6/qt6base/Config.in.host
-@@ -0,0 +1,4 @@
-+# Select this if you need host qt6 tools that require the Qt::Gui module (e.g.
-+# Qt Shader Baker(qsb)).
-+config BR2_PACKAGE_HOST_QT6BASE_GUI
-+	bool
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 6857725ef5..47f47b6f8c 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -84,7 +84,6 @@ HOST_QT6BASE_DEPENDENCIES = \
- 	host-pcre2 \
- 	host-zlib
- HOST_QT6BASE_CONF_OPTS = \
--	-DFEATURE_gui=OFF \
- 	-DFEATURE_concurrent=OFF \
- 	-DFEATURE_xml=ON \
- 	-DFEATURE_sql=OFF \
-@@ -98,6 +97,12 @@ HOST_QT6BASE_CONF_OPTS = \
- 	-DFEATURE_system_pcre2=ON \
- 	-DFEATURE_system_zlib=ON
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 276a0217ab..b7e95a6885 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -47,6 +47,7 @@ source "package/qt6/qt6base/Config.in"
+ source "package/qt6/qt6core5compat/Config.in"
+ source "package/qt6/qt6serialbus/Config.in"
+ source "package/qt6/qt6serialport/Config.in"
++source "package/qt6/qt6shadertools/Config.in"
+ source "package/qt6/qt6svg/Config.in"
  
-+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_GUI),y)
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_gui=ON
-+else
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_gui=OFF
-+endif
+ endif
+diff --git a/package/qt6/qt6shadertools/Config.in b/package/qt6/qt6shadertools/Config.in
+new file mode 100644
+index 0000000000..1b47dc6132
+--- /dev/null
++++ b/package/qt6/qt6shadertools/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_QT6SHADERTOOLS
++	bool "qt6shadertools"
++	select BR2_PACKAGE_HOST_QT6BASE_GUI
++	select BR2_PACKAGE_QT6BASE_GUI
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
 +
- # Conditional blocks below are ordered by alphabetic ordering of the
- # BR2_PACKAGE_* option.
- 
++	  The Qt Shader Tools module builds on the SPIR-V Open
++	  Source Ecosystem as described at the Khronos SPIR-V web
++	  site.
++
++	  https://doc.qt.io/qt-6/qtshadertools-index.html
+diff --git a/package/qt6/qt6shadertools/qt6shadertools.hash b/package/qt6/qt6shadertools/qt6shadertools.hash
+new file mode 100644
+index 0000000000..90313163fa
+--- /dev/null
++++ b/package/qt6/qt6shadertools/qt6shadertools.hash
+@@ -0,0 +1,10 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.0/submodules/qtshadertools-everywhere-src-6.7.0.tar.xz.sha256
++sha256  3e13f967c62f0815c901e754cbc472a2e19170da0c7a505230d559615f7998af  qtshadertools-everywhere-src-6.7.0.tar.xz
++
++# Hashes for license files:
++sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
++sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
++sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+diff --git a/package/qt6/qt6shadertools/qt6shadertools.mk b/package/qt6/qt6shadertools/qt6shadertools.mk
+new file mode 100644
+index 0000000000..108f409380
+--- /dev/null
++++ b/package/qt6/qt6shadertools/qt6shadertools.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# qt6shadertools
++#
++################################################################################
++
++QT6SHADERTOOLS_VERSION = $(QT6_VERSION)
++QT6SHADERTOOLS_SITE = $(QT6_SITE)
++QT6SHADERTOOLS_SOURCE = qtshadertools-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SHADERTOOLS_VERSION).tar.xz
++QT6SHADERTOOLS_INSTALL_STAGING = YES
++QT6SHADERTOOLS_SUPPORTS_IN_SOURCE_BUILD = NO
++
++QT6SHADERTOOLS_CMAKE_BACKEND = ninja
++
++QT6SHADERTOOLS_LICENSE = \
++	GPL-2.0+ or LGPL-3.0, \
++	GPL-3.0, GFDL-1.3 no invariants (docs)
++
++QT6SHADERTOOLS_LICENSE_FILES = \
++	LICENSES/GPL-2.0-only.txt \
++	LICENSES/GPL-3.0-only.txt \
++	LICENSES/LGPL-3.0-only.txt \
++	LICENSES/GFDL-1.3-no-invariants-only.txt
++
++QT6SHADERTOOLS_CONF_OPTS = \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF
++
++QT6SHADERTOOLS_DEPENDENCIES = \
++	host-pkgconf \
++	qt6base \
++	host-qt6shadertools
++
++HOST_QT6SHADERTOOLS_DEPENDENCIES = \
++	host-qt6base
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.45.0
 
