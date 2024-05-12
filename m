@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6BAAC25B5F
-	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 10:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79C93C10F1A
+	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 10:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DD4A421B5;
-	Sun, 12 May 2024 10:06:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4566A4214B;
+	Sun, 12 May 2024 10:06:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id McHtSa3vUxWZ; Sun, 12 May 2024 10:06:07 +0000 (UTC)
+ id P7LVCkPCBCDV; Sun, 12 May 2024 10:06:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 688D24209D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EE33421D2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 688D24209D;
-	Sun, 12 May 2024 10:06:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E1B121BF27A
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:06:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EE33421D2;
+	Sun, 12 May 2024 10:06:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2320C1BF27A
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD526840F0
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:06:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 181EA421D2
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:06:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kWiqpOZeemOQ for <buildroot@lists.busybox.net>;
- Sun, 12 May 2024 10:06:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lf_k64QDXsfN for <buildroot@lists.busybox.net>;
+ Sun, 12 May 2024 10:06:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24B67840EF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 24B67840EF
- for <buildroot@buildroot.org>; Sun, 12 May 2024 10:06:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1AA1287069; Sun, 12 May 2024 10:06:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 May 2024 12:05:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 322500d1bdad5cbcc229c75e766b58318bb12235
-X-Git-Newrev: 4c561a7adf95d33acddabcd72e6155c8c05bbbfe
-X-Patchwork-Hint: ignore
-Message-Id: <20240512100605.1AA1287069@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch/Config.in.x86: enable SSE2 on Pentium
- M
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A757C4209D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A757C4209D
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A757C4209D
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 10:06:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 80EDB1BF203;
+ Sun, 12 May 2024 10:06:06 +0000 (UTC)
+Date: Sun, 12 May 2024 12:06:05 +0200
+To: Stefan Ott via buildroot <buildroot@buildroot.org>
+Message-ID: <20240512120605.60672d99@windsurf>
+In-Reply-To: <20240313191736.847855-1-stefan@ott.net>
+References: <20240313191736.847855-1-stefan@ott.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715508366;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=NLi/cmbOQM56othU7cHajtDcp1zlD3U35uX1LmEJPtA=;
+ b=gRtKrC07NnSQ7jSKO2gYVWvl3oGi2ocTj/ef0fyAVbR/HFMErHwq4Xwd3lL+JgcIzxa3C8
+ 11r5M8pGukm8hTj0xzEUhop+smD3ge7zxEEIqonW0gOkF8XeqrNWLxL7Xh2WsfDRkdhxgD
+ WaiONht6KLP5TOs40xdTSvzbG80rkQjxeWg9wEQLqbab+z1a71ttDyL5fLoaVCFtO1yw5l
+ awclc8/tpSJaRu8ajoVSi9Bskci2yAH+HOL1dpuEjmQdanzKu/TJiQxGgOMf7eV3stiw4s
+ ZURvuST/CIw3sm/NtmLITl+fL3p5bth9GnD+9ChAQdFjNVuniSf8oqDZ45mO4A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gRtKrC07
+Subject: Re: [Buildroot] [PATCH] arch/Config.in.x86: enable SSE2 on Pentium M
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,35 +82,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Stefan Ott <stefan@ott.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c561a7adf95d33acddabcd72e6155c8c05bbbfe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 13 Mar 2024 20:17:36 +0100
+Stefan Ott via buildroot <buildroot@buildroot.org> wrote:
 
-The Pentium M does support SSE2 so it would make sense to enable it.
+> The Pentium M does support SSE2 so it would make sense to enable it.
+> 
+> Signed-off-by: Stefan Ott <stefan@ott.net>
+> ---
+>  arch/Config.in.x86 | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Stefan Ott <stefan@ott.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- arch/Config.in.x86 | 1 +
- 1 file changed, 1 insertion(+)
+Applied to master, thanks.
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 49823fe885..93a223b7ae 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -72,6 +72,7 @@ config BR2_x86_pentium_m
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_SSE2
- config BR2_x86_pentium2
- 	bool "pentium2"
- 	depends on !BR2_x86_64
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
