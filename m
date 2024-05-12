@@ -4,65 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26525C10F1A
-	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 08:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D7B0C25B5F
+	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 10:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D44754220B;
-	Sun, 12 May 2024 08:20:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2DEB41FDA;
+	Sun, 12 May 2024 10:03:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZbEpriJHbWOU; Sun, 12 May 2024 08:20:01 +0000 (UTC)
+ id 9-v4P0yd6oRM; Sun, 12 May 2024 10:03:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83C7F4220D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25E1C41FE2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83C7F4220D;
-	Sun, 12 May 2024 08:20:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 627441BF3F6
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 08:20:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25E1C41FE2;
+	Sun, 12 May 2024 10:03:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C8EFE1BF303
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:03:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E5766075B
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 08:20:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BFAD484105
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 10:03:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R_rDsLadHhSL for <buildroot@lists.busybox.net>;
- Sun, 12 May 2024 08:19:59 +0000 (UTC)
-X-Greylist: delayed 2082 seconds by postgrey-1.37 at util1.osuosl.org;
- Sun, 12 May 2024 08:19:58 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DF04760790
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF04760790
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=60.248.80.70;
- helo=atcsqr.andestech.com; envelope-from=peterlin@andestech.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id drO7SoaSsrNs for <buildroot@lists.busybox.net>;
+ Sun, 12 May 2024 10:03:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
- [60.248.80.70])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DF04760790
- for <buildroot@buildroot.org>; Sun, 12 May 2024 08:19:57 +0000 (UTC)
-Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
- by Atcsqr.andestech.com with ESMTP id 44C7jOOI086864
- for <buildroot@buildroot.org>; Sun, 12 May 2024 15:45:24 +0800 (+08)
- (envelope-from peterlin@andestech.com)
-Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
- by Atcsqr.andestech.com with ESMTP id 44C7j937086819
- for <buildroot@buildroot.org>; Sun, 12 May 2024 15:45:09 +0800 (+08)
- (envelope-from peterlin@andestech.com)
-Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS16.andestech.com
- (10.0.1.222) with Microsoft SMTP Server id 14.3.498.0;
- Sun, 12 May 2024 15:45:09 +0800
-To: <buildroot@buildroot.org>
-Date: Sun, 12 May 2024 15:44:59 +0800
-Message-ID: <20240512074459.1360700-1-peterlin@andestech.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Originating-IP: [10.0.15.183]
-X-DNSRBL: 
-X-MAIL: Atcsqr.andestech.com 44C7jOOI086864
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=andestech.com
-Subject: [Buildroot] [PATCH] package/kmon: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBDCB840BE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBDCB840BE
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 10:03:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B379F87065; Sun, 12 May 2024 10:03:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 12 May 2024 12:02:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cfda1f0b87ebfb7686b82f319c531d4d28fdfd67
+X-Git-Newrev: 322500d1bdad5cbcc229c75e766b58318bb12235
+X-Patchwork-Hint: ignore
+Message-Id: <20240512100302.B379F87065@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qbee-agent: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,88 +57,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yu Chien Peter Lin via buildroot <buildroot@buildroot.org>
-Reply-To: Yu Chien Peter Lin <peterlin@andestech.com>
-Cc: Yu Chien Peter Lin <peterlin@andestech.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6028498656480452842=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add Kmon, a Rust-based, text-UI tool for managing Linux kernel
-modules and monitoring kernel activities, providing a single
-interface for various tools like dmesg and kmod.
+--===============6028498656480452842==
+Content-Type: text/plain
 
-Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=322500d1bdad5cbcc229c75e766b58318bb12235
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This patch add qbee-agent, an open source device management software
+for Linux devices.
+
+Signed-off-by: Jon Henrik Bjørnstad <jonhenrik@qbee.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in      |  1 +
- package/kmon/Config.in |  9 +++++++++
- package/kmon/kmon.hash |  4 ++++
- package/kmon/kmon.mk   | 12 ++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/kmon/Config.in
- create mode 100644 package/kmon/kmon.hash
- create mode 100644 package/kmon/kmon.mk
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/qbee-agent/Config.in       | 25 +++++++++++++++++++++++++
+ package/qbee-agent/qbee-agent.hash |  3 +++
+ package/qbee-agent/qbee-agent.mk   | 38 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 70 insertions(+)
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 67ce43e9cc..5a52550c27 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1650,6 +1650,9 @@ F:	package/sdbusplus/
+ N:	Jon Ringle <jringle@gridpoint.com>
+ F:	package/mbpoll/
+ 
++N:	Jon Henrik Bjørnstad <jonhenrik@qbee.io>
++F:	package/qbee-agent/
++
+ N:	Jonathan Ben Avraham <yba@tkos.co.il>
+ F:	arch/Config.in.xtensa
+ F:	package/autofs/
 diff --git a/package/Config.in b/package/Config.in
-index 0c17154877..f17547775e 100644
+index 2af63c124e..8aff995f63 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2753,6 +2753,7 @@ menu "System tools"
- 	source "package/jailhouse/Config.in"
- 	source "package/keyutils/Config.in"
- 	source "package/kmod/Config.in"
-+	source "package/kmon/Config.in"
- 	source "package/kvmtool/Config.in"
- 	source "package/libostree/Config.in"
- 	source "package/libvirt/Config.in"
-diff --git a/package/kmon/Config.in b/package/kmon/Config.in
+@@ -2797,6 +2797,7 @@ menu "System tools"
+ 	source "package/procs/Config.in"
+ 	source "package/psmisc/Config.in"
+ 	source "package/pwgen/Config.in"
++	source "package/qbee-agent/Config.in"
+ 	source "package/quota/Config.in"
+ 	source "package/quotatool/Config.in"
+ 	source "package/rauc/Config.in"
+diff --git a/package/qbee-agent/Config.in b/package/qbee-agent/Config.in
 new file mode 100644
-index 0000000000..7c56f387fa
+index 0000000000..e75adf5805
 --- /dev/null
-+++ b/package/kmon/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_KMON
-+	bool "kmon"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
++++ b/package/qbee-agent/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_QBEE_AGENT
++	bool "qbee-agent"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_USE_MMU # bash
++	depends on !BR2_STATIC_LIBS # shadow
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 # shadow
++	select BR2_PACKAGE_IPTABLES # runtime
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
++	select BR2_PACKAGE_SHADOW # runtime
++	select BR2_PACKAGE_BASH # runtime
 +	help
-+	  kmon provides a terminal UI for managing kernel modules
-+	  and monitoring kernel activities.
++	  Qbee is a device management platform that comprise of an
++	  open-source agent and a hosted SaaS backend.  This config
++	  installs pre-built static binaries made with the official
++	  public signing key for qbee.io. The binaries will work
++	  seamlessly with the qbee.io device management backend.
 +
-+	  https://github.com/orhun/kmon
-diff --git a/package/kmon/kmon.hash b/package/kmon/kmon.hash
++	  https://github.com/qbee-io/qbee-agent
++	  https://qbee.io
++
++comment "qbee-agent needs a toolchain w/ headers >= 4.14, dynamic library"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+diff --git a/package/qbee-agent/qbee-agent.hash b/package/qbee-agent/qbee-agent.hash
 new file mode 100644
-index 0000000000..87b7ab5986
+index 0000000000..8e9e7230ea
 --- /dev/null
-+++ b/package/kmon/kmon.hash
-@@ -0,0 +1,4 @@
++++ b/package/qbee-agent/qbee-agent.hash
+@@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  bc2d495bfca48cdfe4d4e3cab1dafd887ebbca9310a99613182b4f26c530acc5  kmon-v1.6.5.tar.gz
-+sha256  f1d7ca1381b10a10523fbde322ffcd54245328b1b442a9d3e348c800279a29de  kmon-v1.6.5-cargo2.tar.gz
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-diff --git a/package/kmon/kmon.mk b/package/kmon/kmon.mk
++sha256  d329d6d1c885ec4d410ab8c5f93320ab603cef860311a6b392edd5b903039a81  qbee-agent-2024.09-go2.tar.gz
++sha256  02d07d96be99eb042b01ba650079a440ce26a78c5e0e1e8060c33a8c9e200404  LICENSE
+diff --git a/package/qbee-agent/qbee-agent.mk b/package/qbee-agent/qbee-agent.mk
 new file mode 100644
-index 0000000000..5208124223
+index 0000000000..30219eebdc
 --- /dev/null
-+++ b/package/kmon/kmon.mk
-@@ -0,0 +1,12 @@
++++ b/package/qbee-agent/qbee-agent.mk
+@@ -0,0 +1,38 @@
 +################################################################################
 +#
-+# kmon
++# qbee-agent package
 +#
 +################################################################################
 +
-+KMON_VERSION = v1.6.5
-+KMON_SITE = $(call github,orhun,kmon,$(KMON_VERSION))
-+KMON_LICENSE = GPL-3.0
-+KMON_LICENSE_FILES = LICENSE
++# keep QBEE_AGENT_COMMIT_ID in sync when updating
++QBEE_AGENT_VERSION = 2024.09
++QBEE_AGENT_SITE = $(call github,qbee-io,qbee-agent,$(QBEE_AGENT_VERSION))
++QBEE_AGENT_LICENSE = Apache-2.0
++QBEE_AGENT_LICENSE_FILES = LICENSE
 +
-+$(eval $(cargo-package))
--- 
-2.34.1
++QBEE_AGENT_COMMIT_ID = c30d43b8e64cfef960cee9475b58ae083e4ad246
++
++QBEE_AGENT_GOMOD = go.qbee.io/agent
++
++QBEE_AGENT_LDFLAGS = -s -w \
++	-X $(QBEE_AGENT_GOMOD)/app.Version=$(QBEE_AGENT_VERSION) \
++	-X $(QBEE_AGENT_GOMOD)/app.Commit=$(QBEE_AGENT_COMMIT_ID)
++
++define QBEE_AGENT_INSTALL_CERT
++	$(INSTALL) -D -m 0600 $(@D)/package/share/ssl/ca.cert \
++		$(TARGET_DIR)/etc/qbee/ppkeys/ca.cert
++endef
++
++QBEE_AGENT_POST_INSTALL_TARGET_HOOKS += QBEE_AGENT_INSTALL_CERT
++
++define QBEE_AGENT_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/package/init-scripts/systemd/qbee-agent.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/qbee-agent.service
++endef
++
++define QBEE_AGENT_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 $(@D)/package/init-scripts/sysvinit/qbee-agent \
++		$(TARGET_DIR)/etc/init.d/S99qbee-agent
++endef
++
++$(eval $(golang-package))
+
+--===============6028498656480452842==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6028498656480452842==--
