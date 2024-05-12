@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B778C10F1A
-	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 07:08:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 191EEC10F1A
+	for <buildroot@archiver.kernel.org>; Sun, 12 May 2024 07:08:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0AE9F40BE4;
-	Sun, 12 May 2024 07:08:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC2DC4010C;
+	Sun, 12 May 2024 07:08:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id voBFKiL2zirW; Sun, 12 May 2024 07:08:03 +0000 (UTC)
+ id cKip4wNXuwcW; Sun, 12 May 2024 07:08:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10D2840BE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC511401CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10D2840BE8;
-	Sun, 12 May 2024 07:08:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EE3121BF473
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 07:07:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC511401CC;
+	Sun, 12 May 2024 07:08:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C99A1BF473
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 07:08:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D9FE842222
- for <buildroot@lists.busybox.net>; Sun, 12 May 2024 07:07:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 46C22840BE
+ for <buildroot@lists.busybox.net>; Sun, 12 May 2024 07:08:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4gnzQRQc-RCl for <buildroot@lists.busybox.net>;
- Sun, 12 May 2024 07:07:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5YbKycz6V7IU for <buildroot@lists.busybox.net>;
+ Sun, 12 May 2024 07:08:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2BCD4221D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2BCD4221D
- for <buildroot@buildroot.org>; Sun, 12 May 2024 07:07:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D0DC8702F; Sun, 12 May 2024 07:07:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 12 May 2024 09:06:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5a7c40bd1c10d62fc7305db5ac7d1842d7099bb6
-X-Git-Newrev: 84ccd2c783f68aa959e6a65df7621977a90ce31f
-X-Patchwork-Hint: ignore
-Message-Id: <20240512070757.3D0DC8702F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-compose: bump version to
- v2.27.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 387868409D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 387868409D
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 387868409D
+ for <buildroot@buildroot.org>; Sun, 12 May 2024 07:08:32 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6A0AB60002;
+ Sun, 12 May 2024 07:08:30 +0000 (UTC)
+Date: Sun, 12 May 2024 09:08:29 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240512090829.2bf594fd@windsurf>
+In-Reply-To: <Zj91p/Bv/ZtCtvO6@waldemar-brodkorb.de>
+References: <Zj91p/Bv/ZtCtvO6@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715497710;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Q2PI6Ao2tgVoxfXOSb+ElJ1LzMJZwxnnoMI5xFbjlLQ=;
+ b=W9yjJ8YtK+e1jMR29zNEH5ebVQjiFLilc/qKd38Hn7SZxxJg6b5VObGds4GmEwwKCWX+z4
+ wWaRVkKuMAIoUwXqa6J+1yYfUfBDrFhH/tpJvhgbXoQYiWMmCJ2bABErY07y3C6Jju1dAK
+ dhpZMF+jal2ejQzc8OCFmNb/8u+t2HCPv8U50MCHydVnbE+Kf3rPk/65rpPbX7K3CWjnvq
+ OmDKAsjGwVEXxyQV6zyiX/OrrYe4/NWCMzZIKwBMkWM9YJdjmt+I4HEqkJg4w+Eo+Iz0jE
+ WZpgRqsw3QBsIp78gGvVTFSK785HnkplNOfY/OdaCprp2vA52C2rBP1jJTnebw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=W9yjJ8Yt
+Subject: Re: [Buildroot] [PATCH] configs/qemu_riscv64_nomu_virt_defconfig:
+ enable networking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,46 +83,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Niklas Cassel <niklas.cassel@wdc.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84ccd2c783f68aa959e6a65df7621977a90ce31f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 11 May 2024 15:41:59 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-https://github.com/docker/compose/releases/tag/v2.27.0
+> Enable networking for better user experience.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  board/qemu/riscv64-virt/linux-nommu.config | 22 ++++++++++++++++++++++
+>  board/qemu/riscv64-virt/readme.txt         |  2 +-
+>  configs/qemu_riscv64_nommu_virt_defconfig  |  7 +++----
+>  3 files changed, 26 insertions(+), 5 deletions(-)
+>  create mode 100644 board/qemu/riscv64-virt/linux-nommu.config
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/docker-compose/docker-compose.hash | 2 +-
- package/docker-compose/docker-compose.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
-index cda4a130d5..1fd454e3fa 100644
---- a/package/docker-compose/docker-compose.hash
-+++ b/package/docker-compose/docker-compose.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  821aac932d0a3bbe583ea290ae777cec785a77f987c5007a30970fa6568e9322  docker-compose-2.26.1-go2.tar.gz
-+sha256  448eaf225c2984a2d78b4faa3fe74a4aa1e2bb791f90ac8d4970d3d046e638df  docker-compose-2.27.0-go2.tar.gz
- sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
-diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
-index 66a88ac7e7..32b2236a91 100644
---- a/package/docker-compose/docker-compose.mk
-+++ b/package/docker-compose/docker-compose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_COMPOSE_VERSION = 2.26.1
-+DOCKER_COMPOSE_VERSION = 2.27.0
- DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
- DOCKER_COMPOSE_LICENSE = Apache-2.0
- DOCKER_COMPOSE_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
