@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ACAFC25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:48:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 982ECC25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:49:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1087F4159D;
-	Mon, 13 May 2024 21:48:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 35750415FF;
+	Mon, 13 May 2024 21:49:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0ujyKRcOMd8E; Mon, 13 May 2024 21:48:39 +0000 (UTC)
+ id Oy-FIx2LqPIR; Mon, 13 May 2024 21:49:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8507E41555
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E113415AF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8507E41555;
-	Mon, 13 May 2024 21:48:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E113415AF;
+	Mon, 13 May 2024 21:49:19 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E94E81BF2A4
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:48:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F3C951BF2A4
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:49:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D414482284
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:48:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED65E82486
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:49:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q1sHdAfs_xs5 for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 21:48:36 +0000 (UTC)
+ id S3uLmgfIwq6g for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 21:49:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D42E682262
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D42E682262
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2123881FB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2123881FB9
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D42E682262
- for <buildroot@busybox.net>; Mon, 13 May 2024 21:48:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2123881FB9
+ for <buildroot@busybox.net>; Mon, 13 May 2024 21:49:14 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.fritz.box ([82.135.81.197]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0G1d-1sTPZm03aJ-00yPsW
- for <buildroot@busybox.net>; Mon, 13 May 2024 23:48:33 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MMXUD-1rpw0V3hZv-00KfJU
+ for <buildroot@busybox.net>; Mon, 13 May 2024 23:49:12 +0200
 To: buildroot@busybox.net
-Date: Mon, 13 May 2024 23:48:32 +0200
-Message-ID: <20240513214832.18094-1-ps.report@gmx.net>
+Date: Mon, 13 May 2024 23:49:12 +0200
+Message-ID: <20240513214912.18201-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.45.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Ib3gQS9w23s19OYwlX2SKHN5ynpnnSxAhitPdl894GX1NwrBLft
- e6DdUu3w1nR+BEAplKOO9JdCmv65Ec6HO2h/xkHlkxiBpIOWRChb4y2RjpFvusYPMr9hybQ
- S7i7R22XOFtCNBgWuHBQmlUAW05EJeKJN5jWah+n8N7XC5JtCkz8p+YoSVemozr2KhNOVsP
- pGPX+rQS/XaI5q526H7ug==
-UI-OutboundReport: notjunk:1;M01:P0:yxdn+JAbd4k=;IUbqDgvYx9vzARFNnRPhM92qPNx
- PWYgr4Tm7WDKcClZf1s36JZYU7iyWRSDmELUqo5hMZy1H2ltAbFouk0Wmclk5CWNQZvbY7KN8
- 9suWe4RBim3FBeQKFDsev2UNxnySA5CMjtjWMRLj3bqx4ArwH8GGMETqKsoQbmIHyGhjlF7Q0
- LK1xxlw+NLNvjFmWJBVA7GJBrtje/sD2uZ+ZOSvHhrkqKnoNk7SCYC+2/d1BoPhWZW6/9m3Mw
- LUwLVU9FBF7Ng5QFGVQ9Uaoi6QtaPEjT0ML4ZjCw4LTjCNlAxhnuxGgrTyxwBUu5Jo7iJEzCI
- gdqP88g3iZIy3mEymntZmCs5DwVP6tyvbbG6MtKjlBsfXkR4SVN9Kbf/ww1JdFDuD5KqF5mfr
- mAixJ4CHxprpBfDg2DB5WqCPa4gCpAF64Hv5V/9F8eA3lMDsRTYwRN3KSvDnLSMQ5TdRFfduP
- iyBEX+2+1gCcQnnVOJSGjtVtzz47YVc6g4WafQEB/v7Z3MwBBwD9wTJU5+eEbEZCzN2WPO0cU
- f61M3yv0TVSNwYjztBhMFODmZ9A+39T0fItH4ML1VB21pmc3aKEd9Pj7w8YGIJ+oyXmQywCB4
- gbsfG0ItUuwHKsMDdNhXJlucU9QAfCStyiUlWH9Pb3LbtinOjQRMBgodiuOiUDXkEEfiuwykg
- JetlItMPX4YdZXAnnWA6RjVhZfvrhpJB8LmsiovdyMZ8MYUDYueR4Lsv6qMc/EbNCq3MHSRQZ
- MjctixC4Im7ZgvWHPNE4OxzVuv3W1QINIQ1pHWd/irmwXeu3rmC/qODDq7z3nNr56253U9prb
- WspJC1FA8dwrEi9kZ5BUzrkao6tX+0jx/Z4fxosPUXiEo=
+X-Provags-ID: V03:K1:7U5xXs0UDvOr2gZDrDr4O0u16Xa6RBGMyTS6rAjSGJkCGNBjuFV
+ ohq6a6bXm573oriX83Dy9ZtxfBB2sH+dxEalU9E8F3hcaN3lSX9MN87ykb1ySfuQ2m3EN9a
+ rMJ2jbpQM7QQGrWcyjuwVX0+o3Ydn8PEpO0bzS/B5vPr8Dfh6VtmrSfaSR7NTPQyjjJ403h
+ oI5y/jTyXqR1U9mOyT2sg==
+UI-OutboundReport: notjunk:1;M01:P0:KpgE0ceiB3s=;xpEn/zZNphOw7G6m/U7VBU43j3n
+ PcabMVneMYc0iKoXhaL/UR5lQUgSvCOVDDppLgMb98icRYFoLT/txUjRJmzPRkH/qKW3/kX+Q
+ gc/slZCCboWifdd73IYDibRClrbIQVeX1lM51AjHr94K/lKc+Qm32ihfcQmupkkKYybIbPM83
+ +9eKE+r1j+rcHaxE4xk1KR99+ZVJwhu0ldZmM5oHKaZ2JJamULlnR940rWoDeg9g75Hil+VuE
+ ZE58s5PVfOr4y+W18JbHZ8Mg/Bq3+/geHjX0van2BzQis//BXokfaR2dlZUr6aO9BPay06zDB
+ DgSJpAYZelbdg7yQWDAXYD62zu5hlVRkptVW+ZCubB7l9zokgQFfoMWTLMPJyVhuOtNWeIUCI
+ SAlKp8kNqytGOVZ2gbc6doTVOTLGa/VIlbMCzxwQ3SyL+2YWVA2R9roC2XSUnClOcrPN+SJie
+ DcvxQbFmf9BNIdsdffMytydYRXxGxAbA0pAqJPcSTiDbJPa37K2QnLcC6rvvRl4RAJxzbIY0b
+ W0yNQ1cVKxwf3JzdPVdEFRX38jmvjw4+QH88lxj+1NiZKfRkLC5C/hAzkKTLIP62axOmiK5kY
+ Fy9lF3GlRpE+Wk4yia+ZTmlXIhw6v6BOOzhu6O2otWdmrb7jHwVHaVAMXpZ1kmRSrtgvZMYJh
+ tmTzFIED99bAX7A+3cTbZNO5mkJveFt7e1HjHfxlHAB5vURJvL+dq+tiEdr3v7R0+2slMGRwA
+ uZYbtCJ2Hj2hlkyh8hQCer3oQD28p/vHEN8Up9mBdijFipo9FoS0ED21VC7bxu3U6rt7+xfn+
+ ewQ6mLL2gJaiIEFruIslavY+/QPzs9a3jCKEtzDme9He0=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.net; 
- s=s31663417; t=1715636913; x=1716241713; i=ps.report@gmx.net;
- bh=Hb7AypnHE5pu98SAEXpD1Yc6iLiFTl322QNA+R3zcyc=;
+ s=s31663417; t=1715636953; x=1716241753; i=ps.report@gmx.net;
+ bh=ouZv4rR4vyQT8x5ftbM4qf/Mvf6wWSJGjZX61p7ofgE=;
  h=X-UI-Sender-Class:From:To:Subject:Date:Message-ID:MIME-Version:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=lxSrIaEf93WD+G6jgOyhea+RNFX3CqDsdm4wAauRRUYltVVHBfi2Mws/x/Z6jrlm
- STG5PyBBDipnwzYrwl/qh6QCrAG98JCjKzsgb57zwM+3eBrTI+qj0agUtbtiw7UAl
- rq5Tk+w0qSblgH+IZUS7fk6RkYf6wN9t5y4Mcz8FaC7xWU2R1N8V5IamC+IPjS2qo
- TbJ+Kq2viRXW+UT1OtEuvx/8WFHieLIOxCxID8ljQMpepVCt3WtxhLYKf3yfXMTWv
- ZSMcz1TKjCU98C8jV7a51Ew4+7o9m1N3tkreNZaNnxwXtn22CfgHiPNR5YclFfuvA
- LjPdNqcyvlkefLMp0Q==
+ b=Y2rAoQGU4IYaZKCEhXTBFbaOZuj9hTFRTm3dg7Di83Y1ZZVypj8yrDiFxi342Ope
+ YFdkuGiRQeOWyYulUnqfCnyErnH/dFR/rbgIrQaJ98QXP84nWJqVRBPujj626oLMX
+ vdfbQV8RyLiZDU8hQRQe5uSJ9bW3jlmSInL6cpOWrxKoLuQdR6z9UmNeEK4DGc9Eq
+ +kCLF5H6cmD8G4SwgXZCPcxsrh5KlE2Cm4+W5yPpDBqlcPkn3JzKOhpgOHrJiLgwA
+ B1BWxRHUy3QVmdWFLSEWL7y01DSDUqb7TQ1r3/GOOx0rntog7px8roUnqQZEJbW7U
+ ateuFVlHLvd58hSwZg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=lxSrIaEf
-Subject: [Buildroot] [PATCH v1] package/wiringpi: re-add and bump version to
- 3.4
+ header.a=rsa-sha256 header.s=s31663417 header.b=Y2rAoQGU
+Subject: [Buildroot] [PATCH v1] package/dillo: bump version to 3.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,352 +101,341 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- revert commit 90dd780391 ("package/wiringpi: remove")
-- bump version to 3.4
+- bump version to 3.1.0 (for details see [1])
 - change download URL to github
 - change home page URL to github
-- rebased 0001-Adjust-for-buildroot-build.patch
-- add optional libxcrypt dependency, fix build failure since bump of glibc
-  to version 2.39
-- needs kernel headers >= 5.5 for GPIOLINE_FLAG_BIAS_PULL_UP,
-  GPIOLINE_FLAG_BIAS_PULL_DOWN and GPIOLINE_FLAG_BIAS_DISABLE usage
+- remove 0001-usr-local-include.patch
+  (no longer needed since upstream commit [2])
+- remove 0002-Fix-openssl-detection.patch
+  (no longer applicable)
+- remove 0003-Support-OpenSSL-1.1.0.patch
+  (original from upstream, no longer applicable)
+- remove 0004-fix-build-with-gcc-10.patch
+  (no longer applicable)
+- adjust autreconf comment
+- determine all autoconf options (with default values)
+
+[1] https://github.com/dillo-browser/dillo/releases/tag/v3.1.0
+[2] https://github.com/dillo-browser/dillo/commit/3ac33673869b6f1ae1a29a329e5fa5c100bdd562
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- Config.in.legacy                              |   9 --
- DEVELOPERS                                    |   1 +
- package/Config.in                             |   1 +
- package/squeezelite/squeezelite.mk            |   5 +
- .../0001-Adjust-for-buildroot-build.patch     | 126 ++++++++++++++++++
- ...erial-fix-compile-for-missing-baud-d.patch |  47 +++++++
- package/wiringpi/Config.in                    |  16 +++
- package/wiringpi/wiringpi.hash                |   3 +
- package/wiringpi/wiringpi.mk                  |  36 +++++
- 9 files changed, 235 insertions(+), 9 deletions(-)
- create mode 100644 package/wiringpi/0001-Adjust-for-buildroot-build.patch
- create mode 100644 package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
- create mode 100644 package/wiringpi/Config.in
- create mode 100644 package/wiringpi/wiringpi.hash
- create mode 100644 package/wiringpi/wiringpi.mk
+ package/dillo/0001-usr-local-include.patch    |  27 ----
+ .../dillo/0002-Fix-openssl-detection.patch    |  29 ----
+ .../dillo/0003-Support-OpenSSL-1.1.0.patch    |  33 -----
+ .../dillo/0004-fix-build-with-gcc-10.patch    | 124 ------------------
+ package/dillo/Config.in                       |   2 +-
+ package/dillo/dillo.hash                      |   2 +-
+ package/dillo/dillo.mk                        |  23 +++-
+ 7 files changed, 19 insertions(+), 221 deletions(-)
+ delete mode 100644 package/dillo/0001-usr-local-include.patch
+ delete mode 100644 package/dillo/0002-Fix-openssl-detection.patch
+ delete mode 100644 package/dillo/0003-Support-OpenSSL-1.1.0.patch
+ delete mode 100644 package/dillo/0004-fix-build-with-gcc-10.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 46f7a304cb..8d4f488dbd 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -1938,15 +1938,6 @@ config BR2_PACKAGE_KODI_PERIPHERAL_STEAMCONTROLLER
- 
- comment "Legacy options removed in 2020.05"
- 
--config BR2_PACKAGE_WIRINGPI
--	bool "wiringpi package removed"
--	select BR2_LEGACY
--	help
--	  The author of wiringpi has deprecated the package, and
--	  completely removed the git tree that was serving the
--	  sources, with this message:
--	  Please look for alternatives for wiringPi
+diff --git a/package/dillo/0001-usr-local-include.patch b/package/dillo/0001-usr-local-include.patch
+deleted file mode 100644
+index 0c3fed2bfa..0000000000
+--- a/package/dillo/0001-usr-local-include.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-Do not add (possibly poisoned) /usr/local/include and /usr/local/lib
+-to gcc and ld search paths in configure.
 -
- config BR2_PACKAGE_PYTHON_PYCRYPTO
- 	bool "python-pycrypto package removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d653648718..9f7bade097 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2546,6 +2546,7 @@ F:	package/fft-eval/
- F:	package/python-blinker/
- F:	package/qt5/qt5speech/
- F:	package/speechd/
-+F:	package/wiringpi/
+-With BR2_COMPILER_PARANOID_UNSAFE_PATH enabled, poisoned paths result
+-in hard errors, failing affected configure tests.
+-
+-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+-
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -57,16 +57,6 @@
+- AC_TYPE_INT32_T
+- AC_TYPE_UINT32_T
+- 
+--dnl --------------------------------------
+--dnl Check whether to add /usr/local or not
+--dnl (this is somewhat a religious problem)
+--dnl --------------------------------------
+--dnl
+--if test "`$CPP -v < /dev/null 2>&1 | grep '/usr/local/include' 2>&1`" = ""; then
+--  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+--  LDFLAGS="$LDFLAGS -L/usr/local/lib"
+--fi
+--
+- dnl ------------------------------------
+- dnl Check for socket libs (AIX, Solaris)
+- dnl ------------------------------------
+diff --git a/package/dillo/0002-Fix-openssl-detection.patch b/package/dillo/0002-Fix-openssl-detection.patch
+deleted file mode 100644
+index 6e5f1d021f..0000000000
+--- a/package/dillo/0002-Fix-openssl-detection.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 96dde9dedf806256cdc6cbf5cacbd5c8d74e6288 Mon Sep 17 00:00:00 2001
+-From: Jonathan Kimmitt <jrrk2@cam.ac.uk>
+-Date: Thu, 9 Jan 2020 22:01:42 +0100
+-Subject: [PATCH] Fix openssl detection
+-
+-SSL_library_init is now a define, use OPENSSL_init_ssl instead.
+-
+-Signed-off-by: Jonathan Kimmitt <jrrk2@cam.ac.uk>
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 66b5e9f..206fd53 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -276,7 +276,7 @@ if test "x$enable_ssl" = "xyes"; then
+- 
+-   if test "x$ssl_ok" = "xyes"; then
+-     old_libs="$LIBS"
+--    AC_CHECK_LIB(ssl, SSL_library_init, ssl_ok=yes, ssl_ok=no, -lcrypto)
+-+    AC_CHECK_LIB(ssl, OPENSSL_init_ssl, ssl_ok=yes, ssl_ok=no, -lcrypto)
+-     LIBS="$old_libs"
+-   fi
+- 
+--- 
+-2.24.1
+-
+diff --git a/package/dillo/0003-Support-OpenSSL-1.1.0.patch b/package/dillo/0003-Support-OpenSSL-1.1.0.patch
+deleted file mode 100644
+index 87b9d0dce3..0000000000
+--- a/package/dillo/0003-Support-OpenSSL-1.1.0.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From ff44d8b2d5211a502afdb3e612dae0e8133b5124 Mon Sep 17 00:00:00 2001
+-From: Johannes Hofmann <Johannes.Hofmann@gmx.de>
+-Date: Thu, 9 Jan 2020 22:07:15 +0100
+-Subject: [PATCH] Support OpenSSL 1.1.0
+-
+-taken-from: pkgsrc (Ryo ONODERA)
+-submitted-by: Jun Ebihara <jun@soum.co.jp>
+-
+-Upstream: https://hg.dillo.org/dillo/rev/b171b8610400
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- dpi/https.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/dpi/https.c b/dpi/https.c
+-index 766b3af..025cfc4 100644
+---- a/dpi/https.c
+-+++ b/dpi/https.c
+-@@ -476,7 +476,11 @@ static int handle_certificate_problem(SSL * ssl_connection)
+-       case X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT:
+-          /*Either self signed and untrusted*/
+-          /*Extract CN from certificate name information*/
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-          if ((cn = strstr(remote_cert->name, "/CN=")) == NULL) {
+-+#else
+-+         if ((cn = strstr(X509_get_subject_name(remote_cert), "/CN=")) == NULL) {
+-+#endif
+-             strcpy(buf, "(no CN given)");
+-          } else {
+-             char *cn_end;
+--- 
+-2.24.1
+-
+diff --git a/package/dillo/0004-fix-build-with-gcc-10.patch b/package/dillo/0004-fix-build-with-gcc-10.patch
+deleted file mode 100644
+index 413bccb00b..0000000000
+--- a/package/dillo/0004-fix-build-with-gcc-10.patch
++++ /dev/null
+@@ -1,124 +0,0 @@
+-fix build with gcc 10
+-
+-gcc 10 is now defaulting to -fno-common resulting in the following build
+-failures:
+-
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g2 -D_FORTIFY_SOURCE=1 -DENABLE_IPV6 -DD_DNS_THREADED -D_REENTRANT -D_THREAD_SAFE -Wall -W -Wno-unused-parameter -Waggregate-return   -o dpid dpi.o dpi_socket_dir.o dpid.o dpid_common.o main.o misc_new.o ../dpip/libDpip.a ../dlib/libDlib.a 
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: dpi_socket_dir.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: dpid_common.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:64: multiple definition of `sock_set'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:64: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:61: multiple definition of `services_list'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:61: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:58: multiple definition of `dpi_attr_list'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:58: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:55: multiple definition of `numsocks'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:55: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:52: multiple definition of `numdpis'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:52: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:31: multiple definition of `srs_fd'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:31: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:28: multiple definition of `srs_name'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:28: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
+-/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: misc_new.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
+-
+-So add missing extern for srs_fd, numdpis, numsocks, dpi_attr_list,
+-services_list and sock_set
+-
+-Also remove srs_name which is never used and give a name to dpi_errno
+-enum
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/9c777af97fe50143c6a68f0170fc86c87d8ead3f
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: sent to jcid@dillo.org]
+-
+-diff -r f60d55c02567 dpid/dpid.c
+---- a/dpid/dpid.c	Fri Oct 05 22:05:08 2018 +0200
+-+++ b/dpid/dpid.c	Thu Aug 27 18:16:50 2020 +0200
+-@@ -38,6 +38,12 @@
+- 
+- #define QUEUE 5
+- 
+-+int srs_fd;
+-+int numdpis;
+-+int numsocks;
+-+struct dp *dpi_attr_list;
+-+Dlist *services_list;
+-+fd_set sock_set;
+- volatile sig_atomic_t caught_sigchld = 0;
+- char *SharedKey = NULL;
+- 
+-diff -r f60d55c02567 dpid/dpid.h
+---- a/dpid/dpid.h	Fri Oct 05 22:05:08 2018 +0200
+-+++ b/dpid/dpid.h	Thu Aug 27 18:16:50 2020 +0200
+-@@ -25,10 +25,9 @@
+- 
+- /*! \TODO: Should read this from dillorc */
+- #define SRS_NAME "dpid.srs"
+--char *srs_name;
+- 
+- /*! dpid's service request socket file descriptor */
+--int srs_fd;
+-+extern int srs_fd;
+- 
+- /*! plugin state information
+-  */
+-@@ -49,19 +48,19 @@
+- };
+- 
+- /*! Number of available plugins */
+--int numdpis;
+-+extern int numdpis;
+- 
+- /*! Number of sockets being watched */
+--int numsocks;
+-+extern int numsocks;
+- 
+- /*! State information for each plugin. */
+--struct dp *dpi_attr_list;
+-+extern struct dp *dpi_attr_list;
+- 
+- /*! service served for each plugin  */
+--Dlist *services_list;
+-+extern Dlist *services_list;
+- 
+- /*! Set of sockets watched for connections */
+--fd_set sock_set;
+-+extern fd_set sock_set;
+- 
+- /*! Set to 1 by the SIGCHLD handler dpi_sigchld */
+- extern volatile sig_atomic_t caught_sigchld;
+-diff -r f60d55c02567 dpid/dpid_common.h
+---- a/dpid/dpid_common.h	Fri Oct 05 22:05:08 2018 +0200
+-+++ b/dpid/dpid_common.h	Thu Aug 27 18:16:50 2020 +0200
+-@@ -37,10 +37,10 @@
+- 
+- 
+- /*! Error codes for dpid */
+--enum {
+-+enum dpi_errno {
+-    no_errors,
+-    dpid_srs_addrinuse /* dpid service request socket address already in use */
+--} dpi_errno;
+-+};
+- 
+- /*! Intended for identifying dillo plugins
+-  * and related files
+-diff -r f60d55c02567 dpid/main.c
+---- a/dpid/main.c	Fri Oct 05 22:05:08 2018 +0200
+-+++ b/dpid/main.c	Thu Aug 27 18:16:50 2020 +0200
+-@@ -231,7 +231,7 @@
+-    /* this sleep used to unmask a race condition */
+-    // sleep(2);
+- 
+--   dpi_errno = no_errors;
+-+   enum dpi_errno error_code = no_errors;
+- 
+-    /* Get list of available dpis */
+-    numdpis = register_all(&dpi_attr_list);
+-@@ -254,7 +254,7 @@
+- 
+-    /* Initialise sockets */
+-    if ((numsocks = init_ids_srs_socket()) == -1) {
+--      switch (dpi_errno) {
+-+      switch (error_code) {
+-       case dpid_srs_addrinuse:
+-          MSG_ERR("dpid refuses to start, possibly because:\n");
+-          MSG_ERR("\t1) An instance of dpid is already running.\n");
+diff --git a/package/dillo/Config.in b/package/dillo/Config.in
+index d06f2d1f51..3aa831ae02 100644
+--- a/package/dillo/Config.in
++++ b/package/dillo/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_DILLO
  
- N:	Peter Thompson <peter.macleod.thompson@gmail.com>
- F:	package/sdl2_gfx/
-diff --git a/package/Config.in b/package/Config.in
-index c29b4a5101..ffb6c69562 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1805,6 +1805,7 @@ menu "Hardware handling"
- 	source "package/tslib/Config.in"
- 	source "package/uhd/Config.in"
- 	source "package/urg/Config.in"
-+	source "package/wiringpi/Config.in"
- endmenu
+ 	  Enable openssl package to gain https support.
  
- menu "Javascript"
-diff --git a/package/squeezelite/squeezelite.mk b/package/squeezelite/squeezelite.mk
-index b0347c4df9..2ed3d8b769 100644
---- a/package/squeezelite/squeezelite.mk
-+++ b/package/squeezelite/squeezelite.mk
-@@ -40,6 +40,11 @@ ifeq ($(BR2_PACKAGE_SQUEEZELITE_VISEXPORT),y)
- SQUEEZELITE_MAKE_OPTS += -DVISEXPORT
+-	  http://www.dillo.org
++	  https://github.com/dillo-browser/dillo
+ 
+ comment "dillo needs a toolchain w/ C++"
+ 	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
+diff --git a/package/dillo/dillo.hash b/package/dillo/dillo.hash
+index fa46702a63..0a524530e7 100644
+--- a/package/dillo/dillo.hash
++++ b/package/dillo/dillo.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  db1be16c1c5842ebe07b419aa7c6ef11a45603a75df2877f99635f4f8345148b  dillo-3.0.5.tar.bz2
++sha256  3aa2a686648b383417a0c1f575c3d5431d6a2d53f35c2e11bf579cb25b2b45e7  dillo-3.1.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
+index a6885f5c14..52708ed8ab 100644
+--- a/package/dillo/dillo.mk
++++ b/package/dillo/dillo.mk
+@@ -4,22 +4,33 @@
+ #
+ ################################################################################
+ 
+-DILLO_VERSION = 3.0.5
+-DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
+-DILLO_SITE = http://www.dillo.org/download
++DILLO_VERSION = 3.1.0
++DILLO_SITE = $(call github,dillo-browser,dillo,v$(DILLO_VERSION))
+ DILLO_LICENSE = GPL-3.0+
+ DILLO_LICENSE_FILES = COPYING
+-# configure.ac gets patched, so autoreconf is necessary
++# no configure file, so autoreconf is necessary
+ DILLO_AUTORECONF = YES
+ DILLO_DEPENDENCIES = fltk zlib \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ DILLO_CONF_ENV = ac_cv_path_FLTK_CONFIG=$(STAGING_DIR)/usr/bin/fltk-config
+ 
++DILLO_CONF_OPTS = \
++	--disable-efence \
++	--disable-mbedtls \
++	--disable-gprof \
++	--disable-insure \
++	--enable-ipv6 \
++	--enable-cookies \
++	--enable-gif \
++	--disable-rtfl \
++	--enable-xembed \
++	--disable-html-tests
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-DILLO_CONF_OPTS += --enable-ssl
++DILLO_CONF_OPTS += --enable-tls --enable-openssl
+ DILLO_DEPENDENCIES += openssl
+ else
+-DILLO_CONF_OPTS += --disable-ssl
++DILLO_CONF_OPTS += --disable-tls --disable-openssl
  endif
  
-+ifeq ($(BR2_PACKAGE_WIRINGPI),y)
-+SQUEEZELITE_DEPENDENCIES += wiringpi
-+SQUEEZELITE_MAKE_OPTS += -DRPI
-+endif
-+
- define SQUEEZELITE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		OPTS="$(SQUEEZELITE_MAKE_OPTS)" -C $(@D) all
-diff --git a/package/wiringpi/0001-Adjust-for-buildroot-build.patch b/package/wiringpi/0001-Adjust-for-buildroot-build.patch
-new file mode 100644
-index 0000000000..2720c502c1
---- /dev/null
-+++ b/package/wiringpi/0001-Adjust-for-buildroot-build.patch
-@@ -0,0 +1,126 @@
-+From ebfa5527467ba175cca84afeae244c06e265a508 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Wed, 2 Dec 2015 00:22:26 +0100
-+Subject: [PATCH] Adjust for buildroot build.
-+
-+ - enable CC override
-+ - fix devLib/gpio include path for local build (without installing first)
-+ - change CFLAGS from '=' to '+=' to honour buildroot given flags
-+ - add linker name link for libwiringPiDev and libwiringPi for local linking
-+   (without installing first)
-+ - fix install linker name link (do not link with absolute path)
-+ - add gpio-static linking target
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+
-+ - Rebased for wiringpi-8d188fa0e00bb8c6ff6eddd07bf92857e9bd533a
-+
-+Signed-off-by: Atanas Palavrov <palavrov@gmail.com>
-+
-+ - Rebased for wiringpi-3.4
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ devLib/Makefile   |  7 ++++---
-+ gpio/Makefile     | 12 ++++++++----
-+ wiringPi/Makefile |  5 +++--
-+ 3 files changed, 15 insertions(+), 9 deletions(-)
-+
-+diff --git a/devLib/Makefile b/devLib/Makefile
-+index 611e423..d0c70d0 100644
-+--- a/devLib/Makefile
-++++ b/devLib/Makefile
-+@@ -37,9 +37,9 @@ DYNAMIC=libwiringPiDev.so.$(VERSION)
-+ #DEBUG	= -g -O0
-+ DEBUG	= -O2
-+ CC	?= gcc
-+-INCLUDE	= -I.
-++INCLUDE	= -I../wiringPi
-+ DEFS	= -D_GNU_SOURCE
-+-CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
-++CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
-+ 
-+ LIBS    =
-+ 
-+@@ -69,6 +69,7 @@ $(STATIC):	$(OBJ)
-+ $(DYNAMIC):	$(OBJ)
-+ 	$Q echo "[Link (Dynamic)]"
-+ 	$Q $(CC) -shared -Wl,-soname,libwiringPiDev.so$(WIRINGPI_SONAME_SUFFIX) -o libwiringPiDev.so.$(VERSION) -lpthread $(OBJ)
-++	$Q ln -sf libwiringPiDev.so.$(VERSION) libwiringPiDev.so
-+ 
-+ .c.o:
-+ 	$Q echo [Compile] $<
-+@@ -93,7 +94,7 @@ install:	$(DYNAMIC)
-+ 	$Q echo "[Install Dynamic Lib]"
-+ 	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
-+ 	$Q install -m 0755 libwiringPiDev.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)
-+-	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)	$(DESTDIR)/lib/libwiringPiDev.so
-++	$Q ln -sf libwiringPiDev.so.$(VERSION)				$(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so
-+ 	$Q $(LDCONFIG)
-+ 
-+ .PHONY:	install-static
-+diff --git a/gpio/Makefile b/gpio/Makefile
-+index 249bb24..3aa24b7 100644
-+--- a/gpio/Makefile
-++++ b/gpio/Makefile
-+@@ -33,10 +33,10 @@ endif
-+ #DEBUG	= -g -O0
-+ DEBUG	= -O2
-+ CC	?= gcc
-+-INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
-+-CFLAGS	= $(DEBUG) -Wall -Wextra $(INCLUDE) -Winline -pipe $(EXTRA_CFLAGS)
-++INCLUDE	= -I../wiringPi -I../devLib
-++CFLAGS	+= $(DEBUG) -Wall -Wextra $(INCLUDE) -Winline -pipe $(EXTRA_CFLAGS)
-+ 
-+-LDFLAGS	= -L$(DESTDIR)$(PREFIX)/lib
-++LDFLAGS	= -L../wiringPi -L../devLib
-+ LIBS    = -lwiringPi -lwiringPiDev -lpthread -lrt -lm -lcrypt
-+ 
-+ # May not need to  alter anything below this line
-+@@ -52,9 +52,13 @@ version.h:	../VERSION
-+ 	$Q echo Need to run newVersion above.
-+ 
-+ gpio:	$(OBJ)
-+-	$Q echo [Link]
-++	$Q echo "[Link (Dynamic)]"
-+ 	$Q $(CC) -o $@ $(OBJ) $(LDFLAGS) $(LIBS)
-+ 
-++gpio-static: $(OBJ)
-++	$Q echo "[Link (Static)]"
-++	$Q $(CC) -static -o gpio $(OBJ) ../wiringPi/libwiringPi.a ../devLib/libwiringPiDev.a -lpthread
-++
-+ .c.o:
-+ 	$Q echo [Compile] $<
-+ 	$Q $(CC) -c $(CFLAGS) $< -o $@
-+diff --git a/wiringPi/Makefile b/wiringPi/Makefile
-+index 88fc48e..082bfaf 100644
-+--- a/wiringPi/Makefile
-++++ b/wiringPi/Makefile
-+@@ -39,7 +39,7 @@ DEBUG	= -O2
-+ CC	?= gcc
-+ INCLUDE	= -I.
-+ DEFS	= -D_GNU_SOURCE
-+-CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
-++CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
-+ #CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Wconversion -Winline $(INCLUDE) -pipe -fPIC
-+ 
-+ LIBS    = -lm -lpthread -lrt -lcrypt
-+@@ -77,6 +77,7 @@ static:
-+ $(DYNAMIC):	$(OBJ)
-+ 	$Q echo "[Link (Dynamic)]"
-+ 	$Q $(CC) -shared -Wl,-soname,libwiringPi.so$(WIRINGPI_SONAME_SUFFIX) -o libwiringPi.so.$(VERSION) $(OBJ) $(LIBS)
-++	$Q ln -sf libwiringPi.so.$(VERSION) libwiringPi.so
-+ 
-+ .c.o:
-+ 	$Q echo [Compile] $<
-+@@ -102,7 +103,7 @@ install:	$(DYNAMIC)
-+ 	$Q echo "[Install Dynamic Lib]"
-+ 	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
-+ 	$Q install -m 0755 libwiringPi.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)
-+-	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)	$(DESTDIR)/lib/libwiringPi.so
-++	$Q ln -sf libwiringPi.so.$(VERSION)				$(DESTDIR)$(PREFIX)/lib/libwiringPi.so
-+ 	$Q $(LDCONFIG)
-+ 
-+ .PHONY: check-deb-destdir
-+-- 
-+2.45.0
-+
-diff --git a/package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch b/package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
-new file mode 100644
-index 0000000000..c9c4385d48
---- /dev/null
-+++ b/package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
-@@ -0,0 +1,47 @@
-+From 1e7a7a625ca20633062406ce525b19d168c356af Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 20 Mar 2017 20:51:20 +0100
-+Subject: [PATCH] wiringPi/wiringSerial: fix compile for missing baud defines
-+
-+For sparc-buildroot-linux-uclibc/sysroot/usr/include/asm/termbits.h
-+containing:
-+
-+  /* These have totally bogus values and nobody uses them
-+     so far. Later on we'd have to use say 0x10000x and
-+     adjust CBAUD constant and drivers accordingly.
-+  #define B2500000  0x00001010
-+  #define B3000000  0x00001011
-+  #define B3500000  0x00001012
-+  #define B4000000  0x00001013  */
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ wiringPi/wiringSerial.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/wiringPi/wiringSerial.c b/wiringPi/wiringSerial.c
-+index e1587ad..4ac8d1e 100644
-+--- a/wiringPi/wiringSerial.c
-++++ b/wiringPi/wiringSerial.c
-+@@ -75,10 +75,18 @@ int serialOpen (const char *device, const int baud)
-+     case 1152000:	myBaud = B1152000 ; break ;
-+     case 1500000:	myBaud = B1500000 ; break ;
-+     case 2000000:	myBaud = B2000000 ; break ;
-++#if defined(B2500000)
-+     case 2500000:	myBaud = B2500000 ; break ;
-++#endif
-++#if defined(B3000000)
-+     case 3000000:	myBaud = B3000000 ; break ;
-++#endif
-++#if defined(B3500000)
-+     case 3500000:	myBaud = B3500000 ; break ;
-++#endif
-++#if defined(B4000000)
-+     case 4000000:	myBaud = B4000000 ; break ;
-++#endif
-+ 
-+     default:
-+       return -2 ;
-+-- 
-+2.11.0
-+
-diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
-new file mode 100644
-index 0000000000..11ef9825a1
---- /dev/null
-+++ b/package/wiringpi/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_WIRINGPI
-+	bool "wiringpi"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
-+	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  wiringPi libraries (and gpio command)
-+
-+	  https://github.com/WiringPi/WiringPi
-+
-+comment "wiringpi needs a toolchain w/ threads, dynamic library, kernel headers >= 5.5"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
-diff --git a/package/wiringpi/wiringpi.hash b/package/wiringpi/wiringpi.hash
-new file mode 100644
-index 0000000000..590d03946c
---- /dev/null
-+++ b/package/wiringpi/wiringpi.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  a81219e9ea0ce08295d2fc0457c69c4df0c6d2e846cb5817ba3247f673480d55  wiringpi-3.4.tar.gz
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
-diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
-new file mode 100644
-index 0000000000..3515634d6d
---- /dev/null
-+++ b/package/wiringpi/wiringpi.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# wiringpi
-+#
-+################################################################################
-+
-+WIRINGPI_VERSION = 3.4
-+WIRINGPI_SITE = $(call github,WiringPi,WiringPi,$(WIRINGPI_VERSION))
-+
-+WIRINGPI_LICENSE = LGPL-3.0+
-+WIRINGPI_LICENSE_FILES = COPYING.LESSER
-+WIRINGPI_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+WIRINGPI_DEPENDENCIES += libxcrypt
-+endif
-+
-+define WIRINGPI_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/wiringPi all
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/devLib all
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/gpio all
-+endef
-+
-+define WIRINGPI_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/wiringPi install DESTDIR=$(STAGING_DIR) PREFIX=/usr LDCONFIG=true
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/devLib install DESTDIR=$(STAGING_DIR) PREFIX=/usr LDCONFIG=true
-+endef
-+
-+define WIRINGPI_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/wiringPi install DESTDIR=$(TARGET_DIR) PREFIX=/usr LDCONFIG=true
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/devLib install DESTDIR=$(TARGET_DIR) PREFIX=/usr LDCONFIG=true
-+	$(INSTALL) -D -m 0755 $(@D)/gpio/gpio $(TARGET_DIR)/usr/bin/gpio
-+	$(INSTALL) -D -m 0755 $(@D)/gpio/pintest $(TARGET_DIR)/usr/bin/pintest
-+endef
-+
-+$(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
 -- 
 2.45.0
 
