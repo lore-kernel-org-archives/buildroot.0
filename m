@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80D94C25B5F
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:25:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3394CC25B5F
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E4E240725;
-	Mon, 13 May 2024 21:25:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D2804092B;
+	Mon, 13 May 2024 21:25:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I8OLobQ-9Oe4; Mon, 13 May 2024 21:25:00 +0000 (UTC)
+ id I8mgl8vgTSUZ; Mon, 13 May 2024 21:25:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAC0D40726
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E57B240889
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAC0D40726;
-	Mon, 13 May 2024 21:24:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 50BC61BF2A4
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:24:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E57B240889;
+	Mon, 13 May 2024 21:25:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 50C931BF2A4
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:25:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C47A40725
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:24:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E477404B4
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:25:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P5wkgVBf6yDY for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 21:24:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MZse1f1ttsxY for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 21:25:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46F3440715
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 46F3440715
- for <buildroot@buildroot.org>; Mon, 13 May 2024 21:24:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ABEC387309; Mon, 13 May 2024 21:24:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 13 May 2024 23:24:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd65b5e7551fe59a663f7c73818ca1777c66c117
-X-Git-Newrev: 8c79f4be597d78428126bfdb02eb47c3126f3ebe
-X-Patchwork-Hint: ignore
-Message-Id: <20240513212456.ABEC387309@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/flutter-packages: bump version to
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0D2D94012A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D2D94012A
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0D2D94012A
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 21:25:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 776EFE0004;
+ Mon, 13 May 2024 21:25:00 +0000 (UTC)
+Date: Mon, 13 May 2024 23:24:59 +0200
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20240513232459.47921ffd@windsurf>
+In-Reply-To: <20240326174059.499034-1-adam.duskett@amarulasolutions.com>
+References: <20240326174059.499034-1-adam.duskett@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715635500;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=MSDfzyTNUApeQwei4bIpu5ncUMuTDcegYgyqx5z2Y/g=;
+ b=l4rDAEjFluzF39a/eyyERLJEszW+zUeyKcomrlkrzSJARFibFwbcbWvBSjrKObyk8zmpf6
+ kwgM4mwSIyes/8xB8RJw5WQnMIH/X3DiUwOpuljXunAWVcdeeN/7cKqw6m9e301GOfHghE
+ 3Ean28yrC7SUbq86q57oMFAz3ECOjubFJ1w+2zNoYCSNqiECqoEGlOD1xg1JTQQTEFq1h8
+ 5JgKTSEXbQflV9TZEAzLl0sbANE2NZfWv16POLP5MKEBhVRblqLUKFn96rpNaV5/blJ5ug
+ b16bPeUMGzW6alyDZ9e+FlSQhYUS2KLBFcPzQ65sjKsBW0BP9m+TsastB1KQPA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=l4rDAEjF
+Subject: Re: [Buildroot] [PATCH] package/flutter-packages: bump version to
  ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,44 +83,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c79f4be597d78428126bfdb02eb47c3126f3ebe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 26 Mar 2024 11:40:59 -0600
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/flutter-packages/flutter-packages.hash | 2 +-
- package/flutter-packages/flutter-packages.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+>  package/flutter-packages/flutter-packages.hash | 2 +-
+>  package/flutter-packages/flutter-packages.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flutter-packages/flutter-packages.hash b/package/flutter-packages/flutter-packages.hash
-index ea30e7a36d..f266c497e4 100644
---- a/package/flutter-packages/flutter-packages.hash
-+++ b/package/flutter-packages/flutter-packages.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8276276e050c1ea45787f74b0f8c915b8cf2162b6af8537ffa9886bd423f2828  flutter-packages-947e34ce9fedcdd6750b54eb1cc74b854b49ab48.tar.gz
-+sha256  2e1e19713ac74b6e00a6f5ec516e8ccda5e5ba1fc8b249d40abcfe4cb50dff87  flutter-packages-ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3.tar.gz
- sha256  89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9  LICENSE
-diff --git a/package/flutter-packages/flutter-packages.mk b/package/flutter-packages/flutter-packages.mk
-index 0cc3bdff24..6b1a4371e8 100644
---- a/package/flutter-packages/flutter-packages.mk
-+++ b/package/flutter-packages/flutter-packages.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUTTER_PACKAGES_VERSION = 947e34ce9fedcdd6750b54eb1cc74b854b49ab48
-+FLUTTER_PACKAGES_VERSION = ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3
- FLUTTER_PACKAGES_SITE = $(call github,flutter,packages,$(FLUTTER_PACKAGES_VERSION))
- FLUTTER_PACKAGES_LICENSE = BSD-3-Clause
- FLUTTER_PACKAGES_LICENSE_FILES = LICENSE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
