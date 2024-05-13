@@ -4,89 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E530FC25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 09:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 921D5C25B75
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 10:29:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A7CB83337;
-	Mon, 13 May 2024 09:20:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2CD982315;
+	Mon, 13 May 2024 10:29:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 54h1g20skq-M; Mon, 13 May 2024 09:20:10 +0000 (UTC)
+ id SjdZ8moSJvf4; Mon, 13 May 2024 10:29:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6ECB832DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE05D8232C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6ECB832DC;
-	Mon, 13 May 2024 09:20:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B6C01BF239
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 09:19:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE05D8232C;
+	Mon, 13 May 2024 10:29:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E5C51BF3B0
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 10:29:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3804481FE0
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 09:19:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6734B406D2
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 10:29:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EKZqf11Xs0jX for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 09:19:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3D05081E96
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D05081E96
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D05081E96
- for <buildroot@busybox.net>; Mon, 13 May 2024 09:19:54 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([82.135.81.197]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4z6q-1sXmOL05S8-012J3H
- for <buildroot@busybox.net>; Mon, 13 May 2024 11:19:53 +0200
-To: buildroot@busybox.net
-Date: Mon, 13 May 2024 11:19:48 +0200
-Message-ID: <20240513091950.30116-4-ps.report@gmx.net>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20240513091950.30116-1-ps.report@gmx.net>
-References: <20240513091950.30116-1-ps.report@gmx.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GB_PoywlvQS2 for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 10:29:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::b29; helo=mail-yb1-xb29.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EF5274068E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF5274068E
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com
+ [IPv6:2607:f8b0:4864:20::b29])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EF5274068E
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 10:29:46 +0000 (UTC)
+Received: by mail-yb1-xb29.google.com with SMTP id
+ 3f1490d57ef6-de59daab3f3so3966040276.3
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 03:29:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715596186; x=1716200986;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=MSZAGAZkqIuiYUQ4EQ9I+ag2BJ4q7yaZ1F6PrfJElic=;
+ b=Ar1XHXYUkPZ51oROLkjvvvaxI0JjTNEaRWTpD6b3ej4rpr70sVogg2iWTPLEKNt3U5
+ Iu7sSNC7J28g27u/iYquQI1q+BJOhzEO6+06iwU/xZbYPKOCkx3Z+FyASMKsg/xNHetJ
+ nb3AtqAa5mBpIkNqsx1zGGBqvG2eQLKAJf0YqpL028wnsWuwQTE5H0polu2PAnMG0EXx
+ uDE4x1MAVmUHmJ6ye3mOvvh+YSnQw+xn9XfE92/BizC/Vzr0uittIWOB+9v0rk7n8EEv
+ w40iMw/zIuxXPA87zU+cmPjRYYWXJFbMOeFUbfaLxQOic7AJA5g4kfIbw5x/BxhYSvuT
+ BNSw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUkzp3h+n6OREfhkqi1CMMrhvmALF6b/vWsW9yFq9gjHIGW0zL6i1sIytHHJ+0CsaGC1hMfHObAtvPhNHfomkl6axKZwVy7Tg==
+X-Gm-Message-State: AOJu0YzsvWdhe/ExBhBH6r3a1wKHUksrypU+v58f/jF6gA9THDbO59JC
+ nOCAJ62gb42nNhSp3m47Fl8tvzk9JozZkLTb7QIUMKOfaZl5LJDBRiJZGWmxpWoOv5ZD1c6Ebkj
+ lu7ASjCnoJ0tXhUzgV9+agVgI5Vw=
+X-Google-Smtp-Source: AGHT+IEyPzso5JiZpiMbUjPyGTOL7X3TZVgLN8CSHcqO4pwhTPUraEqU3eZWnKSX0RxR52mkkTQY0uRnZ0uWFXGsy6M=
+X-Received: by 2002:a25:7482:0:b0:de5:6abe:9ab4 with SMTP id
+ 3f1490d57ef6-dee4f4da5afmr8235394276.50.1715596185618; Mon, 13 May 2024
+ 03:29:45 -0700 (PDT)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:hZ890/VXKHT9yZN4dct6wEZjEcGpCr9sX3rSmVgIWx0u/It3NVt
- U6HoGRZ3YxOkWmYiwbUQOt/Z+NW/SLXcb3iyU5Txw50XJO9F37/qQhnyQWaBe7Hcv6jiA0X
- glXXPCmyJ/+jdjN998CjnWcQhzlJSKWi13LuI2XlKXfaYorNeE9LHo40wKdtOd83AVgV9ja
- o+T+kw5GenF1ShrIjyiYg==
-UI-OutboundReport: notjunk:1;M01:P0:V9TUyY2XM+E=;gDeFoP9KWrFGb+by4pCe4e3n+D5
- GOTAwhA3tKQkXxQdPNOQajUv/NqmmU90neB7ZpqRGpM2BGLknwCvOzbRj1duzR/eHw+dnkx5r
- MQ5u30cQJi4qYhBXfsvqpokOF4TYeQx1xywwmXbRw4knKoizEKJALNS4JGpLuoZuqUg0KcrVu
- 2dvEiCYJGPkaFZ39OZn188YkPdTGumofWPmBeitWTC3cUTJzD2GkATrXoJVbWuuRjTyLZ//HM
- ZTZns15mDLuEKw6YoYSDxjRiGKuEKxGco//lO+ZayQSGxm+HiU27n5lRYzUx+oOQlptBqcJKX
- kPd7zynkBYEqqW0gGbx6gh+zdhqbJGpGcMBR02oHgdfe1QkhBWUYSj+8boX2QVoEKS/s6UOar
- jsBqd760OqKNLGEJ0SYXrAYNOj+UUg2ryKpYNtVQQPbSrPYeQmpYFAcQ5g50h1Ce3eZXG8YLo
- 96oxvF+4Qu+6vhSOaNhonp++dBQjtqTT2Ktpb9Tu9E2cWHKWVc6/tvIhG2dTtBSCZC9aVOBrM
- gmiTwN/ko70dvDicZLGRQhs+jRSsy2hnFXPTt3SrwRVwJnBpLjjz/GQf+RIz70+cYtbe8vD+T
- OmVa7E8OiwwUbkVFY2fJh2AGK0iF+oT6Kaz4U2M8HhkmyaA6CMY0pTDKm2MDg1G8du4uRP0r5
- zNElg4nMfr2ibjYh/LtfnjgezZR6nMc/mMFTOIvhIqTF1Bmqt/D6SfJn4mPQwsglGdHb2AlhJ
- HUqzUQJAIwLbDsKwwfgnTWBKms8e5AoPUh7YgF1ftEAG36NqUohYtmOs5fTbt//GxXQEEGAhU
- 7VKC5ZfvRhh02OcQ1kd5IZCN+3uuKLB9lCdFZx8DeX3CQ=
+References: <20240512114617.2564569-1-roykollensvendsen@gmail.com>
+ <20240512114617.2564569-2-roykollensvendsen@gmail.com>
+ <20240513084026.4513d1f6@windsurf>
+ <CAMdwsN8eL5Urj5AyWn0RStgBmeZ0_afz7aRAgr5iwfxjhV_Vgg@mail.gmail.com>
+In-Reply-To: <CAMdwsN8eL5Urj5AyWn0RStgBmeZ0_afz7aRAgr5iwfxjhV_Vgg@mail.gmail.com>
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Date: Mon, 13 May 2024 12:29:33 +0200
+Message-ID: <CA+R_deoKLT7TYE5kKjD9pOUsVcNA-iJOfmekfBOTA=gN3z=YoQ@mail.gmail.com>
+To: Jesse Van Gavere <jesseevg@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.net; 
- s=s31663417; t=1715591993; x=1716196793; i=ps.report@gmx.net;
- bh=M1LrUl8EqpgNaXA6Ad/6x2B3aBbXMUrp1AKW2JqNErg=;
- h=X-UI-Sender-Class:From:To:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=qVzPpmbN7R1ed7z0b+PZ8LaIA3Hn4iZwlxZV4Qh3hIyi19+l2JW3NP5EOzMvtAvY
- nsYXSrAxK/G/TZ/aiRcmyNc93N5arzk2cVttRIqCJirsfH2j+6t4c2lS/7QgIvJq8
- n/nljo9YoajmfCxMZQVBJ70bhzBSHJgUc8lIKvblhixmq8rVwfMkqrB0dmW4nSQbO
- vbmyIeqwyUrkjelgys9waoxubtSpkzh9MGaZaAWIAuixV1xEMpYc1dJJOIpl9TMSM
- yOHEqSrVjpnTShroH8nHPIEEEzdJnyVHR6+gdCGAfXJAlEuBKMp4iVyYPp0VVEc6I
- MguXKfgdnuoS6HxQ3w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=qVzPpmbN
-Subject: [Buildroot] [PATCH v2 4/4] package/openssl: move
- libopenssl/libressl/.br2-external.in.openssl source statements outside of
- the choice
+ d=gmail.com; s=20230601; t=1715596186; x=1716200986; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=MSZAGAZkqIuiYUQ4EQ9I+ag2BJ4q7yaZ1F6PrfJElic=;
+ b=AkyP6Z/nPPsyOrSTWXDkH7VLzQSnk94FNshT1VtuALIC7eBsXS2eSsHOmxspxw9ZPc
+ ZOciGnw2SCs+wapL9T9/fewECpFCukZODF8xDMga89iiOutuhTBKvfTuETAXBPNFcz66
+ rOmHQX9klBqE6u2D+vuh7VE/n9tNHGUytn3+7f21hvnesPHGGM7vWFZy1cTrCd49KXsi
+ wYbtJ2arbltmE/ZrTuzUkKT2P0IFUEVNI+Wke1r7yX0WGeF4FpGXbkRJoygzi19UIHyo
+ FOHhX/TZU71Jx5x5DpJ1V7kKeQn6XanOEKec2bjuCh4+RmvyO7aKprcTcu/8B2dKx4fU
+ BvZA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=AkyP6Z/n
+Subject: Re: [Buildroot] [PATCH v3 02/14] package/qt6/qt6base: patch
+ CVE-2024-33861
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,155 +102,154 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Peter Seiderer via buildroot <buildroot@buildroot.org>
-Reply-To: Peter Seiderer <ps.report@gmx.net>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
+ Zoltan Gyarmati <zgyarmati@zgyarmati.de>, Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============2116682586231000447=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following error/warnings with kconfig from linux-6.9-rc5:
+--===============2116682586231000447==
+Content-Type: multipart/alternative; boundary="00000000000038d3ce0618535d35"
 
-  package/libopenssl/Config.in:5:warning: choice value must have a prompt
-  package/libopenssl/Config.in:7:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:15:warning: choice value must have a prompt
-  package/libopenssl/Config.in:18:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:19:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:20:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:21:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:22:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:23:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:24:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:25:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:26:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:27:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:28:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:32:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:33:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:34:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:50:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:54:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:58:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:62:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:66:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:70:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:75:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:79:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:83:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:87:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:91:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:95:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:99:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:103:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:107:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:111:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:115:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:119:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:123:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:130:warning: defaults for choice values not supported
-  package/libopenssl/Config.in:134:warning: defaults for choice values not supported
-  package/openssl/Config.in:12:error: recursive dependency detected!
-  package/openssl/Config.in:12:	choice <choice> contains symbol BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
-  package/libopenssl/Config.in:5:	symbol BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC is part of choice BR2_PACKAGE_LIBOPENSSL
-  package/openssl/Config.in:17:	symbol BR2_PACKAGE_LIBOPENSSL is part of choice <choice>
-  For a resolution refer to Documentation/kbuild/kconfig-language.rst
-  subsection "Kconfig recursive dependency limitations"
+--00000000000038d3ce0618535d35
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - fix typo in subject line (statements vs. statemetns)
-  - move 'if BR2_PACKAGE_LIBOPENSSL' from package/libopenssl/Config.in
-    to package/openssl/Config.in (suggested by Yann E. MORIN)
-  - move 'f BR2_PACKAGE_LIBRESSL' from ackage/libressl/Config.in to
-    package/openssl/Config.in (suggested by Yann E. MORIN)
-  - move .br2-external.in.openssl source statement outside of the choice
-    (suggested by Yann E. MORIN)
+Hi Thomas and Jesse,
 
-Notes:
-  - with this solution for .br2-external.in.openssl exactly one alternative/
-    external openssl library can be provided (previously more than one
-    additional entry could be provided inside the choice)
----
- package/libopenssl/Config.in |  4 ----
- package/libressl/Config.in   |  4 ----
- package/openssl/Config.in    | 19 ++++++++++++++-----
- 3 files changed, 14 insertions(+), 13 deletions(-)
+I assume I should add this information to the commit message and make a v4
+patch-set?
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 0c8db52e2e..53112ff927 100644
---- a/package/libopenssl/Config.in
-+++ b/package/libopenssl/Config.in
-@@ -1,5 +1,3 @@
--if BR2_PACKAGE_LIBOPENSSL
--
- # 4xx PowerPC cores seem to have trouble with openssl's ASM
- # optimizations
- config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
-@@ -132,5 +130,3 @@ config BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE
- config BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP
- 	bool "enable compression"
- 	default y
--
--endif # BR2_PACKAGE_LIBOPENSSL
-diff --git a/package/libressl/Config.in b/package/libressl/Config.in
-index 600829cb9e..2146481faa 100644
---- a/package/libressl/Config.in
-+++ b/package/libressl/Config.in
-@@ -1,9 +1,5 @@
--if BR2_PACKAGE_LIBRESSL
--
- config BR2_PACKAGE_LIBRESSL_BIN
- 	bool "openssl binary"
- 	help
- 	  Install the openssl binary to the target file system. This is
- 	  a command line tool for doing various cryptographic stuff.
--
--endif
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index 3d14988d99..bee22aa69f 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -28,8 +28,6 @@ config BR2_PACKAGE_LIBOPENSSL
- 
- 	  Note: Some helper scripts need perl.
- 
--source "package/libopenssl/Config.in"
--
- config BR2_PACKAGE_LIBRESSL
- 	bool "libressl"
- 	depends on !BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-@@ -44,12 +42,23 @@ config BR2_PACKAGE_LIBRESSL
- 
- 	  http://www.libressl.org/
- 
-+config BR2_PACKAGE_OPENSSL_EXTERNAL
-+        bool "from an external tree"
-+        depends on "$(BR2_EXTERNAL)" != ""
-+
-+endchoice
-+
-+if BR2_PACKAGE_LIBOPENSSL
-+source "package/libopenssl/Config.in"
-+endif
-+
-+if BR2_PACKAGE_LIBRESSL
- source "package/libressl/Config.in"
-+endif
- 
--# openssl from br2-external trees, if any
-+if BR2_PACKAGE_OPENSSL_EXTERNAL
- source "$(BASE_DIR)/.br2-external.in.openssl"
--
--endchoice
-+endif
- 
- config BR2_PACKAGE_HAS_OPENSSL
- 	bool
--- 
-2.45.0
+Best regards,
+Roy
+
+man. 13. mai 2024 kl. 09:57 skrev Jesse Van Gavere <jesseevg@gmail.com>:
+
+> Hello Thomas,
+>
+> Op ma 13 mei 2024 om 08:40 schreef Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com>:
+>
+> >
+> > Hello Roy,
+> >
+> > On Sun, 12 May 2024 13:45:49 +0200
+> > Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+> >
+> > > From: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
+> > >
+> > > Got patch from:
+> > >
+> > > https://download.qt.io/archive/qt/6.7/
+> > > Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+> >
+> > Thanks for this v3. However, you're again putting a fix as PATCH 02/14
+> > of the series, after a bump. Is it because this CVE is only applicable
+> > to Qt 6.7 (and not the 6.4.3 we already have in Buildroot) ? Could you
+> > clarify this point, which is very important?
+>
+> This is not applicable to 6.4.3, the affected versions are detailed in
+> the bugzilla report below and it's only 6.5.0+
+> So this seems perfectly valid to go along with the version bump.
+>
+> OpenSUSE report:
+> https://www.suse.com/security/cve/CVE-2024-33861.html
+> Bugzilla report clarifying affected versions
+> https://bugzilla.suse.com/show_bug.cgi?id=1223917
+>
+> > Thanks!
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, co-owner and CEO, Bootlin
+> > Embedded Linux and Kernel engineering and training
+> > https://bootlin.com
+>
+> Best regards,
+> Jesse
+>
+
+--00000000000038d3ce0618535d35
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Thomas and Jesse,<br></div><div><br></div><div>I a=
+ssume I should add this information to the commit message and make a v4 pat=
+ch-set?<br></div><div><br></div><div>Best regards,<br></div><div>Roy<br></d=
+iv></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_att=
+r">man. 13. mai 2024 kl. 09:57 skrev Jesse Van Gavere &lt;<a href=3D"mailto=
+:jesseevg@gmail.com">jesseevg@gmail.com</a>&gt;:<br></div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">Hello Thomas,<br>
+<br>
+Op ma 13 mei 2024 om 08:40 schreef Thomas Petazzoni<br>
+&lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com" target=3D"_blank">thoma=
+s.petazzoni@bootlin.com</a>&gt;:<br>
+<br>
+&gt;<br>
+&gt; Hello Roy,<br>
+&gt;<br>
+&gt; On Sun, 12 May 2024 13:45:49 +0200<br>
+&gt; Roy Kollen Svendsen &lt;<a href=3D"mailto:roykollensvendsen@gmail.com"=
+ target=3D"_blank">roykollensvendsen@gmail.com</a>&gt; wrote:<br>
+&gt;<br>
+&gt; &gt; From: Roy Kollen Svendsen &lt;<a href=3D"mailto:roy.kollen.svends=
+en@akersolutions.com" target=3D"_blank">roy.kollen.svendsen@akersolutions.c=
+om</a>&gt;<br>
+&gt; &gt;<br>
+&gt; &gt; Got patch from:<br>
+&gt; &gt;<br>
+&gt; &gt; <a href=3D"https://download.qt.io/archive/qt/6.7/" rel=3D"norefer=
+rer" target=3D"_blank">https://download.qt.io/archive/qt/6.7/</a><br>
+&gt; &gt; Signed-off-by: Roy Kollen Svendsen &lt;<a href=3D"mailto:roykolle=
+nsvendsen@gmail.com" target=3D"_blank">roykollensvendsen@gmail.com</a>&gt;<=
+br>
+&gt;<br>
+&gt; Thanks for this v3. However, you&#39;re again putting a fix as PATCH 0=
+2/14<br>
+&gt; of the series, after a bump. Is it because this CVE is only applicable=
+<br>
+&gt; to Qt 6.7 (and not the 6.4.3 we already have in Buildroot) ? Could you=
+<br>
+&gt; clarify this point, which is very important?<br>
+<br>
+This is not applicable to 6.4.3, the affected versions are detailed in<br>
+the bugzilla report below and it&#39;s only 6.5.0+<br>
+So this seems perfectly valid to go along with the version bump.<br>
+<br>
+OpenSUSE report:<br>
+<a href=3D"https://www.suse.com/security/cve/CVE-2024-33861.html" rel=3D"no=
+referrer" target=3D"_blank">https://www.suse.com/security/cve/CVE-2024-3386=
+1.html</a><br>
+Bugzilla report clarifying affected versions<br>
+<a href=3D"https://bugzilla.suse.com/show_bug.cgi?id=3D1223917" rel=3D"nore=
+ferrer" target=3D"_blank">https://bugzilla.suse.com/show_bug.cgi?id=3D12239=
+17</a><br>
+<br>
+&gt; Thanks!<br>
+&gt;<br>
+&gt; Thomas<br>
+&gt; --<br>
+&gt; Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+&gt; Embedded Linux and Kernel engineering and training<br>
+&gt; <a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">h=
+ttps://bootlin.com</a><br>
+<br>
+Best regards,<br>
+Jesse<br>
+</blockquote></div>
+
+--00000000000038d3ce0618535d35--
+
+--===============2116682586231000447==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2116682586231000447==--
