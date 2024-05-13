@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7408C25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:17:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA904C25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5137A40824;
-	Mon, 13 May 2024 21:17:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D9FD407B7;
+	Mon, 13 May 2024 21:18:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BDk2kHWeYawg; Mon, 13 May 2024 21:17:46 +0000 (UTC)
+ id WBMIJ6Uxsj_v; Mon, 13 May 2024 21:18:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C38EB408BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B9334086D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C38EB408BC;
-	Mon, 13 May 2024 21:17:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 33FD91BF947
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:17:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B9334086D;
+	Mon, 13 May 2024 21:18:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 26FBF1BF2A4
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:18:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2DF3360A9C
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:17:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13FF0404B4
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:18:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P_2t1oPiHs4e for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 21:17:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5v4SaW-X0Cbw for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 21:18:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B52860A61
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B52860A61
- for <buildroot@buildroot.org>; Mon, 13 May 2024 21:17:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E50787300; Mon, 13 May 2024 21:17:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 13 May 2024 23:13:16 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 580f6ef46dfec9db8483eeab8d639b935641289f
-X-Git-Newrev: cd65b5e7551fe59a663f7c73818ca1777c66c117
-X-Patchwork-Hint: ignore
-Message-Id: <20240513211740.3E50787300@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kvmtool: enable build for riscv
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5886B40B19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5886B40B19
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5886B40B19
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 21:18:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 87D891BF204;
+ Mon, 13 May 2024 21:18:11 +0000 (UTC)
+Date: Mon, 13 May 2024 23:18:10 +0200
+To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+Message-ID: <20240513231810.4c4b1655@windsurf>
+In-Reply-To: <20240327150616.39345-1-cleger@rivosinc.com>
+References: <20240327150616.39345-1-cleger@rivosinc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715635091;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ng46rS8R8Z3Wd451ISzSLAqxYWCJTglFERrrhaHzLBc=;
+ b=TyxAvbPxMCebDRJQV/P9nunbc0hxkYwO6k/JTKz/AW3EbYxIX53MaaDPCjmuXD5/RYDa+H
+ XLjyZMrQ1Gp39E+WQNDTwbLKDt8oDKtMY5IuE6NMGV3t6qtB3G9eSvC0VkKQVCp6eA4m0e
+ 6HXG+bsK7VlOdvOVEaZjrAVc4R4rVUt1B9s2f+wjb8HDCmya+o5GRWkH7l9QNyZ/DenYSj
+ spOZvKkcbSDIX/gdbrV2sI+4YaF3aTM76vzWnKAGuJq0JhCJU+lIOM69nR1Xx7gRhrf5OB
+ HFxFGEsYM7O12H21/EOwKtlIz6Ox7k/jvz6A/fTruczMXXy1eeoTDI+ju9lamw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TyxAvbPx
+Subject: Re: [Buildroot] [PATCH 0/2] Update kvmtool and add support for riscv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,56 +82,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0766707354745805989=="
+Cc: Anup Patel <apatel@ventanamicro.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0766707354745805989==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=cd65b5e7551fe59a663f7c73818ca1777c66c117
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-kvmtool now supports riscv, enable it and select BR2_PACKAGE_DTC which
-is needed to build it.
-
-Signed-off-by: Clément Léger <cleger@rivosinc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kvmtool/Config.in | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/kvmtool/Config.in b/package/kvmtool/Config.in
-index bf19a25376..35225e0150 100644
---- a/package/kvmtool/Config.in
-+++ b/package/kvmtool/Config.in
-@@ -6,11 +6,12 @@ config BR2_PACKAGE_KVMTOOL
- 	# Only mips big-endian seems to be supported (build breaks)
- 	# Should work on powerpc64 but the build breaks with missing types
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
--		BR2_mips || BR2_x86_64
-+		BR2_mips || BR2_x86_64 || BR2_riscv
- 	# libfdt is only required for DT architectures...
- 	# ...but it's not able to build for static targets
--	depends on !(BR2_STATIC_LIBS && (BR2_aarch64 || BR2_arm || BR2_armeb))
--	select BR2_PACKAGE_DTC if BR2_aarch64 || BR2_arm || BR2_armeb
-+	depends on !(BR2_STATIC_LIBS && (BR2_aarch64 || BR2_arm || \
-+		BR2_armeb || BR2_riscv))
-+	select BR2_PACKAGE_DTC if BR2_aarch64 || BR2_arm || BR2_armeb || BR2_riscv
- 	help
- 	  kvmtool is a lightweight tool for hosting KVM guests.
- 	  As a pure virtualization tool it only supports guests using
-
---===============0766707354745805989==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0766707354745805989==--
+SGVsbG8gQ2zDqW1lbnQsCgpPbiBXZWQsIDI3IE1hciAyMDI0IDE2OjA2OjExICswMTAwCkNsw6lt
+ZW50IEzDqWdlciA8Y2xlZ2VyQHJpdm9zaW5jLmNvbT4gd3JvdGU6Cgo+IEJ1bXAga3ZtdG9vbCB0
+byBhIHJlY2VudCB2ZXJzaW9uIChjdXJyZW50IG9uZSBkYXRlcyBiYWNrIHRvIDIwMTcpIGFuZAo+
+IGVuYWJsZSByaXNjdiBzdXBwb3J0Lgo+IAo+IENsw6ltZW50IEzDqWdlciAoMik6Cj4gICBwYWNr
+YWdlL2t2bXRvb2w6IGJ1bXAgcGFja2FnZSB2ZXJzaW9uIHRvIDRkMmMwMTdmNDEKPiAgIHBhY2th
+Z2Uva3ZtdG9vbDogZW5hYmxlIGJ1aWxkIGZvciByaXNjdgoKVGhhbmtzLCBzZXJpZXMgYXBwbGll
+ZCwgYWZ0ZXIgdHdlYWtpbmcgdGhlIGZpcnN0IHBhdGNoIGR1ZSB0byByZWNlbnQKY2hhbmdlcyBp
+biB0aGUgZG93bmxvYWQgaW5mcmFzdHJ1Y3R1cmUgZm9yIGdpdC1mZXRjaGVkIHBhY2thZ2VzLgoK
+VGhhbmtzIQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBC
+b290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5n
+Cmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
