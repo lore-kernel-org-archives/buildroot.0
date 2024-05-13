@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3EDBC25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:31:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 564D7C25B74
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:35:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7AF682909;
-	Mon, 13 May 2024 19:31:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20B3D82246;
+	Mon, 13 May 2024 19:35:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OJgsoERJnNxX; Mon, 13 May 2024 19:31:05 +0000 (UTC)
+ id NPa3g2ooQZ6t; Mon, 13 May 2024 19:35:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B89288291A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF34F82251
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B89288291A;
-	Mon, 13 May 2024 19:31:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF34F82251;
+	Mon, 13 May 2024 19:35:19 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 815FF1BF2CA
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:31:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DE87B1BF2CA
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E46F607A8
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:31:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBBFE607D9
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:35:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8tyMgsga3ufb for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 19:31:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id ZfkPxl8KmPVG for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 19:35:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 064DD60665
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 064DD60665
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 064DD60665
- for <buildroot@buildroot.org>; Mon, 13 May 2024 19:31:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 04F3820004;
- Mon, 13 May 2024 19:30:57 +0000 (UTC)
-Date: Mon, 13 May 2024 21:30:57 +0200
-To: Sergey Bobrenok <bobrofon@gmail.com>
-Message-ID: <20240513213057.2a0eb060@windsurf>
-In-Reply-To: <20240229192138.21843-1-bobrofon@gmail.com>
-References: <20240229192138.21843-1-bobrofon@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B88E9607A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B88E9607A8
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B88E9607A8
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 19:35:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D82E1C0005;
+ Mon, 13 May 2024 19:35:13 +0000 (UTC)
+Date: Mon, 13 May 2024 21:35:12 +0200
+To: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <20240513213512.55e93cb6@windsurf>
+In-Reply-To: <20240513112205.985165-1-troglobit@gmail.com>
+References: <20240513112205.985165-1-troglobit@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715628658;
+ d=bootlin.com; s=gm1; t=1715628913;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=xUyhkGj7kxxhIazmGOGLbmCyw5voP17az1A05lovKwE=;
- b=l5ywre0YgNOGi9XjoB+819tIAKP8VGdfsisQ+ltOswgxR6qngSAuwE072LhzQrcWrjT/HB
- AohAVONa96BmoZGwOBgNtPxxeKK8HEqRrkl9QfLmanjl9YsGvkNMLii9/poxkI9VXykNvD
- hZpemJ2/+E4qMeSxg7xLlKyslg4cztUCSlSVxMJ8x+hn6ZFM24JaVK0QlVzoWah7K+mTTs
- WIKytsXG2IFYptR5sEshHlYDh/Q12J9vRlBR1HTlIoajA4i3brLT38YCi6CHv17B408ZOx
- eZ0FIru0tojR8Hz4r26ujVQ6BEvQpJ0EmJidKrChovMxC8CSutV3On6/cGqDCg==
+ bh=h02O+vrGQ7u5IoZIVuVYOP9OOMXvzhoYDvV98dSMMXg=;
+ b=j9ozrxotb1tQ36fTaTxP7zi7blqCP37bc8BHU5OSvmXEqjyyfgv5TRaJRK49Ebm+3Wua0I
+ ohIQX656EMRSo6BMf6sNxGMfklrFgMgvQ394lIWHuum2q5KMQh+uQQP5HZoaKlSOjHae4E
+ mBob2xVqBWNOvfa9dnF9RBQEL2IhDk5ZM/IBZfhYYQ1kWJn4/MUVTsc5sqkHs4+pZmx6Ge
+ Qyfa7+WopPYLOfVrsXXEiRGrr2+1h9WaY1/q47sfjqT+WaKYnwpnJ5zrs0n7NSsnVLBCpG
+ UWDMJJMea5wYirhnQetAP2doYQtD+DHFlvQPlz1L4/XYKDTS+hiZMe80NaopjQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=l5ywre0Y
-Subject: Re: [Buildroot] [PATCH 1/1] package/basu: new package
+ header.s=gm1 header.b=j9ozrxot
+Subject: Re: [Buildroot] [PATCH 1/1] pacakge/smcroute: bump to version v2.5.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,38 +82,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 29 Feb 2024 22:21:38 +0300
-Sergey Bobrenok <bobrofon@gmail.com> wrote:
+On Mon, 13 May 2024 13:22:05 +0200
+Joachim Wiberg <troglobit@gmail.com> wrote:
 
-> basu is the sd-bus library, extracted from systemd.
+> Fixes segfault on kernel without IPv6 support.  For details, see
+> https://github.com/troglobit/smcroute/releases/tag/2.5.7
 > 
-> Some projects rely on the sd-bus library for DBus support. However not
-> all systems have systemd or elogind installed. This library provides
-> just sd-bus (and the busctl utility).
-> 
-> Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 > ---
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  ...ble-stack-protection-for-Buildroot-p.patch | 39 +++++++++++++++++++
->  ...-F_ADD_SEALS-definition-from-missing.patch | 34 ++++++++++++++++
->  package/basu/Config.in                        | 23 +++++++++++
->  package/basu/basu.hash                        |  4 ++
->  package/basu/basu.mk                          | 28 +++++++++++++
->  7 files changed, 130 insertions(+)
->  create mode 100644 package/basu/0001-meson.build-Disable-stack-protection-for-Buildroot-p.patch
->  create mode 100644 package/basu/0002-memfd-util.c-Use-F_ADD_SEALS-definition-from-missing.patch
->  create mode 100644 package/basu/Config.in
->  create mode 100644 package/basu/basu.hash
->  create mode 100644 package/basu/basu.mk
+>  package/smcroute/smcroute.hash | 5 ++---
+>  package/smcroute/smcroute.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+Applied to master after fixing the typo in the commit title, thanks.
 
 Thomas
 -- 
