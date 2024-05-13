@@ -4,86 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6A16C25B75
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 11:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F5EAC25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 11:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 517744026D;
-	Mon, 13 May 2024 11:39:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9CC84076A;
+	Mon, 13 May 2024 11:44:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N94CrepxBYkf; Mon, 13 May 2024 11:39:54 +0000 (UTC)
+ id A9kZVxOk3Gd5; Mon, 13 May 2024 11:44:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AADB4028E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 916A5407FE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AADB4028E;
-	Mon, 13 May 2024 11:39:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5B6561BF479
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 11:39:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 916A5407FE;
+	Mon, 13 May 2024 11:44:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 98BF51BF479
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 11:44:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55D1960656
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 11:39:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 85A76824C1
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 11:44:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yn5rVymJ0okK for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 11:39:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1032; helo=mail-pj1-x1032.google.com;
- envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 40E4D60622
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40E4D60622
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com
- [IPv6:2607:f8b0:4864:20::1032])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 40E4D60622
- for <buildroot@buildroot.org>; Mon, 13 May 2024 11:39:50 +0000 (UTC)
-Received: by mail-pj1-x1032.google.com with SMTP id
- 98e67ed59e1d1-2b6215bcd03so1128798a91.1
- for <buildroot@buildroot.org>; Mon, 13 May 2024 04:39:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715600389; x=1716205189;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VFXkyKp4mT1FHfYnRmDbdsMmUhxEZ1t2zBLRlWCfHOI=;
- b=FWyXf9cOXZwgXfXuANDuu3kIcC9w+bV6RexptyMgrY9CGYApkn4VetyFr4UCiv+6sm
- U+7Hu6+OCe34iqtZbcD4lzzbPG+P3VUs295EdYYZNRGNgJ1zyqgzLb/jsNspsLNA60+l
- FeiS+m7UqqyYZvC+rrLMZc4OjAXvve2DAwTdCAXas/fqIL7Tk4YsRThZJ9TLBDPf0qTi
- nCRw7lGV4JeHsTdBGQZjoiQoZJ6THZKj3LtYrEWkxGi1fmxE4ctt8CjSQoigmYv/lWxp
- uR4D1p51uZMnBBy/+y8+betOdVTjwOyjCvJJeQ7Jytj3oNyaQzgG73sfysvimQX5km/C
- VRlQ==
-X-Gm-Message-State: AOJu0YxZSok6auJKyfkHK1+yNZLML37oEBNLYMNfiURFTR8yBfdYzUA6
- KuZLD3MQ6UbnlC0KfSnPdl3NQ+3S0zib7pQeLBLRp9H7BJOKIHooPH6YEfx7bxG+uDEi3Ivxj9A
- D/JwZSa2HO8mdgqQVULI1r/EBnoX1l4a+
-X-Google-Smtp-Source: AGHT+IGxW0tyF2vRTWEHtbqiWL9TydRaZIN4p5V45j/OaUPF+35IKFNNmBUIglHfzGgUBZM99L85+JE9/sRvtdJqNmY=
-X-Received: by 2002:a17:90a:5285:b0:2a5:3f1f:a1d1 with SMTP id
- 98e67ed59e1d1-2b6cb7d0ebbmr9076200a91.0.1715600389535; Mon, 13 May 2024
- 04:39:49 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A8X3EPuSNUqr for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 11:44:51 +0000 (UTC)
+X-Greylist: delayed 305 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 13 May 2024 11:44:51 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 53C1E82496
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53C1E82496
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.67.18.16;
+ helo=smtprelay04.ispgateway.de; envelope-from=mf@go-sys.de;
+ receiver=<UNKNOWN> 
+Received: from smtprelay04.ispgateway.de (smtprelay04.ispgateway.de
+ [80.67.18.16])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 53C1E82496
+ for <buildroot@busybox.net>; Mon, 13 May 2024 11:44:51 +0000 (UTC)
+Received: from [91.21.113.99] (helo=mail.go-sys.de)
+ by smtprelay04.ispgateway.de with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.97.1)
+ (envelope-from <mf@go-sys.de>) id 1s6U1u-0000000041T-0Smw
+ for buildroot@busybox.net; Mon, 13 May 2024 13:39:43 +0200
+Received: from mail.go-sys.de (192.168.1.9) by mail.go-sys.de (192.168.1.9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 13 May
+ 2024 13:39:40 +0200
+Received: from go-sys.de (192.168.1.175) by mail.go-sys.de (192.168.1.9) with
+ Microsoft SMTP Server id 15.1.2507.39 via Frontend Transport;
+ Mon, 13 May 2024 13:39:40 +0200
+From: Michael Fischer <mf@go-sys.de>
+To: <buildroot@busybox.net>
+Date: Mon, 13 May 2024 13:39:36 +0200
+Message-ID: <20240513113936.7471-1-mf@go-sys.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 13 May 2024 08:39:38 -0300
-Message-ID: <CAOMZO5BFKyfF8WpZC9W=1uH0C4mNzZfHTADJTtDc4epxdnLDCg@mail.gmail.com>
-To: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>, 
- Julien Olivain <ju.o@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715600389; x=1716205189; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=VFXkyKp4mT1FHfYnRmDbdsMmUhxEZ1t2zBLRlWCfHOI=;
- b=bzYpQPH+ZLxoiRi51Jhu60zUOZzngaZw7OECk8sfMiY/JhH+zBHk14ighHcoan0t3Z
- 395qblxQRRZsH4oLbgqfAPW9rx4T/GZA48rGVNO05uSzxQllfiMXU3IJt29Xdgo5oKlK
- dEAc3D7wIoEkOt8FRUK/LP6MRY1hlVxpLoYVG0fIo1gtsZNo0ADj4gFsutodKa5d9fuH
- K7/9jG3HyX46dtTly00+PzK0vl6HEexk3f/cROqfXlGma/aJDucDyQ8XzD9ynddH8jSc
- Cdt7Yu8byuTlpnm30ChdboRxX7Lluo8LHqT7goAJfgOiy6gboAs/h87jS1vc+siw02U3
- kimA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=bzYpQPH+
-Subject: [Buildroot] imx93-evk: Fails to boot from the SD card
+X-C2ProcessedOrg: 5fa85167-cd6f-46be-bafe-19070fe3dac3
+X-CrossPremisesHeadersFilteredBySendConnector: mail.go-sys.de
+X-OrganizationHeadersPreserved: mail.go-sys.de
+X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=go-sys.de
+Subject: [Buildroot] [PATCH] package/sdl2: bump version to 2.30.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,52 +77,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Michael Fischer <mf@go-sys.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgU8OpYmFzdGllbiBhbmQgSnVsaWVuLAoKSSBidWlsdCBhbiBpbWFnZSBmb3IgZnJlZXNjYWxl
-X2lteDkzZXZrX2RlZmNvbmZpZyB1c2luZyB0aGUgdG9wIG9mCnRyZWUgQnVpbGRyb290LCBmbGFz
-aGVkIHRoZSBzZGNhcmQuaW1nIGludG8gYW4gU0QgY2FyZCBhbiBwdXQgdGhlIGJvb3QKc3dpdGNo
-IHRvIFNEIGNhcmQgYm9vdCBtb2RlLCBidXQgdGhlIGltYWdlIGZhaWxzIHRvIGJvb3Q6CgpVLUJv
-b3QgU1BMIDIwMjMuMDQgKEFwciAyOCAyMDI0IC0gMTA6NTk6MzUgLTAzMDApClNPQzogMHhhMTAw
-OTMwMApMQzogMHgyMDQwMDEwClBNSUM6IE92ZXIgRHJpdmUgVm9sdGFnZSBNb2RlCkREUjogMzcz
-M01UUwpNMzMgcHJlcGFyZSBvawpOb3JtYWwgQm9vdApUcnlpbmcgdG8gYm9vdCBmcm9tIEJPT1RS
-T00KQm9vdCBTdGFnZTogUHJpbWFyeSBib290CmltYWdlIG9mZnNldCAweDgwMDAsIHBhZ2VzaXpl
-IDB4MjAwLCBpdnQgb2Zmc2V0IDB4MApMb2FkIGltYWdlIGZyb20gMHg1NjgwMCBieSBST01fQVBJ
-Ck5PVElDRTogIEJMMzE6IHYyLjgocmVsZWFzZSk6Y3VzdG9tCk5PVElDRTogIEJMMzE6IEJ1aWx0
-IDogMTA6NTU6MjcsIEFwciAyOCAyMDI0CgoKVS1Cb290IDIwMjMuMDQgKEFwciAyOCAyMDI0IC0g
-MTA6NTk6MzUgLTAzMDApCgpDUFU6ICAgaS5NWDkzKDUyKSByZXYxLjEgMTcwMCBNSHogKHJ1bm5p
-bmcgYXQgMTY5MiBNSHopCkNQVTogICBJbmR1c3RyaWFsIHRlbXBlcmF0dXJlIGdyYWRlICgtNDBD
-IHRvIDEwNUMpIGF0IDQzQwpSZXNldCBjYXVzZTogUE9SICgweDEpCk1vZGVsOiBOWFAgaS5NWDkz
-IDExWDExIEVWSyBib2FyZApEUkFNOiAgMiBHaUIKb3B0ZWUgb3B0ZWU6IE9QLVRFRSBhcGkgdWlk
-IG1pc21hdGNoClRDUEM6ICBWZW5kb3IgSUQgWzB4MWZjOV0sIFByb2R1Y3QgSUQgWzB4NTExMF0s
-IEFkZHIgW0kyQzIgMHg1Ml0KU05LLlBvd2VyMy4wIG9uIENDMQpQRE8gMDogdHlwZSAwLCA1MDAw
-IG1WLCAzMDAwIG1BIFtFXQpQRE8gMTogdHlwZSAwLCA5MDAwIG1WLCAzMDAwIG1BIFtdClBETyAy
-OiB0eXBlIDAsIDE1MDAwIG1WLCAzMDAwIG1BIFtdClBETyAzOiB0eXBlIDAsIDIwMDAwIG1WLCAy
-MjUwIG1BIFtdClJlcXVlc3RpbmcgUERPIDM6IDIwMDAwIG1WLCA3NTAgbUEKU291cmNlIGFjY2Vw
-dCByZXF1ZXN0ClBEIHNvdXJjZSByZWFkeSEKdGNwY19wZF9yZWNlaXZlX21lc3NhZ2U6IFBvbGxp
-bmcgQUxFUlQgcmVnaXN0ZXIsIFRDUENfQUxFUlRfUlhfU1RBVFVTCmJpdCBmYWlsZWQsIHJldCA9
-IC02MgpUQ1BDOiAgVmVuZG9yIElEIFsweDFmYzldLCBQcm9kdWN0IElEIFsweDUxMTBdLCBBZGRy
-IFtJMkMyIDB4NTFdClRDUEM6ICBWZW5kb3IgSUQgWzB4MWZjOV0sIFByb2R1Y3QgSUQgWzB4NTEx
-MF0sIEFkZHIgW0kyQzIgMHg1MF0KQ29yZTogIDIyOSBkZXZpY2VzLCAzNiB1Y2xhc3NlcywgZGV2
-aWNldHJlZTogc2VwYXJhdGUKTU1DOiAgIEZTTF9TREhDOiAwLCBGU0xfU0RIQzogMQpMb2FkaW5n
-IEVudmlyb25tZW50IGZyb20gTU1DLi4uICoqKiBXYXJuaW5nIC0gTm8gYmxvY2sgZGV2aWNlLCB1
-c2luZwpkZWZhdWx0IGVudmlyb25tZW50CgpbKl0tVmlkZW8gTGluayAwYWR2NzUzNV9taXBpMmhk
-bWkgaGRtaUAzZDogQ2FuJ3QgZmluZCBjZWMgZGV2aWNlIGlkPTB4M2MKZmFpbCB0byBwcm9iZSBw
-YW5lbCBkZXZpY2UgaGRtaUAzZApmYWlsIHRvIGdldCBkaXNwbGF5IHRpbWluZ3MKcHJvYmUgdmlk
-ZW8gZGV2aWNlIGZhaWxlZCwgcmV0IC0xOQoKWzBdIGxjZC1jb250cm9sbGVyQDRhZTMwMDAwLCB2
-aWRlbwpbMV0gZHNpQDRhZTEwMDAwLCB2aWRlb19icmlkZ2UKWzJdIGhkbWlAM2QsIHBhbmVsCmFk
-djc1MzVfbWlwaTJoZG1pIGhkbWlAM2Q6IENhbid0IGZpbmQgY2VjIGRldmljZSBpZD0weDNjCmZh
-aWwgdG8gcHJvYmUgcGFuZWwgZGV2aWNlIGhkbWlAM2QKZmFpbCB0byBnZXQgZGlzcGxheSB0aW1p
-bmdzCnByb2JlIHZpZGVvIGRldmljZSBmYWlsZWQsIHJldCAtMTkKSW46ICAgIHNlcmlhbApPdXQ6
-ICAgc2VyaWFsCkVycjogICBzZXJpYWwKCkJ1aWxkSW5mbzoKICAtIEVMRSBmaXJtd2FyZSB2ZXJz
-aW9uIDAuMS4wLTQ0ODgwOTA0CgpVSUQ6IDB4NjI4MGE4NjAgMHg1ODQ2NTUyMCAweDk4ODM3OTlm
-IDB4MzExMDEyZmIKZmxhc2ggdGFyZ2V0IGlzIE1NQzoxCk1NQyBjYXJkIGluaXQgZmFpbGVkIQoq
-KiBCbG9jayBkZXZpY2UgTU1DIDEgbm90IHN1cHBvcnRlZAoKVGhlIFNEIGNhcmQgaXMgbm90IHJl
-Y29nbml6ZWQuCgpXb3VsZCB5b3UgaGFwcGVuIHRvIGhhdmUgYW55IHN1Z2dlc3Rpb25zPwoKVGhh
-bmtzLAoKRmFiaW8gRXN0ZXZhbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+---
+ package/sdl2/sdl2.hash | 4 ++--
+ package/sdl2/sdl2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index 3c4b06cf3e..3c72d1d6d1 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.2.tar.gz.sig
+-sha256  891d66ac8cae51361d3229e3336ebec1c407a8a2a063b61df14f5fdf3ab5ac31  SDL2-2.30.2.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.3.tar.gz.sig
++sha256  820440072f8f5b50188c1dae104f2ad25984de268785be40c41a099a510f0aec  SDL2-2.30.3.tar.gz
+ # Locally calculated
+ sha256  9b9e1764f06701bcf7ce21e942c682d5921ba0900c6fca760321b1c8837a9662  LICENSE.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 70f765f0ea..b5b0fb49e1 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_VERSION = 2.30.2
++SDL2_VERSION = 2.30.3
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
+-- 
+2.20.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
