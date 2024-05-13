@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61C24C25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 20:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D86C25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 20:35:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2366D60B4C;
-	Mon, 13 May 2024 20:35:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2F8460B0A;
+	Mon, 13 May 2024 20:35:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ff6ND6SQxRjx; Mon, 13 May 2024 20:35:46 +0000 (UTC)
+ id tCpedgAyj0Kk; Mon, 13 May 2024 20:35:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF88460B44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDE8E60B53
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF88460B44;
-	Mon, 13 May 2024 20:35:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDE8E60B53;
+	Mon, 13 May 2024 20:35:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8A1CB1BF2C0
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:34:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1A33D1BF2C0
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:34:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E839403A9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F698403CA
  for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:34:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id txoScA024VU9 for <buildroot@lists.busybox.net>;
+ id 5iACkT--T-qE for <buildroot@lists.busybox.net>;
  Mon, 13 May 2024 20:34:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE358403E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93EA24034A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE358403E9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93EA24034A
  for <buildroot@buildroot.org>; Mon, 13 May 2024 20:34:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5A628714E; Mon, 13 May 2024 20:34:50 +0000 (UTC)
+ id 3430287155; Mon, 13 May 2024 20:34:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 13 May 2024 22:11:14 +0200
+Date: Mon, 13 May 2024 22:10:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5dd7363e7f58852c231f42049bf3b0454f51d0f0
-X-Git-Newrev: 441b788b72c7f75eb3f7e6a0fcc1860372f28939
+X-Git-Oldrev: 40557cfec1d07ef314cfbd5f3c1fb31fdc531128
+X-Git-Newrev: 6670bde37b9fc79fc8953f6ca07ef4a6191ea37a
 X-Patchwork-Hint: ignore
-Message-Id: <20240513203450.C5A628714E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-waipu: bump version to
- 21.6.0-Omega
+Message-Id: <20240513203450.3430287155@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-hdhomerun: bump version
+ to 21.0.1-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,38 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=441b788b72c7f75eb3f7e6a0fcc1860372f28939
+commit: https://git.buildroot.net/buildroot/commit/?id=6670bde37b9fc79fc8953f6ca07ef4a6191ea37a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-index 6f9d521601..2c682c884c 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
+index 8f24eb7158..c1635b5582 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  c595fa830f56b265a94de5a33dd50bdd8ae068ebe0797dd15220ba52adf04fda  kodi-pvr-waipu-21.5.0-Omega.tar.gz
-+sha256  0db467d4986c36efb0c837dd728fc6322d3021fe2d8c93da9355b63f210fa0ca  kodi-pvr-waipu-21.6.0-Omega.tar.gz
- sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-index d82f8f7a2f..4e9f8e00cf 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+-sha256  3adbb5da035d714ccdfe9fa08185487fc218dd14464dc3b8242254a852ac1f8a  kodi-pvr-hdhomerun-21.0.0-Omega.tar.gz
++sha256  5c59d1ca40846b733175ba0f5360b86ea676a64d1a162bdc0faf8e16a8f2dea0  kodi-pvr-hdhomerun-21.0.1-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+index e384480f80..5f69f606ef 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_WAIPU_VERSION = 21.5.0-Omega
-+KODI_PVR_WAIPU_VERSION = 21.6.0-Omega
- KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
- KODI_PVR_WAIPU_LICENSE = GPL-2.0+
- KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
+-KODI_PVR_HDHOMERUN_VERSION = 21.0.0-Omega
++KODI_PVR_HDHOMERUN_VERSION = 21.0.1-Omega
+ KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOMERUN_VERSION))
+ KODI_PVR_HDHOMERUN_LICENSE = GPL-2.0+
+ KODI_PVR_HDHOMERUN_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
