@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1673C25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 20:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2702BC25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 20:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90CB04030D;
-	Mon, 13 May 2024 20:38:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4AA1406D4;
+	Mon, 13 May 2024 20:40:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LsdDwUVWQig7; Mon, 13 May 2024 20:38:52 +0000 (UTC)
+ id cRvuHPSZEfR4; Mon, 13 May 2024 20:40:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3483E40324
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AA3C407FF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3483E40324;
-	Mon, 13 May 2024 20:38:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0501A1BF2C0
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:38:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8AA3C407FF;
+	Mon, 13 May 2024 20:40:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B0A981BF2C0
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:40:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5E684012A
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:38:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D4D182849
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:40:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lblxg0QT_GOl for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 20:38:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UaIZiutN8OAa for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 20:40:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 213D0400B8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 213D0400B8
- for <buildroot@buildroot.org>; Mon, 13 May 2024 20:38:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A0748715D; Mon, 13 May 2024 20:38:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 13 May 2024 22:37:38 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 69cb6259479c548a09aac1140261c17f1cbb86b3
-X-Git-Newrev: 1c8bdef54213640e88b199466d1e504515c1a073
-X-Patchwork-Hint: ignore
-Message-Id: <20240513203849.1A0748715D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: refactor nios2 obsolete
- handling into common gcc code
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9026882846
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9026882846
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9026882846
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 20:40:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F399A20002;
+ Mon, 13 May 2024 20:40:39 +0000 (UTC)
+Date: Mon, 13 May 2024 22:40:39 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240513224039.6aa3b261@windsurf>
+In-Reply-To: <ZkDsA9NqjGG5GwdB@waldemar-brodkorb.de>
+References: <ZkDsA9NqjGG5GwdB@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715632840;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=CzZZDxbIAQcK0YL69MwkS7JwK0HKdctgLesVisqX6I8=;
+ b=MTRyKcKhumMU89oSULG/VeSosPWMFuu0ltTzZAl+Vo4+nuBsEJPbQo4tbLqCDyUPsqSeTC
+ qgRfhaR3S+3zk6RPdZ1k8J1dAyhLGv6yT830HBdqpSvP4Tw+/5L2L06iwj9Eu5nGHmDEmy
+ OY1CKv8tpmnbIFopAx+i7a8fAKaD2J7gvpY0XqPx70gVOtFoYIPmqdPV+YJUMLQjxhjaa7
+ syuvrbM6BgZPbi9OoyvjFiWBXhUFEQDUSNDQ+bIqUWvT5dxxCW4YVHdiyYl+cajq6LH34y
+ 7ejwv68wFRHyP9T+m9BSD1FtRKlJ16mNylkQFpTg4II0VuAL/IdcOJeqfuGCvg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=MTRyKcKh
+Subject: Re: [Buildroot] [PATCH] package/gcc: enable obsolete nios2 target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,75 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c8bdef54213640e88b199466d1e504515c1a073
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 12 May 2024 18:19:15 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Commit 69cb6259479c548a09aac1140261c17f1cbb86b3 ("package/gcc: enable
-obsolete nios2 target") added some handling of nios2 with gcc 14.x,
-duplicated between gcc-initial and gcc-final. Let's deduplicate this
-logic into the common package/gcc/gcc.mk code.
+> +# allow to build gcc 14.x
+> +ifeq ($(BR2_nios2),y)
+> +HOST_GCC_FINAL_CONF_OPTS += --enable-obsolete
+> +endif
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcc/gcc-final/gcc-final.mk     | 5 -----
- package/gcc/gcc-initial/gcc-initial.mk | 5 -----
- package/gcc/gcc.mk                     | 5 +++++
- 3 files changed, 5 insertions(+), 10 deletions(-)
+Dammit, I applied, but in fact, this change should have gone in one
+single place: package/gcc/gcc.mk, adding to HOST_GCC_COMMON_CONF_OPTS,
+which is used for both the gcc-initial and gcc-final stage. So I did
+this as a follow-up commit in
+https://gitlab.com/buildroot.org/buildroot/-/commit/1c8bdef54213640e88b199466d1e504515c1a073.
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 5feb96b568..99d7047b5f 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -117,11 +117,6 @@ else
- HOST_GCC_FINAL_CONF_OPTS += --disable-libgomp
- endif
- 
--# allow to build gcc 14.x
--ifeq ($(BR2_nios2),y)
--HOST_GCC_FINAL_CONF_OPTS += --enable-obsolete
--endif
--
- # End with user-provided options, so that they can override previously
- # defined options.
- HOST_GCC_FINAL_CONF_OPTS += \
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 8b4247bdad..1f8b76a942 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -42,11 +42,6 @@ HOST_GCC_INITIAL_CONF_OPTS = \
- 	--disable-largefile \
- 	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
- 
--# allow to build gcc 14.x
--ifeq ($(BR2_nios2),y)
--HOST_GCC_INITIAL_CONF_OPTS += --enable-obsolete
--endif
--
- HOST_GCC_INITIAL_CONF_ENV = \
- 	$(HOST_GCC_COMMON_CONF_ENV)
- 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 94935d79a2..672f9472a9 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -293,6 +293,11 @@ HOST_GCC_COMMON_CONF_OPTS += \
- 	--with-long-double-128
- endif
- 
-+# allow to build gcc 14.x
-+ifeq ($(BR2_nios2),y)
-+HOST_GCC_COMMON_CONF_OPTS += --enable-obsolete
-+endif
-+
- HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
- 
- # For gcc-initial, we need to tell gcc that the C library will be
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
