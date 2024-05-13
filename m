@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78EB1C25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:36:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BE09C25B74
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:36:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44EB260A6E;
-	Mon, 13 May 2024 19:36:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A0316086F;
+	Mon, 13 May 2024 19:36:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mMrTZIWhs3EM; Mon, 13 May 2024 19:36:28 +0000 (UTC)
+ id MuQkc5cdAMgV; Mon, 13 May 2024 19:36:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9D3860A98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 529A060A5F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A9D3860A98;
-	Mon, 13 May 2024 19:36:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 529A060A5F;
+	Mon, 13 May 2024 19:36:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 403E31BF2CA
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:36:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3D0241BF2CA
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:36:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1753840866
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:36:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 340904076B
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:36:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id APABO11Mr8dT for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 19:36:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id eGgsmW0jwW1Y for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 19:36:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19542407B4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 19542407B4
- for <buildroot@buildroot.org>; Mon, 13 May 2024 19:36:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EAA548710F; Mon, 13 May 2024 19:36:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 13 May 2024 21:35:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 86a5cd42db6acc1ee4f312a55b40ab38f8743d72
-X-Git-Newrev: 19d12dffc4550aaec50b3d2ffcdc67746fff60f4
-X-Patchwork-Hint: ignore
-Message-Id: <20240513193616.EAA548710F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl2: bump version to 2.30.3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ACF8B40861
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACF8B40861
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ACF8B40861
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 19:36:51 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B810320004;
+ Mon, 13 May 2024 19:36:49 +0000 (UTC)
+Date: Mon, 13 May 2024 21:36:49 +0200
+To: Fabio Estevam <festevam@gmail.com>
+Message-ID: <20240513213649.5624a768@windsurf>
+In-Reply-To: <20240513123442.213242-1-festevam@gmail.com>
+References: <20240513123442.213242-1-festevam@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715629009;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=CUdSngTxlDLOd4A7si23FCcleBLHjSgHqRqaX1HZUko=;
+ b=p7LdXtIGe5WiQkxBNROQleiPzW2RqNc9k6YD7/y2SaLuRrS+5jzJGQw0VJKyWsauukooAb
+ 7IkcFXSjAWXB6lmau/NdpuMKSU6R0l8GI4YqGpcVBVWDXDTgu4tQgFgDaPhULfTKSrjmRa
+ QqXSwU4UexcvixRV4FCoblR82VYPkZq75FSytjSlzjr+BPJrDu9Bdpll6sOdJ1tDGBtlY/
+ GVWILUtm40AIaougav/yLRFCnmDU9+M/KAOlffJR0kqHzTDI9H6ce1h4lKm1ouxkilRKo+
+ VSHH51+Ek7Y5LqfJRHjp1+J0t0z6EIXemnrbPzpyaTQOlhSC1RxvMYiY3/GvUw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=p7LdXtIG
+Subject: Re: [Buildroot] [PATCH] configs/freescale_imx93evk: Update to NXP
+ lf-6.6.3-1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +83,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: ju.o@free.fr, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19d12dffc4550aaec50b3d2ffcdc67746fff60f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 13 May 2024 09:34:42 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Update kernel, TF-A and U-Boot repos to the NXP lf-6.6.3-1.0.0 versions.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  configs/freescale_imx93evk_defconfig | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 3c4b06cf3e..3c72d1d6d1 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.2.tar.gz.sig
--sha256  891d66ac8cae51361d3229e3336ebec1c407a8a2a063b61df14f5fdf3ab5ac31  SDL2-2.30.2.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.3.tar.gz.sig
-+sha256  820440072f8f5b50188c1dae104f2ad25984de268785be40c41a099a510f0aec  SDL2-2.30.3.tar.gz
- # Locally calculated
- sha256  9b9e1764f06701bcf7ce21e942c682d5921ba0900c6fca760321b1c8837a9662  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 70f765f0ea..b5b0fb49e1 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDL2_VERSION = 2.30.2
-+SDL2_VERSION = 2.30.3
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+BTW, it would be good to make use of BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+in this defconfig (and in fact in the other defconfigs you maintain as
+well!). Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
