@@ -1,74 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 564D7C25B74
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:35:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2A56C25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:36:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20B3D82246;
-	Mon, 13 May 2024 19:35:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NPa3g2ooQZ6t; Mon, 13 May 2024 19:35:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF34F82251
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF34F82251;
-	Mon, 13 May 2024 19:35:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DE87B1BF2CA
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:35:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBBFE607D9
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:35:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B1A0607A8;
+	Mon, 13 May 2024 19:36:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZfkPxl8KmPVG for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 19:35:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id Kb21CuHki3HS; Mon, 13 May 2024 19:35:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D712607D9
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D712607D9;
+	Mon, 13 May 2024 19:35:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E00F91BF2CA
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:35:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA9138230F
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:35:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h1xHr-ErlLkI for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 19:35:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B88E9607A8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B88E9607A8
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B88E9607A8
- for <buildroot@buildroot.org>; Mon, 13 May 2024 19:35:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D82E1C0005;
- Mon, 13 May 2024 19:35:13 +0000 (UTC)
-Date: Mon, 13 May 2024 21:35:12 +0200
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20240513213512.55e93cb6@windsurf>
-In-Reply-To: <20240513112205.985165-1-troglobit@gmail.com>
-References: <20240513112205.985165-1-troglobit@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B911482246
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B911482246
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B911482246
+ for <buildroot@busybox.net>; Mon, 13 May 2024 19:35:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A46651BF203;
+ Mon, 13 May 2024 19:35:53 +0000 (UTC)
+Date: Mon, 13 May 2024 21:35:52 +0200
+To: Michael Fischer <mf@go-sys.de>
+Message-ID: <20240513213552.5e09055f@windsurf>
+In-Reply-To: <20240513113936.7471-1-mf@go-sys.de>
+References: <20240513113936.7471-1-mf@go-sys.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715628913;
+ d=bootlin.com; s=gm1; t=1715628954;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=h02O+vrGQ7u5IoZIVuVYOP9OOMXvzhoYDvV98dSMMXg=;
- b=j9ozrxotb1tQ36fTaTxP7zi7blqCP37bc8BHU5OSvmXEqjyyfgv5TRaJRK49Ebm+3Wua0I
- ohIQX656EMRSo6BMf6sNxGMfklrFgMgvQ394lIWHuum2q5KMQh+uQQP5HZoaKlSOjHae4E
- mBob2xVqBWNOvfa9dnF9RBQEL2IhDk5ZM/IBZfhYYQ1kWJn4/MUVTsc5sqkHs4+pZmx6Ge
- Qyfa7+WopPYLOfVrsXXEiRGrr2+1h9WaY1/q47sfjqT+WaKYnwpnJ5zrs0n7NSsnVLBCpG
- UWDMJJMea5wYirhnQetAP2doYQtD+DHFlvQPlz1L4/XYKDTS+hiZMe80NaopjQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=vwqUtBuI/OPne1SFyen/rUZYIQbbWc8yfdJH58oyey0=;
+ b=XRW9A6V78M7O7ibhF2URk1fsXNFOu706Z3xUqbhtFOYjhnet+QoWM53a9fJGdaeELeQICT
+ s8tRtYX3FWAeE8lSFzZvhUD3a1vV+HuFAHpvD7S1UMvayy/OWS1wxt+UT52kztCp34Jsz7
+ XUDx+JvNlyQCr3DLjujgODgmMVVnDgjoKqyEQRsv0vc4L/POgl3zegY7TqaKxAAQp2usYG
+ QAgcgB/vmhgsbgJB1eEQaMNrmQhp96O4H8jnNgOfnWPMwS34QR7c0DRe0kTxuUuFZeTwNT
+ ilxsHsQGOKpE9P1itVKuWhloszrwsVFgqd7wmknHCIg+nK5tVtSRq3yDVseAYA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=j9ozrxot
-Subject: Re: [Buildroot] [PATCH 1/1] pacakge/smcroute: bump to version v2.5.7
+ header.s=gm1 header.b=XRW9A6V7
+Subject: Re: [Buildroot] [PATCH] package/sdl2: bump version to 2.30.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,25 +82,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 13 May 2024 13:22:05 +0200
-Joachim Wiberg <troglobit@gmail.com> wrote:
+On Mon, 13 May 2024 13:39:36 +0200
+Michael Fischer <mf@go-sys.de> wrote:
 
-> Fixes segfault on kernel without IPv6 support.  For details, see
-> https://github.com/troglobit/smcroute/releases/tag/2.5.7
-> 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
 > ---
->  package/smcroute/smcroute.hash | 5 ++---
->  package/smcroute/smcroute.mk   | 2 +-
->  2 files changed, 3 insertions(+), 4 deletions(-)
+>  package/sdl2/sdl2.hash | 4 ++--
+>  package/sdl2/sdl2.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master after fixing the typo in the commit title, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
