@@ -4,72 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95F9AC25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:30:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9844BC25B5F
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:30:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D6E240356;
-	Mon, 13 May 2024 21:30:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59F8440356;
+	Mon, 13 May 2024 21:30:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NFP7rb1K53vW; Mon, 13 May 2024 21:30:20 +0000 (UTC)
+ id BHku8Pj_4EV8; Mon, 13 May 2024 21:30:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0916F407FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03B4F407FA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0916F407FA;
-	Mon, 13 May 2024 21:30:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C95BB1BF2A4
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:30:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03B4F407FA;
+	Mon, 13 May 2024 21:30:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 10C0D1BF2A4
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0A0E82290
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:30:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0950D407FA
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:30:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p2WanptntVbp for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 21:30:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uqJGHF1nJj5h for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 21:30:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
+ helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A0DC882263
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0DC882263
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A0DC882263
- for <buildroot@buildroot.org>; Mon, 13 May 2024 21:30:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 840E21C0002;
- Mon, 13 May 2024 21:30:15 +0000 (UTC)
-Date: Mon, 13 May 2024 23:30:14 +0200
-To: Jan Kraval <jan.kraval@gmail.com>
-Message-ID: <20240513233014.3b09e56e@windsurf>
-In-Reply-To: <20240220051926.68559-1-jan.kraval@gmail.com>
-References: <20240220051926.68559-1-jan.kraval@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D5F4840356
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5F4840356
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D5F4840356
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 21:30:42 +0000 (UTC)
+Received: from pps.filterd (m0346901.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 44DG9Itg010016; Mon, 13 May 2024 21:30:41 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3y3p4u2vem-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 13 May 2024 21:30:41 +0000
+Received: from xusxph005rp020.corp.ray.com ([128.13.121.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 44DLUdTQ013430
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Mon, 13 May 2024 21:30:40 GMT
+Received: from dtulimr02.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph005rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 44DLUdJL013788
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Mon, 13 May 2024 21:30:39 GMT
+X-Received: from bspbox.kirk (unknown [10.148.204.208])
+ by dtulimr02.rockwellcollins.com (Postfix) with ESMTP id 289553026D67;
+ Mon, 13 May 2024 16:30:39 -0500 (CDT)
+To: buildroot@buildroot.org
+Date: Mon, 13 May 2024 21:30:35 +0000
+Message-ID: <20240513213035.1738493-1-brandon.maier@collins.com>
+X-Mailer: git-send-email 2.45.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-13_15,2024-05-10_02,2023-05-22_02
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-13_15,2024-05-10_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
+ adultscore=0 bulkscore=0
+ mlxscore=0 phishscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405130148
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
+ bulkscore=0 phishscore=0
+ mlxscore=0 suspectscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405130147
+X-Proofpoint-GUID: 9A_nZ-fwkmJvS777Bsbnjd7_1NlditaL
+X-Proofpoint-ORIG-GUID: 9A_nZ-fwkmJvS777Bsbnjd7_1NlditaL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-13_15,2024-05-10_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0 bulkscore=0
+ mlxscore=0 malwarescore=0 impostorscore=0 suspectscore=0 phishscore=0
+ clxscore=1011 mlxlogscore=999 adultscore=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2405010000 definitions=main-2405130147
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715635815;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=zdwsgXMYx11grlnVaW5WldY1TYYJw4ExcTD+h4I8p5o=;
- b=Ce0cBNoCewbb6LXq7p4YnhR2354/J0M0JM018txywCvjgCPHWbih5axvyu7aZAojv/yR6L
- X4SP7dWc+f5BgQTdxM6coSHZ4WLh8AeAvGTv7RBSjmzH+Lu1PF8V27YPEXN7lkG4+j/BO3
- me0+SO0zJgJZKwS/f23R9QGbw+bal74cRjWrrhosrqqoQiFep3+sgwenSi9bVRJxNkxZQN
- Q7udjU0HyBvixZ2luqhTpzJyUyuNM+ZiAUT+VRrXf5kDx10QZVWuNQ3b6pTHHszxSztkiC
- iUua7eFVVRQzfwUcq9cMe9XqSjhUfJilUqrpDr6rFcWWAUMq9XLRahpjoDT7VA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=collins.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=POD051818; bh=0coiovmW8DljP4a8rBCgYWS57A43ZLeAKTpBxRfVfW0=;
+ b=Swm5vXH+Xow6Rt+Q7z+XGFqRf5OYHItBIwu7pe7NWXZR55+bkiD92L9I9FnC7jpjjUn7
+ cqm8djURHEn/GOyABRTT6Aja/wgOQWHM91pwXjAxtcwEohRSXMBC5Ag1pdDzC/8Nhs/x
+ 3DL0TsmhmDhPppufFBupbHqik96MtSJe+WPNHJtlpulPkhIzMabofQevGk3r+tZKYTon
+ 4VDgXsB7NI/fiCyiGSAoWuBYVbleM07g+GEHjSin6ajw3UrnZYbi1LuKC+Uj+Ro3M5tS
+ 0dStq71WYXflyI4G23Eruz0fL0jXZi9UIWHeSuQwwHT3lAvlnTBWHVGTNppVCUGcugAp bg== 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ce0cBNoC
-Subject: Re: [Buildroot] [PATCH 1/2] board/orangepi/orangepi-lite: switch to
- extlinux
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=Swm5vXH+
+Subject: [Buildroot] [PATCH] support/testing/infra/builder.py: fix missing
+ $HOME during build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,48 +119,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Brandon Maier <brandon.maier@collins.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 20 Feb 2024 06:19:25 +0100
-Jan Kraval <jan.kraval@gmail.com> wrote:
+When running a test that uses host-python-setuptools using the Buildroot
+Docker image, for example running the following command,
 
-> Switch to extlinux instead of U-Boot boot script. Drop custom
-> boot script and genimage config. Instead use common orangepi
-> files from board/orangepi/common.
-> 
-> Signed-off-by: Jan Kraval <jan.kraval@gmail.com>
+> ./utils/docker-run ./support/testing/run-tests -o output -s -k tests.package.test_python_pytest.TestPythonPy3Pytest
 
-Thanks for this patch, it looks good, except for one question, below.
+The build fails with the following error,
 
-> @@ -25,15 +29,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_lite"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
-> -BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+>   File "/home/blmaier/buildroot/output/TestPythonPy3Pytest/build/host-python-setuptools-69.2.0/setuptools/_distutils/dist.py", line 354, in _gen_paths
+>     yield pathlib.Path('~').expanduser() / filename
+>           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   File "/home/blmaier/buildroot/output/TestPythonPy3Pytest/host/lib/python3.11/pathlib.py", line 1385, in expanduser
+>     raise RuntimeError("Could not determine home directory.")
+> RuntimeError: Could not determine home directory.
+>
+> ERROR Backend subprocess exited when trying to invoke get_requires_for_build_wheel
 
-Why is this option being dropped? I don't see how the move to extlinux
-has anything to do with this. For a given version/configuration of
-U-Boot (which are not changed in this commit), whether host-python3 is
-needed or not should not change.
+Python setuptools is looking for $HOME but failing to find it.
 
-Could you clarify?
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+---
+ support/testing/infra/builder.py | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Make sure to test your configuration with ./utils/docker-run, to verify
-that you are not dependent on system-provided packages.
-
-Thanks!
-
-Thomas
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index a2abb9ed89..295bc7b83d 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -52,7 +52,10 @@ class Builder(object):
+                            "> end defconfig\n")
+         self.logfile.flush()
+ 
+-        env = {"PATH": os.environ["PATH"]}
++        env = {
++            "PATH": os.environ["PATH"],
++            "HOME": os.environ["HOME"]
++        }
+         env.update(make_extra_env)
+ 
+         cmd = ["make",
+@@ -79,7 +82,11 @@ class Builder(object):
+         in the environment that calls make.
+         e.g. make_extra_env={"BR2_DL_DIR": "/path"}
+         """
+-        env = {"PATH": os.environ["PATH"]}
++        env = {
++            "PATH": os.environ["PATH"],
++            "HOME": os.environ["HOME"]
++        }
++
+         if "http_proxy" in os.environ:
+             self.logfile.write("Using system proxy: " +
+                                os.environ["http_proxy"] + "\n")
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.45.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
