@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FB36C25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:37:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F6DC25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:37:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3AED6080E;
-	Mon, 13 May 2024 19:37:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C47FF60A65;
+	Mon, 13 May 2024 19:37:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CJz5e-y4BIg7; Mon, 13 May 2024 19:37:40 +0000 (UTC)
+ id jRzwrD_aqdFZ; Mon, 13 May 2024 19:37:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA72E6086F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A54F360A87
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA72E6086F;
-	Mon, 13 May 2024 19:37:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 620B61BF2CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id A54F360A87;
+	Mon, 13 May 2024 19:37:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EB9391BF2CA
  for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:37:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B7AD4076C
+ by smtp1.osuosl.org (Postfix) with ESMTP id E40DF8228C
  for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:37:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ynyIeCAwof_n for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 19:37:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2EVrAIF2SorR for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 19:37:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AE744076B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5AE744076B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DD2368227C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD2368227C
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD2368227C
  for <buildroot@buildroot.org>; Mon, 13 May 2024 19:37:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 48B3D87114; Mon, 13 May 2024 19:37:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 13 May 2024 21:36:58 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 22fd54b737d81ceb8b1cb0ccb0896c0b914b02cd
-X-Git-Newrev: bd4efc86c90b85fbd5825f6b2eab49790e09f601
-X-Patchwork-Hint: ignore
-Message-Id: <20240513193737.48B3D87114@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/network-manager-openvpn: bump to
- version 1.11.0
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E6EE1C0002;
+ Mon, 13 May 2024 19:37:34 +0000 (UTC)
+Date: Mon, 13 May 2024 21:37:34 +0200
+To: Michel Alex <Alex.Michel@wiedemann-group.com>
+Message-ID: <20240513213734.38e900ba@windsurf>
+In-Reply-To: <AS1P250MB06088D7843BC7CD2E15833E0A9E22@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+References: <AS1P250MB06088D7843BC7CD2E15833E0A9E22@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715629055;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=TnzJUIvh4iVI//Kk4nVIs3kjbHNAK5CoHHyQloiKvLg=;
+ b=eCNSSztDg6aKq7hZl3VwFvisbYm2xmjHML97co/TRgMVy28dlxd51waxwqewAEsjWzG0Cv
+ IVtY0P3QCOBS1x6uo7x1exO4djGFWSlF2RAzAzJO9HaSFiy+HuakCHmf14zgX3z0JecPPa
+ IqJtIWSo3fgehSq7AfeyM/nSrA+nyfT9lbz0PqipnH3GdZa6vK9grgVtmLLu2zltnLDqDe
+ UqyQYd6qes/8/EDT1L4gXwKeyqf2zsox+Tl5YphUWAMfxiQAM6Wnue4fiROsjGgSfgNPlE
+ OKHFWGIitM3EPKVeAJn04FPvZpuGW6L38srx8MTWvLwwll8gIT5vqcfp3fgtuQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eCNSSztD
+Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager-openvpn: bump
+ to version 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,50 +83,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd4efc86c90b85fbd5825f6b2eab49790e09f601
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 13 May 2024 12:42:52 +0000
+Michel Alex <Alex.Michel@wiedemann-group.com> wrote:
 
-https://download.gnome.org/sources/NetworkManager-openvpn/1.11/NetworkManager-openvpn-1.11.0.news
+> https://download.gnome.org/sources/NetworkManager-openvpn/1.11/NetworkManager-openvpn-1.11.0.news
+> 
+> Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
+> ---
+>  package/network-manager-openvpn/network-manager-openvpn.hash | 4 ++--
+>  package/network-manager-openvpn/network-manager-openvpn.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/network-manager-openvpn/network-manager-openvpn.hash | 4 ++--
- package/network-manager-openvpn/network-manager-openvpn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/network-manager-openvpn/network-manager-openvpn.hash b/package/network-manager-openvpn/network-manager-openvpn.hash
-index 11fb28f8c8..59d03fae2a 100644
---- a/package/network-manager-openvpn/network-manager-openvpn.hash
-+++ b/package/network-manager-openvpn/network-manager-openvpn.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/NetworkManager-openvpn/1.10/NetworkManager-openvpn-1.10.2.sha256sum
--sha256  62f0f2a8782221b923f212ac2a8ebbc1002efd6a90ee945dad4adfb56d076d21  NetworkManager-openvpn-1.10.2.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager-openvpn/1.11/NetworkManager-openvpn-1.11.0.sha256sum
-+sha256  2128de06f91b33c13d63cdaa6e178bc1ca57fc770cde3bc7c24891f4d9824501  NetworkManager-openvpn-1.11.0.tar.xz
- # Locally computed
- sha256  c39e345d992dfba62db265f8c6d6ff1d90c61d92876635ae05adbfa2f45fff46  COPYING
-diff --git a/package/network-manager-openvpn/network-manager-openvpn.mk b/package/network-manager-openvpn/network-manager-openvpn.mk
-index ccc86e45f7..f39edf3209 100644
---- a/package/network-manager-openvpn/network-manager-openvpn.mk
-+++ b/package/network-manager-openvpn/network-manager-openvpn.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.10
--NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).2
-+NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.11
-+NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).0
- NETWORK_MANAGER_OPENVPN_SOURCE = NetworkManager-openvpn-$(NETWORK_MANAGER_OPENVPN_VERSION).tar.xz
- NETWORK_MANAGER_OPENVPN_SITE = https://download.gnome.org/sources/NetworkManager-openvpn/$(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR)
- NETWORK_MANAGER_OPENVPN_DEPENDENCIES = network-manager openvpn
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
