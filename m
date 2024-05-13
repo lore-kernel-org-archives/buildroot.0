@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A685AC25B75
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 20:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48172C25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 20:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 720916058D;
-	Mon, 13 May 2024 20:08:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1716260656;
+	Mon, 13 May 2024 20:10:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b72fs1OYG9gg; Mon, 13 May 2024 20:08:37 +0000 (UTC)
+ id Gw7KcV9-o_sV; Mon, 13 May 2024 20:10:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8358160591
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2553460658
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8358160591;
-	Mon, 13 May 2024 20:08:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6AF931BF2C0
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:08:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2553460658;
+	Mon, 13 May 2024 20:10:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AC3A1BF2C0
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6299A823A0
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:08:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 436544018D
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 20:10:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GeM3CNjIfjBA for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 20:08:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GLNy_ls4OUsb for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 20:10:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 35BE08239A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35BE08239A
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 35BE08239A
- for <buildroot@buildroot.org>; Mon, 13 May 2024 20:08:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 00FC920007;
- Mon, 13 May 2024 20:08:32 +0000 (UTC)
-Date: Mon, 13 May 2024 22:08:32 +0200
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <20240513220832.069a1b9b@windsurf>
-In-Reply-To: <CACXRmJi2z3zApRQ0vUupEQVjDE0C6chEBr1F_rZn16juJzXMCQ@mail.gmail.com>
-References: <CACXRmJi2z3zApRQ0vUupEQVjDE0C6chEBr1F_rZn16juJzXMCQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715630913;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=FwucPMlCtj2kQVvAgNKS1CUQZOcN8Df7xGxxcfcQv6o=;
- b=JBbxrBESRTVtWIAydGu43R8qlXc+oBU62fjxlSmXxjLqKWdHL8XiyP0CSHTY768OYw28n8
- zb58NEjL69GX0ZYBlQCCTLcBDtWgx5uB+zbvnco2Ba6kCJLEdEeZO7NsuQqVz1GMmTrocK
- Ma7TNdWf5E1Dj9L36/SJGMrKj8zdrUoiMS8XUJnjAbfX1/3QmnL4pkDJTDnfFEhcSzDS/4
- 1xrcv6ejSy/fVv2B3B+SCsirLa1CeD+/ZmGIA4Sv0XKF50x32hiEwdcR0VnAzVCuPzlDTJ
- BQm7ytVrFAlNKIHywxhCFwA26rRJU/gtJcTA2MwtJQmwUMDNsdH+T3mt1dqaQg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JBbxrBES
-Subject: Re: [Buildroot] [PATCH v1] package/libsoup3: bump to 3.5.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E205400B8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E205400B8
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 20:10:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8655A87143; Mon, 13 May 2024 20:10:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 13 May 2024 22:08:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cd2a8827688b2449b0482b79308830739a7746ab
+X-Git-Newrev: dfdcc8b0af1bd84788282317a4b77d4cc36b0e7c
+X-Patchwork-Hint: ignore
+Message-Id: <20240513201004.8655A87143@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libzenoh-pico: bump to version
+ 0.11.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,46 +60,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 13 May 2024 10:24:19 +0200
-Thomas Devoogdt <thomas@devoogdt.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dfdcc8b0af1bd84788282317a4b77d4cc36b0e7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> News: https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.1.news.
-> 
-> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-> ---
->  package/libsoup3/libsoup3.hash | 4 ++--
->  package/libsoup3/libsoup3.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
-> index 11e48b42aa..139771a11e 100644
-> --- a/package/libsoup3/libsoup3.hash
-> +++ b/package/libsoup3/libsoup3.hash
-> @@ -1,4 +1,4 @@
-> -# From https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.4.sha256sum
-> -sha256  291c67725f36ed90ea43efff25064b69c5a2d1981488477c05c481a3b4b0c5aa
->  libsoup-3.4.4.tar.xz
-> +# From https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.1.sha256sum
-> +sha256  c1d7cfb89832d35c271f37d544f2cfe21fa60ae9faad4a7ac58996ae4031f7ba
->  libsoup-3.5.1.tar.xz
+https://github.com/eclipse-zenoh/zenoh-pico/releases/tag/0.11.0.1
 
-Your patch was badly line-wrapped. I'm not sure what happened, but most
-likely you didn't send it with git send-email?
+Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libzenoh-pico/libzenoh-pico.hash | 2 +-
+ package/libzenoh-pico/libzenoh-pico.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Anyway, I fixed that up locally (because the change was small) and
-applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libzenoh-pico/libzenoh-pico.hash b/package/libzenoh-pico/libzenoh-pico.hash
+index 98f804508f..945d0f9aaf 100644
+--- a/package/libzenoh-pico/libzenoh-pico.hash
++++ b/package/libzenoh-pico/libzenoh-pico.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7b615515ac844470ec7806921e8106b2923f6c43e242b34f062954de7560b799  libzenoh-pico-0.10.1-rc.tar.gz
++sha256  c259da44aa919919d1129b6a46edb05e2f5f2bf2818f73c27f515e443da9fc83  libzenoh-pico-0.11.0.1.tar.gz
+ sha256  d386df32cf327bbb25abe894277d3d7e0f447bafc59f4ad362615b0136f30db5  LICENSE
+diff --git a/package/libzenoh-pico/libzenoh-pico.mk b/package/libzenoh-pico/libzenoh-pico.mk
+index 90dfda6c98..86204de14f 100644
+--- a/package/libzenoh-pico/libzenoh-pico.mk
++++ b/package/libzenoh-pico/libzenoh-pico.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBZENOH_PICO_VERSION = 0.10.1-rc
++LIBZENOH_PICO_VERSION = 0.11.0.1
+ LIBZENOH_PICO_SITE = $(call github,eclipse-zenoh,zenoh-pico,$(LIBZENOH_PICO_VERSION))
+ LIBZENOH_PICO_LICENSE = Apache-2.0 or EPL-2.0
+ LIBZENOH_PICO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
