@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3394CC25B5F
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:25:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BA8BC25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:27:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D2804092B;
-	Mon, 13 May 2024 21:25:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E37E4076A;
+	Mon, 13 May 2024 21:27:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I8mgl8vgTSUZ; Mon, 13 May 2024 21:25:05 +0000 (UTC)
+ id 4aNd-kNaSWdP; Mon, 13 May 2024 21:27:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E57B240889
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F199F408B5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E57B240889;
-	Mon, 13 May 2024 21:25:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F199F408B5;
+	Mon, 13 May 2024 21:27:01 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 50C931BF2A4
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:25:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0797C1BF2A4
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:27:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E477404B4
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:25:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8A7F404B4
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:27:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MZse1f1ttsxY for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 21:25:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id iwb_GefORsQI for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 21:27:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0D2D94012A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D2D94012A
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0D2D94012A
- for <buildroot@buildroot.org>; Mon, 13 May 2024 21:25:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 776EFE0004;
- Mon, 13 May 2024 21:25:00 +0000 (UTC)
-Date: Mon, 13 May 2024 23:24:59 +0200
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20240513232459.47921ffd@windsurf>
-In-Reply-To: <20240326174059.499034-1-adam.duskett@amarulasolutions.com>
-References: <20240326174059.499034-1-adam.duskett@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715635500;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=MSDfzyTNUApeQwei4bIpu5ncUMuTDcegYgyqx5z2Y/g=;
- b=l4rDAEjFluzF39a/eyyERLJEszW+zUeyKcomrlkrzSJARFibFwbcbWvBSjrKObyk8zmpf6
- kwgM4mwSIyes/8xB8RJw5WQnMIH/X3DiUwOpuljXunAWVcdeeN/7cKqw6m9e301GOfHghE
- 3Ean28yrC7SUbq86q57oMFAz3ECOjubFJ1w+2zNoYCSNqiECqoEGlOD1xg1JTQQTEFq1h8
- 5JgKTSEXbQflV9TZEAzLl0sbANE2NZfWv16POLP5MKEBhVRblqLUKFn96rpNaV5/blJ5ug
- b16bPeUMGzW6alyDZ9e+FlSQhYUS2KLBFcPzQ65sjKsBW0BP9m+TsastB1KQPA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=l4rDAEjF
-Subject: Re: [Buildroot] [PATCH] package/flutter-packages: bump version to
- ab1630b9b9bd1130b4d5d1ac18a588b690fd0fa3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 246904012A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 246904012A
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 21:26:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C5F0087316; Mon, 13 May 2024 21:26:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 13 May 2024 23:26:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8c79f4be597d78428126bfdb02eb47c3126f3ebe
+X-Git-Newrev: ab990cf58a724a178dbdd55afdb520212f7197c0
+X-Patchwork-Hint: ignore
+Message-Id: <20240513212659.C5F0087316@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/musl: enable on s390x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,29 +59,63 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3257667157914177216=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 26 Mar 2024 11:40:59 -0600
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+--===============3257667157914177216==
+Content-Type: text/plain
 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->  package/flutter-packages/flutter-packages.hash | 2 +-
->  package/flutter-packages/flutter-packages.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=ab990cf58a724a178dbdd55afdb520212f7197c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Add s390x musl supported archs. Upstream musl already supports s390x[1].
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Tested with qemu_s390s_defconfig:
+
+	$ output/host/bin/qemu-system-s390x -M s390-ccw-virtio -cpu max,zpci=on -m 4G -smp 2 -kernel output/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda net.ifnames=0 biosdevname=0" -display none -serial mon:stdio -net nic,model=virtio -net user
+	(...)
+	Welcome to Buildroot
+	buildroot login: root
+	# uname -a
+	Linux buildroot 6.1.44 #2 SMP Sun Feb 18 01:33:42 CET 2024 s390x GNU/Linux
+	# /lib/ld-musl-s390x.so.1
+	musl libc (s390x)
+	Version 1.2.4
+	Dynamic Program Loader
+	Usage: /lib/ld-musl-s390x.so.1 [options] [--] pathname [args]
+
+[1]: https://git.musl-libc.org/cgit/musl/commit/?id=15094943050eb9a564f409323070e50b40f78816
+
+Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/musl/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/musl/Config.in b/package/musl/Config.in
+index 7fba85bcd9..a6e2af054c 100644
+--- a/package/musl/Config.in
++++ b/package/musl/Config.in
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_MUSL_ARCH_SUPPORTS
+ 	default y if BR2_powerpc64
+ 	default y if BR2_powerpc64le
+ 	default y if BR2_riscv
++	default y if BR2_s390x
+ 	default y if BR2_sh
+ 	default y if BR2_x86_64
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE # not supported, build breaks
+
+--===============3257667157914177216==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3257667157914177216==--
