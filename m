@@ -1,71 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B961C25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 14:34:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7F9EC25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 16:00:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DADB1608B6;
-	Mon, 13 May 2024 14:34:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 20FD741578;
+	Mon, 13 May 2024 16:00:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 73gTxqB9tfdD; Mon, 13 May 2024 14:34:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id marfLDXkPOZN; Mon, 13 May 2024 16:00:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7A9760904
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 922E341532
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7A9760904;
-	Mon, 13 May 2024 14:34:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A05F51BF239
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 14:34:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 922E341532;
+	Mon, 13 May 2024 16:00:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 925CE1BF39F
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 16:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8AB3280DA6
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 14:34:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E0D941E5D
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 16:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t8DX2MAL2Kvz for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 14:34:51 +0000 (UTC)
-X-Greylist: delayed 496 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 13 May 2024 14:34:51 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 320A980EAC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 320A980EAC
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=134.119.228.102;
- helo=smtprelay07.ispgateway.de; envelope-from=mf@go-sys.de;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GLa4ZMpj1UHZ for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 16:00:10 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=208.72.58.67;
+ helo=sinclair-ext5.swishmail.com; envelope-from=nick.whitlock@eizo.com;
  receiver=<UNKNOWN> 
-Received: from smtprelay07.ispgateway.de (smtprelay07.ispgateway.de
- [134.119.228.102])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 320A980EAC
- for <buildroot@busybox.net>; Mon, 13 May 2024 14:34:51 +0000 (UTC)
-Received: from [91.21.113.99] (helo=mail.go-sys.de)
- by smtprelay07.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.97.1)
- (envelope-from <mf@go-sys.de>) id 1s6WdK-000000002lx-2mgk
- for buildroot@busybox.net; Mon, 13 May 2024 16:26:31 +0200
-Received: from mail.go-sys.de (192.168.1.9) by mail.go-sys.de (192.168.1.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 13 May
- 2024 16:26:29 +0200
-Received: from go-sys.de (192.168.1.175) by mail.go-sys.de (192.168.1.9) with
- Microsoft SMTP Server id 15.1.2507.39 via Frontend Transport;
- Mon, 13 May 2024 16:26:29 +0200
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Mon, 13 May 2024 16:26:12 +0200
-Message-ID: <20240513142612.21594-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B242341E60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B242341E60
+Received: from sinclair-ext5.swishmail.com (sinclair-ext5.swishmail.com
+ [208.72.58.67])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B242341E60
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 16:00:08 +0000 (UTC)
+Received: from ivanova.swishmail.com (ivanova.swishmail.com [208.72.58.39])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (P-384) server-signature ECDSA (P-384) server-digest
+ SHA384) (No client certificate requested)
+ by sinclair-ext5.swishmail.com (Postfix) with ESMTPS id E36C0659D
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 12:00:05 -0400 (EDT)
+Received: (qmail 63699 invoked by uid 89); 13 May 2024 12:00:05 -0400
+Received: from unknown (HELO localhost.localdomain.com)
+ (noreply@techsource.com)
+ by ivanova.swishmail.com with ESMTPA; 13 May 2024 12:00:05 -0400
+From: Nick Whitlock <nick.whitlock@eizo.com>
+To: buildroot@buildroot.org
+Date: Mon, 13 May 2024 11:59:05 -0400
+Message-ID: <20240513155907.104270-1-nick.whitlock@eizo.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-C2ProcessedOrg: 5fa85167-cd6f-46be-bafe-19070fe3dac3
-X-CrossPremisesHeadersFilteredBySendConnector: mail.go-sys.de
-X-OrganizationHeadersPreserved: mail.go-sys.de
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=go-sys.de
-Subject: [Buildroot] [PATCH] package/gnuplot: bump version to 6.0.0
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=eizo.com
+X-Mailman-Original-Authentication-Results: sinclair-ext5.swishmail.com;
+ dkim=none;
+ spf=temperror (sinclair-ext5.swishmail.com: error in processing during lookup
+ of nick.whitlock@eizo.com: DNS error) smtp.mailfrom=nick.whitlock@eizo.com; 
+ dmarc=temperror reason="SPF/DKIM temp error" header.from=eizo.com
+ (policy=temperror)
+Subject: [Buildroot] [PATCH] package/nvidia-driver: bump version to 550.78
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,124 +75,189 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Nick Whitlock <nick.whitlock@eizo.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-0001-configure-add-without-demo-option: adapt patch to 6.0.0 version
+The NVIDIA drivers now have 64-bit and 32-bit versions bundled
+into one .run file.
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
+A configuration value was also added to check if the user wants
+to install GTK integration for the NVIDIA driver.
+
+The legacy version of libGL.so was removed in favor of the
+vendor neutral version.
+
+This has been confirmed to work on kernel 6.1.4.
+
+Signed-off-by: Nick Whitlock <nick.whitlock@eizo.com>
 ---
- ...01-configure-add-without-demo-option.patch | 42 +++++++------------
- package/gnuplot/gnuplot.hash                  |  8 ++--
- package/gnuplot/gnuplot.mk                    |  2 +-
- 3 files changed, 21 insertions(+), 31 deletions(-)
+ package/nvidia-driver/Config.in          |  3 ++
+ package/nvidia-driver/nvidia-driver.hash |  7 ++-
+ package/nvidia-driver/nvidia-driver.mk   | 69 +++++++++++++-----------
+ 3 files changed, 43 insertions(+), 36 deletions(-)
 
-diff --git a/package/gnuplot/0001-configure-add-without-demo-option.patch b/package/gnuplot/0001-configure-add-without-demo-option.patch
-index a557e279bc..4eb9833fe7 100644
---- a/package/gnuplot/0001-configure-add-without-demo-option.patch
-+++ b/package/gnuplot/0001-configure-add-without-demo-option.patch
-@@ -8,32 +8,19 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- [Michael: adapt patch to 5.4.0 version]
- Signed-off-by: Michael Fischer <mf@go-sys.de>
-+[Michael: adapt patch to 6.0.0 version]
-+Signed-off-by: Michael Fischer <mf@go-sys.de>
+diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
+index a8617a939b..0fcce93e28 100644
+--- a/package/nvidia-driver/Config.in
++++ b/package/nvidia-driver/Config.in
+@@ -90,4 +90,7 @@ config BR2_PACKAGE_NVIDIA_DRIVER_MODULE
+ 	  provides Unified Memory access to the GPU and CPU memories for
+ 	  CUDA programs.
  
--diff -Naur a/configure.ac b/configure.ac
----- a/configure.ac	2020-07-12 02:29:47.000000000 +0200
--+++ b/configure.ac	2020-08-06 14:21:17.918756893 +0200
--@@ -713,6 +713,17 @@
--                [ Define if you want to read .gnuplot from current directory (SECURITY RISK!).])
-- fi
-+--- a/configure.ac	2023-12-19 00:28:58.000000000 +0100
-++++ b/configure.ac	2024-05-13 15:41:18.313920528 +0200
-+@@ -715,6 +715,32 @@
-+ 
-+ dnl Process rest of with and enable options
-  
- +dnl Whether we want to build the doc files
- +dnl Does nothing here, is passed on to the doc subdir
- +AC_ARG_ENABLE(doc,dnl
- +[  --disable-doc    do not build doc files])
--+
--+dnl Whether we want to build the demo files
--+dnl Does nothing here, is passed on to the demo subdir
--+AC_ARG_ENABLE(demo,dnl
--+[  --disable-demo    do not build demo files])
--+
--+
-- dnl Sort help/subtopic tables by row or column
-- AC_ARG_WITH(row-help,dnl
-- [  --with-row-help         format help and subtopic tables by row (default)
--@@ -1095,6 +1106,24 @@
--   AC_DEFINE_UNQUOTED([DIST_CONTACT],["$DIST_CONTACT"],[Contact address for modified and binary distributed gnuplot versions])
-- fi
-- 
- +dnl build doc files
- +if test "$enable_doc" != no; then
- +  AC_CONFIG_SUBDIRS(docs)
-@@ -43,6 +30,10 @@ diff -Naur a/configure.ac b/configure.ac
- +fi
- +AC_SUBST(DOCSUBDIR)
- +
-++dnl Whether we want to build the demo files
-++dnl Does nothing here, is passed on to the demo subdir
-++AC_ARG_ENABLE(demo,dnl
-++[  --disable-demo    do not build demo files])
- +dnl build demo files
- +if test "$enable_demo" != no; then
- +  AC_CONFIG_SUBDIRS(demo)
-@@ -52,12 +43,11 @@ diff -Naur a/configure.ac b/configure.ac
- +fi
- +AC_SUBST(DEMOSUBDIR)
- +
-- dnl Substitute variables
-- AC_SUBST(PACKAGE)
-- AC_SUBST(VERSION_MAJOR)
--diff -Naur a/Makefile.am b/Makefile.am
----- a/Makefile.am	2020-03-31 19:28:16.000000000 +0200
--+++ b/Makefile.am	2020-08-06 14:34:12.995097799 +0200
-+ dnl without-extra-coordinate may leave a hole in "struct coordinate"
-+ AC_ARG_WITH(extra-coordinate,dnl
-+ [  --without-extra-coordinate    leave possible hole in struct coordinate],,)
-+--- a/Makefile.am	2023-12-19 00:28:58.000000000 +0100
-++++ b/Makefile.am	2024-05-13 15:54:21.189906680 +0200
- @@ -1,7 +1,7 @@
-  ## Process this file with automake to produce Makefile.in -*-Makefile-*-
-  AUTOMAKE_OPTIONS = foreign
-diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
-index 39dacd50a4..dd587a8220 100644
---- a/package/gnuplot/gnuplot.hash
-+++ b/package/gnuplot/gnuplot.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.10/
--md5  334851e63450362bdb95e67fa8a23665  gnuplot-5.4.10.tar.gz
--sha1  9981e5b0111c07d376deef571ccc75ce4b4ebbd2  gnuplot-5.4.10.tar.gz
-+# From https://sourceforge.net/projects/gnuplot/files/gnuplot/6.0.0/
-+md5  10246eb96bbf3a151d6eb9bbcc223e4e  gnuplot-6.0.0.tar.gz
-+sha1  3abea0cccad89b0c8fb6619ad51b83a971ee24b9  gnuplot-6.0.0.tar.gz
- # Locally computed
--sha256  975d8c1cc2c41c7cedc4e323aff035d977feb9a97f0296dd2a8a66d197a5b27c  gnuplot-5.4.10.tar.gz
-+sha256  635a28f0993f6ab0d1179e072ad39b8139d07f51237f841d93c6c2ff4b1758ec  gnuplot-6.0.0.tar.gz
- sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
-diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
-index 91e9bfb9bf..26b2daaf24 100644
---- a/package/gnuplot/gnuplot.mk
-+++ b/package/gnuplot/gnuplot.mk
-@@ -4,7 +4,7 @@
++config BR2_PACKAGE_NVIDIA_DRIVER_GTK
++	bool "nvidia GTK acceleration"
++
+ endif # BR2_PACKAGE_NVIDIA_DRIVER
+diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
+index 620112e6c8..06e3314d53 100644
+--- a/package/nvidia-driver/nvidia-driver.hash
++++ b/package/nvidia-driver/nvidia-driver.hash
+@@ -1,4 +1,3 @@
+-# Locally computed
+-sha256  94e399b459659c12b1344e8c8f4f5eee1ed5915ff459fc8bb831c9e1d44677db  NVIDIA-Linux-x86-390.151.run
+-sha256  6e4fd2258465f5d5527fe80abd46de925a30348b4a84658498a6d75caf42c47c  NVIDIA-Linux-x86_64-390.151-no-compat32.run
+-sha256  bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  LICENSE
++# Locally computed:
++sha256  34070434527ec9d575483e7f11ca078e467e73f6defc54366ecfbdcfe4a3bf73  NVIDIA-Linux-x86_64-550.78.run
++sha256  5ac626496a6388d37cdd53e0300525267a4b8c89fb5980da060783afd561faf7  LICENSE
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index f1217b00aa..9ea97a2a9f 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -4,10 +4,9 @@
  #
  ################################################################################
  
--GNUPLOT_VERSION = 5.4.10
-+GNUPLOT_VERSION = 6.0.0
- GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
- GNUPLOT_LICENSE = gnuplot license (open source)
- GNUPLOT_LICENSE_FILES = Copyright
+-NVIDIA_DRIVER_VERSION = 390.151
+-NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
+-NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
+-NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION)$(if $(BR2_x86_64),-no-compat32).run
++NVIDIA_DRIVER_VERSION = 550.78
++NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86_64/$(NVIDIA_DRIVER_VERSION)
++NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86_64-$(NVIDIA_DRIVER_VERSION).run
+ NVIDIA_DRIVER_LICENSE = NVIDIA Software License
+ NVIDIA_DRIVER_LICENSE_FILES = LICENSE
+ NVIDIA_DRIVER_REDISTRIBUTE = NO
+@@ -23,30 +22,15 @@ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_XORG),y)
+ NVIDIA_DRIVER_DEPENDENCIES += mesa3d-headers xlib_libX11 xlib_libXext
+ NVIDIA_DRIVER_PROVIDES += libgl libegl libgles
+ 
+-# libGL.so.$(NVIDIA_DRIVER_VERSION) is the legacy libGL.so library; it
+-# has been replaced with libGL.so.1.0.0. Installing both is technically
+-# possible, but great care must be taken to ensure they do not conflict,
+-# so that EGL still works. The legacy library exposes an NVidia-specific
+-# API, so it should not be needed, except for legacy, binary-only
+-# applications (in other words: we don't care).
+-#
+-# libGL.so.1.0.0 is the new vendor-neutral library, aimed at replacing
+-# the old libGL.so.$(NVIDIA_DRIVER_VERSION) library. The latter contains
+-# NVidia extensions (which is deemed bad now), while the former follows
+-# the newly-introduced vendor-neutral "dispatching" API/ABI:
+-#   https://github.com/aritger/linux-opengl-abi-proposal/blob/master/linux-opengl-abi-proposal.txt
+-# However, this is not very useful to us, as we don't support multiple
+-# GL providers at the same time on the system, which this proposal is
+-# aimed at supporting.
+-#
+-# So we only install the legacy library for now.
+ NVIDIA_DRIVER_LIBS_GL = \
+ 	libGLX.so.0 \
+-	libGL.so.$(NVIDIA_DRIVER_VERSION) \
++	libglxserver_nvidia.so.$(NVIDIA_DRIVER_VERSION) \
++	libGL.so.1.7.0 \
+ 	libGLX_nvidia.so.$(NVIDIA_DRIVER_VERSION)
+ 
+ NVIDIA_DRIVER_LIBS_EGL = \
+ 	libEGL.so.1.1.0 \
++	libEGL.so.$(NVIDIA_DRIVER_VERSION) \
+ 	libGLdispatch.so.0 \
+ 	libEGL_nvidia.so.$(NVIDIA_DRIVER_VERSION)
+ 
+@@ -57,13 +41,18 @@ NVIDIA_DRIVER_LIBS_GLES = \
+ 	libGLESv2_nvidia.so.$(NVIDIA_DRIVER_VERSION)
+ 
+ NVIDIA_DRIVER_LIBS_MISC = \
++	libnvidia-allocator.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-api.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-cfg.so.$(NVIDIA_DRIVER_VERSION) \
+ 	libnvidia-eglcore.so.$(NVIDIA_DRIVER_VERSION) \
+-	libnvidia-egl-wayland.so.1.0.2 \
++	libnvidia-egl-gbm.so.1.1.1 \
++	libnvidia-egl-wayland.so.1.1.13 \
++	libnvidia-wayland-client.so.$(NVIDIA_DRIVER_VERSION) \
+ 	libnvidia-glcore.so.$(NVIDIA_DRIVER_VERSION) \
+ 	libnvidia-glsi.so.$(NVIDIA_DRIVER_VERSION) \
+-	tls/libnvidia-tls.so.$(NVIDIA_DRIVER_VERSION) \
+-	libvdpau_nvidia.so.$(NVIDIA_DRIVER_VERSION):vdpau/ \
+-	libnvidia-ml.so.$(NVIDIA_DRIVER_VERSION)
++	libnvidia-glvkspirv.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-ml.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-rtcore.so.$(NVIDIA_DRIVER_VERSION)
+ 
+ NVIDIA_DRIVER_LIBS += \
+ 	$(NVIDIA_DRIVER_LIBS_GL) \
+@@ -87,13 +76,26 @@ endef
+ # wants to run a third-party program developed under such an agreement).
+ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
+ NVIDIA_DRIVER_LIBS += \
++	libnvidia-fbc.so.$(NVIDIA_DRIVER_VERSION) \
+ 	libnvidia-ifr.so.$(NVIDIA_DRIVER_VERSION) \
+-	libnvidia-fbc.so.$(NVIDIA_DRIVER_VERSION)
++	libnvidia-ngx.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-opticalflow.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvoptix.so.$(NVIDIA_DRIVER_VERSION)
++endif
++
++# Include GTK libraries (if required)
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_GTK),y)
++NVIDIA_DRIVER_LIBS += \
++	libnvidia-gtk2.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-gtk3.so.$(NVIDIA_DRIVER_VERSION)
+ endif
+ 
+ # We refer to the destination path; the origin file has no directory component
+ NVIDIA_DRIVER_LIBS += \
+ 	nvidia_drv.so:xorg/modules/drivers/ \
++	libnvidia-pkcs11.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-pkcs11-openssl3.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-tls.so.$(NVIDIA_DRIVER_VERSION) \
+ 	libglx.so.$(NVIDIA_DRIVER_VERSION):xorg/modules/extensions/
+ 
+ # libglx needs a symlink according to the driver README. It has no SONAME
+@@ -107,11 +109,13 @@ endif # X drivers
+ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),y)
+ NVIDIA_DRIVER_LIBS += \
+ 	libcuda.so.$(NVIDIA_DRIVER_VERSION) \
+-	libnvidia-compiler.so.$(NVIDIA_DRIVER_VERSION) \
++	libcudadebugger.so.$(NVIDIA_DRIVER_VERSION) \
+ 	libnvcuvid.so.$(NVIDIA_DRIVER_VERSION) \
+-	libnvidia-fatbinaryloader.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-encode.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-gpucomp.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-nvvm.so.$(NVIDIA_DRIVER_VERSION) \
+ 	libnvidia-ptxjitcompiler.so.$(NVIDIA_DRIVER_VERSION) \
+-	libnvidia-encode.so.$(NVIDIA_DRIVER_VERSION)
++	libvdpau_nvidia.so.$(NVIDIA_DRIVER_VERSION)
+ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA_PROGS),y)
+ NVIDIA_DRIVER_PROGS = nvidia-cuda-mps-control nvidia-cuda-mps-server
+ endif
+@@ -152,8 +156,9 @@ endif # BR2_PACKAGE_NVIDIA_DRIVER_MODULE == y
+ # virtually everywhere, and it is fine enough to provide useful options.
+ # Except it can't extract into an existing (even empty) directory.
+ define NVIDIA_DRIVER_EXTRACT_CMDS
+-	$(SHELL) $(NVIDIA_DRIVER_DL_DIR)/$(NVIDIA_DRIVER_SOURCE) --extract-only --target \
+-		$(@D)/tmp-extract
++	$(SHELL) $(NVIDIA_DRIVER_DL_DIR)/$(NVIDIA_DRIVER_SOURCE) --extract-only \
++		$(if $(BR2_x86_64),--no-install-compat32-libs) \
++		--target $(@D)/tmp-extract
+ 	chmod u+w -R $(@D)
+ 	mv $(@D)/tmp-extract/* $(@D)/tmp-extract/.manifest $(@D)
+ 	rm -rf $(@D)/tmp-extract
 -- 
-2.20.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
