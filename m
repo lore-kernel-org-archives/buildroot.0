@@ -4,95 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45749C25B7A
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 22:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 327BAC25B78
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 22:04:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7684416DF;
-	Mon, 13 May 2024 22:04:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05DA3416E7;
+	Mon, 13 May 2024 22:04:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hg6A0BELT8_T; Mon, 13 May 2024 22:04:29 +0000 (UTC)
+ id GUxPA8qkt-91; Mon, 13 May 2024 22:04:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24859416CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 943C0416E1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24859416CD;
-	Mon, 13 May 2024 22:04:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 943C0416E1;
+	Mon, 13 May 2024 22:04:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 56C8B1BF2C0
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 22:04:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 54EE91BF2C0
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 22:04:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B8C6405C6
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 22:04:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4115E4053C
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 22:04:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tbuX3RJ6q0cS for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 22:04:12 +0000 (UTC)
+ id p1WF4fOtwgxs for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 22:04:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::229; helo=mail-lj1-x229.google.com;
+ client-ip=2a00:1450:4864:20::22b; helo=mail-lj1-x22b.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE39A4053C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE39A4053C
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
- [IPv6:2a00:1450:4864:20::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE39A4053C
- for <buildroot@buildroot.org>; Mon, 13 May 2024 22:04:11 +0000 (UTC)
-Received: by mail-lj1-x229.google.com with SMTP id
- 38308e7fff4ca-2e3efa18e6aso44966371fa.0
- for <buildroot@buildroot.org>; Mon, 13 May 2024 15:04:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BF6C440546
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF6C440546
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
+ [IPv6:2a00:1450:4864:20::22b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BF6C440546
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 22:04:13 +0000 (UTC)
+Received: by mail-lj1-x22b.google.com with SMTP id
+ 38308e7fff4ca-2df83058d48so64136441fa.1
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 15:04:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715637849; x=1716242649;
+ d=1e100.net; s=20230601; t=1715637851; x=1716242651;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=fuHyG9TQy+ISXS++YtIRoivCLJAxD4fiovsBX61jgaE=;
- b=astHW6wDEc0eNk2nxkyTGPvLuUddYAzzb8E4AaBRPE+TPT6WFAI+ZeEtZvVSJ6vwCP
- jkj21XnZ7Nte0SLBov1p0xK8KJXz1X0+bEKELzmuaWXkFzaSzqOakmmCx4jswSI++GhL
- PeHSTnn/NNoV9skr7S40iUoA+nYEZNf2aDpwESxvAw3MtlAZ+b827YRPccWzLovc/7If
- cy+0aSnygBX90GUEheg0dryoo8rnBLyKrhA3ZsLwTK1WTKZgDuLKOHwkgk8oVHTD6SQY
- 27DI53uY46xKaElmh6lRLr/vtMQByctWEQHn+QgZVVbXh8okMDJUI+5a1UwST/SIuctK
- 6YFQ==
-X-Gm-Message-State: AOJu0YxgTPxviTIvBeOgsIv6kIeRhqOpkEv2vakdueuN73xU19VXY1cE
- RI8EPXgFpsR80aQ/+uitvFQyG3NLbD+mOSmn+26wOwnWmECtfT8aolTHcH1+
-X-Google-Smtp-Source: AGHT+IE97DY0k+p7JQm+dVqXplXnqjiWjanG0DIsVbQiJLTfHmnyZqBoYyeOuVi5YjLngLMfLE7vfg==
-X-Received: by 2002:a2e:9792:0:b0:2e1:f38c:b598 with SMTP id
- 38308e7fff4ca-2e4b17916f3mr46180001fa.18.1715637848565; 
- Mon, 13 May 2024 15:04:08 -0700 (PDT)
+ bh=aCfpcSlifdq79wM1w6kEXDROJh4QVH5Gwv6gtxalcfo=;
+ b=ooU93CXyYfxZKi/LMnay1+Bf7K1qv3TRN0011T0wp5MTraJh8RF45qfnAmjRlVWUE4
+ Kd2wZ/RhuIIazDlRyxZOS+2RFyB9TJUVnxUDzuezw7EdNg8eQqn9+ol80BD8Tsrs14Ic
+ 8sq0pyp9wEuUlVWM5YyFtxrE3lm5gftBwAlYIN2fn173H9SJ8bpIXx22ENwHYRHr9IQ7
+ Uagwnqusob7ygASDORzKz82E0x4z0iZTvSIPmmCZ6u6PWADW5In7ufwFE29QKGwz6gZK
+ ak7+kJJ+dq9xg+zou86lpBHtlZKr1gFj67GwnKQQw5s/I4TCzhRLhP/RIQYktizLRQF8
+ /YHQ==
+X-Gm-Message-State: AOJu0YxTLPxTTEkagPvLnMJ1kwahxWkxBqBaOoUSOWOy9qCC//k3ScLW
+ xXV+1sc2VRnBzSJiQB1w3FyzHxvnT2/xRQYeq/L8NW4tO1Q8oV5UP06MxCd+
+X-Google-Smtp-Source: AGHT+IGqBgAl7X1Mn/3oxa1mw4Y+JKjQJ1UOdzBFlx20U17WUPCfoGJ3C4lgOULCA9Amo8qN8Wm5oQ==
+X-Received: by 2002:a2e:3a0f:0:b0:2e0:37be:b70f with SMTP id
+ 38308e7fff4ca-2e51fe57d31mr64062981fa.26.1715637851319; 
+ Mon, 13 May 2024 15:04:11 -0700 (PDT)
 Received: from precision7530-arch-roy.lan
  ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
  by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-2e4d0ce3488sm15548401fa.52.2024.05.13.15.04.07
+ 38308e7fff4ca-2e4d0ce3488sm15548401fa.52.2024.05.13.15.04.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 13 May 2024 15:04:07 -0700 (PDT)
+ Mon, 13 May 2024 15:04:10 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 00:03:15 +0200
-Message-ID: <20240513220328.1085629-10-roykollensvendsen@gmail.com>
+Date: Tue, 14 May 2024 00:03:16 +0200
+Message-ID: <20240513220328.1085629-11-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.45.0
 In-Reply-To: <20240513220328.1085629-1-roykollensvendsen@gmail.com>
 References: <1934329>
  <20240513220328.1085629-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715637849; x=1716242649; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1715637851; x=1716242651; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=fuHyG9TQy+ISXS++YtIRoivCLJAxD4fiovsBX61jgaE=;
- b=IzKjXZjO/FNo6duQP7cXTL1DqxLaMuVDSB9CTux0Osll4kuiTVq8g2DHuiFNj8TRBi
- jqRaGp8ki2VWLjoYW4A8W+gHIFh9V25n2tdAIH5ZTWSOHdvVqRckLkLyCBkI/tCvcrZP
- L9h7mvJUyr5uK3MxHwzN8VllHI6cBn2E1y7WqLqpcHTUQAwOfrl9m8MqMPzm5exeL5hz
- 21F7kDtfdQRD3Khvo3PE5QHHW6zvQxs62+HileX4qDfaLdDUqMW6aHJDeY//VO5KqODF
- j/Rel/DUbf/dWtTKHpekvIr9veDvq9KiTcMf2h+T0gzMPqbRBFfsb0mKk5voB7MkZH8d
- S1Ug==
+ bh=aCfpcSlifdq79wM1w6kEXDROJh4QVH5Gwv6gtxalcfo=;
+ b=mFG9NVfC84zBVLKEY5GXFAbKFT52DfB+gkzSKReBM5DIY8Gt/dADvOW79ACRHlhNJ4
+ GJfsKBiuhMcU3Xw7XEf8wvCtcFZyvgPFx/0nIa6sX5El1S7MQtqg86GZVZxGWXKeM6HF
+ yqf1wErHWDWce6s6qujTX91tURr6VM2TeLbkvYUmjiyGSKN+pCKEZOCQGkDyCCRCOcOr
+ hMmxcOkaDw4Tf3MawqEmCoVaD1YgoY3W5MSFStUAiB4ka+hV1rmowsyvALXqK3DBP2N3
+ lJNMobnnUihUPv/5ZFVo4iB1jMSbNpLKicNmEFwYHekdqzGNa2ZTRrfCA7BnauN0wSkj
+ 6I4w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=IzKjXZjO
-Subject: [Buildroot] [PATCH v4 10/14] package/qt6/qt6websockets: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=mFG9NVfC
+Subject: [Buildroot] [PATCH v4 11/14] package/qt6/qt6wayland: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -119,49 +119,69 @@ From: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
 
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/qt6/Config.in                        |  1 +
- package/qt6/qt6websockets/Config.in          |  9 ++++
- package/qt6/qt6websockets/qt6websockets.hash | 11 +++++
- package/qt6/qt6websockets/qt6websockets.mk   | 46 ++++++++++++++++++++
- 4 files changed, 67 insertions(+)
- create mode 100644 package/qt6/qt6websockets/Config.in
- create mode 100644 package/qt6/qt6websockets/qt6websockets.hash
- create mode 100644 package/qt6/qt6websockets/qt6websockets.mk
+Changes v3 -> v4:
+  - Fix compositor build by letting this package select libxkbcommon.
+ 
+ package/qt6/Config.in                  |  1 +
+ package/qt6/qt6wayland/Config.in       | 25 ++++++++++++
+ package/qt6/qt6wayland/qt6wayland.hash | 11 ++++++
+ package/qt6/qt6wayland/qt6wayland.mk   | 53 ++++++++++++++++++++++++++
+ 4 files changed, 90 insertions(+)
+ create mode 100644 package/qt6/qt6wayland/Config.in
+ create mode 100644 package/qt6/qt6wayland/qt6wayland.hash
+ create mode 100644 package/qt6/qt6wayland/qt6wayland.mk
 
 diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 625134d281..16f792cff3 100644
+index 16f792cff3..69ce0b3f6a 100644
 --- a/package/qt6/Config.in
 +++ b/package/qt6/Config.in
-@@ -51,5 +51,6 @@ source "package/qt6/qt6serialbus/Config.in"
+@@ -51,6 +51,7 @@ source "package/qt6/qt6serialbus/Config.in"
  source "package/qt6/qt6serialport/Config.in"
  source "package/qt6/qt6shadertools/Config.in"
  source "package/qt6/qt6svg/Config.in"
-+source "package/qt6/qt6websockets/Config.in"
++source "package/qt6/qt6wayland/Config.in"
+ source "package/qt6/qt6websockets/Config.in"
  
  endif
-diff --git a/package/qt6/qt6websockets/Config.in b/package/qt6/qt6websockets/Config.in
+diff --git a/package/qt6/qt6wayland/Config.in b/package/qt6/qt6wayland/Config.in
 new file mode 100644
-index 0000000000..a201483922
+index 0000000000..a47c9e888c
 --- /dev/null
-+++ b/package/qt6/qt6websockets/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_QT6WEBSOCKETS
-+	bool "qt6websockets"
++++ b/package/qt6/qt6wayland/Config.in
+@@ -0,0 +1,25 @@
++comment "qt6wayland needs an OpenGL-capable backend"
++	depends on !BR2_PACKAGE_QT6_GL_SUPPORTS
++
++config BR2_PACKAGE_QT6WAYLAND
++	bool "qt6wayland"
++	depends on BR2_PACKAGE_QT6_GL_SUPPORTS
++	select BR2_PACKAGE_WAYLAND
 +	help
 +	  Qt is a cross-platform application and UI framework for
 +	  developers using C++.
 +
-+	  This package corresponds to the qt6websockets module.
++	  This package corresponds to the qt6wayland module.
 +
-+	  https://doc.qt.io/qt-6/qtwebsockets-index.html
-diff --git a/package/qt6/qt6websockets/qt6websockets.hash b/package/qt6/qt6websockets/qt6websockets.hash
++	  https://doc.qt.io/qt-6/qtwayland-index.html
++
++if BR2_PACKAGE_QT6WAYLAND
++
++config BR2_PACKAGE_QT6WAYLAND_COMPOSITOR
++	bool "Enable compositor (experimental)"
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  The compositor API is still experimental, and not built by
++	  default.
++
++endif
+diff --git a/package/qt6/qt6wayland/qt6wayland.hash b/package/qt6/qt6wayland/qt6wayland.hash
 new file mode 100644
-index 0000000000..4e36eb4257
+index 0000000000..13a6ba15eb
 --- /dev/null
-+++ b/package/qt6/qt6websockets/qt6websockets.hash
++++ b/package/qt6/qt6wayland/qt6wayland.hash
 @@ -0,0 +1,11 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.0/submodules/qtwebsockets-everywhere-src-6.7.0.tar.xz.sha256
-+sha256  5ffc77da6b36cdf18e04c975a0fbf243968806a93a6291bcd2e9cd0b26139736  qtwebsockets-everywhere-src-6.7.0.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.0/submodules/qtwayland-everywhere-src-6.7.0.tar.xz.sha256
++sha256  d73470e4217da388d8cd2a517ee8bb373853f33c569306e80f04397845157aea  qtwayland-everywhere-src-6.7.0.tar.xz
 +
 +# Hashes for license files:
 +sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
@@ -171,55 +191,62 @@ index 0000000000..4e36eb4257
 +sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
 +sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
 +sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6websockets/qt6websockets.mk b/package/qt6/qt6websockets/qt6websockets.mk
+diff --git a/package/qt6/qt6wayland/qt6wayland.mk b/package/qt6/qt6wayland/qt6wayland.mk
 new file mode 100644
-index 0000000000..cc17085d10
+index 0000000000..cf8727287e
 --- /dev/null
-+++ b/package/qt6/qt6websockets/qt6websockets.mk
-@@ -0,0 +1,46 @@
++++ b/package/qt6/qt6wayland/qt6wayland.mk
+@@ -0,0 +1,53 @@
 +################################################################################
 +#
-+# qt6websockets
++# qt6wayland
 +#
 +################################################################################
 +
-+QT6WEBSOCKETS_VERSION = $(QT6_VERSION)
-+QT6WEBSOCKETS_SITE = $(QT6_SITE)
-+QT6WEBSOCKETS_SOURCE = qtwebsockets-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6WEBSOCKETS_VERSION).tar.xz
-+QT6WEBSOCKETS_INSTALL_STAGING = YES
++QT6WAYLAND_VERSION = $(QT6_VERSION)
++QT6WAYLAND_SITE = $(QT6_SITE)
++QT6WAYLAND_SOURCE = qtwayland-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6WAYLAND_VERSION).tar.xz
++QT6WAYLAND_INSTALL_STAGING = YES
 +
-+QT6WEBSOCKETS_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6WAYLAND_SUPPORTS_IN_SOURCE_BUILD = NO
 +
-+QT6WEBSOCKETS_CMAKE_BACKEND = ninja
++QT6WAYLAND_CMAKE_BACKEND = ninja
 +
-+QT6WEBSOCKETS_LICENSE = \
++QT6WAYLAND_LICENSE = \
 +	GPL-2.0+ or LGPL-3.0, \
 +	GPL-3.0, GFDL-1.3 no invariants (docs)
 +
-+QT6WEBSOCKETS_LICENSE_FILES = \
++QT6WAYLAND_LICENSE_FILES = \
 +	LICENSES/GPL-2.0-only.txt \
 +	LICENSES/GPL-3.0-only.txt \
 +	LICENSES/LGPL-3.0-only.txt \
 +	LICENSES/GFDL-1.3-no-invariants-only.txt
 +
-+QT6WEBSOCKETS_CONF_OPTS = \
-+	-DQT_FEATURE_thread=ON \
++QT6WAYLAND_CONF_OPTS = \
++	-DQT_HOST_PATH=$(HOST_DIR) \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF \
++	-DFEATURE_wayland_client=ON
++
++ifeq ($(BR2_PACKAGE_QT6WAYLAND_COMPOSITOR),y)
++QT6WAYLAND_CONF_OPTS += -DFEATURE_wayland_server=ON
++else
++QT6WAYLAND_CONF_OPTS += -DFEATURE_wayland_server=OFF
++endif
++
++HOST_QT6WAYLAND_CONF_OPTS = \
 +	-DQT_HOST_PATH=$(HOST_DIR) \
 +	-DBUILD_WITH_PCH=OFF \
 +	-DQT_BUILD_EXAMPLES=OFF \
 +	-DQT_BUILD_TESTS=OFF
 +
-+HOST_QT6WEBSOCKETS_CONF_OPTS = \
-+	-DQT_FEATURE_thread=ON \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DBUILD_WITH_PCH=OFF \
-+	-DQT_BUILD_EXAMPLES=OFF \
-+	-DQT_BUILD_TESTS=OFF
-+
-+QT6WEBSOCKETS_DEPENDENCIES = \
++QT6WAYLAND_DEPENDENCIES = \
 +	qt6base \
 +	qt6declarative \
-+	host-qt6declarative
++	host-qt6wayland \
++	wayland \
++	host-wayland
 +
 +$(eval $(cmake-package))
 +$(eval $(host-cmake-package))
