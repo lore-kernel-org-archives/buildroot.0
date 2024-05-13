@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31812C25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA252C25B10
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 21:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFEFA4096F;
-	Mon, 13 May 2024 21:28:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3AC5409DA;
+	Mon, 13 May 2024 21:28:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FB3PFbjtjPgj; Mon, 13 May 2024 21:28:06 +0000 (UTC)
+ id qpgVwuohcYlf; Mon, 13 May 2024 21:28:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B575440841
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A863A409AD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B575440841;
-	Mon, 13 May 2024 21:28:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E6051BF2A4
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:28:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A863A409AD;
+	Mon, 13 May 2024 21:28:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 13BEC1BF2A4
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:28:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C2CE60A9E
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:28:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE759822FE
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 21:28:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kE8T-g5l8sLr for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 21:28:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LLGB1NXeJK5c for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 21:28:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5844860646
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5844860646
- for <buildroot@buildroot.org>; Mon, 13 May 2024 21:28:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F29B87321; Mon, 13 May 2024 21:28:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 13 May 2024 23:27:37 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab990cf58a724a178dbdd55afdb520212f7197c0
-X-Git-Newrev: 052deababf60838a19f6334bae1746c841eba877
-X-Patchwork-Hint: ignore
-Message-Id: <20240513212804.0F29B87321@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/slirp4netns: bump to version 1.2.3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DCEB3822FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCEB3822FC
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DCEB3822FC
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 21:28:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B4901BF204;
+ Mon, 13 May 2024 21:28:04 +0000 (UTC)
+Date: Mon, 13 May 2024 23:28:03 +0200
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Message-ID: <20240513232803.1cafa524@windsurf>
+In-Reply-To: <20240219184827.790288-1-raphael.pavlidis@gmail.com>
+References: <20240219184827.790288-1-raphael.pavlidis@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1715635684;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Y/DmqH6ATM1qd3zdj7LIEKBaq9D29NP0OvizLm9G14I=;
+ b=BvM2CKkH7WxcVfe/mGmefWD/3okbPC0Sb9Czp5CfLM38wm3078McWJ7zd+N3QFl5HOQs8e
+ QyDmxN/W5W0FNSkKeubevho4+QcI+U6EnPAp6d6U6KmJuRLRTGtQW4hsPcmTPtx4UOApbr
+ 27Y39CINGqMe4WaKRV+nSBeINjdPL68Xc0vE+OHDNolz2o+bmT2t41hQaKTv9t047h1VHS
+ tW0tmEcNi1P9yi7hvpKFlUq51sZHVvdORD3dlv6QFaAAbLx3lhJT1WTm8Pi192gelbeOJb
+ eLYpFWcEDA2OnhAfcwZ2L/1pYTWaPRvm9y+Qkyiihhw3zVZGmo3cYaS95id0nQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=BvM2CKkH
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/slirp4netns: bump to version
+ 1.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +83,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=052deababf60838a19f6334bae1746c841eba877
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 19 Feb 2024 18:48:27 +0000
+Raphael Pavlidis <raphael.pavlidis@gmail.com> wrote:
 
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/slirp4netns/slirp4netns.hash | 2 +-
- package/slirp4netns/slirp4netns.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+> ---
+>  package/slirp4netns/slirp4netns.hash | 2 +-
+>  package/slirp4netns/slirp4netns.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/slirp4netns/slirp4netns.hash b/package/slirp4netns/slirp4netns.hash
-index e3115c1be0..e310da1af2 100644
---- a/package/slirp4netns/slirp4netns.hash
-+++ b/package/slirp4netns/slirp4netns.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b584edde686d3cfbac210cbdb93c4b0ba5d8cc0a6a4d92b9dfc3c5baec99c727  slirp4netns-1.2.0.tar.gz
-+sha256  acce648fab8fe5f113c41a8fd6d20177708519b4ddaa60f845e1998a17b22ca5  slirp4netns-1.2.3.tar.gz
- sha256  58db3cfabf8ec806bc060e54ab5466a31de4a3ae80fe4a8aa02fb6b1c053c93f  COPYING
-diff --git a/package/slirp4netns/slirp4netns.mk b/package/slirp4netns/slirp4netns.mk
-index 7ff594cc44..7fa992af6d 100644
---- a/package/slirp4netns/slirp4netns.mk
-+++ b/package/slirp4netns/slirp4netns.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SLIRP4NETNS_VERSION = 1.2.0
-+SLIRP4NETNS_VERSION = 1.2.3
- SLIRP4NETNS_SITE = $(call github,rootless-containers,slirp4netns,v$(SLIRP4NETNS_VERSION))
- SLIRP4NETNS_LICENSE = GPL-2.0
- SLIRP4NETNS_LICENSE_FILES = COPYING
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
