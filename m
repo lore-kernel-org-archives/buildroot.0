@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFF18C25B10
-	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:47:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79CE1C25B74
+	for <buildroot@archiver.kernel.org>; Mon, 13 May 2024 19:49:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1D67607A8;
-	Mon, 13 May 2024 19:47:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4732A605DA;
+	Mon, 13 May 2024 19:49:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WjD1axiyDOIA; Mon, 13 May 2024 19:47:13 +0000 (UTC)
+ id xLJMXqXdYaUG; Mon, 13 May 2024 19:49:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB476608D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53505605EE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB476608D5;
-	Mon, 13 May 2024 19:47:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 455F71BF2CA
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:47:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53505605EE;
+	Mon, 13 May 2024 19:49:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F6021BF2CA
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30C3F82A5D
- for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:47:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4BD76605EE
+ for <buildroot@lists.busybox.net>; Mon, 13 May 2024 19:49:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9DPXZYy16fHX for <buildroot@lists.busybox.net>;
- Mon, 13 May 2024 19:47:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x0cpJY9SHG3w for <buildroot@lists.busybox.net>;
+ Mon, 13 May 2024 19:48:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 29B1D82A53
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29B1D82A53
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 29B1D82A53
- for <buildroot@busybox.net>; Mon, 13 May 2024 19:47:09 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E18AFF802;
- Mon, 13 May 2024 19:47:07 +0000 (UTC)
-Date: Mon, 13 May 2024 21:47:07 +0200
-To: Michael Fischer <mf@go-sys.de>
-Message-ID: <20240513214707.510b8f00@windsurf>
-In-Reply-To: <20240513142612.21594-1-mf@go-sys.de>
-References: <20240513142612.21594-1-mf@go-sys.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1715629628;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=v/dH5DnGAdDEev6YGTU6EWjWchZKBU7kjYJCLeZnEdE=;
- b=MEdhvhW0CWpy5ig8fM3MFkSR662GkFRQ6s+dr78H8Zyuw6nqePPXuyTHcB3QUc0QOfoOI7
- lDP0eb2Ug3Y/15KnZ/r5rsgY7mSsISM7lwIYwc/dXVkybmr8pBvzuabIX8a/ntYb6nuYmq
- svO8H2bckP1cyG6PGmzsmKhJCHM05JhKxyUeJYZOZVZPu56/iR0Ghgyp3sDDTTGoHdTJ/f
- pgB/1I7aSwDRk4xtg34pUhD1L/9tbXHxf4KVHUDVcI1yVRLR1EGpc/ht0hl7sgtg/Ua7hM
- GCTG8mrSHmNOKaZ+XT0dVsDrfy549jUwwoOKBXljSPuE1rLOyVBjlxswKi+x3g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MEdhvhW0
-Subject: Re: [Buildroot] [PATCH] package/gnuplot: bump version to 6.0.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 906A9605DA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 906A9605DA
+ for <buildroot@buildroot.org>; Mon, 13 May 2024 19:48:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7ADC687121; Mon, 13 May 2024 19:48:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 13 May 2024 21:48:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5f11ce4aeaba99917778c384b236d267e78a7b29
+X-Git-Newrev: b8c70f67017ebe08459992ac575ae4989243c232
+X-Patchwork-Hint: ignore
+Message-Id: <20240513194859.7ADC687121@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/duma: set HOST_CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,29 +59,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 13 May 2024 16:26:12 +0200
-Michael Fischer <mf@go-sys.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b8c70f67017ebe08459992ac575ae4989243c232
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> 0001-configure-add-without-demo-option: adapt patch to 6.0.0 version
+Set HOST_CFLAGS to avoid the following build failure raised since bump
+to version 2.5.21 in commit af2cd694e3903131d6e2f00646adfa83a89a23e2:
 
-It would be very nice to submit this patch to the upstream gnuplot
-maintainers :-)
+/usr/bin/gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O2 -g0   -c createconf.c -o createconf.o
+gcc: error: unrecognized command-line option '-mlongcalls'
+gcc: error: unrecognized command-line option '-mauto-litpools'
 
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
+Fixes: af2cd694e3903131d6e2f00646adfa83a89a23e2
+ - http://autobuild.buildroot.org/results/28be2acc6d58754c7431df81d0b63b30e6af8554
 
-Nevertheless, patch applied, thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/duma/duma.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/duma/duma.mk b/package/duma/duma.mk
+index 6bbdf41f4a..80fe8a5d64 100644
+--- a/package/duma/duma.mk
++++ b/package/duma/duma.mk
+@@ -20,6 +20,7 @@ define DUMA_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) \
+ 		OS=linux \
+ 		DUMA_OPTIONS="$(DUMA_OPTIONS)" \
++		HOST_CFLAGS="$(HOST_CFLAGS)" \
+ 		CPPFLAGS="$(TARGET_CXXFLAGS) -std=c++11" -C $(@D)
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
