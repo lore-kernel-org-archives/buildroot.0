@@ -4,91 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85F72C25B75
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 20:21:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91714C04FFE
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 20:23:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5AB7A40A6D;
-	Tue, 14 May 2024 20:21:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60738400E2;
+	Tue, 14 May 2024 20:23:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qIkDeX-WqMSW; Tue, 14 May 2024 20:21:27 +0000 (UTC)
+ id TVDPyM3e4yvG; Tue, 14 May 2024 20:23:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDD9540127
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F16540127
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BDD9540127;
-	Tue, 14 May 2024 20:21:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 85DAB1BF232
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 20:21:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F16540127;
+	Tue, 14 May 2024 20:23:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9720E1BF232
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 20:23:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F57A60B66
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 20:21:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61D1B801DA
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 20:23:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wp0I4st8dE2m for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 20:21:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7BBAA60B5F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BBAA60B5F
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7BBAA60B5F
- for <buildroot@buildroot.org>; Tue, 14 May 2024 20:21:22 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-34dc9065606so3429412f8f.1
- for <buildroot@buildroot.org>; Tue, 14 May 2024 13:21:22 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nq6DblfDN0HA for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 20:23:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.54;
+ helo=mail-wm1-f54.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D54988232D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D54988232D
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com
+ [209.85.128.54])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D54988232D
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 20:23:42 +0000 (UTC)
+Received: by mail-wm1-f54.google.com with SMTP id
+ 5b1f17b1804b1-420160f8f52so17382835e9.0
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 13:23:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715718080; x=1716322880;
+ d=1e100.net; s=20230601; t=1715718220; x=1716323020;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=cz2Cn1viQynH9AM+0O1p6aYOqpkavnwzuh99cTmjevE=;
- b=FRX1VCxcOODGXbK+2RVHTyBXWKzkF3H8kwEtOubuGYZeSAX0htRcOw87MXi641nh7x
- zURNI8TeNZ2ynGw7Hd4BTJGb0CtDs1ln5o1/rtYALGcWYJlqKYgs8159vX7Hb5/Tgs2L
- SOTw0dFJW4euZDMzyinAitt0KkDL26Mefbia7CGeu1prFgsverZWMBZocYcwBxN7Dey7
- E08y9EEakH3gj6ghcrjGYwszEtHC0vqfvnaoClWFuslOzJW3FWKq8T21C7Ewe1aVX6z5
- M/5G8Sosp0b1VpmNRopPwdKvbWaGOLO31xlBuHNvMo82KZWKahT//pDi1JpJeVhP/Nhd
- S/ug==
-X-Gm-Message-State: AOJu0YxI/DR8lklQZIcV7M3aQe2Uy50qIxgW7ZZsTX0gwLJsPFUcAgbU
- NgHdADYV3uNMHyTajc94zLcR9tWr5fjeZfodAcvdB2bb8ilgMGDtqpZdgA==
-X-Google-Smtp-Source: AGHT+IGf5QG5IKXatO0Y532lCKE8k8oQK3rsjQrGr86AaU7gAPCyE5mhat7xShV62H4TR9IfIpQjBw==
-X-Received: by 2002:adf:ce06:0:b0:351:aced:1c6b with SMTP id
- ffacd0b85a97d-351aced1d24mr11434240f8f.15.1715718080296; 
- Tue, 14 May 2024 13:21:20 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=lSbY4gZ6XlNWsKWvySUNnSoHL3erEJj+osOwH/ms2aM=;
+ b=GdwinoPugPBeIhR2ShtYD0AIEmy56heNRYyEYEGU09LZJ2HYirVPvQucDxHvlGqt52
+ ZfF6f5eW+imE705jTq91k5OZD+ue/s5nUKfCqtqeF+C/t22yekYoPFNdxH+BxpRnybb2
+ UliR9m2I5MfZNlNii7jqL6hqFP0KDPbSzwcAn2drg+fm0646D4W2Yne+ojl9wGzb7awp
+ tCeBiWERLJqKLS1Yd0ZmYTKh7FzX1vbDzKIDwrMiUVKfMiCmO9aSsDUBmJMnY2Bv0vox
+ dBsR57+vJQ2XQSglMHdqFc5L9iQ9Kp5gpiEnUcl/rW+1UOYuGErSrrU1as/B73koeeTm
+ A/YA==
+X-Gm-Message-State: AOJu0YyjMvE+TpBbOoA1u33NxOvw9mq9195qcv7pLJ0sHVBO1yyLNpcZ
+ Yx7NqBUQFUNfZaThf9mIpSvElG77rBRZe5E0+K4Pd1+5Ji5JNL5sgne4LbHG
+X-Google-Smtp-Source: AGHT+IG3ED//BG0/eeU6byK0V1j3VJKAPMlAORa46quI/NoHuEagwxqKFugMyVu3pRjZeC3MpclyvQ==
+X-Received: by 2002:a05:600c:1c9a:b0:41c:13f6:206d with SMTP id
+ 5b1f17b1804b1-41feac59d99mr101458695e9.25.1715718220100; 
+ Tue, 14 May 2024 13:23:40 -0700 (PDT)
+Received: from localhost.localdomain
+ ([2a02:a03f:eb68:2f00:a5d4:851e:63d3:a5f0])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3502b896a34sm14462288f8f.35.2024.05.14.13.21.19
+ 5b1f17b1804b1-41ff6cbe992sm167927865e9.6.2024.05.14.13.23.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 May 2024 13:21:20 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Tue, 14 May 2024 13:23:39 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 22:21:19 +0200
-Message-ID: <20240514202119.3685539-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.44.0
+Date: Tue, 14 May 2024 22:23:37 +0200
+Message-Id: <20240514202337.3934490-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715718080; x=1716322880; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=cz2Cn1viQynH9AM+0O1p6aYOqpkavnwzuh99cTmjevE=;
- b=cee5X4yQAz5dOADrLNmkuimZ/sIxHFQin2RX6+b/sPJ+CZw9hybuICYdIueJYCHsJX
- nK4LhzolbFDxa8c+2lCoJtUwjZyMz6omaVShTA8I9vRfYflHySTkqGO3TMnZGFcEjz8a
- HCcTSHRvuwHYOuFgNZoJTmUEMsHT5/ei9g9UaCXHIzIPl2dByBqoeLqY8hKLZuc0ur9H
- L1HSfOJd2zGoAEdFyPEXCfHTlDjh06Ralc/JofxTqoYqy/wIk7NY/TAFLTXyHr1rBArf
- gZDdnHg2tJG6A+WX5gXI4iOzEFcEem93fbyucjQ59G40j1qtudWxPyuTGM02dhzbVJtD
- nErg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cee5X4yQ
-Subject: [Buildroot] [PATCH] package/python-*: fix hashes for cargo-vendored
- python packages
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v1] package/libopenssl: fix build for the
+ bootlin-riscv32-glibc toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,246 +87,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The recent commits that touched vendoring and hashes, totally missed
-the non-native vendored packages, like python packages that contain
-rust code, and are thus cargo-vendored.
+Seen while using the ./utils/test-pkg utility.
 
-The issue in this case, is that we need to download the archive as it
-is hosted and known to PyPI, but store it locally with our vendoring
-suffix. This is inherently conflicting.
+/home/thomas/br-test-pkg/bootlin-riscv32-glibc/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/13.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: crypto/legacy-dso-riscvcap.o: in function `OPENSSL_cpuid_setup':
+riscvcap.c:(.text.startup+0x190): undefined reference to `riscv_vlen_asm'
 
-Fortunately, the PyPI webserver will ignore the query part of the URL,
-so we can request the archive known to PyPI, and append an arbitrary
-query, that is automatically constructed with the actual filename we
-will use to store it. Basically, an URL for a python package like:
-    https://pypi.org.pkg/pkg-hash/pkg-vesion.tar.gz
-can be turned into:
-    https://pypi.org.pkg/pkg-hash/pkg-vesion.tar.gz?buildroot-path=filename/python-pkg-version-cargo2.tar.gz
-
-This way, we can use out default _SOURCE value, and construct a _SITE
-that contains the actual package URL, with an arbtrary query.
-
-NOTE: this is a stop-gap measure, to quickly fix those packages, while
-waiting for a generic solution that works in all cases, not just with
-PyPI.
-
-NOTE-2: of course, if PyPI changes its policy, and no longer ignored the
-query part, this is going to break again. Hence the need for a generic
-solution...
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/python-bcrypt/python-bcrypt.hash               | 2 +-
- package/python-bcrypt/python-bcrypt.mk                 | 5 +++--
- package/python-cryptography/python-cryptography.hash   | 2 +-
- package/python-cryptography/python-cryptography.mk     | 5 +++--
- package/python-maturin/python-maturin.hash             | 2 +-
- package/python-maturin/python-maturin.mk               | 5 +++--
- package/python-orjson/python-orjson.hash               | 2 +-
- package/python-orjson/python-orjson.mk                 | 5 +++--
- package/python-pydantic-core/python-pydantic-core.hash | 2 +-
- package/python-pydantic-core/python-pydantic-core.mk   | 5 +++--
- package/python-rpds-py/python-rpds-py.hash             | 2 +-
- package/python-rpds-py/python-rpds-py.mk               | 5 +++--
- package/python-rtoml/python-rtoml.hash                 | 2 +-
- package/python-rtoml/python-rtoml.mk                   | 5 +++--
- 14 files changed, 28 insertions(+), 21 deletions(-)
+ ...Implement-riscv_vlen_asm-for-riscv32.patch | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/libopenssl/0004-Implement-riscv_vlen_asm-for-riscv32.patch
 
-diff --git a/package/python-bcrypt/python-bcrypt.hash b/package/python-bcrypt/python-bcrypt.hash
-index e148078699..8e660a158b 100644
---- a/package/python-bcrypt/python-bcrypt.hash
-+++ b/package/python-bcrypt/python-bcrypt.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  d64daee0af1afe137718674e67a49b8bb791842aab265b588a6d68d44a449c70  bcrypt-4.0.1.tar.gz
-+sha256  f0b2c7d5d79a6537e3d291b07d2be70dd122a15ea871854d4ce95b447c6873a5  python-bcrypt-4.0.1-cargo2.tar.gz
- # Locally computed sha256 checksums
- sha256  8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90  LICENSE
-diff --git a/package/python-bcrypt/python-bcrypt.mk b/package/python-bcrypt/python-bcrypt.mk
-index cbd6855d9c..f3137401d7 100644
---- a/package/python-bcrypt/python-bcrypt.mk
-+++ b/package/python-bcrypt/python-bcrypt.mk
-@@ -5,8 +5,9 @@
- ################################################################################
- 
- PYTHON_BCRYPT_VERSION = 4.0.1
--PYTHON_BCRYPT_SOURCE = bcrypt-$(PYTHON_BCRYPT_VERSION).tar.gz
--PYTHON_BCRYPT_SITE = https://files.pythonhosted.org/packages/8c/ae/3af7d006aacf513975fd1948a6b4d6f8b4a307f8a244e1a3d3774b297aad
-+PYTHON_BCRYPT_SOURCE_PYPI = bcrypt-$(PYTHON_BCRYPT_VERSION).tar.gz
-+PYTHON_BCRYPT_SITE_PYPI = https://files.pythonhosted.org/packages/8c/ae/3af7d006aacf513975fd1948a6b4d6f8b4a307f8a244e1a3d3774b297aad
-+PYTHON_BCRYPT_SITE = $(PYTHON_BCRYPT_SITE_PYPI)/$(PYTHON_BCRYPT_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_BCRYPT_SETUP_TYPE = setuptools
- PYTHON_BCRYPT_LICENSE = Apache-2.0
- PYTHON_BCRYPT_LICENSE_FILES = LICENSE
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index e083014750..5fbf69a208 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  405c9a6271e1a088ea0b432bc2094e2e8baadb2241e192ce9c73a7cc9793b127  cryptography-39.0.2.tar.gz
-+sha256  b55c6c011ba4bb803de0b557f40f1765bab9f63240e93516daaf75c3c68e6618  python-cryptography-39.0.2-cargo2.tar.gz
- # Locally computed sha256 checksums
- sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 07c88ec3da..1cbccd0d5c 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -5,8 +5,9 @@
- ################################################################################
- 
- PYTHON_CRYPTOGRAPHY_VERSION = 39.0.2
--PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/fa/f3/f4b8c175ea9a1de650b0085858059050b7953a93d66c97ed89b93b232996
-+PYTHON_CRYPTOGRAPHY_SOURCE_PYPI = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
-+PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/fa/f3/f4b8c175ea9a1de650b0085858059050b7953a93d66c97ed89b93b232996
-+PYTHON_CRYPTOGRAPHY_SITE = $(PYTHON_CRYPTOGRAPHY_SITE_PYPI)/$(PYTHON_CRYPTOGRAPHY_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools-rust
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-index be6167afea..9807260ebd 100644
---- a/package/python-maturin/python-maturin.hash
-+++ b/package/python-maturin/python-maturin.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  3757ed29fbaa87a7dde95dade795ea80f099a867343e920ccc471f75d141a6fa  maturin-1.4.0.tar.gz
-+sha256  53d51f5e2decca9af248748684aefa9245910757f19ae147dcf566172ecb0907  python-maturin-1.4.0-cargo2.tar.gz
- # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
- sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index 91507468a2..37479dd7e7 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
-@@ -5,8 +5,9 @@
- ################################################################################
- 
- PYTHON_MATURIN_VERSION = 1.4.0
--PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
--PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/20/90/43a3aa35f037e91582ec7516a92084a71f84e89e39ef580813bed072b154
-+PYTHON_MATURIN_SOURCE_PYPI = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
-+PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/20/90/43a3aa35f037e91582ec7516a92084a71f84e89e39ef580813bed072b154
-+PYTHON_MATURIN_SITE = $(PYTHON_MATURIN_SITE_PYPI)/$(PYTHON_MATURIN_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
- PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
- PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
-diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-index 0e9b93f311..c010097fc7 100644
---- a/package/python-orjson/python-orjson.hash
-+++ b/package/python-orjson/python-orjson.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  245a1ad9a8f926273787e91f7d7e14b4b357e263a215d8c96dd2039b3cddc238  orjson-3.9.10.tar.gz
-+sha256  30dbdd4ebd62a40b6f13a3c741bb215004778c17fd951d0ce5812a7c34476b09  python-orjson-3.9.10-cargo2.tar.gz
- # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-index a2e8a50468..dd538acb0a 100644
---- a/package/python-orjson/python-orjson.mk
-+++ b/package/python-orjson/python-orjson.mk
-@@ -5,8 +5,9 @@
- ################################################################################
- 
- PYTHON_ORJSON_VERSION = 3.9.10
--PYTHON_ORJSON_SOURCE = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
--PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/72/75/642688bf5d99131fe8cf603f4ef9f26e4b1c6ed8f7f5c7e6fb31def54fb7
-+PYTHON_ORJSON_SOURCE_PYPI = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
-+PYTHON_ORJSON_SITE_PYPI = https://files.pythonhosted.org/packages/72/75/642688bf5d99131fe8cf603f4ef9f26e4b1c6ed8f7f5c7e6fb31def54fb7
-+PYTHON_ORJSON_SITE = $(PYTHON_ORJSON_SITE_PYPI)/$(PYTHON_ORJSON_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_ORJSON_SETUP_TYPE = maturin
- PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
- PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
-index 817595ba8c..b5d975cb3b 100644
---- a/package/python-pydantic-core/python-pydantic-core.hash
-+++ b/package/python-pydantic-core/python-pydantic-core.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  032fff43cdec54ac579bbdda1a09163e89634c729c1a8163340601a5dfc55eb3  pydantic_core-2.14.6.tar.gz
-+sha256  23f5e10872d9c3d49ebc1fcbd317612eb63d65a7afd88dbef8d23cb63d830cb4  python-pydantic-core-2.14.6-cargo2.tar.gz
- # Locally computed sha256 checksums
- sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
-diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
-index 8b6e0053e4..38128ebe46 100644
---- a/package/python-pydantic-core/python-pydantic-core.mk
-+++ b/package/python-pydantic-core/python-pydantic-core.mk
-@@ -5,8 +5,9 @@
- ################################################################################
- 
- PYTHON_PYDANTIC_CORE_VERSION = 2.14.6
--PYTHON_PYDANTIC_CORE_SOURCE = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
--PYTHON_PYDANTIC_CORE_SITE = https://files.pythonhosted.org/packages/b2/7d/8304d8471cfe4288f95a3065ebda56f9790d087edc356ad5bd83c89e2d79
-+PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
-+PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/b2/7d/8304d8471cfe4288f95a3065ebda56f9790d087edc356ad5bd83c89e2d79
-+PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
- PYTHON_PYDANTIC_CORE_LICENSE = MIT
- PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
-diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
-index 62b508ae6b..3071f60df7 100644
---- a/package/python-rpds-py/python-rpds-py.hash
-+++ b/package/python-rpds-py/python-rpds-py.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  d9b542bf5321495737005a78d9fbf40541b898d1e2b3309cbe36a2431977be8b  rpds_py-0.18.1.tar.gz
-+sha256  c16ec7e898efa0302cde6ac3c83ef8a2400f865d44941085b4f87784325fb89a  python-rpds-py-0.18.1-cargo2.tar.gz
- # Locally computed sha256 checksums
- sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
-diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
-index c38f749521..398ac6682b 100644
---- a/package/python-rpds-py/python-rpds-py.mk
-+++ b/package/python-rpds-py/python-rpds-py.mk
-@@ -5,8 +5,9 @@
- ################################################################################
- 
- PYTHON_RPDS_PY_VERSION = 0.18.1
--PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
--PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/2d/aa/e7c404bdee1db7be09860dff423d022ffdce9269ec8e6532cce09ee7beea
-+PYTHON_RPDS_PY_SOURCE_PYPI = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
-+PYTHON_RPDS_PY_SITE_PYPI = https://files.pythonhosted.org/packages/2d/aa/e7c404bdee1db7be09860dff423d022ffdce9269ec8e6532cce09ee7beea
-+PYTHON_RPDS_PY_SITE = $(PYTHON_RPDS_PY_SITE_PYPI)/$(PYTHON_RPDS_PY_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_RPDS_PY_SETUP_TYPE = maturin
- PYTHON_RPDS_PY_LICENSE = MIT
- PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
-diff --git a/package/python-rtoml/python-rtoml.hash b/package/python-rtoml/python-rtoml.hash
-index 59f17d9d62..dae1badcf3 100644
---- a/package/python-rtoml/python-rtoml.hash
-+++ b/package/python-rtoml/python-rtoml.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  987d3d9e9d56761b17c3e4e172937cbcc793bf24b0ebb2730647a9a2cf86c789  rtoml-0.10.0.tar.gz
-+sha256  624cc1ff2b3fdea42aeee3a4d1537d37431ec001870dfee1e04a12bd3076a2d3  python-rtoml-0.10.0-cargo2.tar.gz
- # Locally computed sha256 checksums
- sha256  cd5ffde80e6d3286a2e2e5f02fb2cb07b823931ca368e7c735a6c5f5aebe7103  LICENSE
-diff --git a/package/python-rtoml/python-rtoml.mk b/package/python-rtoml/python-rtoml.mk
-index 16f9dea573..d5de20f832 100644
---- a/package/python-rtoml/python-rtoml.mk
-+++ b/package/python-rtoml/python-rtoml.mk
-@@ -5,8 +5,9 @@
- ################################################################################
- 
- PYTHON_RTOML_VERSION = 0.10.0
--PYTHON_RTOML_SOURCE = rtoml-$(PYTHON_RTOML_VERSION).tar.gz
--PYTHON_RTOML_SITE = https://files.pythonhosted.org/packages/ca/b2/0e77a00e75ed582ec1c4c3a9e1eeed886a15c195bcce87b7daf1171c4115
-+PYTHON_RTOML_SOURCE_PYPI = rtoml-$(PYTHON_RTOML_VERSION).tar.gz
-+PYTHON_RTOML_SITE_PYPI = https://files.pythonhosted.org/packages/ca/b2/0e77a00e75ed582ec1c4c3a9e1eeed886a15c195bcce87b7daf1171c4115
-+PYTHON_RTOML_SITE = $(PYTHON_RTOML_SITE_PYPI)/$(PYTHON_RTOML_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_RTOML_SETUP_TYPE = maturin
- PYTHON_RTOML_LICENSE = MIT
- PYTHON_RTOML_LICENSE_FILES = LICENSE
+diff --git a/package/libopenssl/0004-Implement-riscv_vlen_asm-for-riscv32.patch b/package/libopenssl/0004-Implement-riscv_vlen_asm-for-riscv32.patch
+new file mode 100644
+index 0000000000..5de3221172
+--- /dev/null
++++ b/package/libopenssl/0004-Implement-riscv_vlen_asm-for-riscv32.patch
+@@ -0,0 +1,50 @@
++From 84f1acab51e159366b8cf97635ed97f8f0b6564a Mon Sep 17 00:00:00 2001
++From: Hongren Zheng <i@zenithal.me>
++Date: Fri, 26 Apr 2024 06:03:43 +0000
++Subject: [PATCH] Implement riscv_vlen_asm for riscv32
++
++riscvcap.c: undefined reference to 'riscv_vlen_asm'
++
++Reviewed-by: Paul Dale <ppzgs1@gmail.com>
++Reviewed-by: Tomas Mraz <tomas@openssl.org>
++(Merged from https://github.com/openssl/openssl/pull/24270)
++
++/home/thomas/br-test-pkg/bootlin-riscv32-glibc/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/13.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: crypto/legacy-dso-riscvcap.o: in function `OPENSSL_cpuid_setup':
++riscvcap.c:(.text.startup+0x190): undefined reference to `riscv_vlen_asm'
++
++Upstream: https://github.com/openssl/openssl/commit/87314d24c4f025df1ebf47dc527cc8a96bef354a
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++---
++ crypto/riscv32cpuid.pl | 17 +++++++++++++++++
++ 1 file changed, 17 insertions(+)
++
++diff --git a/crypto/riscv32cpuid.pl b/crypto/riscv32cpuid.pl
++index 20694e7de7..ac1c043ec9 100644
++--- a/crypto/riscv32cpuid.pl
+++++ b/crypto/riscv32cpuid.pl
++@@ -84,5 +84,22 @@ OPENSSL_cleanse:
++ ___
++ }
++ 
+++{
+++my ($ret) = ('a0');
+++$code .= <<___;
+++################################################################################
+++# size_t riscv_vlen_asm(void)
+++# Return VLEN (i.e. the length of a vector register in bits).
+++.p2align 3
+++.globl riscv_vlen_asm
+++.type riscv_vlen_asm,\@function
+++riscv_vlen_asm:
+++    csrr $ret, vlenb
+++    slli $ret, $ret, 3
+++    ret
+++.size riscv_vlen_asm,.-riscv_vlen_asm
+++___
+++}
+++
++ print $code;
++ close STDOUT or die "error closing STDOUT: $!";
++-- 
++2.34.1
++
 -- 
-2.44.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
