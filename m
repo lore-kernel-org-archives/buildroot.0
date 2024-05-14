@@ -4,64 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EB1EC25B75
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 16:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 893E3C25B75
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 16:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 614EE40300;
-	Tue, 14 May 2024 16:18:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E876A41574;
+	Tue, 14 May 2024 16:53:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ywfJnDvwWHzf; Tue, 14 May 2024 16:18:41 +0000 (UTC)
+ id x_GE7NjO8jnH; Tue, 14 May 2024 16:53:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D47640639
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A253C4157A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D47640639;
-	Tue, 14 May 2024 16:18:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A253C4157A;
+	Tue, 14 May 2024 16:53:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 82FE11BF3CD
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 16:18:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DBCB21BF955
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 16:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F15181EAC
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 16:18:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6F3982509
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 16:52:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qw3WIqNTKwGQ for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 16:18:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5C87F81E8A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C87F81E8A
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5C87F81E8A
- for <buildroot@buildroot.org>; Tue, 14 May 2024 16:18:38 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 8137E3521100; Tue, 14 May 2024 18:18:36 +0200 (CEST)
-Date: Tue, 14 May 2024 18:18:36 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ id 55HswnPZr2eL for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 16:52:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::1029; helo=mail-pj1-x1029.google.com;
+ envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 05741824DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05741824DF
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com
+ [IPv6:2607:f8b0:4864:20::1029])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 05741824DF
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 16:52:58 +0000 (UTC)
+Received: by mail-pj1-x1029.google.com with SMTP id
+ 98e67ed59e1d1-2b346712919so4159119a91.2
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 09:52:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715705578; x=1716310378;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=65ATPhcUQCi0xJhwX6MshQZgMF6opCBGrSgzCB5hWyI=;
+ b=HjIIlGsDftGdaQ+yA7vL4PT+/l00XrlxuKlBpi0BVEsHDNJgvSr2282iAGVMWAGM4t
+ ymyFCsBzLTxwmqP3KerSWnamCRBgU+K3/knEdDZ/uP7eisSkAsg7OVkXvFTNNpJZQTs5
+ IAkVn0+YvNUav10m2gwo85/OQqKHFCg3bYR3hCO/IWGKzu2PeQvkAs7txPMRK0kfZd/Z
+ EqDGGkHFD5mglqjgJCj5TXHDXgXv5SVl37rvbS/5r5FCjYlFhrrHUdPqnxPG+WVW+lMG
+ Kn8Dv8ZSkpuLgcBSzgiphEHxLCseDdZb6FWj+6dAMDsV5n7rH29+WmHZQnxFYVetVfET
+ os1w==
+X-Gm-Message-State: AOJu0Ywm/CdZ+31V/rO3+GSEH1adm4yuLA5RkoVp1oqReLDavERfr8WT
+ ix1mU0k93BQCSKRw4ilnZnk51M/egSdZTEZzKhr67NSQrEWTRAdaVXlQiQ==
+X-Google-Smtp-Source: AGHT+IHwLJ3wxxYYbZe3nxN0p19BBClwutVU7nUfYurrvtpSSu9Eq2LxoanZZU7xcvcZ3DjlIm4tvg==
+X-Received: by 2002:a17:90a:cc8:b0:2b2:9d08:82d2 with SMTP id
+ 98e67ed59e1d1-2b6cd0e7be7mr11217476a91.42.1715705577590; 
+ Tue, 14 May 2024 09:52:57 -0700 (PDT)
+Received: from localhost.localdomain
+ ([2600:8802:2a05:9000:bfb8:57fa:3f5f:2fdb])
+ by smtp.gmail.com with ESMTPSA id
+ 98e67ed59e1d1-2b6711660b9sm9942677a91.14.2024.05.14.09.52.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 14 May 2024 09:52:57 -0700 (PDT)
+From: Kadambini Nema <kadambini.nema@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <ZkOO3O+OwNALpA/H@waldemar-brodkorb.de>
+Date: Tue, 14 May 2024 09:52:51 -0700
+Message-Id: <20240514165251.511634-1-kadambini.nema@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-27-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1715703516; bh=gK4Ts7ASPqyszyIVZoifmTro3g9TZ+MX97mKu62a2XI=;
- h=Date:From:To:Subject:From;
- b=X4xo78zFfPrj+StKpBLdoz1TyhARd9M4c6gF/wRNnVgQ7Tki+Fbej9L3lrn5fAYQo
- JQbQ1jdh2dKl3OFIjffYHggCqHTvlwhhdJEsCvMdBYd+SlkP/0ui741CS5UbnXKZ7P
- ngsmghy23WJ4cqAaYeO6q+x5q+Y5e6IBn2FeQC9WlZ55oBCxW/mIWjydBuz2iy0dZl
- Pzq3/X+62EV8liJ0lUjsI+nNsB283kOGUN1okeI0f1+CPSEXQSGW/wqcsUKt7uM9HR
- zp7/JwaLsSw8jn6zUrGQ7LUj7p5tx4IX6DgZMzINoeV51wIYqYmHIj8zfEmx4xKuik
- A71eCqxSscJDg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1715705578; x=1716310378; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=65ATPhcUQCi0xJhwX6MshQZgMF6opCBGrSgzCB5hWyI=;
+ b=S/Nd4wx/OkLmRJCW4+cRBQrTVyUkyIush/RGiWxn/7T7LcN4fywOviXf/3WrFd+fOs
+ hkCawQpTRBB9PIVEXXQoUCQjzmLg7NUgrt6pSn44hI9PyGB/4XsnqFKfxGH3yI0poVzo
+ A0y8qhanvOG5pWOZBN0QS3yDFpZ8gzQABAHZspnGSbW7CWDotPRAG23T2cBTbIe51f0y
+ mzi6ZjBbc/qYboKWXTo6bU91NGjATwI8Ec149OL2jOKUgokY/sQyWD8pst7lRC4Io5Me
+ dWUdcOQo8rkiF9iru9YFc6eM7DrfZtzFN2y4RCWbRnxcMfvYCovgc3rgGofSt4/h1cKF
+ pOIQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=openadk.org header.i=@openadk.org
- header.a=rsa-sha256 header.s=2022 header.b=X4xo78zF
-Subject: [Buildroot] [PATCHv2 3/3] configs/qemu_loongarch64: new defconfig
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=S/Nd4wx/
+Subject: [Buildroot] [PATCH 1/1] package/ustreamer: bump version to 6.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,110 +100,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Kadambini Nema <kadambini.nema@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v1->v2:
- - add me to DEVELOPERS file as requested by Thomas P.
- - add the missing readme.txt file requested by Thomas P.
----
- DEVELOPERS                                    |  2 ++
- .../patches/linux-headers/linux-headers.hash  |  2 ++
- .../qemu/loongarch64/patches/linux/linux.hash |  2 ++
- board/qemu/loongarch64/readme.txt             | 11 ++++++++
- configs/qemu_loongarch64_defconfig            | 27 +++++++++++++++++++
- 5 files changed, 44 insertions(+)
- create mode 100644 board/qemu/loongarch64/patches/linux-headers/linux-headers.hash
- create mode 100644 board/qemu/loongarch64/patches/linux/linux.hash
- create mode 100644 board/qemu/loongarch64/readme.txt
- create mode 100644 configs/qemu_loongarch64_defconfig
+changelog - https://github.com/pikvm/ustreamer/compare/v5.51...v6.11
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9e299e7e66..fa933b8742 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3204,7 +3204,9 @@ F:	package/ngrep/
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+---
+ package/ustreamer/ustreamer.hash | 2 +-
+ package/ustreamer/ustreamer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
+index d3f603e0c8..7c70f0195f 100644
+--- a/package/ustreamer/ustreamer.hash
++++ b/package/ustreamer/ustreamer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  88f107e02a0b5c6493d55ed1bce0c85f66ce83d2bc0271ff6319ad593c6584bc  ustreamer-5.51.tar.gz
++sha256  80ab01eeaa81c7d8e9c7f62304287d176fd729cb12ca5adb2e181b5a3da79216  ustreamer-6.11.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
+index dc8577b5e9..5b73e387d6 100644
+--- a/package/ustreamer/ustreamer.mk
++++ b/package/ustreamer/ustreamer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Waldemar Brodkorb <wbx@openadk.org>
- F:	arch/Config.in.loongarch64
-+F:	board/qemu/loongarch64/
- F:	board/qemu/riscv32-virt/
-+F:	configs/qemu_loongarch64_defconfig
- F:	configs/qemu_riscv32_nommu_virt_defconfig
- F:	package/asterisk/
- F:	package/libjwt/
-diff --git a/board/qemu/loongarch64/patches/linux-headers/linux-headers.hash b/board/qemu/loongarch64/patches/linux-headers/linux-headers.hash
-new file mode 100644
-index 0000000000..f3d9c1186a
---- /dev/null
-+++ b/board/qemu/loongarch64/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1,2 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  b66a5b863b0f8669448b74ca83bd641a856f164b29956e539bbcb5fdeeab9cc6  linux-6.6.30.tar.xz
-diff --git a/board/qemu/loongarch64/patches/linux/linux.hash b/board/qemu/loongarch64/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..f3d9c1186a
---- /dev/null
-+++ b/board/qemu/loongarch64/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  b66a5b863b0f8669448b74ca83bd641a856f164b29956e539bbcb5fdeeab9cc6  linux-6.6.30.tar.xz
-diff --git a/board/qemu/loongarch64/readme.txt b/board/qemu/loongarch64/readme.txt
-new file mode 100644
-index 0000000000..3d49ba57f4
---- /dev/null
-+++ b/board/qemu/loongarch64/readme.txt
-@@ -0,0 +1,11 @@
-+Qemu does not bundle the BIOS file QEMU_EFI.fd. You need to build it:
-+https://github.com/tianocore/edk2-platforms/tree/master/Platform/Loongson/LoongArchQemuPkg#readme
-+
-+For a binary you can download it from here:
-+https://debug.openadk.org/QEMU_EFI.fd
-+
-+Run the emulation with:
-+
-+ qemu-system-loongarch64 -M virt -bios QEMU_EFI.fd -append "console=ttyS0,115200" -kernel output/images/vmlinux.efi -nographic # qemu_loongarch64_defconfig
-+
-+The login prompt will appear in the terminal that started Qemu.
-diff --git a/configs/qemu_loongarch64_defconfig b/configs/qemu_loongarch64_defconfig
-new file mode 100644
-index 0000000000..025e9907e2
---- /dev/null
-+++ b/configs/qemu_loongarch64_defconfig
-@@ -0,0 +1,27 @@
-+# Architecture
-+BR2_loongarch64=y
-+
-+# Filesystem
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+
-+# Linux headers same as kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
-+BR2_LINUX_KERNEL_DEFCONFIG="loongson3"
-+BR2_LINUX_KERNEL_VMLINUX_EFI=y
-+
-+# Disable network scripts
-+# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-+
-+# host-qemu for gitlab testing
-+BR2_PACKAGE_HOST_QEMU=y
-+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+-USTREAMER_VERSION = 5.51
++USTREAMER_VERSION = 6.11
+ USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
+ USTREAMER_LICENSE = GPL-3.0+
+ USTREAMER_LICENSE_FILES = LICENSE
 -- 
-2.30.2
+2.25.1
 
 _______________________________________________
 buildroot mailing list
