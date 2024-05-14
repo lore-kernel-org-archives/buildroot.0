@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0993C04FFE
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 21:54:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC805C25B79
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 21:54:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 978A8814B1;
-	Tue, 14 May 2024 21:54:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EBD781A4E;
+	Tue, 14 May 2024 21:54:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oJZmOZ98a2Ql; Tue, 14 May 2024 21:54:15 +0000 (UTC)
+ id fQJDsMMN5VbR; Tue, 14 May 2024 21:54:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79FE981393
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 373C48176E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79FE981393;
-	Tue, 14 May 2024 21:54:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 373C48176E;
+	Tue, 14 May 2024 21:54:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AEF7F1BF42D
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:54:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1776F1BF42D
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:54:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9BA30405EB
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:54:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE681405EB
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:54:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DHwbtmGoTAw8 for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 21:54:12 +0000 (UTC)
+ id AmIxTi7foH4Q for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 21:54:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1F993404DF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F993404DF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8BBD5404DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BBD5404DF
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F993404DF
- for <buildroot@buildroot.org>; Tue, 14 May 2024 21:54:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8BBD5404DF
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 21:54:25 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a09e6.dip0.t-ipconnect.de [91.58.9.230])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6B9B3A4C0E95;
- Tue, 14 May 2024 23:54:07 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9546AA4C48E8;
+ Tue, 14 May 2024 23:54:09 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:59422)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1s7063-000000000Dp-0F62;
- Tue, 14 May 2024 21:54:07 +0000
+ (envelope-from <bernd@kuhls.net>) id 1s7063-000000000Dp-12yD;
+ Tue, 14 May 2024 21:54:09 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 23:54:02 +0200
-Message-Id: <20240514215406.2866563-1-bernd@kuhls.net>
+Date: Tue, 14 May 2024 23:54:03 +0200
+Message-Id: <20240514215406.2866563-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240514215406.2866563-1-bernd@kuhls.net>
+References: <20240514215406.2866563-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202312101026; t=1715723647;
- bh=H2ciyIYdCgbhJNMlwzXTg46CGfzMjPeXL6dZjZJQOyg=;
- h=From:To:Cc:Subject:Date:From;
- b=V2GhMAnyjoe6JS5xaxzAMZPub1ZCEowoJpd2nQSdairrgkqQqgYKb8U5f0lH16zGr
- L9NGXMr/5EW2ixV69lMx1EzE68cnqkVE4Ka85LLNb58mMQS62mGmLWTKiMENp+1R8B
- JhDAxFYeeSMfTgvdnoOpzrrCgHmVOixuHzlbpxRmdUc7ilgeaJP+8SLpVTQfD5khC1
- rpHGsr6VJZEeEeIn3FtYr53uyySkuTZjColTykMpV6SBJ8Dpt9WIpwYA97vJNxYq31
- tN2wpwDobiv/wLF8ME2aEy/u8Eav9XNNu7HkbnsoHR7wETeiA5n3aoUWHAoTNDGtwE
- +VKvKVl2B66og==
+ s=kas202312101026; t=1715723649;
+ bh=vjIBZX8a9v2m1Kmku/QeXGIUsoKfQ75P+Sw5QUI0Sc4=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=YaYLd4ePk/s2orH83ni8da4m0plLVW+PH0tLff2ufnxyMBi+xO3gOqP3EsseFL7ER
+ sZYbqd2AeELnd5mEtEjD1mdwqccmNKyEw50JJ1C0wwnuQQMcNswVqRL0HiR0vHnI30
+ 1DUU2H9+XauoUHUVefVzMjKVGGqqPAtT1BOeTytIzsS+cf/9S4HM70yyPH9HQKammu
+ aoKPNZ1Rwx2x4LAXCzji994WUDowoM8ykELisypSL1XuHoEUCUh9IoxYYWW+mt55CY
+ /qgQq2h+tizNuF0R4V0ruF/Jzi0Fi3YBN0EA32aQPRbNgddlgfH0IiwGu8/WnYOowB
+ Z+ZFKsjx2mvHw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202312101026 header.b=V2GhMAny
-Subject: [Buildroot] [PATCH 1/5] package/bc: fix build with gcc 14.x
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=YaYLd4eP
+Subject: [Buildroot] [PATCH 2/5] package/rrdtool: fix build with gcc 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,102 +87,1604 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/4d3/4d3c0e0a08cd734699cb61412c99d705738e8ab4/
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...and-write-errors-on-input-and-output.patch | 41 ++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+ .../0001-Constify-argv-fix-warnings.patch     | 1586 +++++++++++++++++
+ 1 file changed, 1586 insertions(+)
+ create mode 100644 package/rrdtool/0001-Constify-argv-fix-warnings.patch
 
-diff --git a/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch b/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
-index cc72e5cd69..87654e3c14 100644
---- a/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
-+++ b/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
-@@ -26,6 +26,10 @@ Origin: other
- Bug-Debian: http://bugs.debian.org/488735
- 
- Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+diff --git a/package/rrdtool/0001-Constify-argv-fix-warnings.patch b/package/rrdtool/0001-Constify-argv-fix-warnings.patch
+new file mode 100644
+index 0000000000..e41e729a0e
+--- /dev/null
++++ b/package/rrdtool/0001-Constify-argv-fix-warnings.patch
+@@ -0,0 +1,1586 @@
++From b76e3c578f1e9f582e9c28f50d82b1f569602075 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Michal=20Such=C3=A1nek?= <hramrach@gmail.com>
++Date: Fri, 5 Jan 2024 15:31:48 +0100
++Subject: [PATCH] Constify argv, fix warnings. (#1242)
++
++* Fix perl warnings
++
++ - cast POPs to void to avoid unused value warning
++ - declare functions that don't set RETVAL as returning void
++
++Signed-off-by: Michal Suchanek <msuchanek@suse.de>
++
++* Constify argv
++
++rrd has no business modifying the string pointed to by passed agrv, and
++as far as gcc can see it does indeed not modify them because it compiles
++with const argv.
++
++This fixes warnings when passing const strings into rrd, and avoids the
++need to duplicate all strings in the tcl bindings.
++
++This fixes warnings like these:
++[    3s] prog/sensord/rrd.c: In function 'rrdInit':
++[    3s] prog/sensord/rrd.c:302:40: warning: cast discards 'const' qualifier from pointer target type [-Wcast-qual]
++[    3s]   302 |                 ret = rrd_create(argc, (char**) argv);
++[    3s]       |                                        ^
++[    3s] prog/sensord/rrd.c: In function 'rrdUpdate':
++[    3s] prog/sensord/rrd.c:458:42: warning: cast discards 'const' qualifier from pointer target type [-Wcast-qual]
++[    3s]   458 |                 if ((ret = rrd_update(3, (char **) /* WEAK */ argv))) {
++[    3s]       |                                          ^
++
++Signed-off-by: Michal Suchanek <msuchanek@suse.de>
++
++* tcl: Do not duplicate const strings
++
++---------
++
++Signed-off-by: Michal Suchanek <msuchanek@suse.de>
++
++Upstream: https://github.com/oetiker/rrdtool-1.x/commit/b76e3c578f1e9f582e9c28f50d82b1f569602075
++
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[Bernd:
-+ Updated to incorporate changes by Matthias Klose <doko@debian.org>
-+ on 2024-03-13 that fix Debian bug https://bugs.debian.org/1065375]
- ---
-  bc/execute.c | 10 +++++++++-
-  bc/main.c    |  3 +++
-@@ -276,6 +280,14 @@ diff --git a/dc/dc.c b/dc/dc.c
- index 6a2bb26..ccdb1c2 100644
- --- a/dc/dc.c
- +++ b/dc/dc.c
-+@@ -45,6 +45,7 @@
-+ #include <getopt.h>
-+ #include "dc.h"
-+ #include "dc-proto.h"
-++#include "number.h"
++---
++ CHANGES                         |  3 ++
++ bindings/lua/rrdlua.c           | 25 +++++-----
++ bindings/perl-shared/RRDs.xs    | 36 +++++++-------
++ bindings/python/rrdtoolmodule.c | 38 +++++++--------
++ bindings/ruby/main.c            | 10 ++--
++ bindings/tcl/tclrrd.c           | 84 ++++++++-------------------------
++ src/optparse.c                  | 14 +++---
++ src/optparse.h                  |  6 +--
++ src/rrd.h                       | 38 +++++++--------
++ src/rrd_cgi.c                   | 24 +++++-----
++ src/rrd_create.c                |  2 +-
++ src/rrd_daemon.c                | 12 ++---
++ src/rrd_dump.c                  |  4 +-
++ src/rrd_fetch.c                 |  2 +-
++ src/rrd_first.c                 |  2 +-
++ src/rrd_flushcached.c           |  2 +-
++ src/rrd_graph.c                 |  6 +--
++ src/rrd_graph.h                 |  4 +-
++ src/rrd_graph_helper.c          |  2 +-
++ src/rrd_info.c                  |  2 +-
++ src/rrd_last.c                  |  2 +-
++ src/rrd_lastupdate.c            |  2 +-
++ src/rrd_list.c                  |  6 +--
++ src/rrd_modify.c                |  2 +-
++ src/rrd_modify.h                |  2 +-
++ src/rrd_resize.c                |  4 +-
++ src/rrd_restore.c               |  2 +-
++ src/rrd_tool.c                  | 26 +++++-----
++ src/rrd_tune.c                  |  2 +-
++ src/rrd_update.c                |  4 +-
++ src/rrd_xport.c                 |  2 +-
++ src/rrdupdate.c                 |  7 +--
++ 32 files changed, 168 insertions(+), 209 deletions(-)
++
++diff --git a/bindings/lua/rrdlua.c b/bindings/lua/rrdlua.c
++index d1a700641..2095c3b5b 100644
++--- a/bindings/lua/rrdlua.c
+++++ b/bindings/lua/rrdlua.c
++@@ -37,8 +37,8 @@
++ extern void rrd_freemem(void *mem);
 + 
-+ #ifndef EXIT_SUCCESS	/* C89 <stdlib.h> */
-+ # define EXIT_SUCCESS	0
- @@ -59,6 +59,7 @@ static void
-  bug_report_info DC_DECLVOID()
-  {
-@@ -304,6 +316,14 @@ diff --git a/dc/eval.c b/dc/eval.c
- index 05a3d9e..6c54e61 100644
- --- a/dc/eval.c
- +++ b/dc/eval.c
-+@@ -41,6 +41,7 @@
++ extern int luaopen_rrd (lua_State * L);
++-typedef int (*RRD_FUNCTION)(int, char **);
++-typedef rrd_info_t *(RRD_FUNCTION_V)(int, char **);
+++typedef int (*RRD_FUNCTION)(int, const char **);
+++typedef rrd_info_t *(RRD_FUNCTION_V)(int, const char **);
++ 
++ /**********************************************************/
++ 
++@@ -49,9 +49,9 @@ static void reset_rrd_state(void)
++     rrd_clear_error();
++ }
++ 
++-static char **make_argv(const char *cmd, lua_State * L)
+++static const char **make_argv(const char *cmd, lua_State * L)
++ {
++-  char **argv;
+++  const char **argv;
++   int i;
++   int argc = lua_gettop(L) + 1;
++ 
++@@ -60,13 +60,12 @@ static char **make_argv(const char *cmd, lua_State * L)
++     luaL_error(L, "Can't allocate memory for arguments array", cmd);
++ 
++   /* fprintf(stderr, "Args:\n"); */
++-  argv[0] = (char *) cmd; /* Dummy arg. Cast to (char *) because rrd */
++-                          /* functions don't expect (const * char)   */
+++  argv[0] = cmd;
++   /* fprintf(stderr, "%s\n", argv[0]); */
++   for (i=1; i<argc; i++) {
++     /* accepts string or number */
++     if (lua_isstring(L, i) || lua_isnumber(L, i)) {
++-      if (!(argv[i] = (char *) lua_tostring (L, i))) {
+++      if (!(argv[i] = lua_tostring (L, i))) {
++         /* raise an error and never return */
++         luaL_error(L, "%s - error duplicating string area for arg #%d",
++                    cmd, i);
++@@ -84,7 +83,7 @@ static char **make_argv(const char *cmd, lua_State * L)
++ static int
++ rrd_common_call (lua_State *L, const char *cmd, RRD_FUNCTION rrd_function)
++ {
++-  char **argv;
+++  const char **argv;
++   int argc = lua_gettop(L) + 1;
++ 
++   argv = make_argv(cmd, L);
++@@ -99,7 +98,7 @@ rrd_common_call (lua_State *L, const char *cmd, RRD_FUNCTION rrd_function)
++ static int
++ lua_rrd_infocall(lua_State *L, const char *cmd, RRD_FUNCTION_V rrd_function)
++ {
++-  char **argv;
+++  const char **argv;
++   rrd_info_t *p, *data;
++   int argc = lua_gettop(L) + 1;
++ 
++@@ -197,7 +196,7 @@ static int
++ lua_rrd_fetch (lua_State * L)
++ {
++   int argc = lua_gettop(L) + 1;
++-  char **argv = make_argv("fetch", L);
+++  const char **argv = make_argv("fetch", L);
++   unsigned long i, j, step, ds_cnt;
++   rrd_value_t *data, *p;
++   char    **names;
++@@ -246,7 +245,7 @@ lua_rrd_first (lua_State * L)
++ {
++   time_t first;
++   int argc = lua_gettop(L) + 1;
++-  char **argv = make_argv("first", L);
+++  const char **argv = make_argv("first", L);
++   reset_rrd_state();
++   first = rrd_first(argc, argv);
++   free(argv);
++@@ -260,7 +259,7 @@ lua_rrd_last (lua_State * L)
++ {
++   time_t last;
++   int argc = lua_gettop(L) + 1;
++-  char **argv = make_argv("last", L);
+++  const char **argv = make_argv("last", L);
++   reset_rrd_state();
++   last = rrd_last(argc, argv);
++   free(argv);
++@@ -275,7 +274,7 @@ static int
++ lua_rrd_graph (lua_State * L)
++ {
++   int argc = lua_gettop(L) + 1;
++-  char **argv = make_argv("last", L);
+++  const char **argv = make_argv("last", L);
++   char **calcpr;
++   int i, xsize, ysize;
++   double ymin, ymax;
++diff --git a/bindings/perl-shared/RRDs.xs b/bindings/perl-shared/RRDs.xs
++index e233b5835..edce76ec4 100644
++--- a/bindings/perl-shared/RRDs.xs
+++++ b/bindings/perl-shared/RRDs.xs
++@@ -44,11 +44,11 @@ extern "C" {
++ 		    strcpy(argv[i+1],handle); \
++  	        } \
++ 		rrd_clear_error();\
++-		RETVAL=name(items+1,argv); \
+++		RETVAL = name(items + 1, (const char **)argv); \
++ 		for (i=0; i < items; i++) {\
++-		    free(argv[i+1]);\
+++		    free((void *)argv[i+1]);\
++ 		} \
++-		free(argv);\
+++		free((void *)argv);\
++ 		\
++ 		if (rrd_test_error()) XSRETURN_UNDEF;
++ 
++@@ -67,11 +67,11 @@ extern "C" {
++ 		    strcpy(argv[i+1],handle); \
++  	        } \
++                 rrd_clear_error(); \
++-                data=name(items+1, argv); \
+++                data = name(items + 1, (const char **)argv); \
++                 for (i=0; i < items; i++) { \
++-		    free(argv[i+1]); \
+++		    free((void *)argv[i+1]); \
++ 		} \
++-		free(argv); \
+++		free((void *)argv); \
++                 if (rrd_test_error()) XSRETURN_UNDEF; \
++                 hash = newHV(); \
++    	        save=data; \
++@@ -175,7 +175,7 @@ static int rrd_fetch_cb_wrapper(
++     /* Check the eval first */
++     if (SvTRUE(ERRSV)) {
++         rrd_set_error("perl callback failed: %s",SvPV_nolen(ERRSV));
++-        POPs; /* there is undef on top of the stack when there is an error
+++        (void)POPs; /* there is undef on top of the stack when there is an error
++                  and call_sv was initiated with G_EVAL|G_SCALER */
++         goto error_out;
++     }
++@@ -383,7 +383,7 @@ rrd_tune(...)
++ 
++ #ifdef HAVE_RRD_GRAPH
++ 
++-SV *
+++void
++ rrd_graph(...)
++ 	PROTOTYPE: @
++ 	PREINIT:
++@@ -404,7 +404,7 @@ rrd_graph(...)
++ 		    strcpy(argv[i+1],handle);
++  	        }
++ 		rrd_clear_error();
++-		rrd_graph(items+1,argv,&calcpr,&xsize,&ysize,NULL,&ymin,&ymax);
+++		rrd_graph(items+1,(const char **)argv,&calcpr,&xsize,&ysize,NULL,&ymin,&ymax);
++ 		for (i=0; i < items; i++) {
++ 		    free(argv[i+1]);
++ 		}
++@@ -433,7 +433,7 @@ rrd_graph(...)
++ 
++ #endif /* HAVE_RRD_GRAPH */
++ 
++-SV *
+++void
++ rrd_fetch(...)
++ 	PROTOTYPE: @
++ 	PREINIT:
++@@ -455,7 +455,7 @@ rrd_fetch(...)
++ 		    strcpy(argv[i+1],handle);
++  	        }
++ 		rrd_clear_error();
++-		rrd_fetch(items+1,argv,&start,&end,&step,&ds_cnt,&ds_namv,&data);
+++		rrd_fetch(items+1,(const char **)argv,&start,&end,&step,&ds_cnt,&ds_namv,&data);
++ 		for (i=0; i < items; i++) {
++ 		    free(argv[i+1]);
++ 		}
++@@ -486,7 +486,7 @@ rrd_fetch(...)
++ 		PUSHs(sv_2mortal(newRV_noinc((SV*)names)));
++ 		PUSHs(sv_2mortal(newRV_noinc((SV*)retar)));
++ 
++-SV *
+++void
++ rrd_fetch_cb_register(cb)
++     SV * cb
++     CODE:
++@@ -496,7 +496,7 @@ rrd_fetch_cb_register(cb)
++             SvSetSV(rrd_fetch_cb_svptr,cb);
++         rrd_fetch_cb_register(rrd_fetch_cb_wrapper);
++ 
++-SV *
+++void
++ rrd_times(start, end)
++ 	  char *start
++ 	  char *end
++@@ -521,7 +521,7 @@ rrd_times(start, end)
++ 		PUSHs(sv_2mortal(newSVuv(start_tmp)));
++ 		PUSHs(sv_2mortal(newSVuv(end_tmp)));
++ 
++-int
+++void
++ rrd_xport(...)
++ 	PROTOTYPE: @
++ 	PREINIT:
++@@ -543,7 +543,7 @@ rrd_xport(...)
++ 		    strcpy(argv[i+1],handle);
++  	        }
++ 		rrd_clear_error();
++-		rrd_xport(items+1,argv,&xsize,&start,&end,&step,&col_cnt,&legend_v,&data);
+++		rrd_xport(items+1,(const char **)argv,&xsize,&start,&end,&step,&col_cnt,&legend_v,&data);
++ 		for (i=0; i < items; i++) {
++ 		    free(argv[i+1]);
++ 		}
++@@ -657,7 +657,7 @@ rrd_flushcached(...)
++ 	OUTPUT:
++ 		RETVAL
++ 
++-SV*
+++void
++ rrd_list(...)
++ 	PROTOTYPE: @
++ 	PREINIT:
++@@ -667,7 +667,7 @@ rrd_list(...)
++                 char **argv;
++ 		AV *list;
++ 	PPCODE:
++-		argv = (char **) malloc((items+1)*sizeof(char *));
+++		argv = malloc((items+1)*sizeof(char *));
++ 		argv[0] = "dummy";
++ 
++ 		for (i = 0; i < items; i++) {
++@@ -681,7 +681,7 @@ rrd_list(...)
++ 
++                 rrd_clear_error();
++ 
++-		data = rrd_list(items+1, argv);
+++		data = rrd_list(items+1, (const char **)argv);
++ 
++                 for (i=0; i < items; i++) {
++ 		    free(argv[i+1]);
++diff --git a/bindings/python/rrdtoolmodule.c b/bindings/python/rrdtoolmodule.c
++index 1ab463584..f255e65bc 100644
++--- a/bindings/python/rrdtoolmodule.c
+++++ b/bindings/python/rrdtoolmodule.c
++@@ -123,7 +123,7 @@ PyRRD_String_FromCF(enum cf_en cf)
++  * @return Zero if the function succeeds, otherwise -1
++  */
++ static int
++-convert_args(char *command, PyObject *args, char ***rrdtool_argv, int *rrdtool_argc)
+++convert_args(char *command, PyObject *args, const char ***rrdtool_argv, int *rrdtool_argc)
++ {
++     PyObject *o, *lo;
++     int i, j, args_count, argv_count, element_count;
++@@ -145,7 +145,7 @@ convert_args(char *command, PyObject *args, char ***rrdtool_argv, int *rrdtool_a
++         }
++     }
++ 
++-    *rrdtool_argv = PyMem_New(char *, element_count + 1);
+++    *rrdtool_argv = PyMem_New(const char *, element_count + 1);
++ 
++     if (*rrdtool_argv == NULL)
++         return -1;
++@@ -186,7 +186,7 @@ convert_args(char *command, PyObject *args, char ***rrdtool_argv, int *rrdtool_a
++  * Destroy argument vector.
++  */
++ static void
++-destroy_args(char ***rrdtool_argv)
+++destroy_args(const char ***rrdtool_argv)
++ {
++     PyMem_Del(*rrdtool_argv);
++     *rrdtool_argv = NULL;
++@@ -267,7 +267,7 @@ static char _rrdtool_create__doc__[] = "Create a new Round Robin Database.\n\n\
++ static PyObject *
++ _rrdtool_create(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int status;
++@@ -306,7 +306,7 @@ static char _rrdtool_dump__doc__[] = "Dump an RRD to XML.\n\n\
++ static PyObject *
++ _rrdtool_dump(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int status;
++@@ -345,7 +345,7 @@ static char _rrdtool_update__doc__[] = "Store a new set of values into\
++ static PyObject *
++ _rrdtool_update(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int status;
++@@ -378,7 +378,7 @@ static char _rrdtool_updatev__doc__[] = "Store a new set of values into "\
++ static PyObject *
++ _rrdtool_updatev(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     rrd_info_t *data;
++@@ -419,7 +419,7 @@ static char _rrdtool_fetch__doc__[] = "Fetch data from an RRD.\n\n\
++ static PyObject *
++ _rrdtool_fetch(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret, *range_tup, *dsnam_tup, *data_list, *t;
++     rrd_value_t *data, *datai, dv;
++@@ -497,7 +497,7 @@ static char _rrdtool_flushcached__doc__[] = "Flush RRD files from memory.\n\n\
++ static PyObject *
++ _rrdtool_flushcached(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int status;
++@@ -592,7 +592,7 @@ static char _rrdtool_graph__doc__[] = "Create a graph based on one or more " \
++ static PyObject *
++ _rrdtool_graph(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int xsize, ysize, i, status;
++@@ -650,7 +650,7 @@ static char _rrdtool_graphv__doc__[] = "Create a graph based on one or more " \
++ static PyObject *
++ _rrdtool_graphv(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     rrd_info_t *data;
++@@ -695,7 +695,7 @@ static char _rrdtool_xport__doc__[] = "Dictionary representation of data " \
++ static PyObject *
++ _rrdtool_xport(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int xsize, status;
++@@ -793,7 +793,7 @@ static char _rrdtool_list__doc__[] = "List RRDs in storage.\n\n" \
++ static PyObject *
++ _rrdtool_list(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret, *str;
++     char *data, *ptr, *end;
++@@ -855,7 +855,7 @@ static char _rrdtool_tune__doc__[] = "Modify some basic properties of a " \
++ static PyObject *
++ _rrdtool_tune(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int status;
++@@ -893,7 +893,7 @@ static char _rrdtool_first__doc__[] = "Get the first UNIX timestamp of the "\
++ static PyObject *
++ _rrdtool_first(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int ts;
++@@ -928,7 +928,7 @@ static char _rrdtool_last__doc__[] = "Get the UNIX timestamp of the most "\
++ static PyObject *
++ _rrdtool_last(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int ts;
++@@ -965,7 +965,7 @@ static char _rrdtool_resize__doc__[] = "Modify the number of rows in a "\
++ static PyObject *
++ _rrdtool_resize(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     int status;
++@@ -1003,7 +1003,7 @@ static char _rrdtool_info__doc__[] = "Extract header information from an "\
++ static PyObject *
++ _rrdtool_info(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret;
++     rrd_info_t *data;
++@@ -1040,7 +1040,7 @@ static char _rrdtool_lastupdate__doc__[] = "Returns datetime and value stored "\
++ static PyObject *
++ _rrdtool_lastupdate(PyObject *Py_UNUSED(self), PyObject *args)
++ {
++-    char **rrdtool_argv = NULL;
+++    const char **rrdtool_argv = NULL;
++     int    rrdtool_argc = 0;
++     PyObject *ret, *ds_dict, *lastupd;
++     int status;
++diff --git a/bindings/ruby/main.c b/bindings/ruby/main.c
++index e4cc6443d..a036b7fb8 100644
++--- a/bindings/ruby/main.c
+++++ b/bindings/ruby/main.c
++@@ -9,7 +9,7 @@
++ 
++ typedef struct string_arr_t {
++     int       len;
++-    char    **strings;
+++    const char    **strings;
++ } string_arr;
++ 
++ VALUE     mRRD;
++@@ -18,12 +18,12 @@ VALUE     rb_eRRDError;
++ typedef int (
++     *RRDFUNC) (
++     int argc,
++-    char **argv);
+++    const char **argv);
++ 
++ typedef rrd_info_t *(
++     *RRDINFOFUNC) (
++     int argc,
++-    char **argv);
+++    const char **argv);
++ 
++ #define RRD_CHECK_ERROR  \
++     if (rrd_test_error()) \
++@@ -72,10 +72,10 @@ void string_arr_delete(
++ 
++     /* skip dummy first entry */
++     for (i = 1; i < a.len; i++) {
++-        free(a.strings[i]);
+++        free((void *)a.strings[i]);
++     }
++ 
++-    free(a.strings);
+++    free((void *)a.strings);
++ }
++ 
++ void reset_rrd_state(
++diff --git a/bindings/tcl/tclrrd.c b/bindings/tcl/tclrrd.c
++index 2927d9251..58a4cef68 100644
++--- a/bindings/tcl/tclrrd.c
+++++ b/bindings/tcl/tclrrd.c
++@@ -22,6 +22,7 @@
++ #include <stdlib.h>
++ #include "../../src/rrd_tool.h"
++ #include "../../src/rrd_format.h"
+++#include "../../src/unused.h"
++ 
++ /* support pre-8.4 tcl */
++ 
++@@ -41,47 +42,39 @@ extern int Tclrrd_SafeInit(
++  * Hence, we need to do some preparation before
++  * calling the rrd library functions.
++  */
++-static char **getopt_init(
+++static const char **getopt_init(
++     int argc,
++     CONST84 char *argv[])
++ {
++-    char    **argv2;
+++    const char    **argv2;
++     int       i;
++ 
++     argv2 = calloc(argc, sizeof(char *));
++     for (i = 0; i < argc; i++) {
++-        argv2[i] = strdup(argv[i]);
+++        argv2[i] = argv[i];
++     }
++     return argv2;
++ }
++ 
++ static void getopt_cleanup(
++-    int argc,
++-    char **argv2)
+++    int UNUSED(argc),
+++    const char **argv2)
++ {
++-    int       i;
++-
++-    for (i = 0; i < argc; i++) {
++-        if (argv2[i] != NULL) {
++-            free(argv2[i]);
++-        }
++-    }
++-    free(argv2);
+++    free((void *)argv2);
++ }
++ 
++ static void getopt_free_element(
++-    char *argv2[],
+++    const char *argv2[],
++     int argn)
++ {
++     if (argv2[argn] != NULL) {
++-        free(argv2[argn]);
++         argv2[argn] = NULL;
++     }
++ }
++ 
++ static void getopt_squieeze(
++     int *argc,
++-    char *argv2[])
+++    const char *argv2[])
++ {
++     int       i, null_i = 0, argc_tmp = *argc;
++ 
++@@ -104,7 +97,7 @@ static int Rrd_Create(
++     CONST84 char *argv[])
++ {
++     int       argv_i;
++-    char    **argv2;
+++    const char    **argv2;
++     char     *parsetime_error = NULL;
++     time_t    last_up = time(NULL) - 10;
++     long int  long_tmp;
++@@ -295,7 +288,7 @@ static int Rrd_Flushcached(
++         return TCL_ERROR;
++     }
++ 
++-    rrd_flushcached(argc, (char**)argv);
+++    rrd_flushcached(argc, argv);
++ 
++     if (rrd_test_error()) {
++         Tcl_AppendResult(interp, "RRD Error: ",
++@@ -380,7 +373,7 @@ static int Rrd_Update(
++     CONST84 char *argv[])
++ {
++     int       argv_i;
++-    char    **argv2, *template = NULL;
+++    const char    **argv2, *template = NULL;
++ 
++     argv2 = getopt_init(argc, argv);
++ 
++@@ -391,16 +384,10 @@ static int Rrd_Update(
++                 Tcl_AppendResult(interp, "RRD Error: option '",
++                                  argv2[argv_i - 1], "' needs an argument",
++                                  (char *) NULL);
++-                if (template != NULL) {
++-                    free(template);
++-                }
++                 getopt_cleanup(argc, argv2);
++                 return TCL_ERROR;
++             }
++-            if (template != NULL) {
++-                free(template);
++-            }
++-            template = strdup(argv2[argv_i]);
+++            template = argv2[argv_i];
++             getopt_free_element(argv2, argv_i - 1);
++             getopt_free_element(argv2, argv_i);
++         } else if (!strcmp(argv2[argv_i], "--")) {
++@@ -409,9 +396,6 @@ static int Rrd_Update(
++         } else if (argv2[argv_i][0] == '-') {
++             Tcl_AppendResult(interp, "RRD Error: unknown option '",
++                              argv2[argv_i], "'", (char *) NULL);
++-            if (template != NULL) {
++-                free(template);
++-            }
++             getopt_cleanup(argc, argv2);
++             return TCL_ERROR;
++         }
++@@ -422,18 +406,12 @@ static int Rrd_Update(
++     if (argc < 2) {
++         Tcl_AppendResult(interp, "RRD Error: needs rrd filename",
++                          (char *) NULL);
++-        if (template != NULL) {
++-            free(template);
++-        }
++         getopt_cleanup(argc, argv2);
++         return TCL_ERROR;
++     }
++ 
++     rrd_update_r(argv2[1], template, argc - 2, (const char **)argv2 + 2);
++ 
++-    if (template != NULL) {
++-        free(template);
++-    }
++     getopt_cleanup(argc, argv2);
++ 
++     if (rrd_test_error()) {
++@@ -454,7 +432,6 @@ static int Rrd_Info(
++ {
++     int status = TCL_OK;
++     rrd_info_t *data;
++-    char **argv2;
++ 
++     /* TODO: support for rrdcached */
++     if (argc != 2) {
++@@ -463,9 +440,7 @@ static int Rrd_Info(
++         return TCL_ERROR;
++     }
++ 
++-    argv2 = getopt_init(argc, argv);
++-
++-    data = rrd_info_r(argv2[1]);
+++    data = rrd_info_r(argv[1]);
++ 
++     if (data) {
++ 	Tcl_SetObjResult(interp, convert_info(data));
++@@ -477,7 +452,6 @@ static int Rrd_Info(
++ 	status = TCL_ERROR;
++     }
++ 
++-    getopt_cleanup(argc, argv2);
++     return status;
++ }
++ 
++@@ -488,7 +462,6 @@ static int Rrd_Lastupdate(
++     CONST84 char *argv[])
++ {
++     time_t    last_update;
++-    char    **argv2;
++     char    **ds_namv;
++     char    **last_ds;
++     char      s[30];
++@@ -502,8 +475,7 @@ static int Rrd_Lastupdate(
++         return TCL_ERROR;
++     }
++ 
++-    argv2 = getopt_init(argc, argv);
++-    if (rrd_lastupdate_r(argv2[1], &last_update,
+++    if (rrd_lastupdate_r(argv[1], &last_update,
++                        &ds_cnt, &ds_namv, &last_ds) == 0) {
++         listPtr = Tcl_GetObjResult(interp);
++         for (i = 0; i < ds_cnt; i++) {
++@@ -527,7 +499,6 @@ static int Rrd_Lastupdate(
++             free(ds_namv);
++         }
++     }
++-    getopt_cleanup(argc, argv2);
++     return TCL_OK;
++ }
++ 
++@@ -543,10 +514,8 @@ static int Rrd_Fetch(
++     char    **ds_namv;
++     Tcl_Obj  *listPtr;
++     char      s[30];
++-    char    **argv2;
++ 
++-    argv2 = getopt_init(argc, argv);
++-    if (rrd_fetch(argc, argv2, &start, &end, &step,
+++    if (rrd_fetch(argc, argv, &start, &end, &step,
++                   &ds_cnt, &ds_namv, &data) != -1) {
++         datai = data;
++         listPtr = Tcl_GetObjResult(interp);
++@@ -562,7 +531,6 @@ static int Rrd_Fetch(
++         free(ds_namv);
++         free(data);
++     }
++-    getopt_cleanup(argc, argv2);
++ 
++     if (rrd_test_error()) {
++         Tcl_AppendResult(interp, "RRD Error: ",
++@@ -590,7 +558,7 @@ static int Rrd_Graph(
++     int       rc, xsize, ysize;
++     double    ymin, ymax;
++     char      dimensions[50];
++-    char    **argv2;
+++    const char    **argv2;
++     CONST84 char *save;
++ 
++     /*
++@@ -692,11 +660,7 @@ static int Rrd_Tune(
++     int argc,
++     CONST84 char *argv[])
++ {
++-    char    **argv2;
++-
++-    argv2 = getopt_init(argc, argv);
++-    rrd_tune(argc, argv2);
++-    getopt_cleanup(argc, argv2);
+++    rrd_tune(argc, argv);
++ 
++     if (rrd_test_error()) {
++         Tcl_AppendResult(interp, "RRD Error: ",
++@@ -716,11 +680,7 @@ static int Rrd_Resize(
++     int argc,
++     CONST84 char *argv[])
++ {
++-    char    **argv2;
++-
++-    argv2 = getopt_init(argc, argv);
++-    rrd_resize(argc, argv2);
++-    getopt_cleanup(argc, argv2);
+++    rrd_resize(argc, argv);
++ 
++     if (rrd_test_error()) {
++         Tcl_AppendResult(interp, "RRD Error: ",
++@@ -740,11 +700,7 @@ static int Rrd_Restore(
++     int argc,
++     CONST84 char *argv[])
++ {
++-    char    **argv2;
++-
++-    argv2 = getopt_init(argc, argv);
++-    rrd_restore(argc, argv2);
++-    getopt_cleanup(argc, argv2);
+++    rrd_restore(argc, argv);
++ 
++     if (rrd_test_error()) {
++         Tcl_AppendResult(interp, "RRD Error: ",
++diff --git a/src/optparse.c b/src/optparse.c
++index 9040ba8b2..79a3efe11 100644
++--- a/src/optparse.c
+++++ b/src/optparse.c
++@@ -10,7 +10,7 @@
++ #define options_argv(i) \
++     ((i) < options->argc ? options->argv[i] : NULL)
++ 
++-void optparse_init(struct optparse *options, int argc, char **argv)
+++void optparse_init(struct optparse *options, int argc, const char **argv)
++ {
++     options->argv = argv;
++     options->argc = argc;
++@@ -42,7 +42,7 @@ is_longopt(const char *arg)
++ static void
++ permute(struct optparse *options, int index)
++ {
++-    char *nonoption = options->argv[index];
+++    const char *nonoption = options->argv[index];
++     for (int i = index; i < options->optind - 1; i++)
++         options->argv[i] = options->argv[i + 1];
++     options->argv[options->optind - 1] = nonoption;
++@@ -67,7 +67,7 @@ int optparse(struct optparse *options, const char *optstring)
++     options->errmsg[0] = '\0';
++     options->optopt = 0;
++     options->optarg = NULL;
++-    char *option = options_argv(options->optind);
+++    const char *option = options_argv(options->optind);
++     if (option == NULL) {
++         return -1;
++     } else if (is_dashdash(option)) {
++@@ -88,7 +88,7 @@ int optparse(struct optparse *options, const char *optstring)
++     option += options->subopt + 1;
++     options->optopt = option[0];
++     int type = argtype(optstring, option[0]);
++-    char *next = options_argv(options->optind + 1);
+++    const char *next = options_argv(options->optind + 1);
++     switch (type) {
++     case -1:
++         opterror(options, "invalid option -- '%c'", option[0]);
++@@ -128,10 +128,10 @@ int optparse(struct optparse *options, const char *optstring)
++     return 0;
++ }
++ 
++-char *optparse_arg(struct optparse *options)
+++const char *optparse_arg(struct optparse *options)
++ {
++     options->subopt = 0;
++-    char *option = options->argv[options->optind];
+++    const char *option = options->argv[options->optind];
++     if (option != NULL)
++         options->optind++;
++     return option;
++@@ -222,7 +222,7 @@ optparse_long(struct optparse *options,
++               int *longindex)
++ {
++ //    printf("%i < %i\n",options->optind,options->argc);
++-    char *option = options_argv(options->optind);
+++    const char *option = options_argv(options->optind);
++     if (option == NULL) {
++         return -1;
++     } else if (is_dashdash(option)) {
++diff --git a/src/optparse.h b/src/optparse.h
++index c4b0ec19c..7a0bb3885 100644
++--- a/src/optparse.h
+++++ b/src/optparse.h
++@@ -44,7 +44,7 @@
++  */
++ 
++ struct optparse {
++-    char **argv;
+++    const char **argv;
++     int argc;
++     int permute;
++     int optind;
++@@ -65,7 +65,7 @@ struct optparse_long {
++ /**
++  * Initializes the parser state.
++  */
++-void optparse_init(struct optparse *options, int argc, char **argv);
+++void optparse_init(struct optparse *options, int argc, const char **argv);
++ 
++ /**
++  * Read the next option in the argv array.
++@@ -98,6 +98,6 @@ optparse_long(struct optparse *options,
++  * subcommand returned by optparse_arg(). This function allows you to
++  * ignore the value of optind.
++  */
++-char *optparse_arg(struct optparse *options);
+++const char *optparse_arg(struct optparse *options);
++ 
 + #endif
-+ #include "dc.h"
-+ #include "dc-proto.h"
-++#include "number.h"
++diff --git a/src/rrd.h b/src/rrd.h
++index 184887ccc..b40f9a449 100644
++--- a/src/rrd.h
+++++ b/src/rrd.h
++@@ -155,10 +155,10 @@ extern    "C" {
++ /* main function blocks */
++     int       rrd_create(
++     int,
++-    char **);
+++    const char **);
++     rrd_info_t *rrd_info(
++     int,
++-    char **);
+++    const char **);
++     rrd_info_t *rrd_info_push(
++     rrd_info_t *,
++     char *,
++@@ -170,19 +170,19 @@ extern    "C" {
++     rrd_info_t *);
++     char     *rrd_list(
++     int,
++-    char **);
+++    const char **);
++     char     *rrd_list_r(
++     int,
++-    char *dirname);
+++    const char *dirname);
++     int       rrd_update(
++     int,
++-    char **);
+++    const char **);
++     rrd_info_t *rrd_update_v(
++     int,
++-    char **);
+++    const char **);
++     int       rrd_graph(
++     int,
++-    char **,
+++    const char **,
++     char ***,
++     int *,
++     int *,
++@@ -191,11 +191,11 @@ extern    "C" {
++     double *);
++     rrd_info_t *rrd_graph_v(
++     int,
++-    char **);
+++    const char **);
 + 
-+ typedef enum {DC_FALSE, DC_TRUE} dc_boolean;
++     int       rrd_fetch(
++     int,
++-    char **,
+++    const char **,
++     time_t *,
++     time_t *,
++     unsigned long *,
++@@ -204,32 +204,32 @@ extern    "C" {
++     rrd_value_t **);
++     int       rrd_restore(
++     int,
++-    char **);
+++    const char **);
++     int       rrd_dump(
++     int,
++-    char **);
+++    const char **);
++     int       rrd_tune(
++     int,
++-    char **);
+++    const char **);
++     time_t    rrd_last(
++     int,
++-    char **);
+++    const char **);
++     int       rrd_lastupdate(
++     int argc,
++-    char **argv);
+++    const char **argv);
++     time_t    rrd_first(
++     int,
++-    char **);
+++    const char **);
++     int       rrd_resize(
++     int,
++-    char **);
+++    const char **);
++     char     *rrd_strversion(
++     void);
++     double    rrd_version(
++     void);
++     int       rrd_xport(
++     int,
++-    char **,
+++    const char **,
++     int *,
++     time_t *,
++     time_t *,
++@@ -239,7 +239,7 @@ extern    "C" {
++     rrd_value_t **);
++     int       rrd_flushcached(
++     int argc,
++-    char **argv);
+++    const char **argv);
 + 
- @@ -97,12 +97,15 @@ static int input_pushback;
-  static int
-  input_fil DC_DECLVOID()
-@@ -512,6 +532,14 @@ diff --git a/dc/misc.c b/dc/misc.c
- index cd23602..cd910b8 100644
- --- a/dc/misc.c
- +++ b/dc/misc.c
-+@@ -47,6 +47,7 @@
-+ #include <getopt.h>
-+ #include "dc.h"
-+ #include "dc-proto.h"
-++#include "number.h"
++     void      rrd_freemem(
++     void *mem);
++@@ -323,7 +323,7 @@ extern    "C" {
++     const char **argv);
++     int       rrd_dump_opt_r(
++     const char *filename,
++-    char *outname,
+++    const char *outname,
++     int opt_noheader);
++     int       rrd_dump_r(
++     const char *filename,
++diff --git a/src/rrd_cgi.c b/src/rrd_cgi.c
++index b82c310db..14a4f511a 100644
++--- a/src/rrd_cgi.c
+++++ b/src/rrd_cgi.c
++@@ -102,7 +102,7 @@ static char *rrdstrip(
++ static char *scanargs(
++     char *line,
++     int *argc,
++-    char ***args);
+++    const char ***args);
 + 
-+ #ifndef EXIT_FAILURE	/* C89 <stdlib.h> */
-+ # define EXIT_FAILURE	1
- @@ -89,6 +89,7 @@ dc_show_id DC_DECLARG((fp, id, suffix))
-  		fprintf(fp, "'%c' (%#o)%s", (unsigned int) id, id, suffix);
-  	else
-@@ -593,8 +621,11 @@ diff --git a/dc/stack.c b/dc/stack.c
- index 49422df..174411d 100644
- --- a/dc/stack.c
- +++ b/dc/stack.c
--@@ -35,7 +35,10 @@
-+@@ -33,9 +33,13 @@
-+ #include "dc.h"
-+ #include "dc-proto.h"
-  #include "dc-regdef.h"
-++#include "number.h"
-  
-  /* an oft-used error message: */
- -#define Empty_Stack	fprintf(stderr, "%s: stack empty\n", progname)
-@@ -657,6 +688,14 @@ diff --git a/dc/string.c b/dc/string.c
- index dee9169..389d899 100644
- --- a/dc/string.c
- +++ b/dc/string.c
-+@@ -45,6 +45,7 @@
-+ #endif
-+ #include "dc.h"
-+ #include "dc-proto.h"
-++#include "number.h"
++ /* format at-time specified times using strftime */
++ static char *printstrftime(
++@@ -317,7 +317,7 @@ static const char *putvar(
++ }
 + 
-+ /* here is the completion of the dc_string type: */
-+ struct dc_string {
- @@ -94,6 +94,7 @@ dc_out_str DC_DECLARG((value, discard_flag))
-  	dc_discard discard_flag DC_DECLEND
-  {
++ /* expand those RRD:* directives that can be used recursively */
++-static char *rrd_expand_vars(
+++static const char *rrd_expand_vars(
++     char *buffer)
++ {
++     int       i;
++@@ -434,7 +434,7 @@ static int readfile(
++ 
++ int main(
++     int argc,
++-    char *argv[])
+++    const char *argv[])
++ {
++     char     *buffer;
++     long      i;
++@@ -926,7 +926,7 @@ static char *drawgraph(
++     }
++     calfree();
++     if (rrd_graph
++-        (argc + 1, (char **) args - 1, &calcpr, &xsize, &ysize, NULL, &ymin,
+++        (argc + 1, args - 1, &calcpr, &xsize, &ysize, NULL, &ymin,
++          &ymax) != -1) {
++         return stralloc(calcpr[0]);
++     } else {
++@@ -973,7 +973,7 @@ static char *printtimelast(
++         /* not raising argc in step with args - 1 since the last argument
++            will be used below for strftime  */
++ 
++-        last = rrd_last(argc, (char **) args - 1);
+++        last = rrd_last(argc, args - 1);
++         if (rrd_test_error()) {
++             char      err[4096];
++ 
++@@ -1027,7 +1027,7 @@ static char *printtimenow(
++ static char *scanargs(
++     char *line,
++     int *argument_count,
++-    char ***arguments)
+++    const char ***arguments)
++ {
++     char     *getP;     /* read cursor */
++     char     *putP;     /* write cursor */
++@@ -1039,8 +1039,8 @@ static char *scanargs(
++ 
++     /* local array of arguments while parsing */
++     int       argc = 1;
++-    char    **argv;
++-    char    **argv_tmp; /* temp variable for realloc() */
+++    const char    **argv;
+++    const char    **argv_tmp; /* temp variable for realloc() */
++ 
++ #ifdef DEBUG_PARSER
++     printf("<-- scanargs(%s) -->\n", line);
++@@ -1051,7 +1051,7 @@ static char *scanargs(
++ 
++     /* create initial argument array of char pointers */
++     argsz = 32;
++-    argv = (char **) malloc(argsz * sizeof(char *));
+++    argv = malloc(argsz * sizeof(char *));
++     if (!argv) {
++         return NULL;
++     }
++@@ -1146,7 +1146,7 @@ static char *scanargs(
++         if (argc == argsz - 2) {
++             /* resize argument array */
++             argsz *= 2;
++-            argv_tmp = (char **) rrd_realloc(argv, argsz * sizeof(char *));
+++            argv_tmp = rrd_realloc(argv, argsz * sizeof(char *));
++             if (*argv_tmp == NULL) {
++                 return NULL;
++             }
++@@ -1213,7 +1213,7 @@ static int parse(
++     /* the name of the vairable ... */
++     char     *val;
++     long      valln;
++-    char    **args;
+++    const char    **args;
++     char     *end;
++     long      end_offset;
++     int       argc;
++@@ -1264,7 +1264,7 @@ static int parse(
++         /* make sure we do not shrink the mallocd block */
++         size_t    newbufsize = i + strlen(end) + valln + 1;
++ 
++-        *buf = (char *) rrd_realloc(*buf, newbufsize);
+++        *buf = rrd_realloc(*buf, newbufsize);
++ 
++         if (*buf == NULL) {
++             perror("Realoc buf:");
++diff --git a/src/rrd_create.c b/src/rrd_create.c
++index f9bad0866..919b4195a 100644
++--- a/src/rrd_create.c
+++++ b/src/rrd_create.c
++@@ -76,7 +76,7 @@ static void parseGENERIC_DS(
++ 
++ int rrd_create(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     struct optparse_long longopts[] = {
++         {"start", 'b', OPTPARSE_REQUIRED},
++diff --git a/src/rrd_daemon.c b/src/rrd_daemon.c
++index 751798aa1..21c38a11d 100644
++--- a/src/rrd_daemon.c
+++++ b/src/rrd_daemon.c
++@@ -1877,7 +1877,7 @@ static int handle_request_tune(
++     HANDLER_PROTO)
++ {                       /* {{{ */
++     int       status;
++-    char**    argv = NULL;
+++    const char**    argv = NULL;
++     int       argc, argc_tmp;
++     char*     i;
++     int       rc;
++@@ -1916,7 +1916,7 @@ static int handle_request_tune(
++         goto done;
++     }
++ 
++-    if ((argv = (char **) malloc(argc * sizeof(char*))) == NULL) {
+++    if ((argv = malloc(argc * sizeof(char*))) == NULL) {
++         rc = send_response(sock, RESP_ERR, "%s\n", rrd_strerror(ENOMEM));
++         goto done;
++     }
++@@ -1927,7 +1927,7 @@ static int handle_request_tune(
++         argc_tmp += 1;
++     }
++ 
++-    status = rrd_tune_r(file, argc, (const char **)argv);
+++    status = rrd_tune_r(file, argc, argv);
++     if (status != 0) {
++         rc = send_response(sock, RESP_ERR, "Got error %s\n", rrd_get_error());
++         goto done;   
++@@ -1935,7 +1935,7 @@ static int handle_request_tune(
++     rc = send_response(sock, RESP_OK, "Success\n");
++     done:
++     free(file);
++-    free(argv);
+++    free((void *)argv);
++     return rc;
++ }  
++ 
++@@ -4505,7 +4505,7 @@ static int cleanup(
++ 
++ static int read_options(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {                       /* {{{ */
++     struct optparse_long longopts[] = {
++         {NULL, 'a', OPTPARSE_REQUIRED},
++@@ -5050,7 +5050,7 @@ static int read_options(
++ 
++ int main(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     int       status;
++ 
++diff --git a/src/rrd_dump.c b/src/rrd_dump.c
++index a4490d594..c58e0ee4a 100644
++--- a/src/rrd_dump.c
+++++ b/src/rrd_dump.c
++@@ -497,7 +497,7 @@ static size_t rrd_dump_opt_cb_fileout(
++ 
++ int rrd_dump_opt_r(
++     const char *filename,
++-    char *outname,
+++    const char *outname,
++     int opt_noheader)
++ {
++     FILE     *out_file;
++@@ -543,7 +543,7 @@ int rrd_dump_r(
++ 
++ int rrd_dump(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     int       opt;
++     struct optparse_long longopts[] = {
++diff --git a/src/rrd_fetch.c b/src/rrd_fetch.c
++index c739bfc45..54780f19b 100644
++--- a/src/rrd_fetch.c
+++++ b/src/rrd_fetch.c
++@@ -61,7 +61,7 @@
++ 
++ int rrd_fetch(
++     int argc,
++-    char **argv,
+++    const char **argv,
++     time_t *start,
++     time_t *end,        /* which time frame do you want ?
++                          * will be changed to represent reality */
++diff --git a/src/rrd_first.c b/src/rrd_first.c
++index a696c5c38..f3dde5404 100644
++--- a/src/rrd_first.c
+++++ b/src/rrd_first.c
++@@ -13,7 +13,7 @@
++ 
++ time_t rrd_first(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     struct optparse_long longopts[] = {
++         {"rraindex", 129, OPTPARSE_REQUIRED},
++diff --git a/src/rrd_flushcached.c b/src/rrd_flushcached.c
++index 090bca749..3bf6cd29d 100644
++--- a/src/rrd_flushcached.c
+++++ b/src/rrd_flushcached.c
++@@ -22,7 +22,7 @@
++ #include "rrd_tool.h"
++ #include "rrd_client.h"
++ 
++-int rrd_flushcached (int argc, char **argv)
+++int rrd_flushcached (int argc, const char **argv)
++ {
++     struct optparse_long longopts[] = {
++         {"daemon", 'd', OPTPARSE_REQUIRED},
++diff --git a/src/rrd_graph.c b/src/rrd_graph.c
++index b32d45085..46511e9a3 100644
++--- a/src/rrd_graph.c
+++++ b/src/rrd_graph.c
++@@ -4607,7 +4607,7 @@ int scan_for_col(
++ /* Now just a wrapper around rrd_graph_v */
++ int rrd_graph(
++     int argc,
++-    char **argv,
+++    const char **argv,
++     char ***prdata,
++     int *xsize,
++     int *ysize,
++@@ -4690,7 +4690,7 @@ int rrd_graph(
++ 
++ rrd_info_t *rrd_graph_v(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     image_desc_t im;
++     rrd_info_t *grinfo;
++@@ -4953,7 +4953,7 @@ void rrd_graph_init(
++ 
++ void rrd_graph_options(
++     int argc,
++-    char *argv[],
+++    const char **argv,
++     struct optparse *poptions,
++     image_desc_t *im)
++ {
++diff --git a/src/rrd_graph.h b/src/rrd_graph.h
++index 4df32ec66..083cf3800 100644
++--- a/src/rrd_graph.h
+++++ b/src/rrd_graph.h
++@@ -473,12 +473,12 @@ void      time_clean(
++ 
++ void      rrd_graph_options(
++     int,
++-    char **,
+++    const char **,
++     struct optparse *,
++     image_desc_t *);
++ void      rrd_graph_script(
++     int,
++-    char **,
+++    const char **,
++     image_desc_t *const,
++     int);
++ int       rrd_graph_color(
++diff --git a/src/rrd_graph_helper.c b/src/rrd_graph_helper.c
++index 99cdefa65..ba90e1a6c 100644
++--- a/src/rrd_graph_helper.c
+++++ b/src/rrd_graph_helper.c
++@@ -1952,7 +1952,7 @@ static int parse_xport(
++ 
++ void rrd_graph_script(
++     int argc,
++-    char *argv[],
+++    const char **argv,
++     image_desc_t *const im,
++     int optno)
++ {
++diff --git a/src/rrd_info.c b/src/rrd_info.c
++index c0c6f68c7..eb0d4e4de 100644
++--- a/src/rrd_info.c
+++++ b/src/rrd_info.c
++@@ -82,7 +82,7 @@ rrd_info_t
++ 
++ rrd_info_t *rrd_info(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     struct optparse_long longopts[] = {
++         {"daemon", 'd', OPTPARSE_REQUIRED},
++diff --git a/src/rrd_last.c b/src/rrd_last.c
++index 026a1e828..1aae72512 100644
++--- a/src/rrd_last.c
+++++ b/src/rrd_last.c
++@@ -11,7 +11,7 @@
++ 
++ time_t rrd_last(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     char *opt_daemon = NULL;
++     time_t lastupdate;
++diff --git a/src/rrd_lastupdate.c b/src/rrd_lastupdate.c
++index ab30dcf67..4f7f4770e 100644
++--- a/src/rrd_lastupdate.c
+++++ b/src/rrd_lastupdate.c
++@@ -14,7 +14,7 @@
++ #include "rrd_client.h"
++ #include <stdarg.h>
++ 
++-int rrd_lastupdate (int argc, char **argv)
+++int rrd_lastupdate (int argc, const char **argv)
++ {
++     struct optparse_long longopts[] = {
++         {"daemon", 'd', OPTPARSE_REQUIRED},
++diff --git a/src/rrd_list.c b/src/rrd_list.c
++index e743b9b7d..6e96220ea 100644
++--- a/src/rrd_list.c
+++++ b/src/rrd_list.c
++@@ -37,7 +37,7 @@ static char *move_past_prefix(const char *prefix, const char *string)
++ 	return (char *)&(string[index]);
++ }
++ 
++-static char *rrd_list_rec(int recursive, char *root, char *dirname)
+++static char *rrd_list_rec(int recursive, const char *root, const char *dirname)
++ {
++ #define SANE_ASPRINTF2(_dest_str, _format, ...)				\
++ 	if (asprintf(&_dest_str, _format, __VA_ARGS__) == -1) {		\
++@@ -138,7 +138,7 @@ static char *rrd_list_rec(int recursive, char *root, char *dirname)
++ 	return out;
++ }
++ 
++-char *rrd_list_r(int recursive, char *dirname)
+++char *rrd_list_r(int recursive, const char *dirname)
++ {
++ #define SANE_ASPRINTF(_dest_str, _format, ...)				\
++ 	if (asprintf(&_dest_str, _format, __VA_ARGS__) == -1) {		\
++@@ -240,7 +240,7 @@ char *rrd_list_r(int recursive, char *dirname)
++ 	return rrd_list_rec(recursive, dirname, dirname);
++ }
++ 
++-char *rrd_list(int argc, char **argv)
+++char *rrd_list(int argc, const char **argv)
++ {
++ 	char *opt_daemon = NULL;
++ 	int status;
++diff --git a/src/rrd_modify.c b/src/rrd_modify.c
++index a2b07f640..70ac9e77f 100644
++--- a/src/rrd_modify.c
+++++ b/src/rrd_modify.c
++@@ -1297,7 +1297,7 @@ static int add_rras(const rrd_t *in, rrd_t *out, const int *ds_map,
++ }
++ 
++ int handle_modify(const rrd_t *in, const char *outfilename,
++-		  int argc, char **argv, int optidx,
+++		  int argc, const char **argv, int optidx,
++ 		  int newstep) {
++     // parse add/remove options
++     int rc = -1;
++diff --git a/src/rrd_modify.h b/src/rrd_modify.h
++index 52d8789be..64a39926e 100644
++--- a/src/rrd_modify.h
+++++ b/src/rrd_modify.h
++@@ -28,7 +28,7 @@ typedef struct {
++ } rra_mod_op_t;
++ 
++ int handle_modify(const rrd_t *in, const char *outfilename,
++-		  int argc, char **argv, int optind,
+++		  int argc, const char **argv, int optind,
++ 		  int newstep);
++ 
++ typedef union {
++diff --git a/src/rrd_resize.c b/src/rrd_resize.c
++index fb75d81ff..742e6d141 100644
++--- a/src/rrd_resize.c
+++++ b/src/rrd_resize.c
++@@ -12,9 +12,9 @@
++ 
++ int rrd_resize(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++-    char     *infilename, outfilename[11] = "resize.rrd";
+++    const char     *infilename, outfilename[11] = "resize.rrd";
++     rrd_t     rrdold, rrdnew;
++     rrd_value_t buffer;
++     int       version;
++diff --git a/src/rrd_restore.c b/src/rrd_restore.c
++index 85d481e0c..ebef5efe8 100644
++--- a/src/rrd_restore.c
+++++ b/src/rrd_restore.c
++@@ -1378,7 +1378,7 @@ int write_file(
++ 
++ int rrd_restore(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     struct optparse_long longopts[] = {
++         {"range-check", 'r', OPTPARSE_NONE},
++diff --git a/src/rrd_tool.c b/src/rrd_tool.c
++index cc6119d9a..56321ee1a 100644
++--- a/src/rrd_tool.c
+++++ b/src/rrd_tool.c
++@@ -22,16 +22,16 @@
++ 
++ 
++ static void PrintUsage(
++-    char *cmd);
+++    const char *cmd);
++ static int CountArgs(
++     char *aLine);
++ static int CreateArgs(
+++    const char *,
++     char *,
++-    char *,
++-    char **);
+++    const char **);
++ static int HandleInputLine(
++     int,
++-    char **,
+++    const char **,
++     FILE *);
++ int       RemoteMode = 0;
++ int       ChangeRoot = 0;
++@@ -42,7 +42,7 @@ int       ChangeRoot = 0;
++ 
++ 
++ static void PrintUsage(
++-    char *cmd)
+++    const char *cmd)
++ {
++ 
++ #ifdef BUILD_DATE
++@@ -443,11 +443,11 @@ static char *fgetslong(
++ 
++ int main(
++     int argc,
++-    char *argv[])
+++    const char *argv[])
++ {
++-    char    **myargv;
+++    const char    **myargv;
++     char     *aLine;
++-    char     *firstdir = "";
+++    const char     *firstdir = "";
++ 
++ #ifdef MUST_DISABLE_SIGFPE
++     signal(SIGFPE, SIG_IGN);
++@@ -526,7 +526,7 @@ int main(
++                 printf("ERROR: not enough arguments\n");
++                 continue;
++             }
++-            if ((myargv = (char **) malloc((argc + 1) *
+++            if ((myargv = malloc((argc + 1) *
++                                            sizeof(char *))) == NULL) {
++                 perror("malloc");
++                 exit(1);
++@@ -572,7 +572,7 @@ int main(
++    resolving them portably is not really simple. */
++ static int HandleInputLine(
++     int argc,
++-    char **argv,
+++    const char **argv,
++     FILE * out)
++ {
++ #if defined(HAVE_OPENDIR) && defined (HAVE_READDIR)
++@@ -887,12 +887,12 @@ static int CountArgs(
++  * CreateArgs - take a string (aLine) and tokenize
++  */
++ static int CreateArgs(
++-    char *pName,
+++    const char *pName,
++     char *aLine,
++-    char **argv)
+++    const char **argv)
++ {
++     char     *getP, *putP;
++-    char    **pargv = argv;
+++    const char    **pargv = argv;
++     char      Quote = 0;
++     int       inArg = 0;
++     int       len;
++diff --git a/src/rrd_tune.c b/src/rrd_tune.c
++index 198817f37..dd3f3f7cb 100644
++--- a/src/rrd_tune.c
+++++ b/src/rrd_tune.c
++@@ -71,7 +71,7 @@ static int set_hwsmootharg(
++ 
++ int rrd_tune(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     char      *opt_daemon = NULL;
++     const char *in_filename = NULL;
++diff --git a/src/rrd_update.c b/src/rrd_update.c
++index fbbe2820a..bb9a0602c 100644
++--- a/src/rrd_update.c
+++++ b/src/rrd_update.c
++@@ -299,7 +299,7 @@ static void initialize_time(
++ 
++ rrd_info_t *rrd_update_v(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     struct optparse_long longopts[] = {
++         {"template",          't', OPTPARSE_REQUIRED},
++@@ -674,7 +674,7 @@ static int rrd_template_update(const char *filename,  /* {{{ */
++ 
++ int rrd_update(
++     int argc,
++-    char **argv)
+++    const char **argv)
++ {
++     struct optparse_long longopts[] = {
++         {"template",          't', OPTPARSE_REQUIRED},
++diff --git a/src/rrd_xport.c b/src/rrd_xport.c
++index d15d33dd9..93c02f926 100644
++--- a/src/rrd_xport.c
+++++ b/src/rrd_xport.c
++@@ -73,7 +73,7 @@ static int rrd_xport_format_addprints(
++ 
++ int rrd_xport(
++     int argc,
++-    char **argv,
+++    const char **argv,
++     int UNUSED(*xsize),
++     time_t *start,
++     time_t *end,        /* which time frame do you want ?
++diff --git a/src/rrdupdate.c b/src/rrdupdate.c
++index cbbf48cc1..e368516c8 100644
++--- a/src/rrdupdate.c
+++++ b/src/rrdupdate.c
++@@ -20,19 +20,20 @@ int main(
++     int argc,
++     char **argv)
++ {
+++    const char **cargv = (const char **)argv;
++     char *name=basename(argv[0]);
++     rrd_info_t *info;
++ 
++     if (!strcmp(name, "rrdcreate")) {
++-        rrd_create(argc, argv);
+++        rrd_create(argc, cargv);
++     }
++     else if (!strcmp(name, "rrdinfo")) {
++-         info=rrd_info(argc, argv);
+++         info=rrd_info(argc, cargv);
++          rrd_info_print(info);
++          rrd_info_free(info);
++     }
++     else {
++-        rrd_update(argc, argv);
+++        rrd_update(argc, cargv);
++     }
++ 
++     if (rrd_test_error()) {
 -- 
 2.39.2
 
