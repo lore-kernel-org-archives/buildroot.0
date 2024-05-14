@@ -4,91 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 607CBC04FFE
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 15:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22B85C04FFE
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 15:44:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2BD8F81B8A;
-	Tue, 14 May 2024 15:42:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFB9981354;
+	Tue, 14 May 2024 15:44:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IjilMduuN9ok; Tue, 14 May 2024 15:42:57 +0000 (UTC)
+ id 4M1wL9uo7l27; Tue, 14 May 2024 15:44:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AD5E822BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E203481372
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3AD5E822BC;
-	Tue, 14 May 2024 15:42:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0B96E1BF4DB
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 15:42:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E203481372;
+	Tue, 14 May 2024 15:44:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 181801BF955
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 15:44:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC35E822BC
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 15:42:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D529540544
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 15:44:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0kHITS_JC2_Q for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 15:42:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2c; helo=mail-io1-xd2c.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ECDA181B8A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECDA181B8A
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
- [IPv6:2607:f8b0:4864:20::d2c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ECDA181B8A
- for <buildroot@buildroot.org>; Tue, 14 May 2024 15:42:53 +0000 (UTC)
-Received: by mail-io1-xd2c.google.com with SMTP id
- ca18e2360f4ac-7e1b5173ddcso239931239f.1
- for <buildroot@buildroot.org>; Tue, 14 May 2024 08:42:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715701373; x=1716306173;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=eTMq5YT8m7UePQZ8zE2gQPw0f944XpHu5N9TsNgAmk4=;
- b=kWAJvwVLS7X9smxIdxLceFW9HS+kpybZJigww3PDOZkfzBeahWIhIERNoVlu43XY4j
- UvkMhjvoE8rZYbEO7zgpNVmgpQ5b2UdQIQu17OOx7VuUlNtKGQHcLIpVCMuiaRu1QRjI
- MoWc5aQRbWF/O4Wu27cTDtN/hMeU/KAAMU0VrKLjFl2Epk0/0op1nciIB3cVTKWDO41R
- vA5ahpsC4BFSDT6Qjhs9CF6tuyOqgvNkoDuOytzYELCl50V8478WPpQhM2SXMZKSxBQg
- xL4GVnWkOf276mTDbP6IEIjkUX/pFjaqHQH4PG7fMjqMRwtWYc689K8jDcQsu7z2qQNP
- tbKQ==
-X-Gm-Message-State: AOJu0Yxz1Nyj5BjhhtfgZ1CBEorP2WvnAxxqYwqWEXvrZrEwgqS51jph
- F7Wy4c/HoXBFfAfgPa044XsvfGwNtkIdtMvfMx6r/9IJ0iLKWp81q78TQw==
-X-Google-Smtp-Source: AGHT+IFdRgRacgvcxzaDHtuOm5WrGnscdVAGiDiongDZTI5rJK1YKawMoHJBRf6dSvPMrs5Uvq+ypg==
-X-Received: by 2002:a6b:5007:0:b0:7e1:acdd:962e with SMTP id
- ca18e2360f4ac-7e1b51c81dbmr1551900239f.12.1715701372738; 
- Tue, 14 May 2024 08:42:52 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
- [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-489375c250fsm3124914173.101.2024.05.14.08.42.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 May 2024 08:42:52 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hbOGuKjVmx_3 for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 15:44:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E68424053A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E68424053A
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 15:44:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D03EE873C2; Tue, 14 May 2024 15:44:03 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 09:42:50 -0600
-Message-Id: <20240514154250.1453970-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715701373; x=1716306173; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=eTMq5YT8m7UePQZ8zE2gQPw0f944XpHu5N9TsNgAmk4=;
- b=bi5YcJVP/4zNQYtQsWN4lBnm8fEgXNEMrQPiaZaVCDtconAdwz6d8hbJ6zvuTConP9
- vVmDmljvBKyYYpV3qnGQ5vyrcEKjcMgh6Go2AtttRaFfg9LLPsAa8A9jOYpmIECjhmcV
- Vzlr+my49x8D1ws/Shr+t++7RhazwkOovz4uQSJ1KXD+C7ZqKx3vsfxqECKAhUgRderp
- Gy90DEQcsUKYmkNu0vOt2UhWsW6vUkhfbVvFyzddN/AOvoV9cPMyrgMZBIuA7Mgtz9QD
- ajoN89K2GMIfZ8RGacqFHrq03i76TQvDoRnwLYk7uI3AmEu85G6ZTVD6zauX9qfqOP3c
- wqDA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=bi5YcJVP
-Subject: [Buildroot] [PATCH 1/1] package/python-ml-dtypes: skip dependency
- check
+Date: Tue, 14 May 2024 17:43:06 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 31c39632856ecd38d3597793e8273786d4f0614f
+X-Git-Newrev: 9764258aaf0ef78ffd83e17d26959613b04b2944
+X-Patchwork-Hint: ignore
+Message-Id: <20240514154403.D03EE873C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/avenger96_defconfig: fix CI build
+ error due to a missing package for uboot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,49 +59,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>,
- Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package pins overly strict numpy dependency versions apparently
-for compatibility reasons that don't appear relevant to buildroot.
+commit: https://git.buildroot.net/buildroot/commit/?id=9764258aaf0ef78ffd83e17d26959613b04b2944
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package also appears to pin an overly strict setuptools version
-for unclear reasons.
+This refers to https://gitlab.com/buildroot.org/buildroot/-/jobs/6813124907
+The build error referenced in that link is:
 
-See:
-https://github.com/jax-ml/ml_dtypes/blob/v0.3.2/pyproject.toml#L51-L55
+error: command 'swig' failed: No such file or directory
+make[4]: *** [scripts/dtc/pylibfdt/Makefile:33: rebuild] Error 1
+make[3]: *** [scripts/Makefile.build:397: scripts/dtc/pylibfdt] Error 2
+make[2]: *** [Makefile:2014: scripts_dtc] Error 2
+make[1]: *** [package/pkg-generic.mk:283: /builds/buildroot.org/buildroot/output/build/uboot-2024.01/.stamp_built] Error 2
+make: *** [Makefile:82: _all] Error 2
 
-To fix this lets just set the --skip-dependency-check build option and
-ignore the build dependency version mismatches since they don't appear
-to cause any build issues.
+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT is added to the avenger96_defconfig in order to resolve the issue
 
-This error was introduced when we migrated setuptools to pep517 in
-8937db8dd595e0988751e5dbb568e870b07b39cc.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Marleen Vos <marleen.vos@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-ml-dtypes/python-ml-dtypes.mk | 1 +
+ configs/avenger96_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/python-ml-dtypes/python-ml-dtypes.mk b/package/python-ml-dtypes/python-ml-dtypes.mk
-index 676137ecf1..8097265078 100644
---- a/package/python-ml-dtypes/python-ml-dtypes.mk
-+++ b/package/python-ml-dtypes/python-ml-dtypes.mk
-@@ -10,6 +10,7 @@ PYTHON_ML_DTYPES_SITE = https://files.pythonhosted.org/packages/39/7d/8d85fcba86
- PYTHON_ML_DTYPES_LICENSE = Apache-2.0
- PYTHON_ML_DTYPES_LICENSE_FILES = LICENSE
- PYTHON_ML_DTYPES_SETUP_TYPE = setuptools
-+PYTHON_ML_DTYPES_BUILD_OPTS = --skip-dependency-check
+diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
+index f73b654dc8..64cfb3c2b0 100644
+--- a/configs/avenger96_defconfig
++++ b/configs/avenger96_defconfig
+@@ -47,6 +47,7 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp15xx-dhcor-avenger96"
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
  
- PYTHON_ML_DTYPES_DEPENDENCIES = \
- 	host-python-numpy \
--- 
-2.34.1
-
+ # Additional tools
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
