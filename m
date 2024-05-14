@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB81EC04FFE
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 17:21:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AACAC04FFE
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 17:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E0784148B;
-	Tue, 14 May 2024 17:21:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29C4240562;
+	Tue, 14 May 2024 17:25:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qdxLWYZQL1lP; Tue, 14 May 2024 17:21:50 +0000 (UTC)
+ id MYbyPyIrEu65; Tue, 14 May 2024 17:25:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B20041497
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1819405C2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B20041497;
-	Tue, 14 May 2024 17:21:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 38C361BF232
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 17:21:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1819405C2;
+	Tue, 14 May 2024 17:25:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E1101BF232
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 17:25:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2480241497
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 17:21:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B538606F3
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 17:25:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tC3SffPUIjsp for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 17:21:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tZbjMsLeAy57 for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 17:25:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::235; helo=mail-lj1-x235.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8F7DD4148B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F7DD4148B
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8F7DD4148B
- for <buildroot@buildroot.org>; Tue, 14 May 2024 17:21:47 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-420180b58c3so16368255e9.2
- for <buildroot@buildroot.org>; Tue, 14 May 2024 10:21:47 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 495E9606D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 495E9606D9
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
+ [IPv6:2a00:1450:4864:20::235])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 495E9606D9
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 17:25:02 +0000 (UTC)
+Received: by mail-lj1-x235.google.com with SMTP id
+ 38308e7fff4ca-2e3b1b6e9d1so71586261fa.2
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 10:25:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715707305; x=1716312105;
+ d=1e100.net; s=20230601; t=1715707500; x=1716312300;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Ld2HdSaTJNWlug4NCuWhVx9Yji++Hb1LcjbxBEL8yss=;
- b=jfWFNGQdc2FYX0mJXa6HUvxKnan3cg/bazHDYKW8PZ3gesVJq36HYsYX4MLWRGxWEP
- 8iXgR0DGoqEa76E+HhSqsCxlwsOBcIEUuz7wMmhr/kSDIrA2TlrinGaWEGbmqsZCXHeF
- 40NicethVHmeoxkdjWnIPHX8J9jUYUFYtCvz6jrZ01spvBZNw+y50X+Wf6S8Z7jei/hB
- rLjAyWUOR1waOHwBuSqO3vHUnprQ5K358FhHjO6+21WCacF2wN63DB3TcB7XkGfKceAX
- +NjJi8KwoDyvwi5rkZCxB8WQC6DOMaDPFkqwkAv+bsoeA7p1ihcdqigVue9zKGD0gnu3
- S6fQ==
-X-Gm-Message-State: AOJu0YxaTPoqzI3oLdO9FAoWECDG57L4DPzFi1ULCvl/GnHl4L8BhtSe
- rd5ZD4xw1jx1yqHThVudYIejDlyA5U9ToIzh1DbuD9pDzSmEq9HfVSJKjA==
-X-Google-Smtp-Source: AGHT+IHJPPguDoowk3A3uFayltG7L//uMVf7J6x4IM1MXnNaklOBqIEtYxaumAzh45dp3/QoyTAgQg==
-X-Received: by 2002:a05:600c:1c88:b0:41b:855b:5d26 with SMTP id
- 5b1f17b1804b1-41fea927e30mr96754365e9.2.1715707305159; 
- Tue, 14 May 2024 10:21:45 -0700 (PDT)
+ bh=clML7ko/4mPld+vNVPE9uqRGz0AkDVEp+K/JqPsCcys=;
+ b=ff8CwD96HFRn5tChz36g39jAApsmgGvm10/icPrw9P8szMjdsDdM6fE1zce9WWG3Bc
+ DeVqfb5fvwqGmmeIrqZVqfDHzAwOqt/Y/1+HyTOTw7wpsOMHwoRYG4QYf5ahwZ8Z3SJW
+ LXvikZ6WgqIKJ7MqzErOEd4Osvr2lPPNV9Ve2BatQEK4O/fAlplLy6tIj0hW2bhcnxJ3
+ Ok8JcNH763g0Khs9sRFJoBE9j3jWdlscZDuRKepNWoZq7X+h3XWHd0LL6XZpyWNTMKw0
+ KXKEWhN7nVKZ7S3+EjORh0UdJLwR3KEDqbMiWDgJ03liKJ2ykbjt018vBqO5NyMsMHcL
+ uIIQ==
+X-Gm-Message-State: AOJu0Yz9BRcfP8dqINVk584Hick66pF+gXb4O07edaM7yL2uzi39ADKl
+ Lms5DgCud7l9f8CGqkHp2kGr+HPgeAxCnX9s2ZS/V66U/KlPtZO4slihKQ==
+X-Google-Smtp-Source: AGHT+IGAa1w+D9+f0+HfEEwRjkH/uBlO9vLkJUUa3BRc+l0MDubSzQLTI+KQxm2lq6h+XTHoKWEy+Q==
+X-Received: by 2002:a05:651c:1a21:b0:2e3:3eaa:ac92 with SMTP id
+ 38308e7fff4ca-2e5205e6e08mr106212021fa.53.1715707499445; 
+ Tue, 14 May 2024 10:24:59 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-41fe36f373fsm180232835e9.20.2024.05.14.10.21.44
+ 5b1f17b1804b1-42010940845sm120293595e9.35.2024.05.14.10.24.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 May 2024 10:21:44 -0700 (PDT)
+ Tue, 14 May 2024 10:24:59 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 19:21:42 +0200
-Message-ID: <20240514172142.4449-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 May 2024 19:24:38 +0200
+Message-ID: <20240514172438.68998-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715707305; x=1716312105; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1715707500; x=1716312300; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Ld2HdSaTJNWlug4NCuWhVx9Yji++Hb1LcjbxBEL8yss=;
- b=JJLnLxT27YAAJKVqcwJBvFu4+myy0+x8cHAXuPLLxBKbAvy5t2tBs5na4c/NEWpfZK
- PAjAdz5CfCMD4duE1Pp6gzJ7t8/ghJU/flzjKdwc+z0Co/1J81B6wm4exGpypY3D0Pjo
- RjPIbEhc0pbyoj9Ox+RwXvepKf57VqXIPxYw7IUEDJ8joyzVjhAS3xLbz+yFCd7xsCvj
- XKaeXNziCiUvkEguerv9cuIjkE7FZXG8v6GdITIrYZIA/67TtERgjrWE09c1qRM2mCc9
- 3LEEYodZiWEXDRhJ+aeJEFQr2P/oZrVkmc44eIo+dbDzS8dPX9KWkddgnQhijqgj66R6
- sRGg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=clML7ko/4mPld+vNVPE9uqRGz0AkDVEp+K/JqPsCcys=;
+ b=X9G+DpIdPsUiX4hE2osmLpEDzushXbShnNwdnUs5iPQRKd+48BKPf+UqNxYRC2e7/G
+ mcmU4On9qtYVVwHDUVWMcAOKgrR67UUsj/dDvokeaqlpN5rZz9SM+v3+FGXFR1D2BwtY
+ cXyT2KyVQcsvJMHBX6IU39OPXip17XjSxAeFhHDL5t1MHaPkqPAZKumP+mEByY9l8DBb
+ dbKXo27dqdEGas+A7FITvoZmzHoc5gvtMt+TDxmRgzm9w5DvGtA02fXNeK8XDGeRIXX7
+ VOJ6IfMVwooblRP+ACaOKeH/c4WC0t+24Zvx3QDEZkjDyJldnetc3b1f40ZqK9KhiCD+
+ 0RNg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JJLnLxT2
-Subject: [Buildroot] [PATCH 1/1] package/libnpth: fix gnupg2 build with
- uclibc
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=X9G+DpId
+Subject: [Buildroot] [PATCH 1/1] package/libedit: set LIBEDIT_CPE_ID_VALID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,132 +100,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure of gnupg2 raised since bump to version
-1.7 in commit 3ef4d24192b20bd1eb5e34c9fa2a6aa5bde91f91 and
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commitdiff;h=02ce6b2d27f91ed6285e4e92d99c21bcc7823c9b:
+cpe:2.3:a:libedit_project:libedit is a valid CPE identifier for this
+package:
 
-/home/autobuild/autobuild/instance-2/output-1/host/lib/gcc/armeb-buildroot-linux-uclibcgnueabi/13.2.0/../../../../armeb-buildroot-linux-uclibcgnueabi/bin/ld: /home/autobuild/autobuild/instance-2/output-1/host/bin/../armeb-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libnpth.so: undefined reference to `busy_wait_for'
-
-Fixes: 3ef4d24192b20bd1eb5e34c9fa2a6aa5bde91f91
- - http://autobuild.buildroot.org/results/9a27ffde79598a39b4fd55c716978d32d0beb924
+  https://nvd.nist.gov/products/cpe/detail/42ACF08B-DD62-48D3-8568-32DAFD116956
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ..._rwlock_timedrdlock-is-not-supported.patch | 51 +++++++++++++++++++
- .../libnpth/0003-Fix-previous-commit.patch    | 39 ++++++++++++++
- 2 files changed, 90 insertions(+)
- create mode 100644 package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
- create mode 100644 package/libnpth/0003-Fix-previous-commit.patch
+ package/libedit/libedit.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch b/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
-new file mode 100644
-index 0000000000..0d9b38e4ce
---- /dev/null
-+++ b/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
-@@ -0,0 +1,51 @@
-+From 01f03a91c9bd63910995aeef412beb3ca6dc9a67 Mon Sep 17 00:00:00 2001
-+From: NIIBE Yutaka <gniibe@fsij.org>
-+Date: Tue, 7 May 2024 13:45:47 +0900
-+Subject: [PATCH] Return a run-time error if npth_rwlock_timedrdlock is not
-+ supported.
-+
-+* src/npth.c (npth_rwlock_timedrdlock): Return ENOSYS if not
-+supported.
-+(npth_rwlock_timedwrlock): Use HAVE_PTHREAD_RWLOCK_TRYWRLOCK.
-+
-+--
-+
-+GnuPG-bug-id: 7109
-+Fixed-commit: 363c370bd35dd0bb4e5636b2d4f06ea88c658794
-+Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-+
-+Upstream: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=01f03a91c9bd63910995aeef412beb3ca6dc9a67
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/npth.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/npth.c b/src/npth.c
-+index c0ff8da..f02540c 100644
-+--- a/src/npth.c
-++++ b/src/npth.c
-+@@ -488,9 +488,11 @@ npth_rwlock_timedrdlock (npth_rwlock_t *rwlock, const struct timespec *abstime)
-+   ENTER();
-+ #if HAVE_PTHREAD_RWLOCK_TIMEDRDLOCK
-+   err = pthread_rwlock_timedrdlock (rwlock, abstime);
-+-#else
-++#elif HAVE_PTHREAD_RWLOCK_TRYRDLOCK
-+   err = busy_wait_for ((trylock_func_t) pthread_rwlock_tryrdlock, rwlock,
-+ 		       abstime);
-++#else
-++  err = ENOSYS;
-+ #endif
-+   LEAVE();
-+   return err;
-+@@ -533,7 +535,7 @@ npth_rwlock_timedwrlock (npth_rwlock_t *rwlock, const struct timespec *abstime)
-+   ENTER();
-+ #if HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK
-+   err = pthread_rwlock_timedwrlock (rwlock, abstime);
-+-#elif HAVE_PTHREAD_RWLOCK_TRYRDLOCK
-++#elif HAVE_PTHREAD_RWLOCK_TRYWRLOCK
-+   err = busy_wait_for ((trylock_func_t) pthread_rwlock_trywrlock, rwlock,
-+ 		       abstime);
-+ #else
-+-- 
-+2.30.2
-+
-diff --git a/package/libnpth/0003-Fix-previous-commit.patch b/package/libnpth/0003-Fix-previous-commit.patch
-new file mode 100644
-index 0000000000..5f3ce06bf6
---- /dev/null
-+++ b/package/libnpth/0003-Fix-previous-commit.patch
-@@ -0,0 +1,39 @@
-+From 75c68399ef3bbb5d024f2a60474a7214fa479016 Mon Sep 17 00:00:00 2001
-+From: NIIBE Yutaka <gniibe@fsij.org>
-+Date: Mon, 13 May 2024 11:13:23 +0900
-+Subject: [PATCH] Fix previous commit.
-+
-+Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-+
-+Upstream: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=75c68399ef3bbb5d024f2a60474a7214fa479016
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/npth.c | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
-+
-+diff --git a/src/npth.c b/src/npth.c
-+index f02540c..8dced17 100644
-+--- a/src/npth.c
-++++ b/src/npth.c
-+@@ -178,6 +178,18 @@ static int initialized_or_any_threads;
-+ typedef int (*trylock_func_t) (void *);
-+ 
-+ #ifndef HAVE_PTHREAD_MUTEX_TIMEDLOCK
-++#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
-++#endif
-++
-++#if !HAVE_PTHREAD_RWLOCK_TIMEDRDLOCK && HAVE_PTHREAD_RWLOCK_TRYRDLOCK
-++#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
-++#endif
-++
-++#if !HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK && HAVE_PTHREAD_RWLOCK_TRYWRLOCK
-++#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
-++#endif
-++
-++#if REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION
-+ static int
-+ busy_wait_for (trylock_func_t trylock, void *lock,
-+ 	       const struct timespec *abstime)
-+-- 
-+2.30.2
-+
+diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
+index ea7f98fdbd..98e29a9b1a 100644
+--- a/package/libedit/libedit.mk
++++ b/package/libedit/libedit.mk
+@@ -10,6 +10,7 @@ LIBEDIT_INSTALL_STAGING = YES
+ LIBEDIT_DEPENDENCIES = ncurses
+ LIBEDIT_LICENSE = BSD-3-Clause
+ LIBEDIT_LICENSE_FILES = COPYING
++LIBEDIT_CPE_ID_VALID = YES
+ 
+ # We're patching configure.ac
+ LIBEDIT_AUTORECONF = YES
 -- 
 2.43.0
 
