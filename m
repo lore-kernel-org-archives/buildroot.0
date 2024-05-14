@@ -4,91 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AACAC04FFE
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 17:25:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A86E2C25B75
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 17:27:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29C4240562;
-	Tue, 14 May 2024 17:25:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E67141596;
+	Tue, 14 May 2024 17:27:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MYbyPyIrEu65; Tue, 14 May 2024 17:25:06 +0000 (UTC)
+ id dk2D5bds58eC; Tue, 14 May 2024 17:27:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1819405C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2356D415A3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1819405C2;
-	Tue, 14 May 2024 17:25:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8E1101BF232
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 17:25:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2356D415A3;
+	Tue, 14 May 2024 17:27:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A20BF1BF232
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 17:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B538606F3
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 17:25:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D91C405C3
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 17:27:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tZbjMsLeAy57 for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 17:25:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::235; helo=mail-lj1-x235.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 495E9606D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 495E9606D9
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
- [IPv6:2a00:1450:4864:20::235])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 495E9606D9
- for <buildroot@buildroot.org>; Tue, 14 May 2024 17:25:02 +0000 (UTC)
-Received: by mail-lj1-x235.google.com with SMTP id
- 38308e7fff4ca-2e3b1b6e9d1so71586261fa.2
- for <buildroot@buildroot.org>; Tue, 14 May 2024 10:25:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715707500; x=1716312300;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=clML7ko/4mPld+vNVPE9uqRGz0AkDVEp+K/JqPsCcys=;
- b=ff8CwD96HFRn5tChz36g39jAApsmgGvm10/icPrw9P8szMjdsDdM6fE1zce9WWG3Bc
- DeVqfb5fvwqGmmeIrqZVqfDHzAwOqt/Y/1+HyTOTw7wpsOMHwoRYG4QYf5ahwZ8Z3SJW
- LXvikZ6WgqIKJ7MqzErOEd4Osvr2lPPNV9Ve2BatQEK4O/fAlplLy6tIj0hW2bhcnxJ3
- Ok8JcNH763g0Khs9sRFJoBE9j3jWdlscZDuRKepNWoZq7X+h3XWHd0LL6XZpyWNTMKw0
- KXKEWhN7nVKZ7S3+EjORh0UdJLwR3KEDqbMiWDgJ03liKJ2ykbjt018vBqO5NyMsMHcL
- uIIQ==
-X-Gm-Message-State: AOJu0Yz9BRcfP8dqINVk584Hick66pF+gXb4O07edaM7yL2uzi39ADKl
- Lms5DgCud7l9f8CGqkHp2kGr+HPgeAxCnX9s2ZS/V66U/KlPtZO4slihKQ==
-X-Google-Smtp-Source: AGHT+IGAa1w+D9+f0+HfEEwRjkH/uBlO9vLkJUUa3BRc+l0MDubSzQLTI+KQxm2lq6h+XTHoKWEy+Q==
-X-Received: by 2002:a05:651c:1a21:b0:2e3:3eaa:ac92 with SMTP id
- 38308e7fff4ca-2e5205e6e08mr106212021fa.53.1715707499445; 
- Tue, 14 May 2024 10:24:59 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42010940845sm120293595e9.35.2024.05.14.10.24.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 May 2024 10:24:59 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 19:24:38 +0200
-Message-ID: <20240514172438.68998-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EBkcNPTU0Wfd for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 17:27:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5003B4154F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5003B4154F
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5003B4154F
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 17:27:00 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 74FD719F5C2;
+ Tue, 14 May 2024 19:26:54 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:35354])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 14 May 2024 19:26:54 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1715707500; x=1716312300; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=clML7ko/4mPld+vNVPE9uqRGz0AkDVEp+K/JqPsCcys=;
- b=X9G+DpIdPsUiX4hE2osmLpEDzushXbShnNwdnUs5iPQRKd+48BKPf+UqNxYRC2e7/G
- mcmU4On9qtYVVwHDUVWMcAOKgrR67UUsj/dDvokeaqlpN5rZz9SM+v3+FGXFR1D2BwtY
- cXyT2KyVQcsvJMHBX6IU39OPXip17XjSxAeFhHDL5t1MHaPkqPAZKumP+mEByY9l8DBb
- dbKXo27dqdEGas+A7FITvoZmzHoc5gvtMt+TDxmRgzm9w5DvGtA02fXNeK8XDGeRIXX7
- VOJ6IfMVwooblRP+ACaOKeH/c4WC0t+24Zvx3QDEZkjDyJldnetc3b1f40ZqK9KhiCD+
- 0RNg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Date: Tue, 14 May 2024 19:26:54 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20240514154250.1453970-1-james.hilliard1@gmail.com>
+References: <20240514154250.1453970-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.5
+Message-ID: <4e9d5bc99a30a885dddb8aba6145f56d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1715707617;
+ bh=9UU8Xx6Zs2WN230GTdkuOsU3BrUlrQXts7J1P9X0w7M=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YvM0JKVLUSzw0HreJT7VwFBDMkIBRJNRruCm0Q1Cn4uZVM23AO+pl7lUH7CeUaHBr
+ mnCd8Kfr0COzoOriLPEPcqgCcSBJVb5ndlPyQC2QfWb7p/kNr7sBc7Ue4UMFrDZ0rB
+ hBfI1XbiCA+WFofX0+T5OIO/WG3Wxlk647pHoi2eButvGXqR4amn/xayp5RN2kEzFD
+ ki1xx4Y4ZWeSPHyzK1AiiQIBVc2gdwpsMwHaTgplPawDCHIjlvQckkjRzMh557Grko
+ Api2ZlPu2Oq9xXZll+/QRYTgzZnE7GJM0YrKm4ZVDkWWZsZcZhyc9k9aJwCyBGjXLd
+ 1SPFahw+wHzJw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=X9G+DpId
-Subject: [Buildroot] [PATCH 1/1] package/libedit: set LIBEDIT_CPE_ID_VALID
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YvM0JKVL
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-ml-dtypes: skip
+ dependency check
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,38 +82,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:libedit_project:libedit is a valid CPE identifier for this
-package:
+Hi James,
 
-  https://nvd.nist.gov/products/cpe/detail/42ACF08B-DD62-48D3-8568-32DAFD116956
+Thanks for the patch!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libedit/libedit.mk | 1 +
- 1 file changed, 1 insertion(+)
+I successfully tested it on branch master at commit 9764258 with 
+command:
 
-diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
-index ea7f98fdbd..98e29a9b1a 100644
---- a/package/libedit/libedit.mk
-+++ b/package/libedit/libedit.mk
-@@ -10,6 +10,7 @@ LIBEDIT_INSTALL_STAGING = YES
- LIBEDIT_DEPENDENCIES = ncurses
- LIBEDIT_LICENSE = BSD-3-Clause
- LIBEDIT_LICENSE_FILES = COPYING
-+LIBEDIT_CPE_ID_VALID = YES
- 
- # We're patching configure.ac
- LIBEDIT_AUTORECONF = YES
--- 
-2.43.0
+     support/testing/run-tests \
+         -d dl -o output_folder \
+         tests.package.test_python_ml_dtypes
 
+On 14/05/2024 17:42, James Hilliard wrote:
+> This package pins overly strict numpy dependency versions apparently
+> for compatibility reasons that don't appear relevant to buildroot.
+> 
+> This package also appears to pin an overly strict setuptools version
+> for unclear reasons.
+> 
+> See:
+> https://github.com/jax-ml/ml_dtypes/blob/v0.3.2/pyproject.toml#L51-L55
+> 
+> To fix this lets just set the --skip-dependency-check build option and
+> ignore the build dependency version mismatches since they don't appear
+> to cause any build issues.
+> 
+> This error was introduced when we migrated setuptools to pep517 in
+> 8937db8dd595e0988751e5dbb568e870b07b39cc.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+Tested-by: Julien Olivain <ju.o@free.fr>
+
+> ---
+>  package/python-ml-dtypes/python-ml-dtypes.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/python-ml-dtypes/python-ml-dtypes.mk 
+> b/package/python-ml-dtypes/python-ml-dtypes.mk
+> index 676137ecf1..8097265078 100644
+> --- a/package/python-ml-dtypes/python-ml-dtypes.mk
+> +++ b/package/python-ml-dtypes/python-ml-dtypes.mk
+> @@ -10,6 +10,7 @@ PYTHON_ML_DTYPES_SITE = 
+> https://files.pythonhosted.org/packages/39/7d/8d85fcba86
+>  PYTHON_ML_DTYPES_LICENSE = Apache-2.0
+>  PYTHON_ML_DTYPES_LICENSE_FILES = LICENSE
+>  PYTHON_ML_DTYPES_SETUP_TYPE = setuptools
+> +PYTHON_ML_DTYPES_BUILD_OPTS = --skip-dependency-check
+> 
+>  PYTHON_ML_DTYPES_DEPENDENCIES = \
+>  	host-python-numpy \
+> --
+> 2.34.1
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
