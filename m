@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFF2BC04FFE
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 21:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59C4EC04FFE
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 21:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B05DF82CA5;
-	Tue, 14 May 2024 21:56:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FEA6822F1;
+	Tue, 14 May 2024 21:56:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id umbvKFzO-76C; Tue, 14 May 2024 21:56:16 +0000 (UTC)
+ id V8Z9VNEGRI91; Tue, 14 May 2024 21:56:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBB47822EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DC86826C0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBB47822EE;
-	Tue, 14 May 2024 21:56:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DC86826C0;
+	Tue, 14 May 2024 21:56:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 54D2A1BF42D
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:56:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8E8221BF42D
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41BE341875
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:56:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87ED241889
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:56:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 14zJBkSFD5gh for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 21:56:10 +0000 (UTC)
+ id VxIZkv3Noy_z for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 21:56:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 79D664195C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79D664195C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6DDD141867
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DDD141867
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 79D664195C
- for <buildroot@buildroot.org>; Tue, 14 May 2024 21:56:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6DDD141867
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 21:56:22 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a09e6.dip0.t-ipconnect.de [91.58.9.230])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4AA9FA4C0E95
- for <buildroot@buildroot.org>; Tue, 14 May 2024 23:55:47 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:36210)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D35F7A4C0E95;
+ Tue, 14 May 2024 23:56:15 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54786)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1s707f-000000000Ta-0qnq
- for buildroot@buildroot.org; Tue, 14 May 2024 21:55:47 +0000
+ (envelope-from <bernd@kuhls.net>) id 1s7087-000000000Y1-3JFk;
+ Tue, 14 May 2024 21:56:15 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 23:55:46 +0200
-Message-Id: <20240514215546.2866676-1-bernd@kuhls.net>
+Date: Tue, 14 May 2024 23:56:15 +0200
+Message-Id: <20240514215615.2866697-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202312101026; t=1715723747;
- bh=juMCyTpKUshiZWnRpyNQKIFBGxzA7+p/f79+6wk9XYU=;
- h=From:To:Subject:Date:From;
- b=CQeTBDCkVZqeXzPqqOqTkGe3f66PCdwBr3/tjPq7Uaprq20uOGZJXEd4BUvCL0LRf
- 4g5c/zdkKB8ZMX8kbz1mmuIdBr1KhybB6YpdFi7LtvgiiiP6fWoRT7sCJwqm3KKUsh
- T7slfkm2aqtBaNf+L/IM/tymFloVY5OvYar1HbYiHGWOZ1nNjcA9JzKtVx9ywmtC7T
- upq65pwLutceW6JtT45Bdun+1TSiF5UwBExoh3X7fX6Xb/VO84KOVCBftoEASGONp0
- uPEOSwhN/ATUAB33MfculA9abiLqn8AMNsON8cCKndOXGBDaLUJ1Do4LGNxvRJjbsW
- SrSXXladBmdVw==
+ s=kas202312101026; t=1715723775;
+ bh=Pgii0dDtuW75fParzsulmuCDJ/AdQznQ2uU3H/EMlDo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=PCL8wKZBs+QAQo2YC05BtV34dBTmNVRa5Y3lE6QQcfAV0APblpf7vuUNxDrh2jwUL
+ GxcVOw/OTj33hJX0wkA+VhgOc1OmTwXDbGVBI5GU0L/G9bTV8kOdhl44CyFJHu8uu1
+ JrRwhfFssNsIS3O2cyFJIRfqwDYpwhN+wDKygMaJ06HYAxzB7ZOzPnaiweVZ9p6h9d
+ 2DLsjYpCeKX9DZ9ivqV/MncMwZQxf8E0Q01SU9EdTMtF9XcHb5rg/AOw5mim33ROLy
+ IFtGoK9GqoD0BuPFSqRlxCG5fAcdTGtCtYfVWRAK21NjL3DvHorjYmDrkyw6a9ATV1
+ gYBE4PO2ySRlA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202312101026 header.b=CQeTBDCk
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-waipu: bump version to
- 21.6.1-Omega
+ header.a=rsa-sha256 header.s=kas202312101026 header.b=PCL8wKZB
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 24.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,39 +80,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2024-May/000758.html
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-index 2c682c884c..6377f36e80 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0db467d4986c36efb0c837dd728fc6322d3021fe2d8c93da9355b63f210fa0ca  kodi-pvr-waipu-21.6.0-Omega.tar.gz
-+sha256  96c558f02d820c43994da05a89693f3e787c2adb8faa2ff28127a6e97d33525c  kodi-pvr-waipu-21.6.1-Omega.tar.gz
- sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-index 4e9f8e00cf..222abcaa1b 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index e1f6211e17..e35774a942 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 24.0.6
++MESA3D_HEADERS_VERSION = 24.0.7
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index fb3df96555..f2c25464f4 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2024-April/000755.html
+-sha256  8b7a92dbe6468c18f2383700135b5fe9de836cdf0cc8fd7dbae3c7110237d604  mesa-24.0.6.tar.xz
+-sha512  60fcc77132c3cb0c98e650d97d3324bfd18abe7f8f8a3aa5209f71b2fddd94510f939bbf5272b2241749307184d5badde9da4842be57ce13f5760875885ea6fc  mesa-24.0.6.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2024-May/000758.html
++sha256  7454425f1ed4a6f1b5b107e1672b30c88b22ea0efea000ae2c7d96db93f6c26a  mesa-24.0.7.tar.xz
++sha512  77b0fae80ab0a07e2e528c113eadef0e3004b8df3e6e98fffe6fc2d8ac39f5ce7fa38ebe5c2ae32bfbac993dd7cbe288ace18ebb03cf2fb445fe7114f74dd45c  mesa-24.0.7.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 39cbb4c23b..6bccdaed04 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--KODI_PVR_WAIPU_VERSION = 21.6.0-Omega
-+KODI_PVR_WAIPU_VERSION = 21.6.1-Omega
- KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
- KODI_PVR_WAIPU_LICENSE = GPL-2.0+
- KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 24.0.6
++MESA3D_VERSION = 24.0.7
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.39.2
 
