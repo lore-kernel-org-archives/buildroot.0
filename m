@@ -4,93 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB06CC04FFE
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 10:13:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58A7EC04FFE
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 10:36:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EC31410D1;
-	Tue, 14 May 2024 10:13:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE81D41A3A;
+	Tue, 14 May 2024 10:36:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S-aHyzxbzC8w; Tue, 14 May 2024 10:13:19 +0000 (UTC)
+ id tZ0qSg6z6iqk; Tue, 14 May 2024 10:36:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECE3F415A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68B5441B8B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECE3F415A5;
-	Tue, 14 May 2024 10:13:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FC8A1BF277
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 10:13:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 68B5441B8B;
+	Tue, 14 May 2024 10:36:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 26EFD1BF292
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 10:36:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0D01860B1E
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 10:13:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0EC4141736
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 10:36:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vSUEtxU3w6PY for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 10:13:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 121ioHr-sDZf for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 10:36:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=marleen.vos@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8630460AE9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8630460AE9
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8630460AE9
- for <buildroot@buildroot.org>; Tue, 14 May 2024 10:13:10 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-3504ad82a64so366174f8f.3
- for <buildroot@buildroot.org>; Tue, 14 May 2024 03:13:10 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 42E1D41731
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42E1D41731
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 42E1D41731
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 10:36:40 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-a59b81d087aso1349712566b.3
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 03:36:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715681588; x=1716286388;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3j6LtfFznGPtwxBbnE387Mf7RDaWSB5sbbuV4ux3wkY=;
- b=q7mKLypgTuafewV18VvkpGfMqhtBrhkWH8spOyy1qjNcaEFUpTGcAEOBmjt3LvQofV
- 8JJVfw9AlDPhMk7oYnI0NPfqSHCc39qtNS8RBJfvH+JxFa+UE7f5xzt1pA+4pCUJcgKZ
- fPCmti642zQR9ieRh4+e/fiQteocN3Py/uuENqPVkwmzv0amWvXTOkeR6QXbop2QvZZn
- hFc17sYt3d03KngBsKbA6bx5yGX2XbqaQM0tUgMrxG5eN2EyFpVlDGbwvwhGeG0Scrxe
- tJEmDfCoQTR7ACdzjKC9RDpoZz/x8G1PrubvBB6aK+eATddQ92Ad7zKNrcrl9fxOI0zv
- Tnng==
-X-Gm-Message-State: AOJu0YyGwnuhJbhpCTqC9JM45KgI8WLwmUxseZeQE8ODWJG0dsdkCP/Z
- 852FZhyCm+qRsMiZyY1iW8pHvVFL+747qhBs0i9tawqjEm02qtKWgerS9HCxy4pB5t0c68HnWG2
- P
-X-Google-Smtp-Source: AGHT+IF2SJHQx3p+r8GR0KvXTCHS1yPNuieHG1pQibuTsYUBaX4KU2DwHTLJ0RL10FAv7mnYMrWzPA==
-X-Received: by 2002:a05:6000:1110:b0:34d:742e:3dbf with SMTP id
- ffacd0b85a97d-3504a110945mr8634170f8f.0.1715681588548; 
- Tue, 14 May 2024 03:13:08 -0700 (PDT)
-Received: from marleenlaptop.. (ip-188-118-3-185.reverse.destiny.be.
- [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3502baad037sm13200862f8f.71.2024.05.14.03.13.07
+ d=1e100.net; s=20230601; t=1715682998; x=1716287798;
+ h=content-transfer-encoding:organization:mime-version:message-id:date
+ :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=zbvRg99z8pYziFR+ziEUzEiS5sFwqkJ1nkd35jfKq9g=;
+ b=ltnpF3Kv5FxKqa9iGeaAwCJWx30EKtPz2yxOIeYrXmDoxS+wYw/7mBTDO9z6DFDUjD
+ T+HaQZsdhX+HozLGSp0I4jEsl1Al+VPvT6AzHhFsYSkbj1qo1ECzISSDwMeZmdMTAEa1
+ sa8XsnSjXjW81OEunkc2ZdUsBoxPG2P2MJwB1LKSEfO44zQK44VfbaxMRZlCZqm6PddA
+ ZBoi7iHkXe/Fn8IqBP5IPKf4P6mcWKUka5800Q4cxmUQQACTxz8RR6LRgaluyBEhAbu/
+ saLODZCiOB5tSUq/Sja6G+SIJzdRHxSfwTXQ1hCQf3qbqBo0jAriRrxiVBB71XiwzJpy
+ cuFA==
+X-Gm-Message-State: AOJu0YznOMnU61PIy/iLi6fgN6Jnhci0pK+42iyHOFQ0svFoyMMNyqMr
+ JmGsfuWaUFFfkY3DWFHDzLYyzRJX1w1lh4juKP5+GDFN+Q/k7fHmLQikpw==
+X-Google-Smtp-Source: AGHT+IF5aVysbCqcpNvdi+ODpJpEcj69J3H5PKwn9F7OP8Y3ArMhWG7BOJ3MqpwCb3TfdHoe0gWdfw==
+X-Received: by 2002:a17:906:dd7:b0:a59:d5e4:1487 with SMTP id
+ a640c23a62f3a-a5a2d5cb6ffmr1184947566b.42.1715682997616; 
+ Tue, 14 May 2024 03:36:37 -0700 (PDT)
+Received: from gimli.addiva.ad (h-79-136-22-50.NA.cust.bahnhof.se.
+ [79.136.22.50]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a5a1781d532sm717517566b.18.2024.05.14.03.36.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 May 2024 03:13:08 -0700 (PDT)
-X-Google-Original-From: marleen.vos@mind.be
+ Tue, 14 May 2024 03:36:37 -0700 (PDT)
+From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 12:12:44 +0200
-Message-Id: <20240514101244.1067520-1-marleen.vos@mind.be>
+Date: Tue, 14 May 2024 12:36:29 +0200
+Message-Id: <20240514103629.2002634-1-troglobit@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Organization: Addiva Elektronik
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=essensium.com; s=google; t=1715681588; x=1716286388; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3j6LtfFznGPtwxBbnE387Mf7RDaWSB5sbbuV4ux3wkY=;
- b=a2djpoU7aqd3NtUz83fe74jl837tyABBjN91wVVI/ErJstZnSRdli52KtHl18FCQxp
- /TbEMu3egLGbJGVWhA1lWhCmLrqHkeKWWDWB1e9JmJ1ZDPsWSXZKNtEQ7IXPRU6ZpIYy
- 8iJ9fpoWF6fdowsSr17ngtoetGRxEXnmh8NcZ0bxIv3d2SX/uBVYUT+5lFhmHGg5ogtI
- omwl1fzNGEz3j9XGV8WTk+RgDe7A6PBqF+dhpypdUArPsHHBRaz7UiQ8AEqhGHuZntBd
- XuOTDHOonKr3ugjHgGD4942wUaiDuz6VX6XVG1CkXr/hy9F8wZilg3b6RTrr8kGkQciZ
- wepw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=essensium.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1715682998; x=1716287798; darn=buildroot.org;
+ h=content-transfer-encoding:organization:mime-version:message-id:date
+ :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=zbvRg99z8pYziFR+ziEUzEiS5sFwqkJ1nkd35jfKq9g=;
+ b=ndZsH7H8xcA1JFVtDlhZR9XSkHPdggSD3QPuXuvqkIZnh02w2dEMeYctF8k3eNYnFJ
+ R10JM29+IMW1Nl0JRKJNkhd1Dc4/VH3vxRcUXTdkGrWAtyWBNsEvjLhUV1IWzT4vMr0U
+ 621GeU+/zNzYP87muJmlyHHIdm67z22R2EYlfGwD6QgBAcg4AhbYF6xXN1Rb8C7B93CV
+ 5bK9ou7mg7wq3bKrjdQZyJfYQzdTvN5e8MYj9UWZsa8sdcmpxeOQji+WxLrj27twlVu7
+ gXCGxU/xp7cGw2ZKn9Cs8sO40p5ZNpUy3vBFgAIewGBArlMvoj1KlwwpdNcm2yHiNxr8
+ 2Dpg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=essensium.com header.i=@essensium.com
- header.a=rsa-sha256 header.s=google header.b=a2djpoU7
-Subject: [Buildroot] [PATCH 1/1] configs/avenger96_defconfig: fix CI build
- error due to a missing package for uboot
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=ndZsH7H8
+Subject: [Buildroot] [PATCH 1/1] package/hostapd: drop duplicate
+ host-pkgconf dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,45 +102,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marleen Vos via buildroot <buildroot@buildroot.org>
-Reply-To: marleen.vos@essensium.com
-Cc: Marleen Vos <marleen.vos@mind.be>
+Cc: Joachim Wiberg <troglobit@gmail.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Marleen Vos <marleen.vos@mind.be>
+host-pkgconf already defined as dependency in package ingress.
 
-This refers to https://gitlab.com/buildroot.org/buildroot/-/jobs/6813124907
-The build error referenced in that link is:
-
-error: command 'swig' failed: No such file or directory
-make[4]: *** [scripts/dtc/pylibfdt/Makefile:33: rebuild] Error 1
-make[3]: *** [scripts/Makefile.build:397: scripts/dtc/pylibfdt] Error 2
-make[2]: *** [Makefile:2014: scripts_dtc] Error 2
-make[1]: *** [package/pkg-generic.mk:283: /builds/buildroot.org/buildroot/output/build/uboot-2024.01/.stamp_built] Error 2
-make: *** [Makefile:82: _all] Error 2
-
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT is added to the avenger96_defconfig in order to resolve the issue
-
-Signed-off-by: Marleen Vos <marleen.vos@mind.be>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- configs/avenger96_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/hostapd/hostapd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
-index f73b654dc8..64cfb3c2b0 100644
---- a/configs/avenger96_defconfig
-+++ b/configs/avenger96_defconfig
-@@ -47,6 +47,7 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp15xx-dhcor-avenger96"
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 8981d9247e..5756510e1d 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -25,7 +25,7 @@ HOSTAPD_CONFIG_DISABLE =
  
- # Additional tools
- BR2_PACKAGE_HOST_GENIMAGE=y
+ # Try to use openssl if it's already available
+ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+-HOSTAPD_DEPENDENCIES += host-pkgconf libopenssl
++HOSTAPD_DEPENDENCIES += libopenssl
+ HOSTAPD_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
+ else
 -- 
 2.34.1
 
