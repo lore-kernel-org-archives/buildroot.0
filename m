@@ -4,78 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91714C04FFE
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 20:23:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5B5DC04FFE
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 20:28:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 60738400E2;
-	Tue, 14 May 2024 20:23:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F160400E2;
+	Tue, 14 May 2024 20:28:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TVDPyM3e4yvG; Tue, 14 May 2024 20:23:46 +0000 (UTC)
+ id fbif4WEd7j5w; Tue, 14 May 2024 20:28:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F16540127
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76F6840127
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F16540127;
-	Tue, 14 May 2024 20:23:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9720E1BF232
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 20:23:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 76F6840127;
+	Tue, 14 May 2024 20:28:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 27D861BF232
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 20:28:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 61D1B801DA
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 20:23:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 20F6840304
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 20:28:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nq6DblfDN0HA for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 20:23:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.54;
- helo=mail-wm1-f54.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JE5sbhLfrobY for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 20:28:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
+ helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D54988232D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D54988232D
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com
- [209.85.128.54])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D54988232D
- for <buildroot@buildroot.org>; Tue, 14 May 2024 20:23:42 +0000 (UTC)
-Received: by mail-wm1-f54.google.com with SMTP id
- 5b1f17b1804b1-420160f8f52so17382835e9.0
- for <buildroot@buildroot.org>; Tue, 14 May 2024 13:23:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715718220; x=1716323020;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=lSbY4gZ6XlNWsKWvySUNnSoHL3erEJj+osOwH/ms2aM=;
- b=GdwinoPugPBeIhR2ShtYD0AIEmy56heNRYyEYEGU09LZJ2HYirVPvQucDxHvlGqt52
- ZfF6f5eW+imE705jTq91k5OZD+ue/s5nUKfCqtqeF+C/t22yekYoPFNdxH+BxpRnybb2
- UliR9m2I5MfZNlNii7jqL6hqFP0KDPbSzwcAn2drg+fm0646D4W2Yne+ojl9wGzb7awp
- tCeBiWERLJqKLS1Yd0ZmYTKh7FzX1vbDzKIDwrMiUVKfMiCmO9aSsDUBmJMnY2Bv0vox
- dBsR57+vJQ2XQSglMHdqFc5L9iQ9Kp5gpiEnUcl/rW+1UOYuGErSrrU1as/B73koeeTm
- A/YA==
-X-Gm-Message-State: AOJu0YyjMvE+TpBbOoA1u33NxOvw9mq9195qcv7pLJ0sHVBO1yyLNpcZ
- Yx7NqBUQFUNfZaThf9mIpSvElG77rBRZe5E0+K4Pd1+5Ji5JNL5sgne4LbHG
-X-Google-Smtp-Source: AGHT+IG3ED//BG0/eeU6byK0V1j3VJKAPMlAORa46quI/NoHuEagwxqKFugMyVu3pRjZeC3MpclyvQ==
-X-Received: by 2002:a05:600c:1c9a:b0:41c:13f6:206d with SMTP id
- 5b1f17b1804b1-41feac59d99mr101458695e9.25.1715718220100; 
- Tue, 14 May 2024 13:23:40 -0700 (PDT)
-Received: from localhost.localdomain
- ([2a02:a03f:eb68:2f00:a5d4:851e:63d3:a5f0])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-41ff6cbe992sm167927865e9.6.2024.05.14.13.23.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 14 May 2024 13:23:39 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 22:23:37 +0200
-Message-Id: <20240514202337.3934490-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.34.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ABBD840284
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABBD840284
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [147.173.1.68])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ABBD840284
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 20:28:35 +0000 (UTC)
+Received: from [IPV6:2a01:e0a:12:eba0:fd4b:fc3:7e21:7e8a] (unknown
+ [IPv6:2a01:e0a:12:eba0:fd4b:fc3:7e21:7e8a])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 88D0CBFD87;
+ Tue, 14 May 2024 22:28:32 +0200 (CEST)
+Message-ID: <5647a701-8c5a-4ce6-92c3-3c252e1cd91b@grenoble.cnrs.fr>
+Date: Tue, 14 May 2024 22:28:31 +0200
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: buildroot@buildroot.org
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1715718512;
+ bh=6NR1oHybf2VACYPYH/fobX7yImVWHzz2NJvxLm8sQ6w=;
+ h=Date:To:Cc:From:Subject:From;
+ b=DN3t3ZSnvR/1ctUYFxTbP/s1jFHFuj/Yvxc34pjAPRHUSLt6NTThSL/3D3QORYuoj
+ kIjYHhmZSsWojRzmbFNbXr50ECvgQD+Fptn3XuxeAou7lRUKSnU3b2Fieyr1CREdxR
+ O6fFJpS4O2Be5TkMpIgcCn0gN8j5f6dRipM629xF/9Au8lqhoJYZSAwmTt2Nvvo8my
+ IpCJb2jgxrL976ecnPTWBHcwFxcrjSfgcEGB4gQ5Dw5YUHMuMCN4FZ/0JV2468tNbr
+ u9cqFZDotJVepmJjQBiELi4tlls7CglVJyJ6IlLqi1Xfbm6mxQltE2s3IRUhuAJkeL
+ tXV1011qfRsiA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/libopenssl: fix build for the
- bootlin-riscv32-glibc toolchain
+ header.from=grenoble.cnrs.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=DN3t3ZSn
+Subject: [Buildroot] Nginx fails to build with GCC 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,83 +82,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Samuel Martin <s.martin49@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Seen while using the ./utils/test-pkg utility.
-
-/home/thomas/br-test-pkg/bootlin-riscv32-glibc/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/13.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: crypto/legacy-dso-riscvcap.o: in function `OPENSSL_cpuid_setup':
-riscvcap.c:(.text.startup+0x190): undefined reference to `riscv_vlen_asm'
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
----
- ...Implement-riscv_vlen_asm-for-riscv32.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/libopenssl/0004-Implement-riscv_vlen_asm-for-riscv32.patch
-
-diff --git a/package/libopenssl/0004-Implement-riscv_vlen_asm-for-riscv32.patch b/package/libopenssl/0004-Implement-riscv_vlen_asm-for-riscv32.patch
-new file mode 100644
-index 0000000000..5de3221172
---- /dev/null
-+++ b/package/libopenssl/0004-Implement-riscv_vlen_asm-for-riscv32.patch
-@@ -0,0 +1,50 @@
-+From 84f1acab51e159366b8cf97635ed97f8f0b6564a Mon Sep 17 00:00:00 2001
-+From: Hongren Zheng <i@zenithal.me>
-+Date: Fri, 26 Apr 2024 06:03:43 +0000
-+Subject: [PATCH] Implement riscv_vlen_asm for riscv32
-+
-+riscvcap.c: undefined reference to 'riscv_vlen_asm'
-+
-+Reviewed-by: Paul Dale <ppzgs1@gmail.com>
-+Reviewed-by: Tomas Mraz <tomas@openssl.org>
-+(Merged from https://github.com/openssl/openssl/pull/24270)
-+
-+/home/thomas/br-test-pkg/bootlin-riscv32-glibc/host/opt/ext-toolchain/bin/../lib/gcc/riscv32-buildroot-linux-gnu/13.2.0/../../../../riscv32-buildroot-linux-gnu/bin/ld: crypto/legacy-dso-riscvcap.o: in function `OPENSSL_cpuid_setup':
-+riscvcap.c:(.text.startup+0x190): undefined reference to `riscv_vlen_asm'
-+
-+Upstream: https://github.com/openssl/openssl/commit/87314d24c4f025df1ebf47dc527cc8a96bef354a
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ crypto/riscv32cpuid.pl | 17 +++++++++++++++++
-+ 1 file changed, 17 insertions(+)
-+
-+diff --git a/crypto/riscv32cpuid.pl b/crypto/riscv32cpuid.pl
-+index 20694e7de7..ac1c043ec9 100644
-+--- a/crypto/riscv32cpuid.pl
-++++ b/crypto/riscv32cpuid.pl
-+@@ -84,5 +84,22 @@ OPENSSL_cleanse:
-+ ___
-+ }
-+ 
-++{
-++my ($ret) = ('a0');
-++$code .= <<___;
-++################################################################################
-++# size_t riscv_vlen_asm(void)
-++# Return VLEN (i.e. the length of a vector register in bits).
-++.p2align 3
-++.globl riscv_vlen_asm
-++.type riscv_vlen_asm,\@function
-++riscv_vlen_asm:
-++    csrr $ret, vlenb
-++    slli $ret, $ret, 3
-++    ret
-++.size riscv_vlen_asm,.-riscv_vlen_asm
-++___
-++}
-++
-+ print $code;
-+ close STDOUT or die "error closing STDOUT: $!";
-+-- 
-+2.34.1
-+
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gYWxsIQoKQnVpbGRpbmcgbmdpbnggd2l0aCBHQ0MgMTQgZmFpbHMgYXQgdGhlIGNvbmZp
+Z3VyZSBzdGVwIHdpdGg6CgogICAgLi9jb25maWd1cmU6IGVycm9yOiBsaWJhdG9taWNfb3BzIGxp
+YnJhcnkgd2FzIG5vdCBmb3VuZC4KClN0ZXBzIHRvIHJlcHJvZHVjZToKCiAgICBnaXQgY2hlY2tv
+dXQgOTc2NDI1OGFhZjBlICAjIG1hc3RlciBhcyBvZiAyMDI0LTA1LTE0CiAgICBtYWtlIGNsZWFu
+CiAgICBtYWtlIGRlZmNvbmZpZwogICAgdXRpbHMvY29uZmlnIC0tZW5hYmxlIEdDQ19WRVJTSU9O
+XzE0X1gKICAgIHV0aWxzL2NvbmZpZyAtLWVuYWJsZSBQQUNLQUdFX05HSU5YCiAgICBtYWtlIG9s
+ZGRlZmNvbmZpZwogICAgbWFrZQoKSWYgdGhlIG9wdGlvbiBHQ0NfVkVSU0lPTl8xNF9YIGlzIG9t
+aXR0ZWQgKHdlIHRoZW4gZGVmYXVsdCB0byBHQ0MgMTMpLAp0aGUgYnVpbGQgc3VjY2VlZHMuCgpM
+b29raW5nIGF0IG91dHB1dC9idWlsZC9uZ2lueC0xLjI0LjAvb2Jqcy9hdXRvY29uZi5lcnIsIGl0
+IGFwcGVhcnMgdGhlCmVycm9yIGlzIG5vdCBjYXVzZWQgYnkgYSBtaXNzaW5nIGxpYnJhcnksIGJ1
+dCBieSBhbiB1bnJlbGF0ZWQK4oCcaW5jb21wYXRpYmxlIHBvaW50ZXIgdHlwZeKAnSBlcnJvciBv
+biB0aGUgdGVzdCBwcm9ncmFtOgoKICAgIC4uLgogICAgY2hlY2tpbmcgZm9yIGF0b21pY19vcHMg
+bGlicmFyeQogICAgb2Jqcy9hdXRvdGVzdC5jOiBJbiBmdW5jdGlvbiAnbWFpbic6CiAgICBvYmpz
+L2F1dG90ZXN0LmM6OTo0ODogZXJyb3I6IHBhc3NpbmcgYXJndW1lbnQgMSBvZiAnQU9fY29tcGFy
+ZV9hbmRfc3dhcCcgZnJvbSBpbmNvbXBhdGlibGUgcG9pbnRlciB0eXBlIFstV2luY29tcGF0aWJs
+ZS1wb2ludGVyLXR5cGVzXQoKSSBkaWQgbm90IGRpZyB0aGlzIG11Y2ggZnVydGhlci4gSG93ZXZl
+ciwgSSBub3RpY2VkIHRoYXQgdGhlIGZpbGUKcGFja2FnZS9uZ2lueC9uZ2lueC5tayBjb250YWlu
+cyB0aGlzIGNvbW1lbnQ6CgogICAgIyBkaXNhYmxlIGV4dGVybmFsIGxpYmF0b21pY19vcHMgYmVj
+YXVzZSBpdHMgZGV0ZWN0aW9uIGZhaWxzLgoKd2hpY2ggbWFrZXMgbWUgd29uZGVyIHdoeSAuL2Nv
+bmZpZ3VyZSBpcyBwcm9iaW5nIGZvciB0aGUgbGlicmFyeSBhbnl3YXkuCgpSZWdhcmRzLAoKRWRn
+YXIgQm9uZXQuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
