@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE942C25B79
-	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 21:54:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95887C25B79
+	for <buildroot@archiver.kernel.org>; Tue, 14 May 2024 21:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88DC281E57;
-	Tue, 14 May 2024 21:54:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FF02822EE;
+	Tue, 14 May 2024 21:55:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u6d5byYGsbP3; Tue, 14 May 2024 21:54:54 +0000 (UTC)
+ id Tf9qPe7vrsJx; Tue, 14 May 2024 21:55:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 973FF82039
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2393181971
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 973FF82039;
-	Tue, 14 May 2024 21:54:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 839571BF42D
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:54:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2393181971;
+	Tue, 14 May 2024 21:55:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CB291BF42D
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6BD83409F0
- for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:54:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A1B7817D3
+ for <buildroot@lists.busybox.net>; Tue, 14 May 2024 21:55:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9TblTHKuHNgB for <buildroot@lists.busybox.net>;
- Tue, 14 May 2024 21:54:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MDpR8-kbpA9X for <buildroot@lists.busybox.net>;
+ Tue, 14 May 2024 21:55:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 54A05409E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54A05409E0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7D3B3822CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D3B3822CB
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 54A05409E0
- for <buildroot@buildroot.org>; Tue, 14 May 2024 21:54:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7D3B3822CB
+ for <buildroot@buildroot.org>; Tue, 14 May 2024 21:55:03 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a09e6.dip0.t-ipconnect.de [91.58.9.230])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CC2C1A4C48EB;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E1243A4C48EC;
  Tue, 14 May 2024 23:54:09 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:59422)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1s7065-000000000Dp-37rR;
+ (envelope-from <bernd@kuhls.net>) id 1s7065-000000000Dp-3On0;
  Tue, 14 May 2024 21:54:09 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 14 May 2024 23:54:05 +0200
-Message-Id: <20240514215406.2866563-4-bernd@kuhls.net>
+Date: Tue, 14 May 2024 23:54:06 +0200
+Message-Id: <20240514215406.2866563-5-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240514215406.2866563-1-bernd@kuhls.net>
 References: <20240514215406.2866563-1-bernd@kuhls.net>
@@ -55,22 +55,22 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202312101026; t=1715723649;
- bh=Dd+tjxcmVoUQX8ZjwzqcEKsNNR5gapy9H9eC6nxgHMI=;
+ bh=dw40Cqg+GbGL9A3l2N1SHGJx+vmaMqvl2wCHH0XYMnY=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=fcmF18ovCfNFPkRvLV4N7SzSMPC3K3YJfDRXSfE/1w4KWe3NP/ruQ7IwGfKgk5KT5
- 3i2h/l2mYudO0ENGjwqwm3DgJgo835Ms+lQJb6FEKFycTw3QvUVJvv6FLklk0Pb0kx
- PajSTBfP9bFem3T8yBonD0zKdyH75vBaaJc9NT5xoElwC3CmtpbNxvhqHyfuPoHlRa
- YfnL5nylKV96siUqO6MqOAZv2Mab4i+Rr4+0/DT4Tt5Pv/79kkulWEuTcEQKlvtVkb
- dDrFyhaQvSeQp1ZhD3X7kFA9w58ehc8J3eeejoJPABhzAlDbQXxK0fju+qnrBv/KGt
- zZ3WrzRpMSIIQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=iUYm40WRC/SMYDFM3xouuLRVF03oFgejSUfAE5a5lSqhIk8MoMTm1xF1+XHonQC3H
+ S4L/pdnNIVaQSo9niaA2NYcTgr3FUImKavR8x9TeHQN96TziSwZ2E8rSpeVpmxD7Yu
+ Vyh3eYdkqW80bc8xL7tErGmX5Fb5d0bMa97PmmmPTnztPWJOmwsgfVNusbiZjUG8Dg
+ 4Fbh9xobnkJRgb1RytzBGxyWs9z7K+iFUFvwBAE6RcYTQ+AMz+OZpJq6I0GSgTPdmQ
+ 5s8hbODEJcJhnca+3xdkr6D8Y0qUacL9S0tgQMLJYCzA2cDqzZGtA0uoVaG06M5NEv
+ 5rG4OOxf/kO1w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202312101026 header.b=fcmF18ov
-Subject: [Buildroot] [PATCH 4/5] package/sofia-sip: fix build with gcc 14.x
+ header.s=kas202312101026 header.b=iUYm40WR
+Subject: [Buildroot] [PATCH 5/5] package/unixodbc: fix build with gcc 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,43 +90,65 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...mpatible-pointer-type-in-sip_basic-c.patch | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch
+ ...r-Fix-incompatible-pointer-to-intege.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
 
-diff --git a/package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch b/package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch
+diff --git a/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch b/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
 new file mode 100644
-index 0000000000..7f890fd27b
+index 0000000000..8efe6dae4e
 --- /dev/null
-+++ b/package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch
-@@ -0,0 +1,27 @@
-+From 46b02f0655af0a9594e805f09a8ee99278f84777 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tomi=20L=C3=A4hteenm=C3=A4ki?= <lihis@lihis.net>
-+Date: Mon, 19 Feb 2024 09:06:20 +0200
-+Subject: [PATCH] Fix incompatible pointer type in sip_basic.c
++++ b/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
+@@ -0,0 +1,49 @@
++From 45f501e1be2db6b017cc242c79bfb9de32b332a1 Mon Sep 17 00:00:00 2001
++From: Florian Weimer <fweimer@redhat.com>
++Date: Mon, 29 Jan 2024 08:27:29 +0100
++Subject: [PATCH] PostgreSQL driver: Fix incompatible pointer-to-integer types
 +
-+Closes #248
++These result in out-of-bounds stack writes on 64-bit architectures
++(caller has 4 bytes, callee writes 8 bytes), and seem to have gone
++unnoticed on little-endian architectures (although big-endian
++architectures must be broken).
 +
-+Upstream: https://github.com/freeswitch/sofia-sip/pull/249
++This change is required to avoid a build failure with GCC 14.
++
++Upstream: https://github.com/lurcher/unixODBC/commit/45f501e1be2db6b017cc242c79bfb9de32b332a1
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ libsofia-sip-ua/sip/sip_basic.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ Drivers/Postgre7.1/info.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+diff --git a/libsofia-sip-ua/sip/sip_basic.c b/libsofia-sip-ua/sip/sip_basic.c
-+index 3444fb25..82e824e3 100644
-+--- a/libsofia-sip-ua/sip/sip_basic.c
-++++ b/libsofia-sip-ua/sip/sip_basic.c
-+@@ -2901,7 +2901,7 @@ issize_t sip_identity_d(su_home_t *home, sip_header_t *h, char *s, isize_t slen)
-+       ext = strchr(ppt, ';');
++diff --git a/Drivers/Postgre7.1/info.c b/Drivers/Postgre7.1/info.c
++index 63ac91f..2216ecd 100644
++--- a/Drivers/Postgre7.1/info.c
+++++ b/Drivers/Postgre7.1/info.c
++@@ -1779,14 +1779,14 @@ char *table_name;
++ char index_name[MAX_INFO_STRING];
++ short fields_vector[8];
++ char isunique[10], isclustered[10];
++-SDWORD index_name_len, fields_vector_len;
+++SQLLEN index_name_len, fields_vector_len;
++ TupleNode *row;
++ int i;
++ HSTMT hcol_stmt;
++ StatementClass *col_stmt, *indx_stmt;
++ char column_name[MAX_INFO_STRING], relhasrules[MAX_INFO_STRING];
++ char **column_names = 0;
++-Int4 column_name_len;
+++SQLLEN column_name_len;
++ int total_columns = 0;
++ char error = TRUE;
++ ConnInfo *ci;
++@@ -2136,7 +2136,7 @@ HSTMT htbl_stmt;
++ StatementClass *tbl_stmt;
++ char tables_query[STD_STATEMENT_LEN];
++ char attname[MAX_INFO_STRING];
++-SDWORD attname_len;
+++SQLLEN attname_len;
++ char pktab[MAX_TABLE_LEN + 1];
++ Int2 result_cols;
 + 
-+       if (ext) {
-+-          msg_param_t *params = su_alloc(home, sizeof(msg_param_t));
-++          msg_param_t const *params = su_alloc(home, sizeof(msg_param_t));
-+           if (msg_params_d(home, &ext, &params) >= 0) {
-+               id->id_info_params = params;
-+           }
 -- 
 2.39.2
 
