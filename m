@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38FCBC25B75
-	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 15:10:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D4B1C25B75
+	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 15:11:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2CFB40226;
-	Wed, 15 May 2024 15:10:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 093D64033C;
+	Wed, 15 May 2024 15:11:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WYJIjzmu7GI9; Wed, 15 May 2024 15:10:16 +0000 (UTC)
+ id KrJwnmXrxLbt; Wed, 15 May 2024 15:11:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC1E34033C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEC40404F7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC1E34033C;
-	Wed, 15 May 2024 15:10:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 075661BF841
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 15:10:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEC40404F7;
+	Wed, 15 May 2024 15:11:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EC6351BF841
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 15:11:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E7C424033C
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 15:10:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D9BFD60788
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 15:11:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MR9Nk4XwUXke for <buildroot@lists.busybox.net>;
- Wed, 15 May 2024 15:10:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JTmJD8My3771 for <buildroot@lists.busybox.net>;
+ Wed, 15 May 2024 15:11:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E35F740226
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E35F740226
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E35F740226
- for <buildroot@buildroot.org>; Wed, 15 May 2024 15:10:12 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A6F0D60003;
- Wed, 15 May 2024 15:10:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s7GGg-001XYx-02;
- Wed, 15 May 2024 17:10:10 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2489960772
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2489960772
+ for <buildroot@buildroot.org>; Wed, 15 May 2024 15:11:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0EB5A873AB; Wed, 15 May 2024 15:11:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Gero =?utf-8?Q?Schw=C3=A4ricke?= <gero.schwaericke@posteo.de>
-References: <20240403222513.1267595-1-gero.schwaericke@posteo.de>
-Date: Wed, 15 May 2024 17:10:09 +0200
-In-Reply-To: <20240403222513.1267595-1-gero.schwaericke@posteo.de> ("Gero
- =?utf-8?Q?Schw=C3=A4ricke=22's?= message of "Wed, 3 Apr 2024 22:24:44
- +0000")
-Message-ID: <87cypnqffy.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] configs/raspberrypizero2w_defconfig: fix
- typo in headers series option
+To: buildroot@buildroot.org
+Date: Wed, 15 May 2024 17:09:37 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: f113543d83d57f9c5ef621e03b4934e2623e20f4
+X-Git-Newrev: e036a25271ceedb8b9839437832c3bccd2075e14
+X-Patchwork-Hint: ignore
+Message-Id: <20240515151102.0EB5A873AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x]
+ configs/raspberrypizero2w_defconfig: fix typo in headers series option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,29 +59,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5390693336423535548=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkdlcm8iID09IEdlcm8gU2Nod8Okcmlja2UgPGdlcm8uc2Nod2Flcmlja2VAcG9zdGVv
-LmRlPiB3cml0ZXM6CgogPiBUaGUgYnVpbGQgZm9yIHRoaXMgZGVmY29uZmlnIGZhaWxzIHdpdGg6
-CiA+ICAgSW5jb3JyZWN0IHNlbGVjdGlvbiBvZiBrZXJuZWwgaGVhZGVyczogZXhwZWN0ZWQgNi44
-LngsIGdvdCA2LjEueAoKID4gRm91bmQgd2l0aCB0aGUgZm9sbG93aW5nIGNvbW1hbmQgd2hpbGUg
-dHJ5aW5nIHRvIGZpbmQgYm9hcmRzIHRoYXQgaGF2ZQogPiBtaXNzaW5nIGN1c3RvbSBoZWFkZXJz
-IHNlcmllczoKCiA+ICAgZ3JlcCAtLW51bGwgLS1yZWN1cnNpdmUgLS1maWxlcy13aXRob3V0LW1h
-dGNoICJCUjJfVE9PTENIQUlOX0VYVEVSTkFMPXkiIC4vY29uZmlncyBcCiA+ICAgICB8IHhhcmdz
-IC0tbnVsbCBncmVwIC0tbnVsbCAtLWZpbGVzLXdpdGgtbWF0Y2hlcyAiQlIyX0xJTlVYX0tFUk5F
-TF9DVVNUT01fLio9eSIgXAogPiAgICAgfCB4YXJncyAtLW51bGwgZ3JlcCAtLW51bGwgLS1maWxl
-cy13aXRob3V0LW1hdGNoICJCUjJfS0VSTkVMX0hFQURFUlNfWzAtOV1cK19bMC05XVwrPXkiXAog
-PiAgICAgfCB4YXJncyAtLW51bGwgZ3JlcCAtLWZpbGVzLXdpdGhvdXQtbWF0Y2ggIkJSMl9QQUNL
-QUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fWzAtOV1cK19bMC05XVwrPXkiCiA+ICAgLi9j
-b25maWdzL21hbmdvcGlfbXExcmR3Ml9kZWZjb25maWcgICMgcGF0Y2ggcGVuZGluZwogPiAgIC4v
-Y29uZmlncy9yYXNwYmVycnlwaXplcm8yd19kZWZjb25maWcKID4gICAuL2NvbmZpZ3Mvc2lwZWVk
-X2xpY2hlZXBpX25hbm9fZGVmY29uZmlnICAjIHBhdGNoIHBlbmRpbmcKCiA+IFNpZ25lZC1vZmYt
-Ynk6IEdlcm8gU2Nod8Okcmlja2UgPGdlcm8uc2Nod2Flcmlja2VAcG9zdGVvLmRlPgoKQ29tbWl0
-dGVkIHRvIDIwMjQuMDIueCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============5390693336423535548==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e036a25271ceedb8b9839437832c3bccd2075e14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+
+The build for this defconfig fails with:
+
+  Incorrect selection of kernel headers: expected 6.8.x, got 6.1.x
+
+Found with the following command while trying to find boards that have
+missing custom headers series:
+
+  grep --null --recursive --files-without-match "BR2_TOOLCHAIN_EXTERNAL=y" ./configs \
+    | xargs --null grep --null --files-with-matches "BR2_LINUX_KERNEL_CUSTOM_.*=y" \
+    | xargs --null grep --null --files-without-match "BR2_KERNEL_HEADERS_[0-9]\+_[0-9]\+=y"\
+    | xargs --null grep --files-without-match "BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_[0-9]\+_[0-9]\+=y"
+  ./configs/mangopi_mq1rdw2_defconfig  # patch pending
+  ./configs/raspberrypizero2w_defconfig
+  ./configs/sipeed_licheepi_nano_defconfig  # patch pending
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6712162631
+
+Signed-off-by: Gero Schwäricke <gero.schwaericke@posteo.de>
+[Romain: add gitlab-ci link]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit dc18b639c93f972246fce345b43dc091d07d35ca)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/raspberrypizero2w_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/raspberrypizero2w_defconfig b/configs/raspberrypizero2w_defconfig
+index 1bf335c076..e152889f2d 100644
+--- a/configs/raspberrypizero2w_defconfig
++++ b/configs/raspberrypizero2w_defconfig
+@@ -3,7 +3,7 @@ BR2_cortex_a53=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+ # Linux headers same as kernel, 6.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6.1=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ 
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+
+--===============5390693336423535548==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5390693336423535548==--
