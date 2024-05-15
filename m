@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60385C25B75
-	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 06:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C88C25B7A
+	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 06:16:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECC8D41A65;
-	Wed, 15 May 2024 06:16:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5A5E941AA1;
+	Wed, 15 May 2024 06:16:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NZ_B-rSa_V64; Wed, 15 May 2024 06:16:28 +0000 (UTC)
+ id SYDNt8GQIRGL; Wed, 15 May 2024 06:16:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93C7E41A67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B1A541A86
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93C7E41A67;
-	Wed, 15 May 2024 06:16:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B1A541A86;
+	Wed, 15 May 2024 06:16:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0F24B1BF59A
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:16:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 210A51BF59A
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E02CB419DB
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:16:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BD5A419EB
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:16:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xf7HaMrsYk9q for <buildroot@lists.busybox.net>;
+ id gQvZWpUs8ynq for <buildroot@lists.busybox.net>;
  Wed, 15 May 2024 06:16:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7203419EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72C39419F1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7203419EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72C39419F1
  for <buildroot@buildroot.org>; Wed, 15 May 2024 06:16:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D60268715C; Wed, 15 May 2024 06:16:05 +0000 (UTC)
+ id E0AAA8715D; Wed, 15 May 2024 06:16:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 May 2024 08:13:08 +0200
+Date: Wed, 15 May 2024 08:14:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 15820bc0cd668fa9e1db78d29a3c44cb1e6cf717
-X-Git-Newrev: ad64ddd4f306eb787ce98263148a91b3386be570
+X-Git-Oldrev: ad64ddd4f306eb787ce98263148a91b3386be570
+X-Git-Newrev: 3f3c22d1bf2e2923eae88f1997925c38aeb49f28
 X-Patchwork-Hint: ignore
-Message-Id: <20240515061605.D60268715C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnpth: fix gnupg2 build with
- uclibc
+Message-Id: <20240515061605.E0AAA8715D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-waipu: bump version to
+ 21.6.1-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,127 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad64ddd4f306eb787ce98263148a91b3386be570
+commit: https://git.buildroot.net/buildroot/commit/?id=3f3c22d1bf2e2923eae88f1997925c38aeb49f28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure of gnupg2 raised since bump to version
-1.7 in commit 3ef4d24192b20bd1eb5e34c9fa2a6aa5bde91f91 and
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commitdiff;h=02ce6b2d27f91ed6285e4e92d99c21bcc7823c9b:
-
-/home/autobuild/autobuild/instance-2/output-1/host/lib/gcc/armeb-buildroot-linux-uclibcgnueabi/13.2.0/../../../../armeb-buildroot-linux-uclibcgnueabi/bin/ld: /home/autobuild/autobuild/instance-2/output-1/host/bin/../armeb-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libnpth.so: undefined reference to `busy_wait_for'
-
-Fixes: 3ef4d24192b20bd1eb5e34c9fa2a6aa5bde91f91
- - http://autobuild.buildroot.org/results/9a27ffde79598a39b4fd55c716978d32d0beb924
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-npth_rwlock_timedrdlock-is-not-supported.patch | 51 ++++++++++++++++++++++
- package/libnpth/0003-Fix-previous-commit.patch     | 39 +++++++++++++++++
- 2 files changed, 90 insertions(+)
+ package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
+ package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch b/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
-new file mode 100644
-index 0000000000..0d9b38e4ce
---- /dev/null
-+++ b/package/libnpth/0002-Return-a-run-time-error-if-npth_rwlock_timedrdlock-is-not-supported.patch
-@@ -0,0 +1,51 @@
-+From 01f03a91c9bd63910995aeef412beb3ca6dc9a67 Mon Sep 17 00:00:00 2001
-+From: NIIBE Yutaka <gniibe@fsij.org>
-+Date: Tue, 7 May 2024 13:45:47 +0900
-+Subject: [PATCH] Return a run-time error if npth_rwlock_timedrdlock is not
-+ supported.
-+
-+* src/npth.c (npth_rwlock_timedrdlock): Return ENOSYS if not
-+supported.
-+(npth_rwlock_timedwrlock): Use HAVE_PTHREAD_RWLOCK_TRYWRLOCK.
-+
-+--
-+
-+GnuPG-bug-id: 7109
-+Fixed-commit: 363c370bd35dd0bb4e5636b2d4f06ea88c658794
-+Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-+
-+Upstream: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=01f03a91c9bd63910995aeef412beb3ca6dc9a67
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/npth.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/npth.c b/src/npth.c
-+index c0ff8da..f02540c 100644
-+--- a/src/npth.c
-++++ b/src/npth.c
-+@@ -488,9 +488,11 @@ npth_rwlock_timedrdlock (npth_rwlock_t *rwlock, const struct timespec *abstime)
-+   ENTER();
-+ #if HAVE_PTHREAD_RWLOCK_TIMEDRDLOCK
-+   err = pthread_rwlock_timedrdlock (rwlock, abstime);
-+-#else
-++#elif HAVE_PTHREAD_RWLOCK_TRYRDLOCK
-+   err = busy_wait_for ((trylock_func_t) pthread_rwlock_tryrdlock, rwlock,
-+ 		       abstime);
-++#else
-++  err = ENOSYS;
-+ #endif
-+   LEAVE();
-+   return err;
-+@@ -533,7 +535,7 @@ npth_rwlock_timedwrlock (npth_rwlock_t *rwlock, const struct timespec *abstime)
-+   ENTER();
-+ #if HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK
-+   err = pthread_rwlock_timedwrlock (rwlock, abstime);
-+-#elif HAVE_PTHREAD_RWLOCK_TRYRDLOCK
-++#elif HAVE_PTHREAD_RWLOCK_TRYWRLOCK
-+   err = busy_wait_for ((trylock_func_t) pthread_rwlock_trywrlock, rwlock,
-+ 		       abstime);
-+ #else
-+-- 
-+2.30.2
-+
-diff --git a/package/libnpth/0003-Fix-previous-commit.patch b/package/libnpth/0003-Fix-previous-commit.patch
-new file mode 100644
-index 0000000000..5f3ce06bf6
---- /dev/null
-+++ b/package/libnpth/0003-Fix-previous-commit.patch
-@@ -0,0 +1,39 @@
-+From 75c68399ef3bbb5d024f2a60474a7214fa479016 Mon Sep 17 00:00:00 2001
-+From: NIIBE Yutaka <gniibe@fsij.org>
-+Date: Mon, 13 May 2024 11:13:23 +0900
-+Subject: [PATCH] Fix previous commit.
-+
-+Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-+
-+Upstream: https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git;a=commit;h=75c68399ef3bbb5d024f2a60474a7214fa479016
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/npth.c | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
-+
-+diff --git a/src/npth.c b/src/npth.c
-+index f02540c..8dced17 100644
-+--- a/src/npth.c
-++++ b/src/npth.c
-+@@ -178,6 +178,18 @@ static int initialized_or_any_threads;
-+ typedef int (*trylock_func_t) (void *);
-+ 
-+ #ifndef HAVE_PTHREAD_MUTEX_TIMEDLOCK
-++#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
-++#endif
-++
-++#if !HAVE_PTHREAD_RWLOCK_TIMEDRDLOCK && HAVE_PTHREAD_RWLOCK_TRYRDLOCK
-++#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
-++#endif
-++
-++#if !HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK && HAVE_PTHREAD_RWLOCK_TRYWRLOCK
-++#define REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION 1
-++#endif
-++
-++#if REQUIRE_THE_BUSY_WAIT_FOR_IMPLEMENTATION
-+ static int
-+ busy_wait_for (trylock_func_t trylock, void *lock,
-+ 	       const struct timespec *abstime)
-+-- 
-+2.30.2
-+
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+index 2c682c884c..6377f36e80 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0db467d4986c36efb0c837dd728fc6322d3021fe2d8c93da9355b63f210fa0ca  kodi-pvr-waipu-21.6.0-Omega.tar.gz
++sha256  96c558f02d820c43994da05a89693f3e787c2adb8faa2ff28127a6e97d33525c  kodi-pvr-waipu-21.6.1-Omega.tar.gz
+ sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+index 4e9f8e00cf..222abcaa1b 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_WAIPU_VERSION = 21.6.0-Omega
++KODI_PVR_WAIPU_VERSION = 21.6.1-Omega
+ KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
+ KODI_PVR_WAIPU_LICENSE = GPL-2.0+
+ KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
