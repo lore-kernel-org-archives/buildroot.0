@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14365C25B75
-	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 06:16:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 328E9C25B75
+	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 06:16:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D994F419F1;
-	Wed, 15 May 2024 06:16:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5452D41A47;
+	Wed, 15 May 2024 06:16:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h01Y8HBZpvfU; Wed, 15 May 2024 06:16:15 +0000 (UTC)
+ id kP8nJieQhH49; Wed, 15 May 2024 06:16:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B566441A22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 994134197F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B566441A22;
-	Wed, 15 May 2024 06:16:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 269E31BF977
+	by smtp2.osuosl.org (Postfix) with ESMTP id 994134197F;
+	Wed, 15 May 2024 06:16:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E4E21BF59A
  for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 194B7405C2
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:16:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D20AE41987
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:16:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H8n1hm0Fc30C for <buildroot@lists.busybox.net>;
- Wed, 15 May 2024 06:16:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NCIIJCB02Tsw for <buildroot@lists.busybox.net>;
+ Wed, 15 May 2024 06:16:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD7634058A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CED2841989
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD7634058A
+ by smtp2.osuosl.org (Postfix) with ESMTP id CED2841989
  for <buildroot@buildroot.org>; Wed, 15 May 2024 06:16:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A83C987157; Wed, 15 May 2024 06:16:05 +0000 (UTC)
+ id C874787149; Wed, 15 May 2024 06:16:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 May 2024 08:07:22 +0200
+Date: Wed, 15 May 2024 08:12:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4b18f32e5d9c3537a05405201092d65148b1bdbf
-X-Git-Newrev: 58ccc55bff54d4c6c289a2d348f18b1b6dfde62d
+X-Git-Oldrev: 93864cef0b1ec94c44498a4edd31de92725b28b2
+X-Git-Newrev: 15820bc0cd668fa9e1db78d29a3c44cb1e6cf717
 X-Patchwork-Hint: ignore
-Message-Id: <20240515061605.A83C987157@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/squid: security bump version to 6.9
+Message-Id: <20240515061605.C874787149@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluent-bit: bump to v3.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58ccc55bff54d4c6c289a2d348f18b1b6dfde62d
+commit: https://git.buildroot.net/buildroot/commit/?id=15820bc0cd668fa9e1db78d29a3c44cb1e6cf717
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2024-25111:
-https://github.com/squid-cache/squid/security/advisories/GHSA-72c2-c3wm-8qxc
+Release Notes:
+- https://fluentbit.io/announcements/v3.0.1
+- https://fluentbit.io/announcements/v3.0.2
+- https://fluentbit.io/announcements/v3.0.3
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Peter: update sha256 hash]
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/fluent-bit/fluent-bit.hash | 2 +-
+ package/fluent-bit/fluent-bit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 4a8ea5d550..e5017ae5cd 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v6/squid-6.6.tar.xz.asc
--md5  5a41134ee1b7e75f62088acdec92d2ca  squid-6.6.tar.xz
--sha1  f05e06a9dd3bf7501d2844e43d9ae1bd00e9edcc  squid-6.6.tar.xz
-+# From http://www.squid-cache.org/Versions/v6/squid-6.9.tar.xz.asc
-+md5  4888e9dc75c0daa0ed526b34c055cb67  squid-6.9.tar.xz
-+sha1  5e73b30116ce7111589cc2b1c9bfe3c17efa2e75  squid-6.9.tar.xz
- # Locally calculated
--sha256  55bd7f9f4898153161ea1228998acb551bf840832b9e5b90fc8ecd2942420318  squid-6.6.tar.xz
-+sha256  1ad72d46e1cb556e9561214f0fb181adb87c7c47927ef69bc8acd68a03f61882  squid-6.9.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e325c63cb0..60eca397ec 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
+diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+index cc9c976d60..a53f6dba51 100644
+--- a/package/fluent-bit/fluent-bit.hash
++++ b/package/fluent-bit/fluent-bit.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e70ae5be2f0ca1cb842a1c8d2762437907c522765f79b5c0c391eaa1b57c9f4c  fluent-bit-3.0.0.tar.gz
++sha256  2f3b82e8b7802fe92625009531592f12d500ff61a02ecf4cd27e0f138a6dc566  fluent-bit-3.0.3.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 33054bea66..b235c3abf4 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQUID_VERSION = 6.6
-+SQUID_VERSION = 6.9
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v6
- SQUID_LICENSE = GPL-2.0+
+-FLUENT_BIT_VERSION = 3.0.0
++FLUENT_BIT_VERSION = 3.0.3
+ FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
