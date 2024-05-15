@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43AEFC25B75
-	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 06:08:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1BDEC25B75
+	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 06:11:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9481400F9;
-	Wed, 15 May 2024 06:08:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9B64540443;
+	Wed, 15 May 2024 06:11:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pPpWB7ZOI2mR; Wed, 15 May 2024 06:08:47 +0000 (UTC)
+ id DRrzYLnF5Jaf; Wed, 15 May 2024 06:11:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0034540443
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC03040AED
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0034540443;
-	Wed, 15 May 2024 06:08:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ED8211BF59A
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:08:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC03040AED;
+	Wed, 15 May 2024 06:11:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CD47E1BF59A
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:11:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7B18605C9
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:08:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9793402E8
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:11:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f5z0kHP2wCET for <buildroot@lists.busybox.net>;
- Wed, 15 May 2024 06:08:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o075h2XUQEto for <buildroot@lists.busybox.net>;
+ Wed, 15 May 2024 06:11:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5C5AE605D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C5AE605D7
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5C5AE605D7
- for <buildroot@buildroot.org>; Wed, 15 May 2024 06:08:43 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 65952FF804;
- Wed, 15 May 2024 06:08:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5D88A402E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D88A402E0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5D88A402E0
+ for <buildroot@buildroot.org>; Wed, 15 May 2024 06:11:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A08E81C0006;
+ Wed, 15 May 2024 06:11:26 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s77od-000ZE2-1u;
- Wed, 15 May 2024 08:08:39 +0200
+ (envelope-from <peter@korsgaard.com>) id 1s77rJ-000ZY5-36;
+ Wed, 15 May 2024 08:11:25 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240514215636.2866720-1-bernd@kuhls.net>
-Date: Wed, 15 May 2024 08:08:39 +0200
-In-Reply-To: <20240514215636.2866720-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Tue, 14 May 2024 23:56:36 +0200")
-Message-ID: <87seyjsj2w.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240514173919.318237-1-fontaine.fabrice@gmail.com>
+Date: Wed, 15 May 2024 08:11:25 +0200
+In-Reply-To: <20240514173919.318237-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 14 May 2024 19:39:19 +0200")
+Message-ID: <87o797siya.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/squid: security bump version to
- 6.9
+Subject: Re: [Buildroot] [PATCH 1/1] package/gnuplot: fix readline dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,38 +68,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Michael Fischer <mf@go-sys.de>,
+ Anthony Viallard <viallard@syscom-instruments.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes CVE-2024-25111:
- > https://github.com/squid-cache/squid/security/advisories/GHSA-72c2-c3wm-8qxc
+ > --without-readline is interpreted as --with-readline=builtin since bump
+ > to version 5.4.0 in commit 263da09323e83bb3d6552b70b739523b66459df8 and
+ > https://github.com/gnuplot/gnuplot/commit/b492ea63bd604081ffb9dee3843e295b0b29df85
+ > so add a mandatory dependency to readline or libedit to gnuplot
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- > ---
- >  package/squid/squid.hash | 6 +++---
- >  package/squid/squid.mk   | 2 +-
- >  2 files changed, 4 insertions(+), 4 deletions(-)
+ > As a side-effect, this will avoid the following build failure with
+ > builtin readline raised since bump to version 6.0.0 in commit
+ > 5f11ce4aeaba99917778c384b236d267e78a7b29:
 
- > diff --git a/package/squid/squid.hash b/package/squid/squid.hash
- > index 4a8ea5d550..ed78933306 100644
- > --- a/package/squid/squid.hash
- > +++ b/package/squid/squid.hash
- > @@ -1,6 +1,6 @@
- > -# From http://www.squid-cache.org/Versions/v6/squid-6.6.tar.xz.asc
- > -md5  5a41134ee1b7e75f62088acdec92d2ca  squid-6.6.tar.xz
- > -sha1  f05e06a9dd3bf7501d2844e43d9ae1bd00e9edcc  squid-6.6.tar.xz
- > +# From http://www.squid-cache.org/Versions/v6/squid-6.9.tar.xz.asc
- > +md5  4888e9dc75c0daa0ed526b34c055cb67  squid-6.9.tar.xz
- > +sha1  5e73b30116ce7111589cc2b1c9bfe3c17efa2e75  squid-6.9.tar.xz
- >  # Locally calculated
- >  sha256  55bd7f9f4898153161ea1228998acb551bf840832b9e5b90fc8ecd2942420318  squid-6.6.tar.xz
+ > /home/autobuild/autobuild/instance-14/output-1/host/lib/gcc/arm-buildroot-linux-gnueabi/13.2.0/../../../../arm-buildroot-linux-gnueabi/bin/ld:
+ > history.o: in function `read_history':
+ > history.c:(.text+0xa8): undefined reference to `gp_read_history'
 
-You forgot to update the sha256. Committed with that fixed, thanks.
+ > Fixes: 5f11ce4aeaba99917778c384b236d267e78a7b29
+ >  - http://autobuild.buildroot.org/results/5e45dd8f9071694110c8481f222b9b07b6a97ef3
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
