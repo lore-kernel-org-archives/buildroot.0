@@ -4,59 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31A94C25B79
-	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 15:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6CDCC25B79
+	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 15:31:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA8964065F;
-	Wed, 15 May 2024 15:30:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73195404F9;
+	Wed, 15 May 2024 15:31:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6LdKw3GjRr55; Wed, 15 May 2024 15:30:58 +0000 (UTC)
+ id OeyUyIkbMf6i; Wed, 15 May 2024 15:31:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7472405D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20CC4405D1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7472405D1;
-	Wed, 15 May 2024 15:30:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20CC4405D1;
+	Wed, 15 May 2024 15:31:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8DFAC1BF841
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 15:30:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 98DE41BF841
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 15:31:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A26A40546
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 15:30:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92CB740657
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 15:31:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VC01qZq6ieG0 for <buildroot@lists.busybox.net>;
- Wed, 15 May 2024 15:30:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id r_dFq9Bm8qkL for <buildroot@lists.busybox.net>;
+ Wed, 15 May 2024 15:31:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D39BD405D1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D39BD405D1
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D39BD405D1
- for <buildroot@buildroot.org>; Wed, 15 May 2024 15:30:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E13A5FF807;
- Wed, 15 May 2024 15:30:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s7Gag-001ZVP-0O;
- Wed, 15 May 2024 17:30:50 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AB1B405D1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AB1B405D1
+ for <buildroot@buildroot.org>; Wed, 15 May 2024 15:31:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8F2C1873D5; Wed, 15 May 2024 15:31:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240330221122.1112448-1-fontaine.fabrice@gmail.com>
-Date: Wed, 15 May 2024 17:30:50 +0200
-In-Reply-To: <20240330221122.1112448-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 30 Mar 2024 23:11:22 +0100")
-Message-ID: <87zfsrozx1.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/apcupsd: set ac_cv_path_SHUTDOWN
+To: buildroot@buildroot.org
+Date: Wed, 15 May 2024 17:27:31 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: e036a25271ceedb8b9839437832c3bccd2075e14
+X-Git-Newrev: 3c14bcebcb657fee1bed615a6b8073add9a0975b
+X-Patchwork-Hint: ignore
+Message-Id: <20240515153113.8F2C1873D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] configs/pc_x86_64_{bios,
+ efi}_defconfig: add wireless regdb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,29 +59,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3c14bcebcb657fee1bed615a6b8073add9a0975b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Set ac_cv_path_SHUTDOWN to /sbin/shutdown to avoid the following build
- > failure when shutdown is not available on host raised since the addition
- > of the package in commit d12b63b741586b89c4017551308c43512a617287:
+Wireless regulatory database lists the allowed radio frequencies for
+each local jurisdiction. Since linux-4.15 the kernel supports loading
+the files regulatory.db/regulatory.db.p7s directly from the
+/lib/firmware directory. Currently this package is not enabled and
+kernel complains with the following message on every boot:
+"""
+platform regulatory.0: Direct firmware load for regulatory.db failed
+with error -2
+cfg80211: failed to load regulatory.db
+"""
+Add wireless regulatory database package to fix the issue.
 
- > configure: error: Missing required tool; need any one of: shutdown shutdown.bsd
+Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 16e9f514905a12caab1d1b308dd95f8b79977828)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/pc_x86_64_bios_defconfig | 1 +
+ configs/pc_x86_64_efi_defconfig  | 1 +
+ 2 files changed, 2 insertions(+)
 
- > Fixes: d12b63b741586b89c4017551308c43512a617287
- >  - http://autobuild.buildroot.org/results/a8bbb5ced8343e08070361f260050de422144710
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2024.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index 6032544d2d..cba92ad93d 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -62,3 +62,4 @@ BR2_PACKAGE_ACPID=y
+ BR2_PACKAGE_CONNMAN=y
+ BR2_PACKAGE_CONNMAN_CLIENT=y
+ BR2_PACKAGE_CONNMAN_WIFI=y
++BR2_PACKAGE_WIRELESS_REGDB=y
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index afb652f3fc..fe6686b4a2 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -63,3 +63,4 @@ BR2_PACKAGE_ACPID=y
+ BR2_PACKAGE_CONNMAN=y
+ BR2_PACKAGE_CONNMAN_CLIENT=y
+ BR2_PACKAGE_CONNMAN_WIFI=y
++BR2_PACKAGE_WIRELESS_REGDB=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
