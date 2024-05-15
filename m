@@ -1,68 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD969C25B75
-	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 10:40:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4902C25B75
+	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 11:08:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6024840154;
-	Wed, 15 May 2024 10:40:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7052E605C6;
+	Wed, 15 May 2024 11:08:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s4UEr5BHOtOu; Wed, 15 May 2024 10:40:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5DvZ-kKa_eQV; Wed, 15 May 2024 11:08:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54BB2416D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91EE460650
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 54BB2416D4;
-	Wed, 15 May 2024 10:40:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91EE460650;
+	Wed, 15 May 2024 11:08:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ABFF61BF40A
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 10:40:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 493581BF23B
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 11:08:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A48D6416D4
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 10:40:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35A6D405F5
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 11:08:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7--Ze1W5xQMN for <buildroot@lists.busybox.net>;
- Wed, 15 May 2024 10:40:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2670140154
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2670140154
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2670140154
- for <buildroot@buildroot.org>; Wed, 15 May 2024 10:40:53 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 668A735282DD; Wed, 15 May 2024 12:40:50 +0200 (CEST)
-Date: Wed, 15 May 2024 12:40:50 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZkSRMq/yXayXrO3S@waldemar-brodkorb.de>
+ id xErNbK_LmJqY for <buildroot@lists.busybox.net>;
+ Wed, 15 May 2024 11:08:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::1034; helo=mail-pj1-x1034.google.com;
+ envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5959940154
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5959940154
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com
+ [IPv6:2607:f8b0:4864:20::1034])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5959940154
+ for <buildroot@buildroot.org>; Wed, 15 May 2024 11:08:22 +0000 (UTC)
+Received: by mail-pj1-x1034.google.com with SMTP id
+ 98e67ed59e1d1-2b370e63d96so1693355a91.3
+ for <buildroot@buildroot.org>; Wed, 15 May 2024 04:08:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715771302; x=1716376102;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=z7ov2k7HS7avI1JO5GAeficJYLNRH/m5bg7jcasTl/Y=;
+ b=LXZMjq4zZ35hIG8fTgKvmFuVJ8uTuROb/wMQG2BnECNnYWZYh+H+0AzjfOl2acsxU1
+ fJAadE83W+B0emVzFvc25jWEcfuCoLxaTTWEuA6OpzxM1u/FkIDL1gBguyvA1YpBrPwH
+ CcZBI/Tt8Sw6PjTsO27pyls08JncgOJq8KGB3ed6/e6x3WDkrCDDNfdzvJMWBLOnTfsn
+ 9pMH5O2RgG/SJxsyQ+2RxEMC8jAdlnjxE2ANp79Lv7kmGdXrTfe+jqXfWpVlcykUhapS
+ 2ASZDpxN6I6Ekvj5cUEdI6u3D0OW0UQx2aj95QwT4W1nBdtIMEmt1iCS+Byfk52KCpcv
+ Ogqw==
+X-Gm-Message-State: AOJu0Ywg9YrZLGOkP1IBlGJgzwqaeZD7NFoJnWn7jnCPjScTK4in9hde
+ VLodRI8frpHxtdDWKg1YdJfcmCs1fpOWU00mdVSx3wYb7OAN6Pf60hruIhC4kJRs7KF87V4sh1O
+ 3VELBZKbj8igH/tnVpJLRXxmAYls=
+X-Google-Smtp-Source: AGHT+IEJ3N2lZQ9gXfwups/Rema4xMtWZfnzaWXwAA+qmGF9/8J0mkQ6u1wNRrnsH6bp7rfoc9OBx+BAryBhRkQRI7c=
+X-Received: by 2002:a17:90a:8c7:b0:2b6:20a0:441e with SMTP id
+ 98e67ed59e1d1-2b6cd1f1b31mr14334029a91.4.1715771301608; Wed, 15 May 2024
+ 04:08:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-27-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1715769650; bh=tFFWhLOOtiBM3Bn73R7C5wuERkUpATSATRCro1Ifolw=;
- h=Date:From:To:Subject:From;
- b=V9XcDYKai33NyCKPCitPSEqKhoWFEruZ+8ym/a8wFhW66zMTzjYd5To0ZMpOtf7eo
- /XuVUvuXxtY1efpdJD+B5OeVedA7vASACpcOsfuRdzECSdvvjZkjLqJO6FOQMLWioF
- ex5G25iJOloiRB2BPZpPKPzXvsQ9j7UZ5mzRn5BXY7GUQBriAlxDu/M16exdPmp9Nd
- HOhyWmw9OzJNZoGz7kanTsOKvXRQKhVOJTlvXxUmcu39kzCz1CKY8D0Plsi9pDY8Bl
- H1rMCYpeD1rTnIj4/wDc3MUOxdbpHETPfjLXRmYo9FbN9E5GmY9ixXfocjj4Vd07ib
- 0/ikH88Jm0ZpQ==
+References: <20240515100209.24769-1-sebastien.szymanski@armadeus.com>
+In-Reply-To: <20240515100209.24769-1-sebastien.szymanski@armadeus.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 15 May 2024 08:08:09 -0300
+Message-ID: <CAOMZO5AvCmYZDD_0DfcuBZqyS0Fu9Se5PdtjfohH2yPPGQdbjg@mail.gmail.com>
+To: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1715771302; x=1716376102; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=z7ov2k7HS7avI1JO5GAeficJYLNRH/m5bg7jcasTl/Y=;
+ b=CZPSHwg0ME9yKnXnMRZ8YC6Pk6feFqM3JGa7o+A57F1LycCY+Y2WlW8F2+ESuK34Zn
+ vXyc8i+NOH/CcxrQZwYJKkJ+7lslB2lBmc0K425UOvTH+hvfbgkUIQfL0JKaOJJz2gLp
+ mmlKaR0Ejkj2RMXhIoIZpQAvZ8GAvrcH0Isp5pSGOcjFMgCvrMzB5H48xSU274ICmrlu
+ XE9YeDBtT0i3ZNaIALY/4ZrIoLEKhZsg5b1x+H+X4kXRKEhSLFmColS+3TqJlTPnrfgC
+ 4U2vIbHmqahZHAswPaaPnzIbUa0gxZ94JsOLVJf5VHCWgKPGzl6AQKpnDDYKTo9Enddn
+ d5Og==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=V9XcDYKa
-Subject: [Buildroot] [PATCH] package/uclibc: fix compile issue with gcc 14.x
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=CZPSHwg0
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/nxp-bt-wifi-firmware: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,65 +99,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Julien Olivain <ju.o@free.fr>, Gilles Talis <gilles.talis@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
- http://autobuild.buildroot.net/results/d9b924bdea3fd61060fa0e961c12534c1fff80de
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- .../0002-fix-kernel_stat64-definition.patch   | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/uclibc/0002-fix-kernel_stat64-definition.patch
-
-diff --git a/package/uclibc/0002-fix-kernel_stat64-definition.patch b/package/uclibc/0002-fix-kernel_stat64-definition.patch
-new file mode 100644
-index 0000000000..5a87586af8
---- /dev/null
-+++ b/package/uclibc/0002-fix-kernel_stat64-definition.patch
-@@ -0,0 +1,35 @@
-+From 186878405324e96f61d896a149f623e0c792c972 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 14 May 2024 23:18:56 -0700
-+Subject: [PATCH] fix kernel_stat64 definition
-+
-+The commit 74ca8d6f5d2e ("remove UCLIBC_HAS_LFS") removed conditional
-+compilation dependent on __UCLIBC_HAS_LFS__, assuming it to be always
-+defined, but removed the wrong branch in the definition of
-+kernel_stat64.
-+Fix kernel_stat64 definition to be stat64.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Tested-by: Chris Packham <judge.packham@gmail.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=186878405324e96f61d896a149f623e0c792c972
-+---
-+ libc/sysdeps/linux/common-generic/bits/kernel_stat.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libc/sysdeps/linux/common-generic/bits/kernel_stat.h b/libc/sysdeps/linux/common-generic/bits/kernel_stat.h
-+index 7a97bb4d7..e874a4a9f 100644
-+--- a/libc/sysdeps/linux/common-generic/bits/kernel_stat.h
-++++ b/libc/sysdeps/linux/common-generic/bits/kernel_stat.h
-+@@ -18,7 +18,7 @@
-+  * However that requires more #ifndef in relevant wrappers,
-+  * further uglifying them
-+  */
-+-#define kernel_stat64	stat
-++#define kernel_stat64	stat64
-+ 
-+ #endif	/*  _BITS_STAT_STRUCT_H */
-+ 
-+-- 
-+2.30.2
-+
--- 
-2.30.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgU8OpYmFzdGllbiwKCk9uIFdlZCwgTWF5IDE1LCAyMDI0IGF0IDc6MDLigK9BTSBTw6liYXN0
+aWVuIFN6eW1hbnNraQo8c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+IHdyb3RlOgo+
+Cj4gVGhpcyBwYWNrYWdlIHByb3ZpZGVzIGZpcm13YXJlcyBmb3IgTlhQIFdpRmkgKyBCbHVldG9v
+dGggY2hpcHNldHMuCj4gSXQgaXMgbmFtZWQgIm54cC1idC13aWZpLWZpcm13YXJlIiBzbyB0aGF0
+IGl0IGlzIG5vdCBjb25mdXNlZCB3aXRoIHRoZQo+IHBhY2thZ2UgZmlybXdhcmUtaW14LgoKVGhh
+bmtzIGZvciB0aGUgcGF0aC4KCklzIHRoZXJlIHN1cHBvcnQgaW4gQnVpbGRyb290IGZvciB0aGUK
+aHR0cHM6Ly9naXRodWIuY29tL254cC1pbXgvbXdpZmlleCBrZXJuZWwgbW9kdWxlcyB0b28/CgpJ
+IHdhbnQgdG8gdGVzdCB0aGUgSVc2MTIgV2lmaSBvbiB0aGUgaW14OTMtZXZrIGJvYXJkLgoKVGhh
+bmtzLAoKRmFiaW8gRXN0ZXZhbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
