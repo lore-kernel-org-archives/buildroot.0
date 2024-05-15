@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70126C25B79
-	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 13:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17C9CC25B75
+	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 13:28:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E854F80C22;
-	Wed, 15 May 2024 13:28:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD0C481F07;
+	Wed, 15 May 2024 13:28:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ko3zx7-cfNqE; Wed, 15 May 2024 13:28:00 +0000 (UTC)
+ id RHsUYkIUCdNv; Wed, 15 May 2024 13:28:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA63F80E4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 666518206B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA63F80E4A;
-	Wed, 15 May 2024 13:27:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A58111BF2C2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 666518206B;
+	Wed, 15 May 2024 13:28:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BC5231BF977
  for <buildroot@lists.busybox.net>; Wed, 15 May 2024 13:27:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D08D80FA9
+ by smtp3.osuosl.org (Postfix) with ESMTP id A959460632
  for <buildroot@lists.busybox.net>; Wed, 15 May 2024 13:27:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i9_ajW0OcJbP for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vE5xWL5ILQga for <buildroot@lists.busybox.net>;
  Wed, 15 May 2024 13:27:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4AAC80E4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E22726059A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4AAC80E4A
+ by smtp3.osuosl.org (Postfix) with ESMTP id E22726059A
  for <buildroot@buildroot.org>; Wed, 15 May 2024 13:27:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D0F2387321; Wed, 15 May 2024 13:27:57 +0000 (UTC)
+ id DC13087323; Wed, 15 May 2024 13:27:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 May 2024 15:23:39 +0200
+Date: Wed, 15 May 2024 15:25:16 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: f5a347c1dc11297f57d1b33aaf4f9c936fa2d241
-X-Git-Newrev: c8a229c85015b1a44911b5daa30238dcf925c72c
+X-Git-Oldrev: c8a229c85015b1a44911b5daa30238dcf925c72c
+X-Git-Newrev: 0b892513d02a3ce7cfb30127764652f676a28ffe
 X-Patchwork-Hint: ignore
-Message-Id: <20240515132757.D0F2387321@busybox.osuosl.org>
+Message-Id: <20240515132757.DC13087323@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.02.x] support/testing:
- TestATFAllwinner: add missing openssl dependency
+ TestF2FS: update kernel to 4.19.310
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,37 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8a229c85015b1a44911b5daa30238dcf925c72c
+commit: https://git.buildroot.net/buildroot/commit/?id=0b892513d02a3ce7cfb30127764652f676a28ffe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The commit [1] updated the u-boot version with the one used by
-orangepi_zero_plus2_defconfig but the dependency on openssl
-was forgotten.
+Since the toolchain Bootlin update to 2023.11-1 [1], the arm Linux
+kernel build is broken with binutils >= 2.41 with:
+
+  arch/arm/mm/proc-v7.S: Assembler messages:
+  arch/arm/mm/proc-v7.S:640: Error: junk at end of line, first unrecognized character is `#'
+
+A similar issue has already be fixed for qemu m68k [2].
+
+Bump to the latest kernel 4.19 that already include the backport
+of 790756c7e022 ("ARM: 8933/1: replace Sun/Solaris style flag on section directive")
+
+[1] 7e0e6e3b8618ab942f25b11ee72fbc5a4deefdf1
+[2] a1ce9474e40f731f327035d8c0962abb16f00ff7
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/6703221868
-
-[1] eb16148dddc6be39b0d850181c2461fdaba1ee6f
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6703222383
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit bc75b09b1c18541abaa47fc34eab44e91e2018ca)
+(cherry picked from commit 7e126bd38d5eedb49cd29699c1afe8b53edd71e0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/boot/test_atf.py | 1 +
- 1 file changed, 1 insertion(+)
+ support/testing/tests/fs/test_f2fs.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-index 352725e721..b0e7696e86 100644
---- a/support/testing/tests/boot/test_atf.py
-+++ b/support/testing/tests/boot/test_atf.py
-@@ -19,6 +19,7 @@ class TestATFAllwinner(infra.basetest.BRTest):
-         BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
-         BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
-         BR2_TARGET_UBOOT_NEEDS_DTC=y
-+        BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-         BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-         BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-         BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/support/testing/tests/fs/test_f2fs.py b/support/testing/tests/fs/test_f2fs.py
+index 425fbe31ca..826077ac94 100644
+--- a/support/testing/tests/fs/test_f2fs.py
++++ b/support/testing/tests/fs/test_f2fs.py
+@@ -20,7 +20,7 @@ class TestF2FS(infra.basetest.BRTest):
+         # BR2_TARGET_ROOTFS_TAR is not set
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.204"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.310"
+         BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+         BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
