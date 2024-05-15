@@ -4,102 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 575D8C25B75
-	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 14:01:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FB6EC25B75
+	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 14:12:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E9EA760877;
-	Wed, 15 May 2024 14:01:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12B0260623;
+	Wed, 15 May 2024 14:12:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5dr6L6XILmH2; Wed, 15 May 2024 14:01:43 +0000 (UTC)
+ id JSR6ycOU9DKw; Wed, 15 May 2024 14:12:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23E8660882
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27C726062B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23E8660882;
-	Wed, 15 May 2024 14:01:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 657991BF2C2
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 14:01:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27C726062B;
+	Wed, 15 May 2024 14:12:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 270551BF4E5
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 14:12:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A56582020
- for <buildroot@lists.busybox.net>; Wed, 15 May 2024 14:01:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10D4541A61
+ for <buildroot@lists.busybox.net>; Wed, 15 May 2024 14:12:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SASi3gxIhTx2 for <buildroot@lists.busybox.net>;
- Wed, 15 May 2024 14:01:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v8Lwmcs7wZuQ for <buildroot@lists.busybox.net>;
+ Wed, 15 May 2024 14:12:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7FD318201B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FD318201B
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7FD318201B
- for <buildroot@buildroot.org>; Wed, 15 May 2024 14:01:36 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-34ef66c0178so4666420f8f.1
- for <buildroot@buildroot.org>; Wed, 15 May 2024 07:01:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3E72240BA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E72240BA1
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3E72240BA1
+ for <buildroot@buildroot.org>; Wed, 15 May 2024 14:12:51 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-5238b5c07efso1468261e87.3
+ for <buildroot@buildroot.org>; Wed, 15 May 2024 07:12:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715781694; x=1716386494;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Z65JEhswkfjaFKBLImv4uGIfcATxcgLvZ+OBwUbVtdw=;
- b=oVufCYXlBOmi+4FUU1VxyWVx17bwV3JOs9oViYbY5OvG2cr9QfuDkGGAaaDSX4nxI0
- 2mIfR3ZbLpBoGdxFFwDDYABBsJxbxMKFuf3ZCN2qEdXTpOa21kh8E8/vHz9hoVR+TKiZ
- LPJuIvtJHeL2rUNqASqrKJcTaPrW9IgyvramvzBlDC2epHawtwIeelpP7eOdbSOiys1K
- xJtX8OaK5q0WzgcwuaKfMpsS4wd74957SyiPLOMkFwZe8UzOYpqc69IMNtZYrWP5Vguq
- TVT0t0ZPm91i/vne2e4hOOybD7CyIpP/Ux5BcBcvgWu25hcMtWKtj1VjbjaLRM7uNsz0
- J8GA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWlG9npoOk2Qd/eqD1UfQikoRhgEfCUoyDhMZ3ARcYaKizo/H5g1Ycu23+L/kRfUcm6oWVWDAwYWzXuClVuaanpvzAMWN8Ruw==
-X-Gm-Message-State: AOJu0YykVuMhlcWVovGge2tfq5om/RIRpo1gYyWipYtC3BHjOHCeDhq5
- 6cMJ4PELuMtusOdDHEEBvOFUWzc8S02TgA9uNWEF7QpLr1cyxrtGTk5PxK2S4QA=
-X-Google-Smtp-Source: AGHT+IGO2GBah9ZdOz43iRGiFPcCh2Gf87oeeYkyChhfxSQ7Y2++n+7aZtamZwbntyCzFW1ghFFVKg==
-X-Received: by 2002:a5d:52cf:0:b0:34a:e73a:67a1 with SMTP id
- ffacd0b85a97d-3504a956039mr14688088f8f.56.1715781694060; 
- Wed, 15 May 2024 07:01:34 -0700 (PDT)
-Received: from ?IPV6:2a04:cec0:1030:da2a:210f:2c50:ac23:ce17?
- ([2a04:cec0:1030:da2a:210f:2c50:ac23:ce17])
+ d=1e100.net; s=20230601; t=1715782370; x=1716387170;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=jgQPlnEIACiJeVgpp3lg19DnNSP58P8jWw+1UbyhPKM=;
+ b=vWYsXkiKusuKfvw1c6zWuiYo61opIkVcwBbC9z6rKabOgo15hpxQv2NsASQd4gE71t
+ DjcY39tNj3PZNQDEW18nmiCU+96a8rjs11M46RBHW59rYCcscfOebbWgdjuzkr8dnsxx
+ 19MqEu6fBK0s8A5z9pcY8ajJqjkr998ezsShNxfcvwP23CtahaKTIYZ2yPDeSsVnytKl
+ FRhMsiyK10lUjikpd9vDKlU8UMeYi9W77VGeZySzMvegetb+Xuagek8JvzTdVQFAJeLI
+ WejHHlDr/K7m7438p3z1QAob4bj7VSTzbqq6vPDQCNXO9L3374y5WqQAJxlf6L6Bh38U
+ Xxsg==
+X-Gm-Message-State: AOJu0Yzec117hZnlpaMsU09g/56iqkj0P2+p16xuMdbQUMnLwI3UK5cf
+ QkdH6feX4vhQtBme3+OMJeFhWOEDrciW7V68cX0z5bHzYfix19plE2W/DDwg5f7U3OXGekPpYHS
+ s
+X-Google-Smtp-Source: AGHT+IHceJLkILJq3MrPeptKtF/Y/ObUoDUsU4A0O0DngzXxSXbGp0Rne5vc9l4CY1UiVMHGW3XJmA==
+X-Received: by 2002:ac2:5049:0:b0:51d:8ff3:d156 with SMTP id
+ 2adb3069b0e04-5220fb6aec0mr9999070e87.19.1715782369855; 
+ Wed, 15 May 2024 07:12:49 -0700 (PDT)
+Received: from P-NTS-Evian.. ([2a04:cec0:1030:da2a:210f:2c50:ac23:ce17])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3502baacfdesm16783331f8f.73.2024.05.15.07.01.33
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 15 May 2024 07:01:33 -0700 (PDT)
-Message-ID: <888f8476-9bc2-409d-a35d-bb93282627d0@smile.fr>
-Date: Wed, 15 May 2024 16:01:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, James Hilliard <james.hilliard1@gmail.com>
-References: <20240514154250.1453970-1-james.hilliard1@gmail.com>
- <4e9d5bc99a30a885dddb8aba6145f56d@free.fr>
-Content-Language: fr, en-US
+ 5b1f17b1804b1-42010940845sm153935455e9.35.2024.05.15.07.12.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 15 May 2024 07:12:49 -0700 (PDT)
 From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <4e9d5bc99a30a885dddb8aba6145f56d@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 15 May 2024 16:12:46 +0200
+Message-ID: <20240515141246.44580-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.44.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1715781694; x=1716386494;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1715782370; x=1716387170;
  darn=buildroot.org; 
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Z65JEhswkfjaFKBLImv4uGIfcATxcgLvZ+OBwUbVtdw=;
- b=XxyzzeetsMoqUPYnXRHSjIohEAhbc7hXBnuFAeYKqe8DHKPHBMjE6txhfEC2SqcZth
- xTkYhWXg5PLZRkqTLdb/EFBRjoycPgJjqxTgqz+v9R6xkboY1P2VeOIl0m6VXoeKZYK8
- OU7bXm3xKwWbCZ9OOoZJMfcxzPPJN1+54lEv/Ymi255VnSYfWFQXqaQvZXmesvbQFTCN
- ImvFNQP+TK9r8lI24zIGe1rdJxe0twZ9I+L5rQmhQ7IPMd6/uFovGKU5uVkJqzkbOdWH
- 4tbOX+nWOsyoWVtMTb+zW7Xqo/FjsdGZN7FDGqaZf6J/Wn9HrxqXHJBsKr7BpU1NNeUB
- UaKA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=jgQPlnEIACiJeVgpp3lg19DnNSP58P8jWw+1UbyhPKM=;
+ b=vjv6vhaqWdYMfETcyqsKRjYp8tH9bL2nWteeY+R2fUgeQ/Uk/eZ3LS1Tr/akl7sxsU
+ 19GlYYgXOQh6j/kmU7OzWhBh/tZN1kRdNJXhbxPLYgoVgr4fZEswViLlY9d2sNROp+8D
+ 2ryHyKCcKrm54889G2ktKigqZy4Cbi0B9WCDa7rYn5Y1XxKBBFeOnees01GfiA/Im+Jb
+ CT/Kux2AI7zYTloN+omHZIuwMTEgB37YQmiZZzEx6R9jNlXhYkKdjminlxQbfIXDHrnw
+ 4Wi0bMTXUy+1VSjTvjOHPsAV4vaMrsulcoUJTDeETVDJFbCb03+rFYwnQc/eeLqeV7Lc
+ eyUw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=smile-fr.20230601.gappssmtp.com
  header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=Xxyzzeet
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-ml-dtypes: skip
- dependency check
+ header.s=20230601 header.b=vjv6vhaq
+Subject: [Buildroot] [PATCH] package/python-ml-dtypes: remove python-pybind
+ from C++ dependency comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,56 +104,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmFtZXMsIEp1bGllbiwgQWxsLAoKTGUgMTQvMDUvMjAyNCDDoCAxOToyNiwgSnVsaWVu
-IE9saXZhaW4gYSDDqWNyaXTCoDoKPiBIaSBKYW1lcywKPiAKPiBUaGFua3MgZm9yIHRoZSBwYXRj
-aCEKPiAKPiBJIHN1Y2Nlc3NmdWxseSB0ZXN0ZWQgaXQgb24gYnJhbmNoIG1hc3RlciBhdCBjb21t
-aXQgOTc2NDI1OCB3aXRoIGNvbW1hbmQ6Cj4gCj4gwqDCoMKgIHN1cHBvcnQvdGVzdGluZy9ydW4t
-dGVzdHMgXAo+IMKgwqDCoMKgwqDCoMKgIC1kIGRsIC1vIG91dHB1dF9mb2xkZXIgXAo+IMKgwqDC
-oMKgwqDCoMKgIHRlc3RzLnBhY2thZ2UudGVzdF9weXRob25fbWxfZHR5cGVzCj4gCj4gT24gMTQv
-MDUvMjAyNCAxNzo0MiwgSmFtZXMgSGlsbGlhcmQgd3JvdGU6Cj4+IFRoaXMgcGFja2FnZSBwaW5z
-IG92ZXJseSBzdHJpY3QgbnVtcHkgZGVwZW5kZW5jeSB2ZXJzaW9ucyBhcHBhcmVudGx5Cj4+IGZv
-ciBjb21wYXRpYmlsaXR5IHJlYXNvbnMgdGhhdCBkb24ndCBhcHBlYXIgcmVsZXZhbnQgdG8gYnVp
-bGRyb290Lgo+Pgo+PiBUaGlzIHBhY2thZ2UgYWxzbyBhcHBlYXJzIHRvIHBpbiBhbiBvdmVybHkg
-c3RyaWN0IHNldHVwdG9vbHMgdmVyc2lvbgo+PiBmb3IgdW5jbGVhciByZWFzb25zLgoKSSBsb29r
-ZWQgYXQgdGhpcyBpc3N1ZSBsYXN0IHdlZWsgd2l0aCB0aGUgc2FtZSBjb25jbHVzaW9ucy4uLgpJ
-IHdhcyBhYmxlIHRvIGZpeCB0aGUgc2V0dXB0b29scyB2ZXJzaW9uIGNoZWNrIGJ1dCBpdCB3YXMg
-c2lsbCBmYWlsaW5nIHdpdGgKbnVtcHkgY2hlY2sgKGl0IHNlZW1zIG51bXB5IGRlcGVuZGVuY3kg
-aXMgbmV2ZXIgZm91bmQgd2hpbGUgY3Jvc3MtY29tcGlsaW5nKS4KCj4+Cj4+IFNlZToKPj4gaHR0
-cHM6Ly9naXRodWIuY29tL2pheC1tbC9tbF9kdHlwZXMvYmxvYi92MC4zLjIvcHlwcm9qZWN0LnRv
-bWwjTDUxLUw1NQo+Pgo+PiBUbyBmaXggdGhpcyBsZXRzIGp1c3Qgc2V0IHRoZSAtLXNraXAtZGVw
-ZW5kZW5jeS1jaGVjayBidWlsZCBvcHRpb24gYW5kCj4+IGlnbm9yZSB0aGUgYnVpbGQgZGVwZW5k
-ZW5jeSB2ZXJzaW9uIG1pc21hdGNoZXMgc2luY2UgdGhleSBkb24ndCBhcHBlYXIKPj4gdG8gY2F1
-c2UgYW55IGJ1aWxkIGlzc3Vlcy4KCk1heWJlIHdlIHNob3VsZCBhdm9pZCB1c2luZyAtLXNraXAt
-ZGVwZW5kZW5jeS1jaGVjayBvcHRpb24gdG9vIGVhc2lseS4gV2UgY291bGQKbWlzcyBhbnkgbmV3
-IGRlcGVuZGVuY3kgdXNlZCBieSBmdXJ0aGVyIHJlbGVhc2U/Cgo+Pgo+PiBUaGlzIGVycm9yIHdh
-cyBpbnRyb2R1Y2VkIHdoZW4gd2UgbWlncmF0ZWQgc2V0dXB0b29scyB0byBwZXA1MTcgaW4KPj4g
-ODkzN2RiOGRkNTk1ZTA5ODg3NTFlNWRiYjU2OGU4NzBiMDdiMzljYy4KPj4KPj4gU2lnbmVkLW9m
-Zi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Cj4gCj4gVGVz
-dGVkLWJ5OiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgo+IAo+PiAtLS0KPj4gwqBwYWNr
-YWdlL3B5dGhvbi1tbC1kdHlwZXMvcHl0aG9uLW1sLWR0eXBlcy5tayB8IDEgKwo+PiDCoDEgZmls
-ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQo+Pgo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRo
-b24tbWwtZHR5cGVzL3B5dGhvbi1tbC1kdHlwZXMubWsKPj4gYi9wYWNrYWdlL3B5dGhvbi1tbC1k
-dHlwZXMvcHl0aG9uLW1sLWR0eXBlcy5tawo+PiBpbmRleCA2NzYxMzdlY2YxLi44MDk3MjY1MDc4
-IDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL3B5dGhvbi1tbC1kdHlwZXMvcHl0aG9uLW1sLWR0eXBl
-cy5tawo+PiArKysgYi9wYWNrYWdlL3B5dGhvbi1tbC1kdHlwZXMvcHl0aG9uLW1sLWR0eXBlcy5t
-awo+PiBAQCAtMTAsNiArMTAsNyBAQCBQWVRIT05fTUxfRFRZUEVTX1NJVEUgPQo+PiBodHRwczov
-L2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvMzkvN2QvOGQ4NWZjYmE4Ngo+PiDCoFBZ
-VEhPTl9NTF9EVFlQRVNfTElDRU5TRSA9IEFwYWNoZS0yLjAKPj4gwqBQWVRIT05fTUxfRFRZUEVT
-X0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4+IMKgUFlUSE9OX01MX0RUWVBFU19TRVRVUF9UWVBF
-ID0gc2V0dXB0b29scwoKV2UgY291bGQgYWRkIGEgY29tbWVudCBoZXJlIHRvIGV4cGxhaW4gd2h5
-IHdlIHNraXAtZGVwZW5kZW5jeS1jaGVjayBoZXJlLgoKQmVzdCByZWdhcmRzLApSb21haW4KCj4+
-ICtQWVRIT05fTUxfRFRZUEVTX0JVSUxEX09QVFMgPSAtLXNraXAtZGVwZW5kZW5jeS1jaGVjawo+
-Pgo+PiDCoFBZVEhPTl9NTF9EVFlQRVNfREVQRU5ERU5DSUVTID0gXAo+PiDCoMKgwqDCoCBob3N0
-LXB5dGhvbi1udW1weSBcCj4+IC0tIAo+PiAyLjM0LjEKPiAKPiBCZXN0IHJlZ2FyZHMsCj4gCj4g
-SnVsaWVuLgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Cj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+python-pybind dependency has been removed since the version bump to
+0.3.2 [1]
+
+[1] 06e1a3620e5268951be089d2b150c1802de7de4c
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/python-ml-dtypes/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-ml-dtypes/Config.in b/package/python-ml-dtypes/Config.in
+index 58c218b214..7dce2fea42 100644
+--- a/package/python-ml-dtypes/Config.in
++++ b/package/python-ml-dtypes/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_ML_DTYPES
+ 	bool "python-ml-dtypes"
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+-	depends on BR2_INSTALL_LIBSTDCPP # python-pybind, python-numpy
++	depends on BR2_INSTALL_LIBSTDCPP # python-numpy
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # python-numpy
+ 	depends on BR2_HOST_GCC_AT_LEAST_9 # host-python-numpy
+-- 
+2.44.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
