@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DD20C25B75
-	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 06:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F4FC25B75
+	for <buildroot@archiver.kernel.org>; Wed, 15 May 2024 06:16:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECEA741987;
-	Wed, 15 May 2024 06:16:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6942C41989;
+	Wed, 15 May 2024 06:16:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L-fah43XbZsM; Wed, 15 May 2024 06:16:08 +0000 (UTC)
+ id peGvIqm0_RRZ; Wed, 15 May 2024 06:16:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA301419F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BC37419DB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA301419F1;
-	Wed, 15 May 2024 06:16:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7F79B1BF59A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1BC37419DB;
+	Wed, 15 May 2024 06:16:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 999181BF977
  for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:16:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A09B60672
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86450419F3
  for <buildroot@lists.busybox.net>; Wed, 15 May 2024 06:16:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NBiyZBDaXVkg for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id leIX2qMywZgX for <buildroot@lists.busybox.net>;
  Wed, 15 May 2024 06:16:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A64406058D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B040E41987
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A64406058D
+ by smtp2.osuosl.org (Postfix) with ESMTP id B040E41987
  for <buildroot@buildroot.org>; Wed, 15 May 2024 06:16:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B37387146; Wed, 15 May 2024 06:16:05 +0000 (UTC)
+ id 8C59487149; Wed, 15 May 2024 06:16:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 15 May 2024 08:04:17 +0200
+Date: Wed, 15 May 2024 07:56:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c6c173dadb7b44ba4af92237d05503b8e83e51dc
-X-Git-Newrev: 4b18f32e5d9c3537a05405201092d65148b1bdbf
+X-Git-Oldrev: 300cb3dc16efeb592bddcb8be07310c21c2c0d7a
+X-Git-Newrev: c6c173dadb7b44ba4af92237d05503b8e83e51dc
 X-Patchwork-Hint: ignore
-Message-Id: <20240515061605.9B37387146@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 24.0.7
+Message-Id: <20240515061605.8C59487149@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ustreamer: bump version to 6.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,59 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b18f32e5d9c3537a05405201092d65148b1bdbf
+commit: https://git.buildroot.net/buildroot/commit/?id=c6c173dadb7b44ba4af92237d05503b8e83e51dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2024-May/000758.html
+changelog - https://github.com/pikvm/ustreamer/compare/v5.51...v6.11
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/ustreamer/ustreamer.hash | 2 +-
+ package/ustreamer/ustreamer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index e1f6211e17..e35774a942 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 24.0.6
-+MESA3D_HEADERS_VERSION = 24.0.7
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index fb3df96555..f2c25464f4 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2024-April/000755.html
--sha256  8b7a92dbe6468c18f2383700135b5fe9de836cdf0cc8fd7dbae3c7110237d604  mesa-24.0.6.tar.xz
--sha512  60fcc77132c3cb0c98e650d97d3324bfd18abe7f8f8a3aa5209f71b2fddd94510f939bbf5272b2241749307184d5badde9da4842be57ce13f5760875885ea6fc  mesa-24.0.6.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2024-May/000758.html
-+sha256  7454425f1ed4a6f1b5b107e1672b30c88b22ea0efea000ae2c7d96db93f6c26a  mesa-24.0.7.tar.xz
-+sha512  77b0fae80ab0a07e2e528c113eadef0e3004b8df3e6e98fffe6fc2d8ac39f5ce7fa38ebe5c2ae32bfbac993dd7cbe288ace18ebb03cf2fb445fe7114f74dd45c  mesa-24.0.7.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 39cbb4c23b..6bccdaed04 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
+index d3f603e0c8..7c70f0195f 100644
+--- a/package/ustreamer/ustreamer.hash
++++ b/package/ustreamer/ustreamer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  88f107e02a0b5c6493d55ed1bce0c85f66ce83d2bc0271ff6319ad593c6584bc  ustreamer-5.51.tar.gz
++sha256  80ab01eeaa81c7d8e9c7f62304287d176fd729cb12ca5adb2e181b5a3da79216  ustreamer-6.11.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
+index dc8577b5e9..5b73e387d6 100644
+--- a/package/ustreamer/ustreamer.mk
++++ b/package/ustreamer/ustreamer.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 24.0.6
-+MESA3D_VERSION = 24.0.7
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-USTREAMER_VERSION = 5.51
++USTREAMER_VERSION = 6.11
+ USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
+ USTREAMER_LICENSE = GPL-3.0+
+ USTREAMER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
