@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3C16C25B74
-	for <buildroot@archiver.kernel.org>; Thu, 16 May 2024 11:09:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 321C6C25B74
+	for <buildroot@archiver.kernel.org>; Thu, 16 May 2024 11:09:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EBC141CCD;
-	Thu, 16 May 2024 11:09:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E8FA41CD7;
+	Thu, 16 May 2024 11:09:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rIST1hFT6dec; Thu, 16 May 2024 11:09:31 +0000 (UTC)
+ id 5r3qA_hsHdcf; Thu, 16 May 2024 11:09:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A50A41CD7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29A4B41CEB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A50A41CD7;
-	Thu, 16 May 2024 11:09:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2E23E1BF263
+	by smtp2.osuosl.org (Postfix) with ESMTP id 29A4B41CEB;
+	Thu, 16 May 2024 11:09:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AD5D1BF982
  for <buildroot@lists.busybox.net>; Thu, 16 May 2024 11:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B46D81DF3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53EA6414D6
  for <buildroot@lists.busybox.net>; Thu, 16 May 2024 11:09:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bVNmtCCWZTAa for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T48RFwkafi3Y for <buildroot@lists.busybox.net>;
  Thu, 16 May 2024 11:09:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 408B081BB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46BC3414CC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 408B081BB4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46BC3414CC
  for <buildroot@buildroot.org>; Thu, 16 May 2024 11:09:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2449E8740B; Thu, 16 May 2024 11:09:28 +0000 (UTC)
+ id 30D83873D4; Thu, 16 May 2024 11:09:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 May 2024 11:27:46 +0200
+Date: Thu, 16 May 2024 11:35:30 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: bb7a0c27d4bca705089f7d17d5a6c302545f2539
-X-Git-Newrev: f2eb2273170e9d12e44fd56c707e54ddc245b949
+X-Git-Oldrev: f2eb2273170e9d12e44fd56c707e54ddc245b949
+X-Git-Newrev: 1f383f120e5f32c597d767ed202bc10a88f99898
 X-Patchwork-Hint: ignore
-Message-Id: <20240516110928.2449E8740B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/coreutils: drop
- gmp optional dependency
+Message-Id: <20240516110928.30D83873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add
+ iperf runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,42 +65,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2eb2273170e9d12e44fd56c707e54ddc245b949
+commit: https://git.buildroot.net/buildroot/commit/?id=1f383f120e5f32c597d767ed202bc10a88f99898
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-libgmp is included in coreutils (through bootstrap.conf) since bump to
-version 9.0 in commit 2ee43bad85693d1c96e14f5b39ccb13a8982f50a and
-https://git.savannah.gnu.org/cgit/coreutils.git/commit/?id=13046444888a7e96f48d28fdd5a6ffe03d4ab036:
-
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --enable-static, --enable-shared, --without-gmp
-
-Fixes: 2ee43bad85693d1c96e14f5b39ccb13a8982f50a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 16463a00affa0ba4814e583bcd544174528f371e)
+(cherry picked from commit 6317f6c9a4107d3409530b653c5900bff17ffb6e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coreutils/coreutils.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ DEVELOPERS                                  |  1 +
+ support/testing/tests/package/test_iperf.py | 23 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index e9cb7b67cb..846d4fa567 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -75,12 +75,6 @@ ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
- COREUTILS_CONF_OPTS += --with-libintl-prefix=$(STAGING_DIR)/usr
- endif
- 
--ifeq ($(BR2_PACKAGE_GMP),y)
--COREUTILS_DEPENDENCIES += gmp
--else
--COREUTILS_CONF_OPTS += --without-gmp
--endif
--
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- COREUTILS_DEPENDENCIES += libcap
- else
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a2a2c56a13..cab7258cb1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1789,6 +1789,7 @@ F:	support/testing/tests/package/test_gzip.py
+ F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_hwloc.py
+ F:	support/testing/tests/package/test_iozone.py
++F:	support/testing/tests/package/test_iperf.py
+ F:	support/testing/tests/package/test_iperf3.py
+ F:	support/testing/tests/package/test_iptables.py
+ F:	support/testing/tests/package/test_jailhouse.py
+diff --git a/support/testing/tests/package/test_iperf.py b/support/testing/tests/package/test_iperf.py
+new file mode 100644
+index 0000000000..31f04d9896
+--- /dev/null
++++ b/support/testing/tests/package/test_iperf.py
+@@ -0,0 +1,23 @@
++import os
++
++import infra.basetest
++
++
++class TestIperf(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_IPERF=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("iperf --version")
++        self.assertRunOk("iperf -s -D")
++        self.assertRunOk("iperf -c 127.0.0.1 -t 3")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
