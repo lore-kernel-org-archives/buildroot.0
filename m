@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DECDEC25B74
-	for <buildroot@archiver.kernel.org>; Thu, 16 May 2024 11:09:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F2FCC25B74
+	for <buildroot@archiver.kernel.org>; Thu, 16 May 2024 11:09:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 737A341CE4;
-	Thu, 16 May 2024 11:09:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5080D41CEA;
+	Thu, 16 May 2024 11:09:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R3wRLDiDMHOf; Thu, 16 May 2024 11:09:41 +0000 (UTC)
+ id ARschGRm8p9Z; Thu, 16 May 2024 11:09:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC78541CEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA65941D11
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC78541CEA;
-	Thu, 16 May 2024 11:09:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A0C191BF263
- for <buildroot@lists.busybox.net>; Thu, 16 May 2024 11:09:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA65941D11;
+	Thu, 16 May 2024 11:09:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 724591BF263
+ for <buildroot@lists.busybox.net>; Thu, 16 May 2024 11:09:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 840D6414CC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4CFE681CA3
  for <buildroot@lists.busybox.net>; Thu, 16 May 2024 11:09:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5mccxnNCSDAq for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CSE1MQjtSoFG for <buildroot@lists.busybox.net>;
  Thu, 16 May 2024 11:09:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56274414CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6109281CA0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56274414CE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6109281CA0
  for <buildroot@buildroot.org>; Thu, 16 May 2024 11:09:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F19E8740D; Thu, 16 May 2024 11:09:28 +0000 (UTC)
+ id 5BE258740B; Thu, 16 May 2024 11:09:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 16 May 2024 11:41:28 +0200
+Date: Thu, 16 May 2024 13:07:27 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 1f383f120e5f32c597d767ed202bc10a88f99898
-X-Git-Newrev: 2b8ca3cfbeb221a787c60d705f1670be8da2e539
+X-Git-Oldrev: 48275e431f5f3ba3ef1c1290d3b28d5c31821172
+X-Git-Newrev: 4415daf635e56f55993eafdd196864ebab5b6d3c
 X-Patchwork-Hint: ignore
-Message-Id: <20240516110928.3F19E8740D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add fwts
- runtime test
+Message-Id: <20240516110928.5BE258740B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/linux-pam: bump
+ to version 1.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,109 +60,115 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2500953710245900703=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b8ca3cfbeb221a787c60d705f1670be8da2e539
+--===============2500953710245900703==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4415daf635e56f55993eafdd196864ebab5b6d3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Bump to latest version, fixing couple of bugs. Remove patch already
+included in this release.
+
+https://github.com/linux-pam/linux-pam/releases/tag/v1.6.1
+
+Signed-off-by: Jan Čermák <sairon@sairon.cz>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7c1faf997f868586a40a9cb6f03166d85a67b8f8)
+(cherry picked from commit 0d394c39b8f26ba6e65771cd4afdcc4fac0ed0e8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                 |  1 +
- support/testing/tests/package/test_fwts.py | 67 ++++++++++++++++++++++++++++++
- 2 files changed, 68 insertions(+)
+ .../0001-pam_namespace-include-stdint-h.patch      | 42 ----------------------
+ package/linux-pam/linux-pam.hash                   |  4 +--
+ package/linux-pam/linux-pam.mk                     |  2 +-
+ 3 files changed, 3 insertions(+), 45 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cab7258cb1..8f58b47fe0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1777,6 +1777,7 @@ F:	support/testing/tests/package/test_file/
- F:	support/testing/tests/package/test_fluidsynth.py
- F:	support/testing/tests/package/test_fluidsynth/
- F:	support/testing/tests/package/test_fping.py
-+F:	support/testing/tests/package/test_fwts.py
- F:	support/testing/tests/package/test_gawk.py
- F:	support/testing/tests/package/test_ghostscript.py
- F:	support/testing/tests/package/test_ghostscript/
-diff --git a/support/testing/tests/package/test_fwts.py b/support/testing/tests/package/test_fwts.py
-new file mode 100644
-index 0000000000..ef792136c2
---- /dev/null
-+++ b/support/testing/tests/package/test_fwts.py
-@@ -0,0 +1,67 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestFwts(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+        BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/aarch64-sbsa/assemble-flash-images support/scripts/genimage.sh"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/aarch64-sbsa/genimage.cfg"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.28"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+        BR2_TARGET_EDK2=y
-+        BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y
-+        BR2_TARGET_GRUB2=y
-+        BR2_TARGET_GRUB2_ARM64_EFI=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu_sbsa"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+        BR2_PACKAGE_FWTS=y
-+        BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE=y
-+        BR2_PACKAGE_HOST_GENIMAGE=y
-+        BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+        BR2_PACKAGE_HOST_MTOOLS=y
-+        """
-+
-+    def test_run(self):
-+        hda = os.path.join(self.builddir, "images", "disk.img")
-+        flash0 = os.path.join(self.builddir, "images", "SBSA_FLASH0.fd")
-+        flash1 = os.path.join(self.builddir, "images", "SBSA_FLASH1.fd")
-+        self.emulator.boot(arch="aarch64",
-+                           options=["-M", "sbsa-ref",
-+                                    "-cpu", "cortex-a57",
-+                                    "-m", "512M",
-+                                    "-pflash", flash0,
-+                                    "-pflash", flash1,
-+                                    "-hda", hda])
-+        self.emulator.login()
-+
-+        # Check the program can execute.
-+        self.assertRunOk("fwts --version")
-+
-+        # We run a simple UEFI runtime service variable interface test
-+        # suite. Those tests are using the fwts efi_runtime kernel
-+        # module.
-+        self.assertRunOk("fwts -q uefirtvariable", timeout=30)
-+
-+        # The previous fwts invocation is expected to have created a
-+        # "results.log" report. We check the file exists and contains
-+        # a known header string.
-+        expected_str = "Results generated by fwts:"
-+        cmd = f"grep -F '{expected_str}' results.log"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertTrue(out[0].startswith(expected_str))
+diff --git a/package/linux-pam/0001-pam_namespace-include-stdint-h.patch b/package/linux-pam/0001-pam_namespace-include-stdint-h.patch
+deleted file mode 100644
+index 5eda619505..0000000000
+--- a/package/linux-pam/0001-pam_namespace-include-stdint-h.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13 Mon Sep 17 00:00:00 2001
+-From: Jacob Heider <jacob@pkgx.dev>
+-Date: Wed, 17 Jan 2024 11:49:26 -0500
+-Subject: [PATCH] pam_namespace: include stdint.h
+-
+-pam_namespace.c makes use of SIZE_MAX but doesn't include stdint.h,
+-resulting in the following build failures on 1.6.0:
+-
+-  pam_namespace.c: In function 'process_line':
+-  pam_namespace.c:649:41: error: 'SIZE_MAX' undeclared (first use in this function)
+-    649 |         if (count > UINT_MAX || count > SIZE_MAX / sizeof(uid_t)) {
+-        |                                         ^~~~~~~~
+-  pam_namespace.c:41:1: note: 'SIZE_MAX' is defined in header '<stdint.h>'; did you forget to '#include <stdint.h>'?
+-     40 | #include "argv_parse.h"
+-    +++ |+#include <stdint.h>
+-     41 |
+-  pam_namespace.c:649:41: note: each undeclared identifier is reported only once for each function it appears in
+-    649 |         if (count > UINT_MAX || count > SIZE_MAX / sizeof(uid_t)) {
+-        |                                         ^~~~~~~~
+-
+-Fixes: v1.6.0~100 ("pam_namespace: validate amount of uids in config")
+-Resolves: https://github.com/linux-pam/linux-pam/issues/733
+-
+-Upstream: https://github.com/linux-pam/linux-pam/commit/cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- modules/pam_namespace/pam_namespace.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/modules/pam_namespace/pam_namespace.c b/modules/pam_namespace/pam_namespace.c
+-index f72d67189..b16731c22 100644
+---- a/modules/pam_namespace/pam_namespace.c
+-+++ b/modules/pam_namespace/pam_namespace.c
+-@@ -34,6 +34,8 @@
+- 
+- #define _ATFILE_SOURCE
+- 
+-+#include "config.h"
+-+#include <stdint.h>
+- #include "pam_cc_compat.h"
+- #include "pam_inline.h"
+- #include "pam_namespace.h"
+diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
+index cd882715cb..353613e6e6 100644
+--- a/package/linux-pam/linux-pam.hash
++++ b/package/linux-pam/linux-pam.hash
+@@ -1,6 +1,6 @@
+ # Locally computed hashes after checking signature at
+-# https://github.com/linux-pam/linux-pam/releases/download/v1.6.0/Linux-PAM-1.6.0.tar.xz.asc
++# https://github.com/linux-pam/linux-pam/releases/download/v1.6.1/Linux-PAM-1.6.1.tar.xz.asc
+ # signed with the key 8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB
+-sha256  fff4a34e5bbee77e2e8f1992f27631e2329bcbf8a0563ddeb5c3389b4e3169ad  Linux-PAM-1.6.0.tar.xz
++sha256  f8923c740159052d719dbfc2a2f81942d68dd34fcaf61c706a02c9b80feeef8e  Linux-PAM-1.6.1.tar.xz
+ # Locally computed
+ sha256  133d98e7a2ab3ffd330b4debb0bfc10fea21e4b2b5a5b09de2e924293be5ff08  Copyright
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index 89a46e81df..a205d67c54 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_PAM_VERSION = 1.6.0
++LINUX_PAM_VERSION = 1.6.1
+ LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.xz
+ LINUX_PAM_SITE = https://github.com/linux-pam/linux-pam/releases/download/v$(LINUX_PAM_VERSION)
+ LINUX_PAM_INSTALL_STAGING = YES
+
+--===============2500953710245900703==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2500953710245900703==--
