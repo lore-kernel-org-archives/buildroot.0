@@ -4,59 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0038C25B74
-	for <buildroot@archiver.kernel.org>; Thu, 16 May 2024 12:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94461C25B74
+	for <buildroot@archiver.kernel.org>; Thu, 16 May 2024 12:25:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B172E6063E;
-	Thu, 16 May 2024 12:24:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F7FB6063E;
+	Thu, 16 May 2024 12:25:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id twkRnVVBaeR6; Thu, 16 May 2024 12:24:56 +0000 (UTC)
+ id 28ug3DVTJryG; Thu, 16 May 2024 12:25:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEB1560E51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BC9560E51
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEB1560E51;
-	Thu, 16 May 2024 12:24:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F32D21BF4DA
- for <buildroot@lists.busybox.net>; Thu, 16 May 2024 12:24:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BC9560E51;
+	Thu, 16 May 2024 12:25:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A9EE1BF4DA
+ for <buildroot@lists.busybox.net>; Thu, 16 May 2024 12:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF2754095D
- for <buildroot@lists.busybox.net>; Thu, 16 May 2024 12:24:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 855E060E55
+ for <buildroot@lists.busybox.net>; Thu, 16 May 2024 12:25:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UOwFggfh1Gu6 for <buildroot@lists.busybox.net>;
- Thu, 16 May 2024 12:24:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Um7Y52pGhWzP for <buildroot@lists.busybox.net>;
+ Thu, 16 May 2024 12:25:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C568B4090F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C568B4090F
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C568B4090F
- for <buildroot@buildroot.org>; Thu, 16 May 2024 12:24:52 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 72735E0004;
- Thu, 16 May 2024 12:24:49 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1s7aAC-004ygc-2W;
- Thu, 16 May 2024 14:24:48 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6C806063E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C6C806063E
+ for <buildroot@buildroot.org>; Thu, 16 May 2024 12:25:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B397687415; Thu, 16 May 2024 12:25:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@smile.fr>
-References: <20240501211300.1590881-1-romain.naour@smile.fr>
-Date: Thu, 16 May 2024 14:24:48 +0200
-In-Reply-To: <20240501211300.1590881-1-romain.naour@smile.fr> (Romain Naour's
- message of "Wed, 1 May 2024 23:12:43 +0200")
-Message-ID: <871q62osfj.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: remove Sebastian Weyer
+To: buildroot@buildroot.org
+Date: Thu, 16 May 2024 14:24:31 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 27e7c199cf14804e038c5b550e050c76ec27ac9b
+X-Git-Newrev: 99eafd1cc66fabeb8b5e7c12cfb97b7c6b9781a9
+X-Patchwork-Hint: ignore
+Message-Id: <20240516122509.B397687415@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] DEVELOPERS: remove
+ Sebastian Weyer
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,24 +59,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1066009132711687572=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+--===============1066009132711687572==
+Content-Type: text/plain
 
- > Sebastian email address at Smile is bouncing, so drop it
- > from the DEVELOPERS file.
+commit: https://git.buildroot.net/buildroot/commit/?id=99eafd1cc66fabeb8b5e7c12cfb97b7c6b9781a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Sebastian email address at Smile is bouncing, so drop it
+from the DEVELOPERS file.
 
-Committed to 2024.02.x, thanks.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 7b973daac3f24ffce0246c5bbf80541499d86189)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 8 --------
+ 1 file changed, 8 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 88c266293b..6a1ec436ff 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2752,14 +2752,6 @@ F:	support/misc/toolchainfile.cmake.in
+ N:	Sam Voss <sam.voss@gmail.com>
+ F:	package/ripgrep/
+ 
+-N:	Sebastian Weyer <sebastian.weyer@smile.fr>
+-F:      package/amlogic-boot-fip/
+-F:	package/nushell/
+-F:	package/rust-bindgen/
+-F:	package/spirv-headers/
+-F:	support/testing/tests/package/sample_nu.nu
+-F:	support/testing/tests/package/test_nu.py
+-
+ N:	Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+ F:	board/armadeus/
+ F:	configs/armadeus*
+
+--===============1066009132711687572==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1066009132711687572==--
