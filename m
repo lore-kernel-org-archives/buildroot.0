@@ -4,76 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14EB5C04FFE
-	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 08:20:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F7E4C04FFE
+	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 08:41:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B854D40105;
-	Fri, 17 May 2024 08:20:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE56A400C4;
+	Fri, 17 May 2024 08:41:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yiXmnzPOYemW; Fri, 17 May 2024 08:20:20 +0000 (UTC)
+ id F9YrGgl9F17k; Fri, 17 May 2024 08:41:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4007401CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECA4040132
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C4007401CC;
-	Fri, 17 May 2024 08:20:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ECA4040132;
+	Fri, 17 May 2024 08:41:36 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C0041BF20B
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 08:20:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 234071BF20B
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 08:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 295FC839B8
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 08:20:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1027483BEF
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 08:41:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JYYuheQY3Zj1 for <buildroot@lists.busybox.net>;
- Fri, 17 May 2024 08:20:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.218.42;
- helo=mail-ej1-f42.google.com; envelope-from=th.huth@gmail.com;
+ id nwz-N02jiWRY for <buildroot@lists.busybox.net>;
+ Fri, 17 May 2024 08:41:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=87.98.178.36;
+ helo=5.mo561.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ECECE83935
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECECE83935
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com
- [209.85.218.42])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ECECE83935
- for <buildroot@buildroot.org>; Fri, 17 May 2024 08:20:15 +0000 (UTC)
-Received: by mail-ej1-f42.google.com with SMTP id
- a640c23a62f3a-a5a7d28555bso465660466b.1
- for <buildroot@buildroot.org>; Fri, 17 May 2024 01:20:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715934014; x=1716538814;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OBjISYxSqICKXxd7+yrUqE2zCxRcc0fMVBA5/Jhi6gg=;
- b=OAWWv+DmDydB0SOazoxy/h5U6UMseC4lhGpzKONRKYmrEF3psybl2ofxC4FhY71ZxI
- CpoZ/pfZAyd1nxMpAMxKfwqOy7Q6OtnqfiuT341y6I9QFhMW8zojliqPQ/IMX5E3tm6l
- 8FxWYDCw9yNccG4y0lNJp3b0Esej+E9qPQ5AZPRcGG41tlMbLlAWShxZAUCZJXaT3OUX
- P9v9DgWUVmr9RfGav0Pwb7+Dytj58bnTGOmgUa93X4pl50yw+nvNPsf9C5B58CSmFuFD
- xS+LdgV2M2O921K/eQlUAY5yh9cgnUJlo0DYrqYfX0RP7MVGF7AmkRiINA16iYqjzqWG
- RnBQ==
-X-Gm-Message-State: AOJu0Yyp4BOj0IElzceslhEuXjO+hBWzBPoR9exQUkKc1hhxlWzDACzU
- KdSXTrQSwC8GkxST+z3kdZDP5OQKh7K8wPnu+3Ifc13Y1CNqY16edOqyIg==
-X-Google-Smtp-Source: AGHT+IElXYdmlCY+tj49VDUGOzng90MqCMmz/weYbWY2JWASByJzD+P3j+PDetvEet7vbvMblNjh7Q==
-X-Received: by 2002:a17:906:cb8b:b0:a59:a9c5:e73b with SMTP id
- a640c23a62f3a-a5a2d5d48e1mr1337434666b.46.1715934013378; 
- Fri, 17 May 2024 01:20:13 -0700 (PDT)
-Received: from fedora.. (ip-109-43-176-52.web.vodafone.de. [109.43.176.52])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a5a1781d207sm1078353966b.22.2024.05.17.01.20.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 May 2024 01:20:12 -0700 (PDT)
-From: Thomas Huth <huth@tuxfamily.org>
-To: buildroot@buildroot.org
-Date: Fri, 17 May 2024 10:20:07 +0200
-Message-ID: <20240517082007.312904-1-huth@tuxfamily.org>
-X-Mailer: git-send-email 2.44.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EB98183BEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB98183BEE
+Received: from 5.mo561.mail-out.ovh.net (5.mo561.mail-out.ovh.net
+ [87.98.178.36])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EB98183BEE
+ for <buildroot@buildroot.org>; Fri, 17 May 2024 08:41:33 +0000 (UTC)
+Received: from director7.ghost.mail-out.ovh.net (unknown [10.109.139.3])
+ by mo561.mail-out.ovh.net (Postfix) with ESMTP id 4VggF31prtz1LcG
+ for <buildroot@buildroot.org>; Fri, 17 May 2024 08:32:23 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-pdfqg (unknown [10.110.96.215])
+ by director7.ghost.mail-out.ovh.net (Postfix) with ESMTPS id D4B911FED1;
+ Fri, 17 May 2024 08:32:22 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.101])
+ by ghost-submission-6684bf9d7b-pdfqg with ESMTPSA
+ id nnbCMBYWR2a+QRAARJCOCQ
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Fri, 17 May 2024 08:32:22 +0000
+X-OVh-ClientIp: 92.148.253.243
+Message-ID: <0ff11f55-6ae4-4206-a9e4-9f8cc5c68f0e@armadeus.com>
+Date: Fri, 17 May 2024 10:32:20 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Fabio Estevam <festevam@gmail.com>
+References: <20240515100209.24769-1-sebastien.szymanski@armadeus.com>
+ <CAOMZO5AvCmYZDD_0DfcuBZqyS0Fu9Se5PdtjfohH2yPPGQdbjg@mail.gmail.com>
+Content-Language: en-US
+From: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Autocrypt: addr=sebastien.szymanski@armadeus.com; keydata=
+ xsBNBFNfZLEBCACv1lqSePHJNpRgcnER+3emy+Arjz84zFax3XkogjY/e3ZneihIgWrVKe5M
+ ql16pX4KTkzNgMUKz4bG/XwT3kjcrXshxFLlg7KrHMl287C+W+QOUjnjVeRi/su+SPmjz8VD
+ yr11h+ZkVLAWhS+uQJ93jy1NwG8M4t1kBLAVHHD5Vw4FJ+3ouaVYIp1X1Cr8bVKQw33Q1aTd
+ ro0kMBb96B9vNu7ciJZ3gvlaBzUEKOgNnq9KaywuLnqrqr4HUIn5JuxZjCjJzt9kTAKcTfp2
+ cJM8qpp+2FF5qtbkse9fZ6M64qozgOPr9Tk4Amf9fZEUQ6UNw14mmBZuXSzoHe75gI7TABEB
+ AAHNN1PDqWJhc3RpZW4gU1pZTUFOU0tJIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVz
+ LmNvbT7CwJAEEwEIADoCGyMHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgBYhBJwGygpYm/1C
+ /GCmwbCaKeiBMmTiBQJdhIHLAAoJELCaKeiBMmTixXIH/2W3kbzRG0UF81jtRRnp0H83rjDT
+ v0H+8fgFMRL/7HCJ1QPArkfRJlM2wlJkN+ChP09CCarYfUEHfRCHlTb7At6Yyrz1jziD7ZwX
+ 8IWHYRXnZkY5eZc5DsiUgq6JH49kt+GPzK8UVP9MTa6zkBpPCUf7LzZ4pD3FihdkT52BU3gI
+ d9P49fSI0TYySlb/VKn815aOhvwEr7+Dh3mZUjSh7saofbRmVUOr7p+R3MvvGI19/IJZjeOE
+ ZWliODDOt6HnBOtoGSXMcNIFF6snH52D5N5gY88njZjTwhgGGUBix1bsgf/EY0v4R5itZBXB
+ B/Ze4Tm++YHaB75hZK6PQu/YRv7OwE0EU19ksQEIALo7jhXddrXBTRu5SAjelV53jyHBJTX/
+ vN4nL/VbbW/saca+NJjDSxx5DBmotZbQdWIyZiSIjU/xnTREvtDrl6ZeSsKWd7ZqiuiY4fSR
+ zwuQp9rd0yqRuxesrWeyJB1zCSdEvLyKASERt+nxkOA+IzJ4y1qLtvnWr+SL1AXgTMw+Tkyw
+ KIDCRWHTIYas11ldGj82gOIpYeXnapeNLHfT4EQwg0NeWYHynJxAQWiX5aPlw0uSpAQSsBXQ
+ FIe3fpoveMSnXK+PG2BBOzexYv7r4S70a6sF9sgTTPpfKqUaqqC+u1+bUX6alTAKhGKJywaF
+ 6ViqLlgY8PfwohSyAlqlTRMAEQEAAcLAdgQYAQgAIAIbDBYhBJwGygpYm/1C/GCmwbCaKeiB
+ MmTiBQJdhIHSAAoJELCaKeiBMmTitU8IAK7NQM3fEwaF5XaKtepYWsVka44CD8A9e4r7NVK9
+ ugirKvXirIxBSDmN/Db862NmVpITsZ6ERNSNZLm/7k55N+TexKYiFZeU7G92TEfAM6qPElvx
+ DLEcrkNMq9r08YZeUloacsq31AL5fK4LW+xdvXudkdiKRMJsdTpmff3x5kIziGOHjwFP9wve
+ ZgEH52gpbRsP8Whx/Z2lNX/BBRmFM8OnEXFsjjqDzYThdxTq85wGPpkgvvUGyPNRD7TpbB1C
+ pajOUUkPxgj5LKt77HD1afeZNudWhgcdkbtT5PMQTT0WY6wvMEj9S1+bGPeXRGWLYB7gHQ+L
+ JNoSD7Kz6Y9qnKo=
+In-Reply-To: <CAOMZO5AvCmYZDD_0DfcuBZqyS0Fu9Se5PdtjfohH2yPPGQdbjg@mail.gmail.com>
+X-Ovh-Tracer-Id: 1591740996359154672
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvdehfedgiedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeeujeffheehvddtuefhjeevveffkeetfffgtedvjeekleelvdfhjeelfeeludduieenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppeduvdejrddtrddtrddupdelvddrudegkedrvdehfedrvdegfedpfeejrdehledrudegvddruddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheeiuddpmhhouggvpehsmhhtphhouhht
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=tuxfamily.org
-Subject: [Buildroot] [PATCH v2] package/frotz: fix build with gcc 14
+ header.from=armadeus.com
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-101G0045d1166bf-b8a0-4b98-b64f-19d6f2c04bc7,
+ 9569C84E05C71D58F00340027D646A2164E3897E)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/nxp-bt-wifi-firmware: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,49 +109,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Julien Olivain <ju.o@free.fr>, Gilles Talis <gilles.talis@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Change -std=c99 into -std=gnu99 in the CFLAGS to avoid the following
-build failure with gcc 14:
-
-fastmem.c: In function 'z_restore':
-fastmem.c:842:36: error: implicit declaration of function 'strdup'; did you mean 'strcmp'? [-Wimplicit-function-declaration]
-  842 |                 f_setup.aux_name = strdup(default_name);
-      |                                    ^~~~~~
-      |                                    strcmp
-
-Fixes:
- - http://autobuild.buildroot.org/results/df3b3b98265ec3a75578614746b2d1426c90e125
-
-Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Huth <huth@tuxfamily.org>
----
- v2: Use gnu99 instead of removing c99
-
- package/frotz/frotz.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/frotz/frotz.mk b/package/frotz/frotz.mk
-index 5af235137c..4c477c396d 100644
---- a/package/frotz/frotz.mk
-+++ b/package/frotz/frotz.mk
-@@ -21,7 +21,7 @@ endif
- define FROTZ_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) PREFIX=/usr CONFIG_DIR=/etc \
- 		SOUND_TYPE=none CURSES="$(FROTZ_CURSES)" USE_UTF8=$(FROTZ_UTF8) \
--		CFLAGS="$(TARGET_CFLAGS) -std=c99"
-+		CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
- endef
- 
- define FROTZ_INSTALL_TARGET_CMDS
--- 
-2.44.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgRmFiaW8sCgpPbiA1LzE1LzI0IDEzOjA4LCBGYWJpbyBFc3RldmFtIHdyb3RlOgo+IEhpIFPD
+qWJhc3RpZW4sCj4gCj4gT24gV2VkLCBNYXkgMTUsIDIwMjQgYXQgNzowMuKAr0FNIFPDqWJhc3Rp
+ZW4gU3p5bWFuc2tpCj4gPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPiB3cm90ZToK
+Pj4KPj4gVGhpcyBwYWNrYWdlIHByb3ZpZGVzIGZpcm13YXJlcyBmb3IgTlhQIFdpRmkgKyBCbHVl
+dG9vdGggY2hpcHNldHMuCj4+IEl0IGlzIG5hbWVkICJueHAtYnQtd2lmaS1maXJtd2FyZSIgc28g
+dGhhdCBpdCBpcyBub3QgY29uZnVzZWQgd2l0aCB0aGUKPj4gcGFja2FnZSBmaXJtd2FyZS1pbXgu
+Cj4gCj4gVGhhbmtzIGZvciB0aGUgcGF0aC4KCjopCgo+IAo+IElzIHRoZXJlIHN1cHBvcnQgaW4g
+QnVpbGRyb290IGZvciB0aGUKPiBodHRwczovL2dpdGh1Yi5jb20vbnhwLWlteC9td2lmaWV4IGtl
+cm5lbCBtb2R1bGVzIHRvbz8KCk5vcGUuIEkgZGlkIHRlc3QgaXQgYnV0IG91dCBvZiB0aGUgYnVp
+bGRyb290IHRyZWUuIEkgaGF2ZSBhbHNvIHRlc3RlZCAKdGhlIGluLWtlcm5lbCBtd2lmaWV4IGRy
+aXZlci4KClJlZ2FyZHMsCgo+IAo+IEkgd2FudCB0byB0ZXN0IHRoZSBJVzYxMiBXaWZpIG9uIHRo
+ZSBpbXg5My1ldmsgYm9hcmQuCj4gCj4gVGhhbmtzLAo+IAo+IEZhYmlvIEVzdGV2YW0KCi0tIApT
+w6liYXN0aWVuIFN6eW1hbnNraSwgQXJtYWRldXMgU3lzdGVtcwpTb2Z0d2FyZSBlbmdpbmVlcgoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
