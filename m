@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F089C25B79
-	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 14:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1DA1C25B79
+	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 14:27:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3F67822EC;
-	Fri, 17 May 2024 14:27:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A891822EC;
+	Fri, 17 May 2024 14:27:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lwKSG5V3qQGD; Fri, 17 May 2024 14:27:34 +0000 (UTC)
+ id hI2VBtHh1IEm; Fri, 17 May 2024 14:27:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1834822ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78066822ED
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1834822ED;
-	Fri, 17 May 2024 14:27:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 485531BF2B6
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 14:27:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78066822ED;
+	Fri, 17 May 2024 14:27:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C246E1BF2B6
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 14:27:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41C4540514
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 14:27:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A7CFC60743
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 14:27:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ReBD2qMfJtWm for <buildroot@lists.busybox.net>;
- Fri, 17 May 2024 14:27:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X2jU1l0nu7Tc for <buildroot@lists.busybox.net>;
+ Fri, 17 May 2024 14:27:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70D8D40025
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70D8D40025
- for <buildroot@buildroot.org>; Fri, 17 May 2024 14:27:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B32A87422; Fri, 17 May 2024 14:27:32 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 17 May 2024 16:23:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 932b52fad87d79d9f26a343edafe2981079de16e
-X-Git-Newrev: 95093854e4c6ce69ee54df17fce20417312a3d0a
-X-Patchwork-Hint: ignore
-Message-Id: <20240517142732.5B32A87422@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ruby: build host-ruby with yaml
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0AB7A6071A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AB7A6071A
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0AB7A6071A
+ for <buildroot@buildroot.org>; Fri, 17 May 2024 14:27:54 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2D39813F88E;
+ Fri, 17 May 2024 16:27:48 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 17 May 2024 16:27:47 +0200
+Date: Fri, 17 May 2024 16:27:47 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Message-ID: <ZkdpYxTUSYkn9jRa@landeda>
+References: <20240416184209.2621561-1-thomas@devoogdt.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240416184209.2621561-1-thomas@devoogdt.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1715956073;
+ bh=4GzT/MGos88RdipkCtD7WRDZnXQEf1srMQZLhYxnH5A=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=IXFL/qDTQmUJ/UYZZCHPTGqJxpy3aMBoS6OZ6dXvwoWNJoXtauq/ttY1A+PA0I8/K
+ vNn6TLCcpTXkZQp9vL/i3Ehn0VzrCRa1kpel4ZRRfQog0Wq7fnDWVv5yivTehwsP9O
+ AdM4pPU/7qWJYzbTg54hZCw8AdZiiaYHwrrFHcWnl1EtT7WWrC7o7F/OGc7RB8u50G
+ VEHV2ga1FiVrDy19hamsGw5thAy46VPGWULJy0GG+SI3n8CXNdMn8SQr4LiVaN8bzQ
+ GB2iZHqBpWtcSv4dOpnAbXlWIybkTgdNy3KSHA5WDumgiI9Lmtc24OTKxeNxaBngMf
+ 174NaZo9nOAFg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=IXFL/qDT
+Subject: Re: [Buildroot] [PATCH v3 1/4] package/ruby: add host psych (yaml)
  support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,54 +81,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>, Bernd Kuhls <bernd@kuhls.net>,
+ Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95093854e4c6ce69ee54df17fce20417312a3d0a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-webkitgtk/wpewebkit needs a host-ruby with yaml support, otherwise the build
-fails with errors like:
+On 2024-04-16 20:42 +0200, Thomas Devoogdt spake thusly:
+> Needed to compile webkitgtk 2.44.0.
+> 
+> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 
-cd /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore && \
-  /home/peko/source/buildroot/output/host/bin/ruby \
-    /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/GenerateSettings.rb \
-    --outputDir /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/WebCore/DerivedSources \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.cpp.erb \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.idl.erb \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.h.erb \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/Settings.cpp.erb \
-    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/Settings.h.erb \
-    /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/WTF/Scripts/Preferences/UnifiedWebPreferences.yaml \
-    /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/page/Settings.yaml
-/home/peko/source/buildroot/output/host/lib/ruby/3.3.0/yaml.rb:3: warning: It seems your ruby installation is missing psych (for YAML output).
-To eliminate this warning, please install libyaml and reinstall your ruby.
+I just pushed a similar patch from Peter:
+    95093854e4c6  package/ruby: build host-ruby with yaml support
 
-We do not currently have any Config.in.host options for ruby or libyaml, but
-given how small/fast libyaml is to build just do it unconditionally.
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/ruby/ruby.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+> v2: n/a
+> v3: n/a
+> ---
+> Question to the reviewer, should I use this:
+> 
+> ```
+> ifeq ($(BR2_PACKAGE_HOST_LIBYAML),y)
+> HOST_RUBY_DEPENDENCIES += host-libyaml
+> endif
+> ```
+> ---
+>  package/ruby/ruby.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+> index 4b9ce80e67..ac7de38de4 100644
+> --- a/package/ruby/ruby.mk
+> +++ b/package/ruby/ruby.mk
+> @@ -20,7 +20,7 @@ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
+>  RUBY_CPE_ID_VENDOR = ruby-lang
+>  
+>  RUBY_DEPENDENCIES = host-pkgconf host-ruby
+> -HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
+> +HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl host-libyaml
+>  RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+>  RUBY_CONF_OPTS = \
+>  	--disable-install-doc \
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 4b9ce80e67..00fa0e0f65 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -20,7 +20,7 @@ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
- RUBY_CPE_ID_VENDOR = ruby-lang
- 
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
--HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
-+HOST_RUBY_DEPENDENCIES = host-libyaml host-pkgconf host-openssl
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_CONF_OPTS = \
- 	--disable-install-doc \
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
