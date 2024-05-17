@@ -1,103 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F7E4C04FFE
-	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 08:41:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6360C04FFE
+	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 12:02:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE56A400C4;
-	Fri, 17 May 2024 08:41:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 294356072C;
+	Fri, 17 May 2024 12:02:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gz3gI_8uA9jk; Fri, 17 May 2024 12:02:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE9196070E
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE9196070E;
+	Fri, 17 May 2024 12:02:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 968581BF990
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 12:02:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82A4C403EA
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 12:02:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F9YrGgl9F17k; Fri, 17 May 2024 08:41:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECA4040132
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECA4040132;
-	Fri, 17 May 2024 08:41:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 234071BF20B
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 08:41:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1027483BEF
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 08:41:36 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nwz-N02jiWRY for <buildroot@lists.busybox.net>;
- Fri, 17 May 2024 08:41:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=87.98.178.36;
- helo=5.mo561.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EB98183BEE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB98183BEE
-Received: from 5.mo561.mail-out.ovh.net (5.mo561.mail-out.ovh.net
- [87.98.178.36])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EB98183BEE
- for <buildroot@buildroot.org>; Fri, 17 May 2024 08:41:33 +0000 (UTC)
-Received: from director7.ghost.mail-out.ovh.net (unknown [10.109.139.3])
- by mo561.mail-out.ovh.net (Postfix) with ESMTP id 4VggF31prtz1LcG
- for <buildroot@buildroot.org>; Fri, 17 May 2024 08:32:23 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-pdfqg (unknown [10.110.96.215])
- by director7.ghost.mail-out.ovh.net (Postfix) with ESMTPS id D4B911FED1;
- Fri, 17 May 2024 08:32:22 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.101])
- by ghost-submission-6684bf9d7b-pdfqg with ESMTPSA
- id nnbCMBYWR2a+QRAARJCOCQ
- (envelope-from <sebastien.szymanski@armadeus.com>);
- Fri, 17 May 2024 08:32:22 +0000
-X-OVh-ClientIp: 92.148.253.243
-Message-ID: <0ff11f55-6ae4-4206-a9e4-9f8cc5c68f0e@armadeus.com>
-Date: Fri, 17 May 2024 10:32:20 +0200
+ id 00f49HE8-62L for <buildroot@lists.busybox.net>;
+ Fri, 17 May 2024 12:02:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DA96F400AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA96F400AC
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DA96F400AC
+ for <buildroot@buildroot.org>; Fri, 17 May 2024 12:02:01 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-a59b097b202so353920266b.0
+ for <buildroot@buildroot.org>; Fri, 17 May 2024 05:02:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715947319; x=1716552119;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=1OqbTOAG9Rh8TDYQAvZfBJnJ381uegdfE+ywhf+OOtU=;
+ b=cp+50Bi2qfcf67tTQCn5EXm9CNgzZNhpH5UWDdkVqskPH4ZNlbzL2bymbR3xEdDZNz
+ U3jpYVWoa8IHqSzRyTyPp/AZs+VL7kbzbYKR2qFn/DWrIvF17R5552DK2ygPmmtRVcrK
+ Gd/OJAr9odctRq3yK/6reoGxeHLkR222ffi111ai/ISP4qLR4PUfoDF+kMkWhE57ebgJ
+ yh5cOKf0ShUm4HGuClOQVvAphVvpcSV9An4+iQ3InRN0muyzzP+gVrpT75fcC7V4go+9
+ /KryFRZ0iFgLNvaY9xPoHI+aQdSyeFVEQ/RY/TarqOAzBg/IjVIzjm4uM6MzTfL346kB
+ 5MQg==
+X-Gm-Message-State: AOJu0YzPW51BftU7dJ2QpBPmZmhtaIiKYiRgulavbBwlncuBsr556t/H
+ 0oo2mbNUwKR9NlKelotTDJM9z0TmogQcO9Qb3Vj+D9tCzVKto4rNqhwg0w==
+X-Google-Smtp-Source: AGHT+IEHCC6Uyi0kbWq6ipcKW/GHCBWr5eS4lKiLqwFckKQGwFYwpy3+trrPvO51GkGQ1JCDu6Mrtg==
+X-Received: by 2002:a17:906:f10f:b0:a59:ae57:1658 with SMTP id
+ a640c23a62f3a-a5a2d55aebdmr1397311566b.30.1715947319216; 
+ Fri, 17 May 2024 05:01:59 -0700 (PDT)
+Received: from development2.visionsystems.de (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a5a1781d48dsm1107913866b.5.2024.05.17.05.01.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 17 May 2024 05:01:58 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Fri, 17 May 2024 14:00:57 +0200
+Message-Id: <20240517120057.3736694-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fabio Estevam <festevam@gmail.com>
-References: <20240515100209.24769-1-sebastien.szymanski@armadeus.com>
- <CAOMZO5AvCmYZDD_0DfcuBZqyS0Fu9Se5PdtjfohH2yPPGQdbjg@mail.gmail.com>
-Content-Language: en-US
-From: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Autocrypt: addr=sebastien.szymanski@armadeus.com; keydata=
- xsBNBFNfZLEBCACv1lqSePHJNpRgcnER+3emy+Arjz84zFax3XkogjY/e3ZneihIgWrVKe5M
- ql16pX4KTkzNgMUKz4bG/XwT3kjcrXshxFLlg7KrHMl287C+W+QOUjnjVeRi/su+SPmjz8VD
- yr11h+ZkVLAWhS+uQJ93jy1NwG8M4t1kBLAVHHD5Vw4FJ+3ouaVYIp1X1Cr8bVKQw33Q1aTd
- ro0kMBb96B9vNu7ciJZ3gvlaBzUEKOgNnq9KaywuLnqrqr4HUIn5JuxZjCjJzt9kTAKcTfp2
- cJM8qpp+2FF5qtbkse9fZ6M64qozgOPr9Tk4Amf9fZEUQ6UNw14mmBZuXSzoHe75gI7TABEB
- AAHNN1PDqWJhc3RpZW4gU1pZTUFOU0tJIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVz
- LmNvbT7CwJAEEwEIADoCGyMHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgBYhBJwGygpYm/1C
- /GCmwbCaKeiBMmTiBQJdhIHLAAoJELCaKeiBMmTixXIH/2W3kbzRG0UF81jtRRnp0H83rjDT
- v0H+8fgFMRL/7HCJ1QPArkfRJlM2wlJkN+ChP09CCarYfUEHfRCHlTb7At6Yyrz1jziD7ZwX
- 8IWHYRXnZkY5eZc5DsiUgq6JH49kt+GPzK8UVP9MTa6zkBpPCUf7LzZ4pD3FihdkT52BU3gI
- d9P49fSI0TYySlb/VKn815aOhvwEr7+Dh3mZUjSh7saofbRmVUOr7p+R3MvvGI19/IJZjeOE
- ZWliODDOt6HnBOtoGSXMcNIFF6snH52D5N5gY88njZjTwhgGGUBix1bsgf/EY0v4R5itZBXB
- B/Ze4Tm++YHaB75hZK6PQu/YRv7OwE0EU19ksQEIALo7jhXddrXBTRu5SAjelV53jyHBJTX/
- vN4nL/VbbW/saca+NJjDSxx5DBmotZbQdWIyZiSIjU/xnTREvtDrl6ZeSsKWd7ZqiuiY4fSR
- zwuQp9rd0yqRuxesrWeyJB1zCSdEvLyKASERt+nxkOA+IzJ4y1qLtvnWr+SL1AXgTMw+Tkyw
- KIDCRWHTIYas11ldGj82gOIpYeXnapeNLHfT4EQwg0NeWYHynJxAQWiX5aPlw0uSpAQSsBXQ
- FIe3fpoveMSnXK+PG2BBOzexYv7r4S70a6sF9sgTTPpfKqUaqqC+u1+bUX6alTAKhGKJywaF
- 6ViqLlgY8PfwohSyAlqlTRMAEQEAAcLAdgQYAQgAIAIbDBYhBJwGygpYm/1C/GCmwbCaKeiB
- MmTiBQJdhIHSAAoJELCaKeiBMmTitU8IAK7NQM3fEwaF5XaKtepYWsVka44CD8A9e4r7NVK9
- ugirKvXirIxBSDmN/Db862NmVpITsZ6ERNSNZLm/7k55N+TexKYiFZeU7G92TEfAM6qPElvx
- DLEcrkNMq9r08YZeUloacsq31AL5fK4LW+xdvXudkdiKRMJsdTpmff3x5kIziGOHjwFP9wve
- ZgEH52gpbRsP8Whx/Z2lNX/BBRmFM8OnEXFsjjqDzYThdxTq85wGPpkgvvUGyPNRD7TpbB1C
- pajOUUkPxgj5LKt77HD1afeZNudWhgcdkbtT5PMQTT0WY6wvMEj9S1+bGPeXRGWLYB7gHQ+L
- JNoSD7Kz6Y9qnKo=
-In-Reply-To: <CAOMZO5AvCmYZDD_0DfcuBZqyS0Fu9Se5PdtjfohH2yPPGQdbjg@mail.gmail.com>
-X-Ovh-Tracer-Id: 1591740996359154672
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvdehfedgiedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeeujeffheehvddtuefhjeevveffkeetfffgtedvjeekleelvdfhjeelfeeludduieenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppeduvdejrddtrddtrddupdelvddrudegkedrvdehfedrvdegfedpfeejrdehledrudegvddruddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheeiuddpmhhouggvpehsmhhtphhouhht
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=armadeus.com
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-101G0045d1166bf-b8a0-4b98-b64f-19d6f2c04bc7,
- 9569C84E05C71D58F00340027D646A2164E3897E)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/nxp-bt-wifi-firmware: new
- package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20230601; t=1715947319; x=1716552119; darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=1OqbTOAG9Rh8TDYQAvZfBJnJ381uegdfE+ywhf+OOtU=;
+ b=YlWge0wvE08DxL/F1x1YsE8+s6CmLmmYkNXpBoIxj2BcofbxOZ3nOJX274twxvb8fN
+ CdhQ1PKbdE/sPJ/GmP9MvziPJP/SWEP9tAZJqwCFLgY/8NvKWedKyKyoGdcCKeDhMW9A
+ SYuWBmgQyibZXfen3KDY5GHEiCkFdH+KUM1CV5Fm7pGiLSEdnu8gmVz4RMVVPrqaBlr0
+ OARt0YaafhJ7kSmVWw0RQCl/8d40+xPRkD/rZes902jG6wt64Oo4q1nQ/9XB7+OWrrvb
+ iU9f0zEps/5uXhVvK8EcfX+tUs5KOmWutbaybXbYK83OY8YCzGmafvon7gvHHEG4Pv90
+ PDjA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=googlemail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=YlWge0wv
+Subject: [Buildroot] [PATCH] package/ntp: fix build with GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,26 +98,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Gilles Talis <gilles.talis@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: yegorslists--- via buildroot <buildroot@buildroot.org>
+Reply-To: yegorslists@googlemail.com
+Cc: Bernd Kuhls <bernd@kuhls.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRmFiaW8sCgpPbiA1LzE1LzI0IDEzOjA4LCBGYWJpbyBFc3RldmFtIHdyb3RlOgo+IEhpIFPD
-qWJhc3RpZW4sCj4gCj4gT24gV2VkLCBNYXkgMTUsIDIwMjQgYXQgNzowMuKAr0FNIFPDqWJhc3Rp
-ZW4gU3p5bWFuc2tpCj4gPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPiB3cm90ZToK
-Pj4KPj4gVGhpcyBwYWNrYWdlIHByb3ZpZGVzIGZpcm13YXJlcyBmb3IgTlhQIFdpRmkgKyBCbHVl
-dG9vdGggY2hpcHNldHMuCj4+IEl0IGlzIG5hbWVkICJueHAtYnQtd2lmaS1maXJtd2FyZSIgc28g
-dGhhdCBpdCBpcyBub3QgY29uZnVzZWQgd2l0aCB0aGUKPj4gcGFja2FnZSBmaXJtd2FyZS1pbXgu
-Cj4gCj4gVGhhbmtzIGZvciB0aGUgcGF0aC4KCjopCgo+IAo+IElzIHRoZXJlIHN1cHBvcnQgaW4g
-QnVpbGRyb290IGZvciB0aGUKPiBodHRwczovL2dpdGh1Yi5jb20vbnhwLWlteC9td2lmaWV4IGtl
-cm5lbCBtb2R1bGVzIHRvbz8KCk5vcGUuIEkgZGlkIHRlc3QgaXQgYnV0IG91dCBvZiB0aGUgYnVp
-bGRyb290IHRyZWUuIEkgaGF2ZSBhbHNvIHRlc3RlZCAKdGhlIGluLWtlcm5lbCBtd2lmaWV4IGRy
-aXZlci4KClJlZ2FyZHMsCgo+IAo+IEkgd2FudCB0byB0ZXN0IHRoZSBJVzYxMiBXaWZpIG9uIHRo
-ZSBpbXg5My1ldmsgYm9hcmQuCj4gCj4gVGhhbmtzLAo+IAo+IEZhYmlvIEVzdGV2YW0KCi0tIApT
-w6liYXN0aWVuIFN6eW1hbnNraSwgQXJtYWRldXMgU3lzdGVtcwpTb2Z0d2FyZSBlbmdpbmVlcgoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+From: Yegor Yefremov <yegorslists@googlemail.com>
+
+Fix pthread_detach() detection that is broken when building
+with GCC 14.x.
+
+The patch is taken from a Gentoo repository:
+
+https://gitweb.gentoo.org/repo/gentoo.git/diff/net-misc/ntp/files/ntp-4.2.8_p15-configure-clang16.patch?id=56ef5ce33891feec34cd0c39a0a774a81a587dc7
+
+Bonus: refresh the 0002-ntp-syscalls-fallback.patch file.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/ntp/0002-ntp-syscalls-fallback.patch  |  9 ++++---
+ .../ntp/0003-fix-pthread-detach-check.patch   | 27 +++++++++++++++++++
+ 2 files changed, 32 insertions(+), 4 deletions(-)
+ create mode 100644 package/ntp/0003-fix-pthread-detach-check.patch
+
+diff --git a/package/ntp/0002-ntp-syscalls-fallback.patch b/package/ntp/0002-ntp-syscalls-fallback.patch
+index 535fc93dfd..46704b9d3f 100644
+--- a/package/ntp/0002-ntp-syscalls-fallback.patch
++++ b/package/ntp/0002-ntp-syscalls-fallback.patch
+@@ -8,10 +8,11 @@ Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+  configure.ac | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+-diff --git a/configure.ac b/configure.ac
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1523,11 +1523,11 @@ AC_CACHE_CHECK(
++Index: ntp-4.2.8p17/configure.ac
++===================================================================
++--- ntp-4.2.8p17.orig/configure.ac
+++++ ntp-4.2.8p17/configure.ac
++@@ -1472,11 +1472,11 @@ AC_CACHE_CHECK(
+      [ntp_cv_var_ntp_syscalls],
+      [
+  	ntp_cv_var_ntp_syscalls=no
+diff --git a/package/ntp/0003-fix-pthread-detach-check.patch b/package/ntp/0003-fix-pthread-detach-check.patch
+new file mode 100644
+index 0000000000..c61b6cc736
+--- /dev/null
++++ b/package/ntp/0003-fix-pthread-detach-check.patch
+@@ -0,0 +1,27 @@
++fix pthread_detach check
++
++Refrence:
++ https://gitweb.gentoo.org/repo/gentoo.git/diff/net-misc/ntp/files/ntp-4.2.8_p15-configure-clang16.patch?id=56ef5ce33891feec34cd0c39a0a774a81a587dc7
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ sntp/m4/openldap-thread-check.m4 |    6 ++----
++ 1 file changed, 2 insertions(+), 4 deletions(-)
++
++Index: ntp-4.2.8p17/sntp/m4/openldap-thread-check.m4
++===================================================================
++--- ntp-4.2.8p17.orig/sntp/m4/openldap-thread-check.m4
+++++ ntp-4.2.8p17/sntp/m4/openldap-thread-check.m4
++@@ -262,10 +262,8 @@ pthread_rwlock_t rwlock;
++ 				dnl save the flags
++ 				AC_LINK_IFELSE([AC_LANG_PROGRAM([[
++ #include <pthread.h>
++-#ifndef NULL
++-#define NULL (void*)0
++-#endif
++-]], [[pthread_detach(NULL);]])],[ol_cv_func_pthread_detach=yes],[ol_cv_func_pthread_detach=no])
+++pthread_t thread;
+++]], [[pthread_detach(thread);]])],[ol_cv_func_pthread_detach=yes],[ol_cv_func_pthread_detach=no])
++ 			])
++ 
++ 			if test $ol_cv_func_pthread_detach = no ; then
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
