@@ -1,73 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC7EAC04FFE
-	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 17:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A799C04FFE
+	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 18:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 856394061D;
-	Fri, 17 May 2024 17:32:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F204A82261;
+	Fri, 17 May 2024 18:25:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dX5sOG1KR-P1; Fri, 17 May 2024 17:32:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fs5ZJKUtdmWf; Fri, 17 May 2024 18:25:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E688D40723
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E29E3822B2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E688D40723;
-	Fri, 17 May 2024 17:32:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 04BCB1BF357
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 17:32:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E29E3822B2;
+	Fri, 17 May 2024 18:25:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 52C911BF312
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 18:25:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5B4D402E0
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 17:32:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3D2A0822B2
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 18:25:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id my5VgZMJuogo for <buildroot@lists.busybox.net>;
- Fri, 17 May 2024 17:32:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2604:1380:4641:c500::1; helo=dfw.source.kernel.org;
- envelope-from=jarkko@kernel.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CCD7340104
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCD7340104
-Received: from dfw.source.kernel.org (dfw.source.kernel.org
- [IPv6:2604:1380:4641:c500::1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CCD7340104
- for <buildroot@buildroot.org>; Fri, 17 May 2024 17:31:59 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by dfw.source.kernel.org (Postfix) with ESMTP id 9C2FC61DDA;
- Fri, 17 May 2024 17:31:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDFAEC2BD10;
- Fri, 17 May 2024 17:31:57 +0000 (UTC)
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: buildroot@buildroot.org
-Date: Fri, 17 May 2024 20:31:40 +0300
-Message-ID: <20240517173140.24531-4-jarkko@kernel.org>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20240517173140.24531-1-jarkko@kernel.org>
-References: <20240517173140.24531-1-jarkko@kernel.org>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2bPtptwlFkiX for <buildroot@lists.busybox.net>;
+ Fri, 17 May 2024 18:25:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 041EF82261
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 041EF82261
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 041EF82261
+ for <buildroot@buildroot.org>; Fri, 17 May 2024 18:25:47 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7FE3913F8AD;
+ Fri, 17 May 2024 20:25:41 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 17 May 2024 20:25:41 +0200
+Date: Fri, 17 May 2024 20:25:41 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: yegorslists@googlemail.com
+Message-ID: <ZkehJQxCJHZRJ1lr@landeda>
+References: <20240517120057.3736694-1-yegorslists@googlemail.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240517120057.3736694-1-yegorslists@googlemail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1715967118;
- bh=0qEfZvQaBzgDoALeq+bYnA+mLsZ50OgGHfJG28Yi0Rk=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=inKzHGNTeKlkA/wonXgfVnWvTF8GQpB4uH5YTDWaNIAujj920RZa+86XB7xBB2Qeq
- f40rl7a3e7oBRNy6Myr5Gy/t3bgIKpPLwbs6a2Smz2A8535ay+wJHZ9tT6JEU7ANJd
- DbRPZsK3NZqgvcfIHEXKBRDmuuUIU62gN+6PoXajviyyRFyTULsprlYKXXzbXLl4dZ
- U5esaQT7AdV6iu+PLpf8wB6yS2hShNPC7q9h1PW3DEGN2pB6vPWPLzs80wlVESG33w
- kZRod9oVqjzOam9j1NjV3VBu9FuFbS2oV4Ec+68eRskt2FKHluXsVfOk3QN10MdtC4
- wfU2/U4IsvdeA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1715970344;
+ bh=JHpA7322+CjU179/qK2M/dAtfMkJQgc4F8rlDlzgBgI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=dB5vUSoNDdrvehgWsV7E987RQSrGQQl4JWnLOUSicV/LxoLnakxdCwgnMz+AaxJCt
+ Ub85GgMnZo/+ZBMrkc/bZhRe1PjDd9rG/x+u8t/wjkQi1IroWiAd7z0KMO3jCV+kHm
+ HDATjeGxXJTwaimo0BqPDI53OTGFixE9oFAMIqjKNeD1aSRytAz3TO4Mmk3WMe0oO8
+ 7hUo2bMKHS+WZSgEsHStnVVetm2iLu6eKCYn4wi1OxEhMBiUcoPCs1fhzidNCgvYbl
+ 3n7grF2vDESc1zs0we8Jjc705B0XMVr1cXQzHA7TZfbHToAvPBfEWiAVdhVHVW+Fgr
+ hAJRIoj6lazpA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
- header.a=rsa-sha256 header.s=k20201202 header.b=inKzHGNT
-Subject: [Buildroot] [PATCH v2 3/3] package/swtpm: add host package
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=dB5vUSoN
+Subject: Re: [Buildroot] [PATCH] package/ntp: fix build with GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,115 +80,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, Stefan Berger <stefanb@linux.ibm.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The SWTPM package provides TPM emulators with different front-end
-interfaces to libtpms. TPM emulators provide socket interfaces (TCP/IP and
-Unix) and the Linux CUSE interface for the creation of multiple native
-/dev/vtpm* devices.
+Yegor, All,
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v2:
-- Remove libraries from Config.host.in.
-- Put deps line-by-line.
----
- DEVELOPERS                   |  1 +
- package/Config.in.host       |  1 +
- package/swtpm/Config.in.host | 12 ++++++++++++
- package/swtpm/swtpm.hash     |  2 ++
- package/swtpm/swtpm.mk       | 23 +++++++++++++++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/swtpm/Config.in.host
- create mode 100644 package/swtpm/swtpm.hash
- create mode 100644 package/swtpm/swtpm.mk
+On 2024-05-17 14:00 +0200, yegorslists--- via buildroot spake thusly:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Fix pthread_detach() detection that is broken when building
+> with GCC 14.x.
+> 
+> The patch is taken from a Gentoo repository:
+> 
+> https://gitweb.gentoo.org/repo/gentoo.git/diff/net-misc/ntp/files/ntp-4.2.8_p15-configure-clang16.patch?id=56ef5ce33891feec34cd0c39a0a774a81a587dc7
+> 
+> Bonus: refresh the 0002-ntp-syscalls-fallback.patch file.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index db0dc702a8..732002f85b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1521,6 +1521,7 @@ F:	package/libvirt/
- N:	Jarkko Sakkinen <jarkko@kernel.org>
- F:	package/libtpms/
- F:	package/quota/
-+F:	package/swtpm/
+Sure, but it's relatively obvious, by looking and the changeset, that
+the patch was modified; the interesting information to have in the
+commit log is why it was refreshed:
 
- N:	Jason Pruitt <jrspruitt@gmail.com>
- F:	package/librtlsdr/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 986b2854d0..0cf9dc3897 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -110,6 +110,7 @@ menu "Host utilities"
- 	source "package/starfive-spltool/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/swig/Config.in.host"
-+	source "package/swtpm/Config.in.host"
- 	source "package/swugenerator/Config.in.host"
- 	source "package/systemd/Config.in.host"
- 	source "package/tegrarcm/Config.in.host"
-diff --git a/package/swtpm/Config.in.host b/package/swtpm/Config.in.host
-new file mode 100644
-index 0000000000..79a9aa28af
---- /dev/null
-+++ b/package/swtpm/Config.in.host
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_HOST_SWTPM
-+	bool "host swtpm"
-+	select BR2_PACKAGE_LIBTOOL
-+	help
-+	  Compiles SWTPM software TPM emulator for the host.
-+
-+	  The SWTPM package provides TPM emulators with different
-+	  front-end interfaces to libtpms. TPM emulators provide socket
-+	  interfaces (TCP/IP and Unix) and the Linux CUSE interface for
-+	  the creation of multiple native /dev/vtpm* devices.
-+
-+	  https://github.com/stefanberger/swtpm/wiki
-diff --git a/package/swtpm/swtpm.hash b/package/swtpm/swtpm.hash
-new file mode 100644
-index 0000000000..934d3b6ee0
---- /dev/null
-+++ b/package/swtpm/swtpm.hash
-@@ -0,0 +1,2 @@
-+sha256  b281b4e8c39f68e1928675f788abc70072e4081152e129144359a8c5c304c06b  swtpm-0.8.2.tar.gz
-+sha256  19d27d6e96d07022e5e688f75c974f1ceb9aae9e90e0fccae68666d02099cc4b  LICENSE
-diff --git a/package/swtpm/swtpm.mk b/package/swtpm/swtpm.mk
-new file mode 100644
-index 0000000000..1d42d72e71
---- /dev/null
-+++ b/package/swtpm/swtpm.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# swtpm
-+#
-+################################################################################
-+
-+SWTPM_VERSION = 0.8.2
-+SWTPM_SITE = $(call github,stefanberger,swtpm,v$(SWTPM_VERSION))
-+SWTPM_LICENSE = BSD-4-Clause
-+SWTPM_LICENSE_FILES = LICENSE
-+SWTPM_AUTORECONF = YES
-+
-+HOST_SWTPM_DEPENDENCIES = \
-+	host-json-glib \
-+	host-libopenssl \
-+	host-libtasn1 \
-+	host-libtool \
-+	host-libtpms \
-+	host-pkgconf
-+
-+HOST_SWTPM_CONF_OPTS = --with-openssl --without-seccomp
-+
-+$(eval $(host-autotools-package))
---
-2.45.0
+    Addtionally, refresh patch 0002 to fix the offset of hunk 1.
 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/ntp/0002-ntp-syscalls-fallback.patch  |  9 ++++---
+>  .../ntp/0003-fix-pthread-detach-check.patch   | 27 +++++++++++++++++++
+
+    $ make check-package
+    package/ntp/0003-fix-pthread-detach-check.patch:0: missing Upstream in the header (https://nightly.buildroot.org/#_additional_patch_documentation)
+
+Yes, you do provide the location where you grabbed the patch from, and
+this is very good. Still, we need to know what the upstream status for
+that patch is: has it been submitted? If no, why? If yes, what is the
+URL to the PR/MR, bug report, email?
+
+It is a bit unfortunate that ntp uses bitkeeper as a VCS, which makes it
+a bit more difficult to contribute to, but we still need that in
+formation...
+
+I see that the last commits dates from just a few days ago, so the
+project is not dead.
+
+Could you please check whether this patch was submitted? Maybe there is
+some info about that in the gentoo history for that patch?
+
+> diff --git a/package/ntp/0002-ntp-syscalls-fallback.patch b/package/ntp/0002-ntp-syscalls-fallback.patch
+> index 535fc93dfd..46704b9d3f 100644
+> --- a/package/ntp/0002-ntp-syscalls-fallback.patch
+> +++ b/package/ntp/0002-ntp-syscalls-fallback.patch
+> @@ -8,10 +8,11 @@ Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+>   configure.ac | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>  
+> -diff --git a/configure.ac b/configure.ac
+> ---- a/configure.ac
+> -+++ b/configure.ac
+> -@@ -1523,11 +1523,11 @@ AC_CACHE_CHECK(
+> +Index: ntp-4.2.8p17/configure.ac
+> +===================================================================
+> +--- ntp-4.2.8p17.orig/configure.ac
+> ++++ ntp-4.2.8p17/configure.ac
+> +@@ -1472,11 +1472,11 @@ AC_CACHE_CHECK(
+
+Just fixing the line would have made for a smaller delta, with less
+useless changes in the diff metadata.
+
+Also, the patch was (almost) git-formatted, which is the preferred form
+for bundled patches. Unless it is submitted to, or backported from the
+upstream VCS, in which case it should be in a format supported by that
+VCS. ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
