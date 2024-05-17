@@ -1,74 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD8F2C25B77
-	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 20:08:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40244C04FFE
+	for <buildroot@archiver.kernel.org>; Fri, 17 May 2024 20:53:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CF86834F2;
-	Fri, 17 May 2024 20:08:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S6hZbz_Kx0MW; Fri, 17 May 2024 20:08:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84DFC834FE
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84DFC834FE;
-	Fri, 17 May 2024 20:08:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B9A511BF330
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 20:08:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A32A8407B1
- for <buildroot@lists.busybox.net>; Fri, 17 May 2024 20:08:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC1ED4018B;
+	Fri, 17 May 2024 20:53:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H-z5cLrLYeb4 for <buildroot@lists.busybox.net>;
- Fri, 17 May 2024 20:08:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 253AF407AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 253AF407AD
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 253AF407AD
- for <buildroot@buildroot.org>; Fri, 17 May 2024 20:08:01 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 45A8D13F8A2;
- Fri, 17 May 2024 22:07:57 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 17 May 2024 22:07:57 +0200
-Date: Fri, 17 May 2024 22:07:57 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <Zke5HQJ0VyR-bkjn@landeda>
-References: <20240517171258.783129-1-fontaine.fabrice@gmail.com>
+ id RGIphIaf6BbG; Fri, 17 May 2024 20:53:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C56E4019C
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C56E4019C;
+	Fri, 17 May 2024 20:53:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A26581BF330
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 20:53:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A20C400FB
+ for <buildroot@lists.busybox.net>; Fri, 17 May 2024 20:53:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wZfFCTuWZoDZ for <buildroot@lists.busybox.net>;
+ Fri, 17 May 2024 20:53:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7B4E4405B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B4E4405B0
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7B4E4405B0
+ for <buildroot@buildroot.org>; Fri, 17 May 2024 20:53:27 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-34dc8d3fbf1so436843f8f.1
+ for <buildroot@buildroot.org>; Fri, 17 May 2024 13:53:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715979205; x=1716584005;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Ws3xyeIuYalZ1rIKeprUULpnwukBOfIvbLrSFy7sTjY=;
+ b=rv7+6fgEGmkbxG6lhP01bU1IPv3LByWXQQyRvolnblCouxUIojuzm9P9RyxxPUxcKf
+ c5OHkOZ6zjB8H0uIuTgKgCDtzT/XF+xmLt3J1ERCiwtJ6Avd+HEp4gS247FhQPDqn3yo
+ HT5aRbstRC4+aOWSxnMLlQv7vKCbYYzvO71jH8asiNAbBKDrXWBgGTkmPWJscFih11ny
+ tMf3f595auaqGjWHnM9SV2dLN3yrmw0FlBI7b5W9xYa/jGpB29loHWXOiVCwdrMk28o8
+ A3rRo6It7b2Smc/nwaEG/E8B2OAfOQDylJoV8AUeuZbG9jHYJZzXH5NyXJdE0fy7CNpI
+ V2tg==
+X-Gm-Message-State: AOJu0YxvAYT8h4yZs/Chx96MqiU4GToN2O6JNFTpZFHDMB+P5noaC814
+ Fz13JNQQd/agpGk9ItitxT/7vAjwyeAsNKQJbwMjbCEuRgkrrbXYM43WVw==
+X-Google-Smtp-Source: AGHT+IHu0aFypxH0feHQOe7Y17y1MtlRIPMggLY5CNnyiFeLg/YEpqXhLugGUFVkqXQC5NspTWIoyw==
+X-Received: by 2002:adf:cd85:0:b0:34a:5663:40e with SMTP id
+ ffacd0b85a97d-3504a61c8d3mr13425953f8f.9.1715979204947; 
+ Fri, 17 May 2024 13:53:24 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-351dea787efsm4070467f8f.30.2024.05.17.13.53.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 17 May 2024 13:53:24 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 17 May 2024 22:53:15 +0200
+Message-ID: <20240517205315.850877-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240517171258.783129-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1715976480;
- bh=24ZzOWcbjIdUUYUMAWcSHaU95c4siOky3Bt3JSALR4w=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=iRstYVGmJZsD7qmjoyp7KwSvQL527zD4YiBUady2W/WyXoFjD0aCGKg1MDHjz+5Pf
- djKx7TkH7sdDG4sh4EHqdpHtK1X6ACYIm7m1b1PLgFcNAKOzR5Wf4y4kv2KF5iPdFN
- /Du4VuF0kHWIYiv3MtO9xFAVQah+t3yXF+IZJUP9RoKY1ngjgbHMynRemJ2mYdiktI
- wb9QcqZX/0hicjquEMSe3jERhzBR6tNMWHpaSh83elkdRgJvVhja8pQpEz0rtbc2iW
- 3gQ/cgHpXoMooc11RPYPRYoGUJApHfNPFxoGghe+t9hXmKEDHTsE1DesEXHmDutOqc
- 5x2Z4hVMvz38Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1715979205; x=1716584005; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Ws3xyeIuYalZ1rIKeprUULpnwukBOfIvbLrSFy7sTjY=;
+ b=SuVE7frz5YgUzOetLs7rww4WVhPXeobFH22r9RfbJARncp6htg3c0jUg8X6fZT0iXV
+ i+d81UPYMphqPPb65Wj0ngB3j487Go25SJWC9IIR0wlQdMPQUQDcFs56fJDTZ9wfOx9r
+ ptvfte+yJ490y1AGvXeKyf95e68wIvVYFGAq0IJHXqTrjn/N+EbGYkgdUH+3ugbip20P
+ AUNX1MK63h0eYUdpQxcuGXpQaoXN7ic4H4Fbz6oqVYKuYu33NVuntEdFqyj0G8bqPL+p
+ ZNQmak0lD+9kw4tlbfgNAJ9suJZTE1bEPRnSW23ajv//y2LmpApk+2eGSn8MZ1eNwCJE
+ VXCw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iRstYVGm
-Subject: Re: [Buildroot] [PATCH 1/1] package/gr-osmosdr: fix python build
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=SuVE7frz
+Subject: [Buildroot] [PATCH 1/1] package/mokutil: select libxcrypt if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,72 +100,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Fix the following build failure raised since the addition of the package
+in commit 2e6e121496bfcbe09c018558be13733077b6df9b:
 
-On 2024-05-17 19:12 +0200, Fabrice Fontaine spake thusly:
-> Fix the following python build failure:
-> 
-> In file included from /home/buildroot/instance-0/output-1/host/include/python3.11/Python.h:38,
->                  from /home/buildroot/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/pybind11/detail/common.h:266,
->                  from /home/buildroot/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/pybind11/attr.h:13,
->                  from /home/buildroot/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/pybind11/detail/class.h:12,
->                  from /home/buildroot/instance-0/output-1/host/arc-buildroot-linux-gnu/sysroot/usr/include/pybind11/pybind11.h:13,
->                  from /home/buildroot/instance-0/output-1/build/gr-osmosdr-0.2.4/python/bindings/device_python.cc:1:
-> /home/buildroot/instance-0/output-1/host/include/python3.11/pyport.h:596:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
->   596 | #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
->       |  ^~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f009958c37902a224512b336fcb431903bdd0b96
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+mokutil.c:45:10: fatal error: crypt.h: No such file or directory
+   45 | #include <crypt.h>
+      |          ^~~~~~~~~
 
-Applied to master, thanks.
+Fixes: 2e6e121496bfcbe09c018558be13733077b6df9b
+ - http://autobuild.buildroot.org/results/59e470ad6bf7f48314cd26ed4163c095e4c803ab
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mokutil/Config.in  | 1 +
+ package/mokutil/mokutil.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
-> ---
->  package/gr-osmosdr/gr-osmosdr.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
-> index 316ed80887..0d1e4edb30 100644
-> --- a/package/gr-osmosdr/gr-osmosdr.mk
-> +++ b/package/gr-osmosdr/gr-osmosdr.mk
-> @@ -23,7 +23,9 @@ GR_OSMOSDR_CONF_OPTS = \
->  GR_OSMOSDR_INSTALL_STAGING = YES
->  
->  ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
-> -GR_OSMOSDR_CONF_OPTS += -DENABLE_PYTHON=ON
-> +GR_OSMOSDR_CONF_OPTS += \
-> +	-DENABLE_PYTHON=ON \
-> +	-DPYTHON_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
->  GR_OSMOSDR_DEPENDENCIES += python3 host-python-six
->  else
->  GR_OSMOSDR_CONF_OPTS += -DENABLE_PYTHON=OFF
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/mokutil/Config.in b/package/mokutil/Config.in
+index 3f0c760f7d..dd02078b4e 100644
+--- a/package/mokutil/Config.in
++++ b/package/mokutil/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_MOKUTIL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
+ 	select BR2_PACKAGE_EFIVAR
+ 	select BR2_PACKAGE_KEYUTILS
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  mokutil is a tool to import or delete the machines owner
+diff --git a/package/mokutil/mokutil.mk b/package/mokutil/mokutil.mk
+index 6e83d9f138..f176fa5bee 100644
+--- a/package/mokutil/mokutil.mk
++++ b/package/mokutil/mokutil.mk
+@@ -14,6 +14,7 @@ MOKUTIL_DEPENDENCIES = \
+ 	efivar \
+ 	host-pkgconf \
+ 	keyutils \
++	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
+ 	openssl
+ 
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
