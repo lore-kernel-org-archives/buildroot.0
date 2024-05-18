@@ -4,91 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9CEEC25B74
-	for <buildroot@archiver.kernel.org>; Sat, 18 May 2024 20:25:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4931BC25B74
+	for <buildroot@archiver.kernel.org>; Sat, 18 May 2024 20:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85E8460642;
-	Sat, 18 May 2024 20:25:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 008F060764;
+	Sat, 18 May 2024 20:25:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D88KlAW2xvIz; Sat, 18 May 2024 20:25:13 +0000 (UTC)
+ id 0hGhstv8FgH9; Sat, 18 May 2024 20:25:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A9D960676
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80A836078B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A9D960676;
-	Sat, 18 May 2024 20:25:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A176E1BF3F0
- for <buildroot@lists.busybox.net>; Sat, 18 May 2024 20:25:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80A836078B;
+	Sat, 18 May 2024 20:25:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A1081BF3F0
+ for <buildroot@lists.busybox.net>; Sat, 18 May 2024 20:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E0AF40186
- for <buildroot@lists.busybox.net>; Sat, 18 May 2024 20:25:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A3FEC60674
+ for <buildroot@lists.busybox.net>; Sat, 18 May 2024 20:25:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U6Li1DrkNNXw for <buildroot@lists.busybox.net>;
- Sat, 18 May 2024 20:25:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IlJjL2IJrAu7 for <buildroot@lists.busybox.net>;
+ Sat, 18 May 2024 20:25:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 06D9B4012F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06D9B4012F
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 06D9B4012F
- for <buildroot@buildroot.org>; Sat, 18 May 2024 20:25:09 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-34d7d04808bso866627f8f.0
- for <buildroot@buildroot.org>; Sat, 18 May 2024 13:25:09 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 349BF60642
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 349BF60642
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 349BF60642
+ for <buildroot@buildroot.org>; Sat, 18 May 2024 20:25:11 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-420180b5922so14633165e9.2
+ for <buildroot@buildroot.org>; Sat, 18 May 2024 13:25:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1716063908; x=1716668708;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=7IFnDfYBdYuzWna3dRs27WWuURWVZb571iti/d5j3Wo=;
- b=dIfYIm52asOdh5x8+PjJg/GH02v6LBsDm9oXus51V5F5BE5xXcv9EZy/ucMkABxpux
- j3w9RXvcMPy9bCzWb4SKBjaOcvdPvzTyT9df+i64pcuifcnqoSk6tZDKTEQTQfb7+SWr
- N16DiuqwKZaIzUi6ymJoPwyNxt+TTj6XanaZyP397qOviWQICWv/u43UZHWA8gutqMfa
- zqk9KVPigJjh0OBqQoQ/Pru9P+3LBaLtClH0JF7UDt0LexEFqLGzYjsY/ttvVQAB+jo+
- yBBZycL8ppWBpcUnHHk3e2fIuF2//B2SikIcmwAEMShRQC2y/aNUOJc+Fps7PC67tbWm
- af0g==
-X-Gm-Message-State: AOJu0Yz2UO/MffNdU3TUZIdNqioJWX8+a7ZResB491vvZiV4Q+JYOCdu
- NbI2VH3crRx6mjbJcYNJD64K4fU4W7P1pT8qlBIktgFD3Eh2SdkNvCPXTA==
-X-Google-Smtp-Source: AGHT+IHujWsqiRRiUnvndruFkTfWZTssbGJ0Oz16l/63CuJHfjm2mXNzvQOjU+KZmp/q/jNIRZ0gpw==
-X-Received: by 2002:adf:ef4c:0:b0:349:bccc:a1e7 with SMTP id
- ffacd0b85a97d-3504a6310c6mr25818567f8f.19.1716063907457; 
- Sat, 18 May 2024 13:25:07 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1716063909; x=1716668709;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=LIJKUXtBhDq6PFXOGfVetNLqh5V275NhC4T8YMI/Hxw=;
+ b=hHj96dPEW9+EPvnX5bVVhmrdzS9vJR2p+BWPUbXzN0yhEqil0eQgN0NCzMt4l+rOXw
+ XbzC7bDO8E30nqch54FhZdNsogE2CBltJ15j299WVnDNJ6p+u8lpc5P+Ey0bR99UYtHn
+ k3waPmM4r1fiXcumwE3VSVZ0TUuJgEhrM8AUwZ7Ujd6c8GOZ7cSoujHsgw7lnkTqDB2Y
+ qsGCJYFyhrLpNUdhOGdlggRIPK2nRZXLIsSW3EUeKfYUuV+rHcPnEiJYosB3JiA2Hkcu
+ oBd7n3dc+vdmHp+VE6E9wOguaQEZeNgaijWWHMkMBk2UGFwukQLk6EEo+yPoaIejVXV/
+ RHJA==
+X-Gm-Message-State: AOJu0Yypg6P5arqqbmPYma5lLEpUp9X/hE1AJWlNVjXci4JqLWGCfMOe
+ y+QU30Eq51uTFJdZsVwnJmpZ/K+PuhdZy7np8ACbrp8QUxt9N/Vm+mi/wQ==
+X-Google-Smtp-Source: AGHT+IHwHNhmOOnpnv8YAy5bvuCSbdJndN6/xqaiqRbnMffauHwGakje89w21uQDpkrI0lyHn1WjFA==
+X-Received: by 2002:a5d:6b89:0:b0:34d:a159:48e6 with SMTP id
+ ffacd0b85a97d-3504a20ac1cmr22977221f8f.0.1716063909212; 
+ Sat, 18 May 2024 13:25:09 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3502bbbbde1sm25028683f8f.97.2024.05.18.13.25.06
+ ffacd0b85a97d-3502b8a76e6sm24981434f8f.62.2024.05.18.13.25.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 18 May 2024 13:25:06 -0700 (PDT)
+ Sat, 18 May 2024 13:25:09 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 18 May 2024 22:25:06 +0200
-Message-ID: <cover.1716063903.git.yann.morin.1998@free.fr>
+Date: Sat, 18 May 2024 22:25:07 +0200
+Message-ID: <9acaf4118aa1e3ba7ad9e0516a78273af7d05d3c.1716063903.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.0
+In-Reply-To: <cover.1716063903.git.yann.morin.1998@free.fr>
+References: <cover.1716063903.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1716063908; x=1716668708; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=7IFnDfYBdYuzWna3dRs27WWuURWVZb571iti/d5j3Wo=;
- b=XxRLcAoerSZXVazedryTHer4ROpmd9YtPpF6FkKbcrfRQMwqePC11Vl5+kzzHPuXS1
- bmBrLKYaDgwnv8bDRSKwvPnSrdXxMIBK2mcnhElZb+bjDsZyOupG7PL3VdgrdpFsHle3
- MEsVJkMpA+f3wLZQBqXkPTfoFu8qAyx6ykL0HnMsS9YzZmct/F7C/59KBdSAG5P4qpla
- vWRnUfV50Q7vWj4bBO71ftQ2xJkHISxOzGrCWZvzA+OolKSUwa9wFgKEe5xPQIeA9dco
- y9bNF3vqkq0+Tk0rxCbYBT5OkUnSwLhHBmbmkUZXkrQRbsKI2g2YzT5sqhNE7+clcaQK
- dRdQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1716063909; x=1716668709; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=LIJKUXtBhDq6PFXOGfVetNLqh5V275NhC4T8YMI/Hxw=;
+ b=P3no/u1+F3XxJVSB7aA6tQtTWSasKjgUzs2v4qM3u0R5zqoNOl4vhbERMoSsk/nYQI
+ aPINMgoc6i2Lm1D97GSja80PzZ+rMdp7b7PLUb17bWhYRaFp/fCgkArMKCX3HqIe18aW
+ vqfZtmBUmRFuVQd0Q53qfTvS2qUpW2TZF1dYmIfduUzeG3QmA3Sf+Pof5qBm7H4CsjXA
+ 4fwVQzcGRNsUlO87/pkpT3RNjku3TKGsKh1hx9MMieLP4OHaXSjgYMMQe0k9tBOtI6vh
+ aYTVW85HWRayU4OPmT5KodWlI4pkH1rh3y6ody9+Jhq68BTWaOijANQHzE9BHNVfjqmU
+ SoPQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=XxRLcAoe
-Subject: [Buildroot] [PATCH 0/2] support/download: fix running on hosts with
- wget2 (branch yem/dl-curl)
+ header.a=rsa-sha256 header.s=20230601 header.b=P3no/u1+
+Subject: [Buildroot] [PATCH 1/2] support/download: introduce curl backend
+ for FTP transfers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,54 +103,154 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+Recent versions of wget, starting with wget 2.0, aka wget2 thereafter,
+no longer support FTP (nor FTPS, aka FTP-over-SSL). wget2 is packaged in
+Fedora 40, recently released; F40 does not even have the old wget
+available in its repository anymore.
 
-Recently, Fedora 40 was released, which uses wget2 instead of the
-"original" wget (aka wget1). wget2 is almost a drop-in replacement
-for wget1, except it no longer supports FTP and WARC. While WARC was
-unused in Buildroot, FTP is still used by a few packges, some of
-which only available via FTP.
+Introduce cURL as a download backend, that we use for FTP and FPTS
+protocols.
 
-Switch to using curl for FTP downloads.
+Note that the -q flag does not means being quiet; it means that a curlrc
+file should not be parsed. The long option is --disable, which meaning
+is not much more obivous than the short -q. It also has to be the first
+option on the command line.
 
-We could have switched to curl for http/s downlads too, but it is
-possible that existing packages (esp. in br2-external trees) use
-wget1 options, like we used to in the now-dropped amd-catalyst
-package for example. So we decided to only convert FTP downloads
-over to curl, and keep the rest unchanged, to minise the impact.
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      support/download: introduce curl backend for FTP transfers
-      utils/genrandconfig: do not check certificates with curl
-
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
  Config.in                     |  4 ++++
  docs/manual/prerequisite.adoc |  1 +
  package/pkg-download.mk       |  1 +
  package/pkg-generic.mk        |  2 ++
- support/download/curl         | 45 +++++++++++++++++++++++++++++++++++++++++++
+ support/download/curl         | 45 +++++++++++++++++++++++++++++++++++
  support/download/dl-wrapper   |  1 +
- utils/genrandconfig           |  1 +
- 7 files changed, 55 insertions(+)
+ 6 files changed, 54 insertions(+)
  create mode 100755 support/download/curl
 
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Config.in b/Config.in
+index b5a94325c4..534efa4050 100644
+--- a/Config.in
++++ b/Config.in
+@@ -103,6 +103,10 @@ menu "Build options"
+ 
+ menu "Commands"
+ 
++config BR2_CURL
++	string "Curl command"
++	default "curl -q --ftp-pasv --retry 3"
++
+ config BR2_WGET
+ 	string "Wget command"
+ 	default "wget --passive-ftp -nd -t 3"
+diff --git a/docs/manual/prerequisite.adoc b/docs/manual/prerequisite.adoc
+index 262a5153f5..846a7482ac 100644
+--- a/docs/manual/prerequisite.adoc
++++ b/docs/manual/prerequisite.adoc
+@@ -75,6 +75,7 @@ packages using any of these methods, you will need to install the
+ corresponding tool on the host system:
+ +
+ ** +bazaar+
++** +curl+
+ ** +cvs+
+ ** +git+
+ ** +mercurial+
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 4be45c9d12..455443c164 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -8,6 +8,7 @@
+ ################################################################################
+ 
+ # Download method commands
++export CURL := $(call qstrip,$(BR2_CURL))
+ export WGET := $(call qstrip,$(BR2_WGET))
+ export SVN := $(call qstrip,$(BR2_SVN))
+ export CVS := $(call qstrip,$(BR2_CVS))
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index a2749320c3..e1c16b7343 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1253,6 +1253,8 @@ else ifeq ($$($(2)_SITE_METHOD),hg)
+ DL_TOOLS_DEPENDENCIES += hg
+ else ifeq ($$($(2)_SITE_METHOD),cvs)
+ DL_TOOLS_DEPENDENCIES += cvs
++else ifneq ($(filter ftp ftps,$$($(2)_SITE_METHOD)),)
++DL_TOOLS_DEPENDENCIES += curl
+ endif # SITE_METHOD
+ 
+ # cargo/go vendoring (may) need git
+diff --git a/support/download/curl b/support/download/curl
+new file mode 100755
+index 0000000000..bea4485a6c
+--- /dev/null
++++ b/support/download/curl
+@@ -0,0 +1,45 @@
++#!/usr/bin/env bash
++
++# We want to catch any unexpected failure, and exit immediately
++set -e
++
++# Download helper for curl, to be called from the download wrapper script
++#
++# Options:
++#   -q          Be quiet.
++#   -o FILE     Save into file FILE.
++#   -f FILENAME The filename of the tarball to get at URL
++#   -u URL      Download file at URL.
++#
++# Environment:
++#   CURL     : the curl command to call
++
++quiet=
++while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
++    case "${OPT}" in
++    q)  quiet=-s;;
++    o)  output="${OPTARG}";;
++    f)  filename="${OPTARG}";;
++    u)  url="${OPTARG}";;
++    :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
++    \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
++    esac
++done
++
++shift $((OPTIND-1)) # Get rid of our options
++
++# Caller needs to single-quote its arguments to prevent them from
++# being expanded a second time (in case there are spaces in them)
++_curl() {
++    if [ -z "${quiet}" ]; then
++        printf '%s ' "${CURL}" "${@}"; printf '\n'
++    fi
++    _plain_curl "$@"
++}
++# Note: please keep command below aligned with what is printed above
++_plain_curl() {
++    # shellcheck disable=SC2086  # We want splitting
++    eval ${CURL} "${@}"
++}
++
++_curl ${quiet} "${@}" --output "'${output}'" "'${url}/${filename}'"
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 35428faeef..069b2c1c21 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -91,6 +91,7 @@ main() {
+         backend="${backend_urlencode%|*}"
+         case "${backend}" in
+             git|svn|cvs|bzr|file|scp|hg|sftp) ;;
++            ftp|ftps) backend="curl" ;;
+             *) backend="wget" ;;
+         esac
+         uri=${uri#*+}
+-- 
+2.45.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
