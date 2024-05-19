@@ -4,92 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A0FFC25B75
-	for <buildroot@archiver.kernel.org>; Sun, 19 May 2024 07:25:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93698C25B75
+	for <buildroot@archiver.kernel.org>; Sun, 19 May 2024 07:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB5EF400D8;
-	Sun, 19 May 2024 07:25:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 39FA6400D8;
+	Sun, 19 May 2024 07:46:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HdUYo7y2wD1V; Sun, 19 May 2024 07:25:16 +0000 (UTC)
+ id 1s7Sw8t_ogKQ; Sun, 19 May 2024 07:46:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE37040118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4104B400EA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE37040118;
-	Sun, 19 May 2024 07:25:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7D6491C3B46
- for <buildroot@lists.busybox.net>; Sun, 19 May 2024 07:25:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4104B400EA;
+	Sun, 19 May 2024 07:46:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DFC2E1C3B66
+ for <buildroot@lists.busybox.net>; Sun, 19 May 2024 07:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7759640118
- for <buildroot@lists.busybox.net>; Sun, 19 May 2024 07:25:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5FFC60622
+ for <buildroot@lists.busybox.net>; Sun, 19 May 2024 07:46:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RtTAsZsTFaXg for <buildroot@lists.busybox.net>;
- Sun, 19 May 2024 07:25:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BA6DE400D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA6DE400D8
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BA6DE400D8
- for <buildroot@buildroot.org>; Sun, 19 May 2024 07:25:12 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-a59e4136010so650869366b.3
- for <buildroot@buildroot.org>; Sun, 19 May 2024 00:25:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1716103510; x=1716708310;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=vUgnQH8L0WDBxjygMpzDDvyAV2nU2KACV9HY4GrmpKU=;
- b=KSjNg7yNReN5tLmxriZIuc5BpcmQR7oemyBt0IlmI9HtDVkAFkr/gS8Oj+ccFnuWHW
- haZ/SIbYsRhhXqa5LAKA2LHTUMshduhYYk8EC4Q1newRwYaN4qz20FC0SQGkTY9ZYr2A
- TW47bM6CUGHVz9xzImX7z+widx19VH/qdVXuQmNwFbhwDQU8tk3QGWE2s9e7fTFLEJb1
- 8JGEzuLCE4RHRvUUeJHf1tOfwOYe2JUoAc04T/UTDoh1es3Me69UDnVWK2HDZVp4MWkG
- 59j/DDIYbScciAnjS85L4U7NXVipZRgQz1gH0tDwsXOVDI6pBD7ZaoNaeKy1EzXDiT6o
- Q11w==
-X-Gm-Message-State: AOJu0YyjGDtz5U6eT7MrKi+Hr6AL3U31QSSa2VIJSHACQQAAm0slWJH3
- jRswhqXWTDA+sAKkJV7t8OAESJVEzUK9s23B/Lpal813j5/DLf54LoWJkf3gr7ljYKxeTv72fjI
- 8hlg=
-X-Google-Smtp-Source: AGHT+IE1htebwXRAbtUrivojhMzHz8PAxDez0OiiscW9r0UREpjg++5+1+8V2+B9uQXbUdM0T6SKXg==
-X-Received: by 2002:a17:907:1b0d:b0:a59:cbb5:e09f with SMTP id
- a640c23a62f3a-a5a2d65f230mr1950400666b.53.1716103510301; 
- Sun, 19 May 2024 00:25:10 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-87-8-99-67.retail.telecomitalia.it. [87.8.99.67])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a5a17b17f2csm1300299366b.197.2024.05.19.00.25.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 19 May 2024 00:25:09 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FEqm_Iy-0-zx for <buildroot@lists.busybox.net>;
+ Sun, 19 May 2024 07:46:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 71F55605F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71F55605F1
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 71F55605F1
+ for <buildroot@buildroot.org>; Sun, 19 May 2024 07:46:29 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id DB14F13F86E
+ for <buildroot@buildroot.org>; Sun, 19 May 2024 09:46:25 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 19 May 2024 09:46:25 +0200
+Date: Sun, 19 May 2024 09:46:25 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 19 May 2024 09:25:02 +0200
-Message-ID: <20240519072502.1142825-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Message-ID: <ZkmuURGjDJb7eDIF@landeda>
+References: <cover.1716063903.git.yann.morin.1998@free.fr>
+ <9acaf4118aa1e3ba7ad9e0516a78273af7d05d3c.1716063903.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1716103510; x=1716708310;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vUgnQH8L0WDBxjygMpzDDvyAV2nU2KACV9HY4GrmpKU=;
- b=fBPsugcP3A4GeimDfExCbPm25SZXiAepa5gZYdQ6CyVW/vCLFBa4kXUQe7/oR1DZeV
- 1n+q8oYdG+6DEan8+4+fx3KBqGLoQQ4b1O4/9MNd/cxgiqE0fvqKvBVGYDAYfE5BdoMX
- TbZ962aTw+WQXMCte3dROV2iaowxwXXQmhOYo=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <9acaf4118aa1e3ba7ad9e0516a78273af7d05d3c.1716063903.git.yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1716104786;
+ bh=4G4M8O7k7ZIoq7Bg1LX0a+XF2yrPATT3dV4Iwck34hE=;
+ h=Date:From:To:Subject:References:In-Reply-To:From;
+ b=PDZKggbStyp9J9dPEWpy4/m212sU9K607Z1yi1Qk+Upt1ppQ/cT7jnLbPGZI/HcIA
+ 7h/9TqZYJZ+g2tN0k3RmTKwfZ6mynUL0NT+2U7P225MQK7VOtFSA8GKCLeXV6DNgCz
+ GwEXgPv9vSZeM1HaDNDerMiNgJpaZUtarRtaouRLInpbZELXuDEbtTuVYvUCZogCIo
+ fV6WdJ+LrfwCD7g3UgGuGahh7TmyrAiSRK+lI6ctnfDJ+1f3t1Sc5EC/DiQQ7aWIjK
+ 0659Jz3p3RnKRznGZC+ZHwK011U8pa5x3o48pPpEk83NpH3ElTFJWKj6QJ6Wi1Q5u7
+ MV34fEZAX/oOQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=fBPsugcP
-Subject: [Buildroot] [PATCH v3] package/zxing-cpp: add options for enabling
- readers and/or writers
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=PDZKggbS
+Subject: Re: [Buildroot] [PATCH 1/2] support/download: introduce curl
+ backend for FTP transfers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,102 +83,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Francesco Nicoletta Puzzillo <francesco.nicolettap@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, michael@amarulasolutions.com,
- linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch allows you to choose whether to build encoding (BUILD_WRITERS),
-decoding (BUILD_READERS) or both. At least one of the two options must
-be enabled. This way, it's possible to keep the library size at minimum.
-By default, to ensure backward compatibility, both are compiled.
+All,
 
-Co-Developed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Co-Developed-by: Francesco Nicoletta Puzzillo <francesco.nicolettap@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+On 2024-05-18 22:25 +0200, Yann E. MORIN spake thusly:
+> Recent versions of wget, starting with wget 2.0, aka wget2 thereafter,
+> no longer support FTP (nor FTPS, aka FTP-over-SSL). wget2 is packaged in
+> Fedora 40, recently released; F40 does not even have the old wget
+> available in its repository anymore.
+[--SNIP--]
+> diff --git a/Config.in b/Config.in
+> index b5a94325c4..534efa4050 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -103,6 +103,10 @@ menu "Build options"
+>  
+>  menu "Commands"
+>  
+> +config BR2_CURL
+> +	string "Curl command"
+> +	default "curl -q --ftp-pasv --retry 3"
+> +
+>  config BR2_WGET
+>  	string "Wget command"
+>  	default "wget --passive-ftp -nd -t 3"
+                  ^^^^^^^^^^^^^
+I forgot to drop that in the series...
 
----
-Changes v2 -> v3:
-- Add 'select BR2_PACKAGE_ZXING_CPP_READERS if !BR2_PACKAGE_ZXING_CPP_WRITERS'
-  and drop comment.
-- Add Co-Developed-by tags
+I'll sit on it for a little while, and respin later with that fixed...
 
-Changes v1 -> v2:
-- Drop BR2_PACKAGE_ZXING_CPP_READERS_AND_WRITERS selection
+Regards,
+Yann E. MORIN.
 
- package/zxing-cpp/Config.in    | 17 +++++++++++++++++
- package/zxing-cpp/zxing-cpp.mk | 14 ++++++++++++--
- 2 files changed, 29 insertions(+), 2 deletions(-)
-
-diff --git a/package/zxing-cpp/Config.in b/package/zxing-cpp/Config.in
-index b72a00ec35f9..e5b8cfcdd8aa 100644
---- a/package/zxing-cpp/Config.in
-+++ b/package/zxing-cpp/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_ZXING_CPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_STB
- 	select BR2_PACKAGE_PYTHON_PYBIND if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_ZXING_CPP_READERS if !BR2_PACKAGE_ZXING_CPP_WRITERS
- 	help
- 	  ZXing-cpp (pronounced "zebra crossing") is an open-source,
- 	  multi-format 1D/2D barcode image processing library
-@@ -17,3 +18,19 @@ config BR2_PACKAGE_ZXING_CPP
- 	  compiles the C++ port.
- 
- 	  https://github.com/zxing-cpp/zxing-cpp
-+
-+if BR2_PACKAGE_ZXING_CPP
-+
-+config BR2_PACKAGE_ZXING_CPP_READERS
-+	bool "readers support"
-+	default y
-+	help
-+	  Build with readers (decoders) support
-+
-+config BR2_PACKAGE_ZXING_CPP_WRITERS
-+	bool "writers support"
-+	default y
-+	help
-+	  Build with writers (encoders) support
-+
-+endif # BR2_PACKAGE_ZXING_CPP
-diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
-index 86a1ef96806d..077d7e75d3dd 100644
---- a/package/zxing-cpp/zxing-cpp.mk
-+++ b/package/zxing-cpp/zxing-cpp.mk
-@@ -12,8 +12,6 @@ ZXING_CPP_INSTALL_STAGING = YES
- ZXING_CPP_SUPPORTS_IN_SOURCE_BUILD = NO
- ZXING_CPP_DEPENDENCIES = host-pkgconf stb
- ZXING_CPP_CONF_OPTS = \
--	-DBUILD_READERS=ON \
--	-DBUILD_WRITERS=ON \
- 	-DBUILD_BLACKBOX_TESTS=OFF \
- 	-DBUILD_UNIT_TESTS=OFF \
- 	-DBUILD_DEPENDENCIES=LOCAL
-@@ -28,4 +26,16 @@ else
- ZXING_CPP_CONF_OPTS += -DBUILD_PYTHON_MODULE=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_ZXING_CPP_READERS),y)
-+ZXING_CPP_CONF_OPTS += -DBUILD_READERS=ON
-+else
-+ZXING_CPP_CONF_OPTS += -DBUILD_READERS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZXING_CPP_WRITERS),y)
-+ZXING_CPP_CONF_OPTS += -DBUILD_WRITERS=ON
-+else
-+ZXING_CPP_CONF_OPTS += -DBUILD_WRITERS=OFF
-+endif
-+
- $(eval $(cmake-package))
 -- 
-2.43.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
