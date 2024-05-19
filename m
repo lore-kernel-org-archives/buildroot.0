@@ -1,76 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D50C4C25B75
-	for <buildroot@archiver.kernel.org>; Sun, 19 May 2024 15:06:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DA28C25B75
+	for <buildroot@archiver.kernel.org>; Sun, 19 May 2024 17:30:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7869D81EB5;
-	Sun, 19 May 2024 15:06:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19D03402EC;
+	Sun, 19 May 2024 17:30:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VB4QX7qFHrGK; Sun, 19 May 2024 15:06:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KDqkyQAEVMHo; Sun, 19 May 2024 17:30:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72D5E81EBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C50B94032F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72D5E81EBA;
-	Sun, 19 May 2024 15:06:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 21F901BF578
- for <buildroot@lists.busybox.net>; Sun, 19 May 2024 15:06:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C50B94032F;
+	Sun, 19 May 2024 17:30:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C53311C40D6
+ for <buildroot@lists.busybox.net>; Sun, 19 May 2024 17:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1BB4D81EB5
- for <buildroot@lists.busybox.net>; Sun, 19 May 2024 15:06:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFD306064F
+ for <buildroot@lists.busybox.net>; Sun, 19 May 2024 17:30:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qujI7WahFYX5 for <buildroot@lists.busybox.net>;
- Sun, 19 May 2024 15:06:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 362B081E1B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 362B081E1B
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 362B081E1B
- for <buildroot@busybox.net>; Sun, 19 May 2024 15:06:11 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 21E9613F899;
- Sun, 19 May 2024 17:06:05 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 19 May 2024 17:06:04 +0200
-Date: Sun, 19 May 2024 17:06:04 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <ZkoVXDlT35QpsaZA@landeda>
-References: <20240519133536.21349-1-ps.report@gmx.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fZlbyo3UiuRc for <buildroot@lists.busybox.net>;
+ Sun, 19 May 2024 17:30:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4EE59605E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EE59605E1
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4EE59605E1
+ for <buildroot@buildroot.org>; Sun, 19 May 2024 17:30:02 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-4200ee78f35so10570955e9.1
+ for <buildroot@buildroot.org>; Sun, 19 May 2024 10:30:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1716139799; x=1716744599;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=l00OoT0ji4pCD1J6NzW1HVdw3ruV2WrhiZIBBgw0Xw0=;
+ b=dk72z35wOu06yjx9fTRp/+K1nuOYeyunc4qrE98fs68ng+6h5BBzIlozU2Q2z5ks/N
+ 33sFgnY5Rbg3un+OaSSyGL1s85c/N5Im/K5vRQAmQzmqZ3F09k6t/FvQRYnwwJGccoqZ
+ MbRr+m2aNG8o+5rExJVGpfljEC24pVva8MRA74OaIuKkiq2ufvVSasPYMmaSRzLQn7Hk
+ t2zI1zi1LjdMar0xiRRHwn44IBcXf/EwlwUQ5Essjkej3Vvipfhmujysvi4zHE+2tMqi
+ zf+RM3jXjlTzQjbXfJap2R/fMrEq0p2F1jq0lE2m5XjLDJinukw/HkgUTPxG/ySJTnVB
+ KIhg==
+X-Gm-Message-State: AOJu0YySz2WvxTJnSALbc6ljFVCyurx56UnlSAJPahLCDxBbyCNatwRf
+ 8rLQFs73EKrfr4nFLENciRBBBOp54r9nKQLiw5pcfB0ZdE1xpkLI4DaREg==
+X-Google-Smtp-Source: AGHT+IFiOoQpYX/numt+x/EVhv7YpAwdFHyhYcPVn7GjV6nQ9Us/gSK9tCC1FootjrHTk8u8XerYSQ==
+X-Received: by 2002:a05:600c:474b:b0:41c:13f6:1eec with SMTP id
+ 5b1f17b1804b1-41fea931ffemr250223015e9.3.1716139799044; 
+ Sun, 19 May 2024 10:29:59 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-42028c7730dsm150056945e9.25.2024.05.19.10.29.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 19 May 2024 10:29:58 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 19 May 2024 19:29:55 +0200
+Message-ID: <20240519172955.457904-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240519133536.21349-1-ps.report@gmx.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1716131168;
- bh=mq0b3eF1SzMvcTnC5SzTN4V2elka0bqmcu8UJ1lT0aU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=r40wouk67EkvBpFSWXfMNHyNmMthxARs6UDlJf70lZG1MR0Z2Cvb0dpZ7GcGEl2mG
- 0bLBovq28oiRw+q9vnDO/MUIUNsGhH0qjwavIC/+hYgGXc236nZv2ecSxiYqip44OD
- o596ABaf4pjmzE0wfaX+zNog9a5rPiG4n1RpiBHFpFcUz03k0byoipyb/t5id3uhKL
- g1Pl+EC4YLp1QgErC8WiQWrbD8TS9yCOyj1hShJyyxGw1SQeOewzanXSCRdH7Oktj4
- +dZ+2Ceo6k0v4txZe3UdixAYJF0Lx4KC226wXpMHOWBmVhtGYtO55M+bOr7lflb5FY
- pjIsLUS2O9aqQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1716139799; x=1716744599; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=l00OoT0ji4pCD1J6NzW1HVdw3ruV2WrhiZIBBgw0Xw0=;
+ b=a7ki9p7klhvTAZBLKI4z8mMXX63Tlu5k+S8IOXvwi15aoquqKg9ed+UWCWPfHgFBsu
+ UvylXZtL7sQo1+peGvrCEqUdp8iLURbrdtneBq56RFV+8D7QVuI1/Ovfrw2itFDuiPIu
+ rhoykArFx3ny7fFDEKfLrD6LqauzsD8X7+d+ZYKLC94/BHFdYH4phGHa/g3y7WxpX4o4
+ STkZ8uFCQut482QQIsCnxW3MBpdMiEcjxFNxKlioM7HvH2jKA7G9MimQRbesbqbBoErK
+ +7QkV5BWNgX+L9iXYAAss/m+VpsHWCR3ZMc+M9ST5Uv6w1+eY35VZUuAba4zvn8/vPB6
+ zSKg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=r40wouk6
-Subject: Re: [Buildroot] [PATCH v1] package/git: security bump version to
- 2.45.1
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=a7ki9p7k
+Subject: [Buildroot] [PATCH 1/1] package/ruby: security bump to version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,71 +100,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+This release includes security fixes:
+ - CVE-2024-27282: Arbitrary memory address read vulnerability with
+   Regex search
+ - CVE-2024-27281: RCE vulnerability with .rdoc_options in RDoc
+ - CVE-2024-27280: Buffer overread vulnerability in StringIO
 
-On 2024-05-19 15:35 +0200, Peter Seiderer via buildroot spake thusly:
-> Fixes CVE-2024-32002, CVE-2024-32004, CVE-2024-32020 and CVE-2024-32021
-> (for details see [1]).
-> 
-> [1] https://lore.kernel.org/lkml/xmqqv83g4937.fsf@gitster.g/
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+https://www.ruby-lang.org/en/news/2024/04/23/ruby-3-3-1-released/
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/git/git.hash | 2 +-
->  package/git/git.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/git/git.hash b/package/git/git.hash
-> index 2e54945a40..7dbeec714b 100644
-> --- a/package/git/git.hash
-> +++ b/package/git/git.hash
-> @@ -1,5 +1,5 @@
->  # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
-> -sha256  0aac200bd06476e7df1ff026eb123c6827bc10fe69d2823b4bf2ebebe5953429  git-2.45.0.tar.xz
-> +sha256  e64d340a8e627ae22cfb8bcc651cca0b497cf1e9fdf523735544ff4a732f12bf  git-2.45.1.tar.xz
->  # Locally calculated
->  sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
->  sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-> diff --git a/package/git/git.mk b/package/git/git.mk
-> index b6a7ec0cbb..04f489e038 100644
-> --- a/package/git/git.mk
-> +++ b/package/git/git.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -GIT_VERSION = 2.45.0
-> +GIT_VERSION = 2.45.1
->  GIT_SOURCE = git-$(GIT_VERSION).tar.xz
->  GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
->  GIT_LICENSE = GPL-2.0, LGPL-2.1+
-> -- 
-> 2.45.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index c729c59453..4ac6200bca 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# https://www.ruby-lang.org/en/news/2023/12/25/ruby-3-3-0-released/
+-sha512  7959c5753bfa0bfc4d6d74060869aabbe9815c1c97930659da11b917ee0803ddbbd80e869e00c48b8694b4ba48709c3b6493fd045568e36e902616c35ababf01  ruby-3.3.0.tar.xz
++# https://www.ruby-lang.org/en/news/2024/04/23/ruby-3-3-1-released/
++sha512  c58e9be9b5ab48191fbf7d67e13f0ec42ee71ed338170e0f7b246708e9cfc617ce65098f5ce7ab32d4305e785642d3e44253462104d5b9c4abcb1a4113f48347  ruby-3.3.1.tar.xz
+ 
+ # License files, Locally calculated
+ sha256  e849b28d324423e636a3e6bc5d583cdaf4bd046c2b20872c53886b612d01a4a1  LEGAL
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 00fa0e0f65..fcc637c5ea 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 3.3
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).0
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
+ RUBY_VERSION_EXT = 3.3.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
