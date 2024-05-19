@@ -1,92 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66E29C25B74
-	for <buildroot@archiver.kernel.org>; Sat, 18 May 2024 20:47:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88E31C25B75
+	for <buildroot@archiver.kernel.org>; Sun, 19 May 2024 04:50:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BAA7405D5;
-	Sat, 18 May 2024 20:47:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2789B400A6;
+	Sun, 19 May 2024 04:50:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BHKpbFwn1RQC; Sat, 18 May 2024 20:47:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2dpUfqIbVfVL; Sun, 19 May 2024 04:50:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9D43405EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29AE44025D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9D43405EA;
-	Sat, 18 May 2024 20:47:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2328C1BF3F0
- for <buildroot@lists.busybox.net>; Sat, 18 May 2024 20:47:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 29AE44025D;
+	Sun, 19 May 2024 04:50:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A75C1C32C3
+ for <buildroot@lists.busybox.net>; Sun, 19 May 2024 04:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 102CE60614
- for <buildroot@lists.busybox.net>; Sat, 18 May 2024 20:47:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43CEB81F1A
+ for <buildroot@lists.busybox.net>; Sun, 19 May 2024 04:50:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6QyHdlI5eNOB for <buildroot@lists.busybox.net>;
- Sat, 18 May 2024 20:47:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w6cBLEy6WTgR for <buildroot@lists.busybox.net>;
+ Sun, 19 May 2024 04:50:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::230; helo=mail-lj1-x230.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ED681605ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED681605ED
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
- [IPv6:2a00:1450:4864:20::230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ED681605ED
- for <buildroot@buildroot.org>; Sat, 18 May 2024 20:47:06 +0000 (UTC)
-Received: by mail-lj1-x230.google.com with SMTP id
- 38308e7fff4ca-2e564cad1f6so42369621fa.1
- for <buildroot@buildroot.org>; Sat, 18 May 2024 13:47:06 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
+ envelope-from=dm.chestnykh@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B2BF081F05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2BF081F05
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B2BF081F05
+ for <buildroot@buildroot.org>; Sun, 19 May 2024 04:50:20 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id
+ 2adb3069b0e04-523bb4c7e2dso139849e87.0
+ for <buildroot@buildroot.org>; Sat, 18 May 2024 21:50:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1716065224; x=1716670024;
+ d=1e100.net; s=20230601; t=1716094218; x=1716699018;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=o34IHJ9nTC4l+4kwvDdhOviK0XhPqRny44cTxtnATQ8=;
- b=h020qGxmwFRcFHl8hebpsbW2SqJjBbw6EYyVAsflSJUyTUuxP7zdKNHuWxzXhrrT7f
- r7BmDlXPR9ZuyLTJn1i+QhETA0qUo4kNI6Z/Pqtsr7hpxghZqGi3+HeitUZRCpMZuWF8
- UGGP0+ADjLNTxhiIH3MtcWOE9M55kyc0ucN7gH5ioFgifL09hUkg2o7UpaS5lzTIhHLQ
- yby9r5qf9//4HpLznrI0v8bw6b7ZvxwRYo32st8VgkAaO2b9MuHSs9jb1MYz0mPVU34V
- s8YSTHLS2tOWUdvcRW+YJ5cZB5QUKAOKG8MXcSFalbwBtjTCl2NPkn8K+deWWBQVAVP4
- rw2w==
-X-Gm-Message-State: AOJu0Yy0GVrJsVEqYZ+X+iRTH6eCceGi7WKa/OZ4v4qVP+q15gEOJUYZ
- IO00PHuhhLLn2XTnQ0me0T0K1amH5H7DJ7fzGxJ2gRbbf2D19xtYGWBzcw==
-X-Google-Smtp-Source: AGHT+IFlxr6ic9ALDH1NCcMtlnfg02ikHEaAar1yDQe35cmIDl/8VEb27snA8l9CAazAFGEjOTwY+g==
-X-Received: by 2002:a2e:2c0c:0:b0:2e7:102f:7aeb with SMTP id
- 38308e7fff4ca-2e7102f7d5cmr31659551fa.40.1716065223584; 
- Sat, 18 May 2024 13:47:03 -0700 (PDT)
-Received: from development2.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-574ea5d755bsm6176934a12.51.2024.05.18.13.47.02
+ bh=QkPxEAVcbqCBlgLs4rVkCdNYMP3w6LAlZGyudvl6kOs=;
+ b=SFD5c6FwN4UEbh2v8s2aY3hTTRgAhS/sNyrYVQxgugq0lCZQchuDQphpaUFLrsbo2K
+ Gjt7XwFzKpG5xdu+WXrIo1Rhz0RoEePlTMUPQDBhO3u/5GgaNj4L8iNIOtEqPXqQmAHp
+ sDRyx1nyGXh8FwpiYTB0T5kKrHyrthhExGNAhIVGTIiT9+0OF6oTVL0OTUndRI0zem8W
+ Iauzwld51e94xHyfPEZ3YazCTMBN2XgbaQwAok4wWuwdz20++DHzkmL7XB58QOS2amFv
+ k/inSaaP0XMT3OzD0GTO6MSarbnvv1dhyl1isCqSdeV9mVMXqEhlI6wQ/1CRtAluLFuv
+ 9RJw==
+X-Gm-Message-State: AOJu0Yx+By8fegq0wR19uUImG/CKP9THr4jLXLX325xLsjPHsfub1wov
+ WPdfhbm9tfOPTIzr106HIi2s9rUW94Q6/aKHPH/BqzmBSWWtCrfYjt5v4w==
+X-Google-Smtp-Source: AGHT+IEkL8dcVNCLFN0/TWhrh2shhHI8sQoYA103qBFwmGr/tXzr9c4t0SefW8Z407Rdu2+KxJ419A==
+X-Received: by 2002:a05:6512:3b94:b0:51a:e38d:4e0b with SMTP id
+ 2adb3069b0e04-5220f86a1f5mr19470987e87.0.1716094217732; 
+ Sat, 18 May 2024 21:50:17 -0700 (PDT)
+Received: from localhost.localdomain (109-252-38-243.nat.spd-mgts.ru.
+ [109.252.38.243]) by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-521f38d8806sm3773723e87.186.2024.05.18.21.50.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 18 May 2024 13:47:02 -0700 (PDT)
+ Sat, 18 May 2024 21:50:17 -0700 (PDT)
+From: Dmitry Chestnykh <dm.chestnykh@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 18 May 2024 22:46:02 +0200
-Message-Id: <20240518204602.3167167-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 19 May 2024 07:50:03 +0300
+Message-ID: <20240519045003.306052-1-dm.chestnykh@gmail.com>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1716065224; x=1716670024; darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1716094218; x=1716699018; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=o34IHJ9nTC4l+4kwvDdhOviK0XhPqRny44cTxtnATQ8=;
- b=JDcoZ68smFFoZd4VzJhejwRv0fmzqJFo1rhCsNCC1dtsCAFOus+DcZEmt6wml5KKxu
- JvnXEEsJkymNBfC3/8lVUDt4F2wzNLTCiabS6mdl28N1DPMKS7mnTGXzBC0wC/Cyi1dK
- 3owp228YTKlWol4Z2qgwk6vl0PGMjuAKQyuXE0R0ThfH66KNq7iWRwuWeEm5Gm4qbM1O
- wPYn3uh2kEiykFtChNemeL9uoyEOi5dCPC3jN6jT7VnfnK6HR+8E4q8I3F9DvUVJgHPI
- ZDtauBAbSmfZni8LTFe29X2CaL0KrVYreB80PMssXwVRURDKatV2ZAAh0hEizGAwCye7
- Mlsw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JDcoZ68s
-Subject: [Buildroot] [PATCH v2] package/ntp: fix build with GCC 14.x
+ bh=QkPxEAVcbqCBlgLs4rVkCdNYMP3w6LAlZGyudvl6kOs=;
+ b=W9soCn2V6x4SYzppFcO4fUM7ccAvvmuArbc4Wj5V0GRb21h7mAHl7pDVX+1ljPckSf
+ +TsAyd1UOD2Ca38B+42kGPFtDMogUq941SFSUbbbLlD7OsxEiBe4TUYErYVD3gsrgq3c
+ b3YABKMnQMJlMiA+PcQU6o03nzxD+gT1FXLFVHsVztnB1Zyql6GWNIOhj9iSjlRGk3m5
+ Ln6MY7odac6zJcaqFd9aNeQzAIeGDAujeyS++ioPy6//e6xwfO2vFWx6UskbcATS9k7m
+ BMqq/AD2FPqjIRt6r/ZvlAI6DtFRBvINEOrqxZGrNwPK7kP+OCcapjkvh7fe6MHu1nM8
+ WFyA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=W9soCn2V
+Subject: [Buildroot] [PATCH] package/uclibc-ng-test: Bump to the latest git
+ version.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,99 +101,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Bernd Kuhls <bernd@kuhls.net>
+Cc: Dmitry Chestnykh <dm.chestnykh@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Upstream contains new tests and refactoring
+of the existing functionality.
 
-Fix pthread_detach() detection that is broken when building
-with GCC 14.x:
-
-checking for pthread_kill... yes
-checking for pthread_rwlock_destroy with <pthread.h>... yes
-checking for pthread_detach with <pthread.h>... no
-configure: error: could not locate pthread_detach()
-make[1]: *** [package/pkg-generic.mk:273:
-/home/user/buildroot/bsp-barebox/build/ntp-4.2.8p17/.stamp_configured]
-Error 1
-make: *** [Makefile:82: _all] Error 2
-
-Reference: https://bugs.ntp.org/show_bug.cgi?id=3926
-
-Additionally, refresh patch 0002 to fix the offset of hunk 1.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
 ---
-Changes v1 -v2:
- - add upstream reference (Yann E. MORIN)
- - rework 0002 refresh reason (Yann E. MORIN)
- - add error log
+ DEVELOPERS                                 | 1 +
+ package/uclibc-ng-test/uclibc-ng-test.hash | 2 +-
+ package/uclibc-ng-test/uclibc-ng-test.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
- package/ntp/0002-ntp-syscalls-fallback.patch  |  9 ++++---
- .../ntp/0003-fix-pthread-detach-check.patch   | 27 +++++++++++++++++++
- 2 files changed, 32 insertions(+), 4 deletions(-)
- create mode 100644 package/ntp/0003-fix-pthread-detach-check.patch
-
-diff --git a/package/ntp/0002-ntp-syscalls-fallback.patch b/package/ntp/0002-ntp-syscalls-fallback.patch
-index 535fc93dfd..46704b9d3f 100644
---- a/package/ntp/0002-ntp-syscalls-fallback.patch
-+++ b/package/ntp/0002-ntp-syscalls-fallback.patch
-@@ -8,10 +8,11 @@ Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-  configure.ac | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
-
--diff --git a/configure.ac b/configure.ac
----- a/configure.ac
--+++ b/configure.ac
--@@ -1523,11 +1523,11 @@ AC_CACHE_CHECK(
-+Index: ntp-4.2.8p17/configure.ac
-+===================================================================
-+--- ntp-4.2.8p17.orig/configure.ac
-++++ ntp-4.2.8p17/configure.ac
-+@@ -1472,11 +1472,11 @@ AC_CACHE_CHECK(
-      [ntp_cv_var_ntp_syscalls],
-      [
-  	ntp_cv_var_ntp_syscalls=no
-diff --git a/package/ntp/0003-fix-pthread-detach-check.patch b/package/ntp/0003-fix-pthread-detach-check.patch
-new file mode 100644
-index 0000000000..ffe5daa06d
---- /dev/null
-+++ b/package/ntp/0003-fix-pthread-detach-check.patch
-@@ -0,0 +1,27 @@
-+fix pthread_detach check
-+
-+Refrence:
-+ https://bugs.ntp.org/show_bug.cgi?id=3926
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ sntp/m4/openldap-thread-check.m4 |    6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
-+
-+Index: ntp-4.2.8p17/sntp/m4/openldap-thread-check.m4
-+===================================================================
-+--- ntp-4.2.8p17.orig/sntp/m4/openldap-thread-check.m4
-++++ ntp-4.2.8p17/sntp/m4/openldap-thread-check.m4
-+@@ -262,10 +262,8 @@ pthread_rwlock_t rwlock;
-+ 				dnl save the flags
-+ 				AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-+ #include <pthread.h>
-+-#ifndef NULL
-+-#define NULL (void*)0
-+-#endif
-+-]], [[pthread_detach(NULL);]])],[ol_cv_func_pthread_detach=yes],[ol_cv_func_pthread_detach=no])
-++pthread_t thread;
-++]], [[pthread_detach(thread);]])],[ol_cv_func_pthread_detach=yes],[ol_cv_func_pthread_detach=no])
-+ 			])
-+
-+ 			if test $ol_cv_func_pthread_detach = no ; then
---
-2.34.1
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 52c9b84a9d..ba81ddb5cf 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -851,6 +851,7 @@ F:	package/wireless-regdb/
+ N:	Dmitry Chestnykh <dm.chestnykh@gmail.com>
+ F:	board/qemu/sparc-ss10/
+ F:	configs/qemu_sparc_ss10_defconfig
++F:	package/uclibc-ng-test/
+ 
+ N:	Dominik Faessler <faessler@was.ch>
+ F:	package/logsurfer/
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.hash b/package/uclibc-ng-test/uclibc-ng-test.hash
+index dc0499001e..38621062be 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.hash
++++ b/package/uclibc-ng-test/uclibc-ng-test.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7f5badc6621eb9dbc9030121bfa6d4d1ccf680a346cd15c6dca05a6e03010d96  uclibc-ng-test-0f303c63fab7f4038515ced6f2659242cf60ac19-git4.tar.gz
++sha256  fae9be86b0eb050e139047d934e7e02599d074d481523dead65ce164c8453500  uclibc-ng-test-132c6134d69146bcafbdda68ae3a9cbd9f8fb921-git4.tar.gz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
+index 7d62401244..a80b64349b 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.mk
++++ b/package/uclibc-ng-test/uclibc-ng-test.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_NG_TEST_VERSION = 0f303c63fab7f4038515ced6f2659242cf60ac19
++UCLIBC_NG_TEST_VERSION = 132c6134d69146bcafbdda68ae3a9cbd9f8fb921
+ UCLIBC_NG_TEST_SITE = https://git.uclibc-ng.org/git/uclibc-ng-test.git
+ UCLIBC_NG_TEST_SITE_METHOD = git
+ UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
+-- 
+2.45.1
 
 _______________________________________________
 buildroot mailing list
