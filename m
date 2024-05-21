@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A49CDC25B7A
-	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 12:16:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BD6FC25B75
+	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 12:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E481B40669;
-	Tue, 21 May 2024 12:16:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 761F740694;
+	Tue, 21 May 2024 12:16:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kiLvMfz-5A7P; Tue, 21 May 2024 12:16:15 +0000 (UTC)
+ id Cm9L7y7IK-5P; Tue, 21 May 2024 12:16:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71AD54061F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC5FE40657
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71AD54061F;
-	Tue, 21 May 2024 12:16:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC5FE40657;
+	Tue, 21 May 2024 12:16:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 44CFB1C525D
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 12:16:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 291C91C525D
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 12:16:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 204B1402CA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F08B40232
  for <buildroot@lists.busybox.net>; Tue, 21 May 2024 12:15:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eJAd5OniMhh1 for <buildroot@lists.busybox.net>;
+ id ES_1a9vsGB76 for <buildroot@lists.busybox.net>;
  Tue, 21 May 2024 12:15:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2631440232
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E89B402AF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2631440232
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E89B402AF
  for <buildroot@buildroot.org>; Tue, 21 May 2024 12:15:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C490874B6; Tue, 21 May 2024 12:15:57 +0000 (UTC)
+ id A80DF874B4; Tue, 21 May 2024 12:15:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 May 2024 11:28:28 +0200
+Date: Tue, 21 May 2024 14:14:42 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: a685e7866bc11dbdd7777c88d0a26c38151948e8
-X-Git-Newrev: 00d911b9c6398acf71de189ee2ca39c03706e875
+X-Git-Oldrev: f5c0965c24711f8960788fd537c82f3699137018
+X-Git-Newrev: 535c0a5ada8f9a086b0db341a4e11df1ddf43c9f
 X-Patchwork-Hint: ignore
-Message-Id: <20240521121557.7C490874B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/intel-gmmlib:
- bump version to 22.3.19
+Message-Id: <20240521121557.A80DF874B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libpng: bump
+ version to 1.6.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00d911b9c6398acf71de189ee2ca39c03706e875
+commit: https://git.buildroot.net/buildroot/commit/?id=535c0a5ada8f9a086b0db341a4e11df1ddf43c9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+
+Release notes:
+https://sourceforge.net/p/png-mng/mailman/message/58741099/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d476d2e7e53a92d4e2c038875cb3255dfb11d167)
+(cherry picked from commit ce3ce432feda336e4476eb930353fed8e3318539)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libpng/libpng.hash | 4 ++--
+ package/libpng/libpng.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index d9cad026c4..aadf01a169 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  381f7ad104e3d0d8dd6c3ec0c8304e410a479c439e72db35c83fb7e2b0ec556f  intel-gmmlib-22.3.18.tar.gz
-+sha256  ea9c418b0fd84a982850f230cb2d783dfe2e1f9923065f54b2fcaad1e9b33417  intel-gmmlib-22.3.19.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index 94a07ebfb8..74e19e93fd 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index fbae14c51d..356c0e3e5d 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/png-mng/mailman/message/58731120/
+-sha256  c919dbc11f4c03b05aba3f8884d8eb7adfe3572ad228af972bb60057bdb48450  libpng-1.6.42.tar.xz
++# From https://sourceforge.net/p/png-mng/mailman/message/58741099/
++sha256  6a5ca0652392a2d7c9db2ae5b40210843c0bbc081cbd410825ab00cc59f14a6c  libpng-1.6.43.tar.xz
+ # Locally computed:
+ sha256  7317e078e2d3b5d7ba5a6159e650945153262b44b76f6700f8e9edb261c5143e  LICENSE
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index c4da9f89c7..af38afde47 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_GMMLIB_VERSION = 22.3.18
-+INTEL_GMMLIB_VERSION = 22.3.19
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+-LIBPNG_VERSION = 1.6.42
++LIBPNG_VERSION = 1.6.43
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
