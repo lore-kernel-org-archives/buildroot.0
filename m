@@ -4,90 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15D07C25B74
-	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 09:33:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEF59C25B74
+	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 10:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B9E181F67;
-	Tue, 21 May 2024 09:33:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 34FD881FD4;
+	Tue, 21 May 2024 10:32:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WSmzGHT3y_RS; Tue, 21 May 2024 09:33:01 +0000 (UTC)
+ id 82RDjudO301a; Tue, 21 May 2024 10:32:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEC5881E02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D8C881E3B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEC5881E02;
-	Tue, 21 May 2024 09:33:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 84A881C50A9
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 09:32:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D8C881E3B;
+	Tue, 21 May 2024 10:32:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B0701C5114
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 10:32:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 706E340373
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 09:32:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 830A681E3B
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 10:32:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jDGKIYaf4wtZ for <buildroot@lists.busybox.net>;
- Tue, 21 May 2024 09:32:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 54FAAJSA9F8l for <buildroot@lists.busybox.net>;
+ Tue, 21 May 2024 10:32:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C97F840395
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C97F840395
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
- [IPv6:2a00:1450:4864:20::129])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C97F840395
- for <buildroot@buildroot.org>; Tue, 21 May 2024 09:32:57 +0000 (UTC)
-Received: by mail-lf1-x129.google.com with SMTP id
- 2adb3069b0e04-52449b7aa2bso2141717e87.3
- for <buildroot@buildroot.org>; Tue, 21 May 2024 02:32:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1716283975; x=1716888775;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Xx6o9j3VqtpasSCVYCtphGsG6vkW9OnOF/IiuPi4RbE=;
- b=fyPt9XLQz5vG3NLmeGuGwvKSNfo5UIcefEK4/xMxA0Hk0XE8OkxbppMwYEHqmc/88e
- 6fO4J1/NFoFyQfAadJdqiYQOhCAPD14nnRMoG/COlQrn7/b3W4dlh56hiXycfYBsS5yM
- jyy1jgQa3QudW/8P7sbdIBV9AxOD7NfOckcSw0Bv12vFbTQLfhiiEzGi2WZO9zlT/PnF
- rISV//fWBVQstasCGQgkbAb3CiMcFfcuNIZlwk2fDdmPPsZZIk6itjWpKyZ3gJ8gPpx/
- NkTPWksdX7VZniytzHJXBvnqBPjK3doDmamL0RqFQAdg1yg3siPRdutJe+82F0qycVQN
- Yt+g==
-X-Gm-Message-State: AOJu0Yy+LXSvgOlAQ70ixz2evG+qN44LzEba5CuVvAi3rc32rh3qXFAl
- ziIVyQT7muDlE606E+cFF1/v8wYC1lx3ePG91k5gbHZumzQAFJ/+kwVNIjUOOjVPvd7FuGKaafk
- QN0rC5PsYk4FRFVhgAmN0dya5o9NpWQ==
-X-Google-Smtp-Source: AGHT+IH2KsXz+2elYxpxDbCBLKPDzHoCwmX+/JM3kbqUVWXeE+ayk5MvoRu9K85Fvuoeg5ekMInF7SzRkWFWlhOefRY=
-X-Received: by 2002:ac2:4a6c:0:b0:51d:4c0a:a512 with SMTP id
- 2adb3069b0e04-52210273e3cmr18506012e87.68.1716283975406; Tue, 21 May 2024
- 02:32:55 -0700 (PDT)
+ client-ip=2604:1380:4641:c500::1; helo=dfw.source.kernel.org;
+ envelope-from=jarkko@kernel.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 543EA81E28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 543EA81E28
+Received: from dfw.source.kernel.org (dfw.source.kernel.org
+ [IPv6:2604:1380:4641:c500::1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 543EA81E28
+ for <buildroot@buildroot.org>; Tue, 21 May 2024 10:32:04 +0000 (UTC)
+Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
+ by dfw.source.kernel.org (Postfix) with ESMTP id 19D0761E01;
+ Tue, 21 May 2024 10:32:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BF9C2BD11;
+ Tue, 21 May 2024 10:32:02 +0000 (UTC)
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: buildroot@buildroot.org
+Date: Tue, 21 May 2024 13:31:51 +0300
+Message-ID: <20240521103154.32660-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-References: <20240517120057.3736694-1-yegorslists@googlemail.com>
- <ZkehJQxCJHZRJ1lr@landeda>
- <CAGm1_kuhYZ1uCnWquBBnhS89T7antGULc811jzaMAhtiHKFJJg@mail.gmail.com>
- <Zkh_4z6uQm4QNOds@landeda>
-In-Reply-To: <Zkh_4z6uQm4QNOds@landeda>
-Date: Tue, 21 May 2024 11:35:21 +0200
-Message-ID: <CAGm1_ks6pexetTMRV80zXMz4x_ppHNFRB30Gj3o3uy3c7qUdMQ@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1716283975; x=1716888775; darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Xx6o9j3VqtpasSCVYCtphGsG6vkW9OnOF/IiuPi4RbE=;
- b=JcYIoiwz09MFzMdhGby2HQbUAosYmzMXelJnSN94NB9kgnMT0Qt5sDpQOlfJFkqhQq
- 6Mhb6xQs/ctkq71YptZFvjEQnrG+0/UFXMvfuOuenE+A98VqQIZoo9PZltKcYVBunHcj
- jyk9qqgzRI3IgCkU9JpPBXraVhf+ADkYuAc94Yyd7FIbL0Xh+n+Wdf24tUR4QbGr2Yc2
- hTKGBmF1ZxG8lERXQXoIqZc3o+PewACf5Y4oXAR3PlXK5c/XvqZhNkW0uj42R1ihWNHy
- zU4Szy9/Y0SU5TbbjU+ytbSBgXD3/7queZ9G12LZLt8yOOXaLiLhM93dvJ/SKDR2+OZJ
- nsKQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JcYIoiwz
-Subject: Re: [Buildroot] [PATCH] package/ntp: fix build with GCC 14.x
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=kernel.org; s=k20201202; t=1716287522;
+ bh=PIf9Ke6PmUOQP+OclR7M+/XfTGSgZvN0H7aHHuCmF1I=;
+ h=From:To:Cc:Subject:Date:From;
+ b=NfTIkL8kq3HDEm3KE1UzxQ9kGXMmxFt9Mc7jcaKUWuzMVMg81wyP36vQGYwqHPDHH
+ MbuhwG8Hax8+dQEeZhAwY3/kIV3Rr/SYrA1Rx5GHG5qOcPVwFb/ynHqUGORh2AzRBl
+ bJOHBWT42y19wBDn9wQEGUZMtVRA5kDHT0CFnLMDsSQom5vHUWHlb7uxUnRbVB0+ee
+ YEYj4BfG9lt9JgKbQaZMuMewcLk/3uP/zoeIVWQCXcpOhu+kAYpsTCLVHD37FYNgAD
+ vKxa9xvwIL7eajaD/cRNqVF6tUtMrc+FPkOdpJjrueCLKFPBPSN64hbrlWU9U03Ilf
+ WwoF2MtonLFBQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kernel.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
+ header.s=k20201202 header.b=NfTIkL8k
+Subject: [Buildroot] [PATCH v4 0/3] swtpm and libtpms host packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,33 +78,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>, Julien Olivain <ju.o@free.fr>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Stefan Berger <stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-WWFubiwgQWxsLAoKT24gU2F0LCBNYXkgMTgsIDIwMjQgYXQgMTI6MTbigK9QTSBZYW5uIEUuIE1P
-UklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4gd3JvdGU6Cj4KPiBZZWdvciwgQWxsLAo+Cj4g
-T24gMjAyNC0wNS0xOCAxMjowMCArMDIwMCwgWWVnb3IgWWVmcmVtb3Ygc3Bha2UgdGh1c2x5Ogo+
-ID4gTm93LCBpdCBpcyBvZmZpY2lhbDogaHR0cHM6Ly9idWdzLm50cC5vcmcvc2hvd19idWcuY2dp
-P2lkPTM5MjYKPgo+IFRoYXQncyBncmVhdCwgdGhhbmtzISBBbmQgdXBzdHJlYW0gbG9va3MgcXVp
-dGUgaGFwcHkgd2l0aCBpdC4gOi0pCj4KPiA+IEknbGwgd2FpdCB0aWxsIHRoZSBwYXRjaCBpcyBj
-b21taXR0ZWQgYW5kIHRoZW4gd2lsbCBtYWtlIHYyLgo+Cj4gWW91IGRvbid0IG5lZWQgdG8gd2Fp
-dCBmb3IgdGhlIHBhdGNoIHRvIGJlIGFwcGxpZWQgdXBzdHJlYW07IGp1c3QgYWRkIGFuCj4gdXBz
-dHJlYW0gdGFnIHRvIHRoZSBwYXRjaCwgcG9pbnRpbmcgdG8gdGhhdCBidWcgcmVwb3J0Ogo+Cj4g
-ICAgIFVwc3RyZWFtOiBodHRwczovL2J1Z3MubnRwLm9yZy9zaG93X2J1Zy5jZ2k/aWQ9MzkyNgo+
-ICAgICBTaWduZWQtb2ZmLWJ5OiBZb3UKPgo+IFRoYXQgd2F5LCB0aGUgbmV4dCBwZXJzb24gdG8g
-YnVtcCBudHAgY2FuIGFzc2VzcyB3aGV0aGVyIHRoYXQgcGF0Y2gKPiBuZWVkcyB0byBiZSBjYXJy
-aWVkL3JlYmFzZWQvZHJvcHBlZCwgYnkgY2hlY2tpbmcgdGhlIHVwc3RyZWFtIHN0YXR1cy4KCldl
-IGFyZSBhbG1vc3QgdGhlcmUuIFRoZSBmaXggbGFuZGVkIGF0IHRoZSBtYWludGFpbmVyJ3MgcGVy
-c29uYWwgcmVwby4KCkFub3RoZXIgc2hvdyBzdG9wcGVyIHdpdGggR0NDIDE0LnggaXMgbHJ6c3ou
-IFRoZXJlIGFyZSBhIGxvdCBvZiBpc3N1ZXMKZGVzY3JpYmVkIGluIHRoaXMgb25lIFsxXSBhbmQg
-d2l0aG91dCBhbnkgZmVlZGJhY2sgOi0oCgpbMV0gaHR0cHM6Ly9naXRodWIuY29tL1V3ZU9oc2Uv
-bHJ6c3ovaXNzdWVzLzMKCgpZZWdvcgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+Add swtpm and libtpms host packages.
+
+Jarkko Sakkinen (3):
+  package/json-glib: add host build
+  package/libtpms: add host package
+  package/swtpm: add host package
+
+ DEVELOPERS                     |  2 ++
+ package/Config.in              |  1 +
+ package/Config.in.host         |  1 +
+ package/json-glib/json-glib.mk |  6 ++++++
+ package/libtpms/Config.in      | 20 ++++++++++++++++++++
+ package/libtpms/libtpms.hash   |  2 ++
+ package/libtpms/libtpms.mk     | 18 ++++++++++++++++++
+ package/swtpm/Config.in.host   | 11 +++++++++++
+ package/swtpm/swtpm.hash       |  2 ++
+ package/swtpm/swtpm.mk         | 24 ++++++++++++++++++++++++
+ 10 files changed, 87 insertions(+)
+ create mode 100644 package/libtpms/Config.in
+ create mode 100644 package/libtpms/libtpms.hash
+ create mode 100644 package/libtpms/libtpms.mk
+ create mode 100644 package/swtpm/Config.in.host
+ create mode 100644 package/swtpm/swtpm.hash
+ create mode 100644 package/swtpm/swtpm.mk
+
+--
+2.45.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
