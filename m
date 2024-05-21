@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2ADDC25B74
-	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 18:26:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2EBCC25B74
+	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 19:00:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64AB3608FE;
-	Tue, 21 May 2024 18:26:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0571460A61;
+	Tue, 21 May 2024 19:00:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v2yrK2riLhuo; Tue, 21 May 2024 18:26:13 +0000 (UTC)
+ id rW2VBY7DJfDO; Tue, 21 May 2024 19:00:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BCA860906
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F47060A62
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BCA860906;
-	Tue, 21 May 2024 18:26:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 71D0F1C5452
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 18:26:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F47060A62;
+	Tue, 21 May 2024 19:00:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 995FD1C54BF
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 19:00:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EE5A60906
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 18:26:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 864DD416A5
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 19:00:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hL1X8rLsbAnw for <buildroot@lists.busybox.net>;
- Tue, 21 May 2024 18:26:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6adCtuksqqiZ for <buildroot@lists.busybox.net>;
+ Tue, 21 May 2024 19:00:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BB91E608FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB91E608FE
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BB91E608FE
- for <buildroot@buildroot.org>; Tue, 21 May 2024 18:26:10 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-354b722fe81so3432984f8f.3
- for <buildroot@buildroot.org>; Tue, 21 May 2024 11:26:10 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CC8D141588
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC8D141588
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CC8D141588
+ for <buildroot@buildroot.org>; Tue, 21 May 2024 19:00:07 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-354b7d76c52so3448600f8f.3
+ for <buildroot@buildroot.org>; Tue, 21 May 2024 12:00:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1716315968; x=1716920768;
+ d=1e100.net; s=20230601; t=1716318005; x=1716922805;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Gc35/J78+8AUCLtNpoZr3/pFqShYtZS4Z77ze7NM3bI=;
- b=clTlH/GTQZlhYmiK17HS5hqa3H0XFRxgaCzLRLP/75ZP8Wou5/LSnVnFSeeuOctJF3
- kbaXVG1Hf8cyl/C+WUC+3G06ZH0h5crm4SdHG8vycDWp0qqx0rcjQs9PAiRNc4xMK4uc
- ASBqfHrlOAUUrkZLDKBJ4Jeu0L9hia3CFvYVUEQRWrOoQZMyvEL3YVanU4aG5a6gpUyT
- M+5uNEfUZvjoE5eQ95AIOEm+jTE3Ze4jd8cJhfH6SqyEFRN2HJmWlpT79e+B1CCXIHCK
- EkwKmJjEPo8utv1Ch0UUc1cYXKVSOyaslDEII8oBESEV9qC8anLg5F/W90V09HGMDl/Z
- SBzQ==
-X-Gm-Message-State: AOJu0Yxmdc1iTfPv6/KY0Mn2DF0kDtThc7KH3nkvOhyvFS8E1hXg2aCS
- BHUVaMV7uJ66YVZnku8uI/GTXMXW7iwNZOSRO5fdvQUvNfgK1E02euhroQ==
-X-Google-Smtp-Source: AGHT+IGzo+/jbxrh1J4V6K47xllfw5zWvvD9DIVzS/EKR627RkPNeFT+I+/UEVDlbfFSQeH9T0a/dQ==
-X-Received: by 2002:a5d:43c2:0:b0:354:d437:1e67 with SMTP id
- ffacd0b85a97d-354d4371f48mr500876f8f.27.1716315967832; 
- Tue, 21 May 2024 11:26:07 -0700 (PDT)
+ bh=z795xKAST8JmwYSF+HA8mYc1LkcrWf7qdvM3+zkLwkg=;
+ b=IKN4yG61v5cAx0s0G0AcjIAQe4DnOCwdd1De5YFgLK8KRptr1imDkRvL2VA5Jnaxr+
+ wXTMD2k1ocpYlGMrqGZd6uCfHzRFAQ7aV5Ylcq+2FjqpGBdIex2H40RRcLheaZ5U3fnC
+ ccBIWIZ8YLGNMeOHEkyUXXa1V1z4s8kj2uYjFqYXxF+TK9Xb6915urabuIFPrh8MK/CE
+ 4HgNoJVFDXsE3HLoHINfY7YiIa5ciPZDh/+Sd6E2CBIC0MRl66Sy9sf4Y/RpmJvcc56l
+ gdXlp4iuBSXheZAs7aUTAk7qNWdB+OYXnM7bZOZQ6Qb7og2exKlj0CkRnjUs1m3RLdOQ
+ 6Asw==
+X-Gm-Message-State: AOJu0Yza2TWcBcud+TROyEuiQnupPqjbpub/CFEqdSigK9Mg5BHI4Jla
+ bTDWTpVQiUNH7/mM1SHONyMg+RdfoxoH2DLs4IqDk2Odk135cwiyBaALZA==
+X-Google-Smtp-Source: AGHT+IEWc8aRqFnP2xQcjXJ2Zbk7yaYk0SWiCe9bkMkGK5uxqhGIbFW5PIJnwGXqF226J85glxEOdQ==
+X-Received: by 2002:adf:e501:0:b0:34f:4cc7:88f5 with SMTP id
+ ffacd0b85a97d-3504a737029mr20239806f8f.27.1716318005128; 
+ Tue, 21 May 2024 12:00:05 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-354d0dae938sm2028143f8f.9.2024.05.21.11.26.07
+ ffacd0b85a97d-354bd2e2a5asm9503519f8f.45.2024.05.21.12.00.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 21 May 2024 11:26:07 -0700 (PDT)
+ Tue, 21 May 2024 12:00:04 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 21 May 2024 20:25:59 +0200
-Message-ID: <20240521182559.5676-1-fontaine.fabrice@gmail.com>
+Date: Tue, 21 May 2024 21:00:01 +0200
+Message-ID: <20240521190001.271761-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1716315968; x=1716920768; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1716318005; x=1716922805; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Gc35/J78+8AUCLtNpoZr3/pFqShYtZS4Z77ze7NM3bI=;
- b=OudCcMFBary8fFEvN+oAQ4uaqsLeKXL/koh9rVFp3gwlh1E5WzSPyPsBh3cUmYSKCk
- 0kmfjk2iNmAZ0a3mvfT6P2rgrjAf/jZ0sSNE5TUGsmSUWZwyFTjKBPUmm5aXq347pwA6
- ZhLgf4Be/RSvDd2ILbvzVOdZT9707bZXTNaeu4Jv68Rv4V8g3pPgdybv7WrAT12KNVuK
- +/He53VB3txVZu2DVX1seUdg/zmAZrFNg5ObErlhiOTbH5IrIOOxbdLKSYrfId8I2jJ6
- aJc92pr1RjYZc4j81BRgM02dgxQksK3NRzrFhY4jtJ607ilbaPijLNLXqPL20XrX7CkX
- 3Uzg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=z795xKAST8JmwYSF+HA8mYc1LkcrWf7qdvM3+zkLwkg=;
+ b=E8kEHZBls5u0FEpD7o8v39kI7iQoC0UgeV7D/VftqeMx26NMpr5wrig261xgS1/VbE
+ RD2R6U1IimVTuf8H69Y1o3P3ZgjUcg/lvVzGNPFjD8yUBHktxYExjwVOV/LpVKhuKyHP
+ ueJssTwl5fWC8hg5uIp8RnDJj2WzQBB70orqVQXRehocJuj3+nlhvQlmgVKK3cWb2jSc
+ 5HLmt6Hczw2uHu1XE/NbFVwJX3Hx/QXuawr5eH7bZqpsndrxe8DVqAcGB1lhCo18p7bd
+ L0FE/+ZgEZBj+zq8sVic2b2MEB5yKi0UY6t/y7UWKXtu66k/NtjKadTOGSgHOg1BID2S
+ Q7Vw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=OudCcMFB
-Subject: [Buildroot] [PATCH 1/1] package/lmdb: fix CFLAGS handling
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=E8kEHZBl
+Subject: [Buildroot] [PATCH 1/1] package/dhcpdump: bump to version 1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,64 +106,132 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-By passing TARGET_CONFIGURE_OPTS to make, the following usptream CFLAGS
-are completely overriden:
+- Switch to an active fork (which is already used by Fedora 39)
+- Drop patch (not needed since
+  https://github.com/bbonev/dhcpdump/commit/be272278c3c3fd7fe0d30203d9047fff6b83fa44)
+- HAVE_STRSEP has been dropped since
+  https://github.com/bbonev/dhcpdump/commit/0f7c525da62e7ae928782b2beae9c5313fb972f8
+- CFLAGS and LDFLAGS must be set since
+  https://github.com/bbonev/dhcpdump/commit/6eac74e7efb88bcce9423b3a452dcaa1d48850f0
+- This bump will fix the following build failure with gcc 14 thanks to
+  https://github.com/bbonev/dhcpdump/commit/be272278c3c3fd7fe0d30203d9047fff6b83fa44:
 
-CFLAGS	= $(THREADS) $(OPT) $(W) $(XCFLAGS)
+dhcpdump.c: In function 'pcap_callback':
+dhcpdump.c:153:17: error: implicit declaration of function 'strftime' [-Wimplicit-function-declaration]
+  153 |                 strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S.",
+      |                 ^~~~~~~~
+dhcpdump.c:28:1: note: include '<time.h>' or provide a declaration of 'strftime'
+   27 | #include "dhcp_options.h"
+  +++ |+#include <time.h>
+   28 |
 
-As a result, setting XCFLAGS is a no-op and -pthread is not passed
-resulting in the following build failure since the addition of the
-package in commit eb60c4054c25129d78651a66d1e7554aff04767f:
+https://github.com/bbonev/dhcpdump/releases/tag/v1.9
 
-//binhome//.buildroot.//autobuildlib//rungcc//instancepowerpc64--3buildroot/-outputlinux--1gnu//host9.3.0//opt./.ext/-.toolchain.//bin./../../.lib//powerpc64gcc-/buildrootpowerpc64--linuxbuildroot--gnulinux/-bingnu//ld9.3.0:/ .mdb.c.:/(...text/+.0x1a44.)/:. .undefined/ powerpc64reference- buildrootto `pthread_setspecific'
-
-Fixes: eb60c4054c25129d78651a66d1e7554aff04767f
- - http://autobuild.buildroot.org/results/d67c5a99b7d58826e544f1210fa36bb3bc180739
+Fixes:
+ - http://autobuild.buildroot.org/results/9e559d634ac4e06f74f7b9e0402e45209aef2952
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/lmdb/lmdb.mk | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ .checkpackageignore                           |  1 -
+ .../0001-use-non-bsd-structures.patch         | 23 -------------------
+ package/dhcpdump/Config.in                    |  2 +-
+ package/dhcpdump/dhcpdump.hash                |  2 +-
+ package/dhcpdump/dhcpdump.mk                  | 13 +++++------
+ 5 files changed, 8 insertions(+), 33 deletions(-)
+ delete mode 100644 package/dhcpdump/0001-use-non-bsd-structures.patch
 
-diff --git a/package/lmdb/lmdb.mk b/package/lmdb/lmdb.mk
-index 06c8f6bbb1..86d72e1abc 100644
---- a/package/lmdb/lmdb.mk
-+++ b/package/lmdb/lmdb.mk
-@@ -18,15 +18,21 @@ else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- LMDB_ILBIBS +=  liblmdb.a liblmdb.so
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 00bf0202a6..36b1dc598c 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -560,7 +560,6 @@ package/dhcp/S80dhcp-relay Shellcheck lib_sysv.Variables
+ package/dhcp/S80dhcp-server Shellcheck lib_sysv.Variables
+ package/dhcp/dhclient-script Shellcheck lib_shellscript.TrailingSpace
+ package/dhcpcd/S41dhcpcd lib_sysv.Indent lib_sysv.Variables
+-package/dhcpdump/0001-use-non-bsd-structures.patch lib_patch.Upstream
+ package/dhrystone/0001-cmdline-nruns.patch lib_patch.Sob lib_patch.Upstream
+ package/dhrystone/0002-HZ.patch lib_patch.Sob lib_patch.Upstream
+ package/dhrystone/0003-exit.patch lib_patch.Sob lib_patch.Upstream
+diff --git a/package/dhcpdump/0001-use-non-bsd-structures.patch b/package/dhcpdump/0001-use-non-bsd-structures.patch
+deleted file mode 100644
+index 40115fb640..0000000000
+--- a/package/dhcpdump/0001-use-non-bsd-structures.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-The udphdr structure has uh_* fields when _FAVOR_BSD is
+-defined. Otherwise, the fields are just named source, dest, len and
+-check. See <netinet/udp.h>.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: dhcpdump-1.8/dhcpdump.c
+-===================================================================
+---- dhcpdump-1.8.orig/dhcpdump.c	2011-05-17 20:20:46.506980003 +0200
+-+++ dhcpdump-1.8/dhcpdump.c	2011-05-17 20:20:59.338979999 +0200
+-@@ -163,10 +163,10 @@
+- 	strcpy(ip_origin, (u_char *)inet_ntoa(ip->ip_src));
+- 	strcpy(ip_destination, (u_char *)inet_ntoa(ip->ip_dst));
+- 
+--	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->uh_ulen)))
+-+	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->len)))
+- 		return;
+- 
+--	printdata((u_char *)(sp + offset), ntohs(udp->uh_ulen));
+-+	printdata((u_char *)(sp + offset), ntohs(udp->len));
+- }
+- 
+- // check for matching CHADDR (Peter Apian-Bennewitz <apian@ise.fhg.de>)
+diff --git a/package/dhcpdump/Config.in b/package/dhcpdump/Config.in
+index e0abe040fc..30e42928e4 100644
+--- a/package/dhcpdump/Config.in
++++ b/package/dhcpdump/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_DHCPDUMP
+ 	help
+ 	  A tool for monitoring dhcp requests using tcpdump.
+ 
+-	  http://www.mavetju.org/unix/general.php
++	  https://github.com/bbonev/dhcpdump
+diff --git a/package/dhcpdump/dhcpdump.hash b/package/dhcpdump/dhcpdump.hash
+index a24db5b275..fdf3243ad1 100644
+--- a/package/dhcpdump/dhcpdump.hash
++++ b/package/dhcpdump/dhcpdump.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6d5eb9418162fb738bc56e4c1682ce7f7392dd96e568cc996e44c28de7f77190  dhcpdump-1.8.tar.gz
++sha256  3658ac21cc33e79e72bed070454e49c543017991cb6c37f4253c85e9176869d1  dhcpdump-1.9.tar.xz
+ sha256  bab6ca76b7e93885396513689b1248dfb0e8fd662695b8bd1b26784ef71a0192  LICENSE
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+index ec9571c0af..21cbd56b9c 100644
+--- a/package/dhcpdump/dhcpdump.mk
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-DHCPDUMP_VERSION = 1.8
+-DHCPDUMP_SITE = http://www.mavetju.org/download
++DHCPDUMP_VERSION = 1.9
++DHCPDUMP_SOURCE = dhcpdump-$(DHCPDUMP_VERSION).tar.xz
++DHCPDUMP_SITE = https://github.com/bbonev/dhcpdump/releases/download/v$(DHCPDUMP_VERSION)
+ DHCPDUMP_DEPENDENCIES = libpcap
+ DHCPDUMP_LICENSE = BSD-2-Clause
+ DHCPDUMP_LICENSE_FILES = LICENSE
+@@ -15,12 +16,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ DHCPDUMP_LIBS += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
  endif
  
-+LMDB_MAKE_OPTS += \
-+	AR="$(TARGET_AR)" \
-+	CC="$(TARGET_CC)" \
-+	ILIBS="$(LMDB_ILBIBS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" \
-+	OPT="" \
-+	XCFLAGS="$(TARGET_CFLAGS)"
-+
- define LMDB_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/libraries/liblmdb \
--		ILIBS="$(LMDB_ILBIBS)" \
--		XCFLAGS="$(TARGET_CFLAGS)"
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb $(LMDB_MAKE_OPTS)
+-# glibc, uclibc and musl have strsep()
+-DHCPDUMP_CFLAGS = $(TARGET_CFLAGS) -DHAVE_STRSEP
+-
+ define DHCPDUMP_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(DHCPDUMP_CFLAGS) \
+-		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
++		LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
  endef
  
- define LMDB_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
--		ILIBS="$(LMDB_ILBIBS)" \
-+		$(LMDB_MAKE_OPTS) \
- 		DESTDIR="$(STAGING_DIR)" \
- 		prefix=/usr \
- 		install
-@@ -34,7 +40,7 @@ endef
- 
- define LMDB_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
--		ILIBS="$(LMDB_ILBIBS)" \
-+		$(LMDB_MAKE_OPTS) \
- 		DESTDIR="$(TARGET_DIR)" \
- 		prefix=/usr \
- 		install
+ define DHCPDUMP_INSTALL_TARGET_CMDS
 -- 
 2.43.0
 
