@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5463FC25B75
-	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 04:58:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E00E6C25B74
+	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 04:59:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1382B40481;
-	Tue, 21 May 2024 04:58:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACE4D40106;
+	Tue, 21 May 2024 04:59:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qygNw66yXe-9; Tue, 21 May 2024 04:58:24 +0000 (UTC)
+ id hYBITS7dX0Mz; Tue, 21 May 2024 04:59:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0089B4064A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BDA340473
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0089B4064A;
-	Tue, 21 May 2024 04:58:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9BDA340473;
+	Tue, 21 May 2024 04:59:29 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 63A061C4F75
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 04:58:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3A5E31BF364
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 04:59:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50CDF6071B
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 04:58:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 27E3E605D0
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 04:59:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id prIkHIohXFcB for <buildroot@lists.busybox.net>;
- Tue, 21 May 2024 04:58:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ id r7np4_4RxIui for <buildroot@lists.busybox.net>;
+ Tue, 21 May 2024 04:59:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 49891607AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49891607AF
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 49891607AF
- for <buildroot@buildroot.org>; Tue, 21 May 2024 04:58:20 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3B98113F86A;
- Tue, 21 May 2024 06:58:16 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 21 May 2024 06:58:16 +0200
-Date: Tue, 21 May 2024 06:58:16 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <Zkwp6I9sjgZKMffw@landeda>
-References: <20240519105436.354168-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240519105436.354168-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1716267499;
- bh=b7Webeetg23qx6ecGxdzvkUwlt3TywEq08ze2KWL4t0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=UOVF7xu5B/YDK4j27+vbqaDe4U5mlVfwKTQiUMQyw3XPxflQnpxeFW40zVklgf5ZC
- HK5duhNPrgy4lY0RNLDdo+rm54FDaWA7kwtIZzuSgQ/akxLPbbk5nNAU4qvJaCo9k2
- 0rmmdyc5+nVgJnv0aYIyfXXp1HIaixDCwweNffbIjFgYIzO4ApLYcETAc20ipklYj+
- f4ueffzPT8xrdf8tolLN420HFNxreUyZbBn5HRv+kj5TMDtdjIMGNToHDFdgzHKQKK
- 9bcz721OUL5amXD6FfUxE1LJfdH0a8qthxXXC6tbY17BnYoGlcvnv9ne0bJ32HOY/m
- 1G+QQoImgsQnw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=UOVF7xu5
-Subject: Re: [Buildroot] [PATCH 1/1] package/ivi-homescreen: needs gcc >= 8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63459605B7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63459605B7
+ for <buildroot@buildroot.org>; Tue, 21 May 2024 04:59:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2649887499; Tue, 21 May 2024 04:59:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 21 May 2024 06:58:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 898cf04e47b5d292afc1ab1e67f59b10b8637b12
+X-Git-Newrev: 47078cc11862c564ece3242fa7c8d23fcb914a8b
+X-Patchwork-Hint: ignore
+Message-Id: <20240521045926.2649887499@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zxing-cpp: add options for
+ enabling readers and/or writers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,80 +59,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=47078cc11862c564ece3242fa7c8d23fcb914a8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-05-19 12:54 +0200, Fabrice Fontaine spake thusly:
-> ivi-homescreen needs C++17 filesystem resulting in the following build
-> failure with gcc < 8 since its addition in commit
-> 9d8497e79de3ced144877ba6ee38cc5b7181aaeb:
-> 
-> In file included from /home/buildroot/instance-0/output-1/build/ivi-homescreen-5ab78a19e95c88cc5d6b173ab1260a211e78cf0a/third_party/flutter/shell/platform/common/path_utils.cc:5:0:
-> /home/buildroot/instance-0/output-1/build/ivi-homescreen-5ab78a19e95c88cc5d6b173ab1260a211e78cf0a/third_party/./flutter/shell/platform/common/path_utils.h:8:10: fatal error: filesystem: No such file or directory
->  #include <filesystem>
->           ^~~~~~~~~~~~
-> 
-> Fixes: 9d8497e79de3ced144877ba6ee38cc5b7181aaeb
->  - http://autobuild.buildroot.org/results/a5e88d5a4264a6165be31a99f1c123af53fa382e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The patch allows you to choose whether to build encoding (BUILD_WRITERS),
+decoding (BUILD_READERS) or both. At least one of the two options must
+be enabled. This way, it's possible to keep the library size at minimum.
+By default, to ensure backward compatibility, both are compiled.
 
-Applied to master, thanks.
+Co-Developed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Co-Developed-by: Francesco Nicoletta Puzzillo <francesco.nicolettap@amarulasolutions.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/zxing-cpp/Config.in    | 17 +++++++++++++++++
+ package/zxing-cpp/zxing-cpp.mk | 14 ++++++++++++--
+ 2 files changed, 29 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/ivi-homescreen/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/ivi-homescreen/Config.in b/package/ivi-homescreen/Config.in
-> index dc2ccb0c97..a4f5f6835f 100644
-> --- a/package/ivi-homescreen/Config.in
-> +++ b/package/ivi-homescreen/Config.in
-> @@ -3,7 +3,7 @@ menuconfig BR2_PACKAGE_IVI_HOMESCREEN
->  	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
->  	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
->  	depends on BR2_HOST_GCC_AT_LEAST_5 # flutter-engine
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # flutter-engine
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # flutter-engine
->  	depends on BR2_TOOLCHAIN_USES_GLIBC # flutter-engine
->  	depends on BR2_INSTALL_LIBSTDCPP # flutter-engine
-> @@ -250,11 +250,11 @@ comment "OpenGL texture plugin needs an EGL backend"
->  
->  endif # BR2_PACKAGE_IVI_HOMESCREEN
->  
-> -comment "ivi-homescreen needs a glibc toolchain w/ wchar, C++, gcc >= 5, dynamic library, host gcc >= 5"
-> +comment "ivi-homescreen needs a glibc toolchain w/ wchar, C++, gcc >= 8, dynamic library, host gcc >= 5"
->  	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
->  	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
->  	depends on !BR2_TOOLCHAIN_USES_GLIBC \
-> -		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
-> +		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 \
->  		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
->  		|| !BR2_HOST_GCC_AT_LEAST_5
->  
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/zxing-cpp/Config.in b/package/zxing-cpp/Config.in
+index b72a00ec35..e5b8cfcdd8 100644
+--- a/package/zxing-cpp/Config.in
++++ b/package/zxing-cpp/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_ZXING_CPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_STB
+ 	select BR2_PACKAGE_PYTHON_PYBIND if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_ZXING_CPP_READERS if !BR2_PACKAGE_ZXING_CPP_WRITERS
+ 	help
+ 	  ZXing-cpp (pronounced "zebra crossing") is an open-source,
+ 	  multi-format 1D/2D barcode image processing library
+@@ -17,3 +18,19 @@ config BR2_PACKAGE_ZXING_CPP
+ 	  compiles the C++ port.
+ 
+ 	  https://github.com/zxing-cpp/zxing-cpp
++
++if BR2_PACKAGE_ZXING_CPP
++
++config BR2_PACKAGE_ZXING_CPP_READERS
++	bool "readers support"
++	default y
++	help
++	  Build with readers (decoders) support
++
++config BR2_PACKAGE_ZXING_CPP_WRITERS
++	bool "writers support"
++	default y
++	help
++	  Build with writers (encoders) support
++
++endif # BR2_PACKAGE_ZXING_CPP
+diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
+index 86a1ef9680..077d7e75d3 100644
+--- a/package/zxing-cpp/zxing-cpp.mk
++++ b/package/zxing-cpp/zxing-cpp.mk
+@@ -12,8 +12,6 @@ ZXING_CPP_INSTALL_STAGING = YES
+ ZXING_CPP_SUPPORTS_IN_SOURCE_BUILD = NO
+ ZXING_CPP_DEPENDENCIES = host-pkgconf stb
+ ZXING_CPP_CONF_OPTS = \
+-	-DBUILD_READERS=ON \
+-	-DBUILD_WRITERS=ON \
+ 	-DBUILD_BLACKBOX_TESTS=OFF \
+ 	-DBUILD_UNIT_TESTS=OFF \
+ 	-DBUILD_DEPENDENCIES=LOCAL
+@@ -28,4 +26,16 @@ else
+ ZXING_CPP_CONF_OPTS += -DBUILD_PYTHON_MODULE=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZXING_CPP_READERS),y)
++ZXING_CPP_CONF_OPTS += -DBUILD_READERS=ON
++else
++ZXING_CPP_CONF_OPTS += -DBUILD_READERS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_ZXING_CPP_WRITERS),y)
++ZXING_CPP_CONF_OPTS += -DBUILD_WRITERS=ON
++else
++ZXING_CPP_CONF_OPTS += -DBUILD_WRITERS=OFF
++endif
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
