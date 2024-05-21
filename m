@@ -4,70 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D67BC25B74
-	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 10:32:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06EB4C25B75
+	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 10:39:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1ACD981E28;
-	Tue, 21 May 2024 10:32:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A935480E59;
+	Tue, 21 May 2024 10:39:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S6FBabvBz3PF; Tue, 21 May 2024 10:32:24 +0000 (UTC)
+ id igHWgriqL73c; Tue, 21 May 2024 10:39:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F07C18200B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B299C80E74
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F07C18200B;
-	Tue, 21 May 2024 10:32:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C33F71C511B
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 10:32:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B299C80E74;
+	Tue, 21 May 2024 10:39:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A26D31C512A
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 10:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AEA27404CE
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 10:32:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DE6880E74
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 10:39:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Px63faz1S_Bg for <buildroot@lists.busybox.net>;
- Tue, 21 May 2024 10:32:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=139.178.84.217;
- helo=dfw.source.kernel.org; envelope-from=jarkko@kernel.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 624E4401EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 624E4401EB
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 624E4401EB
- for <buildroot@buildroot.org>; Tue, 21 May 2024 10:32:15 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by dfw.source.kernel.org (Postfix) with ESMTP id 25D5762121;
- Tue, 21 May 2024 10:32:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73831C2BD11;
- Tue, 21 May 2024 10:32:14 +0000 (UTC)
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: buildroot@buildroot.org
-Date: Tue, 21 May 2024 13:31:54 +0300
-Message-ID: <20240521103154.32660-4-jarkko@kernel.org>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240521103154.32660-1-jarkko@kernel.org>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wg1i6KgYUMs7 for <buildroot@lists.busybox.net>;
+ Tue, 21 May 2024 10:39:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1822880E59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1822880E59
+Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1822880E59
+ for <buildroot@buildroot.org>; Tue, 21 May 2024 10:39:20 +0000 (UTC)
+Received: from localhost (unknown [10.0.8.2])
+ by mail.tkos.co.il (Postfix) with ESMTP id 6F3AC4402D3;
+ Tue, 21 May 2024 13:38:54 +0300 (IDT)
+To: Jarkko Sakkinen <jarkko@kernel.org>
+In-Reply-To: <20240521103154.32660-3-jarkko@kernel.org> (Jarkko Sakkinen's
+ message of "Tue, 21 May 2024 13:31:53 +0300")
 References: <20240521103154.32660-1-jarkko@kernel.org>
+ <20240521103154.32660-3-jarkko@kernel.org>
+User-Agent: mu4e 1.12.4; emacs 29.3
+Date: Tue, 21 May 2024 13:39:16 +0300
+Message-ID: <877cfnphyj.fsf@tarshish>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1716287534;
- bh=MsQWMWG3R8eNdBDxqEwLdVQmoDGIMsjK3w9gSKZhj5c=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=rUxoljJnJRobIU3qaQDz+CsJwRLFjwfGYZ2DSqQdQmwsJSRB1z+G6tV8dAbHZxeWg
- DW3g1zY3+U9Tsn8nypDAMNisS9u27AUcLAb5BVYoxuxIwRi6mj1PIHwg871F+JzxjR
- jXRihg4qHtg+e6xGxqqOQt+z9D8RpCkIgpTt/Jg9VeGZXUmCREOkG3OE1IYFQDVm5b
- mFAb9iSl3Xr8bn18GiO3MYyIJqm5aF2SmSp+00Gge+gsfL21SGfqfjGxvUDZrmtqBZ
- +IxcM3bvVAqVGp2Vm+uhg3KLcjUkFnl0r9B7SRgKBdcT8FQM8vcg6jXlERQpjup3gw
- NFoC5b0zUOpVw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=tkos.co.il; s=default; t=1716287934;
+ bh=XLr/NJCDwdkIhsRpXY/P1sKeHFBwk8QgJZMyCqRYd9g=;
+ h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+ b=rV2Idf/UtXOxEJFwrk2h6Ymy634FwJxQgCgJz8AC1pC/ruuVOALOZuavmiOyedJT1
+ 43fXxszqRMSej4wJnNQzfBlTjyjeaWOFOaj6rAIbhEEjPT0ByiByXLINnlo0AwV+M9
+ PXtDG5XDwWaGPbbuinWdEK7SjiWXP1dEPQICirwuno0mzATuA99g8+sgsYlVqQKKPP
+ TJvKYH20HpiHGC7w27ARlmfSb8SAG5ukdW/5RTrq6gNuwe3l7tlsA1z4fs8mhI34Gg
+ I/z3ErkZVq5OUOmSNaBiiiKmWZ4yct6WBqMkFnRF8QXnoeJy8IpLoe50DDCYmf9OrL
+ K5CsgV9heCe3Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=tkos.co.il
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20201202 header.b=rUxoljJn
-Subject: [Buildroot] [PATCH v4 3/3] package/swtpm: add host package
+ unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=rV2Idf/U
+Subject: Re: [Buildroot] [PATCH v4 2/3] package/libtpms: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,119 +77,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Stefan Berger <stefanb@linux.ibm.com>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Stefan Berger <stefanb@linux.ibm.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The SWTPM package provides TPM emulators with different front-end
-interfaces to libtpms. TPM emulators provide socket interfaces (TCP/IP and
-Unix) and the Linux CUSE interface for the creation of multiple native
-/dev/vtpm* devices.
+Hi Jarkko,
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v3:
-- Remove libtool from Config.host.in.
-v2:
-- Remove libraries from Config.host.in.
-- Put deps line-by-line.
----
- DEVELOPERS                   |  1 +
- package/Config.in.host       |  1 +
- package/swtpm/Config.in.host | 11 +++++++++++
- package/swtpm/swtpm.hash     |  2 ++
- package/swtpm/swtpm.mk       | 24 ++++++++++++++++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/swtpm/Config.in.host
- create mode 100644 package/swtpm/swtpm.hash
- create mode 100644 package/swtpm/swtpm.mk
+On Tue, May 21 2024, Jarkko Sakkinen wrote:
+> diff --git a/package/Config.in b/package/Config.in
+> index 1b6a5b0dab..30b76349ec 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1569,6 +1569,7 @@ menu "Crypto"
+>  	source "package/libssh/Config.in"
+>  	source "package/libssh2/Config.in"
+>  	source "package/libtomcrypt/Config.in"
+> +	source "package/libtpms/Config.in"
+>  	source "package/libuecc/Config.in"
+>  	source "package/libxcrypt/Config.in"
+>  	source "package/mbedtls/Config.in"
+> diff --git a/package/libtpms/Config.in b/package/libtpms/Config.in
+> new file mode 100644
+> index 0000000000..335a5bc7b6
+> --- /dev/null
+> +++ b/package/libtpms/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_LIBTPMS
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index db0dc702a8..732002f85b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1521,6 +1521,7 @@ F:	package/libvirt/
- N:	Jarkko Sakkinen <jarkko@kernel.org>
- F:	package/libtpms/
- F:	package/quota/
-+F:	package/swtpm/
+You are not adding a target package, right? So this config symbol
+doesn't do anything.
 
- N:	Jason Pruitt <jrspruitt@gmail.com>
- F:	package/librtlsdr/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 986b2854d0..0cf9dc3897 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -110,6 +110,7 @@ menu "Host utilities"
- 	source "package/starfive-spltool/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/swig/Config.in.host"
-+	source "package/swtpm/Config.in.host"
- 	source "package/swugenerator/Config.in.host"
- 	source "package/systemd/Config.in.host"
- 	source "package/tegrarcm/Config.in.host"
-diff --git a/package/swtpm/Config.in.host b/package/swtpm/Config.in.host
-new file mode 100644
-index 0000000000..0dd984ff8d
---- /dev/null
-+++ b/package/swtpm/Config.in.host
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_HOST_SWTPM
-+	bool "host swtpm"
-+	help
-+	  Compiles SWTPM software TPM emulator for the host.
-+
-+	  The SWTPM package provides TPM emulators with different
-+	  front-end interfaces to libtpms. TPM emulators provide socket
-+	  interfaces (TCP/IP and Unix) and the Linux CUSE interface for
-+	  the creation of multiple native /dev/vtpm* devices.
-+
-+	  https://github.com/stefanberger/swtpm/wiki
-diff --git a/package/swtpm/swtpm.hash b/package/swtpm/swtpm.hash
-new file mode 100644
-index 0000000000..934d3b6ee0
---- /dev/null
-+++ b/package/swtpm/swtpm.hash
-@@ -0,0 +1,2 @@
-+sha256  b281b4e8c39f68e1928675f788abc70072e4081152e129144359a8c5c304c06b  swtpm-0.8.2.tar.gz
-+sha256  19d27d6e96d07022e5e688f75c974f1ceb9aae9e90e0fccae68666d02099cc4b  LICENSE
-diff --git a/package/swtpm/swtpm.mk b/package/swtpm/swtpm.mk
-new file mode 100644
-index 0000000000..f1e42a8bef
---- /dev/null
-+++ b/package/swtpm/swtpm.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# swtpm
-+#
-+################################################################################
-+
-+SWTPM_VERSION = 0.8.2
-+SWTPM_SITE = $(call github,stefanberger,swtpm,v$(SWTPM_VERSION))
-+SWTPM_LICENSE = BSD-4-Clause
-+SWTPM_LICENSE_FILES = LICENSE
-+# Straight from the git repository:
-+SWTPM_AUTORECONF = YES
-+
-+HOST_SWTPM_DEPENDENCIES = \
-+	host-json-glib \
-+	host-libopenssl \
-+	host-libtasn1 \
-+	host-libtool \
-+	host-libtpms \
-+	host-pkgconf
-+
-+HOST_SWTPM_CONF_OPTS = --with-openssl --without-seccomp
-+
-+$(eval $(host-autotools-package))
---
-2.45.1
+baruch
 
+> +	bool "libtpms"
+> +	select BR2_PACKAGE_LIBTOOL
+> +	select BR2_PACKAGE_OPENSSL
+> +	help
+> +	  Libtpms is a library that targets the integration of TPM
+> +	  functionality into hypervisors, primarily into Qemu. Libtpms
+> +	  provides a very narrow public API for this purpose so that
+> +	  integration is possible. Only the minimum of necessary APIs
+> +	  are made publicly available.
+> +
+> +	  It is assumed that the user of libtpms is familiar with the
+> +	  concepts of the Trusted Platform Module (TPM). For the
+> +	  interaction with libtpms it is necessary to know how to
+> +	  construct valid TPM commands and to be able to parse their
+> +	  results. It is not within the scope of libtpms's documentation
+> +	  to provide background on this. See the section on references
+> +	  below.
+> +
+> +	  https://github.com/stefanberger/libtpms/wiki
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
