@@ -1,96 +1,232 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B17DC25B74
-	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 15:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82902C25B74
+	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 16:20:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E20AC40BA0;
-	Tue, 21 May 2024 15:06:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17F0D608FB;
+	Tue, 21 May 2024 16:20:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XL4dNLEBGOMa; Tue, 21 May 2024 15:06:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PyJVNrTd8J1x; Tue, 21 May 2024 16:20:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36FE9404F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47524608EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36FE9404F6;
-	Tue, 21 May 2024 15:06:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 814AC1BF299
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 15:06:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47524608EF;
+	Tue, 21 May 2024 16:20:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 70F771C53B7
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 16:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79CB44069F
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 15:06:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6924381A2B
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 16:20:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id up2yC2aBl0bf for <buildroot@lists.busybox.net>;
- Tue, 21 May 2024 15:06:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::c2f; helo=mail-oo1-xc2f.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D7D5D402F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7D5D402F4
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com
- [IPv6:2607:f8b0:4864:20::c2f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D7D5D402F4
- for <buildroot@buildroot.org>; Tue, 21 May 2024 15:06:51 +0000 (UTC)
-Received: by mail-oo1-xc2f.google.com with SMTP id
- 006d021491bc7-5b31f2c6e52so1578979eaf.2
- for <buildroot@buildroot.org>; Tue, 21 May 2024 08:06:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1716304011; x=1716908811;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=DGuN8bJVbMqkBXKFZbrN7W6zmjoLinAErJNhKCeliok=;
- b=mCGYKzUwBRKUxPCc3tNTgYXl+iv+8u3xpUevdi5FOILwx3DgFVcbj3IX7yjNzNU7w3
- Sa+AeUSBAdI1/KYy3uuoiT/GX3eYir1J+qcY+kxfPjg37Cc0i4v0LluloijCFWXH+TjT
- VNDyhVFbmSMXeE42rmWGNquHQ4LMJW+QxaWLG0nIKAgwgOM1iHv2A/neH2sfqdBqFTKc
- DUFevnVlndHMXheysFGi+od5lMATnDk2Go6jNsNucNj3AFz4jKLA4TlG8nmrd2Zg/KEp
- IOoS3eSBarfu3E8Pw9CLdtev3MPJLqg67x184PEM0caxBszFkH5PaTAqMllBdUogqARa
- J5cw==
-X-Gm-Message-State: AOJu0YzlxEwG4OOnbzuciQNKqyqwNt14QvDj0ZWJTiQeclk510dIV4Ts
- c0g5zQEDppyG/KtksjHfchQo1suMU9TD0N3ArGyjD4O4Yo6+51Dq6fouwhiDBz2tNbhylhtN7PK
- DZZaXZluo2AMQjQsMr/fYC5uC0ZN9/wsJrbVqVA==
-X-Google-Smtp-Source: AGHT+IHCqbqDexcyQ0nCWQTlC/ys1BH0/mNZ3SoMsPmFLORXJayJIYawRoAJUEpMMojj0zk3AmEEWwvkMrENyk+xZZM=
-X-Received: by 2002:a05:6359:4c81:b0:193:f899:f9b9 with SMTP id
- e5c5f4694b2df-193f899f9d3mr3463448955d.9.1716304010697; Tue, 21 May 2024
- 08:06:50 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n-sB3ErGgDRh for <buildroot@lists.busybox.net>;
+ Tue, 21 May 2024 16:19:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
+ helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3306181A16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3306181A16
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3306181A16
+ for <buildroot@buildroot.org>; Tue, 21 May 2024 16:19:58 +0000 (UTC)
+Received: from pps.filterd (m0346905.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 44LEbo75027195; Tue, 21 May 2024 16:19:58 GMT
+Received: from xusxph005rp040.rtx.com (xusxph005rp040.rtx.com [128.13.121.146])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3y8r2c5d4p-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 21 May 2024 16:19:57 +0000
+Received: from xusxph008rp010.corp.ray.com ([128.13.124.224])
+ by xusxph005rp040.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 44LGJuEq004730
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Tue, 21 May 2024 16:19:56 GMT
+Received: from UUSALE2H.utcmail.com (uusale2h.utcmail.com [10.220.63.43])
+ by xusxph008rp010.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 44LGJtvw003928
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Tue, 21 May 2024 16:19:56 GMT
+Received: from UUSALE29.utcmail.com (10.220.63.19) by UUSALE2H.utcmail.com
+ (10.220.63.43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 21 May
+ 2024 12:19:55 -0400
+Received: from UUSALE28.utcmail.com (10.220.63.22) by UUSALE29.utcmail.com
+ (10.220.63.19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 21 May
+ 2024 12:19:55 -0400
+Received: from USG02-CY1-obe.outbound.protection.office365.us (23.103.199.180)
+ by UUSALE28.utcmail.com (10.220.63.22) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4
+ via Frontend Transport; Tue, 21 May 2024 12:19:54 -0400
+Received: from BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:184::20)
+ by BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:184::20)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.36; Tue, 21 May
+ 2024 16:19:48 +0000
+Received: from BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::c67e:811a:963d:4a42]) by BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::c67e:811a:963d:4a42%7]) with mapi id 15.20.7587.035; Tue, 21 May 2024
+ 16:19:48 +0000
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [External] [Buildroot] [PATCH 1/2] support/download: introduce
+ curl backend for FTP transfers
+Thread-Index: AQHaqWGHzrWsC5u5j0ONBOG38CB2kbGh4J+w
+Date: Tue, 21 May 2024 16:19:48 +0000
+Message-ID: <BN0P110MB1673D23A6CFB29DDA9C61DA5EBEAA@BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM>
+References: <cover.1716063903.git.yann.morin.1998@free.fr>
+ <9acaf4118aa1e3ba7ad9e0516a78273af7d05d3c.1716063903.git.yann.morin.1998@free.fr>
+In-Reply-To: <9acaf4118aa1e3ba7ad9e0516a78273af7d05d3c.1716063903.git.yann.morin.1998@free.fr>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0P110MB1673:EE_
+x-ms-office365-filtering-correlation-id: d4431fbb-756e-4d7d-3d5d-08dc79b1d60a
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+ ARA:13230031|1800799015|366007|38070700009|15866825006|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?gLAoCavX6g7LsQ5ewgBGCnglHyQZXtu0OYn1sKup9L3b+JptdYJ3Zh39X5Fb?=
+ =?us-ascii?Q?/1kczlPbF9EQCuPHkoCvWAXYoz+oklZjP8RQuGpsuPKE4uFL+ndSYd2boHfk?=
+ =?us-ascii?Q?t5t2lGgNeO2hxC5YpuKN6qS4RwbYvf26lHEjCC2bUfxyLXn0xNPi5BKQZlxJ?=
+ =?us-ascii?Q?VBQBNwG8wPPne6sPAw1pf9KG9CZ17KaLHiaQyfd8HIp47XRNtWagtbpU8Z5A?=
+ =?us-ascii?Q?vkWe9jq/m1EwzNk1MUjFqZ1d6F0M+r8aTrH6FibsIWCoDC/ct9jHegkAPpJ8?=
+ =?us-ascii?Q?tFvnFabbDBWniSLP4WJ6s8yWZDb0LYJyNF2zXryLLig8+1mbwaLAsG5jAYJ0?=
+ =?us-ascii?Q?ZYrWK/xTyOHFZFsTLFqQevQagoX4yj2bsaNqEuEVS1xVkTK+dhGg/KuQsZWe?=
+ =?us-ascii?Q?f2f3FCjijabWKKE/z9jQthr5Dr3yn0b04I0xLEDOdKzusrrJYe2NUQNq9wQE?=
+ =?us-ascii?Q?XgMDFdatNNn0czENlgs4pca0lELQL2yXl73j+f1n82A9xk6iQ7SwLSHmFJ32?=
+ =?us-ascii?Q?TVxcKzYg8hDmtihQnmc+bLnAZpYu9ZlPZBdsZoeAeG5/PBE47opB2JcWf6Dv?=
+ =?us-ascii?Q?YKm72szO5EIIl9cgdvj3hTpjNmmPbEQSW+ZRQho2UsFtV1y27NgTwxSi+HV6?=
+ =?us-ascii?Q?1kZCekBt3YQw0rpEXbomNCcRykn9b+xROoTz8SxH3RcLWvI+FATjaNB/1Ncz?=
+ =?us-ascii?Q?CqscP6nCm7ea9OC+CpyWBUt+a6KLwofhwxiAwHm/7CTOJnCCZyLn/GuQII4u?=
+ =?us-ascii?Q?kjSSwHL+30j1of79xf4IfsK2x8SJKhHN2dhAoNZ7cyCghXs1lTJpN27tkMAH?=
+ =?us-ascii?Q?SWA2vXR+A9+PqB1ZmD35gKKPEqg4/xmMEnN5y+eCkwpzqc9S3Ed63lnXaetV?=
+ =?us-ascii?Q?EfqOVZ62sqmhJ3lth0CMAzXIbPCNlNmqz6LHX5i+Oyz948l6ldaST7sz1+1l?=
+ =?us-ascii?Q?dWCRTcJO/7lmV6GuZ0xmZ1QV7BV7uL6ARmg0OmTdaz53SHp/5uuq52aGD7/C?=
+ =?us-ascii?Q?MDnhpC+WgbQOFAc7UqPf2hsWk3OUrfvbrH3rA15BfJ2fhrEr1VdHImRzlJ8w?=
+ =?us-ascii?Q?COcMEngcjUE6sMWKAtvf1EYMOYc/9AuBDNz+GS4nU+kIlVSvOFzy6INfTp2x?=
+ =?us-ascii?Q?LOgVVlYLW+6L4nqMQfC8n8PcL07O0chTCqbtpqYzBAcjEkJwf02wTrPysaiD?=
+ =?us-ascii?Q?0P+a28phjcy8OZF3SYGz+PjuedTmdyn4bzuSl3PP4iJ8y0fqFeiAEJeN4Qug?=
+ =?us-ascii?Q?AHY96CIm/QWlz18rjraPdaZRed/pL74f3MFxUt5/lmpmvJCty2i5Kw7kWiBe?=
+ =?us-ascii?Q?qrAgRySv+YAq13hh4/8UTeBVBOSdZ3ux51tpmsp8d18x7R7WNwZ33PnCoMqB?=
+ =?us-ascii?Q?voJylbBq13SRhfOWiND5B0j4krqRYRYWEuIFzOOBbHCI2uv8ZQ=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(1800799015)(366007)(38070700009)(15866825006)(41080700001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DKcrH2TYsFoQVuiPaOYwXE7Ui21E0Cra+on/mLDhnlnzwz11QVlwexh+vKKy?=
+ =?us-ascii?Q?M7Q+F5d4bwJyCGBMqRqdd/kSduTK6bcEQfTlyqUOomSZPM8hg0U6YePdpPJ1?=
+ =?us-ascii?Q?5tKdIqIvVvpnAYlOhD5hW6Tjz9dy5AlfVkw67kclSWAD39DrcqsCLQZxP8YG?=
+ =?us-ascii?Q?FvPWbPU6vxsqKYqn48x+pDmrdP4D06GBKkJ3wIMd3k2rWw3bxkYvjFpTWpyp?=
+ =?us-ascii?Q?K+q1oUqaC9NjyhXwBo7M7DlNVYUYKvyQOIh2OXMsXVIP/CcT92nxi6gPekBQ?=
+ =?us-ascii?Q?EIPF3+Uv6htpTK+KA7gBhwvFelt3957pfBh1+ErUhUbTPKhaVMJ/I3NUAL3z?=
+ =?us-ascii?Q?pNe0M4KKxh9HEUNtSr0xn8xSQeZjqVB2tZ8qD6n6sfgz7N7jykqgAIiR7Rhi?=
+ =?us-ascii?Q?11hVv8N6sjfGaKKuhwCxziy5c85gcjmbHEeGsVqi75STj/aVQl2i98JmGvEX?=
+ =?us-ascii?Q?MXZSkbcRIEHSw5lWKkXMGNEvoQWdFbgfpet3m40MNMfdjndAF4nk/WC/6u9q?=
+ =?us-ascii?Q?qYo5Nr8FL+kNqwh46VFH+6gocpf1aobTutpeXeHv/7Bxe4zuWc/LtNZTeB3T?=
+ =?us-ascii?Q?7gj429E0lnU6rV7Cv4z6GSKH8zIZ1jASwbFLSpsOap+ubx79SvZzt8w9/lsI?=
+ =?us-ascii?Q?8Hson04ya0tIv1XvEt6OvAQTiF+y4w1iU7W2FrIUvGR1Jju2GEJGh8bYWGR7?=
+ =?us-ascii?Q?sgRfnmGfLsEKOlIRgsVVGQoM6xFfDQeMu7H8RSuSliANVdtszrAFqm2agnsE?=
+ =?us-ascii?Q?grafHT5T3apeSdxaxnYYLld2ssrCS/p3R5duqQrAj4GpMTRgcUxM+9XzOxFN?=
+ =?us-ascii?Q?DsUVHo9rEsN+2blik0j1sbdAhX7XqGLGnoK//XX8Ve70+40ykmPN4lCFjBVk?=
+ =?us-ascii?Q?ra+87OoqWy/2FDmDEV8RfZV+/plT3s4uv708QXuw6cPXUe7K/A98Wnsgqhnw?=
+ =?us-ascii?Q?KeUdrRa/tcY7aS3tgkRc10X2KBEKKG4JAZXVyree+3SM0L3bGkADpucgYMGB?=
+ =?us-ascii?Q?w4ZeYYzuh0nDnJxfeKmEhLNcM5+sa+ZqlHJWPsZI45W7opjnEVfQGOTH36BC?=
+ =?us-ascii?Q?s40bqQFxtSYd6eB55COdL8gJbDt71hOysFbBf3fxYIA91pKYUwnzH6DeNw2X?=
+ =?us-ascii?Q?aADu/hEIQnxmGeuRidD5w56tfjuImJYEHm4G+u2sFOhdCJjmdSuF5ObhFg1U?=
+ =?us-ascii?Q?f+eACLQ1kcFjK4VOJnV62Lh/4K7FgO86y9kxFutI6+NiUugoyaUkl1XNf5vv?=
+ =?us-ascii?Q?gZMoVBCEwaM1IdaBkx1eQL1zYJW0xuol2Ua4fz7AZh2xDx/P65zaKGPPnYBo?=
+ =?us-ascii?Q?QYok5ZmZANWQd48kh05rJPwgHNv8KPnBSisTPkOsOWpYccfJJeEpSzYWsYwU?=
+ =?us-ascii?Q?QACw32SnMhaSdED+7u6dhQoiZ31ESr3JetVQVxI/kIrERz6FBh9c9gWcpJRk?=
+ =?us-ascii?Q?bcIPMP4B6tyd23e2NhYPclGXhTJh3Q8AnXxczWGaPAkPrBQZcgBdC+OcE8Tc?=
+ =?us-ascii?Q?qOt+upMBrlMpDvg=3D?=
+arc-seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
+ b=07mPf0gWlhr2mMFF0M8CuVL3O6yb0+CVQMsu1JK5xTxXO2d3HtRIXCBBHje71B2cqlnWT9rRqQEFYnNS+cTRxu5kcKtP3jcvhxZ54DSp3qtadGAc13n27iTm5XOOsDyyfILS5aod5G0J4i/OPqY8B56xOqQdAm84XcOanJzz1W6+dL+SJpt3JQLkCApRKe1CTkh5ZAS+9bBPuMgQI7oe66pMgOdFVNs+sule12pbPX98zwxWv73jKBzj9V8asQUqdyeqlk9mPhFG7Bth4U4Gu8JqYEuUeHvE5bDdBRJBFPv8Fj0FVLs6u+Wl1vk69RlbF5gzw7fnDnutN8cuiVSs+w==
+arc-message-signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector5401;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rMuHvQC6T5Ltr0OFvKUNRSrdB1XN/lzzS7OrFGkIFbM=;
+ b=lmq9QVS7fIQXPgddGcbvcnnBU305lkjabr/fKUTLiQhm7IzmWusr+G7NYc3y1FLAsWuhkQWkALKsowkOLeskwyhlADLedFh6fFNUPHXx41jsTGePefmcvDtTM6uqf3yip+nl1NnsXh9BYP7tWDsOfkpeTRYMCC212pc2I96T9LKdeMxD48/Sr/jg9Qx1+sQ3WokhAKOl0F8bo5t+hOsqbjk5N054qG+Z0N0VIu3/anlyTqg+wr65tvZ2jWJfkWW0b/tIP7NOwszsN/Oxak398itH9EsCJ72nElQLfbk9VqsIM4Bsw61PSSg0BUpE0FGhsAv1tlfvnbIct6rqrrFCFQ==
+arc-authentication-results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=collins.com; dmarc=pass action=none header.from=collins.com;
+ dkim=pass header.d=collins.com; arc=none
+x-ms-exchange-antispam-externalhop-messagedata-chunkcount: 1
+x-ms-exchange-antispam-externalhop-messagedata-0: dFx4p+JPonlQMWdOLmHA5ih1kS68zNzgg8gHUNqrLhMYja3spp9o1CqP2GPY0Yc7IP9Z/rNoRZ3nt8a85gWBp/IeTmEcDJZ549eS7L70IfEeDuXAdQKEW7TS0rQP+gkEJoZRono356dnq3N0S2xVW4Vfk+SeV3HfHFKOKKQFSeRy4pf43n+J5pOD3C8x4LLw1eP4Y8QQwrdzBay2tyGkW4sNS43bNUNErIyLfEL9zlWQ4zrT2UHiuFpQRJkc6I1v/DkudH2GOd2NmYxX3EpS/2vASiVdgXQc4O6XvNqDVXl35TVJuIFqxgMa8f6WtDdSu+Ac/FIq4PKL8hQjUbR9RGTfEi8Wy6fFIwU8fIb3oltSnwdJ9v8kBQfbN9s+ciqHT1TP3gC7JF5DcNdx2/anZ0tlv5Ipj7QYr6rUQGvsx9F8clEiWcJBGS9ZC684W44pGebwqaXVl/foRjxVoCaXypEIkCilkixdXM0JlYflzLc6dVsRPqa++1sYGrA9b2l3M9Wx4pxW9S9PHmYRG5Ndrh/UqmeLuclUW8kjjWlg7Pv5gDYhfXmiMBZrTTIQq44ko5k6VnVnIQ02P/dABNGLhem+hDMsSdWlrjgPi3DPYjQMun5oIOrU4S9Zoo9bwRS8
+x-ms-exchange-crosstenant-authas: Internal
+x-ms-exchange-crosstenant-authsource: BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM
+x-ms-exchange-crosstenant-network-message-id: d4431fbb-756e-4d7d-3d5d-08dc79b1d60a
+x-ms-exchange-crosstenant-originalarrivaltime: 21 May 2024 16:19:48.6764 (UTC)
+x-ms-exchange-crosstenant-fromentityheader: Hosted
+x-ms-exchange-crosstenant-id: 7a18110d-ef9b-4274-acef-e62ab0fe28ed
+x-ms-exchange-transport-crosstenantheadersstamped: BN0P110MB1673
+x-passedthroughonpremises: Yes
 MIME-Version: 1.0
-References: <20240421095353.208034-1-dario.binacchi@amarulasolutions.com>
- <20240421095353.208034-2-dario.binacchi@amarulasolutions.com>
- <20240510215442.3475120a@windsurf>
- <CABGWkvqz7-bnCJ6JBjp3rpbeSnDEZw55jNNHOmpbyGA772xDvA@mail.gmail.com>
- <20240520112336.7431520d@windsurf>
-In-Reply-To: <20240520112336.7431520d@windsurf>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Tue, 21 May 2024 17:06:39 +0200
-Message-ID: <CABGWkvpxUxPrhib7vmKRhA32FYojB=-tnZJr=qiQCKM-=+L7uQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?UTF-8?Q?Gero_Schw=C3=A4ricke?= <gero.schwaericke@grandcentrix.net>
+X-OriginatorOrg: Collins.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-21_10,2024-05-21_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-21_10,2024-05-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ suspectscore=0 adultscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=999 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405210123
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ phishscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 suspectscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405210123
+X-Proofpoint-GUID: a1g1jtwcF8bjxMCb3FhLqU_j_-kE-ZvT
+X-Proofpoint-ORIG-GUID: a1g1jtwcF8bjxMCb3FhLqU_j_-kE-ZvT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-21_10,2024-05-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
+ bulkscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
+ impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2405010000 definitions=main-2405210123
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1716304011; x=1716908811;
- darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=DGuN8bJVbMqkBXKFZbrN7W6zmjoLinAErJNhKCeliok=;
- b=a0phCk20xpdMfkueoUSmFwQ4IAkatOjaNujEQ8rBKvJ6lpQu4Cr/G9rabErDjlo3U0
- sD300ExPcK8YKmCshsxjOHUhfGnp5L3nyG+udwqTOKvolkM83rtQmREejCGoECSZp4qV
- WQdT/w23ZLG97nphjF35WIlImfHrTS9TzjCQc=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=a0phCk20
-Subject: Re: [Buildroot] [RFC PATCH 1/2] support/scripts/genimage.sh:
- support creating a bmap image
+ d=collins.com; h=from : to : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=POD051818;
+ bh=VQStEJAqQv0ja3iW/ugTVyaJUUunjXULQpbYNnPl6BA=;
+ b=m2fyMPCsvvEsj9UJzAVAPz9n0xCIcZ/KtjIELoz2bwnVnXO7ijkhH9jZ5d29aHc6Z2mW
+ 7+gx1TZiFkVsDIpUrgBCDzylF83/kAwkrD8x3xRMER97dDIjTE/8Ll6BKX9US/vZCcR3
+ U4Iob0UPM8RwMXTwubC80w7ZIMbhuozIGerS0/LSRAtVZuQdGxWu/OibOhV67SmuMXrr
+ dTTMcxAzc1D4yDD3MlWpJJimy/dNVkFz+CGjoNAYsJxc4D7PB+Mp+mtDUgte1vSsqg4S
+ Qb2+HJMWFKya1MbwHWep5uvagt9L+8lGZ3MFbHuNGdlRLrCUV1wO8gQfH6I9C7hy8ePd Mw== 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rtxusers.onmicrosoft.us; s=selector1-rtxusers-onmicrosoft-us;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rMuHvQC6T5Ltr0OFvKUNRSrdB1XN/lzzS7OrFGkIFbM=;
+ b=yuPovAXXq6Wzii7O9rk/2hO216+ffblWGGuBl2/GIDK1Gr6o1OAM1YVaVuO6gnBiBEJLmAn/4szX9HkzYsIAPGz5Kbi/AiRphBf7vTVWJYvMGVpC8c6b+d6cWyCEfw8ItqUwg3OqmalrKq/SrI+A0hO3Up/eHSAE97tTkLIOE10=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=collins.com
+ header.i=@collins.com header.a=rsa-sha256 header.s=POD051818
+ header.b=m2fyMPCs; 
+ dkim=fail reason="signature verification failed" (1024-bit key,
+ unprotected) header.d=rtxusers.onmicrosoft.us
+ header.i=@rtxusers.onmicrosoft.us header.a=rsa-sha256
+ header.s=selector1-rtxusers-onmicrosoft-us header.b=yuPovAXX
+Subject: Re: [Buildroot] [External] [PATCH 1/2] support/download: introduce
+ curl backend for FTP transfers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,93 +238,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: quentin.schulz@theobroma-systems.com, Xuanhao Shi <X15000177@gmail.com>,
- buildroot@buildroot.org, Romain Naour <romain.naour@smile.fr>,
- michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: "Maier, Brandon L Collins via buildroot" <buildroot@buildroot.org>
+Reply-To: "Maier, Brandon L Collins" <Brandon.Maier@collins.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLCBHZXJvIGFuZCBBbGwsCgpPbiBNb24sIE1heSAyMCwgMjAyNCBhdCAxMToy
-M+KAr0FNIFRob21hcyBQZXRhenpvbmkKPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdy
-b3RlOgo+Cj4gSGVsbG8gRGFyaW8sCj4KPiBbIFlvdXIgZS1tYWlsIGNsaWVudCBjb25maWd1cmF0
-aW9uIHNlZW1zIHNvbWV3aGF0IGJyb2tlbiwgeW91ciBsaW5lcwo+ICAgYXJlIGJhZGx5IHdyYXBw
-ZWQgXQo+Cj4gT24gTW9uLCAyMCBNYXkgMjAyNCAxMDowNTozNCArMDIwMAo+IERhcmlvIEJpbmFj
-Y2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4gd3JvdGU6Cj4KPiA+ID4g
-Tm93IHRoZSBxdWVzdGlvbiBpcyBob3cgdG8gZG8gdGhpcy4gVG8gbWUgeW91ciBwcm9wb3NhbCBs
-b29rcwo+ID4gPiByZWFzb25hYmxlLCB0aG91Z2ggc29tZSBwZW9wbGUgaGFkIHRoZSBmZWVkYmFj
-ayB0aGF0IGJtYXAtdG9vbHMgd2lsbAo+ID4gPiBub3Qgd29yayBpbiBhbGwgY2FzZXMgKHNob3Vs
-ZCB3ZSB0aGVuIGdyYWNlZnVsbHkgaGFuZGxlIHRoaXMgZmFpbHVyZQo+ID4gPiBjYXNlPykuCj4g
-Pgo+ID4gSWYgSSB1bmRlcnN0YW5kIGNvcnJlY3RseSwgdGhlIGZpcnN0IHBhdGNoIGluIHRoZSBz
-ZXJpZXMgc2VlbXMKPiA+IHJlYXNvbmFibGUgdG8gR2VybyBhcyB3ZWxsLgo+ID4gVGhlcmVmb3Jl
-LCBib3RoIG9mIHlvdSBhcmUgaW4gZmF2b3Igb2YgbWVyZ2luZyB0aGlzIHBhdGNoLiBUaGUgaXNz
-dWUKPiA+IGFyaXNlcyBmb3IgR2Vybwo+ID4gcmVnYXJkaW5nIHRoZSBhcHBsaWNhdGlvbiBvZiB0
-aGUgc2Vjb25kIHBhdGNoLCB3aGljaCBJIGFkZGVkIG9ubHkgYXMKPiA+IGFuIGV4YW1wbGUgdXNl
-IGNhc2UuCj4gPiBJIHRoaW5rIG1lcmdpbmcgdGhlIGZpcnN0IHBhdGNoIHdvdWxkIGdpdmUgdGhl
-IG9wcG9ydHVuaXR5IHRvIHVzZQo+ID4gYm1hcHRvb2wgYW5kIHJlYWxpemUgaXRzCj4gPiB1c2Vm
-dWxuZXNzLiBBZnRlciBhbGwsIHRoZSBwYXRjaCBpcyBiYWNrd2FyZCBjb21wYXRpYmxlLiBJdHMg
-dXNlIGNvdWxkCj4gPiB0aGVuIGxlYWQgdG8gc3Vic2VxdWVudAo+ID4gaW1wcm92ZW1lbnRzLgo+
-ID4KPiA+IFJlZ2FyZGluZyB0aGUgc2Vjb25kIHBhdGNoLCBJIHRoZW4gYXNrIHlvdTogSXMgaXQg
-Y29ycmVjdCBub3QgdG8KPiA+IHByb2NlZWQgd2l0aCBtZXJnaW5nIHRoaXMKPiA+IHBhdGNoIGZv
-ciB0aGUgcmVhc29uIG1lbnRpb25lZCBieSBHZXJvIChpLmUuLCBlbmNyeXB0ZWQgZGlyZWN0b3J5
-KT8gSXQKPiA+IHNlZW1zIHRvIG1lIHRoYXQKPiA+IGJtYXB0b29sIGlzIHVzZWQgaW4gWW9jdG8s
-IHNvIGlzIGl0IGNvcnJlY3QgdG8gc2F5IHRoYXQgeW91IHdvdWxkIGhhdmUKPiA+IHRoZSBzYW1l
-IHByb2JsZW0KPiA+IHdpdGggWW9jdG8/IEkgaG9wZSwgR2VybywgeW91IGRvIG5vdCBtaXN1bmRl
-cnN0YW5kIG1lLgo+Cj4gWWVzLCB0aGUgZmlyc3QgcGF0Y2ggaXMgcmVhc29uYWJsZSwgYnV0IGlm
-IHdlIGNhbid0IGFwcGx5IHNvbWV0aGluZwo+IGxpa2UgdGhlIHNlY29uZCBwYXRjaCwgdGhlbiBp
-dCBtaWdodCBtZWFuIHRoYXQgdGhlIGFwcHJvYWNoIHRha2VuIGluCj4gdGhlIGZpcnN0IHBhdGNo
-IGlzbid0IGNvcnJlY3QuIEluZGVlZCwgaWYgd2UgY2FuJ3QgZW5hYmxlIGJ5IGRlZmF1bHQKPiB0
-aGUgZ2VuZXJhdGlvbiBvZiBibWFwLWNhcGFibGUgaW1hZ2VzIGluIGRlZmNvbmZpZ3MsIGl0IGtp
-bmQgb2YgbGltaXRzCj4gdGhlIHVzZWZ1bG5lc3Mgb2YgdGhpcyBibWFwLXRvb2wgaW50ZWdyYXRp
-b24uCj4KPiBJIHdhcyBob3BpbmcgZm9yIHRoZSBvdGhlciBCUiBtYWludGFpbmVycyB0byBjaGlt
-ZSBpbiB3aXRoIHNvbWUgb3Bpbmlvbi4KPgo+IERvIHdlIGhhdmUgYSB3YXkgdG8gZGV0ZWN0IHRo
-YXQgdGhlIGJtYXAtdG9vbCBnZW5lcmF0aW9uIHdpbGwgZmFpbCwgYW5kCj4gaW4gdGhpcyBjYXNl
-IGdyYWNlZnVsbHkgc2tpcCB0aGUgYm1hcC10b29sIGxvZ2ljPwoKSSByYW4gc29tZSB0ZXN0cyBh
-bmQgdHJpZWQgdG8gcmVwcm9kdWNlIEdlcm8ncyBpc3N1ZS4KV2l0aCB0aGVzZSBjaGFuZ2VzLCBp
-biBjYXNlIG9mIGFuIGVycm9yLCB0aGUgbWFrZSBjb21tYW5kIHdvdWxkIG5vdCBmYWlsLgoKZGlm
-ZiAtLWdpdCBhL3N1cHBvcnQvc2NyaXB0cy9nZW5pbWFnZS5zaCBiL3N1cHBvcnQvc2NyaXB0cy9n
-ZW5pbWFnZS5zaAppbmRleCA3MjU5MmViYjcxMGQuLjEyMmFhMGUwZGM4MSAxMDA3NTUKLS0tIGEv
-c3VwcG9ydC9zY3JpcHRzL2dlbmltYWdlLnNoCisrKyBiL3N1cHBvcnQvc2NyaXB0cy9nZW5pbWFn
-ZS5zaApAQCAtNTksNyArNTksMTIgQEAgaWYgWyAiJHtHRU5JTUFHRV9DUkVBVEVfQk1BUH0iID0g
-InllcyIgXTsgdGhlbgogICAgIGNudD0kKGdyZXAgLWMgIiR7aW1hZ2V9IiAiJHtHRU5JTUFHRV9D
-Rkd9IikKICAgICBbICIke2NudH0iIC1ndCAxIF0gJiYgY29udGludWU7CiAgICAgaW1hZ2VfcGF0
-aD0iJHtCSU5BUklFU19ESVJ9LyR7aW1hZ2V9IgotICAgIGJtYXB0b29sIGNyZWF0ZSAiJHtpbWFn
-ZV9wYXRofSIgLW8gIiR7aW1hZ2VfcGF0aH0uYm1hcCIKLSAgICBnemlwIC1jICIke2ltYWdlX3Bh
-dGh9IiA+ICIke2ltYWdlX3BhdGh9Lmd6IgorICAgIFRNUF9TVERFUlI9JChta3RlbXAgLXQgLnRt
-cC5nZW5pbWFnZS5YWFhYWFhYWFhYKQorICAgIGJtYXB0b29sIGNyZWF0ZSAiJHtpbWFnZV9wYXRo
-fSIgLW8gIiR7aW1hZ2VfcGF0aH0uYm1hcCIgMj4ke1RNUF9TVERFUlJ9CisgICAgaWYgdGVzdCAk
-PyAtZXEgMCA7IHRoZW4KKyAgICAgIGd6aXAgLWMgIiR7aW1hZ2VfcGF0aH0iID4gIiR7aW1hZ2Vf
-cGF0aH0uZ3oiCisgICAgZWxzZQorICAgICAgZWNobyAiQ2Fubm90IGdlbmVyYXRlIGJtYXAgZm9y
-IGZpbGUgJHtpbWFnZV9wYXRofS4gUGxlYXNlIHJlYWQKbG9nIGVycm9yICR7VE1QX1NUREVSUn0g
-Zm9yIGRldGFpbHMiCisgICAgZmkKICAgZG9uZSA8IDwoZ3JlcCAnXmltYWdlICcgIiR7R0VOSU1B
-R0VfQ0ZHfSIgfCBjdXQgLWQgJyAnIC1mIDIpCiBmaQoKVGhlIGNoYW5nZSBnZW5lcmFsbHkgaGFu
-ZGxlcyBhbnkgdHlwZSBvZiBlcnJvciwgYnV0IGluIHRoZSBjYXNlCmhpZ2hsaWdodGVkIGJ5IEdl
-cm8sIGl0IHNlZW1zIHRvIG1lCnRoYXQgbm90IHRvbyBtdWNoIHRpbWUgaXMgd2FzdGVkIGVuY291
-bnRlcmluZyB0aGUgZXJyb3IsIHNpbmNlCmJtYXB0b29sIGluaXRpYWxseSB0cmllcyB0byB1bmRl
-cnN0YW5kIGlmCnRoZSBzeXN0ZW0gc3VwcG9ydHMgdGhlIEZJRU1BUCBpb2N0bCBvciB0aGUgU0VF
-S19IT0xFL1NFRUtfREFUQQpmdW5jdGlvbmFsaXR5IG9mIHRoZSBmaWxlIHNlZWsKc3lzY2FsbC4K
-CkFzIGNhbiBiZSBzZWVuIGluIHRoZSBGaWxlbWFwLnB5IGZpbGU6CgpkZWYgZmlsZW1hcChpbWFn
-ZSk6CiAgICAiIiIKICAgIENyZWF0ZSBhbmQgcmV0dXJuIGFuIGluc3RhbmNlIG9mIGEgRmlsZW1h
-cCBjbGFzcyAtICdGaWxlbWFwRmllbWFwJyBvcgogICAgJ0ZpbGVtYXBTZWVrJywgZGVwZW5kaW5n
-IG9uIHdoYXQgdGhlIHN5c3RlbSB3ZSBydW4gb24gc3VwcG9ydHMuIElmIHRoZQogICAgRklFTUFQ
-IGlvY3RsIGlzIHN1cHBvcnRlZCwgYW4gaW5zdGFuY2Ugb2YgdGhlICdGaWxlbWFwRmllbWFwJyBj
-bGFzcyBpcwogICAgcmV0dXJuZWQuIE90aGVyd2lzZSwgaWYgJ1NFRUtfSE9MRScgaXMgc3VwcG9y
-dGVkIGFuIGluc3RhbmNlIG9mIHRoZQogICAgJ0ZpbGVtYXBTZWVrJyBjbGFzcyBpcyByZXR1cm5l
-ZC4gSWYgbm9uZSBvZiB0aGVzZSBhcmUgc3VwcG9ydGVkLCB0aGUKICAgIGZ1bmN0aW9uIGdlbmVy
-YXRlcyBhbiAnRXJyb3InIHR5cGUgZXhjZXB0aW9uLgogICAgIiIiCgogICAgdHJ5OgogICAgICAg
-IHJldHVybiBGaWxlbWFwRmllbWFwKGltYWdlKQogICAgZXhjZXB0IEVycm9yTm90U3VwcDoKICAg
-ICAgICByZXR1cm4gRmlsZW1hcFNlZWsoaW1hZ2UpCgpDYW4gdGhlc2UgY2hhbmdlcyBtYWtlIHRo
-ZSBwYXRjaGVzIGFjY2VwdGFibGU/CgpUaGFua3MgYW5kIHJlZ2FyZHMsCkRhcmlvCgo+Cj4gQmVz
-dCByZWdhcmRzLAo+Cj4gVGhvbWFzCj4gLS0KPiBUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBh
-bmQgQ0VPLCBCb290bGluCj4gRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBh
-bmQgdHJhaW5pbmcKPiBodHRwczovL2Jvb3RsaW4uY29tCgoKCi0tIAoKRGFyaW8gQmluYWNjaGkK
-ClNlbmlvciBFbWJlZGRlZCBMaW51eCBEZXZlbG9wZXIKCmRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFz
-b2x1dGlvbnMuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCgoKQW1hcnVs
-YSBTb2x1dGlvbnMgU1JMCgpWaWEgTGUgQ2FuZXZhcmUgMzAsIDMxMTAwIFRyZXZpc28sIFZlbmV0
-bywgSVQKClQuICszOSAwNDIgMjQzIDUzMTAKaW5mb0BhbWFydWxhc29sdXRpb25zLmNvbQoKd3d3
-LmFtYXJ1bGFzb2x1dGlvbnMuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+Hi Yann
+
+> -----Original Message-----
+> From: buildroot <buildroot-bounces@buildroot.org> On Behalf Of Yann E.
+> MORIN
+> Sent: Saturday, May 18, 2024 3:25 PM
+> To: buildroot@buildroot.org
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Subject: [External] [Buildroot] [PATCH 1/2] support/download: introduce curl
+> backend for FTP transfers
+>
+> Recent versions of wget, starting with wget 2.0, aka wget2 thereafter,
+> no longer support FTP (nor FTPS, aka FTP-over-SSL). wget2 is packaged in
+> Fedora 40, recently released; F40 does not even have the old wget
+> available in its repository anymore.
+>
+> Introduce cURL as a download backend, that we use for FTP and FPTS
+> protocols.
+>
+> Note that the -q flag does not means being quiet; it means that a curlrc
+> file should not be parsed. The long option is --disable, which meaning
+> is not much more obivous than the short -q. It also has to be the first
+> option on the command line.
+>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  Config.in                     |  4 ++++
+>  docs/manual/prerequisite.adoc |  1 +
+>  package/pkg-download.mk       |  1 +
+>  package/pkg-generic.mk        |  2 ++
+>  support/download/curl         | 45
+> +++++++++++++++++++++++++++++++++++
+>  support/download/dl-wrapper   |  1 +
+>  6 files changed, 54 insertions(+)
+>  create mode 100755 support/download/curl
+>
+> diff --git a/Config.in b/Config.in
+> index b5a94325c4..534efa4050 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -103,6 +103,10 @@ menu "Build options"
+>
+>  menu "Commands"
+>
+> +config BR2_CURL
+> +     string "Curl command"
+> +     default "curl -q --ftp-pasv --retry 3"
+
+In my testing I found we need `-L`/`--location` which allows curl to
+follow redirects. Otherwise, some URLs like github tarballs will silently
+fail to download.
+
+Also I'd suggest `-f`/`--fail` which allows curl to detect some HTTP 4XX
+errors and print them to stderr.
+
+Thanks,
+Brandon Maier
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
