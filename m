@@ -4,69 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2F7BC25B74
-	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 11:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5127BC25B74
+	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 11:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12FAA817C0;
-	Tue, 21 May 2024 11:15:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E31AD81E01;
+	Tue, 21 May 2024 11:57:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q_SW0t5uD75b; Tue, 21 May 2024 11:15:28 +0000 (UTC)
+ id z5eArZ72EHUB; Tue, 21 May 2024 11:57:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D93B81771
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6C5C81F59
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D93B81771;
-	Tue, 21 May 2024 11:15:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CC42C1C4FC0
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 11:15:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6C5C81F59;
+	Tue, 21 May 2024 11:57:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A21641C51E3
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 11:57:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5FCD4045D
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 11:15:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8ED94607C5
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 11:57:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BjyBfCYI-0um for <buildroot@lists.busybox.net>;
- Tue, 21 May 2024 11:15:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EF6E8401F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF6E8401F3
-Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EF6E8401F3
- for <buildroot@buildroot.org>; Tue, 21 May 2024 11:15:24 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.2])
- by mail.tkos.co.il (Postfix) with ESMTP id 0DACC4402D3;
- Tue, 21 May 2024 14:15:00 +0300 (IDT)
-To: "Jarkko Sakkinen" <jarkko@kernel.org>
-In-Reply-To: <D1F9HIPNX2B6.12XBYOS1W36JF@kernel.org> (Jarkko Sakkinen's
- message of "Tue, 21 May 2024 13:47:50 +0300")
-References: <20240521103154.32660-1-jarkko@kernel.org>
- <20240521103154.32660-3-jarkko@kernel.org> <877cfnphyj.fsf@tarshish>
- <D1F9HIPNX2B6.12XBYOS1W36JF@kernel.org>
-User-Agent: mu4e 1.12.4; emacs 29.3
-Date: Tue, 21 May 2024 14:15:21 +0300
-Message-ID: <87y183o1py.fsf@tarshish>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ufjf-u-U7ZSu for <buildroot@lists.busybox.net>;
+ Tue, 21 May 2024 11:57:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
+ helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 869D86073A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 869D86073A
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [147.173.1.68])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 869D86073A
+ for <buildroot@buildroot.org>; Tue, 21 May 2024 11:57:03 +0000 (UTC)
+Received: from [147.173.65.159] (unknown [147.173.65.159])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 2D33CC13B5
+ for <buildroot@buildroot.org>; Tue, 21 May 2024 13:56:59 +0200 (CEST)
+Message-ID: <a0b1ad56-0cf6-488d-aea1-6beaea88f6b0@grenoble.cnrs.fr>
+Date: Tue, 21 May 2024 13:56:59 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1716290100;
- bh=TP+sy6zgbh4PsmQk84LjUMcZcbP7VDvTQm/R6T/3bGA=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=siTELI1jovvMlNy/hV0vzWQ17gXYgcHvcvjXpfWatqCIL0a4ZtWkZ0+rP+cQhavz7
- QKbX86vut/LBA8+Nn5sxFxalXKXQhGNwEj5HSE3mDj/LHaZQkUclGNuIhL2mR8NKMp
- IGLYQlVMzSO0q3S6jAtYBAGHnfNL5lVnBaMaYgdKi9KFzrOiSHbrmSJwcykFNKx8UQ
- QR/35NEpBf834QImh8wDejIFZzXgqgssAAtU4SFV6MlpqGWyzZLtaUYe38acl2NaTU
- dRkUekRkY/12pf3zgUFHTcAPXA3GzOqlw37xgfeW/EdVX3f3xM4qMZ8+SeC4y4FIAX
- ev6XzjeOuWa4g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <1ed351b7-0e04-436d-9ce3-ca70f4d3ff74@grenoble.cnrs.fr>
+Content-Language: en-US
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+In-Reply-To: <1ed351b7-0e04-436d-9ce3-ca70f4d3ff74@grenoble.cnrs.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1716292620;
+ bh=NyZdvUx6l3aduGjT5wkvts6kftKUxfdaaB1gX3wHVGI=;
+ h=Date:Subject:To:References:From:In-Reply-To:From;
+ b=dqJBYPtQdwn5KOrVEKiE9P6XVM/J0fQVMQzqkCICjfTueCPevVl3oagJY2/eX4839
+ QqcQEIgU1ajDAKFmj0/e5e+W21C2rdUZBuanoYJkd1vY/hN6jVjjBF6StAc2AfhW1v
+ jXKvq5NDuw3LfrwneMHeuPJ1sSqziPUNrb0VgSO8CopZj5d0MR2lUkC9h35MR+SgvM
+ GwZxLXEhZLy+N8TC7zfL2ULkDNrE1SYhKeVr+oePaNDM47Es4XP+YrM2ZFqrk3t6bh
+ avdjgDnUG7tAhfkRf0TYkRDT87Teq1+ldcZ4TXdElDL7KsHO7FxN/HoxKHbWp7LPKv
+ sKJpGTmHaYcdg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=grenoble.cnrs.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=siTELI1j
-Subject: Re: [Buildroot] [PATCH v4 2/3] package/libtpms: add host package
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=dqJBYPtQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/nginx: fix compile error in
+ configure script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,105 +84,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Stefan Berger <stefanb@linux.ibm.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jarkko,
+Hello all!
 
-[ Sorry for the dup again ]
+On 2024-05-16, I wrote:
+> Building with GCC 14 fails at the configure step with:
+> 
+>     ./configure: error: libatomic_ops library was not found.
+> 
+> The error is not caused by a missing library, but by an unrelated
+> "incompatible pointer type" error in the test program:
+> 
+>     ...
+>     checking for atomic_ops library
+>     objs/autotest.c: In function 'main':
+>     objs/autotest.c:9:48: error: passing argument 1 of 'AO_compare_and_swap' from incompatible pointer type [-Wincompatible-pointer-types]
+> 
+> This used to be a warning, but it is an error since GCC 14.[1]
+> 
+> Fix this by patching the test program in order to use the correct
+> pointer types.
+> 
+> [1] https://gcc.gnu.org/gcc-14/porting_to.html#incompatible-pointer-types
+> 
+> Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+> ---
+>  ...ix-compile-error-in-configure-script.patch | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/nginx/0011-Fix-compile-error-in-configure-script.patch
+> 
+> diff --git a/package/nginx/0011-Fix-compile-error-in-configure-script.patch b/package/nginx/0011-Fix-compile-error-in-configure-script.patch
+> new file mode 100644
+> index 0000000000..2e719928ce
+> --- /dev/null
+> +++ b/package/nginx/0011-Fix-compile-error-in-configure-script.patch
+> @@ -0,0 +1,41 @@
+> +From e1bcac837f6aeabc4ddece06ecbcf2bcca8dd651 Mon Sep 17 00:00:00 2001
+> +From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+> +Date: Thu, 16 May 2024 11:15:10 +0200
+> +Subject: [PATCH] Fix compile error in configure script
+> +
+> +Building with GCC 14 fails at the configure step with:
+> +
+> +    ./configure: error: libatomic_ops library was not found.
+> +
+> +The error is not caused by a missing library, but by an unrelated
+> +"incompatible pointer type" error in the test program:
+> +
+> +    ...
+> +    checking for atomic_ops library
+> +    objs/autotest.c: In function 'main':
+> +    objs/autotest.c:9:48: error: passing argument 1 of 'AO_compare_and_swap' from incompatible pointer type [-Wincompatible-pointer-types]
+> +
+> +Fix the error by using the correct pointer types.
+> +
+> +Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+> +Upstream: https://mailman.nginx.org/pipermail/nginx-devel/2024-May/LF5H73UPOIS64TVQUN5N6S2A4IACBRPT.html
+> +---
+> + auto/lib/libatomic/conf | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/auto/lib/libatomic/conf b/auto/lib/libatomic/conf
+> +index d1e484a..0f12b9c 100644
+> +--- a/auto/lib/libatomic/conf
+> ++++ b/auto/lib/libatomic/conf
+> +@@ -20,7 +20,7 @@ else
+> +                       #include <atomic_ops.h>"
+> +     ngx_feature_path=
+> +     ngx_feature_libs="-latomic_ops"
+> +-    ngx_feature_test="long  n = 0;
+> ++    ngx_feature_test="AO_t  n = 0;
+> +                       if (!AO_compare_and_swap(&n, 0, 1))
+> +                           return 1;
+> +                       if (AO_fetch_and_add(&n, 1) != 1)
+> +-- 
+> +2.34.1
+> +
 
-On Tue, May 21 2024, Jarkko Sakkinen wrote:
-> On Tue May 21, 2024 at 1:39 PM EEST, Baruch Siach wrote:
->> Hi Jarkko,
->>
->> On Tue, May 21 2024, Jarkko Sakkinen wrote:
->> > diff --git a/package/Config.in b/package/Config.in
->> > index 1b6a5b0dab..30b76349ec 100644
->> > --- a/package/Config.in
->> > +++ b/package/Config.in
->> > @@ -1569,6 +1569,7 @@ menu "Crypto"
->> >  	source "package/libssh/Config.in"
->> >  	source "package/libssh2/Config.in"
->> >  	source "package/libtomcrypt/Config.in"
->> > +	source "package/libtpms/Config.in"
->> >  	source "package/libuecc/Config.in"
->> >  	source "package/libxcrypt/Config.in"
->> >  	source "package/mbedtls/Config.in"
->> > diff --git a/package/libtpms/Config.in b/package/libtpms/Config.in
->> > new file mode 100644
->> > index 0000000000..335a5bc7b6
->> > --- /dev/null
->> > +++ b/package/libtpms/Config.in
->> > @@ -0,0 +1,20 @@
->> > +config BR2_PACKAGE_LIBTPMS
->>
->> You are not adding a target package, right? So this config symbol
->> doesn't do anything.
->
-> Ugh, right. Now I need to do a check before I roll out a new version.
->
-> I think this is what I should actually do, right (diff below)? Sorry
-> learning the process :-)
+The inner patch just landed, with a reworded commit message,
+on nginx's mercurial repo:
 
-We usually don't provide config symbols for host packages that are only
-used as dependencies of other packages. So the right thing to do is drop
-Config.in entirely.
+https://hg.nginx.org/nginx/rev/f58b6f636238
 
-baruch
+Should I re-spin this patch?
 
-> diff --git a/package/Config.in b/package/Config.in
-> index 30b76349ec..1b6a5b0dab 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1569,7 +1569,6 @@ menu "Crypto"
->         source "package/libssh/Config.in"
->         source "package/libssh2/Config.in"
->         source "package/libtomcrypt/Config.in"
-> -       source "package/libtpms/Config.in"
->         source "package/libuecc/Config.in"
->         source "package/libxcrypt/Config.in"
->         source "package/mbedtls/Config.in"
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 0cf9dc3897..4e0dab0504 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -57,6 +57,7 @@ menu "Host utilities"
->         source "package/jsmin/Config.in.host"
->         source "package/kmod/Config.in.host"
->         source "package/libp11/Config.in.host"
-> +       source "package/libtpms/Config.in.host"
->         source "package/llvm-project/lld/Config.in.host"
->         source "package/lpc3250loader/Config.in.host"
->         source "package/lttng-babeltrace/Config.in.host"
-> diff --git a/package/libtpms/Config.in b/package/libtpms/Config.in.host
-> similarity index 89%
-> rename from package/libtpms/Config.in
-> rename to package/libtpms/Config.in.host
-> index 335a5bc7b6..7a477d21a7 100644
-> --- a/package/libtpms/Config.in
-> +++ b/package/libtpms/Config.in.host
-> @@ -1,7 +1,5 @@
-> -config BR2_PACKAGE_LIBTPMS
-> +config BR2_HOST_PACKAGE_LIBTPMS
->         bool "libtpms"
-> -       select BR2_PACKAGE_LIBTOOL
-> -       select BR2_PACKAGE_OPENSSL
->         help
->           Libtpms is a library that targets the integration of TPM
->           functionality into hypervisors, primarily into Qemu. Libtpms
->
-> BR, Jarkko
+Regards,
 
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Edgar.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
