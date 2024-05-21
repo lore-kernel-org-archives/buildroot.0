@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CB64C25B74
-	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 04:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCF2EC25B74
+	for <buildroot@archiver.kernel.org>; Tue, 21 May 2024 04:58:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C71AF40106;
-	Tue, 21 May 2024 04:57:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CF7240106;
+	Tue, 21 May 2024 04:58:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pLtAjT2BtQog; Tue, 21 May 2024 04:56:59 +0000 (UTC)
+ id P0lV92oB1fnS; Tue, 21 May 2024 04:58:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A04CC40350
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 636F64040A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A04CC40350;
-	Tue, 21 May 2024 04:56:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 636F64040A;
+	Tue, 21 May 2024 04:58:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B45331C4F68
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 04:56:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 30E241C4F6D
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 04:58:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF50C4040A
- for <buildroot@lists.busybox.net>; Tue, 21 May 2024 04:56:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DE3E4040A
+ for <buildroot@lists.busybox.net>; Tue, 21 May 2024 04:58:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0QKbOwC7S0OB for <buildroot@lists.busybox.net>;
- Tue, 21 May 2024 04:56:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ id J-9qdy1UZ5u2 for <buildroot@lists.busybox.net>;
+ Tue, 21 May 2024 04:58:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EAAB340106
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAAB340106
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EAAB340106
- for <buildroot@buildroot.org>; Tue, 21 May 2024 04:56:55 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id EA8F113F899;
- Tue, 21 May 2024 06:56:51 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 21 May 2024 06:56:51 +0200
-Date: Tue, 21 May 2024 06:56:51 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <Zkwpk9HrTZu_CfHc@landeda>
-References: <20240520080706.32223-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240520080706.32223-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1716267414;
- bh=oCDZvJejxjQQujmxmtdWO4pIm9L4s6hGnRRYon9uzQQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=SP0KuVq0FZXFxsp79VAAKL6Affj5TkYXFqKwFBfJbKeS3yEin8KIqeybvnaeQiwpR
- RMqsDmeCYLUyx02E32Psukg+CvS6/YxapJprl4Z5c8AtuIrfovamJyWj9pOvviuXeT
- 0mbOSHKlwGuK7lWkHdksXH/5/ge1SC66FAAylQI5J60TKxtsyEfl0bE6eZvnEznME7
- TlA9kZD1dvGPOJWSWT28ftYe+xMG9+Q3DZR8b4HbXT/kqePEScCqxTwfxEIenXFEbs
- EdEemW24O4cGZokb3fAlu4UYYNmsdo0NcLEV1MRhWE83JcAcXFR44YsaniKyMD1EZY
- sfhnNeeBHhC8w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=SP0KuVq0
-Subject: Re: [Buildroot] [PATCH 1/1] package/lmdb: fix static build
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45F3140106
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45F3140106
+ for <buildroot@buildroot.org>; Tue, 21 May 2024 04:58:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2F62487490; Tue, 21 May 2024 04:58:04 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 21 May 2024 06:57:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7bea8c984e2fcff3dd058dbaecfbb6f96e1d66a2
+X-Git-Newrev: 898cf04e47b5d292afc1ab1e67f59b10b8637b12
+X-Patchwork-Hint: ignore
+Message-Id: <20240521045804.2F62487490@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ivi-homescreen: needs gcc >= 8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,96 +58,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=898cf04e47b5d292afc1ab1e67f59b10b8637b12
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-05-20 10:07 +0200, Fabrice Fontaine spake thusly:
-> Fix the following static build failure raised since the addition of the
-> package in commit eb60c4054c25129d78651a66d1e7554aff04767f:
-> 
-> __uClibc_main.c:(.text+0x15c): undefined reference to `__fini_array_start'
-> 
-> Fixes: eb60c4054c25129d78651a66d1e7554aff04767f
->  - http://autobuild.buildroot.org/results/e2bc8c35a10b6513c5605954e93b5b8a1ec7654b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/lmdb/lmdb.mk | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/lmdb/lmdb.mk b/package/lmdb/lmdb.mk
-> index dafe7332cb..13e3235267 100644
-> --- a/package/lmdb/lmdb.mk
-> +++ b/package/lmdb/lmdb.mk
-> @@ -10,21 +10,31 @@ LMDB_LICENSE = OLDAP-2.8
->  LMDB_LICENSE_FILES = libraries/liblmdb/LICENSE
->  LMDB_INSTALL_STAGING = YES
->  
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +LMBD_ILBIBS += liblmdb.a
-> +else ifeq ($(BR2_SHARED_LIBS),y)
-> +LMBD_ILBIBS += liblmdb.so
-> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-> +LMBD_ILBIBS +=  liblmdb.a liblmdb.so
-> +endif
+ivi-homescreen needs C++17 filesystem resulting in the following build
+failure with gcc < 8 since its addition in commit
+9d8497e79de3ced144877ba6ee38cc5b7181aaeb:
 
-    $ ./utils/docker-run make check-package
-    package/lmdb/lmdb.mk:14: possible typo: LMBD_ILBIBS -> *LMDB*
-    package/lmdb/lmdb.mk:16: possible typo: LMBD_ILBIBS -> *LMDB*
-    package/lmdb/lmdb.mk:18: possible typo: LMBD_ILBIBS -> *LMDB*
+In file included from /home/buildroot/instance-0/output-1/build/ivi-homescreen-5ab78a19e95c88cc5d6b173ab1260a211e78cf0a/third_party/flutter/shell/platform/common/path_utils.cc:5:0:
+/home/buildroot/instance-0/output-1/build/ivi-homescreen-5ab78a19e95c88cc5d6b173ab1260a211e78cf0a/third_party/./flutter/shell/platform/common/path_utils.h:8:10: fatal error: filesystem: No such file or directory
+ #include <filesystem>
+          ^~~~~~~~~~~~
 
-> +LMDB_MAKE_OPTS += ILIBS="$(LMBD_ILBIBS)"
+Fixes: 9d8497e79de3ced144877ba6ee38cc5b7181aaeb
+ - http://autobuild.buildroot.org/results/a5e88d5a4264a6165be31a99f1c123af53fa382e
 
-Since I had to fix the LMBD typo, I also dropped LMDB_MAKE_OPTS, because
-it is not the whole of the make options anyway (missing XCFLAGS), and I
-directly passed ILIBS along XCFLAGS, below.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/ivi-homescreen/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  define LMDB_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/libraries/liblmdb \
-> -		XCFLAGS="$(TARGET_CFLAGS)"
-> +		$(LMDB_MAKE_OPTS) XCFLAGS="$(TARGET_CFLAGS)"
->  endef
->  
->  define LMDB_INSTALL_STAGING_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
-> -		DESTDIR="$(STAGING_DIR)" \
-> +		$(LMDB_MAKE_OPTS) DESTDIR="$(STAGING_DIR)" \
->  		prefix=/usr \
->  		install
->  endef
->  
->  define LMDB_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libraries/liblmdb \
-> -		DESTDIR="$(TARGET_DIR)" \
-> +		$(LMDB_MAKE_OPTS) DESTDIR="$(TARGET_DIR)" \
->  		prefix=/usr \
->  		install
->  endef
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ivi-homescreen/Config.in b/package/ivi-homescreen/Config.in
+index dc2ccb0c97..a4f5f6835f 100644
+--- a/package/ivi-homescreen/Config.in
++++ b/package/ivi-homescreen/Config.in
+@@ -3,7 +3,7 @@ menuconfig BR2_PACKAGE_IVI_HOMESCREEN
+ 	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
+ 	depends on BR2_HOST_GCC_AT_LEAST_5 # flutter-engine
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # flutter-engine
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # flutter-engine
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # flutter-engine
+ 	depends on BR2_INSTALL_LIBSTDCPP # flutter-engine
+@@ -250,11 +250,11 @@ comment "OpenGL texture plugin needs an EGL backend"
+ 
+ endif # BR2_PACKAGE_IVI_HOMESCREEN
+ 
+-comment "ivi-homescreen needs a glibc toolchain w/ wchar, C++, gcc >= 5, dynamic library, host gcc >= 5"
++comment "ivi-homescreen needs a glibc toolchain w/ wchar, C++, gcc >= 8, dynamic library, host gcc >= 5"
+ 	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 \
+ 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+ 		|| !BR2_HOST_GCC_AT_LEAST_5
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
