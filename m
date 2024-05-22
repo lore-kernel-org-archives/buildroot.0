@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B9C1C25B78
-	for <buildroot@archiver.kernel.org>; Wed, 22 May 2024 16:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 523E2C25B78
+	for <buildroot@archiver.kernel.org>; Wed, 22 May 2024 16:10:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD6E460AC8;
-	Wed, 22 May 2024 16:09:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2083F6079F;
+	Wed, 22 May 2024 16:10:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XWnSNT52hdHB; Wed, 22 May 2024 16:09:58 +0000 (UTC)
+ id D47JLP1IdxJg; Wed, 22 May 2024 16:10:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9513460ACE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 994D660AD3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9513460ACE;
-	Wed, 22 May 2024 16:09:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 39BC11C5D48
+	by smtp3.osuosl.org (Postfix) with ESMTP id 994D660AD3;
+	Wed, 22 May 2024 16:10:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 23F6F1C5D47
  for <buildroot@lists.busybox.net>; Wed, 22 May 2024 16:09:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 223438144A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C90760737
  for <buildroot@lists.busybox.net>; Wed, 22 May 2024 16:09:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oaZ1HTi2Jn6h for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ko_A8FGML0K1 for <buildroot@lists.busybox.net>;
  Wed, 22 May 2024 16:09:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57232813E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D1F960631
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57232813E9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D1F960631
  for <buildroot@buildroot.org>; Wed, 22 May 2024 16:09:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3FDBC87554; Wed, 22 May 2024 16:09:46 +0000 (UTC)
+ id 298FF87557; Wed, 22 May 2024 16:09:46 +0000 (UTC)
 From: Romain Naour <romain.naour@smile.fr>
 To: buildroot@buildroot.org
-Date: Wed, 22 May 2024 17:54:04 +0200
+Date: Wed, 22 May 2024 17:53:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3a78b1176e6b816959a962a005fcd4030d022ca
-X-Git-Newrev: 459c8c95c76cf442debee5bed516a746c24a4aca
+X-Git-Oldrev: 113eeb55d6701ce01e7401cc322d16604a829513
+X-Git-Newrev: 69202bfe7325269e79cb01bd3d5f59e66eedceae
 X-Patchwork-Hint: ignore
-Message-Id: <20240522160946.3FDBC87554@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/orangepi_r1_defconfig: add hashes
- for Linux/headers/u-boot
+Message-Id: <20240522160946.298FF87557@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/orangepi_r1_defconfig: bump Linux
+ to 5.10.217 to fix gcc 13.x build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,77 +60,75 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2157941883361092461=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=459c8c95c76cf442debee5bed516a746c24a4aca
+--===============2157941883361092461==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=69202bfe7325269e79cb01bd3d5f59e66eedceae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES.  With this, we can now drop the
-defconfig from .checkpackageignore.
+The 5.10.10 kernel fails to build with GCC 13.x:
+
+In file included from <command-line>:
+drivers/ata/libahci.c: In function ‘ahci_led_store’:
+././include/linux/compiler_types.h:315:45: error: call to ‘__compiletime_assert_321’ declared with attribute error: BUILD_BUG_ON failed: sizeof(_s) > sizeof(long)
+  315 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |                                             ^
+././include/linux/compiler_types.h:296:25: note: in definition of macro ‘__compiletime_assert’
+  296 |                         prefix ## suffix();                             \
+      |                         ^~~~~~
+././include/linux/compiler_types.h:315:9: note: in expansion of macro ‘_compiletime_assert’
+  315 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+./include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+./include/linux/build_bug.h:50:9: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
+   50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+      |         ^~~~~~~~~~~~~~~~
+./include/linux/nospec.h:58:9: note: in expansion of macro ‘BUILD_BUG_ON’
+   58 |         BUILD_BUG_ON(sizeof(_s) > sizeof(long));                        \
+      |         ^~~~~~~~~~~~
+drivers/ata/libahci.c:1137:23: note: in expansion of macro ‘array_index_nospec’
+ 1137 |                 pmp = array_index_nospec(pmp, EM_MAX_SLOTS);
+      |                       ^~~~~~~~~~~~~~~~~~
+
+This is fixed upstream by commit f07788079f515ca (ata: ahci: fix enum
+constants for gcc-13), which has been backported to 5.10.x as of 5.10.184,
+so bump to v5.10.217 to fix the build.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- .checkpackageignore                                                 | 1 -
- board/orangepi/orangepi-r1/patches/linux-headers/linux-headers.hash | 1 +
- board/orangepi/orangepi-r1/patches/linux/linux.hash                 | 2 ++
- board/orangepi/orangepi-r1/patches/uboot/uboot.hash                 | 2 ++
- configs/orangepi_r1_defconfig                                       | 2 ++
- 5 files changed, 7 insertions(+), 1 deletion(-)
+ configs/orangepi_r1_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 3fcb842dff..798dc33978 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -270,7 +270,6 @@ configs/orangepi_one_plus_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_pc_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_pc_plus_defconfig lib_defconfig.ForceCheckHash
--configs/orangepi_r1_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_zero3_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_zero_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_zero_plus2_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/orangepi/orangepi-r1/patches/linux-headers/linux-headers.hash b/board/orangepi/orangepi-r1/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/orangepi/orangepi-r1/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/orangepi/orangepi-r1/patches/linux/linux.hash b/board/orangepi/orangepi-r1/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..2ec07fd81b
---- /dev/null
-+++ b/board/orangepi/orangepi-r1/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  d6ecff966f8c95ec4cb3bb303904f757b7de6a6bcfef0d0771cb852158e61c20  linux-6.6.31.tar.xz
-diff --git a/board/orangepi/orangepi-r1/patches/uboot/uboot.hash b/board/orangepi/orangepi-r1/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..bc999536af
---- /dev/null
-+++ b/board/orangepi/orangepi-r1/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
 diff --git a/configs/orangepi_r1_defconfig b/configs/orangepi_r1_defconfig
-index 80f88a168f..b48e6d0015 100644
+index d7a21894bd..318fa126a7 100644
 --- a/configs/orangepi_r1_defconfig
 +++ b/configs/orangepi_r1_defconfig
-@@ -2,6 +2,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-r1/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_R1"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi R1"
+@@ -7,7 +7,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi R1"
  BR2_SYSTEM_DHCP="eth0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.217"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-r1"
+
+--===============2157941883361092461==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2157941883361092461==--
