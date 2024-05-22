@@ -4,50 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B1A2C25B78
-	for <buildroot@archiver.kernel.org>; Wed, 22 May 2024 15:51:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7199C25B79
+	for <buildroot@archiver.kernel.org>; Wed, 22 May 2024 15:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14F9C400DD;
-	Wed, 22 May 2024 15:51:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 49BC641783;
+	Wed, 22 May 2024 15:51:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PmKKZI6xzUi3; Wed, 22 May 2024 15:50:59 +0000 (UTC)
+ id T1M2r27c8VxT; Wed, 22 May 2024 15:51:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97DCA40514
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E537140C1F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 97DCA40514;
-	Wed, 22 May 2024 15:50:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CD2401C5CF1
- for <buildroot@lists.busybox.net>; Wed, 22 May 2024 15:50:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E537140C1F;
+	Wed, 22 May 2024 15:51:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 96CA11C5D03
+ for <buildroot@lists.busybox.net>; Wed, 22 May 2024 15:50:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA2E182078
- for <buildroot@lists.busybox.net>; Wed, 22 May 2024 15:50:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8297C407DA
+ for <buildroot@lists.busybox.net>; Wed, 22 May 2024 15:50:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xtI6Cfjg5JHt for <buildroot@lists.busybox.net>;
- Wed, 22 May 2024 15:50:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95CFB8203D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95CFB8203D
- for <buildroot@buildroot.org>; Wed, 22 May 2024 15:50:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 743C287534; Wed, 22 May 2024 15:50:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u3GZyBtLT75E for <buildroot@lists.busybox.net>;
+ Wed, 22 May 2024 15:50:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 59BA8407D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59BA8407D1
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 59BA8407D1
+ for <buildroot@buildroot.org>; Wed, 22 May 2024 15:50:57 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4202c0d316cso6535945e9.1
+ for <buildroot@buildroot.org>; Wed, 22 May 2024 08:50:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1716393055; x=1716997855;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=cXePK5EvFEBymmHLt34RdeMVtIkfj2d5cW/+1LduAac=;
+ b=pO1V+nztsP37ojfWdOAbAsRgNrC8XkLVLoD74Yjvi+S0bMCCVM7wfw6KdnAYRxqBY8
+ dXhG1rqMAi5bhmh5EJrC15XUquc/ILthxxAa5P0gTetrCkJ/L7p0t/j1fofauR6z5DXz
+ cN08ZVMvsdZ91T6aKsPh0spdxpxqXdu+rlF+DsCBZLao977DhVezfIe4NYV4c5VckiuV
+ 6t/HnxsnIy8CUVhUFOCoqbCHXHLPcgu2m8q1mMgusIsQqu40BCFpivw84PLwpbIssTk3
+ iXEaMzGttBmgZ4kp1SRmJqZNJkSJ10/cGiqGHeMpTGPlPc6xuraDEhlnXCgqpajNoFaS
+ 4Miw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWKuijYORN39oLDJuz1Y7pw5bAm5SHcGI7ysoHcw6T1vp81SjJ3jb2Nd2wAIP5zrwJcDpXpPXBetyh1HWgZ9l8mz2wW536XMg==
+X-Gm-Message-State: AOJu0YxD3PpBPedkmxmaH6l7whRDBmTmfvtkedvOt3ByV4GKLDjcSZlL
+ fyRgQMh6lgb/LKYYRy2FTWHX43LoxNBaCTHrl0NXvITmtVl8SlY5etPws6WXFeaeo0eoDb4rres
+ Z
+X-Google-Smtp-Source: AGHT+IEr2tgMzHxCrxb86gzBbujfJLOF5RbxiyxQm728YPrR54/nquavMtLYeDMqVa8NOgO4Uee8CA==
+X-Received: by 2002:a05:600c:4fc6:b0:41a:7c1d:3326 with SMTP id
+ 5b1f17b1804b1-420fce6d1d1mr21787555e9.8.1716393055180; 
+ Wed, 22 May 2024 08:50:55 -0700 (PDT)
+Received: from [10.5.0.27] (202-122-190-109.dsl.ovh.fr. [109.190.122.202])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-41fccee9335sm499474975e9.29.2024.05.22.08.50.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 22 May 2024 08:50:54 -0700 (PDT)
+Message-ID: <433c25a2-8985-44a4-8a23-0deefce3186f@smile.fr>
+Date: Wed, 22 May 2024 17:50:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20240520083942.16646-1-ju.o@free.fr>
+Content-Language: fr
 From: Romain Naour <romain.naour@smile.fr>
-To: buildroot@buildroot.org
-Date: Wed, 22 May 2024 17:25:37 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bbfee1d9b594182e03d0ccff3e463096b28428df
-X-Git-Newrev: 482b672e8436ee1c20f53f0d7496265f9e968d74
-X-Patchwork-Hint: ignore
-Message-Id: <20240522155056.743C287534@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imx8mmpico: bump bsp components to
- version tn-mickledore_6.1.55-2.2.0_20240417
+In-Reply-To: <20240520083942.16646-1-ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1716393055; x=1716997855;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=cXePK5EvFEBymmHLt34RdeMVtIkfj2d5cW/+1LduAac=;
+ b=QIMevF2iQ3OHtwVXwylMthyQpccgrnbCfljMAFSk746G6q6SC369JbI2gVZj5G2AUB
+ U+RPLW5qllpiz1SH+lXm3kWsCekCnEyfuBRyxd94/Iu/cJaL++mnIG0xBifYt2FHked+
+ 7OIu47NvWAglnksvSdNXv7SdoSirhfaA/t31tsc7tI+zYDmLWfWv3qpjzq+9hfj4pydn
+ 9dEB2lR1kyGFSI0HFWECLlcT4SQfPLp0fs/YuMZYj9s31LPDPwnyxBxq4/AghKEyUHJO
+ I3DuxcC5PnxO7e24s/OG8a+sKGGRncCfXX6iw5SuLlcAttQTTSd8N1M5rro0c3Nb9N3N
+ UtiA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=smile-fr.20230601.gappssmtp.com
+ header.i=@smile-fr.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=QIMevF2i
+Subject: Re: [Buildroot] [PATCH 1/1] configs/imx8mmpico: bump bsp components
+ to version tn-mickledore_6.1.55-2.2.0_20240417
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,264 +110,229 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=482b672e8436ee1c20f53f0d7496265f9e968d74
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This commit bumps the BSP components (U-Boot, Arm Trusted Firmware
-and Kernel) to version tn-mickledore_6.1.55-2.2.0_20240417.
-
-While at it, it also enable BR2_DOWNLOAD_FORCE_CHECK_HASHES=y in the
-defconfig, to check the archives of this new version. The necessary
-hash files are also added. The BR2_GLOBAL_PATCH_DIR moved, due to a
-defconfig refresh with a "make savedefconfig".
-
-This commit also removes arm-truster-firmware package patches which
-are no longer needed (since they are included in the new version).
-
-Finally, this defconfig fail to build since commit dc0f721
-"package/gcc: switch to 13.x as default". Those new BSP components
-contains the patches to fix this build issue.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/6865597270
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-[Romain: remove imx8mmpico_defconfig entry in .checkpackageignore]
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- .checkpackageignore                                |  1 -
- ...ld-allow-lower-address-access-with-gcc-12.patch | 62 ----------------------
- ...ild-add-support-for-new-binutils-versions.patch | 62 ----------------------
- .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +
- .../patches/linux-headers/linux-headers.hash       |  1 +
- .../technexion/imx8mmpico/patches/linux/linux.hash |  2 +
- .../technexion/imx8mmpico/patches/uboot/uboot.hash |  2 +
- configs/imx8mmpico_defconfig                       | 11 ++--
- 8 files changed, 13 insertions(+), 130 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0ddf9effda..3fcb842dff 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -210,7 +210,6 @@ configs/imx6ullevk_defconfig lib_defconfig.ForceCheckHash
- configs/imx6ulpico_defconfig lib_defconfig.ForceCheckHash
- configs/imx7d-sdb_defconfig lib_defconfig.ForceCheckHash
- configs/imx7dpico_defconfig lib_defconfig.ForceCheckHash
--configs/imx8mmpico_defconfig lib_defconfig.ForceCheckHash
- configs/imx8mn_bsh_smm_s2_defconfig lib_defconfig.ForceCheckHash
- configs/imx8mn_bsh_smm_s2_pro_defconfig lib_defconfig.ForceCheckHash
- configs/imx8mpico_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/technexion/imx8mmpico/patches/arm-trusted-firmware/0001-fix-build-allow-lower-address-access-with-gcc-12.patch b/board/technexion/imx8mmpico/patches/arm-trusted-firmware/0001-fix-build-allow-lower-address-access-with-gcc-12.patch
-deleted file mode 100644
-index 90e808cc8e..0000000000
---- a/board/technexion/imx8mmpico/patches/arm-trusted-firmware/0001-fix-build-allow-lower-address-access-with-gcc-12.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 078cbf942c86d77775a26d83fc87ca244de02d4c Mon Sep 17 00:00:00 2001
--From: Govindraj Raja <govindraj.raja@arm.com>
--Date: Fri, 5 May 2023 09:09:36 -0500
--Subject: [PATCH] fix(build): allow lower address access with gcc-12
--
--With gcc-12 any lower address access can trigger a warning/error
--this would be useful in other parts of system but in TF-A
--there are various reasons to access to the lower address ranges,
--example using mmio_read_*/writes_*
--
--So setup to allow access to lower addresses while using gcc-12
--
--Change-Id: Id1b4012b13bc6876d83b90a347fee12478a1921d
--Signed-off-by: Govindraj Raja <govindraj.raja@arm.com>
--Upstream: https://github.com/ARM-software/arm-trusted-firmware/commit/dea23e245fb890c6c06eff7d1aed8fffa981fc05
--Signed-off-by: Julien Olivain <ju.o@free.fr>
-----
-- Makefile                     |  4 ++++
-- make_helpers/build_macros.mk | 12 ++++++++++++
-- 2 files changed, 16 insertions(+)
--
--diff --git a/Makefile b/Makefile
--index dccf0121d..edd7f5886 100644
----- a/Makefile
--+++ b/Makefile
--@@ -385,6 +385,10 @@ ifeq ($(findstring clang,$(notdir $(CC))),)
-- WARNINGS	+=		-Wunused-but-set-variable -Wmaybe-uninitialized	\
-- 				-Wpacked-bitfield-compat -Wshift-overflow=2 \
-- 				-Wlogical-op
--+
--+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105523
--+TF_CFLAGS		+= 	$(call cc_option, --param=min-pagesize=0)
--+
-- else
-- # using clang
-- WARNINGS	+=		-Wshift-overflow -Wshift-sign-overflow \
--diff --git a/make_helpers/build_macros.mk b/make_helpers/build_macros.mk
--index 12aaee684..3a54bf67c 100644
----- a/make_helpers/build_macros.mk
--+++ b/make_helpers/build_macros.mk
--@@ -86,6 +86,18 @@ define assert_numerics
--     $(foreach num,$1,$(eval $(call assert_numeric,$(num))))
-- endef
-- 
--+# Convenience function to check for a given linker option. An call to
--+# $(call ld_option, --no-XYZ) will return --no-XYZ if supported by the linker
--+define ld_option
--+	$(shell if $(LD) $(1) -v >/dev/null 2>&1; then echo $(1); fi )
--+endef
--+
--+# Convenience function to check for a given compiler option. A call to
--+# $(call cc_option, --no-XYZ) will return --no-XYZ if supported by the compiler
--+define cc_option
--+	$(shell if $(CC) $(1) -c -x c /dev/null -o /dev/null >/dev/null 2>&1; then echo $(1); fi )
--+endef
--+
-- # CREATE_SEQ is a recursive function to create sequence of numbers from 1 to
-- # $(2) and assign the sequence to $(1)
-- define CREATE_SEQ
---- 
--2.41.0
--
-diff --git a/board/technexion/imx8mmpico/patches/arm-trusted-firmware/0002-feat-build-add-support-for-new-binutils-versions.patch b/board/technexion/imx8mmpico/patches/arm-trusted-firmware/0002-feat-build-add-support-for-new-binutils-versions.patch
-deleted file mode 100644
-index d989bdb06b..0000000000
---- a/board/technexion/imx8mmpico/patches/arm-trusted-firmware/0002-feat-build-add-support-for-new-binutils-versions.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From cc14748257e07ed5b2caf5194c4c333a8d09a1f4 Mon Sep 17 00:00:00 2001
--From: Marco Felsch <m.felsch@pengutronix.de>
--Date: Wed, 9 Nov 2022 12:59:09 +0100
--Subject: [PATCH] feat(build): add support for new binutils versions
--
--Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
--of a new warning when linking the bl*.elf in the form:
--
--  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
--  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
--  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
--  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
--
--These new warnings are enbaled by default to secure elf binaries:
-- - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-- - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
--
--Fix it in a similar way to what the Linux kernel does, see:
--https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
--
--Following the reasoning there, we set "-z noexecstack" for all linkers
--(although LLVM's LLD defaults to it) and optional add
----no-warn-rwx-segments since this a ld.bfd related.
--
--Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
--Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
--Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
--Upstream: https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c
--Signed-off-by: Julien Olivain <ju.o@free.fr>
-----
-- Makefile | 8 ++++++++
-- 1 file changed, 8 insertions(+)
--
--diff --git a/Makefile b/Makefile
--index edd7f5886..4c0e1473e 100644
----- a/Makefile
--+++ b/Makefile
--@@ -418,6 +418,8 @@ endif
-- 
-- GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-- 
--+TF_LDFLAGS		+=	-z noexecstack
--+
-- # LD = armlink
-- ifneq ($(findstring armlink,$(notdir $(LD))),)
-- TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
--@@ -445,6 +447,12 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
-- # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
-- else
-- TF_LDFLAGS		+=	--fatal-warnings -O1
--+
--+# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
--+# are not loaded by a elf loader.
--+TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
--+TF_LDFLAGS		+=	-O1
--+
-- TF_LDFLAGS		+=	--gc-sections
-- # ld.lld doesn't recognize the errata flags,
-- # therefore don't add those in that case
---- 
--2.41.0
--
-diff --git a/board/technexion/imx8mmpico/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/technexion/imx8mmpico/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..98f425a89e
---- /dev/null
-+++ b/board/technexion/imx8mmpico/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  cfb927722272897f850681c78d5f129b0883a8efaba9c52d30e029086524f7ff  imx-atf-lf-6.1.55-2.2.0.tar.gz
-diff --git a/board/technexion/imx8mmpico/patches/linux-headers/linux-headers.hash b/board/technexion/imx8mmpico/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/technexion/imx8mmpico/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/technexion/imx8mmpico/patches/linux/linux.hash b/board/technexion/imx8mmpico/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..d88a78c458
---- /dev/null
-+++ b/board/technexion/imx8mmpico/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  875716dc8fe6e0df55b40600877232d9a1d62f81950244e16d563621f636f16e  linux-tn-imx-tn-mickledore_6.1.55-2.2.0_20240417.tar.gz
-diff --git a/board/technexion/imx8mmpico/patches/uboot/uboot.hash b/board/technexion/imx8mmpico/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..0f48f6f10b
---- /dev/null
-+++ b/board/technexion/imx8mmpico/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  fbcdf336960f38a14ac4e9a383c207952f8b81cf0b5fe38b53dfe6ad0e8fa089  u-boot-tn-imx-tn-mickledore_6.1.55-2.2.0_20240417.tar.gz
-diff --git a/configs/imx8mmpico_defconfig b/configs/imx8mmpico_defconfig
-index 711cdeb390..d1836db61a 100644
---- a/configs/imx8mmpico_defconfig
-+++ b/configs/imx8mmpico_defconfig
-@@ -1,11 +1,12 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_GLOBAL_PATCH_DIR="board/technexion/imx8mmpico/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-pico-pi.dtb"
--BR2_GLOBAL_PATCH_DIR="board/technexion/imx8mmpico/patches"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux-tn-imx,tn-kirkstone_5.15.71-2.2.0_20230512)/linux-tn-imx-tn-kirkstone_5.15.71-2.2.0_20230512.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux-tn-imx,tn-mickledore_6.1.55-2.2.0_20240417)/linux-tn-imx-tn-mickledore_6.1.55-2.2.0_20240417.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="tn_imx8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-pico-pi freescale/imx8mm-pico-pi-ili9881c"
-@@ -19,13 +20,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.15.71-2.2.0)/imx-atf-lf-5.15.71-2.2.0.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.1.55-2.2.0)/imx-atf-lf-6.1.55-2.2.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-tn-imx,tn-kirkstone_5.15.71-2.2.0_20230512)/u-boot-tn-imx-tn-kirkstone_5.15.71-2.2.0_20230512.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-tn-imx,tn-mickledore_6.1.55-2.2.0_20240417)/u-boot-tn-imx-tn-mickledore_6.1.55-2.2.0_20240417.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pico-imx8mm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSnVsaWVuLAoKTGUgMjAvMDUvMjAyNCDDoCAxMDozOSwgSnVsaWVuIE9saXZhaW4gYSDD
+qWNyaXTCoDoKPiBUaGlzIGNvbW1pdCBidW1wcyB0aGUgQlNQIGNvbXBvbmVudHMgKFUtQm9vdCwg
+QXJtIFRydXN0ZWQgRmlybXdhcmUKPiBhbmQgS2VybmVsKSB0byB2ZXJzaW9uIHRuLW1pY2tsZWRv
+cmVfNi4xLjU1LTIuMi4wXzIwMjQwNDE3Lgo+IAo+IFdoaWxlIGF0IGl0LCBpdCBhbHNvIGVuYWJs
+ZSBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTPXkgaW4gdGhlCj4gZGVmY29uZmlnLCB0
+byBjaGVjayB0aGUgYXJjaGl2ZXMgb2YgdGhpcyBuZXcgdmVyc2lvbi4gVGhlIG5lY2Vzc2FyeQo+
+IGhhc2ggZmlsZXMgYXJlIGFsc28gYWRkZWQuIFRoZSBCUjJfR0xPQkFMX1BBVENIX0RJUiBtb3Zl
+ZCwgZHVlIHRvIGEKPiBkZWZjb25maWcgcmVmcmVzaCB3aXRoIGEgIm1ha2Ugc2F2ZWRlZmNvbmZp
+ZyIuCj4gCj4gVGhpcyBjb21taXQgYWxzbyByZW1vdmVzIGFybS10cnVzdGVyLWZpcm13YXJlIHBh
+Y2thZ2UgcGF0Y2hlcyB3aGljaAo+IGFyZSBubyBsb25nZXIgbmVlZGVkIChzaW5jZSB0aGV5IGFy
+ZSBpbmNsdWRlZCBpbiB0aGUgbmV3IHZlcnNpb24pLgo+IAo+IEZpbmFsbHksIHRoaXMgZGVmY29u
+ZmlnIGZhaWwgdG8gYnVpbGQgc2luY2UgY29tbWl0IGRjMGY3MjEKPiAicGFja2FnZS9nY2M6IHN3
+aXRjaCB0byAxMy54IGFzIGRlZmF1bHQiLiBUaG9zZSBuZXcgQlNQIGNvbXBvbmVudHMKPiBjb250
+YWlucyB0aGUgcGF0Y2hlcyB0byBmaXggdGhpcyBidWlsZCBpc3N1ZS4KPiAKPiBGaXhlczoKPiBo
+dHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzY4NjU1OTcy
+NzAKCkkgcmVtb3ZlZCB0aGUgaW14OG1tcGljb19kZWZjb25maWcgZW50cnkgaW4gLmNoZWNrcGFj
+a2FnZWlnbm9yZS4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpCZXN0IHJlZ2FyZHMsClJv
+bWFpbgoKCj4gCj4gU2lnbmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4K
+PiAtLS0KPiAgLi4ubG93LWxvd2VyLWFkZHJlc3MtYWNjZXNzLXdpdGgtZ2NjLTEyLnBhdGNoIHwg
+NjIgLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICAuLi5kZC1zdXBwb3J0LWZvci1uZXctYmludXRpbHMt
+dmVyc2lvbnMucGF0Y2ggfCA2MiAtLS0tLS0tLS0tLS0tLS0tLS0tCj4gIC4uLi9hcm0tdHJ1c3Rl
+ZC1maXJtd2FyZS5oYXNoICAgICAgICAgICAgICAgICB8ICAyICsKPiAgLi4uL3BhdGNoZXMvbGlu
+dXgtaGVhZGVycy9saW51eC1oZWFkZXJzLmhhc2ggIHwgIDEgKwo+ICAuLi4vaW14OG1tcGljby9w
+YXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2ggICAgICAgfCAgMiArCj4gIC4uLi9pbXg4bW1waWNvL3Bh
+dGNoZXMvdWJvb3QvdWJvb3QuaGFzaCAgICAgICB8ICAyICsKPiAgY29uZmlncy9pbXg4bW1waWNv
+X2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgIHwgMTEgKystLQo+ICA3IGZpbGVzIGNoYW5nZWQs
+IDEzIGluc2VydGlvbnMoKyksIDEyOSBkZWxldGlvbnMoLSkKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0
+IGJvYXJkL3RlY2huZXhpb24vaW14OG1tcGljby9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJl
+LzAwMDEtZml4LWJ1aWxkLWFsbG93LWxvd2VyLWFkZHJlc3MtYWNjZXNzLXdpdGgtZ2NjLTEyLnBh
+dGNoCj4gIGRlbGV0ZSBtb2RlIDEwMDY0NCBib2FyZC90ZWNobmV4aW9uL2lteDhtbXBpY28vcGF0
+Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS8wMDAyLWZlYXQtYnVpbGQtYWRkLXN1cHBvcnQtZm9y
+LW5ldy1iaW51dGlscy12ZXJzaW9ucy5wYXRjaAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQv
+dGVjaG5leGlvbi9pbXg4bW1waWNvL3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvYXJtLXRy
+dXN0ZWQtZmlybXdhcmUuaGFzaAo+ICBjcmVhdGUgbW9kZSAxMjAwMDAgYm9hcmQvdGVjaG5leGlv
+bi9pbXg4bW1waWNvL3BhdGNoZXMvbGludXgtaGVhZGVycy9saW51eC1oZWFkZXJzLmhhc2gKPiAg
+Y3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RlY2huZXhpb24vaW14OG1tcGljby9wYXRjaGVzL2xp
+bnV4L2xpbnV4Lmhhc2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RlY2huZXhpb24vaW14
+OG1tcGljby9wYXRjaGVzL3Vib290L3Vib290Lmhhc2gKPiAKPiBkaWZmIC0tZ2l0IGEvYm9hcmQv
+dGVjaG5leGlvbi9pbXg4bW1waWNvL3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvMDAwMS1m
+aXgtYnVpbGQtYWxsb3ctbG93ZXItYWRkcmVzcy1hY2Nlc3Mtd2l0aC1nY2MtMTIucGF0Y2ggYi9i
+b2FyZC90ZWNobmV4aW9uL2lteDhtbXBpY28vcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS8w
+MDAxLWZpeC1idWlsZC1hbGxvdy1sb3dlci1hZGRyZXNzLWFjY2Vzcy13aXRoLWdjYy0xMi5wYXRj
+aAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDkwZTgwOGNjOGU1Li4wMDAwMDAw
+MDAwMAo+IC0tLSBhL2JvYXJkL3RlY2huZXhpb24vaW14OG1tcGljby9wYXRjaGVzL2FybS10cnVz
+dGVkLWZpcm13YXJlLzAwMDEtZml4LWJ1aWxkLWFsbG93LWxvd2VyLWFkZHJlc3MtYWNjZXNzLXdp
+dGgtZ2NjLTEyLnBhdGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDYyICswLDAgQEAKPiAtRnJv
+bSAwNzhjYmY5NDJjODZkNzc3NzVhMjZkODNmYzg3Y2EyNDRkZTAyZDRjIE1vbiBTZXAgMTcgMDA6
+MDA6MDAgMjAwMQo+IC1Gcm9tOiBHb3ZpbmRyYWogUmFqYSA8Z292aW5kcmFqLnJhamFAYXJtLmNv
+bT4KPiAtRGF0ZTogRnJpLCA1IE1heSAyMDIzIDA5OjA5OjM2IC0wNTAwCj4gLVN1YmplY3Q6IFtQ
+QVRDSF0gZml4KGJ1aWxkKTogYWxsb3cgbG93ZXIgYWRkcmVzcyBhY2Nlc3Mgd2l0aCBnY2MtMTIK
+PiAtCj4gLVdpdGggZ2NjLTEyIGFueSBsb3dlciBhZGRyZXNzIGFjY2VzcyBjYW4gdHJpZ2dlciBh
+IHdhcm5pbmcvZXJyb3IKPiAtdGhpcyB3b3VsZCBiZSB1c2VmdWwgaW4gb3RoZXIgcGFydHMgb2Yg
+c3lzdGVtIGJ1dCBpbiBURi1BCj4gLXRoZXJlIGFyZSB2YXJpb3VzIHJlYXNvbnMgdG8gYWNjZXNz
+IHRvIHRoZSBsb3dlciBhZGRyZXNzIHJhbmdlcywKPiAtZXhhbXBsZSB1c2luZyBtbWlvX3JlYWRf
+Ki93cml0ZXNfKgo+IC0KPiAtU28gc2V0dXAgdG8gYWxsb3cgYWNjZXNzIHRvIGxvd2VyIGFkZHJl
+c3NlcyB3aGlsZSB1c2luZyBnY2MtMTIKPiAtCj4gLUNoYW5nZS1JZDogSWQxYjQwMTJiMTNiYzY4
+NzZkODNiOTBhMzQ3ZmVlMTI0NzhhMTkyMWQKPiAtU2lnbmVkLW9mZi1ieTogR292aW5kcmFqIFJh
+amEgPGdvdmluZHJhai5yYWphQGFybS5jb20+Cj4gLVVwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5j
+b20vQVJNLXNvZnR3YXJlL2FybS10cnVzdGVkLWZpcm13YXJlL2NvbW1pdC9kZWEyM2UyNDVmYjg5
+MGM2YzA2ZWZmN2QxYWVkOGZmZmE5ODFmYzA1Cj4gLVNpZ25lZC1vZmYtYnk6IEp1bGllbiBPbGl2
+YWluIDxqdS5vQGZyZWUuZnI+Cj4gLS0tLQo+IC0gTWFrZWZpbGUgICAgICAgICAgICAgICAgICAg
+ICB8ICA0ICsrKysKPiAtIG1ha2VfaGVscGVycy9idWlsZF9tYWNyb3MubWsgfCAxMiArKysrKysr
+KysrKysKPiAtIDIgZmlsZXMgY2hhbmdlZCwgMTYgaW5zZXJ0aW9ucygrKQo+IC0KPiAtZGlmZiAt
+LWdpdCBhL01ha2VmaWxlIGIvTWFrZWZpbGUKPiAtaW5kZXggZGNjZjAxMjFkLi5lZGQ3ZjU4ODYg
+MTAwNjQ0Cj4gLS0tLSBhL01ha2VmaWxlCj4gLSsrKyBiL01ha2VmaWxlCj4gLUBAIC0zODUsNiAr
+Mzg1LDEwIEBAIGlmZXEgKCQoZmluZHN0cmluZyBjbGFuZywkKG5vdGRpciAkKENDKSkpLCkKPiAt
+IFdBUk5JTkdTCSs9CQktV3VudXNlZC1idXQtc2V0LXZhcmlhYmxlIC1XbWF5YmUtdW5pbml0aWFs
+aXplZAlcCj4gLSAJCQkJLVdwYWNrZWQtYml0ZmllbGQtY29tcGF0IC1Xc2hpZnQtb3ZlcmZsb3c9
+MiBcCj4gLSAJCQkJLVdsb2dpY2FsLW9wCj4gLSsKPiAtKyMgaHR0cHM6Ly9nY2MuZ251Lm9yZy9i
+dWd6aWxsYS9zaG93X2J1Zy5jZ2k/aWQ9MTA1NTIzCj4gLStURl9DRkxBR1MJCSs9IAkkKGNhbGwg
+Y2Nfb3B0aW9uLCAtLXBhcmFtPW1pbi1wYWdlc2l6ZT0wKQo+IC0rCj4gLSBlbHNlCj4gLSAjIHVz
+aW5nIGNsYW5nCj4gLSBXQVJOSU5HUwkrPQkJLVdzaGlmdC1vdmVyZmxvdyAtV3NoaWZ0LXNpZ24t
+b3ZlcmZsb3cgXAo+IC1kaWZmIC0tZ2l0IGEvbWFrZV9oZWxwZXJzL2J1aWxkX21hY3Jvcy5tayBi
+L21ha2VfaGVscGVycy9idWlsZF9tYWNyb3MubWsKPiAtaW5kZXggMTJhYWVlNjg0Li4zYTU0YmY2
+N2MgMTAwNjQ0Cj4gLS0tLSBhL21ha2VfaGVscGVycy9idWlsZF9tYWNyb3MubWsKPiAtKysrIGIv
+bWFrZV9oZWxwZXJzL2J1aWxkX21hY3Jvcy5tawo+IC1AQCAtODYsNiArODYsMTggQEAgZGVmaW5l
+IGFzc2VydF9udW1lcmljcwo+IC0gICAgICQoZm9yZWFjaCBudW0sJDEsJChldmFsICQoY2FsbCBh
+c3NlcnRfbnVtZXJpYywkKG51bSkpKSkKPiAtIGVuZGVmCj4gLSAKPiAtKyMgQ29udmVuaWVuY2Ug
+ZnVuY3Rpb24gdG8gY2hlY2sgZm9yIGEgZ2l2ZW4gbGlua2VyIG9wdGlvbi4gQW4gY2FsbCB0bwo+
+IC0rIyAkKGNhbGwgbGRfb3B0aW9uLCAtLW5vLVhZWikgd2lsbCByZXR1cm4gLS1uby1YWVogaWYg
+c3VwcG9ydGVkIGJ5IHRoZSBsaW5rZXIKPiAtK2RlZmluZSBsZF9vcHRpb24KPiAtKwkkKHNoZWxs
+IGlmICQoTEQpICQoMSkgLXYgPi9kZXYvbnVsbCAyPiYxOyB0aGVuIGVjaG8gJCgxKTsgZmkgKQo+
+IC0rZW5kZWYKPiAtKwo+IC0rIyBDb252ZW5pZW5jZSBmdW5jdGlvbiB0byBjaGVjayBmb3IgYSBn
+aXZlbiBjb21waWxlciBvcHRpb24uIEEgY2FsbCB0bwo+IC0rIyAkKGNhbGwgY2Nfb3B0aW9uLCAt
+LW5vLVhZWikgd2lsbCByZXR1cm4gLS1uby1YWVogaWYgc3VwcG9ydGVkIGJ5IHRoZSBjb21waWxl
+cgo+IC0rZGVmaW5lIGNjX29wdGlvbgo+IC0rCSQoc2hlbGwgaWYgJChDQykgJCgxKSAtYyAteCBj
+IC9kZXYvbnVsbCAtbyAvZGV2L251bGwgPi9kZXYvbnVsbCAyPiYxOyB0aGVuIGVjaG8gJCgxKTsg
+ZmkgKQo+IC0rZW5kZWYKPiAtKwo+IC0gIyBDUkVBVEVfU0VRIGlzIGEgcmVjdXJzaXZlIGZ1bmN0
+aW9uIHRvIGNyZWF0ZSBzZXF1ZW5jZSBvZiBudW1iZXJzIGZyb20gMSB0bwo+IC0gIyAkKDIpIGFu
+ZCBhc3NpZ24gdGhlIHNlcXVlbmNlIHRvICQoMSkKPiAtIGRlZmluZSBDUkVBVEVfU0VRCj4gLS0t
+IAo+IC0yLjQxLjAKPiAtCj4gZGlmZiAtLWdpdCBhL2JvYXJkL3RlY2huZXhpb24vaW14OG1tcGlj
+by9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJlLzAwMDItZmVhdC1idWlsZC1hZGQtc3VwcG9y
+dC1mb3ItbmV3LWJpbnV0aWxzLXZlcnNpb25zLnBhdGNoIGIvYm9hcmQvdGVjaG5leGlvbi9pbXg4
+bW1waWNvL3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvMDAwMi1mZWF0LWJ1aWxkLWFkZC1z
+dXBwb3J0LWZvci1uZXctYmludXRpbHMtdmVyc2lvbnMucGF0Y2gKPiBkZWxldGVkIGZpbGUgbW9k
+ZSAxMDA2NDQKPiBpbmRleCBkOTg5YmRiMDZiZS4uMDAwMDAwMDAwMDAKPiAtLS0gYS9ib2FyZC90
+ZWNobmV4aW9uL2lteDhtbXBpY28vcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS8wMDAyLWZl
+YXQtYnVpbGQtYWRkLXN1cHBvcnQtZm9yLW5ldy1iaW51dGlscy12ZXJzaW9ucy5wYXRjaAo+ICsr
+KyAvZGV2L251bGwKPiBAQCAtMSw2MiArMCwwIEBACj4gLUZyb20gY2MxNDc0ODI1N2UwN2VkNWIy
+Y2FmNTE5NGM0YzMzM2E4ZDA5YTFmNCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAtRnJvbTog
+TWFyY28gRmVsc2NoIDxtLmZlbHNjaEBwZW5ndXRyb25peC5kZT4KPiAtRGF0ZTogV2VkLCA5IE5v
+diAyMDIyIDEyOjU5OjA5ICswMTAwCj4gLVN1YmplY3Q6IFtQQVRDSF0gZmVhdChidWlsZCk6IGFk
+ZCBzdXBwb3J0IGZvciBuZXcgYmludXRpbHMgdmVyc2lvbnMKPiAtCj4gLVVzZXJzIG9mIEdOVSBs
+ZCAoQlBGKSBmcm9tIGJpbnV0aWxzIDIuMzkrIHdpbGwgb2JzZXJ2ZSBtdWx0aXBsZSBpbnN0YWNl
+cwo+IC1vZiBhIG5ldyB3YXJuaW5nIHdoZW4gbGlua2luZyB0aGUgYmwqLmVsZiBpbiB0aGUgZm9y
+bToKPiAtCj4gLSAgbGQuYmZkOiB3YXJuaW5nOiBzdG0zMm1wMV9oZWxwZXIubzogbWlzc2luZyAu
+bm90ZS5HTlUtc3RhY2sgc2VjdGlvbiBpbXBsaWVzIGV4ZWN1dGFibGUgc3RhY2sKPiAtICBsZC5i
+ZmQ6IE5PVEU6IFRoaXMgYmVoYXZpb3VyIGlzIGRlcHJlY2F0ZWQgYW5kIHdpbGwgYmUgcmVtb3Zl
+ZCBpbiBhIGZ1dHVyZSB2ZXJzaW9uIG9mIHRoZSBsaW5rZXIKPiAtICBsZC5iZmQ6IHdhcm5pbmc6
+IGJsMi5lbGYgaGFzIGEgTE9BRCBzZWdtZW50IHdpdGggUldYIHBlcm1pc3Npb25zCj4gLSAgbGQu
+YmZkOiB3YXJuaW5nOiBibDMyLmVsZiBoYXMgYSBMT0FEIHNlZ21lbnQgd2l0aCBSV1ggcGVybWlz
+c2lvbnMKPiAtCj4gLVRoZXNlIG5ldyB3YXJuaW5ncyBhcmUgZW5iYWxlZCBieSBkZWZhdWx0IHRv
+IHNlY3VyZSBlbGYgYmluYXJpZXM6Cj4gLSAtIGh0dHBzOi8vc291cmNld2FyZS5vcmcvZ2l0Lz9w
+PWJpbnV0aWxzLWdkYi5naXQ7YT1jb21taXQ7aD1iYTk1MWFmYjk5OTEyZGEwMWE2ZTg0MzQxMjZi
+OGZhYzdhYTc1MTA3Cj4gLSAtIGh0dHBzOi8vc291cmNld2FyZS5vcmcvZ2l0Lz9wPWJpbnV0aWxz
+LWdkYi5naXQ7YT1jb21taXQ7aD0wZDM4NTc2YTM0ZWM2NGExYjQ1MDBjOTI3N2E4ZTlkMGYwN2U2
+Nzc0Cj4gLQo+IC1GaXggaXQgaW4gYSBzaW1pbGFyIHdheSB0byB3aGF0IHRoZSBMaW51eCBrZXJu
+ZWwgZG9lcywgc2VlOgo+IC1odHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjA4MTAyMjI0
+NDIuMjI5NjY1MS0xLW5kZXNhdWxuaWVyc0Bnb29nbGUuY29tLwo+IC0KPiAtRm9sbG93aW5nIHRo
+ZSByZWFzb25pbmcgdGhlcmUsIHdlIHNldCAiLXogbm9leGVjc3RhY2siIGZvciBhbGwgbGlua2Vy
+cwo+IC0oYWx0aG91Z2ggTExWTSdzIExMRCBkZWZhdWx0cyB0byBpdCkgYW5kIG9wdGlvbmFsIGFk
+ZAo+IC0tLW5vLXdhcm4tcnd4LXNlZ21lbnRzIHNpbmNlIHRoaXMgYSBsZC5iZmQgcmVsYXRlZC4K
+PiAtCj4gLVNpZ25lZC1vZmYtYnk6IE1hcmNvIEZlbHNjaCA8bS5mZWxzY2hAcGVuZ3V0cm9uaXgu
+ZGU+Cj4gLVNpZ25lZC1vZmYtYnk6IFJvYmVydCBTY2h3ZWJlbCA8ci5zY2h3ZWJlbEBwZW5ndXRy
+b25peC5kZT4KPiAtQ2hhbmdlLUlkOiBJOTQzMGY1ZmE1MDM2Y2E4OGRhNDZjZDNiOTQ1NzU0ZDYy
+NjE2YjYxNwo+IC1VcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL0FSTS1zb2Z0d2FyZS9hcm0t
+dHJ1c3RlZC1maXJtd2FyZS9jb21taXQvMWY0OWRiNWYyNWNkZDRlNDM4MjVjOWJjYzA1NzUwNzBi
+ODBmNjI4Ywo+IC1TaWduZWQtb2ZmLWJ5OiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgo+
+IC0tLS0KPiAtIE1ha2VmaWxlIHwgOCArKysrKysrKwo+IC0gMSBmaWxlIGNoYW5nZWQsIDggaW5z
+ZXJ0aW9ucygrKQo+IC0KPiAtZGlmZiAtLWdpdCBhL01ha2VmaWxlIGIvTWFrZWZpbGUKPiAtaW5k
+ZXggZWRkN2Y1ODg2Li40YzBlMTQ3M2UgMTAwNjQ0Cj4gLS0tLSBhL01ha2VmaWxlCj4gLSsrKyBi
+L01ha2VmaWxlCj4gLUBAIC00MTgsNiArNDE4LDggQEAgZW5kaWYKPiAtIAo+IC0gR0NDX1ZfT1VU
+UFVUCQk6PQkkKHNoZWxsICQoQ0MpIC12IDI+JjEpCj4gLSAKPiAtK1RGX0xERkxBR1MJCSs9CS16
+IG5vZXhlY3N0YWNrCj4gLSsKPiAtICMgTEQgPSBhcm1saW5rCj4gLSBpZm5lcSAoJChmaW5kc3Ry
+aW5nIGFybWxpbmssJChub3RkaXIgJChMRCkpKSwpCj4gLSBURl9MREZMQUdTCQkrPQktLWRpYWdf
+ZXJyb3I9d2FybmluZyAtLWx0b19sZXZlbD1PMQo+IC1AQCAtNDQ1LDYgKzQ0NywxMiBAQCBURl9M
+REZMQUdTCQkrPQkkKHN1YnN0IC0tLC1YbGlua2VyIC0tLCQoVEZfTERGTEFHU18kKEFSQ0gpKSkK
+PiAtICMgTEQgPSBnY2MtbGQgKGxkKSBvciBsbHZtLWxkIChsZC5sbGQpIG9yIG90aGVyCj4gLSBl
+bHNlCj4gLSBURl9MREZMQUdTCQkrPQktLWZhdGFsLXdhcm5pbmdzIC1PMQo+IC0rCj4gLSsjIFdp
+dGggbGQuYmZkIHZlcnNpb24gMi4zOSBhbmQgbmV3ZXIgbmV3IHdhcm5pbmdzIGFyZSBhZGRlZC4g
+U2tpcCB0aG9zZSBzaW5jZSB3ZQo+IC0rIyBhcmUgbm90IGxvYWRlZCBieSBhIGVsZiBsb2FkZXIu
+Cj4gLStURl9MREZMQUdTCQkrPQkkKGNhbGwgbGRfb3B0aW9uLCAtLW5vLXdhcm4tcnd4LXNlZ21l
+bnRzKQo+IC0rVEZfTERGTEFHUwkJKz0JLU8xCj4gLSsKPiAtIFRGX0xERkxBR1MJCSs9CS0tZ2Mt
+c2VjdGlvbnMKPiAtICMgbGQubGxkIGRvZXNuJ3QgcmVjb2duaXplIHRoZSBlcnJhdGEgZmxhZ3Ms
+Cj4gLSAjIHRoZXJlZm9yZSBkb24ndCBhZGQgdGhvc2UgaW4gdGhhdCBjYXNlCj4gLS0tIAo+IC0y
+LjQxLjAKPiAtCj4gZGlmZiAtLWdpdCBhL2JvYXJkL3RlY2huZXhpb24vaW14OG1tcGljby9wYXRj
+aGVzL2FybS10cnVzdGVkLWZpcm13YXJlL2FybS10cnVzdGVkLWZpcm13YXJlLmhhc2ggYi9ib2Fy
+ZC90ZWNobmV4aW9uL2lteDhtbXBpY28vcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS9hcm0t
+dHJ1c3RlZC1maXJtd2FyZS5oYXNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
+MDAwMDAwMC4uOThmNDI1YTg5ZTQKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvdGVjaG5l
+eGlvbi9pbXg4bW1waWNvL3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQt
+ZmlybXdhcmUuaGFzaAo+IEBAIC0wLDAgKzEsMiBAQAo+ICsjIExvY2FsbHkgY2FsY3VsYXRlZAo+
+ICtzaGEyNTYgIGNmYjkyNzcyMjI3Mjg5N2Y4NTA2ODFjNzhkNWYxMjliMDg4M2E4ZWZhYmE5YzUy
+ZDMwZTAyOTA4NjUyNGY3ZmYgIGlteC1hdGYtbGYtNi4xLjU1LTIuMi4wLnRhci5nego+IGRpZmYg
+LS1naXQgYS9ib2FyZC90ZWNobmV4aW9uL2lteDhtbXBpY28vcGF0Y2hlcy9saW51eC1oZWFkZXJz
+L2xpbnV4LWhlYWRlcnMuaGFzaCBiL2JvYXJkL3RlY2huZXhpb24vaW14OG1tcGljby9wYXRjaGVz
+L2xpbnV4LWhlYWRlcnMvbGludXgtaGVhZGVycy5oYXNoCj4gbmV3IGZpbGUgbW9kZSAxMjAwMDAK
+PiBpbmRleCAwMDAwMDAwMDAwMC4uNTgwOGQ5MmFmZTgKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIv
+Ym9hcmQvdGVjaG5leGlvbi9pbXg4bW1waWNvL3BhdGNoZXMvbGludXgtaGVhZGVycy9saW51eC1o
+ZWFkZXJzLmhhc2gKPiBAQCAtMCwwICsxIEBACj4gKy4uL2xpbnV4L2xpbnV4Lmhhc2gKPiBcIE5v
+IG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvdGVjaG5leGlvbi9p
+bXg4bW1waWNvL3BhdGNoZXMvbGludXgvbGludXguaGFzaCBiL2JvYXJkL3RlY2huZXhpb24vaW14
+OG1tcGljby9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
+IGluZGV4IDAwMDAwMDAwMDAwLi5kODhhNzhjNDU4Zgo+IC0tLSAvZGV2L251bGwKPiArKysgYi9i
+b2FyZC90ZWNobmV4aW9uL2lteDhtbXBpY28vcGF0Y2hlcy9saW51eC9saW51eC5oYXNoCj4gQEAg
+LTAsMCArMSwyIEBACj4gKyMgTG9jYWxseSBjYWxjdWxhdGVkCj4gK3NoYTI1NiAgODc1NzE2ZGM4
+ZmU2ZTBkZjU1YjQwNjAwODc3MjMyZDlhMWQ2MmY4MTk1MDI0NGUxNmQ1NjM2MjFmNjM2ZjE2ZSAg
+bGludXgtdG4taW14LXRuLW1pY2tsZWRvcmVfNi4xLjU1LTIuMi4wXzIwMjQwNDE3LnRhci5nego+
+IGRpZmYgLS1naXQgYS9ib2FyZC90ZWNobmV4aW9uL2lteDhtbXBpY28vcGF0Y2hlcy91Ym9vdC91
+Ym9vdC5oYXNoIGIvYm9hcmQvdGVjaG5leGlvbi9pbXg4bW1waWNvL3BhdGNoZXMvdWJvb3QvdWJv
+b3QuaGFzaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMDAuLjBmNDhm
+NmYxMGI3Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL3RlY2huZXhpb24vaW14OG1tcGlj
+by9wYXRjaGVzL3Vib290L3Vib290Lmhhc2gKPiBAQCAtMCwwICsxLDIgQEAKPiArIyBMb2NhbGx5
+IGNhbGN1bGF0ZWQKPiArc2hhMjU2ICBmYmNkZjMzNjk2MGYzOGExNGFjNGU5YTM4M2MyMDc5NTJm
+OGI4MWNmMGI1ZmUzOGI1M2RmZTZhZDBlOGZhMDg5ICB1LWJvb3QtdG4taW14LXRuLW1pY2tsZWRv
+cmVfNi4xLjU1LTIuMi4wXzIwMjQwNDE3LnRhci5nego+IGRpZmYgLS1naXQgYS9jb25maWdzL2lt
+eDhtbXBpY29fZGVmY29uZmlnIGIvY29uZmlncy9pbXg4bW1waWNvX2RlZmNvbmZpZwo+IGluZGV4
+IDcxMWNkZWIzOTA3Li5kMTgzNmRiNjFhOSAxMDA2NDQKPiAtLS0gYS9jb25maWdzL2lteDhtbXBp
+Y29fZGVmY29uZmlnCj4gKysrIGIvY29uZmlncy9pbXg4bW1waWNvX2RlZmNvbmZpZwo+IEBAIC0x
+LDExICsxLDEyIEBACj4gIEJSMl9hYXJjaDY0PXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9I
+RUFERVJTX0NVU1RPTV81XzE1PXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NV
+U1RPTV82XzE9eQo+ICtCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvdGVjaG5leGlvbi9pbXg4
+bW1waWNvL3BhdGNoZXMiCj4gK0JSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQo+ICBC
+UjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9mcmVlc2NhbGUvY29tbW9uL2lteC9p
+bXg4LWJvb3Rsb2FkZXItcHJlcGFyZS5zaCBib2FyZC9mcmVlc2NhbGUvY29tbW9uL2lteC9wb3N0
+LWltYWdlLnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9IiR7VUJPT1RfRElSfS9h
+cmNoL2FybS9kdHMvaW14OG1tLXBpY28tcGkuZHRiIgo+IC1CUjJfR0xPQkFMX1BBVENIX0RJUj0i
+Ym9hcmQvdGVjaG5leGlvbi9pbXg4bW1waWNvL3BhdGNoZXMiCj4gIEJSMl9MSU5VWF9LRVJORUw9
+eQo+ICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMPXkKPiAtQlIyX0xJTlVYX0tFUk5F
+TF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixUZWNoTmV4aW9uLGxpbnV4
+LXRuLWlteCx0bi1raXJrc3RvbmVfNS4xNS43MS0yLjIuMF8yMDIzMDUxMikvbGludXgtdG4taW14
+LXRuLWtpcmtzdG9uZV81LjE1LjcxLTIuMi4wXzIwMjMwNTEyLnRhci5neiIKPiArQlIyX0xJTlVY
+X0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixUZWNoTmV4aW9u
+LGxpbnV4LXRuLWlteCx0bi1taWNrbGVkb3JlXzYuMS41NS0yLjIuMF8yMDI0MDQxNykvbGludXgt
+dG4taW14LXRuLW1pY2tsZWRvcmVfNi4xLjU1LTIuMi4wXzIwMjQwNDE3LnRhci5neiIKPiAgQlIy
+X0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InRuX2lteDgiCj4gIEJSMl9MSU5VWF9LRVJORUxfRFRT
+X1NVUFBPUlQ9eQo+ICBCUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0iZnJlZXNjYWxl
+L2lteDhtbS1waWNvLXBpIGZyZWVzY2FsZS9pbXg4bW0tcGljby1waS1pbGk5ODgxYyIKPiBAQCAt
+MTksMTMgKzIwLDEzIEBAIEJSMl9UQVJHRVRfUk9PVEZTX0VYVDJfU0laRT0iMTIwTSIKPiAgIyBC
+UjJfVEFSR0VUX1JPT1RGU19UQVIgaXMgbm90IHNldAo+ICBCUjJfVEFSR0VUX0FSTV9UUlVTVEVE
+X0ZJUk1XQVJFPXkKPiAgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVEFS
+QkFMTD15Cj4gLUJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1RBUkJBTExf
+TE9DQVRJT049IiQoY2FsbCBnaXRodWIsbnhwLWlteCxpbXgtYXRmLGxmLTUuMTUuNzEtMi4yLjAp
+L2lteC1hdGYtbGYtNS4xNS43MS0yLjIuMC50YXIuZ3oiCj4gK0JSMl9UQVJHRVRfQVJNX1RSVVNU
+RURfRklSTVdBUkVfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQoY2FsbCBnaXRodWIsbnhwLWlt
+eCxpbXgtYXRmLGxmLTYuMS41NS0yLjIuMCkvaW14LWF0Zi1sZi02LjEuNTUtMi4yLjAudGFyLmd6
+Igo+ICBCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX1BMQVRGT1JNPSJpbXg4bW0iCj4g
+IEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQkwzMT15Cj4gIEJSMl9UQVJHRVRfVUJP
+T1Q9eQo+ICBCUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09ORklHPXkKPiAgQlIyX1RB
+UkdFVF9VQk9PVF9DVVNUT01fVEFSQkFMTD15Cj4gLUJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1RB
+UkJBTExfTE9DQVRJT049IiQoY2FsbCBnaXRodWIsVGVjaE5leGlvbix1LWJvb3QtdG4taW14LHRu
+LWtpcmtzdG9uZV81LjE1LjcxLTIuMi4wXzIwMjMwNTEyKS91LWJvb3QtdG4taW14LXRuLWtpcmtz
+dG9uZV81LjE1LjcxLTIuMi4wXzIwMjMwNTEyLnRhci5neiIKPiArQlIyX1RBUkdFVF9VQk9PVF9D
+VVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixUZWNoTmV4aW9uLHUtYm9vdC10
+bi1pbXgsdG4tbWlja2xlZG9yZV82LjEuNTUtMi4yLjBfMjAyNDA0MTcpL3UtYm9vdC10bi1pbXgt
+dG4tbWlja2xlZG9yZV82LjEuNTUtMi4yLjBfMjAyNDA0MTcudGFyLmd6Igo+ICBCUjJfVEFSR0VU
+X1VCT09UX0JPQVJEX0RFRkNPTkZJRz0icGljby1pbXg4bW0iCj4gIEJSMl9UQVJHRVRfVUJPT1Rf
+TkVFRFNfRFRDPXkKPiAgQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU1NMPXkKCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
