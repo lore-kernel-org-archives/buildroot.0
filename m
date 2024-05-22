@@ -4,70 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAE9BC25B78
-	for <buildroot@archiver.kernel.org>; Wed, 22 May 2024 19:46:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AC61C25B78
+	for <buildroot@archiver.kernel.org>; Wed, 22 May 2024 19:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9221081497;
-	Wed, 22 May 2024 19:46:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3919821AB;
+	Wed, 22 May 2024 19:48:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FzaSvO6j8kAz; Wed, 22 May 2024 19:46:20 +0000 (UTC)
+ id BjfMr4r678Nl; Wed, 22 May 2024 19:48:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 994F88216D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3FBE82188
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 994F88216D;
-	Wed, 22 May 2024 19:46:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B63461C5F05
- for <buildroot@lists.busybox.net>; Wed, 22 May 2024 19:46:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3FBE82188;
+	Wed, 22 May 2024 19:48:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 153BD1C5F16
+ for <buildroot@lists.busybox.net>; Wed, 22 May 2024 19:48:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F03D40103
- for <buildroot@lists.busybox.net>; Wed, 22 May 2024 19:46:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F639606EA
+ for <buildroot@lists.busybox.net>; Wed, 22 May 2024 19:48:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lmjox39EE5AH for <buildroot@lists.busybox.net>;
- Wed, 22 May 2024 19:46:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tzRqhUn1j51B for <buildroot@lists.busybox.net>;
+ Wed, 22 May 2024 19:48:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.72;
  helo=smtpcmd0872.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D7BA8400BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7BA8400BA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A7157606D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7157606D6
 Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D7BA8400BA
- for <buildroot@buildroot.org>; Wed, 22 May 2024 19:46:15 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A7157606D6
+ for <buildroot@buildroot.org>; Wed, 22 May 2024 19:48:03 +0000 (UTC)
+Received: from [192.168.50.121] ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id 9rudsYT57qLIy9rudsk5tH; Wed, 22 May 2024 21:46:11 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Wed, 22 May 2024 21:46:10 +0200
-Message-Id: <20240522194610.2553161-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+ id 9rwPsYU4SqLIy9rwPsk6JA; Wed, 22 May 2024 21:48:01 +0200
+Message-ID: <e9617956-8abe-4331-9639-42c8327c3061@benettiengineering.com>
+Date: Wed, 22 May 2024 21:48:01 +0200
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfH49zcoPWGWL3sAl8bGWY7/+XS+0bm7czi+2vHlRK29V6BQjc3jOuz77cMRHqt3lo5rhmO1JqA6T+2D3T7SZjkbbQOSx11Ygwe3j6NJ/LJzePPvHStjT
- Z8hamt3s0k7p0AIZlrP7tg7Gw9m6Lzn+kw7+eWdAT3FvCU74Jw6syYPWyN/Ji5k6NojKYG/8c5CZlOROyD+Fx5/F44GE0OOf0ih7N+ipStoy55nD1Wqs6Dg4
- vs3tsZu4Lf6CznPbBMQYLwx/3HdLf+j//fiBiJVrZm+KAsS6AsWBsSRSLsFzRAMo8VpcwBTYy3OByfLgQrrFww==
+User-Agent: Mozilla Thunderbird
+To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+References: <20240520165801.2247467-1-giulio.benetti@benettiengineering.com>
+ <d24cbdea-e17f-4f67-a869-9c699224357f@smile.fr>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <d24cbdea-e17f-4f67-a869-9c699224357f@smile.fr>
+X-CMAE-Envelope: MS4xfDlca6/jyWRfjiEkBk30RJE8RAoGwOQTsXMMRDWPk4jSMKldg3bZh0KGLrZZqEhM1FQzQeAK8Y57oOOUU4pBqV0o23yy8/QY/5qkgaN6BxQBjh5k1ieR
+ M67aTMuO60CywoCgi9lMIpIR90OAiiJjQ6cdMTwsBqquzztS4t3d2n8ENR3j9GZxkqMJ6uCC/tNmOxLJaN6U8c+xEuEygNt8VO2KPk8sIXMC0Pi/4RNm5GNU
+ GjP3XBgm/Qb/+vLVj3CdtZGsRAxSE4++weWoERlbkNdiNZwAs6W7AAycuzTg4K/L
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1716407171; bh=x5Y6xMxssrcyAhaxvz1L7+TbLilx5FCsLb9Xe+HJ6ds=;
- h=From:To:Subject:Date:MIME-Version;
- b=PBk9Jn8lkDmlBRngGXg6siTDLOgShmQfgRRT6gv7pMo08ec+hF30YdJ8JX6fJfLZS
- H/O6GF+SAy4i/HUYEob8xiOG2K8uSBZesuvUAAVBPED4lw73V42jljypoLUMwk0jc3
- J5NvabQRhp7g9J76Ls4Tk7osU0/BMXPnsDw9S/maqlSHYaMKFsE76h81IRuxe/1XiR
- DuanRVau4P01hILEOYPYFBEAK4uCJKJMPAv3SUBnpnGt+G00QMB4Oc7G7CWegHseYL
- rgIMOrGHmIPAxmB+ze5569U8dcR+4T3W2Q310w1A3jqYLBAAd4QI4/7L6xp4vFS2+c
- NhQyOY/dXX0bg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1716407281; bh=vHGunstUauDnGKuyLuSyHqkEvy/FU0ME9icEsF202Uw=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=OAuyjq54PiDrUPn2PGhWaTeSP6/ty8aYNB1p7Ydk08/iDsZNd9BNgeFx48XAYSRZn
+ aw7fNzYBhkAOOBvHTzb/KSrngIYoMN+F/tL2x6eMMhq1qQ5jNlK6M4V5PuIU3iuV5G
+ vHw4twhVRy6DV0iZZWqIRAO/HChBN0DsBERCn1dbsvHLgKy5ti6ucosPt/uSD1mk8x
+ oQi1ShP1xb73YB2FPv5dm4aAQdLoTYKx0+PL/rQuEu24o9JRR/s1jSYqN3QqDpn8jc
+ HqGROPhtPhl+77Pk93nr/9IKTZNyCuTea0D19QZGDjvokDf+DcWNFJuEyb7dUbgVPZ
+ QRFLObOxNmWWg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=PBk9Jn8l
-Subject: [Buildroot] [PATCH v2] configs/amarula_vyasa_rk3288_defconfig: bump
- to Linux version 6.1.91
+ header.s=a1 header.b=OAuyjq54
+Subject: Re: [Buildroot] [PATCH] configs/amarula_vyasa_rk3288_defconfig:
+ bump to Linux version 6.1.91
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,56 +83,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Build fails with gcc 13 with:
-drivers/ata/libahci.c: In function 'ahci_led_store':
-././include/linux/compiler_types.h:357:45: error: call to
-'__compiletime_assert_302' declared with attribute error: BUILD_BUG_ON failed:
-sizeof(_s) > sizeof(long)
-  357 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-
-As explained in Linux commit[0] that fixes the build, sizeof() of enum
-like '(1<<31)' translate to a 64-bit type, but we expect a 32-bit type.
-So commit[0] makes sure the data type to be 32-bits wide by using BIT()
-macro.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/6865596548
-
-[0]:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=97e28deab8bfe70d5687650f94484f8f9101e566
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* improve commit log as requested by Romain Naour
----
- configs/amarula_vyasa_rk3288_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/configs/amarula_vyasa_rk3288_defconfig b/configs/amarula_vyasa_rk3288_defconfig
-index 7976537225..0dd47f498f 100644
---- a/configs/amarula_vyasa_rk3288_defconfig
-+++ b/configs/amarula_vyasa_rk3288_defconfig
-@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.91"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gUm9tYWluLAoKT24gMjIvMDUvMjQgMTU6MzAsIFJvbWFpbiBOYW91ciB3cm90ZToKPiBI
+ZWxsbyBHaXVsaW8sCj4gCj4gTGUgMjAvMDUvMjAyNCDDoCAxODo1OCwgR2l1bGlvIEJlbmV0dGkg
+YSDDqWNyaXTCoDoKPj4gRml4ZXM6Cj4+IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3Jn
+L2J1aWxkcm9vdC8tL2pvYnMvNjg2NTU5NjU0OAo+IAo+IEl0IHdvdWxkIGJlIGdyZWF0IGlmIHlv
+dSBjYW4gZXhwbGFpbiBob3cgdGhlIHZlcnNpb24gYnVtcCBmaXggdGhlIGJ1aWxkIGlzc3VlLgoK
+U3VyZSwgSSd2ZSBqdXN0IHNlbnQgYSBWMiBhbmQsCgo+IEluIHRoZSBmdWxsIGJ1aWxkIGxvZyB3
+ZSBjYW4gbm90aWNlOgo+IAo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSA8Y29tbWFuZC1saW5lPjoK
+PiBkcml2ZXJzL2F0YS9saWJhaGNpLmM6IEluIGZ1bmN0aW9uICdhaGNpX2xlZF9zdG9yZSc6Cj4g
+Li8uL2luY2x1ZGUvbGludXgvY29tcGlsZXJfdHlwZXMuaDozNTc6NDU6IGVycm9yOiBjYWxsIHRv
+Cj4gJ19fY29tcGlsZXRpbWVfYXNzZXJ0XzMwMicgZGVjbGFyZWQgd2l0aCBhdHRyaWJ1dGUgZXJy
+b3I6IEJVSUxEX0JVR19PTiBmYWlsZWQ6Cj4gc2l6ZW9mKF9zKSA+IHNpemVvZihsb25nKQo+ICAg
+IDM1NyB8ICAgICAgICAgX2NvbXBpbGV0aW1lX2Fzc2VydChjb25kaXRpb24sIG1zZywgX19jb21w
+aWxldGltZV9hc3NlcnRfLAo+IF9fQ09VTlRFUl9fKQo+IAo+IFRoaXMgZXJyb3Igc2VlbXMgdG8g
+YmUgZml4ZWQgYnkgImF0YTogYWhjaTogZml4IGVudW0gY29uc3RhbnRzIGZvciBnY2MtMTMiIGZy
+b20KPiB2Ni4xLjQ6Cj4gCj4gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tl
+cm5lbC9naXQvc3RhYmxlL2xpbnV4LmdpdC9jb21taXQvP2lkPTk3ZTI4ZGVhYjhiZmU3MGQ1Njg3
+NjUwZjk0NDg0ZjhmOTEwMWU1NjYKCnRoYW5rIHlvdSBmb3IgcG9pbnRpbmcgbWUgdGhlIGNvbW1p
+dCBmaXhpbmcgdGhlIGJ1Zy4KCkJlc3QgcmVnYXJkcwotLSAKR2l1bGlvIEJlbmV0dGkKQ0VPJkNU
+T0BCZW5ldHRpIEVuZ2luZWVyaW5nCgo+IEJlc3QgcmVnYXJkcywKPiBSb21haW4KPiAKPiAKPj4K
+Pj4gU2lnbmVkLW9mZi1ieTogR2l1bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGll
+bmdpbmVlcmluZy5jb20+Cj4+IC0tLQo+PiAgIGNvbmZpZ3MvYW1hcnVsYV92eWFzYV9yazMyODhf
+ZGVmY29uZmlnIHwgMiArLQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBk
+ZWxldGlvbigtKQo+Pgo+PiBkaWZmIC0tZ2l0IGEvY29uZmlncy9hbWFydWxhX3Z5YXNhX3JrMzI4
+OF9kZWZjb25maWcgYi9jb25maWdzL2FtYXJ1bGFfdnlhc2FfcmszMjg4X2RlZmNvbmZpZwo+PiBp
+bmRleCA3OTc2NTM3MjI1Li4wZGQ0N2Y0OThmIDEwMDY0NAo+PiAtLS0gYS9jb25maWdzL2FtYXJ1
+bGFfdnlhc2FfcmszMjg4X2RlZmNvbmZpZwo+PiArKysgYi9jb25maWdzL2FtYXJ1bGFfdnlhc2Ff
+cmszMjg4X2RlZmNvbmZpZwo+PiBAQCAtMjMsNyArMjMsNyBAQCBCUjJfVEFSR0VUX1VCT09UX1NQ
+TF9OQU1FPSJzcGwvdS1ib290LXNwbC1kdGIuYmluIHRwbC91LWJvb3QtdHBsLmJpbiIKPj4gICAj
+IEtlcm5lbAo+PiAgIEJSMl9MSU5VWF9LRVJORUw9eQo+PiAgIEJSMl9MSU5VWF9LRVJORUxfQ1VT
+VE9NX1ZFUlNJT049eQo+PiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0i
+Ni4xLjIiCj4+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEuOTEi
+Cj4+ICAgQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9Im11bHRpX3Y3Igo+PiAgIEJSMl9MSU5V
+WF9LRVJORUxfVUlNQUdFPXkKPj4gICBCUjJfTElOVVhfS0VSTkVMX1VJTUFHRV9MT0FEQUREUj0i
+MHgwMjAwMDAwMCIKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9y
+Zwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
