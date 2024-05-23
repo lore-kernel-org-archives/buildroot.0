@@ -4,91 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28D20C25B75
-	for <buildroot@archiver.kernel.org>; Thu, 23 May 2024 19:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31922C25B75
+	for <buildroot@archiver.kernel.org>; Thu, 23 May 2024 20:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BED4C60698;
-	Thu, 23 May 2024 19:00:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB6C660640;
+	Thu, 23 May 2024 20:09:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kRj_L_sWICJU; Thu, 23 May 2024 19:00:34 +0000 (UTC)
+ id vkQEbzYBfTB5; Thu, 23 May 2024 20:09:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C76BF607DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1228060613
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C76BF607DB;
-	Thu, 23 May 2024 19:00:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1228060613;
+	Thu, 23 May 2024 20:09:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2E0921CE7FC
- for <buildroot@lists.busybox.net>; Thu, 23 May 2024 19:00:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E93A41BF471
+ for <buildroot@lists.busybox.net>; Thu, 23 May 2024 20:09:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A1924183D
- for <buildroot@lists.busybox.net>; Thu, 23 May 2024 19:00:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D39D041973
+ for <buildroot@lists.busybox.net>; Thu, 23 May 2024 20:09:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dCpyQxoQKJE9 for <buildroot@lists.busybox.net>;
- Thu, 23 May 2024 19:00:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E500040142
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E500040142
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E500040142
- for <buildroot@buildroot.org>; Thu, 23 May 2024 19:00:30 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-35507fc2600so23021f8f.0
- for <buildroot@buildroot.org>; Thu, 23 May 2024 12:00:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1716490828; x=1717095628;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=hA2gq2xXv0oLjg8mjUSPsVALaTPr6yP/meG1I4BBZfE=;
- b=BktKdi9xEibwENnN6e/o5IxFyEPq8UajMsEQv8WPKvNlVv3+PKgcS1nJHZJOxEVU0b
- PnLMORcRdrroDL05vBo4qgaB7J65WgR3FbAoNhCNfapnblXygno6x7L+/qbpX9RWcisf
- oF+/SrLMoeCdjxJez6cjErLdt5rm3nJzQFyJG/z6USt78CvILGg3TYxtep/uNggcDJ5D
- EdH/1GWfxczyDM/Kqi2oHI9cp5dwvJ4Z8y6YmX8xq1WiWrVHDIQ6YkCknFRHpQcYrvnZ
- yyhy2i2CR+vy4XZSdEq2qaRCoLZoZaVIbHMTgw+AFjAoS8lU7MD226dA8M2mbYlNzRDA
- MMyw==
-X-Gm-Message-State: AOJu0YxCuKJRPa2c68t6j0V+BnTUmTXxogIgnHOYajZVvFQRpJ++Osmv
- Vy/u4eAQx51u8Lf40nlWrKyIygX9qPuqTIpmIhYHjsqkfDMZ211HSvyaaA==
-X-Google-Smtp-Source: AGHT+IGOSQOSWsmMkJhqQe+NNwdpEg3rV8Yy7mC+XR8+44m/VNotvYIKyZyPEHBIdkslefxWiiNx3g==
-X-Received: by 2002:adf:f8c4:0:b0:34f:7b5a:e52 with SMTP id
- ffacd0b85a97d-354d8d9ec21mr4306610f8f.63.1716490828279; 
- Thu, 23 May 2024 12:00:28 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-354f8e1522csm2158149f8f.42.2024.05.23.12.00.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 23 May 2024 12:00:27 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ id B85TwEtdzyFS for <buildroot@lists.busybox.net>;
+ Thu, 23 May 2024 20:09:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9FDCE41872
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FDCE41872
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9FDCE41872
+ for <buildroot@buildroot.org>; Thu, 23 May 2024 20:09:18 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id E5167B00535;
+ Thu, 23 May 2024 22:09:13 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 23 May 2024 21:00:23 +0200
-Message-ID: <20240523190023.1580129-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Thu, 23 May 2024 22:09:07 +0200
+Message-ID: <20240523200907.13799-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1716490828; x=1717095628; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hA2gq2xXv0oLjg8mjUSPsVALaTPr6yP/meG1I4BBZfE=;
- b=KIrk9xSn16oRR1Mg7TtE0ikNGoM3+xmS4I3TUDaDaCBATNIHlVsZfXHRtttLpX9Pw5
- Cgyv1f933oYX6Hf3XBTjygnvGMG58ehmtjRhjbIAJG5skBwmlZfaRyYtAJAnPRIsBV1w
- HBOJ5z/nQwrB+Dhsf8Nkyae6paQdwn3IKrCYCUniFyAWMKvfyy6s3hwB8gBOPfU8X+H1
- AoRaFiA0SpnDA7T67G9SjiWYkLLdMMqqJu3koSIVRrnYo2RxL9i9RTfJb1I9dvCC2exZ
- ODWYPuk15Y+f8JlKehX4q+ZOpfWeiuDG1gqJLAZ+WIk+aSGaNDvhI3r7ZNTC+wZBJGGM
- cOZg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1716494955;
+ bh=EAUN/kICP6SmNw3+w9pnK1aQjj1vF5+9p/jyuatmFMM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=lHRxNdgMVwUyWApO9GLE02fh9uDCEiAdrXydq67927quLhDeuL2le0GKXwcWnalN9
+ FehpqnSCV1pqTiuLT+5GJ44HplVuBwzM77+BvB46AWclb/lLG/if+RoJGF+t+PUPwj
+ WltrZhJeT2H4WS+hCxnJLxmDxSsUXnTNslNZsSqLoUgloOK/trTj+pqJAg7t8OEvZt
+ bTNii/K/xe0/aq/QNWbSHM6sMUPLJJc2NXXUVfOX01xQkNJRVyCHDeMjHR0VoqGyCs
+ 8RCZfBWr/jZX1Q7DgbpKtR7ZJfGqNFjYdBCnx3njHGfbUvRM633hSo9ZVjXdvCbdAR
+ 8sQ9hSJVswmsQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=KIrk9xSn
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: bump to version 6.17
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=lHRxNdgM
+Subject: [Buildroot] [PATCH 1/1] package/octave: add optional zlib support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,44 +76,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/nhorman/rng-tools/releases/tag/v6.17
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rng-tools/rng-tools.hash | 2 +-
- package/rng-tools/rng-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/octave/octave.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-index 4c86791267..80d43edc46 100644
---- a/package/rng-tools/rng-tools.hash
-+++ b/package/rng-tools/rng-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  17666c4745fb635d91df293be188daf94b9e465d51d8503c0195fa3beb390894  rng-tools-6.16.tar.gz
-+sha256  4aa50994232da74499b60b3ebf79118e30a1943be375b7d931dcf18df5442fd3  rng-tools-6.17.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index f50005343b..d1f41fd4cd 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+index b84e043679b..853f767d971 100644
+--- a/package/octave/octave.mk
++++ b/package/octave/octave.mk
+@@ -28,4 +28,11 @@ else
+ OCTAVE_CONF_OPTS += --disable-readline
+ endif
  
--RNG_TOOLS_VERSION = 6.16
-+RNG_TOOLS_VERSION = 6.17
- RNG_TOOLS_SITE = $(call github,nhorman,rng-tools,v$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++OCTAVE_CONF_OPTS += --with-z
++OCTAVE_DEPENDENCIES += zlib
++else
++OCTAVE_CONF_OPTS += --without-z
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.43.0
+2.45.1
 
 _______________________________________________
 buildroot mailing list
