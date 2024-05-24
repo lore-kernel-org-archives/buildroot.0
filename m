@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A21DC25B74
-	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 12:35:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CB78C25B74
+	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 12:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41E17832D4;
-	Fri, 24 May 2024 12:35:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FEBB83336;
+	Fri, 24 May 2024 12:35:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TrUcwu5hq1u0; Fri, 24 May 2024 12:35:07 +0000 (UTC)
+ id qQOU1imB9TUf; Fri, 24 May 2024 12:35:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2230832FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFB3B80E62
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2230832FF;
-	Fri, 24 May 2024 12:35:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 36F861CF7F4
- for <buildroot@lists.busybox.net>; Fri, 24 May 2024 12:34:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFB3B80E62;
+	Fri, 24 May 2024 12:35:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 37F601CF7AC
+ for <buildroot@lists.busybox.net>; Fri, 24 May 2024 12:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B4798329D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1CAB1408D0
  for <buildroot@lists.busybox.net>; Fri, 24 May 2024 12:34:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id csNqTezNXEfj for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ouncWg6AcG7N for <buildroot@lists.busybox.net>;
  Fri, 24 May 2024 12:34:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1669D83298
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E385A4087B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1669D83298
- for <buildroot@buildroot.org>; Fri, 24 May 2024 12:34:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E385A4087B
+ for <buildroot@buildroot.org>; Fri, 24 May 2024 12:34:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E7882875A1; Fri, 24 May 2024 12:34:56 +0000 (UTC)
+ id D11FF87553; Fri, 24 May 2024 12:34:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 May 2024 14:33:16 +0200
+Date: Fri, 24 May 2024 14:31:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd6fa8d13b69ca85cc1a9add538b94cf5e5cdb68
-X-Git-Newrev: d96b3c331cb0e0cf3bec3d3b1496ed9adb426d05
+X-Git-Oldrev: 73dd1d6b96665574607c8b05189426ad3eb05a6f
+X-Git-Newrev: bd6fa8d13b69ca85cc1a9add538b94cf5e5cdb68
 X-Patchwork-Hint: ignore
-Message-Id: <20240524123456.E7882875A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/minisign: do not strip
+Message-Id: <20240524123456.D11FF87553@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/putty: security bump to version
+ 0.81
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,36 +65,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d96b3c331cb0e0cf3bec3d3b1496ed9adb426d05
+commit: https://git.buildroot.net/buildroot/commit/?id=bd6fa8d13b69ca85cc1a9add538b94cf5e5cdb68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Set CMAKE_STRIP to an empty value to avoid the following build failure
-with BR2_BINFMT_FLAT raised since the addition of the package in commit
-d90ac63d9b3448a239bb9aa8030326699a3fdc3d:
+The only change between 0.80 and 0.81 is one security fix:
 
-/home/buildroot/instance-0/output-1/host/bin/m68k-linux-strip: /home/buildroot/instance-0/output-1/build/minisign-0.11/minisign: file format not recognized
+ - ECDSA signatures using 521-bit keys (the NIST P521 curve, otherwise
+   known as ecdsa-sha2-nistp521) were generated with biased random
+   numbers. This permits an attacker in possession of a few dozen
+   signatures to RECOVER THE PRIVATE KEY.
 
-Fixes: d90ac63d9b3448a239bb9aa8030326699a3fdc3d
- - http://autobuild.buildroot.org/results/9cc9fd17c7eb4a741c08f27f69764df4a26295fa
+   Any 521-bit ECDSA private key that PuTTY or Pageant has used to
+   sign anything should be considered compromised.
+
+   This vulnerability has the identifier CVE-2024-31497.
+
+Update hash of LICENCE file (update in year with
+https://git.tartarus.org/?p=simon/putty.git;a=commit;h=f2f28ac0386eebbd45ea605818d31d62d219f589)
+
+https://lists.tartarus.org/pipermail/putty-announce/2024/000038.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minisign/minisign.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/putty/putty.hash | 8 ++++----
+ package/putty/putty.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/minisign/minisign.mk b/package/minisign/minisign.mk
-index 34b3f4046e..7cdce597f7 100644
---- a/package/minisign/minisign.mk
-+++ b/package/minisign/minisign.mk
-@@ -10,6 +10,7 @@ MINISIGN_LICENSE = ISC
- MINISIGN_LICENSE_FILES = LICENSE
- MINISIGN_DEPENDENCIES = libsodium
- HOST_MINISIGN_DEPENDENCIES = host-libsodium
-+MINISIGN_CONF_OPTS = -DCMAKE_STRIP=""
+diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+index 84569a31e5..30b749c47b 100644
+--- a/package/putty/putty.hash
++++ b/package/putty/putty.hash
+@@ -1,7 +1,7 @@
+ # Hashes from: http://the.earth.li/~sgtatham/putty/0.80/{sha1,sha256,sha512}sums
+-sha1  9c4a96f63ee3e927472191c935cc89228693c03a  putty-0.80.tar.gz
+-sha256  2013c83a721b1753529e9090f7c3830e8fe4c80a070ccce764539badb3f67081  putty-0.80.tar.gz
+-sha512  c8a6b6fa54ecd8bcf4ec274fef51343dd9996e6458b250b5555c4dc88ded25e87f97277da482c29858510e65635112d541f559ab683635bd950572d850129f90  putty-0.80.tar.gz
++sha1  8c88d871855d3730a0473bb1cb1006654e73b680  putty-0.81.tar.gz
++sha256  cb8b00a94f453494e345a3df281d7a3ed26bb0dd7e36264f145206f8857639fe  putty-0.81.tar.gz
++sha512  d86f2fd0e126b18275d58cf64334b3b27c450899a1c2be2502de9faa2ef58f7fc8efc5d45f25c8395623f1e21917aa02407343bb2fee44c4c00b9f81267d5ecd  putty-0.81.tar.gz
  
- ifeq ($(BR2_STATIC_LIBS),y)
- MINISIGN_CONF_OPTS += -DBUILD_STATIC_EXECUTABLES=1
+ # Locally calculated
+-sha256  7ede37f344ee03436c155a375ecb6cdb42a77105baa6e7804bf43260dc4a0c54  LICENCE
++sha256  e0410341c5e45f7479c28d79298edbf615589cdfc115b2d69683d4ccd0425ce0  LICENCE
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+index bff6e78074..617518e647 100644
+--- a/package/putty/putty.mk
++++ b/package/putty/putty.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PUTTY_VERSION = 0.80
++PUTTY_VERSION = 0.81
+ PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+ PUTTY_LICENSE = MIT
+ PUTTY_LICENSE_FILES = LICENCE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
