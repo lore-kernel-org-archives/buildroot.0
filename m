@@ -4,67 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 822B4C25B74
-	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 21:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48536C25B74
+	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 21:15:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 400C24099E;
-	Fri, 24 May 2024 21:14:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07B314099E;
+	Fri, 24 May 2024 21:15:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8DEEQmqB_m1p; Fri, 24 May 2024 21:14:14 +0000 (UTC)
+ id XuN03PH4kTKd; Fri, 24 May 2024 21:15:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5C0B409A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C81FA409AA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5C0B409A7;
-	Fri, 24 May 2024 21:14:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0834F1CFE15
- for <buildroot@lists.busybox.net>; Fri, 24 May 2024 21:14:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C81FA409AA;
+	Fri, 24 May 2024 21:15:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C9671CFE15
+ for <buildroot@lists.busybox.net>; Fri, 24 May 2024 21:15:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E8A9860629
- for <buildroot@lists.busybox.net>; Fri, 24 May 2024 21:14:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2996040447
+ for <buildroot@lists.busybox.net>; Fri, 24 May 2024 21:15:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3KdB1YGL-QCB for <buildroot@lists.busybox.net>;
- Fri, 24 May 2024 21:14:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A058660625
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A058660625
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A058660625
- for <buildroot@buildroot.org>; Fri, 24 May 2024 21:14:10 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 024F2B00573;
- Fri, 24 May 2024 23:14:04 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 24 May 2024 23:13:59 +0200
-Message-ID: <20240524211359.560684-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PRDnmTbT_P-k for <buildroot@lists.busybox.net>;
+ Fri, 24 May 2024 21:15:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EE1DC4018A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE1DC4018A
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE1DC4018A
+ for <buildroot@buildroot.org>; Fri, 24 May 2024 21:15:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 79B481BF204;
+ Fri, 24 May 2024 21:15:04 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sAcFj-00Gi74-2B;
+ Fri, 24 May 2024 23:15:03 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20240522194610.2553161-1-giulio.benetti@benettiengineering.com>
+Date: Fri, 24 May 2024 23:15:03 +0200
+In-Reply-To: <20240522194610.2553161-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Wed, 22 May 2024 21:46:10 +0200")
+Message-ID: <877cfikj3c.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1716585247;
- bh=XNSAA3BsWSG++H2s3xC+ebHUlrBmO3DhPnv8TA3ydIo=;
- h=From:To:Cc:Subject:Date:From;
- b=HnM42AxKE19ReoJcYpq3cZtbIT2se8jaCg3vDif/F1ty6lG7lDUnjYwJh8GFo2mmB
- sK3IeKr3yXgy+59C4ISffqFR2qWX0Q8phdHjYFxEL9yxLfR65JKfp98EH1TrfU6d+L
- HPOM0l/B+ggTrAMqdEvhlPbj0f9dlAXvdNhMKZsIdsHT4QQQXelod8LaBdIWbcF18/
- gMhPtah1/Q7jgGYIJqZ91USszuIV/Nd5WEzAGWbjzwJAoav1lROnB1GjrUq9Z/KzSe
- +SJGJXTt2fthWMx5z1ElEIuXAunkBnPYwEoC/lU6zYxexh27TUZl7FyzOcRw28vyri
- ZhtAeJw4xrFbA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=HnM42AxK
-Subject: [Buildroot] [PATCH 1/1] configs/visionfive2: uboot needs openssl
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2] configs/amarula_vyasa_rk3288_defconfig:
+ bump to Linux version 6.1.91
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,45 +69,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Francois Dugast <francois.dugast.foss@gmail.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The defconfig fails in uboot build, with output:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-    scripts/sign-file.c:25:10: fatal error: openssl/opensslv.h: No such file or directory
-       25 | #include <openssl/opensslv.h>
-          |          ^~~~~~~~~~~~~~~~~~~~
+ > Build fails with gcc 13 with:
+ > drivers/ata/libahci.c: In function 'ahci_led_store':
+ > ././include/linux/compiler_types.h:357:45: error: call to
+ > '__compiletime_assert_302' declared with attribute error: BUILD_BUG_ON failed:
+ > sizeof(_s) > sizeof(long)
+ >   357 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
 
-This commit fixes the issue by adding
-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y to the defconfig.
+ > As explained in Linux commit[0] that fixes the build, sizeof() of enum
+ > like '(1<<31)' translate to a 64-bit type, but we expect a 32-bit type.
+ > So commit[0] makes sure the data type to be 32-bits wide by using BIT()
+ > macro.
 
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/6929002318
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/6865596548
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- configs/visionfive2_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ > [0]:
+ > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=97e28deab8bfe70d5687650f94484f8f9101e566
 
-diff --git a/configs/visionfive2_defconfig b/configs/visionfive2_defconfig
-index bb8ab082af6..dae9608eeb1 100644
---- a/configs/visionfive2_defconfig
-+++ b/configs/visionfive2_defconfig
-@@ -30,6 +30,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_visionfive2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > ---
+ > V1-> V2:
+ > * improve commit log as requested by Romain Naour
+
+Committed, thanks.
+
+Could you also send a patch adding download hashes for the defconfig
+(see utils/add-custom-hashes)?
+
 -- 
-2.45.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
