@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CB78C25B74
-	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 12:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79582C25B74
+	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 12:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FEBB83336;
-	Fri, 24 May 2024 12:35:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 388CE81063;
+	Fri, 24 May 2024 12:35:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qQOU1imB9TUf; Fri, 24 May 2024 12:35:11 +0000 (UTC)
+ id x8ZbiKsHfy1u; Fri, 24 May 2024 12:35:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFB3B80E62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2A6A83385
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFB3B80E62;
-	Fri, 24 May 2024 12:35:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 37F601CF7AC
+	by smtp1.osuosl.org (Postfix) with ESMTP id A2A6A83385;
+	Fri, 24 May 2024 12:35:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BAA51CF80D
  for <buildroot@lists.busybox.net>; Fri, 24 May 2024 12:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1CAB1408D0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C6EC832A9
  for <buildroot@lists.busybox.net>; Fri, 24 May 2024 12:34:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ouncWg6AcG7N for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GLsmX3IlKa5T for <buildroot@lists.busybox.net>;
  Fri, 24 May 2024 12:34:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E385A4087B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E382E80E62
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E385A4087B
+ by smtp1.osuosl.org (Postfix) with ESMTP id E382E80E62
  for <buildroot@buildroot.org>; Fri, 24 May 2024 12:34:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D11FF87553; Fri, 24 May 2024 12:34:56 +0000 (UTC)
+ id C1E5D8759F; Fri, 24 May 2024 12:34:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 24 May 2024 14:31:25 +0200
+Date: Fri, 24 May 2024 14:30:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 73dd1d6b96665574607c8b05189426ad3eb05a6f
-X-Git-Newrev: bd6fa8d13b69ca85cc1a9add538b94cf5e5cdb68
+X-Git-Oldrev: 459c8c95c76cf442debee5bed516a746c24a4aca
+X-Git-Newrev: 73dd1d6b96665574607c8b05189426ad3eb05a6f
 X-Patchwork-Hint: ignore
-Message-Id: <20240524123456.D11FF87553@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/putty: security bump to version
- 0.81
+Message-Id: <20240524123456.C1E5D8759F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgresql: security bump version
+ to 16.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,62 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd6fa8d13b69ca85cc1a9add538b94cf5e5cdb68
+commit: https://git.buildroot.net/buildroot/commit/?id=73dd1d6b96665574607c8b05189426ad3eb05a6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The only change between 0.80 and 0.81 is one security fix:
+Release notes: https://www.postgresql.org/about/news/postgresql-163-157-1412-1315-and-1219-released-2858/
 
- - ECDSA signatures using 521-bit keys (the NIST P521 curve, otherwise
-   known as ecdsa-sha2-nistp521) were generated with biased random
-   numbers. This permits an attacker in possession of a few dozen
-   signatures to RECOVER THE PRIVATE KEY.
+Fixes CVE-2024-4317.
 
-   Any 521-bit ECDSA private key that PuTTY or Pageant has used to
-   sign anything should be considered compromised.
-
-   This vulnerability has the identifier CVE-2024-31497.
-
-Update hash of LICENCE file (update in year with
-https://git.tartarus.org/?p=simon/putty.git;a=commit;h=f2f28ac0386eebbd45ea605818d31d62d219f589)
-
-https://lists.tartarus.org/pipermail/putty-announce/2024/000038.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/putty/putty.hash | 8 ++++----
- package/putty/putty.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 84569a31e5..30b749c47b 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,7 +1,7 @@
- # Hashes from: http://the.earth.li/~sgtatham/putty/0.80/{sha1,sha256,sha512}sums
--sha1  9c4a96f63ee3e927472191c935cc89228693c03a  putty-0.80.tar.gz
--sha256  2013c83a721b1753529e9090f7c3830e8fe4c80a070ccce764539badb3f67081  putty-0.80.tar.gz
--sha512  c8a6b6fa54ecd8bcf4ec274fef51343dd9996e6458b250b5555c4dc88ded25e87f97277da482c29858510e65635112d541f559ab683635bd950572d850129f90  putty-0.80.tar.gz
-+sha1  8c88d871855d3730a0473bb1cb1006654e73b680  putty-0.81.tar.gz
-+sha256  cb8b00a94f453494e345a3df281d7a3ed26bb0dd7e36264f145206f8857639fe  putty-0.81.tar.gz
-+sha512  d86f2fd0e126b18275d58cf64334b3b27c450899a1c2be2502de9faa2ef58f7fc8efc5d45f25c8395623f1e21917aa02407343bb2fee44c4c00b9f81267d5ecd  putty-0.81.tar.gz
- 
- # Locally calculated
--sha256  7ede37f344ee03436c155a375ecb6cdb42a77105baa6e7804bf43260dc4a0c54  LICENCE
-+sha256  e0410341c5e45f7479c28d79298edbf615589cdfc115b2d69683d4ccd0425ce0  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index bff6e78074..617518e647 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 6c3f561f7e..d917a03ebb 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v16.2/postgresql-16.2.tar.bz2.sha256
+-sha256  446e88294dbc2c9085ab4b7061a646fa604b4bec03521d5ea671c2e5ad9b2952  postgresql-16.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v16.2/postgresql-16.3.tar.bz2.sha256
++sha256  331963d5d3dc4caf4216a049fa40b66d6bcb8c730615859411b9518764e60585  postgresql-16.3.tar.bz2
+ # License file, Locally calculated
+ sha256  9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 0448e71892..0a1d98079a 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PUTTY_VERSION = 0.80
-+PUTTY_VERSION = 0.81
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
+-POSTGRESQL_VERSION = 16.2
++POSTGRESQL_VERSION = 16.3
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
