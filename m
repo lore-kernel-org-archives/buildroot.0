@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9481C25B74
-	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 21:33:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5983C25B74
+	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 21:38:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 649B740353;
-	Fri, 24 May 2024 21:33:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C95D4029B;
+	Fri, 24 May 2024 21:38:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c5m8mu-bug7f; Fri, 24 May 2024 21:33:43 +0000 (UTC)
+ id 4YLgEsySr6Ra; Fri, 24 May 2024 21:38:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C0674030C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AAF140265
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C0674030C;
-	Fri, 24 May 2024 21:33:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 006DA1CFE93
- for <buildroot@lists.busybox.net>; Fri, 24 May 2024 21:33:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AAF140265;
+	Fri, 24 May 2024 21:38:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E4E21CFEB7
+ for <buildroot@lists.busybox.net>; Fri, 24 May 2024 21:38:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0EB8605E0
- for <buildroot@lists.busybox.net>; Fri, 24 May 2024 21:33:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8722E4024C
+ for <buildroot@lists.busybox.net>; Fri, 24 May 2024 21:38:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J_8ZRgknW9vI for <buildroot@lists.busybox.net>;
- Fri, 24 May 2024 21:33:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ht3z3lXhDEzk for <buildroot@lists.busybox.net>;
+ Fri, 24 May 2024 21:38:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63E00605C4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63E00605C4
- for <buildroot@buildroot.org>; Fri, 24 May 2024 21:33:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4ADF1875F2; Fri, 24 May 2024 21:33:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3FD3B401E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FD3B401E3
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3FD3B401E3
+ for <buildroot@buildroot.org>; Fri, 24 May 2024 21:38:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C3D0C1C0002;
+ Fri, 24 May 2024 21:38:28 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sAccO-00GitI-0V;
+ Fri, 24 May 2024 23:38:28 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 24 May 2024 23:31:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 898b794faa054e9058d3ea6d7b490f5603c1e3af
-X-Git-Newrev: 4ae2267c6c87471e721b09c3148fedd78bf0dab6
-X-Patchwork-Hint: ignore
-Message-Id: <20240524213338.4ADF1875F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 24.2.2
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+References: <20240516155212.975737-1-dario.binacchi@amarulasolutions.com>
+Date: Fri, 24 May 2024 23:38:28 +0200
+In-Reply-To: <20240516155212.975737-1-dario.binacchi@amarulasolutions.com>
+ (Dario Binacchi's message of "Thu, 16 May 2024 17:52:12 +0200")
+Message-ID: <87ttimj3fv.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] configs/qemu_sparc_ss10_defconfig: fix
+ linux hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +69,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Dmitry Chestnykh <dm.chestnykh@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>, michael@amarulasolutions.com,
+ linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ae2267c6c87471e721b09c3148fedd78bf0dab6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > The patch fixes "make legal-info" for qemu_sparc_ss10 configuration:
+ >>>> host-gcc-initial 13.2.0 Collecting legal info
+ > COPYING: OK (sha256: 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c)
+ > COPYING3: OK (sha256: 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903)
+ > COPYING.LIB: OK (sha256: a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861)
+ > COPYING3.LIB: OK (sha256: a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c)
+ > ERROR: No hash found for linux-6.8.6.tar.xz
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index fcc7b9dfbb..8a23f9cd7e 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  94dfcc4d2e6f75d0b9b9a5c95c1ff5d69178440888ff2ab98ec095d4adf8e955  intel-media-24.2.1.tar.gz
-+sha256  7d0d43e201706ab2dc62741b7873d52dc3779a7b1187b5a321cd0a37223b2b8c  intel-media-24.2.2.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 52f74d1ade..2bbe4a7a08 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 24.2.1
-+INTEL_MEDIADRIVER_VERSION = 24.2.2
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+ > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
+Committed after extending the commit message to explain when this issue
+was introduced, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
