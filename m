@@ -4,118 +4,119 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA879C25B79
-	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 19:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5834C25B74
+	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 19:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 633AF41B80;
-	Fri, 24 May 2024 19:37:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 864EF41BCD;
+	Fri, 24 May 2024 19:37:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vdfmt9Wwchca; Fri, 24 May 2024 19:37:25 +0000 (UTC)
+ id dZsL3AqHY2Z3; Fri, 24 May 2024 19:37:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF3F9409A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC13941BD4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EF3F9409A7;
-	Fri, 24 May 2024 19:37:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 95A2D1CFD34
- for <buildroot@lists.busybox.net>; Fri, 24 May 2024 19:36:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC13941BD4;
+	Fri, 24 May 2024 19:37:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EADF1CFD32
+ for <buildroot@lists.busybox.net>; Fri, 24 May 2024 19:36:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8159D400F5
- for <buildroot@lists.busybox.net>; Fri, 24 May 2024 19:36:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 57B5E408FD
+ for <buildroot@lists.busybox.net>; Fri, 24 May 2024 19:36:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AduBwHiqmELp for <buildroot@lists.busybox.net>;
- Fri, 24 May 2024 19:36:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.145;
- helo=fout2-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3jYzL9rr4T07 for <buildroot@lists.busybox.net>;
+ Fri, 24 May 2024 19:36:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.159;
+ helo=fhigh8-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AA20340447
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA20340447
-Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com
- [103.168.172.145])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AA20340447
- for <buildroot@buildroot.org>; Fri, 24 May 2024 19:36:50 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
- by mailfout.nyi.internal (Postfix) with ESMTP id D915313800A6;
- Fri, 24 May 2024 15:36:49 -0400 (EDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D7009408D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7009408D0
+Received: from fhigh8-smtp.messagingengine.com
+ (fhigh8-smtp.messagingengine.com [103.168.172.159])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D7009408D0
+ for <buildroot@buildroot.org>; Fri, 24 May 2024 19:36:51 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+ by mailfhigh.nyi.internal (Postfix) with ESMTP id 0692A1140155;
+ Fri, 24 May 2024 15:36:51 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
- by compute2.internal (MEProxy); Fri, 24 May 2024 15:36:49 -0400
-X-ME-Sender: <xms:UexQZrSdsXAa46KMDYxdTa25MDpRANz7UQsJ2us4dhE8Rj-uN-qUUA>
- <xme:UexQZsz5NVGp1Dj5Okv-vSDaWCKFJaKG2quwVEqy5mvwEP_UhUACT0iBo0eHrSxCJ
- wql2uF_8VRRw8dBmDY>
-X-ME-Received: <xmr:UexQZg382DnidBBFPmY_yTfgatA3Ow2ZMpFyMDu1X1T6KjV-gU7NARA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeikedgudefiecutefuodetggdotefrod
+ by compute3.internal (MEProxy); Fri, 24 May 2024 15:36:51 -0400
+X-ME-Sender: <xms:UuxQZmXuW1bOlERJXTKM6KGrXNkV6TGHoCHlANjH-hin_cDT8UMPyw>
+ <xme:UuxQZilbZQCbLa8yoOHKOSCShIdIbDSF0ZXApr61sD_oFQhONDpdKQzYxDR_mrBKZ
+ GGqnwlyLB99ZBPkVm4>
+X-ME-Received: <xmr:UuxQZqb-Osrlv4PreXKOlvFxevrUkgwI4PWU0_p5uPLQEhPHfFFsLPA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeikedgudefhecutefuodetggdotefrod
  ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
  necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
  enucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhi
  rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
- enucggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefh
- ueevgeffgedukeejleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
- hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:UexQZrBrtno9lyOGsAbOTXHPpM4k9jymIMmHXtGwyiLyFZz_1uvhCg>
- <xmx:UexQZki-70ZpWoW1WPfwwtDHZypNRHRssAVJT9_AWyax-xVRe5zXVQ>
- <xmx:UexQZvpQT_RW9wKOG7zT9SlsoGeGCLj7GsdMUWUG_KRmbsvFesZ3Fg>
- <xmx:UexQZvinmy1ecajv7H2R0iczBqW3TQg30Owdbe0tWWsiMvYNuaOz9A>
- <xmx:UexQZuYNgby2LcmJ2o8DrSyum83A43ocAnX0CR3trJkkqxFV4hOJSPYZ>
+ enucggtffrrghtthgvrhhnpeekkefgvdfgheffvedtveekjeeutdeifefhveetffdtvdej
+ ffeludejgedtieekleenucffohhmrghinhepuhgrphhiqdhgrhhouhhprdhorhhgnecuve
+ hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhn
+ rdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:UuxQZtX80hXg2ilJHuOyGAQsR3lvfoV3Al9ZBx00HMX68oV_38HOxw>
+ <xmx:UuxQZgnJnOAnABaGStDtAQ0cM44_RCeEqkztnMGcxtYADRqOP4jSVg>
+ <xmx:UuxQZidLkiJq0aPe06H4nopprA3RtnyTy2hT_y-qGGwp9Fvwx1XBAA>
+ <xmx:UuxQZiGbYLTsld9VphdJ-vqmBEn1xQBOjmthBTUp069_0YGIp4i7EQ>
+ <xmx:UuxQZvvl_nqXqiv7xGwbsC7NjFreYONwY4eQLfP72Ym7alPuvgyJ05Qg>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 24 May 2024 15:36:48 -0400 (EDT)
+ 24 May 2024 15:36:49 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Fri, 24 May 2024 20:36:40 +0100
+Date: Fri, 24 May 2024 20:36:41 +0100
 MIME-Version: 1.0
-Message-Id: <20240524-loongarch64-v1-6-d24078d79cd5@flygoat.com>
+Message-Id: <20240524-loongarch64-v1-7-d24078d79cd5@flygoat.com>
 References: <20240524-loongarch64-v1-0-d24078d79cd5@flygoat.com>
 In-Reply-To: <20240524-loongarch64-v1-0-d24078d79cd5@flygoat.com>
 To: buildroot@buildroot.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2311;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5370;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=3j6OWBVIbMmvfpgLPrx7kKnZ91JBVWVTStaUuhwFnDU=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSAN97X98Sfnp8cdqbA1rylKshzSZ3Ppesf1ATn6OXwd
- fLe3enVUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABPxVGH4HyOxptDzXq3CI/6O
- B3l2znyHH2c+eK3JO3/vVIb63zd1JjP8lTU2OvIwfILHfBYbUxMtzekW0zhNi5q2VZcZTktg2T+
- HAwA=
+ bh=/dQaOmzuAR00TdVHdZp7p22ohNK+eGOnoLyqF2CSOqA=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSAN95iXrN/NSk/sl6dUpN8z3HrUjb25Neinr9FxCJTf
+ z5aJ1LSUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABPZqMTwP+/8gS7D5GUPti52
+ lq1bmHBOUe4pswmPYPnWGZyqArt0PRn+ii+arHZw94IFnxfuPn5Xflu98/ufhllTzuYa53K01sQ
+ 9YAAA
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=flygoat.com; h=
  cc:cc:content-transfer-encoding:content-type:content-type:date
  :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to; s=fm2; t=1716579409;
- x=1716665809; bh=fSY05B9B62hyED0WPJS+dJLxGWor7F0LEkylhOnE4gw=; b=
- rHtm/iRv3YXBuwy5n34v/iw4S8h7aaZ1vvaVrSFfws32rM7l3+X9zznX6FtVkwdP
- pZoqyfRvTGx7prn+1vgmkdu0KH8fwHqeKgAi/f5lfdMiLPGBZsDHGvCL0ORwKPOc
- afWpWt1CsNnUsM8mYArV1OG7R+ea2PlL+Ea8Wob6kNxmw64Lm26eIRGkxE4YfsoK
- Cgi4EvSZxWf527IpTSGwePCXLDdoAujls5PlN3QF2oW/YuYCYmkIPV0V0CTRj1db
- I3NkCzdu6lQUC3bAQ0UIwABe4WVkyxh+2219WtgIk7dON8s2QbKL9lKzPvPjxWRX
- ALzdR42TTKUzA5ER3jQRPQ==
+ :references:reply-to:subject:subject:to:to; s=fm2; t=1716579411;
+ x=1716665811; bh=qxOWvl6D3q5iAYgIruYA5TZ9VQnc8D/RI3tN/kTSE+E=; b=
+ gd2R9AzuqFXmoB1uDJKkgLITKoZ3EE9BK4GKoRpbUMj1QmnT/7+Tlu/2Oa0A5Vso
+ M5lZ9wqkJG5xxvbwG0z2m85hRbanjx5HwOrzUIWGUOqAuFlrpSWSXrmYLdr3UTTC
+ XzC0f5Edf54CV95O8XL9ym9TnzrAoR6AVbdf2Xn5zKSW8X+Xvu6T5XT4AmOVMrO9
+ KcTxIHSrUGKAKkhez9wyFj9shllJ+ELd0GsOP9v48Huh5uYCVGQXsC8CM0MiSnx3
+ W2nD0GnEVidRYarC8jiKhj0ZUHW8uwzd75sc4qsgGX4CQbj3WdwM3cQzN6UYSyMf
+ JJKJvzcy3Fi5Gl3hqEW5OA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
  messagingengine.com; h=cc:cc:content-transfer-encoding
  :content-type:content-type:date:date:feedback-id:feedback-id
  :from:from:in-reply-to:in-reply-to:message-id:mime-version
  :references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
- :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1716579409; x=
- 1716665809; bh=fSY05B9B62hyED0WPJS+dJLxGWor7F0LEkylhOnE4gw=; b=k
- vMMYv9arGjOcmDc+8yR1p7svDDkJ+JqrETqA4+rYBf+PtXGNnCBKf1gPD7RgtJ6q
- Z/DCW0c8dnh9d38CYCjvrGnoM2cQLkI4YNvjbkJE+4DLp3xKDkbZP8Ih9vaAkG6O
- E2Lx9zv90BX4kci/pJ96yXuOFbn1g3EZ8smMUFWRMT2O2k+eqsQE1Yh5Q5r69Wkj
- Z+bKwwedPn0+HdTurIdgNwdC9yEK9B9bzN48WWbbEHQ2ZU4g1zFCcLTfNNhslbXM
- QAqDJ+1A4E1DAfq+zr3w/3mlM0+H3Tr82T1SlUNq6QtqhBvfCu04EIB2NWG4Rd26
- eB+mEqDqokWMvRdc8AvFw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1716579411; x=
+ 1716665811; bh=qxOWvl6D3q5iAYgIruYA5TZ9VQnc8D/RI3tN/kTSE+E=; b=Q
+ VLOCQf/OxnCoHYQ4stl9AZYWVc1kQABbVVw9kqzTmVI5xaPC2ne0pGNBRQVEue0n
+ ZMn+Gc/xNryjEp3u7zCulNEOOtPcyYqken12qOjviecu/8myZm+wVRNkE8LPjkpg
+ eW9JrC1rISx4TZGNWDjbhnAXp/7BNVMFwCA22sRqUa1We96UWF6v4lpUxbk6SA2u
+ kubr5aiFPXbV9kn9Sv9UP3p8K9gV6O2GffmUe1xd+9QNDQBhxMYbyKc6LtpDWa97
+ mVS3/vyDzUzOX+mUQJ3oBIU/8STSWF//wNzyUNcSiYxal06mZuWGUwaiEKJsd+Qi
+ qgTpHSCgTve44zzOcsR8A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=flygoat.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=flygoat.com
- header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=rHtm/iRv; 
+ header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=gd2R9Azu; 
  dkim=pass (2048-bit key,
  unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm1 header.b=kvMMYv9a
-Subject: [Buildroot] [PATCH RESEND 6/7] boot/grub2: Introduce
- loongarch64-efi target
+ header.a=rsa-sha256 header.s=fm1 header.b=QVLOCQf/
+Subject: [Buildroot] [PATCH RESEND 7/7] board/loongarch64-efi: Introduce the
+ new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -136,63 +137,187 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-loongarch64-efi target presents in GRUB can be utilised
-by any EFI compatible LoongArch64 machine to boot kernel.
+Introduce bread new loongarch64-efi board, with skeleton
+from aarch64-efi board.
+
+It corverd most LoongArch64 systems.
+
+Linux 6.6, as the most recent LTS kernel, was chosen
+to ensure proper architecture support is included.
+
+A developer entry is created for myself for future contacts
+as well.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- boot/grub2/Config.in | 10 ++++++++++
- boot/grub2/grub2.mk  |  9 +++++++++
- 2 files changed, 19 insertions(+)
+ DEVELOPERS                             |  5 +++++
+ board/loongarch64-efi/genimage-efi.cfg | 33 +++++++++++++++++++++++++++++++
+ board/loongarch64-efi/grub.cfg         |  6 ++++++
+ board/loongarch64-efi/post-image.sh    |  5 +++++
+ board/loongarch64-efi/readme.txt       | 34 ++++++++++++++++++++++++++++++++
+ configs/loongarch64_efi_defconfig      | 36 ++++++++++++++++++++++++++++++++++
+ 6 files changed, 119 insertions(+)
 
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index 7c235e96f71d..8bf193d4a86c 100644
---- a/boot/grub2/Config.in
-+++ b/boot/grub2/Config.in
-@@ -5,6 +5,7 @@ config BR2_TARGET_GRUB2_ARCH_SUPPORTS
- 	default y if BR2_arm
- 	default y if BR2_aarch64
- 	default y if BR2_RISCV_64
-+	default y if BR2_loongarch64
- 	depends on BR2_USE_MMU
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 52c9b84a9d41..333f952cf392 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1568,6 +1568,11 @@ F:	package/libuhttpd/
+ F:	package/libuwsc/
+ F:	package/rtty/
  
- config BR2_TARGET_GRUB2
-@@ -112,6 +113,15 @@ config BR2_TARGET_GRUB2_RISCV64_EFI
- 	  64bit RISC-V platform and you want to boot Grub 2 as an EFI
- 	  application.
- 
-+config BR2_TARGET_GRUB2_LOONGARCH64_EFI
-+	bool "loongarch64-efi"
-+	depends on BR2_loongarch64
-+	select BR2_TARGET_GRUB2_HAS_EFI_BOOT
-+	help
-+	  Select this option if the platform you're targetting is a
-+	  64bit LoongArch platform and you want to boot Grub 2 as an EFI
-+	  application.
++N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
++F:	arch/Config.in.loongarch
++F:	board/loongarch64-efi
++F:	configs/loongarch64_efi_defconfig
 +
- if BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
- 
- comment "Options for the x86 legacy BIOS or ARM U-Boot support"
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 6d0d71c47d08..347915431fd0 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -102,6 +102,15 @@ GRUB2_BUILTIN_CONFIG_riscv64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
- GRUB2_BUILTIN_MODULES_riscv64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
- GRUB2_TUPLES-$(BR2_TARGET_GRUB2_RISCV64_EFI) += riscv64-efi
- 
-+GRUB2_IMAGE_loongarch64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/bootloongarch64.efi
-+GRUB2_CFG_loongarch64-efi = $(BINARIES_DIR)/efi-part/EFI/BOOT/grub.cfg
-+GRUB2_PREFIX_loongarch64-efi = /EFI/BOOT
-+GRUB2_TARGET_loongarch64-efi = loongarch64
-+GRUB2_PLATFORM_loongarch64-efi = efi
-+GRUB2_BUILTIN_CONFIG_loongarch64-efi = $(GRUB2_BUILTIN_CONFIG_EFI)
-+GRUB2_BUILTIN_MODULES_loongarch64-efi = $(GRUB2_BUILTIN_MODULES_EFI)
-+GRUB2_TUPLES-$(BR2_TARGET_GRUB2_LOONGARCH64_EFI) += loongarch64-efi
+ N:	Joachim Wiberg <troglobit@gmail.com>
+ F:	configs/globalscale_espressobin_defconfig
+ F:	board/globalscale/espressobin/
+diff --git a/board/loongarch64-efi/genimage-efi.cfg b/board/loongarch64-efi/genimage-efi.cfg
+new file mode 100644
+index 000000000000..c78f81016d01
+--- /dev/null
++++ b/board/loongarch64-efi/genimage-efi.cfg
+@@ -0,0 +1,33 @@
++image efi-part.vfat {
++	vfat {
++		file EFI {
++			image = "efi-part/EFI"
++		}
++		file vmlinuz.efi {
++			image = "vmlinuz.efi"
++		}
++	}
 +
- # Grub2 is kind of special: it considers CC, LD and so on to be the
- # tools to build the host programs and uses TARGET_CC, TARGET_CFLAGS,
- # TARGET_CPPFLAGS, TARGET_LDFLAGS to build the bootloader itself.
++	size = 64M
++}
++
++image disk.img {
++	hdimage {
++		partition-table-type = "gpt"
++	}
++
++	partition boot {
++		image = "efi-part.vfat"
++		partition-type-uuid = U
++		offset = 32K
++		bootable = true
++	}
++
++	partition root {
++		# For partition-type-uuid value, see:
++		# https://uapi-group.org/specifications/specs/discoverable_partitions_specification/
++		# SD_GPT_ROOT_LOONGARCH64
++		partition-type-uuid = 77055800-792c-4f94-b39a-98c91b762bb6
++		image = "rootfs.ext2"
++	}
++}
+diff --git a/board/loongarch64-efi/grub.cfg b/board/loongarch64-efi/grub.cfg
+new file mode 100644
+index 000000000000..42c6cb03ad19
+--- /dev/null
++++ b/board/loongarch64-efi/grub.cfg
+@@ -0,0 +1,6 @@
++set default="0"
++set timeout="5"
++
++menuentry "Buildroot" {
++	linux /vmlinuz.efi root=PARTLABEL=root rootwait console=ttyS0,115200
++}
+diff --git a/board/loongarch64-efi/post-image.sh b/board/loongarch64-efi/post-image.sh
+new file mode 100755
+index 000000000000..f0214dc8667a
+--- /dev/null
++++ b/board/loongarch64-efi/post-image.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++
++cp -f ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
+diff --git a/board/loongarch64-efi/readme.txt b/board/loongarch64-efi/readme.txt
+new file mode 100644
+index 000000000000..4c4e06874c1f
+--- /dev/null
++++ b/board/loongarch64-efi/readme.txt
+@@ -0,0 +1,34 @@
++The loongarch64_efi_defconfig allows to build a minimal Linux system that
++can boot on all loongarch64 systems providing an EFI firmware.
++
++This includes almost all Loongson-3 series workstations and servers.
++
++Building and booting
++====================
++
++$ make loongarch64_efi_defconfig
++$ make
++
++The file output/images/disk.img is a complete disk image that can be
++booted, it includes the grub2 bootloader, Linux kernel and root
++filesystem.
++
++Testing under Qemu
++==================
++
++This image can also be tested using Qemu:
++
++qemu-system-loongarch64 \
++	-M virt \
++	-cpu la464 \
++	-nographic \
++	-bios </path/to/QEMU_EFI.fd> \
++	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
++	-device virtio-blk-pci,drive=hd0 \
++	-netdev user,id=eth0 \
++	-device virtio-net-pci,netdev=eth0
++
++Note that </path/to/QEMU_EFI.fd> needs to point to a valid loongarch64 UEFI
++firmware image for qemu.
++It may be provided by your distribution as a edk2-loongarch64 package,
++in path such as /usr/share/edk2/loongarch64/QEMU_EFI.fd .
+diff --git a/configs/loongarch64_efi_defconfig b/configs/loongarch64_efi_defconfig
+new file mode 100644
+index 000000000000..874ee58be8b8
+--- /dev/null
++++ b/configs/loongarch64_efi_defconfig
+@@ -0,0 +1,36 @@
++# Architecture
++BR2_loongarch64=y
++BR2_loongarch64_generic=y
++
++# System
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++
++## Required tools to create bootable media
++BR2_PACKAGE_HOST_GENIMAGE=y
++
++# Bootloader
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_LOONGARCH64_EFI=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/loongarch64-efi/post-image.sh support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/loongarch64-efi/genimage-efi.cfg"
++
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_VMLINUZ_EFI=y
++
++# Host tools for genimage
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_MTOOLS=y
 
 -- 
 2.43.0
