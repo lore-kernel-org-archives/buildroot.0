@@ -4,118 +4,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A2C8C25B74
-	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 19:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21CF8C25B7D
+	for <buildroot@archiver.kernel.org>; Fri, 24 May 2024 19:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3236C40523;
-	Fri, 24 May 2024 19:36:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DF469408C4;
+	Fri, 24 May 2024 19:36:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S-QXuYfmLVRT; Fri, 24 May 2024 19:36:50 +0000 (UTC)
+ id m9iawHHTJyFE; Fri, 24 May 2024 19:36:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAA2D400F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 032F341B1E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DAA2D400F5;
-	Fri, 24 May 2024 19:36:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4E7341CFD2F
- for <buildroot@lists.busybox.net>; Fri, 24 May 2024 19:36:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 032F341B1E;
+	Fri, 24 May 2024 19:36:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A07F61CFD23
+ for <buildroot@lists.busybox.net>; Fri, 24 May 2024 19:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B9EE401B7
- for <buildroot@lists.busybox.net>; Fri, 24 May 2024 19:36:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C2FB834F7
+ for <buildroot@lists.busybox.net>; Fri, 24 May 2024 19:36:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y7nOsRCkatow for <buildroot@lists.busybox.net>;
- Fri, 24 May 2024 19:36:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FnDIW4hsTwCA for <buildroot@lists.busybox.net>;
+ Fri, 24 May 2024 19:36:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.145;
  helo=fout2-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5AF0E40441
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AF0E40441
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 76FA9834F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76FA9834F6
 Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com
  [103.168.172.145])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5AF0E40441
- for <buildroot@buildroot.org>; Fri, 24 May 2024 19:36:46 +0000 (UTC)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
- by mailfout.nyi.internal (Postfix) with ESMTP id 8E72E13800A1;
- Fri, 24 May 2024 15:36:45 -0400 (EDT)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 76FA9834F6
+ for <buildroot@buildroot.org>; Fri, 24 May 2024 19:36:47 +0000 (UTC)
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+ by mailfout.nyi.internal (Postfix) with ESMTP id 9D8C813800A5;
+ Fri, 24 May 2024 15:36:46 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
- by compute4.internal (MEProxy); Fri, 24 May 2024 15:36:45 -0400
-X-ME-Sender: <xms:TexQZlCXx2xXL6Ya-HsP6vmlt08hFZewxalKr1mM3SPSzm84HKaAmA>
- <xme:TexQZjhpo8i22RZa-drHJUS2Ekgv3CW9qUOSZpJkSgW3uZumaPxkHLpdEe0mYive-
- 5IMuSSkzNQh8qlpxaw>
-X-ME-Received: <xmr:TexQZgl1HMU9DeGVmTndU-_AaqktLmGcsDZ4iMoYT6QCo5c0FQrYhCU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeikedgudefhecutefuodetggdotefrod
+ by compute7.internal (MEProxy); Fri, 24 May 2024 15:36:46 -0400
+X-ME-Sender: <xms:TuxQZp2kb48xzDGwBjk2bdh_h2HqPvnOLebhUOivHFmCWW8OIGYxcw>
+ <xme:TuxQZgFBII_dyO9zj2AJleEKmIhzcOOvZAEwFsJdXqxMxh5UQ1ZDZ7PSGs4ZjROvl
+ o_E5rgH2kHwmmCtH14>
+X-ME-Received: <xmr:TuxQZp7rbq26pLqjbOJIPY9kUx7LkH3_WkOMKIPZmgMmaahokxdxMh0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeikedgudefiecutefuodetggdotefrod
  ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
  necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
  enucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomheplfhi
  rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
- enucggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleffkeegudeghfdtuddugefh
- ueevgeffgedukeejleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
- hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:TexQZvxWc3Up_4ot7ASWxVP7hEPyzuOVVinB9dFEsPDbN6StjwFITQ>
- <xmx:TexQZqQ11pZ-CIHrOO5sM_8oDnZpey-rZRx4VAMgNJ6_4F2atMaq0Q>
- <xmx:TexQZibLfNl5JeyqBa_rIhvxcvqWm4BPcWWdBeRqgwEJd-LU1rhktA>
- <xmx:TexQZrQ0TGae3DXagjr3wpqkH252HC_J52M5o2cV9amWurZcitv_KQ>
- <xmx:TexQZnLXd1L4a8yDjXrNA5AqhDH7CkQ_6TQugiUwPHUEJOj2TxAb0nf->
+ enucggtffrrghtthgvrhhnpeegleejgfdtkeejfefhhfeutefhueduueevieeivdffjedu
+ tdetvdetleehgeehieenucffohhmrghinhepfihikhhiphgvughirgdrohhrghdplhhooh
+ hnghhsohhnrdgtnhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+ fhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:TuxQZm2ydf6h0sEdLFkR9xdRd8s1m-PJHNvA8h1hU6g-fHvoIkLEiQ>
+ <xmx:TuxQZsGqKlViLpuVcgAq2uATiAFXk4XgcNlvauH07ve5_VsqF1Zutw>
+ <xmx:TuxQZn-2ZuF4cH2gRqN_u5XEvJm-TpfJIvQYhutoOhs5W6ee0s7TlQ>
+ <xmx:TuxQZplfYxK3C6LSE5B0O2li9oKlamentO_3N_f7Ptx97YwLvtpxVA>
+ <xmx:TuxQZhMo7y6tN2qXPYuzyXDptiBDAxMdC9DZgUEMRmfqEgiiElm6DFuu>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 24 May 2024 15:36:44 -0400 (EDT)
+ 24 May 2024 15:36:45 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Fri, 24 May 2024 20:36:36 +0100
+Date: Fri, 24 May 2024 20:36:37 +0100
 MIME-Version: 1.0
-Message-Id: <20240524-loongarch64-v1-2-d24078d79cd5@flygoat.com>
+Message-Id: <20240524-loongarch64-v1-3-d24078d79cd5@flygoat.com>
 References: <20240524-loongarch64-v1-0-d24078d79cd5@flygoat.com>
 In-Reply-To: <20240524-loongarch64-v1-0-d24078d79cd5@flygoat.com>
 To: buildroot@buildroot.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3017;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4695;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=dEVKDIHabvokgngIFQG3juCvbnJudDCjOHdZpiPjr+8=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSAN97dS6pisy9+nWvk/olVPblVM8E4+Iy05euF+gprv
- 0hHR8h2lLIwiHExyIopsoQIKPVtaLy44PqDrD8wc1iZQIYwcHEKwETEpRkZVj7RzT/Z7LL2pn7U
- zXcXxeti1kvdtVKesnfthrJJLNeuT2P4H/mt8E6njUDTd62epcov9/yu971rekR+mkzOlzM9Vdf
- 8eAE=
+ bh=PjFdhwl3/TVZStx8ruQ/P7bTV+3LIOuwCBhpAm0sSeY=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSAN96fp/dJTqpTW/i7vuXooRv/7zvM2TtJ1/Qp76vLp
+ UeZ8kQ/dpSyMIhxMciKKbKECCj1bWi8uOD6g6w/MHNYmUCGMHBxCsBEftox/LPKqfPhcfSx4ZM/
+ LO02Lbpy5v5bjCfl3y61f2khxRjQwMXIMOnS0qok/muHzSbyOpQKbAussucuuKj8ftHc5z4Fxz5
+ vYQMA
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=flygoat.com; h=
  cc:cc:content-transfer-encoding:content-type:content-type:date
  :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to; s=fm2; t=1716579405;
- x=1716665805; bh=7S/SGOvEUWU8iYiMTqdUly9LasmYNfMDAtl33+6QnOE=; b=
- xb2hGaB5OoyU/OP4L1WApPISfO8gpBTLyvysX2qv4nZ5IZLa10B56YeElV2osOqm
- 2JITw6VqPs7VtwHa1ngdz2YLUUBb2+LJTvFs9YDtihTpXc4YcSk6hqLb2tGQkeNH
- ozYKVCDpZXRI7DaCX2AJz4TP+Jfv9wmnZFjqtdw6lnifsBlaSw8Mnor0d1GwBz8r
- GrT0VOSY8Z1XTT6UE/LvNyFIQ0RxZ21gI+mDfLHA/My1dnz9RMpQo4WqC8W/fRWj
- u8owUmgv87CPm6q+cuzbk8bSjSF/eb/HWZILwweDfD89H8UpqW15CueyrgEvp8pJ
- HrK5TXjzByUYWpi6pPgo7A==
+ :references:reply-to:subject:subject:to:to; s=fm2; t=1716579406;
+ x=1716665806; bh=Vy3k4doxccQBfwCGEiP3ab841BQfhbDBjWjfWu4hjJU=; b=
+ thJ8IJt9yx64xuaZtZqfiGtN8ewFKDWq0yFYIBnREarcoV711BR0vtFKE2qw0Cp5
+ VJ9P7v4fWmBo47ENadYDGdnJioe2Mikhy6W/s7tew60sb4uLNPvsD/Mub5HXGZ2H
+ FlkxO/wCyrLUmgLTw7AuYKx5eo5036H7v7/cEVhc1QxfqJCkDQzDHeRcOXyhAcIK
+ gW8lKgsAO/nN1j//SNLw40xFMa9vLy6AzbW/r0hl6D5W8kfri5TP8f4aR4Y4Bj+k
+ F2ZQFli6u17NLNXC0JihfbhUqDy54H9+NwGPZJsUXoDMBFdupax7FJehMA12PP3S
+ T7NTb9xPv9UumKw+oEDu3w==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
  messagingengine.com; h=cc:cc:content-transfer-encoding
  :content-type:content-type:date:date:feedback-id:feedback-id
  :from:from:in-reply-to:in-reply-to:message-id:mime-version
  :references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
- :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1716579405; x=
- 1716665805; bh=7S/SGOvEUWU8iYiMTqdUly9LasmYNfMDAtl33+6QnOE=; b=E
- DMAHCNLyQg6Ungg4Dum3uMjSi62WE1ljJiW3lyU3TcZkxAuuw/QbvoNdzylwiD71
- 84f0VZjaE2RHUwadbDUmtSi6V4YyNJ/NbXxXBNPG3F2s5XNFIuJ55mM1S+uioiH8
- 4FOZbB7zZsPj1t0+8tmLprDoVf9YCqoKg3ENdJnefg/Sm/leQ3ekDt9Jjd6nyGAG
- KN/6+uic+/1CHijIkLNxH/o5ZBwBHZj21whT4GXdxZPz/bfJmHzxsS1U7wXLPhJ0
- xpA3Clg1UyJ1aLYIQgY08TkKqjJH/SMOas0meDWNxPmVNKbK3SOQG+da53H7aQwC
- exL3VJR1tyYPXZJOeEHJg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1716579406; x=
+ 1716665806; bh=Vy3k4doxccQBfwCGEiP3ab841BQfhbDBjWjfWu4hjJU=; b=c
+ SF1uXOWG939MRBq11o2lQvCFxVsHSa4eLB69rspTiOCrwTEBHP1Fsv5zkZE0RVic
+ ZxSv8jTUcnUvxmuPRG2c/41PcBwFm7U6iWrPbHN2U067oBYE+r639rs/hb1eGxTn
+ Rjr6t9vY6acPYfIi18M+86K+JfVEMwKypCSxRtvhDTV7FWdxWg6qPl2yceLRcD4r
+ sc6p6FfcKi+HrttQ/vdCL0VDBT7F0KPICKrCugTgP8Eq/mta1kEulDMeE7eo9GCT
+ nOaU42kxyomPXjF0YpzaNn3i/RgNpjnXSwEHslCaEpc0pBRioIzWt8eAfw4pLzJZ
+ JcJhAbgwsLBiIqx+J6raA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=flygoat.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=flygoat.com
- header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=xb2hGaB5; 
+ header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=thJ8IJt9; 
  dkim=pass (2048-bit key,
  unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm1 header.b=EDMAHCNL
-Subject: [Buildroot] [PATCH RESEND 2/7] package/gcc: Introduce
- BR2_GCC_TARGET_SIMD option
+ header.a=rsa-sha256 header.s=fm1 header.b=cSF1uXOW
+Subject: [Buildroot] [PATCH RESEND 3/7] arch: Introduce LoongArch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -136,76 +136,181 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Introduce BR2_GCC_TARGET_SIMD for gcc to handle --with-simd/-msimd
-present at loongarch's gcc options.
+Introduce LoongArch64 at architecture level.
+
+Config.in.loongarch is prepared for possible loongarch32
+enablement in future.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/Config.in                                         | 6 ++++++
- arch/arch.mk                                           | 1 +
- package/gcc/gcc.mk                                     | 4 ++++
- toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++++
- 4 files changed, 15 insertions(+)
+ arch/Config.in           |  13 +++++
+ arch/Config.in.loongarch | 127 +++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 140 insertions(+)
 
 diff --git a/arch/Config.in b/arch/Config.in
-index f39c33ef7fff..cc902446bfd9 100644
+index cc902446bfd9..504808fcbce4 100644
 --- a/arch/Config.in
 +++ b/arch/Config.in
-@@ -350,6 +350,12 @@ config BR2_GCC_TARGET_FPU
- config BR2_GCC_TARGET_FLOAT_ABI
- 	string
+@@ -77,6 +77,15 @@ config BR2_i386
+ 	  Intel i386 architecture compatible microprocessor
+ 	  http://en.wikipedia.org/wiki/I386
  
-+# The value of this option will be passed as --with-simd=<value> when
-+# building gcc (internal backend) or -simd=<value> in the toolchain
-+# wrapper (external toolchain)
++config BR2_loongarch64
++	bool "LoongArch64"
++	select BR2_USE_MMU
++	select BR2_ARCH_IS_64
++	help
++	  LoongArch64 is a  is a 64-bit architecture developed by Loongson.
++	  http://www.loongson.cn/
++	  https://en.wikipedia.org/wiki/Loongson
++
+ config BR2_m68k
+ 	bool "m68k"
+ 	# MMU support is set by the subarchitecture file, arch/Config.in.m68k
+@@ -380,6 +389,10 @@ if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
+ source "arch/Config.in.arm"
+ endif
+ 
++if BR2_loongarch64
++source "arch/Config.in.loongarch"
++endif
++
+ if BR2_m68k
+ source "arch/Config.in.m68k"
+ endif
+diff --git a/arch/Config.in.loongarch b/arch/Config.in.loongarch
+new file mode 100644
+index 000000000000..f5d767a9d87d
+--- /dev/null
++++ b/arch/Config.in.loongarch
+@@ -0,0 +1,127 @@
++# LoongArch CPU
++
++choice
++	prompt "Target Architecture Variant"
++	default BR2_loongarch64_generic
++
++config BR2_loongarch64_generic
++	bool "Generic LoongArch 64-bit"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
++	help
++	  Generic LoongArch 64-bit processor.
++
++config BR2_loongarch64_v1_0
++	bool "LoongArch64 ISA version 1.0"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
++	help
++	  LoongArch64 ISA version 1.0 processor.
++
++config BR2_loongarch64_v1_1
++	bool "LoongArch64 ISA version 1.1"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
++	help
++	  LoongArch64 ISA version 1.1 processor.
++endchoice
++
++choice
++	prompt "FPU Type"
++	default BR2_LOONGARCH_FPU_64
++
++config BR2_LOONGARCH_FPU_64
++	bool "64"
++	help
++	  Allow the use of hardware floating-point instructions for 32-bit
++	  and 64-bit operations.
++
++config BR2_LOONGARCH_FPU_32
++	bool "32"
++	help
++	  Allow the use of hardware floating-point instructions for 32-bit
++	  operations only.
++
++config BR2_LOONGARCH_FPU_NONE
++	bool "none"
++	help
++	  Prevent the use of hardware floating-point instructions.
++endchoice
++
++choice
++	prompt "SIMD Type"
++	default BR2_LOONGARCH_SIMD_NONE
++
++config BR2_LOONGARCH_SIMD_NONE
++	bool "none"
++	help
++	  Prevent the use of hardware SIMD instructions.
++
++config BR2_LOONGARCH_SIMD_LSX
++	bool "LSX"
++	help
++	  Enable generating instructions from the 128-bit LoongArch SIMD
++	  Extension (LSX).
++
++config BR2_LOONGARCH_SIMD_LASX
++	bool "LASX"
++	help
++	  Enable generating instructions from the 256-bit LoongArch Advanced
++	  SIMD Extension (LASX) and the 128-bit LoongArch SIMD Extension (LSX).
++endchoice
++
++choice
++	prompt "Target ABI"
++	default BR2_LOONGARCH_ABI_LP64D if BR2_ARCH_IS_64 && BR2_LOONGARCH_FPU_64
++	default BR2_LOONGARCH_ABI_LP64F if BR2_ARCH_IS_64 && BR2_LOONGARCH_FPU_32
++	default BR2_LOONGARCH_ABI_LP64S if BR2_ARCH_IS_64 && BR2_LOONGARCH_SIMD_NONE
++
++config BR2_LOONGARCH_ABI_LP64D
++	bool "lp64d"
++	depends on BR2_ARCH_IS_64
++	depends on BR2_LOONGARCH_FPU_64
++
++config BR2_LOONGARCH_ABI_LP64F
++	bool "lp64f"
++	depends on BR2_ARCH_IS_64
++	depends on BR2_LOONGARCH_FPU_64 || BR2_LOONGARCH_FPU_32
++
++config BR2_LOONGARCH_ABI_LP64S
++	bool "lp64d"
++	depends on BR2_ARCH_IS_64
++endchoice
++
++config BR2_ARCH
++	default "loongarch64" if BR2_ARCH_IS_64
++
++config BR2_NORMALIZED_ARCH
++	default "loongarch"
++
++config BR2_ENDIAN
++	default "LITTLE"
++
++config BR2_GCC_TARGET_ARCH
++	default "loongarch64" if BR2_loongarch64_generic
++	default "la64v1.0" if BR2_loongarch64_v1_0
++	default "la64v1.1" if BR2_loongarch64_v1_1
++
++config BR2_GCC_TARGET_FPU
++	default "64" if BR2_LOONGARCH_FPU_64
++	default "32" if BR2_LOONGARCH_FPU_32
++	default "none" if BR2_LOONGARCH_FPU_NONE
++
 +config BR2_GCC_TARGET_SIMD
-+	string
++	default "lasx" if BR2_LOONGARCH_SIMD_LASX
++	default "lsx" if BR2_LOONGARCH_SIMD_LSX
++	default "none" if BR2_LOONGARCH_FPU_NONE
 +
- # The value of this option will be passed as --with-mode=<value> when
- # building gcc (internal backend) or -m<value> in the toolchain
- # wrapper (external toolchain)
-diff --git a/arch/arch.mk b/arch/arch.mk
-index 4174d33df548..4a7851a9fdce 100644
---- a/arch/arch.mk
-+++ b/arch/arch.mk
-@@ -16,6 +16,7 @@ GCC_TARGET_FP32_MODE := $(call qstrip,$(BR2_GCC_TARGET_FP32_MODE))
- GCC_TARGET_CPU := $(call qstrip,$(BR2_GCC_TARGET_CPU))
- GCC_TARGET_FPU := $(call qstrip,$(BR2_GCC_TARGET_FPU))
- GCC_TARGET_FLOAT_ABI := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
-+GCC_TARGET_SIMD := $(call qstrip,$(BR2_GCC_TARGET_SIMD))
- GCC_TARGET_MODE := $(call qstrip,$(BR2_GCC_TARGET_MODE))
- 
- # Explicitly set LD's "max-page-size" instead of relying on some defaults
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 672f9472a947..394559479ce1 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -251,6 +251,10 @@ ifneq ($(GCC_TARGET_FLOAT_ABI),)
- HOST_GCC_COMMON_CONF_OPTS += --with-float=$(GCC_TARGET_FLOAT_ABI)
- endif
- 
-+ifneq ($(GCC_TARGET_SIMD),)
-+HOST_GCC_COMMON_CONF_OPTS += --with-simd=$(GCC_TARGET_SIMD)
-+endif
++config BR2_GCC_TARGET_ABI
++	default "lp64d" if BR2_LOONGARCH_ABI_LP64D
++	default "lp64f" if BR2_LOONGARCH_ABI_LP64F
++	default "lp64s" if BR2_LOONGARCH_ABI_LP64S
 +
- ifneq ($(GCC_TARGET_MODE),)
- HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
- endif
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index c08bf0a65391..2c2afa76c069 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -217,6 +217,10 @@ ifneq ($(GCC_TARGET_FLOAT_ABI),)
- TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(GCC_TARGET_FLOAT_ABI)
- TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(GCC_TARGET_FLOAT_ABI)"'
- endif
-+ifneq ($(GCC_TARGET_SIMD),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -msimd=$(GCC_TARGET_SIMD)
-+TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SIMD='"$(GCC_TARGET_SIMD)"'
-+endif
- ifneq ($(GCC_TARGET_MODE),)
- TOOLCHAIN_EXTERNAL_CFLAGS += -m$(GCC_TARGET_MODE)
- TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(GCC_TARGET_MODE)"'
++config BR2_READELF_ARCH_NAME
++	default "LoongArch"
++
++# vim: ft=kconfig
++# -*- mode:kconfig; -*-
 
 -- 
 2.43.0
