@@ -1,73 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6CFDC25B78
-	for <buildroot@archiver.kernel.org>; Sat, 25 May 2024 14:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B02EC25B78
+	for <buildroot@archiver.kernel.org>; Sat, 25 May 2024 14:15:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65B0782142;
-	Sat, 25 May 2024 14:06:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06EC6605FB;
+	Sat, 25 May 2024 14:15:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ytqT94AyR3SF; Sat, 25 May 2024 14:06:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iuWzH178FfMA; Sat, 25 May 2024 14:15:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C1FE82146
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F067F605FD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C1FE82146;
-	Sat, 25 May 2024 14:06:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5D40E1BF408
- for <buildroot@lists.busybox.net>; Sat, 25 May 2024 14:06:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F067F605FD;
+	Sat, 25 May 2024 14:15:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 211F81D05B6
+ for <buildroot@lists.busybox.net>; Sat, 25 May 2024 14:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 499E382146
- for <buildroot@lists.busybox.net>; Sat, 25 May 2024 14:06:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CD41403CA
+ for <buildroot@lists.busybox.net>; Sat, 25 May 2024 14:15:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k_n9a-leZF6l for <buildroot@lists.busybox.net>;
- Sat, 25 May 2024 14:06:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.133;
- helo=smtpdh18-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9DE6182142
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DE6182142
-Received: from smtpdh18-2.aruba.it (smtpdh18-2.aruba.it [62.149.155.133])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9DE6182142
- for <buildroot@buildroot.org>; Sat, 25 May 2024 14:06:45 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sfQ-Fa5XzTv9 for <buildroot@lists.busybox.net>;
+ Sat, 25 May 2024 14:15:47 +0000 (UTC)
+X-Greylist: delayed 427 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 25 May 2024 14:15:46 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8DB99403EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DB99403EC
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.218;
+ helo=smtpcmd01-sp1.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8DB99403EC
+ for <buildroot@buildroot.org>; Sat, 25 May 2024 14:15:46 +0000 (UTC)
+Received: from [192.168.50.121] ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id As2ksGTGHV0F9As2ksdCFq; Sat, 25 May 2024 16:06:43 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Sat, 25 May 2024 16:06:41 +0200
-Message-Id: <20240525140641.1374683-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+ id As4bse1W4wy3rAs4bs8GzD; Sat, 25 May 2024 16:08:37 +0200
+Message-ID: <3f8e6ce5-d15c-429c-acdd-1f022d410dfe@benettiengineering.com>
+Date: Sat, 25 May 2024 16:08:37 +0200
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfIlHiGS0bdOsju9/dpRAN5cbO9CbG0dKg0Bngo01pHFG1WwmtG70dWWhDXznq/cwRzKgPEd3Ggg2krHNl1kTcYrxL+sArPENgBg26+pNftv64rJ71oWC
- xCyg9AZqb5FJS53YVmWMGXKOJyUZO/UlwH7LwHrrvdkHMDAzFk+ENk1SxD2r8V+oxttNCR/5udn47wkCHFZobec/d4gKqyrpXcF/1Od2GvLvAIRYzzNIHIw5
- R3BXF5sz6byyp3HHPDhvAMq0Jb5DsnbQ/v0wgRRaPL8Xis9Yu1YO+ESPV7bUNAfHUW1E6Vrprlj0LpNRtbh2eg==
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>
+References: <20240524220421.710392-1-giulio.benetti@benettiengineering.com>
+ <874jami5s5.fsf@dell.be.48ers.dk>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <874jami5s5.fsf@dell.be.48ers.dk>
+X-CMAE-Envelope: MS4xfJPW2ZdJ/ou9FuTkP1rje0Uzli7VhvSPh0zDId0KAvpYeenj4bqGges6vVuNF37z+15/APxOQJVFnmzFFxE7oFusjpfAt/6UnDj9kjIvAyZ4sN831O5g
+ NYzODGofEqLawB0emOhMAH32X2hwe/mUUx/T7nae7NReb67EA/Z8XqKgt0Uxgaa5qvHHsBKBDXoITJTlTdpTHM7jpBtTHFVv+5EieJ5U0W9TiHRiaPBOhZtL
+ ICqiVgWDKzLSG9mlLOxQcDt+lmSgNY50/JQRyLMTM5Ihk3lFJHgYSfXmZAmwzEHx
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1716646003; bh=/tWDf9ldc3Yeskn0E4SL5c0ZRlWCXfjYDZkEwgrlHjY=;
- h=From:To:Subject:Date:MIME-Version;
- b=g6ORJV/x7VVoasWteHE2iS4rXF/1JOyNKxqGOXRTl7E1hEW5BD2dluWoaK9J/sSkY
- 3OvXttBUATNHAqacow+smOoE4y9hFmy02Eee2kjySYoqQfvVJKRslXxAzxesr9WhWp
- Dup6IYkSrM+QGIusvDulbedXFSYRDQqtpiyyIpc7IVRkP1quPD3EFpJGPA+7r2Mxus
- 9L/K1DOZdPvVeb/jWJAHjlE0Nnd0jktRGbjsFaOL83SVKdGxOOl2g83f50eWlWrIjX
- H/9Y1P4cRVOnuhqbKESGE1Sxr1ynxv1IW/7iBYyVljOFvpB09fwXilGp/au9Lhq0xy
- mJadP8jwWvKvg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1716646117; bh=3PE+RNGJ5yyYsX0/x1Ua2kQ+/Vzx+cQStwgNbApIR8Q=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=hLj9eDJZG5ZIvSPjtGe9HsotRF6dbNfZMGQWrF0dnzh3tZIxgtRCtF8rBi2f53+7N
+ 1m08YJ7hqp9tVL8OKSvqK6TZRnj2QRKQ594lSeDRqmTBVPPZetdfo6iba7empvBs5a
+ ZNqIn1jobu1xZ/MzeM1s80xXkugHfO6qlTOtufW4YYNZ61K8wmTSJppnbcbCjNrDlh
+ oH7WUJmAChugMnlPz6UC/oGFVFq+X0HAYFC1uc7qk4opHtpFrQ1VwucPQaCZxgY0rN
+ VFW6UYwUpzm2Q4IzngFLpcCvtj4a8ToWmXrp4hbJVC6+O1NtT15VaYZAhdV2Ws2s9R
+ seGH1BzjcvBhg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=g6ORJV/x
-Subject: [Buildroot] [PATCH v2] configs/amarula_vyasa_rk3288_defconfig: add
- uboot, linux, linux-headers hashes
+ header.s=a1 header.b=hLj9eDJZ
+Subject: Re: [Buildroot] [PATCH] configs/amarula_vyasa_rk3288_defconfig: add
+ uboot and linux hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,81 +85,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add global patch directory pointing to board specific .hash files
-for uboot, linux, linux-headers and add BR2_DOWNLOAD_FORCE_CHECK_HASHES.
-This way we can drop this defconfig entry in .checkpackageignore.
+On 25/05/24 11:45, Peter Korsgaard wrote:
+>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+> 
+>   > Add BR2_DOWNLOAD_FORCE_CHECK_HASHES and drop defconfig entry in
+>   > .checkpackageignore.
+> 
+>   > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>   > ---
+>   >  .checkpackageignore                    | 1 -
+>   >  boot/uboot/uboot.hash                  | 1 +
+>   >  configs/amarula_vyasa_rk3288_defconfig | 1 +
+>   >  linux/linux.hash                       | 1 +
+>   >  4 files changed, 3 insertions(+), 1 deletion(-)
+> 
+>   > diff --git a/.checkpackageignore b/.checkpackageignore
+>   > index ebf320c3c5..9b9e4a61f9 100644
+>   > --- a/.checkpackageignore
+>   > +++ b/.checkpackageignore
+>   > @@ -122,7 +122,6 @@ configs/acmesystems_aria_g25_256mb_defconfig lib_defconfig.ForceCheckHash
+>   >  configs/acmesystems_arietta_g25_128mb_defconfig lib_defconfig.ForceCheckHash
+>   >  configs/acmesystems_arietta_g25_256mb_defconfig lib_defconfig.ForceCheckHash
+>   >  configs/am574x_idk_defconfig lib_defconfig.ForceCheckHash
+>   > -configs/amarula_vyasa_rk3288_defconfig lib_defconfig.ForceCheckHash
+>   >  configs/andes_ae350_45_defconfig lib_defconfig.ForceCheckHash
+>   >  configs/arcturus_ucls1012a_defconfig lib_defconfig.ForceCheckHash
+>   >  configs/arcturus_ucp1020_defconfig lib_defconfig.ForceCheckHash
+>   > diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+>   > index a8021fb696..b0ffd7e69d 100644
+>   > --- a/boot/uboot/uboot.hash
+>   > +++ b/boot/uboot/uboot.hash
+>   > @@ -1,3 +1,4 @@
+>   >  # Locally computed:
+>   > +sha256  50b4482a505bc281ba8470c399a3c26e145e29b23500bc35c50debd7fa46bdf8  u-boot-2022.10.tar.bz2
+>   >  sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
+>   >  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+> 
+> This is not right. You should add the hash to a custom
+> board/amarula/.../patches/uboot/uboot.hash file, E.G. see commit
+> 459c8c95c7 (configs/orangepi_r1_defconfig: add hashes for
+> Linux/headers/u-boot) for an exmple.
+> 
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- .checkpackageignore                                          | 1 -
- board/amarula/vyasa/patches/linux-headers/linux-headers.hash | 1 +
- board/amarula/vyasa/patches/linux/linux.hash                 | 2 ++
- board/amarula/vyasa/patches/uboot/uboot.hash                 | 2 ++
- configs/amarula_vyasa_rk3288_defconfig                       | 2 ++
- 5 files changed, 7 insertions(+), 1 deletion(-)
- create mode 120000 board/amarula/vyasa/patches/linux-headers/linux-headers.hash
- create mode 100644 board/amarula/vyasa/patches/linux/linux.hash
- create mode 100644 board/amarula/vyasa/patches/uboot/uboot.hash
+Thank you for pointing, I've misunderstood. I've sent a V2:
+https://patchwork.ozlabs.org/project/buildroot/patch/20240525140641.1374683-1-giulio.benetti@benettiengineering.com/
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index ebf320c3c5..9b9e4a61f9 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -122,7 +122,6 @@ configs/acmesystems_aria_g25_256mb_defconfig lib_defconfig.ForceCheckHash
- configs/acmesystems_arietta_g25_128mb_defconfig lib_defconfig.ForceCheckHash
- configs/acmesystems_arietta_g25_256mb_defconfig lib_defconfig.ForceCheckHash
- configs/am574x_idk_defconfig lib_defconfig.ForceCheckHash
--configs/amarula_vyasa_rk3288_defconfig lib_defconfig.ForceCheckHash
- configs/andes_ae350_45_defconfig lib_defconfig.ForceCheckHash
- configs/arcturus_ucls1012a_defconfig lib_defconfig.ForceCheckHash
- configs/arcturus_ucp1020_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/amarula/vyasa/patches/linux-headers/linux-headers.hash b/board/amarula/vyasa/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/amarula/vyasa/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/amarula/vyasa/patches/linux/linux.hash b/board/amarula/vyasa/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..b763fc947a
---- /dev/null
-+++ b/board/amarula/vyasa/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  880ace63ca2291b8b639e9bd862cc828649d3e1e00ccfee5861473debd2e4dec  linux-6.1.91.tar.xz
-diff --git a/board/amarula/vyasa/patches/uboot/uboot.hash b/board/amarula/vyasa/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..5e017f5499
---- /dev/null
-+++ b/board/amarula/vyasa/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  50b4482a505bc281ba8470c399a3c26e145e29b23500bc35c50debd7fa46bdf8  u-boot-2022.10.tar.bz2
-diff --git a/configs/amarula_vyasa_rk3288_defconfig b/configs/amarula_vyasa_rk3288_defconfig
-index 0dd47f498f..2267d49afc 100644
---- a/configs/amarula_vyasa_rk3288_defconfig
-+++ b/configs/amarula_vyasa_rk3288_defconfig
-@@ -5,6 +5,8 @@ BR2_ARM_FPU_NEON_VFPV4=y
- 
- # Linux headers same as kernel, a 6.1 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_GLOBAL_PATCH_DIR="board/amarula/vyasa/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- 
- # Bootloader
- BR2_TARGET_UBOOT=y
 -- 
-2.34.1
-
+Giulio Benetti
+CEO&CTO@Benetti Engineering
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
