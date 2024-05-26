@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83099C25B75
-	for <buildroot@archiver.kernel.org>; Sun, 26 May 2024 19:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01872C25B75
+	for <buildroot@archiver.kernel.org>; Sun, 26 May 2024 19:57:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3623B60768;
-	Sun, 26 May 2024 19:56:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1CF3605C5;
+	Sun, 26 May 2024 19:57:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RNobqQcoOCpg; Sun, 26 May 2024 19:56:35 +0000 (UTC)
+ id b0YmnxhgCVSb; Sun, 26 May 2024 19:57:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CEFC605C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFF6E60768
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CEFC605C5;
-	Sun, 26 May 2024 19:56:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 117FE1D1393
- for <buildroot@lists.busybox.net>; Sun, 26 May 2024 19:56:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFF6E60768;
+	Sun, 26 May 2024 19:57:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 52E341D13A7
+ for <buildroot@lists.busybox.net>; Sun, 26 May 2024 19:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F293D402D0
- for <buildroot@lists.busybox.net>; Sun, 26 May 2024 19:56:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C8EE81EB5
+ for <buildroot@lists.busybox.net>; Sun, 26 May 2024 19:56:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HkCQtMGBvLwG for <buildroot@lists.busybox.net>;
- Sun, 26 May 2024 19:56:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f-HXdITjPchd for <buildroot@lists.busybox.net>;
+ Sun, 26 May 2024 19:56:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
  helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 281734012F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 281734012F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 637B481EAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 637B481EAE
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 281734012F
- for <buildroot@buildroot.org>; Sun, 26 May 2024 19:56:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9DCA4FF802;
- Sun, 26 May 2024 19:56:29 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 637B481EAE
+ for <buildroot@buildroot.org>; Sun, 26 May 2024 19:56:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 231D6FF802;
+ Sun, 26 May 2024 19:56:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sBJym-004PbR-36;
- Sun, 26 May 2024 21:56:28 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sBJzC-004Pdn-1i;
+ Sun, 26 May 2024 21:56:54 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-References: <51910310-86f7-43cf-8288-43c48c6ccd90@grenoble.cnrs.fr>
-Date: Sun, 26 May 2024 21:56:28 +0200
-In-Reply-To: <51910310-86f7-43cf-8288-43c48c6ccd90@grenoble.cnrs.fr> (Edgar
- Bonet's message of "Mon, 6 May 2024 17:22:49 +0200")
-Message-ID: <87sey4fitv.fsf@dell.be.48ers.dk>
+References: <b7f8810e-94a8-49e5-97e7-8dca2284e535@grenoble.cnrs.fr>
+Date: Sun, 26 May 2024 21:56:54 +0200
+In-Reply-To: <b7f8810e-94a8-49e5-97e7-8dca2284e535@grenoble.cnrs.fr> (Edgar
+ Bonet's message of "Mon, 6 May 2024 17:23:14 +0200")
+Message-ID: <87o78sfit5.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] configs/acmesystems_acqua_a5_*: add
- hashes for Linux/at91bootstrap3
+Subject: Re: [Buildroot] [PATCH 2/2] configs/acmesystems_acqua_a5_*: bump to
+ Linux 6.6.30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,7 +77,6 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Edgar" == Edgar Bonet <bonet@grenoble.cnrs.fr> writes:
 
- > And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES.
  > Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
 
 Committed to 2024.02.x, thanks.
