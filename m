@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CA41C25B74
-	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 15:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 030A6C25B78
+	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 15:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CEF8C404F3;
-	Mon, 27 May 2024 15:55:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C48A94148E;
+	Mon, 27 May 2024 15:55:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zEiMo9W5G3j5; Mon, 27 May 2024 15:55:31 +0000 (UTC)
+ id h7d9Ai0e_Vs3; Mon, 27 May 2024 15:55:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10DBA4056E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C82E40454
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10DBA4056E;
-	Mon, 27 May 2024 15:55:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E054F1D1E8D
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 15:55:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C82E40454;
+	Mon, 27 May 2024 15:55:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E69341D1E62
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 15:55:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD2D560743
+ by smtp1.osuosl.org (Postfix) with ESMTP id D123581493
  for <buildroot@lists.busybox.net>; Mon, 27 May 2024 15:55:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BW-0HYHpbkUk for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nJyKcDaNwkOK for <buildroot@lists.busybox.net>;
  Mon, 27 May 2024 15:55:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01E6160730
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2B778149A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01E6160730
- for <buildroot@buildroot.org>; Mon, 27 May 2024 15:55:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2B778149A
+ for <buildroot@buildroot.org>; Mon, 27 May 2024 15:55:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DCEBF876DF; Mon, 27 May 2024 15:55:26 +0000 (UTC)
+ id BC746876DC; Mon, 27 May 2024 15:55:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 May 2024 17:53:54 +0200
+Date: Mon, 27 May 2024 17:42:52 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: c91995369462a1d613da1267e6e6ad11a545a2af
-X-Git-Newrev: 9faa2751f304a13ff7db91a84165fc845a7a74c1
+X-Git-Oldrev: 7246f1951665e9c15f38f0b0fa21a2b1473cca33
+X-Git-Newrev: 4eb7098a1a6391fa8c4e32d5703a0abdf589a1f1
 X-Patchwork-Hint: ignore
-Message-Id: <20240527155526.DCEBF876DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/network-manager:
- drop CONTRIBUTING.md from license files
+Message-Id: <20240527155526.BC746876DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/python-rpds-py:
+ bump to version 0.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9faa2751f304a13ff7db91a84165fc845a7a74c1
+commit: https://git.buildroot.net/buildroot/commit/?id=4eb7098a1a6391fa8c4e32d5703a0abdf589a1f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-This is irrelevant as of 402ad9fe5407 (package/network-manager: bump
-to version 1.22.10).
+As reported by Antoine Coutant on the Buildroot mailing list [1]:
 
-Details: https://lore.kernel.org/all/ZgXKrtfSjahxswtP@landeda/
+rpds depends on the crate pyo3. This crate uses
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+  "std::sync::atomic::AtomicI64"
+
+which doesn't exist for 32 bits targets.
+That leads to an error as reported by Buildroot Gitlab-ci.
+
+An issue have been opened on pyo3's github [2].
+A fix have been accepted by pyo3 [3] and merged in pyo3 0.20.3 release
+[4]. This pyo3 0.20.3 uses crate portable-atomic [5] to provide atomic
+types and compare and swap operations for all targets that can use std.
+
+python-rpds-py 0.18.1 is the first release that use pyo3 0.20.3.
+
+Before python-rpds-py 0.18.1 release fixing this issue would require
+that we be able to patch a package during the Cargo vendoring step [6].
+
+[1] http://lists.busybox.net/pipermail/buildroot/2024-February/684867.html
+[2]: https://github.com/PyO3/pyo3/issues/3614
+[3]: https://github.com/PyO3/pyo3/pull/3619
+[4]: https://github.com/PyO3/pyo3/blob/v0.20.3/CHANGELOG.md
+[5]: https://github.com/taiki-e/portable-atomic
+[6]: http://lists.busybox.net/pipermail/buildroot/2024-February/684886.html
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6783811842 (TestPythonPy3Dtschema)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/6783811860 (TestPythonPy3FlaskExpectsJson)
+
+Reported-by: Antoine Coutant <antoine.coutant@smile.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dc21afed0fec55b684be76b8d71d46a7177cf6f3)
+(cherry picked from commit 26b054083d36a0fb16340b10a9df239879a2c573)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/network-manager/network-manager.hash | 1 -
- package/network-manager/network-manager.mk   | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/python-rpds-py/python-rpds-py.hash | 2 +-
+ package/python-rpds-py/python-rpds-py.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 0196d68c55..daf4c3fef6 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -3,4 +3,3 @@ sha256  4b58bf3ac57e2cefb5652efd0945eb0b4bc36a63d92a61ab471d8bb2c9a420e1  Networ
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256  e7cf3d92bda8e5365eaf4514d572146a19e93336f7a966493778d0d0c4476fae  CONTRIBUTING.md
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index f6ef923d55..4a246fd904 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -10,7 +10,7 @@ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
- NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
--NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING.md
-+NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL
- NETWORK_MANAGER_CPE_ID_VENDOR = gnome
- NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
- NETWORK_MANAGER_SELINUX_MODULES = networkmanager
+diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
+index 4650d9c385..62b508ae6b 100644
+--- a/package/python-rpds-py/python-rpds-py.hash
++++ b/package/python-rpds-py/python-rpds-py.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  760b05720269195d86071ac7cf627b3a4ab9366680d8d449a6a63b84d96a5bc0  rpds_py-0.17.1.tar.gz
++sha256  d9b542bf5321495737005a78d9fbf40541b898d1e2b3309cbe36a2431977be8b  rpds_py-0.18.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909  LICENSE
+diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
+index 80670f2e4f..57fe0be7e8 100644
+--- a/package/python-rpds-py/python-rpds-py.mk
++++ b/package/python-rpds-py/python-rpds-py.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_RPDS_PY_VERSION = 0.17.1
++PYTHON_RPDS_PY_VERSION = 0.18.1
+ PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
+-PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/b7/0a/e3bdcc977e6db3bf32a3f42172f583adfa7c3604091a03d512333e0161fe
++PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/2d/aa/e7c404bdee1db7be09860dff423d022ffdce9269ec8e6532cce09ee7beea
+ PYTHON_RPDS_PY_SETUP_TYPE = maturin
+ PYTHON_RPDS_PY_LICENSE = MIT
+ PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
