@@ -4,59 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68C66C25B74
-	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 09:19:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D85F0C25B74
+	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 09:19:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 23BD840444;
-	Mon, 27 May 2024 09:19:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6C2340BCC;
+	Mon, 27 May 2024 09:19:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HTnVL454KBbX; Mon, 27 May 2024 09:19:17 +0000 (UTC)
+ id 0etKfG9rrDBx; Mon, 27 May 2024 09:19:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E293404B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAF2240BFF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E293404B6;
-	Mon, 27 May 2024 09:19:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B9F5F1D1A77
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 09:19:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AAF2240BFF;
+	Mon, 27 May 2024 09:19:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 31ACD1D1A89
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 09:19:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2C60402D4
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 09:19:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1EAD640BFF
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 09:19:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 75e-EheHSvBV for <buildroot@lists.busybox.net>;
- Mon, 27 May 2024 09:19:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x0e84lng-l46 for <buildroot@lists.busybox.net>;
+ Mon, 27 May 2024 09:19:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B4117402B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4117402B1
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B4117402B1
- for <buildroot@buildroot.org>; Mon, 27 May 2024 09:19:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 24B1D1BF20E;
- Mon, 27 May 2024 09:19:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sBWVa-0057YB-1x;
- Mon, 27 May 2024 11:19:10 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4441A40BCC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4441A40BCC
+ for <buildroot@buildroot.org>; Mon, 27 May 2024 09:19:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1335087689; Mon, 27 May 2024 09:19:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-References: <20240524181856.2712581-1-alexander.i.mukhin@gmail.com>
-Date: Mon, 27 May 2024 11:19:10 +0200
-In-Reply-To: <20240524181856.2712581-1-alexander.i.mukhin@gmail.com>
- (Alexander Mukhin's message of "Fri, 24 May 2024 21:18:56 +0300")
-Message-ID: <8734q3d33l.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/zfs: bump version to 2.2.4
+To: buildroot@buildroot.org
+Date: Mon, 27 May 2024 11:18:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d71c90a3018ee37b18f1c7f209e70a8b792efabd
+X-Git-Newrev: 5746b8b37148f553a5b907735e9f3237cb682ed9
+X-Patchwork-Hint: ignore
+Message-Id: <20240527091929.1335087689@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zfs: bump version to 2.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,20 +58,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: salvador.joseluis@gmail.com, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Alexander" == Alexander Mukhin <alexander.i.mukhin@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5746b8b37148f553a5b907735e9f3237cb682ed9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/zfs/zfs.hash | 4 ++--
+ package/zfs/zfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index 01c86f2bd6..9c8d4cec85 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.2/zfs-2.2.2.sha256.asc
+-sha256  76bc0547d9ba31d4b0142e417aaaf9f969072c3cb3c1a5b10c8738f39ed12fc9  zfs-2.2.2.tar.gz
++# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.4/zfs-2.2.4.sha256.asc
++sha256  9790905f7683d41759418e1ef3432828c31116654ff040e91356ff1c21c31ec0  zfs-2.2.4.tar.gz
+ 
+ # Hash for license files:
+ sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index 59cdd31942..fa6d282f8c 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZFS_VERSION = 2.2.2
++ZFS_VERSION = 2.2.4
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_SELINUX_MODULES = zfs
+ ZFS_LICENSE = CDDL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
