@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23A6EC25B74
-	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 13:13:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04BA3C25B74
+	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 13:14:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6F7881C56;
-	Mon, 27 May 2024 13:13:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C214F81007;
+	Mon, 27 May 2024 13:14:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7p4c1FxIpiEu; Mon, 27 May 2024 13:13:24 +0000 (UTC)
+ id 4BLfpI2zBMEK; Mon, 27 May 2024 13:14:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFC5F81CAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D720C81008
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFC5F81CAD;
-	Mon, 27 May 2024 13:13:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E76CB1D1276
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 13:13:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D720C81008;
+	Mon, 27 May 2024 13:14:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CBA2B1D1276
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 13:14:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0D0B606E3
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 13:13:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B8A61401C2
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 13:14:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Msn_XTKypx-e for <buildroot@lists.busybox.net>;
- Mon, 27 May 2024 13:13:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uKvcJ5A77Auh for <buildroot@lists.busybox.net>;
+ Mon, 27 May 2024 13:14:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C767C6066C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C767C6066C
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C767C6066C
- for <buildroot@buildroot.org>; Mon, 27 May 2024 13:13:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 71DEC240006;
- Mon, 27 May 2024 13:13:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 74965401B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74965401B2
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 74965401B2
+ for <buildroot@buildroot.org>; Mon, 27 May 2024 13:14:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6003E1BF203;
+ Mon, 27 May 2024 13:14:09 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sBaA8-005LKC-2w;
- Mon, 27 May 2024 15:13:16 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sBaAy-005LOP-2a;
+ Mon, 27 May 2024 15:14:08 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Romain Naour <romain.naour@smile.fr>
 References: <20240430204744.1014238-1-romain.naour@smile.fr>
-Date: Mon, 27 May 2024 15:13:16 +0200
-In-Reply-To: <20240430204744.1014238-1-romain.naour@smile.fr> (Romain Naour's
- message of "Tue, 30 Apr 2024 22:47:43 +0200")
-Message-ID: <87le3vbdoz.fsf@dell.be.48ers.dk>
+ <20240430204744.1014238-2-romain.naour@smile.fr>
+Date: Mon, 27 May 2024 15:14:08 +0200
+In-Reply-To: <20240430204744.1014238-2-romain.naour@smile.fr> (Romain Naour's
+ message of "Tue, 30 Apr 2024 22:47:44 +0200")
+Message-ID: <87h6ejbdnj.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] support/testing: TestPerlDBDmysql: use
- ext2 instead of cpio
+Subject: Re: [Buildroot] [PATCH 2/2] package/perl-dbd-mysql: fix runtime
+ issue with MariaDB
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,21 +78,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
- > The CPIO filesystem generated by TestPerlDBDmysql is too large, and
- > doesn't fit as an initramfs in the 256MB of RAM available in the
- > versatilepb machine. This causes a failure while running a basic
- > test "perl -MDBI -e '1'" since "/usr/lib/perl5", and many files
- > being missing from the root filesystem, ultimately causing the test
- > to fail.
+ > Now that the TestPerlDBDmysql can be run normally, a new runtime issue
+ > appear due to switch from oracle-mysql to MariaDB:
 
- > Can't locate DBI.pm in @INC (you may need to install the DBI module)
- > (@INC entries checked: /usr/lib/perl5/site_perl/5.38.2/arm-linux
- > /usr/lib/perl5/site_perl/5.38.2 /usr/lib/perl5/5.38.2/arm-linux
- > /usr/lib/perl5/5.38.2).
+ >   # perl -MDBI -e '1'
+ >   # echo $?
+ >   0
 
- > It would make sense to switch all test cases to use ext2 + a
- > hard-drive, but for now, let's fix the few test cases that are causing
- > problems.
+ >   # perl -MDBD::mysql -e '1'
+ >   Can't load '/usr/lib/perl5/site_perl/5.38.2/arm-linux/auto/DBD/mysql/mysql.so'
+ >   for module DBD::mysql: /usr/lib/perl5/site_perl/5.38.2/arm-linux/auto/DBD/mysql/mysql.so:
+ >   undefined symbol: net_buffer_length at /usr/lib/perl5/5.38.2/arm-linux/DynaLoader.pm line 206.
+
+ > This is fixed by an upstream commit [1] from 4.046_01 release.
+
+ > [1] https://github.com/perl5-dbi/DBD-mysql/commit/0f0cebe87fab335873fd3701bc304922da826940
 
  > Fixes:
  > https://gitlab.com/buildroot.org/buildroot/-/jobs/6735654506
