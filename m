@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CECAC25B74
-	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 15:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E640FC25B74
+	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 15:55:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1E2B940253;
-	Mon, 27 May 2024 15:54:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A218840253;
+	Mon, 27 May 2024 15:55:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z30GmDtgGeLV; Mon, 27 May 2024 15:54:17 +0000 (UTC)
+ id pkrmYmQAPDjF; Mon, 27 May 2024 15:55:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F3A740454
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A614B40454
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2F3A740454;
-	Mon, 27 May 2024 15:54:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5EC891D1E62
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 15:54:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A614B40454;
+	Mon, 27 May 2024 15:55:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B3DF71D1E62
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 15:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B10C401C0
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 15:54:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9E3908151E
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 15:55:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VLKgSzXODru2 for <buildroot@lists.busybox.net>;
- Mon, 27 May 2024 15:54:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yYI87TbSiU2Q for <buildroot@lists.busybox.net>;
+ Mon, 27 May 2024 15:55:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EC416401BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC416401BA
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EC416401BA
- for <buildroot@buildroot.org>; Mon, 27 May 2024 15:54:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D993240008;
- Mon, 27 May 2024 15:54:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sBcfr-005YZl-1P;
- Mon, 27 May 2024 17:54:11 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7C5781493
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D7C5781493
+ for <buildroot@buildroot.org>; Mon, 27 May 2024 15:55:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CC3B4876CC; Mon, 27 May 2024 15:55:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20240507172832.3546905-1-james.hilliard1@gmail.com>
-Date: Mon, 27 May 2024 17:54:11 +0200
-In-Reply-To: <20240507172832.3546905-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Tue, 7 May 2024 11:28:32 -0600")
-Message-ID: <87a5kb9roc.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: drop
- CONTRIBUTING.md from license files
+To: buildroot@buildroot.org
+Date: Mon, 27 May 2024 17:50:33 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 4eb7098a1a6391fa8c4e32d5703a0abdf589a1f1
+X-Git-Newrev: c91995369462a1d613da1267e6e6ad11a545a2af
+X-Patchwork-Hint: ignore
+Message-Id: <20240527155526.CC3B4876CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/zeromq: disable
+ perf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,25 +59,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c91995369462a1d613da1267e6e6ad11a545a2af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > This is irrelevant as of 402ad9fe5407 (package/network-manager: bump
- > to version 1.22.10).
+Disable performance measurement tools which are enabled by default since
+bump to version 4.2.5 in commit d3a8177e175e035ca3b19dca7868859f7cb238a1
 
- > Details: https://lore.kernel.org/all/ZgXKrtfSjahxswtP@landeda/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8b1b43802419fabf19ac780f6106cccfb255718c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/zeromq/zeromq.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
-Committed to 2024.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 137fad1a66..f1a1f02f9e 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -7,7 +7,7 @@
+ ZEROMQ_VERSION = 4.3.5
+ ZEROMQ_SITE = https://github.com/zeromq/libzmq/releases/download/v$(ZEROMQ_VERSION)
+ ZEROMQ_INSTALL_STAGING = YES
+-ZEROMQ_CONF_OPTS = --disable-Werror --without-documentation
++ZEROMQ_CONF_OPTS = --disable-perf --disable-Werror --without-documentation
+ ZEROMQ_LICENSE = MPL-2.0
+ ZEROMQ_LICENSE_FILES = LICENSE
+ ZEROMQ_CPE_ID_VENDOR = zeromq
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
