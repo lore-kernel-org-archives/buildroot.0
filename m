@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DC6FC25B74
-	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 05:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14080C25B74
+	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 05:58:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 325726078B;
-	Mon, 27 May 2024 05:57:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80B90605DC;
+	Mon, 27 May 2024 05:58:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 50gPyfyGQgPE; Mon, 27 May 2024 05:57:27 +0000 (UTC)
+ id ap0V2gz9mb0x; Mon, 27 May 2024 05:58:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 417646081B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACE976078B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 417646081B;
-	Mon, 27 May 2024 05:57:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7D4371D1843
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 05:56:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACE976078B;
+	Mon, 27 May 2024 05:58:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DFFB81D180D
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 05:58:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76B096081B
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 05:56:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBA8440285
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 05:58:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id foPsQM-3O1Bq for <buildroot@lists.busybox.net>;
- Mon, 27 May 2024 05:56:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OqEJ6LnA9eOG for <buildroot@lists.busybox.net>;
+ Mon, 27 May 2024 05:58:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 000386078B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 000386078B
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 000386078B
- for <buildroot@buildroot.org>; Mon, 27 May 2024 05:56:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A299FF805;
- Mon, 27 May 2024 05:56:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 40C3A4027F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40C3A4027F
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 40C3A4027F
+ for <buildroot@buildroot.org>; Mon, 27 May 2024 05:57:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 405A4E0006;
+ Mon, 27 May 2024 05:57:57 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sBTLm-004yXk-1n;
- Mon, 27 May 2024 07:56:50 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sBTMq-004ydx-1w;
+ Mon, 27 May 2024 07:57:56 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240506193050.B7544867DD@busybox.osuosl.org>
-Date: Mon, 27 May 2024 07:56:50 +0200
-In-Reply-To: <20240506193050.B7544867DD@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Mon, 6 May 2024 21:30:33 +0200")
-Message-ID: <87cyp7er19.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240506081959.330708-1-fontaine.fabrice@gmail.com>
+Date: Mon, 27 May 2024 07:57:56 +0200
+In-Reply-To: <20240506081959.330708-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 6 May 2024 10:19:58 +0200")
+Message-ID: <878qzveqzf.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] configs/sheevaplug_defconfig: add
- hashes for u-boot and Linux
+Subject: Re: [Buildroot] [PATCH 1/2] package/libhtp: security bump to
+ version 0.5.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,24 +69,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=56ce35d235b7f7b297e33c118e4e7b64491f73c6
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Fix CVE-2024-23837 and CVE-2024-28871
+ > https://github.com/OISF/libhtp/security/advisories/GHSA-f9wf-rrjj-qx8m
+ > https://github.com/OISF/libhtp/security/advisories/GHSA-ffr2-45w9-7wmg
+ > https://github.com/OISF/libhtp/blob/0.5.48/ChangeLog
 
- > And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES.
-
- > Generated by utils/add-custom-hashes, with the (redundant)
- > linux-headers.hash replaced by a symlink.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2024.02.x, thanks.
 
