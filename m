@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 670EAC25B74
-	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 06:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E272C25B74
+	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 06:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34E3D608A6;
-	Mon, 27 May 2024 06:03:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 150CA60874;
+	Mon, 27 May 2024 06:03:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 05q6SLUFrf5H; Mon, 27 May 2024 06:03:49 +0000 (UTC)
+ id zituzWcEHQxx; Mon, 27 May 2024 06:03:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D331E6089E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC8D6608B2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D331E6089E;
-	Mon, 27 May 2024 06:03:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 147871D1879
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC8D6608B2;
+	Mon, 27 May 2024 06:03:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 205FB1D187A
  for <buildroot@lists.busybox.net>; Mon, 27 May 2024 06:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E042981E47
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5E35401F1
  for <buildroot@lists.busybox.net>; Mon, 27 May 2024 06:03:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Do-vvmHXPzM1 for <buildroot@lists.busybox.net>;
- Mon, 27 May 2024 06:03:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fKihmlAKmTCK for <buildroot@lists.busybox.net>;
+ Mon, 27 May 2024 06:03:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7AC281E3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28EED405D7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C7AC281E3B
- for <buildroot@buildroot.org>; Mon, 27 May 2024 06:03:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28EED405D7
+ for <buildroot@buildroot.org>; Mon, 27 May 2024 06:03:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A61187FB48; Mon, 27 May 2024 06:03:32 +0000 (UTC)
+ id 2535187634; Mon, 27 May 2024 06:03:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 27 May 2024 07:52:31 +0200
+Date: Mon, 27 May 2024 07:59:56 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 20dc0f23f4df90bacfe0b78092eac833f6499f2d
-X-Git-Newrev: 1cfabbf913a02d5b5116e7ca262f11adf02838eb
+X-Git-Oldrev: 40205fa62b4fa578b9158810c0681f665142fb2f
+X-Git-Newrev: 944a5d556af613792a2edd3491a9a4747f6dbc5d
 X-Patchwork-Hint: ignore
-Message-Id: <20240527060332.A61187FB48@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/pppd: fix build
- with kernel < 4.7
+Message-Id: <20240527060333.2535187634@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/liburiparser:
+ security bump to version 0.9.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,101 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cfabbf913a02d5b5116e7ca262f11adf02838eb
+commit: https://git.buildroot.net/buildroot/commit/?id=944a5d556af613792a2edd3491a9a4747f6dbc5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Fix the following build failure with kernel < 4.7 raised since bump to
-version 2.5.0 in commit 0c15169f5ae57d88a77df34cc896044a37c9597b and
-https://github.com/ppp-project/ppp/commit/81ad945630120cc1c27c8bb00503be42b76ff202:
+- Fixed: [CVE-2024-34402]
+    Protect against integer overflow in ComposeQueryEngine
+- Fixed: [CVE-2024-34403]
+    Protect against integer overflow in ComposeQueryMallocExMm
 
-sys-linux.c: In function 'get_ppp_stats_rtnetlink':
-sys-linux.c:1783:29: error: field 'ifsm' has incomplete type
- 1783 |         struct if_stats_msg ifsm;
-      |                             ^~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/82392df447f650f241f23e59e65131fb4a930010
+https://github.com/uriparser/uriparser/blob/uriparser-0.9.8/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 45c1def9915ead52a5e4b874c33194653b598117)
+(cherry picked from commit 6fe29e41ccd6682bca48b0d9d206ae3a631339f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-compile-with-older-Linux-kernel-headers.patch | 66 ++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ package/liburiparser/liburiparser.hash | 2 +-
+ package/liburiparser/liburiparser.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pppd/0005-pppd-sys-linux-Fix-compile-with-older-Linux-kernel-headers.patch b/package/pppd/0005-pppd-sys-linux-Fix-compile-with-older-Linux-kernel-headers.patch
-new file mode 100644
-index 0000000000..46c293103a
---- /dev/null
-+++ b/package/pppd/0005-pppd-sys-linux-Fix-compile-with-older-Linux-kernel-headers.patch
-@@ -0,0 +1,66 @@
-+From 7a3f478a4b7128d4f70ea64d99fedec766b1c009 Mon Sep 17 00:00:00 2001
-+From: Jaco Kroon <jaco@uls.co.za>
-+Date: Tue, 31 Oct 2023 11:47:21 +0200
-+Subject: [PATCH] pppd/sys-linux: Fix compile with older Linux kernel headers
-+ (#452)
-+
-+When compiling pppd against kernel headers which don't provide
-+the definitions for the NETLINK mechanisms, leave out the code
-+which uses NETLINK, so as to avoid getting compile errors.
-+
-+Upstream commit in Linux refers.
-+
-+commit 10c9ead9f3c6bb24bddc9a96681f7d58e6623966
-+Author: Roopa Prabhu <roopa@cumulusnetworks.com>
-+Date:   Wed Apr 20 08:43:43 2016 -0700
-+rtnetlink: add new RTM_GETSTATS message to dump link stats
-+
-+This commit adds the #defines and structs used, so simply not compiling
-+this code if the required #defines isn't there should solve the problem.
-+
-+Closes: #450
-+
-+Signed-off-by: Jaco Kroon <jaco@uls.co.za>
-+Upstream: https://github.com/ppp-project/ppp/commit/7a3f478a4b7128d4f70ea64d99fedec766b1c009
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ pppd/sys-linux.c | 12 ++----------
-+ 1 file changed, 2 insertions(+), 10 deletions(-)
-+
-+diff --git a/pppd/sys-linux.c b/pppd/sys-linux.c
-+index 561b150f2..a8d6cd95b 100644
-+--- a/pppd/sys-linux.c
-++++ b/pppd/sys-linux.c
-+@@ -131,16 +131,6 @@
-+ #include <linux/netlink.h>
-+ #include <linux/rtnetlink.h>
-+ #include <linux/if_link.h>
-+-
-+-/* Attempt at retaining compile-support with older than 4.7 kernels, or kernels
-+- * where RTM_NEWSTATS isn't defined for whatever reason.
-+- */
-+-#ifndef RTM_NEWSTATS
-+-#define RTM_NEWSTATS 92
-+-#define RTM_GETSTATS 94
-+-#define IFLA_STATS_LINK_64 1
-+-#endif
-+-
-+ #include <linux/if_addr.h>
-+ 
-+ /* glibc versions prior to 2.24 do not define SOL_NETLINK */
-+@@ -1776,6 +1766,7 @@ get_ppp_stats_ioctl(int u, struct pppd_stats *stats)
-+ static int
-+ get_ppp_stats_rtnetlink(int u, struct pppd_stats *stats)
-+ {
-++#ifdef RTM_NEWSTATS
-+     static int fd = -1;
-+ 
-+     struct {
-+@@ -1825,6 +1816,7 @@ get_ppp_stats_rtnetlink(int u, struct pppd_stats *stats)
-+ err:
-+     close(fd);
-+     fd = -1;
-++#endif
-+     return 0;
-+ }
-+ 
+diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
+index 73b4ec6867..f2e3317897 100644
+--- a/package/liburiparser/liburiparser.hash
++++ b/package/liburiparser/liburiparser.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1ddae35cb3cc2c36e8199829d46f1c7f8b222e74a723fdae67ec8561e1ac5a39  uriparser-0.9.7.tar.xz
++sha256  1d71c054837ea32a31e462bce5a1af272379ecf511e33448e88100b87ff73b2e  uriparser-0.9.8.tar.xz
+ sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING
+diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
+index 6d25b1d9bb..b0ba8c387b 100644
+--- a/package/liburiparser/liburiparser.mk
++++ b/package/liburiparser/liburiparser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBURIPARSER_VERSION = 0.9.7
++LIBURIPARSER_VERSION = 0.9.8
+ LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.xz
+ LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
+ LIBURIPARSER_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
