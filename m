@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C2C5C25B74
-	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 06:01:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3BDEC25B74
+	for <buildroot@archiver.kernel.org>; Mon, 27 May 2024 06:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B54160857;
-	Mon, 27 May 2024 06:01:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF714606A7;
+	Mon, 27 May 2024 06:03:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o4iXQ53DOhZB; Mon, 27 May 2024 06:01:54 +0000 (UTC)
+ id z6_N_92GtC3u; Mon, 27 May 2024 06:03:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 820446081B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8079605A3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 820446081B;
-	Mon, 27 May 2024 06:01:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B52531D1871
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 06:00:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8079605A3;
+	Mon, 27 May 2024 06:03:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F28971D0BF1
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 06:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1C5F402A5
- for <buildroot@lists.busybox.net>; Mon, 27 May 2024 06:00:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF7A240734
+ for <buildroot@lists.busybox.net>; Mon, 27 May 2024 06:03:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uTGIefl54SUH for <buildroot@lists.busybox.net>;
- Mon, 27 May 2024 06:00:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xJNHPGpNgSJh for <buildroot@lists.busybox.net>;
+ Mon, 27 May 2024 06:03:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 75425402A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75425402A2
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 75425402A2
- for <buildroot@buildroot.org>; Mon, 27 May 2024 06:00:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E6201C0002;
- Mon, 27 May 2024 06:00:04 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sBTOt-004ypR-32;
- Mon, 27 May 2024 08:00:03 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1893404D5
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E1893404D5
+ for <buildroot@buildroot.org>; Mon, 27 May 2024 06:03:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CD19687635; Mon, 27 May 2024 06:03:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240505190821.1252791-1-fontaine.fabrice@gmail.com>
-Date: Mon, 27 May 2024 08:00:03 +0200
-In-Reply-To: <20240505190821.1252791-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 5 May 2024 21:08:21 +0200")
-Message-ID: <87v82zdcbg.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/liburiparser: security bump to
- version 0.9.8
+To: buildroot@buildroot.org
+Date: Mon, 27 May 2024 07:57:15 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: a6f9dff3af57d046f5dfb92c2831267b30cd6132
+X-Git-Newrev: baaf5f569f8115c25d54198631eddcbc4710f766
+X-Patchwork-Hint: ignore
+Message-Id: <20240527060332.CD19687635@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libhtp: security
+ bump to version 0.5.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,27 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=baaf5f569f8115c25d54198631eddcbc4710f766
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > - Fixed: [CVE-2024-34402]
- >     Protect against integer overflow in ComposeQueryEngine
- > - Fixed: [CVE-2024-34403]
- >     Protect against integer overflow in ComposeQueryMallocExMm
+Fix CVE-2024-23837 and CVE-2024-28871
 
- > https://github.com/uriparser/uriparser/blob/uriparser-0.9.8/ChangeLog
+https://github.com/OISF/libhtp/security/advisories/GHSA-f9wf-rrjj-qx8m
+https://github.com/OISF/libhtp/security/advisories/GHSA-ffr2-45w9-7wmg
+https://github.com/OISF/libhtp/blob/0.5.48/ChangeLog
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit babb39c87366217ce84269ba11b29475d3d183b7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libhtp/libhtp.hash | 2 +-
+ package/libhtp/libhtp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2024.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
+index c016cb3439..1809bc93a3 100644
+--- a/package/libhtp/libhtp.hash
++++ b/package/libhtp/libhtp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d4214f94522fa5a1ec1909dbb52831c534788d93bc6b2ca8252de9332b11b606  libhtp-0.5.45.tar.gz
++sha256  7f0719732fd0c82f9915e3df27e31548798590ad624fbad24f58b50885248ab8  libhtp-0.5.48.tar.gz
+ sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
+diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
+index 8a732d1d5c..8735f593d9 100644
+--- a/package/libhtp/libhtp.mk
++++ b/package/libhtp/libhtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBHTP_VERSION = 0.5.45
++LIBHTP_VERSION = 0.5.48
+ LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
+ LIBHTP_LICENSE = BSD-3-Clause
+ LIBHTP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
