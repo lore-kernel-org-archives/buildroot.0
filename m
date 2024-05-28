@@ -4,52 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8525C25B78
-	for <buildroot@archiver.kernel.org>; Tue, 28 May 2024 13:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 726CAC25B7C
+	for <buildroot@archiver.kernel.org>; Tue, 28 May 2024 13:42:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D8EB8195C;
-	Tue, 28 May 2024 13:42:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F1E98196A;
+	Tue, 28 May 2024 13:42:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pgG4JoQlkake; Tue, 28 May 2024 13:42:30 +0000 (UTC)
+ id HlCBUWQx73XT; Tue, 28 May 2024 13:42:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B59DF8196A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32FF681B10
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B59DF8196A;
-	Tue, 28 May 2024 13:42:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B22AA1D2858
- for <buildroot@lists.busybox.net>; Tue, 28 May 2024 13:42:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32FF681B10;
+	Tue, 28 May 2024 13:42:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EB9521D2858
+ for <buildroot@lists.busybox.net>; Tue, 28 May 2024 13:42:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB29A60822
- for <buildroot@lists.busybox.net>; Tue, 28 May 2024 13:42:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E46F140343
+ for <buildroot@lists.busybox.net>; Tue, 28 May 2024 13:42:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ccBobx1JjKGY for <buildroot@lists.busybox.net>;
- Tue, 28 May 2024 13:42:29 +0000 (UTC)
-X-Greylist: delayed 1235 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 28 May 2024 13:42:28 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B574560784
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B574560784
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F4Nijn7ynkgD for <buildroot@lists.busybox.net>;
+ Tue, 28 May 2024 13:42:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=98.142.107.122;
  helo=vern.gendns.com; envelope-from=david@lechnology.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E51FF4015C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E51FF4015C
 Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B574560784
- for <buildroot@buildroot.org>; Tue, 28 May 2024 13:42:28 +0000 (UTC)
-Received: from ip98-183-112-25.ok.ok.cox.net ([98.183.112.25]:59982
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E51FF4015C
+ for <buildroot@buildroot.org>; Tue, 28 May 2024 13:42:42 +0000 (UTC)
+Received: from ip98-183-112-25.ok.ok.cox.net ([98.183.112.25]:37966
  helo=[192.168.0.142]) by vern.gendns.com with esmtpsa (TLS1.2) tls
  TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.96.2)
- (envelope-from <david@lechnology.com>) id 1sBwnN-00039G-0q;
- Tue, 28 May 2024 09:21:51 -0400
-Message-ID: <54d9b3ce-23b9-410d-9d73-379126759187@lechnology.com>
-Date: Tue, 28 May 2024 08:21:50 -0500
+ (envelope-from <david@lechnology.com>) id 1sBwnb-0003ER-2u;
+ Tue, 28 May 2024 09:22:05 -0400
+Message-ID: <a80ddf55-0686-41b4-acab-4fa5af249baa@lechnology.com>
+Date: Tue, 28 May 2024 08:22:05 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
  buildroot@buildroot.org
 References: <20240528081026.175912-1-dario.binacchi@amarulasolutions.com>
+ <20240528081026.175912-2-dario.binacchi@amarulasolutions.com>
 Content-Language: en-US
 From: David Lechner <david@lechnology.com>
 Autocrypt: addr=david@lechnology.com; keydata=
@@ -94,7 +93,7 @@ Autocrypt: addr=david@lechnology.com; keydata=
  +M4GyTil33pnBXEZp29nh7ev4VJ96sVvnQFzls3motvG+pq/c37Ms1gYayeCzA2iCDuKx6Zk
  ybHg7IzNEduqZQ4bkaBpnEt+vwE3Gg5l4dAUFWAs9qY13nyBANQ282FNctziEHCUJZ/Map6T
  dzHWO6hU1HuvmlwcJSFCOey8yhkt386E6KfVYzrIhwTtabg+DLyMZK40Rop1VcU7Nx0M
-In-Reply-To: <20240528081026.175912-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20240528081026.175912-2-dario.binacchi@amarulasolutions.com>
 X-AntiAbuse: This header was added to track abuse,
  please include it with any abuse report
 X-AntiAbuse: Primary Hostname - vern.gendns.com
@@ -114,21 +113,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
  Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
  List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=HTklV9J0XjQ9rX7jiXBW/2D1Fvc7pKGPAVQvK8tnfEo=; b=rTOXd1z+cWhmro9vfDk1y2TJhn
- F9ZVGnEqcXXRJMx6JpBwbrjyomcyLIDeFLKHxUDZDjVMynZuUlflRBkeumMCYcgo8CFJIgTUmujKV
- Zrsav3nuGTFQOYdGRw+PwX0BOMIImFNsuDiasfGhld4elOv6/UP8BCrSm8uy5edxn9sX0djOu36HA
- boEi5Pi6eRY7YkaifgjABtxHnwqK94QTJgRMIkQT7dhBqqcw9MyM51OTWRCcrgxPHfEqgp9i3FDza
- cfymjym5DhkD+ZPBBVpV2ke5msQ047C8w6mTvflmx6TeUJg8o8YsxVK4TZkG+17hqZ+aVeinBSi06
- Qs4MDmig==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=LZJt5v1egAkfB/TIid3Yo1q14D+EQ5Apc3T9xYxUbN0=; b=WoupD9Xg6/lg8lRZkoi76phrgX
+ 9EfxqSlRkKfVCUT1mxu4MPsk+je8CIe7NNQrwxjemwdTsKXXPv/DvbEEbxbKt1zYYpCDCyNsej0s1
+ p7RuOSh9WKanO9+tzmwmepf5pm9x5zFsl54ZQzvK84tV1fPgos9xSZp/qsd8l2A7ltOGhKY4soPsg
+ fE5kirazPhpE+tLSKER3/U5Kke35/LcmPFiJyHovld1bGM745Gshxqf20yu3ZcifzLtQdq2sKYKOd
+ Z/nCNtviXCjHOaHFIVajmyv/kQHltIUAEcQb0k+fL5E7RT7wFVF9btyELcWXOFO8XWEgu/hfrroCv
+ oj4N+8zw==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=lechnology.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=lechnology.com header.i=@lechnology.com
- header.a=rsa-sha256 header.s=default header.b=rTOXd1z+
-Subject: Re: [Buildroot] [PATCH 1/2] configs/lego_ev3_defconfig: fix Linux
- compilation error with binutils 2.41+
+ header.a=rsa-sha256 header.s=default header.b=WoupD9Xg
+Subject: Re: [Buildroot] [PATCH 2/2] configs/lego_ev3_defconfig: add hashes
+ for Linux/headers/u-boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -147,10 +146,8 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 On 5/28/24 3:10 AM, Dario Binacchi wrote:
-> The Linux kernel fails to build since commit e88225ed882 (package/binutils:
-> make 2.41 the default version).  This commit applies the backport patch of
-> upstream commit 790756c7e0229dedc83bf058ac69633045b1000e to the 4.19.y
-> stable kernel.
+> And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop the
+> defconfig from .checkpackageignore.
 > 
 > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > ---
