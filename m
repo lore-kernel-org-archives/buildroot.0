@@ -1,97 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71DF1C25B75
-	for <buildroot@archiver.kernel.org>; Wed, 29 May 2024 18:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7413C25B75
+	for <buildroot@archiver.kernel.org>; Wed, 29 May 2024 20:24:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE27380C3F;
-	Wed, 29 May 2024 18:39:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8317F40441;
+	Wed, 29 May 2024 20:24:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U3TjvwyFE0-r; Wed, 29 May 2024 18:38:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N4wYkw4hBHck; Wed, 29 May 2024 20:24:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9125D80F55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F6FC404B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9125D80F55;
-	Wed, 29 May 2024 18:38:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B5B731BF4D7
- for <buildroot@lists.busybox.net>; Wed, 29 May 2024 18:38:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F6FC404B1;
+	Wed, 29 May 2024 20:24:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F9B61BF359
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 20:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9CE8980EAB
- for <buildroot@lists.busybox.net>; Wed, 29 May 2024 18:38:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4BF5F404B1
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 20:24:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cHg5Kv-si3og for <buildroot@lists.busybox.net>;
- Wed, 29 May 2024 18:38:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CD61680C80
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD61680C80
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CD61680C80
- for <buildroot@buildroot.org>; Wed, 29 May 2024 18:38:56 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4210aa012e5so382365e9.0
- for <buildroot@buildroot.org>; Wed, 29 May 2024 11:38:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717007934; x=1717612734;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=u7v76SS9uMNqGyduUH29jEe1rFZFrS2WFLea2BwtkuE=;
- b=G0OtNjlQ4HPUH3fRhxSw87SoF5oxRUgtkMldLvG05TaNusQDTBLhSJOjX6vWEbRi6O
- UcOVQcV5+AJGg7jhDwp9mRvtpcPcscu5MuYnUJj1F+5/IZJeGrwX+uQdCLsmBGpDgyxe
- v9amXm5a34RYaHt8qbJhwH1z+OAAGWfsMHJhcjCn0jTbtPQQ6+WvRja1xr0VLsJ8UOg4
- 38jIX5HuapHGv2ATUg9Krct5JJXUwLorRTcwfQCz+SRjTf72DtmwFTzUKvzL0C57wFVH
- l9sp7oo1jiWVUNcDA7vB4QVCKjZWumgodPiubO16ElDt2eEzJcpYwJqljaUZy1ZRCnyz
- OO1w==
-X-Gm-Message-State: AOJu0YyMpsBzO1iBjAPz0kTrsXkHVLUEgqOzah1s45X4l/7y7j43glYB
- rp0bum7CZm81EDg/oMW+Cq/Bbsl0Tpc6GGckPbslH61c5+ZAAAGOI8gEG185TkeTO7PdxfgNKc4
- T5+U=
-X-Google-Smtp-Source: AGHT+IEEaCsGEQomAqrbd97Mm1gj8RremmU1eR/YlINK/nUCM6DwalTx3dtPfwk4tPO/KZxfNYJF/g==
-X-Received: by 2002:a7b:c2aa:0:b0:41c:1434:f571 with SMTP id
- 5b1f17b1804b1-42108aba96bmr124150285e9.37.1717007934653; 
- Wed, 29 May 2024 11:38:54 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.43.2])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3557dcf0871sm15839260f8f.110.2024.05.29.11.38.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 May 2024 11:38:54 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HPe9aaM1ByOi for <buildroot@lists.busybox.net>;
+ Wed, 29 May 2024 20:24:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D21AB40441
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D21AB40441
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D21AB40441
+ for <buildroot@buildroot.org>; Wed, 29 May 2024 20:24:35 +0000 (UTC)
+Received: from pps.filterd (m0346910.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 44TGSEml001395
+ for <buildroot@buildroot.org>; Wed, 29 May 2024 20:24:35 GMT
+Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3ye7wq34a1-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Wed, 29 May 2024 20:24:34 +0000
+Received: from xusxph009rp020.corp.ray.com ([128.13.125.224])
+ by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 44TKOXFA004781
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)
+ for <buildroot@buildroot.org>; Wed, 29 May 2024 20:24:33 GMT
+Received: from ciulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph009rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 44TKOWTh030327
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+ for <buildroot@buildroot.org>; Wed, 29 May 2024 20:24:33 GMT
+X-Received: from bspbox.kirk (unknown [10.148.204.208])
+ by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id C98DE3000468;
+ Wed, 29 May 2024 15:24:32 -0500 (CDT)
 To: buildroot@buildroot.org
-Date: Wed, 29 May 2024 20:38:42 +0200
-Message-ID: <20240529183842.1384707-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240529183842.1384707-1-dario.binacchi@amarulasolutions.com>
-References: <20240529183842.1384707-1-dario.binacchi@amarulasolutions.com>
+Date: Wed, 29 May 2024 20:24:22 +0000
+Message-ID: <20240529202425.469185-1-brandon.maier@collins.com>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-29_16,2024-05-28_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-29_16,2024-05-28_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=571
+ phishscore=0 mlxscore=0
+ adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405290143
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ bulkscore=0 spamscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=550 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405290143
+X-Proofpoint-GUID: mgbm1SMtX-0XXrCZMc_aGhW454ajQQLw
+X-Proofpoint-ORIG-GUID: mgbm1SMtX-0XXrCZMc_aGhW454ajQQLw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-29_16,2024-05-28_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ malwarescore=0 mlxlogscore=640 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1015
+ mlxscore=0 spamscore=0 phishscore=0 impostorscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405290143
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1717007934; x=1717612734;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=u7v76SS9uMNqGyduUH29jEe1rFZFrS2WFLea2BwtkuE=;
- b=Rq+fCIsJd3x14o9NB5SBgwKXXgn8BkYsI+KsIGatApuFmCjpQvEEM3Dylk40yxPSAo
- 4ovR74OlKYmz12JfRiAIlzfIut1SuzZZZIfFUUDL93zm/c6DPcFipk+wwhpFNxxY8d/b
- JRbmNnFYGvYUeQQtOpf4/OpEXsGqmu+PsCBW0=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Rq+fCIsJ
-Subject: [Buildroot] [PATCH v2 2/2] configs/lego_ev3_defconfig: add hashes
- for Linux/headers/u-boot
+ d=collins.com; h=cc :
+ content-transfer-encoding : date : from : message-id : mime-version :
+ subject : to; s=POD051818;
+ bh=Mz/yZ7pLC00lwS0Eh0tGbuWlQp5WrsnPIBZ5CQvsaCY=;
+ b=NmQnTmk2DkJuRdDLU6ilTQiuMonKUM9RQuqksAh6tSy/mkEkiaVjPklTa3O0de+NnGSG
+ EAYYYC8UgSMNR8jb7o8jddviKT9vDTNeKilpDrut1+jU8ZOr4h2RmELOYOcTTIhecw50
+ GpUUdpzQHsSMGVxltxTTn+mRFZvylg3h1rBnq0s5mOBDa1k7OgwVgrrua1EGnCKbwkr+
+ TIk5XGHn4vxhSsLCbOsfR6MzDDsSo8+53PqQyq+bI8gUn428vOm/hdmBmkXVa0gbyF7S
+ 6oJVguDnMpCU8ZRdd/KgEPaWBNHFt4dC5ErM7zIGR0z2mCa3QGxoQp1CyRKsHeK2Jccm cA== 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=NmQnTmk2
+Subject: [Buildroot] [PATCH 1/4] support/testing: add mtd test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,83 +121,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- David Lechner <david@lechnology.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Brandon Maier <brandon.maier@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop
-the defconfig from .checkpackageignore.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 ---
-Changes v1 -> v2:
-- Update the sha256 for the new version of Linux.
+ support/testing/tests/package/test_mtd.py | 48 +++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 support/testing/tests/package/test_mtd.py
 
- .checkpackageignore                                     | 1 -
- board/lego/ev3/patches/linux-headers/linux-headers.hash | 1 +
- board/lego/ev3/patches/linux/linux.hash                 | 2 ++
- board/lego/ev3/patches/uboot/uboot.hash                 | 2 ++
- configs/lego_ev3_defconfig                              | 2 ++
- 5 files changed, 7 insertions(+), 1 deletion(-)
- create mode 120000 board/lego/ev3/patches/linux-headers/linux-headers.hash
- create mode 100644 board/lego/ev3/patches/linux/linux.hash
- create mode 100644 board/lego/ev3/patches/uboot/uboot.hash
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index f6d54361bc10..bb27977d8c32 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -218,7 +218,6 @@ configs/khadas_vim3_defconfig lib_defconfig.ForceCheckHash
- configs/kontron_bl_imx8mm_defconfig lib_defconfig.ForceCheckHash
- configs/kontron_pitx_imx8m_defconfig lib_defconfig.ForceCheckHash
- configs/kontron_smarc_sal28_defconfig lib_defconfig.ForceCheckHash
--configs/lego_ev3_defconfig lib_defconfig.ForceCheckHash
- configs/linksprite_pcduino_defconfig lib_defconfig.ForceCheckHash
- configs/ls1028ardb_defconfig lib_defconfig.ForceCheckHash
- configs/ls1046a-frwy_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/lego/ev3/patches/linux-headers/linux-headers.hash b/board/lego/ev3/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 000000000000..5808d92afe89
---- /dev/null
-+++ b/board/lego/ev3/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/lego/ev3/patches/linux/linux.hash b/board/lego/ev3/patches/linux/linux.hash
+diff --git a/support/testing/tests/package/test_mtd.py b/support/testing/tests/package/test_mtd.py
 new file mode 100644
-index 000000000000..81824a41ee4c
+index 0000000000..0871ab6457
 --- /dev/null
-+++ b/board/lego/ev3/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  6c5e4d3c87feadbfdb9f7d2e46f3f120b00286ba380491c5956708e0b94232c8  linux-4.19.315.tar.xz
-diff --git a/board/lego/ev3/patches/uboot/uboot.hash b/board/lego/ev3/patches/uboot/uboot.hash
-new file mode 100644
-index 000000000000..c53d9ecc5cec
---- /dev/null
-+++ b/board/lego/ev3/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  312b7eeae44581d1362c3a3f02c28d806647756c82ba8c72241c7cdbe68ba77e  u-boot-2021.07.tar.bz2
-diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
-index 86b2aea65611..df80bb3f1098 100644
---- a/configs/lego_ev3_defconfig
-+++ b/configs/lego_ev3_defconfig
-@@ -5,6 +5,8 @@ BR2_arm926t=y
- # system
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_GLOBAL_PATCH_DIR="board/lego/ev3/patches"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lego/ev3/post-image.sh"
- # Linux headers same as kernel, a 4.19 series
++++ b/support/testing/tests/package/test_mtd.py
+@@ -0,0 +1,48 @@
++import os
++
++import infra.basetest
++
++
++class TestMtd(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_ENABLE_LOCALE_WHITELIST=""
++        BR2_PACKAGE_MTD=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_TARGET_ROOTFS_CPIO=y
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++
++        self.emulator.login()
++
++        mtd = "/dev/mtd0"
++        erasesize = 256 * 1024
++        test_sectors = 4
++        test_size = erasesize * test_sectors
++
++        output, exit_code = self.emulator.run(f"mtd_debug info {mtd}")
++        output = [x.strip() for x in output if x.strip()]
++        self.assertEqual(output, [
++            "mtd.type = MTD_NORFLASH",
++            "mtd.flags = MTD_CAP_NORFLASH",
++            "mtd.size = 134217728 (128M)",
++            "mtd.erasesize = 262144 (256K)",
++            "mtd.writesize = 1",
++            "mtd.oobsize = 0",
++            "regions = 0",
++        ])
++
++        # Test flashcp
++        self.assertRunOk(f"dd if=/dev/urandom of=random.bin bs={test_size} count=1")
++        self.assertRunOk(f"flashcp random.bin {mtd}")
++        self.assertRunOk(f"cmp -s -n {test_size} random.bin {mtd}")
++
++        # Test flash_erase
++        self.assertRunOk(f"dd if=/dev/zero bs={test_size} count=1 | tr '\\000' '\\377' >nor-erase.bin")
++        self.assertRunOk(f"flash_erase {mtd} 0 {test_sectors}")
++        self.assertRunOk(f"cmp -s -n {test_size} nor-erase.bin {mtd}")
 -- 
-2.43.0
+2.45.1
 
 _______________________________________________
 buildroot mailing list
