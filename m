@@ -1,78 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75D3DC25B75
-	for <buildroot@archiver.kernel.org>; Wed, 29 May 2024 14:32:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EED6C25B75
+	for <buildroot@archiver.kernel.org>; Wed, 29 May 2024 18:19:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 658B540980;
-	Wed, 29 May 2024 14:32:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 99B97605C4;
+	Wed, 29 May 2024 18:19:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bLEE0LdQOKsp; Wed, 29 May 2024 14:32:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Myn9asyCiEZ6; Wed, 29 May 2024 18:19:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FCBF40928
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98A3D60B45
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FCBF40928;
-	Wed, 29 May 2024 14:32:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 681E71D36AF
- for <buildroot@lists.busybox.net>; Wed, 29 May 2024 14:32:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98A3D60B45;
+	Wed, 29 May 2024 18:19:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8507D1D393B
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 18:19:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 609FB40928
- for <buildroot@lists.busybox.net>; Wed, 29 May 2024 14:32:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7ECB340428
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 18:19:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OgK9BtIbVWCi for <buildroot@lists.busybox.net>;
- Wed, 29 May 2024 14:32:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8AEBB40918
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AEBB40918
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8AEBB40918
- for <buildroot@buildroot.org>; Wed, 29 May 2024 14:32:06 +0000 (UTC)
-Received: from 202.225.26.77.dynamic.reverse-mundo-r.com ([77.26.225.202]
- helo=momiji) by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1sCKLR-00DzdT-Hy; Wed, 29 May 2024 16:32:01 +0200
-Received: from localhost (momiji [local])
- by momiji (OpenSMTPD) with ESMTPA id 4a7ae36d;
- Wed, 29 May 2024 14:32:00 +0000 (UTC)
-Date: Wed, 29 May 2024 16:31:55 +0200
-Message-ID: <20240529163155.GB375910@igalia.com>
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <87ttihrvm6.fsf@dell.be.48ers.dk>
-References: <20240522091608.3659847-1-aperez@igalia.com>
- <20240522091608.3659847-3-aperez@igalia.com> <87ttihrvm6.fsf@dell.be.48ers.dk>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MTl6nBxhkH7y for <buildroot@lists.busybox.net>;
+ Wed, 29 May 2024 18:19:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 54BFB400F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54BFB400F1
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 54BFB400F1
+ for <buildroot@buildroot.org>; Wed, 29 May 2024 18:19:00 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 31DDB13F89A;
+ Wed, 29 May 2024 20:18:53 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 29 May 2024 20:18:52 +0200
+Date: Wed, 29 May 2024 20:18:52 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Geoff Levand <geoff@infradead.org>
+Message-ID: <ZldxjKMyzPIK1djL@landeda>
+References: <99605672-166f-4747-9653-6f45458ddf04@infradead.org>
+ <87plt5ruxy.fsf@dell.be.48ers.dk>
+ <31d643d8-4bca-4817-a6f2-a40ac0d77d37@infradead.org>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
- From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=Tw5AX6VrVQe97nFCluDRmSV1jtDaoHPdPcz+U4rmf8Y=; b=LxoQrKLUzGjV3OSmMH9jeBRW/g
- nqkfNKsSeaw9mGzT0zY4Ly5VGX/j2qGogNfcmEtSAsy8VlUJuuDGOwj7/oNOiLM8IIWtJcQrGbTaE
- 84D2n+izQlIPKNejEV8zNDfBYT1JCdTGOSu/ooVlH1c5Yiab8h8iFPMajunPVDef/Ejzkd0wkeBgN
- VhnyL4Dz1S5kUnpw/TUqsg7SFwwpkalZWE8VjIDitMbCoCxzfRWcNUJCXAgo9rAGmtaLZBn5kUmWo
- 8RZTqxycPTXZlrxTa2wTbrPUlYAM+bJRb10wz9UpNOFhExeGsqxDOqiyPFIDIPAde/91EzbzhG9me
- c/wytxIg==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <31d643d8-4bca-4817-a6f2-a40ac0d77d37@infradead.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1717006737;
+ bh=u7FhnncinGYx/PF7Eyy84M88c32ds0ElICaw4YjsPwA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=RgPeiqL+3rNyibDcE5IZWvn+WFBbAaUoYJG20ubEYDMLDW16+idSmRiioTij5yCMx
+ N/aSzA4JtgF7M3PPKVDp0+Dk52hPnX+GnQXFjFLo55Sy0WS2UXAWihJ6WGTn0egKtU
+ G+/P5t+k3nYVI2jta4LzQhLf8u0ikZi+jCPBivbOWA/KB/iqzgk5EUnMwgk2KW5A5x
+ iLMfMnbQZtOzZaLc5RY0V4P9lL4u4DnpCkg6a2YaAGn7qy/Dyl65Yo36YqGAZqglgW
+ Sa9HCURiBJvjkv86eBvkI7Vzp0K/9bUdQ84PdcIh83qRwNHM+rCeoA7ViR3fTQQ6zi
+ 1uFH/dU7Bs+ow==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=LxoQrKLU
-Subject: Re: [Buildroot] [PATCH 2/4] package/wpewebkit: security bump to
- version 2.44.2
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=RgPeiqL+
+Subject: Re: [Buildroot] [PATCH] package/flannel: Bump to version 0.25.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,83 +83,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1342470780648490831=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Geoff, All,
 
---===============1342470780648490831==
-Content-Type: multipart/signed; boundary="hN7CaNN7z/2Obhqg"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
+On 2024-05-29 17:58 +0900, Geoff Levand spake thusly:
+> On 5/29/24 15:30, Peter Korsgaard wrote:
+> >>>>>> "Geoff" == Geoff Levand <geoff@infradead.org> writes:
+> >  > -sha256  8406a3b2b799344197c79f96e5b39ea7b6228f0bb2cb069b5f44dce684e29b9b  flannel-0.25.1-go2.tar.gz
+> >  > +sha256  565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954  flannel-0.25.2-go2.tar.gz
+> > Hmm, I get a different hash here?
+> > ERROR: while checking hashes from package/flannel/flannel.hash
+> > ERROR: flannel-0.25.2-go2.tar.gz has wrong sha256 hash:
+> > ERROR: expected: 565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954
+> > ERROR: got     : e181a5e4233db47b0f03718ea801274c3a6024d235ead76e974f3df4f4183de1
+> I see this in the build log;
+>   flannel-0.25.2-go2.tar.gz: OK (sha256: 565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954)
+>   >>> flannel 0.25.2 Extracting
+> Maybe there was some problem with your download of flannel-0.25.2-go2.tar.gz 
 
+The issue has been identified:
+  - we now require tar >= 1.35 (for reproducibility of tarballs)
+  - we check whether the tar on the host system is suitable
+  - if not, then we build our own host-tar, and use that
 
---hN7CaNN7z/2Obhqg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: base64
+So we should always use a valid tar: either the system one, or our own.
 
-SGkgUGV0ZXIsIGFsbCwKCk9uIFdlZCwgMjkgTWF5IDIwMjQgMDg6MTY6MTcgKzAyMDAgUGV0ZXIg
-S29yc2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPiB3cm90ZToKPiA+Pj4+PiAiQWRyaWFuIiA9
-PSBBZHJpYW4gUGVyZXogZGUgQ2FzdHJvIDxhcGVyZXpAaWdhbGlhLmNvbT4gd3JpdGVzOgo+IAo+
-ICA+IFVwZGF0ZSB0byB0aGUgbW9zdCByZWNlbnQgc3RhYmxlIHJlbGVhc2Ugb2YgV1BFIFdlYktp
-dC4gQXMgdGhpcyBpcyBhCj4gID4gY2hhbmdlIHRvIGEgbmV3ZXIgcmVsZWFzZSBzZXJpZXMsIHRo
-ZXJlIGFyZSBhIGZldyBjaGFuZ2VzIGluIHRoZSBDTWFrZQo+ICA+IGJ1aWxkIG9wdGlvbnMuIERl
-cGVuZGVuY2llcyBtb3N0bHkgcmVtYWluIHRoZSBzYW1lLiBUaGUgbWFpbiBjaGFuZ2VzCj4gID4g
-YXJlOgo+IAo+ICA+ICAtIFRoZSBuZXcgRU5BQkxFX1dFQl9DT0RFQ1Mgb3B0aW9uIGlzIHNldCBh
-bG9uZyB3aXRoIEVOQUJMRV9WSURFTyBhbmQKPiAgPiAgICBFTkFCTEVfV0VCX1JUQyBkZXBlbmRp
-bmcgb24gQlIyX1BBQ0tBR0VfV1BFV0VCS0lUX01VTFRJTUVESUEuCj4gID4gIC0gVGhlIG5ldyBV
-U0VfTElCQkFDS1RSQUNFIG9wdGlvbiBpcyBzZXQgYWNjb3JkaW5nbHksIGRlcGVuZGluZyBvbgo+
-ICA+ICAgIEJSMl9QQUNLQUdFX0xJQkJBQ0tUUkFDRS4KPiAgPiAgLSBXZWJBc3NlbWJseSBkb2Vz
-IG5vdCB3b3JrIHdpdGggRU5BQkxFX0NfTE9PUCwgc28gaXQgbmVlZHMgdG8gYmUKPiAgPiAgICBk
-aXNhYmxlZCBhbG9uZ3NpZGUgaXQgZm9yIE1JUFNyNiwgQVJNdjUgYW5kIEFSTXY2OyBub3QgdGhh
-dCBidWlsZGluZwo+ICA+ICAgIFdlYkFzc2VtYmx5IHN1cHBvcnQgaXMgZW5hYmxlZCBieSBkZWZh
-dWx0Lgo+ICA+ICAtIEVOQUJMRV9BQ0NFU1NJQklMSVRZIGhhcyBiZWVuIHJlbW92ZWQsIGluc3Rl
-YWQgdGhlIG5ldyBVU0VfQVRLIG9wdGlvbgo+ICA+ICAgIGNhbiBiZSB1c2VkIHRvIHRoZSBzYW1l
-IGVmZmVjdC4KPiAgPiAgLSBKUEVHMjAwMCBpcyBubyBsb25nZXIgc3VwcG9ydGVkLCB0aGUgb3Bl
-bmpwZWcgZGVwZW5kZW5jeSBpcyByZW1vdmVkLgo+IAo+ICA+IFJlbGVhc2Ugbm90ZXMgYW5kIGFu
-bm91bmNlbWVudDoKPiAKPiAgPiAgIC0gaHR0cHM6Ly93cGV3ZWJraXQub3JnL2Jsb2cvMjAyNC13
-cGV3ZWJraXQtMi40NC5odG1sCj4gCj4gID4gICAtIGh0dHBzOi8vd3Bld2Via2l0Lm9yZy9yZWxl
-YXNlL3dwZXdlYmtpdC0yLjQ0LjAuaHRtbAo+ICA+ICAgLSBodHRwczovL3dwZXdlYmtpdC5vcmcv
-cmVsZWFzZS93cGV3ZWJraXQtMi40NC4xLmh0bWwKPiAgPiAgIC0gaHR0cHM6Ly93cGV3ZWJraXQu
-b3JnL3JlbGVhc2Uvd3Bld2Via2l0LTIuNDQuMi5odG1sCj4gCj4gID4gUmVsZXZhbnQgc2VjdXJp
-dHkgYWR2aXNvcmllczoKPiAKPiAgPiAgIC0gaHR0cHM6Ly93cGV3ZWJraXQub3JnL3NlY3VyaXR5
-L1dTQS0yMDI0LTAwMDIuaHRtbAo+ICA+ICAgLSBodHRwczovL3dwZXdlYmtpdC5vcmcvc2VjdXJp
-dHkvV1NBLTIwMjQtMDAwMy5odG1sCj4gCj4gID4gU2lnbmVkLW9mZi1ieTogQWRyaWFuIFBlcmV6
-IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+Cj4gIAo+ICA+ICBXUEVXRUJLSVRfU0lURSA9
-IGh0dHBzOi8vd3Bld2Via2l0Lm9yZy9yZWxlYXNlcwo+ICA+IC1XUEVXRUJLSVRfU09VUkNFID0g
-d3Bld2Via2l0LSQoV1BFV0VCS0lUX1ZFUlNJT04pLnRhci54ego+ICA+ICtXUEVXRUJLSVRfU09V
-UkNFID0gd3Bld2Via2l0LSQoV1BFV0VCS0lUX1ZFUlNJT04pLnRhci5sego+IAo+IEkga25vdyBv
-ZiB0aGUgeHogYmFja2Rvb3IgaXNzdWUsIGJ1dCB3ZSB1c2UgLnh6IGluIGEgTE9UIG9mIHBhY2th
-Z2VzIGFuZAo+IHVwc3RyZWFtIHByb3ZpZGVzIC50YXIueHosIHNvIEkgcHJlZmVyIHRvIHVzZSB0
-aGF0IGhlcmUgYXMgd2VsbCB0byBub3QKPiBoYXZlIHRvIHB1bGwgaW4gaG9zdC1semlwLgoKWWVz
-LCBJJ3ZlIGJlZW4gZm9sbG93aW5nIHRoZSBkaXNjdXNzaW9uLCBhbmQgaG93IEJ1aWxkcm9vdCB3
-YXNuJ3QKYWZmZWN0ZWQgZHVlIHRvIGJlaW5nIHNvbWV3aGF0IHNsb3cgcGlja2luZyB1cGRhdGVz
-ID0pCgpHb29kIHRvIGtub3cgdGhhdCB5b3UgcHJlZmVyIHRvIGtlZXAgdXNpbmcgLnh6IHBhY2th
-Z2VzLCBJIGhhdmUganVzdApzdWJtaXR0ZWQgYSB2ZXJzaW9uIGJ1bXAgdG8gQ29nIGFuZCBrZXB0
-IHVzaW5nIC54eiBhcyB3ZWxsIHRoZXJlLgoKPiBDb21taXR0ZWQgd2l0aCB0aGF0IGNoYW5nZWQs
-IHRoYW5rcy4KClRoYW5rIHlvdSEKCkNoZWVycywK4oCUQWRyacOhbgo=
+However (there is always a "however"), the user can set TAR in their
+environment, to instruct Buildroot to use that specific tar. For
+example, it is possible to do:
 
---hN7CaNN7z/2Obhqg
-Content-Type: application/pgp-signature; name="signature.asc"
+    $ TAR=tar-1.35 make
 
------BEGIN PGP SIGNATURE-----
+So, when we check whether the host tar is suitable, we in fact check
+that $(TAR) as provided by the user (and if not given, then we default
+to looking 'tar' in PATH).
 
-iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZlc8WwAKCRCRxVnb5MkS
-Owj3AJ9ZBoWJ7I5lJShj2grKkfFS6oVU1QCeP4T0kWP3v45DyPbvV7ozMc1XG2U=
-=qgTB
------END PGP SIGNATURE-----
+But we do not use $(TAR) from the download helper infrastructure, where
+we only use 'tar'.
 
---hN7CaNN7z/2Obhqg--
+so, when the user has a system with an older tar in PATH, but provides a
+TAR=tar-1.35 when building, then there is a discrepancy between the tar
+we check, and the one we use.
 
---===============1342470780648490831==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Boom.
 
+That's what happened to Peter.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1342470780648490831==--
