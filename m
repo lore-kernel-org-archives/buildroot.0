@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 135F8C25B75
-	for <buildroot@archiver.kernel.org>; Wed, 29 May 2024 08:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 407F7C25B75
+	for <buildroot@archiver.kernel.org>; Wed, 29 May 2024 09:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A886881342;
-	Wed, 29 May 2024 08:58:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B887381174;
+	Wed, 29 May 2024 09:14:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XE6F_Z3JZBc4; Wed, 29 May 2024 08:58:28 +0000 (UTC)
+ id A6UZyGqYOZxW; Wed, 29 May 2024 09:14:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8682812F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 539E281065
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8682812F5;
-	Wed, 29 May 2024 08:58:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2629F1D3342
- for <buildroot@lists.busybox.net>; Wed, 29 May 2024 08:58:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 539E281065;
+	Wed, 29 May 2024 09:14:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 38F2A1BF333
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 09:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1344260757
- for <buildroot@lists.busybox.net>; Wed, 29 May 2024 08:58:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 244744017C
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 09:13:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MnDafo-arCbK for <buildroot@lists.busybox.net>;
- Wed, 29 May 2024 08:58:25 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2001:8b0:10b:1:d65d:64ff:fe57:4e05; helo=desiato.infradead.org;
- envelope-from=geoff@infradead.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 62B6860756
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62B6860756
-Received: from desiato.infradead.org (desiato.infradead.org
- [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 62B6860756
- for <buildroot@buildroot.org>; Wed, 29 May 2024 08:58:21 +0000 (UTC)
-Received: from fpd2fa7e2a.ap.nuro.jp ([210.250.126.42] helo=[192.168.1.8])
- by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
- id 1sCF8S-0000000DUzW-1Asc; Wed, 29 May 2024 08:58:17 +0000
-Message-ID: <31d643d8-4bca-4817-a6f2-a40ac0d77d37@infradead.org>
-Date: Wed, 29 May 2024 17:58:09 +0900
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZNj5Y2gbGRUR for <buildroot@lists.busybox.net>;
+ Wed, 29 May 2024 09:13:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 558274016D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 558274016D
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 558274016D
+ for <buildroot@buildroot.org>; Wed, 29 May 2024 09:13:54 +0000 (UTC)
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1sCFNW-00Dt63-Vx; Wed, 29 May 2024 11:13:51 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 69c4ba3f;
+ Wed, 29 May 2024 09:13:50 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Wed, 29 May 2024 12:13:47 +0300
+Message-ID: <20240529091349.1075724-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>, yann.morin.1998@free.fr
-References: <99605672-166f-4747-9653-6f45458ddf04@infradead.org>
- <87plt5ruxy.fsf@dell.be.48ers.dk>
-Content-Language: en-US
-From: Geoff Levand <geoff@infradead.org>
-In-Reply-To: <87plt5ruxy.fsf@dell.be.48ers.dk>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
- :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
- Sender:Reply-To:Content-ID:Content-Description;
- bh=cS0OV06mYpyuWTB2/sbzgRilnNU2Fuvh/CAfdU0n1wQ=; b=nOfEwABWYgxuQZXL7h2Akjr1h+
- RPaKalq13xE6RlWccSH3IlBqHsxjVzfvq1kkdWR1TYBIgQhlCgkXcevwqVYKE13TAqdLPxZrDiXKO
- AAuW4fAX0vD6tyS18nwESJdECGmL8svFc2xw12yLDEkeLK2qlTMaJ6EmtFV/Kv/l4CaxRs0Ei4PTn
- tr/FW6Iotw/8SP+fkkNAlT9YUaveRLEWt8fMAmz1bULX4cv9yWA4NT+9eR0MKw+WnUkctKNNS6+Q+
- xKvzwSF0aGLxGUd8NXrcAB+heDoGDxt3XbbmVZxnAGrIWHs6ddYOXmHS0aKEZKxXpgY0kEaaEjhaS
- pY18S39w==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=xTzL6g2+lxEg0nMXGrM0p28ocYiCXjVSPr78hpKdCWM=; b=bIQt+K3x5/YTsfgSSQzjuXEejM
+ WkklOLD/MYBRfa/KnIPlKNU9l25CYUhxYDqwr5VmbEZpS6Ir/pwom2CXGZEubeoM2ge/op0PV0jr+
+ wOjg0XHNJauZwFhQbDdItYLJf6LPU7RD3RjupARIEBT8mNdSYC8NAZni0PN/V3Z4Zo3ZsorbdEpKI
+ MdY94InmWruk6yeI7J3zNSbzG8SAPv/tWNzIC8I5IHzacRppW3zsbrVRQPV8cCyPfbqusGK3cJAIS
+ FeCMcLrwcBdp49FNwF/tLN6ietU6gOVZ5rtdQoPMBm9v4lJOJCs67gPvnDNQPYJ/Zp1RatMfYiMCM
+ VQ3XGrkg==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=infradead.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=infradead.org header.i=@infradead.org
- header.a=rsa-sha256 header.s=desiato.20200630 header.b=nOfEwABW
-Subject: Re: [Buildroot] [PATCH] package/flannel: Bump to version 0.25.2
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=bIQt+K3x
+Subject: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.18.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,44 +81,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+This is a small bugfix release, with a rendering fix for popup menus
+and that can use weston-protocols version 14 for building. Release
+notes:
 
-On 5/29/24 15:30, Peter Korsgaard wrote:
->>>>>> "Geoff" == Geoff Levand <geoff@infradead.org> writes:
-> 
->  > Signed-off-by: Geoff Levand <geoff@infradead.org>
->  > diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
->  > index 831f6234da..367c4f6ecf 100644
->  > --- a/package/flannel/flannel.hash
->  > +++ b/package/flannel/flannel.hash
->  > @@ -1,3 +1,3 @@
->  >  # Locally computed:
->  > -sha256  8406a3b2b799344197c79f96e5b39ea7b6228f0bb2cb069b5f44dce684e29b9b  flannel-0.25.1-go2.tar.gz
->  > +sha256  565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954  flannel-0.25.2-go2.tar.gz
-> 
-> Hmm, I get a different hash here?
-> 
-> ERROR: while checking hashes from package/flannel/flannel.hash
-> ERROR: flannel-0.25.2-go2.tar.gz has wrong sha256 hash:
-> ERROR: expected: 565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954
-> ERROR: got     : e181a5e4233db47b0f03718ea801274c3a6024d235ead76e974f3df4f4183de1
+  https://wpewebkit.org/release/cog-0.18.4.html
 
-I always do a clean build and run some tests before I send out a
-patch.  It worked OK then, and I just tested again and it was OK.
-I see this in the build log;
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/cog/cog.hash | 8 ++++----
+ package/cog/cog.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-  flannel-0.25.2-go2.tar.gz: OK (sha256: 565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954)
-  >>> flannel 0.25.2 Extracting
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index c0e99e14aa..b59b5f4795 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/cog-0.18.3.tar.xz.sums
+-md5  e457de5b5ac8994ae9971c0a5a22b8a2  cog-0.18.3.tar.xz
+-sha1  21df2a84c651b45e78d08e45e71631250a0078c3  cog-0.18.3.tar.xz
+-sha256  cd4ec937175a290ccd7c8ec398e4569aec04084cd94b11b2d83518778ba9d055  cog-0.18.3.tar.xz
++# From https://wpewebkit.org/releases/cog-0.18.4.tar.xz.sums
++md5  0566ab6676b499ebcff372fbe39e24fc  cog-0.18.4.tar.xz
++sha1  2d6f88cfb07eaac1be2bf9954832f19f8a856631  cog-0.18.4.tar.xz
++sha256  31d7079db2eeed790899d2f1f824dd6a54bf30d072d196d737be572f105d99b1  cog-0.18.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 11c0e3b502..7f680bb700 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COG_VERSION = 0.18.3
++COG_VERSION = 0.18.4
+ COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
+-- 
+2.45.1
 
-Maybe there was some problem with your download of flannel-0.25.2-go2.tar.gz 
-
--Geoff
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
