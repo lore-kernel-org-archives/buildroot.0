@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5287DC25B78
-	for <buildroot@archiver.kernel.org>; Tue, 28 May 2024 19:20:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC225C25B78
+	for <buildroot@archiver.kernel.org>; Wed, 29 May 2024 00:15:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1B0D4026C;
-	Tue, 28 May 2024 19:20:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 23F3382089;
+	Wed, 29 May 2024 00:15:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sDbkABmn73Hf; Tue, 28 May 2024 19:20:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iwZzfiOeH0Pa; Wed, 29 May 2024 00:15:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D9EB402C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBB7782080
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D9EB402C9;
-	Tue, 28 May 2024 19:20:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 66C8F1D2680
- for <buildroot@lists.busybox.net>; Tue, 28 May 2024 19:20:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBB7782080;
+	Wed, 29 May 2024 00:15:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 07C851BF335
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 00:15:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 526BE402C9
- for <buildroot@lists.busybox.net>; Tue, 28 May 2024 19:20:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F32D760663
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 00:15:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5xFQJo3MgYeK for <buildroot@lists.busybox.net>;
- Tue, 28 May 2024 19:20:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B546C4026C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B546C4026C
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B546C4026C
- for <buildroot@buildroot.org>; Tue, 28 May 2024 19:20:28 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 7F0FEB0055A;
- Tue, 28 May 2024 21:20:23 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 28 May 2024 21:20:08 +0200
-Message-ID: <20240528192008.32699-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tCdhoeP9A7mr for <buildroot@lists.busybox.net>;
+ Wed, 29 May 2024 00:15:30 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=2001:8b0:10b:1236::1;
+ helo=casper.infradead.org; envelope-from=geoff@infradead.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BEAFC60650
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEAFC60650
+Received: from casper.infradead.org (casper.infradead.org
+ [IPv6:2001:8b0:10b:1236::1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BEAFC60650
+ for <buildroot@buildroot.org>; Wed, 29 May 2024 00:15:26 +0000 (UTC)
+Received: from fpd2fa7e2a.ap.nuro.jp ([210.250.126.42] helo=[192.168.1.8])
+ by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+ id 1sC6yM-00000009EKs-2w21; Wed, 29 May 2024 00:15:19 +0000
+Message-ID: <99605672-166f-4747-9653-6f45458ddf04@infradead.org>
+Date: Wed, 29 May 2024 09:15:12 +0900
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1716924025;
- bh=OusqilaiAYTb15i7XZfbNlohZNFG47mM5Ir3W0HqOU0=;
- h=From:To:Cc:Subject:Date:From;
- b=hDbz82eA3NUhQOeQWSbqB8pbMBZRFomQeZYFVddPpG5LF0XLDouIdI8p99E/lM/Nt
- rkX/Fdx5Df75J2yX3kuWVOqRGLZpjtfr4xLGDIfPIilxfJGnXX7q4bTI/DVilpE6Ta
- b241QwPhNQjf2EXkDBG9nSdiyicDjP9n9U1unWM19Or4UUEnvOiRehkerA2mK8q+PZ
- 87c4iBwf9orfOLi8dlBfB/B7BI3eI0dsxrfCUGFxE1iJlEXGgCjahK4u6NbWwFq+xZ
- Sts/+AWwDzpqRR+cmcVgvdvmOzQoFm7xMfHCxqu8TaWy84o/cNzw/DKa6J4ZCDRgfK
- BxBDoP638by0w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=hDbz82eA
-Subject: [Buildroot] [PATCH 1/1] package/ccache: always disable developer
- mode
+User-Agent: Mozilla Thunderbird
+From: Geoff Levand <geoff@infradead.org>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+Content-Language: en-US
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+ To:Subject:From:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:Content-ID:
+ Content-Description:In-Reply-To:References;
+ bh=NrNSzsl0SNC+XjwpcUL+1Cf2pNxVfCFcanMdAtZp59I=; b=KyB4HoDNnTaKy1kNngAmq4Xx1t
+ oH153MDcZ3jrSVcPre/JDC9TdOQiMUyc86MyEazvrOaHkOaA6mmjfKu9JaqD6KWompUXwdNyJaOP5
+ URGQkGkaWFtXdHBCp2EUOQq050qtr0s5vBDMBQnnO6ZJ03v3C6oPcYit8NYPYNCVEaxzNfKra0wPt
+ j+rywW0K191JkU/m8stohG3VAC2JP05FiPCi1c5zndruPcaAUQs5gK6CmJ9Qd3JT+O0+iBGajzOxn
+ CJ9d1OipFh55wvriXtXQANQbPwxjVRb82PHnmIhIXdVWjjxep+K26azxVdBcOpsRouADwabGRe/ue
+ excGMwKw==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=infradead.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org
+ header.a=rsa-sha256 header.s=casper.20170209 header.b=KyB4HoDN
+Subject: [Buildroot] [PATCH] package/flannel: Bump to version 0.25.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,108 +78,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Xavier Roumegue <xroumegue@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ccache CMake build system has some conditions that automatically
-enables a developer mode (sets CCACHE_DEV_MODE=ON). See [1].
+Signed-off-by: Geoff Levand <geoff@infradead.org>
 
-More specifically, if CCACHE_DEV_MODE is unset AND the environment
-variable "CI" is set, CCACHE_DEV_MODE is set to "ON".
-
-This situation can happen when Buildroot builds are executed in
-Jenkins jobs, for example. Since Buildroot does not set
-CCACHE_DEV_MODE and Jenkins sets the "CI" environment variable,
-this ccache developer mode can be enabled in an unexpected way
-for the Buildroot user. For example, it happened that a Jenkins build
-breaks, while the build with the same configuration in the user
-session is working.
-
-One of the effects of enabling this ccache developer mode, is to treat
-compiler warnings as errors, see [3]. This can lead to build error,
-depending on the ccache version and the host compiler being used.
-
-This behavior can be reproduced and observed, with commands:
-
-    cat > .config <<EOF
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_CCACHE=y
-    BR2_PACKAGE_BUSYBOX=y
-    EOF
-    make olddefconfig
-
-    make clean
-    make host-ccache
-
-Outputs:
-
-    ...
-    -- Ccache version: 4.9.1
-    -- Ccache dev mode: OFF
-    -- Setting CMAKE_BUILD_TYPE to Release as none was specified.
-    ...
-
-Whereas:
-
-    make clean
-    CI=true make host-ccache
-
-Outputs:
-
-    ...
-    -- Ccache version: 4.9.1
-    -- Ccache dev mode: ON
-    -- Setting CMAKE_BUILD_TYPE to Debug as none was specified.
-    ...
-
-For a failure example: on Fedora 40 with host gcc 14.1.1, Buildroot at
-tag 2024.02 has ccache 4.8.2. Host ccache can fail, when building with
-"CI=true make host-ccache" with output:
-
-    /buildroot/output/build/host-ccache-4.8.2/src/third_party/fmt/core.h:3119:44:   in 'constexpr' expansion of 'fmt::v8::make_format_args<>(args#0, args#1)'
-    /buildroot/output/build/host-ccache-4.8.2/src/third_party/fmt/core.h:1706:15: error: possibly dangling reference to a temporary [-Werror=dangling-reference]
-     1706 |   const auto& arg = arg_mapper<Context>().map(std::forward<T>(val));
-          |               ^~~
-
-This commit sets CCACHE_DEV_MODE=OFF to make the ccache behavior more
-deterministic in Buildroot, independently of being used in a CI tool
-or not.
-
-[1] https://github.com/ccache/ccache/blob/v4.9.1/CMakeLists.txt#L56
-[2] https://github.com/jenkinsci/jenkins/blob/jenkins-2.459/core/src/main/java/jenkins/model/CoreEnvironmentContributor.java#L43
-[3] https://github.com/ccache/ccache/blob/v4.9.1/cmake/StandardWarnings.cmake#L5
-
-Reported-by: Xavier Roumegue <xroumegue@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Note: while this patch is meant for master branch, I believe it would
-also be interesting to apply this patch on maintenance branches, like
-2024.02.x, because they includes older ccache versions which are likely
-to generate compiler warnings (and therefore errors in the described
-case). I let the maintainers decide.
----
- package/ccache/ccache.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 4a45ea12e4e..0b2c02e8a73 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -15,6 +15,7 @@ HOST_CCACHE_DEPENDENCIES = host-hiredis host-zstd
- HOST_CCACHE_CONF_OPTS += \
- 	-UCMAKE_C_COMPILER_LAUNCHER \
- 	-UCMAKE_CXX_COMPILER_LAUNCHER \
-+	-DCCACHE_DEV_MODE=OFF \
- 	-DZSTD_FROM_INTERNET=OFF \
- 	-DHIREDIS_FROM_INTERNET=OFF \
- 	-DENABLE_TESTING=OFF
--- 
-2.45.1
-
+diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
+index 831f6234da..367c4f6ecf 100644
+--- a/package/flannel/flannel.hash
++++ b/package/flannel/flannel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  8406a3b2b799344197c79f96e5b39ea7b6228f0bb2cb069b5f44dce684e29b9b  flannel-0.25.1-go2.tar.gz
++sha256  565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954  flannel-0.25.2-go2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index aa24644764..317ad14ba3 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLANNEL_VERSION = 0.25.1
++FLANNEL_VERSION = 0.25.2
+ FLANNEL_SITE = $(call github,flannel-io,flannel,v$(FLANNEL_VERSION))
+ 
+ FLANNEL_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
