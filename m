@@ -1,73 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20631C25B7C
-	for <buildroot@archiver.kernel.org>; Wed, 29 May 2024 07:45:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 135F8C25B75
+	for <buildroot@archiver.kernel.org>; Wed, 29 May 2024 08:58:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3438408F3;
-	Wed, 29 May 2024 07:45:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NNgZ17WQYtWp; Wed, 29 May 2024 07:45:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72191408FA
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72191408FA;
-	Wed, 29 May 2024 07:45:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 52E631D32A9
- for <buildroot@lists.busybox.net>; Wed, 29 May 2024 07:45:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F4CB812EE
- for <buildroot@lists.busybox.net>; Wed, 29 May 2024 07:45:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A886881342;
+	Wed, 29 May 2024 08:58:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yTwK8H2kg4qD for <buildroot@lists.busybox.net>;
- Wed, 29 May 2024 07:45:40 +0000 (UTC)
-X-Greylist: delayed 600 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 29 May 2024 07:45:39 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E8A85812EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8A85812EC
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:1600:4:17::42aa;
- helo=smtp-42aa.mail.infomaniak.ch;
- envelope-from=slaveze@smartandconnective.com; receiver=<UNKNOWN> 
-Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch
- [IPv6:2001:1600:4:17::42aa])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E8A85812EC
- for <buildroot@buildroot.org>; Wed, 29 May 2024 07:45:39 +0000 (UTC)
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch
- [10.7.10.108])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Vq1Gt2v8zzZQT;
- Wed, 29 May 2024 09:29:26 +0200 (CEST)
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4Vq1Gs66fTzMB4; Wed, 29 May 2024 09:29:25 +0200 (CEST)
-From: Sebastien Laveze <slaveze@smartandconnective.com>
-To: buildroot@buildroot.org
-Date: Wed, 29 May 2024 09:29:10 +0200
-Message-Id: <20240529072911.288748-1-slaveze@smartandconnective.com>
-X-Mailer: git-send-email 2.34.1
+ id XE6F_Z3JZBc4; Wed, 29 May 2024 08:58:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8682812F5
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8682812F5;
+	Wed, 29 May 2024 08:58:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2629F1D3342
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 08:58:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1344260757
+ for <buildroot@lists.busybox.net>; Wed, 29 May 2024 08:58:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MnDafo-arCbK for <buildroot@lists.busybox.net>;
+ Wed, 29 May 2024 08:58:25 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2001:8b0:10b:1:d65d:64ff:fe57:4e05; helo=desiato.infradead.org;
+ envelope-from=geoff@infradead.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 62B6860756
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62B6860756
+Received: from desiato.infradead.org (desiato.infradead.org
+ [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 62B6860756
+ for <buildroot@buildroot.org>; Wed, 29 May 2024 08:58:21 +0000 (UTC)
+Received: from fpd2fa7e2a.ap.nuro.jp ([210.250.126.42] helo=[192.168.1.8])
+ by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+ id 1sCF8S-0000000DUzW-1Asc; Wed, 29 May 2024 08:58:17 +0000
+Message-ID: <31d643d8-4bca-4817-a6f2-a40ac0d77d37@infradead.org>
+Date: Wed, 29 May 2024 17:58:09 +0900
 MIME-Version: 1.0
-X-Infomaniak-Routing: alpha
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smartandconnective.com; s=20191114; t=1716967766;
- bh=t+3sUKXnZqLrl1Z+NlLgL+gmrdL9ajh7oFFAK3tYbjI=;
- h=From:To:Cc:Subject:Date:From;
- b=V/CfOQNfUatLrgxatf8YYDgWB6DSYgSufTUgaiiv4zh9h2AYHpgHY2Lqam9mTEgeA
- 9RwChiJncrQASHq3iF5K0lAxMa9oRAsDVeCvNReMEk6rfRvUhlKrtCZe3Qyz1mYAHR
- 4h5VVx2XA+5Q0E6TZ95om/1aWU9dAb+zZBy72QF4=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>, yann.morin.1998@free.fr
+References: <99605672-166f-4747-9653-6f45458ddf04@infradead.org>
+ <87plt5ruxy.fsf@dell.be.48ers.dk>
+Content-Language: en-US
+From: Geoff Levand <geoff@infradead.org>
+In-Reply-To: <87plt5ruxy.fsf@dell.be.48ers.dk>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+ :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+ Sender:Reply-To:Content-ID:Content-Description;
+ bh=cS0OV06mYpyuWTB2/sbzgRilnNU2Fuvh/CAfdU0n1wQ=; b=nOfEwABWYgxuQZXL7h2Akjr1h+
+ RPaKalq13xE6RlWccSH3IlBqHsxjVzfvq1kkdWR1TYBIgQhlCgkXcevwqVYKE13TAqdLPxZrDiXKO
+ AAuW4fAX0vD6tyS18nwESJdECGmL8svFc2xw12yLDEkeLK2qlTMaJ6EmtFV/Kv/l4CaxRs0Ei4PTn
+ tr/FW6Iotw/8SP+fkkNAlT9YUaveRLEWt8fMAmz1bULX4cv9yWA4NT+9eR0MKw+WnUkctKNNS6+Q+
+ xKvzwSF0aGLxGUd8NXrcAB+heDoGDxt3XbbmVZxnAGrIWHs6ddYOXmHS0aKEZKxXpgY0kEaaEjhaS
+ pY18S39w==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=smartandconnective.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smartandconnective.com header.i=@smartandconnective.com
- header.a=rsa-sha256 header.s=20191114 header.b=V/CfOQNf
-Subject: [Buildroot] [PATCH] package/mosquitto: add target mosquitto_passwd
+ header.from=infradead.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=infradead.org header.i=@infradead.org
+ header.a=rsa-sha256 header.s=desiato.20200630 header.b=nOfEwABW
+Subject: Re: [Buildroot] [PATCH] package/flannel: Bump to version 0.25.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,58 +81,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>,
- Sebastien Laveze <slaveze@smartandconnective.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The mosquitto_passwd utility is useful on target if user accounts need
-to be created runtime.
+Hi Peter,
 
-Signed-off-by: Sebastien Laveze <slaveze@smartandconnective.com>
----
- package/mosquitto/Config.in    | 7 +++++++
- package/mosquitto/mosquitto.mk | 4 ++++
- 2 files changed, 11 insertions(+)
+On 5/29/24 15:30, Peter Korsgaard wrote:
+>>>>>> "Geoff" == Geoff Levand <geoff@infradead.org> writes:
+> 
+>  > Signed-off-by: Geoff Levand <geoff@infradead.org>
+>  > diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
+>  > index 831f6234da..367c4f6ecf 100644
+>  > --- a/package/flannel/flannel.hash
+>  > +++ b/package/flannel/flannel.hash
+>  > @@ -1,3 +1,3 @@
+>  >  # Locally computed:
+>  > -sha256  8406a3b2b799344197c79f96e5b39ea7b6228f0bb2cb069b5f44dce684e29b9b  flannel-0.25.1-go2.tar.gz
+>  > +sha256  565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954  flannel-0.25.2-go2.tar.gz
+> 
+> Hmm, I get a different hash here?
+> 
+> ERROR: while checking hashes from package/flannel/flannel.hash
+> ERROR: flannel-0.25.2-go2.tar.gz has wrong sha256 hash:
+> ERROR: expected: 565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954
+> ERROR: got     : e181a5e4233db47b0f03718ea801274c3a6024d235ead76e974f3df4f4183de1
 
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 8bedf2ad21..fe722108da 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -29,6 +29,13 @@ config BR2_PACKAGE_MOSQUITTO_BROKER
- 	help
- 	  Build and install the mosquitto broker onto target.
- 
-+config BR2_PACKAGE_MOSQUITTO_PASSWORD
-+	bool "install the target mosquitto password utility"
-+	default n
-+	depends on BR2_PACKAGE_MOSQUITTO
-+	help
-+	  Build and install the target mosquitto password utility.
-+
- comment "mosquitto broker needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index b847e56fec..9226d3d7f1 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -94,6 +94,10 @@ ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER),y)
- MOSQUITTO_MAKE_DIRS += src
- endif
- 
-+ifeq ($(BR2_PACKAGE_MOSQUITTO_PASSWORD),y)
-+MOSQUITTO_MAKE_DIRS += apps/mosquitto_passwd
-+endif
-+
- define MOSQUITTO_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) DIRS="$(MOSQUITTO_MAKE_DIRS)" \
- 		$(MOSQUITTO_MAKE_OPTS)
--- 
-2.34.1
+I always do a clean build and run some tests before I send out a
+patch.  It worked OK then, and I just tested again and it was OK.
+I see this in the build log;
 
+  flannel-0.25.2-go2.tar.gz: OK (sha256: 565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954)
+  >>> flannel 0.25.2 Extracting
+
+Maybe there was some problem with your download of flannel-0.25.2-go2.tar.gz 
+
+-Geoff
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
