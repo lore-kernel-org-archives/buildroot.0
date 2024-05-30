@@ -4,130 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB45DC25B74
-	for <buildroot@archiver.kernel.org>; Thu, 30 May 2024 13:53:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98680C25B74
+	for <buildroot@archiver.kernel.org>; Thu, 30 May 2024 15:53:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9869F40151;
-	Thu, 30 May 2024 13:53:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D7F4404D1;
+	Thu, 30 May 2024 15:53:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WgZ12xPIQLKA; Thu, 30 May 2024 13:53:24 +0000 (UTC)
+ id Yn0KshoZ327G; Thu, 30 May 2024 15:53:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A295D4140B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28BEC41431
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A295D4140B;
-	Thu, 30 May 2024 13:53:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 54F951D4722
- for <buildroot@lists.busybox.net>; Thu, 30 May 2024 13:53:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28BEC41431;
+	Thu, 30 May 2024 15:53:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2096E1D483D
+ for <buildroot@lists.busybox.net>; Thu, 30 May 2024 15:53:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E26A84245
- for <buildroot@lists.busybox.net>; Thu, 30 May 2024 13:53:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D366610C7
+ for <buildroot@lists.busybox.net>; Thu, 30 May 2024 15:53:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WsqwrxTHAMs8 for <buildroot@lists.busybox.net>;
- Thu, 30 May 2024 13:53:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=98.142.107.122;
- helo=vern.gendns.com; envelope-from=david@lechnology.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 644FB8315C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 644FB8315C
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 644FB8315C
- for <buildroot@buildroot.org>; Thu, 30 May 2024 13:53:20 +0000 (UTC)
-Received: from ip98-183-112-25.ok.ok.cox.net ([98.183.112.25]:40808
- helo=[192.168.0.142]) by vern.gendns.com with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.96.2)
- (envelope-from <david@lechnology.com>) id 1sCgGB-0004Rv-0F;
- Thu, 30 May 2024 09:53:17 -0400
-Message-ID: <2c9b0556-bcd8-4d70-891b-77d6858aa285@lechnology.com>
-Date: Thu, 30 May 2024 08:53:17 -0500
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xx_FyUGj21mX for <buildroot@lists.busybox.net>;
+ Thu, 30 May 2024 15:53:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::112c; helo=mail-yw1-x112c.google.com;
+ envelope-from=jesseevg@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 44FC3610C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44FC3610C4
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com
+ [IPv6:2607:f8b0:4864:20::112c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 44FC3610C4
+ for <buildroot@buildroot.org>; Thu, 30 May 2024 15:53:05 +0000 (UTC)
+Received: by mail-yw1-x112c.google.com with SMTP id
+ 00721157ae682-62a0849f5a8so10424137b3.2
+ for <buildroot@buildroot.org>; Thu, 30 May 2024 08:53:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1717084385; x=1717689185;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=mVO+dhsDDM07l1jJchgbN7SiGsxjdhh3DI1qlhc9skY=;
+ b=l1e5VOg51EKh1a3YF4LQYcvt+MZExhodS7frkY2xBFa3h2H6Ngtqka4UX0adJ5no+7
+ bYqAjbs5esOnK85GV4y+oc6cP/JSJVDjqrT/93WXjvzVhHtTceBM7wHQV4LxTxKVi6X/
+ VJcM9pde4WosDu0ufVkwQIzyRx3bjvy4b7Ol+DEyJ4Ti5kesc37e0iZXt/3PU2y8AF5p
+ i5hKVWvacVbxjPjGiyCRxXS4Y5WhMupga832QntrxEmbxDNB4eT9J7X7AdDi+iFN0sYQ
+ 8izu5ZG+1Ow/8Hor7Kry913Gfa1wTFSYvcBGRF85W3XrihJIQsywcxaM3yIO+1Lj3cM2
+ qraw==
+X-Gm-Message-State: AOJu0Yxwyv4EAbV3shR70EpCoaAIEn2AeXA11fo4OUMZZcQ4EyRse5t0
+ uJmhTHYvrXELO6pb3/U3huTTuileLfDHq2oJAq35yN6OSeA+I8AUcX3mmQrmOUFdFPzeyp4fOQK
+ 6ANdHrscHhHdAXaq0xduD6pBV/L57uw==
+X-Google-Smtp-Source: AGHT+IEuv1timbuoCIuxmG7nRrEzn+j32nJyqw6CmUrmZwZivbMk5y3dR4SH76M/Qdi8EdCu3QIPyExTpMHKMGIenCU=
+X-Received: by 2002:a0d:dc87:0:b0:61b:33b6:41dd with SMTP id
+ 00721157ae682-62c6bc7af2amr27631417b3.37.1717084384592; Thu, 30 May 2024
+ 08:53:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-References: <20240529183842.1384707-1-dario.binacchi@amarulasolutions.com>
- <20240529183842.1384707-2-dario.binacchi@amarulasolutions.com>
-Content-Language: en-US
-From: David Lechner <david@lechnology.com>
-Autocrypt: addr=david@lechnology.com; keydata=
- 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
-In-Reply-To: <20240529183842.1384707-2-dario.binacchi@amarulasolutions.com>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id:
- davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
- In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
- :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
- Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
- List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=zd3GiQVnm6sFhjxZ69P1PXUlMDfraMOkltEHdzFFyhs=; b=epdFoyNxVPfVoFHIL+AmI4jzTd
- hHtP1KPdhDmpticUsusVceR+jS4ZRBH4XkPVvGHluuQOfsSgBrmTrkUQS3ovAI+DIdYUFYFvJZMuH
- mApSO7QbvIHvXw7r65vBbgiZepuFXdrpGaQ2gqod+c2svNXuxnjxlV7SNFuwU8hx9hu3pUMH6ZR1Z
- PObPRdOoNdHlNeqjQFfUjKloZ+qxsMn90d44so4bbonz+rzm3fmLtp330kLCZ1uAglcfWfoEHDHxA
- 3ctati9XccHr4hLeO4IfdVhviamYXeHNmxmBOdUSyipuGXqQ03jbpdK+kWjGgF52JWTZlcAGHJ1hH
- CfAFM4mQ==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=lechnology.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+From: Jesse Van Gavere <jesseevg@gmail.com>
+Date: Thu, 30 May 2024 17:52:54 +0200
+Message-ID: <CAMdwsN_aTq18DxJUJQKCdgZcjEmdP6cfC4ExS1=kEngRUouGsA@mail.gmail.com>
+To: Buildroot Mailing List <buildroot@buildroot.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1717084385; x=1717689185; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=mVO+dhsDDM07l1jJchgbN7SiGsxjdhh3DI1qlhc9skY=;
+ b=J6RqaOa0wth6SK4Ku8Nxt/JDtcOjx341h+8XG6Cnt7ywKJwwzFPy1JxSIAfsh+cAA5
+ mTWko0VdZxjNfN0nIiuZhXU1d8mHHjL9nTAl1G4sLiG2B6vA8E16RLvpcMA6zfATogyU
+ p/EVTq/UvA8/kzbxTPd/VeYeeiIjDX6bqZE/fUzx5XOtQcPriYxarboFu7Vfm9TzIhWb
+ qBmRsB73lL4xvsJGOwbsHMEtY7atr48uZZ752scbec9H1mo8ytDeOwMV85Fvr/tw7JBo
+ tmqAcoU3fUNvhBiXYnSqeeT0AX20V1tbsjdkRNT3CqKJyJBQUdQZrCmHjW4ikW0QBuFD
+ PYvw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=lechnology.com header.i=@lechnology.com
- header.a=rsa-sha256 header.s=default header.b=epdFoyNx
-Subject: Re: [Buildroot] [PATCH v2 2/2] configs/lego_ev3_defconfig: add
- hashes for Linux/headers/u-boot
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=J6RqaOa0
+Subject: [Buildroot] Buildroot LTS sponsoring initiative
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -139,22 +94,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3821721744618654438=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 5/29/24 1:38 PM, Dario Binacchi wrote:
-> And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop
-> the defconfig from .checkpackageignore.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
+--===============3821721744618654438==
+Content-Type: multipart/alternative; boundary="000000000000cb0d970619addc35"
 
-Acked-by: David Lechner <david@lechnology.com>
+--000000000000cb0d970619addc35
+Content-Type: text/plain; charset="UTF-8"
+
+Hi,
+
+I got a mail from Mind from one of their marketing managers which talked
+about something called buildroot LTS sponsoring initiative, is this
+endorsed by this community/the maintainers?
+
+I had not seen any communication about this and wanted to know if it was
+legit first and what the motivation behind this was, compared to possible
+other alternatives.
+
+Best regards,
+Jesse
+
+--000000000000cb0d970619addc35
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Hi,<div dir=3D"auto"><br></div><div dir=3D"auto">I got a =
+mail from Mind from one of their marketing managers which talked about some=
+thing called buildroot LTS sponsoring initiative, is this endorsed by this =
+community/the maintainers?</div><div dir=3D"auto"><br></div><div dir=3D"aut=
+o">I had not seen any communication about this and wanted to know if it was=
+ legit first and what the motivation behind this was, compared to possible =
+other alternatives.</div><div dir=3D"auto"><br></div><div dir=3D"auto">Best=
+ regards,</div><div dir=3D"auto">Jesse</div></div>
+
+--000000000000cb0d970619addc35--
+
+--===============3821721744618654438==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3821721744618654438==--
