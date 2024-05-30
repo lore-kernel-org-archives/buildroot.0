@@ -4,94 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4851BC25B74
-	for <buildroot@archiver.kernel.org>; Thu, 30 May 2024 20:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15CD4C25B74
+	for <buildroot@archiver.kernel.org>; Thu, 30 May 2024 20:51:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10F63843CA;
-	Thu, 30 May 2024 20:47:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E64284341;
+	Thu, 30 May 2024 20:51:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B5qAUZmDOKJ1; Thu, 30 May 2024 20:47:31 +0000 (UTC)
+ id VuZIk_cpyg2u; Thu, 30 May 2024 20:51:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5E88843C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0F3784335
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5E88843C1;
-	Thu, 30 May 2024 20:47:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 535861D4ACF
- for <buildroot@lists.busybox.net>; Thu, 30 May 2024 20:47:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0F3784335;
+	Thu, 30 May 2024 20:51:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 431BE1D4B29
+ for <buildroot@lists.busybox.net>; Thu, 30 May 2024 20:51:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F3D460656
- for <buildroot@lists.busybox.net>; Thu, 30 May 2024 20:47:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AB9484335
+ for <buildroot@lists.busybox.net>; Thu, 30 May 2024 20:51:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6VdqthsnKOiW for <buildroot@lists.busybox.net>;
- Thu, 30 May 2024 20:47:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2C6D560646
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C6D560646
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2C6D560646
- for <buildroot@buildroot.org>; Thu, 30 May 2024 20:47:18 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4211249fdf4so14347705e9.3
- for <buildroot@buildroot.org>; Thu, 30 May 2024 13:47:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717102037; x=1717706837;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=sCZdRiBDUCb9uWk8m4LfJJ/KqijuFT3foK2QYhi/5Ao=;
- b=p9LRw1TX4SjO1K7qd/Ongj544nzaDPPnvzGHIojVQim2usWAkRtz077ijfqo9jdB9M
- PZM7dO4HXq7RolMcHQFQ8XPcZWUxWIqpyZk9fkMhMziJ6hpDMcp+hEC9wiVZcWDY5Ut7
- qv66xDXzPMVBIpwNTGPPUWGrUBfni/Bexn5sBx3J2tNYhKj5KBvBKGV5KRJIJqH5rvRG
- hRCdlowl/YRQvqPEP4V0WfyoylXOBdQAgcX+K/gbrk84sjFzMkLyYvdJ/NrWUUD9GHQc
- HxxRLxtARoy2kddcZNSIv8jsoakGeVrrO1ZpYx+St1NMkN3dJ1jeF2gxzD81ey2Hxw3+
- 9lHg==
-X-Gm-Message-State: AOJu0Yw7j3lQtEmydRDoQyt2NuiEfeFOjdMkJRlUsLa1E7TCelF1a2TH
- ZHTqZxOR8MRO1B+QPpzCpY8qlnU5mwSwpURRbzRPATwbUmXhvmDHsNUEi1By0m78U4Ev9/UBxfr
- x6fU=
-X-Google-Smtp-Source: AGHT+IHD1+ck9hwACCryMcgHZcsTjOeYp4Ar1Yeu5xDpAmn5ywSGc3+Y11lTeg7LoiYDXllaG/fi/A==
-X-Received: by 2002:a05:600c:3d86:b0:421:2a54:2f1d with SMTP id
- 5b1f17b1804b1-4212a5430camr15058035e9.17.1717102036860; 
- Thu, 30 May 2024 13:47:16 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.43.40])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4212b84ae09sm4736375e9.18.2024.05.30.13.47.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 30 May 2024 13:47:16 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sjEQQ50TQpwA for <buildroot@lists.busybox.net>;
+ Thu, 30 May 2024 20:50:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D25784333
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D25784333
+ for <buildroot@buildroot.org>; Thu, 30 May 2024 20:50:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E9AB28778E; Thu, 30 May 2024 20:50:58 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 30 May 2024 22:47:06 +0200
-Message-ID: <20240530204706.2132204-4-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240530204706.2132204-1-dario.binacchi@amarulasolutions.com>
-References: <20240530204706.2132204-1-dario.binacchi@amarulasolutions.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1717102037; x=1717706837;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=sCZdRiBDUCb9uWk8m4LfJJ/KqijuFT3foK2QYhi/5Ao=;
- b=evfgbe589cm3vOtPr/yMYXXX5+aSvVCMQ8wBBE1hmxn2x3IPLPVRa+i3RzVGlgcQ7Y
- vHG5PlQruGv34SwwjnywY3R9tO7WZGb/BDb6OsMDwOMONCvBvLJ+FGvpWCGQlEfzTace
- ZO711ZcGFN1wKzVd6nYw52EIc0ozmDqnxgXdE=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=evfgbe58
-Subject: [Buildroot] [PATCH 4/4] configs/acmesystems_arietta_*: add hashes
- for at91bootstrap3/Linux/headers
+Date: Thu, 30 May 2024 22:49:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 091ad8455da98fb7abc5af22e7a4c36f64c0783e
+X-Git-Newrev: e5173e0131b0e938f787fb03780bc552efc8f5aa
+X-Patchwork-Hint: ignore
+Message-Id: <20240530205058.E9AB28778E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2024.05-rc1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,95 +58,215 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, Biagio Montaruli <biagio.hkr@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop the
-defconfig from .checkpackageignore.
+commit: https://git.buildroot.net/buildroot/commit/?id=e5173e0131b0e938f787fb03780bc552efc8f5aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                             | 2 --
- .../arietta-g25/patches/at91bootstrap3/at91bootstrap3.hash      | 2 ++
- .../arietta-g25/patches/linux-headers/linux-headers.hash        | 1 +
- board/acmesystems/arietta-g25/patches/linux/linux.hash          | 2 ++
- configs/acmesystems_arietta_g25_128mb_defconfig                 | 2 ++
- configs/acmesystems_arietta_g25_256mb_defconfig                 | 2 ++
- 6 files changed, 9 insertions(+), 2 deletions(-)
- create mode 100644 board/acmesystems/arietta-g25/patches/at91bootstrap3/at91bootstrap3.hash
- create mode 120000 board/acmesystems/arietta-g25/patches/linux-headers/linux-headers.hash
- create mode 100644 board/acmesystems/arietta-g25/patches/linux/linux.hash
+ CHANGES                    | 79 ++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile                   |  4 +--
+ docs/website/download.html | 22 ++++++-------
+ docs/website/news.html     | 21 ++++++++++++
+ 4 files changed, 113 insertions(+), 13 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5d15fa8046f6..846cd8e1ecfd 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -117,8 +117,6 @@ boot/syslinux/0014-Fix-build-with-binutils-note-gnu-property-section.patch lib_p
- boot/syslinux/0016-Workaround-multiple-definition-of-symbol-errors.patch lib_patch.Upstream
- boot/syslinux/0017-Replace-builtin-strlen-that-appears-to-get-optimized.patch lib_patch.Upstream
- configs/aarch64_efi_defconfig lib_defconfig.ForceCheckHash
--configs/acmesystems_arietta_g25_128mb_defconfig lib_defconfig.ForceCheckHash
--configs/acmesystems_arietta_g25_256mb_defconfig lib_defconfig.ForceCheckHash
- configs/am574x_idk_defconfig lib_defconfig.ForceCheckHash
- configs/andes_ae350_45_defconfig lib_defconfig.ForceCheckHash
- configs/arcturus_ucls1012a_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/acmesystems/arietta-g25/patches/at91bootstrap3/at91bootstrap3.hash b/board/acmesystems/arietta-g25/patches/at91bootstrap3/at91bootstrap3.hash
-new file mode 100644
-index 000000000000..6edf3d3345ec
---- /dev/null
-+++ b/board/acmesystems/arietta-g25/patches/at91bootstrap3/at91bootstrap3.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  5ea2a8fed1ba0024229c6f6d77176679e1b24791bdbce8e285634013d4a93551  at91bootstrap3-v3.10.3-git4.tar.gz
-diff --git a/board/acmesystems/arietta-g25/patches/linux-headers/linux-headers.hash b/board/acmesystems/arietta-g25/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 000000000000..5808d92afe89
---- /dev/null
-+++ b/board/acmesystems/arietta-g25/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/acmesystems/arietta-g25/patches/linux/linux.hash b/board/acmesystems/arietta-g25/patches/linux/linux.hash
-new file mode 100644
-index 000000000000..81824a41ee4c
---- /dev/null
-+++ b/board/acmesystems/arietta-g25/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  6c5e4d3c87feadbfdb9f7d2e46f3f120b00286ba380491c5956708e0b94232c8  linux-4.19.315.tar.xz
-diff --git a/configs/acmesystems_arietta_g25_128mb_defconfig b/configs/acmesystems_arietta_g25_128mb_defconfig
-index 74f395cf86af..43ec1d2d5fa2 100644
---- a/configs/acmesystems_arietta_g25_128mb_defconfig
-+++ b/configs/acmesystems_arietta_g25_128mb_defconfig
-@@ -6,6 +6,8 @@ BR2_arm926t=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+diff --git a/CHANGES b/CHANGES
+index 13ac108549..b2bdde5069 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,82 @@
++2024.05-rc1, released May 30th, 2024
++
++	Fixes all over the tree and new features.
++
++        Toolchains:
++        - Binutils 2.24 added, 2.39 dropped, 2.41 is now default
++        - GCC 14.x added, 11.x dropped, 13.x is now default
++        - uClibc-ng bumped to 1.0.48
++        - Musl bumped to 1.2.5, adds riscv32 support
++        - Glibc bumped to 2.39, libcrypt no longer available (see
++          libxcrypt package)
++        - External glibc based toolchains no longer install libcrypt
++          files (except for libcrypt.so.1) to not conflict with the
++          libxcrypt package
++        - Bootlin external toolchains updated to 2024.02
++        - Support for external toolchains using GCC version 14
++        - Old external Codesourcery ARM/AARCH64 toolchains removed
++        - Old external Codesourcery niosII toolchain removed
++        - Old external Codescape mips toolchains removed
++        - Support for Linux 6.7 / 6.8 kernel headers added
++
++	Architecture:
++        - Support for riscv32 noMMU added
++        - Internal toolchains for SPARC (re-)added
++        - Support for the Motorola m68k specific shared library
++	  support for the FLAT binary format dropped, as support has
++	  been removed from the Linux kernel as of v5.19.
++
++        Download (notice, Buildroot generated tarballs have changed):
++        - Tar 1.35 is now required (will be automatically built if not
++          available on the host). Notice that tar 1.35 changes the way
++          devmajor/minor is stored, so tarballs created with 1.35 are
++          not binary identical to <1.35
++        - The tarball creation logic has now been extended to
++          correctly handle when ACLs are set on the download
++          directory.
++        - An issue with conflicting git tags between (different
++          versions of) a package has been fixes
++        - Git attributes are now handled correctly
++
++        Security:
++        - The /dev/shm entry in the default /etc/fstab used for
++          busybox and sysv init systems was missing the sticky bit,
++          allowing users to delete and replace other users files.
++
++        Infrastructure:
++        - kconfig/menuconfig can now be built with GCC 14.x
++        - Git is now used to to fetch CVE data from the FKIE
++	  repository to work around an issue with missing meta files
++	  in the releases.
++        - utils/check-package now also checks if defconfigs use
++          BR2_DOWNLOAD_FORCE_CHECK_HASHES to ensure custom
++          bootloader/kernels are correctly downloaded.
++
++        New defconfigs: Beagleboneai64, Orangepi Zero2w, Pine64 star64
++
++	New packages: basu, bats-assert, bats-file, bats-support, bcc,
++	bpftrace, export-subst, flutter-adaptive-scaffold-example,
++	flutter-animations-example, flutter-dynamic-layouts-example,
++	flutter-go-router-example, flutter-image-example,
++	flutter-markdown-example, flutter-packages,
++	flutter-rfw-local-example, go-bootstrap-stage3, igt-gpu-tools,
++	libgpiod2, libxmlb, libzenoh-c, lmdb, lua-lightningmdb,
++	lua-lsdbus, mokutil, python-email-validator,
++	python-expandvars, python-fastui, python-hid, python-jc,
++	python-mpmath, python-poetry-core, python-sympy,
++	python-yamllint, qbee-agent, starfive-spltool, ustreamer
++
++	Removed packages: flutter-gallery, omxplayer, ti-k3-image-gen
++
++	Issues resolved (http://bugs.uclibc.org):
++
++        #14416: Mesa3D missing DRI3 support for various Gallium drivers
++        #15766: BR2_PACKAGE_WESTON_XWAYLAND -- 12.0.1 -- fails to build..
++        #15997: Build Squid with GCC12.3 in Buildroot 2024.02 will fail
++        #16009: 'select' does not work with 'choice'
++        #16036: android-tools version is too old
++        #16075: Cannot use linux kernel extensions from external tree..
++
+ 2024.02.2, released May 7th, 2024
  
- # System configuration
-+BR2_GLOBAL_PATCH_DIR="board/acmesystems/arietta-g25/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Arietta-G25 Buildroot"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-diff --git a/configs/acmesystems_arietta_g25_256mb_defconfig b/configs/acmesystems_arietta_g25_256mb_defconfig
-index 9c7307613015..294ab3124478 100644
---- a/configs/acmesystems_arietta_g25_256mb_defconfig
-+++ b/configs/acmesystems_arietta_g25_256mb_defconfig
-@@ -6,6 +6,8 @@ BR2_arm926t=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index d1caec63b5..40f862b515 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
  
- # System configuration
-+BR2_GLOBAL_PATCH_DIR="board/acmesystems/arietta-g25/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Arietta-G25 Buildroot"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
--- 
-2.43.0
-
+ # Set and export the version string
+-export BR2_VERSION := 2024.05-git
++export BR2_VERSION := 2024.05-rc1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1709640000
++BR2_VERSION_EPOCH = 1717102000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index cc83d42a9f..b6793870a8 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -75,41 +75,41 @@
+ 	  <p><a href="/downloads/buildroot-2023.11.2.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
+-      <h3 style="text-align: center;">Latest release candidate: <b>2024.02-rc2</b></h3>
++-->
++      <h3 style="text-align: center;">Latest release candidate: <b>2024.05-rc1</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2024.02-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2024.02-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2024.02-rc2.tar.gz">buildroot-2024.02-rc2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2024.02-rc2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2024.05-rc1.tar.gz">buildroot-2024.05-rc1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2024.05-rc1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2024.02-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.05-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2024.02-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2024.05-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2024.02-rc2.tar.xz">buildroot-2024.02-rc2.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2024.02-rc2.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2024.05-rc1.tar.xz">buildroot-2024.05-rc1.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2024.05-rc1.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+--->
++
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 072523dd65..e13def66cf 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2024.05-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>30 May 2024</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>We have a new release candidate! Lots of changes all over the tree, see the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2024.05-rc1">CHANGES</a>
++	  file for more details.</p>
++
++	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2024.05-rc1.tar.xz">2024.05-rc1
++	  release</a>, and report any problems found to the
++         <a href="support.html">mailing list</a> or
++         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
