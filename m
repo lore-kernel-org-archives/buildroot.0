@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C8D0C25B74
-	for <buildroot@archiver.kernel.org>; Thu, 30 May 2024 18:24:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBA54C25B7E
+	for <buildroot@archiver.kernel.org>; Thu, 30 May 2024 18:24:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4765C811FC;
-	Thu, 30 May 2024 18:24:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97B8581459;
+	Thu, 30 May 2024 18:24:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YbREexwQTVyq; Thu, 30 May 2024 18:23:59 +0000 (UTC)
+ id WwAvrHflf60m; Thu, 30 May 2024 18:24:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D5938118D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3CE78148F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D5938118D;
-	Thu, 30 May 2024 18:23:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 159261D4984
- for <buildroot@lists.busybox.net>; Thu, 30 May 2024 18:23:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3CE78148F;
+	Thu, 30 May 2024 18:24:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BA89D1D4984
+ for <buildroot@lists.busybox.net>; Thu, 30 May 2024 18:24:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0EA0C8117A
- for <buildroot@lists.busybox.net>; Thu, 30 May 2024 18:23:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B18414163D
+ for <buildroot@lists.busybox.net>; Thu, 30 May 2024 18:24:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kER1t2yULAXJ for <buildroot@lists.busybox.net>;
- Thu, 30 May 2024 18:23:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nSh1p8W-Rb4T for <buildroot@lists.busybox.net>;
+ Thu, 30 May 2024 18:24:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 32E118115A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32E118115A
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 32E118115A
- for <buildroot@buildroot.org>; Thu, 30 May 2024 18:23:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DD6CA40004;
- Thu, 30 May 2024 18:23:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6874A413D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6874A413D0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6874A413D0
+ for <buildroot@buildroot.org>; Thu, 30 May 2024 18:24:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2CE431C0004;
+ Thu, 30 May 2024 18:24:01 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sCkRM-00Boei-1C;
- Thu, 30 May 2024 20:23:52 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sCkRV-00Boeo-1Z;
+ Thu, 30 May 2024 20:24:01 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 References: <20240529183842.1384707-1-dario.binacchi@amarulasolutions.com>
-Date: Thu, 30 May 2024 20:23:52 +0200
-In-Reply-To: <20240529183842.1384707-1-dario.binacchi@amarulasolutions.com>
- (Dario Binacchi's message of "Wed, 29 May 2024 20:38:41 +0200")
-Message-ID: <87ikyvqhtz.fsf@dell.be.48ers.dk>
+ <20240529183842.1384707-2-dario.binacchi@amarulasolutions.com>
+Date: Thu, 30 May 2024 20:24:01 +0200
+In-Reply-To: <20240529183842.1384707-2-dario.binacchi@amarulasolutions.com>
+ (Dario Binacchi's message of "Wed, 29 May 2024 20:38:42 +0200")
+Message-ID: <87ed9jqhtq.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2 1/2] configs/lego_ev3_defconfig: bump
- Linux to 4.19.315 to fix compilation error
+Subject: Re: [Buildroot] [PATCH v2 2/2] configs/lego_ev3_defconfig: add
+ hashes for Linux/headers/u-boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,16 +79,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
 
- > The Linux kernel failed to build since commit e88225ed882 (package/binutils:
- > make 2.41 the default version). The new version contains the commit
- > 790756c7e0229 ("ARM: 8933/1: replace Sun/Solaris style flag on section
- > directive") that fixes the issue.
+ > And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop
+ > the defconfig from .checkpackageignore.
 
  > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
  > ---
  > Changes v1 -> v2:
- > - Bump linux kernel to 4.19.315.
- > - Drop the patch to apply. It's contained in the new Linux version.
+ > - Update the sha256 for the new version of Linux.
 
 Committed, thanks.
 
