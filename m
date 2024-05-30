@@ -1,88 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98680C25B74
-	for <buildroot@archiver.kernel.org>; Thu, 30 May 2024 15:53:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2872AC25B74
+	for <buildroot@archiver.kernel.org>; Thu, 30 May 2024 18:18:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D7F4404D1;
-	Thu, 30 May 2024 15:53:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0EBF84338;
+	Thu, 30 May 2024 18:18:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yn0KshoZ327G; Thu, 30 May 2024 15:53:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HpbYynD8l-kh; Thu, 30 May 2024 18:18:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28BEC41431
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D2518435B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28BEC41431;
-	Thu, 30 May 2024 15:53:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2096E1D483D
- for <buildroot@lists.busybox.net>; Thu, 30 May 2024 15:53:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D2518435B;
+	Thu, 30 May 2024 18:18:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EB99E1D4947
+ for <buildroot@lists.busybox.net>; Thu, 30 May 2024 18:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0D366610C7
- for <buildroot@lists.busybox.net>; Thu, 30 May 2024 15:53:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D63354187C
+ for <buildroot@lists.busybox.net>; Thu, 30 May 2024 18:18:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xx_FyUGj21mX for <buildroot@lists.busybox.net>;
- Thu, 30 May 2024 15:53:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::112c; helo=mail-yw1-x112c.google.com;
- envelope-from=jesseevg@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 44FC3610C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44FC3610C4
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com
- [IPv6:2607:f8b0:4864:20::112c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 44FC3610C4
- for <buildroot@buildroot.org>; Thu, 30 May 2024 15:53:05 +0000 (UTC)
-Received: by mail-yw1-x112c.google.com with SMTP id
- 00721157ae682-62a0849f5a8so10424137b3.2
- for <buildroot@buildroot.org>; Thu, 30 May 2024 08:53:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717084385; x=1717689185;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=mVO+dhsDDM07l1jJchgbN7SiGsxjdhh3DI1qlhc9skY=;
- b=l1e5VOg51EKh1a3YF4LQYcvt+MZExhodS7frkY2xBFa3h2H6Ngtqka4UX0adJ5no+7
- bYqAjbs5esOnK85GV4y+oc6cP/JSJVDjqrT/93WXjvzVhHtTceBM7wHQV4LxTxKVi6X/
- VJcM9pde4WosDu0ufVkwQIzyRx3bjvy4b7Ol+DEyJ4Ti5kesc37e0iZXt/3PU2y8AF5p
- i5hKVWvacVbxjPjGiyCRxXS4Y5WhMupga832QntrxEmbxDNB4eT9J7X7AdDi+iFN0sYQ
- 8izu5ZG+1Ow/8Hor7Kry913Gfa1wTFSYvcBGRF85W3XrihJIQsywcxaM3yIO+1Lj3cM2
- qraw==
-X-Gm-Message-State: AOJu0Yxwyv4EAbV3shR70EpCoaAIEn2AeXA11fo4OUMZZcQ4EyRse5t0
- uJmhTHYvrXELO6pb3/U3huTTuileLfDHq2oJAq35yN6OSeA+I8AUcX3mmQrmOUFdFPzeyp4fOQK
- 6ANdHrscHhHdAXaq0xduD6pBV/L57uw==
-X-Google-Smtp-Source: AGHT+IEuv1timbuoCIuxmG7nRrEzn+j32nJyqw6CmUrmZwZivbMk5y3dR4SH76M/Qdi8EdCu3QIPyExTpMHKMGIenCU=
-X-Received: by 2002:a0d:dc87:0:b0:61b:33b6:41dd with SMTP id
- 00721157ae682-62c6bc7af2amr27631417b3.37.1717084384592; Thu, 30 May 2024
- 08:53:04 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B6Wxc-SX7cT4 for <buildroot@lists.busybox.net>;
+ Thu, 30 May 2024 18:18:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4772241884
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4772241884
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4772241884
+ for <buildroot@buildroot.org>; Thu, 30 May 2024 18:17:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BA29340002;
+ Thu, 30 May 2024 18:17:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sCkLZ-00BkB0-2S;
+ Thu, 30 May 2024 20:17:53 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <99605672-166f-4747-9653-6f45458ddf04@infradead.org>
+ <87plt5ruxy.fsf@dell.be.48ers.dk>
+ <31d643d8-4bca-4817-a6f2-a40ac0d77d37@infradead.org>
+ <ZldxjKMyzPIK1djL@landeda>
+Date: Thu, 30 May 2024 20:17:53 +0200
+In-Reply-To: <ZldxjKMyzPIK1djL@landeda> (Yann E. MORIN's message of "Wed, 29
+ May 2024 20:18:52 +0200")
+Message-ID: <87mso7qi3y.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-From: Jesse Van Gavere <jesseevg@gmail.com>
-Date: Thu, 30 May 2024 17:52:54 +0200
-Message-ID: <CAMdwsN_aTq18DxJUJQKCdgZcjEmdP6cfC4ExS1=kEngRUouGsA@mail.gmail.com>
-To: Buildroot Mailing List <buildroot@buildroot.org>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717084385; x=1717689185; darn=buildroot.org;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=mVO+dhsDDM07l1jJchgbN7SiGsxjdhh3DI1qlhc9skY=;
- b=J6RqaOa0wth6SK4Ku8Nxt/JDtcOjx341h+8XG6Cnt7ywKJwwzFPy1JxSIAfsh+cAA5
- mTWko0VdZxjNfN0nIiuZhXU1d8mHHjL9nTAl1G4sLiG2B6vA8E16RLvpcMA6zfATogyU
- p/EVTq/UvA8/kzbxTPd/VeYeeiIjDX6bqZE/fUzx5XOtQcPriYxarboFu7Vfm9TzIhWb
- qBmRsB73lL4xvsJGOwbsHMEtY7atr48uZZ752scbec9H1mo8ytDeOwMV85Fvr/tw7JBo
- tmqAcoU3fUNvhBiXYnSqeeT0AX20V1tbsjdkRNT3CqKJyJBQUdQZrCmHjW4ikW0QBuFD
- PYvw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=J6RqaOa0
-Subject: [Buildroot] Buildroot LTS sponsoring initiative
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/flannel: Bump to version 0.25.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,53 +71,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3821721744618654438=="
+Cc: Geoff Levand <geoff@infradead.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3821721744618654438==
-Content-Type: multipart/alternative; boundary="000000000000cb0d970619addc35"
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
---000000000000cb0d970619addc35
-Content-Type: text/plain; charset="UTF-8"
+ > Geoff, All,
+ > On 2024-05-29 17:58 +0900, Geoff Levand spake thusly:
+ >> On 5/29/24 15:30, Peter Korsgaard wrote:
+ >> >>>>>> "Geoff" == Geoff Levand <geoff@infradead.org> writes:
+ >> >  > -sha256
+ >> >  > 8406a3b2b799344197c79f96e5b39ea7b6228f0bb2cb069b5f44dce684e29b9b
+ >> >  > flannel-0.25.1-go2.tar.gz
+ >> >  > +sha256
+ >> >  > 565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954
+ >> >  > flannel-0.25.2-go2.tar.gz
+ >> > Hmm, I get a different hash here?
+ >> > ERROR: while checking hashes from package/flannel/flannel.hash
+ >> > ERROR: flannel-0.25.2-go2.tar.gz has wrong sha256 hash:
+ >> > ERROR: expected: 565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954
+ >> > ERROR: got     : e181a5e4233db47b0f03718ea801274c3a6024d235ead76e974f3df4f4183de1
+ >> I see this in the build log;
+ >> flannel-0.25.2-go2.tar.gz: OK (sha256:
+ >> 565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954)
+ >> >>> flannel 0.25.2 Extracting
+ >> Maybe there was some problem with your download of flannel-0.25.2-go2.tar.gz 
 
-Hi,
+ > The issue has been identified:
+ >   - we now require tar >= 1.35 (for reproducibility of tarballs)
+ >   - we check whether the tar on the host system is suitable
+ >   - if not, then we build our own host-tar, and use that
 
-I got a mail from Mind from one of their marketing managers which talked
-about something called buildroot LTS sponsoring initiative, is this
-endorsed by this community/the maintainers?
+ > So we should always use a valid tar: either the system one, or our own.
 
-I had not seen any communication about this and wanted to know if it was
-legit first and what the motivation behind this was, compared to possible
-other alternatives.
+ > However (there is always a "however"), the user can set TAR in their
+ > environment, to instruct Buildroot to use that specific tar. For
+ > example, it is possible to do:
 
-Best regards,
-Jesse
+ >     $ TAR=tar-1.35 make
 
---000000000000cb0d970619addc35
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ > So, when we check whether the host tar is suitable, we in fact check
+ > that $(TAR) as provided by the user (and if not given, then we default
+ > to looking 'tar' in PATH).
 
-<div dir=3D"auto">Hi,<div dir=3D"auto"><br></div><div dir=3D"auto">I got a =
-mail from Mind from one of their marketing managers which talked about some=
-thing called buildroot LTS sponsoring initiative, is this endorsed by this =
-community/the maintainers?</div><div dir=3D"auto"><br></div><div dir=3D"aut=
-o">I had not seen any communication about this and wanted to know if it was=
- legit first and what the motivation behind this was, compared to possible =
-other alternatives.</div><div dir=3D"auto"><br></div><div dir=3D"auto">Best=
- regards,</div><div dir=3D"auto">Jesse</div></div>
+ > But we do not use $(TAR) from the download helper infrastructure, where
+ > we only use 'tar'.
 
---000000000000cb0d970619addc35--
+ > so, when the user has a system with an older tar in PATH, but provides a
+ > TAR=tar-1.35 when building, then there is a discrepancy between the tar
+ > we check, and the one we use.
 
---===============3821721744618654438==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ > Boom.
 
+ > That's what happened to Peter.
+
+Yes, sorry about the noise. Will get that issue fixed.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3821721744618654438==--
