@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCE5DC25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 12:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3122DC25B7E
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 12:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A18561178;
-	Fri, 31 May 2024 12:22:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5B45606CF;
+	Fri, 31 May 2024 12:22:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tb3N78mXbI2A; Fri, 31 May 2024 12:22:40 +0000 (UTC)
+ id KshFdsGYzT91; Fri, 31 May 2024 12:22:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05EEC61179
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CF0D61187
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05EEC61179;
-	Fri, 31 May 2024 12:22:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CF0D61187;
+	Fri, 31 May 2024 12:22:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DE0021D5203
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E22401D5203
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B1A984545
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9414184547
  for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6FslpR1p78Mm for <buildroot@lists.busybox.net>;
+ id ZCwGsDjoHlDs for <buildroot@lists.busybox.net>;
  Fri, 31 May 2024 12:22:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E00F84547
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8067D84546
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E00F84547
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8067D84546
  for <buildroot@buildroot.org>; Fri, 31 May 2024 12:22:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8754B8780A; Fri, 31 May 2024 12:22:21 +0000 (UTC)
+ id 6192087807; Fri, 31 May 2024 12:22:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 14:19:08 +0200
+Date: Fri, 31 May 2024 14:00:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f555bffb8ed3e699f94fbfc88255bc0bca937e0d
-X-Git-Newrev: 622d3b25307bdc6db74628515be7f7b244f4bf77
+X-Git-Oldrev: a13aca12af814b789884ae84360b2397da9c84ca
+X-Git-Newrev: 2770ab249cae186511b134dcc6196f8fa47163b6
 X-Patchwork-Hint: ignore
-Message-Id: <20240531122221.8754B8780A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/zynq_microzed_defconfig: bump to xilinx-v2024.1
+Message-Id: <20240531122221.6192087807@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/zynq_zc702_defconfig:
+ bump to xilinx-v2024.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,10 +65,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=622d3b25307bdc6db74628515be7f7b244f4bf77
+commit: https://git.buildroot.net/buildroot/commit/?id=2770ab249cae186511b134dcc6196f8fa47163b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps the zynq_microzed_defconfig to xilinx-v2024.1 which includes
+This patch bumps the zynq_zc702_defconfig to xilinx-v2024.1 which includes
 the following updates:
 
 - Linux v6.6.10
@@ -77,13 +77,13 @@ the following updates:
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/zynq_microzed_defconfig | 8 ++++----
+ configs/zynq_zc702_defconfig | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index 8fb9bc49dc..c6ca5a6244 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
+diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
+index 84c8843ced..9e37678d9b 100644
+--- a/configs/zynq_zc702_defconfig
++++ b/configs/zynq_zc702_defconfig
 @@ -2,26 +2,26 @@ BR2_arm=y
  BR2_cortex_a9=y
  BR2_ARM_ENABLE_NEON=y
@@ -102,8 +102,8 @@ index 8fb9bc49dc..c6ca5a6244 100644
  BR2_LINUX_KERNEL_UIMAGE=y
  BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-microzed"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-microzed"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc702"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zc702"
  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  BR2_TARGET_ROOTFS_EXT2=y
  BR2_TARGET_ROOTFS_EXT2_4=y
@@ -113,7 +113,7 @@ index 8fb9bc49dc..c6ca5a6244 100644
 -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-microzed"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc702"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
 _______________________________________________
 buildroot mailing list
