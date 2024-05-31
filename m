@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3122DC25B7E
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 12:22:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD31C25B75
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 12:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5B45606CF;
-	Fri, 31 May 2024 12:22:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3F296117B;
+	Fri, 31 May 2024 12:22:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KshFdsGYzT91; Fri, 31 May 2024 12:22:44 +0000 (UTC)
+ id uLkyOM2uaDuH; Fri, 31 May 2024 12:22:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CF0D61187
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDD1561192
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CF0D61187;
-	Fri, 31 May 2024 12:22:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDD1561192;
+	Fri, 31 May 2024 12:22:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E22401D5203
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F2E111D5215
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9414184547
+ by smtp1.osuosl.org (Postfix) with ESMTP id A74E184546
  for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZCwGsDjoHlDs for <buildroot@lists.busybox.net>;
- Fri, 31 May 2024 12:22:21 +0000 (UTC)
+ id Q5eIVJMfeRjG for <buildroot@lists.busybox.net>;
+ Fri, 31 May 2024 12:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8067D84546
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BAB584548
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8067D84546
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BAB584548
  for <buildroot@buildroot.org>; Fri, 31 May 2024 12:22:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6192087807; Fri, 31 May 2024 12:22:21 +0000 (UTC)
+ id 9924687806; Fri, 31 May 2024 12:22:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 14:00:14 +0200
+Date: Fri, 31 May 2024 14:20:24 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a13aca12af814b789884ae84360b2397da9c84ca
-X-Git-Newrev: 2770ab249cae186511b134dcc6196f8fa47163b6
+X-Git-Oldrev: 622d3b25307bdc6db74628515be7f7b244f4bf77
+X-Git-Newrev: b574b0b9e6d076e25a3d67e8f4bddcd690ef2b1f
 X-Patchwork-Hint: ignore
-Message-Id: <20240531122221.6192087807@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/zynq_zc702_defconfig:
- bump to xilinx-v2024.1
+Message-Id: <20240531122221.9924687806@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/zynq/patches: remove
+ xilinx 6.1.70 hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,56 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2770ab249cae186511b134dcc6196f8fa47163b6
+commit: https://git.buildroot.net/buildroot/commit/?id=b574b0b9e6d076e25a3d67e8f4bddcd690ef2b1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps the zynq_zc702_defconfig to xilinx-v2024.1 which includes
-the following updates:
-
-- Linux v6.6.10
-- U-Boot v2024.01
+Now that the zynq_* defconfigs have migrated to xilinx_2024.1, remove the
+older hashes.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/zynq_zc702_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ board/zynq/patches/linux/linux.hash | 1 -
+ board/zynq/patches/uboot/uboot.hash | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
-index 84c8843ced..9e37678d9b 100644
---- a/configs/zynq_zc702_defconfig
-+++ b/configs/zynq_zc702_defconfig
-@@ -2,26 +2,26 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_GLOBAL_PATCH_DIR="board/zynq/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_merge_6.1.70)/xlnx_rebase_v6.1_LTS_merge_6.1.70.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc702"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zc702"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc702"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/board/zynq/patches/linux/linux.hash b/board/zynq/patches/linux/linux.hash
+index db57012f98..d85f773478 100644
+--- a/board/zynq/patches/linux/linux.hash
++++ b/board/zynq/patches/linux/linux.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  56acddefc6f6fdc00df5b75ceb4f86a9d0af9a4fef78cf57f9f2c274b22f006f  xlnx_rebase_v6.1_LTS_merge_6.1.70.tar.gz
+ sha256  ea85988e66b9a2e19ccd76d0f5f5e657988a873fed292160917712f45605a805  xlnx_rebase_v6.6_LTS_2024.1.tar.gz
+diff --git a/board/zynq/patches/uboot/uboot.hash b/board/zynq/patches/uboot/uboot.hash
+index 516707bf26..a5ab9fae05 100644
+--- a/board/zynq/patches/uboot/uboot.hash
++++ b/board/zynq/patches/uboot/uboot.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  32a997a748697ff27e5e6db8edaff5ba893077214bc18b5267daff0b708dab53  xlnx_rebase_v2023.01_2023.2.tar.gz
+ sha256  58e391a001d9d8ed347ab3258ff7c8435c866b1ff2b2c22ebc95af592444c0f5  xlnx_rebase_v2024.01_2024.1.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
