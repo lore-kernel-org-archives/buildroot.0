@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 325CCC25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 17:35:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ED5CC25B75
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 17:35:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F35724245B;
-	Fri, 31 May 2024 17:35:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51DFC4245C;
+	Fri, 31 May 2024 17:35:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8yCsajoQRo48; Fri, 31 May 2024 17:35:42 +0000 (UTC)
+ id NJrIANmwiorL; Fri, 31 May 2024 17:35:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84F5642452
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D03F4245D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84F5642452;
-	Fri, 31 May 2024 17:35:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CE2561D559E
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 17:35:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D03F4245D;
+	Fri, 31 May 2024 17:35:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D1EBE1D5597
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 17:35:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C72114172C
+ by smtp4.osuosl.org (Postfix) with ESMTP id A96EE423ED
  for <buildroot@lists.busybox.net>; Fri, 31 May 2024 17:35:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Sm1mm_LkwsZ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SNixDNBW3gqf for <buildroot@lists.busybox.net>;
  Fri, 31 May 2024 17:35:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDA834144C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4F27423C2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CDA834144C
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4F27423C2
  for <buildroot@buildroot.org>; Fri, 31 May 2024 17:35:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B9C97878FC; Fri, 31 May 2024 17:35:33 +0000 (UTC)
+ id 9DE79878FA; Fri, 31 May 2024 17:35:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 19:34:55 +0200
+Date: Fri, 31 May 2024 19:26:01 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e7f25b2b40e2beeac2f7fbe70fbb91cc892ed1ae
-X-Git-Newrev: 86b39fbe7ddfe716cfb67b624bf61e4e9ca1def1
+X-Git-Oldrev: 5b54a92563b536acd34f6ea54fd1161a257e2365
+X-Git-Newrev: 82efc2faa923e8881748738963be1fbe3cb2bb45
 X-Patchwork-Hint: ignore
-Message-Id: <20240531173533.B9C97878FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dhcpdump: bump to
- version 1.9
+Message-Id: <20240531173533.9DE79878FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcamera: bump to
+ version 0.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,135 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86b39fbe7ddfe716cfb67b624bf61e4e9ca1def1
+commit: https://git.buildroot.net/buildroot/commit/?id=82efc2faa923e8881748738963be1fbe3cb2bb45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Switch to an active fork (which is already used by Fedora 39)
-- Drop patch (not needed since
-  https://github.com/bbonev/dhcpdump/commit/be272278c3c3fd7fe0d30203d9047fff6b83fa44)
-- HAVE_STRSEP has been dropped since
-  https://github.com/bbonev/dhcpdump/commit/0f7c525da62e7ae928782b2beae9c5313fb972f8
-- CFLAGS and LDFLAGS must be set since
-  https://github.com/bbonev/dhcpdump/commit/6eac74e7efb88bcce9423b3a452dcaa1d48850f0
-- This bump will fix the following build failure with gcc 14 thanks to
-  https://github.com/bbonev/dhcpdump/commit/be272278c3c3fd7fe0d30203d9047fff6b83fa44:
-
-dhcpdump.c: In function 'pcap_callback':
-dhcpdump.c:153:17: error: implicit declaration of function 'strftime' [-Wimplicit-function-declaration]
-  153 |                 strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S.",
-      |                 ^~~~~~~~
-dhcpdump.c:28:1: note: include '<time.h>' or provide a declaration of 'strftime'
-   27 | #include "dhcp_options.h"
-  +++ |+#include <time.h>
-   28 |
-
-https://github.com/bbonev/dhcpdump/releases/tag/v1.9
-
-Fixes:
- - http://autobuild.buildroot.org/results/9e559d634ac4e06f74f7b9e0402e45209aef2952
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  1 -
- package/dhcpdump/0001-use-non-bsd-structures.patch | 23 ----------------------
- package/dhcpdump/Config.in                         |  2 +-
- package/dhcpdump/dhcpdump.hash                     |  2 +-
- package/dhcpdump/dhcpdump.mk                       | 13 ++++++------
- 5 files changed, 8 insertions(+), 33 deletions(-)
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8f5fc0a476..543b6f33cf 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -533,7 +533,6 @@ package/dhcp/S80dhcp-relay Shellcheck lib_sysv.Variables
- package/dhcp/S80dhcp-server Shellcheck lib_sysv.Variables
- package/dhcp/dhclient-script Shellcheck lib_shellscript.TrailingSpace
- package/dhcpcd/S41dhcpcd lib_sysv.Indent lib_sysv.Variables
--package/dhcpdump/0001-use-non-bsd-structures.patch lib_patch.Upstream
- package/dhrystone/0001-cmdline-nruns.patch lib_patch.Sob lib_patch.Upstream
- package/dhrystone/0002-HZ.patch lib_patch.Sob lib_patch.Upstream
- package/dhrystone/0003-exit.patch lib_patch.Sob lib_patch.Upstream
-diff --git a/package/dhcpdump/0001-use-non-bsd-structures.patch b/package/dhcpdump/0001-use-non-bsd-structures.patch
-deleted file mode 100644
-index 40115fb640..0000000000
---- a/package/dhcpdump/0001-use-non-bsd-structures.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--The udphdr structure has uh_* fields when _FAVOR_BSD is
--defined. Otherwise, the fields are just named source, dest, len and
--check. See <netinet/udp.h>.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: dhcpdump-1.8/dhcpdump.c
--===================================================================
----- dhcpdump-1.8.orig/dhcpdump.c	2011-05-17 20:20:46.506980003 +0200
--+++ dhcpdump-1.8/dhcpdump.c	2011-05-17 20:20:59.338979999 +0200
--@@ -163,10 +163,10 @@
-- 	strcpy(ip_origin, (u_char *)inet_ntoa(ip->ip_src));
-- 	strcpy(ip_destination, (u_char *)inet_ntoa(ip->ip_dst));
-- 
---	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->uh_ulen)))
--+	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->len)))
-- 		return;
-- 
---	printdata((u_char *)(sp + offset), ntohs(udp->uh_ulen));
--+	printdata((u_char *)(sp + offset), ntohs(udp->len));
-- }
-- 
-- // check for matching CHADDR (Peter Apian-Bennewitz <apian@ise.fhg.de>)
-diff --git a/package/dhcpdump/Config.in b/package/dhcpdump/Config.in
-index e0abe040fc..30e42928e4 100644
---- a/package/dhcpdump/Config.in
-+++ b/package/dhcpdump/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_DHCPDUMP
- 	help
- 	  A tool for monitoring dhcp requests using tcpdump.
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 1ae74b3b18..1566356b99 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,4 @@
+-sha256  f9c3e949f9d6a42e29322833e57a0e6e8c54655507c820636470ea597e767fd8  libcamera-v0.2.0-git4.tar.gz
++sha256  1e0a3feff93577a30bcd4e67aa4c1969aecabcd90f78f540a637bb77553c5a7d  libcamera-v0.3.0-git4.tar.gz
  
--	  http://www.mavetju.org/unix/general.php
-+	  https://github.com/bbonev/dhcpdump
-diff --git a/package/dhcpdump/dhcpdump.hash b/package/dhcpdump/dhcpdump.hash
-index a24db5b275..fdf3243ad1 100644
---- a/package/dhcpdump/dhcpdump.hash
-+++ b/package/dhcpdump/dhcpdump.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6d5eb9418162fb738bc56e4c1682ce7f7392dd96e568cc996e44c28de7f77190  dhcpdump-1.8.tar.gz
-+sha256  3658ac21cc33e79e72bed070454e49c543017991cb6c37f4253c85e9176869d1  dhcpdump-1.9.tar.xz
- sha256  bab6ca76b7e93885396513689b1248dfb0e8fd662695b8bd1b26784ef71a0192  LICENSE
-diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
-index ec9571c0af..21cbd56b9c 100644
---- a/package/dhcpdump/dhcpdump.mk
-+++ b/package/dhcpdump/dhcpdump.mk
-@@ -4,8 +4,9 @@
- #
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index eecbaa44b9..dfcd340b75 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--DHCPDUMP_VERSION = 1.8
--DHCPDUMP_SITE = http://www.mavetju.org/download
-+DHCPDUMP_VERSION = 1.9
-+DHCPDUMP_SOURCE = dhcpdump-$(DHCPDUMP_VERSION).tar.xz
-+DHCPDUMP_SITE = https://github.com/bbonev/dhcpdump/releases/download/v$(DHCPDUMP_VERSION)
- DHCPDUMP_DEPENDENCIES = libpcap
- DHCPDUMP_LICENSE = BSD-2-Clause
- DHCPDUMP_LICENSE_FILES = LICENSE
-@@ -15,12 +16,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
- DHCPDUMP_LIBS += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
- endif
- 
--# glibc, uclibc and musl have strsep()
--DHCPDUMP_CFLAGS = $(TARGET_CFLAGS) -DHAVE_STRSEP
--
- define DHCPDUMP_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(DHCPDUMP_CFLAGS) \
--		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
- endef
- 
- define DHCPDUMP_INSTALL_TARGET_CMDS
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = v0.2.0
++LIBCAMERA_VERSION = v0.3.0
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
