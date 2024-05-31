@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BEF1C25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 15:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5790C25B75
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 15:34:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D7D6400DC;
-	Fri, 31 May 2024 15:34:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B8C840B84;
+	Fri, 31 May 2024 15:34:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id plHsesF7B-Px; Fri, 31 May 2024 15:34:06 +0000 (UTC)
+ id emrMhs1qe3OL; Fri, 31 May 2024 15:34:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FF8240B75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB8574172F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FF8240B75;
-	Fri, 31 May 2024 15:34:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 036631D5496
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB8574172F;
+	Fri, 31 May 2024 15:34:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 32A8A1D54A5
  for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:34:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E476B606F3
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:34:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B78F40B75
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:34:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yOLULQOVMJVN for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k1cHm7QDaHgU for <buildroot@lists.busybox.net>;
  Fri, 31 May 2024 15:34:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C8DD605E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C9D6400DC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C8DD605E3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C9D6400DC
  for <buildroot@buildroot.org>; Fri, 31 May 2024 15:34:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E01682684; Fri, 31 May 2024 15:34:04 +0000 (UTC)
+ id 27AD382B92; Fri, 31 May 2024 15:34:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 17:16:46 +0200
+Date: Fri, 31 May 2024 17:17:34 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: f9b33bfacb968bd3e068e915eb44e79606225024
-X-Git-Newrev: a513846df7cbc6f2390bf0dbc23bbccbb7980474
+X-Git-Oldrev: a513846df7cbc6f2390bf0dbc23bbccbb7980474
+X-Git-Newrev: a103e3dca826c8cbdd512308db03b0f30b66067f
 X-Patchwork-Hint: ignore
-Message-Id: <20240531153404.0E01682684@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libjwt: security
- bump to version 1.17.0
+Message-Id: <20240531153404.27AD382B92@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add
+ ethtool runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,55 +65,116 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a513846df7cbc6f2390bf0dbc23bbccbb7980474
+commit: https://git.buildroot.net/buildroot/commit/?id=a103e3dca826c8cbdd512308db03b0f30b66067f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-- Use official tarball and so drop autoreconf
-- Update hash of LICENSE file, verbatim copy of the current MPL 2.0 with
-  https://github.com/benmcollins/libjwt/commit/ebebb5027f37a85c40c072a02681e206d31875ca
-- Fix CVE-2024-25189: libjwt 1.15.3 uses strcmp (which is not constant
-  time) to verify authentication, which makes it easier to bypass
-  authentication via a timing side channel.
-
-https://github.com/benmcollins/libjwt/compare/v1.15.3...v1.17.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c65639ebd509cc6a9f6a616b6ef01a85ba32aff0)
+(cherry picked from commit 0623c53054e478bf6faa68a3b95e4e6ae0a84ee0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libjwt/libjwt.hash | 4 ++--
- package/libjwt/libjwt.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ DEVELOPERS                                         |  2 +
+ support/testing/tests/package/test_ethtool.py      | 71 ++++++++++++++++++++++
+ .../package/test_ethtool/linux-e1000e.fragment     |  1 +
+ 3 files changed, 74 insertions(+)
 
-diff --git a/package/libjwt/libjwt.hash b/package/libjwt/libjwt.hash
-index 47e8b2c506..adc32c3a26 100644
---- a/package/libjwt/libjwt.hash
-+++ b/package/libjwt/libjwt.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  cb2fd95123689e7d209a3a8c060e02f68341c9a5ded524c0cd881a8cd20d711f  libjwt-1.15.3.tar.gz
--sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-+sha256  b8b257da9b64ba9075fce3a3f670ae02dee7fc95ab7009a2e1ad60905e3f8d48  libjwt-1.17.0.tar.bz2
-+sha256  3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04  LICENSE
-diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
-index 8929904d10..f143ba4b62 100644
---- a/package/libjwt/libjwt.mk
-+++ b/package/libjwt/libjwt.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--LIBJWT_VERSION = 1.15.3
--LIBJWT_SITE = $(call github,benmcollins,libjwt,v$(LIBJWT_VERSION))
-+LIBJWT_VERSION = 1.17.0
-+LIBJWT_SITE = https://github.com/benmcollins/libjwt/releases/download/v$(LIBJWT_VERSION)
-+LIBJWT_SOURCE = libjwt-$(LIBJWT_VERSION).tar.bz2
- LIBJWT_DEPENDENCIES = host-pkgconf jansson
--LIBJWT_AUTORECONF = YES
- LIBJWT_INSTALL_STAGING = YES
- LIBJWT_LICENSE = MPL-2.0
- LIBJWT_LICENSE_FILES = LICENSE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6a1ec436ff..cc9bac809b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1772,6 +1772,8 @@ F:	support/testing/tests/package/test_ddrescue.py
+ F:	support/testing/tests/package/test_ddrescue/
+ F:	support/testing/tests/package/test_dos2unix.py
+ F:	support/testing/tests/package/test_ed.py
++F:	support/testing/tests/package/test_ethtool.py
++F:	support/testing/tests/package/test_ethtool/
+ F:	support/testing/tests/package/test_file.py
+ F:	support/testing/tests/package/test_file/
+ F:	support/testing/tests/package/test_fluidsynth.py
+diff --git a/support/testing/tests/package/test_ethtool.py b/support/testing/tests/package/test_ethtool.py
+new file mode 100644
+index 0000000000..7a2627c6e9
+--- /dev/null
++++ b/support/testing/tests/package/test_ethtool.py
+@@ -0,0 +1,71 @@
++import os
++
++import infra.basetest
++
++
++class TestEthtool(infra.basetest.BRTest):
++    # This ethtool test uses an emulated Intel e1000e adapted (which
++    # is well supported by Qemu, the Kernel and ethtool). We are not
++    # using the usual virtio_net because it's not supporting some
++    # ethtool features like adapter testing. For that reason, we need
++    # to compile a Kernel.
++    kernel_fragment = \
++        infra.filepath("tests/package/test_ethtool/linux-e1000e.fragment")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.27"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
++        BR2_PACKAGE_ETHTOOL=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
++                           options=["-M", "virt",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "256M",
++                                    "-netdev", "user,id=test_net",
++                                    "-net", "nic,model=e1000e,netdev=test_net",
++                                    "-drive", f"file={drive},if=virtio,format=raw"])
++        self.emulator.login()
++
++        # We check the program can run.
++        self.assertRunOk("ethtool --version")
++
++        # We check a simple query runs correctly.
++        self.assertRunOk("ethtool eth0")
++
++        # We query the driver name and check it's the expected e1000e.
++        out, ret = self.emulator.run("ethtool -i eth0")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "driver: e1000e")
++
++        # We request an adapter online self test.
++        self.assertRunOk("ethtool -t eth0 online", timeout=30)
++
++        # We query offload parameters and check TSO are enabled (this
++        # is the driver default).
++        out, ret = self.emulator.run("ethtool -k eth0")
++        self.assertEqual(ret, 0)
++        self.assertIn("tcp-segmentation-offload: on", out)
++
++        # We request to disable TSO.
++        self.assertRunOk("ethtool -K eth0 tcp-segmentation-offload off")
++
++        # We check again. TSO should now be disabled.
++        out, ret = self.emulator.run("ethtool -k eth0")
++        self.assertEqual(ret, 0)
++        self.assertIn("tcp-segmentation-offload: off", out)
+diff --git a/support/testing/tests/package/test_ethtool/linux-e1000e.fragment b/support/testing/tests/package/test_ethtool/linux-e1000e.fragment
+new file mode 100644
+index 0000000000..cc3fe0047e
+--- /dev/null
++++ b/support/testing/tests/package/test_ethtool/linux-e1000e.fragment
+@@ -0,0 +1 @@
++CONFIG_E1000E=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
