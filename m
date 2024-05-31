@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8BC7C27C4F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EB7EC27C79
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 874E561019;
-	Thu, 13 Jun 2024 10:07:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E78561075;
+	Thu, 13 Jun 2024 10:07:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 21ChM-0Z6pm5; Thu, 13 Jun 2024 10:07:29 +0000 (UTC)
+ id N_3R2q43UXGz; Thu, 13 Jun 2024 10:07:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 956F661062
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F0F360ED3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 956F661062;
-	Thu, 13 Jun 2024 10:07:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F0F360ED3;
+	Thu, 13 Jun 2024 10:07:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 106241BF354
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E233D1BF354
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54315413E4
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D3777413EA
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6ayG6zWeSbkV for <buildroot@lists.busybox.net>;
- Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ id TtNyOk6SQZHo for <buildroot@lists.busybox.net>;
+ Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E46D413EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C47BD413E6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E46D413EF
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C47BD413E6
+ for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A9B687F56; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id B9A9A87F56; Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 1 Jun 2024 21:41:30 +0200
+Date: Fri, 31 May 2024 19:26:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 363a0fb1461aaeb6bb1185f231bee19f513a8c52
-X-Git-Newrev: a0d47a69916e7e143059ee21d6b70a5a65abfefc
+X-Git-Oldrev: 5b54a92563b536acd34f6ea54fd1161a257e2365
+X-Git-Newrev: 82efc2faa923e8881748738963be1fbe3cb2bb45
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100459.6A9B687F56@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libfribidi: bump to version 1.0.14
+Message-Id: <20240613100458.B9A9A87F56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera: bump to version 0.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0d47a69916e7e143059ee21d6b70a5a65abfefc
+commit: https://git.buildroot.net/buildroot/commit/?id=82efc2faa923e8881748738963be1fbe3cb2bb45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfribidi/libfribidi.hash | 2 +-
- package/libfribidi/libfribidi.mk   | 2 +-
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
-index 9187112cee..b37fb92236 100644
---- a/package/libfribidi/libfribidi.hash
-+++ b/package/libfribidi/libfribidi.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7fa16c80c81bd622f7b198d31356da139cc318a63fc7761217af4130903f54a2  fribidi-1.0.13.tar.xz
-+sha256  76ae204a7027652ac3981b9fa5817c083ba23114340284c58e756b259cd2259a  fribidi-1.0.14.tar.xz
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index ba0859c93d..7c6d32fb76 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 1ae74b3b18..1566356b99 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,4 @@
+-sha256  f9c3e949f9d6a42e29322833e57a0e6e8c54655507c820636470ea597e767fd8  libcamera-v0.2.0-git4.tar.gz
++sha256  1e0a3feff93577a30bcd4e67aa4c1969aecabcd90f78f540a637bb77553c5a7d  libcamera-v0.3.0-git4.tar.gz
+ 
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index eecbaa44b9..dfcd340b75 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBFRIBIDI_VERSION = 1.0.13
-+LIBFRIBIDI_VERSION = 1.0.14
- LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.xz
- LIBFRIBIDI_SITE = https://github.com/fribidi/fribidi/releases/download/v$(LIBFRIBIDI_VERSION)
- LIBFRIBIDI_LICENSE = LGPL-2.1+
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = v0.2.0
++LIBCAMERA_VERSION = v0.3.0
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
