@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 007E9C27C75
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:05:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4B48C27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:05:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C29A66102E;
-	Thu, 13 Jun 2024 10:05:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8372D61036;
+	Thu, 13 Jun 2024 10:05:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2chYRGAvwxXx; Thu, 13 Jun 2024 10:05:29 +0000 (UTC)
+ id E3KFMV5VYr1u; Thu, 13 Jun 2024 10:05:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B047C61031
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0A666103C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B047C61031;
-	Thu, 13 Jun 2024 10:05:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1A9641BF966
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0A666103C;
+	Thu, 13 Jun 2024 10:05:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 122611BF354
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 89D97413F0
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C7AC60ECF
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x84UA_ANw9jV for <buildroot@lists.busybox.net>;
- Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1PhCQ-9fN2yD for <buildroot@lists.busybox.net>;
+ Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EF82413DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5A5160EB9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7EF82413DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5A5160EB9
  for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C76587F56; Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
+ id D24F287F30; Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 14:17:44 +0200
+Date: Fri, 31 May 2024 19:34:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2770ab249cae186511b134dcc6196f8fa47163b6
-X-Git-Newrev: 3e0cedb2ab072ba4cf5b39b64448e93e3e36c894
+X-Git-Oldrev: e7f25b2b40e2beeac2f7fbe70fbb91cc892ed1ae
+X-Git-Newrev: 86b39fbe7ddfe716cfb67b624bf61e4e9ca1def1
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100458.6C76587F56@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynq_zc706_defconfig: bump to
- xilinx-v2024.1
+Message-Id: <20240613100458.D24F287F30@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dhcpdump: bump to version 1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,56 +64,135 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e0cedb2ab072ba4cf5b39b64448e93e3e36c894
+commit: https://git.buildroot.net/buildroot/commit/?id=86b39fbe7ddfe716cfb67b624bf61e4e9ca1def1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps the zynq_zc706_defconfig to xilinx-v2024.1 which includes
-the following updates:
+- Switch to an active fork (which is already used by Fedora 39)
+- Drop patch (not needed since
+  https://github.com/bbonev/dhcpdump/commit/be272278c3c3fd7fe0d30203d9047fff6b83fa44)
+- HAVE_STRSEP has been dropped since
+  https://github.com/bbonev/dhcpdump/commit/0f7c525da62e7ae928782b2beae9c5313fb972f8
+- CFLAGS and LDFLAGS must be set since
+  https://github.com/bbonev/dhcpdump/commit/6eac74e7efb88bcce9423b3a452dcaa1d48850f0
+- This bump will fix the following build failure with gcc 14 thanks to
+  https://github.com/bbonev/dhcpdump/commit/be272278c3c3fd7fe0d30203d9047fff6b83fa44:
 
-- Linux v6.6.10
-- U-Boot v2024.01
+dhcpdump.c: In function 'pcap_callback':
+dhcpdump.c:153:17: error: implicit declaration of function 'strftime' [-Wimplicit-function-declaration]
+  153 |                 strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S.",
+      |                 ^~~~~~~~
+dhcpdump.c:28:1: note: include '<time.h>' or provide a declaration of 'strftime'
+   27 | #include "dhcp_options.h"
+  +++ |+#include <time.h>
+   28 |
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+https://github.com/bbonev/dhcpdump/releases/tag/v1.9
+
+Fixes:
+ - http://autobuild.buildroot.org/results/9e559d634ac4e06f74f7b9e0402e45209aef2952
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/zynq_zc706_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                                |  1 -
+ package/dhcpdump/0001-use-non-bsd-structures.patch | 23 ----------------------
+ package/dhcpdump/Config.in                         |  2 +-
+ package/dhcpdump/dhcpdump.hash                     |  2 +-
+ package/dhcpdump/dhcpdump.mk                       | 13 ++++++------
+ 5 files changed, 8 insertions(+), 33 deletions(-)
 
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index e22ba7a3d9..9ccf23f6e1 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -2,26 +2,26 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_GLOBAL_PATCH_DIR="board/zynq/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_merge_6.1.70)/xlnx_rebase_v6.1_LTS_merge_6.1.70.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc706"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zc706"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynq-zc706"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 8f5fc0a476..543b6f33cf 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -533,7 +533,6 @@ package/dhcp/S80dhcp-relay Shellcheck lib_sysv.Variables
+ package/dhcp/S80dhcp-server Shellcheck lib_sysv.Variables
+ package/dhcp/dhclient-script Shellcheck lib_shellscript.TrailingSpace
+ package/dhcpcd/S41dhcpcd lib_sysv.Indent lib_sysv.Variables
+-package/dhcpdump/0001-use-non-bsd-structures.patch lib_patch.Upstream
+ package/dhrystone/0001-cmdline-nruns.patch lib_patch.Sob lib_patch.Upstream
+ package/dhrystone/0002-HZ.patch lib_patch.Sob lib_patch.Upstream
+ package/dhrystone/0003-exit.patch lib_patch.Sob lib_patch.Upstream
+diff --git a/package/dhcpdump/0001-use-non-bsd-structures.patch b/package/dhcpdump/0001-use-non-bsd-structures.patch
+deleted file mode 100644
+index 40115fb640..0000000000
+--- a/package/dhcpdump/0001-use-non-bsd-structures.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-The udphdr structure has uh_* fields when _FAVOR_BSD is
+-defined. Otherwise, the fields are just named source, dest, len and
+-check. See <netinet/udp.h>.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: dhcpdump-1.8/dhcpdump.c
+-===================================================================
+---- dhcpdump-1.8.orig/dhcpdump.c	2011-05-17 20:20:46.506980003 +0200
+-+++ dhcpdump-1.8/dhcpdump.c	2011-05-17 20:20:59.338979999 +0200
+-@@ -163,10 +163,10 @@
+- 	strcpy(ip_origin, (u_char *)inet_ntoa(ip->ip_src));
+- 	strcpy(ip_destination, (u_char *)inet_ntoa(ip->ip_dst));
+- 
+--	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->uh_ulen)))
+-+	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->len)))
+- 		return;
+- 
+--	printdata((u_char *)(sp + offset), ntohs(udp->uh_ulen));
+-+	printdata((u_char *)(sp + offset), ntohs(udp->len));
+- }
+- 
+- // check for matching CHADDR (Peter Apian-Bennewitz <apian@ise.fhg.de>)
+diff --git a/package/dhcpdump/Config.in b/package/dhcpdump/Config.in
+index e0abe040fc..30e42928e4 100644
+--- a/package/dhcpdump/Config.in
++++ b/package/dhcpdump/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_DHCPDUMP
+ 	help
+ 	  A tool for monitoring dhcp requests using tcpdump.
+ 
+-	  http://www.mavetju.org/unix/general.php
++	  https://github.com/bbonev/dhcpdump
+diff --git a/package/dhcpdump/dhcpdump.hash b/package/dhcpdump/dhcpdump.hash
+index a24db5b275..fdf3243ad1 100644
+--- a/package/dhcpdump/dhcpdump.hash
++++ b/package/dhcpdump/dhcpdump.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6d5eb9418162fb738bc56e4c1682ce7f7392dd96e568cc996e44c28de7f77190  dhcpdump-1.8.tar.gz
++sha256  3658ac21cc33e79e72bed070454e49c543017991cb6c37f4253c85e9176869d1  dhcpdump-1.9.tar.xz
+ sha256  bab6ca76b7e93885396513689b1248dfb0e8fd662695b8bd1b26784ef71a0192  LICENSE
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+index ec9571c0af..21cbd56b9c 100644
+--- a/package/dhcpdump/dhcpdump.mk
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-DHCPDUMP_VERSION = 1.8
+-DHCPDUMP_SITE = http://www.mavetju.org/download
++DHCPDUMP_VERSION = 1.9
++DHCPDUMP_SOURCE = dhcpdump-$(DHCPDUMP_VERSION).tar.xz
++DHCPDUMP_SITE = https://github.com/bbonev/dhcpdump/releases/download/v$(DHCPDUMP_VERSION)
+ DHCPDUMP_DEPENDENCIES = libpcap
+ DHCPDUMP_LICENSE = BSD-2-Clause
+ DHCPDUMP_LICENSE_FILES = LICENSE
+@@ -15,12 +16,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ DHCPDUMP_LIBS += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
+ endif
+ 
+-# glibc, uclibc and musl have strsep()
+-DHCPDUMP_CFLAGS = $(TARGET_CFLAGS) -DHAVE_STRSEP
+-
+ define DHCPDUMP_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(DHCPDUMP_CFLAGS) \
+-		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
++		LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
+ endef
+ 
+ define DHCPDUMP_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
