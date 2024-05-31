@@ -4,72 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E08AC25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 11:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA79DC25B75
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 12:00:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C89EB416C1;
-	Fri, 31 May 2024 11:49:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86E0F41A73;
+	Fri, 31 May 2024 12:00:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 75923AKWN7Qr; Fri, 31 May 2024 11:49:21 +0000 (UTC)
+ id XXBSa8HtHdiF; Fri, 31 May 2024 12:00:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82C31416DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 371B84239F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82C31416DD;
-	Fri, 31 May 2024 11:49:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A392E1D2D06
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 11:49:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 371B84239F;
+	Fri, 31 May 2024 12:00:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 78A2C1D51C3
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:00:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9CA9781911
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 11:49:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64C7E40B3D
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:00:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m-nw8whHWBVY for <buildroot@lists.busybox.net>;
- Fri, 31 May 2024 11:49:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WFwBjQJIcpCc for <buildroot@lists.busybox.net>;
+ Fri, 31 May 2024 12:00:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 745E38132F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 745E38132F
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 745E38132F
- for <buildroot@buildroot.org>; Fri, 31 May 2024 11:49:18 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 25AF213F8B9;
- Fri, 31 May 2024 13:49:13 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 31 May 2024 13:49:12 +0200
-Date: Fri, 31 May 2024 13:49:12 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Stephan Lukits <stephan.lukits@gmail.com>
-Message-ID: <Zlm5OCJLEpDnRMki@landeda>
-References: <A5CEAE69-CA07-4771-951C-05D3B4889D05@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F1E5D409F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1E5D409F1
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F1E5D409F1
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 12:00:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 89DDD1BF203;
+ Fri, 31 May 2024 12:00:01 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sD0vQ-00Cg3E-1K;
+ Fri, 31 May 2024 14:00:00 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Neal Frager <neal.frager@amd.com>
+References: <20240531094752.3760287-1-neal.frager@amd.com>
+ <20240531094752.3760287-2-neal.frager@amd.com>
+Date: Fri, 31 May 2024 14:00:00 +0200
+In-Reply-To: <20240531094752.3760287-2-neal.frager@amd.com> (Neal Frager's
+ message of "Fri, 31 May 2024 10:47:47 +0100")
+Message-ID: <87h6eep4xr.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <A5CEAE69-CA07-4771-951C-05D3B4889D05@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1717156155;
- bh=We/xcD9Z171+G1lab9Dh6PeD6qAfM2pvHSGuE/Pmu4c=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=vTxH+0kQ3wliTGFwucV3gkLBMQwutY+Y7zvN81DRW/GRTLsaO2XmI/wfRA5OSU9qC
- I+vGcKbe2U1TGceGBwj3NZRZHIlYL4yuIxbclFhZ4R/HQRdJ/hV6+xHsXNDHAXNoIH
- FsSLkZiy4Lejz7fQIFtUR4ee7nEDfSjvtZ23DRMa0Vt0SoWKTxAYG/C/YKmv4J3jm5
- X0TMx9lKYzE5Uy6GgiKjsSyFIjaMwV3BqW42m8t0EuWvScpJeB5bN6cB9+Xv2hoa6a
- HHYDd7n6iqWI3YLiQyzZFNMagDoARAWgEuF260TokAxUCGvmC/ex5ifq4h5Xh6wmYm
- jH0K80XRuPsZg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=vTxH+0kQ
-Subject: Re: [Buildroot] [2024.02] make menuconfig fails
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 2/7] board/zynq/post-image.sh: support
+ linux 6.6 dts directory structure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,39 +70,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: martin.chabot@gmail.com, brandon.maier@collins.com, ju.o@free.fr,
+ juju@cotds.org, michal.simek@amd.com, thomas.petazzoni@bootlin.com,
+ buildroot@buildroot.org, luca.ceresoli@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Stephan, All,
+>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
 
-On 2024-05-31 13:37 +0200, Stephan Lukits spake thusly:
-> Good afternoon, on fedora 40 `make menuconfig` fails even though ncurses and its devel package is installed.
-> 
-> To fix it I changed support/kconfig/lxdialog/check-lxdialog.sh:51
-> 
-> int main() {}
-> ^^^
+ > Linux 6.6 includes a xilinx directory in the dts directory structure for zynq
+ > boards.  This patch updates the post-image.sh to match the zynqmp post-image.sh
+ > in order to support this change.
 
-Thanks for the report. That's already been fixed:
+ > Signed-off-by: Neal Frager <neal.frager@amd.com>
+ > ---
+ V1-> V2:
+ > - added this patch to support new dts dir structure
 
-  - on master:    a6210d28 kconfig/lxdialog: fix check() with GCC14
-  - on 2024.02.x: f5a347c1 kconfig/lxdialog: fix check() with GCC14
+Committed, thanks.
 
-The next rlease of either will contain that fix.
-
-Regards,
-Yann E. MORIN.
+Given that these two files are now identical I have added a patch that
+simply replaces this with a symlink to ../zynqmp/post-image.sh
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
