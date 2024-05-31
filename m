@@ -4,89 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BA7DC25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 14:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B31D7C25B75
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 15:13:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A898F41A00;
-	Fri, 31 May 2024 14:57:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 661A240152;
+	Fri, 31 May 2024 15:13:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B8d929T_kg_p; Fri, 31 May 2024 14:57:38 +0000 (UTC)
+ id wChPRC2KugNC; Fri, 31 May 2024 15:13:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5439141A69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B34B040247
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5439141A69;
-	Fri, 31 May 2024 14:57:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 730ED1D53A8
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 14:57:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B34B040247;
+	Fri, 31 May 2024 15:13:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E5BF1D5414
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:13:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D6D661147
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 14:57:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A33340247
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:13:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zThYtJpGDmo3 for <buildroot@lists.busybox.net>;
- Fri, 31 May 2024 14:57:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7w36SPvuVy5V for <buildroot@lists.busybox.net>;
+ Fri, 31 May 2024 15:13:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::112a; helo=mail-yw1-x112a.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A89D26111D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A89D26111D
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com
- [IPv6:2607:f8b0:4864:20::112a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A89D26111D
- for <buildroot@buildroot.org>; Fri, 31 May 2024 14:57:35 +0000 (UTC)
-Received: by mail-yw1-x112a.google.com with SMTP id
- 00721157ae682-627ecda47d0so21819427b3.2
- for <buildroot@buildroot.org>; Fri, 31 May 2024 07:57:35 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9FF8640152
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FF8640152
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9FF8640152
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 15:13:31 +0000 (UTC)
+Received: by mail-lf1-x134.google.com with SMTP id
+ 2adb3069b0e04-52b8bb0c059so757609e87.0
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 08:13:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717167454; x=1717772254;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ d=1e100.net; s=20230601; t=1717168409; x=1717773209;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=mIWLVLpXy7mhfqKmEFvwFEpDZx14Y0fXPahfc5pE9uU=;
- b=kDeVY/LucdTY1uZ33VhLZi085S7eXWIUjsq5vLGyr/LscRhulLvD5cSfJVsZvzN7JM
- SZIdxyMp6+thr3gXdf/zP6+GayUY0iS2rz8bbMYMEstPuYv0majqdaNASCDJjDxRQ6gf
- Yv6jKTEdIfcJkslWxfDSfPNyUHNMfDqRyq7nzROyDy6OiC5sPHhSIMh2j5TCuxGd0E+j
- PrbP4BDWMxbW0pmqKqc1iP6VoNAT1e8MIKuKArtQCIEPY0oMMx3XMRHTHAGVAR2xph4X
- p8u7us1DXgJm5mGqNqCMXCMZF3qZhoSIroq6Uaf0Q1ZiDo4fJrUOL/HSbAAu3EP+Cnrn
- AxFw==
-X-Gm-Message-State: AOJu0YyJKbNUY8tpQSzS+VwnIZKjNmha5eKGHTfFNL5DNBvVBb5S+Hm7
- ZmGBQ527lMfONFlUc0ODgEm6nd3b529iPG1qxNMa2gh/ZEXel9kKjrc5As4v9N3jNz7+mnDNv4M
- yXXxBUmFqk6JwdfBq83PwYky7E79hI//us01K34c9a9F+P+cB0K8=
-X-Google-Smtp-Source: AGHT+IHx5U3emm8Nu0d1Z8T4p8sJbDbm1dbASTateXiPCZXLuwpuYtzHNEcelfJgviHmKUQ+2WfOIrzGnuZsKUP0vNk=
-X-Received: by 2002:a81:5201:0:b0:627:ddef:34ab with SMTP id
- 00721157ae682-62c7971dfc9mr18861627b3.24.1717167454098; Fri, 31 May 2024
- 07:57:34 -0700 (PDT)
+ bh=lvzzTiYtmJUGnRYj9kd07DF9+rfWDlFnFItLfNydfOM=;
+ b=qpMzv8oCb9MmKpS4KHntOcIwbzUWMFIrYhNHqosrsiqxal6KBeCaI0eRS8f0qZHoNE
+ 4uQvyHFRCZdm+LbUE+Gfr6oymhh2iJBimkUuecpRvzZ1/uA+aiqxymI5BvurTKEypLdV
+ jV+uAvWhJESIHKZhUy+ka7SmGEq1m1wAzGOHuOCT91Q04SRvUtBYrI/awWub5ZP+PnAh
+ O37Ruy5qGh2vOx5bYQS7qGlLnwU+YQdOOvJ7EI8IftjY6YOcgRVd4nuPqRm5V3D8/7YS
+ w+JdY2RzgXGrZPAP/Dyp+D0+OTfUTL9iRKbnvh+Fw2myxj+u3SB/336dKJr91FaJSoXH
+ fEvg==
+X-Gm-Message-State: AOJu0Yxy7niznya7dEyb4mM/zxfBQtUlfo13nNMDI7pJe9M02D5vn6nL
+ 9+tSAl6Xy6WkLAe9fhWJjEHpX+u0yJsrGia6KHRX3OpSMvblQqt5wrc6VhFE
+X-Google-Smtp-Source: AGHT+IGlQwcRSnvZDkQcZ+uZbaA21L9qNX4R5MIwWDbjN0bKrxIsN6Og8kgsEwLv/2l3wqDUQWcKcg==
+X-Received: by 2002:a05:6512:7b:b0:51d:a1ca:5f26 with SMTP id
+ 2adb3069b0e04-52b89573c20mr1623779e87.20.1717168408796; 
+ Fri, 31 May 2024 08:13:28 -0700 (PDT)
+Received: from precision7530-arch-roy.lan ([79.161.254.12])
+ by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-52b84d3f510sm362599e87.90.2024.05.31.08.13.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 31 May 2024 08:13:28 -0700 (PDT)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+X-Google-Original-From: Roy Kollen Svendsen
+ <roy.kollen.svendsen@akersolutions.com>
+To: buildroot@buildroot.org
+Date: Fri, 31 May 2024 17:13:02 +0200
+Message-ID: <20240531151325.2443323-1-roy.kollen.svendsen@akersolutions.com>
+X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20240513220328.1085629-1-roykollensvendsen@gmail.com>
+References: <20240513220328.1085629-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
-References: <20240529213751.3919280-1-dario.binacchi@amarulasolutions.com>
- <87a5k7qfjv.fsf@dell.be.48ers.dk>
-In-Reply-To: <87a5k7qfjv.fsf@dell.be.48ers.dk>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Fri, 31 May 2024 16:57:23 +0200
-Message-ID: <CABGWkvpYgwKTQzu-Kx+ydqJdEXe99Dbg_o2KTE+nWKUcAjEhbQ@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1717167454; x=1717772254;
- darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
+ d=gmail.com; s=20230601; t=1717168409; x=1717773209; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=mIWLVLpXy7mhfqKmEFvwFEpDZx14Y0fXPahfc5pE9uU=;
- b=HXeeVcXrXtTowhi5lotn27gh8ijCXTaDgpPYVCBn7W+qgFk90V66b2HNw58J5ib/hd
- QSyFbO3/8RDqlRRenzbRfAtksFoR+WZf7XFOeNDolx6Nc7Hix4gKuHRAObL0IHkHmZGn
- atbuqKY72ZPZntm+J1WPr/QXl7RYpDdLD2IHk=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=lvzzTiYtmJUGnRYj9kd07DF9+rfWDlFnFItLfNydfOM=;
+ b=a6Fp4tW5i2XnUpNwq9k7M+7Rxw3iPamm2h8Xum4/sy/Zo+g7OYHv1xUtPCIE7NVquc
+ HUOGmGoAffTDGGJMXTaAyZJp2OQ8IU/FpJdNDQ0nI01BERFnCvMttBJvckSAs48ymzEz
+ NDIBfJvt/KvCbfjj9GFVzu02qeaJOquyZ7j4r0CqA8Fj9yLfyCqyOFdBQJyAxQOsa3yf
+ J3VsjTnQ3z7ZV4TUnvCp4UEbsWib0X8Z+G1Gr50hLFBx4ziRiYjqRJBPh7JJ6nX+Bwgw
+ w51H+eMh81eQ2kB9VdsmqW5pKLiY1yplu5DPAoIE5DWDw+LjW3pl5AULx3VxqENozKPF
+ iC+w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=HXeeVcXr
-Subject: Re: [Buildroot] [PATCH v2 1/1] configs/at91sam9x5ek*_defconfig: add
- hashes for at91bootstrap3/Linux/headers/u-boot
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=a6Fp4tW5
+Subject: [Buildroot] [PATCH v5 01/14] package/qt6: bump version to 6.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,51 +105,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
- michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
+ Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUGV0ZXIsCgpPbiBUaHUsIE1heSAzMCwgMjAyNCBhdCA5OjEz4oCvUE0gUGV0ZXIgS29yc2dh
-YXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPiB3cm90ZToKPgo+ID4+Pj4+ICJEYXJpbyIgPT0gRGFy
-aW8gQmluYWNjaGkgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPiB3cml0ZXM6
-Cj4KPiAgPiBBbmQgZW5hYmxlIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVMuIFdpdGgg
-dGhpcywgd2UgY2FuIG5vdyBkcm9wIHRoZQo+ICA+IGRlZmNvbmZpZyBmcm9tIC5jaGVja3BhY2th
-Z2VpZ25vcmUuCj4KPiAgPiBGdXJ0aGVybW9yZSwgdGhlIHVzZSBvZiB0aGUgZGlyZWN0b3J5IGJv
-YXJkL2F0bWVsL2F0OTFzYW05eDVlay9wYXRjaGVzCj4gID4gZm9yIGFsbCA0IGF0OTFzYW05eDVl
-aypfZGVmY29uZmlnIGNvbmZpZ3VyYXRpb25zIGF1dG9tYXRpY2FsbHkgZml4ZXMgdGhlCj4gID4g
-TGludXggY29tcGlsYXRpb24gZmFpbHVyZSBmb3IgdGhlIGF0OTFzYW05eDVla19kZWZjb25maWcs
-Cj4gID4gYXQ5MXNhbTl4NWVrX21tY19kZWZjb25maWcsIGFuZCBhdDkxc2FtOXg1ZWtfbW1jX2Rl
-dl9kZWZjb25maWcKPiAgPiBjb25maWd1cmF0aW9ucyBhcyB3ZWxsLgo+Cj4gID4gU2lnbmVkLW9m
-Zi1ieTogRGFyaW8gQmluYWNjaGkgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29t
-Pgo+ICA+IC0tLQo+ICA+IENoYW5nZXMgdjEgLT4gdjI6Cj4gID4gLSBQdXQgdGhlIHBhdGNoZXMg
-dW5kZXIgYm9hcmQvYXRtZWwvYXQ5MXNhbTl4NWVrL3BhdGNoZXMgYW5kIHVzZSB0aGVtCj4gID4g
-ICBmb3IgYWxsIDQgY29uZmlndXJhdGlvbnMgKGkuIGUuIGF0OTFzYW05eDVla19kZWZjb25maWcs
-Cj4gID4gICBhdDkxc2FtOXg1ZWtfZGV2X2RlZmNvbmZpZywgYXQ5MXNhbTl4NWVrX21tY19kZWZj
-b25maWcgYW5kCj4gID4gICBhdDkxc2FtOXg1ZWtfbW1jX2Rldl9kZWZjb25maWcpLgo+Cj4gID4g
-KysrIGIvYm9hcmQvYXRtZWwvYXQ5MXNhbTl4NWVrL3BhdGNoZXMvdWJvb3QvdWJvb3QuaGFzaAo+
-ICA+IEBAIC0wLDAgKzEsMiBAQAo+ICA+ICsjIExvY2FsbHkgY29tcHV0ZWQKPiAgPiArc2hhMjU2
-ICBjYzcyZDZhMzZlYmY1ZjA5NzBlMTg3ODhiMWUxZGM5Yjc2YmE5MjM3ZWM2NzQ1YzZmMTZmMWIy
-ZTFkOGZiM2EwICB1Ym9vdC1saW51eDRzYW1fNi4xLWdpdDQudGFyLmd6Cj4KPiBIbW0sIGRpZCB5
-b3UgZG8gYW55dGhpbmcgc3BlY2lhbCBoZXJlPyBUaGlzIGlzIHRoZSBoYXNoIEkgZ2V0IGlmIEkg
-dXNlCj4gdGFyIDEuMzQsIGJ1dCBOT1QgaWYgSSB1c2UgdGhlIGNvcnJlY3QgdmVyc2lvbiwgMS4z
-NS4KCkkgbXVzdCBoYXZlIG1hZGUgYSBtaXN0YWtlLiBJIGRlZmluaXRlbHkgaGFkIHByb2JsZW1z
-IGRvd25sb2FkaW5nIHNvbWUKcGFja2FnZXMsIHNvIEkKZGlkIHNvbWUgdGVzdHMgYnkgcmV2ZXJ0
-aW5nIHZlcnNpb24gMS4zNSBvZiB0aGUgdGFyIHBhY2thZ2UuIEkgaGF2ZQpzZXZlcmFsIGJ1aWxk
-cm9vdCBkaXJlY3Rvcmllcwogb24gbXkgUEMsIGFuZCBpbiBzb21lLCBJIGhhdmUgdGhlIHdyb25n
-IHNoYTI1NnN1bSwgd2hpbGUgaW4gb3RoZXJzLCBJCmhhdmUgeW91ciBzaGEyNTZzdW0uCklmIEkg
-cmVtZW1iZXIgc29tZXRoaW5nIG1vcmUgY2VydGFpbiBhYm91dCB3aGF0IEkgZGlkLCBJIHdpbGwg
-bGV0IHlvdSBrbm93LgpTb3JyeSBmb3IgdGhlIGVycm9yLgoKVGhhbmtzIGFuZCByZWdhcmRzLApE
-YXJpbwoKPgo+IEZpeGVkIGJ5IHJ1bm5pbmcgLi91dGlscy9hZGQtY3VzdG9tLWhhc2hlcyBhbmQg
-YXBwbGllZCwgdGhhbmtzLgo+Cj4gLS0KPiBCeWUsIFBldGVyIEtvcnNnYWFyZAoKCgotLSAKCkRh
-cmlvIEJpbmFjY2hpCgpTZW5pb3IgRW1iZWRkZWQgTGludXggRGV2ZWxvcGVyCgpkYXJpby5iaW5h
-Y2NoaUBhbWFydWxhc29sdXRpb25zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwoKCkFtYXJ1bGEgU29sdXRpb25zIFNSTAoKVmlhIExlIENhbmV2YXJlIDMwLCAzMTEwMCBU
-cmV2aXNvLCBWZW5ldG8sIElUCgpULiArMzkgMDQyIDI0MyA1MzEwCmluZm9AYW1hcnVsYXNvbHV0
-aW9ucy5jb20KCnd3dy5hbWFydWxhc29sdXRpb25zLmNvbQpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+For details see [1], [2], [3], [4], [5], [6], [7], [8], [9] and [10].
+
+[1] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.0/release-note.md
+[2] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.1/release-note.md
+[3] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.2/release-note.md
+[4] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.3/release-note.md
+
+[5] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.0/release-note.md
+[6] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.1/release-note.md
+[7] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.2/release-note.md
+[8] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.3/release-note.md
+
+[9] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.0/release-note.md
+[10] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.1/release-note.md
+
+Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
+---
+Changes v4 -> v5:
+  - Bump to v6.7.1
+  - Remove CVE-patch. It is already part of v6.7.1
+
+ package/qt6/qt6.mk                             | 4 ++--
+ package/qt6/qt6base/qt6base.hash               | 4 ++--
+ package/qt6/qt6base/qt6base.mk                 | 1 -
+ package/qt6/qt6core5compat/qt6core5compat.hash | 4 ++--
+ package/qt6/qt6serialbus/qt6serialbus.hash     | 4 ++--
+ package/qt6/qt6serialport/qt6serialport.hash   | 4 ++--
+ package/qt6/qt6svg/qt6svg.hash                 | 4 ++--
+ 7 files changed, 12 insertions(+), 13 deletions(-)
+
+diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
+index 1edb252c96..ee426884f9 100644
+--- a/package/qt6/qt6.mk
++++ b/package/qt6/qt6.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-QT6_VERSION_MAJOR = 6.4
+-QT6_VERSION = $(QT6_VERSION_MAJOR).3
++QT6_VERSION_MAJOR = 6.7
++QT6_VERSION = $(QT6_VERSION_MAJOR).1
+ QT6_SOURCE_TARBALL_PREFIX = everywhere-src
+ QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
+ 
+diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
+index cb111bd405..488f4b0136 100644
+--- a/package/qt6/qt6base/qt6base.hash
++++ b/package/qt6/qt6base/qt6base.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtbase-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  5087c9e5b0165e7bc3c1a4ab176b35d0cd8f52636aea903fa377bdba00891a60  qtbase-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtbase-everywhere-src-6.7.1.tar.xz.sha256
++sha256  b7338da1bdccb4d861e714efffaa83f174dfe37e194916bfd7ec82279a6ace19  qtbase-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files
+ sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 6857725ef5..5bc5370834 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -9,7 +9,6 @@ QT6BASE_SITE = $(QT6_SITE)
+ QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
+ QT6BASE_CPE_ID_VENDOR = qt
+ QT6BASE_CPE_ID_PRODUCT = qt
+-
+ QT6BASE_CMAKE_BACKEND = ninja
+ 
+ QT6BASE_LICENSE = \
+diff --git a/package/qt6/qt6core5compat/qt6core5compat.hash b/package/qt6/qt6core5compat/qt6core5compat.hash
+index 0735df3af2..c50093c0a9 100644
+--- a/package/qt6/qt6core5compat/qt6core5compat.hash
++++ b/package/qt6/qt6core5compat/qt6core5compat.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  d4b249abb823d575eee9045c24d924ba8d1276e6be7735b287689991d998aa7a  qt5compat-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qt5compat-everywhere-src-6.7.1.tar.xz.sha256
++sha256  41c4bbe419158fc170ee3ef3ecffead506e70802109deec036d86e4244086009  qt5compat-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialbus/qt6serialbus.hash b/package/qt6/qt6serialbus/qt6serialbus.hash
+index 98c8931962..d9cf2260c1 100644
+--- a/package/qt6/qt6serialbus/qt6serialbus.hash
++++ b/package/qt6/qt6serialbus/qt6serialbus.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialbus-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  b6446a7516d1f04e561c00f9c50ce4d39dad72150f067722ba759f00b4b34366  qtserialbus-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtserialbus-everywhere-src-6.7.1.tar.xz.sha256
++sha256  513905d545b81b040fc9d7a996aa2d6fa310048c36b24919a973f2a6a555628f  qtserialbus-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialport/qt6serialport.hash b/package/qt6/qt6serialport/qt6serialport.hash
+index 9341978d86..527bc14fe4 100644
+--- a/package/qt6/qt6serialport/qt6serialport.hash
++++ b/package/qt6/qt6serialport/qt6serialport.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  5f97ad9067efa39a8a2a39fbbc1e03d2191f305733d9c2f3060f8017ecfc95de  qtserialport-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtserialport-everywhere-src-6.7.1.tar.xz.sha256
++sha256  e543a3788bfd522f2e4a111ba568214f1f5be6e55f08318c2dcd376124ea5886  qtserialport-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6svg/qt6svg.hash b/package/qt6/qt6svg/qt6svg.hash
+index bb239cb012..80924035f0 100644
+--- a/package/qt6/qt6svg/qt6svg.hash
++++ b/package/qt6/qt6svg/qt6svg.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtsvg-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  88315f886cf81898705e487cedba6e6160724359d23c518c92c333c098879a4a  qtsvg-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtsvg-everywhere-src-6.7.1.tar.xz.sha256
++sha256  3ed5b80f7228c41dd463b7a57284ed273d224d1c323c0dd78c5209635807cbce  qtsvg-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+-- 
+2.45.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
