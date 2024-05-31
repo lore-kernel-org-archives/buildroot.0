@@ -4,97 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FD59C25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 15:14:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A920C25B75
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 15:14:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E0B8F42438;
-	Fri, 31 May 2024 15:14:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C97842435;
+	Fri, 31 May 2024 15:14:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uuNrB7ao-eU7; Fri, 31 May 2024 15:14:28 +0000 (UTC)
+ id MgQU1jSKad_T; Fri, 31 May 2024 15:14:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA41542433
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7676042448
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA41542433;
-	Fri, 31 May 2024 15:14:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7676042448;
+	Fri, 31 May 2024 15:14:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9A9CF1D5418
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:13:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 77EEE1D5423
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:13:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 94E7280E3A
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:13:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6543D81200
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:13:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UgBQDZiuY1IZ for <buildroot@lists.busybox.net>;
- Fri, 31 May 2024 15:13:48 +0000 (UTC)
+ id OObvti5_j-aS for <buildroot@lists.busybox.net>;
+ Fri, 31 May 2024 15:13:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 752D080AAD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 752D080AAD
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 752D080AAD
- for <buildroot@buildroot.org>; Fri, 31 May 2024 15:13:48 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-52b82d57963so1663296e87.2
- for <buildroot@buildroot.org>; Fri, 31 May 2024 08:13:48 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E50AC810EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E50AC810EA
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E50AC810EA
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 15:13:49 +0000 (UTC)
+Received: by mail-lf1-x134.google.com with SMTP id
+ 2adb3069b0e04-52b78c65cadso2875212e87.0
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 08:13:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717168426; x=1717773226;
+ d=1e100.net; s=20230601; t=1717168428; x=1717773228;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=xlA9PzsCI1lx6lB2dOkYd0H2c7coy3dE5sTqexc3754=;
- b=nIY0u+Xy4lOzyL2EbQzrQwW0DugcK4XWCwAs89YCZ04/NaJzdBpafLDit3Ob4YoHv1
- paZrkmuGgj9CfoWu7R3kwxx+skm0Mk+7tI1osa9f/zu9ukSSuzH5r6Tplrvg1QxlKV+s
- Q2+lCwL0n1COqIXFrImpT/3FCv/WwiD7Itpb1l7PcI6KCYlkLWbLQlSuWuxLA8QShCMk
- OWTf1C7Xpt6qjCN9RwL4JG9J041+h6UoziLTAVjv1qcwJ+cwOCvgtg7bZzqDhpgVuGF9
- 5wzg11aYjenQLz/0eVAcbnPkukXz8jeIhYYd8cBLML9qPkTAnOUbR3u1VvFu89zphyke
- PO1g==
-X-Gm-Message-State: AOJu0YwS17JItUg2skTjiq3ziJl7AHsAmAbR2kPR58PWOjwSpus2CBLh
- 0wQ1dKsIXjqnnY6EElGSc9LXNmN+Cu0/uFxIMQpebDKBI7tJnC4urbYE0S6O
-X-Google-Smtp-Source: AGHT+IH5BmIETJzC+eMfC5H+F+4/zoW30Bqs6YU0dsgoreUW0Y9IG/AsShcr7wkMSEAxPsaOQnLH8w==
-X-Received: by 2002:ac2:58d8:0:b0:51b:e46c:19fd with SMTP id
- 2adb3069b0e04-52b89595e9dmr1253207e87.18.1717168424857; 
- Fri, 31 May 2024 08:13:44 -0700 (PDT)
+ bh=rcPBr5OFh0dKrnzgE0FL9isV5PfJbc4DbnhQC3hs/9M=;
+ b=M0E+74RYsiUai6CJ3EXJBFwj0ttfbByShmtbx1KO3kPxZXShu3mq5o5bGhrU8h6JNd
+ UHu8av9Dr85o4GrZAoIHVHWvwRXqyUxcjPQWCLcTECw7wsA6g5PFlsOIibWL+lKWjnqF
+ i562U5UvxUoHGprhT32zOgL1QQaaY2hF1b+pvUWWVadigkLdmYIQrczgdq59nFZcO82Q
+ oPG1k+kAYeRlDuwugzYRwFF3Wt607PAH6bV1Ehl4tpAiC4Qj/SyoJv+HIMiBfkOduMh6
+ nEsL2iiLxApW1HXgd/mTaGedRfHMcBX5ij4oYixUULtAmYEaboHWyLyj45hga5QSPfS+
+ 5L5g==
+X-Gm-Message-State: AOJu0YwyXYcL5cHbx2usyaBfQfjvFUKxc91sSgyces/5MQE7CEs658ET
+ tYQ/VYFb7vH59vFInfebunhnaqjdmnoHQf4T9Lkc1/dmUTHChKung/tWl5e4
+X-Google-Smtp-Source: AGHT+IFJHk9R82GYNzxC+2099MARj2gPADOxP94zFoDQE7AFgySuXZzmk5wp29j3loqr6nJacBLXww==
+X-Received: by 2002:a05:6512:b9d:b0:52b:8255:71d4 with SMTP id
+ 2adb3069b0e04-52b8956093emr2201331e87.3.1717168427636; 
+ Fri, 31 May 2024 08:13:47 -0700 (PDT)
 Received: from precision7530-arch-roy.lan ([79.161.254.12])
  by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-52b84d3f510sm362599e87.90.2024.05.31.08.13.44
+ 2adb3069b0e04-52b84d3f510sm362599e87.90.2024.05.31.08.13.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 31 May 2024 08:13:44 -0700 (PDT)
+ Fri, 31 May 2024 08:13:47 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 X-Google-Original-From: Roy Kollen Svendsen
  <roy.kollen.svendsen@akersolutions.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 17:13:09 +0200
-Message-ID: <20240531151325.2443323-8-roy.kollen.svendsen@akersolutions.com>
+Date: Fri, 31 May 2024 17:13:10 +0200
+Message-ID: <20240531151325.2443323-9-roy.kollen.svendsen@akersolutions.com>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20240531151325.2443323-1-roy.kollen.svendsen@akersolutions.com>
 References: <20240513220328.1085629-1-roykollensvendsen@gmail.com>
  <20240531151325.2443323-1-roy.kollen.svendsen@akersolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717168426; x=1717773226; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1717168428; x=1717773228; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=xlA9PzsCI1lx6lB2dOkYd0H2c7coy3dE5sTqexc3754=;
- b=j9s3fZ7fMmqDt1RxqDbfiWfQdS4gxQQ9LyIiD5tpYOwOwBV0X64+PNggJvv2KGpWBI
- b6tQB6EGREihT9AmhuCErSDdlxc+Da9afvoGTY84dvduBtlihTBQdzh6/5k8sWW05XcQ
- 3wlfXCYwwP54Gkd1ZKSDNb8DymRXVtPlxi+tPZXytEeQu3snswpHMty7i9zz9P1V8VLR
- uEeATuDfrje/zATah60MtF8Zr9AbUmE04k0/uzWYGc4ZmpNZuOFGGuyj+qUkgV1Bje0J
- DVINUMyBY16UAzVw/wn6hLFmFIPMFcPyie1xHLuFglrBOQp245sh04C8orXVvLAJvi3e
- JBNg==
+ bh=rcPBr5OFh0dKrnzgE0FL9isV5PfJbc4DbnhQC3hs/9M=;
+ b=kiuqijiM6GXh75feGW+lupDyal862F888XK009SX8GiYtAi6OQppEi+RjF3RtJjj9W
+ M6b/19gV9vDtjLTKx22xIMxpyAnXfW97zhq2YSalRWnQbewGVSgsTqU5+XZqmHLrCt9R
+ 8tqNaNGQh6LMGSm/f9HdEjoXsSBpmaMd+E5aNO25BwR6F2+vLSiODUGovPnQ6NA3Xfoa
+ eyHBrDUiJO/XRnW79meB2FirSKfTEMREc7FmFEm+izwRmWKrUcP8Zo5TO/Py6Z1QjzBU
+ MIXh8RCIdh31SeaSq2Bth9dOAPzanNZh3d2HWd+7VdxqakEdbYM5qBbrFvmE6neJdr1Y
+ qKTQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=j9s3fZ7f
-Subject: [Buildroot] [PATCH v5 08/14] package/qt6/qt6languageserver: new
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=kiuqijiM
+Subject: [Buildroot] [PATCH v5 09/14] package/qt6/qt6declarative: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -115,55 +114,135 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+We add the patch to avoid checking for FEATURE_ssl when FEATURE_network
+is not available. FEATURE_ssl is defined by the Qt Network module. So
+we will get the following build failure if the patch is not applied and
+FEATURE_network=ON:
+
+CMake Error at qt6base-6.7.0/cmake/QtFeature.cmake:376 (message):
+  Attempting to evaluate feature ssl but its definition is missing.  Either
+  the feature does not exist or a dependency to the module that defines it is
+  missing
+Call Stack (most recent call first):
+  qt6base-6.7.0/cmake/QtFeature.cmake:141 (qt_evaluate_feature)
+  qt6base-6.7.0/cmake/QtFeature.cmake:180 (qt_internal_evaluate_config_expression)
+  qt6base-6.7.0/cmake/QtFeature.cmake:396 (qt_evaluate_config_expression)
+  qt6base-6.7.0/cmake/QtFeature.cmake:711 (qt_evaluate_feature)
+  qt6base-6.7.0/cmake/QtFeature.cmake:680 (qt_feature_module_end)
+  src/qml/CMakeLists.txt:13 (qt_feature_evaluate_features)
+
+To avoid the following build error, we also make sure the host qt6base is
+built with Testlib enabled:
+
+CMake Error at buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelpers.cmake:684 (message):
+  Failed to find the host tool "Qt6::qmltestrunner".  It is part of the
+  Qt6QmlTools package, but the package did not contain the tool.  Make sure
+  that the host module Qml was built with all features enabled (no explicitly
+  disabled tools).
+Call Stack (most recent call first):
+  buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelpers.cmake:72 (qt_internal_find_tool)
+  tools/qmltestrunner/CMakeLists.txt:11 (qt_internal_add_tool)
+
 Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
 ---
 Changes v4 -> v5:
   - Bump to v6.7.1
 
  package/qt6/Config.in                         |  1 +
- package/qt6/qt6languageserver/Config.in       |  9 +++++
- .../qt6languageserver/qt6languageserver.hash  | 11 ++++++
- .../qt6languageserver/qt6languageserver.mk    | 34 +++++++++++++++++++
- 4 files changed, 55 insertions(+)
- create mode 100644 package/qt6/qt6languageserver/Config.in
- create mode 100644 package/qt6/qt6languageserver/qt6languageserver.hash
- create mode 100644 package/qt6/qt6languageserver/qt6languageserver.mk
+ ...1-Fix-build-with--no-feature-network.patch | 28 ++++++++++
+ package/qt6/qt6declarative/Config.in          | 24 ++++++++
+ .../qt6/qt6declarative/qt6declarative.hash    | 11 ++++
+ package/qt6/qt6declarative/qt6declarative.mk  | 56 +++++++++++++++++++
+ 5 files changed, 120 insertions(+)
+ create mode 100644 package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patch
+ create mode 100644 package/qt6/qt6declarative/Config.in
+ create mode 100644 package/qt6/qt6declarative/qt6declarative.hash
+ create mode 100644 package/qt6/qt6declarative/qt6declarative.mk
 
 diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index b7e95a6885..81682af476 100644
+index 81682af476..625134d281 100644
 --- a/package/qt6/Config.in
 +++ b/package/qt6/Config.in
 @@ -45,6 +45,7 @@ if BR2_PACKAGE_QT6
  
  source "package/qt6/qt6base/Config.in"
  source "package/qt6/qt6core5compat/Config.in"
-+source "package/qt6/qt6languageserver/Config.in"
++source "package/qt6/qt6declarative/Config.in"
+ source "package/qt6/qt6languageserver/Config.in"
  source "package/qt6/qt6serialbus/Config.in"
  source "package/qt6/qt6serialport/Config.in"
- source "package/qt6/qt6shadertools/Config.in"
-diff --git a/package/qt6/qt6languageserver/Config.in b/package/qt6/qt6languageserver/Config.in
+diff --git a/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patch b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patch
 new file mode 100644
-index 0000000000..8a54ae1911
+index 0000000000..bef5794229
 --- /dev/null
-+++ b/package/qt6/qt6languageserver/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_QT6LANGUAGESERVER
-+	bool "qt6languageserver"
++++ b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patch
+@@ -0,0 +1,28 @@
++From 8377691a0998fd84e6fc8349a5db450bf2d79164 Mon Sep 17 00:00:00 2001
++From: Tasuku Suzuki <tasuku.suzuki@signal-slot.co.jp>
++Date: Tue, 21 Nov 2023 23:58:43 +0900
++Subject: Fix build with -no-feature-network
++
++Change-Id: Ib21012301da6afb5458f707b39a9a8079d93eb93
++Reviewed-by: Ulf Hermann <ulf.hermann@qt.io>
++Upstream: https://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=8377691a0998fd84e6fc8349a5db450bf2d79164
++Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
++---
++ src/qml/configure.cmake | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/qml/configure.cmake b/src/qml/configure.cmake
++index 2d0434643a..d1ff90bd54 100644
++--- a/src/qml/configure.cmake
+++++ b/src/qml/configure.cmake
++@@ -82,7 +82,7 @@ qt_feature("qml-ssl" PUBLIC
++     SECTION "QML"
++     LABEL "QML SSL support"
++     PURPOSE "Provides ssl support in QML."
++-    CONDITION QT_FEATURE_ssl
+++    CONDITION QT_FEATURE_qml_network AND QT_FEATURE_ssl
++ )
++ 
++ # On arm and arm64 we need a specialization of cacheFlush() for each OS to be
++-- 
++cgit v1.2.3
+diff --git a/package/qt6/qt6declarative/Config.in b/package/qt6/qt6declarative/Config.in
+new file mode 100644
+index 0000000000..1daa645413
+--- /dev/null
++++ b/package/qt6/qt6declarative/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_QT6DECLARATIVE
++	bool "qt6declarative"
++	# Enable host test module to ensure that qmltestrunner is built
++	select BR2_PACKAGE_HOST_QT6BASE_TEST if BR2_PACKAGE_QT6BASE_TEST
 +	help
 +	  Qt is a cross-platform application and UI framework for
 +	  developers using C++.
 +
-+	  This package corresponds to the qt6languageserver module.
++	  This package corresponds to the qt6declarative module.
 +
-+	  https://doc.qt.io/qt-6/qtlanguageserver-index.html
-diff --git a/package/qt6/qt6languageserver/qt6languageserver.hash b/package/qt6/qt6languageserver/qt6languageserver.hash
++	  https://doc.qt.io/qt-6/qtdeclarative-index.html
++
++if BR2_PACKAGE_QT6DECLARATIVE
++
++config BR2_PACKAGE_QT6DECLARATIVE_QUICK
++	bool "quick module"
++	select BR2_PACKAGE_QT6BASE_GUI
++	select BR2_PACKAGE_QT6LANGUAGESERVER
++	select BR2_PACKAGE_QT6SHADERTOOLS
++	select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_QT6_GL_SUPPORTS
++	select BR2_PACKAGE_HOST_QT6SVG
++	select BR2_PACKAGE_HOST_QT6DECLARATIVE
++
++endif
+diff --git a/package/qt6/qt6declarative/qt6declarative.hash b/package/qt6/qt6declarative/qt6declarative.hash
 new file mode 100644
-index 0000000000..8193d7d14a
+index 0000000000..480e3805ca
 --- /dev/null
-+++ b/package/qt6/qt6languageserver/qt6languageserver.hash
++++ b/package/qt6/qt6declarative/qt6declarative.hash
 @@ -0,0 +1,11 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtlanguageserver-everywhere-src-6.7.1.tar.xz.sha256
-+sha256  a0fcda1464760e10d9d78d4260e78c94f7ef51343193d8fd2cfef991a4fa94f9  qtlanguageserver-everywhere-src-6.7.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtdeclarative-everywhere-src-6.7.1.tar.xz.sha256
++sha256  81135c96ed2f599385b8a68c57f4f438dad193c62f946f5b200a321558fd9f1c  qtdeclarative-everywhere-src-6.7.1.tar.xz
 +
 +# Hashes for license files:
 +sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
@@ -173,46 +252,68 @@ index 0000000000..8193d7d14a
 +sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
 +sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
 +sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6languageserver/qt6languageserver.mk b/package/qt6/qt6languageserver/qt6languageserver.mk
+diff --git a/package/qt6/qt6declarative/qt6declarative.mk b/package/qt6/qt6declarative/qt6declarative.mk
 new file mode 100644
-index 0000000000..6f96feb275
+index 0000000000..2348ff2dae
 --- /dev/null
-+++ b/package/qt6/qt6languageserver/qt6languageserver.mk
-@@ -0,0 +1,34 @@
++++ b/package/qt6/qt6declarative/qt6declarative.mk
+@@ -0,0 +1,56 @@
 +################################################################################
 +#
-+# qt6languageserver
++# qt6declaratve
 +#
 +################################################################################
 +
-+QT6LANGUAGESERVER_VERSION = $(QT6_VERSION)
-+QT6LANGUAGESERVER_SITE = $(QT6_SITE)
-+QT6LANGUAGESERVER_SOURCE = qtlanguageserver-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6LANGUAGESERVER_VERSION).tar.xz
-+QT6LANGUAGESERVER_INSTALL_STAGING = YES
-+QT6LANGUAGESERVER_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6DECLARATIVE_VERSION = $(QT6_VERSION)
++QT6DECLARATIVE_SITE = $(QT6_SITE)
++QT6DECLARATIVE_SOURCE = qtdeclarative-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6DECLARATIVE_VERSION).tar.xz
++QT6DECLARATIVE_INSTALL_STAGING = YES
 +
-+QT6LANGUAGESERVER_CMAKE_BACKEND = ninja
++QT6DECLARATIVE_SUPPORTS_IN_SOURCE_BUILD = NO
 +
-+QT6LANGUAGESERVER_LICENSE = \
++QT6DECLARATIVE_CMAKE_BACKEND = ninja
++
++QT6DECLARATIVE_LICENSE = \
 +	GPL-2.0+ or LGPL-3.0, \
 +	GPL-3.0, GFDL-1.3 no invariants (docs)
 +
-+QT6LANGUAGESERVER_LICENSE_FILES = \
++QT6DECLARATIVE_LICENSE_FILES = \
 +	LICENSES/GPL-2.0-only.txt \
 +	LICENSES/GPL-3.0-only.txt \
 +	LICENSES/LGPL-3.0-only.txt \
 +	LICENSES/GFDL-1.3-no-invariants-only.txt
 +
-+QT6LANGUAGESERVER_CONF_OPTS = \
++QT6DECLARATIVE_CONF_OPTS = \
++	-DQT_FEATURE_qml_profiler=OFF \
 +	-DQT_HOST_PATH=$(HOST_DIR) \
 +	-DBUILD_WITH_PCH=OFF \
 +	-DQT_BUILD_EXAMPLES=OFF \
 +	-DQT_BUILD_TESTS=OFF
 +
-+QT6LANGUAGESERVER_DEPENDENCIES = \
-+	qt6base
++HOST_QT6DECLARATIVE_CONF_OPTS = \
++	-DQT_HOST_PATH=$(HOST_DIR) \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF \
++	-DQT_FEATURE_ssl=OFF
++
++QT6DECLARATIVE_DEPENDENCIES = \
++	host-qt6base \
++	host-qt6svg \
++	host-qt6shadertools \
++	host-qt6declarative \
++	qt6base \
++	qt6shadertools \
++	qt6languageserver \
++	qt6svg
++
++HOST_QT6DECLARATIVE_DEPENDENCIES = \
++	host-qt6base \
++	host-qt6svg \
++	host-qt6shadertools
 +
 +$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.45.1
 
