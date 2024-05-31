@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70856C25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 13:40:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8288C27C4F
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 13:40:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D73841663;
-	Fri, 31 May 2024 13:40:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 883EA41739;
+	Fri, 31 May 2024 13:40:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aHT9u64Z6ADm; Fri, 31 May 2024 13:40:18 +0000 (UTC)
+ id nAk10uEfszc0; Fri, 31 May 2024 13:40:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F32441676
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0D324173A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F32441676;
-	Fri, 31 May 2024 13:40:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C68F21D52FD
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 13:40:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0D324173A;
+	Fri, 31 May 2024 13:40:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 49E291D52FD
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 13:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2E09423AB
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 13:40:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41FC08443C
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 13:40:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 84sTGY6Je_dM for <buildroot@lists.busybox.net>;
- Fri, 31 May 2024 13:40:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FziMaR-lmdaj for <buildroot@lists.busybox.net>;
+ Fri, 31 May 2024 13:40:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BDAF4417A7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDAF4417A7
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BDAF4417A7
- for <buildroot@buildroot.org>; Fri, 31 May 2024 13:40:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D659320005;
- Fri, 31 May 2024 13:40:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6BAC784562
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BAC784562
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6BAC784562
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 13:40:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7868CC000C;
+ Fri, 31 May 2024 13:40:17 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sD2UP-00CpQW-0l;
- Fri, 31 May 2024 15:40:13 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sD2US-00CpRW-37;
+ Fri, 31 May 2024 15:40:16 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 References: <20240530204706.2132204-1-dario.binacchi@amarulasolutions.com>
- <20240530204706.2132204-3-dario.binacchi@amarulasolutions.com>
-Date: Fri, 31 May 2024 15:40:13 +0200
-In-Reply-To: <20240530204706.2132204-3-dario.binacchi@amarulasolutions.com>
- (Dario Binacchi's message of "Thu, 30 May 2024 22:47:05 +0200")
-Message-ID: <871q5inlqa.fsf@dell.be.48ers.dk>
+ <20240530204706.2132204-4-dario.binacchi@amarulasolutions.com>
+Date: Fri, 31 May 2024 15:40:16 +0200
+In-Reply-To: <20240530204706.2132204-4-dario.binacchi@amarulasolutions.com>
+ (Dario Binacchi's message of "Thu, 30 May 2024 22:47:06 +0200")
+Message-ID: <87wmnam75r.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 3/4] configs/acmesystems_arietta_*: bump
- Linux to 4.19.315 to fix compilation error
+Subject: Re: [Buildroot] [PATCH 4/4] configs/acmesystems_arietta_*: add
+ hashes for at91bootstrap3/Linux/headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,10 +79,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
 
- > The Linux kernel failed to build since commit e88225ed882 (package/binutils:
- > make 2.41 the default version). The new version contains the commit
- > 790756c7e0229 ("ARM: 8933/1: replace Sun/Solaris style flag on section
- > directive") that fixes the issue.
+ > And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop the
+ > defconfig from .checkpackageignore.
 
  > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
