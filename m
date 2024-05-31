@@ -4,96 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1848C25B7E
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 15:14:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C15CC25B7E
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 15:17:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 745E042478;
-	Fri, 31 May 2024 15:14:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C18F9402EA;
+	Fri, 31 May 2024 15:17:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3bubCgCZ4piT; Fri, 31 May 2024 15:14:48 +0000 (UTC)
+ id RUEKhTAHTtW3; Fri, 31 May 2024 15:17:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9269442488
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8921D40346
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9269442488;
-	Fri, 31 May 2024 15:14:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 43C5A1D541F
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:13:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8921D40346;
+	Fri, 31 May 2024 15:17:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 37EA61D53F9
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:17:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3125061147
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:13:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 23B548450C
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 15:17:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qzZOIpFIvcMa for <buildroot@lists.busybox.net>;
- Fri, 31 May 2024 15:13:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::135; helo=mail-lf1-x135.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D6DA960605
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6DA960605
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D6DA960605
- for <buildroot@buildroot.org>; Fri, 31 May 2024 15:13:57 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-52b80e5688aso2613370e87.0
- for <buildroot@buildroot.org>; Fri, 31 May 2024 08:13:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717168436; x=1717773236;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=fTiOd9D8QM1eaxQAeLksa9Ox7MvGc8T4IyfiFyQHpxA=;
- b=YhHzP80cQ+W2j4WonrBEp6jDE6BAd28kgtmyx9A+Nr7gV1R+DBnEwd/KsNG9T6cO8i
- w2E63eVTYZtSY3Ol7L7YeJrbp3NZuU8Id3qQOGjD2o3TdFJ3ZG3e+Xcs83bQ7DlQJQIb
- 6liB7UpUK7OoxeiahS0SNKInSHqPFESYj03bubq0wlZ4lL5FPOGrcfnztIWq7nwi3BMd
- cr6WRaZNfP2XvvcwK+HJr9ky6TPEE6iVK5srYIWJaYGcy+2ckpQbUWB8DqjspbhfDGsc
- 73E0D63lirkqxqKKBUVSOqdz96jGUJA1M8CwSsqZYY3rTJfyCweyJ9QjEAx2INGkNI2U
- JRsw==
-X-Gm-Message-State: AOJu0YyREpVJxaapMMYQbpAC0UIb5vrlGSk1ZlCYD4TkpjOvTmi9mMWR
- yucehTqRc6jF1fWI2t0Sg8TUNOGqvPWAY64Qr1DKk05yAibc4jyKmDpgUZ9w
-X-Google-Smtp-Source: AGHT+IHoGCEH+W/uo4KrReWeWgNMbJR3iRkLnFcIhqW2Kh+VzfgMDHxzwXM8+jzTtiCbcxssqm0lYg==
-X-Received: by 2002:ac2:5f65:0:b0:52b:8365:2a8f with SMTP id
- 2adb3069b0e04-52b8954eb9emr1446486e87.25.1717168435586; 
- Fri, 31 May 2024 08:13:55 -0700 (PDT)
-Received: from precision7530-arch-roy.lan ([79.161.254.12])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-52b84d3f510sm362599e87.90.2024.05.31.08.13.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 31 May 2024 08:13:55 -0700 (PDT)
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-X-Google-Original-From: Roy Kollen Svendsen
- <roy.kollen.svendsen@akersolutions.com>
-To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 17:13:15 +0200
-Message-ID: <20240531151325.2443323-14-roy.kollen.svendsen@akersolutions.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240531151325.2443323-1-roy.kollen.svendsen@akersolutions.com>
-References: <20240513220328.1085629-1-roykollensvendsen@gmail.com>
- <20240531151325.2443323-1-roy.kollen.svendsen@akersolutions.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p42PywAjYObG for <buildroot@lists.busybox.net>;
+ Fri, 31 May 2024 15:17:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1DB9C8450B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DB9C8450B
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1DB9C8450B
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 15:17:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E904B1BF203;
+ Fri, 31 May 2024 15:17:12 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sD40G-00EHzk-1N;
+ Fri, 31 May 2024 17:17:12 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240508204910.751301-1-fontaine.fabrice@gmail.com>
+Date: Fri, 31 May 2024 17:17:12 +0200
+In-Reply-To: <20240508204910.751301-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 8 May 2024 22:49:10 +0200")
+Message-ID: <87jzjam2o7.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717168436; x=1717773236; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=fTiOd9D8QM1eaxQAeLksa9Ox7MvGc8T4IyfiFyQHpxA=;
- b=N3gaOPQVK5oaJtnHlIGjsE4QwOG3b2CwYMyURBqoWJLUjVAP8rMpBEpefxF/pruY/6
- Vb7+m2Wph6EMYR21AcXy2Wat6jAl2HI+w9w7E40SkPqIibF7wbben07ZC7Wu+lsuLhNj
- 0/OeWoXQQtmg2xxZQOVVuHlRBXdExBkvBf03pcWEAktHZl35r6Xx4kO3T8nVHLzOh/u7
- hEhCrCxVGsNPBiB8vQxm3340o1hdS5AesCxu+4/nxeqK5KCtayes4IhuvlBBSsuvMvYK
- vPH/gu29Ic68Cj2H43Oi7FWpYnioNQE7E3nQA33QGAla/lAfNB7UXbHfiJno7xzf1c1q
- n68Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=N3gaOPQV
-Subject: [Buildroot] [PATCH v5 14/14] package/qt6/qt6mqtt: new package
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/libjwt: security bump to
+ version 1.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,127 +69,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
- Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
- Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
----
-Changes v4 -> v5:
-  - Bump to v6.7.1
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- package/qt6/Config.in            |  1 +
- package/qt6/qt6.mk               |  2 ++
- package/qt6/qt6mqtt/Config.in    | 10 +++++++++
- package/qt6/qt6mqtt/qt6mqtt.hash |  8 ++++++++
- package/qt6/qt6mqtt/qt6mqtt.mk   | 35 ++++++++++++++++++++++++++++++++
- 5 files changed, 56 insertions(+)
- create mode 100644 package/qt6/qt6mqtt/Config.in
- create mode 100644 package/qt6/qt6mqtt/qt6mqtt.hash
- create mode 100644 package/qt6/qt6mqtt/qt6mqtt.mk
+ > - Use official tarball and so drop autoreconf
+ > - Update hash of LICENSE file, verbatim copy of the current MPL 2.0 with
+ >   https://github.com/benmcollins/libjwt/commit/ebebb5027f37a85c40c072a02681e206d31875ca
+ > - Fix CVE-2024-25189: libjwt 1.15.3 uses strcmp (which is not constant
+ >   time) to verify authentication, which makes it easier to bypass
+ >   authentication via a timing side channel.
 
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 9dbc4b804a..e84806d5e4 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -47,6 +47,7 @@ source "package/qt6/qt6base/Config.in"
- source "package/qt6/qt6core5compat/Config.in"
- source "package/qt6/qt6declarative/Config.in"
- source "package/qt6/qt6languageserver/Config.in"
-+source "package/qt6/qt6mqtt/Config.in"
- source "package/qt6/qt6serialbus/Config.in"
- source "package/qt6/qt6serialport/Config.in"
- source "package/qt6/qt6shadertools/Config.in"
-diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
-index ee426884f9..5431629ede 100644
---- a/package/qt6/qt6.mk
-+++ b/package/qt6/qt6.mk
-@@ -9,4 +9,6 @@ QT6_VERSION = $(QT6_VERSION_MAJOR).1
- QT6_SOURCE_TARBALL_PREFIX = everywhere-src
- QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
- 
-+QT6_GIT = git://code.qt.io
-+
- include $(sort $(wildcard package/qt6/*/*.mk))
-diff --git a/package/qt6/qt6mqtt/Config.in b/package/qt6/qt6mqtt/Config.in
-new file mode 100644
-index 0000000000..2cda7e53c0
---- /dev/null
-+++ b/package/qt6/qt6mqtt/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT6MQTT
-+	bool "qt6mqtt"
-+	select BR2_PACKAGE_QT6BASE_NETWORK
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt6mqtt module.
-+
-+	  https://doc.qt.io/qt-6/qtmqtt-index.html
-diff --git a/package/qt6/qt6mqtt/qt6mqtt.hash b/package/qt6/qt6mqtt/qt6mqtt.hash
-new file mode 100644
-index 0000000000..658bddaa75
---- /dev/null
-+++ b/package/qt6/qt6mqtt/qt6mqtt.hash
-@@ -0,0 +1,8 @@
-+sha256  f1c3b739296832befe24309130ead4ef4167f4cc2029a9c258821f92e7733fb4  qt6mqtt-6.7.1-git4.tar.gz
-+
-+# Hashes for license files:
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6mqtt/qt6mqtt.mk b/package/qt6/qt6mqtt/qt6mqtt.mk
-new file mode 100644
-index 0000000000..0405311065
---- /dev/null
-+++ b/package/qt6/qt6mqtt/qt6mqtt.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# qt6mqtt
-+#
-+################################################################################
-+
-+QT6MQTT_VERSION = $(QT6_VERSION)
-+QT6MQTT_SITE = $(QT6_GIT)/qt/qtmqtt.git
-+
-+QT6MQTT_INSTALL_STAGING = YES
-+
-+QT6MQTT_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+QT6MQTT_CMAKE_BACKEND = ninja
-+
-+QT6MQTT_LICENSE = \
-+	BSD-3-Clause, GPL-3.0-only, \
-+	GFDL-1.3-invariants-only (docs)
-+
-+QT6MQTT_LICENSE_FILES = \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/GFDL-1.3-no-invariants-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt
-+
-+QT6MQTT_CONF_OPTS = \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DBUILD_WITH_PCH=OFF \
-+	-DQT_BUILD_EXAMPLES=OFF \
-+	-DQT_BUILD_TESTS=OFF
-+
-+QT6MQTT_DEPENDENCIES = \
-+	qt6base
-+
-+$(eval $(cmake-package))
+ > https://github.com/benmcollins/libjwt/compare/v1.15.3...v1.17.0
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2024.02.x, thanks.
+
 -- 
-2.45.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
