@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E2CBC27C4F
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 13:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEEE4C25B7E
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 13:40:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB40F41676;
-	Fri, 31 May 2024 13:40:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C57244166E;
+	Fri, 31 May 2024 13:40:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x6dTiPFnhExb; Fri, 31 May 2024 13:40:06 +0000 (UTC)
+ id v-xe8cEwqgj5; Fri, 31 May 2024 13:40:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17EFF40B36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5D3840B36
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 17EFF40B36;
-	Fri, 31 May 2024 13:40:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D30B1D5158
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 13:40:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C5D3840B36;
+	Fri, 31 May 2024 13:40:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ECEE91D52FD
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 13:40:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78110843A2
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 13:40:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E41C6423B9
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 13:40:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zWiE2P1yy-PP for <buildroot@lists.busybox.net>;
- Fri, 31 May 2024 13:40:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G3lE-4qY9-cw for <buildroot@lists.busybox.net>;
+ Fri, 31 May 2024 13:40:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3430B843A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3430B843A4
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3430B843A4
- for <buildroot@buildroot.org>; Fri, 31 May 2024 13:40:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B5441E0007;
- Fri, 31 May 2024 13:39:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C71E3417A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C71E3417A7
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C71E3417A7
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 13:40:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 56832C0014;
+ Fri, 31 May 2024 13:40:03 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sD2UB-00CpPU-0N;
- Fri, 31 May 2024 15:39:59 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sD2UE-00CpPY-2K;
+ Fri, 31 May 2024 15:40:02 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 References: <20240530204706.2132204-1-dario.binacchi@amarulasolutions.com>
-Date: Fri, 31 May 2024 15:39:59 +0200
-In-Reply-To: <20240530204706.2132204-1-dario.binacchi@amarulasolutions.com>
- (Dario Binacchi's message of "Thu, 30 May 2024 22:47:03 +0200")
-Message-ID: <87a5k6nlqo.fsf@dell.be.48ers.dk>
+ <20240530204706.2132204-2-dario.binacchi@amarulasolutions.com>
+Date: Fri, 31 May 2024 15:40:02 +0200
+In-Reply-To: <20240530204706.2132204-2-dario.binacchi@amarulasolutions.com>
+ (Dario Binacchi's message of "Thu, 30 May 2024 22:47:04 +0200")
+Message-ID: <875xuunlql.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/4] configs/acmesystems_aria_*: bump Linux
- to 4.19.315 to fix compilation error
+Subject: Re: [Buildroot] [PATCH 2/4] configs/acmesystems_aria_*: add hashes
+ for at91bootstrap3/Linux/headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,10 +79,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
 
- > The Linux kernel failed to build since commit e88225ed882 (package/binutils:
- > make 2.41 the default version). The new version contains the commit
- > 790756c7e0229 ("ARM: 8933/1: replace Sun/Solaris style flag on section
- > directive") that fixes the issue.
+ > And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop the
+ > defconfig from .checkpackageignore.
 
  > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
