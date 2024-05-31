@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEDE9C25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 14:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF22FC25B7E
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 14:51:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47AC9419CF;
-	Fri, 31 May 2024 14:50:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79A1C423E4;
+	Fri, 31 May 2024 14:51:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AwmXDP7lS0p0; Fri, 31 May 2024 14:50:02 +0000 (UTC)
+ id gKQG-wtalPNg; Fri, 31 May 2024 14:51:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E611C419DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4527E423E0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E611C419DD;
-	Fri, 31 May 2024 14:50:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 444AE1D53A8
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 14:50:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4527E423E0;
+	Fri, 31 May 2024 14:51:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EE6151D53B2
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 14:50:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DD9860621
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 14:50:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E86BD40187
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 14:50:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bCoSv8B5y2ul for <buildroot@lists.busybox.net>;
- Fri, 31 May 2024 14:49:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3ebPK6Nnxgbe for <buildroot@lists.busybox.net>;
+ Fri, 31 May 2024 14:50:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F963606BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F963606BD
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0F963606BD
- for <buildroot@buildroot.org>; Fri, 31 May 2024 14:49:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5242A60008;
- Fri, 31 May 2024 14:49:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sD3Zn-00EGMV-1t;
- Fri, 31 May 2024 16:49:51 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 357E6400DC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 357E6400DC
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 14:50:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 20143878A7; Fri, 31 May 2024 14:50:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240507214234.94186-1-christian@aperture.us>
- <20240508183727.5b2ca48c@windsurf>
-Date: Fri, 31 May 2024 16:49:51 +0200
-In-Reply-To: <20240508183727.5b2ca48c@windsurf> (Thomas Petazzoni via
- buildroot's message of "Wed, 8 May 2024 18:37:27 +0200")
-Message-ID: <87o78mm3xs.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: security bump version to
- go1.22.3
+To: buildroot@buildroot.org
+Date: Fri, 31 May 2024 16:47:10 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 9faa2751f304a13ff7db91a84165fc845a7a74c1
+X-Git-Newrev: f9b33bfacb968bd3e068e915eb44e79606225024
+X-Patchwork-Hint: ignore
+Message-Id: <20240531145028.20143878A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/go: security bump
+ to version 1.21.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,38 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Stewart <christian@aperture.us>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f9b33bfacb968bd3e068e915eb44e79606225024
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > On Tue,  7 May 2024 14:42:34 -0700
- > Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+Fixes the following security issue:
 
- >> Fixes CVEs:
- >> 
- >> CVE-2024-24787: cmd/go: arbitrary code execution during build on darwin
- >> CVE-2024-24788: net: malformed DNS message can cause infinite loop
- >> 
- >> https://go.dev/doc/devel/release#go1.22.3
- >> 
- >> Signed-off-by: Christian Stewart <christian@aperture.us>
- >> ---
- >> package/go/go.hash | 2 +-
- >> package/go/go.mk   | 2 +-
- >> 2 files changed, 2 insertions(+), 2 deletions(-)
+CVE-2024-24787: cmd/go: arbitrary code execution during build on darwin
 
- > Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-For 2024.02.x I have instead bumped to 1.21.10.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 0c6a8f230e..516f0a70de 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  58f0c5ced45a0012bce2ff7a9df03e128abcc8818ebabe5027bb92bafe20e421  go1.21.9.src.tar.gz
++sha256  900e0afe8900c1ee65a8a8c4f0c5a3ca02dcf85c1d1cb13a652be22c21399394  go1.21.10.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index fdd956e439..c8089d71b1 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.21.9
++GO_VERSION = 1.21.10
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
