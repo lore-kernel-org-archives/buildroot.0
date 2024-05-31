@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2C64C25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 12:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CD7DC25B75
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 12:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73CD2606BD;
-	Fri, 31 May 2024 12:22:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97FED61127;
+	Fri, 31 May 2024 12:22:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a31keIWQCIrE; Fri, 31 May 2024 12:22:22 +0000 (UTC)
+ id FOYkbpJhVZTd; Fri, 31 May 2024 12:22:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E459607A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D31761130
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E459607A8;
-	Fri, 31 May 2024 12:22:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0F9921D5203
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D31761130;
+	Fri, 31 May 2024 12:22:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 155AE1D5211
  for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1015607A8
+ by smtp1.osuosl.org (Postfix) with ESMTP id F24AC84549
  for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ywy2j5gBVH5p for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EeLEqGmrtVv1 for <buildroot@lists.busybox.net>;
  Fri, 31 May 2024 12:22:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BD1C606BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DC8484543
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BD1C606BD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4DC8484543
  for <buildroot@buildroot.org>; Fri, 31 May 2024 12:22:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B93487807; Fri, 31 May 2024 12:22:21 +0000 (UTC)
+ id 30488838DA; Fri, 31 May 2024 12:22:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 13:35:03 +0200
+Date: Fri, 31 May 2024 13:34:25 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8d5a3d1af54a85f4796ae73a61169e08098faf39
-X-Git-Newrev: eefc510767c3d9ea7f7c89642e34b8cdb6174195
+X-Git-Oldrev: b329eb2172c5622dfbb45026dfb2384a5c12a233
+X-Git-Newrev: 8d5a3d1af54a85f4796ae73a61169e08098faf39
 X-Patchwork-Hint: ignore
-Message-Id: <20240531122221.3B93487807@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/zynq/post-image.sh:
- support linux 6.6 dts directory structure
+Message-Id: <20240531122221.30488838DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/zynq/patches: add
+ xilinx_2024.1 hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,36 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eefc510767c3d9ea7f7c89642e34b8cdb6174195
+commit: https://git.buildroot.net/buildroot/commit/?id=8d5a3d1af54a85f4796ae73a61169e08098faf39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Linux 6.6 includes a xilinx directory in the dts directory structure for zynq
-boards.  This patch updates the post-image.sh to match the zynqmp post-image.sh
-in order to support this change.
+Add the Linux and u-boot hashes for xilinx_2024.1 release.
+
+xilinx_2024.1 release includes:
+ - uboot 2024.01
+ - linux 6.6.10
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/zynq/post-image.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ board/zynq/patches/linux/linux.hash | 1 +
+ board/zynq/patches/uboot/uboot.hash | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/board/zynq/post-image.sh b/board/zynq/post-image.sh
-index 192354b5be..f44b66342d 100755
---- a/board/zynq/post-image.sh
-+++ b/board/zynq/post-image.sh
-@@ -4,9 +4,9 @@
- # let's use a symlink with that name that points to the *first*
- # devicetree listed in the config.
- 
--FIRST_DT=$(sed -n \
--           's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9\-]*\).*"$/\1/p' \
--           "${BR2_CONFIG}")
-+FIRST_DT=$(sed -nr \
-+               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
-+               "${BR2_CONFIG}")
- 
- [ -z "${FIRST_DT}" ] || ln -fs "${FIRST_DT}.dtb" "${BINARIES_DIR}/system.dtb"
- 
+diff --git a/board/zynq/patches/linux/linux.hash b/board/zynq/patches/linux/linux.hash
+index 8ed4bbead4..db57012f98 100644
+--- a/board/zynq/patches/linux/linux.hash
++++ b/board/zynq/patches/linux/linux.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  56acddefc6f6fdc00df5b75ceb4f86a9d0af9a4fef78cf57f9f2c274b22f006f  xlnx_rebase_v6.1_LTS_merge_6.1.70.tar.gz
++sha256  ea85988e66b9a2e19ccd76d0f5f5e657988a873fed292160917712f45605a805  xlnx_rebase_v6.6_LTS_2024.1.tar.gz
+diff --git a/board/zynq/patches/uboot/uboot.hash b/board/zynq/patches/uboot/uboot.hash
+index 35e54e0baf..516707bf26 100644
+--- a/board/zynq/patches/uboot/uboot.hash
++++ b/board/zynq/patches/uboot/uboot.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  32a997a748697ff27e5e6db8edaff5ba893077214bc18b5267daff0b708dab53  xlnx_rebase_v2023.01_2023.2.tar.gz
++sha256  58e391a001d9d8ed347ab3258ff7c8435c866b1ff2b2c22ebc95af592444c0f5  xlnx_rebase_v2024.01_2024.1.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
