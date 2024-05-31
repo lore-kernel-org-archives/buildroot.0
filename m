@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FD31C25B75
-	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 12:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74FBDC25B75
+	for <buildroot@archiver.kernel.org>; Fri, 31 May 2024 12:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3F296117B;
-	Fri, 31 May 2024 12:22:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17D10606D4;
+	Fri, 31 May 2024 12:52:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uLkyOM2uaDuH; Fri, 31 May 2024 12:22:48 +0000 (UTC)
+ id SOBMzJ_LLlgr; Fri, 31 May 2024 12:52:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDD1561192
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CE01606BD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDD1561192;
-	Fri, 31 May 2024 12:22:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F2E111D5215
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CE01606BD;
+	Fri, 31 May 2024 12:52:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 107041D51A5
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:52:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A74E184546
- for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:22:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECA33408C3
+ for <buildroot@lists.busybox.net>; Fri, 31 May 2024 12:52:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q5eIVJMfeRjG for <buildroot@lists.busybox.net>;
- Fri, 31 May 2024 12:22:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TgpCu7xygrCE for <buildroot@lists.busybox.net>;
+ Fri, 31 May 2024 12:52:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BAB584548
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 193E1400D7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BAB584548
- for <buildroot@buildroot.org>; Fri, 31 May 2024 12:22:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 193E1400D7
+ for <buildroot@buildroot.org>; Fri, 31 May 2024 12:52:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9924687806; Fri, 31 May 2024 12:22:21 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id E847B8780B; Fri, 31 May 2024 12:52:02 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 14:20:24 +0200
+Date: Fri, 31 May 2024 14:42:18 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 622d3b25307bdc6db74628515be7f7b244f4bf77
-X-Git-Newrev: b574b0b9e6d076e25a3d67e8f4bddcd690ef2b1f
+X-Git-Oldrev: b574b0b9e6d076e25a3d67e8f4bddcd690ef2b1f
+X-Git-Newrev: 9a629f5129d652960b203e53685aea24a4dd86a1
 X-Patchwork-Hint: ignore
-Message-Id: <20240531122221.9924687806@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/zynq/patches: remove
- xilinx 6.1.70 hashes
+Message-Id: <20240531125202.E847B8780B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/docker-run: allow
+ running with Podman
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,35 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b574b0b9e6d076e25a3d67e8f4bddcd690ef2b1f
+commit: https://git.buildroot.net/buildroot/commit/?id=9a629f5129d652960b203e53685aea24a4dd86a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now that the zynq_* defconfigs have migrated to xilinx_2024.1, remove the
-older hashes.
+Podman is command line compatible with Docker, there's no need to
+require contributors to install Docker to run checks before sending
+patches.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The additional "--userns=keep-id" option is necessary because unlike
+Docker Podman creates a user namespace for containers by
+default. Without keep-id the repository and pre-existing output files
+belong to root inside the container namespace, breaking writes,
+certain Git safety checks, and possibly all access (if the user is
+using a strict umask).
+
+Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/zynq/patches/linux/linux.hash | 1 -
- board/zynq/patches/uboot/uboot.hash | 1 -
- 2 files changed, 2 deletions(-)
+ utils/docker-run | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/board/zynq/patches/linux/linux.hash b/board/zynq/patches/linux/linux.hash
-index db57012f98..d85f773478 100644
---- a/board/zynq/patches/linux/linux.hash
-+++ b/board/zynq/patches/linux/linux.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  56acddefc6f6fdc00df5b75ceb4f86a9d0af9a4fef78cf57f9f2c274b22f006f  xlnx_rebase_v6.1_LTS_merge_6.1.70.tar.gz
- sha256  ea85988e66b9a2e19ccd76d0f5f5e657988a873fed292160917712f45605a805  xlnx_rebase_v6.6_LTS_2024.1.tar.gz
-diff --git a/board/zynq/patches/uboot/uboot.hash b/board/zynq/patches/uboot/uboot.hash
-index 516707bf26..a5ab9fae05 100644
---- a/board/zynq/patches/uboot/uboot.hash
-+++ b/board/zynq/patches/uboot/uboot.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  32a997a748697ff27e5e6db8edaff5ba893077214bc18b5267daff0b708dab53  xlnx_rebase_v2023.01_2023.2.tar.gz
- sha256  58e391a001d9d8ed347ab3258ff7c8435c866b1ff2b2c22ebc95af592444c0f5  xlnx_rebase_v2024.01_2024.1.tar.gz
+diff --git a/utils/docker-run b/utils/docker-run
+index 79694474c1..3dcabe2718 100755
+--- a/utils/docker-run
++++ b/utils/docker-run
+@@ -29,6 +29,16 @@ declare -a mountpoints=(
+     "$(pwd)"
+ )
+ 
++if command -v docker >/dev/null; then
++    DOCKER="docker"
++elif command -v podman >/dev/null; then
++    DOCKER="podman"
++    docker_opts+=( --userns=keep-id )
++else
++    echo "ERROR: Neither docker nor podman available!" >&2
++    exit 1
++fi
++
+ # curl lists (and recognises and uses) other types of *_proxy variables,
+ # but only those make sense for Buildroot:
+ for env in all_proxy http_proxy https_proxy ftp_proxy no_proxy; do
+@@ -84,4 +94,4 @@ if tty -s; then
+     docker_opts+=( -t )
+ fi
+ 
+-exec docker run "${docker_opts[@]}" "${IMAGE}" "${@}"
++exec ${DOCKER} run "${docker_opts[@]}" "${IMAGE}" "${@}"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
