@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E07D2C27C4F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD27AC27C75
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34D8361086;
-	Thu, 13 Jun 2024 10:08:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C5D761095;
+	Thu, 13 Jun 2024 10:08:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fNi8qtvM4fWN; Thu, 13 Jun 2024 10:07:57 +0000 (UTC)
+ id piqll-eJLakm; Thu, 13 Jun 2024 10:08:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33DB7610B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C5A9610BB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33DB7610B5;
-	Thu, 13 Jun 2024 10:07:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FC561BF354
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C5A9610BB;
+	Thu, 13 Jun 2024 10:08:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F25061BF354
  for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6162760EC2
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E47F4413D8
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qPL3OfCtp5ru for <buildroot@lists.busybox.net>;
- Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7lMoYqVKAT9V for <buildroot@lists.busybox.net>;
+ Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C95160ED3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 582C5413EE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4C95160ED3
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 582C5413EE
+ for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4793F87F56; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ id 5448A87F57; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 15:32:04 +0200
+Date: Sat, 1 Jun 2024 21:34:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c286c345cf42bc341a3f0502e33fc8477fdd904
-X-Git-Newrev: c1554df688cb1563c8da2f8fcba21020dcf126a1
+X-Git-Oldrev: 9cf5c95e38488f79a4a27ca7a27a5875029cbbe4
+X-Git-Newrev: 6c8a7a7bc92f56b53b2602727a12aa13e3248d24
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100500.4793F87F56@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/versal_vck190_defconfig: add hashes
+Message-Id: <20240613100459.5448A87F57@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mtd: bump to version 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,57 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1554df688cb1563c8da2f8fcba21020dcf126a1
+commit: https://git.buildroot.net/buildroot/commit/?id=6c8a7a7bc92f56b53b2602727a12aa13e3248d24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+https://lists.infradead.org/pipermail/linux-mtd/2024-March/104058.html
+
 Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                                 | 1 -
- board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 ++
- board/xilinx/patches/versal-firmware/versal-firmware.hash           | 2 ++
- configs/versal_vck190_defconfig                                     | 2 ++
- 4 files changed, 6 insertions(+), 1 deletion(-)
+ package/mtd/mtd.hash | 4 ++--
+ package/mtd/mtd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index c3de61111f..eea412d01d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -358,7 +358,6 @@ configs/ts4900_defconfig lib_defconfig.ForceCheckHash
- configs/ts5500_defconfig lib_defconfig.ForceCheckHash
- configs/ts7680_defconfig lib_defconfig.ForceCheckHash
- configs/uevm5432_defconfig lib_defconfig.ForceCheckHash
--configs/versal_vck190_defconfig lib_defconfig.ForceCheckHash
- configs/visionfive_defconfig lib_defconfig.ForceCheckHash
- configs/wandboard_defconfig lib_defconfig.ForceCheckHash
- configs/warp7_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..e300398541
---- /dev/null
-+++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c3369c89eab4e452bbc76c630e5dccb6c0ae588c0175b6c8549aa0241deb06ef  xlnx_rebase_v2.10_2024.1.tar.gz
-diff --git a/board/xilinx/patches/versal-firmware/versal-firmware.hash b/board/xilinx/patches/versal-firmware/versal-firmware.hash
-new file mode 100644
-index 0000000000..c4d745f22c
---- /dev/null
-+++ b/board/xilinx/patches/versal-firmware/versal-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  versal-firmware-xilinx_v2024.1.tar.gz
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index ecfc10cc91..69272e721c 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
-@@ -39,3 +39,5 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_PACKAGE_HOST_BOOTGEN=y
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
+diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
+index 9926a34a80..1efb06f490 100644
+--- a/package/mtd/mtd.hash
++++ b/package/mtd/mtd.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://infraroot.at/pub/mtd/mtd-utils-2.1.6.tar.bz2.asc
+-sha256  c1d853bc4adf83bcabd2792fc95af33bdd8643c97e8f7b3f0180af36af76f0e5  mtd-utils-2.1.6.tar.bz2
++# https://infraroot.at/pub/mtd/mtd-utils-2.2.0.tar.bz2.asc
++sha256  250d082f67375ca8451b5fcfc9a23a53ced3ebebd8312c288daf2507bbab1324  mtd-utils-2.2.0.tar.bz2
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 998cc419b3..f71179c2de 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MTD_VERSION = 2.1.6
++MTD_VERSION = 2.2.0
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
+ MTD_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
