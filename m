@@ -4,66 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AFE3C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 21:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12169C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 21:01:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED602820DE;
-	Sat,  1 Jun 2024 21:01:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC8D6847C1;
+	Sat,  1 Jun 2024 21:01:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NY_CqE6OXN5R; Sat,  1 Jun 2024 21:01:18 +0000 (UTC)
+ id vf3NkqFs4C6D; Sat,  1 Jun 2024 21:01:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22CE58479A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 896D28479A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22CE58479A;
-	Sat,  1 Jun 2024 21:01:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E6A1E1BF4E5
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 21:01:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 896D28479A;
+	Sat,  1 Jun 2024 21:01:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C5AE1BF4E5
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 21:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D21BD423FA
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 21:01:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 693734056E
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 21:01:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0W8Ae5cGgvxv for <buildroot@lists.busybox.net>;
- Sat,  1 Jun 2024 21:01:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 70FDA423F7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70FDA423F7
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 70FDA423F7
- for <buildroot@buildroot.org>; Sat,  1 Jun 2024 21:01:14 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 07E6AB004FF;
- Sat,  1 Jun 2024 23:01:10 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat,  1 Jun 2024 23:01:04 +0200
-Message-ID: <20240601210104.1160688-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lwS_3O-WZIVl for <buildroot@lists.busybox.net>;
+ Sat,  1 Jun 2024 21:01:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 605554053D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 605554053D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 605554053D
+ for <buildroot@buildroot.org>; Sat,  1 Jun 2024 21:01:32 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id A10AB13F8B3;
+ Sat,  1 Jun 2024 23:01:28 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 01 Jun 2024 23:01:28 +0200
+Date: Sat, 1 Jun 2024 23:01:28 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <ZluMKNFicss1Lf9S@landeda>
+References: <ZlsWbN4ndrbor49a@waldemar-brodkorb.de>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <ZlsWbN4ndrbor49a@waldemar-brodkorb.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1717275672;
- bh=2KLWLqGfPjbnRjLtJgISXwV48r4vCc3OFHx9BxL695E=;
- h=From:To:Cc:Subject:Date:From;
- b=BhDx8mCweA8rraEBrKcWwh5Epr/A4q0/rhCP1rCcxx5wShBsWUNslw+GeIG+1PaWF
- mDONUOLrlAX+6I+kPa795Bf+sxLbYsGhEYscfkEKR5QVbhEeiF5eCci0ryQUZBD0qb
- ElcDr5se0rfEDdFQF0uYNszSjyAlLBIm7g9n3yoVDlaLeXM9yiGfsvW/HY5tZxtxcl
- GBs7rCUCB/OZLvk0b8eHipswAEoQ2xK9JC/BXOj896GMeleyI+U9Xc54LlpWB/601B
- MhkuHfHTrMbcJabyUuZqeLWnYw0VnUoDZDEz3uVIu8EsA4vXzblGpuGrUwqfBEBdKf
- ZP2eYxJRcmMLA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1717275690;
+ bh=u9TBcqnDE6QQDj8WpAminIEptHnhmIcQ1/WmDyFCUoc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ZLTYzcORciNq4YBeG4AX0L6SMBlRoJ2PNBrZOdIhgBO5VvCLzI4z7OOb1cvPK3bPw
+ XmzKigwnie6RLPwpI1pWS3COiRZc/HZNiM+vPIqGM+MvY5Ii5vgXvFO7vxQDkBkfWs
+ dWMwyGU5uiEuxx9Ljk4FLD7iY8if37SYHtFdZEf+gVr2+RLX/rbRM9e25B17YS6Jdy
+ bROXch4SAiJLh0+7cVxT/9vlH7z6r81EW6zoKCbZ9/cxIkrjAGHonnwaL7/eJaI5Uu
+ 8BHMN1um5nXlGX9tgZfjFBt2jmz0FVCuZx/U2PHAzE2umeoNGnbCcz9u3PrXQZo7bf
+ Q86F9WdukilLg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BhDx8mCw
-Subject: [Buildroot] [PATCH 1/1] support/testing: add bcc runtime test
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZLTYzcOR
+Subject: Re: [Buildroot] [PATCH] package/gcc: update to 13.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,137 +80,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                    |  2 +
- support/testing/tests/package/test_bcc.py     | 84 +++++++++++++++++++
- .../tests/package/test_bcc/linux-bcc.fragment |  4 +
- 3 files changed, 90 insertions(+)
- create mode 100644 support/testing/tests/package/test_bcc.py
- create mode 100644 support/testing/tests/package/test_bcc/linux-bcc.fragment
+Waldemar, All,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b9568ed7c58..cc70a4a6ddd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1799,6 +1799,8 @@ F:	support/testing/tests/package/test_acpica.py
- F:	support/testing/tests/package/test_acpica/
- F:	support/testing/tests/package/test_apache.py
- F:	support/testing/tests/package/test_bc.py
-+F:	support/testing/tests/package/test_bcc.py
-+F:	support/testing/tests/package/test_bcc/
- F:	support/testing/tests/package/test_bitcoin.py
- F:	support/testing/tests/package/test_brotli.py
- F:	support/testing/tests/package/test_bzip2.py
-diff --git a/support/testing/tests/package/test_bcc.py b/support/testing/tests/package/test_bcc.py
-new file mode 100644
-index 00000000000..51f175a5b49
---- /dev/null
-+++ b/support/testing/tests/package/test_bcc.py
-@@ -0,0 +1,84 @@
-+import os
-+import time
-+
-+import infra.basetest
-+
-+
-+class TestBcc(infra.basetest.BRTest):
-+    # This test is using a Kernel >= 5.2, so it will use
-+    # CONFIG_IKHEADERS. Those Kernel headers are unpacked from
-+    # "/sys/kernel/kheaders.tar.xz" with a "tar" invocation. The
-+    # Busybox "tar" command invoked by bcc fails to unpack the Kernel
-+    # tar archive. We need the GNU Tar package. The Kernel also needs
-+    # few extra config options, for running execsnoop.
-+    kern_fragment = \
-+        infra.filepath("tests/package/test_bcc/linux-bcc.fragment")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_fragment}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+        BR2_PACKAGE_BCC=y
-+        BR2_PACKAGE_TAR=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
-+                                    "-drive", f"file={drive},if=virtio,format=raw"])
-+        self.emulator.login()
-+
-+        log = "/root/execsnoop.log"
-+        test_cmd = "/bin/sleep 1"
-+
-+        # bcc needs debugs to be mounted.
-+        self.assertRunOk("mount -t debugfs none /sys/kernel/debug/")
-+
-+        # Generate some exec()s activity in background. We explicitly
-+        # call for "/bin/sleep" rather than just "sleep" to avoid
-+        # using any shell builtin and make sure we will exec() the
-+        # binary.
-+        cmd = f"while true ; do {test_cmd} ; done &"
-+        self.assertRunOk(cmd)
-+
-+        # Run execsnoop, also in background...
-+        cmd = f"/usr/share/bcc/tools/execsnoop > {log} &"
-+        self.assertRunOk(cmd)
-+
-+        for attempt in range(3):
-+            # Wait a bit, to let execsnoop to start and log some data.
-+            time.sleep(40 * self.timeout_multiplier)
-+
-+            # We check that the log file contains some data.
-+            cmd = f"test -s {log}"
-+            _, ret = self.emulator.run(cmd)
-+            if ret == 0:
-+                break
-+        else:
-+            self.fail(f"Timeout while waiting for data in {log}.")
-+
-+        # Kill our background execsnoop execution.
-+        self.assertRunOk("kill $!")
-+
-+        # Check we have captured execution occurrences of out test
-+        # command.
-+        cmd = f"grep -Foc '{test_cmd}' {log}"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertGreater(int(out[0]), 0)
-diff --git a/support/testing/tests/package/test_bcc/linux-bcc.fragment b/support/testing/tests/package/test_bcc/linux-bcc.fragment
-new file mode 100644
-index 00000000000..35359b08f6a
---- /dev/null
-+++ b/support/testing/tests/package/test_bcc/linux-bcc.fragment
-@@ -0,0 +1,4 @@
-+CONFIG_FTRACE=y
-+CONFIG_FTRACE_SYSCALLS=y
-+CONFIG_FUNCTION_TRACER=y
-+CONFIG_KPROBES=y
+On 2024-06-01 14:39 +0200, Waldemar Brodkorb spake thusly:
+> See here for changes made to this release:
+> https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=13.3
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  .checkpackageignore                                           | 2 +-
+>  .../0001-disable-split-stack-for-non-thread-builds.patch      | 0
+>  .../0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch          | 0
+>  .../0003-Remove-crypt-and-crypt_r-interceptors.patch          | 0
+>  package/gcc/Config.in.host                                    | 2 +-
+>  package/gcc/gcc.hash                                          | 4 ++--
+>  6 files changed, 4 insertions(+), 4 deletions(-)
+>  rename package/gcc/{13.2.0 => 13.3.0}/0001-disable-split-stack-for-non-thread-builds.patch (100%)
+>  rename package/gcc/{13.2.0 => 13.3.0}/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch (100%)
+>  rename package/gcc/{13.2.0 => 13.3.0}/0003-Remove-crypt-and-crypt_r-interceptors.patch (100%)
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index 8f5fc0a476..102b3cfcbc 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -670,7 +670,7 @@ package/gamin/0001-no-abstract-sockets.patch lib_patch.Upstream
+>  package/gamin/0002-no-const-return.patch lib_patch.Sob lib_patch.Upstream
+>  package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch lib_patch.Upstream
+>  package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+> -package/gcc/13.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+> +package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+>  package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+>  package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
+>  package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
+> diff --git a/package/gcc/13.2.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch
+> similarity index 100%
+> rename from package/gcc/13.2.0/0001-disable-split-stack-for-non-thread-builds.patch
+> rename to package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch
+> diff --git a/package/gcc/13.2.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch b/package/gcc/13.3.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
+> similarity index 100%
+> rename from package/gcc/13.2.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
+> rename to package/gcc/13.3.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
+> diff --git a/package/gcc/13.2.0/0003-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/13.3.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
+> similarity index 100%
+> rename from package/gcc/13.2.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
+> rename to package/gcc/13.3.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> index a0377cc0a3..ac20591e5c 100644
+> --- a/package/gcc/Config.in.host
+> +++ b/package/gcc/Config.in.host
+> @@ -76,7 +76,7 @@ config BR2_GCC_VERSION
+>  	string
+>  	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
+>  	default "12.3.0"    if BR2_GCC_VERSION_12_X
+> -	default "13.2.0"    if BR2_GCC_VERSION_13_X
+> +	default "13.3.0"    if BR2_GCC_VERSION_13_X
+>  	default "14.1.0"    if BR2_GCC_VERSION_14_X
+>  	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
+>  
+> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+> index 08d4fca6e7..0b48a1acdd 100644
+> --- a/package/gcc/gcc.hash
+> +++ b/package/gcc/gcc.hash
+> @@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
+>  sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
+>  # From https://gcc.gnu.org/pub/gcc/releases/gcc-12.3.0/sha512.sum
+>  sha512  8fb799dfa2e5de5284edf8f821e3d40c2781e4c570f5adfdb1ca0671fcae3fb7f794ea783e80f01ec7bfbf912ca508e478bd749b2755c2c14e4055648146c204  gcc-12.3.0.tar.xz
+> -# From https://gcc.gnu.org/pub/gcc/releases/gcc-13.2.0/sha512.sum
+> -sha512  d99e4826a70db04504467e349e9fbaedaa5870766cda7c5cab50cdebedc4be755ebca5b789e1232a34a20be1a0b60097de9280efe47bdb71c73251e30b0862a2  gcc-13.2.0.tar.xz
+> +# From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
+> +sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
+>  # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.1.0/sha512.sum
+>  sha512  e9e224f2b26646fcf038d28dfa08b94c623bc57941f99894a321d01c600f7c68aff6b8837fd25e73e540de1f8de5606e98694a62cdcdfb525ce768b3ef6879ea  gcc-14.1.0.tar.xz
+>  
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.45.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
