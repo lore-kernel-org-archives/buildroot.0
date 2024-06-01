@@ -4,90 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD98C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 12:59:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0A95C27C50
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 13:52:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76FDA60814;
-	Sat,  1 Jun 2024 12:59:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A7C760627;
+	Sat,  1 Jun 2024 13:52:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qZW-l0Npdr45; Sat,  1 Jun 2024 12:59:58 +0000 (UTC)
+ id 1aJz0VgkuvLY; Sat,  1 Jun 2024 13:52:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D06E60856
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83D9E60665
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D06E60856;
-	Sat,  1 Jun 2024 12:59:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83D9E60665;
+	Sat,  1 Jun 2024 13:52:55 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 150011BF239
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 12:59:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BD2C31BF2F5
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 13:52:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01F3A845E5
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 12:59:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A20848474E
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 13:52:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GZrrcdJpCRg0 for <buildroot@lists.busybox.net>;
- Sat,  1 Jun 2024 12:59:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CEF13845F1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEF13845F1
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CEF13845F1
- for <buildroot@busybox.net>; Sat,  1 Jun 2024 12:59:55 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-35dbfe31905so3039940f8f.2
- for <buildroot@busybox.net>; Sat, 01 Jun 2024 05:59:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717246794; x=1717851594;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=t6TsNkuozK1mkQQJRmKhbwSBtyNseDal2PcNX+Q9l/4=;
- b=Ld7Yn9Jh6KfL9us6V9uwmGj6sEXARQSHsb4CA3vbXhO3aZU1c01lqse/6v/TrwXiXs
- 5bN8vv6Ioqr2lqg8WWQSALB9ggYVyxQvvi4JmiUSj952delAppuTfniIP/Qe0NAVR5Hq
- R+AZf4uCOjQ9ZwEIwinRXrUbdSUYqP0HQHyuh4eenILSJnTlPgaQmnTvSxo2nlIUl9Fa
- ytuAR+eCbTPEEIS5PQr/JAp45w0oINSPTiBaGEY9OSZEgGxdrqGkeYgYYlFvMcE7exXZ
- jMKZqnijZ7/1630e/n3a/Bqasqoywzx+1YXsxBztK71lWiEecV4zNZL4RKUeTr7dB5zh
- cSQw==
-X-Gm-Message-State: AOJu0YyqVp9QUHLV130hcWkbPkoewPaAFO2N9PpnSTDTc3umxvUGqGhp
- Oz7mG9zJMNQjb39r2Q//wZkNVCaNXV5lEpH4ndd7pDeLOGz0XHp+D9nIB4c7VTOBgzb9t3ZCSo1
- Fsw==
-X-Google-Smtp-Source: AGHT+IFSG2uZAVipnEkEI5ZFesspSwsdpP/ZEaN19XIYvUHPDDlMyF6pWy3gxfHdnt9BFrMW8JmE+Q==
-X-Received: by 2002:a5d:4e03:0:b0:34d:b284:9c65 with SMTP id
- ffacd0b85a97d-35e0f30ed25mr2980364f8f.45.1717246793622; 
- Sat, 01 Jun 2024 05:59:53 -0700 (PDT)
-Received: from xubuntu-23.. ([37.65.6.24]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-35dd04c10f2sm4032011f8f.10.2024.06.01.05.59.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Jun 2024 05:59:53 -0700 (PDT)
-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sat,  1 Jun 2024 14:59:51 +0200
-Message-Id: <20240601125951.29789-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1717246794; x=1717851594; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=t6TsNkuozK1mkQQJRmKhbwSBtyNseDal2PcNX+Q9l/4=;
- b=L2jtJDzVUk2oWQIXs0R/REidSVzAlvvjKZZdV6BMminpZ4iAR6sJCLqlsuNLL1qkV0
- ksJtIbeMnsucbZKUBe+1C227NS1k2eqhZiILhDF+Ynj1OiemlbMglVD95EV07MHtKwk/
- rRFUH7yiPbFdCalfXG0Rcah5TXeR0ocboMg38Pno/qr03xcv0nporJjsQVIUZPMo8UK1
- C0TUt4anVBlAM1iBAXoNRROwuM2eXX8YejuXuF1dytQpovRkPK8WYG4vZ4FAejVntLaH
- 4ERE7xKVoH+DkznCdwOkfyp8m2X8nF25RIsfPnPc9y0oaTk3oPgKv4Q1w/w+rxsWbar2
- JF0Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=L2jtJDzV
-Subject: [Buildroot] [PATCH] package/luarocks: bump to version 3.11.1
+ id SMVmRhHD7QSn for <buildroot@lists.busybox.net>;
+ Sat,  1 Jun 2024 13:52:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 748E98474D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 748E98474D
+ for <buildroot@buildroot.org>; Sat,  1 Jun 2024 13:52:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 52CD087880; Sat,  1 Jun 2024 13:52:52 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 1 Jun 2024 15:51:11 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 42fad03182ed53de8003b66d50e893f42b72145e
+X-Git-Newrev: f97e6293de1491e75b0798bddf4b0532c7f92bd2
+X-Patchwork-Hint: ignore
+Message-Id: <20240601135252.52CD087880@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/docker-run: set podman
+ userns option in environment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,42 +59,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+commit: https://git.buildroot.net/buildroot/commit/?id=f97e6293de1491e75b0798bddf4b0532c7f92bd2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Commit 9a629f5 "utils/docker-run: allow running with Podman" added an
+option on system providing the podman command. This case is mainly
+for Fedora systems.
+
+Fedora repositories have a podman-docker package, that provides the
+docker command for compatibility. See [1]. In that case, invoking
+"docker" redirects to podman.
+
+When this package is installed on a Fedora system, both the docker and
+podman commands are available. Since the docker command is checked
+before podman, the --userns option is not passed in that case. This
+brings "permission denied" errors.
+
+Other cases are also possible, like a host system providing the real
+Docker alongside a podman installation. In such a case, to avoid
+unexpected change of behavior of the docker-run script, the original
+search order is preserved (search for "docker" first, then "podman").
+
+This commit changes the way the podman user namespace mode is set.
+Rather than adding the "--userns=keep-id" command line option only in
+the podman case, it is globally set using the PODMAN_USERNS=keep-id
+environment variable [2].
+
+Doing so makes sure that the variable will be consumed by the "docker"
+compatibility command, and just ignored by the real "docker"
+implementation.
+
+[1] https://packages.fedoraproject.org/pkgs/podman/podman-docker/
+[2] https://docs.podman.io/en/latest/markdown/podman-run.1.html
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/docker-run | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index fbf527021..15a44f9db 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  25f56b3c7272fb35b869049371d649a1bbe668a56d24df0a66e3712e35dd44a6  luarocks-3.11.0.tar.gz
-+sha256  c3fb3d960dffb2b2fe9de7e3cb004dc4d0b34bb3d342578af84f84325c669102  luarocks-3.11.1.tar.gz
- sha256  660773f53ed17cd0d8be7d67168c25e8cc664a506788c7b5971192bdd2994a9d  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 4c9922914..cf5f966cd 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/docker-run b/utils/docker-run
+index 3dcabe2718..1adb02d74e 100755
+--- a/utils/docker-run
++++ b/utils/docker-run
+@@ -29,11 +29,16 @@ declare -a mountpoints=(
+     "$(pwd)"
+ )
  
--LUAROCKS_VERSION = 3.11.0
-+LUAROCKS_VERSION = 3.11.1
- LUAROCKS_SITE = https://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
--- 
-2.40.1
-
++# We use the PODMAN_USERNS environment variable rather than using the
++# --userns command line argument because Fedora system may have the
++# podman-docker package installed, providing the "docker"
++# compatibility command.
++export PODMAN_USERNS="keep-id"
++
+ if command -v docker >/dev/null; then
+     DOCKER="docker"
+ elif command -v podman >/dev/null; then
+     DOCKER="podman"
+-    docker_opts+=( --userns=keep-id )
+ else
+     echo "ERROR: Neither docker nor podman available!" >&2
+     exit 1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
