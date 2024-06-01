@@ -4,49 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1BBBC25B76
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 21:01:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30833C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 21:01:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A86A847D2;
-	Sat,  1 Jun 2024 21:01:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFABC847E0;
+	Sat,  1 Jun 2024 21:01:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F-Fr7eQdF8FK; Sat,  1 Jun 2024 21:01:40 +0000 (UTC)
+ id sX4Jg9aIpRzX; Sat,  1 Jun 2024 21:01:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FC68847CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C7A2847B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FC68847CB;
-	Sat,  1 Jun 2024 21:01:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C7A2847B1;
+	Sat,  1 Jun 2024 21:01:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E69731BF4E5
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 21:01:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3A4011BF4E5
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 21:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC4CD847BF
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 21:01:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A34F847C6
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 21:01:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0NqjdIhgBA3Z for <buildroot@lists.busybox.net>;
- Sat,  1 Jun 2024 21:01:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 0_-QojaCRmRo for <buildroot@lists.busybox.net>;
+ Sat,  1 Jun 2024 21:01:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD7BB84797
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD7BB84797
- for <buildroot@buildroot.org>; Sat,  1 Jun 2024 21:01:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C2E45876CF; Sat,  1 Jun 2024 21:01:17 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 1 Jun 2024 23:00:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cc08d6f5d1a152279c340f56539a43d932ea0b0d
-X-Git-Newrev: f3b2f0f9859b4bcb422d69437ecb01ee9038d3c1
-X-Patchwork-Hint: ignore
-Message-Id: <20240601210117.C2E45876CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: update to 13.3.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B0E0B847B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0E0B847B4
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B0E0B847B4
+ for <buildroot@buildroot.org>; Sat,  1 Jun 2024 21:01:21 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 09636240004;
+ Sat,  1 Jun 2024 21:01:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sDVqn-00HCBK-1J;
+ Sat, 01 Jun 2024 23:01:17 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Sebastien Laveze <slaveze@smartandconnective.com>
+References: <20240529072911.288748-1-slaveze@smartandconnective.com>
+Date: Sat, 01 Jun 2024 23:01:17 +0200
+In-Reply-To: <20240529072911.288748-1-slaveze@smartandconnective.com>
+ (Sebastien Laveze's message of "Wed, 29 May 2024 09:29:10 +0200")
+Message-ID: <87ed9gl6n6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/mosquitto: add target
+ mosquitto_passwd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,82 +69,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Titouan Christophe <titouanchristophe@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3b2f0f9859b4bcb422d69437ecb01ee9038d3c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Sebastien" == Sebastien Laveze <slaveze@smartandconnective.com> writes:
 
-See here for changes made to this release:
-https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=13.3
+ > The mosquitto_passwd utility is useful on target if user accounts need
+ > to be created runtime.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .checkpackageignore                                                   | 2 +-
- .../0001-disable-split-stack-for-non-thread-builds.patch              | 0
- .../0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch                  | 0
- .../0003-Remove-crypt-and-crypt_r-interceptors.patch                  | 0
- package/gcc/Config.in.host                                            | 2 +-
- package/gcc/gcc.hash                                                  | 4 ++--
- 6 files changed, 4 insertions(+), 4 deletions(-)
+ > Signed-off-by: Sebastien Laveze <slaveze@smartandconnective.com>
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 914f3b5bb5..9264f84a15 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -665,7 +665,7 @@ package/gamin/0001-no-abstract-sockets.patch lib_patch.Upstream
- package/gamin/0002-no-const-return.patch lib_patch.Sob lib_patch.Upstream
- package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch lib_patch.Upstream
- package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
--package/gcc/13.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
-+package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
- package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
-diff --git a/package/gcc/13.2.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch
-similarity index 100%
-rename from package/gcc/13.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch
-diff --git a/package/gcc/13.2.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch b/package/gcc/13.3.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
-similarity index 100%
-rename from package/gcc/13.2.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
-rename to package/gcc/13.3.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
-diff --git a/package/gcc/13.2.0/0003-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/13.3.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
-similarity index 100%
-rename from package/gcc/13.2.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
-rename to package/gcc/13.3.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 2324561a3e..969702b707 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -74,7 +74,7 @@ config BR2_GCC_VERSION
- 	string
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "12.3.0"    if BR2_GCC_VERSION_12_X
--	default "13.2.0"    if BR2_GCC_VERSION_13_X
-+	default "13.3.0"    if BR2_GCC_VERSION_13_X
- 	default "14.1.0"    if BR2_GCC_VERSION_14_X
- 	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
- 
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 08d4fca6e7..0b48a1acdd 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
- sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-12.3.0/sha512.sum
- sha512  8fb799dfa2e5de5284edf8f821e3d40c2781e4c570f5adfdb1ca0671fcae3fb7f794ea783e80f01ec7bfbf912ca508e478bd749b2755c2c14e4055648146c204  gcc-12.3.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-13.2.0/sha512.sum
--sha512  d99e4826a70db04504467e349e9fbaedaa5870766cda7c5cab50cdebedc4be755ebca5b789e1232a34a20be1a0b60097de9280efe47bdb71c73251e30b0862a2  gcc-13.2.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
-+sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.1.0/sha512.sum
- sha512  e9e224f2b26646fcf038d28dfa08b94c623bc57941f99894a321d01c600f7c68aff6b8837fd25e73e540de1f8de5606e98694a62cdcdfb525ce768b3ef6879ea  gcc-14.1.0.tar.xz
- 
+Looking at the build logic for mosquitto_passwd (and mosquitto_ctrl) I
+see they need openssl (and cjson for mosquitto_ctrl). They don't make a
+lot of sense without the broker and they are really tiny compared to the
+libraries and the broker, so I have changed the patch to automatically
+build them if the broker is enabled and the needed libraries.
+
+ls -lahS target/usr/sbin/mosquitto target/usr/bin/mosquitto_* target/usr/lib/libssl.so.3 target/usr/lib/libcrypto.so.3 target/usr/lib/libcjson.so.1.7.18
+-rwxr-xr-x 1 peko peko 4.8M Jun  1 00:42 target/usr/lib/libcrypto.so.3
+-rwxr-xr-x 1 peko peko 968K Jun  1 00:42 target/usr/lib/libssl.so.3
+-rwxr-xr-x 1 peko peko 266K Jun  1 00:42 target/usr/sbin/mosquitto
+-rwxr-xr-x 1 peko peko  58K Jun  1 00:42 target/usr/bin/mosquitto_rr
+-rwxr-xr-x 1 peko peko  58K Jun  1 00:42 target/usr/bin/mosquitto_sub
+-rwxr-xr-x 1 peko peko  54K Jun  1 00:42 target/usr/bin/mosquitto_ctrl
+-rwxr-xr-x 1 peko peko  50K Jun  1 00:42 target/usr/bin/mosquitto_pub
+-rwxr-xr-x 1 peko peko  34K Jun  1 00:42 target/usr/lib/libcjson.so.1.7.18
+-rwxr-xr-x 1 peko peko  26K Jun  1 00:42 target/usr/bin/mosquitto_passwd
+
+And committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
