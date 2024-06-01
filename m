@@ -4,50 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23F9FC25B76
-	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 20:51:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84051C27C44
+	for <buildroot@archiver.kernel.org>; Sat,  1 Jun 2024 20:51:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA3F68429F;
-	Sat,  1 Jun 2024 20:51:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4775D8429F;
+	Sat,  1 Jun 2024 20:51:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rGWDiq4CPRK2; Sat,  1 Jun 2024 20:51:35 +0000 (UTC)
+ id 6BF0tFyGfUXU; Sat,  1 Jun 2024 20:51:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91C51847BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AF77847C6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91C51847BF;
-	Sat,  1 Jun 2024 20:51:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1AF77847C6;
+	Sat,  1 Jun 2024 20:51:49 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C51A41BF4E5
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 20:51:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C78061BF4E5
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 20:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B164460733
- for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 20:51:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBC8C60733
+ for <buildroot@lists.busybox.net>; Sat,  1 Jun 2024 20:51:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pMpRoINzQnbs for <buildroot@lists.busybox.net>;
- Sat,  1 Jun 2024 20:51:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 4XAw-VLhQw5K for <buildroot@lists.busybox.net>;
+ Sat,  1 Jun 2024 20:51:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D340A606F9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D340A606F9
- for <buildroot@buildroot.org>; Sat,  1 Jun 2024 20:51:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAE2E8769D; Sat,  1 Jun 2024 20:51:31 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 1 Jun 2024 22:51:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 507caef3ddf5ab7d933e14303508db057c4b9501
-X-Git-Newrev: cc08d6f5d1a152279c340f56539a43d932ea0b0d
-X-Patchwork-Hint: ignore
-Message-Id: <20240601205131.CAE2E8769D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] micropython: Add patch to avoid textrel on
- arm/thumb
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 85894606F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85894606F9
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 85894606F9
+ for <buildroot@buildroot.org>; Sat,  1 Jun 2024 20:51:46 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 709EA13F861;
+ Sat,  1 Jun 2024 22:51:40 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 01 Jun 2024 22:51:40 +0200
+Date: Sat, 1 Jun 2024 22:51:40 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Message-ID: <ZluJ3A9D-fTJKmJ1@landeda>
+References: <20240529-ztext-v2-0-82985032f169@gmx.net>
+ <20240529-ztext-v2-2-82985032f169@gmx.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240529-ztext-v2-2-82985032f169@gmx.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1717275103;
+ bh=qQdweWjnnorstyj4YjJTOZiFi64S8HY5F8PWUUN5X1E=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=pXz6QlqmSr99zWEcOt5CCrpGYZJTAYkWRZSJMzRNDZ6Y7TND8Fj5nO3vd/ApTtL5+
+ EMiC+ghEDulyqeijgK/r2ZTv5POck2+Ix6mxnoMiDtST/CkXmvARWtrwww4NBUTJJV
+ K/yAs9YpNQWDuGqA19fWnAqcB+DZP+CyjBwdspiGxiEqOX0m7nlb2C4KT3fL5VnUEl
+ kSthD+f/U6ulbez2dTYmWRAOQUvPOAreSG+65C2/NEZ/D1UouzeBEQkmF8s3gFUaV/
+ RFt6Hrr1/HfCEhQQbQJ+5ZRk8M6+53X3dkm0m7xnv4tY0RLnSSXBeWlSvjQTXyPcLD
+ QrTXjqzo2bfag==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pXz6Qlqm
+Subject: Re: [Buildroot] [PATCH v2 2/2] micropython: Add patch to avoid
+ textrel on arm/thumb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,169 +82,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6951297446511488219=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6951297446511488219==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=cc08d6f5d1a152279c340f56539a43d932ea0b0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...-Make-non-Thumb2-long-jump-workaround-opt.patch | 130 +++++++++++++++++++++
- 1 file changed, 130 insertions(+)
-
-diff --git a/package/micropython/0001-py-nlrthumb-Make-non-Thumb2-long-jump-workaround-opt.patch b/package/micropython/0001-py-nlrthumb-Make-non-Thumb2-long-jump-workaround-opt.patch
-new file mode 100644
-index 0000000000..b05791045e
---- /dev/null
-+++ b/package/micropython/0001-py-nlrthumb-Make-non-Thumb2-long-jump-workaround-opt.patch
-@@ -0,0 +1,130 @@
-+From 7b050b366b7dacfb43779c51702a892d8f1873d0 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=2E=20Neusch=C3=A4fer?= <j.ne@posteo.net>
-+Date: Sun, 2 Apr 2023 19:58:42 +0200
-+Subject: [PATCH] py/nlrthumb: Make non-Thumb2 long-jump workaround opt-in.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Although the original motivation given for the workaround[1] is correct,
-+nlr.o and nlrthumb.o are linked with a small enough distance that the
-+problem does not occur, and the workaround isn't necessary. The distance
-+between the b instruction and its target (nlr_push_tail) is just 64
-+bytes[2], well within the ±2046 byte range addressable by an
-+unconditional branch instruction in Thumb mode.
-+
-+The workaround induces a relocation in the text section (textrel), which
-+isn't supported everywhere, notably not on musl-libc[3], where it causes
-+a crash on start-up. With the workaround removed, micropython works on an
-+ARMv5T Linux system built with musl-libc.
-+
-+This commit changes nlrthumb.c to use a direct jump by default, but
-+leaves the long jump workaround as an option for those cases where it's
-+actually needed.
-+
-+[1]: commit dd376a239dc4f47b0ee7866810fcda151f3cf6dd
-+
-+Author: Damien George <damien.p.george@gmail.com>
-+Date:   Fri Sep 1 15:25:29 2017 +1000
-+
-+    py/nlrthumb: Get working again on standard Thumb arch (ie not Thumb2).
-+
-+    "b" on Thumb might not be long enough for the jump to nlr_push_tail so
-+    it must be done indirectly.
-+
-+[2]: Excerpt from objdump -d micropython:
-+
-+000095c4 <nlr_push_tail>:
-+    95c4:       b510            push    {r4, lr}
-+    95c6:       0004            movs    r4, r0
-+    95c8:       f02d fd42       bl      37050 <mp_thread_get_state>
-+    95cc:       6943            ldr     r3, [r0, #20]
-+    95ce:       6023            str     r3, [r4, #0]
-+    95d0:       6144            str     r4, [r0, #20]
-+    95d2:       2000            movs    r0, #0
-+    95d4:       bd10            pop     {r4, pc}
-+
-+000095d6 <nlr_pop>:
-+    95d6:       b510            push    {r4, lr}
-+    95d8:       f02d fd3a       bl      37050 <mp_thread_get_state>
-+    95dc:       6943            ldr     r3, [r0, #20]
-+    95de:       681b            ldr     r3, [r3, #0]
-+    95e0:       6143            str     r3, [r0, #20]
-+    95e2:       bd10            pop     {r4, pc}
-+
-+000095e4 <nlr_push>:
-+    95e4:       60c4            str     r4, [r0, #12]
-+    95e6:       6105            str     r5, [r0, #16]
-+    95e8:       6146            str     r6, [r0, #20]
-+    95ea:       6187            str     r7, [r0, #24]
-+    95ec:       4641            mov     r1, r8
-+    95ee:       61c1            str     r1, [r0, #28]
-+    95f0:       4649            mov     r1, r9
-+    95f2:       6201            str     r1, [r0, #32]
-+    95f4:       4651            mov     r1, sl
-+    95f6:       6241            str     r1, [r0, #36]   @ 0x24
-+    95f8:       4659            mov     r1, fp
-+    95fa:       6281            str     r1, [r0, #40]   @ 0x28
-+    95fc:       4669            mov     r1, sp
-+    95fe:       62c1            str     r1, [r0, #44]   @ 0x2c
-+    9600:       4671            mov     r1, lr
-+    9602:       6081            str     r1, [r0, #8]
-+    9604:       e7de            b.n     95c4 <nlr_push_tail>
-+
-+[3]: https://www.openwall.com/lists/musl/2020/09/25/4
-+
-+Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-+Upstream: https://github.com/micropython/micropython/commit/7b050b366b7dacfb43779c51702a892d8f1873d0
-+---
-+ py/mpconfig.h |  6 ++++++
-+ py/nlrthumb.c | 10 +++++++++-
-+ 2 files changed, 15 insertions(+), 1 deletion(-)
-+
-+diff --git a/py/mpconfig.h b/py/mpconfig.h
-+index af2480266..1aa3e0699 100644
-+--- a/py/mpconfig.h
-++++ b/py/mpconfig.h
-+@@ -587,6 +587,12 @@
-+ /*****************************************************************************/
-+ /* Python internal features                                                  */
-+
-++// Use a special long jump in nlrthumb.c, which may be necessary if nlr.o and
-++// nlrthumb.o are linked far apart from each other.
-++#ifndef MICROPY_NLR_THUMB_USE_LONG_JUMP
-++#define MICROPY_NLR_THUMB_USE_LONG_JUMP (0)
-++#endif
-++
-+ // Whether to enable import of external modules
-+ // When disabled, only importing of built-in modules is supported
-+ // When enabled, a port must implement mp_import_stat (among other things)
-+diff --git a/py/nlrthumb.c b/py/nlrthumb.c
-+index a22c5df5b..e7b24f242 100644
-+--- a/py/nlrthumb.c
-++++ b/py/nlrthumb.c
-+@@ -38,6 +38,14 @@
-+
-+ __attribute__((naked)) unsigned int nlr_push(nlr_buf_t *nlr) {
-+
-++    // If you get a linker error here, indicating that a relocation doesn't
-++    // fit, try the following (in that order):
-++    //
-++    // 1. Ensure that nlr.o nlrthumb.o are linked closely together, i.e.
-++    //    there aren't too many other files between them in the linker list
-++    //    (PY_CORE_O_BASENAME in py/py.mk)
-++    // 2. Set -DMICROPY_NLR_THUMB_USE_LONG_JUMP=1 during the build
-++    //
-+     __asm volatile (
-+         "str    r4, [r0, #12]       \n" // store r4 into nlr_buf
-+         "str    r5, [r0, #16]       \n" // store r5 into nlr_buf
-+@@ -71,7 +79,7 @@ __attribute__((naked)) unsigned int nlr_push(nlr_buf_t *nlr) {
-+         "str    lr, [r0, #8]        \n" // store lr into nlr_buf
-+         #endif
-+
-+-        #if !defined(__thumb2__)
-++        #if MICROPY_NLR_THUMB_USE_LONG_JUMP
-+         "ldr    r1, nlr_push_tail_var \n"
-+         "bx     r1                  \n" // do the rest in C
-+         ".align 2                   \n"
-+--
-+2.43.0
-+
-
---===============6951297446511488219==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6951297446511488219==--
+Si4sIEFsbCwKCk9uIDIwMjQtMDUtMjkgMjA6MjIgKzAyMDAsIEouIE5ldXNjaMOkZmVyIHZpYSBi
+dWlsZHJvb3Qgc3Bha2UgdGh1c2x5Ogo+IFNpZ25lZC1vZmYtYnk6IEouIE5ldXNjaMOkZmVyIDxq
+Lm5ldXNjaGFlZmVyQGdteC5uZXQ+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKUmVnYXJk
+cywKWWFubiBFLiBNT1JJTi4KCj4gLS0tCj4gIC4uLi1NYWtlLW5vbi1UaHVtYjItbG9uZy1qdW1w
+LXdvcmthcm91bmQtb3B0LnBhdGNoIHwgMTMwICsrKysrKysrKysrKysrKysrKysrKwo+ICAxIGZp
+bGUgY2hhbmdlZCwgMTMwIGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9t
+aWNyb3B5dGhvbi8wMDAxLXB5LW5scnRodW1iLU1ha2Utbm9uLVRodW1iMi1sb25nLWp1bXAtd29y
+a2Fyb3VuZC1vcHQucGF0Y2ggYi9wYWNrYWdlL21pY3JvcHl0aG9uLzAwMDEtcHktbmxydGh1bWIt
+TWFrZS1ub24tVGh1bWIyLWxvbmctanVtcC13b3JrYXJvdW5kLW9wdC5wYXRjaAo+IG5ldyBmaWxl
+IG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uZjQxYzExMzcxYQo+IC0tLSAvZGV2L251
+bGwKPiArKysgYi9wYWNrYWdlL21pY3JvcHl0aG9uLzAwMDEtcHktbmxydGh1bWItTWFrZS1ub24t
+VGh1bWIyLWxvbmctanVtcC13b3JrYXJvdW5kLW9wdC5wYXRjaAo+IEBAIC0wLDAgKzEsMTMwIEBA
+Cj4gK0Zyb20gN2IwNTBiMzY2YjdkYWNmYjQzNzc5YzUxNzAyYTg5MmQ4ZjE4NzNkMCBNb24gU2Vw
+IDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogPT9VVEYtOD9xP0o9MkU9MjBOZXVzY2g9QzM9QTRm
+ZXI/PSA8ai5uZUBwb3N0ZW8ubmV0Pgo+ICtEYXRlOiBTdW4sIDIgQXByIDIwMjMgMTk6NTg6NDIg
+KzAyMDAKPiArU3ViamVjdDogW1BBVENIXSBweS9ubHJ0aHVtYjogTWFrZSBub24tVGh1bWIyIGxv
+bmctanVtcCB3b3JrYXJvdW5kIG9wdC1pbi4KPiArTUlNRS1WZXJzaW9uOiAxLjAKPiArQ29udGVu
+dC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gK0NvbnRlbnQtVHJhbnNmZXItRW5j
+b2Rpbmc6IDhiaXQKPiArCj4gK0FsdGhvdWdoIHRoZSBvcmlnaW5hbCBtb3RpdmF0aW9uIGdpdmVu
+IGZvciB0aGUgd29ya2Fyb3VuZFsxXSBpcyBjb3JyZWN0LAo+ICtubHIubyBhbmQgbmxydGh1bWIu
+byBhcmUgbGlua2VkIHdpdGggYSBzbWFsbCBlbm91Z2ggZGlzdGFuY2UgdGhhdCB0aGUKPiArcHJv
+YmxlbSBkb2VzIG5vdCBvY2N1ciwgYW5kIHRoZSB3b3JrYXJvdW5kIGlzbid0IG5lY2Vzc2FyeS4g
+VGhlIGRpc3RhbmNlCj4gK2JldHdlZW4gdGhlIGIgaW5zdHJ1Y3Rpb24gYW5kIGl0cyB0YXJnZXQg
+KG5scl9wdXNoX3RhaWwpIGlzIGp1c3QgNjQKPiArYnl0ZXNbMl0sIHdlbGwgd2l0aGluIHRoZSDC
+sTIwNDYgYnl0ZSByYW5nZSBhZGRyZXNzYWJsZSBieSBhbgo+ICt1bmNvbmRpdGlvbmFsIGJyYW5j
+aCBpbnN0cnVjdGlvbiBpbiBUaHVtYiBtb2RlLgo+ICsKPiArVGhlIHdvcmthcm91bmQgaW5kdWNl
+cyBhIHJlbG9jYXRpb24gaW4gdGhlIHRleHQgc2VjdGlvbiAodGV4dHJlbCksIHdoaWNoCj4gK2lz
+bid0IHN1cHBvcnRlZCBldmVyeXdoZXJlLCBub3RhYmx5IG5vdCBvbiBtdXNsLWxpYmNbM10sIHdo
+ZXJlIGl0IGNhdXNlcwo+ICthIGNyYXNoIG9uIHN0YXJ0LXVwLiBXaXRoIHRoZSB3b3JrYXJvdW5k
+IHJlbW92ZWQsIG1pY3JvcHl0aG9uIHdvcmtzIG9uIGFuCj4gK0FSTXY1VCBMaW51eCBzeXN0ZW0g
+YnVpbHQgd2l0aCBtdXNsLWxpYmMuCj4gKwo+ICtUaGlzIGNvbW1pdCBjaGFuZ2VzIG5scnRodW1i
+LmMgdG8gdXNlIGEgZGlyZWN0IGp1bXAgYnkgZGVmYXVsdCwgYnV0Cj4gK2xlYXZlcyB0aGUgbG9u
+ZyBqdW1wIHdvcmthcm91bmQgYXMgYW4gb3B0aW9uIGZvciB0aG9zZSBjYXNlcyB3aGVyZSBpdCdz
+Cj4gK2FjdHVhbGx5IG5lZWRlZC4KPiArCj4gK1sxXTogY29tbWl0IGRkMzc2YTIzOWRjNGY0N2Iw
+ZWU3ODY2ODEwZmNkYTE1MWYzY2Y2ZGQKPiArCj4gK0F1dGhvcjogRGFtaWVuIEdlb3JnZSA8ZGFt
+aWVuLnAuZ2VvcmdlQGdtYWlsLmNvbT4KPiArRGF0ZTogICBGcmkgU2VwIDEgMTU6MjU6MjkgMjAx
+NyArMTAwMAo+ICsKPiArICAgIHB5L25scnRodW1iOiBHZXQgd29ya2luZyBhZ2FpbiBvbiBzdGFu
+ZGFyZCBUaHVtYiBhcmNoIChpZSBub3QgVGh1bWIyKS4KPiArCj4gKyAgICAiYiIgb24gVGh1bWIg
+bWlnaHQgbm90IGJlIGxvbmcgZW5vdWdoIGZvciB0aGUganVtcCB0byBubHJfcHVzaF90YWlsIHNv
+Cj4gKyAgICBpdCBtdXN0IGJlIGRvbmUgaW5kaXJlY3RseS4KPiArCj4gK1syXTogRXhjZXJwdCBm
+cm9tIG9iamR1bXAgLWQgbWljcm9weXRob246Cj4gKwo+ICswMDAwOTVjNCA8bmxyX3B1c2hfdGFp
+bD46Cj4gKyAgICA5NWM0OiAgICAgICBiNTEwICAgICAgICAgICAgcHVzaCAgICB7cjQsIGxyfQo+
+ICsgICAgOTVjNjogICAgICAgMDAwNCAgICAgICAgICAgIG1vdnMgICAgcjQsIHIwCj4gKyAgICA5
+NWM4OiAgICAgICBmMDJkIGZkNDIgICAgICAgYmwgICAgICAzNzA1MCA8bXBfdGhyZWFkX2dldF9z
+dGF0ZT4KPiArICAgIDk1Y2M6ICAgICAgIDY5NDMgICAgICAgICAgICBsZHIgICAgIHIzLCBbcjAs
+ICMyMF0KPiArICAgIDk1Y2U6ICAgICAgIDYwMjMgICAgICAgICAgICBzdHIgICAgIHIzLCBbcjQs
+ICMwXQo+ICsgICAgOTVkMDogICAgICAgNjE0NCAgICAgICAgICAgIHN0ciAgICAgcjQsIFtyMCwg
+IzIwXQo+ICsgICAgOTVkMjogICAgICAgMjAwMCAgICAgICAgICAgIG1vdnMgICAgcjAsICMwCj4g
+KyAgICA5NWQ0OiAgICAgICBiZDEwICAgICAgICAgICAgcG9wICAgICB7cjQsIHBjfQo+ICsKPiAr
+MDAwMDk1ZDYgPG5scl9wb3A+Ogo+ICsgICAgOTVkNjogICAgICAgYjUxMCAgICAgICAgICAgIHB1
+c2ggICAge3I0LCBscn0KPiArICAgIDk1ZDg6ICAgICAgIGYwMmQgZmQzYSAgICAgICBibCAgICAg
+IDM3MDUwIDxtcF90aHJlYWRfZ2V0X3N0YXRlPgo+ICsgICAgOTVkYzogICAgICAgNjk0MyAgICAg
+ICAgICAgIGxkciAgICAgcjMsIFtyMCwgIzIwXQo+ICsgICAgOTVkZTogICAgICAgNjgxYiAgICAg
+ICAgICAgIGxkciAgICAgcjMsIFtyMywgIzBdCj4gKyAgICA5NWUwOiAgICAgICA2MTQzICAgICAg
+ICAgICAgc3RyICAgICByMywgW3IwLCAjMjBdCj4gKyAgICA5NWUyOiAgICAgICBiZDEwICAgICAg
+ICAgICAgcG9wICAgICB7cjQsIHBjfQo+ICsKPiArMDAwMDk1ZTQgPG5scl9wdXNoPjoKPiArICAg
+IDk1ZTQ6ICAgICAgIDYwYzQgICAgICAgICAgICBzdHIgICAgIHI0LCBbcjAsICMxMl0KPiArICAg
+IDk1ZTY6ICAgICAgIDYxMDUgICAgICAgICAgICBzdHIgICAgIHI1LCBbcjAsICMxNl0KPiArICAg
+IDk1ZTg6ICAgICAgIDYxNDYgICAgICAgICAgICBzdHIgICAgIHI2LCBbcjAsICMyMF0KPiArICAg
+IDk1ZWE6ICAgICAgIDYxODcgICAgICAgICAgICBzdHIgICAgIHI3LCBbcjAsICMyNF0KPiArICAg
+IDk1ZWM6ICAgICAgIDQ2NDEgICAgICAgICAgICBtb3YgICAgIHIxLCByOAo+ICsgICAgOTVlZTog
+ICAgICAgNjFjMSAgICAgICAgICAgIHN0ciAgICAgcjEsIFtyMCwgIzI4XQo+ICsgICAgOTVmMDog
+ICAgICAgNDY0OSAgICAgICAgICAgIG1vdiAgICAgcjEsIHI5Cj4gKyAgICA5NWYyOiAgICAgICA2
+MjAxICAgICAgICAgICAgc3RyICAgICByMSwgW3IwLCAjMzJdCj4gKyAgICA5NWY0OiAgICAgICA0
+NjUxICAgICAgICAgICAgbW92ICAgICByMSwgc2wKPiArICAgIDk1ZjY6ICAgICAgIDYyNDEgICAg
+ICAgICAgICBzdHIgICAgIHIxLCBbcjAsICMzNl0gICBAIDB4MjQKPiArICAgIDk1Zjg6ICAgICAg
+IDQ2NTkgICAgICAgICAgICBtb3YgICAgIHIxLCBmcAo+ICsgICAgOTVmYTogICAgICAgNjI4MSAg
+ICAgICAgICAgIHN0ciAgICAgcjEsIFtyMCwgIzQwXSAgIEAgMHgyOAo+ICsgICAgOTVmYzogICAg
+ICAgNDY2OSAgICAgICAgICAgIG1vdiAgICAgcjEsIHNwCj4gKyAgICA5NWZlOiAgICAgICA2MmMx
+ICAgICAgICAgICAgc3RyICAgICByMSwgW3IwLCAjNDRdICAgQCAweDJjCj4gKyAgICA5NjAwOiAg
+ICAgICA0NjcxICAgICAgICAgICAgbW92ICAgICByMSwgbHIKPiArICAgIDk2MDI6ICAgICAgIDYw
+ODEgICAgICAgICAgICBzdHIgICAgIHIxLCBbcjAsICM4XQo+ICsgICAgOTYwNDogICAgICAgZTdk
+ZSAgICAgICAgICAgIGIubiAgICAgOTVjNCA8bmxyX3B1c2hfdGFpbD4KPiArCj4gK1szXTogaHR0
+cHM6Ly93d3cub3BlbndhbGwuY29tL2xpc3RzL211c2wvMjAyMC8wOS8yNS80Cj4gKwo+ICtTaWdu
+ZWQtb2ZmLWJ5OiBKLiBOZXVzY2jDpGZlciA8ai5uZUBwb3N0ZW8ubmV0Pgo+ICtVcHN0cmVhbTog
+aHR0cHM6Ly9naXRodWIuY29tL21pY3JvcHl0aG9uL21pY3JvcHl0aG9uL2NvbW1pdC83YjA1MGIz
+NjZiN2RhY2ZiNDM3NzljNTE3MDJhODkyZDhmMTg3M2QwCj4gKy0tLQo+ICsgcHkvbXBjb25maWcu
+aCB8ICA2ICsrKysrKwo+ICsgcHkvbmxydGh1bWIuYyB8IDEwICsrKysrKysrKy0KPiArIDIgZmls
+ZXMgY2hhbmdlZCwgMTUgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+ICsKPiArZGlmZiAt
+LWdpdCBhL3B5L21wY29uZmlnLmggYi9weS9tcGNvbmZpZy5oCj4gK2luZGV4IGFmMjQ4MDI2Ni4u
+MWFhM2UwNjk5IDEwMDY0NAo+ICstLS0gYS9weS9tcGNvbmZpZy5oCj4gKysrKyBiL3B5L21wY29u
+ZmlnLmgKPiArQEAgLTU4Nyw2ICs1ODcsMTIgQEAKPiArIC8qKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKi8K
+PiArIC8qIFB5dGhvbiBpbnRlcm5hbCBmZWF0dXJlcyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgKi8KPiArCj4gKysvLyBVc2UgYSBzcGVjaWFsIGxvbmcg
+anVtcCBpbiBubHJ0aHVtYi5jLCB3aGljaCBtYXkgYmUgbmVjZXNzYXJ5IGlmIG5sci5vIGFuZAo+
+ICsrLy8gbmxydGh1bWIubyBhcmUgbGlua2VkIGZhciBhcGFydCBmcm9tIGVhY2ggb3RoZXIuCj4g
+KysjaWZuZGVmIE1JQ1JPUFlfTkxSX1RIVU1CX1VTRV9MT05HX0pVTVAKPiArKyNkZWZpbmUgTUlD
+Uk9QWV9OTFJfVEhVTUJfVVNFX0xPTkdfSlVNUCAoMCkKPiArKyNlbmRpZgo+ICsrCj4gKyAvLyBX
+aGV0aGVyIHRvIGVuYWJsZSBpbXBvcnQgb2YgZXh0ZXJuYWwgbW9kdWxlcwo+ICsgLy8gV2hlbiBk
+aXNhYmxlZCwgb25seSBpbXBvcnRpbmcgb2YgYnVpbHQtaW4gbW9kdWxlcyBpcyBzdXBwb3J0ZWQK
+PiArIC8vIFdoZW4gZW5hYmxlZCwgYSBwb3J0IG11c3QgaW1wbGVtZW50IG1wX2ltcG9ydF9zdGF0
+IChhbW9uZyBvdGhlciB0aGluZ3MpCj4gK2RpZmYgLS1naXQgYS9weS9ubHJ0aHVtYi5jIGIvcHkv
+bmxydGh1bWIuYwo+ICtpbmRleCBhMjJjNWRmNWIuLmU3YjI0ZjI0MiAxMDA2NDQKPiArLS0tIGEv
+cHkvbmxydGh1bWIuYwo+ICsrKysgYi9weS9ubHJ0aHVtYi5jCj4gK0BAIC0zOCw2ICszOCwxNCBA
+QAo+ICsKPiArIF9fYXR0cmlidXRlX18oKG5ha2VkKSkgdW5zaWduZWQgaW50IG5scl9wdXNoKG5s
+cl9idWZfdCAqbmxyKSB7Cj4gKwo+ICsrICAgIC8vIElmIHlvdSBnZXQgYSBsaW5rZXIgZXJyb3Ig
+aGVyZSwgaW5kaWNhdGluZyB0aGF0IGEgcmVsb2NhdGlvbiBkb2Vzbid0Cj4gKysgICAgLy8gZml0
+LCB0cnkgdGhlIGZvbGxvd2luZyAoaW4gdGhhdCBvcmRlcik6Cj4gKysgICAgLy8KPiArKyAgICAv
+LyAxLiBFbnN1cmUgdGhhdCBubHIubyBubHJ0aHVtYi5vIGFyZSBsaW5rZWQgY2xvc2VseSB0b2dl
+dGhlciwgaS5lLgo+ICsrICAgIC8vICAgIHRoZXJlIGFyZW4ndCB0b28gbWFueSBvdGhlciBmaWxl
+cyBiZXR3ZWVuIHRoZW0gaW4gdGhlIGxpbmtlciBsaXN0Cj4gKysgICAgLy8gICAgKFBZX0NPUkVf
+T19CQVNFTkFNRSBpbiBweS9weS5taykKPiArKyAgICAvLyAyLiBTZXQgLURNSUNST1BZX05MUl9U
+SFVNQl9VU0VfTE9OR19KVU1QPTEgZHVyaW5nIHRoZSBidWlsZAo+ICsrICAgIC8vCj4gKyAgICAg
+X19hc20gdm9sYXRpbGUgKAo+ICsgICAgICAgICAic3RyICAgIHI0LCBbcjAsICMxMl0gICAgICAg
+XG4iIC8vIHN0b3JlIHI0IGludG8gbmxyX2J1Zgo+ICsgICAgICAgICAic3RyICAgIHI1LCBbcjAs
+ICMxNl0gICAgICAgXG4iIC8vIHN0b3JlIHI1IGludG8gbmxyX2J1Zgo+ICtAQCAtNzEsNyArNzks
+NyBAQCBfX2F0dHJpYnV0ZV9fKChuYWtlZCkpIHVuc2lnbmVkIGludCBubHJfcHVzaChubHJfYnVm
+X3QgKm5scikgewo+ICsgICAgICAgICAic3RyICAgIGxyLCBbcjAsICM4XSAgICAgICAgXG4iIC8v
+IHN0b3JlIGxyIGludG8gbmxyX2J1Zgo+ICsgICAgICAgICAjZW5kaWYKPiArCj4gKy0gICAgICAg
+ICNpZiAhZGVmaW5lZChfX3RodW1iMl9fKQo+ICsrICAgICAgICAjaWYgTUlDUk9QWV9OTFJfVEhV
+TUJfVVNFX0xPTkdfSlVNUAo+ICsgICAgICAgICAibGRyICAgIHIxLCBubHJfcHVzaF90YWlsX3Zh
+ciBcbiIKPiArICAgICAgICAgImJ4ICAgICByMSAgICAgICAgICAgICAgICAgIFxuIiAvLyBkbyB0
+aGUgcmVzdCBpbiBDCj4gKyAgICAgICAgICIuYWxpZ24gMiAgICAgICAgICAgICAgICAgICBcbiIK
+PiArLS0KPiArMi40My4wCj4gKwo+IAo+IC0tCj4gMi40My4wCj4gCj4gX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
+Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0t
+LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8
+ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04g
+fCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNp
+Z25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEg
+MDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBU
+aGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8g
+XCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0t
+LS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
