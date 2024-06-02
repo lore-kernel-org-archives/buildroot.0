@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A7E4C25B74
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 257A2C25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:27:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 17555400B9;
-	Sun,  2 Jun 2024 18:24:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CBE6840413;
+	Sun,  2 Jun 2024 18:27:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cvm377l2yC95; Sun,  2 Jun 2024 18:24:10 +0000 (UTC)
+ id sIdGxUiZZmCI; Sun,  2 Jun 2024 18:27:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29D1640378
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8489408E2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 29D1640378;
-	Sun,  2 Jun 2024 18:24:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 02A951BF4DA
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:24:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8489408E2;
+	Sun,  2 Jun 2024 18:27:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E7661BF4DA
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2D8E402CC
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:24:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B72882423
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vRdQ7V27BBSc for <buildroot@lists.busybox.net>;
- Sun,  2 Jun 2024 18:24:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8movV1gfdmhl for <buildroot@lists.busybox.net>;
+ Sun,  2 Jun 2024 18:27:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8BCB640250
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BCB640250
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8BCB640250
- for <buildroot@buildroot.org>; Sun,  2 Jun 2024 18:24:07 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1FFADFF804;
- Sun,  2 Jun 2024 18:24:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A94B682CF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A94B682CF1
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A94B682CF1
+ for <buildroot@busybox.net>; Sun,  2 Jun 2024 18:27:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 95AEEC0002;
+ Sun,  2 Jun 2024 18:27:20 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sDpsB-0013t8-1O;
- Sun, 02 Jun 2024 20:24:03 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sDpvL-0014Y8-37;
+ Sun, 02 Jun 2024 20:27:19 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240602162123.2513233-1-yann.morin.1998@free.fr>
-Date: Sun, 02 Jun 2024 20:24:03 +0200
-In-Reply-To: <20240602162123.2513233-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 2 Jun 2024 18:21:23 +0200")
-Message-ID: <871q5fkxto.fsf@dell.be.48ers.dk>
+To: Francois Perrad <francois.perrad@gadz.org>
+References: <20240602070634.597337-1-francois.perrad@gadz.org>
+Date: Sun, 02 Jun 2024 20:27:19 +0200
+In-Reply-To: <20240602070634.597337-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Sun, 2 Jun 2024 09:06:33 +0200")
+Message-ID: <87wmn7jj3s.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/qt5base: fix download
+Subject: Re: [Buildroot] [PATCH] configs/olimex_stmp157_olinuxino_lime: add
+ hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,49 +69,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>, buildroot@buildroot.org
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Francois" == Francois Perrad <francois.perrad@gadz.org> writes:
 
- > Since qt5base was last bumped in 8ab4a0a348b2 (package/qt5: bump packages
- > to latest kde submodule versions), the hash for the downloaded tarball
- > has changed:
-
- >     $ make qt5base-source
- >     [...]
- >     ERROR: expected: 935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d
- >     ERROR: got     : 3067c4d84ba9927bfe65bf606c17af082199e0a3b22781fbf9bc6c6bc3de26dd
-
- > We know the hash was good back when 8ab4a0a348b2 was applied, because
- > the tarball has been cached on sources.buildroot.org with the expected
- > hash:
-
- >     $ curl 'https://sources.buildroot.net/qt5base/qtbase-da6e958319e95fe564d3b30c931492dd666bfaff.tar.bz2' 2>/dev/null |sha256sum -
- >     935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d  -
-
- > But now, the archive generated by the KDE gorge (Gitlab underneath) has
- > another hash (as seen above). This means that the KDE forge (Gitlab) has
- > changed the way it generates archives. So, what's the delta? It turns
- > out that the only changes are about CRLF that were present in the
- > original archive, and are no longer in the new one. It is to be noted
- > that the affected files do not have CRLFS in the repository. It further
- > turns out that the archive was previously generated with .gitattibutes
- > of the main branch ('dev' in Qt repositories), while now they are
- > generated with the .gitattibutes of the commit for which they are
- > generated.
-
-Funky!
-
- > Switch to using the git download method for really reproducible
- > archives...
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > and enable BR2_DOWNLOAD_FORCE_CHECK_HASHES
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed, thanks.
 
