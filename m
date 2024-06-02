@@ -1,94 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32097C25B76
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 03:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06049C25B7E
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 07:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53E5681E15;
-	Sun,  2 Jun 2024 03:14:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79DBA405F6;
+	Sun,  2 Jun 2024 07:06:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9-5QLFE-bqQr; Sun,  2 Jun 2024 07:06:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F0E41D7E
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18F0E41D7E;
+	Sun,  2 Jun 2024 07:06:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EE0201BF3DB
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 07:06:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D59BA84509
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 07:06:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6lfs5Yyi0vBv; Sun,  2 Jun 2024 03:14:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0E1C81E26
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0E1C81E26;
-	Sun,  2 Jun 2024 03:14:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CB8081BF852
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 03:14:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B83E660810
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 03:14:37 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I17TX8HqqTTQ for <buildroot@lists.busybox.net>;
- Sun,  2 Jun 2024 03:14:36 +0000 (UTC)
+ id hQUESlQ0I-MA for <buildroot@lists.busybox.net>;
+ Sun,  2 Jun 2024 07:06:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::733; helo=mail-qk1-x733.google.com;
- envelope-from=vfazio@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 12DBE607C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12DBE607C4
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com
- [IPv6:2607:f8b0:4864:20::733])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 12DBE607C4
- for <buildroot@buildroot.org>; Sun,  2 Jun 2024 03:14:35 +0000 (UTC)
-Received: by mail-qk1-x733.google.com with SMTP id
- af79cd13be357-794cbdc2314so224249685a.2
- for <buildroot@buildroot.org>; Sat, 01 Jun 2024 20:14:35 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::22d; helo=mail-lj1-x22d.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1DEA183B68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DEA183B68
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1DEA183B68
+ for <buildroot@busybox.net>; Sun,  2 Jun 2024 07:06:38 +0000 (UTC)
+Received: by mail-lj1-x22d.google.com with SMTP id
+ 38308e7fff4ca-2e73359b979so28971911fa.1
+ for <buildroot@busybox.net>; Sun, 02 Jun 2024 00:06:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717298073; x=1717902873;
+ d=1e100.net; s=20230601; t=1717311996; x=1717916796;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=69Ak3fVPGAbz03rR3WdPIDNMRw8fQ9ymeTvz7XMRO10=;
- b=V5N1Gojnji6tsJ2m0mmXh3dzbG4lAP2A0Gn+3Nz1S+aM3Ld27RYJSI1ck0iqpKMFAJ
- qvW661b4nrnhNmD0KGRDhvuoFOiqePt/8/crXTylbqVXr4QS1ehO2mbSOXXRSSafqZOo
- 6nyW3hjvHWQBCjwU+0+r2eWqOudcIIxU5Phuav6ZkvOTVgph3DG21cE9GIZ2AOK/buua
- 070B/yisn2e5VbdHZzI514TUa2Lpvs8Ofz0k6qYHf1O8nhqZHhfPURUfMQHT+otNeMXg
- teABJ/+eHC8Pq1S+DNFCP+8ogDp5HlppOeQx3/YTKm6HX2FEsKyLEeyQszfsDZtlqJyO
- lpPQ==
-X-Gm-Message-State: AOJu0YwWzydhCTuhRtVFtsN7Eg7zP/5tEAVQiPwCtaqpLLXzOYqxLEy9
- XYQOHiczDq0elqlp6N9yaHxry9iR/pvZpMqHxm0uw5agOCBvoCKgG0i86uys
-X-Google-Smtp-Source: AGHT+IG/vNhxe1JOD7Ccy4n1fIKqux2x8hmOktUqVum3WLjd+ly+Y+CjoKeNB4JtF9UkUfGujXZOqw==
-X-Received: by 2002:a05:620a:892:b0:792:c286:3f84 with SMTP id
- af79cd13be357-794f5c795bbmr550658385a.20.1717298073228; 
- Sat, 01 Jun 2024 20:14:33 -0700 (PDT)
-Received: from localhost.localdomain (syn-131-093-209-211.res.spectrum.com.
- [131.93.209.211]) by smtp.gmail.com with ESMTPSA id
- af79cd13be357-794f2efc70asm175851585a.17.2024.06.01.20.14.31
+ bh=waKU8vTcQH1m/B7/KEMjcXbuZx8lu354CvnTHsgEPlg=;
+ b=DQl3Dx5ra//wUshXRa3ym5KwnzIvaGpFkz7OXPIZ3++8pEeMjnlOPBN34MyBvb13qF
+ STFbKoqqSq1gd38QAniTrBuAQWebCPUL/v8dXNVDvEJrBCQakbQpTzUTWlMpG41G3gLq
+ U1rmkBBxB1+A3Q5xIydEONw0+5ilrgX+kE/rufBQnaBuTQG/sb1Ouvtml+t4J7iPM1cO
+ Rzvzaq8lqXgtqJ/S2n4ZvadmsXRpTMrBmHc3yD0dGo4wfrEBGa73aAuBovYtNXUkUxew
+ YW0AWHrlfCKhKCz04dPKL+vPi0wmkzRrjiePlDU+kY3ibeIUdL16eaj7hXBwP5js4UQU
+ Ip5A==
+X-Gm-Message-State: AOJu0YxiFA51FGRXqcROko/g0bg91aW0O/Hrpwfci9ICDOO2aBD4gFS3
+ YnNpNSLRbujmdiZ0QO0IU0Iu/G8q2JNoS5zZJ1sQefDaFnsr3J9nVYyyTy1+Q8FXRQRFm0MoHrM
+ mDw==
+X-Google-Smtp-Source: AGHT+IF+cTgfdQk5Aw3lrlGD3zkbE1qBvfy+bfrPW0yhb/3/mjOlPo2pOxtmFYWQgLgULRivpR5yQg==
+X-Received: by 2002:a2e:b615:0:b0:2d4:3e82:117e with SMTP id
+ 38308e7fff4ca-2ea951acc2amr36575861fa.32.1717311996307; 
+ Sun, 02 Jun 2024 00:06:36 -0700 (PDT)
+Received: from vm-2404.. ([37.65.6.24]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-35dd04c0f7esm5454215f8f.22.2024.06.02.00.06.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Jun 2024 20:14:32 -0700 (PDT)
-From: Vincent Fazio <vfazio@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  1 Jun 2024 22:14:27 -0500
-Message-Id: <20240602031427.16506-1-vfazio@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ Sun, 02 Jun 2024 00:06:35 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sun,  2 Jun 2024 09:06:33 +0200
+Message-ID: <20240602070634.597337-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717298073; x=1717902873; darn=buildroot.org;
+ d=gadz.org; s=google; t=1717311996; x=1717916796; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=69Ak3fVPGAbz03rR3WdPIDNMRw8fQ9ymeTvz7XMRO10=;
- b=MMrTEoftUr6jdwmL3B4Rjs8bpPEIr4vaoqEjs//ztR8dbSyoKGGm2OqxdOolJSTmCJ
- tJEBiTlN/D0uFaqgh2sYGwIhjQ3N6BunvTMo4OFMS0Q8CXhhzFoAyuFLr2mHhbTWmTo+
- V2td3aUQ8WEA/W8kCY/Baa6vBYeG4lCiqgIW4qPCGEkHO2wfqYs1kWwkVHUaHq/i+TJL
- dP8wXQMz1hbXGoSVQ/D1CT56bnpaH/jb2ZgcHQghRliRSOLbt7pwc69w4l35a0PAGQhz
- QJ6yJkgssNdQ7DeQJDYZHTa+kkdu0UkUYXPAVj4Q+uOrDXXz3iqZI6E7obIrnRDKYCs3
- u6PQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=waKU8vTcQH1m/B7/KEMjcXbuZx8lu354CvnTHsgEPlg=;
+ b=b4O6p/fceS5X3STIvOrsjfHsyCruaBdvM6kL9Svk2dO1y7utK8ST+aOTOaAoQwzGZX
+ LFCPcj6mo3mfQtvabEPrs8PU926uvGiq/VsnnfRs2IRPajVylZRYcmQkPmGbh4r7u7Zz
+ 4BghYik6Z5PDYZL8GuZ3dOEGQxxrhuoHX/erI4eWKWxTpYqJNL2igJP2WPJFbAsaVKsn
+ Po251w/Tf8J+qdQlOvYbBnVdvocTHilc3lUQ32wFTYBETlch8BgE+MQprwg45TMPT0R0
+ Vs47egVDpUA3BKMR3UYO0wcGWjWqJSeZy4rOfzOpEeW27Qx+5DFhywtO/+oIdY2hRanI
+ jFTw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=MMrTEoft
-Subject: [Buildroot] [PATCH 1/1] package/python3: miscellaneous fixups
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=b4O6p/fc
+Subject: [Buildroot] [PATCH] configs/olimex_stmp157_olinuxino_lime: add
+ hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,311 +101,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Vincent Fazio <vfazio@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There is no longer a need to lie about having mercurial installed as of
-upstream 5c4b0d063a, so drop the ac_cv_prog_HAS_HG override.
+and enable BR2_DOWNLOAD_FORCE_CHECK_HASHES
 
-`PYTHON3_REMOVE_USELESS_FILES`, while not exactly useless, had been
-referencing stale files and not performing full cleanup:
-
-  * the "m" ABI suffix was dropped in upstream 6c44fde3e0
-  * the smtpd was dropped in upstream a797fba888
-  * the wininst* binaries were dropped in upstream 0e2a0f72cc
-
-These legacy references have now been dropped.
-
-The smtpd.py file is a bit quirky because despite having been removed
-upstream, Buildroot's patches to disable certain modules have been
-carrying it forward. This has been rectified.
-
-While here, rework the file removals to accomodate the ABI suffix change
-and to globally remove __pycache__ directories. It's important to note
-that Buildroot uses legacy pyc placements for sourceless distributions,
-meaning __pycache__ is not used at all [0].
-
-When necessary, optimized pyc files will be generated into the correct
-paths in subsequent hooks.
-
-[0]: https://peps.python.org/pep-3147/#case-4-legacy-pyc-files-and-source-less-imports
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0008-Add-an-option-to-disable-pydoc.patch | 16 ++++++-----
- ...009-Add-an-option-to-disable-lib2to3.patch | 27 ++++++++++---------
- .../0017-Add-an-option-to-disable-IDLE.patch  | 26 +++++++++---------
- package/python3/python3.mk                    | 23 +++++-----------
- 4 files changed, 43 insertions(+), 49 deletions(-)
+ .checkpackageignore                                           | 1 -
+ .../stmp1_olinuxino/patches/linux-headers/linux-headers.hash  | 1 +
+ board/olimex/stmp1_olinuxino/patches/linux/linux.hash         | 2 ++
+ board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash         | 2 ++
+ configs/olimex_stmp157_olinuxino_lime_defconfig               | 4 ++++
+ 5 files changed, 9 insertions(+), 1 deletion(-)
+ create mode 120000 board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/olimex/stmp1_olinuxino/patches/linux/linux.hash
+ create mode 100644 board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
 
-diff --git a/package/python3/0008-Add-an-option-to-disable-pydoc.patch b/package/python3/0008-Add-an-option-to-disable-pydoc.patch
-index 3c678bef1c..ffb6a7796f 100644
---- a/package/python3/0008-Add-an-option-to-disable-pydoc.patch
-+++ b/package/python3/0008-Add-an-option-to-disable-pydoc.patch
-@@ -1,4 +1,4 @@
--From 77fcd90a1236d59d40aa32d3bc4bef4303eb4066 Mon Sep 17 00:00:00 2001
-+From e6284624679a525440dc4bfddc1347f8add22fd8 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Wed, 22 Feb 2017 17:07:56 -0800
- Subject: [PATCH] Add an option to disable pydoc
-@@ -12,6 +12,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- [ Adam Duskett: ported to Python 3.10.0 ]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+[ Vincent Fazio: fix scripts array to reflect upstream ]
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
- ---
-  Makefile.pre.in | 7 ++++++-
-  configure.ac    | 6 ++++++
-@@ -19,7 +21,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
-  3 files changed, 19 insertions(+), 3 deletions(-)
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 8f5fc0a47..201ec2a85 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -253,7 +253,6 @@ configs/olimex_a20_olinuxino_lime_defconfig lib_defconfig.ForceCheckHash
+ configs/olimex_a20_olinuxino_micro_defconfig lib_defconfig.ForceCheckHash
+ configs/olimex_a33_olinuxino_defconfig lib_defconfig.ForceCheckHash
+ configs/olimex_a64_olinuxino_defconfig lib_defconfig.ForceCheckHash
+-configs/olimex_stmp157_olinuxino_lime_defconfig lib_defconfig.ForceCheckHash
+ configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
+ configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_lite2_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash b/board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 000000000..5808d92af
+--- /dev/null
++++ b/board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/olimex/stmp1_olinuxino/patches/linux/linux.hash b/board/olimex/stmp1_olinuxino/patches/linux/linux.hash
+new file mode 100644
+index 000000000..8691d5ffd
+--- /dev/null
++++ b/board/olimex/stmp1_olinuxino/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  5d3ca43b81056305860d7407c871eac4f8eafa603029ee67816574a31444fd93  linux-fc74113e14d76aea9482264ff42e07397b94553d-git4.tar.gz
+diff --git a/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash b/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
+new file mode 100644
+index 000000000..a991a1922
+--- /dev/null
++++ b/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  6aaa18a9023db29ceaad5bca240605990b68a6bf348aaefad0bee8be8d37648e  uboot-efadf793a0a5924e2c96362dc1df3e56622ebb97-git4.tar.gz
+diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
+index 8bd8e10ca..ecfa78135 100644
+--- a/configs/olimex_stmp157_olinuxino_lime_defconfig
++++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
+@@ -5,6 +5,10 @@ BR2_cortex_a7=y
+ # Linux headers same as kernel, a 5.10 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
  
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index 5a40b7c5484..e87bc1fcd32 100644
-+index 5a40b7c548..e87bc1fcd3 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
- @@ -1877,7 +1877,9 @@ bininstall: commoninstall altbininstall
-@@ -52,7 +54,7 @@ index 5a40b7c5484..e87bc1fcd32 100644
-  libinstall:	all $(srcdir)/Modules/xxmodule.c
-  	@for i in $(SCRIPTDIR) $(LIBDEST); \
- diff --git a/configure.ac b/configure.ac
--index b4d7d2cca6a..d56d8f9d1c5 100644
-+index b4d7d2cca6..d56d8f9d1c 100644
- --- a/configure.ac
- +++ b/configure.ac
- @@ -4222,6 +4222,12 @@ AS_VAR_IF([posix_threads], [stub], [
-@@ -69,7 +71,7 @@ index b4d7d2cca6a..d56d8f9d1c5 100644
-  AH_TEMPLATE(ENABLE_IPV6, [Define if --enable-ipv6 is specified])
-  AC_MSG_CHECKING([if --enable-ipv6 is specified])
- diff --git a/setup.py b/setup.py
--index 53b066cb18b..d8647724650 100644
-+index 53b066cb18..25e6f4fc26 100644
- --- a/setup.py
- +++ b/setup.py
- @@ -1597,6 +1597,12 @@ class DummyProcess:
-@@ -77,8 +79,8 @@ index 53b066cb18b..d8647724650 100644
-      import warnings
-      warnings.filterwarnings("ignore",category=DeprecationWarning)
- +
--+    scripts = ['Tools/scripts/idle3', 'Tools/scripts/2to3',
--+               'Lib/smtpd.py']
-++    scripts = ['Tools/scripts/idle3', 'Tools/scripts/2to3']
-++
- +    if not '--disable-pydoc' in sysconfig.get_config_var("CONFIG_ARGS"):
- +        scripts += [ 'Tools/scripts/pydoc3' ]
- +
-@@ -96,5 +98,5 @@ index 53b066cb18b..d8647724650 100644
-  
-  # --install-platlib
- -- 
--2.44.0
-+2.34.1
- 
-diff --git a/package/python3/0009-Add-an-option-to-disable-lib2to3.patch b/package/python3/0009-Add-an-option-to-disable-lib2to3.patch
-index 13cb273bf8..06f38e92b3 100644
---- a/package/python3/0009-Add-an-option-to-disable-lib2to3.patch
-+++ b/package/python3/0009-Add-an-option-to-disable-lib2to3.patch
-@@ -1,4 +1,4 @@
--From 18e19402fab3939223a58481734e685d25c3102b Mon Sep 17 00:00:00 2001
-+From 3fbd10c59a777c4ef7ee1bd3fb70808e25e11703 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Wed, 22 Feb 2017 17:15:31 -0800
- Subject: [PATCH] Add an option to disable lib2to3
-@@ -14,14 +14,16 @@ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- [ Bernd Kuhls: ported to Python 3.11.4]
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[ Vincent Fazio: fix scripts array to reflect upstream ]
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
- ---
-  Makefile.pre.in | 17 ++++++++++++-----
-  configure.ac    |  6 ++++++
-- setup.py        |  6 +++---
-- 3 files changed, 21 insertions(+), 8 deletions(-)
-+ setup.py        |  4 +++-
-+ 3 files changed, 21 insertions(+), 6 deletions(-)
- 
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index e87bc1fcd32..1a0ab0de426 100644
-+index e87bc1fcd3..1a0ab0de42 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
- @@ -1881,7 +1881,9 @@ ifeq (@PYDOC@,yes)
-@@ -82,7 +84,7 @@ index e87bc1fcd32..1a0ab0de426 100644
-  # bpo-21536: Misc/python-config.sh is generated in the build directory
-  # from $(srcdir)Misc/python-config.sh.in.
- diff --git a/configure.ac b/configure.ac
--index d56d8f9d1c5..bf91fb2f824 100644
-+index d56d8f9d1c..bf91fb2f82 100644
- --- a/configure.ac
- +++ b/configure.ac
- @@ -7147,6 +7147,12 @@ PY_STDLIB_MOD([xxlimited_35], [test "$with_trace_refs" = "no"], [test "$ac_cv_fu
-@@ -99,24 +101,23 @@ index d56d8f9d1c5..bf91fb2f824 100644
-  AC_CONFIG_FILES(Makefile.pre Misc/python.pc Misc/python-embed.pc Misc/python-config.sh)
-  AC_CONFIG_FILES([Modules/Setup.bootstrap Modules/Setup.stdlib])
- diff --git a/setup.py b/setup.py
--index d8647724650..e02591dae10 100644
-+index 25e6f4fc26..78d880f9db 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -1598,11 +1598,11 @@ class DummyProcess:
-+@@ -1598,10 +1598,12 @@ class DummyProcess:
-      import warnings
-      warnings.filterwarnings("ignore",category=DeprecationWarning)
-  
---    scripts = ['Tools/scripts/idle3', 'Tools/scripts/2to3',
---               'Lib/smtpd.py']
--+    scripts = ['Tools/scripts/idle3', 'Lib/smtpd.py']
-+-    scripts = ['Tools/scripts/idle3', 'Tools/scripts/2to3']
-++    scripts = ['Tools/scripts/idle3']
-+ 
-      if not '--disable-pydoc' in sysconfig.get_config_var("CONFIG_ARGS"):
-          scripts += [ 'Tools/scripts/pydoc3' ]
---
- +    if not '--disable-lib2to3' in sysconfig.get_config_var("CONFIG_ARGS"):
- +        scripts += [ 'Tools/scripts/2to3' ]
-+ 
-      setup(# PyPI Metadata (PEP 301)
-            name = "Python",
--           version = sys.version.split()[0],
- -- 
--2.44.0
-+2.34.1
- 
-diff --git a/package/python3/0017-Add-an-option-to-disable-IDLE.patch b/package/python3/0017-Add-an-option-to-disable-IDLE.patch
-index f0af3f53f4..fe44ef0d05 100644
---- a/package/python3/0017-Add-an-option-to-disable-IDLE.patch
-+++ b/package/python3/0017-Add-an-option-to-disable-IDLE.patch
-@@ -1,4 +1,4 @@
--From f74c580b9e5bd8c710627b48cea4e152426e71e6 Mon Sep 17 00:00:00 2001
-+From dd4ac2662ae1feaa3a29c4088193e48645b080f7 Mon Sep 17 00:00:00 2001
- From: Maxime Ripard <maxime.ripard@free-electrons.com>
- Date: Wed, 22 Feb 2017 17:45:14 -0800
- Subject: [PATCH] Add an option to disable IDLE
-@@ -11,14 +11,16 @@ Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
- Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- [ Adam Duskett: ported to Python 3.10.0 ]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+[ Vincent Fazio: fixup setup array to reflect upstream ]
-+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
- ---
-  Makefile.pre.in | 7 ++++++-
-  configure.ac    | 6 ++++++
-- setup.py        | 5 ++++-
-- 3 files changed, 16 insertions(+), 2 deletions(-)
-+ setup.py        | 4 +++-
-+ 3 files changed, 15 insertions(+), 2 deletions(-)
- 
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index 8e5f6762d20..4e407cbcfa9 100644
-+index 8e5f6762d2..4e407cbcfa 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
- @@ -1875,7 +1875,9 @@ bininstall: commoninstall altbininstall
-@@ -51,7 +53,7 @@ index 8e5f6762d20..4e407cbcfa9 100644
-  libinstall:	all $(srcdir)/Modules/xxmodule.c
-  	@for i in $(SCRIPTDIR) $(LIBDEST); \
- diff --git a/configure.ac b/configure.ac
--index cb7e980e5b5..fe497ec9dfb 100644
-+index cb7e980e5b..fe497ec9df 100644
- --- a/configure.ac
- +++ b/configure.ac
- @@ -7206,6 +7206,12 @@ AC_ARG_ENABLE(lib2to3,
-@@ -68,25 +70,25 @@ index cb7e980e5b5..fe497ec9dfb 100644
-  AC_CONFIG_FILES(Makefile.pre Misc/python.pc Misc/python-embed.pc Misc/python-config.sh)
-  AC_CONFIG_FILES([Modules/Setup.bootstrap Modules/Setup.stdlib])
- diff --git a/setup.py b/setup.py
--index e02591dae10..ada914c5501 100644
-+index 78d880f9db..ca05faec97 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -1598,11 +1598,14 @@ class DummyProcess:
-+@@ -1598,12 +1598,14 @@ class DummyProcess:
-      import warnings
-      warnings.filterwarnings("ignore",category=DeprecationWarning)
-  
---    scripts = ['Tools/scripts/idle3', 'Lib/smtpd.py']
--+    scripts = [ 'Lib/smtpd.py']
-+-    scripts = ['Tools/scripts/idle3']
-++    scripts = []
-+ 
-      if not '--disable-pydoc' in sysconfig.get_config_var("CONFIG_ARGS"):
-          scripts += [ 'Tools/scripts/pydoc3' ]
-      if not '--disable-lib2to3' in sysconfig.get_config_var("CONFIG_ARGS"):
-          scripts += [ 'Tools/scripts/2to3' ]
- +    if not '--disable-idle3' in sysconfig.get_config_var("CONFIG_ARGS"):
- +        scripts += [ 'Tools/scripts/idle3' ]
--+
-+ 
-      setup(# PyPI Metadata (PEP 301)
-            name = "Python",
--           version = sys.version.split()[0],
- -- 
--2.44.0
-+2.34.1
- 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 5d9d77af50..6859fc2274 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -36,8 +36,7 @@ HOST_PYTHON3_CONF_OPTS += \
- # Make python believe we don't have 'hg', so that it doesn't try to
- # communicate over the network during the build.
- HOST_PYTHON3_CONF_ENV += \
--	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
--	ac_cv_prog_HAS_HG=/bin/false
-+	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags"
- 
- PYTHON3_DEPENDENCIES = host-python3 libffi
- 
-@@ -156,14 +155,11 @@ else
- PYTHON3_CONF_OPTS += --disable-ossaudiodev
- endif
- 
--# Make python believe we don't have 'hg', so that it doesn't try to
--# communicate over the network during the build.
- PYTHON3_CONF_ENV += \
- 	ac_cv_have_long_long_format=yes \
- 	ac_cv_file__dev_ptmx=yes \
- 	ac_cv_file__dev_ptc=yes \
--	ac_cv_working_tzset=yes \
--	ac_cv_prog_HAS_HG=/bin/false
-+	ac_cv_working_tzset=yes
- 
- # GCC is always compliant with IEEE754
- ifeq ($(BR2_ENDIAN),"LITTLE")
-@@ -200,18 +196,11 @@ PYTHON3_CONF_OPTS += \
- #
- define PYTHON3_REMOVE_USELESS_FILES
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
--	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
- 	rm -f $(TARGET_DIR)/usr/bin/python3-config
--	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
--	rm -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/distutils/command/wininst*.exe
--	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m-*/ \
--		-type f -not -name Makefile` ; do \
--		rm -f $$i ; \
--	done
--	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/__pycache__/
--	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/lib-dynload/sysconfigdata/__pycache__
--	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/collections/__pycache__
--	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/importlib/__pycache__
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)-*/ \
-+		-type f -not -name Makefile -exec rm -rf {} \;
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/ -type d \
-+		-name __pycache__ -exec rm -rf {} \;
- endef
- 
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
++# Build
++BR2_GLOBAL_PATCH_DIR="board/olimex/stmp1_olinuxino/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="stmp1-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
