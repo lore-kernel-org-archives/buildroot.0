@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88AF8C25B74
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:44:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18CDCC25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:44:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C68E40B32;
-	Sun,  2 Jun 2024 18:44:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFC4240BB4;
+	Sun,  2 Jun 2024 18:44:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R6l6wF-tD-Lo; Sun,  2 Jun 2024 18:44:08 +0000 (UTC)
+ id km58gaR1BOaD; Sun,  2 Jun 2024 18:44:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16E3840BB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF93340BC6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16E3840BB9;
-	Sun,  2 Jun 2024 18:44:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 250091BF4DA
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:44:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF93340BC6;
+	Sun,  2 Jun 2024 18:44:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 10A871BF4DA
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1195E811BF
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:44:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14EBD40B85
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:44:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EY2_sydoOb8Y for <buildroot@lists.busybox.net>;
- Sun,  2 Jun 2024 18:44:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AOTAbQ25edmC for <buildroot@lists.busybox.net>;
+ Sun,  2 Jun 2024 18:44:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12C1F81221
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12C1F81221
- for <buildroot@buildroot.org>; Sun,  2 Jun 2024 18:44:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF29587975; Sun,  2 Jun 2024 18:44:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6DF8A40BCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DF8A40BCB
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6DF8A40BCB
+ for <buildroot@buildroot.org>; Sun,  2 Jun 2024 18:44:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4BBDE240002;
+ Sun,  2 Jun 2024 18:44:01 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sDqBU-0016hI-0y;
+ Sun, 02 Jun 2024 20:44:00 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 2 Jun 2024 20:37:17 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1d127da425c3b7f7f483968d038a73d32f592263
-X-Git-Newrev: 0deb8c4c5dcae01e1da772e2e1540aa989e8af8b
-X-Patchwork-Hint: ignore
-Message-Id: <20240602184401.EF29587975@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ncftp: bump to version
- 3.2.7
+To: yegorslists@googlemail.com
+References: <20240602141954.2667787-1-yegorslists@googlemail.com>
+Date: Sun, 02 Jun 2024 20:44:00 +0200
+In-Reply-To: <20240602141954.2667787-1-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Sun, 2 Jun 2024 16:19:54
+ +0200")
+Message-ID: <87sexvjibz.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2] package/ncftp: bump to version 3.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,99 +69,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0deb8c4c5dcae01e1da772e2e1540aa989e8af8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Change download location as the new version is not available at the
-old location.
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Change download location as the new version is not available at the
+ > old location.
 
-Remove already upstreamed patch.
+ > Remove already upstreamed patch.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .checkpackageignore                 |  1 -
- package/ncftp/0001-fix-gcc-10.patch | 24 ------------------------
- package/ncftp/ncftp.hash            |  2 +-
- package/ncftp/ncftp.mk              |  8 +++-----
- 4 files changed, 4 insertions(+), 31 deletions(-)
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > ---
+ > Changes v1 -> v2:
+ >     - Rework download location change explanation (Peter Korsgaard)
+ >     - remove the patch from .checkpackageignore (Peter Korsgaard)
+ >     - download xz version (Peter Korsgaard)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 25ad6f1d63..c3de61111f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1086,7 +1086,6 @@ package/musl/0001-avoid-kernel-if_ether.h.patch lib_patch.Upstream
- package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch lib_patch.Upstream
- package/nano/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
- package/nanocom/0001-fix-build-with-gcc-10.patch lib_patch.Upstream
--package/ncftp/0001-fix-gcc-10.patch lib_patch.Upstream
- package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch lib_patch.Upstream
- package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch lib_patch.Upstream
- package/ne10/0002-fix-build-without-C.patch lib_patch.Upstream
-diff --git a/package/ncftp/0001-fix-gcc-10.patch b/package/ncftp/0001-fix-gcc-10.patch
-deleted file mode 100644
-index 8ff9c44c50..0000000000
---- a/package/ncftp/0001-fix-gcc-10.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Fix build with gcc 10
--
--Add missing extern to gBm to fix the following build failure with
---fno-common which is enabled by default with gcc 10:
--
--/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: bookmark.o:(.bss+0x10): multiple definition of `gBm'; gpshare.o:(.bss+0x24): first defined here
--
--Fixes:
-- - http://autobuild.buildroot.org/results/78822bc0e0039e8f8949011a256cac022863276f
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--
--diff -Nura ncftp-3.2.6-orig/sh_util/gpshare.c ncftp-3.2.6/sh_util/gpshare.c
----- ncftp-3.2.6-orig/sh_util/gpshare.c	2020-08-21 10:46:34.173816750 +0200
--+++ ncftp-3.2.6/sh_util/gpshare.c	2020-08-21 10:52:25.407976319 +0200
--@@ -28,7 +28,7 @@
-- 
-- static int gIsAtty1 = 1, gIsAtty2 = 1;
-- extern int gLoadedBm, gBookmarkMatchMode;
---Bookmark gBm;
--+extern Bookmark gBm;
-- 
-- double
-- FileSize(double size, const char **uStr0, double *uMult0)
-diff --git a/package/ncftp/ncftp.hash b/package/ncftp/ncftp.hash
-index 3ab27df5cc..3e390b1015 100644
---- a/package/ncftp/ncftp.hash
-+++ b/package/ncftp/ncftp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  129e5954850290da98af012559e6743de193de0012e972ff939df9b604f81c23  ncftp-3.2.6-src.tar.gz
-+sha256  d41c5c4d6614a8eae2ed4e4d7ada6b6d3afcc9fb65a4ed9b8711344bef24f7e8  ncftp-3.2.7-src.tar.xz
- sha256  4fe2f063d25d79c49712a272ebb68e050c703eed9c66c80108427edfe3285580  doc/LICENSE.txt
-diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-index 676a9c5895..a3aa3fb194 100644
---- a/package/ncftp/ncftp.mk
-+++ b/package/ncftp/ncftp.mk
-@@ -4,11 +4,9 @@
- #
- ################################################################################
- 
--NCFTP_VERSION = 3.2.6
--# use .gz as upstream .xz tarball has changed after the hash was added for
--# 2017.02. Can be changed back to .xz when version is bumped
--NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.gz
--NCFTP_SITE = ftp://ftp.ncftp.com/ncftp
-+NCFTP_VERSION = 3.2.7
-+NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.xz
-+NCFTP_SITE = https://www.ncftp.com/public_ftp/ncftp
- NCFTP_TARGET_BINS = ncftp
- NCFTP_LICENSE = Clarified Artistic License
- NCFTP_LICENSE_FILES = doc/LICENSE.txt
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
