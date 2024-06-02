@@ -4,60 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 491FAC25B74
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5839EC25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:23:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AAEA040025;
-	Sun,  2 Jun 2024 18:18:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1232140025;
+	Sun,  2 Jun 2024 18:23:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8tKOqwY_Wi6r; Sun,  2 Jun 2024 18:18:13 +0000 (UTC)
+ id E2ACt8JVIfyN; Sun,  2 Jun 2024 18:23:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BD88400B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4877400B9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9BD88400B9;
-	Sun,  2 Jun 2024 18:18:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3A1EC1BF4DA
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:18:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4877400B9;
+	Sun,  2 Jun 2024 18:23:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 841781BF4DA
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:23:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3174B803BE
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:18:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 715B3605D2
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:23:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AiNJWy_KftVf for <buildroot@lists.busybox.net>;
- Sun,  2 Jun 2024 18:18:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9599D82033
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9599D82033
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9599D82033
- for <buildroot@buildroot.org>; Sun,  2 Jun 2024 18:18:08 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C99CDE0003;
- Sun,  2 Jun 2024 18:18:05 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sDpmP-00110M-0d;
- Sun, 02 Jun 2024 20:18:05 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240602145542.2485828-1-yann.morin.1998@free.fr>
-Date: Sun, 02 Jun 2024 20:18:05 +0200
-In-Reply-To: <20240602145542.2485828-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 2 Jun 2024 16:55:42 +0200")
-Message-ID: <875xurky3m.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GR8UjijkbAR0 for <buildroot@lists.busybox.net>;
+ Sun,  2 Jun 2024 18:23:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D1359600D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1359600D4
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D1359600D4
+ for <buildroot@buildroot.org>; Sun,  2 Jun 2024 18:23:09 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-42122ac2f38so20351415e9.1
+ for <buildroot@buildroot.org>; Sun, 02 Jun 2024 11:23:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1717352587; x=1717957387;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=UWBzi7Q18A2qRUJoIQkjwZhWSqxxT0cWqQFB6lNzkD0=;
+ b=ubnKTqM8mVl1/zeiQ8mivXdzgJkE8WQs8eHYQ4fK5TV3n9DdjUpo1CjTqXfUClRnRF
+ I1zeefrA09vexzGwlZeI8/fWZy9RlQoGy8Qz5JKI2o9OlqezJIJWtcO3CF2IDeHRoDsM
+ wbWShINsRArmmoLpNxrX7Ax2LJMgLHqyYvC6Nx0be9e63wasN0fAElJUbcDlIWzBi3PA
+ iYgeivgT0/E87WMfH+vrXaJ8gaLHS+0KjpTPb3Rj2+9gx5ZKJFQvfWwkqmuiH6JEGBMo
+ fXXUai1ZHKEHtW2AwJUzoK+o4CN8WM3wfbka8vM8jDzJfBFDTNwzQvRrR/vRqnvEkyZE
+ ZC0Q==
+X-Gm-Message-State: AOJu0Yz6M4HdLZmj/xbUaSCEC3f1ICj5ac16mGR5rOXMaZEO1zYPqKad
+ 39FEcjjcBtjGMEpKDb+Es4kndY0e7nXnuDdNcPZY3KlHkmBBqe6boxzruA==
+X-Google-Smtp-Source: AGHT+IHzQ8VUWLyPUF+srAdNCVfTexqdtNjj0EschijhtMhL46dsi1PeUaa1W9X8E9XrjuGeaZMKGA==
+X-Received: by 2002:a05:600c:45c9:b0:421:1b8d:2df0 with SMTP id
+ 5b1f17b1804b1-4212dd519ddmr58120955e9.7.1717352587243; 
+ Sun, 02 Jun 2024 11:23:07 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4212b8b39aesm89101525e9.46.2024.06.02.11.23.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 02 Jun 2024 11:23:07 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun,  2 Jun 2024 20:23:06 +0200
+Message-ID: <cover.1717352584.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/pkg-download: use _DL_SUBDIR as
- root dir of generated archives
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1717352587; x=1717957387; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=UWBzi7Q18A2qRUJoIQkjwZhWSqxxT0cWqQFB6lNzkD0=;
+ b=XMXDsPdxaBTAf7GmuwGL4L1zE3D5l5TxQXAQ9Hj3+LF9iZyMPIrt4m+arxzGzQiWCM
+ 6lojVZ+UGeE+xIQxC7WbjpvD/jLYc/c/qqfJ7IrhFyipkc/4oN37sg0xgYnKBpJ8SCHt
+ MWcjUKZcx1VUYmtxJpsi/2DBqkRca4mUvTS22zR4d1ljh0/1Cc5ffR8pXl32gMLuTanR
+ mOlDPiDLNuupS4AoQzaFegHO67x0Wz5KN+KHwJ/D3cgNI0tcePxQojo1nBJe/2GMqnVB
+ vK2QmK+CItSbsXXM17BNUrFaEWmCR2w/PSZTPf9PYgId+uG8P2FqkXoCxv86RGP+WHoW
+ oE+g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=XMXDsPdx
+Subject: [Buildroot] [PATCH 0/2 v2] support/download: fix running on hosts
+ with wget2 (branch yem/dl-curl)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,71 +101,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello All!
 
- > Currently, when wegenerate archives, e.g. for git, svn, cargo, go, we
- > use the package _BASENAME_RAW as the root directory of the generated
- > archive. For example, for package foo at version 1.2.3, that would
- > generate an archive rooted at foo-1.2.3/.
+Recently, Fedora 40 was released, which uses wget2 instead of the
+"original" wget (aka wget1). wget2 is almost a drop-in replacement
+for wget1, except it no longer supports FTP and WARC. While WARC was
+unused in Buildroot, FTP is still used by a few packges, some of
+which only available via FTP.
 
- > This is usually what we want, except in one specific condition: when the
- > package shares its download with another package *and* it is a generated
- > archive. In that case, the root directory will be different for each of
- > the two packages, which is incorrect, but was so far benign: we never
- > had any hash for such generated archives, and they were only generated
- > in two cases:
- >   - linux and linux-headers
- >   - barebox and barebox-aux
+Switch to using curl for FTP downloads.
 
- > As we skipp one directory depth when extracting the archives, we did not
- > care what the root directory was; whether it was that of one package or
- > the other was of no consequence.
+We could have switched to curl for http/s downlads too, but it is
+possible that existing packages (esp. in br2-external trees) use
+wget1 options, like we used to in the now-dropped amd-catalyst
+package for example. So we decided to only convert FTP downloads
+over to curl, and keep the rest unchanged, to minise the impact.
 
- > But now that we can have hashes for archives generated from custom
- > versions, this breaks the usual case where the headers used for the
- > toolchains are those os the kernel to build for the target. In this
- > case, we may end up downloading the linux-headers package before we
- > download the linux  package, so we'd get the hash for an archive rooted
- > at linux-headers-XXX/, but the one for the linux package the archive
- > wouold be rooted at linux-XXX/, or we may end up (e.g. with parallel
- > builds) downloading the linux pakcage first and linux-headers next.
+Changes v1 -> v2:
+  - drop --passive-ftp from BR2_WGET
 
- > That would cause conflicts in hashes, as demonstrated by the only
- > defconfig we have in that situation, olimex_stmp157_olinuxino_lime.
+Regards,
+Yann E. MORIN.
 
- > _BASENAME_RAW is a construct that is expanded to include the RAWNAME
- > followed by a dash and the version, if there is a version, or with just
- > the RAWNAME when there is no version.
 
- > We tweak the download macro to use _DL_SUBDIR followed by the version.
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      support/download: introduce curl backend for FTP transfers
+      utils/genrandconfig: do not check certificates with curl
 
- > This is only used by VCS backends (cvs, git, svn...) and so there will
- > always be a version string, so no need to duplicate the case without a
- > version like is done for _BASENAME_RAW
+ Config.in                     |  6 +++++-
+ docs/manual/prerequisite.adoc |  1 +
+ package/pkg-download.mk       |  1 +
+ package/pkg-generic.mk        |  2 ++
+ support/download/curl         | 45 +++++++++++++++++++++++++++++++++++++++++++
+ support/download/dl-wrapper   |  1 +
+ utils/genrandconfig           |  3 ++-
+ 7 files changed, 57 insertions(+), 2 deletions(-)
+ create mode 100755 support/download/curl
 
- > _DL_SUBDIR defaults to _RAWNAME, so this is a noop by default, unless
- > the package declares it shares its download with another one, in which
- > case the generated archive will now be rooted as for the shared package.
-
- > This was trigerred by:
- >     https://patchwork.ozlabs.org/project/buildroot/patch/20240602070634.597337-1-francois.perrad@gadz.org/
-
- > Reported-by: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Francois Perrad <francois.perrad@gadz.org>
-
-That indeed caused quite some head scratching today.
-
-Committed, thanks!
-
--- 
-Bye, Peter Korsgaard
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
