@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6838C27C4F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3EECC27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4AEA6107A;
-	Thu, 13 Jun 2024 10:07:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 468CD61096;
+	Thu, 13 Jun 2024 10:07:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UavX4DMURos4; Thu, 13 Jun 2024 10:07:39 +0000 (UTC)
+ id hgXLG_dOgNOB; Thu, 13 Jun 2024 10:07:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFC9B60ED3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41FD061090
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFC9B60ED3;
-	Thu, 13 Jun 2024 10:07:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4D9CD1BF354
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41FD061090;
+	Thu, 13 Jun 2024 10:07:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A2521BF354
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D449441401
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D1EC60EC3
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BKnnKnCKLHc3 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uSqnFnDf9wUT for <buildroot@lists.busybox.net>;
  Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2611413E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8594F60BAD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2611413E7
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8594F60BAD
+ for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE6CE87F56; Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
+ id 8250887F30; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 19:35:03 +0200
+Date: Sun, 2 Jun 2024 20:37:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 86b39fbe7ddfe716cfb67b624bf61e4e9ca1def1
-X-Git-Newrev: cf9cd968a3a6a01fe72fae01bb6ea0dcccf9795f
+X-Git-Oldrev: 1d127da425c3b7f7f483968d038a73d32f592263
+X-Git-Newrev: 0deb8c4c5dcae01e1da772e2e1540aa989e8af8b
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100458.DE6CE87F56@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/timescaledb: bump version to 2.15.0
+Message-Id: <20240613100459.8250887F30@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ncftp: bump to version 3.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf9cd968a3a6a01fe72fae01bb6ea0dcccf9795f
+commit: https://git.buildroot.net/buildroot/commit/?id=0deb8c4c5dcae01e1da772e2e1540aa989e8af8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/timescale/timescaledb/blob/2.15.0/CHANGELOG.md
+Change download location as the new version is not available at the
+old location.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Remove already upstreamed patch.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                 |  1 -
+ package/ncftp/0001-fix-gcc-10.patch | 24 ------------------------
+ package/ncftp/ncftp.hash            |  2 +-
+ package/ncftp/ncftp.mk              |  8 +++-----
+ 4 files changed, 4 insertions(+), 31 deletions(-)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index f98098bdb8..ba81c74c7e 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 25ad6f1d63..c3de61111f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1086,7 +1086,6 @@ package/musl/0001-avoid-kernel-if_ether.h.patch lib_patch.Upstream
+ package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch lib_patch.Upstream
+ package/nano/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
+ package/nanocom/0001-fix-build-with-gcc-10.patch lib_patch.Upstream
+-package/ncftp/0001-fix-gcc-10.patch lib_patch.Upstream
+ package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch lib_patch.Upstream
+ package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch lib_patch.Upstream
+ package/ne10/0002-fix-build-without-C.patch lib_patch.Upstream
+diff --git a/package/ncftp/0001-fix-gcc-10.patch b/package/ncftp/0001-fix-gcc-10.patch
+deleted file mode 100644
+index 8ff9c44c50..0000000000
+--- a/package/ncftp/0001-fix-gcc-10.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix build with gcc 10
+-
+-Add missing extern to gBm to fix the following build failure with
+--fno-common which is enabled by default with gcc 10:
+-
+-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: bookmark.o:(.bss+0x10): multiple definition of `gBm'; gpshare.o:(.bss+0x24): first defined here
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/78822bc0e0039e8f8949011a256cac022863276f
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -Nura ncftp-3.2.6-orig/sh_util/gpshare.c ncftp-3.2.6/sh_util/gpshare.c
+---- ncftp-3.2.6-orig/sh_util/gpshare.c	2020-08-21 10:46:34.173816750 +0200
+-+++ ncftp-3.2.6/sh_util/gpshare.c	2020-08-21 10:52:25.407976319 +0200
+-@@ -28,7 +28,7 @@
+- 
+- static int gIsAtty1 = 1, gIsAtty2 = 1;
+- extern int gLoadedBm, gBookmarkMatchMode;
+--Bookmark gBm;
+-+extern Bookmark gBm;
+- 
+- double
+- FileSize(double size, const char **uStr0, double *uMult0)
+diff --git a/package/ncftp/ncftp.hash b/package/ncftp/ncftp.hash
+index 3ab27df5cc..3e390b1015 100644
+--- a/package/ncftp/ncftp.hash
++++ b/package/ncftp/ncftp.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c7768b267ea67914d0491b28da102faecd317060e429b2da7530517fbc94e73b  timescaledb-2.14.2.tar.gz
-+sha256  ff2019f734566f73af0a8041db50f7f1d0ad6967f7e2e7d796d388cd38c0b5bb  timescaledb-2.15.0.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 59731270c5..d6c8164234 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
+ # Locally computed:
+-sha256  129e5954850290da98af012559e6743de193de0012e972ff939df9b604f81c23  ncftp-3.2.6-src.tar.gz
++sha256  d41c5c4d6614a8eae2ed4e4d7ada6b6d3afcc9fb65a4ed9b8711344bef24f7e8  ncftp-3.2.7-src.tar.xz
+ sha256  4fe2f063d25d79c49712a272ebb68e050c703eed9c66c80108427edfe3285580  doc/LICENSE.txt
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index 676a9c5895..a3aa3fb194 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -4,11 +4,9 @@
  #
  ################################################################################
  
--TIMESCALEDB_VERSION = 2.14.2
-+TIMESCALEDB_VERSION = 2.15.0
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+-NCFTP_VERSION = 3.2.6
+-# use .gz as upstream .xz tarball has changed after the hash was added for
+-# 2017.02. Can be changed back to .xz when version is bumped
+-NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.gz
+-NCFTP_SITE = ftp://ftp.ncftp.com/ncftp
++NCFTP_VERSION = 3.2.7
++NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.xz
++NCFTP_SITE = https://www.ncftp.com/public_ftp/ncftp
+ NCFTP_TARGET_BINS = ncftp
+ NCFTP_LICENSE = Clarified Artistic License
+ NCFTP_LICENSE_FILES = doc/LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
