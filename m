@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98A55C25B74
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:27:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C91F0C25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:28:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 68EC4402B1;
-	Sun,  2 Jun 2024 18:27:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7AA5140413;
+	Sun,  2 Jun 2024 18:28:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0ATzKRkTjfD0; Sun,  2 Jun 2024 18:27:56 +0000 (UTC)
+ id soJIOEIkhQWg; Sun,  2 Jun 2024 18:27:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B4DA40544
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2511940BB4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B4DA40544;
-	Sun,  2 Jun 2024 18:27:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D27EB1BF4DA
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2511940BB4;
+	Sun,  2 Jun 2024 18:27:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BC831BF853
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BBAA182CF1
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC7E2405A6
  for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FFnS-dikT6kH for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UDHWLYod2F1B for <buildroot@lists.busybox.net>;
  Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C5B582423
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 164FC40544
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C5B582423
+ by smtp2.osuosl.org (Postfix) with ESMTP id 164FC40544
  for <buildroot@buildroot.org>; Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0207B878D0; Sun,  2 Jun 2024 18:27:53 +0000 (UTC)
+ id E5194876CE; Sun,  2 Jun 2024 18:27:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 2 Jun 2024 20:24:54 +0200
+Date: Sun, 2 Jun 2024 20:19:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 75da04c817b07a9c426cf2e438b0f8883096f4ef
-X-Git-Newrev: 4456bec6ab7c579ec6adc472fdca705a01ad57ed
+X-Git-Oldrev: ebe238f2b595136be92c53aa70c40d3f333cc34e
+X-Git-Newrev: 75da04c817b07a9c426cf2e438b0f8883096f4ef
 X-Patchwork-Hint: ignore
-Message-Id: <20240602182754.0207B878D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/olimex_stmp157_olinuxino_lime: add
- hashes
+Message-Id: <20240602182753.E5194876CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5base: fix download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,72 +64,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4456bec6ab7c579ec6adc472fdca705a01ad57ed
+commit: https://git.buildroot.net/buildroot/commit/?id=75da04c817b07a9c426cf2e438b0f8883096f4ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-and enable BR2_DOWNLOAD_FORCE_CHECK_HASHES
+Since qt5base was last bumped in 8ab4a0a348b2 (package/qt5: bump packages
+to latest kde submodule versions), the hash for the downloaded tarball
+has changed:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+    $ make qt5base-source
+    [...]
+    ERROR: expected: 935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d
+    ERROR: got     : 3067c4d84ba9927bfe65bf606c17af082199e0a3b22781fbf9bc6c6bc3de26dd
+
+We know the hash was good back when 8ab4a0a348b2 was applied, because
+the tarball has been cached on sources.buildroot.org with the expected
+hash:
+
+    $ curl 'https://sources.buildroot.net/qt5base/qtbase-da6e958319e95fe564d3b30c931492dd666bfaff.tar.bz2' 2>/dev/null |sha256sum -
+    935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d  -
+
+But now, the archive generated by the KDE gorge (Gitlab underneath) has
+another hash (as seen above). This means that the KDE forge (Gitlab) has
+changed the way it generates archives. So, what's the delta? It turns
+out that the only changes are about CRLF that were present in the
+original archive, and are no longer in the new one. It is to be noted
+that the affected files do not have CRLFS in the repository. It further
+turns out that the archive was previously generated with .gitattibutes
+of the main branch ('dev' in Qt repositories), while now they are
+generated with the .gitattibutes of the commit for which they are
+generated.
+
+Switch to using the git download method for really reproducible
+archives...
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                                   | 1 -
- board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash | 1 +
- board/olimex/stmp1_olinuxino/patches/linux/linux.hash                 | 2 ++
- board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash                 | 2 ++
- configs/olimex_stmp157_olinuxino_lime_defconfig                       | 4 ++++
- 5 files changed, 9 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/qt5base.hash | 2 +-
+ package/qt5/qt5base/qt5base.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 9264f84a15..1c5ab08f5f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -249,7 +249,6 @@ configs/olimex_a20_olinuxino_lime_defconfig lib_defconfig.ForceCheckHash
- configs/olimex_a20_olinuxino_micro_defconfig lib_defconfig.ForceCheckHash
- configs/olimex_a33_olinuxino_defconfig lib_defconfig.ForceCheckHash
- configs/olimex_a64_olinuxino_defconfig lib_defconfig.ForceCheckHash
--configs/olimex_stmp157_olinuxino_lime_defconfig lib_defconfig.ForceCheckHash
- configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
- configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
- configs/orangepi_lite2_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash b/board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/olimex/stmp1_olinuxino/patches/linux/linux.hash b/board/olimex/stmp1_olinuxino/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..8691d5ffd3
---- /dev/null
-+++ b/board/olimex/stmp1_olinuxino/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  5d3ca43b81056305860d7407c871eac4f8eafa603029ee67816574a31444fd93  linux-fc74113e14d76aea9482264ff42e07397b94553d-git4.tar.gz
-diff --git a/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash b/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..a991a1922f
---- /dev/null
-+++ b/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  6aaa18a9023db29ceaad5bca240605990b68a6bf348aaefad0bee8be8d37648e  uboot-efadf793a0a5924e2c96362dc1df3e56622ebb97-git4.tar.gz
-diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
-index 8bd8e10ca9..ecfa781354 100644
---- a/configs/olimex_stmp157_olinuxino_lime_defconfig
-+++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
-@@ -5,6 +5,10 @@ BR2_cortex_a7=y
- # Linux headers same as kernel, a 5.10 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+index ffc474f49e..77b88fa909 100644
+--- a/package/qt5/qt5base/qt5base.hash
++++ b/package/qt5/qt5base/qt5base.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d  qtbase-da6e958319e95fe564d3b30c931492dd666bfaff.tar.bz2
++sha256  9219c8e5d82b32b351743fb548f248400f3b3eca9db37a43b2b8c929d2625c01  qt5base-da6e958319e95fe564d3b30c931492dd666bfaff-git4.tar.gz
  
-+# Build
-+BR2_GLOBAL_PATCH_DIR="board/olimex/stmp1_olinuxino/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="stmp1-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index e173639cca..bbab9b3de1 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ QT5BASE_VERSION = da6e958319e95fe564d3b30c931492dd666bfaff
+-QT5BASE_SITE = $(QT5_SITE)/qtbase/-/archive/$(QT5BASE_VERSION)
+-QT5BASE_SOURCE = qtbase-$(QT5BASE_VERSION).tar.bz2
++QT5BASE_SITE = $(QT5_SITE)/qtbase
++QT5BASE_SITE_METHOD = git
+ QT5BASE_CPE_ID_VENDOR = qt
+ QT5BASE_CPE_ID_PRODUCT = qt
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
