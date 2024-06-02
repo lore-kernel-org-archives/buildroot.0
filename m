@@ -4,92 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B84E5C25B7E
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 14:55:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 328CDC25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 15:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 55D4B4000B;
-	Sun,  2 Jun 2024 14:55:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF267400AC;
+	Sun,  2 Jun 2024 15:37:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i7y2ff2N5k91; Sun,  2 Jun 2024 14:55:48 +0000 (UTC)
+ id NbRGX9aJggrb; Sun,  2 Jun 2024 15:37:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36499400BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3477400BB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 36499400BB;
-	Sun,  2 Jun 2024 14:55:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 14EEC1BF82C
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 14:55:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3477400BB;
+	Sun,  2 Jun 2024 15:37:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F19801BF287
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 15:37:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DF27400BB
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 14:55:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA42E8143E
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 15:37:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xp0uz1NiS71T for <buildroot@lists.busybox.net>;
- Sun,  2 Jun 2024 14:55:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DEDBB4000B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEDBB4000B
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DEDBB4000B
- for <buildroot@buildroot.org>; Sun,  2 Jun 2024 14:55:45 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4213870aafdso5415605e9.2
- for <buildroot@buildroot.org>; Sun, 02 Jun 2024 07:55:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717340144; x=1717944944;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=4JDyC+vLjAebxLVHJfg1e5bgVccc61n7sn0vkn2jV0g=;
- b=uVjl5RG2ydUiQEAumSLrVnzCsCqBltWCKf68e5+A7dfeFy/ppetqxKmyqjTjzsEWMP
- dneZgG+KmOQkdK1t+ISyzKtda3tcLRuu/rcMlP5I/JVmRku66Ep7fiPpHpmzyiMUMwGc
- jHZw2nNQ5KtFBANWPmx+UtxsSqD8b2mnxu72KYeWlwgdx1qBB5IegtDDPYgXmK3W0Pp/
- KrooCSS2DV+mVVHY9qKKDWSzjeBSGNV7JYE/B/4kY3RWBRIMZXAcQFqP/pbW/d537rn/
- YsTmbEJPx0FtHb7UlPzir6/xHTjnaztN8l50R0Uy9tPcFtMFoz6Y7tSJEfsd7uvCs0fv
- vHEQ==
-X-Gm-Message-State: AOJu0YzZOBzECK07yjcKySOont+Dt6XgUUL9NGCdydWm4hDTa9ZvWf0N
- kII+F3I44z7T/1odcqYtIyeM06vgs764K0lWfcl4TQ08tAbeBFeLUXbTeg==
-X-Google-Smtp-Source: AGHT+IHTZGOKQvYKRdOLgIE4d21tfseMj50mK7fFThOUOocaa7haBVep8eDQHI5uCcBn334as7D7tA==
-X-Received: by 2002:a05:6000:11c7:b0:34d:837a:9d08 with SMTP id
- ffacd0b85a97d-35e0f3335a7mr4744049f8f.61.1717340143616; 
- Sun, 02 Jun 2024 07:55:43 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-35dd03fae7csm6419129f8f.0.2024.06.02.07.55.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Jun 2024 07:55:43 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mqgbej_1B1ww for <buildroot@lists.busybox.net>;
+ Sun,  2 Jun 2024 15:37:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B8F1181434
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8F1181434
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B8F1181434
+ for <buildroot@busybox.net>; Sun,  2 Jun 2024 15:37:28 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 48E7013F879;
+ Sun,  2 Jun 2024 17:37:23 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 02 Jun 2024 17:37:23 +0200
+Date: Sun, 2 Jun 2024 17:37:23 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun,  2 Jun 2024 16:55:42 +0200
-Message-ID: <20240602145542.2485828-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.45.1
+To: Francois Perrad <francois.perrad@gadz.org>
+Message-ID: <ZlyRs_aj7sXheiBt@landeda>
+References: <20240602070634.597337-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717340144; x=1717944944; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=4JDyC+vLjAebxLVHJfg1e5bgVccc61n7sn0vkn2jV0g=;
- b=alI5R8YSj8SjXVXccusWFMLMfygk2gbQF1rGlCiP4cfH6V9Yju5QAIrM0nlFZY8Kcg
- Bkb023TQnyfcXT1NAF/LDoV1nRrl4hl7iv+aafiZCNKxKiP+nJDZOYQfRs6JVvhwV+7L
- WhBCiOBf5HaZKB36fUJUo22/a2Kij9qjA19wuId3atcJO6IQgPx5lO2dmmpU9LR/oXns
- c1Mid7nBu8PGfQd2/1fX01fv/YMmFL2LckjqJcFqX6LiRB0cCJvgGGTtzVnSZO40wVmK
- /fgmu5aLOXG5hQk73qHlrYmQJPriaG3Fk8R9eimplwnEG++WC7AHMu5Tzazd4PDebMBy
- npoQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=none dis=none)
+Content-Disposition: inline
+In-Reply-To: <20240602070634.597337-1-francois.perrad@gadz.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1717342645;
+ bh=31AlYAVc0LtbpgJG2S5bguaqBMbv+h3dwyAcC1toDE8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=HsfdrB5zCjVaflvlyLsdUHPTWpz3yOJKODxyA5Qfegdj+vS7voka3Jg6VeEoaUf4r
+ mENVegitxDo+9raENz6MiyG4u1X08sTrLz4IGKEtpFpIGo6f76ek5qLM3MruuFqZ6G
+ lBC1PvdB9HfzbyV9WCACVb9XHdGoA7hs2CZKCmkRAP/C9YHFUMrXQsqt/NEw8Odj+C
+ g8kklc2866SQXX+xHhiyjlTPsF0xziIcRKOBjrk606lgJSTZdl7h+/KWKSr7PlH7yy
+ CFjFnY7zDL0ewy13IVB6jay2qxesVtCM+bECsQwKIOKGQxdxvj2seOn97wWg+MMUEz
+ DS9jJgJYsMmJg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=alI5R8YS
-Subject: [Buildroot] [PATCH] package/pkg-download: use _DL_SUBDIR as root
- dir of generated archives
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HsfdrB5z
+Subject: Re: [Buildroot] [PATCH] configs/olimex_stmp157_olinuxino_lime: add
+ hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,82 +81,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, when wegenerate archives, e.g. for git, svn, cargo, go, we
-use the package _BASENAME_RAW as the root directory of the generated
-archive. For example, for package foo at version 1.2.3, that would
-generate an archive rooted at foo-1.2.3/.
+Francois, All,
 
-This is usually what we want, except in one specific condition: when the
-package shares its download with another package *and* it is a generated
-archive. In that case, the root directory will be different for each of
-the two packages, which is incorrect, but was so far benign: we never
-had any hash for such generated archives, and they were only generated
-in two cases:
-  - linux and linux-headers
-  - barebox and barebox-aux
+On 2024-06-02 09:06 +0200, Francois Perrad spake thusly:
+> and enable BR2_DOWNLOAD_FORCE_CHECK_HASHES
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-As we skipp one directory depth when extracting the archives, we did not
-care what the root directory was; whether it was that of one package or
-the other was of no consequence.
+Thank you for this patch. It uncovered a very nasty issue we have had
+since we introduce _DL_SUBDIR more than 6 years ago now, and for which I
+just sent a fix:
 
-But now that we can have hashes for archives generated from custom
-versions, this breaks the usual case where the headers used for the
-toolchains are those os the kernel to build for the target. In this
-case, we may end up downloading the linux-headers package before we
-download the linux  package, so we'd get the hash for an archive rooted
-at linux-headers-XXX/, but the one for the linux package the archive
-wouold be rooted at linux-XXX/, or we may end up (e.g. with parallel
-builds) downloading the linux pakcage first and linux-headers next.
+    https://lore.kernel.org/buildroot/20240602145542.2485828-1-yann.morin.1998@free.fr/T/#u
 
-That would cause conflicts in hashes, as demonstrated by the only
-defconfig we have in that situation, olimex_stmp157_olinuxino_lime.
+Basically, Peter and I spent quite some time trying to udnerstand why
+we got a hash different from yours:
 
-_BASENAME_RAW is a construct that is expanded to include the RAWNAME
-followed by a dash and the version, if there is a version, or with just
-the RAWNAME when there is no version.
+    $ make olimex_stmp157_olinuxino_lime_defconfig
+    $ make source
+    [...]
+    ERROR: while checking hashes from board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash
+    ERROR: linux-fc74113e14d76aea9482264ff42e07397b94553d-git4.tar.gz has wrong sha256 hash:
+    ERROR: expected: 5d3ca43b81056305860d7407c871eac4f8eafa603029ee67816574a31444fd93
+    ERROR: got     : ee94af461da08f406408c70094582232a348b14069bc4dcbe7ff97e16cfe0c70
+    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-We tweak the download macro to use _DL_SUBDIR followed by the version.
+However, what was even stranger to us, was that the download was OK when
+we actually tried to directly trigger the linux download (there is a hint
+in the trace above, but we did not see it immediately):
 
-This is only used by VCS backends (cvs, git, svn...) and so there will
-always be a version string, so no need to duplicate the case without a
-version like is done for _BASENAME_RAW
+    $ make linux-source
+    [...]
+    linux-fc74113e14d76aea9482264ff42e07397b94553d-git4.tar.gz: OK (sha256: 5d3ca43b81056305860d7407c871eac4f8eafa603029ee67816574a31444fd93)
 
-_DL_SUBDIR defaults to _RAWNAME, so this is a noop by default, unless
-the package declares it shares its download with another one, in which
-case the generated archive will now be rooted as for the shared package.
+So, sometimes the hash is OK, sometimes it is not? I seriously
+considered Gremlins at one point... ;-] Of course, when we identified
+the delta between the two archives, we eventually noticed the download
+was failing for linux-headers, not for linux...
 
-This was trigerred by:
-    https://patchwork.ozlabs.org/project/buildroot/patch/20240602070634.597337-1-francois.perrad@gadz.org/
+This is something that you too could have spotted on your side, if all
+you had done was to run the download from scratch to validate the change
+(I pretty much always do that to be sure):
 
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Francois Perrad <francois.perrad@gadz.org>
----
- package/pkg-download.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+    $ rm -rf $(pwd)/dl-empty
+    $ make olimex_stmp157_olinuxino_lime_defconfig
+    $ BR2_DL_DIR=$(pwd)/dl-empty make source
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 4be45c9d12..bec213fb71 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -117,7 +117,7 @@ define DOWNLOAD
- 		-D '$(DL_DIR)' \
- 		-f '$(notdir $(1))' \
- 		$(foreach f,$($(2)_HASH_FILES),-H '$(f)') \
--		-n '$($(2)_BASENAME_RAW)' \
-+		-n '$($(2)_DL_SUBDIR)-$($(2)_VERSION)' \
- 		-N '$($(2)_RAWNAME)' \
- 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
- 		$(if $(filter YES,$($(2)_SVN_EXTERNALS)),-r) \
+Anyway, that was a really nasty issue, but we now have a fix. Could you
+please help test and review that patch, please?
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  .checkpackageignore                                           | 1 -
+>  .../stmp1_olinuxino/patches/linux-headers/linux-headers.hash  | 1 +
+>  board/olimex/stmp1_olinuxino/patches/linux/linux.hash         | 2 ++
+>  board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash         | 2 ++
+>  configs/olimex_stmp157_olinuxino_lime_defconfig               | 4 ++++
+>  5 files changed, 9 insertions(+), 1 deletion(-)
+>  create mode 120000 board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash
+>  create mode 100644 board/olimex/stmp1_olinuxino/patches/linux/linux.hash
+>  create mode 100644 board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index 8f5fc0a47..201ec2a85 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -253,7 +253,6 @@ configs/olimex_a20_olinuxino_lime_defconfig lib_defconfig.ForceCheckHash
+>  configs/olimex_a20_olinuxino_micro_defconfig lib_defconfig.ForceCheckHash
+>  configs/olimex_a33_olinuxino_defconfig lib_defconfig.ForceCheckHash
+>  configs/olimex_a64_olinuxino_defconfig lib_defconfig.ForceCheckHash
+> -configs/olimex_stmp157_olinuxino_lime_defconfig lib_defconfig.ForceCheckHash
+>  configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
+>  configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
+>  configs/orangepi_lite2_defconfig lib_defconfig.ForceCheckHash
+> diff --git a/board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash b/board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash
+> new file mode 120000
+> index 000000000..5808d92af
+> --- /dev/null
+> +++ b/board/olimex/stmp1_olinuxino/patches/linux-headers/linux-headers.hash
+> @@ -0,0 +1 @@
+> +../linux/linux.hash
+> \ No newline at end of file
+> diff --git a/board/olimex/stmp1_olinuxino/patches/linux/linux.hash b/board/olimex/stmp1_olinuxino/patches/linux/linux.hash
+> new file mode 100644
+> index 000000000..8691d5ffd
+> --- /dev/null
+> +++ b/board/olimex/stmp1_olinuxino/patches/linux/linux.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256  5d3ca43b81056305860d7407c871eac4f8eafa603029ee67816574a31444fd93  linux-fc74113e14d76aea9482264ff42e07397b94553d-git4.tar.gz
+> diff --git a/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash b/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
+> new file mode 100644
+> index 000000000..a991a1922
+> --- /dev/null
+> +++ b/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256  6aaa18a9023db29ceaad5bca240605990b68a6bf348aaefad0bee8be8d37648e  uboot-efadf793a0a5924e2c96362dc1df3e56622ebb97-git4.tar.gz
+> diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
+> index 8bd8e10ca..ecfa78135 100644
+> --- a/configs/olimex_stmp157_olinuxino_lime_defconfig
+> +++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
+> @@ -5,6 +5,10 @@ BR2_cortex_a7=y
+>  # Linux headers same as kernel, a 5.10 series
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+>  
+> +# Build
+> +BR2_GLOBAL_PATCH_DIR="board/olimex/stmp1_olinuxino/patches"
+> +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+> +
+>  # System configuration
+>  BR2_TARGET_GENERIC_HOSTNAME="stmp1-olinuxino"
+>  BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+> -- 
+> 2.43.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.45.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
