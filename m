@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A557C25B74
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:28:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88AF8C25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 46B4940AFC;
-	Sun,  2 Jun 2024 18:28:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C68E40B32;
+	Sun,  2 Jun 2024 18:44:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xsPL-j1Ppw3n; Sun,  2 Jun 2024 18:28:03 +0000 (UTC)
+ id R6l6wF-tD-Lo; Sun,  2 Jun 2024 18:44:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A037C40BEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16E3840BB9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A037C40BEB;
-	Sun,  2 Jun 2024 18:28:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 787C81BF4DA
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16E3840BB9;
+	Sun,  2 Jun 2024 18:44:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 250091BF4DA
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:44:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ED93E40629
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1195E811BF
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:44:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E3qKBNzh-Pnd for <buildroot@lists.busybox.net>;
- Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EY2_sydoOb8Y for <buildroot@lists.busybox.net>;
+ Sun,  2 Jun 2024 18:44:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1355440413
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12C1F81221
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1355440413
- for <buildroot@buildroot.org>; Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12C1F81221
+ for <buildroot@buildroot.org>; Sun,  2 Jun 2024 18:44:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DB3DE878D1; Sun,  2 Jun 2024 18:27:53 +0000 (UTC)
+ id EF29587975; Sun,  2 Jun 2024 18:44:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 2 Jun 2024 20:15:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3b2f0f9859b4bcb422d69437ecb01ee9038d3c1
-X-Git-Newrev: ebe238f2b595136be92c53aa70c40d3f333cc34e
+Date: Sun, 2 Jun 2024 20:37:17 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 1d127da425c3b7f7f483968d038a73d32f592263
+X-Git-Newrev: 0deb8c4c5dcae01e1da772e2e1540aa989e8af8b
 X-Patchwork-Hint: ignore
-Message-Id: <20240602182753.DB3DE878D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-download: use _DL_SUBDIR as
- root dir of generated archives
+Message-Id: <20240602184401.EF29587975@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ncftp: bump to version
+ 3.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,77 +65,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebe238f2b595136be92c53aa70c40d3f333cc34e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=0deb8c4c5dcae01e1da772e2e1540aa989e8af8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, when we generate archives, e.g.  for git, svn, cargo or go, we
-use the package _BASENAME_RAW as the root directory of the generated
-archive.  For example, for package foo at version 1.2.3, that would generate
-an archive rooted at foo-1.2.3/.
+Change download location as the new version is not available at the
+old location.
 
-This is usually what we want, except in one specific condition: when the
-package shares its download with another package *and* it is a generated
-archive. In that case, the root directory will be different for each of
-the two packages, which is incorrect, but was so far benign: we never
-had any hash for such generated archives, and they were only generated
-in two cases:
-  - linux and linux-headers
-  - barebox and barebox-aux
+Remove already upstreamed patch.
 
-As we skip one directory depth when extracting the archives, we did not
-care what the root directory was; whether it was that of one package or
-the other was of no consequence.
-
-But now that we can have hashes for archives generated from custom
-versions, this breaks the usual case where the headers used for the
-toolchains are those of the kernel to build for the target. In this
-case, we may end up downloading the linux-headers package before we
-download the linux package, so we'd get the hash for an archive rooted
-at linux-headers-XXX/, but the one for the linux package the archive
-would be rooted at linux-XXX/, or we may end up (e.g. with parallel
-builds) downloading the linux package first and linux-headers next.
-
-That would cause conflicts in hashes, as demonstrated by the only defconfig
-we have in that situation, olimex_stmp157_olinuxino_lime_defconfig.
-
-_BASENAME_RAW is a construct that is expanded to include the RAWNAME
-followed by a dash and the version, if there is a version, or with just
-the RAWNAME when there is no version.
-
-We tweak the download macro to use _DL_SUBDIR followed by the version.
-
-This is only used by VCS backends (cvs, git, svn...) and so there will
-always be a version string, so no need to duplicate the case without a
-version like is done for _BASENAME_RAW
-
-_DL_SUBDIR defaults to _RAWNAME, so this is a noop by default, unless
-the package declares it shares its download with another one, in which
-case the generated archive will now be rooted as for the shared package.
-
-This was triggered by:
-    https://patchwork.ozlabs.org/project/buildroot/patch/20240602070634.597337-1-francois.perrad@gadz.org/
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-download.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .checkpackageignore                 |  1 -
+ package/ncftp/0001-fix-gcc-10.patch | 24 ------------------------
+ package/ncftp/ncftp.hash            |  2 +-
+ package/ncftp/ncftp.mk              |  8 +++-----
+ 4 files changed, 4 insertions(+), 31 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 4be45c9d12..bec213fb71 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -117,7 +117,7 @@ define DOWNLOAD
- 		-D '$(DL_DIR)' \
- 		-f '$(notdir $(1))' \
- 		$(foreach f,$($(2)_HASH_FILES),-H '$(f)') \
--		-n '$($(2)_BASENAME_RAW)' \
-+		-n '$($(2)_DL_SUBDIR)-$($(2)_VERSION)' \
- 		-N '$($(2)_RAWNAME)' \
- 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
- 		$(if $(filter YES,$($(2)_SVN_EXTERNALS)),-r) \
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 25ad6f1d63..c3de61111f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1086,7 +1086,6 @@ package/musl/0001-avoid-kernel-if_ether.h.patch lib_patch.Upstream
+ package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch lib_patch.Upstream
+ package/nano/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
+ package/nanocom/0001-fix-build-with-gcc-10.patch lib_patch.Upstream
+-package/ncftp/0001-fix-gcc-10.patch lib_patch.Upstream
+ package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch lib_patch.Upstream
+ package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch lib_patch.Upstream
+ package/ne10/0002-fix-build-without-C.patch lib_patch.Upstream
+diff --git a/package/ncftp/0001-fix-gcc-10.patch b/package/ncftp/0001-fix-gcc-10.patch
+deleted file mode 100644
+index 8ff9c44c50..0000000000
+--- a/package/ncftp/0001-fix-gcc-10.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix build with gcc 10
+-
+-Add missing extern to gBm to fix the following build failure with
+--fno-common which is enabled by default with gcc 10:
+-
+-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: bookmark.o:(.bss+0x10): multiple definition of `gBm'; gpshare.o:(.bss+0x24): first defined here
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/78822bc0e0039e8f8949011a256cac022863276f
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -Nura ncftp-3.2.6-orig/sh_util/gpshare.c ncftp-3.2.6/sh_util/gpshare.c
+---- ncftp-3.2.6-orig/sh_util/gpshare.c	2020-08-21 10:46:34.173816750 +0200
+-+++ ncftp-3.2.6/sh_util/gpshare.c	2020-08-21 10:52:25.407976319 +0200
+-@@ -28,7 +28,7 @@
+- 
+- static int gIsAtty1 = 1, gIsAtty2 = 1;
+- extern int gLoadedBm, gBookmarkMatchMode;
+--Bookmark gBm;
+-+extern Bookmark gBm;
+- 
+- double
+- FileSize(double size, const char **uStr0, double *uMult0)
+diff --git a/package/ncftp/ncftp.hash b/package/ncftp/ncftp.hash
+index 3ab27df5cc..3e390b1015 100644
+--- a/package/ncftp/ncftp.hash
++++ b/package/ncftp/ncftp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  129e5954850290da98af012559e6743de193de0012e972ff939df9b604f81c23  ncftp-3.2.6-src.tar.gz
++sha256  d41c5c4d6614a8eae2ed4e4d7ada6b6d3afcc9fb65a4ed9b8711344bef24f7e8  ncftp-3.2.7-src.tar.xz
+ sha256  4fe2f063d25d79c49712a272ebb68e050c703eed9c66c80108427edfe3285580  doc/LICENSE.txt
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index 676a9c5895..a3aa3fb194 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -4,11 +4,9 @@
+ #
+ ################################################################################
+ 
+-NCFTP_VERSION = 3.2.6
+-# use .gz as upstream .xz tarball has changed after the hash was added for
+-# 2017.02. Can be changed back to .xz when version is bumped
+-NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.gz
+-NCFTP_SITE = ftp://ftp.ncftp.com/ncftp
++NCFTP_VERSION = 3.2.7
++NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.xz
++NCFTP_SITE = https://www.ncftp.com/public_ftp/ncftp
+ NCFTP_TARGET_BINS = ncftp
+ NCFTP_LICENSE = Clarified Artistic License
+ NCFTP_LICENSE_FILES = doc/LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
