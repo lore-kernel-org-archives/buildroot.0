@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F97DC27C44
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 20:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEBFEC25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 20:40:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F60B83196;
-	Sun,  2 Jun 2024 20:40:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D718883131;
+	Sun,  2 Jun 2024 20:40:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id byjC1qj3AhMm; Sun,  2 Jun 2024 20:40:10 +0000 (UTC)
+ id 7f-I4zXrx3Ot; Sun,  2 Jun 2024 20:40:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3914C83A72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2018783498
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3914C83A72;
-	Sun,  2 Jun 2024 20:40:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2018783498;
+	Sun,  2 Jun 2024 20:40:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7C5ED1BF315
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 20:39:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5BDFC1BF315
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 20:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 648A6402F6
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 20:39:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56452402F6
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 20:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Na2XbD0UFl9Z for <buildroot@lists.busybox.net>;
- Sun,  2 Jun 2024 20:39:56 +0000 (UTC)
+ id rpZU5F_tViDN for <buildroot@lists.busybox.net>;
+ Sun,  2 Jun 2024 20:39:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3FCD2400AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FCD2400AC
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3FCD2400AC
- for <buildroot@buildroot.org>; Sun,  2 Jun 2024 20:39:56 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-35dc04717a1so2786257f8f.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2CC1C4013B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CC1C4013B
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2CC1C4013B
+ for <buildroot@buildroot.org>; Sun,  2 Jun 2024 20:39:57 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-42134bb9677so17538675e9.2
  for <buildroot@buildroot.org>; Sun, 02 Jun 2024 13:39:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717360794; x=1717965594;
+ d=1e100.net; s=20230601; t=1717360795; x=1717965595;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=gXzEtc/Ruyflv/s7nHqAB3x0wgNuwk0WaxN+ap22Df0=;
- b=emS3zCEMdPOdU6mKZyOdPQ1CPR05x5+zUMCz0ppFuuqXNYS3VMuKQlJci3R9HvibYZ
- YTQYODKImJWMRkYHsX251J1VOxPEngh189lqi1ntHNoBWuXvmQn4PGJ27iJ9oMtgbEd9
- kAeCnxJpWW+nhC9sH+fNBg0QEBH3qZ0oVKLY0JF/D2qA9fD6YQp9bSs2CGdvxa1DM1O8
- vkeU5c/zbRYYaSLyTGazJ9y+l+/Trx9o1PHeuOH+0/B1RqphvFZp+9KIZqObtR4MpN9P
- ZL5a8QGzRNbkOer5jd5d+LuJAC+VpuXqJJ1tXEt4Lc+XMwgnwNG5HHUf0nuiTztEorxk
- WxrA==
-X-Gm-Message-State: AOJu0YwscHfRVOcvqxDDTg+LaRJUW0ePd4EkhFA/wDD5enMgj0HUKzml
- fPD/jsinEE53qQgpUiRsB1Dba3vCqK41LZAaLpQ2BK/T/pfcMO/B2E8KKA==
-X-Google-Smtp-Source: AGHT+IHHhK9CSdZIgYjmGVwINyWUV4BQ5DRuV9XcOlzdrBDsVjjPQHueVeikWGMMPg9ZqGOxUBWNug==
-X-Received: by 2002:a5d:67cf:0:b0:355:3f6:1ba4 with SMTP id
- ffacd0b85a97d-35e0f32ea48mr5666795f8f.64.1717360794233; 
- Sun, 02 Jun 2024 13:39:54 -0700 (PDT)
+ bh=bdt/j3LdWzzvziKlM95F7xsR++s75dw33l4cLt4E4Ko=;
+ b=V4vYhgWG1ZnvXojLy+iLzyNGOn7FAD4LmKlgeJ+rvkKjvvDKMFBv5Lm2OKftohlV5A
+ jHwEG50WuoGXmxzLQjBnx2AsglZrZXWUeAteqFsGMa+a8s8ZTR75H0wnMZddYkJee8YV
+ AHJxcqDoxV4XvG5uWPtpnowJwPPmanCGElr+kksHC4oX341VZNSMhGLlnkb8CdenKD/K
+ R2gLWcmN2y7se+Gldel8qdcS0RtR48AvaocP4dExXpllL7s6g2K32k6YltKUoW8eEzkh
+ A5h0yPJf5ZE5uvNQaWCa6iM/Swgha7kARBUk3XUcz+Y81twaIrgrx/Iuf8WpSblFHoQ1
+ BX6A==
+X-Gm-Message-State: AOJu0Ywgq8e/E44aMWYKyQf/idk1elEoz3hhhyuwGAGWmm5iLLJ4Vnd3
+ 8I/JIki3ndcJCdj3NgJ646U+EGo8ldrgkJFx4bS28nRLMydaQUBAtu2soQ==
+X-Google-Smtp-Source: AGHT+IH7h70tAdw9eum0n7E+A2t1zOUTMFJQVzNNS/Wa5rze285TOE4xzsb0F4JClhQmGXyrWZob8g==
+X-Received: by 2002:a05:600c:3584:b0:421:2bf5:2362 with SMTP id
+ 5b1f17b1804b1-4212e0c0597mr77079665e9.39.1717360795110; 
+ Sun, 02 Jun 2024 13:39:55 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-35e0f97ba3csm6460862f8f.73.2024.06.02.13.39.53
+ ffacd0b85a97d-35e0f97ba3csm6460862f8f.73.2024.06.02.13.39.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Sun, 02 Jun 2024 13:39:54 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  2 Jun 2024 22:39:39 +0200
-Message-ID: <35ac1aa10d311fb73287c4fbf95b146581beeade.1717360788.git.yann.morin.1998@free.fr>
+Date: Sun,  2 Jun 2024 22:39:41 +0200
+Message-ID: <3ea7b2b70a9cd08c0145a73a55e16cc162315a1f.1717360788.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <cover.1717360788.git.yann.morin.1998@free.fr>
 References: <cover.1717360788.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717360794; x=1717965594; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1717360795; x=1717965595; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=gXzEtc/Ruyflv/s7nHqAB3x0wgNuwk0WaxN+ap22Df0=;
- b=E6cX1tQGsfU8ik0u8s1vhQBdy7YUY8kuc3u5M7u/BjGXHaDv7yAzHS0xIwk2pUIdxG
- Rvtj3t8yr4Ggwx9/oEJYysPKYspqZco4pGgjk49bI45VVpzYKGFgqdWN5N/TCnFlfEK9
- 6XX+mKiqaZd8iKsn9N/hVryAuz2ZcM/OQv/oBupep/FhFZ/IwbxpkW2WgAkeEynPDXTD
- yOlA4NPSCCOeXNvb4II6izDvKCWdQY1Cq+PvX97T4KvsuNKBxrhvUwDdy3EhA/UwbAgq
- C2R6i0ilhTJmDsCUC5ZcVvVhw/58PmQH3tEa7PWQBw8D1dywHnEymtzwzY7Ho+ACCDt/
- B+sQ==
+ bh=bdt/j3LdWzzvziKlM95F7xsR++s75dw33l4cLt4E4Ko=;
+ b=AxEcTRTgsE+X3sZ3aHib9wryUiPAbV8Wt+QBlfNOGy0H5M87K9sq/SUOOyaNoNN2oJ
+ T2UP7C1KeJfMEmKAGDnc6MM/InEcrdBHW9ZQX0qJvpSCR7KCfwBrsqadQj5fstMU08AR
+ 84aIkuWKoI8CIDMEvXoLscz+5wXB8k0Se9zXnHFgbWPO4ot4OGUQUk7oh3zCTVwhXvKG
+ 4xj6KNuggObL67+K62z794PFrUSdrJITI2BcdmclHIosszV5ZTuIGDR25IJgDZ9wr+cv
+ u1lk/kixR/bjrHPETj8clcI4gKWf+lwSlP5rAa+e0KRWBJ9Cf7VSNhfiTl7p5QwMJd4m
+ mCoA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=E6cX1tQG
-Subject: [Buildroot] [PATCH 03/16] utils/check-package: add option to run
- the test-suite
+ header.a=rsa-sha256 header.s=20230601 header.b=AxEcTRTg
+Subject: [Buildroot] [PATCH 05/16] support/download/dl-wrapper: fix
+ shellcheck errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,74 +103,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Currently, how to run the check-package test-suite is thoroughly under-
-documented. There is one hint in the commit log for commit fc254881e6df
-(utils/checkpackagelib: add unit tests), and another in commit
-242e9d72e7d2 (utils/docker-run: new script); the former is hard to find,
-and the latter is about an unrelated script, so harder yet to find...
-
-Add a new option to check-package, that will make it run its test-suite.
-Since pytest is only needed for the test-suite, only import it in that
-case.
-
-pytest will be default create a cache of the tests (not sure what it is
-about, though), so instruct it not to (esp. since the tree can be
-read-only).
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
 ---
- utils/check-package              | 10 ++++++++++
- utils/checkpackagelib/readme.txt |  1 +
- 2 files changed, 11 insertions(+)
+ .checkpackageignore         |  1 -
+ support/download/dl-wrapper | 20 ++++++++++++++------
+ 2 files changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index cbb3613e19..f759d88a89 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -85,6 +85,9 @@ def parse_args():
-     parser.add_argument("--failed-only", action="store_true", help="print only"
-                         " the name of the functions that failed (debug)")
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 1c5ab08f5f..e7180718c7 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1661,7 +1661,6 @@ support/dependencies/dependencies.sh Shellcheck
+ support/download/bzr Shellcheck lib_shellscript.ConsecutiveEmptyLines
+ support/download/cargo-post-process Shellcheck
+ support/download/cvs Shellcheck
+-support/download/dl-wrapper Shellcheck
+ support/download/file Shellcheck
+ support/download/go-post-process Shellcheck
+ support/download/hg Shellcheck
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 35428faeef..67a9718d9d 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -22,7 +22,7 @@ export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:lru:qf:e"
+ main() {
+     local OPT OPTARG
+     local backend output large_file recurse quiet rc
+-    local -a uris hfiles
++    local -a uris hfiles backend_opts
  
-+    parser.add_argument("--test-suite", action="store_true", help="Run the"
-+                        " test-suite")
+     # Parse our options; anything after '--' is for the backend
+     while getopts ":c:d:D:o:n:N:H:lrf:u:qp:" OPT; do
+@@ -58,6 +58,7 @@ main() {
+     # If we can neither link nor copy, fallback to doing a download.
+     # NOTE! This is not atomic, is subject to TOCTTOU, but the whole
+     # dl-wrapper runs under an flock, so we're safe.
++    # shellcheck disable=SC2166  # -a works in this case
+     if [ ! -e "${output}" -a -e "${old_dl_dir}/${filename}" ]; then
+         ln "${old_dl_dir}/${filename}" "${output}" || \
+         cp "${old_dl_dir}/${filename}" "${output}" || \
+@@ -111,6 +112,12 @@ main() {
+         tmpd="$(mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX")"
+         tmpf="${tmpd}/output"
+ 
++        # shellcheck disable=SC2206  # all three are dash-options
++        backend_opts=( ${quiet} ${large_file} ${recurse} )
++        if [ "${urlencode}" ]; then
++            backend_opts+=( -e )
++        fi
 +
-     flags = parser.parse_args()
+         # Helpers expect to run in a directory that is *really* trashable, so
+         # they are free to create whatever files and/or sub-dirs they might need.
+         # Doing the 'cd' here rather than in all backends is easier.
+@@ -121,7 +128,6 @@ main() {
+         # the next URI until it succeeds. Once out of URI to try, we need to
+         # cleanup and exit.
+         if ! "${OLDPWD}/support/download/${backend}" \
+-                $([ -n "${urlencode}" ] && printf %s '-e') \
+                 -c "${cset}" \
+                 -d "${dl_dir}" \
+                 -n "${raw_base_name}" \
+@@ -129,7 +135,9 @@ main() {
+                 -f "${filename}" \
+                 -u "${uri}" \
+                 -o "${tmpf}" \
+-                ${quiet} ${large_file} ${recurse} -- "${@}"
++                "${backend_opts[@]}" \
++                -- \
++                "${@}"
+         then
+             # cd back to keep path coherence
+             cd "${OLDPWD}"
+@@ -193,8 +201,8 @@ main() {
+     # Some backends (cp and scp) may create executable files, so we need to
+     # carry the executable bit if needed.
+     [ -x "${tmpf}" ] && new_mode=755 || new_mode=644
+-    new_mode=$(printf "%04o" $((0${new_mode} & ~0$(umask))))
+-    chmod ${new_mode} "${tmp_output}"
++    new_mode="$(printf "%04o" $((0${new_mode} & ~0$(umask))))"
++    chmod "${new_mode}" "${tmp_output}"
  
-     flags.ignore_list = get_ignored_parsers_per_file(flags.intree_only, flags.ignore_filename)
-@@ -287,6 +290,13 @@ def __main__():
-     global flags
-     flags = parse_args()
+     # We must *not* unlink tmp_output, otherwise there is a small window
+     # during which another download process may create the same tmp_output
+@@ -226,7 +234,7 @@ main() {
  
-+    if flags.test_suite:
-+        import pytest
-+        return pytest.main(
-+            # Disable writing/loading a cache with: -p no:cacheprovider
-+            ["-v", "-p", "no:cacheprovider", os.path.dirname(__file__)]
-+        )
-+
-     if flags.intree_only:
-         # change all paths received to be relative to the base dir
-         base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-diff --git a/utils/checkpackagelib/readme.txt b/utils/checkpackagelib/readme.txt
-index 3bfe289607..b3e8c67100 100644
---- a/utils/checkpackagelib/readme.txt
-+++ b/utils/checkpackagelib/readme.txt
-@@ -23,6 +23,7 @@ How the scripts are structured:
- - lib_type.py contains check functions specific to files of this type.
+ trace()  { local msg="${1}"; shift; printf "%s: ${msg}" "${my_name}" "${@}"; }
+ warn()   { trace "${@}" >&2; }
+-errorN() { local ret="${1}"; shift; warn "${@}"; exit ${ret}; }
++errorN() { local ret="${1}"; shift; warn "${@}"; exit "${ret}"; }
+ error()  { errorN 1 "${@}"; }
  
- Some hints when changing this code:
-+- test your changes: utils/check-package --test-suite
- - prefer O(n) algorithms, where n is the total number of lines in the files
-   processed.
- - when there is no other reason for ordering, use alphabetical order (e.g. keep
+ my_name="${0##*/}"
 -- 
 2.45.1
 
