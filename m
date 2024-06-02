@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9FD7C25B74
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 09:01:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F8B4C25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 09:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92E20400D3;
-	Sun,  2 Jun 2024 09:01:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 27F7A400D3;
+	Sun,  2 Jun 2024 09:42:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qhqWoWDo_I6Y; Sun,  2 Jun 2024 09:01:07 +0000 (UTC)
+ id IunwjTDtzCz0; Sun,  2 Jun 2024 09:42:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6500740468
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2018C40465
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6500740468;
-	Sun,  2 Jun 2024 09:01:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3097F1BF27C
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 09:01:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2018C40465;
+	Sun,  2 Jun 2024 09:42:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 283D91BF3D2
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 09:42:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CD7F40468
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 09:01:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1DE79606E9
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 09:42:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NVyyV4bRGl08 for <buildroot@lists.busybox.net>;
- Sun,  2 Jun 2024 09:01:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vqsV5Zlq0DFC for <buildroot@lists.busybox.net>;
+ Sun,  2 Jun 2024 09:42:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 04C53400D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04C53400D3
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 04C53400D3
- for <buildroot@buildroot.org>; Sun,  2 Jun 2024 09:01:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CB286606CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB286606CC
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CB286606CC
+ for <buildroot@buildroot.org>; Sun,  2 Jun 2024 09:42:45 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 193D213F88D;
- Sun,  2 Jun 2024 11:00:56 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6000113F92C;
+ Sun,  2 Jun 2024 11:42:38 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 02 Jun 2024 11:00:55 +0200
-Date: Sun, 2 Jun 2024 11:00:55 +0200
+ Sun, 02 Jun 2024 11:42:38 +0200
+Date: Sun, 2 Jun 2024 11:42:38 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Christian Stewart <christian@aperture.us>
-Message-ID: <Zlw0x-GMNwen_N31@landeda>
-References: <20240511235609.88305-1-christian@aperture.us>
+To: Geoff Levand <geoff@infradead.org>
+Message-ID: <Zlw-jsAvHNP_HO2g@landeda>
+References: <f01af2e5-4683-47e2-86d9-737f07279724@infradead.org>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240511235609.88305-1-christian@aperture.us>
+In-Reply-To: <f01af2e5-4683-47e2-86d9-737f07279724@infradead.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1717318859;
- bh=nHtxO2oOtNuL1GTzzqk+0jHTPDSvCIuTx/KalQAf3EA=;
+ d=free.fr; s=smtp-20201208; t=1717321362;
+ bh=d0lsjQp2DrC0KIJweOz5WZBjwaR833TTHTQndCnowlw=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=eE88+LVHoxFB2xDKjudj5TtQo9+e8HvScBBGbHPccsWQDqXA6UFbeqCNZ8cdJqM6z
- uBCjb0sCjSrDvFBdxhRHwDLFNbPdhNufnRgnd5kpOyQt2/djrFQPzhdwFGg9DxPNFK
- PFBtNPsVoJ8iX+HcHYgeLqBq6RnIb1uaTWpGJfbDNSaEXjRWvaJB+ZgzeKgxxwL6qA
- uJ/pCowb0nOZewI8QiimJzej+OLfDyRkAvH+xLBBFrf/Nqa7ac3bXEa52/+f4YldWr
- 6HmkR2bnHL2eN9G26vSj7jCuwJaKav7ohywk4iLsiGlU8ed4K+35qX3XEMgJxZ8f23
- h0tBKarPUYGyw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=O/rGn0wM3uXmSkx4/J3O1mnvMw/xt26PVjuN/ptDeAYCzjqz+iu5MUOWQZqTSONOU
+ W3aULXbfePz5pP2KxIhZcf/PNpzHRyaywzlNMroJ9tOMw+lWTpuRsFIYtOnb5+9YUd
+ DvNu+3fMcMunYr5GGGUQ1g97m4D/OUe332yrGEd67Hg/L6qSFSnx8wLBtJ3oe74IJn
+ MGZIpzByyP1R/yJ0BfZakRrQ4gZOiHBeBmjAt7z2SMKlJkJYxoZGJ7ii86ZVPORoM6
+ bk5kP9bsp4Oc4cfBl71OMovoUaZ9sBO1Mpilzpjmhr58HxrcRP/UGsSMkiCJOQUjny
+ KYdOTm2d4miag==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=eE88+LVH
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/docker-compose: bump version
- to v2.27.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=O/rGn0wM
+Subject: Re: [Buildroot] flannel riscv64 build failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,90 +86,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Christian, All,
+Geoff, All,
 
-On 2024-05-11 16:56 -0700, Christian Stewart via buildroot spake thusly:
-> https://github.com/docker/compose/releases/tag/v2.27.0
+On 2024-06-02 16:28 +0900, Geoff Levand spake thusly:
+> On 5/20/24 13:06, Thomas Petazzoni wrote:
+> >   riscv64    |         flannel-0.25.1         | http://autobuild.buildroot.net/results/d2be77d8b9236db45c4f3a558f3198f199c0c568
+> I posted about the riscv64 build failure to the flannel project, and one developer said
+> it might be due to buildroot setting CGO_ENABLED=1 for the riscv64 build.  
+> The report is here:
+>   https://github.com/flannel-io/flannel/issues/1988
 > 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+> I'm not sure if setting CGO_ENABLED=0 just for the flannel build will solve the problem,
+> nor do I how to do that.  Any help will be appreciated.
 
-We have a download failure for docker-compose (as noticed by Peter):
+You may want to test something along the lines of:
 
-    http://autobuild.buildroot.net/results/cd3a19e9172fb49591fe3a1a7da28c09a4919495/build-end.log
+    diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+    index 317ad14ba3..4279c5bb99 100644
+    --- a/package/flannel/flannel.mk
+    +++ b/package/flannel/flannel.mk
+    @@ -12,6 +12,14 @@ FLANNEL_LICENSE_FILES = LICENSE
 
-    ERROR: while checking hashes from package/docker-compose/docker-compose.hash
-    ERROR: docker-compose-2.27.0-go2.tar.gz has wrong sha256 hash:
-    ERROR: expected: 448eaf225c2984a2d78b4faa3fe74a4aa1e2bb791f90ac8d4970d3d046e638df
-    ERROR: got     : 42e9d2a33806656bd145ec742a3ba00b64acc3f88b500793d3b78319c39e25e0
-    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+     FLANNEL_LDFLAGS = -X github.com/flannel-io/flannel/version.Version=$(FLANNEL_VERSION)
 
-I can't even reproduce localy, with this defconfig for example:
-
-    $ cat <<_EOF_ >.config
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-    BR2_PACKAGE_DOCKER_CLI=y
-    BR2_PACKAGE_DOCKER_COMPOSE=y
-    _EOF_
-    $ make oldddefconfig
-
-    $ make docker-compose-source
-    [...]
-    go: downloading dario.cat/mergo v1.0.0
-    [...]
-    go: downloading github.com/imdario/mergo v0.3.16
-    [...]
-    go: github.com/docker/compose/v2/cmd/compose imports
-            github.com/docker/cli/cli/command/container imports
-            github.com/docker/cli/cli/compose/loader imports
-            dario.cat/mergo: unrecognized import path "dario.cat/mergo": https fetch: Get "https://dario.cat/mergo?go-get=1": dial tcp: lookup dario.cat on 127.0.0.53:53: server misbehaving
-
-As I understand it, dario.cat is a "vanity URL" [0] so it should not be
-resolved by the resolver, but by go-pkg, but apparently that did not
-happen for me...
-
-Do you have any idea what's going on?
-
-[0] https://pkg.go.dev/dario.cat/mergo#readme-important-notes
+    +# Upstream only supports CGO on x86_64 (aka amd64):
+    +#   https://github.com/flannel-io/flannel/issues/1988#issuecomment-2141483747
+    +#   https://github.com/flannel-io/flannel/blob/v0.25.1/Makefile#L11
+    +# So force it disabled for anything but x86_64, where we keep the default
+    +ifeq ($(BR2_x86_64),)
+    +FLANNEL_GO_ENV += CGO_ENABLED=0
+    +endif
+    +
+     # Install flannel to its well known location.
+     define FLANNEL_INSTALL_TARGET_CMDS
+     	$(INSTALL) -D -m 0755 $(@D)/bin/flannel $(TARGET_DIR)/opt/bin/flanneld
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/docker-compose/docker-compose.hash | 2 +-
->  package/docker-compose/docker-compose.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
-> index cda4a130d5..1fd454e3fa 100644
-> --- a/package/docker-compose/docker-compose.hash
-> +++ b/package/docker-compose/docker-compose.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  821aac932d0a3bbe583ea290ae777cec785a77f987c5007a30970fa6568e9322  docker-compose-2.26.1-go2.tar.gz
-> +sha256  448eaf225c2984a2d78b4faa3fe74a4aa1e2bb791f90ac8d4970d3d046e638df  docker-compose-2.27.0-go2.tar.gz
->  sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
-> diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
-> index 66a88ac7e7..32b2236a91 100644
-> --- a/package/docker-compose/docker-compose.mk
-> +++ b/package/docker-compose/docker-compose.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -DOCKER_COMPOSE_VERSION = 2.26.1
-> +DOCKER_COMPOSE_VERSION = 2.27.0
->  DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
->  DOCKER_COMPOSE_LICENSE = Apache-2.0
->  DOCKER_COMPOSE_LICENSE_FILES = LICENSE
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
