@@ -4,90 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6A1AC25B74
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 08:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F3E1C25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 08:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AA8383438;
-	Sun,  2 Jun 2024 08:03:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E4EDF8458C;
+	Sun,  2 Jun 2024 08:25:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cVlEEx3NthKy; Sun,  2 Jun 2024 08:03:27 +0000 (UTC)
+ id Ft7ws322wuIZ; Sun,  2 Jun 2024 08:25:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D303845BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2608E81489
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D303845BF;
-	Sun,  2 Jun 2024 08:03:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AF20C1BF3DB
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 08:03:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2608E81489;
+	Sun,  2 Jun 2024 08:25:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 701961BF275
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 08:25:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A8F4560892
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 08:03:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D282402E5
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 08:25:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xAZ3AZDknpKQ for <buildroot@lists.busybox.net>;
- Sun,  2 Jun 2024 08:03:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1135; helo=mail-yw1-x1135.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8BA3760890
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BA3760890
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com
- [IPv6:2607:f8b0:4864:20::1135])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8BA3760890
- for <buildroot@buildroot.org>; Sun,  2 Jun 2024 08:03:23 +0000 (UTC)
-Received: by mail-yw1-x1135.google.com with SMTP id
- 00721157ae682-62a0873c6e4so34340087b3.3
- for <buildroot@buildroot.org>; Sun, 02 Jun 2024 01:03:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717315402; x=1717920202;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=R1KrRe1MnLUC0JSChI4O1gSfg9KxG1YXGmSBzN4In+0=;
- b=fOdeYRg/eggNcnlIPEV3ENdBjeVDnPQpDS5FpIbDceO3cPWVUW1XpGxaX+VGxPw67u
- lWpzlDEMpUqj4XXlrFKBSszzokbVkQ/LaLQmckLtgGcz8llsjvi83Fdgwyhk5+WQvtpg
- UPLFtMewwYrodaY5DmSgL3q1KaYvliKZAeIIRGQ/mD7sM1udfkxLXF9RgUaENWm740Nq
- uBWUXCkcRLkqzgu7AQrEeAyNL6e1Y9h/u8F5DHsg1oF8qCpKV+58U3NdFfsP1r7WiO9E
- C3Edx6hsYX+wuX0suF15Llxdrb5y82gv3zMzNXJUUp3yILEnLJ9GqnK99VTrQTQNe02u
- Vq4A==
-X-Gm-Message-State: AOJu0YzTgN/DiNgbIBYehBLj7UchGtugviAAFzQpK8z5Pp/2XBWXhx1t
- 4JGhTwNy23045l5zaU+nIyGoVvTGH1VUjVP/8HpaJD/DeHRYs3azGjGXp3LYtCfNDb8TQoq9psE
- I4nbNtB2HZd35bcsb0o+akHYLE5M=
-X-Google-Smtp-Source: AGHT+IE5FvBl7MoSUGcYwHlfK9Gch5kDqjqB6gnXnXIbtVlDlFB4Vw5ez6okKRmKAK3T0osdlWsQL65BLIsODcwZ2Y4=
-X-Received: by 2002:a0d:e443:0:b0:61a:b00a:ff9 with SMTP id
- 00721157ae682-62c796d6617mr68919627b3.13.1717315402085; Sun, 02 Jun 2024
- 01:03:22 -0700 (PDT)
-MIME-Version: 1.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id deJnWckmolsq for <buildroot@lists.busybox.net>;
+ Sun,  2 Jun 2024 08:25:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 84708400D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84708400D3
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 84708400D3
+ for <buildroot@buildroot.org>; Sun,  2 Jun 2024 08:25:03 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 248AA13F8AD;
+ Sun,  2 Jun 2024 10:24:53 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 02 Jun 2024 10:24:52 +0200
+Date: Sun, 2 Jun 2024 10:24:52 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Message-ID: <ZlwsVC6lDaKkKZ1N@landeda>
 References: <20240531151325.2443323-1-roy.kollen.svendsen@akersolutions.com>
- <20240531151325.2443323-9-roy.kollen.svendsen@akersolutions.com>
- <ZltXHCyhxx8XkbTm@landeda>
-In-Reply-To: <ZltXHCyhxx8XkbTm@landeda>
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Date: Sun, 2 Jun 2024 10:03:07 +0200
-Message-ID: <CA+R_deouN7hKSnkNn0Fo9GiMMbFZxXKOf=W0dZFxocT-gj9qMA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717315402; x=1717920202; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=R1KrRe1MnLUC0JSChI4O1gSfg9KxG1YXGmSBzN4In+0=;
- b=WWrQd22e1EM/jGXjyUPJdIw+foWKmRLmj5TLSPfWbHUwHkiJyTjjMtPKc8EdxqdCfS
- +rIhH9jEdvafnmumIWlddg9fZInKUtq4DGfDXaNdxfD1PAcC05b5wDnHH7INygse7pw6
- vpd2aHLJuFV7sN5uSdIpCY12tIrmIgQUnYj5tszxuKwWMjNitPCS1ede2QBozRsS8zRv
- QuaW22NmGe23elQZVz5nigW0ONSiXsuAYxt2Lp8YAbmsrxcVr66HYiSYFng2iD23q0NJ
- mzjUGTv1lXXkgf0UR/aDBWMGNns0FYuKAJE8qGKIVVNaPUyGIlCPXTJhzHZOe1eVsWIb
- WUVQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ <20240531151325.2443323-6-roy.kollen.svendsen@akersolutions.com>
+ <ZltV8DAQmGI-vTpe@landeda>
+ <CA+R_dequoj35fREbX-Rdi_EKp2x=f2jKLyz5=FpimqZcigb9=w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CA+R_dequoj35fREbX-Rdi_EKp2x=f2jKLyz5=FpimqZcigb9=w@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1717316700;
+ bh=JolhYZ7eor5eq9m471h5uYMkTV7ardNFibF/66Xynzw=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=GiePTYYNWhdny1xsO+xH/KdrPb0BD+1wR6uYZG3snkKmulvYL8AguCv7KgB8jbqV1
+ /PgLwZ+WlayhhvYZPev0XAxRCaDyKgrzUpn5P2stfpqPHjqTG2/V9pLqIDDWdevG/T
+ /kY2PWuCJ7sDmnT/Nd9hvmb4y4j5PJalAtWsmastXD57ooIZWCZtV5xQ8AGzJsBaV+
+ sPR7b0QQSTYuNY0WzP0KbkX7f+tD9DIOZeFzLGq2K1SgDl9g2c8EuU3WiWinHxwEid
+ INCykPpBv4ctS55vkhU/zhWGMStcdI3NLSstgx0Cprt8GzuS5/nmOVPKjyjL4NTY+4
+ XuXpESc24vjrw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=WWrQd22e
-Subject: Re: [Buildroot] [PATCH v5 09/14] package/qt6/qt6declarative: new
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GiePTYYN
+Subject: Re: [Buildroot] [PATCH v5 06/14] package/qt6/qt6shadertools: new
  package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -105,664 +89,200 @@ Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
  Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
  Jesse Van Gavere <jesseevg@gmail.com>
-Content-Type: multipart/mixed; boundary="===============5399246785184687920=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5399246785184687920==
-Content-Type: multipart/alternative; boundary="000000000000823e220619e3a664"
-
---000000000000823e220619e3a664
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Yann,
-
-Ok, thanks for your feedback. I'll try to follow the same pattern for all
-commit messages for new packages requiring new blind host options. I will
-try to make the exlanations less verbose, move the explanations to the
-commits which apply the blind host options and add an explanation for Qt
-Tools selecting Qt::Sql.
-
-I'll probably try to rebuild the packages without the blind host options
-enabled, to get the error messages. And add those (in a more compact form)
-+ maybe some explanation by referencing relevant lines in the Qt
-buildsystem.
-
-Best Regards
-Roy
-
-l=C3=B8r. 1. jun. 2024, 19:15 skrev Yann E. MORIN <yann.morin.1998@free.fr>=
-:
-
-> Roy, All,
->
-> On 2024-05-31 17:13 +0200, Roy Kollen Svendsen spake thusly:
-> > We add the patch to avoid checking for FEATURE_ssl when FEATURE_network
-> > is not available. FEATURE_ssl is defined by the Qt Network module. So
-> > we will get the following build failure if the patch is not applied and
-> > FEATURE_network=3DON:
-> >
-> > CMake Error at qt6base-6.7.0/cmake/QtFeature.cmake:376 (message):
-> >   Attempting to evaluate feature ssl but its definition is missing.
-> Either
-> >   the feature does not exist or a dependency to the module that defines
-> it is
-> >   missing
-> > Call Stack (most recent call first):
-> >   qt6base-6.7.0/cmake/QtFeature.cmake:141 (qt_evaluate_feature)
-> >   qt6base-6.7.0/cmake/QtFeature.cmake:180
-> (qt_internal_evaluate_config_expression)
-> >   qt6base-6.7.0/cmake/QtFeature.cmake:396 (qt_evaluate_config_expressio=
-n)
-> >   qt6base-6.7.0/cmake/QtFeature.cmake:711 (qt_evaluate_feature)
-> >   qt6base-6.7.0/cmake/QtFeature.cmake:680 (qt_feature_module_end)
-> >   src/qml/CMakeLists.txt:13 (qt_feature_evaluate_features)
-> >
-> > To avoid the following build error, we also make sure the host qt6base =
-is
-> > built with Testlib enabled:
-> >
-> > CMake Error at
-> buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelpers.cmake:684
-> (message):
-> >   Failed to find the host tool "Qt6::qmltestrunner".  It is part of the
->
-> This is the kind of explanation (even if a bit verbose) that we indeed
-> need for the requirement on the host qt6base having some modules
-> enabled. If you can provide that for the other packages, that would be
-> awesome!
->
-> Regards,
-> Yann E. MORIN.
->
-> >   Qt6QmlTools package, but the package did not contain the tool.  Make
-> sure
-> >   that the host module Qml was built with all features enabled (no
-> explicitly
-> >   disabled tools).
-> > Call Stack (most recent call first):
-> >   buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelpers.cmake:72
-> (qt_internal_find_tool)
-> >   tools/qmltestrunner/CMakeLists.txt:11 (qt_internal_add_tool)
-> >
-> > Signed-off-by: Roy Kollen Svendsen <
-> roy.kollen.svendsen@akersolutions.com>
-> > ---
-> > Changes v4 -> v5:
-> >   - Bump to v6.7.1
-> >
-> >  package/qt6/Config.in                         |  1 +
-> >  ...1-Fix-build-with--no-feature-network.patch | 28 ++++++++++
-> >  package/qt6/qt6declarative/Config.in          | 24 ++++++++
-> >  .../qt6/qt6declarative/qt6declarative.hash    | 11 ++++
-> >  package/qt6/qt6declarative/qt6declarative.mk  | 56 +++++++++++++++++++
-> >  5 files changed, 120 insertions(+)
-> >  create mode 100644
-> package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patch
-> >  create mode 100644 package/qt6/qt6declarative/Config.in
-> >  create mode 100644 package/qt6/qt6declarative/qt6declarative.hash
-> >  create mode 100644 package/qt6/qt6declarative/qt6declarative.mk
-> >
-> > diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-> > index 81682af476..625134d281 100644
-> > --- a/package/qt6/Config.in
-> > +++ b/package/qt6/Config.in
-> > @@ -45,6 +45,7 @@ if BR2_PACKAGE_QT6
-> >
-> >  source "package/qt6/qt6base/Config.in"
-> >  source "package/qt6/qt6core5compat/Config.in"
-> > +source "package/qt6/qt6declarative/Config.in"
-> >  source "package/qt6/qt6languageserver/Config.in"
-> >  source "package/qt6/qt6serialbus/Config.in"
-> >  source "package/qt6/qt6serialport/Config.in"
-> > diff --git
-> a/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patc=
-h
-> b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patc=
-h
-> > new file mode 100644
-> > index 0000000000..bef5794229
-> > --- /dev/null
-> > +++
-> b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patc=
-h
-> > @@ -0,0 +1,28 @@
-> > +From 8377691a0998fd84e6fc8349a5db450bf2d79164 Mon Sep 17 00:00:00 2001
-> > +From: Tasuku Suzuki <tasuku.suzuki@signal-slot.co.jp>
-> > +Date: Tue, 21 Nov 2023 23:58:43 +0900
-> > +Subject: Fix build with -no-feature-network
-> > +
-> > +Change-Id: Ib21012301da6afb5458f707b39a9a8079d93eb93
-> > +Reviewed-by: Ulf Hermann <ulf.hermann@qt.io>
-> > +Upstream:
-> https://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=3D8377691a0998fd8=
-4e6fc8349a5db450bf2d79164
-> > +Signed-off-by: Roy Kollen Svendsen <
-> roy.kollen.svendsen@akersolutions.com>
-> > +---
-> > + src/qml/configure.cmake | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/src/qml/configure.cmake b/src/qml/configure.cmake
-> > +index 2d0434643a..d1ff90bd54 100644
-> > +--- a/src/qml/configure.cmake
-> > ++++ b/src/qml/configure.cmake
-> > +@@ -82,7 +82,7 @@ qt_feature("qml-ssl" PUBLIC
-> > +     SECTION "QML"
-> > +     LABEL "QML SSL support"
-> > +     PURPOSE "Provides ssl support in QML."
-> > +-    CONDITION QT_FEATURE_ssl
-> > ++    CONDITION QT_FEATURE_qml_network AND QT_FEATURE_ssl
-> > + )
-> > +
-> > + # On arm and arm64 we need a specialization of cacheFlush() for each
-> OS to be
-> > +--
-> > +cgit v1.2.3
-> > diff --git a/package/qt6/qt6declarative/Config.in
-> b/package/qt6/qt6declarative/Config.in
-> > new file mode 100644
-> > index 0000000000..1daa645413
-> > --- /dev/null
-> > +++ b/package/qt6/qt6declarative/Config.in
-> > @@ -0,0 +1,24 @@
-> > +config BR2_PACKAGE_QT6DECLARATIVE
-> > +     bool "qt6declarative"
-> > +     # Enable host test module to ensure that qmltestrunner is built
-> > +     select BR2_PACKAGE_HOST_QT6BASE_TEST if BR2_PACKAGE_QT6BASE_TEST
-> > +     help
-> > +       Qt is a cross-platform application and UI framework for
-> > +       developers using C++.
-> > +
-> > +       This package corresponds to the qt6declarative module.
-> > +
-> > +       https://doc.qt.io/qt-6/qtdeclarative-index.html
-> > +
-> > +if BR2_PACKAGE_QT6DECLARATIVE
-> > +
-> > +config BR2_PACKAGE_QT6DECLARATIVE_QUICK
-> > +     bool "quick module"
-> > +     select BR2_PACKAGE_QT6BASE_GUI
-> > +     select BR2_PACKAGE_QT6LANGUAGESERVER
-> > +     select BR2_PACKAGE_QT6SHADERTOOLS
-> > +     select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_QT6_GL_SUPPORTS
-> > +     select BR2_PACKAGE_HOST_QT6SVG
-> > +     select BR2_PACKAGE_HOST_QT6DECLARATIVE
-> > +
-> > +endif
-> > diff --git a/package/qt6/qt6declarative/qt6declarative.hash
-> b/package/qt6/qt6declarative/qt6declarative.hash
-> > new file mode 100644
-> > index 0000000000..480e3805ca
-> > --- /dev/null
-> > +++ b/package/qt6/qt6declarative/qt6declarative.hash
-> > @@ -0,0 +1,11 @@
-> > +# Hash from:
-> https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtdeclar=
-ative-everywhere-src-6.7.1.tar.xz.sha256
-> > +sha256
-> 81135c96ed2f599385b8a68c57f4f438dad193c62f946f5b200a321558fd9f1c
-> qtdeclarative-everywhere-src-6.7.1.tar.xz
-> > +
-> > +# Hashes for license files:
-> > +sha256
-> 9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce
-> LICENSES/BSD-3-Clause.txt
-> > +sha256
-> 110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4
-> LICENSES/GFDL-1.3-no-invariants-only.txt
-> > +sha256
-> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
-> LICENSES/GPL-2.0-only.txt
-> > +sha256
-> 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
-> LICENSES/GPL-3.0-only.txt
-> > +sha256
-> da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768
-> LICENSES/LGPL-3.0-only.txt
-> > +sha256
-> 9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700
-> LICENSES/LicenseRef-Qt-Commercial.txt
-> > +sha256
-> 40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2
-> LICENSES/Qt-GPL-exception-1.0.txt
-> > diff --git a/package/qt6/qt6declarative/qt6declarative.mk
-> b/package/qt6/qt6declarative/qt6declarative.mk
-> > new file mode 100644
-> > index 0000000000..2348ff2dae
-> > --- /dev/null
-> > +++ b/package/qt6/qt6declarative/qt6declarative.mk
-> > @@ -0,0 +1,56 @@
-> >
-> +########################################################################=
-########
-> > +#
-> > +# qt6declaratve
-> > +#
-> >
-> +########################################################################=
-########
-> > +
-> > +QT6DECLARATIVE_VERSION =3D $(QT6_VERSION)
-> > +QT6DECLARATIVE_SITE =3D $(QT6_SITE)
-> > +QT6DECLARATIVE_SOURCE =3D
-> qtdeclarative-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6DECLARATIVE_VERSION).tar.=
-xz
-> > +QT6DECLARATIVE_INSTALL_STAGING =3D YES
-> > +
-> > +QT6DECLARATIVE_SUPPORTS_IN_SOURCE_BUILD =3D NO
-> > +
-> > +QT6DECLARATIVE_CMAKE_BACKEND =3D ninja
-> > +
-> > +QT6DECLARATIVE_LICENSE =3D \
-> > +     GPL-2.0+ or LGPL-3.0, \
-> > +     GPL-3.0, GFDL-1.3 no invariants (docs)
-> > +
-> > +QT6DECLARATIVE_LICENSE_FILES =3D \
-> > +     LICENSES/GPL-2.0-only.txt \
-> > +     LICENSES/GPL-3.0-only.txt \
-> > +     LICENSES/LGPL-3.0-only.txt \
-> > +     LICENSES/GFDL-1.3-no-invariants-only.txt
-> > +
-> > +QT6DECLARATIVE_CONF_OPTS =3D \
-> > +     -DQT_FEATURE_qml_profiler=3DOFF \
-> > +     -DQT_HOST_PATH=3D$(HOST_DIR) \
-> > +     -DBUILD_WITH_PCH=3DOFF \
-> > +     -DQT_BUILD_EXAMPLES=3DOFF \
-> > +     -DQT_BUILD_TESTS=3DOFF
-> > +
-> > +HOST_QT6DECLARATIVE_CONF_OPTS =3D \
-> > +     -DQT_HOST_PATH=3D$(HOST_DIR) \
-> > +     -DBUILD_WITH_PCH=3DOFF \
-> > +     -DQT_BUILD_EXAMPLES=3DOFF \
-> > +     -DQT_BUILD_TESTS=3DOFF \
-> > +     -DQT_FEATURE_ssl=3DOFF
-> > +
-> > +QT6DECLARATIVE_DEPENDENCIES =3D \
-> > +     host-qt6base \
-> > +     host-qt6svg \
-> > +     host-qt6shadertools \
-> > +     host-qt6declarative \
-> > +     qt6base \
-> > +     qt6shadertools \
-> > +     qt6languageserver \
-> > +     qt6svg
-> > +
-> > +HOST_QT6DECLARATIVE_DEPENDENCIES =3D \
-> > +     host-qt6base \
-> > +     host-qt6svg \
-> > +     host-qt6shadertools
-> > +
-> > +$(eval $(cmake-package))
-> > +$(eval $(host-cmake-package))
-> > --
-> > 2.45.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------=
-------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There i=
-s
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------=
-------'
->
-
---000000000000823e220619e3a664
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto">Hi Yann,<div dir=3D"auto"><br></div><div dir=3D"auto">Ok,=
- thanks for your feedback. I&#39;ll try to follow the same pattern for all =
-commit messages for new packages requiring new blind host options. I will t=
-ry to make the exlanations less verbose, move the explanations to the commi=
-ts which apply the blind host options and add an explanation for Qt Tools s=
-electing Qt::Sql.</div><div dir=3D"auto"><br></div><div dir=3D"auto">I&#39;=
-ll probably try to rebuild the packages without the blind host options enab=
-led, to get the error messages. And add those (in a more compact form) + ma=
-ybe some explanation by referencing relevant lines in the Qt buildsystem.</=
-div><div dir=3D"auto"><br></div><div dir=3D"auto">Best Regards</div><div di=
-r=3D"auto">Roy</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" c=
-lass=3D"gmail_attr">l=C3=B8r. 1. jun. 2024, 19:15 skrev Yann E. MORIN &lt;<=
-a href=3D"mailto:yann.morin.1998@free.fr">yann.morin.1998@free.fr</a>&gt;:<=
-br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;borde=
-r-left:1px #ccc solid;padding-left:1ex">Roy, All,<br>
-<br>
-On 2024-05-31 17:13 +0200, Roy Kollen Svendsen spake thusly:<br>
-&gt; We add the patch to avoid checking for FEATURE_ssl when FEATURE_networ=
-k<br>
-&gt; is not available. FEATURE_ssl is defined by the Qt Network module. So<=
-br>
-&gt; we will get the following build failure if the patch is not applied an=
-d<br>
-&gt; FEATURE_network=3DON:<br>
-&gt; <br>
-&gt; CMake Error at qt6base-6.7.0/cmake/QtFeature.cmake:376 (message):<br>
-&gt;=C2=A0 =C2=A0Attempting to evaluate feature ssl but its definition is m=
-issing.=C2=A0 Either<br>
-&gt;=C2=A0 =C2=A0the feature does not exist or a dependency to the module t=
-hat defines it is<br>
-&gt;=C2=A0 =C2=A0missing<br>
-&gt; Call Stack (most recent call first):<br>
-&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:141 (qt_evaluate_featu=
-re)<br>
-&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:180 (qt_internal_evalu=
-ate_config_expression)<br>
-&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:396 (qt_evaluate_confi=
-g_expression)<br>
-&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:711 (qt_evaluate_featu=
-re)<br>
-&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:680 (qt_feature_module=
-_end)<br>
-&gt;=C2=A0 =C2=A0src/qml/CMakeLists.txt:13 (qt_feature_evaluate_features)<b=
-r>
-&gt; <br>
-&gt; To avoid the following build error, we also make sure the host qt6base=
- is<br>
-&gt; built with Testlib enabled:<br>
-&gt; <br>
-&gt; CMake Error at buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelper=
-s.cmake:684 (message):<br>
-&gt;=C2=A0 =C2=A0Failed to find the host tool &quot;Qt6::qmltestrunner&quot=
-;.=C2=A0 It is part of the<br>
-<br>
-This is the kind of explanation (even if a bit verbose) that we indeed<br>
-need for the requirement on the host qt6base having some modules<br>
-enabled. If you can provide that for the other packages, that would be<br>
-awesome!<br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
-&gt;=C2=A0 =C2=A0Qt6QmlTools package, but the package did not contain the t=
-ool.=C2=A0 Make sure<br>
-&gt;=C2=A0 =C2=A0that the host module Qml was built with all features enabl=
-ed (no explicitly<br>
-&gt;=C2=A0 =C2=A0disabled tools).<br>
-&gt; Call Stack (most recent call first):<br>
-&gt;=C2=A0 =C2=A0buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelpers.c=
-make:72 (qt_internal_find_tool)<br>
-&gt;=C2=A0 =C2=A0tools/qmltestrunner/CMakeLists.txt:11 (qt_internal_add_too=
-l)<br>
-&gt; <br>
-&gt; Signed-off-by: Roy Kollen Svendsen &lt;<a href=3D"mailto:roy.kollen.sv=
-endsen@akersolutions.com" target=3D"_blank" rel=3D"noreferrer">roy.kollen.s=
-vendsen@akersolutions.com</a>&gt;<br>
-&gt; ---<br>
-&gt; Changes v4 -&gt; v5:<br>
-&gt;=C2=A0 =C2=A0- Bump to v6.7.1<br>
-&gt; <br>
-&gt;=C2=A0 package/qt6/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
-&gt;=C2=A0 ...1-Fix-build-with--no-feature-network.patch | 28 ++++++++++<br=
->
-&gt;=C2=A0 package/qt6/qt6declarative/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 | 24 ++++++++<br>
-&gt;=C2=A0 .../qt6/qt6declarative/qt6declarative.hash=C2=A0 =C2=A0 | 11 +++=
-+<br>
-&gt;=C2=A0 package/qt6/qt6declarative/<a href=3D"http://qt6declarative.mk" =
-rel=3D"noreferrer noreferrer" target=3D"_blank">qt6declarative.mk</a>=C2=A0=
- | 56 +++++++++++++++++++<br>
-&gt;=C2=A0 5 files changed, 120 insertions(+)<br>
-&gt;=C2=A0 create mode 100644 package/qt6/qt6declarative/0001-Fix-build-wit=
-h--no-feature-network.patch<br>
-&gt;=C2=A0 create mode 100644 package/qt6/qt6declarative/Config.in<br>
-&gt;=C2=A0 create mode 100644 package/qt6/qt6declarative/qt6declarative.has=
-h<br>
-&gt;=C2=A0 create mode 100644 package/qt6/qt6declarative/<a href=3D"http://=
-qt6declarative.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">qt6decla=
-rative.mk</a><br>
-&gt; <br>
-&gt; diff --git a/package/qt6/Config.in b/package/qt6/Config.in<br>
-&gt; index 81682af476..625134d281 100644<br>
-&gt; --- a/package/qt6/Config.in<br>
-&gt; +++ b/package/qt6/Config.in<br>
-&gt; @@ -45,6 +45,7 @@ if BR2_PACKAGE_QT6<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 source &quot;package/qt6/qt6base/Config.in&quot;<br>
-&gt;=C2=A0 source &quot;package/qt6/qt6core5compat/Config.in&quot;<br>
-&gt; +source &quot;package/qt6/qt6declarative/Config.in&quot;<br>
-&gt;=C2=A0 source &quot;package/qt6/qt6languageserver/Config.in&quot;<br>
-&gt;=C2=A0 source &quot;package/qt6/qt6serialbus/Config.in&quot;<br>
-&gt;=C2=A0 source &quot;package/qt6/qt6serialport/Config.in&quot;<br>
-&gt; diff --git a/package/qt6/qt6declarative/0001-Fix-build-with--no-featur=
-e-network.patch b/package/qt6/qt6declarative/0001-Fix-build-with--no-featur=
-e-network.patch<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..bef5794229<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-netwo=
-rk.patch<br>
-&gt; @@ -0,0 +1,28 @@<br>
-&gt; +From 8377691a0998fd84e6fc8349a5db450bf2d79164 Mon Sep 17 00:00:00 200=
-1<br>
-&gt; +From: Tasuku Suzuki &lt;<a href=3D"mailto:tasuku.suzuki@signal-slot.c=
-o.jp" target=3D"_blank" rel=3D"noreferrer">tasuku.suzuki@signal-slot.co.jp<=
-/a>&gt;<br>
-&gt; +Date: Tue, 21 Nov 2023 23:58:43 +0900<br>
-&gt; +Subject: Fix build with -no-feature-network<br>
-&gt; +<br>
-&gt; +Change-Id: Ib21012301da6afb5458f707b39a9a8079d93eb93<br>
-&gt; +Reviewed-by: Ulf Hermann &lt;<a href=3D"mailto:ulf.hermann@qt.io" tar=
-get=3D"_blank" rel=3D"noreferrer">ulf.hermann@qt.io</a>&gt;<br>
-&gt; +Upstream: <a href=3D"https://code.qt.io/cgit/qt/qtdeclarative.git/com=
-mit/?id=3D8377691a0998fd84e6fc8349a5db450bf2d79164" rel=3D"noreferrer noref=
-errer" target=3D"_blank">https://code.qt.io/cgit/qt/qtdeclarative.git/commi=
-t/?id=3D8377691a0998fd84e6fc8349a5db450bf2d79164</a><br>
-&gt; +Signed-off-by: Roy Kollen Svendsen &lt;<a href=3D"mailto:roy.kollen.s=
-vendsen@akersolutions.com" target=3D"_blank" rel=3D"noreferrer">roy.kollen.=
-svendsen@akersolutions.com</a>&gt;<br>
-&gt; +---<br>
-&gt; + src/qml/configure.cmake | 2 +-<br>
-&gt; + 1 file changed, 1 insertion(+), 1 deletion(-)<br>
-&gt; +<br>
-&gt; +diff --git a/src/qml/configure.cmake b/src/qml/configure.cmake<br>
-&gt; +index 2d0434643a..d1ff90bd54 100644<br>
-&gt; +--- a/src/qml/configure.cmake<br>
-&gt; ++++ b/src/qml/configure.cmake<br>
-&gt; +@@ -82,7 +82,7 @@ qt_feature(&quot;qml-ssl&quot; PUBLIC<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0SECTION &quot;QML&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0LABEL &quot;QML SSL support&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0PURPOSE &quot;Provides ssl support in QML.&quot;<=
-br>
-&gt; +-=C2=A0 =C2=A0 CONDITION QT_FEATURE_ssl<br>
-&gt; ++=C2=A0 =C2=A0 CONDITION QT_FEATURE_qml_network AND QT_FEATURE_ssl<br=
->
-&gt; + )<br>
-&gt; + <br>
-&gt; + # On arm and arm64 we need a specialization of cacheFlush() for each=
- OS to be<br>
-&gt; +-- <br>
-&gt; +cgit v1.2.3<br>
-&gt; diff --git a/package/qt6/qt6declarative/Config.in b/package/qt6/qt6dec=
-larative/Config.in<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..1daa645413<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/qt6/qt6declarative/Config.in<br>
-&gt; @@ -0,0 +1,24 @@<br>
-&gt; +config BR2_PACKAGE_QT6DECLARATIVE<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;qt6declarative&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0# Enable host test module to ensure that qmltestr=
-unner is built<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_QT6BASE_TEST if BR2_PACKA=
-GE_QT6BASE_TEST<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Qt is a cross-platform application and UI =
-framework for<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0developers using C++.<br>
-&gt; +<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0This package corresponds to the qt6declara=
-tive module.<br>
-&gt; +<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://doc.qt.io/qt-6/qtdeclar=
-ative-index.html" rel=3D"noreferrer noreferrer" target=3D"_blank">https://d=
-oc.qt.io/qt-6/qtdeclarative-index.html</a><br>
-&gt; +<br>
-&gt; +if BR2_PACKAGE_QT6DECLARATIVE<br>
-&gt; +<br>
-&gt; +config BR2_PACKAGE_QT6DECLARATIVE_QUICK<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;quick module&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_QT6BASE_GUI<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_QT6LANGUAGESERVER<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_QT6SHADERTOOLS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_=
-QT6_GL_SUPPORTS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_QT6SVG<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_QT6DECLARATIVE<br>
-&gt; +<br>
-&gt; +endif<br>
-&gt; diff --git a/package/qt6/qt6declarative/qt6declarative.hash b/package/=
-qt6/qt6declarative/qt6declarative.hash<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..480e3805ca<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/qt6/qt6declarative/qt6declarative.hash<br>
-&gt; @@ -0,0 +1,11 @@<br>
-&gt; +# Hash from: <a href=3D"https://download.qt.io/official_releases/qt/6=
-.7/6.7.1/submodules/qtdeclarative-everywhere-src-6.7.1.tar.xz.sha256" rel=
-=3D"noreferrer noreferrer" target=3D"_blank">https://download.qt.io/officia=
-l_releases/qt/6.7/6.7.1/submodules/qtdeclarative-everywhere-src-6.7.1.tar.x=
-z.sha256</a><br>
-&gt; +sha256=C2=A0 81135c96ed2f599385b8a68c57f4f438dad193c62f946f5b200a3215=
-58fd9f1c=C2=A0 qtdeclarative-everywhere-src-6.7.1.tar.xz<br>
-&gt; +<br>
-&gt; +# Hashes for license files:<br>
-&gt; +sha256=C2=A0 9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb4=
-2ed1dcce=C2=A0 LICENSES/BSD-3-Clause.txt<br>
-&gt; +sha256=C2=A0 110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef2=
-42b206a4=C2=A0 LICENSES/GFDL-1.3-no-invariants-only.txt<br>
-&gt; +sha256=C2=A0 8177f97513213526df2cf6184d8ff986c675afb514d4e68a40401052=
-1b880643=C2=A0 LICENSES/GPL-2.0-only.txt<br>
-&gt; +sha256=C2=A0 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545=
-eb65b903=C2=A0 LICENSES/GPL-3.0-only.txt<br>
-&gt; +sha256=C2=A0 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520=
-b4464768=C2=A0 LICENSES/LGPL-3.0-only.txt<br>
-&gt; +sha256=C2=A0 9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3=
-f18a4700=C2=A0 LICENSES/LicenseRef-Qt-Commercial.txt<br>
-&gt; +sha256=C2=A0 40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0=
-530846b2=C2=A0 LICENSES/Qt-GPL-exception-1.0.txt<br>
-&gt; diff --git a/package/qt6/qt6declarative/<a href=3D"http://qt6declarati=
-ve.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">qt6declarative.mk</a=
-> b/package/qt6/qt6declarative/<a href=3D"http://qt6declarative.mk" rel=3D"=
-noreferrer noreferrer" target=3D"_blank">qt6declarative.mk</a><br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..2348ff2dae<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/qt6/qt6declarative/<a href=3D"http://qt6declarative.mk" =
-rel=3D"noreferrer noreferrer" target=3D"_blank">qt6declarative.mk</a><br>
-&gt; @@ -0,0 +1,56 @@<br>
-&gt; +#####################################################################=
-###########<br>
-&gt; +#<br>
-&gt; +# qt6declaratve<br>
-&gt; +#<br>
-&gt; +#####################################################################=
-###########<br>
-&gt; +<br>
-&gt; +QT6DECLARATIVE_VERSION =3D $(QT6_VERSION)<br>
-&gt; +QT6DECLARATIVE_SITE =3D $(QT6_SITE)<br>
-&gt; +QT6DECLARATIVE_SOURCE =3D qtdeclarative-$(QT6_SOURCE_TARBALL_PREFIX)-=
-$(QT6DECLARATIVE_VERSION).tar.xz<br>
-&gt; +QT6DECLARATIVE_INSTALL_STAGING =3D YES<br>
-&gt; +<br>
-&gt; +QT6DECLARATIVE_SUPPORTS_IN_SOURCE_BUILD =3D NO<br>
-&gt; +<br>
-&gt; +QT6DECLARATIVE_CMAKE_BACKEND =3D ninja<br>
-&gt; +<br>
-&gt; +QT6DECLARATIVE_LICENSE =3D \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0GPL-2.0+ or LGPL-3.0, \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0GPL-3.0, GFDL-1.3 no invariants (docs)<br>
-&gt; +<br>
-&gt; +QT6DECLARATIVE_LICENSE_FILES =3D \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0LICENSES/GPL-2.0-only.txt \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0LICENSES/GPL-3.0-only.txt \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0LICENSES/LGPL-3.0-only.txt \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0LICENSES/GFDL-1.3-no-invariants-only.txt<br>
-&gt; +<br>
-&gt; +QT6DECLARATIVE_CONF_OPTS =3D \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_FEATURE_qml_profiler=3DOFF \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_HOST_PATH=3D$(HOST_DIR) \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DBUILD_WITH_PCH=3DOFF \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_BUILD_EXAMPLES=3DOFF \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_BUILD_TESTS=3DOFF<br>
-&gt; +<br>
-&gt; +HOST_QT6DECLARATIVE_CONF_OPTS =3D \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_HOST_PATH=3D$(HOST_DIR) \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DBUILD_WITH_PCH=3DOFF \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_BUILD_EXAMPLES=3DOFF \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_BUILD_TESTS=3DOFF \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_FEATURE_ssl=3DOFF<br>
-&gt; +<br>
-&gt; +QT6DECLARATIVE_DEPENDENCIES =3D \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6base \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6svg \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6shadertools \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6declarative \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0qt6base \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0qt6shadertools \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0qt6languageserver \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0qt6svg<br>
-&gt; +<br>
-&gt; +HOST_QT6DECLARATIVE_DEPENDENCIES =3D \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6base \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6svg \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6shadertools<br>
-&gt; +<br>
-&gt; +$(eval $(cmake-package))<br>
-&gt; +$(eval $(host-cmake-package))<br>
-&gt; -- <br>
-&gt; 2.45.1<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank" rel=3D"no=
-referrer">buildroot@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer noreferrer" target=3D"_blank">https://lists.buildroot.org/ma=
-ilman/listinfo/buildroot</a><br>
-<br>
--- <br>
-.-----------------.--------------------.------------------.----------------=
-----.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
-Erics&#39; conspiracy: |<br>
-| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
-=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
-| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
- =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
-| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer noreferrer" ta=
-rget=3D"_blank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=
-=A0 =C2=A0 |=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
-&#39;------------------------------^-------^------------------^------------=
---------&#39;<br>
-</blockquote></div>
-
---000000000000823e220619e3a664--
-
---===============5399246785184687920==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5399246785184687920==--
+Um95LCBBbGwsCgpPbiAyMDI0LTA2LTAyIDAwOjQ4ICswMjAwLCBSb3kgS29sbGVuIFN2ZW5kc2Vu
+IHNwYWtlIHRodXNseToKPiBJIGF0dGVtcHRlZCB0byBleHBsYWluIHRoZSBob3N0IFF0Njo6R3Vp
+IGRlcGVuZGVuY3kgaW4gcGF0Y2ggMDIvMTQ6Cj4gICAgIFRoZSBRdDY6Okd1aSBtb2R1bGUgaXMg
+bmVlZGVkIHdoZW4gYnVpbGRpbmcgdGhlICdRdCBTaGFkZXIgQmFrZXInIChxc2IpCj4gICAgIGhv
+c3QgdG9vbC4gUXNiIGlzIG5lZWRlZCBmb3IgY29udmVydGluZyB0aGUgUXQ2IFZ1bGthbiBHTFNM
+IHNvdXJjZSBjb2RlIHRvCj4gICAgIHBsYXRmb3JtIHNwZWNpZmljIHNoYWRlciBsYW5ndWFnZXMg
+d2hpY2ggaXMgdGhlbiBsYXRlciBjb3BpZWQgdG8gdGFyZ2V0Lgo+ICAgICBGb3IgbW9yZSBkZXRh
+aWxzIHRha2UgYSBsb29rIGF0OiBbMV1odHRwczovL2RvYy5xdC5pby9xdC02Lwo+ICAgICBxdHNo
+YWRlcnRvb2xzLW92ZXJ2aWV3Lmh0bWwgYW5kIFsyXWh0dHBzOi8vZG9jLnF0LmlvL3F0LTYvcXNo
+YWRlcmJha2VyLmh0bWwKCkFoLCB0aG9zZSBleHBsYW5hdGlvbnMgc2hvdWxkIGJlbG9uZyB0byB0
+aGUgY29tbWl0IHRoYXQgYWRkcwpxdDZzaGFkZXJ0b29scyBhcyB3ZWxsLCB0aGVuLgoKSSdsbCBk
+byB0aGUgZHVwbGljYXRpb24gd2hlbiBhcHBseWluZyAoYSBiaXQgbGF0ZXIgYWZ0ZXIgY29mZmVl
+IGhhcwpraWNrZWQgaW4pLgoKPiBJbiBjb21taXQgbWVzc2FnZSAwMy8xNCBJIHdyb3RlOgo+ICAg
+ICBRdCBOZXR3b3JrIGlzIGEgcmVxdWlyZWQgZGVwZW5kZW5jeSBvZiBRdCBUb29scy4gVGhlcmVm
+b3Igd2UgbmVlZCBhIHdheSB0bwo+ICAgICBlbmFibGUgdGhlIFF0IE5ldHdvcmsgbW9kdWxlIHdo
+ZW4gYnVpbGRpbmcgZm9yIGhvc3QuCgpEaXR0by4KCj4gSW4gY29tbWl0IG1lc3NhZ2UgMDkvMTQg
+SSBleHBsYWluZWQgd2h5IEkgYWRkZWQgYW4gb3B0aW9uIHRvIGVuYWJsZSB0aGUgVGVzdGxpYgo+
+IGZlYXR1cmUgb24gaG9zdC4gWW91IHNlZW1lZCB0byBhY2NlcHQgdGhpcyBleHBsYW5hdGlvbi4K
+Clllcy4KCj4gSSBhZGRlZCB0aGUgYmxpbmQgaG9zdCBvcHRpb24gZm9yIGVuYWJsaW5nIHRoZSBR
+dCBTcWwgbW9kdWxlIHRvIGZpeCB0aGUKPiBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZToKPiAKPiBD
+TWFrZSBFcnJvciBhdCAvaG9tZS9yb3kvc3JjL2J1aWxkcm9vdC1xdDYtdGVzdGluZy9idWlsZHJv
+b3Qvb3V0cHV0L2J1aWxkLwo+IHF0NmJhc2UtNi43LjAvY21ha2UvUXRUb29sSGVscGVycy5jbWFr
+ZTo2ODQgKG1lc3NhZ2UpOgo+IMKgIEZhaWxlZCB0byBmaW5kIHRoZSBob3N0IHRvb2wgIlF0Njo6
+cWhlbHBnZW5lcmF0b3IiLsKgIEl0IGlzIHBhcnQgb2YgdGhlCj4gwqAgUXQ2VG9vbHNUb29scyBw
+YWNrYWdlLCBidXQgdGhlIHBhY2thZ2UgZGlkIG5vdCBjb250YWluIHRoZSB0b29sLsKgIE1ha2Ug
+c3VyZQo+IMKgIHRoYXQgdGhlIGhvc3QgbW9kdWxlIFRvb2xzIHdhcyBidWlsdCB3aXRoIGFsbCBm
+ZWF0dXJlcyBlbmFibGVkIChubwo+IMKgIGV4cGxpY2l0bHkgZGlzYWJsZWQgdG9vbHMpLgo+IENh
+bGwgU3RhY2sgKG1vc3QgcmVjZW50IGNhbGwgZmlyc3QpOgo+IMKgIC9ob21lL3JveS9zcmMvYnVp
+bGRyb290LXF0Ni10ZXN0aW5nL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvcXQ2YmFzZS02LjcuMC8K
+PiBjbWFrZS9RdFRvb2xIZWxwZXJzLmNtYWtlOjcyIChxdF9pbnRlcm5hbF9maW5kX3Rvb2wpCj4g
+wqAgc3JjL2Fzc2lzdGFudC9xaGVscGdlbmVyYXRvci9DTWFrZUxpc3RzLnR4dDo5IChxdF9pbnRl
+cm5hbF9hZGRfdG9vbCkKPiDCoAo+IEknbGwgYWRkIHRoaXMgdG8gY29tbWl0IG1lc3NhZ2UgMDUv
+MTQsIGlmIHlvdSB3YW50IG1lIHRvIGNyZWF0ZSBhIHY2IHBhdGNoIHNldC4KCk5vIG5lZWQgdG8g
+cmVzZW5kIGZvciBub3csIGxldCdzIHNlZSBpZiBJIGNhbiBhcHBseSB3aXRoIHlvdXIgYWRkaXRp
+b25hbApleHBsYW5hdGlvbnMKClRoYW5rcyEKClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IEJl
+c3QgUmVnYXJkcywKPiAKPiBSb3kKPiAKPiAKPiBsw7hyLiAxLiBqdW5pIDIwMjQga2wuIDE5OjEw
+IHNrcmV2IFlhbm4gRS4gTU9SSU4gPFszXXlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPjoKPiAKPiAg
+ICAgUm95LCBBbGwsCj4gCj4gICAgIFRoYW5rcyBmb3IgeW91ciBuZXcgaXRlcmF0aW9uIG9mIHRo
+aXMgc2VyaWVzLgo+IAo+ICAgICBJIHdhcyBsb29raW5nIGF0IGFwcGx5aW5nIGl0LCBidXQgSSBo
+YXZlIGEgY29tbWVudCBhYm91dCB0aGlzIHBhdGNoOiB3aHkKPiAgICAgaXMgdGhlIGhvc3QgcXQ2
+YmFzZSByZXF1aXJlZCB0byBoYXZlIEdVSSBzdXBwb3J0IHRvIGJ1aWxkIHRoZSB0YXJnZXQKPiAg
+ICAgcXQ2c2hhZGVydG9vbHM/Cj4gCj4gICAgIFRoYXQncyBhIHF1ZXN0aW9uIFRob21hcyBhbHJl
+YWR5IGFza2VkIGluIGEgcHJldmlvdXMgaXRlcmF0aW9uOgo+ICAgICDCoCDCoCBbNF1odHRwczov
+L2xvcmUua2VybmVsLm9yZy9idWlsZHJvb3QvMjAyNDA1MDkxNjQ1MDcuNDY4MmJlZThAd2luZHN1
+cmYvCj4gCj4gICAgIGJ1dCBJIGNvdWxkIG5vdCBzZWUgYW4gZXhwbGFuYXRpb24gYXMgYSByZXBs
+eSB0byBUaG9tYXMsIG9yIGluIHRoZQo+ICAgICBmb2xsb3dpbmcgdmVyc2lvbnMgb2YgdGhpcyBz
+ZXJpZXMuCj4gCj4gICAgIENvdWxkIHlvdSBwcm92aWRlIGEgbGl0dGxlIGJpdCBvZiBhbiBleHBs
+YW5hdGlvbj8gRm9yIGV4YW1wbGUsIGRvZXMgaXQKPiAgICAgbmVlZCBhIHRvb2wgdGhhdCBpcyBw
+cm92aWRlZCBieSBxdDZiYXNlIG9ubHkgd2hlbiB0aGUgZ3VpIG1vZHVsZSBpcwo+ICAgICBlbmFi
+bGVkPyBPciBzb21ldGhpbmcgZWxzZT8KPiAKPiAgICAgSXQgZG9lcyBub3QgbmVlZCB0byBiZSBh
+IGxvbmcgZXhwbGFuYXRpb24sIGp1c3QgYSBzZW50ZW5jZSBvciBtYXliZSB0d287Cj4gICAgIHdl
+IGp1c3QgbmVlZCB0byB1bmRlcnN0YW5kIHRoZSBkZXBlbmRlbmN5Lgo+IAo+ICAgICBTYW1lIGdv
+ZXMgZm9yIHRoZSBxdDZ0b2xzIGFuZCBpdHMgZGVwZW5kZW5jaWVzIG9uIEhPU1RfUVQ2QkFTRV9O
+RVRXT1JLCj4gICAgIGFuZCBIT1NUX1FUNkJBU0VfU1FMLCBhbmQgb3RoZXIgc3VjaCBkZXBlbmRl
+bmNpZXMuCj4gCj4gICAgIFRoYW5rIHlvdSEKPiAKPiAgICAgUmVnYXJkcywKPiAgICAgWWFubiBF
+LiBNT1JJTi4KPiAKPiAgICAgT24gMjAyNC0wNS0zMSAxNzoxMyArMDIwMCwgUm95IEtvbGxlbiBT
+dmVuZHNlbiBzcGFrZSB0aHVzbHk6Cj4gICAgID4gU2lnbmVkLW9mZi1ieTogUm95IEtvbGxlbiBT
+dmVuZHNlbiA8WzVdCj4gICAgIHJveS5rb2xsZW4uc3ZlbmRzZW5AYWtlcnNvbHV0aW9ucy5jb20+
+Cj4gICAgID4gLS0tCj4gICAgID4gQ2hhbmdlcyB2NCAtPiB2NToKPiAgICAgPsKgIMKgLSBCdW1w
+IHRvIHY2LjcuMQo+ICAgICA+Cj4gICAgID7CoCBwYWNrYWdlL3F0Ni9Db25maWcuaW7CoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoHzCoCAxICsKPiAgICAgPsKgIHBhY2thZ2Uv
+cXQ2L3F0NnNoYWRlcnRvb2xzL0NvbmZpZy5pbsKgIMKgIMKgIMKgIMKgIHwgMTMgKysrKysrKwo+
+ICAgICA+wqAgLi4uL3F0Ni9xdDZzaGFkZXJ0b29scy9xdDZzaGFkZXJ0b29scy5oYXNowqAgwqAg
+fCAxMCArKysrKwo+ICAgICA+wqAgcGFja2FnZS9xdDYvcXQ2c2hhZGVydG9vbHMvWzZdcXQ2c2hh
+ZGVydG9vbHMubWvCoCB8IDM5Cj4gICAgICsrKysrKysrKysrKysrKysrKysKPiAgICAgPsKgIDQg
+ZmlsZXMgY2hhbmdlZCwgNjMgaW5zZXJ0aW9ucygrKQo+ICAgICA+wqAgY3JlYXRlIG1vZGUgMTAw
+NjQ0IHBhY2thZ2UvcXQ2L3F0NnNoYWRlcnRvb2xzL0NvbmZpZy5pbgo+ICAgICA+wqAgY3JlYXRl
+IG1vZGUgMTAwNjQ0IHBhY2thZ2UvcXQ2L3F0NnNoYWRlcnRvb2xzL3F0NnNoYWRlcnRvb2xzLmhh
+c2gKPiAgICAgPsKgIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3F0Ni9xdDZzaGFkZXJ0b29s
+cy9bN11xdDZzaGFkZXJ0b29scy5tawo+ICAgICA+Cj4gICAgID4gZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvcXQ2L0NvbmZpZy5pbiBiL3BhY2thZ2UvcXQ2L0NvbmZpZy5pbgo+ICAgICA+IGluZGV4IDI3
+NmEwMjE3YWIuLmI3ZTk1YTY4ODUgMTAwNjQ0Cj4gICAgID4gLS0tIGEvcGFja2FnZS9xdDYvQ29u
+ZmlnLmluCj4gICAgID4gKysrIGIvcGFja2FnZS9xdDYvQ29uZmlnLmluCj4gICAgID4gQEAgLTQ3
+LDYgKzQ3LDcgQEAgc291cmNlICJwYWNrYWdlL3F0Ni9xdDZiYXNlL0NvbmZpZy5pbiIKPiAgICAg
+PsKgIHNvdXJjZSAicGFja2FnZS9xdDYvcXQ2Y29yZTVjb21wYXQvQ29uZmlnLmluIgo+ICAgICA+
+wqAgc291cmNlICJwYWNrYWdlL3F0Ni9xdDZzZXJpYWxidXMvQ29uZmlnLmluIgo+ICAgICA+wqAg
+c291cmNlICJwYWNrYWdlL3F0Ni9xdDZzZXJpYWxwb3J0L0NvbmZpZy5pbiIKPiAgICAgPiArc291
+cmNlICJwYWNrYWdlL3F0Ni9xdDZzaGFkZXJ0b29scy9Db25maWcuaW4iCj4gICAgID7CoCBzb3Vy
+Y2UgInBhY2thZ2UvcXQ2L3F0NnN2Zy9Db25maWcuaW4iCj4gICAgID7CoAo+ICAgICA+wqAgZW5k
+aWYKPiAgICAgPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9xdDYvcXQ2c2hhZGVydG9vbHMvQ29uZmln
+LmluIGIvcGFja2FnZS9xdDYvCj4gICAgIHF0NnNoYWRlcnRvb2xzL0NvbmZpZy5pbgo+ICAgICA+
+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gICAgID4gaW5kZXggMDAwMDAwMDAwMC4uMWI0N2RjNjEz
+Mgo+ICAgICA+IC0tLSAvZGV2L251bGwKPiAgICAgPiArKysgYi9wYWNrYWdlL3F0Ni9xdDZzaGFk
+ZXJ0b29scy9Db25maWcuaW4KPiAgICAgPiBAQCAtMCwwICsxLDEzIEBACj4gICAgID4gK2NvbmZp
+ZyBCUjJfUEFDS0FHRV9RVDZTSEFERVJUT09MUwo+ICAgICA+ICvCoCDCoCDCoGJvb2wgInF0NnNo
+YWRlcnRvb2xzIgo+ICAgICA+ICvCoCDCoCDCoHNlbGVjdCBCUjJfUEFDS0FHRV9IT1NUX1FUNkJB
+U0VfR1VJCj4gICAgID4gK8KgIMKgIMKgc2VsZWN0IEJSMl9QQUNLQUdFX1FUNkJBU0VfR1VJCj4g
+ICAgID4gK8KgIMKgIMKgaGVscAo+ICAgICA+ICvCoCDCoCDCoCDCoFF0IGlzIGEgY3Jvc3MtcGxh
+dGZvcm0gYXBwbGljYXRpb24gYW5kIFVJIGZyYW1ld29yayBmb3IKPiAgICAgPiArwqAgwqAgwqAg
+wqBkZXZlbG9wZXJzIHVzaW5nIEMrKy4KPiAgICAgPiArCj4gICAgID4gK8KgIMKgIMKgIMKgVGhl
+IFF0IFNoYWRlciBUb29scyBtb2R1bGUgYnVpbGRzIG9uIHRoZSBTUElSLVYgT3Blbgo+ICAgICA+
+ICvCoCDCoCDCoCDCoFNvdXJjZSBFY29zeXN0ZW0gYXMgZGVzY3JpYmVkIGF0IHRoZSBLaHJvbm9z
+IFNQSVItViB3ZWIKPiAgICAgPiArwqAgwqAgwqAgwqBzaXRlLgo+ICAgICA+ICsKPiAgICAgPiAr
+wqAgwqAgwqAgwqBbOF1odHRwczovL2RvYy5xdC5pby9xdC02L3F0c2hhZGVydG9vbHMtaW5kZXgu
+aHRtbAo+ICAgICA+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3F0Ni9xdDZzaGFkZXJ0b29scy9xdDZz
+aGFkZXJ0b29scy5oYXNoIGIvcGFja2FnZS9xdDYKPiAgICAgL3F0NnNoYWRlcnRvb2xzL3F0NnNo
+YWRlcnRvb2xzLmhhc2gKPiAgICAgPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ICAgICA+IGluZGV4
+IDAwMDAwMDAwMDAuLjhlODBkNjQ4NTEKPiAgICAgPiAtLS0gL2Rldi9udWxsCj4gICAgID4gKysr
+IGIvcGFja2FnZS9xdDYvcXQ2c2hhZGVydG9vbHMvcXQ2c2hhZGVydG9vbHMuaGFzaAo+ICAgICA+
+IEBAIC0wLDAgKzEsMTAgQEAKPiAgICAgPiArIyBIYXNoIGZyb206IFs5XWh0dHBzOi8vZG93bmxv
+YWQucXQuaW8vb2ZmaWNpYWxfcmVsZWFzZXMvcXQvNi43LzYuNy4xLwo+ICAgICBzdWJtb2R1bGVz
+L3F0c2hhZGVydG9vbHMtZXZlcnl3aGVyZS1zcmMtNi43LjEudGFyLnh6LnNoYTI1Ngo+ICAgICA+
+ICtzaGEyNTbCoAo+ICAgICBlNTg1ZTNhOTg1YjJlMmJhZDgxOTFhODQ0ODlhMDRlNjljM2RlZmM2
+MDIyYThlNzQ2YWFkMjJhMWYxNzkxMGMywqAKPiAgICAgcXRzaGFkZXJ0b29scy1ldmVyeXdoZXJl
+LXNyYy02LjcuMS50YXIueHoKPiAgICAgPiArCj4gICAgID4gKyMgSGFzaGVzIGZvciBsaWNlbnNl
+IGZpbGVzOgo+ICAgICA+ICtzaGEyNTbCoAo+ICAgICA5ZjA0OTBmMTg2NTZjNmYyNDM1YmQxNGY2
+MDNlZjBjOTY0MzRkMTgyNTYxNTM2M2RjZTQzYWJiNDJlZDFkY2NlwqAgTElDRU5TRVMvCj4gICAg
+IEJTRC0zLUNsYXVzZS50eHQKPiAgICAgPiArc2hhMjU2wqAKPiAgICAgMTEwNTM1NTIyMzk2NzA4
+Y2VhMzdjNzJhODAyYzVlN2U4MTM5MTEzOWY1Zjc5ODU2MzFjOTNlZjI0MmIyMDZhNMKgIExJQ0VO
+U0VTLwo+ICAgICBHRkRMLTEuMy1uby1pbnZhcmlhbnRzLW9ubHkudHh0Cj4gICAgID4gK3NoYTI1
+NsKgCj4gICAgIDgxNzdmOTc1MTMyMTM1MjZkZjJjZjYxODRkOGZmOTg2YzY3NWFmYjUxNGQ0ZTY4
+YTQwNDAxMDUyMWI4ODA2NDPCoCBMSUNFTlNFUy8KPiAgICAgR1BMLTIuMC1vbmx5LnR4dAo+ICAg
+ICA+ICtzaGEyNTbCoAo+ICAgICA4Y2ViNGI5ZWU1YWRlZGRlNDdiMzFlOTc1YzFkOTBjNzNhZDI3
+YjZiMTY1YTFkY2Q4MGM3YzU0NWViNjViOTAzwqAgTElDRU5TRVMvCj4gICAgIEdQTC0zLjAtb25s
+eS50eHQKPiAgICAgPiArc2hhMjU2wqAKPiAgICAgZGE3ZWFiYjdiYWZkZjdkM2FlNWU5ZjIyM2Fh
+NWJkYzFlZWNlNDVhYzU2OWRjMjFiM2IwMzc1MjBiNDQ2NDc2OMKgIExJQ0VOU0VTLwo+ICAgICBM
+R1BMLTMuMC1vbmx5LnR4dAo+ICAgICA+ICtzaGEyNTbCoAo+ICAgICA0MDY3OGQzMzhjZTUzY2Q5
+M2Y4YjIyYjI4MWEyZWNiY2FhM2VlNjVjZTYwYjI1ZmZiMGM0NjJiMDUzMDg0NmIywqAgTElDRU5T
+RVMvCj4gICAgIFF0LUdQTC1leGNlcHRpb24tMS4wLnR4dAo+ICAgICA+IGRpZmYgLS1naXQgYS9w
+YWNrYWdlL3F0Ni9xdDZzaGFkZXJ0b29scy9bMTBdcXQ2c2hhZGVydG9vbHMubWsgYi9wYWNrYWdl
+Lwo+ICAgICBxdDYvcXQ2c2hhZGVydG9vbHMvWzExXXF0NnNoYWRlcnRvb2xzLm1rCj4gICAgID4g
+bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiAgICAgPiBpbmRleCAwMDAwMDAwMDAwLi4xMDhmNDA5Mzgw
+Cj4gICAgID4gLS0tIC9kZXYvbnVsbAo+ICAgICA+ICsrKyBiL3BhY2thZ2UvcXQ2L3F0NnNoYWRl
+cnRvb2xzL1sxMl1xdDZzaGFkZXJ0b29scy5tawo+ICAgICA+IEBAIC0wLDAgKzEsMzkgQEAKPiAg
+ICAgPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gICAgICMjIyMjIyMjCj4gICAgID4gKyMKPiAgICAgPiAr
+IyBxdDZzaGFkZXJ0b29scwo+ICAgICA+ICsjCj4gICAgID4gKyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAg
+ICAjIyMjIyMjIwo+ICAgICA+ICsKPiAgICAgPiArUVQ2U0hBREVSVE9PTFNfVkVSU0lPTiA9ICQo
+UVQ2X1ZFUlNJT04pCj4gICAgID4gK1FUNlNIQURFUlRPT0xTX1NJVEUgPSAkKFFUNl9TSVRFKQo+
+ICAgICA+ICtRVDZTSEFERVJUT09MU19TT1VSQ0UgPSBxdHNoYWRlcnRvb2xzLSQoUVQ2X1NPVVJD
+RV9UQVJCQUxMX1BSRUZJWCktJAo+ICAgICAoUVQ2U0hBREVSVE9PTFNfVkVSU0lPTikudGFyLnh6
+Cj4gICAgID4gK1FUNlNIQURFUlRPT0xTX0lOU1RBTExfU1RBR0lORyA9IFlFUwo+ICAgICA+ICtR
+VDZTSEFERVJUT09MU19TVVBQT1JUU19JTl9TT1VSQ0VfQlVJTEQgPSBOTwo+ICAgICA+ICsKPiAg
+ICAgPiArUVQ2U0hBREVSVE9PTFNfQ01BS0VfQkFDS0VORCA9IG5pbmphCj4gICAgID4gKwo+ICAg
+ICA+ICtRVDZTSEFERVJUT09MU19MSUNFTlNFID0gXAo+ICAgICA+ICvCoCDCoCDCoEdQTC0yLjAr
+IG9yIExHUEwtMy4wLCBcCj4gICAgID4gK8KgIMKgIMKgR1BMLTMuMCwgR0ZETC0xLjMgbm8gaW52
+YXJpYW50cyAoZG9jcykKPiAgICAgPiArCj4gICAgID4gK1FUNlNIQURFUlRPT0xTX0xJQ0VOU0Vf
+RklMRVMgPSBcCj4gICAgID4gK8KgIMKgIMKgTElDRU5TRVMvR1BMLTIuMC1vbmx5LnR4dCBcCj4g
+ICAgID4gK8KgIMKgIMKgTElDRU5TRVMvR1BMLTMuMC1vbmx5LnR4dCBcCj4gICAgID4gK8KgIMKg
+IMKgTElDRU5TRVMvTEdQTC0zLjAtb25seS50eHQgXAo+ICAgICA+ICvCoCDCoCDCoExJQ0VOU0VT
+L0dGREwtMS4zLW5vLWludmFyaWFudHMtb25seS50eHQKPiAgICAgPiArCj4gICAgID4gK1FUNlNI
+QURFUlRPT0xTX0NPTkZfT1BUUyA9IFwKPiAgICAgPiArwqAgwqAgwqAtREJVSUxEX1dJVEhfUENI
+PU9GRiBcCj4gICAgID4gK8KgIMKgIMKgLURRVF9CVUlMRF9FWEFNUExFUz1PRkYgXAo+ICAgICA+
+ICvCoCDCoCDCoC1EUVRfQlVJTERfVEVTVFM9T0ZGCj4gICAgID4gKwo+ICAgICA+ICtRVDZTSEFE
+RVJUT09MU19ERVBFTkRFTkNJRVMgPSBcCj4gICAgID4gK8KgIMKgIMKgaG9zdC1wa2djb25mIFwK
+PiAgICAgPiArwqAgwqAgwqBxdDZiYXNlIFwKPiAgICAgPiArwqAgwqAgwqBob3N0LXF0NnNoYWRl
+cnRvb2xzCj4gICAgID4gKwo+ICAgICA+ICtIT1NUX1FUNlNIQURFUlRPT0xTX0RFUEVOREVOQ0lF
+UyA9IFwKPiAgICAgPiArwqAgwqAgwqBob3N0LXF0NmJhc2UKPiAgICAgPiArCj4gICAgID4gKyQo
+ZXZhbCAkKGNtYWtlLXBhY2thZ2UpKQo+ICAgICA+ICskKGV2YWwgJChob3N0LWNtYWtlLXBhY2th
+Z2UpKQo+ICAgICA+IC0tCj4gICAgID4gMi40NS4xCj4gICAgID4KPiAgICAgPiBfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ICAgICA+IGJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKPiAgICAgPiBbMTNdYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiAgICAgPiBb
+MTRdaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cj4gCj4gICAgIC0tCj4gICAgIC4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0t
+LS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCj4gICAgIHzCoCBZYW5u
+IEUuIE1PUklOwqAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJp
+Y3MnCj4gICAgIGNvbnNwaXJhY3k6IHwKPiAgICAgfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2Fy
+ZcKgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOwqAgwqAgwqB8wqAgX19fwqAgwqAgwqAgwqAgwqAg
+wqAKPiAgICAgwqAgwqB8Cj4gICAgIHwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0t
+LS0tLTrCoCBYwqAgQUdBSU5TVMKgIMKgIMKgIHzCoCBcZS/CoCBUaGVyZSBpcwo+ICAgICBub8Kg
+IHwKPiAgICAgfCBbMTVdaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBc
+IEhUTUwgTUFJTMKgIMKgIHzCoCDCoHbCoAo+ICAgICDCoGNvbnNwaXJhY3kuwqAgfAo+ICAgICAn
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0t
+Xgo+ICAgICAtLS0tLS0tLS0tLS0tLS0tLS0tLScKPiAKPiAKPiBSZWZlcmVuY2VzOgo+IAo+IFsx
+XSBodHRwczovL2RvYy5xdC5pby9xdC02L3F0c2hhZGVydG9vbHMtb3ZlcnZpZXcuaHRtbAo+IFsy
+XSBodHRwczovL2RvYy5xdC5pby9xdC02L3FzaGFkZXJiYWtlci5odG1sCj4gWzNdIG1haWx0bzp5
+YW5uLm1vcmluLjE5OThAZnJlZS5mcgo+IFs0XSBodHRwczovL2xvcmUua2VybmVsLm9yZy9idWls
+ZHJvb3QvMjAyNDA1MDkxNjQ1MDcuNDY4MmJlZThAd2luZHN1cmYvCj4gWzVdIG1haWx0bzpyb3ku
+a29sbGVuLnN2ZW5kc2VuQGFrZXJzb2x1dGlvbnMuY29tCj4gWzZdIGh0dHA6Ly9xdDZzaGFkZXJ0
+b29scy5tay8KPiBbN10gaHR0cDovL3F0NnNoYWRlcnRvb2xzLm1rLwo+IFs4XSBodHRwczovL2Rv
+Yy5xdC5pby9xdC02L3F0c2hhZGVydG9vbHMtaW5kZXguaHRtbAo+IFs5XSBodHRwczovL2Rvd25s
+b2FkLnF0LmlvL29mZmljaWFsX3JlbGVhc2VzL3F0LzYuNy82LjcuMS9zdWJtb2R1bGVzL3F0c2hh
+ZGVydG9vbHMtZXZlcnl3aGVyZS1zcmMtNi43LjEudGFyLnh6LnNoYTI1Ngo+IFsxMF0gaHR0cDov
+L3F0NnNoYWRlcnRvb2xzLm1rLwo+IFsxMV0gaHR0cDovL3F0NnNoYWRlcnRvb2xzLm1rLwo+IFsx
+Ml0gaHR0cDovL3F0NnNoYWRlcnRvb2xzLm1rLwo+IFsxM10gbWFpbHRvOmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCj4gWzE0XSBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QKPiBbMTVdIGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8KCj4gX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCgotLSAKLi0tLS0tLS0tLS0t
+LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0t
+LS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwg
+QVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBT
+b2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAg
+IHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAg
+ICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcv
+IHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0t
+LS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
