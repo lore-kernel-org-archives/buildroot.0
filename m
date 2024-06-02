@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C91F0C25B74
-	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A557C25B74
+	for <buildroot@archiver.kernel.org>; Sun,  2 Jun 2024 18:28:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7AA5140413;
-	Sun,  2 Jun 2024 18:28:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 46B4940AFC;
+	Sun,  2 Jun 2024 18:28:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id soJIOEIkhQWg; Sun,  2 Jun 2024 18:27:59 +0000 (UTC)
+ id xsPL-j1Ppw3n; Sun,  2 Jun 2024 18:28:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2511940BB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A037C40BEB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2511940BB4;
-	Sun,  2 Jun 2024 18:27:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A037C40BEB;
+	Sun,  2 Jun 2024 18:28:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0BC831BF853
- for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 787C81BF4DA
+ for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC7E2405A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED93E40629
  for <buildroot@lists.busybox.net>; Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UDHWLYod2F1B for <buildroot@lists.busybox.net>;
+ id E3qKBNzh-Pnd for <buildroot@lists.busybox.net>;
  Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 164FC40544
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1355440413
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 164FC40544
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1355440413
  for <buildroot@buildroot.org>; Sun,  2 Jun 2024 18:27:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5194876CE; Sun,  2 Jun 2024 18:27:53 +0000 (UTC)
+ id DB3DE878D1; Sun,  2 Jun 2024 18:27:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 2 Jun 2024 20:19:22 +0200
+Date: Sun, 2 Jun 2024 20:15:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ebe238f2b595136be92c53aa70c40d3f333cc34e
-X-Git-Newrev: 75da04c817b07a9c426cf2e438b0f8883096f4ef
+X-Git-Oldrev: f3b2f0f9859b4bcb422d69437ecb01ee9038d3c1
+X-Git-Newrev: ebe238f2b595136be92c53aa70c40d3f333cc34e
 X-Patchwork-Hint: ignore
-Message-Id: <20240602182753.E5194876CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5base: fix download
+Message-Id: <20240602182753.DB3DE878D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-download: use _DL_SUBDIR as
+ root dir of generated archives
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,74 +65,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75da04c817b07a9c426cf2e438b0f8883096f4ef
+commit: https://git.buildroot.net/buildroot/commit/?id=ebe238f2b595136be92c53aa70c40d3f333cc34e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since qt5base was last bumped in 8ab4a0a348b2 (package/qt5: bump packages
-to latest kde submodule versions), the hash for the downloaded tarball
-has changed:
+Currently, when we generate archives, e.g.  for git, svn, cargo or go, we
+use the package _BASENAME_RAW as the root directory of the generated
+archive.  For example, for package foo at version 1.2.3, that would generate
+an archive rooted at foo-1.2.3/.
 
-    $ make qt5base-source
-    [...]
-    ERROR: expected: 935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d
-    ERROR: got     : 3067c4d84ba9927bfe65bf606c17af082199e0a3b22781fbf9bc6c6bc3de26dd
+This is usually what we want, except in one specific condition: when the
+package shares its download with another package *and* it is a generated
+archive. In that case, the root directory will be different for each of
+the two packages, which is incorrect, but was so far benign: we never
+had any hash for such generated archives, and they were only generated
+in two cases:
+  - linux and linux-headers
+  - barebox and barebox-aux
 
-We know the hash was good back when 8ab4a0a348b2 was applied, because
-the tarball has been cached on sources.buildroot.org with the expected
-hash:
+As we skip one directory depth when extracting the archives, we did not
+care what the root directory was; whether it was that of one package or
+the other was of no consequence.
 
-    $ curl 'https://sources.buildroot.net/qt5base/qtbase-da6e958319e95fe564d3b30c931492dd666bfaff.tar.bz2' 2>/dev/null |sha256sum -
-    935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d  -
+But now that we can have hashes for archives generated from custom
+versions, this breaks the usual case where the headers used for the
+toolchains are those of the kernel to build for the target. In this
+case, we may end up downloading the linux-headers package before we
+download the linux package, so we'd get the hash for an archive rooted
+at linux-headers-XXX/, but the one for the linux package the archive
+would be rooted at linux-XXX/, or we may end up (e.g. with parallel
+builds) downloading the linux package first and linux-headers next.
 
-But now, the archive generated by the KDE gorge (Gitlab underneath) has
-another hash (as seen above). This means that the KDE forge (Gitlab) has
-changed the way it generates archives. So, what's the delta? It turns
-out that the only changes are about CRLF that were present in the
-original archive, and are no longer in the new one. It is to be noted
-that the affected files do not have CRLFS in the repository. It further
-turns out that the archive was previously generated with .gitattibutes
-of the main branch ('dev' in Qt repositories), while now they are
-generated with the .gitattibutes of the commit for which they are
-generated.
+That would cause conflicts in hashes, as demonstrated by the only defconfig
+we have in that situation, olimex_stmp157_olinuxino_lime_defconfig.
 
-Switch to using the git download method for really reproducible
-archives...
+_BASENAME_RAW is a construct that is expanded to include the RAWNAME
+followed by a dash and the version, if there is a version, or with just
+the RAWNAME when there is no version.
 
+We tweak the download macro to use _DL_SUBDIR followed by the version.
+
+This is only used by VCS backends (cvs, git, svn...) and so there will
+always be a version string, so no need to duplicate the case without a
+version like is done for _BASENAME_RAW
+
+_DL_SUBDIR defaults to _RAWNAME, so this is a noop by default, unless
+the package declares it shares its download with another one, in which
+case the generated archive will now be rooted as for the shared package.
+
+This was triggered by:
+    https://patchwork.ozlabs.org/project/buildroot/patch/20240602070634.597337-1-francois.perrad@gadz.org/
+
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5base/qt5base.hash | 2 +-
- package/qt5/qt5base/qt5base.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-index ffc474f49e..77b88fa909 100644
---- a/package/qt5/qt5base/qt5base.hash
-+++ b/package/qt5/qt5base/qt5base.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d  qtbase-da6e958319e95fe564d3b30c931492dd666bfaff.tar.bz2
-+sha256  9219c8e5d82b32b351743fb548f248400f3b3eca9db37a43b2b8c929d2625c01  qt5base-da6e958319e95fe564d3b30c931492dd666bfaff-git4.tar.gz
- 
- # Hashes for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e173639cca..bbab9b3de1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- QT5BASE_VERSION = da6e958319e95fe564d3b30c931492dd666bfaff
--QT5BASE_SITE = $(QT5_SITE)/qtbase/-/archive/$(QT5BASE_VERSION)
--QT5BASE_SOURCE = qtbase-$(QT5BASE_VERSION).tar.bz2
-+QT5BASE_SITE = $(QT5_SITE)/qtbase
-+QT5BASE_SITE_METHOD = git
- QT5BASE_CPE_ID_VENDOR = qt
- QT5BASE_CPE_ID_PRODUCT = qt
- 
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 4be45c9d12..bec213fb71 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -117,7 +117,7 @@ define DOWNLOAD
+ 		-D '$(DL_DIR)' \
+ 		-f '$(notdir $(1))' \
+ 		$(foreach f,$($(2)_HASH_FILES),-H '$(f)') \
+-		-n '$($(2)_BASENAME_RAW)' \
++		-n '$($(2)_DL_SUBDIR)-$($(2)_VERSION)' \
+ 		-N '$($(2)_RAWNAME)' \
+ 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
+ 		$(if $(filter YES,$($(2)_SVN_EXTERNALS)),-r) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
