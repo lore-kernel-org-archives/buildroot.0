@@ -4,55 +4,147 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8B37C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 11:56:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E4C2C25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 12:00:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77B4E40AB7;
-	Mon,  3 Jun 2024 11:56:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DD0D40363;
+	Mon,  3 Jun 2024 12:00:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kQCV3roa2w9o; Mon,  3 Jun 2024 11:56:04 +0000 (UTC)
+ id PJcF5yi7PWC5; Mon,  3 Jun 2024 12:00:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E35B402F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EF30405CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E35B402F2;
-	Mon,  3 Jun 2024 11:56:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2EF30405CC;
+	Mon,  3 Jun 2024 12:00:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 023271BF383
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 11:56:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 16E7A1BF383
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 12:00:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2F41402F2
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 11:55:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 03BF6405CC
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 12:00:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ob5ZIVuXkA04 for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 11:55:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 96F7A400E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96F7A400E4
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 96F7A400E4
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 11:55:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9C64340006;
- Mon,  3 Jun 2024 11:55:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1sE6I5-002vvo-0W;
- Mon, 03 Jun 2024 13:55:53 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon,  3 Jun 2024 13:55:48 +0200
-Message-Id: <20240603115550.699332-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
+ id GU-kv-nRJvku for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 12:00:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:2416::600;
+ helo=nam11-co1-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B14940363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B14940363
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com
+ (mail-co1nam11on20600.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2416::600])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B14940363
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 12:00:33 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g15sr6g4GgPXqLy7QI/Bt3fkVQVe95gaR+08pW583lb3MfJSpPhe5wtl+eHkQibu96iLFjyjMEmPX9/EczasootqZUAAFp8BCP2lsePUwLH7Zy8vx+WSWl5UzrGV8Ir+Y7CM7WLMl1jcSfX0BsyEASjRKJJFp8kK52Q3PytaDZSmMVaiOROpOGNYe9BWMfn9M16zeONuFBilTi9EQVzYU5E5RxyYO1M/jZcLpIYPnfBlivMlDHe+UNGz5MROnHao5yijS7uqlE2jWtrozwJCnH+OUYpxUAqbQIi14bzo+WBhZwJHnOFhlYlDw/mThU+TELFlbChZryUr/c0zrAeq0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dFUkLbJXm+6ZkjAxEwFVxW50h6WebBUaxjgUnv6L44s=;
+ b=jZAP3JDvljeGVAYwIpwaNOVfw5sIJWnSU+Y9OA9xEw+y1jD8tJ3kAI21CvsfZXglVgwHWBhs3Og0TNaS4RtpHBNJZfRvWn44IUMgNdAGNR4wXth0AIYE7GxvmmvKz4Y8SqrAFFV6oSvDFokoYEtoI4vcK7dctSvLQVVUX3hxvmFdLn/yvMW9dLTCICJaRpArZywn8Qo3Gm2DaBeVC5/5GoQsFYW6JV69OyPavqGLU3zfEc5ZZ52OARI7yFPHm88ZvVVWQY44JpGe1ABIKIP1q/dEnh8yiOBD+sONt8Ggw/gwk6i2p3uedc6ycwXHZLZI4yG0YP5lGvOxsST35wK8xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from BL0PR03CA0004.namprd03.prod.outlook.com (2603:10b6:208:2d::17)
+ by SA0PR12MB4349.namprd12.prod.outlook.com (2603:10b6:806:98::21)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.26; Mon, 3 Jun
+ 2024 12:00:25 +0000
+Received: from BL02EPF0001A0FA.namprd03.prod.outlook.com
+ (2603:10b6:208:2d:cafe::a6) by BL0PR03CA0004.outlook.office365.com
+ (2603:10b6:208:2d::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.30 via Frontend
+ Transport; Mon, 3 Jun 2024 12:00:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A0FA.mail.protection.outlook.com (10.167.242.101) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7633.15 via Frontend Transport; Mon, 3 Jun 2024 12:00:24 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 3 Jun
+ 2024 07:00:24 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Mon, 3 Jun 2024 07:00:23 -0500
+To: <buildroot@buildroot.org>
+Date: Mon, 3 Jun 2024 13:00:20 +0100
+Message-ID: <20240603120020.189821-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A0FA:EE_|SA0PR12MB4349:EE_
+X-MS-Office365-Filtering-Correlation-Id: c4290493-a615-4ce3-ae51-08dc83c4c094
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230031|82310400017|376005|36860700004|1800799015; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?yndTger37p5/KHXnxhjjqOHEDI1ki90RdzmoJbEgAhV4S7BbBloahoEK3fdM?=
+ =?us-ascii?Q?377dq/pqf/xZSg3R43uJULbX9Gh1LazDbBK+EycQDbzRBSeO4BUlGgEIJyD9?=
+ =?us-ascii?Q?pkLlbp8kap1OTz89K5D2pjcpN+p9y9vs99E6dRssReMiHaAzJgfy65MsnmZ1?=
+ =?us-ascii?Q?lCXXMaInfrMswoVNyjcQki4y1IDEYsBQ/EcdBQEmq9+dlqw9sx54+4EuyrM+?=
+ =?us-ascii?Q?afh08hoVU7cffoEsmxzYIxSql78/aRvI9oOtYDx2ddmIQMzzDQBdcOj7ZCzp?=
+ =?us-ascii?Q?Se2AMbqX+b7OMuohfBP4fyWwm/sldiKK8nKGcwezAe+43hkEy3PV1xouhaVE?=
+ =?us-ascii?Q?I9RIqkUWYmqQVNFBeDeXV8rfitdV1g8J0uJQB+8yUigEvb17fPHHxci6hktx?=
+ =?us-ascii?Q?frILua/KzNVDV9wPCrsknc5ZN4jg4vwKr6eF4BkyNQkNU++uX2tBhm2vcO2P?=
+ =?us-ascii?Q?Yc4BZtInSJ3vK30TsLJGeAzdJAVuYn2TM8vKsLZ1hBUpAdkoos5qpnedYz9l?=
+ =?us-ascii?Q?U3hqVAQSZXLn1n1twjLsMrH+UgKmDG4impZzRnrgwgTD2Vl2f1mG2X79l45B?=
+ =?us-ascii?Q?YxpPdHdH7YGow25JOlk8UZCnETk3UnqVOATUsi8gKgw+hn7wD/sqEzCiKhgp?=
+ =?us-ascii?Q?RiAJ30lHEVYAt1ogzQT9q4BH9AguihDxwofyO0u5azPGd4wrKmYUnDTfNy68?=
+ =?us-ascii?Q?4YUy4RTTEzRUfbTrb7UFwNGtw1uNj/zuOGG4cAXd+fRbrRMPi6hTiCdnm/tg?=
+ =?us-ascii?Q?Ydwyh/aA8HqrIlzNPk6CtjKMz6Zm+HcEIN9HUgJv5NlGpCpG73Z13kV4sO1o?=
+ =?us-ascii?Q?Dj5ilNz9QxUlKGnytafLmVNC1GJy3SaM7lIhDHVhlhhq06t/asJ+duWwKoSq?=
+ =?us-ascii?Q?BdXsTXah5PXFylgU9uXWtRs777c9wTgD/Oo7vkqFKf1ZDIQnSNn7mDFkfsRt?=
+ =?us-ascii?Q?L7+yUpNOL4TLBeiTXrKhurQF53cQvRiCDDz7TAC9VP/E5EFep89eTYGpTdd9?=
+ =?us-ascii?Q?p2QMziRON7xnAZbyAgtljVAEGkfsJbrVLP/IHjJkMTuHo4Y9X9NVgUE/6djf?=
+ =?us-ascii?Q?f8H1sxo9/3ltr0s8kWIh+X2ljDTf099S/DKuT/9K040tV2ZeZ3CTjUl59cSB?=
+ =?us-ascii?Q?JET8FYUxW00MEa62mOVF7qpw36yqRB+U9aChcpiQ54ZwJFhJYjEzBnBpIpmO?=
+ =?us-ascii?Q?YLagDe1u2xYs1PKXg7sfxLgSxhspClP80n8O1hC711ap7RT5lmMj+AzcgR+N?=
+ =?us-ascii?Q?PX1EPlaJ2j2lhV1YjNfcsHNaT2gtnEV8hrZY+Bt1/KEX4fqEofvF7IWc6Bmb?=
+ =?us-ascii?Q?g5RFGb4jod16CxwyIZtYqmQxrRKgP3fTB65u6ETwD5RJ3FWXdEzWr6O4eQVe?=
+ =?us-ascii?Q?pFFSsc7izMfvXZQLxWTI3KVgqrOj?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230031)(82310400017)(376005)(36860700004)(1800799015); DIR:OUT;
+ SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2024 12:00:24.7097 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4290493-a615-4ce3-ae51-08dc83c4c094
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0001A0FA.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4349
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dFUkLbJXm+6ZkjAxEwFVxW50h6WebBUaxjgUnv6L44s=;
+ b=ZEltKEjsIXZm8S6rkZ31ya/bD5+hBiB36QGMQKNTI4X1WQN4yLqpePMMEMGL1H/6VUSq9i69Mm8AILZi5vqbZtZv3BDmBxpYBn7HzDlxDc7Lck58nHQUXqhiRTktdv2jAIt0dz+Nj6JCBzD8Fixf/o7ITCMJur6M3LvfTcQSE00=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH 1/2] boot/at91bootstrap: remove package
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=ZEltKEjs
+Subject: [Buildroot] [PATCH v1 1/1] configs/versal_vck190_defconfig: bump to
+ xilinx-v2024.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,855 +156,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, michal.simek@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The upstream is no longer available, no defconfigs use it and the package
-has been replaced 12 years ago with at91bootstrap3 with commit ca0d69c61cc
-(at91bootstrap3: new package), so remove it.
+This patch bumps the versal_vck190_defconfig to xilinx-v2024.1 which includes
+the following updates:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- Linux v6.6.10
+- U-Boot v2024.01
+- ATF v2.10
+- PLM xilinx-v2024.1
+- PSMFW xilinx-v2024.1
+
+Removed ATF patches that were needed for ATF v2.8.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- Config.in.legacy                              |   7 +
- boot/Config.in                                |   1 -
- boot/at91bootstrap/0001-eabi-fix.patch        | 334 ------------------
- .../0002-gcc-4.6.x-ldscript-fix.patch         |  29 --
- .../0003-u-boot-relocation-fix.patch          | 284 ---------------
- boot/at91bootstrap/Config.in                  |  49 ---
- boot/at91bootstrap/at91bootstrap.hash         |   3 -
- boot/at91bootstrap/at91bootstrap.mk           |  55 ---
- 8 files changed, 7 insertions(+), 755 deletions(-)
- delete mode 100644 boot/at91bootstrap/0001-eabi-fix.patch
- delete mode 100644 boot/at91bootstrap/0002-gcc-4.6.x-ldscript-fix.patch
- delete mode 100644 boot/at91bootstrap/0003-u-boot-relocation-fix.patch
- delete mode 100644 boot/at91bootstrap/Config.in
- delete mode 100644 boot/at91bootstrap/at91bootstrap.hash
- delete mode 100644 boot/at91bootstrap/at91bootstrap.mk
+ ...-build-add-support-for-new-binutils-versions.patch |  1 -
+ .../0002-build-tools-avoid-unnecessary-link.patch     |  1 -
+ configs/versal_vck190_defconfig                       | 11 +++++------
+ 3 files changed, 5 insertions(+), 8 deletions(-)
+ delete mode 120000 board/versal/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
+ delete mode 120000 board/versal/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index b5a87d4e88..7e5bc28bae 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2024.05"
- 
-+config BR2_TARGET_AT91BOOTSTRAP
-+	bool "at91bootstrap removed"
-+	select BR2_LEGACY
-+	help
-+	  Upstream for at91bootstrap 1.x is no longer available and
-+	  has been replaced by at91bootstrap3.
-+
- config BR2_PACKAGE_ON2_8170_MODULES
- 	bool "on2-8170-modules removed"
- 	select BR2_LEGACY
-diff --git a/boot/Config.in b/boot/Config.in
-index 87e1b7c00e..3e00d28e56 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -1,7 +1,6 @@
- menu "Bootloaders"
- 
- source "boot/afboot-stm32/Config.in"
--source "boot/at91bootstrap/Config.in"
- source "boot/at91bootstrap3/Config.in"
- source "boot/at91dataflashboot/Config.in"
- source "boot/arm-trusted-firmware/Config.in"
-diff --git a/boot/at91bootstrap/0001-eabi-fix.patch b/boot/at91bootstrap/0001-eabi-fix.patch
-deleted file mode 100644
-index eab3c20928..0000000000
---- a/boot/at91bootstrap/0001-eabi-fix.patch
+diff --git a/board/versal/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch b/board/versal/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
+deleted file mode 120000
+index 8ad996914b..0000000000
+--- a/board/versal/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
 +++ /dev/null
-@@ -1,334 +0,0 @@
--When using an EABI toolchain, the default compilation generates
--references to __aeabi_unwind_cpp_pr0(). This symbol is defined in
--libgcc, but we don't want to use it for a bootloader.
--
--Therefore, this patch passes some additional CFLAGS to disable the
--generation of such references by avoiding unwind tables, exceptions,
--etc.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- board/at91cap9adk/dataflash/Makefile      |    2 +-
-- board/at91cap9adk/norflash/Makefile       |    2 +-
-- board/at91cap9stk/nandflash/Makefile      |    2 +-
-- board/at91sam9260ek/dataflash/Makefile    |    2 +-
-- board/at91sam9260ek/nandflash/Makefile    |    2 +-
-- board/at91sam9261ek/dataflash/Makefile    |    2 +-
-- board/at91sam9261ek/nandflash/Makefile    |    2 +-
-- board/at91sam9263ek/dataflash/Makefile    |    2 +-
-- board/at91sam9263ek/nandflash/Makefile    |    2 +-
-- board/at91sam9g10ek/dataflash/Makefile    |    2 +-
-- board/at91sam9g10ek/nandflash/Makefile    |    2 +-
-- board/at91sam9g20ek/dataflash/Makefile    |    2 +-
-- board/at91sam9g20ek/nandflash/Makefile    |    2 +-
-- board/at91sam9g45ekes/nandflash/Makefile  |    2 +-
-- board/at91sam9m10ekes/dataflash/Makefile  |    2 +-
-- board/at91sam9m10ekes/nandflash/Makefile  |    2 +-
-- board/at91sam9m10g45ek/dataflash/Makefile |    2 +-
-- board/at91sam9m10g45ek/nandflash/Makefile |    2 +-
-- board/at91sam9rlek/dataflash/Makefile     |    2 +-
-- board/at91sam9rlek/nandflash/Makefile     |    2 +-
-- board/at91sam9xeek/dataflash/Makefile     |    2 +-
-- board/at91sam9xeek/nandflash/Makefile     |    2 +-
-- lib/Makefile                              |    2 +-
-- 23 files changed, 23 insertions(+), 23 deletions(-)
--
--Index: Bootstrap-v1.16/board/at91cap9adk/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91cap9adk/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91cap9adk/dataflash/Makefile
--@@ -34,7 +34,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91cap9adk/norflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91cap9adk/norflash/Makefile
--+++ Bootstrap-v1.16/board/at91cap9adk/norflash/Makefile
--@@ -34,7 +34,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91cap9stk/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91cap9stk/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91cap9stk/nandflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- 
--Index: Bootstrap-v1.16/board/at91sam9260ek/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9260ek/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9260ek/dataflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9260ek/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9260ek/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9260ek/nandflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9261ek/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9261ek/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9261ek/dataflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9261ek/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9261ek/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9261ek/nandflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9263ek/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9263ek/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9263ek/dataflash/Makefile
--@@ -34,7 +34,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9263ek/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9263ek/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9263ek/nandflash/Makefile
--@@ -33,7 +33,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -O0 -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -O0 -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9g10ek/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9g10ek/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9g10ek/dataflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9g10ek/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9g10ek/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9g10ek/nandflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9g20ek/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9g20ek/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9g20ek/dataflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9g20ek/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9g20ek/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9g20ek/nandflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9g45ekes/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9g45ekes/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9g45ekes/nandflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -O2 -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9m10ekes/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9m10ekes/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9m10ekes/dataflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -O2 -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9m10ekes/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9m10ekes/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9m10ekes/nandflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -O2 -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9m10g45ek/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9m10g45ek/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9m10g45ek/dataflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -O2 -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9m10g45ek/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9m10g45ek/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9m10g45ek/nandflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -O2 -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -O2 -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9rlek/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9rlek/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9rlek/dataflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9rlek/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9rlek/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9rlek/nandflash/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9xeek/dataflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9xeek/dataflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9xeek/dataflash/Makefile
--@@ -38,7 +38,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/board/at91sam9xeek/nandflash/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/board/at91sam9xeek/nandflash/Makefile
--+++ Bootstrap-v1.16/board/at91sam9xeek/nandflash/Makefile
--@@ -38,7 +38,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
--Index: Bootstrap-v1.16/lib/Makefile
--===================================================================
----- Bootstrap-v1.16.orig/lib/Makefile
--+++ Bootstrap-v1.16/lib/Makefile
--@@ -37,7 +37,7 @@
-- SIZE=$(CROSS_COMPILE)size
-- OBJCOPY=$(CROSS_COMPILE)objcopy
-- OBJDUMP=$(CROSS_COMPILE)objdump
---CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL)
--+CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -I$(INCL) -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables
-- ASFLAGS=-g -mcpu=arm926ej-s -c -Os -Wall -D$(TARGET) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
-- 
-- # Linker flags.
-diff --git a/boot/at91bootstrap/0002-gcc-4.6.x-ldscript-fix.patch b/boot/at91bootstrap/0002-gcc-4.6.x-ldscript-fix.patch
-deleted file mode 100644
-index e4ed04e865..0000000000
---- a/boot/at91bootstrap/0002-gcc-4.6.x-ldscript-fix.patch
+@@ -1 +0,0 @@
+-../../../../boot/arm-trusted-firmware/v2.8/0001-feat-build-add-support-for-new-binutils-versions.patch
+\ No newline at end of file
+diff --git a/board/versal/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch b/board/versal/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
+deleted file mode 120000
+index fecdee5449..0000000000
+--- a/board/versal/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
 +++ /dev/null
-@@ -1,29 +0,0 @@
--From b783d1f9bf985c0981e755bd2c13e091e9d6837f Mon Sep 17 00:00:00 2001
--From: Gregory Hermant <gregory.hermant@calao-systems.com>
--Date: Tue, 6 Nov 2012 09:38:50 +0100
--Subject: [PATCH] at91bootstrap: fix overlap linker issue
--
--The linker script of the at91bootstrap package has to be modified when
--built from gcc-4.6.x version. Indeed a section named text.startup is
--created and has to be added into the text section.
--
--Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-----
-- elf32-littlearm.lds |    1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
--index a33952f..4f3ba25 100644
----- a/elf32-littlearm.lds
--+++ b/elf32-littlearm.lds
--@@ -7,6 +7,7 @@ SECTIONS
-- 	.text : { 
-- 		_stext = .;
-- 		*(.text)
--+		*(.text*)
-- 		*(.rodata)                 /* read-only data (constants) */
-- 		*(.rodata*)
-- 		. = ALIGN(4);
---- 
--1.7.9.5
--
-diff --git a/boot/at91bootstrap/0003-u-boot-relocation-fix.patch b/boot/at91bootstrap/0003-u-boot-relocation-fix.patch
-deleted file mode 100644
-index 0c9b9114cb..0000000000
---- a/boot/at91bootstrap/0003-u-boot-relocation-fix.patch
-+++ /dev/null
-@@ -1,284 +0,0 @@
--From d4e4a1aad559e35d84b445d1379be94ad036984e Mon Sep 17 00:00:00 2001
--From: Alexandre Belloni <alexandre.belloni@piout.net>
--Date: Thu, 25 Oct 2012 22:57:14 +0200
--Subject: [PATCH] u-boot relocation fix
--
--Every AT91SAM plaforms were broken between 2010.12 and 2011.03 because
--of the relocation changes.
--
--We have to get JUMP_ADDR consistant with what is used by u-boot
--(CONFIG_SYS_TEXT_BASE).
--
--I didn't know what to do with at91sam9m10g45ek as it doesn't seems to be
--converted yet. But anyway, that means that it is either not working or
--doesn't care so changing it here shouldn't harm.
--
--We also have to increase the IMG_SIZE as u-boot as grown larger than the
--default value. As requested on the u-boot ML, we assume that it could
--be up to 495kB big.
--
--It means that now, you have to flash your kernel at 0x00084000 instead
--of 0x00042000. And so you also have to load it from that adress from
--u-boot.
--
--Then, remember that you could decrease IMG_SIZE to boot faster.
--
--Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
-----
-- board/at91sam9260ek/dataflash/at91sam9260ek.h      |    4 ++--
-- board/at91sam9260ek/nandflash/at91sam9260ek.h      |    2 +-
-- board/at91sam9261ek/dataflash/at91sam9261ek.h      |    4 ++--
-- board/at91sam9261ek/nandflash/at91sam9261ek.h      |    2 +-
-- board/at91sam9263ek/dataflash/at91sam9263ek.h      |    4 ++--
-- board/at91sam9263ek/nandflash/at91sam9263ek.h      |    2 +-
-- board/at91sam9g10ek/dataflash/at91sam9g10ek.h      |    4 ++--
-- board/at91sam9g10ek/nandflash/at91sam9g10ek.h      |    2 +-
-- board/at91sam9g20ek/dataflash/at91sam9g20ek.h      |    4 ++--
-- board/at91sam9g20ek/nandflash/at91sam9g20ek.h      |    2 +-
-- board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h  |    2 +-
-- .../at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h  |    2 +-
-- board/at91sam9rlek/dataflash/at91sam9rlek.h        |    4 ++--
-- board/at91sam9rlek/nandflash/at91sam9rlek.h        |    2 +-
-- board/at91sam9xeek/dataflash/at91sam9xeek.h        |    4 ++--
-- board/at91sam9xeek/nandflash/at91sam9xeek.h        |    2 +-
-- 16 files changed, 23 insertions(+), 23 deletions(-)
--
--diff --git a/board/at91sam9260ek/dataflash/at91sam9260ek.h b/board/at91sam9260ek/dataflash/at91sam9260ek.h
--index 1834246..91081a1 100644
----- a/board/at91sam9260ek/dataflash/at91sam9260ek.h
--+++ b/board/at91sam9260ek/dataflash/at91sam9260ek.h
--@@ -74,10 +74,10 @@
-- #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS1_DATAFLASH	/* Boot on SPI NCS0 */
-- 
-- #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
---#define	IMG_SIZE		0x33900			/* Image Size in DataFlash    */
--+#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash    */
-- 
-- #define MACH_TYPE       0x44B       /* AT91SAM9260-EK */
---#define JUMP_ADDR		0x23F00000		/* Final Jump Address 	      */
--+#define JUMP_ADDR		0x21F00000		/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9260ek/nandflash/at91sam9260ek.h b/board/at91sam9260ek/nandflash/at91sam9260ek.h
--index 2cac601..f8fdff2 100644
----- a/board/at91sam9260ek/nandflash/at91sam9260ek.h
--+++ b/board/at91sam9260ek/nandflash/at91sam9260ek.h
--@@ -92,7 +92,7 @@
-- #define	IMG_SIZE		0x40000		/* Image Size in NandFlash    */
-- 
-- #define MACH_TYPE       	0x44B		/* AT91SAM9260-EK */
---#define JUMP_ADDR		0x23F00000	/* Final Jump Address 	      */
--+#define JUMP_ADDR		0x21F00000	/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9261ek/dataflash/at91sam9261ek.h b/board/at91sam9261ek/dataflash/at91sam9261ek.h
--index 8ce30e9..276ba3d 100644
----- a/board/at91sam9261ek/dataflash/at91sam9261ek.h
--+++ b/board/at91sam9261ek/dataflash/at91sam9261ek.h
--@@ -97,10 +97,10 @@
-- #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
-- 
-- #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
---#define	IMG_SIZE		0x33900			/* Image Size in DataFlash    */
--+#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash    */
-- 
-- #define MACH_TYPE       0x350       /* AT91SAM9261-EK */
---#define JUMP_ADDR		0x23F00000		/* Final Jump Address 	      */
--+#define JUMP_ADDR		0x21F00000		/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9261ek/nandflash/at91sam9261ek.h b/board/at91sam9261ek/nandflash/at91sam9261ek.h
--index badc3ac..e628c97 100644
----- a/board/at91sam9261ek/nandflash/at91sam9261ek.h
--+++ b/board/at91sam9261ek/nandflash/at91sam9261ek.h
--@@ -114,7 +114,7 @@
-- #define	IMG_SIZE		0x40000		/* Image Size in NandFlash    */
-- 
-- #define MACH_TYPE       	0x350		/* AT91SAM9261-EK */
---#define JUMP_ADDR		0x23F00000	/* Final Jump Address 	      */
--+#define JUMP_ADDR		0x21F00000	/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9263ek/dataflash/at91sam9263ek.h b/board/at91sam9263ek/dataflash/at91sam9263ek.h
--index 5c9da4b..870f9e2 100644
----- a/board/at91sam9263ek/dataflash/at91sam9263ek.h
--+++ b/board/at91sam9263ek/dataflash/at91sam9263ek.h
--@@ -96,10 +96,10 @@
-- #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
-- 
-- #define IMG_ADDRESS 			0x8400			/* Image Address in DataFlash */
---#define	IMG_SIZE			0x33900			/* Image Size in DataFlash    */
--+#define	IMG_SIZE			0x7BC00			/* Image Size in DataFlash    */
-- 
-- #define MACH_TYPE       		0x4B2       		/* AT91SAM9263-EK */
---#define JUMP_ADDR			0x23F00000		/* Final Jump Address 	      */
--+#define JUMP_ADDR			0x21F00000		/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9263ek/nandflash/at91sam9263ek.h b/board/at91sam9263ek/nandflash/at91sam9263ek.h
--index 505afc7..8ab4f46 100644
----- a/board/at91sam9263ek/nandflash/at91sam9263ek.h
--+++ b/board/at91sam9263ek/nandflash/at91sam9263ek.h
--@@ -108,7 +108,7 @@
-- #define	IMG_SIZE	0x40000		/* Image Size in NandFlash    */
-- 
-- #define MACH_TYPE       1202       	/* AT91SAM9263-EK */
---#define JUMP_ADDR	0x23F00000	/* Final Jump Address 	      */
--+#define JUMP_ADDR	0x21F00000	/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9g10ek/dataflash/at91sam9g10ek.h b/board/at91sam9g10ek/dataflash/at91sam9g10ek.h
--index b2faf44..f4f556b 100644
----- a/board/at91sam9g10ek/dataflash/at91sam9g10ek.h
--+++ b/board/at91sam9g10ek/dataflash/at91sam9g10ek.h
--@@ -98,10 +98,10 @@
-- #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
-- 
-- #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
---#define	IMG_SIZE		0x33900			/* Image Size in DataFlash    */
--+#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash    */
-- 
-- #define MACH_TYPE       0x350       /* AT91SAM9261-EK */
---#define JUMP_ADDR		0x23F00000		/* Final Jump Address 	      */
--+#define JUMP_ADDR		0x21F00000		/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9g10ek/nandflash/at91sam9g10ek.h b/board/at91sam9g10ek/nandflash/at91sam9g10ek.h
--index 66c40a3..6c3ecda 100644
----- a/board/at91sam9g10ek/nandflash/at91sam9g10ek.h
--+++ b/board/at91sam9g10ek/nandflash/at91sam9g10ek.h
--@@ -115,7 +115,7 @@
-- #define	IMG_SIZE		0x40000		/* Image Size in NandFlash    */
-- 
-- #define MACH_TYPE       	0x350		/* AT91SAM9G10-EK */
---#define JUMP_ADDR		0x23F00000	/* Final Jump Address 	      */
--+#define JUMP_ADDR		0x21F00000	/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9g20ek/dataflash/at91sam9g20ek.h b/board/at91sam9g20ek/dataflash/at91sam9g20ek.h
--index eea0439..7fc70d6 100644
----- a/board/at91sam9g20ek/dataflash/at91sam9g20ek.h
--+++ b/board/at91sam9g20ek/dataflash/at91sam9g20ek.h
--@@ -75,10 +75,10 @@
-- #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS1_DATAFLASH	/* Boot on SPI NCS1 */
-- 
-- #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
---#define	IMG_SIZE		0x33900			/* Image Size in DataFlash */
--+#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash */
-- 
-- #define MACH_TYPE		0x658			/* AT91SAM9G20-EK */
---#define JUMP_ADDR		0x23F00000		/* Final Jump Address */
--+#define JUMP_ADDR		0x21F00000		/* Final Jump Address */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9g20ek/nandflash/at91sam9g20ek.h b/board/at91sam9g20ek/nandflash/at91sam9g20ek.h
--index 31bd499..e797e4d 100644
----- a/board/at91sam9g20ek/nandflash/at91sam9g20ek.h
--+++ b/board/at91sam9g20ek/nandflash/at91sam9g20ek.h
--@@ -93,7 +93,7 @@
-- #define	IMG_SIZE		0x40000			/* Image Size in NandFlash */
-- 
-- #define MACH_TYPE		0x658			/* AT91SAM9G20-EK */
---#define JUMP_ADDR		0x23F00000		/* Final Jump Address */
--+#define JUMP_ADDR		0x21F00000		/* Final Jump Address */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h b/board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h
--index a60fd41..5587a00 100644
----- a/board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h
--+++ b/board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h
--@@ -89,7 +89,7 @@
-- #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
-- 
-- #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
---#define	IMG_SIZE		0x33900			/* Image Size in DataFlash */
--+#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash */
-- 
-- #define MACH_TYPE		0x9CD			/* AT91SAM9M10-EKES */
-- #define JUMP_ADDR		0x73F00000		/* Final Jump Address */
--diff --git a/board/at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h b/board/at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h
--index 5c726b5..9090097 100644
----- a/board/at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h
--+++ b/board/at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h
--@@ -85,7 +85,7 @@
-- #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
-- 
-- #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
---#define	IMG_SIZE		0x33900			/* Image Size in DataFlash */
--+#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash */
-- 
-- #define MACH_TYPE		0x726			/* AT91SAM9M10G45-EK */
-- #define JUMP_ADDR		0x73F00000		/* Final Jump Address */
--diff --git a/board/at91sam9rlek/dataflash/at91sam9rlek.h b/board/at91sam9rlek/dataflash/at91sam9rlek.h
--index 05c42dc..150f17e 100644
----- a/board/at91sam9rlek/dataflash/at91sam9rlek.h
--+++ b/board/at91sam9rlek/dataflash/at91sam9rlek.h
--@@ -89,10 +89,10 @@
-- #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
-- 
-- #define IMG_ADDRESS 	0x8400		/* Image Address in DataFlash */
---#define	IMG_SIZE	0x33900		/* Image Size in DataFlash    */
--+#define	IMG_SIZE	0x7BC00		/* Image Size in DataFlash    */
-- 
-- #define MACH_TYPE       1326       	/* AT91SAM9RL-EK */
---#define JUMP_ADDR	0x23F00000	/* Final Jump Address 	      */
--+#define JUMP_ADDR	0x21F00000	/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9rlek/nandflash/at91sam9rlek.h b/board/at91sam9rlek/nandflash/at91sam9rlek.h
--index 656b4ba..594db8f 100644
----- a/board/at91sam9rlek/nandflash/at91sam9rlek.h
--+++ b/board/at91sam9rlek/nandflash/at91sam9rlek.h
--@@ -112,7 +112,7 @@
-- #define	IMG_SIZE		0x40000		/* Image Size in NandFlash    */
-- 
-- #define MACH_TYPE       1326       		/* AT91SAM9RL-EK */
---#define JUMP_ADDR		0x23F00000	/* Final Jump Address 	      */
--+#define JUMP_ADDR		0x21F00000	/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9xeek/dataflash/at91sam9xeek.h b/board/at91sam9xeek/dataflash/at91sam9xeek.h
--index 27d1822..08e515d 100644
----- a/board/at91sam9xeek/dataflash/at91sam9xeek.h
--+++ b/board/at91sam9xeek/dataflash/at91sam9xeek.h
--@@ -74,10 +74,10 @@
-- #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS1_DATAFLASH	/* Boot on SPI NCS1 */
-- 
-- #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
---#define	IMG_SIZE		0x33900			/* Image Size in DataFlash    */
--+#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash    */
-- 
-- #define MACH_TYPE		0x44B			/* AT91SAM9XE-EK same id as AT91SAM9260-EK*/
---#define JUMP_ADDR		0x23F00000		/* Final Jump Address 	      */
--+#define JUMP_ADDR		0x21F00000		/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
--diff --git a/board/at91sam9xeek/nandflash/at91sam9xeek.h b/board/at91sam9xeek/nandflash/at91sam9xeek.h
--index 5dbc63e..9fac7cb 100644
----- a/board/at91sam9xeek/nandflash/at91sam9xeek.h
--+++ b/board/at91sam9xeek/nandflash/at91sam9xeek.h
--@@ -94,7 +94,7 @@
-- #define	IMG_SIZE		0x40000		/* Image Size in NandFlash    */
-- 
-- #define MACH_TYPE		0x44B			/* AT91SAM9XE-EK same id as AT91SAM9260-EK*/
---#define JUMP_ADDR		0x23F00000		/* Final Jump Address 	      */
--+#define JUMP_ADDR		0x21F00000		/* Final Jump Address 	      */
-- 
-- /* ******************************************************************* */
-- /* Application Settings                                                */
---- 
--1.7.9.5
--
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-deleted file mode 100644
-index 0f6430fd8d..0000000000
---- a/boot/at91bootstrap/Config.in
-+++ /dev/null
-@@ -1,49 +0,0 @@
--config BR2_TARGET_AT91BOOTSTRAP
--	bool "AT91 Bootstrap"
--	depends on BR2_arm926t
--	help
--	  AT91Bootstrap is a first level bootloader for the Atmel AT91
--	  devices. It integrates algorithms for:
--	  - Device initialization such as clock configuration, PIO
--	    settings...
--	  - Peripheral drivers such as PIO, PMC or SDRAMC...
--	  - Physical media algorithm such as DataFlash, NandFlash, NOR
--	    Flash...
--
--if	BR2_TARGET_AT91BOOTSTRAP
--
--config BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR
--	string "custom patch dir"
--	help
--	  If your board requires custom patches, add the path to the
--	  directory containing the patches here. The patches must be
--	  named at91bootstrap-<version>-<something>.patch.
--
--	  Most users may leave this empty
--
--config BR2_TARGET_AT91BOOTSTRAP_BOARD
--	string "Bootstrap board"
--	default ""
--	help
--	  This is used to do a make <board>_config
--
--choice
--	prompt "Boot Memory"
--	default BR2_TARGET_AT91BOOTSTRAP_DATAFLASH
--	help
--	  Select Chip for which AT91 bootstrap should be built
--
--config BR2_TARGET_AT91BOOTSTRAP_DATAFLASH
--	bool "Data Flash"
--
--config BR2_TARGET_AT91BOOTSTRAP_NANDFLASH
--	bool "NAND Flash"
--
--endchoice
--
--config BR2_TARGET_AT91BOOTSTRAP_MEMORY
--	string
--	default	"dataflash"	if	BR2_TARGET_AT91BOOTSTRAP_DATAFLASH
--	default	"nandflash"	if	BR2_TARGET_AT91BOOTSTRAP_NANDFLASH
--
--endif
-diff --git a/boot/at91bootstrap/at91bootstrap.hash b/boot/at91bootstrap/at91bootstrap.hash
-deleted file mode 100644
-index d9f8db8897..0000000000
---- a/boot/at91bootstrap/at91bootstrap.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# locally computed
--sha256  d66192a274247f4baa39fa932eadf903d7add55641d89d30402f967c4f2282a5  AT91Bootstrap1.16.zip
--sha256  6a3ac5dfcf19e6bac1b1109d30d72818768a3855e2594b84fe2b012b5fe0e77b  include/sdramc.h
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-deleted file mode 100644
-index 385957b5d4..0000000000
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ /dev/null
-@@ -1,55 +0,0 @@
--################################################################################
--#
--# at91bootstrap
--#
--################################################################################
--
--AT91BOOTSTRAP_VERSION = 1.16
--AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
--AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
--AT91BOOTSTRAP_LICENSE = BSD-Source-Code
--AT91BOOTSTRAP_LICENSE_FILES = include/sdramc.h
--
--AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
--AT91BOOTSTRAP_MEMORY = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
--AT91BOOTSTRAP_MAKE_SUBDIR = board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
--AT91BOOTSTRAP_BINARY = $(AT91BOOTSTRAP_MAKE_SUBDIR)/$(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
--
--AT91BOOTSTRAP_INSTALL_IMAGES = YES
--AT91BOOTSTRAP_INSTALL_TARGET = NO
--
--define AT91BOOTSTRAP_EXTRACT_CMDS
--	$(UNZIP) -d $(BUILD_DIR) $(AT91BOOTSTRAP_DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
--	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)/* $(@D)
--	rmdir $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)
--endef
--
--ifneq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)),)
--define AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
--	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) \*.patch
--endef
--
--AT91BOOTSTRAP_POST_PATCH_HOOKS += AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
--endif
--
--# The at91bootstrap Makefile doesn't support customizing
--# CFLAGS/LDFLAGS, so we cheat and pass our custom flags through CC and
--# LD.
--define AT91BOOTSTRAP_BUILD_CMDS
--	$(MAKE1) CROSS_COMPILE=$(TARGET_CROSS) \
--		CC="$(TARGET_CC) -fno-stack-protector" \
--		LD="$(TARGET_CC) -fno-PIE" \
--		-C $(@D)/$(AT91BOOTSTRAP_MAKE_SUBDIR)
--endef
--
--define AT91BOOTSTRAP_INSTALL_IMAGES_CMDS
--	cp $(@D)/$(AT91BOOTSTRAP_BINARY) $(BINARIES_DIR)
--endef
--
--$(eval $(generic-package))
--
--ifeq ($(BR2_TARGET_AT91BOOTSTRAP)$(BR_BUILDING),yy)
--ifeq ($(AT91BOOTSTRAP_BOARD),)
--$(error No AT91Bootstrap board name set. Check your BR2_TARGET_AT91BOOTSTRAP_BOARD setting)
--endif
--endif
+@@ -1 +0,0 @@
+-../../../../boot/arm-trusted-firmware/v2.8/0002-build-tools-avoid-unnecessary-link.patch
+\ No newline at end of file
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index 8561b6641a..ecfc10cc91 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -1,12 +1,12 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
+@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.2)/xlnx_rebase_v2.8_2023.2.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.1)/xlnx_rebase_v2.10_2024.1.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+@@ -33,10 +33,9 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_PACKAGE_VERSAL_FIRMWARE=y
+-BR2_PACKAGE_VERSAL_FIRMWARE_VERSION="xilinx_v2023.2"
++BR2_PACKAGE_VERSAL_FIRMWARE_VERSION="xilinx_v2024.1"
+ BR2_PACKAGE_VERSAL_FIRMWARE_BOARD="vck190"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_PACKAGE_HOST_BOOTGEN=y
+-BR2_GLOBAL_PATCH_DIR="board/versal/patches"
 -- 
-2.39.2
+2.25.1
 
 _______________________________________________
 buildroot mailing list
