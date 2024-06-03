@@ -4,97 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7DE6C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 11:53:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1738CC25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 11:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 75947414B4;
-	Mon,  3 Jun 2024 11:53:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D58B8400E4;
+	Mon,  3 Jun 2024 11:56:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SGxs_EV8a9Ze; Mon,  3 Jun 2024 11:53:42 +0000 (UTC)
+ id A9ecRueCp3Pg; Mon,  3 Jun 2024 11:56:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B00041597
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2E2B405CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B00041597;
-	Mon,  3 Jun 2024 11:53:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7F35C1BF383
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 11:52:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2E2B405CC;
+	Mon,  3 Jun 2024 11:56:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A41561BF383
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 11:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 643A941492
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 11:52:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DEAB8212C
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 11:55:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hk8GJDFlH3LI for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 11:52:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12c; helo=mail-lf1-x12c.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5ADE641369
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ADE641369
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
- [IPv6:2a00:1450:4864:20::12c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5ADE641369
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 11:52:51 +0000 (UTC)
-Received: by mail-lf1-x12c.google.com with SMTP id
- 2adb3069b0e04-52b919d214cso1651810e87.2
- for <buildroot@buildroot.org>; Mon, 03 Jun 2024 04:52:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717415569; x=1718020369;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=6UxGyZxlrMO1fDkjO0vYZTp+tpIvRcKgDSplFUfGPqw=;
- b=XYwLqm4gDsn6SuYEt3Z9M7sf0SWjQUMgoivUFW1ei6V0ptps3RN8+BhmL6xQf2iO52
- nVRpB2iur2/E5aJiZu5+SboG9968uDJIGubC9Xtv0WkBo1vEMgcrZXhn858NJN7nyFOe
- X6W2w9QxVUuex8Ov1zT0gDlBuvVDzY9YG6NzZr4Cc5gg3kdHYGj7SEmtXZA0h80nMXLh
- xLvKNKI1+pt5qLeXCRnfFCZdXAjIonK2jLJGNw7nCkx6odxjypKsZThi0kAgXz3ZJUId
- wSmOKK0MrOWWO0g1oABM6S0j6PNSjiXJkwPPlIXgTALC5qPlf9hWKkmf4dAVu9XxP1xy
- uC8g==
-X-Gm-Message-State: AOJu0YyqmiLXjF7/q8wpghrCY2SFApTr61trVCJVo0uW0NY/D4N5mdrK
- vJB+lE5acAsyKIiXykZ0QFtKeY1vG2BWBcf0/fMnb1nlEOuPUL5yuFpYUInW
-X-Google-Smtp-Source: AGHT+IEN6GqvtmexRO7zp8kXnjZEtsPldUgo5W97FAy5B9szUvrHLUmFeFVURP7oibyQycD06q+ARg==
-X-Received: by 2002:a05:6512:1152:b0:52b:9c8a:7355 with SMTP id
- 2adb3069b0e04-52b9c8a74dbmr1336686e87.52.1717415568937; 
- Mon, 03 Jun 2024 04:52:48 -0700 (PDT)
-Received: from precision7530-arch-roy.lan
- ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-52b96035a33sm529058e87.294.2024.06.03.04.52.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 03 Jun 2024 04:52:48 -0700 (PDT)
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-X-Google-Original-From: Roy Kollen Svendsen
- <roy.kollen.svendsen@akersolutions.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XTiRJ5F8P-dq for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 11:55:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 24F258212A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24F258212A
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 24F258212A
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 11:55:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 38DAD20005;
+ Mon,  3 Jun 2024 11:55:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1sE6I5-002vvu-2H;
+ Mon, 03 Jun 2024 13:55:53 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon,  3 Jun 2024 13:51:57 +0200
-Message-ID: <20240603115206.3583474-14-roy.kollen.svendsen@akersolutions.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240603115206.3583474-1-roy.kollen.svendsen@akersolutions.com>
-References: <20240531151325.2443323-9-roy.kollen.svendsen@akersolutions.com>
- <20240603115206.3583474-1-roy.kollen.svendsen@akersolutions.com>
+Date: Mon,  3 Jun 2024 13:55:49 +0200
+Message-Id: <20240603115550.699332-2-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240603115550.699332-1-peter@korsgaard.com>
+References: <20240603115550.699332-1-peter@korsgaard.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717415569; x=1718020369; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=6UxGyZxlrMO1fDkjO0vYZTp+tpIvRcKgDSplFUfGPqw=;
- b=VGNZOiMkyQlxLrBoRD75CMR1Wi/JVMtyZQcWD6KWpcFl+d2Bcq3TNdmDAw1Hjr5s2B
- rEi6nodKbhxiW6I4qubEps6iSFwRmhHhSLctjLgTG9qdXTIeFixp4DhraCx1bDeP2cUX
- BN/elvC1xkEvqYCMuM7Gc16QHxhg/LJ6izmeAIIc4syQFW7fCQPBnIE4f4BGsYnEhwyV
- JL/+jArD7EJLTAiNwUBV9+vQOf5hUCGUzQSkceiIsGuRdYvRUQ6HDHcFJYTb1Lm1x5YP
- c0ijsMLVz3UCLXLzsaTUcDLWFp5lzdNwON0NidfPwv0nHZ+cWmkCkMJofq5ymzKpYj7m
- 7XLg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=VGNZOiMk
-Subject: [Buildroot] [PATCH v6 14/14] package/qt6/qt6mqtt: new package
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH 2/2] boot/at91dataflashboot: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,123 +66,193 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
- Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
- Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
----
- package/qt6/Config.in            |  1 +
- package/qt6/qt6.mk               |  2 ++
- package/qt6/qt6mqtt/Config.in    | 10 +++++++++
- package/qt6/qt6mqtt/qt6mqtt.hash |  8 ++++++++
- package/qt6/qt6mqtt/qt6mqtt.mk   | 35 ++++++++++++++++++++++++++++++++
- 5 files changed, 56 insertions(+)
- create mode 100644 package/qt6/qt6mqtt/Config.in
- create mode 100644 package/qt6/qt6mqtt/qt6mqtt.hash
- create mode 100644 package/qt6/qt6mqtt/qt6mqtt.mk
+At91dataflashboot is an ancient (2006) fork of at91bootstrap1 specifically
+for the Atmel/Microchip AT45 series (dataflash) of serial flashes.
 
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 9dbc4b804a..e84806d5e4 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -47,6 +47,7 @@ source "package/qt6/qt6base/Config.in"
- source "package/qt6/qt6core5compat/Config.in"
- source "package/qt6/qt6declarative/Config.in"
- source "package/qt6/qt6languageserver/Config.in"
-+source "package/qt6/qt6mqtt/Config.in"
- source "package/qt6/qt6serialbus/Config.in"
- source "package/qt6/qt6serialport/Config.in"
- source "package/qt6/qt6shadertools/Config.in"
-diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
-index ee426884f9..5431629ede 100644
---- a/package/qt6/qt6.mk
-+++ b/package/qt6/qt6.mk
-@@ -9,4 +9,6 @@ QT6_VERSION = $(QT6_VERSION_MAJOR).1
- QT6_SOURCE_TARBALL_PREFIX = everywhere-src
- QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
+The package hasn't seen any meaningful updates since, is not used by any
+defconfigs and at91bootstrap3 nowadays has AT45 support - So remove the
+package.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy                              |  6 +++
+ boot/Config.in                                |  1 -
+ .../0001-do-not-install.patch                 | 22 ----------
+ boot/at91dataflashboot/0002-eabi-fixes.patch  | 43 -------------------
+ boot/at91dataflashboot/Config.in              |  3 --
+ boot/at91dataflashboot/at91dataflashboot.hash |  2 -
+ boot/at91dataflashboot/at91dataflashboot.mk   | 28 ------------
+ 7 files changed, 6 insertions(+), 99 deletions(-)
+ delete mode 100644 boot/at91dataflashboot/0001-do-not-install.patch
+ delete mode 100644 boot/at91dataflashboot/0002-eabi-fixes.patch
+ delete mode 100644 boot/at91dataflashboot/Config.in
+ delete mode 100644 boot/at91dataflashboot/at91dataflashboot.hash
+ delete mode 100644 boot/at91dataflashboot/at91dataflashboot.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7e5bc28bae..f0bff5191f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -153,6 +153,12 @@ config BR2_TARGET_AT91BOOTSTRAP
+ 	  Upstream for at91bootstrap 1.x is no longer available and
+ 	  has been replaced by at91bootstrap3.
  
-+QT6_GIT = git://code.qt.io
-+
- include $(sort $(wildcard package/qt6/*/*.mk))
-diff --git a/package/qt6/qt6mqtt/Config.in b/package/qt6/qt6mqtt/Config.in
-new file mode 100644
-index 0000000000..2cda7e53c0
---- /dev/null
-+++ b/package/qt6/qt6mqtt/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT6MQTT
-+	bool "qt6mqtt"
-+	select BR2_PACKAGE_QT6BASE_NETWORK
++config BR2_TARGET_AT91DATAFLASHBOOT
++	bool "at91dataflashboot removed"
++	select BR2_LEGACY
 +	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++	  at91dataflashboot has been replaced by at91bootstrap3.
 +
-+	  This package corresponds to the qt6mqtt module.
-+
-+	  https://doc.qt.io/qt-6/qtmqtt-index.html
-diff --git a/package/qt6/qt6mqtt/qt6mqtt.hash b/package/qt6/qt6mqtt/qt6mqtt.hash
-new file mode 100644
-index 0000000000..658bddaa75
---- /dev/null
-+++ b/package/qt6/qt6mqtt/qt6mqtt.hash
-@@ -0,0 +1,8 @@
-+sha256  f1c3b739296832befe24309130ead4ef4167f4cc2029a9c258821f92e7733fb4  qt6mqtt-6.7.1-git4.tar.gz
-+
-+# Hashes for license files:
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6mqtt/qt6mqtt.mk b/package/qt6/qt6mqtt/qt6mqtt.mk
-new file mode 100644
-index 0000000000..0405311065
---- /dev/null
-+++ b/package/qt6/qt6mqtt/qt6mqtt.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# qt6mqtt
-+#
-+################################################################################
-+
-+QT6MQTT_VERSION = $(QT6_VERSION)
-+QT6MQTT_SITE = $(QT6_GIT)/qt/qtmqtt.git
-+
-+QT6MQTT_INSTALL_STAGING = YES
-+
-+QT6MQTT_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+QT6MQTT_CMAKE_BACKEND = ninja
-+
-+QT6MQTT_LICENSE = \
-+	BSD-3-Clause, GPL-3.0-only, \
-+	GFDL-1.3-invariants-only (docs)
-+
-+QT6MQTT_LICENSE_FILES = \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/GFDL-1.3-no-invariants-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt
-+
-+QT6MQTT_CONF_OPTS = \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DBUILD_WITH_PCH=OFF \
-+	-DQT_BUILD_EXAMPLES=OFF \
-+	-DQT_BUILD_TESTS=OFF
-+
-+QT6MQTT_DEPENDENCIES = \
-+	qt6base
-+
-+$(eval $(cmake-package))
+ config BR2_PACKAGE_ON2_8170_MODULES
+ 	bool "on2-8170-modules removed"
+ 	select BR2_LEGACY
+diff --git a/boot/Config.in b/boot/Config.in
+index 3e00d28e56..14e0ca65fa 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -2,7 +2,6 @@ menu "Bootloaders"
+ 
+ source "boot/afboot-stm32/Config.in"
+ source "boot/at91bootstrap3/Config.in"
+-source "boot/at91dataflashboot/Config.in"
+ source "boot/arm-trusted-firmware/Config.in"
+ source "boot/barebox/Config.in"
+ source "boot/beaglev-ddrinit/Config.in"
+diff --git a/boot/at91dataflashboot/0001-do-not-install.patch b/boot/at91dataflashboot/0001-do-not-install.patch
+deleted file mode 100644
+index 41d97ad20e..0000000000
+--- a/boot/at91dataflashboot/0001-do-not-install.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Disable the automatic installation of at91dataflashboot since it tries
+-to install things to /tftpboot, which is not possible when not
+-building as root.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: at91dataflashboot-1.05/Makefile
+-===================================================================
+---- at91dataflashboot-1.05.orig/Makefile
+-+++ at91dataflashboot-1.05/Makefile
+-@@ -40,7 +40,7 @@
+- 
+- I=config.h com.h dataflash.h embedded_services.h main.h stdio.h include/AT91RM9200.h include/lib_AT91RM9200.h 
+- 
+--all: 	clean $(BINNAME) $(LSSNAME) install
+-+all: 	clean $(BINNAME) $(LSSNAME)
+- 	$(SIZE) $(OUTNAME)
+- 
+- # C objects here
+diff --git a/boot/at91dataflashboot/0002-eabi-fixes.patch b/boot/at91dataflashboot/0002-eabi-fixes.patch
+deleted file mode 100644
+index e38905f7cb..0000000000
+--- a/boot/at91dataflashboot/0002-eabi-fixes.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-Get at91dataflashboot to build with EABI toolchains, by providing the
+-__aeabi_uidiv and __aeabi_uidivmod symbols. The code is based on
+-U-Boot's code.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- _udivsi3.S |   14 ++++++++++++++
+- 1 file changed, 14 insertions(+)
+-
+-Index: DataflashBoot-1.05/_udivsi3.S
+-===================================================================
+---- DataflashBoot-1.05.orig/_udivsi3.S
+-+++ DataflashBoot-1.05/_udivsi3.S
+-@@ -12,8 +12,11 @@
+- 	.text
+- 	.globl	 __udivsi3
+- 	.type  __udivsi3       ,function
+-+        .globl  __aeabi_uidiv
+-+        .type   __aeabi_uidiv ,function
+- 	.align	0
+-  __udivsi3      :
+-+ __aeabi_uidiv:
+- 	cmp	divisor, #0
+- 	beq	Ldiv0
+- 	mov	curbit, #1
+-@@ -68,6 +71,17 @@
+- 	mov	r0, #0			@ about as wrong as it could be
+- 	ldmia	sp!, {pc}
+- 	.size  __udivsi3       , . -  __udivsi3
+-+
+-+.globl __aeabi_uidivmod
+-+__aeabi_uidivmod:
+-+
+-+        stmfd   sp!, {r0, r1, ip, lr}
+-+        bl      __aeabi_uidiv
+-+        ldmfd   sp!, {r1, r2, ip, lr}
+-+        mul     r3, r0, r2
+-+        sub     r1, r1, r3
+-+        mov     pc, lr
+-+
+- /* # 235 "libgcc1.S" */
+- /* # 320 "libgcc1.S" */
+- /* # 421 "libgcc1.S" */
+diff --git a/boot/at91dataflashboot/Config.in b/boot/at91dataflashboot/Config.in
+deleted file mode 100644
+index 8b37d84409..0000000000
+--- a/boot/at91dataflashboot/Config.in
++++ /dev/null
+@@ -1,3 +0,0 @@
+-config BR2_TARGET_AT91DATAFLASHBOOT
+-	bool "AT91 DataFlashBoot"
+-	depends on BR2_arm && BR2_arm926t
+diff --git a/boot/at91dataflashboot/at91dataflashboot.hash b/boot/at91dataflashboot/at91dataflashboot.hash
+deleted file mode 100644
+index 57df4e5389..0000000000
+--- a/boot/at91dataflashboot/at91dataflashboot.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# locally computed
+-sha256  2cfeb6a9236e1a743c8010f05e504dbc92169ef42d9a6cf7948954a577bfc386  DataflashBoot-1.05.tar.bz2
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+deleted file mode 100644
+index cb329a90df..0000000000
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ /dev/null
+@@ -1,28 +0,0 @@
+-################################################################################
+-#
+-# at91dataflashboot
+-#
+-################################################################################
+-
+-AT91DATAFLASHBOOT_VERSION = 1.05
+-AT91DATAFLASHBOOT_SOURCE = DataflashBoot-$(AT91DATAFLASHBOOT_VERSION).tar.bz2
+-AT91DATAFLASHBOOT_SITE = ftp://www.at91.com/pub/buildroot
+-
+-AT91DATAFLASHBOOT_INSTALL_TARGET = NO
+-AT91DATAFLASHBOOT_INSTALL_IMAGES = YES
+-
+-AT91DATAFLASHBOOT_CFLAGS = $(TARGET_CFLAGS) -fno-stack-protector
+-ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+-AT91DATAFLASHBOOT_CFLAGS += -marm
+-endif
+-
+-define AT91DATAFLASHBOOT_BUILD_CMDS
+-	make -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) \
+-		CFLAGS="$(AT91DATAFLASHBOOT_CFLAGS)"
+-endef
+-
+-define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
+-	cp $(@D)/DataflashBoot-$(AT91DATAFLASHBOOT_VERSION).bin $(BINARIES_DIR)
+-endef
+-
+-$(eval $(generic-package))
 -- 
-2.45.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
