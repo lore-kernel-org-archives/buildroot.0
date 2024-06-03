@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2C6CC25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 17:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECFAFC25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 17:34:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C1CF40922;
-	Mon,  3 Jun 2024 17:34:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9D3D408EF;
+	Mon,  3 Jun 2024 17:34:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kby-26lCgUXy; Mon,  3 Jun 2024 17:34:32 +0000 (UTC)
+ id og0yWPWcN_GR; Mon,  3 Jun 2024 17:34:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 324F8408E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01DFE40928
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 324F8408E3;
-	Mon,  3 Jun 2024 17:34:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 928311BF232
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01DFE40928;
+	Mon,  3 Jun 2024 17:34:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B20641BF83B
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 17:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F53B607C7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9F44781144
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 17:34:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RC1smPc2NvVX for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p2ZL_fMyKBP8 for <buildroot@lists.busybox.net>;
  Mon,  3 Jun 2024 17:34:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC2FE6077C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3E0B81137
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC2FE6077C
+ by smtp1.osuosl.org (Postfix) with ESMTP id D3E0B81137
  for <buildroot@buildroot.org>; Mon,  3 Jun 2024 17:34:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A256787A1C; Mon,  3 Jun 2024 17:34:29 +0000 (UTC)
+ id BF16E87A1D; Mon,  3 Jun 2024 17:34:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 3 Jun 2024 18:00:23 +0200
+Date: Mon, 3 Jun 2024 18:06:23 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 923ab8a7d57ba93adda9b46866705d6a74f41f8c
-X-Git-Newrev: 5dcf2d88497cbdafd7b224ab58616eb8b9d7ab27
+X-Git-Oldrev: fe189deeed96779f9fb8c9006a85b50034322365
+X-Git-Newrev: 1e70541c8546c215fc3b6f2dd127596cf635c572
 X-Patchwork-Hint: ignore
-Message-Id: <20240603173429.A256787A1C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/ivi-homescreen:
- drop bogus comment dependency on NPTL
+Message-Id: <20240603173429.BF16E87A1D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add zbar
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,53 +65,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5dcf2d88497cbdafd7b224ab58616eb8b9d7ab27
+commit: https://git.buildroot.net/buildroot/commit/?id=1e70541c8546c215fc3b6f2dd127596cf635c572
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-As part of the review process of the ivi-homescreen package, which
-landed in commit 9d8497e79de3ced144877ba6ee38cc5b7181aaeb, it was
-deemed that the dependency on BR2_TOOLCHBAIN_HAS_THREAD_NPTL was not
-needed, as it was implied by glibc. According to the commit log:
-
-    [yann.morin.1998@free.fr:
-      - propagate BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS to comments
-      - drop NPTL, implied by glibc
-      - reorder dependencies in a more logical way
-      - reorder comments
-      - drop undefined BR2_PACKAGE_IVI_HOMESCREEN_HAS_CLIENT
-      - grammar ("for to change")
-    ]
-    Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-However, while the BR2_TOOLCHBAIN_HAS_THREAD_NPTL dependency was
-removed from the BR2_PACKAGE_IVI_HOMESCREEN option definition, the
-corresponding dependency in the Config.in comment was not
-dropped. Let's bring things back in sync.
-
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b9b072f83c1f2a55b54405b2dc28e6586b59b74b)
+(cherry picked from commit 85f0941532c424df2d7b1cfc153546d02dd3cd12)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ivi-homescreen/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/package/test_zbar.py | 37 ++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/package/ivi-homescreen/Config.in b/package/ivi-homescreen/Config.in
-index c24df05b6d..dc2ccb0c97 100644
---- a/package/ivi-homescreen/Config.in
-+++ b/package/ivi-homescreen/Config.in
-@@ -250,10 +250,10 @@ comment "OpenGL texture plugin needs an EGL backend"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index de9585bd3f..88b042921c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1872,6 +1872,7 @@ F:	support/testing/tests/package/test_weston/
+ F:	support/testing/tests/package/test_xz.py
+ F:	support/testing/tests/package/test_z3.py
+ F:	support/testing/tests/package/test_z3/
++F:	support/testing/tests/package/test_zbar.py
+ F:	support/testing/tests/package/test_zchunk.py
+ F:	support/testing/tests/package/test_zstd.py
  
- endif # BR2_PACKAGE_IVI_HOMESCREEN
- 
--comment "ivi-homescreen needs a glibc toolchain w/ wchar, C++, gcc >= 5, dynamic library, host gcc >= 5, NPTL"
-+comment "ivi-homescreen needs a glibc toolchain w/ wchar, C++, gcc >= 5, dynamic library, host gcc >= 5"
- 	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
- 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
- 		|| !BR2_HOST_GCC_AT_LEAST_5
+diff --git a/support/testing/tests/package/test_zbar.py b/support/testing/tests/package/test_zbar.py
+new file mode 100644
+index 0000000000..b840df089a
+--- /dev/null
++++ b/support/testing/tests/package/test_zbar.py
+@@ -0,0 +1,37 @@
++import os
++
++import infra.basetest
++
++
++class TestZbar(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_IMAGEMAGICK=y
++        BR2_PACKAGE_LIBQRENCODE=y
++        BR2_PACKAGE_LIBQRENCODE_TOOLS=y
++        BR2_PACKAGE_ZBAR=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        txt_msg = "Hello Buildroot!"
++        qr_img = "qr.png"
++
++        # We check the program can execute.
++        self.assertRunOk("zbarimg --version")
++
++        # We generate a QR code image containing a message.
++        self.assertRunOk(f"qrencode -o '{qr_img}' '{txt_msg}'")
++
++        # We decode the QR code image and check the extracted message
++        # is the expected one.
++        out, ret = self.emulator.run(f"zbarimg -q --raw {qr_img}")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], txt_msg)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
