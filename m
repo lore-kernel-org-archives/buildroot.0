@@ -4,50 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 264F0C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 18:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6C72C25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 18:14:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 712EF40442;
-	Mon,  3 Jun 2024 18:12:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E4864080B;
+	Mon,  3 Jun 2024 18:14:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yF8gnrXCejRP; Mon,  3 Jun 2024 18:12:14 +0000 (UTC)
+ id ChPDHLPcSUnb; Mon,  3 Jun 2024 18:14:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19772405D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCC6740806
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19772405D2;
-	Mon,  3 Jun 2024 18:12:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCC6740806;
+	Mon,  3 Jun 2024 18:14:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03CC81BF35F
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 18:12:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2A8F81BF35F
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 18:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E191C82181
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 18:12:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24895812F1
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 18:14:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O3wSzV0gPbno for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 18:12:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01D8C82156
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01D8C82156
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 18:12:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4D21822AD; Mon,  3 Jun 2024 18:12:10 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 3 Jun 2024 20:07:20 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 89492fe1a8cb27c49c12e85620abe182999bfc51
-X-Git-Newrev: 4816c095d834ba352f59a18bb13e2e5755262018
-X-Patchwork-Hint: ignore
-Message-Id: <20240603181210.E4D21822AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/pkg-generic.mk:
- really make DL_SUBDIR inheritance work
+ id pVF30wy4jDGm for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 18:14:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 12C5281FCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12C5281FCB
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 12C5281FCB
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 18:14:19 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 15B6413F899;
+ Mon,  3 Jun 2024 20:14:16 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:34384])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 03 Jun 2024 20:14:15 +0200
+MIME-Version: 1.0
+Date: Mon, 03 Jun 2024 20:14:15 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In-Reply-To: <Zloux27_r6DqP0JF@landeda>
+References: <20240531194025.122135-1-ju.o@free.fr> <Zloux27_r6DqP0JF@landeda>
+User-Agent: Webmail Free/1.6.5
+Message-ID: <d8ea34fee435e9e86a3033554cf72c2c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1717438457;
+ bh=GIzH0zDUAak9ZzLAXo0GeDLsGRYbgojhOMKY98P/2Qc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YJMJQpxzpmCX1jO0Kz8yksXCQXvYNvHg1D41q8pH19MwR0yN7uCpyen+GKHLF84ff
+ ZRIViDd3tegkjwfbgQS3HZmLK0S4zEeXB8g6mlYhRjnDS7S3Fq0WL/YMLhpp9w9zMD
+ atCZ06KICK6e+O5+oH9lYriFtZj6oso/HasEuTl+sLgqw3eh093y7lvK7HdkQ5lW9/
+ 4IkkiYDHD61LGbPtyYJRZTE3Ab+VYQOOY/+Dt67efmrZyKnrJvJAIp3tez7fYnc6Ok
+ xqJ5Prj8NCpUgPdEZXeDhLOZWdrERW5PQYdDabsBaEwo4svZbwY1P6M+WKbOgQnRDz
+ yLOPG54SLb0kQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YJMJQpxz
+Subject: Re: [Buildroot] [PATCH 1/1] package/octave: add optional {Graphics,
+ Image}Magick++ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,76 +82,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4816c095d834ba352f59a18bb13e2e5755262018
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+Hi Yann,
 
-While bumping kodi, we figured out that the kodi-texturepacker and
-kodi-jsonschemabuilder were both re-downloading the main Kodi tarball,
-even though they contain:
+On 31/05/2024 22:10, Yann E. MORIN wrote:
+> Julien, All,
+> 
+> On 2024-05-31 21:40 +0200, Julien Olivain spake thusly:
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+>> ---
+>>  package/octave/octave.mk | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>> 
+>> diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+>> index a087961be97..6a21bef7b87 100644
+>> --- a/package/octave/octave.mk
+>> +++ b/package/octave/octave.mk
+>> @@ -26,6 +26,16 @@ else
+>>  OCTAVE_CONF_OPTS += --without-bz2
+>>  endif
+>> 
+>> +ifeq ($(BR2_PACKAGE_GRAPHICSMAGICK),y)
+>> +OCTAVE_CONF_OPTS += --with-magick=GraphicsMagick++
+>> +OCTAVE_DEPENDENCIES += graphicsmagick
+>> +else ifeq ($(BR2_PACKAGE_IMAGEMAGICK),y)
+>> +OCTAVE_CONF_OPTS += --with-magick=ImageMagick++
+>> +OCTAVE_DEPENDENCIES += imagemagick
+>> +else
+>> +OCTAVE_CONF_OPTS += --without-magick
+> 
+> This is material for the next branch, so should we just add
+> --without-magick on master, for correctness?
 
-KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
-KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+To me, this is another instance of the grey zone between what goes in
+"master" and "next". Peter accepted the same kind of commit in master:
+https://gitlab.com/buildroot.org/buildroot/-/commit/c1723c0dfda041efb3da1d4da94909cbc0003e77
 
-Both are host packages, and turns out that changing those variables to
-HOST_ ones made the download sharing work.
+The branch "next" was already opened.
 
-Commit efa7712b092950c92f994e2ee30c120a64e5451b ("package/pkg-generic:
-host variant inherits target download settings") introduced
-inheritance of host variables from target variables from a number of
-variables, including DL_SUBDIR. But it missed the fact that earlier in
-pkg-generic.mk, the following line was defined:
+I understood that such a change is then a "fix" of Octave
+automatically detecting the presence of those dependencies. The build
+is not broken. It is just the support that might be enabled or not,
+depending on the build order.
 
-  $(2)_DL_SUBDIR ?= $$($(2)_RAWNAME)
+So I don't think there is a big differences between applying this patch
+on master, or next. You can also apply on master after the 2024.05 tag.
+If you apply now on next and disable on master, we will need to also
+update (or resolve a conflict) while the merge next in master.
 
-So, when this later code kicked in:
+Tell me what you prefer, I'll send a v2 if needed.
 
- ifndef $(2)_DL_SUBDIR
-  ifdef $(3)_DL_SUBDIR
-   $(2)_DL_SUBDIR = $$($(3)_DL_SUBDIR)
-  endif
- endif
+> Regards,
+> Yann E. MORIN.
+> 
+>> +endif
+>> +
+>>  ifeq ($(BR2_PACKAGE_READLINE),y)
+>>  OCTAVE_CONF_OPTS += \
+>>  	--enable-readline \
+>> --
+>> 2.45.1
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___        
+>        |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There 
+> is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   
+> conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 
-In fact it never did anything because $(2)_DL_SUBDIR would never be
-undefined. This commit fixes this issue by properly adjusting the
-logic to inherit the value of the target variable when it exists, or
-defaulting to $$($(2)_RAWNAME) otherwise.
+Best regards,
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a1c4d6c884c8aa871cc27166f33feecd1002b3e8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-generic.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 577a148c1e..a2749320c3 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -525,7 +525,6 @@ endif
- 
- $(2)_BASENAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
- $(2)_BASENAME_RAW = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
--$(2)_DL_SUBDIR ?= $$($(2)_RAWNAME)
- $(2)_DL_DIR = $$(DL_DIR)/$$($(2)_DL_SUBDIR)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASENAME)
- 
-@@ -538,6 +537,8 @@ endif
- ifndef $(2)_DL_SUBDIR
-  ifdef $(3)_DL_SUBDIR
-   $(2)_DL_SUBDIR = $$($(3)_DL_SUBDIR)
-+ else
-+  $(2)_DL_SUBDIR = $$($(2)_RAWNAME)
-  endif
- endif
- 
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
