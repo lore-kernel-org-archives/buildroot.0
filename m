@@ -4,81 +4,163 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66304C25B74
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 00:44:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F0CBC25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 05:02:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D04C14012D;
-	Mon,  3 Jun 2024 00:44:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DCF5940162;
+	Mon,  3 Jun 2024 05:02:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5XHD_jiaO_ze; Mon,  3 Jun 2024 00:44:54 +0000 (UTC)
+ id 638lY0UQVso8; Mon,  3 Jun 2024 05:02:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DB9C40167
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1EC84022E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8DB9C40167;
-	Mon,  3 Jun 2024 00:44:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0AB6C1BF855
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 00:44:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1EC84022E;
+	Mon,  3 Jun 2024 05:02:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DD96E1BF3D7
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 05:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0456140167
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 00:44:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D2F52607B3
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 05:02:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0nfEc7hqI5aU for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 00:44:51 +0000 (UTC)
-X-Greylist: delayed 426 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 03 Jun 2024 00:44:51 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8C9774012D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C9774012D
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.141.245;
- helo=esa1.hgst.iphmx.com; envelope-from=prvs=87711d278=wilfred.mallawa@wdc.com;
- receiver=<UNKNOWN> 
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8C9774012D
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 00:44:51 +0000 (UTC)
-X-CSE-ConnectionGUID: CwuCZ9RbTU66UBMnmLqFew==
-X-CSE-MsgGUID: ouXhZaoxRWaLQE06wY8eIg==
-X-IronPort-AV: E=Sophos;i="6.08,210,1712592000"; d="scan'208";a="18218499"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com)
- ([199.255.45.15])
- by ob1.hgst.iphmx.com with ESMTP; 03 Jun 2024 08:37:43 +0800
-IronPort-SDR: 665d02ad_7A5+6ePLK0mTCy+Gd5CM0zgZDdBi6Cs7ebPHLVKHMfWsYT5
- Xodv0mtLKlQ53LyI0hD9nwc1sYdjjdw+7TvEnZg==
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
- by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 02 Jun 2024 16:39:26 -0700
-WDCIronportException: Internal
-Received: from unknown (HELO fedora.wdc.com) ([10.225.165.42])
- by uls-op-cesaip01.wdc.com with ESMTP; 02 Jun 2024 17:37:42 -0700
-To: buildroot@buildroot.org
-Date: Mon,  3 Jun 2024 10:37:07 +1000
-Message-ID: <20240603003706.87432-2-wilfred.mallawa@wdc.com>
-X-Mailer: git-send-email 2.45.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h6-BDHLmvIHd for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 05:02:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f400:7ea9::621;
+ helo=nam02-sn1-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6BD9B6077B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BD9B6077B
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com
+ (mail-sn1nam02on20621.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7ea9::621])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6BD9B6077B
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 05:02:31 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CPWzDcSh+78BVUuRfU38t9UEHFEryP1n/6pGgC/zeOBaObsBWUOmWkF4+3xXHfrxRdLySAMRrg2w225pVevxMZDlWjURrZGmngqX5BXl1Kn9s1JOKIOX0B4GzM1b7S7xHdfED/U29HsafmPXTc7b2UgfJzjwszvQviZftojghuGj04FmRa25WCV2ygIhCrNhpPgU/l8ZWrZLgxSvrww3PzViKYUA9DJr8WETicNk/ht7zE/qS1L5HaDxxLLTKTrEozs5xZrD9YAsvpuRH9Ii/4iEWCttzzTml+oVkoy8YRWEk9kb7G9DryLBqh26ZGTxfFHrk1HqC35H55CB8JnL1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9Gxh5t5QpkvVfdEFrtJvdFPtC8PXXqoS5NAFN5c5Yh0=;
+ b=nlj2S74uow7C3F3miqlGSn2wVn/IVs3X+elKrARKr52R56bbGwyALYv37rZfYYVO12F76cmr1JBxlkK6xsCJeJCJGIlI4takL7JHbZEMQAPVmItstbEednFFloh2B62mP975uiYQmj9qBk4F8gKtP2/HNf9dvoAF1mXf7yNK+KPAOp/MERi8cRBHR0xl4zBhbq0xKBp5f+icDS7sdfE56pO/XZRbGbfNUVJ8DuZhjhN/jhKPnVQomgyUU7EXvZDlvjY/YiDIPh/sMsZJloTsonC81OiscAHtpJJ3PMMHV7n2d3k/B5x31WE8LQ/1riCiGpRDj6qQ+yMYVsPTc+yz7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by BL1PR12MB5924.namprd12.prod.outlook.com (2603:10b6:208:39b::15)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.29; Mon, 3 Jun
+ 2024 05:02:28 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b%7]) with mapi id 15.20.7633.021; Mon, 3 Jun 2024
+ 05:02:27 +0000
+To: "Maier, Brandon L                            Collins"
+ <Brandon.Maier@collins.com>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [PATCH] configs/versal_vck190_defconfig: add hashes
+Thread-Index: AQHarGMGoz5QfJpYlEmY1g6km7tPO7Gk+GOwgAAOzACAANFXcIAPtOww
+Date: Mon, 3 Jun 2024 05:02:27 +0000
+Message-ID: <CH2PR12MB5004F4FB992790C240CB26DCF0FF2@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20240522161338.1278400-1-brandon.maier@collins.com>
+ <CH2PR12MB500492AF5FCEA01A7EE55E99F0F42@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <BN0P110MB16738955F9A8C09D69A9AD26EBF4A@BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM>
+ <CH2PR12MB50046AE384EC6E246F6FAC96F0F52@CH2PR12MB5004.namprd12.prod.outlook.com>
+In-Reply-To: <CH2PR12MB50046AE384EC6E246F6FAC96F0F52@CH2PR12MB5004.namprd12.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|BL1PR12MB5924:EE_
+x-ms-office365-filtering-correlation-id: 10b85707-98f9-41a9-0700-08dc838a5d79
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0; ARA:13230031|366007|376005|1800799015|38070700009;
+x-microsoft-antispam-message-info: =?us-ascii?Q?4nGWvFd8NpFut95KkL/1WD3+H8NOYO6TDCa9aEVju+blTtYyFdNo5dvDAtIH?=
+ =?us-ascii?Q?XmsSGLZMyZmkOflrXrf6+XYQAaVU1reVAeJsnAnOoxZ5MrlNLiJevQlXej4Z?=
+ =?us-ascii?Q?RdLMpR7eRI7UvRXVv9rcFiKyNA0Y7sNPN4vPif4YpGINPrxj8OQYZ5XTDmFs?=
+ =?us-ascii?Q?ZR/LRZIBXUaoAM04IEnsLKpDUkXt8bXLSnyr2R0/ZCaFBjUl5bU/Z16WenPR?=
+ =?us-ascii?Q?t2yq6wnkxJYTb4FduChzO9dl/9gwgaZzozhPtkT0fv9/I2PXexBVV6sLUdZo?=
+ =?us-ascii?Q?/Z9VVBR+VrWmUo5Bz/27rzv9tmtSVOS3uIeOmIzAjAa0L1NBQY8UBAkwDxiW?=
+ =?us-ascii?Q?a5SYAvhrqLItMbAeiURTQdpPWR+CadTRRAcopci3ZQ6aJJ/pFcBB6ugfKuGj?=
+ =?us-ascii?Q?9nobkpln5PC7ELRqp9xe4OCh7CQG96E/j6EDiaLQ8/7/kS9jS7qh3hDcBEGy?=
+ =?us-ascii?Q?Ip6cP5gKOlVyXSbCRZtwN2HW+GaRBQmPy1IvHmSlfSsOG23aJ2OLgj3kVW/A?=
+ =?us-ascii?Q?CTkWEJ0HLl8b5Sj1cJ9tnIbLHwWLN7+vH42HnbPMXPuYF/jSzQhZUYnshLgS?=
+ =?us-ascii?Q?8l5i0wxGavZ7bkvlWqHSNk5qIOSbaxvZ84WLo4sm0B/DaRVxMUf5InIEDkHt?=
+ =?us-ascii?Q?s61yDArKmOiI2m6qPWIQBZz6LuDf1w0VVGm3n+iuVklqzWN3+aT8noulAXfW?=
+ =?us-ascii?Q?dsZr/oOMCCA1F7I5dKFmY0cobuIUC60vBfREx+df8KuOctqS4S69YBpysG3e?=
+ =?us-ascii?Q?qNvye/iPTps0wRGrOm6d20ZqlFHdWq926StUXLlAwbQ6fz6bTO1yzYy+tcR7?=
+ =?us-ascii?Q?CXRsQxAxM9Ir6RbXanCgODxbwPHPXSXFkvsw32x68rNISU+DKQIqapijHZRm?=
+ =?us-ascii?Q?mjvCq/UVD0nymAZwOCENyuZVdXSuaXComAgeofGtMKjHUaXQBgtL+XVrH0pa?=
+ =?us-ascii?Q?19SeXi5NMcUGJP1dSYONDx6vKlmykKbD1+kWIJzBK2WRWh7S20kM3v8Ks/S3?=
+ =?us-ascii?Q?tnG5EZpZitg1rCgFrQTziwvHXF8BlmzqDK2qFUsdE+nyeV+KnwsITyTzVQpA?=
+ =?us-ascii?Q?EqpRqRnrobYzVAnf9objaaHjvHI0ZqgeCPVB+pGRLTekdsUmvzWeFlovUem3?=
+ =?us-ascii?Q?ARzu6EhHnDTlI0rAreV0PSdFsj+pB/Suucz+LpGJSkWIYrYPWBjiwAOcuK5q?=
+ =?us-ascii?Q?HtgOMJfEuWkFcT6Cs4bJOdPjelWgT8LKQZlPdILmMkDDB2MfZEVXFWgo07ff?=
+ =?us-ascii?Q?OCHeG7gBCCbLHUBOKvHZGuA8YSePibEX7GmY4lJXxw=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230031)(366007)(376005)(1800799015)(38070700009); DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1g2r6sKsG4Ia5uo3tntsVHiVZrlGi+WS9XmXTwC2No80CWGrzGGbsEZ2/MXq?=
+ =?us-ascii?Q?Boba7zTJuxFDljI3EA2C8haz2qLtC6VwvczPxHmGDEXO64FCxrEY/PLAX4mY?=
+ =?us-ascii?Q?Osf1IJFNlVHuiF+29TqaVZLh9GB2+LISa0z2zgpbkfNev6XLInP0NBUl5q00?=
+ =?us-ascii?Q?MHUUr9kB3q55NEVI8SqejDlcy8WiK8qWhpGzMTvu4EIoUxvw29CmA4TUdpaq?=
+ =?us-ascii?Q?m/jGGmxBIxf80jdxq7GwAz192FdUPzuvRpgciA6JNcuK8c9T8NuhjNn1OK4p?=
+ =?us-ascii?Q?D8ET8TUTbX6E3nT8F9FmI3FMGa4E0QS4Dnbq9PY22KQQhbCVVAz/yDXU0jr/?=
+ =?us-ascii?Q?XWsPEAXTmBZd3EsNAVWZHw1ZI9M/Nh7dEQiYvzkBZCCaAbXHZjCZiMhHwU+a?=
+ =?us-ascii?Q?pBthrbUVfTWSu2O4JmUu4PljhpaTJo6vEEDW8cG2LwxWsGlKbxCsS4fS/osz?=
+ =?us-ascii?Q?+GaGM6vvquxepMl5QgO5Lw4cZb3IkSj0IBuV8Ebn9r3zUWrOms/oqD+7Mwh9?=
+ =?us-ascii?Q?mImj4i2cholXpGusCjYqUfn7Bhw5zEqedSyZQjGkwDvRynapY97TJ5+a6X9H?=
+ =?us-ascii?Q?PKis7gfyYFn81d92Lat//3qNmXLHkAt87dj+KFLhUF+yAxQ895x6Bb5dCT5p?=
+ =?us-ascii?Q?ePVyqB0LSf39q4Iwh5mfTTsTwGUapoeUbWYEHbsgV6QWoqhkEIVf1SHupbhl?=
+ =?us-ascii?Q?iaLnZrDOYJKn+xcrK9Z+TnU7bNuydb8QnTDQC2AXN/o5dyV3EQUaqGdOQk4S?=
+ =?us-ascii?Q?ePUAE37grJ7GAKi9R9PdwfqHpiEtVjp9cekzL4uVz5zMRrOwhBoEVHllQr7i?=
+ =?us-ascii?Q?QLri/YJfReQkmQchuVSuBPukK+JJ6uYxyUwYjrlGdy3cOrLbM/Dn0WESE3CW?=
+ =?us-ascii?Q?06MBeQqrpdTfsqzfjxlS1GEAC+MYFPZiGMTgeXf/yt4lSuQ/+QGO8iKSpUbF?=
+ =?us-ascii?Q?x3KHdfgQaSQ3ruTxJyP17sLXxXvV/6UOex8IiXJN9IJUjloUiItgVcnbdzsQ?=
+ =?us-ascii?Q?ZkOfqObdc21TmgxezPAm0uIycbuQODS/xiGxULTcXlYQds54H5dG5TXhaqCG?=
+ =?us-ascii?Q?anPTuct6f1Ta0MfCw9NAL9+1OXFHCjpEYFEoNoMPgBwmBU0UKe0op0zRbxKK?=
+ =?us-ascii?Q?sHr9MNBwWvNEprXXOkOv5HCFYBd4KouMEvawuqKa7xX0NYqAu+VjIrgWxkmQ?=
+ =?us-ascii?Q?kN4AS9pJaQyRPD3gDvPecpeoqqTtx3EznIhhWvHPam+JjeobwbuA9daOSGn4?=
+ =?us-ascii?Q?N8nT8I9QWv5j489uXmJFm802qGl9of6zb06mM1ooC+QUL/bTN0TozIH5wp3B?=
+ =?us-ascii?Q?f1w5o0FXNQzbmnqmBJkfq7xiNYocp7bnmhpQDu8pvU2Z00Wx10t+s5BsVSh1?=
+ =?us-ascii?Q?T1k4//s8Y5d+jnA3cghoAkgYDVGaONo4mJ4dzsHh+mwWqX1j1b1BwGKwr4JO?=
+ =?us-ascii?Q?2t0uvajEQZb1dQLS3XK+3A77cARvtV0PdOIHs3VZiftGKU+F6xPpG4KjpDh4?=
+ =?us-ascii?Q?F8qPnRxFMJeoX/cQiPnmcqJQcCgUD1aZ/jYD8I5ty3IyRqDVX3489A9k7EPo?=
+ =?us-ascii?Q?IhLsZUxlTvNWMunbxWcY56z7Jf3VV7i6a8aHcRSPzK4sQHIyhDQ/YUda8XHM?=
+ =?us-ascii?Q?3ESlaGXqvaUTjRtzPlX5Glc=3D?=
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1717375491; x=1748911491;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=O0OcthPynTpENriinNA0jCB5Sh4jszuatOKnJRNuGfY=;
- b=ATpmPXXgQXkoILv8V5bLepIKWbYigLa7JXxI0sPZOfhjbVg67BDY1wJ1
- Frm1UXjWK69o52A7inDvejXwScRBzkvC6QZmCpQHH+1yvsVIUBTw5q4Jp
- qbfD1tZmLj3N6CLjnC5Zl4cgQdaQDjcDgtRhT+5lLxWeUrJCYysIKhQvO
- 1qRVnj1NT2QmxzNhk1ACsfNN346mLLRj/LUVak8hR/VzqhIYDtfodNX4c
- grprvWXRxUS5kd3NAnT/1j//TWvE2x/a15VQ8vfrOW3rWJml1XCzd009A
- NyoWUJ8X6jzlBTgm4JzNjmdFtW0GS5sYQbtNi9Mk5oeBoL26B5WC8hG9p
- A==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10b85707-98f9-41a9-0700-08dc838a5d79
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2024 05:02:27.6322 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iBKY4uy9lvTIz9+3QTECimOj/TSk+q+e6VUsafa/x0TG6NhBFBWYaD5k8aNqkOGe
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5924
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9Gxh5t5QpkvVfdEFrtJvdFPtC8PXXqoS5NAFN5c5Yh0=;
+ b=fqexGpEANAlr+5YCp411hbrx6KovudiWRKCJuGVy23sDNSW8qY5EuJkmHQP1Zg7uBIAyyUYpSH7571DaDCoRBVd/iEyzjbpdejAm97alGIuAaI4BCdMS+J8ylcla41K4hAbVRfVOmbr7yz8XZqgXXUd6kE1qhQWk7a+XHfcI3cs=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=wdc.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=wdc.com header.i=@wdc.com header.a=rsa-sha256
- header.s=dkim.wdc.com header.b=ATpmPXXg
-Subject: [Buildroot] [PATCH v2 1/1] package/libspdm: bump version to 3.3.0
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=fqexGpEA
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH] configs/versal_vck190_defconfig: add hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,189 +172,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Wilfred Mallawa via buildroot <buildroot@buildroot.org>
-Reply-To: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-Cc: Wilfred Mallawa <wilfred.mallawa@wdc.com>,
- Alistair Francis <alistair@alistair23.me>
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-`libspdm 3.3.0` now supports the SPDM event capability, however this
-patch disables support for EVENT_CAP as it is optional, and requires
-additional functionality implemented at link time.
+Hello Brandon,
 
-Adds a pending upstream patch that fixes the incorrect parsing of
-certificates with `id-DMTF-hardware-identity OID` tags.
+> My only concern is that this patch conflicts with the following patch set which is still waiting for additional review.  The patch set below changes the versal-firmware package from one that downloads pre-built binaries to a version which builds the binaries from source.  If the patch set below gets applied first, then the hash for the versal-firmware-xilinx_v2023.2.tar.gz
+file will be wrong.
+>
+> https://patchwork.ozlabs.org/project/buildroot/list/?series=397588
+>
+> Could we apply this patch set first, and then go through and add all the correct hashes for the zynq, zynqmp and versal defconfigs?
 
-Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
----
-Changes in V2:
-	- Keep LTO enabled.
+> I'm for that approach, I will decline this patch. Please CC me when the zynqmp-firmware series is applied, and I will spin hashes for the Xilinx boards.
 
- ...eLists-remove-fixed-options-for-NONE.patch | 52 -----------------
- ...spdm_responder-Fixup-set-cert-checks.patch | 56 +++++++++++++++++++
- package/libspdm/libspdm.hash                  |  2 +-
- package/libspdm/libspdm.mk                    |  5 +-
- 4 files changed, 60 insertions(+), 55 deletions(-)
- delete mode 100644 package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch
- create mode 100644 package/libspdm/0001-library-spdm_responder-Fixup-set-cert-checks.patch
+I was hoping that the zynqmp-firmware and versal-firmware patches would be
+accepted before the Xilinx 2024.1 release, but that does not appear to be the
+case.
 
-diff --git a/package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch b/package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch
-deleted file mode 100644
-index 0de0ad0079..0000000000
---- a/package/libspdm/0001-CMakeLists-remove-fixed-options-for-NONE.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From d4d6b138d727e484fa9d0fef476ca181681d0695 Mon Sep 17 00:00:00 2001
--From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
--Date: Mon, 19 Feb 2024 09:56:14 +1000
--Subject: [PATCH] CMakeLists: remove fixed options for NONE
--
--The use of the NONE toolchain option is such that we can provide at the
--build project level (buildroot etc...). However, the changes introduced
--in 811f2b596def04b3a36368cf2098546d7907767f set certain compiler/linker
--option that does not comply with the definition of the options as
--specified in [1]. This change removes those options.
--
--[1] https://github.com/DMTF/libspdm/blob/main/doc/build.md#linux-builds-inside-build-environments
--
--Upstream: https://github.com/DMTF/libspdm/commit/d4d6b138d727e484fa9d0fef476ca181681d0695
--Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-----
-- CMakeLists.txt | 19 -------------------
-- 1 file changed, 19 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 9c300cc817..f6cf17d269 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -618,25 +618,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
--         SET(CMAKE_EXE_LINKER_FLAGS "")
-- 
--         SET(CMAKE_C_LINK_EXECUTABLE "")
---
---    elseif(TOOLCHAIN STREQUAL "NONE")
---        ADD_COMPILE_OPTIONS(-fshort-wchar -fno-strict-aliasing -Wall -Werror -Wno-array-bounds -ffunction-sections -fdata-sections -fno-common -Wno-address -fpie -fno-asynchronous-unwind-tables -flto -DUSING_LTO  -Wno-maybe-uninitialized -Wno-uninitialized  -Wno-builtin-declaration-mismatch -Wno-nonnull-compare -Werror-implicit-function-declaration)
---        if(CMAKE_BUILD_TYPE STREQUAL "Debug")
---            ADD_COMPILE_OPTIONS(-g)
---        endif()
---        if(GCOV STREQUAL "ON")
---        ADD_COMPILE_OPTIONS(--coverage -fprofile-arcs -ftest-coverage)
---        endif()
---        SET(OPENSSL_FLAGS -include base.h -Wno-error=maybe-uninitialized -Wno-error=format -Wno-format -Wno-error=unused-but-set-variable -Wno-cast-qual -Wno-error=implicit-function-declaration)
---        SET(CMOCKA_FLAGS -std=gnu99 -Wpedantic -Wall -Wshadow -Wmissing-prototypes -Wcast-align -Werror=address -Wstrict-prototypes -Werror=strict-prototypes -Wwrite-strings -Werror=write-strings -Werror-implicit-function-declaration -Wpointer-arith -Werror=pointer-arith -Wdeclaration-after-statement -Werror=declaration-after-statement -Wreturn-type -Werror=return-type -Wuninitialized -Werror=uninitialized -Werror=strict-overflow -Wstrict-overflow=2 -Wno-format-zero-length -Wmissing-field-initializers -Wformat-security -Werror=format-security -fno-common -Wformat -fno-common -fstack-protector-strong -Wno-cast-qual)
---
---        SET(CMAKE_LINKER ${CMAKE_C_COMPILER})
---        SET(CMAKE_EXE_LINKER_FLAGS "-flto -Wno-error -no-pie" )
---        if(GCOV STREQUAL "ON")
---        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  --coverage -lgcov -fprofile-arcs -ftest-coverage")
---        endif()
---        SET(CMAKE_C_LINK_EXECUTABLE "<CMAKE_LINKER> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -Wl,--start-group <LINK_LIBRARIES> -Wl,--end-group")
---
--     endif()
-- 
--     if(NOT TOOLCHAIN STREQUAL "NIOS2_GCC")
---- 
--2.43.2
--
-diff --git a/package/libspdm/0001-library-spdm_responder-Fixup-set-cert-checks.patch b/package/libspdm/0001-library-spdm_responder-Fixup-set-cert-checks.patch
-new file mode 100644
-index 0000000000..1708568500
---- /dev/null
-+++ b/package/libspdm/0001-library-spdm_responder-Fixup-set-cert-checks.patch
-@@ -0,0 +1,56 @@
-+From e41eea4f4119d1efb9a633092b32e6717a1c246c Mon Sep 17 00:00:00 2001
-+From: Alistair Francis <alistair.francis@wdc.com>
-+Date: Thu, 23 May 2024 15:33:26 +1000
-+Subject: [PATCH] library/spdm_responder: Fixup set cert checks
-+
-+When we run checks against the certificate that the requester set we
-+have the following function calls
-+ - libspdm_set_cert_verify_certchain()
-+  - libspdm_x509_set_cert_certificate_check()
-+  ...
-+   - libspdm_verify_leaf_cert_spdm_extension()
-+
-+At which point libspdm_verify_leaf_cert_spdm_extension() checks to make
-+sure the id-DMTF-hardware-identity OID is not set if it's an AliasCert
-+model.
-+
-+This ends up being incorrect though. If using an AliasCert the
-+SET_CERTIFICATE CertChain (table 93 - section 770) will "contain a partial
-+certificate chain from the root CA to the Device Certificate CA". This
-+means that the leaf certificate of that chain should set the the
-+id-DMTF-hardware-identity OID as it isn't an alias certificate.
-+
-+At this point the check in libspdm_verify_leaf_cert_spdm_extension() is
-+incorrect.
-+
-+The documentation of libspdm_x509_set_cert_certificate_check() states
-+that:
-+    is_requester_cert     Is the function verifying requester or responder cert.
-+
-+Although we are a responder, we are verifying a certificate set by the
-+requester, so change the is_requester_cert to true to avoid the
-+incorrect id-DMTF-hardware-identity OID check and match the
-+documentation.
-+
-+Upstream: https://github.com/DMTF/libspdm/pull/2708
-+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-+---
-+ library/spdm_responder_lib/libspdm_rsp_set_certificate.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/library/spdm_responder_lib/libspdm_rsp_set_certificate.c b/library/spdm_responder_lib/libspdm_rsp_set_certificate.c
-+index 8c2d36fca8..bed87d9e9a 100644
-+--- a/library/spdm_responder_lib/libspdm_rsp_set_certificate.c
-++++ b/library/spdm_responder_lib/libspdm_rsp_set_certificate.c
-+@@ -42,7 +42,7 @@ static bool libspdm_set_cert_verify_certchain(const uint8_t *cert_chain, size_t
-+     /*verify leaf cert*/
-+     if (!libspdm_x509_set_cert_certificate_check(leaf_cert_buffer, leaf_cert_buffer_size,
-+                                                  base_asym_algo, base_hash_algo,
-+-                                                 false, is_device_cert_model)) {
-++                                                 true, is_device_cert_model)) {
-+         return false;
-+     }
-+ 
-+-- 
-+2.45.1
-+
-diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
-index 32415bcfce..7067f010e2 100644
---- a/package/libspdm/libspdm.hash
-+++ b/package/libspdm/libspdm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0ee460c0ce5c4d126ca65f9c4bdabd5725b87cec7160b2d06721169df58f3a95  libspdm-3.2.0.tar.gz
-+sha256  178c7bd785b3ac71b886b8360dab926d42e4d5edc55009bcd341295f25f56c91  libspdm-3.3.0.tar.gz
- sha256  7dc072bff163df39209bbb63e0916f4667c2a84cf3c36ccc84ec7425bc3e4779  LICENSE.md
-diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
-index 2ec35be0ac..76386eee70 100644
---- a/package/libspdm/libspdm.mk
-+++ b/package/libspdm/libspdm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSPDM_VERSION = 3.2.0
-+LIBSPDM_VERSION = 3.3.0
- LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
- LIBSPDM_LICENSE = BSD-3-Clause
- LIBSPDM_LICENSE_FILES = LICENSE.md
-@@ -27,7 +27,8 @@ LIBSPDM_CONF_OPTS = \
- 	-DCOMPILED_LIBSSL_PATH=/usr/lib/ \
- 	-DDISABLE_TESTS=1 \
- 	-DDISABLE_EDDSA=1 \
--	-DLINK_FLAGS=$(STAGING_DIR)
-+	-DLINK_FLAGS=$(STAGING_DIR) \
-+	-DCMAKE_C_FLAGS="-DLIBSPDM_ENABLE_CAPABILITY_EVENT_CAP=0" ..
- 
- define LIBSPDM_INSTALL_STAGING_CMDS
- 	mkdir -p $(STAGING_DIR)/usr/lib
--- 
-2.45.1
+I will be submitting patches to bump the zynqmp and versal defconfigs to the
+Xilinx 2024.1 release this week.  If you want, you can add the hashes right
+after.
+
+I will then update the zynqmp-firmware and versal-firmware patch set to be
+applied on top of the 2024.1 defconfigs with the hash check.
+
+Ok for you?
+
+Best regards,
+Neal Frager
+AMD
 
 _______________________________________________
 buildroot mailing list
