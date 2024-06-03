@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C66E5C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 09:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79D08C25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 09:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 90D9F40960;
-	Mon,  3 Jun 2024 09:20:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4518C41077;
+	Mon,  3 Jun 2024 09:20:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i3oToIjNyyQF; Mon,  3 Jun 2024 09:20:44 +0000 (UTC)
+ id kBxka_KwRxBZ; Mon,  3 Jun 2024 09:20:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B31FE40BF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA3A24116E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B31FE40BF1;
-	Mon,  3 Jun 2024 09:20:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 184E61BF3EB
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA3A24116E;
+	Mon,  3 Jun 2024 09:20:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CD7031BF3EB
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D1A64068C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DFFB81F70
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:19:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g2OweYlht_hT for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BH5oj5omSvD9 for <buildroot@lists.busybox.net>;
  Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A8124065E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C147E81F79
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A8124065E
+ by smtp1.osuosl.org (Postfix) with ESMTP id C147E81F79
  for <buildroot@buildroot.org>; Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27E7187988; Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
+ id B796E87988; Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 3 Jun 2024 11:03:40 +0200
+Date: Mon, 3 Jun 2024 11:11:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5cbcbf5078b51ac15fe58a506a51639685dcd370
-X-Git-Newrev: b530de097f905e616e735baa3494a597e176e5b5
+X-Git-Oldrev: d36ce5f3860406325f07ffe4725d27f50dcf56b7
+X-Git-Newrev: e5993e6cd493dd6329bbf54cd7c19c5862a8a1e6
 X-Patchwork-Hint: ignore
-Message-Id: <20240603091957.27E7187988@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnetfilter_acct: use https for
- _SITE
+Message-Id: <20240603091957.B796E87988@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zip: download from sourceforge
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b530de097f905e616e735baa3494a597e176e5b5
+commit: https://git.buildroot.net/buildroot/commit/?id=e5993e6cd493dd6329bbf54cd7c19c5862a8a1e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http redirects to https, so use that instead.
+The tarball (with .tar.gz extension but same content) is also available over
+https from sourceforge, so use that instead.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libnetfilter_acct/Config.in            | 2 +-
- package/libnetfilter_acct/libnetfilter_acct.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zip/zip.hash | 2 +-
+ package/zip/zip.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnetfilter_acct/Config.in b/package/libnetfilter_acct/Config.in
-index ecfef6dc64..614af27fe1 100644
---- a/package/libnetfilter_acct/Config.in
-+++ b/package/libnetfilter_acct/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBNETFILTER_ACCT
- 	  libnetfilter_acct is the userspace library providing interface
- 	  to extended accounting infrastructure.
+diff --git a/package/zip/zip.hash b/package/zip/zip.hash
+index eb4bbf3b03..cbb96beb31 100644
+--- a/package/zip/zip.hash
++++ b/package/zip/zip.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated from download (no sig, hash)
+-sha256  f0e8bb1f9b7eb0b01285495a2699df3a4b766784c1765a8f1aeedf63c0806369  zip30.tgz
++sha256  f0e8bb1f9b7eb0b01285495a2699df3a4b766784c1765a8f1aeedf63c0806369  zip30.tar.gz
+ sha256  8ecd6c1bab449127eb665cef1561e73a8bce52e217375f6f466939e137b1e110  LICENSE
+diff --git a/package/zip/zip.mk b/package/zip/zip.mk
+index 3aa59e7ba7..0457ba9414 100644
+--- a/package/zip/zip.mk
++++ b/package/zip/zip.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
  
--	  http://www.netfilter.org/projects/libnetfilter_acct/
-+	  https://www.netfilter.org/projects/libnetfilter_acct/
-diff --git a/package/libnetfilter_acct/libnetfilter_acct.mk b/package/libnetfilter_acct/libnetfilter_acct.mk
-index e791f6f13f..6763ad27dd 100644
---- a/package/libnetfilter_acct/libnetfilter_acct.mk
-+++ b/package/libnetfilter_acct/libnetfilter_acct.mk
-@@ -6,7 +6,7 @@
- 
- LIBNETFILTER_ACCT_VERSION = 1.0.3
- LIBNETFILTER_ACCT_SOURCE = libnetfilter_acct-$(LIBNETFILTER_ACCT_VERSION).tar.bz2
--LIBNETFILTER_ACCT_SITE = http://www.netfilter.org/projects/libnetfilter_acct/files
-+LIBNETFILTER_ACCT_SITE = https://www.netfilter.org/projects/libnetfilter_acct/files
- LIBNETFILTER_ACCT_INSTALL_STAGING = YES
- LIBNETFILTER_ACCT_DEPENDENCIES = host-pkgconf libmnl
- LIBNETFILTER_ACCT_LICENSE = LGPL-2.1+
+ ZIP_VERSION = 3.0
+-# The version is really 3.0, but the tarball is named zip30.tgz
+-ZIP_SOURCE = zip$(subst .,,$(ZIP_VERSION)).tgz
+-ZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
++# The version is really 3.0, but the tarball is named zip30.tar.gz
++ZIP_SOURCE = zip$(subst .,,$(ZIP_VERSION)).tar.gz
++ZIP_SITE = https://sourceforge.net/projects/infozip/files/Zip%203.x%20%28latest%29/$(ZIP_VERSION)
+ ZIP_LICENSE = Info-ZIP
+ ZIP_LICENSE_FILES = LICENSE
+ ZIP_CPE_ID_VENDOR = info-zip_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
