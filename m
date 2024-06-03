@@ -4,59 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F332BC25B76
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 10:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5A8BC25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 10:55:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE3276071F;
-	Mon,  3 Jun 2024 10:55:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59A3D6071F;
+	Mon,  3 Jun 2024 10:55:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RWlRcpU22Wgt; Mon,  3 Jun 2024 10:55:02 +0000 (UTC)
+ id zXfOjDRTmEPM; Mon,  3 Jun 2024 10:55:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D950260739
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6117E60785
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D950260739;
-	Mon,  3 Jun 2024 10:55:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CB1A81BF31A
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 10:54:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6117E60785;
+	Mon,  3 Jun 2024 10:55:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8757E1BF31A
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 10:55:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B76AF60739
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 10:54:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72E914043A
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 10:55:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sn7n5gVWa0tB for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 10:54:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8zNXeXKtBCt3 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 10:55:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E51B86071F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E51B86071F
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E51B86071F
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 10:54:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E836C240003;
- Mon,  3 Jun 2024 10:54:55 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sE5L5-002ovb-1M;
- Mon, 03 Jun 2024 12:54:55 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90D1A403ED
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90D1A403ED
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 10:55:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8654A84CD0; Mon,  3 Jun 2024 10:55:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-References: <20240411213940.91282-1-ju.o@free.fr>
-Date: Mon, 03 Jun 2024 12:54:55 +0200
-In-Reply-To: <20240411213940.91282-1-ju.o@free.fr> (Julien Olivain's message
- of "Thu, 11 Apr 2024 23:39:40 +0200")
-Message-ID: <87y17mi9ds.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add links runtime test
+To: buildroot@buildroot.org
+Date: Mon, 3 Jun 2024 12:49:59 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 2e18fd6f074b36e5174635cb3a960de79cc4b592
+X-Git-Newrev: 404cbe8a425248769a53aacb539a3b75e1a0dd52
+X-Patchwork-Hint: ignore
+Message-Id: <20240603105542.8654A84CD0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/elfutils: fix
+ host build failure due to missing demangle support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,20 +59,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=404cbe8a425248769a53aacb539a3b75e1a0dd52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
+When building on hosts with libstdc++ without demangle support this error
+shows up:
+checking for __cxa_demangle in -lstdc++... no
+configure: error: __cxa_demangle not found in libstdc++, use --disable-demangler to disable demangler support.
+make[1]: *** [package/pkg-generic.mk:273: /home/giuliobenetti/br_reproduce/c2524c7580d97f7387ec22da62be71d77f2ed8ec/output/build/host-elfutils-0.189/.stamp_configured] Error 1
+make: *** [Makefile:23: _all] Error 2
 
-Committed to 2024.02.x, thanks.
+So let's disable demangler for host by default.
 
--- 
-Bye, Peter Korsgaard
+Fixes: still not showed by autobuilders. Reproduced on Ubuntu 22.04 with
+Ubuntu APT g++ 11.4.0
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5f2c9f882d6ac693e758b30dcb489b1d05ad2644)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/elfutils/elfutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 87b51aa5b5..4d8cc43342 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -27,6 +27,7 @@ HOST_ELFUTILS_CONF_OPTS = \
+ 	--with-bzlib \
+ 	--with-lzma \
+ 	--without-zstd \
++	--disable-demangler \
+ 	--disable-progs
+ 
+ ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
