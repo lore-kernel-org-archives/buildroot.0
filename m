@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F56AC25B76
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 10:23:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27EC9C27C44
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 10:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C708607FE;
-	Mon,  3 Jun 2024 10:23:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4E30605AC;
+	Mon,  3 Jun 2024 10:51:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5YZZewwdb-ee; Mon,  3 Jun 2024 10:23:49 +0000 (UTC)
+ id BuN18vg0blZD; Mon,  3 Jun 2024 10:51:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 084C560756
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC5966071F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 084C560756;
-	Mon,  3 Jun 2024 10:23:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 56C3F1BF31A
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 10:23:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC5966071F;
+	Mon,  3 Jun 2024 10:51:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D92191BF31A
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 10:51:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F80D401FB
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 10:23:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C66666071F
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 10:51:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LB62ICAgWSW2 for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 10:23:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xPFbt4k9fIvV for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 10:51:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D0F3401AE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D0F3401AE
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 10:23:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1FE7E879A5; Mon,  3 Jun 2024 10:23:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E5091605AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5091605AC
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E5091605AC
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 10:51:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9373C40005;
+ Mon,  3 Jun 2024 10:51:24 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sE5Hg-002cpD-05;
+ Mon, 03 Jun 2024 12:51:24 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 3 Jun 2024 12:19:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2cdd3d1ccfbf36a921b737749367a70ad29e87a5
-X-Git-Newrev: 0e567a1580eaffcf6e18a68747e7d5701bcb176d
-X-Patchwork-Hint: ignore
-Message-Id: <20240603102339.1FE7E879A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: add optional tpm2
- dependency
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20240418135615.457970-1-giulio.benetti@benettiengineering.com>
+Date: Mon, 03 Jun 2024 12:51:23 +0200
+In-Reply-To: <20240418135615.457970-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Thu, 18 Apr 2024 15:56:15 +0200")
+Message-ID: <877cf6jo44.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/elfutils: fix host build failure
+ due to missing demangle support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +69,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e567a1580eaffcf6e18a68747e7d5701bcb176d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-When tpm2-tss package is selected, systemd can enable its TPM2 support
-[1] used by systemd-boot, systemd-cryptenroll (when cryptsetup package
-is also enabled) [2] and other tool systemd-pcr{extend,lock,machine}.
+ > When building on hosts with libstdc++ without demangle support this error
+ > shows up:
+ > checking for __cxa_demangle in -lstdc++... no
+ > configure: error: __cxa_demangle not found in libstdc++, use --disable-demangler to disable demangler support.
+ > make[1]: *** [package/pkg-generic.mk:273:
+ > /home/giuliobenetti/br_reproduce/c2524c7580d97f7387ec22da62be71d77f2ed8ec/output/build/host-elfutils-0.189/.stamp_configured]
+ > Error 1
+ > make: *** [Makefile:23: _all] Error 2
 
-[1] https://github.com/systemd/systemd/blob/db11bab38ccf1ed257f310d29070843d4c58ea01/meson.build#L1341
-[2] https://www.freedesktop.org/software/systemd/man/latest/systemd-cryptenroll.html
+ > So let's disable demangler for host by default.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/systemd/systemd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ > Fixes: still not showed by autobuilders. Reproduced on Ubuntu 22.04 with
+ > Ubuntu APT g++ 11.4.0
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 8987dc19a6..483b2d24a5 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -577,6 +577,13 @@ else
- SYSTEMD_CONF_OPTS += -Dhibernate=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_TPM2_TSS),y)
-+SYSTEMD_DEPENDENCIES += tpm2-tss
-+SYSTEMD_CONF_OPTS += -Dtpm2=true
-+else
-+SYSTEMD_CONF_OPTS += -Dtpm2=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
- SYSTEMD_INSTALL_IMAGES = YES
- SYSTEMD_DEPENDENCIES += gnu-efi host-python-pyelftools
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Committed to 2024.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
