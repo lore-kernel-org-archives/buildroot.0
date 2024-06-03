@@ -4,97 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 267BFC25B78
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 22:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E79C25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 23:10:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0EEB40975;
-	Mon,  3 Jun 2024 22:58:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BF41402B2;
+	Mon,  3 Jun 2024 23:10:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OFwbailRZMX6; Mon,  3 Jun 2024 22:58:18 +0000 (UTC)
+ id v3fnn_wlxjLk; Mon,  3 Jun 2024 23:10:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3FCF40978
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9D1C404DB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3FCF40978;
-	Mon,  3 Jun 2024 22:58:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D0A6C1BF2B1
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 22:58:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9D1C404DB;
+	Mon,  3 Jun 2024 23:10:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 428F41BF352
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 23:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC2E940978
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 22:58:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C555403C4
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 23:10:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nclwwZaQMye3 for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 22:58:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A28Kf5ylGNVN for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 23:10:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.53.144.211;
  helo=mail.athaariq.my.id; envelope-from=foss@athaariq.my.id;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D03FE40975
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D03FE40975
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5563A40010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5563A40010
 Received: from mail.athaariq.my.id (unknown [117.53.144.211])
- by smtp4.osuosl.org (Postfix) with ESMTP id D03FE40975
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 22:58:15 +0000 (UTC)
-Received: from [192.168.208.75] (unknown [192.168.100.1])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5563A40010
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 23:10:23 +0000 (UTC)
+Received: from localhost.localdomain (unknown [192.168.100.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
  (No client certificate requested)
- by mail.athaariq.my.id (Postfix) with ESMTPSA id C86BC3302C;
- Mon, 03 Jun 2024 22:58:11 +0000 (UTC)
-Message-ID: <3e31a13f-ae2c-4469-b275-9007ac82d17f@athaariq.my.id>
-Date: Tue, 4 Jun 2024 05:58:00 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
-References: <20240603074049.28426-1-foss@athaariq.my.id>
- <20240603084617.38508-1-foss@athaariq.my.id>
- <20240603084617.38508-2-foss@athaariq.my.id>
- <ec99ecde-ff6e-40c6-9622-f4440462a026@gmx.de>
-Content-Language: en-US
+ by mail.athaariq.my.id (Postfix) with ESMTPSA id A97D4344F4;
+ Mon, 03 Jun 2024 23:10:19 +0000 (UTC)
 From: Athaariq Ardhiansyah <foss@athaariq.my.id>
-Autocrypt: addr=foss@athaariq.my.id; keydata=
- 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
- GMviPu198f0Mg1RQmg==
+To: buildroot@buildroot.org
+Date: Tue,  4 Jun 2024 06:09:34 +0700
+Message-ID: <20240603230940.51746-1-foss@athaariq.my.id>
+X-Mailer: git-send-email 2.45.2
 In-Reply-To: <ec99ecde-ff6e-40c6-9622-f4440462a026@gmx.de>
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+References: <ec99ecde-ff6e-40c6-9622-f4440462a026@gmx.de>
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=athaariq.my.id
-Subject: Re: [Buildroot] [PATCH v2 2/3] package/raspberrypi-usbboot: bump
- version to 20221215-105525
+Subject: [Buildroot] [PATCH v3 1/3] package/rpi-firmware: bump version to
+ v1.20240529
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,23 +67,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Athaariq Ardhiansyah <foss@athaariq.my.id>,
+ Martin Bark <martin@barkynet.com>, Fiona Klute <fiona.klute@gmx.de>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fiona!
+Latest RPi firmware already provided support for Raspberry Pi 5.
 
- > the commit message should mention the actual version.
+Signed-off-by: Athaariq Ardhiansyah <foss@athaariq.my.id>
 
-The upstream maintainer won't tag the version anymore since December
-18th, 2022. So, I have no idea what version of the latest commit. Last
-tagged version has no Raspberry Pi 5 support, unfortunately. From your
-perspective, should we ask the maintainer to tag again or we can safely
-use the latest commit possible similar as rpi-firmware? Thanks.
+---
+Changes v1 -> v2:
+  - Fix missing description due to terminal issue
+---
+ package/rpi-firmware/Config.in         | 5 +++++
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
-Best regards,
-Athaariq Ardhiansyah
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index a9aeaed745..e4de5ddaa3 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -63,6 +63,11 @@ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_DB
+ 	help
+ 	  The debug set of files for versions 4.
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI5
++	bool "rpi 5"
++	help
++	  The default set of files for versions 5.
++
+ config BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE
+ 	string "Path to a file stored as boot/config.txt"
+ 	help
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 33e05a2f4a..57afe3a1e5 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  dd43e77ca1a8969cdb7f05dd72a57f90862071d5a93bdd6aea8246aba85689cf  rpi-firmware-83dafbc92c0e63f76ca2ecdd42462d56489d1c77.tar.gz
++sha256  a116479e4e8e3bae354860d00321e5df5010cdbe10a3db9e59c81858a0aec84d  rpi-firmware-3590de0c181d433af368a95f15bc480bdaff8b47.tar.gz
+ sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 11177aee02..5eef3974d3 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 83dafbc92c0e63f76ca2ecdd42462d56489d1c77
++RPI_FIRMWARE_VERSION = 3590de0c181d433af368a95f15bc480bdaff8b47
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-- 
+2.45.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
