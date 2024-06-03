@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6739C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 20:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50999C27C50
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 20:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A97CA605EE;
-	Mon,  3 Jun 2024 20:40:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1EFC760B60;
+	Mon,  3 Jun 2024 20:45:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BLwNArYKwxJS; Mon,  3 Jun 2024 20:40:39 +0000 (UTC)
+ id syy5GoVlhKL6; Mon,  3 Jun 2024 20:45:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAE2960604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2903E60B66
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAE2960604;
-	Mon,  3 Jun 2024 20:40:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4CF951BF2B6
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 20:40:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2903E60B66;
+	Mon,  3 Jun 2024 20:45:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0ABE81BF2B6
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 20:45:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A150404DA
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 20:40:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E04FF40940
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 20:45:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aK7dH9nqbYE7 for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 20:40:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 23RJhzBO-yC4 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 20:45:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F32784011B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F32784011B
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F32784011B
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 20:40:35 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 20BFF13F846;
- Mon,  3 Jun 2024 22:40:31 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 03 Jun 2024 22:40:30 +0200
-Date: Mon, 3 Jun 2024 22:40:30 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <Zl4qPmAfUPtS8MNf@landeda>
-References: <20240601011733.2964473-1-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240601011733.2964473-1-james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1717447233;
- bh=x9PvN/OVsz65g2aLK/46UkKa6APB0O+gG1aUZbwMF5g=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=shvs4useAKwp+SiPtA2Eoodp0Q4qUl6JKFhYZs0wzFfW3gQffCwYJrNWyCu2ejHo2
- cuN3s6cWpj5NOR//iI6Dr/QtiI6rcuA9JWDtrpRaDxiqHnZRck7HgUstOkLWEOl5jJ
- febFoDXyQazsrv1BeTtEEhzMjsIzDHrH7oLpvvJYnDGQmUhUtr492Fey061BhLoHNH
- g6uEmiytriEWv3DaPR8ZW6QOvHRCxaX51UY9GKwWLHokAxY7uUOiHpNiZtZEQ5jCqq
- 7D/YkMR7JJtqxdOr5Wufzt5dEpcRW3rzYZd1TfugeFt+sy6ngrPBYuDhBCQnlgqP9N
- lZfj6Yy+hAdgA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=shvs4use
-Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: drop glibc Linaro
- toolchain version check
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEE9C4081E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEE9C4081E
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 20:45:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A92AF87A2E; Mon,  3 Jun 2024 20:45:07 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 3 Jun 2024 22:44:13 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 0deb8c4c5dcae01e1da772e2e1540aa989e8af8b
+X-Git-Newrev: 7c53563f9d0a2f7b90007da9a1e470d25ef75ef0
+X-Patchwork-Hint: ignore
+Message-Id: <20240603204507.A92AF87A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/vala: bump to version
+ 0.56.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,88 +59,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7c53563f9d0a2f7b90007da9a1e470d25ef75ef0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2024-05-31 19:17 -0600, James Hilliard spake thusly:
-> It has been well over 10 years since glibc 2.14 was released, I don't
-> think we need this check anymore.
+Set GI_GIRDIR env variable which is now required for configure
+to function.
 
-To support that claim, I've added references to Debian and Ubuntu, and
-when they stopped using glibc versions older than 2.14.
+Details:
+https://gitlab.gnome.org/GNOME/vala/-/commit/a9d38070ce86d7994b949f7cb426fbf670a953d8
 
-> The distutils module is no longer bundled with python 3.12 so this
-> eliminates the need to install additional python modules under python
-> 3.12.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998@free.fr: drop spurious reflow of _DEPENDENCIES]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 6 ++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  utils/genrandconfig | 19 -------------------
->  1 file changed, 19 deletions(-)
-> 
-> diff --git a/utils/genrandconfig b/utils/genrandconfig
-> index b838dda34d..0889be0d43 100755
-> --- a/utils/genrandconfig
-> +++ b/utils/genrandconfig
-> @@ -25,8 +25,6 @@ import os
->  from random import randint
->  import sys
->  import traceback
-> -from distutils.version import StrictVersion
-> -import platform
->  
->  
->  class SystemInfo:
-> @@ -166,23 +164,6 @@ async def is_toolchain_usable(configfile, config):
->              print("      Missing: %s" % toolchainline.strip(), file=sys.stderr)
->              return False
->  
-> -    # The latest Linaro toolchains on x86-64 hosts requires glibc
-> -    # 2.14+ on the host.
-> -    if platform.machine() == 'x86_64':
-> -        if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
-> -           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
-> -           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
-> -           'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
-> -            proc = await asyncio.create_subprocess_exec(
-> -                'ldd', '--version', stdout=asyncio.subprocess.PIPE)
-> -            ldd_version_output, _ = await proc.communicate()
-> -            if proc.returncode:
-> -                return False
-> -            glibc_version = ldd_version_output.decode().splitlines()[0].split()[-1]
-> -            if StrictVersion('2.14') > StrictVersion(glibc_version):
-> -                print("WARN: ignoring the Linaro ARM toolchains because too old host glibc", file=sys.stderr)
-> -                return False
-> -
->      return True
->  
->  
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index b3716f0854..a16875ac6a 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/vala/0.56/vala-0.56.14.sha256sum
+-sha256  9382c268ca9bdc02aaedc8152a9818bf3935273041f629c56de410e360a3f557  vala-0.56.14.tar.xz
++# From https://download.gnome.org/sources/vala/0.56/vala-0.56.17.sha256sum
++sha256  26100c4e4ef0049c619275f140d97cf565883d00c7543c82bcce5a426934ed6a  vala-0.56.17.tar.xz
+ # Locally computed
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 415d996faa..85f928202a 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ VALA_VERSION_MAJOR = 0.56
+-VALA_VERSION = $(VALA_VERSION_MAJOR).14
++VALA_VERSION = $(VALA_VERSION_MAJOR).17
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPL-2.1+
+@@ -15,7 +15,9 @@ VALA_CPE_ID_VENDOR = gnome
+ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
+ # Yes, the autoconf script understands ':' as "xsltproc is not
+ # available".
+-HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
++HOST_VALA_CONF_ENV = \
++	ac_cv_path_XSLTPROC=: \
++	GI_GIRDIR="$(STAGING_DIR)/usr/share/gir-1.0"
+ HOST_VALA_CONF_OPTS += --disable-valadoc
+ 
+ # We wrap vala, valac and vapigen to point to the proper gir and vapi data dirs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
