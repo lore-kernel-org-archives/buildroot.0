@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F882C25B76
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 16:25:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B28EDC25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 16:25:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33C00607FA;
-	Mon,  3 Jun 2024 16:25:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C811B608F6;
+	Mon,  3 Jun 2024 16:25:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HpQrt6wRsn5e; Mon,  3 Jun 2024 16:25:49 +0000 (UTC)
+ id nOuZo5nBar7s; Mon,  3 Jun 2024 16:25:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 381C760854
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FBCC60A5B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 381C760854;
-	Mon,  3 Jun 2024 16:25:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7D47A1BF397
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FBCC60A5B;
+	Mon,  3 Jun 2024 16:25:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E135E1BF397
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 16:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A28F40992
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB49D81452
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 16:25:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B6elQ0IxOhUO for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 16:25:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ckJXh1DrMLnR for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 16:25:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
  helo=mslow1.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6B22440930
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B22440930
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6AFFB81442
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AFFB81442
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6B22440930
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6AFFB81442
  for <buildroot@buildroot.org>; Mon,  3 Jun 2024 16:25:46 +0000 (UTC)
 Received: from relay8-d.mail.gandi.net (unknown [217.70.183.201])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id D998BC160D
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 16:19:23 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 399681BF20C;
- Mon,  3 Jun 2024 16:19:17 +0000 (UTC)
-Date: Mon, 3 Jun 2024 18:19:15 +0200
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 50464C2C91
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 16:19:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C44081BF209;
+ Mon,  3 Jun 2024 16:19:44 +0000 (UTC)
+Date: Mon, 3 Jun 2024 18:19:43 +0200
 To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20240603181915.4d09f3c5@booty>
-In-Reply-To: <20240603115212.184529-2-neal.frager@amd.com>
+Message-ID: <20240603181943.1fa205b2@booty>
+In-Reply-To: <20240603115212.184529-3-neal.frager@amd.com>
 References: <20240603115212.184529-1-neal.frager@amd.com>
- <20240603115212.184529-2-neal.frager@amd.com>
+ <20240603115212.184529-3-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1717431560;
+ d=bootlin.com; s=gm1; t=1717431585;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=6S4fN/+wWcvnNk86ZjEuEjGruV6H/waDNrNRElO307k=;
- b=FfNnZTU3SyqO5i2xTO43XmFWoX+L3yZyprUz/SoriKkcV/LtQYJxAI/Y3PISHK4Oldofhd
- wwDF+aj3V8AmLqJRIdSTA1Glz85zj2bR2PD8h3UH+rp4A+/isDDX3i3IC4+U20f2juuB7T
- TiIBq3BExANPtwUKkD2UvIfCtRp5qleAzY/3sEcPzKwTy0otljBa0MqXZIoFQJ6iAZzSG8
- bT2o6DizT/AZ8h26fOH4vS1JGhrZGY8c03DTDpvqBgQGVb/BbmjIVg2JQdlpOHOC1Xoo6z
- Ka6JoNRuZIOAKqUnz51+6svqC80mnHnvBvwUoTOuR+3rxDOb5D3pM696LQBUFQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=QtKRBxeIkdOmgbp2A361Z7VlaZMs1+sn606ND60vwK8=;
+ b=fnKRFydH8+OTogMgTMNSujQIuZcIjecimdBWOCW79w96Od9kq3Qjl5brqfGJXHSgroSKL/
+ Cj7ebPsT2j2fvHRy8eYaYKEEPEPO+ivBIyQvMAS4l+np2i7sA3645C7A0ncUKuOU94/E8k
+ nWGKA9EYiiLnqmPDdmSHC/8OzsfGWp/DXWLAwbHhHX8eCtXcH+8av4uMYhZ2ARlONezW64
+ 2gBqTHMfahSFBz5l6GPXu47rmI0DYN3IlMFKU8Mi7Cwzwhg42Ld2iYBgnTpTJu9aIZpJ57
+ b9Fdfox4Hc4kX5uFCIjD71zMLkfyi8UPpFiqNlsNRGEznbZoCVt5KoN+8NwVIA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FfNnZTU3
-Subject: Re: [Buildroot] [PATCH v1 2/3] configs/zynqmp_zcu104_defconfig:
+ header.s=gm1 header.b=fnKRFydH
+Subject: Re: [Buildroot] [PATCH v1 3/3] configs/zynqmp_zcu106_defconfig:
  bump to xilinx-v2024.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -93,10 +93,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 3 Jun 2024 12:52:11 +0100
+On Mon, 3 Jun 2024 12:52:12 +0100
 Neal Frager <neal.frager@amd.com> wrote:
 
-> This patch bumps the zynqmp_zcu104_defconfig to xilinx-v2024.1 which includes
+> This patch bumps the zynqmp_zcu106_defconfig to xilinx-v2024.1 which includes
 > the following updates:
 > 
 > - Linux v6.6.10
