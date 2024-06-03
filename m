@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2296FC25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 09:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80C42C25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 09:21:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE65A4149C;
-	Mon,  3 Jun 2024 09:21:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E93741494;
+	Mon,  3 Jun 2024 09:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rt5LE4Pd-N88; Mon,  3 Jun 2024 09:21:21 +0000 (UTC)
+ id yhivWgNDT54L; Mon,  3 Jun 2024 09:21:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F37774117D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 282FA414A3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F37774117D;
-	Mon,  3 Jun 2024 09:21:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 282FA414A3;
+	Mon,  3 Jun 2024 09:21:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 116D91BF3EB
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:20:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1529B1BF863
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:20:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6F94540685
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7007D4068F
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:19:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VJLg5ym0vVlD for <buildroot@lists.busybox.net>;
+ id unqXA2md2V6A for <buildroot@lists.busybox.net>;
  Mon,  3 Jun 2024 09:19:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4F1E40684
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAFB84068B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C4F1E40684
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAFB84068B
  for <buildroot@buildroot.org>; Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C11DA87989; Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
+ id E708587989; Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 3 Jun 2024 11:11:31 +0200
+Date: Mon, 3 Jun 2024 11:18:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e5993e6cd493dd6329bbf54cd7c19c5862a8a1e6
-X-Git-Newrev: eca3ea8d3f83a19a1ce9823306e689d2b0b92c5d
+X-Git-Oldrev: 083a66e1f8b46c5a79082717e59740a4dbd7cfeb
+X-Git-Newrev: 1a61c1d9b1919120883b689c3767925bd91d3028
 X-Patchwork-Hint: ignore
-Message-Id: <20240603091957.C11DA87989@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/proftpd: download from github
+Message-Id: <20240603091957.E708587989@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Config.in: drop --passive-ftp from default
+ wget options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,30 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eca3ea8d3f83a19a1ce9823306e689d2b0b92c5d
+commit: https://git.buildroot.net/buildroot/commit/?id=1a61c1d9b1919120883b689c3767925bd91d3028
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The tarball is also available over https from github, so use that instead.
+Fedora has recently migrated to wget2, which has dropped ftp support and the
+--passive-ftp command line option:
+
+https://fedoraproject.org/wiki/Changes/Wget2asWget
+
+It turns out that the command line option also doesn't do anything for wget1
+as it was made the default in wget 1.10:
+
+https://git.savannah.gnu.org/cgit/wget.git/tree/NEWS?h=v1.13#n292
+
+wget 1.10 is from 2005, so it is safe to assume that all supported
+distributions use >= 1.10.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/proftpd/proftpd.mk | 2 +-
+ Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 242de38b0d..cd7d232672 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/Config.in b/Config.in
+index b5a94325c4..bdf5fa8647 100644
+--- a/Config.in
++++ b/Config.in
+@@ -105,7 +105,7 @@ menu "Commands"
  
- PROFTPD_VERSION = 1.3.8b
--PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source
-+PROFTPD_SITE = https://github.com/proftpd/proftpd/archive/v$(PROFTPD_VERSION)
- PROFTPD_LICENSE = GPL-2.0+
- PROFTPD_LICENSE_FILES = COPYING
- PROFTPD_CPE_ID_VENDOR = proftpd
+ config BR2_WGET
+ 	string "Wget command"
+-	default "wget --passive-ftp -nd -t 3"
++	default "wget -nd -t 3"
+ 
+ config BR2_SVN
+ 	string "Subversion (svn) command"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
