@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAFBAC25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 15:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FF3CC25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 15:57:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD5FA408BD;
-	Mon,  3 Jun 2024 15:57:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A8FB408E6;
+	Mon,  3 Jun 2024 15:57:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mkwXamGPNgTD; Mon,  3 Jun 2024 15:57:32 +0000 (UTC)
+ id 1t-yct3XHGv8; Mon,  3 Jun 2024 15:57:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8064B408D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A25CA408EC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8064B408D5;
-	Mon,  3 Jun 2024 15:57:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4A4A11BF228
+	by smtp4.osuosl.org (Postfix) with ESMTP id A25CA408EC;
+	Mon,  3 Jun 2024 15:57:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C6FC1BF865
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:57:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C62AD400EA
+ by smtp3.osuosl.org (Postfix) with ESMTP id AEB9D607CC
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:57:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XodrNrOTmQoT for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8YiYC1BqVeqd for <buildroot@lists.busybox.net>;
  Mon,  3 Jun 2024 15:57:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0687340118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E895660A44
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0687340118
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 15:57:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E895660A44
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 15:57:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E82A485E50; Mon,  3 Jun 2024 15:57:19 +0000 (UTC)
+ id C239087A02; Mon,  3 Jun 2024 15:57:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 3 Jun 2024 17:47:24 +0200
+Date: Mon, 3 Jun 2024 17:26:20 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 079b471563e92be1ba15dd044b4387db3a0e52f6
-X-Git-Newrev: c796ab743a7d1e34f4e49e408fe30ceeb82126f2
+X-Git-Oldrev: 72ca72c4b9d7eeb5046d2ebb8783ce7ddcc53c77
+X-Git-Newrev: 59a0b5c9fd736cf133b26956e5a93f7f9f2b294e
 X-Patchwork-Hint: ignore
-Message-Id: <20240603155719.E82A485E50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/imagemagick: bump
- to version 7.1.1-31
+Message-Id: <20240603155719.C239087A02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add
+ lrzsz runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,57 +65,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c796ab743a7d1e34f4e49e408fe30ceeb82126f2
+commit: https://git.buildroot.net/buildroot/commit/?id=59a0b5c9fd736cf133b26956e5a93f7f9f2b294e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-For change log, see [1].
-
-License hash file changed, due to the addition of an URL. See [2].
-
-Fixes: [3]
-
-Some 32 bit architectures were failing at runtime with the message:
-
-    FATAL: time limit exceeded 'file.png' @ fatal/cache.c/GetImagePixelCache/1702
-
-The fix is included in 7.1.1-23.
-
-[1] https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
-[2] https://github.com/ImageMagick/ImageMagick/commit/2c87d7da1b1db4573a37bd7933dfbf772ac3eecf
-[3] https://github.com/ImageMagick/ImageMagick/issues/6891
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0c9ea82ea805fe00ca69836b0ca785af2728ec08)
+(cherry picked from commit dd45ac10d96b9a93be22a13dd3a4ac7973025008)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 4 ++--
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                  |  1 +
+ support/testing/tests/package/test_lrzsz.py | 42 +++++++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index fd80316ec5..30a12220dd 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  09402e5f17c6575ef9f010bb2e21ae1710f1f3426f115ad4317ee9129c32608e  imagemagick-7.1.1-21.tar.gz
--sha256  8cceeb67d4e783cb63075c7311fdb990fa0369ee80fbd0f481064cd02386ca2d  LICENSE
-+sha256  c82210ea3fdbd044b656ba3d5b42df1da9a18e78fc0e500169bad70d3b0d9ba3  imagemagick-7.1.1-31.tar.gz
-+sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 53cf02abf4..b2d3e755a6 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.1.1-21
-+IMAGEMAGICK_VERSION = 7.1.1-31
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 853d8d6c90..bba212def5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1810,6 +1810,7 @@ F:	support/testing/tests/package/test_libjxl.py
+ F:	support/testing/tests/package/test_links.py
+ F:	support/testing/tests/package/test_links/
+ F:	support/testing/tests/package/test_lrzip.py
++F:	support/testing/tests/package/test_lrzsz.py
+ F:	support/testing/tests/package/test_ltrace.py
+ F:	support/testing/tests/package/test_lvm2.py
+ F:	support/testing/tests/package/test_lzip.py
+diff --git a/support/testing/tests/package/test_lrzsz.py b/support/testing/tests/package/test_lrzsz.py
+new file mode 100644
+index 0000000000..23b4cdc531
+--- /dev/null
++++ b/support/testing/tests/package/test_lrzsz.py
+@@ -0,0 +1,42 @@
++import os
++
++import infra.basetest
++
++
++class TestLrzsz(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_LRZSZ=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        fifo = "/tmp/return-fifo"
++        data_fname = "data"
++        data_path = f"/tmp/{data_fname}"
++
++        # We check a program can execute.
++        self.assertRunOk("sz --version")
++
++        # We create a data file, to be transferred.
++        cmd = f"dd if=/dev/urandom of={data_path} bs=1M count=1"
++        self.assertRunOk(cmd)
++
++        # We create a fifo, used as a return fifo.
++        self.assertRunOk(f"mkfifo {fifo}")
++
++        # We transfer the test data using ZMODEM over the pipe and our
++        # return fifo.
++        self.assertRunOk(f"sz {data_path} < {fifo} | rz > {fifo}")
++
++        # The rz command is supposed to have created the received file
++        # in the current directory. We expect the received data to be
++        # the same as the original input file.
++        self.assertRunOk(f"cmp {data_path} {data_fname}")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
