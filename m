@@ -4,57 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64053C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 07:17:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65104C25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 07:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0ECA56071F;
-	Mon,  3 Jun 2024 07:17:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0021E60724;
+	Mon,  3 Jun 2024 07:17:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 01T9FJsus16M; Mon,  3 Jun 2024 07:17:54 +0000 (UTC)
+ id 41EFlrY5s0R6; Mon,  3 Jun 2024 07:17:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4063C60724
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF1936081F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4063C60724;
-	Mon,  3 Jun 2024 07:17:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1E4961BF2EF
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF1936081F;
+	Mon,  3 Jun 2024 07:17:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BFE2B1BF2EF
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 07:17:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C97B284240
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 07:17:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC81940448
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 07:17:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id okgtwO5_V_hD for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 07:17:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BBwFsMRBbqn8 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 07:17:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
  helo=relay8-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E24D584247
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E24D584247
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4BA484043A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BA484043A
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E24D584247
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 07:17:33 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BB9671BF20A;
- Mon,  3 Jun 2024 07:17:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4BA484043A
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 07:17:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4ECDD1BF206;
+ Mon,  3 Jun 2024 07:17:33 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1sE1wh-002Eag-0n;
- Mon, 03 Jun 2024 09:17:31 +0200
+ (envelope-from <peko@dell.be.48ers.dk>) id 1sE1wi-002EbQ-2n;
+ Mon, 03 Jun 2024 09:17:32 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon,  3 Jun 2024 09:17:10 +0200
-Message-Id: <20240603071726.532652-7-peter@korsgaard.com>
+Date: Mon,  3 Jun 2024 09:17:13 +0200
+Message-Id: <20240603071726.532652-10-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240603071726.532652-1-peter@korsgaard.com>
 References: <20240603071726.532652-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: [Buildroot] [PATCH 07/23] package/libmnl: use upstream sha256sum
+Subject: [Buildroot] [PATCH 10/23] package/libnetfilter_log: use https for
+ _SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,37 +67,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dariobin@libero.it>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ftp.netfilter.org no longer provides ftp, so use the https:// url from
-_SITE.
-
-This provides a .sha256sum but NOT md5/sha1, so update the .hash file to
-match.
+http redirects to https, so use that instead.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmnl/libmnl.hash | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/libnetfilter_log/Config.in           | 2 +-
+ package/libnetfilter_log/libnetfilter_log.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmnl/libmnl.hash b/package/libmnl/libmnl.hash
-index 4b592333cb..e2db46f03b 100644
---- a/package/libmnl/libmnl.hash
-+++ b/package/libmnl/libmnl.hash
-@@ -1,7 +1,5 @@
--# From ftp://ftp.netfilter.org/pub/libmnl/libmnl-1.0.5.tar.bz2.{md5sum,sha1sum}
--md5  0bbb70573119ec5d49435114583e7a49  libmnl-1.0.5.tar.bz2
--sha1  63c6456b77f7978a7b37e62c1b38346b2ef2d91c  libmnl-1.0.5.tar.bz2
-+# From https://netfilter.org/projects/libmnl/files/libmnl-1.0.5.tar.bz2.sha256sum
-+sha256  274b9b919ef3152bfb3da3a13c950dd60d6e2bcd54230ffeca298d03b40d0525  libmnl-1.0.5.tar.bz2
+diff --git a/package/libnetfilter_log/Config.in b/package/libnetfilter_log/Config.in
+index b244e8a8e9..66e1b170bc 100644
+--- a/package/libnetfilter_log/Config.in
++++ b/package/libnetfilter_log/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_LIBNETFILTER_LOG
+ 	  libnetfilter_log is a userspace library providing interface
+ 	  to packets that have been logged by the kernel packet filter.
  
- # Locally calculated
--sha256  274b9b919ef3152bfb3da3a13c950dd60d6e2bcd54230ffeca298d03b40d0525  libmnl-1.0.5.tar.bz2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+-	  http://www.netfilter.org/projects/libnetfilter_log/
++	  https://www.netfilter.org/projects/libnetfilter_log/
+diff --git a/package/libnetfilter_log/libnetfilter_log.mk b/package/libnetfilter_log/libnetfilter_log.mk
+index 01f94aac41..9b01f819bb 100644
+--- a/package/libnetfilter_log/libnetfilter_log.mk
++++ b/package/libnetfilter_log/libnetfilter_log.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBNETFILTER_LOG_VERSION = 1.0.2
+ LIBNETFILTER_LOG_SOURCE = libnetfilter_log-$(LIBNETFILTER_LOG_VERSION).tar.bz2
+-LIBNETFILTER_LOG_SITE = http://www.netfilter.org/projects/libnetfilter_log/files
++LIBNETFILTER_LOG_SITE = https://www.netfilter.org/projects/libnetfilter_log/files
+ LIBNETFILTER_LOG_INSTALL_STAGING = YES
+ LIBNETFILTER_LOG_DEPENDENCIES = host-pkgconf libmnl libnfnetlink
+ LIBNETFILTER_LOG_LICENSE = GPL-2.0+
 -- 
 2.39.2
 
