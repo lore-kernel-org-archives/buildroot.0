@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ED08C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 23:10:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2699C25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 23:10:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A4FC404DB;
-	Mon,  3 Jun 2024 23:10:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BF154065D;
+	Mon,  3 Jun 2024 23:10:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x0NAYysnlu5R; Mon,  3 Jun 2024 23:10:31 +0000 (UTC)
+ id GFM5PZvoaSGR; Mon,  3 Jun 2024 23:10:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 332DD4065D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C05C5413B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 332DD4065D;
-	Mon,  3 Jun 2024 23:10:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 443581BF352
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 23:10:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C05C5413B1;
+	Mon,  3 Jun 2024 23:10:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5904B1BF352
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 23:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E6FC60B9C
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 23:10:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5392E403C4
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 23:10:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fjtLhI_J5XiZ for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 23:10:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vTNH2jMDS_g8 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 23:10:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.53.144.211;
  helo=mail.athaariq.my.id; envelope-from=foss@athaariq.my.id;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3254C6063C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3254C6063C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 18FD540010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18FD540010
 Received: from mail.athaariq.my.id (unknown [117.53.144.211])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3254C6063C
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 23:10:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18FD540010
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 23:10:28 +0000 (UTC)
 Received: from localhost.localdomain (unknown [192.168.100.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
  (No client certificate requested)
- by mail.athaariq.my.id (Postfix) with ESMTPSA id 59C79344EB;
- Mon, 03 Jun 2024 23:10:23 +0000 (UTC)
+ by mail.athaariq.my.id (Postfix) with ESMTPSA id CBBEB344E4;
+ Mon, 03 Jun 2024 23:10:25 +0000 (UTC)
 From: Athaariq Ardhiansyah <foss@athaariq.my.id>
 To: buildroot@buildroot.org
-Date: Tue,  4 Jun 2024 06:09:35 +0700
-Message-ID: <20240603230940.51746-2-foss@athaariq.my.id>
+Date: Tue,  4 Jun 2024 06:09:36 +0700
+Message-ID: <20240603230940.51746-3-foss@athaariq.my.id>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240603230940.51746-1-foss@athaariq.my.id>
 References: <ec99ecde-ff6e-40c6-9622-f4440462a026@gmx.de>
  <20240603230940.51746-1-foss@athaariq.my.id>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=athaariq.my.id
-Subject: [Buildroot] [PATCH v3 2/3] package/raspberrypi-usbboot: bump
- version to master (commit 4a3d311)
+Subject: [Buildroot] [PATCH v3 3/3] board/raspberrypi: add support for
+ Raspberry Pi 5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,107 +68,212 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Athaariq Ardhiansyah <foss@athaariq.my.id>,
- Fiona Klute <fiona.klute@gmx.de>
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>,
+ Martin Bark <martin@barkynet.com>, Athaariq Ardhiansyah <foss@athaariq.my.id>,
+ Pierre-Jean Texier <texier.pj2@gmail.com>, Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Latest raspberrypi-usbboot package has Raspberry Pi 5 support. It is
-considerably matured at commit 4a3d31171769f87d919340778e5aaeaba01e10b5.
+Since the last Raspberry Pi 5 submission has no progress, I'm submitting
+these patches anyway. The newly released Raspberry Pi 5 board shares
+similar software structure except it has less proprietary API.
+Therefore, rpi-userland and all of raspberry-centric GPIO utilities are
+no longer supported.
+
+Keep in mind that RPi 5 has no native 32-bit support for both kernel and
+userspace binary due to Cortex-A76 processor specification. That is the
+reason why I did not add _64.
 
 Signed-off-by: Athaariq Ardhiansyah <foss@athaariq.my.id>
 
 ---
 Changes v1 -> v2:
-  - Fix missing description due to terminal issue
-  - Use the latest commit instead of the latest tag
-
-Changes v2 -> v3:
-  - Update the commit title
-  - Add more explanation on commit description
+  - Fix missing newlines due to terminal issue
 ---
- ...akefile-allow-passing-CFLAGS-LDFLAGS.patch | 25 ++++++++++---------
- .../raspberrypi-usbboot.hash                  |  2 +-
- .../raspberrypi-usbboot.mk                    |  4 +--
- 3 files changed, 16 insertions(+), 15 deletions(-)
+ board/raspberrypi/config_5.txt | 65 ++++++++++++++++++++++++++++++++++
+ board/raspberrypi5             |  1 +
+ configs/raspberrypi5_defconfig | 46 ++++++++++++++++++++++++
+ package/raspi-gpio/Config.in   |  4 +++
+ package/rpi-userland/Config.in |  3 ++
+ 5 files changed, 119 insertions(+)
+ create mode 100644 board/raspberrypi/config_5.txt
+ create mode 120000 board/raspberrypi5
+ create mode 100644 configs/raspberrypi5_defconfig
 
-diff --git a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-index d482b0b9d4..ea53f8360a 100644
---- a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-+++ b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-@@ -1,30 +1,31 @@
--From 38b730c00f45abf324caf687b5b00662ff4252c2 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 2 Dec 2016 23:09:44 +0100
-+From e09c92d68efa4efbd48a3366f9053a4f8c275091 Mon Sep 17 00:00:00 2001
-+From: Athaariq Ardhiansyah <foss@athaariq.my.id>
-+Date: Mon, 3 Jun 2024 15:35:49 +0700
- Subject: [PATCH] Makefile: allow passing CFLAGS/LDFLAGS
+diff --git a/board/raspberrypi/config_5.txt b/board/raspberrypi/config_5.txt
+new file mode 100644
+index 0000000000..2e470fff99
+--- /dev/null
++++ b/board/raspberrypi/config_5.txt
+@@ -0,0 +1,65 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++# Raspberry Pi 5 has no start.elf and fixup.dat files due to the existence of
++# Bootloader EEPROM
++
++kernel=Image
++
++# To use an external initramfs file
++#initramfs rootfs.cpio.gz
++
++# Automatically load initramfs files, if found
++auto_initramfs=1
++
++# Uncomment some or all of these to enable the optional hardware interfaces
++#dtparam=i2c_arm=on
++#dtparam=i2s=on
++#dtparam=spi=on
++
++# Enable audio (loads snd_bcm2835)
++dtparam=audio=on
++
++# Automatically load overlays for detected cameras
++camera_auto_detect=1
++
++# Automatically load overlays for detected DSI displays
++display_auto_detect=1
++
++# Enable DRM VC4 V3D driver
++dtoverlay=vc4-kms-v3d-pi5
++max_framebuffers=2
++
++# Don't have the firmware create an initial video= setting in cmdline.txt.
++# Use the kernel's default instead.
++disable_fw_kms_setup=1
++
++# Disable overscan assuming the display supports displaying the full resolution
++# If the text shown on the screen disappears off the edge, comment this out
++disable_overscan=1
++
++# How much memory in MB to assign to the GPU on Pi models having
++# 256, 512 or 1024 MB total memory
++gpu_mem_256=100
++gpu_mem_512=100
++gpu_mem_1024=100
++
++# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
++dtoverlay=miniuart-bt
++
++# enable autoprobing of Bluetooth driver without need of hciattach/btattach
++dtparam=krnbt=on
++
++# enable 64bits support
++arm_64bit=1
++
++# Run as fast as firmware / board allows
++arm_boost=1
++
++# Raspberry PI 5 won't use UART0 as terminal out of the box. We need to enable
++# this through config.txt
++enable_uart=1
++dtoverlay=uart0-pi5
+diff --git a/board/raspberrypi5 b/board/raspberrypi5
+new file mode 120000
+index 0000000000..fcdafc81ed
+--- /dev/null
++++ b/board/raspberrypi5
+@@ -0,0 +1 @@
++raspberrypi
+\ No newline at end of file
+diff --git a/configs/raspberrypi5_defconfig b/configs/raspberrypi5_defconfig
+new file mode 100644
+index 0000000000..733838ab2e
+--- /dev/null
++++ b/configs/raspberrypi5_defconfig
+@@ -0,0 +1,46 @@
++BR2_aarch64=y
++BR2_cortex_a76=y
++
++# patches
++BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++
++BR2_SYSTEM_DHCP="eth0"
++
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c1432b4bae5b6582f4d32ba381459f33c34d1424)/linux-c1432b4bae5b6582f4d32ba381459f33c34d1424.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="bcm2712"
++
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2712-rpi-5-b"
++
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI5=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi5/config_5.txt"
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
++BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O 64bit"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi5/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi5/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
+diff --git a/package/raspi-gpio/Config.in b/package/raspi-gpio/Config.in
+index 32a9448335..19c796e4a7 100644
+--- a/package/raspi-gpio/Config.in
++++ b/package/raspi-gpio/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_RASPI_GPIO
+ 	bool "raspi-gpio"
++	depends on !BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI5
+ 	help
+ 	  Tool to help debug / hack at the BCM283x GPIO. You can dump
+ 	  the state of a GPIO or (all GPIOs). You can change a GPIO
+@@ -9,4 +10,7 @@ config BR2_PACKAGE_RASPI_GPIO
+ 	  registers, ignoring anything else that may be using them
+ 	  (like Linux drivers).
  
--This might be needed to pass some custom CFLAGS/LDFLAGS when building
--rpiboot.
-+This might be needed to pass some custom CFLAGS/LDFLAGS when building rpiboot.
++	  WARNING: Raspberry Pi 5 is NOT supported. Use libgpiod2
++	           instead.
++
+ 	  https://github.com/RPi-Distro/raspi-gpio
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 4219bdb9c4..a4fff821e1 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_RPI_USERLAND
+ 	depends on BR2_arm || BR2_aarch64
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI5
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_HAS_LIBEGL if BR2_arm
+ 	select BR2_PACKAGE_HAS_LIBGLES if BR2_arm
+@@ -16,6 +17,8 @@ config BR2_PACKAGE_RPI_USERLAND
+ 	  mmal, GLESv2, vcos, openmaxil, vchiq_arm, bcm_host, WFC,
+ 	  OpenVG.
  
- Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Rebased on 9324fd7]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+Signed-off-by: Athaariq Ardhiansyah <foss@athaariq.my.id>
- ---
-  Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
++	  WARNING: Raspberry Pi 5 is NOT supported. Use mesa3d instead.
++
+ 	  https://github.com/raspberrypi/userland/
  
- diff --git a/Makefile b/Makefile
--index 822e714..875e717 100755
-+index 4479b1b..076ae43 100755
- --- a/Makefile
- +++ b/Makefile
--@@ -1,5 +1,5 @@
-- rpiboot: main.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
---	$(CC) -Wall -Wextra -g -o $@ $< -lusb-1.0
--+	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ $< -lusb-1.0 $(LDFLAGS)
-+@@ -3,7 +3,7 @@ GIT_VER=$(shell git rev-parse HEAD 2>/dev/null | cut -c1-8 || echo "")
-+ INSTALL_PREFIX?=/usr
-+ 
-+ rpiboot: main.c bootfiles.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
-+-	$(CC) -Wall -Wextra -g -o $@ main.c bootfiles.c `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" -DINSTALL_PREFIX=\"$(INSTALL_PREFIX)\"
-++	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ main.c bootfiles.c `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" -DINSTALL_PREFIX=\"$(INSTALL_PREFIX)\" $(LDFLAGS)
-  
-  %.h: %.bin ./bin2c
-  	./bin2c $< $@
- -- 
--2.31.1
-+2.45.2
- 
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-index cedc5fb7e1..1a183bf47f 100644
---- a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  4565314b38e7c7505b7d32a3b51b49f79c7dd5767d45b86d38e5255ae7489a43  raspberrypi-usbboot-2021.07.01.tar.gz
-+sha256  2182a6bf5ca9cd54ee3bca2d7667758ceac685fa78a3a6ae663762bde03e781a  raspberrypi-usbboot-4a3d31171769f87d919340778e5aaeaba01e10b5.tar.gz
- 
- # License files
- sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-index 2e4194da0b..7eef7df600 100644
---- a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--RASPBERRYPI_USBBOOT_VERSION = 2021.07.01
-+RASPBERRYPI_USBBOOT_VERSION = 4a3d31171769f87d919340778e5aaeaba01e10b5
- RASPBERRYPI_USBBOOT_SITE = \
--	$(call github,raspberrypi,usbboot,v$(RASPBERRYPI_USBBOOT_VERSION))
-+	$(call github,raspberrypi,usbboot,$(RASPBERRYPI_USBBOOT_VERSION))
- RASPBERRYPI_USBBOOT_LICENSE = Apache-2.0
- RASPBERRYPI_USBBOOT_LICENSE_FILES = LICENSE
- 
+ if BR2_PACKAGE_RPI_USERLAND && BR2_arm
 -- 
 2.45.2
 
