@@ -4,80 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 963F4C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 19:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9CAAC25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 19:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F5D760B35;
-	Mon,  3 Jun 2024 19:46:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77DBF6072F;
+	Mon,  3 Jun 2024 19:59:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id smuUtrrFFS4v; Mon,  3 Jun 2024 19:45:59 +0000 (UTC)
+ id 9_3quCtHD80v; Mon,  3 Jun 2024 19:59:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B7A560B38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7467E6076B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B7A560B38;
-	Mon,  3 Jun 2024 19:45:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96C891BF275
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 19:45:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7467E6076B;
+	Mon,  3 Jun 2024 19:59:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E893A1BF228
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 19:59:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8276D40984
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 19:45:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0A2740CA5
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 19:59:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W1hqCCfa9JwM for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 19:45:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 56nmBGFC3XzK for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 19:59:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.41;
+ helo=smtpcmd0641.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C01C408C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C01C408C0
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0C01C408C0
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 19:45:55 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id BE11F13F861;
- Mon,  3 Jun 2024 21:45:50 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 03 Jun 2024 21:45:50 +0200
-Date: Mon, 3 Jun 2024 21:45:50 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <Zl4dbrMut2XTOzF2@landeda>
-References: <cover.1717360788.git.yann.morin.1998@free.fr>
- <1f9ee4bc875b559abde9a4746ab55fa4ca62dc85.1717360788.git.yann.morin.1998@free.fr>
- <CADvTj4qfHg9=mC_OweMCpfNNBDMweBreqDo_bT=t=m339oLBWQ@mail.gmail.com>
- <Zlzg8I5r7cd8yTz5@landeda>
- <CADvTj4rhK6KUZ-q-w65ZDGJZyh2fs2DnHXM-mxzMv3LS9GOQYA@mail.gmail.com>
- <Zl2uhKujEDzv2Gur@landeda>
- <CADvTj4qyfvGUCbfMj=uWSxcJkBH7LBs-hcdv4Z3_Ax6FtYTnNg@mail.gmail.com>
- <Zl4Ov3hQoTGFl6e8@landeda>
- <CADvTj4phNuDpoCNFju9PwcwGMYKaur9KanirPeYbwC-fLjx=6A@mail.gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 700E0404DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 700E0404DA
+Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 700E0404DA
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 19:59:10 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id EDpjsigmqmFXqEDpjspxnT; Mon, 03 Jun 2024 21:59:08 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Mon,  3 Jun 2024 21:59:07 +0200
+Message-Id: <20240603195907.1245756-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CADvTj4phNuDpoCNFju9PwcwGMYKaur9KanirPeYbwC-fLjx=6A@mail.gmail.com>
+X-CMAE-Envelope: MS4xfGH3d30ZMojkNBCuk1yUk1cJal0z0jkZJxdZX3a/czs409XDSC0DzQV2/FjkRNkQ51lH+8TbhijLzv2Od6AvN70evyXR2+G0zVN1vsw2PUwB+mlMExtn
+ L78+EsoQ1Gb9Ed88wHJG7+kYS+eJSfq3O3CG5TnesE/HwxuOQEpHCyFs4z98VSQGshUUUj61JBiSODZOqc3PA+tYeXoHyD7B54hqtM/A9CfCDBODbuUF9Jlf
+ aQrWM6GCM66y2Ha+2U6SnxZBAvIiYjqG+fknErerjY8=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1717443952;
- bh=yZknEIkSBTOEvaWv41gHXPuMzQRB0RXla9+SYvmqFcU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uDc8NqqBjKqZs9eRxIT8Peq1dAUSH3ZXNYGyyztSHgsxH8he9W8/ua8gw0EOzR//O
- FAypuMjJ6EHah4o/9v2e1oxKSFAYWoyCXDmIJrIgU5TSDpsftOUpOavlMGK4tdlE/T
- rtSUaKNCGl0fuh6cMTSUq+DNiwOiGH4SJdKU0WdeVmGjfzg3Ik/Hq+HfInkN1msExw
- RI+znDMmWpujeviephGI20xyDGJEXuy9TrFsuJ6ADrtXPNVvSsAFd8V+KIFTaugJnL
- y7MzBljT8r5vj6tRHGaB4qVlapjsjNeu/mqMRpwIAAuPhmSSN/dqfhziVNIYckvjH4
- 2STNIxVwAHe+A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=aruba.it; s=a1; 
+ t=1717444748; bh=5jx62HBcLJos1m1JZKQksAw55ejX4llUR+y3UOe61x0=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=kFci2/grzBEn3N4P7Pn835xOTbHDSWNcyUSFmT0D7HxlK/yxFUQamz6fqg9bEBcWd
+ nXsi3ZX59FjUxXSVlzfK35B4tlTDZA5H1tdqpcLFILSKePXQc/Ls/7H+QvZEBkmtt7
+ VCYE73zrfiIwNNmAHmzLfEzhzjeBxs9NnNBHPfEOSX1hc0mRnC4h+C2WRhZBKpd5gp
+ smApt5Re8+lWoxOZir4aqbKfUxVNzZjrI/VU4SDufMygw0f8gLXyRBrY2U52wfQi3D
+ ZS1xRRFYDiT6welYKxIEhCTUUyG30HjtpaS9POf0Sp0+uWHWXH/7Gn+74jjvKuXf3D
+ dVKzROgD3VkVw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uDc8NqqB
-Subject: Re: [Buildroot] [PATCH 14/16] package/pkg-cargo: add support for
- unlocked packages
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=kFci2/gr
+Subject: [Buildroot] [PATCH] package/esp-hosted: fix build failure on Linux
+ 6.8.12+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,52 +79,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SmFtZXMsIEFsbCwKCk9uIDIwMjQtMDYtMDMgMTI6NTUgLTA2MDAsIEphbWVzIEhpbGxpYXJkIHNw
-YWtlIHRodXNseToKPiBPbiBNb24sIEp1biAzLCAyMDI0IGF0IDEyOjQz4oCvUE0gWWFubiBFLiBN
-T1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IHdyb3RlOgpbLS1TTklQLS1dCj4gPiBUaGUg
-cHJvYmxlbSB3aXRoIHNob3J0IGhhc2hlcywgaXMgdGhhdCB0aGV5IGFyZSBtdWNoIGxlc3MgdW5p
-cXVlIHRoYW4KPiA+IGZ1bGwgaGFzaGVzLiBbLS1TTklQLS1dCj4gV2VsbCB0aGUgc2hvcnQgaGFz
-aCB3b3VsZCBvbmx5IG5lZWQgdG8gYmUgdW5pcXVlIHBlciBwYWNrYWdlIHZlcnNpb24gc28KPiBJ
-IHRoaW5rIGl0IHdvdWxkIHdvcmsgZmluZSBpbiB0aGlzIGNhc2UuCgoiQWxsIHdpbGwgYmUgZmlu
-ZSIgSSBzaG91dGVkIGF0IGhpbSBhcyBoZSB3YXMgZmFsbGluZyBkb3duIHRoZSBsYXZhCmxha2Uu
-Li4gOy0pCgpZZXMsIHlvdSBhcmUgcmlnaHQsIHRoYXQgaXQgc2hvdWxkIG5vdCBjYXVzZSBhbnkg
-aXNzdWUgaW4gcHJhY3RpY2UuCkhvd2V2ZXIsIGdldHRpbmcgdGhlIGhhc2ggKHNob3J0IG9yIGZ1
-bGwpIG1lYW5zIHNwYXduaW5nIGEgc3ViLXNoZWxsOwppdCBpcyBub3QgdmVyeSBncmVhdC4uLiBF
-c3BlY2lhbGx5IGNvbXBhcmVkIHRvIHRoZSBzaW1wbGVyIHNvbHV0aW9uLApiZWxvdy4uLgoKPiA+
-IFRoZXJlIGlzIGEgc2ltcGxlciBzb2x1dGlvbiwgdGhvdWdoLCB3aGljaCBpcyB0byByZWx5IG9u
-IHRoZSAubWsgdG8gc2V0Cj4gPiB0aGUgdmVyc2lvbiBhbmQgYmUgZG9uZSB3aXRoIGl0Ogo+ID4K
-PiA+ICAxLiBpdCBpcyB2ZXJ5IHNlbGRvbSB0aGF0IGEgY2FyZ28gcGFja2FnZSBpcyBub3QgbG9j
-a2VkLCBzbyB3ZSBkb24ndAo+ID4gICAgIG5lZWQgYW55dGhpbmcgdG9vIGNvbXBsZXg7Cj4gPiAg
-Mi4gZm9yIHVubG9ja2VkIHBhY2thZ2VzLCB3ZSdsbCB2ZXJ5IHNlbGRvbSB1cGRhdGUgb3VyIENh
-cmdvLmxvY2ssIHNvCj4gPiAgICAgd2UgZG9uJ3QgbmVlZCBhbnl0aGluZyB0b28gZmFuY3k7Cj4g
-PiAgMy4gaWYgb25lIGZvcmdldHMgdG8gdXBkYXRlIHRoZSB2ZXJzaW9uIHdoZW4gdXBkYXRpbmcg
-Q2FyZ28ubG9jaywKPiA+ICAgICB0aGVyZSB3aWxsIGJlIGEgaGFzaCBtaXNtYXRjaCBvbiBkb3du
-bG9hZCBhbnl3YXksIHNvIHdlJ2xsIG5vdGljZS4KPiAKPiBPaywgYnV0IGhvdyB3b3VsZCB3ZSBo
-YW5kbGUgYSBjYXNlIHdoZXJlIHdlIG5lZWQgdG8gdXBkYXRlIHRoZQo+IENhcmdvLmxvY2sgYnV0
-IGFyZSB1bmFibGUgdG8gdXBkYXRlIHRoZSB2ZXJzaW9uKGkuZS4gaWYgdGhlIHBhY2thZ2UgZG9l
-cwo+IG5vdCBoYXZlIGEgbmV3ZXIgdmVyc2lvbikuCgpJIHdhcyBub3Qgc3BlYWtpbmcgYWJvdXQg
-dGhlIHZlcnNpb24gb2YgdGhlIHBhY2thZ2UsIGJ1dCB0aGF0IG9mIHRoZQphcmNoaXZlLCBsaWtl
-IHdlIGhhdmUgLWdpdDQsIC1jYXJnbzIsIGV0Yy4uLgoKPiBBcmUgeW91IHRoaW5raW5nIG9mIHNv
-bWV0aGluZyBsaWtlIHNldHRpbmcgdGhlIENhcmdvLmxvY2sgdmVyc2lvbiBpbiB0aGUgLm1rCj4g
-YW5kIGluY29ycG9yYXRpbmcgdGhhdCBpbiB0aGUgYXJjaGl2ZSBzb21laG93PwoKWWVzLCBleGFj
-dGx5IHRoYXQ6IEZPT19DQVJHT19MT0NLX1ZFUlNJT04gPSBOCgpBbmQgdGhlbiB0aGUgaW5mcmEg
-Y2FuIGFwcGVuZCBhIC1sb2NrTiBzdWZmaXggd2hlbiBpdCBjb25zdHJ1Y3RzIHRoZQphcmNoaXZl
-IGZpbGVuYW1lLgoKRGFtbiwgeW91IGdvdCBtZSB0byByZXZlYWwgbXkgY3VubmluZyBwbGFuIGlu
-IGFkdmFuY2UhIDstKQoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCi0tIAouLS0tLS0tLS0tLS0t
-LS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0t
-LS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBB
-U0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNv
-ZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAg
-fAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAg
-ICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8g
-fCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0t
-LS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Add local patch pending upstream to fix build failure due to old Linux
+Bluetooth API.
+
+Fixes:
+http://autobuild.buildroot.net/results/d64fa083ec27c3684d4186d2b1b05e041ad330f5/
+http://autobuild.buildroot.net/results/5c4fac191970444e63109a762023c0e60f9693e2/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ ...x-Bluetooth-build-failure-on-Linux-6.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch
+
+diff --git a/package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch b/package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch
+new file mode 100644
+index 0000000000..7020b3a947
+--- /dev/null
++++ b/package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch
+@@ -0,0 +1,35 @@
++From f8903bc2be7ae5ac9fb9bbeed8512e974c6e60ec Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 3 Jun 2024 21:53:38 +0200
++Subject: [PATCH] esp_hosted_ng: Fix Bluetooth build failure on Linux 6.8.11+
++
++After Linux commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=84a4bb6548a29326564f0e659fb8064503ecc1c7
++BT_HS has been removed and consequently AMP controllers can't be created,
++so at this point only HCI_PRIMARY has been left as unique controller type
++to be created and this became implicit with no need to define if the
++controller if HCI_PRIMARY or HCI_AMP. So let's assign HCI_PRIMARY up to
++Linux 6.8.11 only preventing build failure.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ esp_hosted_ng/host/esp_bt.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/esp_hosted_ng/host/esp_bt.c b/esp_hosted_ng/host/esp_bt.c
++index 3b78c11698..4598ac0e0a 100644
++--- a/esp_hosted_ng/host/esp_bt.c
+++++ b/esp_hosted_ng/host/esp_bt.c
++@@ -240,7 +240,9 @@ int esp_init_bt(struct esp_adapter *adapter)
++ 	hdev->set_bdaddr = esp_bt_set_bdaddr;
++ #endif
++ 
+++#if (LINUX_VERSION_CODE <= KERNEL_VERSION(6, 8, 11))
++ 	hdev->dev_type = HCI_PRIMARY;
+++#endif
++ 
++ 	SET_HCIDEV_DEV(hdev, adapter->dev);
++ 
++-- 
++2.34.1
++
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
