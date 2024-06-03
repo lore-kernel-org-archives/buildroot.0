@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A0E4C27C4F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AE5DC27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B02160F03;
-	Thu, 13 Jun 2024 10:08:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44DD36112B;
+	Thu, 13 Jun 2024 10:08:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FOjwRRtDDfod; Thu, 13 Jun 2024 10:08:34 +0000 (UTC)
+ id 5bixEtkPczbK; Thu, 13 Jun 2024 10:08:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9143B61115
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56E016111E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9143B61115;
-	Thu, 13 Jun 2024 10:08:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56E016111E;
+	Thu, 13 Jun 2024 10:08:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9F18A1BF354
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C89F61BF354
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 24F8D413EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E8AB413EF
  for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ShHRxiWriPkk for <buildroot@lists.busybox.net>;
+ id 0tm9Y8mEoaoJ for <buildroot@lists.busybox.net>;
  Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F929413F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B7FE413F7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F929413F6
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B7FE413F7
+ for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0819F87F30; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ id 8E93787F56; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 11:06:04 +0200
+Date: Mon, 3 Jun 2024 22:44:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 49fa6ebb71f89e3c9e13d12070bea41ccf6ed700
-X-Git-Newrev: 1608313efff353b65d8f7b4606aa86a178938acc
+X-Git-Oldrev: 0deb8c4c5dcae01e1da772e2e1540aa989e8af8b
+X-Git-Newrev: 7c53563f9d0a2f7b90007da9a1e470d25ef75ef0
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100500.0819F87F30@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/json-glib: add host build
+Message-Id: <20240613100459.8E93787F56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vala: bump to version 0.56.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +64,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1608313efff353b65d8f7b4606aa86a178938acc
+commit: https://git.buildroot.net/buildroot/commit/?id=7c53563f9d0a2f7b90007da9a1e470d25ef75ef0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-[yann.morin.1998@free.fr: also disable doc and tests]
+Set GI_GIRDIR env variable which is now required for configure
+to function.
+
+Details:
+https://gitlab.gnome.org/GNOME/vala/-/commit/a9d38070ce86d7994b949f7cb426fbf670a953d8
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998@free.fr: drop spurious reflow of _DEPENDENCIES]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/json-glib/json-glib.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 6 ++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index cd53f24cee..e216af20b1 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -18,6 +18,15 @@ JSON_GLIB_DEPENDENCIES = \
- 	host-pkgconf \
- 	libglib2
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index b3716f0854..a16875ac6a 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/vala/0.56/vala-0.56.14.sha256sum
+-sha256  9382c268ca9bdc02aaedc8152a9818bf3935273041f629c56de410e360a3f557  vala-0.56.14.tar.xz
++# From https://download.gnome.org/sources/vala/0.56/vala-0.56.17.sha256sum
++sha256  26100c4e4ef0049c619275f140d97cf565883d00c7543c82bcce5a426934ed6a  vala-0.56.17.tar.xz
+ # Locally computed
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 415d996faa..85f928202a 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+HOST_JSON_GLIB_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-libglib2
-+
-+HOST_JSON_GLIB_CONF_OPTS = \
-+	-Dgtk_doc=disabled \
-+	-Dtests=false \
-+	-Dintrospection=disabled
-+
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- JSON_GLIB_CONF_OPTS += -Dintrospection=enabled
- JSON_GLIB_DEPENDENCIES += gobject-introspection
-@@ -34,3 +43,4 @@ endif
- JSON_GLIB_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ VALA_VERSION_MAJOR = 0.56
+-VALA_VERSION = $(VALA_VERSION_MAJOR).14
++VALA_VERSION = $(VALA_VERSION_MAJOR).17
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPL-2.1+
+@@ -15,7 +15,9 @@ VALA_CPE_ID_VENDOR = gnome
+ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
+ # Yes, the autoconf script understands ':' as "xsltproc is not
+ # available".
+-HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
++HOST_VALA_CONF_ENV = \
++	ac_cv_path_XSLTPROC=: \
++	GI_GIRDIR="$(STAGING_DIR)/usr/share/gir-1.0"
+ HOST_VALA_CONF_OPTS += --disable-valadoc
  
- $(eval $(meson-package))
-+$(eval $(host-meson-package))
+ # We wrap vala, valac and vapigen to point to the proper gir and vapi data dirs
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
