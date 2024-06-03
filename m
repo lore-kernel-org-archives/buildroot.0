@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2A0AC25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 15:53:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1610C25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 15:54:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 838884025E;
-	Mon,  3 Jun 2024 15:53:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7DF24025F;
+	Mon,  3 Jun 2024 15:54:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NQLc7nMshSbO; Mon,  3 Jun 2024 15:53:53 +0000 (UTC)
+ id pueKuPm6LyQp; Mon,  3 Jun 2024 15:54:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 432CE40302
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A2A94086C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 432CE40302;
-	Mon,  3 Jun 2024 15:53:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A2A94086C;
+	Mon,  3 Jun 2024 15:54:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16DCD1BF228
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:53:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B511F1BF228
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:54:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0FDDB4025E
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:53:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A11944086C
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:54:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rmEb02DIf3tl for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 15:53:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id eLK1jnouCKCO for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 15:54:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F155840302
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F155840302
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F155840302
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 15:53:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BD235FF804;
- Mon,  3 Jun 2024 15:53:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B652F4025F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B652F4025F
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B652F4025F
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 15:54:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 50F0A240005;
+ Mon,  3 Jun 2024 15:54:38 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sEA0K-003mIE-0Z;
- Mon, 03 Jun 2024 17:53:48 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sEA17-003mQO-2D;
+ Mon, 03 Jun 2024 17:54:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240409111635.5181-1-cp0613@linux.alibaba.com>
- <20240509184233.25d27458@windsurf>
-Date: Mon, 03 Jun 2024 17:53:48 +0200
-In-Reply-To: <20240509184233.25d27458@windsurf> (Thomas Petazzoni via
- buildroot's message of "Thu, 9 May 2024 18:42:33 +0200")
-Message-ID: <87zfs2ggz7.fsf@dell.be.48ers.dk>
+To: Ludovic Desroches via buildroot <buildroot@buildroot.org>
+References: <20240409122233.2529454-1-ludovic.desroches@microchip.com>
+Date: Mon, 03 Jun 2024 17:54:37 +0200
+In-Reply-To: <20240409122233.2529454-1-ludovic.desroches@microchip.com>
+ (Ludovic Desroches via buildroot's message of "Tue, 9 Apr 2024
+ 14:22:33 +0200")
+Message-ID: <87v82qggxu.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/bpftool: fix riscv support
+Subject: Re: [Buildroot] [PATCH] package/evemu: add staging installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,32 +69,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: cp0613@linux.alibaba.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Naumann Andreas <ANaumann@ultratronik.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Ludovic" == Ludovic Desroches via buildroot <buildroot@buildroot.org> writes:
 
- > On Tue,  9 Apr 2024 19:16:35 +0800
- > cp0613@linux.alibaba.com wrote:
+ > To make the evdev library available for other packages, install it to the
+ > staging directory.
 
- >> From: Chen Pei <cp0613@linux.alibaba.com>
- >> 
- >> bpftool already supports riscv, including rv64 and rv32, so support is enabled.
- >> 
- >> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
- >> ---
- >> package/bpftool/Config.in | 1 +
- >> 1 file changed, 1 insertion(+)
-
- > Thanks for your contribution, I've applied to our master branch, after
- > adjusting the commit title. Indeed your commit is not "fixing riscv
- > support", it is merely allowing the bpftool package to be enabled on
- > riscv.
-
- > Thanks again!
+ > Signed-off-by: Ludovic Desroches <ludovic.desroches@microchip.com>
 
 Committed to 2024.02.x, thanks.
 
