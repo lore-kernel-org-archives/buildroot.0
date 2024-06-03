@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6479AC27C44
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 09:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01BF6C25B76
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 09:20:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3031140648;
-	Mon,  3 Jun 2024 09:20:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A28B6406E3;
+	Mon,  3 Jun 2024 09:20:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vrHee04P-GUS; Mon,  3 Jun 2024 09:20:11 +0000 (UTC)
+ id Ccim9XdqxR7f; Mon,  3 Jun 2024 09:20:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DF7540689
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44FB9406AC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DF7540689;
-	Mon,  3 Jun 2024 09:20:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 186321BF3EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 44FB9406AC;
+	Mon,  3 Jun 2024 09:20:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 474A71BF863
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:19:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 337CD40691
+ by smtp2.osuosl.org (Postfix) with ESMTP id 261C5401AE
  for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:19:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MDZnjqM23usi for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GsWJWYi8Hzwc for <buildroot@lists.busybox.net>;
  Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 042C94062D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D4D3401D5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 042C94062D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D4D3401D5
  for <buildroot@buildroot.org>; Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D924E878C8; Mon,  3 Jun 2024 09:19:56 +0000 (UTC)
+ id 4C8078798C; Mon,  3 Jun 2024 09:19:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 3 Jun 2024 11:02:54 +0200
+Date: Mon, 3 Jun 2024 11:03:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1efc1e7b90f2c1a831d31ecbc1f58320f60bb560
-X-Git-Newrev: 02f6617b680a42eeec5ba7b5d478111dbc8ca185
+X-Git-Oldrev: 9f615dc406e20b0d07394ab1a863826c0928f016
+X-Git-Newrev: 07a44a24248cfee4b44296c2634ef8e218590d37
 X-Patchwork-Hint: ignore
-Message-Id: <20240603091956.D924E878C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/file: use https:// _SITE
+Message-Id: <20240603091957.4C8078798C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnetfilter_log: use https://
+ reference for .hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +65,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02f6617b680a42eeec5ba7b5d478111dbc8ca185
+commit: https://git.buildroot.net/buildroot/commit/?id=07a44a24248cfee4b44296c2634ef8e218590d37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ftp.astrom.com also serves the files over https://, so use that instead.
+ftp.netfilter.org no longer provides ftp, so use the https:// url from
+_SITE.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[yann.morin.1998@free.fr: use https, not http]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/file/file.hash | 2 +-
- package/file/file.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnetfilter_log/libnetfilter_log.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index 08e8497471..7c15569c09 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after verifying signature
--# ftp://ftp.astron.com/pub/file/file-5.45.tar.gz.asc
-+# https://astron.com/pub/file/file-5.45.tar.gz.asc
- # using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
- sha256  fc97f51029bb0e2c9f4e3bffefdaf678f0e039ee872b9de5c002a6d09c784d82  file-5.45.tar.gz
- sha256  0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
-diff --git a/package/file/file.mk b/package/file/file.mk
-index b67fcaead4..27d9181d76 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libnetfilter_log/libnetfilter_log.hash b/package/libnetfilter_log/libnetfilter_log.hash
+index 7589284f40..1e3cea0a80 100644
+--- a/package/libnetfilter_log/libnetfilter_log.hash
++++ b/package/libnetfilter_log/libnetfilter_log.hash
+@@ -1,4 +1,4 @@
+-# From ftp://ftp.netfilter.org/pub/libnetfilter_log/libnetfilter_log-1.0.2.tar.bz2.sha256sum
++# From https://www.netfilter.org/projects/libnetfilter_log/files/libnetfilter_log-1.0.2.tar.bz2.sha256sum
+ sha256  e3f408575614d849e4726b45e90c7ebb0e6744b04859555a9ce6ec40744ffeea  libnetfilter_log-1.0.2.tar.bz2
  
- FILE_VERSION = 5.45
--FILE_SITE = ftp://ftp.astron.com/pub/file
-+FILE_SITE = https://astron.com/pub/file
- FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
- FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
- FILE_CPE_ID_VALID = YES
+ # Hash for license file:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
