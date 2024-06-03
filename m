@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1610C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 15:54:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79339C25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 15:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7DF24025F;
-	Mon,  3 Jun 2024 15:54:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 403C840295;
+	Mon,  3 Jun 2024 15:55:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pueKuPm6LyQp; Mon,  3 Jun 2024 15:54:42 +0000 (UTC)
+ id Lcr8Jw9bY1kQ; Mon,  3 Jun 2024 15:55:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A2A94086C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1189F4086C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A2A94086C;
-	Mon,  3 Jun 2024 15:54:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B511F1BF228
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:54:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1189F4086C;
+	Mon,  3 Jun 2024 15:55:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F59D1BF228
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:55:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A11944086C
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:54:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3BB1640118
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 15:55:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eLK1jnouCKCO for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 15:54:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2eEow2RWJHhG for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 15:55:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B652F4025F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B652F4025F
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B652F4025F
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 15:54:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 50F0A240005;
- Mon,  3 Jun 2024 15:54:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 224CB400EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 224CB400EA
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 224CB400EA
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 15:55:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 41312E0006;
+ Mon,  3 Jun 2024 15:55:51 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sEA17-003mQO-2D;
- Mon, 03 Jun 2024 17:54:37 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sEA2I-003mcC-1N;
+ Mon, 03 Jun 2024 17:55:50 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Ludovic Desroches via buildroot <buildroot@buildroot.org>
-References: <20240409122233.2529454-1-ludovic.desroches@microchip.com>
-Date: Mon, 03 Jun 2024 17:54:37 +0200
-In-Reply-To: <20240409122233.2529454-1-ludovic.desroches@microchip.com>
- (Ludovic Desroches via buildroot's message of "Tue, 9 Apr 2024
- 14:22:33 +0200")
-Message-ID: <87v82qggxu.fsf@dell.be.48ers.dk>
+To: Paul Cercueil <paul@crapouillou.net>
+References: <20240409181214.83567-1-paul@crapouillou.net>
+Date: Mon, 03 Jun 2024 17:55:50 +0200
+In-Reply-To: <20240409181214.83567-1-paul@crapouillou.net> (Paul Cercueil's
+ message of "Tue, 9 Apr 2024 20:12:14 +0200")
+Message-ID: <87r0deggvt.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/evemu: add staging installation
+Subject: Re: [Buildroot] [PATCH] package/lightning: bump version to 2.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,21 +68,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ludovic Desroches <ludovic.desroches@microchip.com>,
- Naumann Andreas <ANaumann@ultratronik.de>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Ludovic" == Ludovic Desroches via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
 
- > To make the evdev library available for other packages, install it to the
- > staging directory.
+ > Release notes:
+ > https://lists.gnu.org/archive/html/lightning/2024-02/msg00000.html
 
- > Signed-off-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+ > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Committed to 2024.02.x, thanks.
+Committed to 2024.02.x given the fixes, thanks.
 
 -- 
 Bye, Peter Korsgaard
