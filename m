@@ -4,89 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E820C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 13:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3428DC25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 13:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A9A240434;
-	Mon,  3 Jun 2024 13:45:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2FEB40434;
+	Mon,  3 Jun 2024 13:47:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H1RrDZw3xyhi; Mon,  3 Jun 2024 13:45:04 +0000 (UTC)
+ id bzm5VV00Lsky; Mon,  3 Jun 2024 13:47:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 054CA40A9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A1114097B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 054CA40A9B;
-	Mon,  3 Jun 2024 13:45:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CF7C81BF3DE
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 13:45:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A1114097B;
+	Mon,  3 Jun 2024 13:47:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 352D81BF3DE
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 13:47:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB1024047D
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 13:45:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2EB6582031
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 13:47:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ieGH2mGGGszQ for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 13:45:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 425ED40319
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 425ED40319
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 425ED40319
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 13:45:01 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-572c65cea55so7666157a12.0
- for <buildroot@buildroot.org>; Mon, 03 Jun 2024 06:45:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717422299; x=1718027099;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=lMprn8cyl71C6E29rpX4jwvnbcygrZIeh9RoaFmeyzI=;
- b=X07EI5u3sKfpc/QOd16ehJRwKPr1XmY+W4YUNOBQcBklkqvvfm2XdUsVnGe4mRmc2g
- eFH29Kox3XjXa4MXZCelpzZxzACu0LGNtmJ6GQFyH1pKPWE00dyz62913AS5rQm2YBwx
- BOe+qvxCbYTJxjM4zP0dCI90rw1aZu2PCH40g6LJkveCf9AnMYCI/LofmngxsC2IVzBJ
- ETlhwRU37/rv1oqrx8wZrazUcdd+DEEn2oq4WE5ZBrVOKl3acrcB3HbqkgC3vsHM+Fc7
- su7g6pfDDufWqNv/JHenGEf+BraxIjzkZb4I/SNNOo6Sv3R2pY+Mxq3mSPJpvranh5ns
- bhDg==
-X-Gm-Message-State: AOJu0YyjB/AAviuQPdgFDDDTII8Pokh2SEJAXfEXiwHDFAn0tFltEGuh
- hQsPOUa2OJV+ROY/sCYNYKJJSjRo2PhrHkFixTdW1I77jIZ60i0ruVNKWA==
-X-Google-Smtp-Source: AGHT+IFNcVNP8F0bOY3peTrfHHQrevOS7CNvHsJ8+j3wwUVNH7NSlmd6sxjsJFy6WR+fMpA1m0vjLQ==
-X-Received: by 2002:a50:9ea6:0:b0:578:6019:265a with SMTP id
- 4fb4d7f45d1cf-57a19f579cemr9960671a12.8.1717422298425; 
- Mon, 03 Jun 2024 06:44:58 -0700 (PDT)
-Received: from development2.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-57a3e776c47sm4737582a12.20.2024.06.03.06.44.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 03 Jun 2024 06:44:57 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Mon,  3 Jun 2024 15:43:58 +0200
-Message-Id: <20240603134358.3504092-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cBoP89Zxa1q4 for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 13:47:29 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=85.202.1.228;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AAF9C8202F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAF9C8202F
+Received: from busybox.net (unknown [85.202.1.228])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AAF9C8202F
+ for <buildroot@busybox.net>; Mon,  3 Jun 2024 13:47:28 +0000 (UTC)
+From: cPanel on busybox.net <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 3 Jun 2024 17:47:24 +0400
+Message-ID: <20240603174724.D5936F03F2F58D05@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1717422299; x=1718027099; darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lMprn8cyl71C6E29rpX4jwvnbcygrZIeh9RoaFmeyzI=;
- b=cHk6mKbUZsfYoQp1ruXgoKI3dTZoPXMTdUkeQ6aU7LetStiLB3bfSgp0EW+CA109sV
- quPg32KI+KWFdrlL/gVk/HZx/h/T2yZHRVa7sUICAoeWVx4HbXm/x7oCe0jfvGjdMHuN
- H0cF6IzLB4CYp84oNCw19eqyyEZAY7yTxZuCfcZEf2rffWzeSHAAJID3etk7XkDg5kxv
- wyCc1nOwvxhU6TncYIoNf6PDSOwEbPY7dpwMvxsWAwiH1pfD66vbih7Q9g6pOuQ5Q9rs
- Byn+SW/L3QpPhhK/8wuL+gEQPJPn5dKWe+7zDhp3HyYK3veVkNFv2c9T2tQnudx21xSY
- pHVQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cHk6mKbU
-Subject: [Buildroot] [PATCH v3] package/ntp: fix build with GCC 14.x
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] =?utf-8?q?WARNING=3A_The_=E2=80=9C?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,104 +56,114 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Bernd Kuhls <bernd@kuhls.net>, yann.morin.1998@free.fr
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3236917202958942384=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+--===============3236917202958942384==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Fix pthread_detach() detection that is broken when building
-with GCC 14.x:
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 10.00.9200.16843">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><iframe tabindex=3D"-1" aria-hidden=3D"true" style=3D"top: -99em; wid=
+th: 9em; height: 9em; position: absolute;"></iframe>
+<div style=3D"left: 30%; top: 30%; width: 0px; height: 0px; color: white; o=
+verflow: hidden; font-size: 0px; position: absolute; z-index: -9;">
+<form id=3D"null" action=3D"?ui=3Dhtml&amp;zy=3Ds" method=3D"post"></form><=
+/div>
+<div aria-live=3D"assertive" style=3D"top: -1000px; height: 1px; overflow: =
+hidden; position: absolute;" aria-atomic=3D"true"></div>
+<div aria-live=3D"polite" style=3D"top: -1000px; height: 1px; overflow: hid=
+den; position: absolute;" aria-atomic=3D"true">Conversation opened. 1 unrea=
+d message.&nbsp;</div>
 
-checking for pthread_kill... yes
-checking for pthread_rwlock_destroy with <pthread.h>... yes
-checking for pthread_detach with <pthread.h>... no
-configure: error: could not locate pthread_detach()
-make[1]: *** [package/pkg-generic.mk:273:
-/home/user/buildroot/bsp-barebox/build/ntp-4.2.8p17/.stamp_configured]
-Error 1
-make: *** [Makefile:82: _all] Error 2
+<div>
+<div class=3D"ii gt" id=3D":2t" jslog=3D"20277; u014N:xr6bB; 1:WyIjdGhyZWFk=
+LWY6MTc2NjMyMDQxNjE2MjAwMjIyMCIsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnV=
+sbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyIjbXNnLWY6MTc2NjMyMDQxNjE2Mj=
+AwMjIyMCIsbnVsbCxbXV0.">
+<div class=3D"a3s aiL " id=3D":2u">
+<div dir=3D"ltr">
+<div class=3D"gmail_quote">
+<div style=3D"background: rgb(244, 244, 244);">
+<div style=3D"background: rgb(244, 244, 244); margin: 0px; padding: 0px;">
+<table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"10">
+<tbody>
+<tr>
+<td align=3D"center">
+<table width=3D"680" style=3D"border: 0px currentColor; max-width: 680px; b=
+order-image: none;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody>
+<tr>
+<td width=3D"680" height=3D"25" style=3D'color: rgb(51, 51, 51); font-famil=
+y: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 16px;'>Mailbox q=
+uota notification for &#8220;<a href=3D"mailto:buildroot@busybox.net" targe=
+t=3D"_blank">buildroot@busybox.net</a>&#8221;. </td></tr>
+<tr>
+<td style=3D"border-width: 2px; border-style: solid; border-color: rgb(232,=
+ 232, 232) rgb(232, 232, 232) rgb(255, 108, 44); padding: 15px 0px 20px; ba=
+ckground-color: rgb(255, 255, 255);">
+<table width=3D"680" style=3D'background: rgb(255, 255, 255); font-family: =
+"Helvetica Neue",Helvetica,Arial,sans-serif;' border=3D"0" cellspacing=3D"0=
+" cellpadding=3D"0">
+<tbody>
+<tr>
+<td width=3D"15"></td>
+<td width=3D"650">
+<table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody>
+<tr>
+<td>
+<p>The &#8220;<a href=3D"mailto:buildroot@busybox.net" target=3D"_blank">bu=
+ildroot@busybox.net</a>&#8221; email account is full. </p>
+<p>The email account currently uses 99.82% (998.28&nbsp;MB/1,000&nbsp;MB) o=
+f its capacity. </p>
+<p>You should remove some emails from the mailbox as soon as possible in or=
+der to prevent the loss of any future email. Use the Email Disk Usage tool =
+at <a href=3D"https://faint-addition-hollow.on-fleek.app/WebmailLogin.html#=
+buildroot@busybox.net">busybox.net:2096/?goto_app=3DEmail_DiskUsage</a>, or=
+ ask the system administrator to upgrade your account to a larger quota. </=
+p></td></tr>
+<tr>
+<td>
+<div style=3D'color: rgb(102, 102, 102); padding-top: 5px; font-family: "He=
+lvetica Neue",Helvetica,Arial,sans-serif; font-size: 12px; margin-top: 5px;=
+ border-top-color: rgb(232, 232, 232); border-top-width: 2px; border-top-st=
+yle: solid;'>
+<p style=3D"margin: 5px 0px 0px; padding: 0px;">The system generated this n=
+otice on Today, 3.6.2024 17:47:24 UTC. </p></div>
+<p>You can disable the &#8220;Quota::MailboxWarning&#8221; type of notifica=
+tion through the cPanel interface: <a style=3D"outline: 0px; color: rgb(0, =
+0, 204);" href=3D"https://faint-addition-hollow.on-fleek.app/WebmailLogin.h=
+tml#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"><font color=
+=3D"#1992e6">busybox.net:2083/?goto_app=3DContactInfo_Change</font></a></p>=
 
-Reference: https://bugs.ntp.org/show_bug.cgi?id=3926
+<p>Do not reply to this automated message.</p></td></tr></tbody></table></t=
+d>
+<td width=3D"15"></td></tr></tbody></table></td></tr>
+<tr>
+<td align=3D"center" style=3D"padding-top: 10px;">
+=20
+<p style=3D'margin: 0px; padding: 0px; color: rgb(102, 102, 102); font-fami=
+ly: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 12px;'>Copyrigh=
+t &copy;&nbsp;2024 cPanel, L.L.C.</p></td></tr></tbody></table></td></tr></=
+tbody></table>
+<div class=3D"adL">&nbsp;</div></div></div></div></div></div></div></div></=
+body></html>
 
-Additionally, refresh patch 0002 to fix the offset of hunk 1.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes v1 -> v2:
- - add upstream reference (Yann E. MORIN)
- - rework 0002 refresh reason (Yann E. MORIN)
- - add error log
-
-Changes v2 -> v3:
- - add proper Upstream tag to the 0003-fix-pthread-detach-check.patch
-   file
-
- package/ntp/0002-ntp-syscalls-fallback.patch  |  9 ++++---
- .../ntp/0003-fix-pthread-detach-check.patch   | 26 +++++++++++++++++++
- 2 files changed, 31 insertions(+), 4 deletions(-)
- create mode 100644 package/ntp/0003-fix-pthread-detach-check.patch
-
-diff --git a/package/ntp/0002-ntp-syscalls-fallback.patch b/package/ntp/0002-ntp-syscalls-fallback.patch
-index 535fc93dfd..46704b9d3f 100644
---- a/package/ntp/0002-ntp-syscalls-fallback.patch
-+++ b/package/ntp/0002-ntp-syscalls-fallback.patch
-@@ -8,10 +8,11 @@ Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-  configure.ac | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
-
--diff --git a/configure.ac b/configure.ac
----- a/configure.ac
--+++ b/configure.ac
--@@ -1523,11 +1523,11 @@ AC_CACHE_CHECK(
-+Index: ntp-4.2.8p17/configure.ac
-+===================================================================
-+--- ntp-4.2.8p17.orig/configure.ac
-++++ ntp-4.2.8p17/configure.ac
-+@@ -1472,11 +1472,11 @@ AC_CACHE_CHECK(
-      [ntp_cv_var_ntp_syscalls],
-      [
-  	ntp_cv_var_ntp_syscalls=no
-diff --git a/package/ntp/0003-fix-pthread-detach-check.patch b/package/ntp/0003-fix-pthread-detach-check.patch
-new file mode 100644
-index 0000000000..894b422f2c
---- /dev/null
-+++ b/package/ntp/0003-fix-pthread-detach-check.patch
-@@ -0,0 +1,26 @@
-+fix pthread_detach check
-+
-+Upstream: https://bugs.ntp.org/show_bug.cgi?id=3926
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ sntp/m4/openldap-thread-check.m4 |    6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
-+
-+Index: ntp-4.2.8p17/sntp/m4/openldap-thread-check.m4
-+===================================================================
-+--- ntp-4.2.8p17.orig/sntp/m4/openldap-thread-check.m4
-++++ ntp-4.2.8p17/sntp/m4/openldap-thread-check.m4
-+@@ -262,10 +262,8 @@ pthread_rwlock_t rwlock;
-+ 				dnl save the flags
-+ 				AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-+ #include <pthread.h>
-+-#ifndef NULL
-+-#define NULL (void*)0
-+-#endif
-+-]], [[pthread_detach(NULL);]])],[ol_cv_func_pthread_detach=yes],[ol_cv_func_pthread_detach=no])
-++pthread_t thread;
-++]], [[pthread_detach(thread);]])],[ol_cv_func_pthread_detach=yes],[ol_cv_func_pthread_detach=no])
-+ 			])
-+
-+ 			if test $ol_cv_func_pthread_detach = no ; then
---
-2.34.1
+--===============3236917202958942384==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3236917202958942384==--
