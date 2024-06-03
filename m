@@ -4,74 +4,136 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49249C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 16:46:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EA7FC25B75
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 16:57:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF8E460A63;
-	Mon,  3 Jun 2024 16:46:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3632B605D8;
+	Mon,  3 Jun 2024 16:57:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5IMIy_rg9hOW; Mon,  3 Jun 2024 16:46:36 +0000 (UTC)
+ id 2j2L8fx3lQ61; Mon,  3 Jun 2024 16:57:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEDAF60A52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7114D605DE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEDAF60A52;
-	Mon,  3 Jun 2024 16:46:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 290081BF397
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 16:46:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7114D605DE;
+	Mon,  3 Jun 2024 16:57:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D9621BF397
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 16:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 13CBC820CB
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 16:46:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4836840681
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 16:57:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HIF7Lpys4QY3 for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 16:46:33 +0000 (UTC)
-X-Greylist: delayed 1800 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 03 Jun 2024 16:46:31 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5DA58820B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DA58820B0
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.56.217;
- helo=16.mo561.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
- receiver=<UNKNOWN> 
-Received: from 16.mo561.mail-out.ovh.net (16.mo561.mail-out.ovh.net
- [188.165.56.217])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5DA58820B0
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 16:46:31 +0000 (UTC)
-Received: from director9.ghost.mail-out.ovh.net (unknown [10.109.140.194])
- by mo561.mail-out.ovh.net (Postfix) with ESMTP id 4VtJZv2PKfz1P1G
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 16:09:43 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-lq7t4 (unknown [10.108.42.86])
- by director9.ghost.mail-out.ovh.net (Postfix) with ESMTPS id E7D611FE9D;
- Mon,  3 Jun 2024 16:09:42 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.108])
- by ghost-submission-6684bf9d7b-lq7t4 with ESMTPSA
- id x4mDNMbqXWZ+MAEAaU+okA
- (envelope-from <sebastien.szymanski@armadeus.com>);
- Mon, 03 Jun 2024 16:09:42 +0000
-X-OVh-ClientIp: 92.148.253.243
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-To: buildroot@buildroot.org
-Date: Mon,  3 Jun 2024 18:09:35 +0200
-Message-ID: <20240603160935.26618-1-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.44.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yqvmwQYQE2Ry for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 16:57:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 18CC940654
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18CC940654
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 18CC940654
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 16:57:21 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.115.134]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVvL5-1s3tRg3CDd-00RqQG; Mon, 03
+ Jun 2024 18:57:02 +0200
+Message-ID: <ec99ecde-ff6e-40c6-9622-f4440462a026@gmx.de>
+Date: Mon, 3 Jun 2024 18:57:00 +0200
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 16917490525253004267
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvdelvddgleejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepuforsggrshhtihgvnhcuufiihihmrghnshhkihcuoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqnecuggftrfgrthhtvghrnhepueefhfffkeffleefffdttddufeelhfdtteetieduiefgffdviefhieehueffheehnecuffhomhgrihhnpegsuhhshigsohigrdhnvghtnecukfhppeduvdejrddtrddtrddupdelvddrudegkedrvdehfedrvdegfedpfeejrdehledrudegvddruddtkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheeiuddpmhhouggvpehsmhhtphhouhht
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=armadeus.com
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-108S002e8150b51-8dce-454d-9571-bb1c80afdc47,
- E3E398E6AD9729369AB4DFE8A60F7EA96D5EA23B)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: [Buildroot] [PATCH 1/1]
- board/freescale/common/imx/imx8-bootloader-prepare.sh: fix FIT external
- position
+User-Agent: Mozilla Thunderbird
+To: Athaariq Ardhiansyah <foss@athaariq.my.id>, buildroot@buildroot.org
+References: <20240603074049.28426-1-foss@athaariq.my.id>
+ <20240603084617.38508-1-foss@athaariq.my.id>
+ <20240603084617.38508-2-foss@athaariq.my.id>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <20240603084617.38508-2-foss@athaariq.my.id>
+X-Provags-ID: V03:K1:RrBiY+vXMwxbwPXAzTvXdc4P4yzYwwf4Fn95f1XHscAj8CCax01
+ bZJDvKusqEpTEHlXjI3UJGaN4QvBfTUVi0ye3BVwet8IjhKkX5NEM6TbcjKdmCyGa4kRJfE
+ 1wEHhFney1DwzZLIZKaCDi7+V0VwXWmB6ChtoOYl3fMcUkMmmkRxPNO5seRVfx562d1PXW7
+ En3vFTuNcEjt/O8jqp1Fw==
+UI-OutboundReport: notjunk:1;M01:P0:n9gVdEULOxg=;VJYVlE1o8cNwZtW9CbTrt6nCkTI
+ 84uuA8g6k+z0Om7NIEA2kej8jY5BHM/vKNjc+SpOU/eaZvWc43cBzC1D73HB+P8Skt8f528km
+ 11kRniO6HCbX2gATncXGoDRZLTSYNGMNODehuvKtmthFsK+bxq8g3n7pU25AlFR/wVt3tQyQC
+ Nq9yk0AiNjwCJTabNwCEuDGooF02kKopY8UxOOptdElAnl75hfT5W/LAJ9hPcvG6AKZpNJ7GQ
+ m7CGMTLIWNZIu8A7CmqIVy02h025kfjhsd54DegqBXydqdHTw25ZMvG+K/xnI8C/pPHcr0gjW
+ jVvqr3TtoMuSB8scA7EigbSNncGT2hCDLDKtEc/gsAu06o7vPJkkG4K0xTT68rJainpmRG0fg
+ HeCA3CVw7Om2uTDDdkeDIVBGzfXzavV1dVYTvql6ulXPJtzOV6vMxgjeNC37+yiQZ9XhSE5mV
+ hZUjzemq8MexIPtXGiwg4q9LImKJprQuyQaCtkcv0wSjKRHCwKtOsS3j4pHEZ13l9mDdUL3vg
+ iSgtpRhJrCY3/RxvKFkXXqGLvymQGUY7D83Tqqs01WOnz7bn1zX4REst8F9sSnd0nLULmSGym
+ Z6ly1LOGJ8SfnrgZrH4I+gns8p4poyFTa5+j78xHUaHNcMNy2/7bf47fdMJp6sPF7HjIRCqoC
+ E7DbiECOBihx5k9hZ58aK7L5JwP5yzzE4t77ZHXEOVwKmGsf2+atxCdVlNF3X58rryYVFDWhn
+ WFae6m9T0LJHmt52RWVJYVHJoZQxTvJh8XmM7r0nojuonKtNDifIe1Khc9b9J7apw00HoJMAj
+ qJYveLOfHLIx36imiHBbP4ifOvqhJaeJWn0lNHWUbJX0Q=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1717433822; x=1718038622; i=fiona.klute@gmx.de;
+ bh=HKi7oL2REPMjnevIDs8KzujyeANyRKQOy1SfR2gp6xY=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=JWc9IJavaX5rH+NtGhUR2ZXMsAV1bRfPKCRhfKjP61nG3L8IdAUCwnGSKe+s/lcS
+ 7kfYTC8XyY1ziXjXmPH1aFpCJBD/HhFJly0jTrHotDoCz4T+/raVBnNDuNOYung/2
+ 5GZSOdAvmr8WoksUzzXF2Cwd8fSOtSo4c1NeEQjb6VHNDweXnb5qCUfo7H4U37o7Q
+ xZE2vqsQCks3WQY65U9Cc9ZhowYkKm7VsE67oVqZTMRZUsZ733PE6Yale/OjsMBBu
+ YIZJLbpuZR0o+HU9Q80F0sJfGbFg68MSDIGWjywt9ijHS1t1LnkCHkgpPr+K8bQHW
+ jj6ysQSKkiex7P/EQQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=JWc9IJav
+Subject: Re: [Buildroot] [PATCH v2 2/3] package/raspberrypi-usbboot: bump
+ version to 20221215-105525
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,88 +145,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Whitaker <buildroot@martin-whitaker.me.uk>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogTWFydGluIFdoaXRha2VyIDxidWlsZHJvb3RAbWFydGluLXdoaXRha2VyLm1lLnVrPgoK
-V2hlbiB1c2luZyBpbXgtbWtpbWFnZSA2LjEuMzZfMi4xLjAgb3IgbGF0ZXIsIGFuIGFkZGl0aW9u
-YWwgZGF0YSBzdHJ1Y3R1cmUKaXMgaW5zZXJ0ZWQgaW4gdGhlIGdlbmVyYXRlZCBpbWFnZS4gVGhl
-IEZJVCBleHRlcm5hbCBkYXRhIHBvc2l0aW9uIHBhc3NlZAp0byB0aGUgdWJvb3QgbWtpbWFnZSBw
-cm9ncmFtIG5lZWRzIHRvIGJlIGFkanVzdGVkIGFjY29yZGluZ2x5LgoKRml4ZXM6IGh0dHBzOi8v
-YnVncy5idXN5Ym94Lm5ldC9zaG93X2J1Zy5jZ2k/aWQ9MTU5NzMKRml4ZXM6IDcyZGU3ODkwMjMz
-MCAoInBhY2thZ2UvaW14LW1raW1hZ2U6IGJ1bXAgdmVyc2lvbiB0byBsZi02LjEuMzYtMi4xLjAi
-KQpUZXN0ZWQtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFy
-bWFkZXVzLmNvbT4KW1PDqWJhc3RpZW46IFRlc3RlZCBvbiBpLk1YOE1NIEVWSyBhbmQgaS5NWDhN
-UCBFVktdCltTw6liYXN0aWVuOgogLSBmaXggc3ViamVjdAogLSBhZGQgVGVzdGVkLWJ5IHRhZwog
-LSBmaXggRml4ZXMgdGFncwpdClNpZ25lZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxz
-ZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KLS0tCgpUaGUgcGF0aCBjb21lcyBmcm9t
-IGh0dHBzOi8vYnVncy5idXN5Ym94Lm5ldC9zaG93X2J1Zy5jZ2k/aWQ9MTU5NzMgYW5kCml0cyBh
-dXRob3IgaXMgTWFydGluIFdoaXRha2VyIDxidWlsZHJvb3RAbWFydGluLXdoaXRha2VyLm1lLnVr
-Pi4KSSB3YXNuJ3Qgc3VyZSBpZiBJIHNob3VsZCBoYXZlIGFkZCBoaXMgU2lnbmVkLW9mZi1ieSB0
-YWcuCgogYm9hcmQvZnJlZXNjYWxlL2NvbW1vbi9pbXgvaW14OC1ib290bG9hZGVyLXByZXBhcmUu
-c2ggfCAxMCArKysrKystLS0tCiAxIGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA0IGRl
-bGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2JvYXJkL2ZyZWVzY2FsZS9jb21tb24vaW14L2lteDgt
-Ym9vdGxvYWRlci1wcmVwYXJlLnNoIGIvYm9hcmQvZnJlZXNjYWxlL2NvbW1vbi9pbXgvaW14OC1i
-b290bG9hZGVyLXByZXBhcmUuc2gKaW5kZXggYTllZTE1NGU5YzRjLi5iMzUzZDUwNmZlNDQgMTAw
-NzU1Ci0tLSBhL2JvYXJkL2ZyZWVzY2FsZS9jb21tb24vaW14L2lteDgtYm9vdGxvYWRlci1wcmVw
-YXJlLnNoCisrKyBiL2JvYXJkL2ZyZWVzY2FsZS9jb21tb24vaW14L2lteDgtYm9vdGxvYWRlci1w
-cmVwYXJlLnNoCkBAIC04LDYgKzgsOCBAQCBtYWluICgpCiAJCWV4aXQgMQogCWZpCiAKKwlGSVRf
-RVhURVJOQUxfUE9TSVRJT049MHg1MDAwCisKIAlpZiBncmVwIC1FcSAiXkJSMl9QQUNLQUdFX0ZS
-RUVTQ0FMRV9JTVhfUExBVEZPUk1fSU1YOE09eSQiICR7QlIyX0NPTkZJR307IHRoZW4KIAkJZGQg
-aWY9JHtCSU5BUklFU19ESVJ9L3UtYm9vdC1zcGwuYmluIG9mPSR7QklOQVJJRVNfRElSfS91LWJv
-b3Qtc3BsLXBhZGRlZC5iaW4gYnM9NCBjb252PXN5bmMKIAkJY2F0ICR7QklOQVJJRVNfRElSfS91
-LWJvb3Qtc3BsLXBhZGRlZC5iaW4gJHtCSU5BUklFU19ESVJ9L2Rkcl9mdy5iaW4gPiAke0JJTkFS
-SUVTX0RJUn0vdS1ib290LXNwbC1kZHIuYmluCkBAIC0xNiw3ICsxOCw3IEBAIG1haW4gKCkKIAkJ
-ZWxzZQogCQkJQkwzMT0ke0JJTkFSSUVTX0RJUn0vYmwzMS5iaW4gQkwzMz0ke0JJTkFSSUVTX0RJ
-Un0vdS1ib290LW5vZHRiLmJpbiBBVEZfTE9BRF9BRERSPTB4MDA5MTAwMDAgJHtIT1NUX0RJUn0v
-YmluL21raW1hZ2VfZml0X2F0Zi5zaCAke1VCT09UX0RUQn0gPiAke0JJTkFSSUVTX0RJUn0vdS1i
-b290Lml0cwogCQlmaQotCQkke0hPU1RfRElSfS9iaW4vbWtpbWFnZSAtRSAtcCAweDMwMDAgLWYg
-JHtCSU5BUklFU19ESVJ9L3UtYm9vdC5pdHMgJHtCSU5BUklFU19ESVJ9L3UtYm9vdC5pdGIKKwkJ
-JHtIT1NUX0RJUn0vYmluL21raW1hZ2UgLUUgLXAgJHtGSVRfRVhURVJOQUxfUE9TSVRJT059IC1m
-ICR7QklOQVJJRVNfRElSfS91LWJvb3QuaXRzICR7QklOQVJJRVNfRElSfS91LWJvb3QuaXRiCiAJ
-CXJtIC1mICR7QklOQVJJRVNfRElSfS91LWJvb3QuaXRzCiAKIAkJJHtIT1NUX0RJUn0vYmluL21r
-aW1hZ2VfaW14OCAtZml0IC1zaWduZWRfaGRtaSAke0JJTkFSSUVTX0RJUn0vc2lnbmVkX2hkbWlf
-aW14OG0uYmluIC1sb2FkZXIgJHtCSU5BUklFU19ESVJ9L3UtYm9vdC1zcGwtZGRyLmJpbiAweDdF
-MTAwMCAtc2Vjb25kX2xvYWRlciAke0JJTkFSSUVTX0RJUn0vdS1ib290Lml0YiAweDQwMjAwMDAw
-IDB4NjAwMDAgLW91dCAke0JJTkFSSUVTX0RJUn0vaW14OC1ib290LXNkLmJpbgpAQCAtMjgsNyAr
-MzAsNyBAQCBtYWluICgpCiAJCWVsc2UKIAkJCUJMMzE9JHtCSU5BUklFU19ESVJ9L2JsMzEuYmlu
-IEJMMzM9JHtCSU5BUklFU19ESVJ9L3UtYm9vdC1ub2R0Yi5iaW4gQVRGX0xPQURfQUREUj0weDAw
-OTIwMDAwICR7SE9TVF9ESVJ9L2Jpbi9ta2ltYWdlX2ZpdF9hdGYuc2ggJHtVQk9PVF9EVEJ9ID4g
-JHtCSU5BUklFU19ESVJ9L3UtYm9vdC5pdHMKIAkJZmkKLQkJJHtIT1NUX0RJUn0vYmluL21raW1h
-Z2UgLUUgLXAgMHgzMDAwIC1mICR7QklOQVJJRVNfRElSfS91LWJvb3QuaXRzICR7QklOQVJJRVNf
-RElSfS91LWJvb3QuaXRiCisJCSR7SE9TVF9ESVJ9L2Jpbi9ta2ltYWdlIC1FIC1wICR7RklUX0VY
-VEVSTkFMX1BPU0lUSU9OfSAtZiAke0JJTkFSSUVTX0RJUn0vdS1ib290Lml0cyAke0JJTkFSSUVT
-X0RJUn0vdS1ib290Lml0YgogCQlybSAtZiAke0JJTkFSSUVTX0RJUn0vdS1ib290Lml0cwogCiAJ
-CSR7SE9TVF9ESVJ9L2Jpbi9ta2ltYWdlX2lteDggLWZpdCAtbG9hZGVyICR7QklOQVJJRVNfRElS
-fS91LWJvb3Qtc3BsLWRkci5iaW4gMHg3RTEwMDAgLXNlY29uZF9sb2FkZXIgJHtCSU5BUklFU19E
-SVJ9L3UtYm9vdC5pdGIgMHg0MDIwMDAwMCAweDYwMDAwIC1vdXQgJHtCSU5BUklFU19ESVJ9L2lt
-eDgtYm9vdC1zZC5iaW4KQEAgLTQwLDcgKzQyLDcgQEAgbWFpbiAoKQogCQllbHNlCiAJCQlCTDMx
-PSR7QklOQVJJRVNfRElSfS9ibDMxLmJpbiBCTDMzPSR7QklOQVJJRVNfRElSfS91LWJvb3Qtbm9k
-dGIuYmluIEFURl9MT0FEX0FERFI9MHgwMDk2MDAwMCAke0hPU1RfRElSfS9iaW4vbWtpbWFnZV9m
-aXRfYXRmLnNoICR7VUJPT1RfRFRCfSA+ICR7QklOQVJJRVNfRElSfS91LWJvb3QuaXRzCiAJCWZp
-Ci0JCSR7SE9TVF9ESVJ9L2Jpbi9ta2ltYWdlIC1FIC1wIDB4MzAwMCAtZiAke0JJTkFSSUVTX0RJ
-Un0vdS1ib290Lml0cyAke0JJTkFSSUVTX0RJUn0vdS1ib290Lml0YgorCQkke0hPU1RfRElSfS9i
-aW4vbWtpbWFnZSAtRSAtcCAke0ZJVF9FWFRFUk5BTF9QT1NJVElPTn0gLWYgJHtCSU5BUklFU19E
-SVJ9L3UtYm9vdC5pdHMgJHtCSU5BUklFU19ESVJ9L3UtYm9vdC5pdGIKIAkJcm0gLWYgJHtCSU5B
-UklFU19ESVJ9L3UtYm9vdC5pdHMKIAogCQkke0hPU1RfRElSfS9iaW4vbWtpbWFnZV9pbXg4IC12
-IHYyIC1maXQgLWxvYWRlciAke0JJTkFSSUVTX0RJUn0vdS1ib290LXNwbC1kZHIuYmluIDB4OTEy
-MDAwIC1zZWNvbmRfbG9hZGVyICR7QklOQVJJRVNfRElSfS91LWJvb3QuaXRiIDB4NDAyMDAwMDAg
-MHg2MDAwMCAtb3V0ICR7QklOQVJJRVNfRElSfS9pbXg4LWJvb3Qtc2QuYmluCkBAIC01Miw3ICs1
-NCw3IEBAIG1haW4gKCkKIAkJZWxzZQogCQkJQkwzMT0ke0JJTkFSSUVTX0RJUn0vYmwzMS5iaW4g
-QkwzMz0ke0JJTkFSSUVTX0RJUn0vdS1ib290LW5vZHRiLmJpbiBBVEZfTE9BRF9BRERSPTB4MDA5
-NzAwMDAgJHtIT1NUX0RJUn0vYmluL21raW1hZ2VfZml0X2F0Zi5zaCAke1VCT09UX0RUQn0gPiAk
-e0JJTkFSSUVTX0RJUn0vdS1ib290Lml0cwogCQlmaQotCQkke0hPU1RfRElSfS9iaW4vbWtpbWFn
-ZSAtRSAtcCAweDMwMDAgLWYgJHtCSU5BUklFU19ESVJ9L3UtYm9vdC5pdHMgJHtCSU5BUklFU19E
-SVJ9L3UtYm9vdC5pdGIKKwkJJHtIT1NUX0RJUn0vYmluL21raW1hZ2UgLUUgLXAgJHtGSVRfRVhU
-RVJOQUxfUE9TSVRJT059IC1mICR7QklOQVJJRVNfRElSfS91LWJvb3QuaXRzICR7QklOQVJJRVNf
-RElSfS91LWJvb3QuaXRiCiAJCXJtIC1mICR7QklOQVJJRVNfRElSfS91LWJvb3QuaXRzCiAKIAkJ
-JHtIT1NUX0RJUn0vYmluL21raW1hZ2VfaW14OCAtdiB2MiAtZml0IC1sb2FkZXIgJHtCSU5BUklF
-U19ESVJ9L3UtYm9vdC1zcGwtZGRyLmJpbiAweDkyMDAwMCAtc2Vjb25kX2xvYWRlciAke0JJTkFS
-SUVTX0RJUn0vdS1ib290Lml0YiAweDQwMjAwMDAwIDB4NjAwMDAgLW91dCAke0JJTkFSSUVTX0RJ
-Un0vaW14OC1ib290LXNkLmJpbgotLSAKMi40NC4xCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+Hi Athaariq!
+
+Am 03.06.24 um 10:46 schrieb Athaariq Ardhiansyah:
+> Latest raspberrypi-usbboot package has Raspberry Pi 5 support.
+>
+> Signed-off-by: Athaariq Ardhiansyah <foss@athaariq.my.id>
+>
+> ---
+> Changes v1 -> v2:
+>    - Fix missing description due to terminal issue
+>    - Use the latest commit instead of the latest tag
+> ---
+>   ...akefile-allow-passing-CFLAGS-LDFLAGS.patch | 25 ++++++++++---------
+>   .../raspberrypi-usbboot.hash                  |  2 +-
+>   .../raspberrypi-usbboot.mk                    |  4 +--
+>   3 files changed, 16 insertions(+), 15 deletions(-)
+>
+> diff --git a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
+> index d482b0b9d4..ea53f8360a 100644
+> --- a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
+> +++ b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
+> @@ -1,30 +1,31 @@
+> -From 38b730c00f45abf324caf687b5b00662ff4252c2 Mon Sep 17 00:00:00 2001
+> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -Date: Fri, 2 Dec 2016 23:09:44 +0100
+> +From e09c92d68efa4efbd48a3366f9053a4f8c275091 Mon Sep 17 00:00:00 2001
+> +From: Athaariq Ardhiansyah <foss@athaariq.my.id>
+> +Date: Mon, 3 Jun 2024 15:35:49 +0700
+>   Subject: [PATCH] Makefile: allow passing CFLAGS/LDFLAGS
+>
+> -This might be needed to pass some custom CFLAGS/LDFLAGS when building
+> -rpiboot.
+> +This might be needed to pass some custom CFLAGS/LDFLAGS when building rpiboot.
+>
+>   Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
+>   Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -[Rebased on 9324fd7]
+>   Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +Signed-off-by: Athaariq Ardhiansyah <foss@athaariq.my.id>
+>   ---
+>    Makefile | 2 +-
+>    1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>   diff --git a/Makefile b/Makefile
+> -index 822e714..875e717 100755
+> +index 4479b1b..076ae43 100755
+>   --- a/Makefile
+>   +++ b/Makefile
+> -@@ -1,5 +1,5 @@
+> - rpiboot: main.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
+> --	$(CC) -Wall -Wextra -g -o $@ $< -lusb-1.0
+> -+	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ $< -lusb-1.0 $(LDFLAGS)
+> +@@ -3,7 +3,7 @@ GIT_VER=$(shell git rev-parse HEAD 2>/dev/null | cut -c1-8 || echo "")
+> + INSTALL_PREFIX?=/usr
+> +
+> + rpiboot: main.c bootfiles.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
+> +-	$(CC) -Wall -Wextra -g -o $@ main.c bootfiles.c `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" -DINSTALL_PREFIX=\"$(INSTALL_PREFIX)\"
+> ++	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ main.c bootfiles.c `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" -DINSTALL_PREFIX=\"$(INSTALL_PREFIX)\" $(LDFLAGS)
+>
+>    %.h: %.bin ./bin2c
+>    	./bin2c $< $@
+>   --
+> -2.31.1
+> +2.45.2
+>
+> diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
+> index cedc5fb7e1..1a183bf47f 100644
+> --- a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
+> +++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
+> @@ -1,5 +1,5 @@
+>   # Locally calculated
+> -sha256  4565314b38e7c7505b7d32a3b51b49f79c7dd5767d45b86d38e5255ae7489a43  raspberrypi-usbboot-2021.07.01.tar.gz
+> +sha256  2182a6bf5ca9cd54ee3bca2d7667758ceac685fa78a3a6ae663762bde03e781a  raspberrypi-usbboot-4a3d31171769f87d919340778e5aaeaba01e10b5.tar.gz
+>
+>   # License files
+>   sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+> diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
+> index 2e4194da0b..7eef7df600 100644
+> --- a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
+> +++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>
+> -RASPBERRYPI_USBBOOT_VERSION = 2021.07.01
+> +RASPBERRYPI_USBBOOT_VERSION = 4a3d31171769f87d919340778e5aaeaba01e10b5
+
+This commit is (as of typing) the latest commit on the master branch of
+the GitHub repository, not version 20221215-105525. I sent a patch to
+update to 20221215-105525 in late April because I need it for certain
+CM4 devices, so I noticed the difference. Including RPi 5 support as
+well makes sense to me, but the commit message should mention the actual
+version.
+
+Best regards,
+Fiona
+
+>   RASPBERRYPI_USBBOOT_SITE = \
+> -	$(call github,raspberrypi,usbboot,v$(RASPBERRYPI_USBBOOT_VERSION))
+> +	$(call github,raspberrypi,usbboot,$(RASPBERRYPI_USBBOOT_VERSION))
+>   RASPBERRYPI_USBBOOT_LICENSE = Apache-2.0
+>   RASPBERRYPI_USBBOOT_LICENSE_FILES = LICENSE
+>
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
