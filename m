@@ -4,165 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46F20C25B75
-	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 09:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23971C25B76
+	for <buildroot@archiver.kernel.org>; Mon,  3 Jun 2024 10:00:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 098DE400EA;
-	Mon,  3 Jun 2024 09:44:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C65B740350;
+	Mon,  3 Jun 2024 10:00:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kGjjOT0NwGbO; Mon,  3 Jun 2024 09:44:31 +0000 (UTC)
+ id nSLEobhuOS7E; Mon,  3 Jun 2024 10:00:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1392840109
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4A06402D4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1392840109;
-	Mon,  3 Jun 2024 09:44:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 968521BF3EB
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:44:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D4A06402D4;
+	Mon,  3 Jun 2024 10:00:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 616601BF239
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:59:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82D3581EE2
- for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:44:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D43940621
+ for <buildroot@lists.busybox.net>; Mon,  3 Jun 2024 09:59:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vocR0I-v2LEb for <buildroot@lists.busybox.net>;
- Mon,  3 Jun 2024 09:44:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CfKeOhBGMztN for <buildroot@lists.busybox.net>;
+ Mon,  3 Jun 2024 09:59:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:240a::627;
- helo=nam04-mw2-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 70E9381EDC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70E9381EDC
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam04on20627.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:240a::627])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 70E9381EDC
- for <buildroot@buildroot.org>; Mon,  3 Jun 2024 09:44:28 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KHdEXZfex3CtyIQuF2n453aaVbqcMIz5LovJ2T5Oz8pCCa1kRihO9xsqeIT5okLUOuaiLMBODIOFHW+R4Whtpwa0NyiNFgn1ruSU+3bKMXKY360OVrNGgH9kddWTgPMcAolsFAWIGaCrPkCZZJ5Mj05GdVZ+9QdzgW8Fr2Z9E3n7YbAKTkFKdR28Wtc2vt7E7CmXylqd62ZnL1k/0IQA4zkCRp+1Xl4HjEPr77CBUSmUrHYfMafzNP57ydlukQTGlp9e3xs1Lzj6A9Y0reF2LlFeiLsqNp4TgOGrn80UvpVyzzPuX/pEmy0E4DZlostLa06nEoLaPe7wI/8oBjUqYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zyCK1EN9by2AGSIadLvCoSg9DWn7m2qhbUcGjRWWFJ8=;
- b=a9raokBi/FgG3VNenB2b0/89KLacXAOeNq3sXlTs2t7eBAb5W2e4tk8eqJMLpftvvBbHhUJCLUi2q0R7ZrzTSZl/dT4Eh1mHLDYyGP6D3IRvSNBXLZ3yag2nK9hCTcC1XIfTIsJUC6qih0blzKuJuf6cYCPqMqHrVdnbKY6lPIsLr36rWa4Bih5gs2kBIejP4JqtDfHbKdSjPBcMpz6cmA6Rtq78DmENBW/vG12YnmK/6fiN85B4QxjasOgUtBN2zqqTciLH5z5G7k0aG9pbiQo+whqKBq9/SuIn4MAtuYQ8UcaMOpz2ANCtyuNBqfgGUR0vZnLpw2vTnmqZxIcntQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by SA3PR12MB8804.namprd12.prod.outlook.com (2603:10b6:806:31f::11)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.22; Mon, 3 Jun
- 2024 09:44:25 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b%7]) with mapi id 15.20.7633.021; Mon, 3 Jun 2024
- 09:44:24 +0000
-To: "Maier, Brandon L                            Collins"
- <Brandon.Maier@collins.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>, 'Peter Korsgaard' <peter@korsgaard.com>
-Thread-Topic: [PATCH] configs/versal_vck190_defconfig: add hashes
-Thread-Index: AQHarGMGoz5QfJpYlEmY1g6km7tPO7Gk+GOwgAAOzACAANFXcIAPtOwwgABNe6A=
-Date: Mon, 3 Jun 2024 09:44:24 +0000
-Message-ID: <CH2PR12MB5004E338086FC3DF5D1A8EC8F0FF2@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20240522161338.1278400-1-brandon.maier@collins.com>
- <CH2PR12MB500492AF5FCEA01A7EE55E99F0F42@CH2PR12MB5004.namprd12.prod.outlook.com>
- <BN0P110MB16738955F9A8C09D69A9AD26EBF4A@BN0P110MB1673.NAMP110.PROD.OUTLOOK.COM>
- <CH2PR12MB50046AE384EC6E246F6FAC96F0F52@CH2PR12MB5004.namprd12.prod.outlook.com>
- <CH2PR12MB5004F4FB992790C240CB26DCF0FF2@CH2PR12MB5004.namprd12.prod.outlook.com>
-In-Reply-To: <CH2PR12MB5004F4FB992790C240CB26DCF0FF2@CH2PR12MB5004.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|SA3PR12MB8804:EE_
-x-ms-office365-filtering-correlation-id: cb6b9aae-58d0-4e38-1d66-08dc83b1c0db
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0; ARA:13230031|1800799015|376005|366007|38070700009;
-x-microsoft-antispam-message-info: =?us-ascii?Q?JO9LduUvDA0RoQxIT2I2vj0fNIvOtit8PlfAXsyhghweIkJvUoZacXJs/tza?=
- =?us-ascii?Q?FR1Z1f7aFhqthbJ05T1CQAHvyAZiBZGuq2ZDRwjwpSMPyNftQhf1bFlVCieL?=
- =?us-ascii?Q?/HmZCRvcmTPMvBQRrPS/1v69XuWLJfpcq1sLuPqs3Bzp0S/r50KPbVIqU6Fx?=
- =?us-ascii?Q?X4KfecPBdOUikrvMwt8WUe5CCLd6M2B056NeJic5rX/1pFbelbP3jCyP8JD8?=
- =?us-ascii?Q?ctSr9OcsqFlF0qtr3jfwGVqpotMbFy1nI66rOCESGHYOz2u4TJ62hJlbEYuJ?=
- =?us-ascii?Q?JncDxsZl9YRiLok+uWCNXhTdjyEqctgeXRbkM3fVrWDIQvwnfO5qfjzbeIJF?=
- =?us-ascii?Q?2Re6RyI6wKGrdr8TO/pWVjda+EBDcNNQxz+sn9M4QG/N/z3X94r0shueuaDP?=
- =?us-ascii?Q?Gfb7Ts/cgrLwgKbXVYKmjAcziwdR8g4DbChyt1rBlOyPkH2Vnms1X6f2TG2Z?=
- =?us-ascii?Q?1vN4x7NHJA5iaw5ainu6ndsZhjW9CFur5PsayoumrAeHhFewnVI3E4xm4GsL?=
- =?us-ascii?Q?NU1Pnr9mSV1Z56KLqmiejGVAURtExKhxdVs4Cv8YQgkEKtGutlNOiKjnfo2z?=
- =?us-ascii?Q?k+uBDs55eMWYqkJw++fQpypvgvzukYsj/2RARTEHCdjlYmZBwBNfwm9EJLJa?=
- =?us-ascii?Q?ejrtad7HQqPZ/l5MXettjvy0z+vApSJqSLUHgMIfG9K9NA6x7CFnBJt3QgGz?=
- =?us-ascii?Q?9exAs4y5Lo2n4JQHKiWQsUQn6Oc1Gisp+rPd+tpiSipkG5Qn11/1DfNdUMcw?=
- =?us-ascii?Q?W2xCJELBw0vhDDTZFX3uOeDdpbTMArEBzc5neWAZVOHGDP0C0MFB64KTXjiU?=
- =?us-ascii?Q?IFKcJPuyAawzGEVKSk8s7SiAkEjviZopT8GAYgPe4p7D1RA2jwF/UZ2WRgQ/?=
- =?us-ascii?Q?HRk0/wbK1CJAMoEegEMXBBIW7oW1iPw8+lpg5zpb8xNG5He3FB7rprtpB8tK?=
- =?us-ascii?Q?MTsvwe4ljf31Nfs4Zd8IrRHX+zK0/XudhEqX5eJ0X+QMxIkh/qJGMZ7aFV1v?=
- =?us-ascii?Q?VQYDR+A2Q9LbxScSQUAnhJKumdTU5TlAnr23mJhujoekLE7wQOR+2FkExNgI?=
- =?us-ascii?Q?yPjEvMWuwsdw/1Z0vPdS8K264/fxs3DRGwTr53C19YotAQGTXo/Czxn27jkq?=
- =?us-ascii?Q?g0F6frazx9URDwaUdREtDERrzS25kPHtLjrMuap5b6x4/K70SXyxLLTGtxc4?=
- =?us-ascii?Q?JcBywl8QJ+wm4FjUxE7cTEoG4m8vSZGpRTjcqaXVMhdZ7feJNs8DDMUOx7bP?=
- =?us-ascii?Q?HFl9sZkidaFpSrtbOskoEgQ+BsnFs6LG2YgQoYnYKChpqup3Bfb0vwtIRwEt?=
- =?us-ascii?Q?UXf3YcqKGJi3EtVKqjWXhKAe0gnXHspTDZRL667mYPmGBg=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(1800799015)(376005)(366007)(38070700009); DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5cXhE56p+vmKZ/HXXloY9ailYe7frJp69mEwsYjUj54IgLtv++PsBRN2fn/s?=
- =?us-ascii?Q?JxdA8EX9maNWYDoKH0fCIwWJG1GJWk1KG8U6iHbPtb+BkbIOQpubI6P6HRpN?=
- =?us-ascii?Q?PAwtMvv0uSjBN1TmbP9BTpPn6XIPzwv2HJBFgvTZYAExs6IX0NKKUvjxmNkY?=
- =?us-ascii?Q?T5jB5/2UDHqSxjh72BejfvGBqIaCTCgAbikaJt/NCAG96EIn5oVRI4dS1kja?=
- =?us-ascii?Q?lwaSdfdu96qk78fMDpzha+e+JlOD14kDOP4eaagH1zUyUY4Atku28UaAiHYK?=
- =?us-ascii?Q?wNVokKsksfMSUp8YVGWGBUOrLLu26OV9A/ZpGqPQzUZl9XYQkdP58/R3nEC8?=
- =?us-ascii?Q?hqDlc9AbuOYWg976lCANnP1vMCx1H5uIBxMjPMYcR87msnNVb18C+PiKR4Zi?=
- =?us-ascii?Q?Zar0mSQ1FPrJvitkFwPOI34B457PsD/tmUFiHx5NQeIpkYHVbQZNcLA7q2S9?=
- =?us-ascii?Q?S1mGiDDz2O3UtKRWTzvhHad3RTc3Ld47yAGmC3SHhzD0SjlNCPh+apN9rp4K?=
- =?us-ascii?Q?pouWA63eKbi3AzFFLH5QEg6DN5M2e78W3mnOGHCUP2BAPs8GitkUsyU7l5t8?=
- =?us-ascii?Q?C9zEz5E1g1BgXLJ34sVjYBsZnJX1bdONhGqEk9Niz+ZJYEZD/pfFdQ5iagr9?=
- =?us-ascii?Q?Q1U/DltYZ8Wsn5Ap15Go+8ogJtYKTm7wxqwcQtnRihJPs4JahYJv3vKjOY96?=
- =?us-ascii?Q?lIJV86BjXjsvtfvODyX7sPz5PDO+zF75/9mmwFINPDElpoEGAg7m2+YN2sEZ?=
- =?us-ascii?Q?zNDgrU8Pm/1VGdWNE2lKhaBUYitA57FqCN96pYsQpkmTxE85jAUJy/Pk8K0+?=
- =?us-ascii?Q?AJWxVC17qT3bpu8zANSZ9pp/MoUwpWG/mkeMFyG0ll0OeExDbAB5uVssB+Z1?=
- =?us-ascii?Q?9tsSFejMao+zcG0eS9YA4o7lZCDivFqgcU3fJQrrsMiqaqStR5DFEdAysKPZ?=
- =?us-ascii?Q?ocyXysERdJr4n2VmG4PNPe7aiJ3XnUZV9Ecbo7iaVMsLSyDJlwG8kEqcSStQ?=
- =?us-ascii?Q?taI9cleprZuFJR4LhP4dP6yMcbEeREn1Hl8VEQeVR7S7lLvXCrobHTNOr7Gc?=
- =?us-ascii?Q?f2d79tbA1ppeeRQaTpMtel/pzuNf+N8xVCGhsjmKP3LtlE9Ow+Jj6GutuXKm?=
- =?us-ascii?Q?k+wDZNTsLcQR6OzXBaV9hhg7in0L5GnhOjo6FHOF1hXXDv6Y329yjqktXVLH?=
- =?us-ascii?Q?slnF+XViMvHn8XkazrISnfJw74HR9uXy4SG2P2/yVnoQbyc5mPPos6CWd8lv?=
- =?us-ascii?Q?bYTC7HphU3goXREBLx67rVY940WglJInQwx4YfLu7bk2BCH+M9fOte+EUO0N?=
- =?us-ascii?Q?3TfESd5y9DdsaydJDw8WRGUmTWGfQVzY8hf3o/saCJrJ7N4yvz8C55mEtRd6?=
- =?us-ascii?Q?Z82a49my754yG3ve/ZpRC+iKK1cV8OZ/q4AGXjzvLmiAYKdf159W9rB+TIjp?=
- =?us-ascii?Q?sAD1QRPKvf37kpNh4nCbB4B1Wopv/Vl99+Q9cNK8gP9kC7yy1tO7/LofSe3p?=
- =?us-ascii?Q?tjh7Cbo0QeD9hZ5N+ioQfx9z2872pFCrRo107azmRyBQofPSA3ZVMVMBHvQu?=
- =?us-ascii?Q?gkQvZ0todzd5+HcGtKWpT2P5sBi9Xpy4TJFjsS/fKwFjmO/9hxBJoZlgKPLM?=
- =?us-ascii?Q?RPREK2O/OuYgQ+3+ihbdVOI=3D?=
+ client-ip=2607:f8b0:4864:20::112c; helo=mail-yw1-x112c.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5DCF2405D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DCF2405D2
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com
+ [IPv6:2607:f8b0:4864:20::112c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5DCF2405D2
+ for <buildroot@buildroot.org>; Mon,  3 Jun 2024 09:59:56 +0000 (UTC)
+Received: by mail-yw1-x112c.google.com with SMTP id
+ 00721157ae682-627dfbcf42aso39073957b3.1
+ for <buildroot@buildroot.org>; Mon, 03 Jun 2024 02:59:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1717408795; x=1718013595;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=bLofck9NaGKnDeMmSuoQS2thA7e9/b1sZaFdfCSCrG0=;
+ b=l+Qx4JI616ZV4zD7uZ0G6sQNJ0tOXwJrTaZCqLVaUDDBoDeZMHNap3IokqbVgwVOmG
+ G8IsbmZWjocdbb3TE+fsXKEbsmp+t/rhn31NacRxOZZ+bKS3NGWT2K4xS5h0C5PCoCHl
+ evb3liN8BC62OKX2b1QYY1iNEfg+HCFVFmGfxTEfZDbxEVtpJJj8kPAx40DNPORPUwy6
+ CBGWVuyFziqXILujdECbS8w5tIwLLRTPRGcH+o3c2CiD0zF710tvJTX7obZ1tNunx3lH
+ i0IspEEcnYyrH2xPM4+nH1mQTQa/0gK7Oo3LQ4YcCnexiBgwC+Mf5GT4M1d6IGz/0odx
+ 5NTg==
+X-Gm-Message-State: AOJu0Yxt7FmVrH8lezj6qYj/i7n4a9RhjvvthTPGq4oxMJ1ZBoz3YtDh
+ GAOfrhdvi9fv1LoSdPT3wPoZI5AZiswngtrFM3/MAJKdlkGvj4u9DYy4o5PVA6zcprbbmALRfzy
+ /+UBJxip0xYHnIk5VEWpP6it5WD4=
+X-Google-Smtp-Source: AGHT+IGkwYXyza1+GebqGZYK9QEcbsCmm9yv1FyfJMzaehh54x+5lPAT7TeTgU3v7CWY9UJ9X5psYQp75V2C4k8nlV4=
+X-Received: by 2002:a05:690c:f85:b0:61a:d21f:a131 with SMTP id
+ 00721157ae682-62c797e58f7mr106169247b3.37.1717408794972; Mon, 03 Jun 2024
+ 02:59:54 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb6b9aae-58d0-4e38-1d66-08dc83b1c0db
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2024 09:44:24.7367 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: htdnEdQMwMx404Bzb4I0NJiQv83dYHCtjjlwiefWT8/9DBigEtCGv+vJTsYLtNdi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8804
+References: <20240531151325.2443323-1-roy.kollen.svendsen@akersolutions.com>
+ <20240531151325.2443323-9-roy.kollen.svendsen@akersolutions.com>
+ <ZltXHCyhxx8XkbTm@landeda>
+ <CA+R_deouN7hKSnkNn0Fo9GiMMbFZxXKOf=W0dZFxocT-gj9qMA@mail.gmail.com>
+ <CA+R_depNxKwN2X-d2h47TzrSkxeXK1UU0TVjoptSvHwS8-hVZg@mail.gmail.com>
+In-Reply-To: <CA+R_depNxKwN2X-d2h47TzrSkxeXK1UU0TVjoptSvHwS8-hVZg@mail.gmail.com>
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Date: Mon, 3 Jun 2024 11:59:42 +0200
+Message-ID: <CA+R_dequcm5iKOuTROpHLEot8k5aE0+nU=N=13+X7iHOq-xG=A@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zyCK1EN9by2AGSIadLvCoSg9DWn7m2qhbUcGjRWWFJ8=;
- b=y3Ov8HyYhXsjF7bLyvWrQMLcQcH2xtiBrOIxj6g3pYgkddXoH1hoNpK72KHRVl8A+GCvBHgYiOfVpsC1aeJrBIK4LaLTHb3GH06OP39RH9gAeUzNOcH8iQd/E88mOzuXV0tP7RK0uIbQb/aA+zxD8G+95yfeLa8e0MBmod1CRCE=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=y3Ov8HyY
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH] configs/versal_vck190_defconfig: add hashes
+ d=gmail.com; s=20230601; t=1717408795; x=1718013595; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=bLofck9NaGKnDeMmSuoQS2thA7e9/b1sZaFdfCSCrG0=;
+ b=gExalO2MD1TK9IIHbeto5TK2U5gq2vQ4lVkxsdiuYvxmJp7Jj/QvIO/HvonmW10CW3
+ IYIqDBsbKbGvVn/HyL6Ol8m8okVv49UlBbcBa32smhxd5R0/oV/EV1BFAlnxRZ0Zrsie
+ ri1Fk0G/cqQy5tzMsKlGsq0176Csj5M6Qar98U38OJ6c9SZdfF4tU+BL2dUt0+2zBr5Y
+ 9B0jWTz8N6Dqw7jFybPuz5/hABFvTvjm0wKTMAR2W9BSgXm1A3GC/v3fwAwqjhdEJzIA
+ nH02iaPZkH380ykhgR8dJagPgp6pX/bJ4JbIO2gpH86un7UDaqZboKWkFimj0oRbscgP
+ RyEQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=gExalO2M
+Subject: Re: [Buildroot] [PATCH v5 09/14] package/qt6/qt6declarative: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -174,57 +102,879 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Jesse Van Gavere <jesseevg@gmail.com>
+Content-Type: multipart/mixed; boundary="===============8154361291839071070=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Brandon, Peter,
+--===============8154361291839071070==
+Content-Type: multipart/alternative; boundary="000000000000289d2a0619f965bb"
 
-> My only concern is that this patch conflicts with the following patch set which is still waiting for additional review.  The patch set below changes the versal-firmware package from one that downloads pre-built binaries to a version which builds the binaries from source.  If the patch set below gets applied first, then the hash for the versal-firmware-xilinx_v2023.2.tar.gz
-file will be wrong.
+--000000000000289d2a0619f965bb
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Yann,
+
+After adding a couple of more comments qt6base.mk looks like:
+
+# We need host-qt6base with Gui support when building host-qt6shadertools,
+# otherwise the build is skipped and no qsb host tool is generated.
+# qt6shadertools fail to build if qsb is not available. qsb is also require=
+d
+# when building host-qt6declarative with Quick support, which is necessary
+for
+# the qmltime host tool to be built. qt6declarative fails to build if
+qmltime is
+# not available. Gui support is also required when building Svg support and
+# thereby the svgtoqml host tool. qt6declarative will also fail to build if
+# svgtoqml is not available.
+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_GUI),y)
+HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_gui=3DON
+else
+HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_gui=3DOFF
+endif
+
+# The Network module is explicitly required by qt6tools.
+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_NETWORK),y)
+HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_network=3DON
+else
+HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_network=3DOFF
+endif
+
+# We need host qt6base with Sql support for host-qt6tools to generate the
+# qhelpgenerator host tool. qt6tools will fail to build if qhelpgenerator
+is not
+# available.
+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_SQL),y)
+HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_sql=3DON
+else
+HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_sql=3DOFF
+endif
+
+# We need host-qt6base with Testlib support when building
+host-qt6declarative,
+# with QuickTest support. QuickTest support is further required for
+building the
+# qmltestrunner host tool. qt6declarative will fail to build if
+qmltestrunner is
+# not available.
+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_TEST),y)
+HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_testlib=3DON
+else
+HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_testlib=3DOFF
+endif
+
+Best Regards,
+Roy
+
+man. 3. juni 2024 kl. 11:24 skrev Roy Kollen Svendsen <
+roykollensvendsen@gmail.com>:
+
+> Hi Yann,
 >
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=397588
+> I've rebuilt with all Qt6 packages and features enabled but with the blin=
+d
+> host options set to OFF to recreate the error messages.
 >
-> Could we apply this patch set first, and then go through and add all the correct hashes for the zynq, zynqmp and versal defconfigs?
+> I will try to extract the essential parts of these and add to commit
+> messages for both qt6base and the dependent packages.
+>
+> I'm also tracing the host tool dependencies in Qt6' cmake files to try to
+> formulate some better explanations.
+>
+> Currently I've added some comments to the blind host options in qt6base.m=
+k.
+> Any comments on the following?:
+>
+> # We need host-qt6base with Gui support when building host-qt6shadertools=
+,
+> # otherwise the build is skipped and no qsb host tool is generated.
+> # qt6shadertools fail to build if qsb is not available. qsb is also
+> required
+> # when building host-qt6declarative with Quick support, which is necessar=
+y
+> for
+> # the qmltime host tool to be built. qt6declarative fails to build if
+> qmltime is
+> # not available. Gui support is also required when building Svg support a=
+nd
+> # thereby the svgtoqml host tool. qt6declarative will also fail to build =
+if
+> # svgtoqml is not available.
+> ifeq ($(BR2_PACKAGE_HOST_QT6BASE_GUI),y)
+> HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_gui=3DON
+> else
+> HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_gui=3DOFF
+> endif
+>
+> ifeq ($(BR2_PACKAGE_HOST_QT6BASE_NETWORK),y)
+> HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_network=3DOFF
+> else
+> HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_network=3DOFF
+> endif
+>
+> ifeq ($(BR2_PACKAGE_HOST_QT6BASE_SQL),y)
+> HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_sql=3DOFF
+> else
+> HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_sql=3DOFF
+> endif
+>
+> # We need host-qt6base with Testlib support when building
+> host-qt6declarative,
+> # with QuickTest support. QuickTest support is further required for
+> building the
+> # qmltestrunner host tool. qt6declarative will fail to build if
+> qmltestrunner is
+> # not available.
+> ifeq ($(BR2_PACKAGE_HOST_QT6BASE_TEST),y)
+> HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_testlib=3DON
+> else
+> HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_testlib=3DOFF
+> endif
+>
+> Best Regards,
+> Roy
+>
+> s=C3=B8n. 2. juni 2024 kl. 10:03 skrev Roy Kollen Svendsen <
+> roykollensvendsen@gmail.com>:
+>
+>> Hi Yann,
+>>
+>> Ok, thanks for your feedback. I'll try to follow the same pattern for al=
+l
+>> commit messages for new packages requiring new blind host options. I wil=
+l
+>> try to make the exlanations less verbose, move the explanations to the
+>> commits which apply the blind host options and add an explanation for Qt
+>> Tools selecting Qt::Sql.
+>>
+>> I'll probably try to rebuild the packages without the blind host options
+>> enabled, to get the error messages. And add those (in a more compact for=
+m)
+>> + maybe some explanation by referencing relevant lines in the Qt
+>> buildsystem.
+>>
+>> Best Regards
+>> Roy
+>>
+>> l=C3=B8r. 1. jun. 2024, 19:15 skrev Yann E. MORIN <yann.morin.1998@free.=
+fr>:
+>>
+>>> Roy, All,
+>>>
+>>> On 2024-05-31 17:13 +0200, Roy Kollen Svendsen spake thusly:
+>>> > We add the patch to avoid checking for FEATURE_ssl when FEATURE_netwo=
+rk
+>>> > is not available. FEATURE_ssl is defined by the Qt Network module. So
+>>> > we will get the following build failure if the patch is not applied a=
+nd
+>>> > FEATURE_network=3DON:
+>>> >
+>>> > CMake Error at qt6base-6.7.0/cmake/QtFeature.cmake:376 (message):
+>>> >   Attempting to evaluate feature ssl but its definition is missing.
+>>> Either
+>>> >   the feature does not exist or a dependency to the module that
+>>> defines it is
+>>> >   missing
+>>> > Call Stack (most recent call first):
+>>> >   qt6base-6.7.0/cmake/QtFeature.cmake:141 (qt_evaluate_feature)
+>>> >   qt6base-6.7.0/cmake/QtFeature.cmake:180
+>>> (qt_internal_evaluate_config_expression)
+>>> >   qt6base-6.7.0/cmake/QtFeature.cmake:396
+>>> (qt_evaluate_config_expression)
+>>> >   qt6base-6.7.0/cmake/QtFeature.cmake:711 (qt_evaluate_feature)
+>>> >   qt6base-6.7.0/cmake/QtFeature.cmake:680 (qt_feature_module_end)
+>>> >   src/qml/CMakeLists.txt:13 (qt_feature_evaluate_features)
+>>> >
+>>> > To avoid the following build error, we also make sure the host qt6bas=
+e
+>>> is
+>>> > built with Testlib enabled:
+>>> >
+>>> > CMake Error at
+>>> buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelpers.cmake:684
+>>> (message):
+>>> >   Failed to find the host tool "Qt6::qmltestrunner".  It is part of t=
+he
+>>>
+>>> This is the kind of explanation (even if a bit verbose) that we indeed
+>>> need for the requirement on the host qt6base having some modules
+>>> enabled. If you can provide that for the other packages, that would be
+>>> awesome!
+>>>
+>>> Regards,
+>>> Yann E. MORIN.
+>>>
+>>> >   Qt6QmlTools package, but the package did not contain the tool.  Mak=
+e
+>>> sure
+>>> >   that the host module Qml was built with all features enabled (no
+>>> explicitly
+>>> >   disabled tools).
+>>> > Call Stack (most recent call first):
+>>> >   buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelpers.cmake:72
+>>> (qt_internal_find_tool)
+>>> >   tools/qmltestrunner/CMakeLists.txt:11 (qt_internal_add_tool)
+>>> >
+>>> > Signed-off-by: Roy Kollen Svendsen <
+>>> roy.kollen.svendsen@akersolutions.com>
+>>> > ---
+>>> > Changes v4 -> v5:
+>>> >   - Bump to v6.7.1
+>>> >
+>>> >  package/qt6/Config.in                         |  1 +
+>>> >  ...1-Fix-build-with--no-feature-network.patch | 28 ++++++++++
+>>> >  package/qt6/qt6declarative/Config.in          | 24 ++++++++
+>>> >  .../qt6/qt6declarative/qt6declarative.hash    | 11 ++++
+>>> >  package/qt6/qt6declarative/qt6declarative.mk  | 56
+>>> +++++++++++++++++++
+>>> >  5 files changed, 120 insertions(+)
+>>> >  create mode 100644
+>>> package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patc=
+h
+>>> >  create mode 100644 package/qt6/qt6declarative/Config.in
+>>> >  create mode 100644 package/qt6/qt6declarative/qt6declarative.hash
+>>> >  create mode 100644 package/qt6/qt6declarative/qt6declarative.mk
+>>> >
+>>> > diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+>>> > index 81682af476..625134d281 100644
+>>> > --- a/package/qt6/Config.in
+>>> > +++ b/package/qt6/Config.in
+>>> > @@ -45,6 +45,7 @@ if BR2_PACKAGE_QT6
+>>> >
+>>> >  source "package/qt6/qt6base/Config.in"
+>>> >  source "package/qt6/qt6core5compat/Config.in"
+>>> > +source "package/qt6/qt6declarative/Config.in"
+>>> >  source "package/qt6/qt6languageserver/Config.in"
+>>> >  source "package/qt6/qt6serialbus/Config.in"
+>>> >  source "package/qt6/qt6serialport/Config.in"
+>>> > diff --git
+>>> a/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.pa=
+tch
+>>> b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.pa=
+tch
+>>> > new file mode 100644
+>>> > index 0000000000..bef5794229
+>>> > --- /dev/null
+>>> > +++
+>>> b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.pa=
+tch
+>>> > @@ -0,0 +1,28 @@
+>>> > +From 8377691a0998fd84e6fc8349a5db450bf2d79164 Mon Sep 17 00:00:00 20=
+01
+>>> > +From: Tasuku Suzuki <tasuku.suzuki@signal-slot.co.jp>
+>>> > +Date: Tue, 21 Nov 2023 23:58:43 +0900
+>>> > +Subject: Fix build with -no-feature-network
+>>> > +
+>>> > +Change-Id: Ib21012301da6afb5458f707b39a9a8079d93eb93
+>>> > +Reviewed-by: Ulf Hermann <ulf.hermann@qt.io>
+>>> > +Upstream:
+>>> https://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=3D8377691a0998f=
+d84e6fc8349a5db450bf2d79164
+>>> > +Signed-off-by: Roy Kollen Svendsen <
+>>> roy.kollen.svendsen@akersolutions.com>
+>>> > +---
+>>> > + src/qml/configure.cmake | 2 +-
+>>> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+>>> > +
+>>> > +diff --git a/src/qml/configure.cmake b/src/qml/configure.cmake
+>>> > +index 2d0434643a..d1ff90bd54 100644
+>>> > +--- a/src/qml/configure.cmake
+>>> > ++++ b/src/qml/configure.cmake
+>>> > +@@ -82,7 +82,7 @@ qt_feature("qml-ssl" PUBLIC
+>>> > +     SECTION "QML"
+>>> > +     LABEL "QML SSL support"
+>>> > +     PURPOSE "Provides ssl support in QML."
+>>> > +-    CONDITION QT_FEATURE_ssl
+>>> > ++    CONDITION QT_FEATURE_qml_network AND QT_FEATURE_ssl
+>>> > + )
+>>> > +
+>>> > + # On arm and arm64 we need a specialization of cacheFlush() for eac=
+h
+>>> OS to be
+>>> > +--
+>>> > +cgit v1.2.3
+>>> > diff --git a/package/qt6/qt6declarative/Config.in
+>>> b/package/qt6/qt6declarative/Config.in
+>>> > new file mode 100644
+>>> > index 0000000000..1daa645413
+>>> > --- /dev/null
+>>> > +++ b/package/qt6/qt6declarative/Config.in
+>>> > @@ -0,0 +1,24 @@
+>>> > +config BR2_PACKAGE_QT6DECLARATIVE
+>>> > +     bool "qt6declarative"
+>>> > +     # Enable host test module to ensure that qmltestrunner is built
+>>> > +     select BR2_PACKAGE_HOST_QT6BASE_TEST if BR2_PACKAGE_QT6BASE_TES=
+T
+>>> > +     help
+>>> > +       Qt is a cross-platform application and UI framework for
+>>> > +       developers using C++.
+>>> > +
+>>> > +       This package corresponds to the qt6declarative module.
+>>> > +
+>>> > +       https://doc.qt.io/qt-6/qtdeclarative-index.html
+>>> > +
+>>> > +if BR2_PACKAGE_QT6DECLARATIVE
+>>> > +
+>>> > +config BR2_PACKAGE_QT6DECLARATIVE_QUICK
+>>> > +     bool "quick module"
+>>> > +     select BR2_PACKAGE_QT6BASE_GUI
+>>> > +     select BR2_PACKAGE_QT6LANGUAGESERVER
+>>> > +     select BR2_PACKAGE_QT6SHADERTOOLS
+>>> > +     select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_QT6_GL_SUPPORT=
+S
+>>> > +     select BR2_PACKAGE_HOST_QT6SVG
+>>> > +     select BR2_PACKAGE_HOST_QT6DECLARATIVE
+>>> > +
+>>> > +endif
+>>> > diff --git a/package/qt6/qt6declarative/qt6declarative.hash
+>>> b/package/qt6/qt6declarative/qt6declarative.hash
+>>> > new file mode 100644
+>>> > index 0000000000..480e3805ca
+>>> > --- /dev/null
+>>> > +++ b/package/qt6/qt6declarative/qt6declarative.hash
+>>> > @@ -0,0 +1,11 @@
+>>> > +# Hash from:
+>>> https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtdecl=
+arative-everywhere-src-6.7.1.tar.xz.sha256
+>>> > +sha256
+>>> 81135c96ed2f599385b8a68c57f4f438dad193c62f946f5b200a321558fd9f1c
+>>> qtdeclarative-everywhere-src-6.7.1.tar.xz
+>>> > +
+>>> > +# Hashes for license files:
+>>> > +sha256
+>>> 9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce
+>>> LICENSES/BSD-3-Clause.txt
+>>> > +sha256
+>>> 110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4
+>>> LICENSES/GFDL-1.3-no-invariants-only.txt
+>>> > +sha256
+>>> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
+>>> LICENSES/GPL-2.0-only.txt
+>>> > +sha256
+>>> 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
+>>> LICENSES/GPL-3.0-only.txt
+>>> > +sha256
+>>> da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768
+>>> LICENSES/LGPL-3.0-only.txt
+>>> > +sha256
+>>> 9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700
+>>> LICENSES/LicenseRef-Qt-Commercial.txt
+>>> > +sha256
+>>> 40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2
+>>> LICENSES/Qt-GPL-exception-1.0.txt
+>>> > diff --git a/package/qt6/qt6declarative/qt6declarative.mk
+>>> b/package/qt6/qt6declarative/qt6declarative.mk
+>>> > new file mode 100644
+>>> > index 0000000000..2348ff2dae
+>>> > --- /dev/null
+>>> > +++ b/package/qt6/qt6declarative/qt6declarative.mk
+>>> > @@ -0,0 +1,56 @@
+>>> >
+>>> +######################################################################=
+##########
+>>> > +#
+>>> > +# qt6declaratve
+>>> > +#
+>>> >
+>>> +######################################################################=
+##########
+>>> > +
+>>> > +QT6DECLARATIVE_VERSION =3D $(QT6_VERSION)
+>>> > +QT6DECLARATIVE_SITE =3D $(QT6_SITE)
+>>> > +QT6DECLARATIVE_SOURCE =3D
+>>> qtdeclarative-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6DECLARATIVE_VERSION).ta=
+r.xz
+>>> > +QT6DECLARATIVE_INSTALL_STAGING =3D YES
+>>> > +
+>>> > +QT6DECLARATIVE_SUPPORTS_IN_SOURCE_BUILD =3D NO
+>>> > +
+>>> > +QT6DECLARATIVE_CMAKE_BACKEND =3D ninja
+>>> > +
+>>> > +QT6DECLARATIVE_LICENSE =3D \
+>>> > +     GPL-2.0+ or LGPL-3.0, \
+>>> > +     GPL-3.0, GFDL-1.3 no invariants (docs)
+>>> > +
+>>> > +QT6DECLARATIVE_LICENSE_FILES =3D \
+>>> > +     LICENSES/GPL-2.0-only.txt \
+>>> > +     LICENSES/GPL-3.0-only.txt \
+>>> > +     LICENSES/LGPL-3.0-only.txt \
+>>> > +     LICENSES/GFDL-1.3-no-invariants-only.txt
+>>> > +
+>>> > +QT6DECLARATIVE_CONF_OPTS =3D \
+>>> > +     -DQT_FEATURE_qml_profiler=3DOFF \
+>>> > +     -DQT_HOST_PATH=3D$(HOST_DIR) \
+>>> > +     -DBUILD_WITH_PCH=3DOFF \
+>>> > +     -DQT_BUILD_EXAMPLES=3DOFF \
+>>> > +     -DQT_BUILD_TESTS=3DOFF
+>>> > +
+>>> > +HOST_QT6DECLARATIVE_CONF_OPTS =3D \
+>>> > +     -DQT_HOST_PATH=3D$(HOST_DIR) \
+>>> > +     -DBUILD_WITH_PCH=3DOFF \
+>>> > +     -DQT_BUILD_EXAMPLES=3DOFF \
+>>> > +     -DQT_BUILD_TESTS=3DOFF \
+>>> > +     -DQT_FEATURE_ssl=3DOFF
+>>> > +
+>>> > +QT6DECLARATIVE_DEPENDENCIES =3D \
+>>> > +     host-qt6base \
+>>> > +     host-qt6svg \
+>>> > +     host-qt6shadertools \
+>>> > +     host-qt6declarative \
+>>> > +     qt6base \
+>>> > +     qt6shadertools \
+>>> > +     qt6languageserver \
+>>> > +     qt6svg
+>>> > +
+>>> > +HOST_QT6DECLARATIVE_DEPENDENCIES =3D \
+>>> > +     host-qt6base \
+>>> > +     host-qt6svg \
+>>> > +     host-qt6shadertools
+>>> > +
+>>> > +$(eval $(cmake-package))
+>>> > +$(eval $(host-cmake-package))
+>>> > --
+>>> > 2.45.1
+>>> >
+>>> > _______________________________________________
+>>> > buildroot mailing list
+>>> > buildroot@buildroot.org
+>>> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>>>
+>>> --
+>>>
+>>> .-----------------.--------------------.------------------.------------=
+--------.
+>>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+>>> conspiracy: |
+>>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>>>        |
+>>> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There
+>>> is no  |
+>>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>>>  conspiracy.  |
+>>>
+>>> '------------------------------^-------^------------------^------------=
+--------'
+>>>
+>>
 
-> I'm for that approach, I will decline this patch. Please CC me when the zynqmp-firmware series is applied, and I will spin hashes for the Xilinx boards.
+--000000000000289d2a0619f965bb
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> I was hoping that the zynqmp-firmware and versal-firmware patches would be
-> accepted before the Xilinx 2024.1 release, but that does not appear to be the
-> case.
+<div dir=3D"ltr"><div>Hi Yann,</div><div><br></div><div>After adding a coup=
+le of more comments <a href=3D"http://qt6base.mk">qt6base.mk</a> looks like=
+:</div><div><br></div><div># We need host-qt6base with Gui support when bui=
+lding host-qt6shadertools,<br># otherwise the build is skipped and no qsb h=
+ost tool is generated. <br># qt6shadertools fail to build if qsb is not ava=
+ilable. qsb is also required<br># when building host-qt6declarative with Qu=
+ick support, which is necessary for<br># the qmltime host tool to be built.=
+ qt6declarative fails to build if qmltime is<br># not available. Gui suppor=
+t is also required when building Svg support and<br># thereby the svgtoqml =
+host tool. qt6declarative will also fail to build if<br># svgtoqml is not a=
+vailable.<br>ifeq ($(BR2_PACKAGE_HOST_QT6BASE_GUI),y)<br>HOST_QT6BASE_CONF_=
+OPTS +=3D -DFEATURE_gui=3DON<br>else<br>HOST_QT6BASE_CONF_OPTS +=3D -DFEATU=
+RE_gui=3DOFF<br>endif<br><br># The Network module is explicitly required by=
+ qt6tools. <br>ifeq ($(BR2_PACKAGE_HOST_QT6BASE_NETWORK),y)<br>HOST_QT6BASE=
+_CONF_OPTS +=3D -DFEATURE_network=3DON<br>else<br>HOST_QT6BASE_CONF_OPTS +=
+=3D -DFEATURE_network=3DOFF<br>endif<br><br># We need host qt6base with Sql=
+ support for host-qt6tools to generate the<br># qhelpgenerator host tool. q=
+t6tools will fail to build if qhelpgenerator is not<br># available.<br>ifeq=
+ ($(BR2_PACKAGE_HOST_QT6BASE_SQL),y)<br>HOST_QT6BASE_CONF_OPTS +=3D -DFEATU=
+RE_sql=3DON<br>else<br>HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_sql=3DOFF<br>e=
+ndif<br><br># We need host-qt6base with Testlib support when building host-=
+qt6declarative,<br># with QuickTest support. QuickTest support is further r=
+equired for building the<br># qmltestrunner host tool. qt6declarative will =
+fail to build if qmltestrunner is<br># not available. =C2=A0<br>ifeq ($(BR2=
+_PACKAGE_HOST_QT6BASE_TEST),y)<br>HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_tes=
+tlib=3DON<br>else<br>HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_testlib=3DOFF<br=
+>endif</div><div><br></div><div>Best Regards,</div><div>Roy<br></div></div>=
+<br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">man. 3=
+. juni 2024 kl. 11:24 skrev Roy Kollen Svendsen &lt;<a href=3D"mailto:royko=
+llensvendsen@gmail.com">roykollensvendsen@gmail.com</a>&gt;:<br></div><bloc=
+kquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:=
+1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr"><div>Hi Yann,=
+</div><div><br></div>I&#39;ve rebuilt with all Qt6 packages and features en=
+abled but with=20
+the blind host options set to OFF to recreate the error messages.<div><div>=
+<br></div><div>I will try to extract the essential parts of these and add t=
+o commit messages for both qt6base and the dependent packages.<br></div><di=
+v><br></div><div>I&#39;m also tracing the host tool dependencies in Qt6&#39=
+; cmake files to try to formulate some better explanations.</div><div><br><=
+/div><div>Currently I&#39;ve added some comments to the blind host options =
+in <a href=3D"http://qt6base.mk" target=3D"_blank">qt6base.mk</a>. Any comm=
+ents on the following?:<br></div></div><div><br></div><div># We need host-q=
+t6base with Gui support when building host-qt6shadertools,<br># otherwise t=
+he build is skipped and no qsb host tool is generated. <br># qt6shadertools=
+ fail to build if qsb is not available. qsb is also required<br># when buil=
+ding host-qt6declarative with Quick support, which is necessary for<br># th=
+e qmltime host tool to be built. qt6declarative fails to build if qmltime i=
+s<br># not available. Gui support is also required when building Svg suppor=
+t and<br># thereby the svgtoqml host tool. qt6declarative will also fail to=
+ build if<br># svgtoqml is not available.<br>ifeq ($(BR2_PACKAGE_HOST_QT6BA=
+SE_GUI),y)<br>HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_gui=3DON<br>else<br>HOS=
+T_QT6BASE_CONF_OPTS +=3D -DFEATURE_gui=3DOFF<br>endif<br><br>ifeq ($(BR2_PA=
+CKAGE_HOST_QT6BASE_NETWORK),y)<br>HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_net=
+work=3DOFF<br>else<br>HOST_QT6BASE_CONF_OPTS +=3D -DFEATURE_network=3DOFF<b=
+r>endif<br><br>ifeq ($(BR2_PACKAGE_HOST_QT6BASE_SQL),y)<br>HOST_QT6BASE_CON=
+F_OPTS +=3D -DFEATURE_sql=3DOFF<br>else<br>HOST_QT6BASE_CONF_OPTS +=3D -DFE=
+ATURE_sql=3DOFF<br>endif<br><br># We need host-qt6base with Testlib support=
+ when building host-qt6declarative,<br># with QuickTest support. QuickTest =
+support is further required for building the<br># qmltestrunner host tool. =
+qt6declarative will fail to build if qmltestrunner is<br># not available. =
+=C2=A0<br>ifeq ($(BR2_PACKAGE_HOST_QT6BASE_TEST),y)<br>HOST_QT6BASE_CONF_OP=
+TS +=3D -DFEATURE_testlib=3DON<br>else<br>HOST_QT6BASE_CONF_OPTS +=3D -DFEA=
+TURE_testlib=3DOFF<br>endif</div><div><br></div><div>Best Regards,</div><di=
+v>Roy<br></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=
+=3D"gmail_attr">s=C3=B8n. 2. juni 2024 kl. 10:03 skrev Roy Kollen Svendsen =
+&lt;<a href=3D"mailto:roykollensvendsen@gmail.com" target=3D"_blank">roykol=
+lensvendsen@gmail.com</a>&gt;:<br></div><blockquote class=3D"gmail_quote" s=
+tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
+ding-left:1ex"><div dir=3D"auto">Hi Yann,<div dir=3D"auto"><br></div><div d=
+ir=3D"auto">Ok, thanks for your feedback. I&#39;ll try to follow the same p=
+attern for all commit messages for new packages requiring new blind host op=
+tions. I will try to make the exlanations less verbose, move the explanatio=
+ns to the commits which apply the blind host options and add an explanation=
+ for Qt Tools selecting Qt::Sql.</div><div dir=3D"auto"><br></div><div dir=
+=3D"auto">I&#39;ll probably try to rebuild the packages without the blind h=
+ost options enabled, to get the error messages. And add those (in a more co=
+mpact form) + maybe some explanation by referencing relevant lines in the Q=
+t buildsystem.</div><div dir=3D"auto"><br></div><div dir=3D"auto">Best Rega=
+rds</div><div dir=3D"auto">Roy</div></div><br><div class=3D"gmail_quote"><d=
+iv dir=3D"ltr" class=3D"gmail_attr">l=C3=B8r. 1. jun. 2024, 19:15 skrev Yan=
+n E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr" target=3D"_blank"=
+>yann.morin.1998@free.fr</a>&gt;:<br></div><blockquote class=3D"gmail_quote=
+" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);=
+padding-left:1ex">Roy, All,<br>
+<br>
+On 2024-05-31 17:13 +0200, Roy Kollen Svendsen spake thusly:<br>
+&gt; We add the patch to avoid checking for FEATURE_ssl when FEATURE_networ=
+k<br>
+&gt; is not available. FEATURE_ssl is defined by the Qt Network module. So<=
+br>
+&gt; we will get the following build failure if the patch is not applied an=
+d<br>
+&gt; FEATURE_network=3DON:<br>
+&gt; <br>
+&gt; CMake Error at qt6base-6.7.0/cmake/QtFeature.cmake:376 (message):<br>
+&gt;=C2=A0 =C2=A0Attempting to evaluate feature ssl but its definition is m=
+issing.=C2=A0 Either<br>
+&gt;=C2=A0 =C2=A0the feature does not exist or a dependency to the module t=
+hat defines it is<br>
+&gt;=C2=A0 =C2=A0missing<br>
+&gt; Call Stack (most recent call first):<br>
+&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:141 (qt_evaluate_featu=
+re)<br>
+&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:180 (qt_internal_evalu=
+ate_config_expression)<br>
+&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:396 (qt_evaluate_confi=
+g_expression)<br>
+&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:711 (qt_evaluate_featu=
+re)<br>
+&gt;=C2=A0 =C2=A0qt6base-6.7.0/cmake/QtFeature.cmake:680 (qt_feature_module=
+_end)<br>
+&gt;=C2=A0 =C2=A0src/qml/CMakeLists.txt:13 (qt_feature_evaluate_features)<b=
+r>
+&gt; <br>
+&gt; To avoid the following build error, we also make sure the host qt6base=
+ is<br>
+&gt; built with Testlib enabled:<br>
+&gt; <br>
+&gt; CMake Error at buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelper=
+s.cmake:684 (message):<br>
+&gt;=C2=A0 =C2=A0Failed to find the host tool &quot;Qt6::qmltestrunner&quot=
+;.=C2=A0 It is part of the<br>
+<br>
+This is the kind of explanation (even if a bit verbose) that we indeed<br>
+need for the requirement on the host qt6base having some modules<br>
+enabled. If you can provide that for the other packages, that would be<br>
+awesome!<br>
+<br>
+Regards,<br>
+Yann E. MORIN.<br>
+<br>
+&gt;=C2=A0 =C2=A0Qt6QmlTools package, but the package did not contain the t=
+ool.=C2=A0 Make sure<br>
+&gt;=C2=A0 =C2=A0that the host module Qml was built with all features enabl=
+ed (no explicitly<br>
+&gt;=C2=A0 =C2=A0disabled tools).<br>
+&gt; Call Stack (most recent call first):<br>
+&gt;=C2=A0 =C2=A0buildroot/output/build/qt6base-6.7.0/cmake/QtToolHelpers.c=
+make:72 (qt_internal_find_tool)<br>
+&gt;=C2=A0 =C2=A0tools/qmltestrunner/CMakeLists.txt:11 (qt_internal_add_too=
+l)<br>
+&gt; <br>
+&gt; Signed-off-by: Roy Kollen Svendsen &lt;<a href=3D"mailto:roy.kollen.sv=
+endsen@akersolutions.com" rel=3D"noreferrer" target=3D"_blank">roy.kollen.s=
+vendsen@akersolutions.com</a>&gt;<br>
+&gt; ---<br>
+&gt; Changes v4 -&gt; v5:<br>
+&gt;=C2=A0 =C2=A0- Bump to v6.7.1<br>
+&gt; <br>
+&gt;=C2=A0 package/qt6/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
+&gt;=C2=A0 ...1-Fix-build-with--no-feature-network.patch | 28 ++++++++++<br=
+>
+&gt;=C2=A0 package/qt6/qt6declarative/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 | 24 ++++++++<br>
+&gt;=C2=A0 .../qt6/qt6declarative/qt6declarative.hash=C2=A0 =C2=A0 | 11 +++=
++<br>
+&gt;=C2=A0 package/qt6/qt6declarative/<a href=3D"http://qt6declarative.mk" =
+rel=3D"noreferrer noreferrer" target=3D"_blank">qt6declarative.mk</a>=C2=A0=
+ | 56 +++++++++++++++++++<br>
+&gt;=C2=A0 5 files changed, 120 insertions(+)<br>
+&gt;=C2=A0 create mode 100644 package/qt6/qt6declarative/0001-Fix-build-wit=
+h--no-feature-network.patch<br>
+&gt;=C2=A0 create mode 100644 package/qt6/qt6declarative/Config.in<br>
+&gt;=C2=A0 create mode 100644 package/qt6/qt6declarative/qt6declarative.has=
+h<br>
+&gt;=C2=A0 create mode 100644 package/qt6/qt6declarative/<a href=3D"http://=
+qt6declarative.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">qt6decla=
+rative.mk</a><br>
+&gt; <br>
+&gt; diff --git a/package/qt6/Config.in b/package/qt6/Config.in<br>
+&gt; index 81682af476..625134d281 100644<br>
+&gt; --- a/package/qt6/Config.in<br>
+&gt; +++ b/package/qt6/Config.in<br>
+&gt; @@ -45,6 +45,7 @@ if BR2_PACKAGE_QT6<br>
+&gt;=C2=A0 <br>
+&gt;=C2=A0 source &quot;package/qt6/qt6base/Config.in&quot;<br>
+&gt;=C2=A0 source &quot;package/qt6/qt6core5compat/Config.in&quot;<br>
+&gt; +source &quot;package/qt6/qt6declarative/Config.in&quot;<br>
+&gt;=C2=A0 source &quot;package/qt6/qt6languageserver/Config.in&quot;<br>
+&gt;=C2=A0 source &quot;package/qt6/qt6serialbus/Config.in&quot;<br>
+&gt;=C2=A0 source &quot;package/qt6/qt6serialport/Config.in&quot;<br>
+&gt; diff --git a/package/qt6/qt6declarative/0001-Fix-build-with--no-featur=
+e-network.patch b/package/qt6/qt6declarative/0001-Fix-build-with--no-featur=
+e-network.patch<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..bef5794229<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-netwo=
+rk.patch<br>
+&gt; @@ -0,0 +1,28 @@<br>
+&gt; +From 8377691a0998fd84e6fc8349a5db450bf2d79164 Mon Sep 17 00:00:00 200=
+1<br>
+&gt; +From: Tasuku Suzuki &lt;<a href=3D"mailto:tasuku.suzuki@signal-slot.c=
+o.jp" rel=3D"noreferrer" target=3D"_blank">tasuku.suzuki@signal-slot.co.jp<=
+/a>&gt;<br>
+&gt; +Date: Tue, 21 Nov 2023 23:58:43 +0900<br>
+&gt; +Subject: Fix build with -no-feature-network<br>
+&gt; +<br>
+&gt; +Change-Id: Ib21012301da6afb5458f707b39a9a8079d93eb93<br>
+&gt; +Reviewed-by: Ulf Hermann &lt;<a href=3D"mailto:ulf.hermann@qt.io" rel=
+=3D"noreferrer" target=3D"_blank">ulf.hermann@qt.io</a>&gt;<br>
+&gt; +Upstream: <a href=3D"https://code.qt.io/cgit/qt/qtdeclarative.git/com=
+mit/?id=3D8377691a0998fd84e6fc8349a5db450bf2d79164" rel=3D"noreferrer noref=
+errer" target=3D"_blank">https://code.qt.io/cgit/qt/qtdeclarative.git/commi=
+t/?id=3D8377691a0998fd84e6fc8349a5db450bf2d79164</a><br>
+&gt; +Signed-off-by: Roy Kollen Svendsen &lt;<a href=3D"mailto:roy.kollen.s=
+vendsen@akersolutions.com" rel=3D"noreferrer" target=3D"_blank">roy.kollen.=
+svendsen@akersolutions.com</a>&gt;<br>
+&gt; +---<br>
+&gt; + src/qml/configure.cmake | 2 +-<br>
+&gt; + 1 file changed, 1 insertion(+), 1 deletion(-)<br>
+&gt; +<br>
+&gt; +diff --git a/src/qml/configure.cmake b/src/qml/configure.cmake<br>
+&gt; +index 2d0434643a..d1ff90bd54 100644<br>
+&gt; +--- a/src/qml/configure.cmake<br>
+&gt; ++++ b/src/qml/configure.cmake<br>
+&gt; +@@ -82,7 +82,7 @@ qt_feature(&quot;qml-ssl&quot; PUBLIC<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0SECTION &quot;QML&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0LABEL &quot;QML SSL support&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0PURPOSE &quot;Provides ssl support in QML.&quot;<=
+br>
+&gt; +-=C2=A0 =C2=A0 CONDITION QT_FEATURE_ssl<br>
+&gt; ++=C2=A0 =C2=A0 CONDITION QT_FEATURE_qml_network AND QT_FEATURE_ssl<br=
+>
+&gt; + )<br>
+&gt; + <br>
+&gt; + # On arm and arm64 we need a specialization of cacheFlush() for each=
+ OS to be<br>
+&gt; +-- <br>
+&gt; +cgit v1.2.3<br>
+&gt; diff --git a/package/qt6/qt6declarative/Config.in b/package/qt6/qt6dec=
+larative/Config.in<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..1daa645413<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/qt6/qt6declarative/Config.in<br>
+&gt; @@ -0,0 +1,24 @@<br>
+&gt; +config BR2_PACKAGE_QT6DECLARATIVE<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;qt6declarative&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0# Enable host test module to ensure that qmltestr=
+unner is built<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_QT6BASE_TEST if BR2_PACKA=
+GE_QT6BASE_TEST<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Qt is a cross-platform application and UI =
+framework for<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0developers using C++.<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0This package corresponds to the qt6declara=
+tive module.<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"https://doc.qt.io/qt-6/qtdeclar=
+ative-index.html" rel=3D"noreferrer noreferrer" target=3D"_blank">https://d=
+oc.qt.io/qt-6/qtdeclarative-index.html</a><br>
+&gt; +<br>
+&gt; +if BR2_PACKAGE_QT6DECLARATIVE<br>
+&gt; +<br>
+&gt; +config BR2_PACKAGE_QT6DECLARATIVE_QUICK<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;quick module&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_QT6BASE_GUI<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_QT6LANGUAGESERVER<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_QT6SHADERTOOLS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_=
+QT6_GL_SUPPORTS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_QT6SVG<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_HOST_QT6DECLARATIVE<br>
+&gt; +<br>
+&gt; +endif<br>
+&gt; diff --git a/package/qt6/qt6declarative/qt6declarative.hash b/package/=
+qt6/qt6declarative/qt6declarative.hash<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..480e3805ca<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/qt6/qt6declarative/qt6declarative.hash<br>
+&gt; @@ -0,0 +1,11 @@<br>
+&gt; +# Hash from: <a href=3D"https://download.qt.io/official_releases/qt/6=
+.7/6.7.1/submodules/qtdeclarative-everywhere-src-6.7.1.tar.xz.sha256" rel=
+=3D"noreferrer noreferrer" target=3D"_blank">https://download.qt.io/officia=
+l_releases/qt/6.7/6.7.1/submodules/qtdeclarative-everywhere-src-6.7.1.tar.x=
+z.sha256</a><br>
+&gt; +sha256=C2=A0 81135c96ed2f599385b8a68c57f4f438dad193c62f946f5b200a3215=
+58fd9f1c=C2=A0 qtdeclarative-everywhere-src-6.7.1.tar.xz<br>
+&gt; +<br>
+&gt; +# Hashes for license files:<br>
+&gt; +sha256=C2=A0 9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb4=
+2ed1dcce=C2=A0 LICENSES/BSD-3-Clause.txt<br>
+&gt; +sha256=C2=A0 110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef2=
+42b206a4=C2=A0 LICENSES/GFDL-1.3-no-invariants-only.txt<br>
+&gt; +sha256=C2=A0 8177f97513213526df2cf6184d8ff986c675afb514d4e68a40401052=
+1b880643=C2=A0 LICENSES/GPL-2.0-only.txt<br>
+&gt; +sha256=C2=A0 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545=
+eb65b903=C2=A0 LICENSES/GPL-3.0-only.txt<br>
+&gt; +sha256=C2=A0 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520=
+b4464768=C2=A0 LICENSES/LGPL-3.0-only.txt<br>
+&gt; +sha256=C2=A0 9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3=
+f18a4700=C2=A0 LICENSES/LicenseRef-Qt-Commercial.txt<br>
+&gt; +sha256=C2=A0 40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0=
+530846b2=C2=A0 LICENSES/Qt-GPL-exception-1.0.txt<br>
+&gt; diff --git a/package/qt6/qt6declarative/<a href=3D"http://qt6declarati=
+ve.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">qt6declarative.mk</a=
+> b/package/qt6/qt6declarative/<a href=3D"http://qt6declarative.mk" rel=3D"=
+noreferrer noreferrer" target=3D"_blank">qt6declarative.mk</a><br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..2348ff2dae<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/qt6/qt6declarative/<a href=3D"http://qt6declarative.mk" =
+rel=3D"noreferrer noreferrer" target=3D"_blank">qt6declarative.mk</a><br>
+&gt; @@ -0,0 +1,56 @@<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +#<br>
+&gt; +# qt6declaratve<br>
+&gt; +#<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +<br>
+&gt; +QT6DECLARATIVE_VERSION =3D $(QT6_VERSION)<br>
+&gt; +QT6DECLARATIVE_SITE =3D $(QT6_SITE)<br>
+&gt; +QT6DECLARATIVE_SOURCE =3D qtdeclarative-$(QT6_SOURCE_TARBALL_PREFIX)-=
+$(QT6DECLARATIVE_VERSION).tar.xz<br>
+&gt; +QT6DECLARATIVE_INSTALL_STAGING =3D YES<br>
+&gt; +<br>
+&gt; +QT6DECLARATIVE_SUPPORTS_IN_SOURCE_BUILD =3D NO<br>
+&gt; +<br>
+&gt; +QT6DECLARATIVE_CMAKE_BACKEND =3D ninja<br>
+&gt; +<br>
+&gt; +QT6DECLARATIVE_LICENSE =3D \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0GPL-2.0+ or LGPL-3.0, \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0GPL-3.0, GFDL-1.3 no invariants (docs)<br>
+&gt; +<br>
+&gt; +QT6DECLARATIVE_LICENSE_FILES =3D \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0LICENSES/GPL-2.0-only.txt \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0LICENSES/GPL-3.0-only.txt \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0LICENSES/LGPL-3.0-only.txt \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0LICENSES/GFDL-1.3-no-invariants-only.txt<br>
+&gt; +<br>
+&gt; +QT6DECLARATIVE_CONF_OPTS =3D \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_FEATURE_qml_profiler=3DOFF \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_HOST_PATH=3D$(HOST_DIR) \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DBUILD_WITH_PCH=3DOFF \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_BUILD_EXAMPLES=3DOFF \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_BUILD_TESTS=3DOFF<br>
+&gt; +<br>
+&gt; +HOST_QT6DECLARATIVE_CONF_OPTS =3D \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_HOST_PATH=3D$(HOST_DIR) \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DBUILD_WITH_PCH=3DOFF \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_BUILD_EXAMPLES=3DOFF \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_BUILD_TESTS=3DOFF \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0-DQT_FEATURE_ssl=3DOFF<br>
+&gt; +<br>
+&gt; +QT6DECLARATIVE_DEPENDENCIES =3D \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6base \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6svg \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6shadertools \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6declarative \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0qt6base \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0qt6shadertools \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0qt6languageserver \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0qt6svg<br>
+&gt; +<br>
+&gt; +HOST_QT6DECLARATIVE_DEPENDENCIES =3D \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6base \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6svg \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0host-qt6shadertools<br>
+&gt; +<br>
+&gt; +$(eval $(cmake-package))<br>
+&gt; +$(eval $(host-cmake-package))<br>
+&gt; -- <br>
+&gt; 2.45.1<br>
+&gt; <br>
+&gt; _______________________________________________<br>
+&gt; buildroot mailing list<br>
+&gt; <a href=3D"mailto:buildroot@buildroot.org" rel=3D"noreferrer" target=
+=3D"_blank">buildroot@buildroot.org</a><br>
+&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
+=3D"noreferrer noreferrer" target=3D"_blank">https://lists.buildroot.org/ma=
+ilman/listinfo/buildroot</a><br>
+<br>
+-- <br>
+.-----------------.--------------------.------------------.----------------=
+----.<br>
+|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
+Erics&#39; conspiracy: |<br>
+| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
+=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
+| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
+ =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
+| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer noreferrer" ta=
+rget=3D"_blank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=
+=A0 =C2=A0 |=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
+&#39;------------------------------^-------^------------------^------------=
+--------&#39;<br>
+</blockquote></div>
+</blockquote></div>
+</blockquote></div>
 
-> I will be submitting patches to bump the zynqmp and versal defconfigs to the
-> Xilinx 2024.1 release this week.  If you want, you can add the hashes right
-> after.
+--000000000000289d2a0619f965bb--
 
-> I will then update the zynqmp-firmware and versal-firmware patch set to be
-> applied on top of the 2024.1 defconfigs with the hash check.
+--===============8154361291839071070==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-> Ok for you?
-
-I have another thought on the subject of the hashes.  All of the Xilinx hashes
-will be the same regardless of whether it is a zynq, zynqmp or versal board.
-
-However, sometimes, we may have actual patches that only apply to a single
-family, like the ATF v2.8 patches currently in the tree.
-
-In order to avoid duplicating the same .hash files 3 times, what do you think
-about creating a board/xilinx/patches directory for the hash files?  This way
-all the hashes can be common for zynq, zynqmp and versal and they can each
-still have their own board/<family>/patches directory for family specific
-patches.
-
-Assuming you are ok with this, would you like to already submit a patch to
-migrate the zynq board hashes to the board/xilinx/patches directory?
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8154361291839071070==--
