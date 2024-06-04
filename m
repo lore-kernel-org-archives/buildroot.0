@@ -4,45 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAE83C25B78
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 20:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87D29C27C53
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 20:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5938A403CA;
-	Tue,  4 Jun 2024 20:06:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5AFA040466;
+	Tue,  4 Jun 2024 20:18:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WbGLXox5xpBE; Tue,  4 Jun 2024 20:06:07 +0000 (UTC)
+ id H_bxetvc2myo; Tue,  4 Jun 2024 20:18:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FE5C40443
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 510114049C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4FE5C40443;
-	Tue,  4 Jun 2024 20:06:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 692081BF48D
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 20:06:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 510114049C;
+	Tue,  4 Jun 2024 20:18:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D24B1BF48D
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 20:18:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5337E8204B
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 20:06:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 707BC4049C
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 20:18:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7fuvYczam9jx for <buildroot@lists.busybox.net>;
- Tue,  4 Jun 2024 20:06:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PLqPV_fcVTmJ for <buildroot@lists.busybox.net>;
+ Tue,  4 Jun 2024 20:18:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CDB78201F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B64440466
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2CDB78201F
- for <buildroot@uclibc.org>; Tue,  4 Jun 2024 20:06:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B64440466
+ for <buildroot@uclibc.org>; Tue,  4 Jun 2024 20:18:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 17C3086132; Tue,  4 Jun 2024 20:06:02 +0000 (UTC)
+ id 4573E86A8D; Tue,  4 Jun 2024 20:18:07 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 04 Jun 2024 20:06:01 +0000
+Date: Tue, 04 Jun 2024 20:18:07 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
@@ -56,14 +56,14 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-16096-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-16096-163-qkIM5Ooh9F@https.bugs.busybox.net/>
+In-Reply-To: <bug-16096-163@https.bugs.busybox.net/>
+References: <bug-16096-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 16096] New: iproute musl + gcc-14 compile error w/
+Subject: [Buildroot] [Bug 16096] iproute musl + gcc-14 compile error w/
  2024.05-rc1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -81,31 +81,19 @@ Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNjA5NgoKICAgICAgICAg
-ICAgQnVnIElEOiAxNjA5NgogICAgICAgICAgIFN1bW1hcnk6IGlwcm91dGUgbXVzbCArIGdjYy0x
-NCBjb21waWxlIGVycm9yIHcvIDIwMjQuMDUtcmMxCiAgICAgICAgICAgUHJvZHVjdDogYnVpbGRy
-b290CiAgICAgICAgICAgVmVyc2lvbjogdW5zcGVjaWZpZWQKICAgICAgICAgIEhhcmR3YXJlOiBB
-bGwKICAgICAgICAgICAgICAgIE9TOiBMaW51eAogICAgICAgICAgICBTdGF0dXM6IE5FVwogICAg
-ICAgICAgU2V2ZXJpdHk6IG5vcm1hbAogICAgICAgICAgUHJpb3JpdHk6IFA1CiAgICAgICAgIENv
-bXBvbmVudDogT3RoZXIKICAgICAgICAgIEFzc2lnbmVlOiB1bmFzc2lnbmVkQGJ1aWxkcm9vdC51
-Y2xpYmMub3JnCiAgICAgICAgICBSZXBvcnRlcjogbGFuY2V0aGVwYW50c0BnbWFpbC5jb20KICAg
-ICAgICAgICAgICAgIENDOiBidWlsZHJvb3RAdWNsaWJjLm9yZwogIFRhcmdldCBNaWxlc3RvbmU6
-IC0tLQoKSSdtIGdldHRpbmcgdGhlIGJlbG93IGVycm9yIHdpdGggZ2NjLTE0IGFuZCBtdXNsIHVz
-aW5nIDIwMjQuMDUtcmMxLgoKVGhlcmUncyBpcyBhbiB1cHN0cmVhbSBwYXRjaCB0aGF0IGZpeGVz
-IHRoaXMuCmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9uZXR3b3JrL2lwcm91dGUyL2lw
-cm91dGUyLmdpdC9jb21taXQvP2lkPTUzYTg5YmZkODZmZmYxYTAwY2M3N2NhYmI4NDU3YTAzZWFh
-M2JjN2QKCi4uL2luY2x1ZGUvanNvbl9wcmludC5oOjU4OjQ4OiBlcnJvcjogcGFzc2luZyBhcmd1
-bWVudCA1IG9mIOKAmHByaW50X2NvbG9yX3R24oCZCmZyb20gaW5jb21wYXRpYmxlIHBvaW50ZXIg
-dHlwZSBbLVdpbmNvbXBhdGlibGUtcG9pbnRlci10eXBlc10KICAgNTggfCAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHZhbHVlKTsgICAgICAgICAgICAgICAg
-IApcCiAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBefn5+fgogICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgfAogICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgY29uc3Qgc3RydWN0IHRpbWV2YWwgKgoKCkJSMl94ODZfNjQ9eQpCUjJfVE9PTENIQUlO
-X0JVSUxEUk9PVF9NVVNMPXkKQlIyX0tFUk5FTF9IRUFERVJTXzZfNj15CkJSMl9CSU5VVElMU19W
-RVJTSU9OXzJfNDJfWD15CkJSMl9HQ0NfVkVSU0lPTl8xNF9YPXkKQlIyX1BBQ0tBR0VfSVBST1VU
-RTI9eQoKLS0gCllvdSBhcmUgcmVjZWl2aW5nIHRoaXMgbWFpbCBiZWNhdXNlOgpZb3UgYXJlIG9u
-IHRoZSBDQyBsaXN0IGZvciB0aGUgYnVnLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNjA5NgoKLS0tIENvbW1l
+bnQgIzEgZnJvbSBMYW5jZSBGcmVkcmlja3NvbiA8bGFuY2V0aGVwYW50c0BnbWFpbC5jb20+IC0t
+LQpBZnRlciBhcHBseWluZyB0aGF0IGZpeCBpdCBzdGlsbCBmYWlscyB3aXRoIHRoZSBmb2xsb3dp
+bmcuCgpyZG1hLmM6MTEwOjIwOiBlcnJvcjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rp
+b24g4oCYYmFzZW5hbWXigJk7IGRpZCB5b3UgbWVhbgrigJhyZW5hbWXigJk/IFstV2ltcGxpY2l0
+LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQogIDExMCB8ICAgICAgICAgZmlsZW5hbWUgPSBiYXNlbmFt
+ZShhcmd2WzBdKTsKICAgICAgfCAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn4KICAgICAgfCAg
+ICAgICAgICAgICAgICAgICAgcmVuYW1lCnJkbWEuYzoxMTA6MTg6IGVycm9yOiBhc3NpZ25tZW50
+IHRvIOKAmGNoYXIgKuKAmSBmcm9tIOKAmGludOKAmSBtYWtlcyBwb2ludGVyIGZyb20KaW50ZWdl
+ciB3aXRob3V0IGEgY2FzdCBbLVdpbnQtY29udmVyc2lvbl0KICAxMTAgfCAgICAgICAgIGZpbGVu
+YW1lID0gYmFzZW5hbWUoYXJndlswXSk7CgoKaG1tbW0sIGJhc2VuYW1lLCBsb29rcyBmYW1pbGlh
+ci4KCi0tIApZb3UgYXJlIHJlY2VpdmluZyB0aGlzIG1haWwgYmVjYXVzZToKWW91IGFyZSBvbiB0
+aGUgQ0MgbGlzdCBmb3IgdGhlIGJ1Zy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
