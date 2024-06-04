@@ -4,109 +4,134 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD893C27C52
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 18:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26DE5C25B78
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 18:07:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C7E9417A4;
-	Tue,  4 Jun 2024 18:01:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5484E417D1;
+	Tue,  4 Jun 2024 18:07:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4uxcCec2sa4H; Tue,  4 Jun 2024 18:01:21 +0000 (UTC)
+ id NODnullZeaKU; Tue,  4 Jun 2024 18:06:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9503417A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57650416CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9503417A6;
-	Tue,  4 Jun 2024 18:01:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57650416CC;
+	Tue,  4 Jun 2024 18:06:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E8AB81BF8A8
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 18:01:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 153C41BF831
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 18:06:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D570B404D1
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 18:01:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0189240644
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 18:06:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R6pL6Rgv-qZy for <buildroot@lists.busybox.net>;
- Tue,  4 Jun 2024 18:01:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2A33D40342
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A33D40342
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2A33D40342
- for <buildroot@buildroot.org>; Tue,  4 Jun 2024 18:01:17 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id
- a640c23a62f3a-a68bf84d747so354129666b.3
- for <buildroot@buildroot.org>; Tue, 04 Jun 2024 11:01:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717524075; x=1718128875;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OU3MtIb30w9Qlfpw8D/ecWcESxO2ChLkslVHXWWusLY=;
- b=Np+/ZYA5r84WCSezz/zinbLliRQDyTxsH9nR1Y3d+tEC+2x3IGzRTnJ3cvpoCMiFQg
- XRnG4syyIXTHgk6WfJ1/+VliukxmL6zPVWVzLr4nFo4NBpli+BFQ7Qs03Ivb08qkt3nr
- nIzqLeJDsvQAQJOvL5lMvQMWtQ2sFTFrQ8Ay+XnnkQ/7bAfuqw+KIBw3StM+ligK0DnB
- j8zVUo1UAaUrfdG8Rq3Li9eeN6wBH9GzFBPisB8UWHrbPj00c7JamrTRygRyjPj63csX
- QsKqjrEPrHILdaO8VCJ+sBsbFelvq017KWfrPDxm7mz+bUjujYHzrhR/+lZLhyNDzTa3
- 1/xw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUoq3EzP79qo3tbYzIXsxiDB0D1jDueCYutnjpoaO+jJZZbjribj/wEEsCX2rhwLdE0hSTzRy60rtjZRTzbr4VqPWriv1xYvw==
-X-Gm-Message-State: AOJu0YzEPBNSZemuytqe2sfQtrbp/b2IpTXMc0QaiufLm+mmvuM3yktq
- TL7gb+Ub4QqLIqA/mAlDg5ECJdf8M4T4oAVrJwHo/QMjbsg7ZUYaazgaVR+WNKJwhfpg7sa1C1G
- yghM=
-X-Google-Smtp-Source: AGHT+IEZmR97ECUFGrve5mJ64727noVxnoJ03hXZFAkfCfDDRF+B0FUvceuaWFGCWbbyt0soG2EPqQ==
-X-Received: by 2002:a17:906:774e:b0:a69:b5:def2 with SMTP id
- a640c23a62f3a-a699faa9004mr17539566b.6.1717524074275; 
- Tue, 04 Jun 2024 11:01:14 -0700 (PDT)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com.
- [209.85.218.44]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a691364322csm297748866b.109.2024.06.04.11.01.13
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 04 Jun 2024 11:01:13 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id
- a640c23a62f3a-a6341cf2c99so656425866b.0
- for <buildroot@buildroot.org>; Tue, 04 Jun 2024 11:01:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCWvslC+w403CoLuDENpmTYksZDfD+iZbo4TMXmkjUdwg6fDN7dVmCjtxAnjfdvYkQjm8qbRok5LkyIlp1uMGTFVMAmee8BsBA==
-X-Received: by 2002:a17:906:684a:b0:a68:e0e4:302b with SMTP id
- a640c23a62f3a-a69a023627dmr16943166b.57.1717524072978; Tue, 04 Jun 2024
- 11:01:12 -0700 (PDT)
+ id ijZpoEKdS0XH for <buildroot@lists.busybox.net>;
+ Tue,  4 Jun 2024 18:06:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 06D64404D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06D64404D1
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 06D64404D1
+ for <buildroot@buildroot.org>; Tue,  4 Jun 2024 18:06:54 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.115.83]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtwUm-1sSvX50Z9I-00rLTE; Tue, 04
+ Jun 2024 20:01:47 +0200
+Message-ID: <a71cb6c0-3159-4b0e-a10d-038461480ffc@gmx.de>
+Date: Tue, 4 Jun 2024 20:01:46 +0200
 MIME-Version: 1.0
-References: <20240511235609.88305-1-christian@aperture.us>
- <Zlw0x-GMNwen_N31@landeda>
- <87a5k3ljy8.fsf@dell.be.48ers.dk> <874ja8g88f.fsf@dell.be.48ers.dk>
- <CA+h8R2qZ8dVMUH94QN85v5Vms1RtNXM5k4VR+5AqBHEOJzzwDg@mail.gmail.com>
- <Zl8-TDOdLCh5dq42@landeda>
-In-Reply-To: <Zl8-TDOdLCh5dq42@landeda>
-Date: Tue, 4 Jun 2024 11:01:01 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2qWatxGjtUnkNpETBBn6OUASgNXrK=vkOBWDbSzFCXPDw@mail.gmail.com>
-Message-ID: <CA+h8R2qWatxGjtUnkNpETBBn6OUASgNXrK=vkOBWDbSzFCXPDw@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+User-Agent: Mozilla Thunderbird
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, Khem Raj <raj.khem@gmail.com>
+References: <20240426215144.1107186-1-fiona.klute@gmx.de>
+ <Zl9VCm-vH0yAi0Jc@landeda>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <Zl9VCm-vH0yAi0Jc@landeda>
+X-Provags-ID: V03:K1:dy/LAV7clfcMqODGirrFIFWWrhgA629Ttdps/tfh0jU2zB7uxOI
+ BvW0Lse4QVkAzMpWN3oM94QUAn/Ngl+wFVPyQv5Eg644LBVNFdZm7swm2o5Lry77MHv1hhQ
+ jHEpgm/CBUlLZNStpOGfxLAMe36em6wxd1y7sX8lhQflwEcXwFodShRYbednvEwHUEgTN2N
+ g6ilkz88wqCsHmPUOqakA==
+UI-OutboundReport: notjunk:1;M01:P0:cRq+dhdA3jc=;RLqQj2u2WIBS3Ukf+OEMPpbPH4c
+ F/zjXCKbzlS5yrs8KijQI5fii9Xwfiood31sWCb062mJU1ndB0WE5EAZK+oc8C0KL0k0N7Eju
+ 9x1EDmkaY0QJKl4Bw2peV9eemVmBeW4aDQNUdPNX5lzAqw/9QJov5dthfcd4+PGjQdwv4HPYe
+ kDEhSdIYtCAHGDn0hzzmYdhp+a8rBIXyyJ4yXW5Y5C0BflrQfH4YyhmAPVo6lTNWUcXVyVvN6
+ 7/vfbsuUemDxMypjBXtAw94rN5QyOajIy3dXUx7xZiVD1zhJ9Sf/sRVOOunZLc+zBA3ffgSZI
+ 64W9t5KlESHTPaF0BOLuaWy1Cht0W1Rp/SlC+MmwzlYCfkhfdwy93tZJtxs3dJh7lLtZlfP4j
+ PHveIkA4YNezu5gcjWvJz5zYIIJ4hHBPTJhVZM663ZDRt2WCftdDvSyopfWg8XdkToW2RLjoE
+ JwB84UIg18sJYw6+oajleENJel8+i/ZlQPGHBkAMElgxolmt6Y1ruTk+j6CQ13sTf5KYdFQgJ
+ mlL9ioBcjzXnDy3qZqJwwjhlYHtApbJH1r0ymM1sFjoAvRszoR4A4BHbiTXddBdJ3ONLFRm0P
+ VuqH7uyKiw0z4tiZv/Kf/VFlzgwKgnKDWzRkX/fgfqVAd8ojjIj1fwvkSHIYk9+kZZpB3/5UX
+ HQC8qNo7aMkNTFnKwXAGNDQJ+G2pIaxk3CFfVKm6VXWeYdLTT8f17AolWCbwUEZ61HoOBeJ1v
+ xkVnR85X1y7+7fZPgp32AZnHS9GnUACzdAYV8Q5gyBQ0c584I5KO7UiwshTY0heIPO+MTPl1p
+ 9ugfcgOgSJ/jq0+ScbnagV6Cr2XxiMnvulJEw7UVDJ/3c=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1717524075; x=1718128875; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=OU3MtIb30w9Qlfpw8D/ecWcESxO2ChLkslVHXWWusLY=;
- b=GP48vg5mCgTHwHmkLmz5YfFgCZxdX+JcYy1kNYIBNZjBnT/bcYy+RDrtol94OPd6Xp
- ca328ehymhiQeJAmQWrDDiU+r4v6dJpjAg91yMhldzSt6WHrficYYVhEni/fSIMskU3S
- 23Pe1lqjuhx/XHyM40xnirrfEl+4K6jQNJ2k/lT7K3rRspQPMW9N6heZ+9uqtX7YmORC
- 27z6hPf+r04uMFRZ+FHk1sRQIfkMXX2TD6uoEdj0Zy5v82brasYK/eWcHpL37zfhZNQt
- kpfjpYW0vtuK0R6DzdguwBsL76coVJDDNvx5vJJFWhScdB1GVbJ5qTVl4GVVhe1KFYBF
- zLVg==
+ d=gmx.de; 
+ s=s31663417; t=1717524412; x=1718129212; i=fiona.klute@gmx.de;
+ bh=ASh6DFnKmfu/mnxEciZ9syD+qqJDTcPs0576UG/Wmj0=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=n0Vxk2SGqTQZsuEnoBFSHZ1a9l4pmjrz2eC795IJKWxVBH04TRpq60AN59KpHSO7
+ hMrfnHdurMCG7C86XWeNXOp0RFKNImYLTdDl8U+gwRKttFvORUFCXDsexY1r/ZXPq
+ FGSww1omaaf1OuO7yRdnWcdKQ+N0X+67786EahSTOpvV+QXEqwPT5WweE1WfivYAv
+ 73dEz9LClQR9NVroVnhtTyQHjJoemgFFTg8beqRZZp61VTpNYMcEKT8j04vhQv+f0
+ FdWrY7A/EvdcJ2Y814B6QbipG+DCvuMFcDyPlIS92awzr+6B1Dz4o9ee0e/p1MI73
+ HUJqiNXMQYjBrRWLXQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=GP48vg5m
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/docker-compose: bump version
- to v2.27.0
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=n0Vxk2SG
+Subject: Re: [Buildroot] [PATCH 1/1] package/kmod: fix build with musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -118,209 +143,220 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============8317096430726284891=="
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8317096430726284891==
-Content-Type: multipart/alternative; boundary="00000000000043666c061a143cfd"
-
---00000000000043666c061a143cfd
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Yann,
-
-On Tue, Jun 4, 2024, 9:18=E2=80=AFAM Yann E. MORIN <yann.morin.1998@free.fr=
-> wrote:
-
-> Christian, All,
+Am 04.06.24 um 19:55 schrieb Yann E. MORIN:
+> Fiona, All,
 >
-> On 2024-06-04 08:47 -0700, Christian Stewart spake thusly:
-> > Is this the correct version? (I'm on my phone and don't have a chance t=
-o
-> check
-> > right now).
-> > [15]
-> https://mirror.skiffos.com/docker-compose/docker-compose-2.27.0-go2.tar.g=
-z
-> > It seems to me that there is a difference between either Go versions
-> vendor/
-> > format OR there is a difference between architectures (amd64 or arm).
-> > Hopefully we can tell the difference from the tarball above
+> On 2024-04-26 23:51 +0200, Fiona Klute via buildroot spake thusly:
+>> From: Fiona Klute <fiona.klute+wiwa@gmx.de>
+>> Patch from upstream PR still being discussed:
+>> https://github.com/kmod-project/kmod/pull/32
 >
-> The deltas are all of the form of that one:
+> Thanks for this pointer. It should have been added in the bundled patch
+> itself (see below).
 >
-> --- docker-compose-2.27.0-go2.tar.42e9d2.hex    2024-06-04
-> 18:07:33.538588495 +0200
-> +++ docker-compose-2.27.0-go2.tar.448eaf.hex    2024-06-04
-> 18:07:39.737437043 +0200
-> @@ -7,7 +7,7 @@
->  00000060  00 00 00 00 30 30 30 30  36 34 34 00 30 30 30 30
-> |....0000644.0000|
->  00000070  30 30 30 00 30 30 30 30  30 30 30 00 30 30 30 30
-> |000.0000000.0000|
->  00000080  30 30 30 30 30 30 35 00  31 34 36 31 32 32 35 33
-> |0000005.14612253|
-> -00000090  32 33 36 00 30 31 34 31  31 35 00 20 30 00 00 00 |236.014115.
-> 0...|
-> +00000090  32 33 36 00 30 31 35 33  35 35 00 20 30 00 00 00 |236.015355.
-> 0...|
->  000000a0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
->  000000b0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
->  000000c0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
-> @@ -18,8 +18,8 @@
->  00000110  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
->  00000120  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
->  00000130  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
-> -00000140  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
-> -00000150  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
-> +00000140  00 00 00 00 00 00 00 00  00 30 30 30 30 30 30 30
-> |.........0000000|
-> +00000150  00 30 30 30 30 30 30 30  00 00 00 00 00 00 00 00
-> |.0000000........|
->  00000160  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
->  00000170  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
->  00000180  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-> |................|
+> I was holding off on that patch of yours, because there has been no
+> resolution on that upstream PR (adding Khem in Cc so he can maybe have
+> a look back at it ;-) ).
 >
-> The --- is the archive Peter and I generated, the +++ is yours.
+> But following your comment on bug #16093, I decided to look again. I
+> just looked at the discussion in more details, and all the discussion
+> is basically just about how to name the symbol. So let's cary this patch
+> for now...
 >
-> What this shows, is that the dev major/minor fields are NULs for us,
-> while they are 0 (zero), ASCII 0x30) in your case.
+>> Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+>> ---
+>>   ...able-implementation-for-basename-API.patch | 131 ++++++++++++++++++
 >
-> This is exactly the change that went in in tar 1.35: our archives were
-> generated with tar 1.35, yours with an older tar (presumably, 1.34).
+>      # ./utils/docker-run make check-package
+>      package/kmod/0002-Use-portable-implementation-for-basename-API.patch:0: missing Upstream in the header (https://nightly.buildroot.org/#_additional_patch_documentation)
 >
-> Peter had a similar issue, as he used to set the TAR environment
-> variable to point to a pre-built tar 1.35, like so:
+> This is where you should add the upstream PR URL:
 >
->     $ TAR=3Dtar-1.35 make source
+>      Upstream: https://github.com/kmod-project/kmod/pull/32
 >
-> Are you doing something similar by chance?
+> You must also sign-off the bundled patch. No need to respin, I can just
+> add it if you just reply with your SoB line.
+
+Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+
+Thanks for taking care of this! If possible, please remove the
+subaddressing from the "From", somehow my mail provider seems to not
+deliver with it. I'll keep the "Upstream" tag in mind for the future. :-)
+
+Best regards,
+Fiona
+
+> Thanks!
+>
+> Regards,
+> Yann E. MORIN.
+>
+>>   1 file changed, 131 insertions(+)
+>>   create mode 100644 package/kmod/0002-Use-portable-implementation-for-basename-API.patch
+>>
+>> diff --git a/package/kmod/0002-Use-portable-implementation-for-basename-API.patch b/package/kmod/0002-Use-portable-implementation-for-basename-API.patch
+>> new file mode 100644
+>> index 0000000000..46d23f4fa9
+>> --- /dev/null
+>> +++ b/package/kmod/0002-Use-portable-implementation-for-basename-API.patch
+>> @@ -0,0 +1,131 @@
+>> +From 721ed6040c7aa47070faf6378c433089e178bd43 Mon Sep 17 00:00:00 2001
+>> +From: Khem Raj <raj.khem@gmail.com>
+>> +Date: Sat, 9 Dec 2023 17:35:59 -0800
+>> +Subject: [PATCH] Use portable implementation for basename API
+>> +
+>> +musl has removed the non-prototype declaration of basename from
+>> +string.h [1] which now results in build errors with clang-17+ compiler
+>> +
+>> +Implement GNU basename behavior using strchr which is portable across libcs
+>> +
+>> +Fixes
+>> +../git/tools/kmod.c:71:19: error: call to undeclared function 'basename'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> +71 | "Commands:\n", basename(argv[0]));
+>> +| ^
+>> +
+>> +[1] https://git.musl-libc.org/cgit/musl/commit/?id=725e17ed6dff4d0cd22487bb64470881e86a92e7
+>> +
+>> +Suggested-by: Rich Felker
+>> +
+>> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+>> +---
+>> + libkmod/libkmod-config.c | 2 +-
+>> + shared/util.c            | 4 ++--
+>> + shared/util.h            | 7 +++++++
+>> + testsuite/testsuite.c    | 2 +-
+>> + tools/depmod.c           | 2 +-
+>> + tools/kmod.c             | 4 ++--
+>> + 6 files changed, 14 insertions(+), 7 deletions(-)
+>> +
+>> +diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
+>> +index e83621b3..8aa555a4 100644
+>> +--- a/libkmod/libkmod-config.c
+>> ++++ b/libkmod/libkmod-config.c
+>> +@@ -794,7 +794,7 @@ static int conf_files_insert_sorted(struct kmod_ctx *ctx,
+>> + 	bool is_single = false;
+>> +
+>> + 	if (name == NULL) {
+>> +-		name = basename(path);
+>> ++		name = gnu_basename(path);
+>> + 		is_single = true;
+>> + 	}
+>> +
+>> +diff --git a/shared/util.c b/shared/util.c
+>> +index e2bab83a..0e16670e 100644
+>> +--- a/shared/util.c
+>> ++++ b/shared/util.c
+>> +@@ -172,9 +172,9 @@ char *modname_normalize(const char *modname, char buf[static PATH_MAX], size_t *
+>> +
+>> + char *path_to_modname(const char *path, char buf[static PATH_MAX], size_t *len)
+>> + {
+>> +-	char *modname;
+>> ++	const char *modname;
+>> +
+>> +-	modname = basename(path);
+>> ++	modname = gnu_basename(path);
+>> + 	if (modname == NULL || modname[0] == '\0')
+>> + 		return NULL;
+>> +
+>> +diff --git a/shared/util.h b/shared/util.h
+>> +index c4a3916b..073dc5a7 100644
+>> +--- a/shared/util.h
+>> ++++ b/shared/util.h
+>> +@@ -5,6 +5,7 @@
+>> + #include <stdbool.h>
+>> + #include <stdlib.h>
+>> + #include <stdio.h>
+>> ++#include <string.h>
+>> + #include <sys/types.h>
+>> + #include <sys/stat.h>
+>> + #include <time.h>
+>> +@@ -76,6 +77,12 @@ do {						\
+>> + 	__p->__v = (val);			\
+>> + } while(0)
+>> +
+>> ++static _always_inline_ const char *gnu_basename(const char *s)
+>> ++{
+>> ++  const char *p = strrchr(s, '/');
+>> ++  return p ? p+1 : s;
+>> ++}
+>> ++
+>> + static _always_inline_ unsigned int ALIGN_POWER2(unsigned int u)
+>> + {
+>> + 	return 1 << ((sizeof(u) * 8) - __builtin_clz(u - 1));
+>> +diff --git a/testsuite/testsuite.c b/testsuite/testsuite.c
+>> +index 318343ac..aafc9873 100644
+>> +--- a/testsuite/testsuite.c
+>> ++++ b/testsuite/testsuite.c
+>> +@@ -70,7 +70,7 @@ static void help(void)
+>> +
+>> + 	printf("Usage:\n"
+>> + 	       "\t%s [options] <test>\n"
+>> +-	       "Options:\n", basename(progname));
+>> ++	       "Options:\n", gnu_basename(progname));
+>> +
+>> + 	for (itr = options, itr_short = options_short;
+>> + 				itr->name != NULL; itr++, itr_short++)
+>> +diff --git a/tools/depmod.c b/tools/depmod.c
+>> +index 43fc354a..cfb15b11 100644
+>> +--- a/tools/depmod.c
+>> ++++ b/tools/depmod.c
+>> +@@ -762,7 +762,7 @@ static int cfg_files_insert_sorted(struct cfg_file ***p_files, size_t *p_n_files
+>> + 	if (name != NULL)
+>> + 		namelen = strlen(name);
+>> + 	else {
+>> +-		name = basename(dir);
+>> ++		name = gnu_basename(dir);
+>> + 		namelen = strlen(name);
+>> + 		dirlen -= namelen + 1;
+>> + 	}
+>> +diff --git a/tools/kmod.c b/tools/kmod.c
+>> +index 55689c07..df91e5c6 100644
+>> +--- a/tools/kmod.c
+>> ++++ b/tools/kmod.c
+>> +@@ -68,7 +68,7 @@ static int kmod_help(int argc, char *argv[])
+>> + 			"Options:\n"
+>> + 			"\t-V, --version     show version\n"
+>> + 			"\t-h, --help        show this help\n\n"
+>> +-			"Commands:\n", basename(argv[0]));
+>> ++			"Commands:\n", gnu_basename(argv[0]));
+>> +
+>> + 	for (i = 0; i < ARRAY_SIZE(kmod_cmds); i++) {
+>> + 		if (kmod_cmds[i]->help != NULL) {
+>> +@@ -156,7 +156,7 @@ static int handle_kmod_compat_commands(int argc, char *argv[])
+>> + 	const char *cmd;
+>> + 	size_t i;
+>> +
+>> +-	cmd = basename(argv[0]);
+>> ++	cmd = gnu_basename(argv[0]);
+>> +
+>> + 	for (i = 0; i < ARRAY_SIZE(kmod_compat_cmds); i++) {
+>> + 		if (streq(kmod_compat_cmds[i]->name, cmd))
+>> --
+>> 2.43.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
 >
 
-I'm using "make foo-extract" and then hashing the file in dl/
+--
+Dipl.-Ing. Fiona Klute
+Mollwitzer Str. 2
+44141 Dortmund
+Germany
 
-Why is the buildroot host tar not used for this?
-
-Thanks!
-Christian
-
---00000000000043666c061a143cfd
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div>Yann,<br><br><div class=3D"gmail_quote"><div dir=3D"=
-ltr" class=3D"gmail_attr">On Tue, Jun 4, 2024, 9:18=E2=80=AFAM Yann E. MORI=
-N &lt;<a href=3D"mailto:yann.morin.1998@free.fr">yann.morin.1998@free.fr</a=
->&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0=
- 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Christian, All,<br>
-<br>
-On 2024-06-04 08:47 -0700, Christian Stewart spake thusly:<br>
-&gt; Is this the correct version? (I&#39;m on my phone and don&#39;t have a=
- chance to check<br>
-&gt; right now).<br>
-&gt; [15]<a href=3D"https://mirror.skiffos.com/docker-compose/docker-compos=
-e-2.27.0-go2.tar.gz" rel=3D"noreferrer noreferrer" target=3D"_blank">https:=
-//mirror.skiffos.com/docker-compose/docker-compose-2.27.0-go2.tar.gz</a><br=
->
-&gt; It seems to me that there is a difference between either Go versions v=
-endor/<br>
-&gt; format OR there is a difference between architectures (amd64 or arm).=
-=C2=A0<br>
-&gt; Hopefully we can tell the difference from the tarball above<br>
-<br>
-The deltas are all of the form of that one:<br>
-<br>
---- docker-compose-2.27.0-go2.tar.42e9d2.hex=C2=A0 =C2=A0 2024-06-04 18:07:=
-33.538588495 +0200<br>
-+++ docker-compose-2.27.0-go2.tar.448eaf.hex=C2=A0 =C2=A0 2024-06-04 18:07:=
-39.737437043 +0200<br>
-@@ -7,7 +7,7 @@<br>
-=C2=A000000060=C2=A0 00 00 00 00 30 30 30 30=C2=A0 36 34 34 00 30 30 30 30 =
-|....0000644.0000|<br>
-=C2=A000000070=C2=A0 30 30 30 00 30 30 30 30=C2=A0 30 30 30 00 30 30 30 30 =
-|000.0000000.0000|<br>
-=C2=A000000080=C2=A0 30 30 30 30 30 30 35 00=C2=A0 31 34 36 31 32 32 35 33 =
-|0000005.14612253|<br>
--00000090=C2=A0 32 33 36 00 30 31 34 31=C2=A0 31 35 00 20 30 00 00 00 |236.=
-014115. 0...|<br>
-+00000090=C2=A0 32 33 36 00 30 31 35 33=C2=A0 35 35 00 20 30 00 00 00 |236.=
-015355. 0...|<br>
-=C2=A0000000a0=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
-|................|<br>
-=C2=A0000000b0=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
-|................|<br>
-=C2=A0000000c0=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
-|................|<br>
-@@ -18,8 +18,8 @@<br>
-=C2=A000000110=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
-|................|<br>
-=C2=A000000120=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
-|................|<br>
-=C2=A000000130=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
-|................|<br>
--00000140=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 |....=
-............|<br>
--00000150=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 |....=
-............|<br>
-+00000140=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 30 30 30 30 30 30 30 |....=
-.....0000000|<br>
-+00000150=C2=A0 00 30 30 30 30 30 30 30=C2=A0 00 00 00 00 00 00 00 00 |.000=
-0000........|<br>
-=C2=A000000160=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
-|................|<br>
-=C2=A000000170=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
-|................|<br>
-=C2=A000000180=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
-|................|<br>
-<br>
-The --- is the archive Peter and I generated, the +++ is yours.<br>
-<br>
-What this shows, is that the dev major/minor fields are NULs for us,<br>
-while they are 0 (zero), ASCII 0x30) in your case.<br>
-<br>
-This is exactly the change that went in in tar 1.35: our archives were<br>
-generated with tar 1.35, yours with an older tar (presumably, 1.34).<br>
-<br>
-Peter had a similar issue, as he used to set the TAR environment<br>
-variable to point to a pre-built tar 1.35, like so:<br>
-<br>
-=C2=A0 =C2=A0 $ TAR=3Dtar-1.35 make source<br>
-<br>
-Are you doing something similar by chance?<br></blockquote></div></div><div=
- dir=3D"auto"><br></div><div dir=3D"auto">I&#39;m using &quot;make foo-extr=
-act&quot; and then hashing the file in dl/</div><div dir=3D"auto"><br></div=
-><div dir=3D"auto">Why is the buildroot host tar not used for this?</div><d=
-iv dir=3D"auto"><br></div><div dir=3D"auto">Thanks!</div><div dir=3D"auto">=
-Christian</div></div>
-
---00000000000043666c061a143cfd--
-
---===============8317096430726284891==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+USt.-ID/VAT number: DE363488944
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8317096430726284891==--
