@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2673C27C4F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88024C27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C1C9610DB;
-	Thu, 13 Jun 2024 10:08:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 596A061013;
+	Thu, 13 Jun 2024 10:08:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OVKsRCQXJesV; Thu, 13 Jun 2024 10:08:14 +0000 (UTC)
+ id AvVfqbFLiwO3; Thu, 13 Jun 2024 10:08:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8AAF610BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DD2C610D6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8AAF610BB;
-	Thu, 13 Jun 2024 10:08:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DD2C610D6;
+	Thu, 13 Jun 2024 10:08:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5AEB31BF354
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A175D1BF354
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5BFE9413E5
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4E7B413E9
  for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SrckjiBECiAo for <buildroot@lists.busybox.net>;
+ id 0tmOB_xWc9s5 for <buildroot@lists.busybox.net>;
  Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A260413C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C99DD413FA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A260413C7
+ by smtp2.osuosl.org (Postfix) with ESMTP id C99DD413FA
  for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7577B87F57; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
+ id AE92787F5A; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 1 Jun 2024 23:01:53 +0200
+Date: Tue, 4 Jun 2024 08:19:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a0d47a69916e7e143059ee21d6b70a5a65abfefc
-X-Git-Newrev: 1d127da425c3b7f7f483968d038a73d32f592263
+X-Git-Oldrev: ca256b6d2c4aa0f1d04f99132f8948c0b09b43f2
+X-Git-Newrev: c489ac4c1eca47d463d14b0cdb697f2692405b2e
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100459.7577B87F57@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mosquitto: build mosquitto_{ctrl,
- passwd} if the broker is enabled
+Message-Id: <20240613100459.AE92787F5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/open62541: bump to version 1.3.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d127da425c3b7f7f483968d038a73d32f592263
+commit: https://git.buildroot.net/buildroot/commit/?id=c489ac4c1eca47d463d14b0cdb697f2692405b2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The tools require openssl (and cjson for mosquitto_ctrl), and are silently
-skipped by the mosquitto build system if those are not available.
-
-The tools are small compared to the broker and dependencies:
-
--rwxr-xr-x 1 peko peko 4.8M Jun  1 00:42 target/usr/lib/libcrypto.so.3
--rwxr-xr-x 1 peko peko 968K Jun  1 00:42 target/usr/lib/libssl.so.3
--rwxr-xr-x 1 peko peko 266K Jun  1 00:42 target/usr/sbin/mosquitto
--rwxr-xr-x 1 peko peko  54K Jun  1 00:42 target/usr/bin/mosquitto_ctrl
--rwxr-xr-x 1 peko peko  34K Jun  1 00:42 target/usr/lib/libcjson.so.1.7.18
--rwxr-xr-x 1 peko peko  26K Jun  1 00:42 target/usr/bin/mosquitto_passwd
-
-So automatically build them (if the dependencies are available) when the
-broker is built.
-
-Notice: We have to explicitly build apps/mosquitto_ctrl +
-apps/mosquitto_passwd and not just apps, as apps/Makefile uses a DIRS
-variable that conflicts with the DIRS=..  we pass to the toplevel Makefile.
-
-Signed-off-by: Sebastien Laveze <slaveze@smartandconnective.com>
-[Peter: drop dedicated option, also handle mosquitto_ctrl]
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/open62541/open62541.hash | 2 +-
+ package/open62541/open62541.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index b847e56fec..6b249c37fd 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -91,7 +91,7 @@ endif
+diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
+index 366a0894e3..be9ee77cc2 100644
+--- a/package/open62541/open62541.hash
++++ b/package/open62541/open62541.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c78e0d2b1cb1a22db0102ed7f439073bc22ff44c5e9d9175f1b8e644f7b21f44  open62541-v1.3.10-git4.tar.gz
++sha256  34fbf37e7f8e159b0a187bf8b0663af0187161ba4c5015828590c919645d596a  open62541-v1.3.11-git4.tar.gz
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+index 1be44eb0b4..26c3cd5c2e 100644
+--- a/package/open62541/open62541.mk
++++ b/package/open62541/open62541.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- MOSQUITTO_MAKE_DIRS = lib client
- ifeq ($(BR2_PACKAGE_MOSQUITTO_BROKER),y)
--MOSQUITTO_MAKE_DIRS += src
-+MOSQUITTO_MAKE_DIRS += src apps/mosquitto_ctrl apps/mosquitto_passwd
- endif
- 
- define MOSQUITTO_BUILD_CMDS
+-OPEN62541_VERSION = v1.3.10
++OPEN62541_VERSION = v1.3.11
+ OPEN62541_SITE_METHOD = git
+ OPEN62541_SITE = https://github.com/open62541/open62541.git
+ OPEN62541_GIT_SUBMODULES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
