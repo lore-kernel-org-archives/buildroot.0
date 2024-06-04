@@ -4,71 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F2AAC27C52
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 17:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD893C27C52
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 18:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDDB340889;
-	Tue,  4 Jun 2024 17:55:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C7E9417A4;
+	Tue,  4 Jun 2024 18:01:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Zh0yNH48bTV; Tue,  4 Jun 2024 17:55:32 +0000 (UTC)
+ id 4uxcCec2sa4H; Tue,  4 Jun 2024 18:01:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3092441585
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9503417A6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3092441585;
-	Tue,  4 Jun 2024 17:55:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9503417A6;
+	Tue,  4 Jun 2024 18:01:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E8E3D1BF8A8
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 17:55:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E8AB81BF8A8
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 18:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D55E5404D1
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 17:55:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D570B404D1
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 18:01:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uuarS5jKnjea for <buildroot@lists.busybox.net>;
- Tue,  4 Jun 2024 17:55:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 61D3B40342
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61D3B40342
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 61D3B40342
- for <buildroot@buildroot.org>; Tue,  4 Jun 2024 17:55:28 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5C61E13F879;
- Tue,  4 Jun 2024 19:55:22 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 04 Jun 2024 19:55:22 +0200
-Date: Tue, 4 Jun 2024 19:55:22 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fiona Klute <fiona.klute@gmx.de>, Khem Raj <raj.khem@gmail.com>
-Message-ID: <Zl9VCm-vH0yAi0Jc@landeda>
-References: <20240426215144.1107186-1-fiona.klute@gmx.de>
+ id R6pL6Rgv-qZy for <buildroot@lists.busybox.net>;
+ Tue,  4 Jun 2024 18:01:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2A33D40342
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A33D40342
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2A33D40342
+ for <buildroot@buildroot.org>; Tue,  4 Jun 2024 18:01:17 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-a68bf84d747so354129666b.3
+ for <buildroot@buildroot.org>; Tue, 04 Jun 2024 11:01:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1717524075; x=1718128875;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OU3MtIb30w9Qlfpw8D/ecWcESxO2ChLkslVHXWWusLY=;
+ b=Np+/ZYA5r84WCSezz/zinbLliRQDyTxsH9nR1Y3d+tEC+2x3IGzRTnJ3cvpoCMiFQg
+ XRnG4syyIXTHgk6WfJ1/+VliukxmL6zPVWVzLr4nFo4NBpli+BFQ7Qs03Ivb08qkt3nr
+ nIzqLeJDsvQAQJOvL5lMvQMWtQ2sFTFrQ8Ay+XnnkQ/7bAfuqw+KIBw3StM+ligK0DnB
+ j8zVUo1UAaUrfdG8Rq3Li9eeN6wBH9GzFBPisB8UWHrbPj00c7JamrTRygRyjPj63csX
+ QsKqjrEPrHILdaO8VCJ+sBsbFelvq017KWfrPDxm7mz+bUjujYHzrhR/+lZLhyNDzTa3
+ 1/xw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUoq3EzP79qo3tbYzIXsxiDB0D1jDueCYutnjpoaO+jJZZbjribj/wEEsCX2rhwLdE0hSTzRy60rtjZRTzbr4VqPWriv1xYvw==
+X-Gm-Message-State: AOJu0YzEPBNSZemuytqe2sfQtrbp/b2IpTXMc0QaiufLm+mmvuM3yktq
+ TL7gb+Ub4QqLIqA/mAlDg5ECJdf8M4T4oAVrJwHo/QMjbsg7ZUYaazgaVR+WNKJwhfpg7sa1C1G
+ yghM=
+X-Google-Smtp-Source: AGHT+IEZmR97ECUFGrve5mJ64727noVxnoJ03hXZFAkfCfDDRF+B0FUvceuaWFGCWbbyt0soG2EPqQ==
+X-Received: by 2002:a17:906:774e:b0:a69:b5:def2 with SMTP id
+ a640c23a62f3a-a699faa9004mr17539566b.6.1717524074275; 
+ Tue, 04 Jun 2024 11:01:14 -0700 (PDT)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com.
+ [209.85.218.44]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a691364322csm297748866b.109.2024.06.04.11.01.13
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 04 Jun 2024 11:01:13 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id
+ a640c23a62f3a-a6341cf2c99so656425866b.0
+ for <buildroot@buildroot.org>; Tue, 04 Jun 2024 11:01:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWvslC+w403CoLuDENpmTYksZDfD+iZbo4TMXmkjUdwg6fDN7dVmCjtxAnjfdvYkQjm8qbRok5LkyIlp1uMGTFVMAmee8BsBA==
+X-Received: by 2002:a17:906:684a:b0:a68:e0e4:302b with SMTP id
+ a640c23a62f3a-a69a023627dmr16943166b.57.1717524072978; Tue, 04 Jun 2024
+ 11:01:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240426215144.1107186-1-fiona.klute@gmx.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1717523725;
- bh=3o08qtEY2yLuiUS9UNekl+adFARQVEglDl/JFzuftp4=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=k0AZ6nt4uw0/ubB3Pj2zwmb/lfo5SJkl7+l1Ujs688f0cUX26qR35Z1iixlLH7wPr
- KUOFz+SLu2N8+OX3LBZeY5jsDKmbVy4Dz20s2Aj8wCzzKvghlkVZl8JbsNO8Xy7Olb
- FvmOU96seO4Wf+JT4c3Y6nt4/G/YZwaIURSlvsaGeWZjtFm8jWbNnlCP2VsyCMV130
- 3rm5yV72Vt/HTQsCv4ieGzA1Bunx+djGWaoRVxXZ5okDyGjgPfeJHZt42ZdwRszRm3
- 5LD8FmSaXtnxy6hj3zrg8LOEPsZQ1jwbc3EExJNVq6F1ARBHA2AxdAc1/Tjr1jyb+/
- yiAGveNRjWBoA==
+References: <20240511235609.88305-1-christian@aperture.us>
+ <Zlw0x-GMNwen_N31@landeda>
+ <87a5k3ljy8.fsf@dell.be.48ers.dk> <874ja8g88f.fsf@dell.be.48ers.dk>
+ <CA+h8R2qZ8dVMUH94QN85v5Vms1RtNXM5k4VR+5AqBHEOJzzwDg@mail.gmail.com>
+ <Zl8-TDOdLCh5dq42@landeda>
+In-Reply-To: <Zl8-TDOdLCh5dq42@landeda>
+Date: Tue, 4 Jun 2024 11:01:01 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2qWatxGjtUnkNpETBBn6OUASgNXrK=vkOBWDbSzFCXPDw@mail.gmail.com>
+Message-ID: <CA+h8R2qWatxGjtUnkNpETBBn6OUASgNXrK=vkOBWDbSzFCXPDw@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1717524075; x=1718128875; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=OU3MtIb30w9Qlfpw8D/ecWcESxO2ChLkslVHXWWusLY=;
+ b=GP48vg5mCgTHwHmkLmz5YfFgCZxdX+JcYy1kNYIBNZjBnT/bcYy+RDrtol94OPd6Xp
+ ca328ehymhiQeJAmQWrDDiU+r4v6dJpjAg91yMhldzSt6WHrficYYVhEni/fSIMskU3S
+ 23Pe1lqjuhx/XHyM40xnirrfEl+4K6jQNJ2k/lT7K3rRspQPMW9N6heZ+9uqtX7YmORC
+ 27z6hPf+r04uMFRZ+FHk1sRQIfkMXX2TD6uoEdj0Zy5v82brasYK/eWcHpL37zfhZNQt
+ kpfjpYW0vtuK0R6DzdguwBsL76coVJDDNvx5vJJFWhScdB1GVbJ5qTVl4GVVhe1KFYBF
+ zLVg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=k0AZ6nt4
-Subject: Re: [Buildroot] [PATCH 1/1] package/kmod: fix build with musl
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=GP48vg5m
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/docker-compose: bump version
+ to v2.27.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,206 +118,209 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============8317096430726284891=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fiona, All,
+--===============8317096430726284891==
+Content-Type: multipart/alternative; boundary="00000000000043666c061a143cfd"
 
-On 2024-04-26 23:51 +0200, Fiona Klute via buildroot spake thusly:
-> From: Fiona Klute <fiona.klute+wiwa@gmx.de>
-> Patch from upstream PR still being discussed:
-> https://github.com/kmod-project/kmod/pull/32
+--00000000000043666c061a143cfd
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for this pointer. It should have been added in the bundled patch
-itself (see below).
+Yann,
 
-I was holding off on that patch of yours, because there has been no
-resolution on that upstream PR (adding Khem in Cc so he can maybe have
-a look back at it ;-) ).
+On Tue, Jun 4, 2024, 9:18=E2=80=AFAM Yann E. MORIN <yann.morin.1998@free.fr=
+> wrote:
 
-But following your comment on bug #16093, I decided to look again. I
-just looked at the discussion in more details, and all the discussion
-is basically just about how to name the symbol. So let's cary this patch
-for now...
+> Christian, All,
+>
+> On 2024-06-04 08:47 -0700, Christian Stewart spake thusly:
+> > Is this the correct version? (I'm on my phone and don't have a chance t=
+o
+> check
+> > right now).
+> > [15]
+> https://mirror.skiffos.com/docker-compose/docker-compose-2.27.0-go2.tar.g=
+z
+> > It seems to me that there is a difference between either Go versions
+> vendor/
+> > format OR there is a difference between architectures (amd64 or arm).
+> > Hopefully we can tell the difference from the tarball above
+>
+> The deltas are all of the form of that one:
+>
+> --- docker-compose-2.27.0-go2.tar.42e9d2.hex    2024-06-04
+> 18:07:33.538588495 +0200
+> +++ docker-compose-2.27.0-go2.tar.448eaf.hex    2024-06-04
+> 18:07:39.737437043 +0200
+> @@ -7,7 +7,7 @@
+>  00000060  00 00 00 00 30 30 30 30  36 34 34 00 30 30 30 30
+> |....0000644.0000|
+>  00000070  30 30 30 00 30 30 30 30  30 30 30 00 30 30 30 30
+> |000.0000000.0000|
+>  00000080  30 30 30 30 30 30 35 00  31 34 36 31 32 32 35 33
+> |0000005.14612253|
+> -00000090  32 33 36 00 30 31 34 31  31 35 00 20 30 00 00 00 |236.014115.
+> 0...|
+> +00000090  32 33 36 00 30 31 35 33  35 35 00 20 30 00 00 00 |236.015355.
+> 0...|
+>  000000a0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+>  000000b0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+>  000000c0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+> @@ -18,8 +18,8 @@
+>  00000110  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+>  00000120  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+>  00000130  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+> -00000140  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+> -00000150  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+> +00000140  00 00 00 00 00 00 00 00  00 30 30 30 30 30 30 30
+> |.........0000000|
+> +00000150  00 30 30 30 30 30 30 30  00 00 00 00 00 00 00 00
+> |.0000000........|
+>  00000160  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+>  00000170  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+>  00000180  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+> |................|
+>
+> The --- is the archive Peter and I generated, the +++ is yours.
+>
+> What this shows, is that the dev major/minor fields are NULs for us,
+> while they are 0 (zero), ASCII 0x30) in your case.
+>
+> This is exactly the change that went in in tar 1.35: our archives were
+> generated with tar 1.35, yours with an older tar (presumably, 1.34).
+>
+> Peter had a similar issue, as he used to set the TAR environment
+> variable to point to a pre-built tar 1.35, like so:
+>
+>     $ TAR=3Dtar-1.35 make source
+>
+> Are you doing something similar by chance?
+>
 
-> Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
-> ---
->  ...able-implementation-for-basename-API.patch | 131 ++++++++++++++++++
+I'm using "make foo-extract" and then hashing the file in dl/
 
-    # ./utils/docker-run make check-package
-    package/kmod/0002-Use-portable-implementation-for-basename-API.patch:0: missing Upstream in the header (https://nightly.buildroot.org/#_additional_patch_documentation)
-
-This is where you should add the upstream PR URL:
-
-    Upstream: https://github.com/kmod-project/kmod/pull/32
-
-You must also sign-off the bundled patch. No need to respin, I can just
-add it if you just reply with your SoB line.
+Why is the buildroot host tar not used for this?
 
 Thanks!
+Christian
 
-Regards,
-Yann E. MORIN.
+--00000000000043666c061a143cfd
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
->  1 file changed, 131 insertions(+)
->  create mode 100644 package/kmod/0002-Use-portable-implementation-for-basename-API.patch
-> 
-> diff --git a/package/kmod/0002-Use-portable-implementation-for-basename-API.patch b/package/kmod/0002-Use-portable-implementation-for-basename-API.patch
-> new file mode 100644
-> index 0000000000..46d23f4fa9
-> --- /dev/null
-> +++ b/package/kmod/0002-Use-portable-implementation-for-basename-API.patch
-> @@ -0,0 +1,131 @@
-> +From 721ed6040c7aa47070faf6378c433089e178bd43 Mon Sep 17 00:00:00 2001
-> +From: Khem Raj <raj.khem@gmail.com>
-> +Date: Sat, 9 Dec 2023 17:35:59 -0800
-> +Subject: [PATCH] Use portable implementation for basename API
-> +
-> +musl has removed the non-prototype declaration of basename from
-> +string.h [1] which now results in build errors with clang-17+ compiler
-> +
-> +Implement GNU basename behavior using strchr which is portable across libcs
-> +
-> +Fixes
-> +../git/tools/kmod.c:71:19: error: call to undeclared function 'basename'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> +71 | "Commands:\n", basename(argv[0]));
-> +| ^
-> +
-> +[1] https://git.musl-libc.org/cgit/musl/commit/?id=725e17ed6dff4d0cd22487bb64470881e86a92e7
-> +
-> +Suggested-by: Rich Felker
-> +
-> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
-> +---
-> + libkmod/libkmod-config.c | 2 +-
-> + shared/util.c            | 4 ++--
-> + shared/util.h            | 7 +++++++
-> + testsuite/testsuite.c    | 2 +-
-> + tools/depmod.c           | 2 +-
-> + tools/kmod.c             | 4 ++--
-> + 6 files changed, 14 insertions(+), 7 deletions(-)
-> +
-> +diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
-> +index e83621b3..8aa555a4 100644
-> +--- a/libkmod/libkmod-config.c
-> ++++ b/libkmod/libkmod-config.c
-> +@@ -794,7 +794,7 @@ static int conf_files_insert_sorted(struct kmod_ctx *ctx,
-> + 	bool is_single = false;
-> +
-> + 	if (name == NULL) {
-> +-		name = basename(path);
-> ++		name = gnu_basename(path);
-> + 		is_single = true;
-> + 	}
-> +
-> +diff --git a/shared/util.c b/shared/util.c
-> +index e2bab83a..0e16670e 100644
-> +--- a/shared/util.c
-> ++++ b/shared/util.c
-> +@@ -172,9 +172,9 @@ char *modname_normalize(const char *modname, char buf[static PATH_MAX], size_t *
-> +
-> + char *path_to_modname(const char *path, char buf[static PATH_MAX], size_t *len)
-> + {
-> +-	char *modname;
-> ++	const char *modname;
-> +
-> +-	modname = basename(path);
-> ++	modname = gnu_basename(path);
-> + 	if (modname == NULL || modname[0] == '\0')
-> + 		return NULL;
-> +
-> +diff --git a/shared/util.h b/shared/util.h
-> +index c4a3916b..073dc5a7 100644
-> +--- a/shared/util.h
-> ++++ b/shared/util.h
-> +@@ -5,6 +5,7 @@
-> + #include <stdbool.h>
-> + #include <stdlib.h>
-> + #include <stdio.h>
-> ++#include <string.h>
-> + #include <sys/types.h>
-> + #include <sys/stat.h>
-> + #include <time.h>
-> +@@ -76,6 +77,12 @@ do {						\
-> + 	__p->__v = (val);			\
-> + } while(0)
-> +
-> ++static _always_inline_ const char *gnu_basename(const char *s)
-> ++{
-> ++  const char *p = strrchr(s, '/');
-> ++  return p ? p+1 : s;
-> ++}
-> ++
-> + static _always_inline_ unsigned int ALIGN_POWER2(unsigned int u)
-> + {
-> + 	return 1 << ((sizeof(u) * 8) - __builtin_clz(u - 1));
-> +diff --git a/testsuite/testsuite.c b/testsuite/testsuite.c
-> +index 318343ac..aafc9873 100644
-> +--- a/testsuite/testsuite.c
-> ++++ b/testsuite/testsuite.c
-> +@@ -70,7 +70,7 @@ static void help(void)
-> +
-> + 	printf("Usage:\n"
-> + 	       "\t%s [options] <test>\n"
-> +-	       "Options:\n", basename(progname));
-> ++	       "Options:\n", gnu_basename(progname));
-> +
-> + 	for (itr = options, itr_short = options_short;
-> + 				itr->name != NULL; itr++, itr_short++)
-> +diff --git a/tools/depmod.c b/tools/depmod.c
-> +index 43fc354a..cfb15b11 100644
-> +--- a/tools/depmod.c
-> ++++ b/tools/depmod.c
-> +@@ -762,7 +762,7 @@ static int cfg_files_insert_sorted(struct cfg_file ***p_files, size_t *p_n_files
-> + 	if (name != NULL)
-> + 		namelen = strlen(name);
-> + 	else {
-> +-		name = basename(dir);
-> ++		name = gnu_basename(dir);
-> + 		namelen = strlen(name);
-> + 		dirlen -= namelen + 1;
-> + 	}
-> +diff --git a/tools/kmod.c b/tools/kmod.c
-> +index 55689c07..df91e5c6 100644
-> +--- a/tools/kmod.c
-> ++++ b/tools/kmod.c
-> +@@ -68,7 +68,7 @@ static int kmod_help(int argc, char *argv[])
-> + 			"Options:\n"
-> + 			"\t-V, --version     show version\n"
-> + 			"\t-h, --help        show this help\n\n"
-> +-			"Commands:\n", basename(argv[0]));
-> ++			"Commands:\n", gnu_basename(argv[0]));
-> +
-> + 	for (i = 0; i < ARRAY_SIZE(kmod_cmds); i++) {
-> + 		if (kmod_cmds[i]->help != NULL) {
-> +@@ -156,7 +156,7 @@ static int handle_kmod_compat_commands(int argc, char *argv[])
-> + 	const char *cmd;
-> + 	size_t i;
-> +
-> +-	cmd = basename(argv[0]);
-> ++	cmd = gnu_basename(argv[0]);
-> +
-> + 	for (i = 0; i < ARRAY_SIZE(kmod_compat_cmds); i++) {
-> + 		if (streq(kmod_compat_cmds[i]->name, cmd))
-> --
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+<div dir=3D"auto"><div>Yann,<br><br><div class=3D"gmail_quote"><div dir=3D"=
+ltr" class=3D"gmail_attr">On Tue, Jun 4, 2024, 9:18=E2=80=AFAM Yann E. MORI=
+N &lt;<a href=3D"mailto:yann.morin.1998@free.fr">yann.morin.1998@free.fr</a=
+>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0=
+ 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Christian, All,<br>
+<br>
+On 2024-06-04 08:47 -0700, Christian Stewart spake thusly:<br>
+&gt; Is this the correct version? (I&#39;m on my phone and don&#39;t have a=
+ chance to check<br>
+&gt; right now).<br>
+&gt; [15]<a href=3D"https://mirror.skiffos.com/docker-compose/docker-compos=
+e-2.27.0-go2.tar.gz" rel=3D"noreferrer noreferrer" target=3D"_blank">https:=
+//mirror.skiffos.com/docker-compose/docker-compose-2.27.0-go2.tar.gz</a><br=
+>
+&gt; It seems to me that there is a difference between either Go versions v=
+endor/<br>
+&gt; format OR there is a difference between architectures (amd64 or arm).=
+=C2=A0<br>
+&gt; Hopefully we can tell the difference from the tarball above<br>
+<br>
+The deltas are all of the form of that one:<br>
+<br>
+--- docker-compose-2.27.0-go2.tar.42e9d2.hex=C2=A0 =C2=A0 2024-06-04 18:07:=
+33.538588495 +0200<br>
++++ docker-compose-2.27.0-go2.tar.448eaf.hex=C2=A0 =C2=A0 2024-06-04 18:07:=
+39.737437043 +0200<br>
+@@ -7,7 +7,7 @@<br>
+=C2=A000000060=C2=A0 00 00 00 00 30 30 30 30=C2=A0 36 34 34 00 30 30 30 30 =
+|....0000644.0000|<br>
+=C2=A000000070=C2=A0 30 30 30 00 30 30 30 30=C2=A0 30 30 30 00 30 30 30 30 =
+|000.0000000.0000|<br>
+=C2=A000000080=C2=A0 30 30 30 30 30 30 35 00=C2=A0 31 34 36 31 32 32 35 33 =
+|0000005.14612253|<br>
+-00000090=C2=A0 32 33 36 00 30 31 34 31=C2=A0 31 35 00 20 30 00 00 00 |236.=
+014115. 0...|<br>
++00000090=C2=A0 32 33 36 00 30 31 35 33=C2=A0 35 35 00 20 30 00 00 00 |236.=
+015355. 0...|<br>
+=C2=A0000000a0=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
+|................|<br>
+=C2=A0000000b0=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
+|................|<br>
+=C2=A0000000c0=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
+|................|<br>
+@@ -18,8 +18,8 @@<br>
+=C2=A000000110=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
+|................|<br>
+=C2=A000000120=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
+|................|<br>
+=C2=A000000130=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
+|................|<br>
+-00000140=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 |....=
+............|<br>
+-00000150=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 |....=
+............|<br>
++00000140=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 30 30 30 30 30 30 30 |....=
+.....0000000|<br>
++00000150=C2=A0 00 30 30 30 30 30 30 30=C2=A0 00 00 00 00 00 00 00 00 |.000=
+0000........|<br>
+=C2=A000000160=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
+|................|<br>
+=C2=A000000170=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
+|................|<br>
+=C2=A000000180=C2=A0 00 00 00 00 00 00 00 00=C2=A0 00 00 00 00 00 00 00 00 =
+|................|<br>
+<br>
+The --- is the archive Peter and I generated, the +++ is yours.<br>
+<br>
+What this shows, is that the dev major/minor fields are NULs for us,<br>
+while they are 0 (zero), ASCII 0x30) in your case.<br>
+<br>
+This is exactly the change that went in in tar 1.35: our archives were<br>
+generated with tar 1.35, yours with an older tar (presumably, 1.34).<br>
+<br>
+Peter had a similar issue, as he used to set the TAR environment<br>
+variable to point to a pre-built tar 1.35, like so:<br>
+<br>
+=C2=A0 =C2=A0 $ TAR=3Dtar-1.35 make source<br>
+<br>
+Are you doing something similar by chance?<br></blockquote></div></div><div=
+ dir=3D"auto"><br></div><div dir=3D"auto">I&#39;m using &quot;make foo-extr=
+act&quot; and then hashing the file in dl/</div><div dir=3D"auto"><br></div=
+><div dir=3D"auto">Why is the buildroot host tar not used for this?</div><d=
+iv dir=3D"auto"><br></div><div dir=3D"auto">Thanks!</div><div dir=3D"auto">=
+Christian</div></div>
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--00000000000043666c061a143cfd--
+
+--===============8317096430726284891==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8317096430726284891==--
