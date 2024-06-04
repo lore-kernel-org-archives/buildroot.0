@@ -4,49 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A93A3C25B78
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 13:28:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 132BAC25B78
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 13:28:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7863A61071;
-	Tue,  4 Jun 2024 13:28:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4A4961398;
+	Tue,  4 Jun 2024 13:28:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rn4tzEy8Ltuk; Tue,  4 Jun 2024 13:28:42 +0000 (UTC)
+ id SYlVsheeHEC1; Tue,  4 Jun 2024 13:28:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA6DE6122E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60E2F613A0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA6DE6122E;
-	Tue,  4 Jun 2024 13:28:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60E2F613A0;
+	Tue,  4 Jun 2024 13:28:45 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9FA6F1BF2A2
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:28:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A50341BF2A2
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:28:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C4B5847FB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89D4E80FF8
  for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:28:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XWBDXCfnSl0z for <buildroot@lists.busybox.net>;
+ id i9yGln_HtByz for <buildroot@lists.busybox.net>;
  Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F14280FF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5366847FC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5F14280FF8
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5366847FC
  for <buildroot@buildroot.org>; Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 49AC887AB2; Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
+ id 54ADC87AAE; Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Jun 2024 15:22:28 +0200
+Date: Tue, 4 Jun 2024 15:25:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b71c5936ad60c9a3d084f5a7b1a7f8ade1cd4c63
-X-Git-Newrev: 3d4896c52909b43e0c3049f8f79f77b5c502e2dd
+X-Git-Oldrev: 3d4896c52909b43e0c3049f8f79f77b5c502e2dd
+X-Git-Newrev: baaf7f738a76d363aed753888da0712c7c430976
 X-Patchwork-Hint: ignore
-Message-Id: <20240604132830.49AC887AB2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vala: bump to version 0.56.17
+Message-Id: <20240604132830.54ADC87AAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ board/freescale/common/imx/imx8-bootloader-prepare.sh: fix FIT external
+ position
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,67 +61,94 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6834786567176043513=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d4896c52909b43e0c3049f8f79f77b5c502e2dd
+--===============6834786567176043513==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=baaf7f738a76d363aed753888da0712c7c430976
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/f08/f087b879167252690ed198de771292142c6249f8/
+When using imx-mkimage 6.1.36_2.1.0 or later, an additional data structure
+is inserted in the generated image. The FIT external data position passed
+to the uboot mkimage program needs to be adjusted accordingly.
 
-Set GI_GIRDIR env variable which is now required for configure
-to function.
-
-Details:
-https://gitlab.gnome.org/GNOME/vala/-/commit/a9d38070ce86d7994b949f7cb426fbf670a953d8
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998@free.fr: drop spurious reflow of _DEPENDENCIES]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=15973
+Fixes: 72de78902330 ("package/imx-mkimage: bump version to lf-6.1.36-2.1.0")
+Tested-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+[Sébastien: Tested on i.MX8MM EVK and i.MX8MP EVK]
+[Sébastien:
+ - fix subject
+ - add Tested-by tag
+ - fix Fixes tags
+]
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 6 ++++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ board/freescale/common/imx/imx8-bootloader-prepare.sh | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index b3716f0854..a16875ac6a 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/vala/0.56/vala-0.56.14.sha256sum
--sha256  9382c268ca9bdc02aaedc8152a9818bf3935273041f629c56de410e360a3f557  vala-0.56.14.tar.xz
-+# From https://download.gnome.org/sources/vala/0.56/vala-0.56.17.sha256sum
-+sha256  26100c4e4ef0049c619275f140d97cf565883d00c7543c82bcce5a426934ed6a  vala-0.56.17.tar.xz
- # Locally computed
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 415d996faa..85f928202a 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index a9ee154e9c..b353d506fe 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -8,6 +8,8 @@ main ()
+ 		exit 1
+ 	fi
  
- VALA_VERSION_MAJOR = 0.56
--VALA_VERSION = $(VALA_VERSION_MAJOR).14
-+VALA_VERSION = $(VALA_VERSION_MAJOR).17
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPL-2.1+
-@@ -15,7 +15,9 @@ VALA_CPE_ID_VENDOR = gnome
- HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
- # Yes, the autoconf script understands ':' as "xsltproc is not
- # available".
--HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
-+HOST_VALA_CONF_ENV = \
-+	ac_cv_path_XSLTPROC=: \
-+	GI_GIRDIR="$(STAGING_DIR)/usr/share/gir-1.0"
- HOST_VALA_CONF_OPTS += --disable-valadoc
++	FIT_EXTERNAL_POSITION=0x5000
++
+ 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+ 		dd if=${BINARIES_DIR}/u-boot-spl.bin of=${BINARIES_DIR}/u-boot-spl-padded.bin bs=4 conv=sync
+ 		cat ${BINARIES_DIR}/u-boot-spl-padded.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+@@ -16,7 +18,7 @@ main ()
+ 		else
+ 			BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		fi
+-		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
++		${HOST_DIR}/bin/mkimage -E -p ${FIT_EXTERNAL_POSITION} -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
  
- # We wrap vala, valac and vapigen to point to the proper gir and vapi data dirs
+ 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+@@ -28,7 +30,7 @@ main ()
+ 		else
+ 			BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		fi
+-		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
++		${HOST_DIR}/bin/mkimage -E -p ${FIT_EXTERNAL_POSITION} -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
+ 		${HOST_DIR}/bin/mkimage_imx8 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+@@ -40,7 +42,7 @@ main ()
+ 		else
+ 			BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00960000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		fi
+-		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
++		${HOST_DIR}/bin/mkimage -E -p ${FIT_EXTERNAL_POSITION} -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
+ 		${HOST_DIR}/bin/mkimage_imx8 -v v2 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x912000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+@@ -52,7 +54,7 @@ main ()
+ 		else
+ 			BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00970000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		fi
+-		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
++		${HOST_DIR}/bin/mkimage -E -p ${FIT_EXTERNAL_POSITION} -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
+ 		${HOST_DIR}/bin/mkimage_imx8 -v v2 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x920000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+
+--===============6834786567176043513==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6834786567176043513==--
