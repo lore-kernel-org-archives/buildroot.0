@@ -1,76 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02D0EC25B78
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 13:36:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68429C25B78
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 14:05:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B261D6106E;
-	Tue,  4 Jun 2024 13:36:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA40384406;
+	Tue,  4 Jun 2024 14:05:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I0g5ektERP3j; Tue,  4 Jun 2024 13:36:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ehiqO1HVTa_C; Tue,  4 Jun 2024 14:05:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAC7E61070
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8049684243
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BAC7E61070;
-	Tue,  4 Jun 2024 13:36:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C28C61BF2A2
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:36:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8049684243;
+	Tue,  4 Jun 2024 14:05:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 970751BF215
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 14:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD0816106E
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:36:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8246A41788
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 14:05:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id neQ0q-rPYVOp for <buildroot@lists.busybox.net>;
- Tue,  4 Jun 2024 13:36:55 +0000 (UTC)
-X-Greylist: delayed 1800 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 04 Jun 2024 13:36:54 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8F9E0606DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F9E0606DA
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.32.96.204;
- helo=9.mo583.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
- receiver=<UNKNOWN> 
-Received: from 9.mo583.mail-out.ovh.net (9.mo583.mail-out.ovh.net
- [178.32.96.204])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8F9E0606DA
- for <buildroot@buildroot.org>; Tue,  4 Jun 2024 13:36:53 +0000 (UTC)
-Received: from director2.ghost.mail-out.ovh.net (unknown [10.109.139.40])
- by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4VtrGD0PJJz1Dj2
- for <buildroot@buildroot.org>; Tue,  4 Jun 2024 12:57:08 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-msz8m (unknown [10.110.168.247])
- by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id A58F41FD80;
- Tue,  4 Jun 2024 12:57:07 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.109])
- by ghost-submission-6684bf9d7b-msz8m with ESMTPSA
- id nqsAJSMPX2b6cCEAmvfe2g
- (envelope-from <sebastien.szymanski@armadeus.com>);
- Tue, 04 Jun 2024 12:57:07 +0000
-X-OVh-ClientIp: 92.148.253.243
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eaw02mozEnh5 for <buildroot@lists.busybox.net>;
+ Tue,  4 Jun 2024 14:05:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.218;
+ helo=smtpcmd01-sp1.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9BBC741708
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BBC741708
+Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9BBC741708
+ for <buildroot@buildroot.org>; Tue,  4 Jun 2024 14:05:11 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id EUmhskbu5wy3rEUmisM5yU; Tue, 04 Jun 2024 16:05:08 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue,  4 Jun 2024 14:57:01 +0200
-Message-ID: <20240604125701.26637-1-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.44.1
+Date: Tue,  4 Jun 2024 16:05:02 +0200
+Message-Id: <20240604140502.192137-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 1090715537770343403
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvdelgedgheegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeffueffgfevieffleetlefgteejffeuffeuhfffieekhfekgffhjeejueefudetgeenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrddutdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehkeefpdhmohguvgepshhmthhpohhuth
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=armadeus.com
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-109S00379d1a54b-6cc3-4f14-999e-64ede07ef4e0,
- 1C94CC713AF3A73937467F77B7C86ACFBFDD39AD)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: [Buildroot] [PATCH 1/1] package/imx-mkimage: bump version to
- lf-6.6.3-1.0.0
+X-CMAE-Envelope: MS4xfN5q5av7r0OPEPpVrF6tyCJqdUvrrayX1GaGYz0Aw1dVQkzlsp+E2CK515BQxRSys9y5Dn/i4WypwT+T8F1sXXecMTzHYdwXNOgPjaRi8UyB5b8SScjS
+ pOdT5D9mhhIZWYv/E8m9xyJaYDxWE+oqamre9yoHJ0d8w9SLCEnFVhRkzX4X7OxA2lMWW2aoJ51VUqEUdXuC9+iuEgJgidvab/JBlw3K6UUcKZeDBPBdjPIU
+ H6q+Ch14UraMLXbbmvgQq7EuXGtTw5BurSGBGv9jcrQKZR+Wd9GG77k8XwSDG3YW8R+rc5O5TVgXBOd7NJLTiZMd9D76Upv5lHGFk/ydRmPzvlQBttaQ58G9
+ /4OlCJ0wWgAGOtwe0dYSDep3xF4vckBHXH1vzz9o85zZcIf0oeEeErjHWrovPiqRTJpkGVLzhO4zb0sKa3quCUv9r3HHm561jC50nHP/G46ceeyT5q8=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1717509908; bh=yGzM7QAqojwhn2Xmkshw2a8gqoeLrB1c8Wbka+YR7NU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=jDFYyWoDE1Tv9jb+nfGRwYNgtkH8Sjj5WL+MXXRtyi8Jt5ReHK7RYf/TV+iyU1I1k
+ ossILGorUK8s8lcp6uIHLlYqxbQRzH+K7mTiub3q53SQon9t90gOFq2bZtpIDNfMI6
+ A4X5W0CQhkV2N18Vg5/gF2H3oPF6G4azPrI06mKAen1r33PWzVJvph3TQMLi7rfuex
+ wrmyFbT+QFCpCUIwlF1sv7WDDPc13ySxgkUeJxPofYwFCRJyr7aqgyH+lxJBBR8qnt
+ /hXhMj5PlLZJDy4g3+QKIQ4TUc00iPaekpp26iyHJx3bJvV8190XK01EWX3r/KEmQ6
+ 97g4/NPNQ8zEA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=jDFYyWoD
+Subject: [Buildroot] [PATCH v2] package/dotnet-runtime-prebuilt: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,35 +79,199 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Erik Larsson <karl.erik.larsson@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>,
+ James Autry <jautry@tekvox.com>, Matthew Maron <matthewm@tekvox.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Jim Reinhart <jimr@tekvox.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogU8OpYmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lA
-YXJtYWRldXMuY29tPgotLS0KIHBhY2thZ2UvaW14LW1raW1hZ2UvaW14LW1raW1hZ2UuaGFzaCB8
-IDIgKy0KIHBhY2thZ2UvaW14LW1raW1hZ2UvaW14LW1raW1hZ2UubWsgICB8IDIgKy0KIDIgZmls
-ZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvaW14LW1raW1hZ2UvaW14LW1raW1hZ2UuaGFzaCBiL3BhY2thZ2UvaW14LW1raW1h
-Z2UvaW14LW1raW1hZ2UuaGFzaAppbmRleCAwMzRiM2QwMmVkMzMuLjMxNjFkNjZhZDJlNSAxMDA2
-NDQKLS0tIGEvcGFja2FnZS9pbXgtbWtpbWFnZS9pbXgtbWtpbWFnZS5oYXNoCisrKyBiL3BhY2th
-Z2UvaW14LW1raW1hZ2UvaW14LW1raW1hZ2UuaGFzaApAQCAtMSwzICsxLDMgQEAKICMgTG9jYWxs
-eSBjYWxjdWxhdGVkCi1zaGEyNTYgIGZkNTM4ZGM1NzFjZTA2NjA5ZDZhNGQ5ZWU4Y2ZkN2QwYzkz
-ZWM0Njg1YWZhOWYxMDc5ZTVhNTkzMWFkM2JkYmMgIGlteC1ta2ltYWdlLWxmLTYuMS4zNl8yLjEu
-MC50YXIuZ3oKK3NoYTI1NiAgNDhlN2JhZDRhNDllNjkzNDE1NDE4ODU5YmIwMzMwYjYzOTM4YTc3
-YmJiMTI2NjBiYzY0NzYxYTVkYWE5MTVjOSAgaW14LW1raW1hZ2UtbGYtNi42LjNfMS4wLjAudGFy
-Lmd6CiBzaGEyNTYgIDIzMWY3ZWRjYzczNTJkNzczNGE5NmVlZjBiODAzMGY3Nzk4MjY3OGM1MTY4
-NzZmY2I4MWUyNWIzMmQ2ODU2NGMgIExJQ0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvaW14LW1r
-aW1hZ2UvaW14LW1raW1hZ2UubWsgYi9wYWNrYWdlL2lteC1ta2ltYWdlL2lteC1ta2ltYWdlLm1r
-CmluZGV4IDZlNzBhOTQ2YmY2NC4uYTgyODU0ZWI2ZTJmIDEwMDY0NAotLS0gYS9wYWNrYWdlL2lt
-eC1ta2ltYWdlL2lteC1ta2ltYWdlLm1rCisrKyBiL3BhY2thZ2UvaW14LW1raW1hZ2UvaW14LW1r
-aW1hZ2UubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1J
-TVhfTUtJTUFHRV9WRVJTSU9OID0gbGYtNi4xLjM2XzIuMS4wCitJTVhfTUtJTUFHRV9WRVJTSU9O
-ID0gbGYtNi42LjNfMS4wLjAKIElNWF9NS0lNQUdFX1NJVEUgPSAkKGNhbGwgZ2l0aHViLG54cC1p
-bXgsaW14LW1raW1hZ2UsJChJTVhfTUtJTUFHRV9WRVJTSU9OKSkKIElNWF9NS0lNQUdFX0xJQ0VO
-U0UgPSBHUEwtMi4wKwogSU1YX01LSU1BR0VfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKLS0gCjIu
-NDQuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+From: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+
+Add pre-built .NET Core Runtime Prebuilt 8.0.6 binaries to execute .NET
+executables on Linux. Version 8.0.6 is the latest LTS version. Let's simply
+download and extract specific tarball for aarch64, arm(eabihf) and x64
+architectures and glibc/musl libc. Let's also:
+* add /etc/dotnet/install_location file to point where dotnet runtime is
+* add a script to export 'dotnet' to PATH and native libraries to
+  LD_LIBRARY_PATH to avoid missing dependencies on runtime
+
+Cc: Jim Reinhart <jimr@tekvox.com>
+Cc: James Autry <jautry@tekvox.com>
+Cc: Matthew Maron <matthewm@tekvox.com>
+Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+---
+V1->V2:
+* add depends on BR2_INSTALL_LIBSTDCPP and drop select BR2_PACKAGE_LTTNG_LIBUST
+---
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/dotnet-runtime-prebuilt/Config.in     | 29 +++++++++
+ .../dotnet-runtime-prebuilt.hash              |  8 +++
+ .../dotnet-runtime-prebuilt.mk                | 62 +++++++++++++++++++
+ .../dotnet-runtime-prebuilt.sh                |  2 +
+ 6 files changed, 103 insertions(+)
+ create mode 100644 package/dotnet-runtime-prebuilt/Config.in
+ create mode 100644 package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.hash
+ create mode 100644 package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.mk
+ create mode 100644 package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.sh
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2f13d71fd8..76836cfce4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1247,6 +1247,7 @@ F:	configs/rockpro64_defconfig
+ F:	package/at/
+ F:	package/binutils/
+ F:	package/cryptsetup/
++F:	package/dotnet-runtime-prebuilt/
+ F:	package/dotnet6-runtime/
+ F:	package/erlang-jiffy/
+ F:	package/esp-hosted/
+diff --git a/package/Config.in b/package/Config.in
+index 6ae9ef4ab5..7e7c5c472c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -663,6 +663,7 @@ menu "Interpreter languages and scripting"
+ 	source "package/4th/Config.in"
+ 	source "package/dotnet6-runtime/Config.in"
+ 	source "package/dotnet8-runtime/Config.in"
++	source "package/dotnet-runtime-prebuilt/Config.in"
+ 	source "package/enscript/Config.in"
+ 	source "package/erlang/Config.in"
+ if BR2_PACKAGE_ERLANG
+diff --git a/package/dotnet-runtime-prebuilt/Config.in b/package/dotnet-runtime-prebuilt/Config.in
+new file mode 100644
+index 0000000000..2e2b54d0ac
+--- /dev/null
++++ b/package/dotnet-runtime-prebuilt/Config.in
+@@ -0,0 +1,29 @@
++config BR2_PACKAGE_DOTNET_RUNTIME_PREBUILT_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64
++	default y if (BR2_arm && BR2_ARM_EABIHF)
++	default y if BR2_x86_64
++	depends on BR2_USE_MMU # fork()
++
++config BR2_PACKAGE_DOTNET_RUNTIME_PREBUILT
++	bool "dotnet-runtime-prebuilt"
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_PACKAGE_DOTNET_RUNTIME_PREBUILT_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_CMAKE
++	select BR2_PACKAGE_ICU
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBKRB5
++	select BR2_PACKAGE_LIBZLIB
++	select BR2_PACKAGE_OPENSSL
++	help
++	  .NET Core 8 Runtime Prebuilt
++
++	  https://dotnet.microsoft.com/download/dotnet-core/8.0
++
++comment "dotnet-runtime needs a toolchain w/ glibc or musl and threads"
++	depends on BR2_PACKAGE_DOTNET8_RUNTIME_PREBUILT_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.hash b/package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.hash
+new file mode 100644
+index 0000000000..6ff15ed121
+--- /dev/null
++++ b/package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.hash
+@@ -0,0 +1,8 @@
++# Locally calculated
++sha256  811b3d6d052e0d37c5cb2f6746cb950ae7c87a1c5082897a27bcd9258c94de66  dotnet-runtime-8.0.6-linux-arm.tar.gz
++sha256  0c1355dfba7b0e354294fd202274e4fa1838b93afcc180ecf667e25e5d1b7df6  dotnet-runtime-8.0.6-linux-arm64.tar.gz
++sha256  cfecba75d6497e14a06f04096c0be6bb57938ef23abd3c5ff6639bd999dbb9a1  dotnet-runtime-8.0.6-linux-musl-arm64.tar.gz
++sha256  566c219fb59864c23333a254092c5b9644717164ad047050ccad06b79f710700  dotnet-runtime-8.0.6-linux-musl-arm.tar.gz
++sha256  15c7219c2630d81131c0b47a7c6577f0f76f56ea0ed8dd337748d0b5929834d9  dotnet-runtime-8.0.6-linux-musl-x64.tar.gz
++sha256  b29b4e02b622cf0ff4581b0a96824b74a6690e97b95158a2e3d8fb43342dadfd  dotnet-runtime-8.0.6-linux-x64.tar.gz
++sha256  cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310  LICENSE.txt
+diff --git a/package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.mk b/package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.mk
+new file mode 100644
+index 0000000000..6dc72b5cdb
+--- /dev/null
++++ b/package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.mk
+@@ -0,0 +1,62 @@
++################################################################################
++#
++# dotnet-runtime-prebuilt
++#
++################################################################################
++
++DOTNET_RUNTIME_PREBUILT_VERSION = 8.0.6
++DOTNET_RUNTIME_PREBUILT_LICENSE = MIT
++DOTNET_RUNTIME_PREBUILT_LICENSE_FILES = LICENSE.txt
++
++# Set download URL and runtime identifier
++# See https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
++# for the list of supported runtimes
++# download_link="$azure_feed/Runtime/$specific_version/dotnet-runtime-$specific_version-$osname-$normalized_architecture.tar.gz"
++
++AZURE_FEED = https://dotnetcli.azureedge.net/dotnet
++DOTNET_RUNTIME_PREBUILT_SITE = $(AZURE_FEED)/Runtime/$(DOTNET_RUNTIME_PREBUILT_VERSION)
++
++ifeq ($(BR2_aarch64),y)
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++DOTNET_RUNTIME_PREBUILT_IDENTIFIER = linux-musl-arm64
++else
++DOTNET_RUNTIME_PREBUILT_IDENTIFIER = linux-arm64
++endif
++else ifeq ($(BR2_arm),y)
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++DOTNET_RUNTIME_PREBUILT_IDENTIFIER = linux-musl-arm
++else
++DOTNET_RUNTIME_PREBUILT_IDENTIFIER = linux-arm
++endif
++else ifeq ($(BR2_x86_64),y)
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++DOTNET_RUNTIME_PREBUILT_IDENTIFIER = linux-musl-x64
++else
++DOTNET_RUNTIME_PREBUILT_IDENTIFIER = linux-x64
++endif
++endif
++
++ifeq ($(DOTNET_RUNTIME_PREBUILT_IDENTIFIER),)
++$(error "Target platform is not supported by dotnet")
++endif
++
++DOTNET_RUNTIME_PREBUILT_SOURCE = dotnet-runtime-$(DOTNET_RUNTIME_PREBUILT_VERSION)-$(DOTNET_RUNTIME_PREBUILT_IDENTIFIER).tar.gz
++
++# Runtime could be installed in the global location [/usr/share/dotnet] and
++# will be picked up automatically.
++# As alternative, it is possible to use the DOTNET_ROOT environment variable
++# to specify the runtime location or register the runtime location in
++# [/etc/dotnet/install_location]
++# This script will install runtime to
++# /usr/share/dotnet
++define DOTNET_RUNTIME_PREBUILT_INSTALL_TARGET_CMDS
++	cp -Rf $(@D)/. $(TARGET_DIR)/usr/share/dotnet
++	mkdir -p $(TARGET_DIR)/etc/dotnet
++	echo "/usr/share/dotnet" > $(TARGET_DIR)/etc/dotnet/install_location
++
++	# Export dotnet to PATH and libraries to LD_LIBRARY_PATH
++	$(INSTALL) -m 0755 -D $(DOTNET_RUNTIME_PREBUILT_PKGDIR)/dotnet-runtime-prebuilt.sh \
++		$(TARGET_DIR)/etc/profile.d/dotnet-runtime-prebuilt.sh
++endef
++
++$(eval $(generic-package))
+diff --git a/package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.sh b/package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.sh
+new file mode 100644
+index 0000000000..b059a9c593
+--- /dev/null
++++ b/package/dotnet-runtime-prebuilt/dotnet-runtime-prebuilt.sh
+@@ -0,0 +1,2 @@
++export PATH=$PATH:/usr/share/dotnet
++export LD_LIBRARY_PATH=/usr/share/dotnet/shared/Microsoft.NETCore.App/8.0.6
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
