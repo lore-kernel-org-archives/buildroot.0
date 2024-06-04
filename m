@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50E98C25B78
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 13:28:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12197C27C50
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 13:28:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6566660073;
-	Tue,  4 Jun 2024 13:28:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBA8761015;
+	Tue,  4 Jun 2024 13:28:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kdgq8o27LAX5; Tue,  4 Jun 2024 13:28:35 +0000 (UTC)
+ id FqfWAthU_Q_x; Tue,  4 Jun 2024 13:28:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD83361077
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68EC9605A0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD83361077;
-	Tue,  4 Jun 2024 13:28:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0EC391BF869
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68EC9605A0;
+	Tue,  4 Jun 2024 13:28:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 485881BF2A2
  for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:28:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 08DC2606DA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33600847EB
  for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:28:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KwjJVtt-NX2c for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2sNyonWKAJ8K for <buildroot@lists.busybox.net>;
  Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3791F606AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 545D6847FB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3791F606AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 545D6847FB
  for <buildroot@buildroot.org>; Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3115E87AAF; Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
+ id 3F13E87AB0; Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Jun 2024 15:16:41 +0200
+Date: Tue, 4 Jun 2024 15:19:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a1c376492d6bb39a8725baae934f2b248501e0c
-X-Git-Newrev: f7f2c8249662ea3a2076af31aae3fa0a7f819dac
+X-Git-Oldrev: f7f2c8249662ea3a2076af31aae3fa0a7f819dac
+X-Git-Newrev: b71c5936ad60c9a3d084f5a7b1a7f8ade1cd4c63
 X-Patchwork-Hint: ignore
-Message-Id: <20240604132830.3115E87AAF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/ls1028ardb: add hashes
+Message-Id: <20240604132830.3F13E87AB0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/mx6cubox: add hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7f2c8249662ea3a2076af31aae3fa0a7f819dac
+commit: https://git.buildroot.net/buildroot/commit/?id=b71c5936ad60c9a3d084f5a7b1a7f8ade1cd4c63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 and enable BR2_DOWNLOAD_FORCE_CHECK_HASHES
@@ -72,74 +72,76 @@ and enable BR2_DOWNLOAD_FORCE_CHECK_HASHES
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                                  | 1 -
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash           | 2 ++
- board/freescale/ls1028ardb/patches/linux-headers/linux-headers.hash  | 1 +
- board/freescale/ls1028ardb/patches/linux/linux.hash                  | 2 ++
- board/freescale/ls1028ardb/patches/uboot/uboot.hash                  | 2 ++
- configs/ls1028ardb_defconfig                                         | 5 +++--
- 6 files changed, 10 insertions(+), 3 deletions(-)
+ .checkpackageignore                                              | 1 -
+ board/solidrun/mx6cubox/patches/linux-headers/linux-headers.hash | 1 +
+ board/solidrun/mx6cubox/patches/linux/linux.hash                 | 2 ++
+ board/solidrun/mx6cubox/patches/uboot/uboot.hash                 | 2 ++
+ configs/mx6cubox_defconfig                                       | 6 +++++-
+ 5 files changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 50fdab88f9..fad6ff5c8b 100644
+index fad6ff5c8b..8825d644ab 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -206,7 +206,6 @@ configs/kontron_bl_imx8mm_defconfig lib_defconfig.ForceCheckHash
- configs/kontron_pitx_imx8m_defconfig lib_defconfig.ForceCheckHash
- configs/kontron_smarc_sal28_defconfig lib_defconfig.ForceCheckHash
- configs/linksprite_pcduino_defconfig lib_defconfig.ForceCheckHash
--configs/ls1028ardb_defconfig lib_defconfig.ForceCheckHash
- configs/ls1046a-frwy_defconfig lib_defconfig.ForceCheckHash
- configs/mangopi_mq1rdw2_defconfig lib_defconfig.ForceCheckHash
- configs/mender_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..17c409530d
---- /dev/null
-+++ b/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  0dda154c335e1a50c727601e698b6a0827e3f92308873b373449fb888df5acfd  atf-LSDK-21.08.tar.gz
-diff --git a/board/freescale/ls1028ardb/patches/linux-headers/linux-headers.hash b/board/freescale/ls1028ardb/patches/linux-headers/linux-headers.hash
+@@ -221,7 +221,6 @@ configs/microchip_sama7g5ek_mmc_dev_defconfig lib_defconfig.ForceCheckHash
+ configs/minnowboard_max_defconfig lib_defconfig.ForceCheckHash
+ configs/mx25pdk_defconfig lib_defconfig.ForceCheckHash
+ configs/mx53loco_defconfig lib_defconfig.ForceCheckHash
+-configs/mx6cubox_defconfig lib_defconfig.ForceCheckHash
+ configs/mx6sx_udoo_neo_defconfig lib_defconfig.ForceCheckHash
+ configs/mx6udoo_defconfig lib_defconfig.ForceCheckHash
+ configs/nexbox_a95x_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/solidrun/mx6cubox/patches/linux-headers/linux-headers.hash b/board/solidrun/mx6cubox/patches/linux-headers/linux-headers.hash
 new file mode 120000
 index 0000000000..5808d92afe
 --- /dev/null
-+++ b/board/freescale/ls1028ardb/patches/linux-headers/linux-headers.hash
++++ b/board/solidrun/mx6cubox/patches/linux-headers/linux-headers.hash
 @@ -0,0 +1 @@
 +../linux/linux.hash
 \ No newline at end of file
-diff --git a/board/freescale/ls1028ardb/patches/linux/linux.hash b/board/freescale/ls1028ardb/patches/linux/linux.hash
+diff --git a/board/solidrun/mx6cubox/patches/linux/linux.hash b/board/solidrun/mx6cubox/patches/linux/linux.hash
 new file mode 100644
-index 0000000000..bd5e29d026
+index 0000000000..8b8381e619
 --- /dev/null
-+++ b/board/freescale/ls1028ardb/patches/linux/linux.hash
++++ b/board/solidrun/mx6cubox/patches/linux/linux.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256  6db58cf91b98f7fc279f341279a5d43d4069fb56a660a34209aba6af53ea2b57  linux-LSDK-21.08.tar.gz
-diff --git a/board/freescale/ls1028ardb/patches/uboot/uboot.hash b/board/freescale/ls1028ardb/patches/uboot/uboot.hash
++sha256  639e50060e3c8f23ed017cb10cfeacc6ba88ff5583812bb76859b4cc6a128291  linux-6.6.27.tar.xz
+diff --git a/board/solidrun/mx6cubox/patches/uboot/uboot.hash b/board/solidrun/mx6cubox/patches/uboot/uboot.hash
 new file mode 100644
-index 0000000000..d0cc110fdd
+index 0000000000..c1aeddf06c
 --- /dev/null
-+++ b/board/freescale/ls1028ardb/patches/uboot/uboot.hash
++++ b/board/solidrun/mx6cubox/patches/uboot/uboot.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256  6279c161ad8a218b549e6631be969b74f358cf01a20103953ccaf3bb14185ac2  u-boot-LSDK-21.08.tar.gz
-diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
-index d92c543b44..462e642c3d 100644
---- a/configs/ls1028ardb_defconfig
-+++ b/configs/ls1028ardb_defconfig
-@@ -2,8 +2,9 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
++sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index 46a1400d9f..bd94f3fc86 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -9,6 +9,10 @@ BR2_ARM_FPU_VFPV3=y
+ # Linux headers same as kernel, a 6.6 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
  
--# patches
--BR2_GLOBAL_PATCH_DIR="board/freescale/common/patches"
 +# Build
-+BR2_GLOBAL_PATCH_DIR="board/freescale/ls1028ardb/patches board/freescale/common/patches"
++BR2_GLOBAL_PATCH_DIR="board/solidrun/mx6cubox/patches"
 +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++
+ # System configuration
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_OVERLAY="board/solidrun/mx6cubox/rootfs_overlay"
+@@ -36,10 +40,10 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6cuboxi"
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
  
- # Toolchain
- # Linux headers same as kernel, a 5.10 series
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
