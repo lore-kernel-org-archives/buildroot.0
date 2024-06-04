@@ -1,66 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4309C25B78
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 09:15:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC2ECC25B78
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 10:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FA0F404AB;
-	Tue,  4 Jun 2024 09:15:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3ABFA61204;
+	Tue,  4 Jun 2024 10:48:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0JniAApeVhea; Tue,  4 Jun 2024 09:15:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oBpmYf2oa9q2; Tue,  4 Jun 2024 10:48:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 282FC404EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2275F61207
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 282FC404EB;
-	Tue,  4 Jun 2024 09:15:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2275F61207;
+	Tue,  4 Jun 2024 10:48:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C73551BF2B9
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 09:15:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 44AE21BF863
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 10:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFB0D4095D
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 09:15:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DCE3140052
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 10:48:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vuEKBj2yPvxt for <buildroot@lists.busybox.net>;
- Tue,  4 Jun 2024 09:15:52 +0000 (UTC)
-X-Greylist: delayed 385 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 04 Jun 2024 09:15:51 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4400B40950
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4400B40950
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.234.176.197;
- helo=aposti.net; envelope-from=paul@crapouillou.net; receiver=<UNKNOWN> 
-Received: from aposti.net (aposti.net [89.234.176.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4400B40950
- for <buildroot@buildroot.org>; Tue,  4 Jun 2024 09:15:51 +0000 (UTC)
-From: Paul Cercueil <paul@crapouillou.net>
-To: buildroot@buildroot.org
-Date: Tue,  4 Jun 2024 11:09:15 +0200
-Message-ID: <20240604090915.10444-1-paul@crapouillou.net>
+ id MT3uFK9fDjqG for <buildroot@lists.busybox.net>;
+ Tue,  4 Jun 2024 10:48:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.165;
+ helo=smtpdh20-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7C8D3409E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C8D3409E4
+Received: from smtpdh20-2.aruba.it (smtpdh20-2.aruba.it [62.149.155.165])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7C8D3409E4
+ for <buildroot@buildroot.org>; Tue,  4 Jun 2024 10:48:24 +0000 (UTC)
+Received: from [192.168.50.221] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id ERiHsPKGy9WDgERiHsefM0; Tue, 04 Jun 2024 12:48:21 +0200
+Message-ID: <64d16992-68a4-4781-85e5-28338045b526@benettiengineering.com>
+Date: Tue, 4 Jun 2024 12:48:21 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=crapouillou.net; s=mail; t=1717492163;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=V8byb5jKzE8FBrZVWNkFxcBTQq1A/CWcxW37rQ4Ou5c=;
- b=XWiHMSWNam1qnl6PBLTfjBnp0uis9SyAKkYX1S1AzO/UdKeM+q7lut8FpNU1K1B/oMvh0A
- RumVJKgDIfpdKt2hms1VtVsQOA6Eh6zRtajQ557AWloT6FiXqD5Ia0XDATzN+f4HFBgERO
- 4dNRP/GEoPpyXSn3C31Twb8AxzlYdbw=
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>
+References: <20240603200025.1246055-1-giulio.benetti@benettiengineering.com>
+ <87wmn5fd1w.fsf@dell.be.48ers.dk>
+Content-Language: it
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <87wmn5fd1w.fsf@dell.be.48ers.dk>
+X-CMAE-Envelope: MS4xfPXoHg9JgHprk9el2xcNAp4XO+eyp/3hDloSki8BQXrKUP7ISpRF4mGa035RIVET09vTG/9BuACftn1e0kX63ativ2Q17uVgm5gvlM1JSVtku4obtOdw
+ B57OcNwY8fjUG+QeTF6A3IzjSEw3bGswvyQouuzA9mYGF37nYK71wfSv3UUU7diBMXFjjgg9pUjt8/k8jbFqisZ1skn9OibSLEcEhmnuewCoCdfjQgnx4E1F
+ lhTj5uHiCRF95X27XeQI1g==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1717498101; bh=d5JgmWA0ETlyRR0vQ8wlt1s8exjdy7d7RcmrzDYUE1E=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=b8SZS6TTuMJBwNriJEzk5wmswQvDc21h90Z9rRiQ3A3jS39NvXDYDsG7YFk4H8p6e
+ 1VLW1e8LVOKpbkBQRgnrv8AbTQVWmqhvahH7iHa4fVBfsBzPkBnFtKWiFxB2ZsgcJv
+ lAcRM4+Oxc8VnjAIyqgjOZZPB7YNFqrShh2YXasHblAZe4jl6/orQvaAsAur8J1NPQ
+ axuQs7icdqsiu9U2XTDK/ycx0oI8KK+GyDxADkoZ3ZVlm1kLjZY5/G/sjuBXSbcTcq
+ sw5wGkwDLpePbo9LjL6rQMZe8cC8scR4+AREIEdDaLCc6V6c7R4b5k8sAq5sJRJ5uR
+ YUUBDaNqjC16g==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=crapouillou.net
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=crapouillou.net header.i=@crapouillou.net
- header.a=rsa-sha256 header.s=mail header.b=XWiHMSWN
-Subject: [Buildroot] [PATCH] package/lightning: fix build on mips64 with n32
- ABI
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=b8SZS6TT
+Subject: Re: [Buildroot] [PATCH v2] package/esp-hosted: fix build failure on
+ Linux 6.8.12+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,166 +83,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Paul Cercueil <paul@crapouillou.net>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Grab commit 778d326740f9893c398f959b419629935b613099 from upstream to
-fix the build on mips64 and mips64el when the n32 ABI is used.
+Hi Peter,
 
-Fixes:
+On 04/06/24 08:16, Peter Korsgaard wrote:
+>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+> 
+>   > Add local patch pending upstream to fix build failure due to old Linux
+>   > Bluetooth API.
+> 
+>   > Fixes:
+>   > http://autobuild.buildroot.net/results/d64fa083ec27c3684d4186d2b1b05e041ad330f5/
+>   > http://autobuild.buildroot.net/results/5c4fac191970444e63109a762023c0e60f9693e2/
+> 
+>   > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>   > ---
+>   V1-> V2:
+>   > * add missing Upstream tag in local patch
+>   > ---
+>   >  ...x-Bluetooth-build-failure-on-Linux-6.patch | 37 +++++++++++++++++++
+>   >  1 file changed, 37 insertions(+)
+>   >  create mode 100644 package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch
+> 
+>   > diff --git a/package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch b/package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch
+>   > new file mode 100644
+>   > index 0000000000..c701aaa82f
+>   > --- /dev/null
+>   > +++ b/package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch
+>   > @@ -0,0 +1,37 @@
+>   > +From f8903bc2be7ae5ac9fb9bbeed8512e974c6e60ec Mon Sep 17 00:00:00 2001
+>   > +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>   > +Date: Mon, 3 Jun 2024 21:53:38 +0200
+>   > +Subject: [PATCH] esp_hosted_ng: Fix Bluetooth build failure on Linux 6.8.11+
+>   > +
+>   > +After Linux commit:
+>   > +https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=84a4bb6548a29326564f0e659fb8064503ecc1c7
+>   > +BT_HS has been removed and consequently AMP controllers can't be created,
+>   > +so at this point only HCI_PRIMARY has been left as unique controller type
+>   > +to be created and this became implicit with no need to define if the
+>   > +controller if HCI_PRIMARY or HCI_AMP. So let's assign HCI_PRIMARY up to
+>   > +Linux 6.8.11 only preventing build failure.
+>   > +
+>   > +Upstream: https://github.com/espressif/esp-hosted/pull/400
+>   > +
+>   > +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>   > +---
+>   > + esp_hosted_ng/host/esp_bt.c | 2 ++
+>   > + 1 file changed, 2 insertions(+)
+>   > +
+>   > +diff --git a/esp_hosted_ng/host/esp_bt.c b/esp_hosted_ng/host/esp_bt.c
+>   > +index 3b78c11698..4598ac0e0a 100644
+>   > +--- a/esp_hosted_ng/host/esp_bt.c
+>   > ++++ b/esp_hosted_ng/host/esp_bt.c
+>   > +@@ -240,7 +240,9 @@ int esp_init_bt(struct esp_adapter *adapter)
+>   > + 	hdev->set_bdaddr = esp_bt_set_bdaddr;
+>   > + #endif
+>   > +
+>   > ++#if (LINUX_VERSION_CODE <= KERNEL_VERSION(6, 8, 11))
+>   > + 	hdev->dev_type = HCI_PRIMARY;
+>   > ++#endif
+> 
+> It would be more robust to make this conditionally on if HCI_PRIMARY is
+> defined in case this ever gets backported to earlier stable kernels,
 
-  http://autobuild.buildroot.net/results/27123bf0ddc84599bceb02ac987327817d498659/
+This is a good idea and upstream still have to merge. I've checked and 
+HCI_PRIMARY has been defined during Linux commit 
+ca8bee5dde1f02c2dbe8c8453dce27f2dfafb21c as a rename of HCI_BREDR(Linux 
+4.8-rc1).
+So I should deal with HCI_BREDR too, something like:
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- ...ips-Fix-build-on-MIPS64-with-n32-ABI.patch | 132 ++++++++++++++++++
- 1 file changed, 132 insertions(+)
- create mode 100644 package/lightning/0001-mips-Fix-build-on-MIPS64-with-n32-ABI.patch
+#ifdef HCI_PRIMARY
+	hdev->dev_type = HCI_PRIMARY;
+#endif
+#ifdef HCI_BREDR
+	hdev->dev_type = HCI_BREDR;
+#endif
 
-diff --git a/package/lightning/0001-mips-Fix-build-on-MIPS64-with-n32-ABI.patch b/package/lightning/0001-mips-Fix-build-on-MIPS64-with-n32-ABI.patch
-new file mode 100644
-index 0000000000..00e5eee8fb
---- /dev/null
-+++ b/package/lightning/0001-mips-Fix-build-on-MIPS64-with-n32-ABI.patch
-@@ -0,0 +1,132 @@
-+From 66a9a994c03d65fc37d701a60b26506bede49ae1 Mon Sep 17 00:00:00 2001
-+From: Paul Cercueil <paul@crapouillou.net>
-+Date: Sun, 2 Jun 2024 22:35:24 +0200
-+Subject: [PATCH] mips: Fix build on MIPS64 with n32 ABI
-+
-+The build on MIPS64 with n32 ABI was broken for a few reasons.
-+
-+- The _movi_d_w() functions had a different prototype in jit_mips-fpu.c
-+  than in lightning.c;
-+- The movi_d_w() was still provided by lightning.c even though
-+  jit_mips-fpu.c provides its own version;
-+- The "ww" opcodes were allowed, which was probably not meant to happen.
-+
-+Fixes a build issue reported by Buildroot:
-+http://autobuild.buildroot.net/results/27123bf0ddc84599bceb02ac987327817d498659/
-+
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-+---
-+ lib/jit_mips-fpu.c |  4 ++--
-+ lib/jit_mips.c     |  3 +--
-+ lib/lightning.c    | 43 +++++++++++++++++++++----------------------
-+ 3 files changed, 24 insertions(+), 26 deletions(-)
-+
-+diff --git a/lib/jit_mips-fpu.c b/lib/jit_mips-fpu.c
-+index 61db30e..8ad97e9 100644
-+--- a/lib/jit_mips-fpu.c
-++++ b/lib/jit_mips-fpu.c
-+@@ -349,7 +349,7 @@ static void _movi_f(jit_state_t*,jit_int32_t,jit_float32_t*);
-+ #    define movi64(r0, i0)		_movi64(_jit, r0, i0)
-+ static void _movi64(jit_state_t*,jit_int32_t,jit_int64_t);
-+ #    define movi_d_w(r0, i0)		_movi_d_w(_jit, r0, i0)
-+-static void _movi_d_w(jit_state_t*,jit_int32_t,jit_int64_t);
-++static void _movi_d_w(jit_state_t*,jit_int32_t,jit_float64_t);
-+ #  elif __WORDSIZE == 64
-+ #    define movi64(r0, i0)		movi(r0, i0)
-+ #  endif
-+@@ -1152,7 +1152,7 @@ _movi64(jit_state_t *_jit, jit_int32_t r0, jit_int64_t i0)
-+ }
-+ 
-+ static void
-+-_movi_d_w(jit_state_t *_jit, jit_int32_t r0, jit_int64_t i0)
-++_movi_d_w(jit_state_t *_jit, jit_int32_t r0, jit_float64_t i0)
-+ {
-+     union {
-+ 	jit_int64_t	l;
-+diff --git a/lib/jit_mips.c b/lib/jit_mips.c
-+index 4fb6c34..6eb41a0 100644
-+--- a/lib/jit_mips.c
-++++ b/lib/jit_mips.c
-+@@ -2184,8 +2184,7 @@ _emit_code(jit_state_t *_jit)
-+ 	    case jit_code_movi_w_d:
-+ 		movi_w_d(rn(node->u.w), node->v.w);
-+ 		break;
-+-#endif
-+-#if __WORDSIZE == 32
-++#else
-+ 	    case jit_code_movr_ww_d:
-+ 		movr_ww_d(rn(node->u.w), rn(node->v.w), rn(node->w.w));
-+ 		break;
-+diff --git a/lib/lightning.c b/lib/lightning.c
-+index b40d35b..2c10928 100644
-+--- a/lib/lightning.c
-++++ b/lib/lightning.c
-+@@ -4331,12 +4331,12 @@ static void _htoni_ul(jit_state_t*, jit_int32_t, jit_word_t);
-+ #endif
-+ #  define movi_f_w(r0, i0)		_movi_f_w(_jit, r0, i0)
-+ static void _movi_f_w(jit_state_t*, jit_int32_t, jit_float32_t);
-+-#if __WORDSIZE == 32 && !(defined(__mips__) && NEW_ABI)
-+-#  define movi_d_ww(r0, r1, i0)		_movi_d_ww(_jit, r0, r1, i0)
-+-static void _movi_d_ww(jit_state_t*, jit_int32_t, jit_int32_t, jit_float64_t);
-+-#else
-++#if __WORDSIZE == 64
-+ #  define movi_d_w(r0, i0)		_movi_d_w(_jit, r0, i0)
-+ static void _movi_d_w(jit_state_t*, jit_int32_t, jit_float64_t);
-++#elif !(defined(__mips__) && NEW_ABI)
-++#  define movi_d_ww(r0, r1, i0)		_movi_d_ww(_jit, r0, r1, i0)
-++static void _movi_d_ww(jit_state_t*, jit_int32_t, jit_int32_t, jit_float64_t);
-+ #endif
-+ #define cloi(r0, i0)			_cloi(_jit, r0, i0)
-+ static void _cloi(jit_state_t*, jit_int32_t, jit_word_t);
-+@@ -4803,7 +4803,23 @@ _movi_f_w(jit_state_t *_jit, jit_int32_t r0, jit_float32_t i0)
-+     movi(r0, data.i);
-+ }
-+ 
-+-#if __WORDSIZE == 32 && !(defined(__mips__) && NEW_ABI)
-++#if __WORDSIZE == 64
-++static void
-++_movi_d_w(jit_state_t *_jit, jit_int32_t r0, jit_float64_t i0)
-++{
-++    union {
-++	jit_int64_t	l;
-++	jit_float64_t	d;
-++    } data;
-++    data.d = i0;
-++#  if defined(__ia64__)
-++    /* Should be used only in this case (with out0 == 120) */
-++    if (r0 >= 120)
-++	r0 = _jitc->rout + (r0 - 120);
-++#  endif
-++    movi(r0, data.l);
-++}
-++#elif !(defined(__mips__) && NEW_ABI)
-+ static void
-+ _movi_d_ww(jit_state_t *_jit, jit_int32_t r0, jit_int32_t r1, jit_float64_t i0)
-+ {
-+@@ -4821,23 +4837,6 @@ _movi_d_ww(jit_state_t *_jit, jit_int32_t r0, jit_int32_t r1, jit_float64_t i0)
-+     movi(r0, data.i[1]);
-+ #  endif
-+ }
-+-
-+-#else
-+-static void
-+-_movi_d_w(jit_state_t *_jit, jit_int32_t r0, jit_float64_t i0)
-+-{
-+-    union {
-+-	jit_int64_t	l;
-+-	jit_float64_t	d;
-+-    } data;
-+-    data.d = i0;
-+-#  if defined(__ia64__)
-+-    /* Should be used only in this case (with out0 == 120) */
-+-    if (r0 >= 120)
-+-	r0 = _jitc->rout + (r0 - 120);
-+-#  endif
-+-    movi(r0, data.l);
-+-}
-+ #endif
-+ 
-+  void
-+-- 
-+2.43.0
-+
+or even better:
+compat.h:
+#ifdef HCI_BREDR
+#define HCI_PRIMARY HCI_BREDR
+#endif
+
+.c:
+#ifdef HCI_PRIMARY
+	hdev->dev_type = HCI_PRIMARY;
+#endif
+
+Yes, this would cover earlier Linux versions and they are interested in 
+very early versions as stated here:
+https://github.com/espressif/esp-hosted/pull/358#issuecomment-2031117798
+
+So I'm going to rework for upstream, so once merged I bump here in 
+Buildroot and drop this local patch.
+
 -- 
-2.43.0
-
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
