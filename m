@@ -1,46 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53485C25B78
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 16:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 955A9C27C52
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 19:21:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E697F84406;
-	Tue,  4 Jun 2024 16:58:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 413A9408EE;
+	Tue,  4 Jun 2024 19:21:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gEb8otZvgmuZ; Tue,  4 Jun 2024 16:58:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XbQUXhamofJL; Tue,  4 Jun 2024 19:21:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC1948447A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1816740917
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC1948447A;
-	Tue,  4 Jun 2024 16:58:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E7081BF83A
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 16:58:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1816740917;
+	Tue,  4 Jun 2024 19:21:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 865FD1BF3E1
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 19:20:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17BE761046
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 16:58:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71F0C40917
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 19:20:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cRDJRj36IhZf for <buildroot@lists.busybox.net>;
- Tue,  4 Jun 2024 16:58:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wbCdNf-h2gmA for <buildroot@lists.busybox.net>;
+ Tue,  4 Jun 2024 19:20:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B6956061F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A11C40563
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B6956061F
- for <buildroot@uclibc.org>; Tue,  4 Jun 2024 16:58:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A11C40563
+ for <buildroot@uclibc.org>; Tue,  4 Jun 2024 19:20:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 9545987990; Tue,  4 Jun 2024 16:58:33 +0000 (UTC)
+ id 10D5987B03; Tue,  4 Jun 2024 19:20:57 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 04 Jun 2024 16:58:33 +0000
+Date: Tue, 04 Jun 2024 19:20:56 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -49,15 +49,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: fiona.klute@gmx.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-16093-163-iySPFZ8ngU@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution cc bug_status
+Message-ID: <bug-16093-163-AVFNJPYpn6@https.bugs.busybox.net/>
 In-Reply-To: <bug-16093-163@https.bugs.busybox.net/>
 References: <bug-16093-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -82,12 +82,27 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=16093
 
---- Comment #1 from Fiona Klute <fiona.klute@gmx.de> ---
-I believe that is the same kmod/musl issue that caused a segfault (after "only"
-warnings during build) with GCC 13. I sent a patch based on an upstream PR in
-April, unfortunately it hasn't been merged yet. Good thing they upgraded that
-to an error in GCC.
-https://patchwork.ozlabs.org/project/buildroot/patch/20240426215144.1107186-1-fiona.klute@gmx.de/
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+                 CC|                            |yann.morin.1998@free.fr
+             Status|NEW                         |RESOLVED
+
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Lance, All,
+
+Thanks for the report.
+
+We believe this issue is now fixed now we applied Fiona's patch:
+   
+https://gitlab.com/buildroot.org/buildroot/-/commit/05617724ee2b5db9a1a6bb07272915ef3c1fd535
+
+If the issue still happens, please re-open and provide more details.
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
