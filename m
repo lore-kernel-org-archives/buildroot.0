@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD27AC27C75
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51767C27C75
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C5D761095;
-	Thu, 13 Jun 2024 10:08:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E75C0610C7;
+	Thu, 13 Jun 2024 10:08:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id piqll-eJLakm; Thu, 13 Jun 2024 10:08:02 +0000 (UTC)
+ id 7SLjo3f32tAb; Thu, 13 Jun 2024 10:08:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C5A9610BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22224610BB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C5A9610BB;
-	Thu, 13 Jun 2024 10:08:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F25061BF354
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22224610BB;
+	Thu, 13 Jun 2024 10:08:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 057C61BF966
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E47F4413D8
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6224D60ED9
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7lMoYqVKAT9V for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 27IXOSCFKbFs for <buildroot@lists.busybox.net>;
  Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 582C5413EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0B5360BBC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 582C5413EE
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0B5360BBC
  for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5448A87F57; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
+ id BC04D85E9B; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 1 Jun 2024 21:34:02 +0200
+Date: Tue, 4 Jun 2024 23:44:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9cf5c95e38488f79a4a27ca7a27a5875029cbbe4
-X-Git-Newrev: 6c8a7a7bc92f56b53b2602727a12aa13e3248d24
+X-Git-Oldrev: c489ac4c1eca47d463d14b0cdb697f2692405b2e
+X-Git-Newrev: 54d48c8cad4e89c1428a0b9440116a01b0431fae
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100459.5448A87F57@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mtd: bump to version 2.2.0
+Message-Id: <20240613100459.BC04D85E9B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3: miscellaneous fixups
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,42 +64,304 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c8a7a7bc92f56b53b2602727a12aa13e3248d24
+commit: https://git.buildroot.net/buildroot/commit/?id=54d48c8cad4e89c1428a0b9440116a01b0431fae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.infradead.org/pipermail/linux-mtd/2024-March/104058.html
+There is no longer a need to lie about having mercurial installed as of
+upstream 5c4b0d063a, so drop the ac_cv_prog_HAS_HG override.
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+`PYTHON3_REMOVE_USELESS_FILES`, while not exactly useless, had been
+referencing stale files and not performing full cleanup:
+
+  * the "m" ABI suffix was dropped in upstream 6c44fde3e0  (python 3.8)
+  * the smtpd was dropped in upstream a797fba888  (python 3.1)
+  * the wininst* binaries were dropped in upstream 0e2a0f72cc  (python 3.10)
+
+These legacy references have now been dropped.
+
+The smtpd.py file is a bit quirky because despite having been removed
+upstream, Buildroot's patches to disable certain modules have been
+carrying it forward. This has been rectified.
+
+While here, rework the file removals to accomodate the ABI suffix change
+and to globally remove __pycache__ directories. It's important to note
+that Buildroot uses legacy pyc placements for sourceless distributions,
+meaning __pycache__ is not used at all [0].
+
+When necessary, optimized pyc files will be generated into the correct
+paths in subsequent hooks.
+
+[0]: https://peps.python.org/pep-3147/#case-4-legacy-pyc-files-and-source-less-imports
+
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mtd/mtd.hash | 4 ++--
- package/mtd/mtd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0008-Add-an-option-to-disable-pydoc.patch      | 16 +++++++------
+ .../0009-Add-an-option-to-disable-lib2to3.patch    | 27 +++++++++++-----------
+ .../0017-Add-an-option-to-disable-IDLE.patch       | 26 +++++++++++----------
+ package/python3/python3.mk                         | 23 +++++-------------
+ 4 files changed, 43 insertions(+), 49 deletions(-)
 
-diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
-index 9926a34a80..1efb06f490 100644
---- a/package/mtd/mtd.hash
-+++ b/package/mtd/mtd.hash
+diff --git a/package/python3/0008-Add-an-option-to-disable-pydoc.patch b/package/python3/0008-Add-an-option-to-disable-pydoc.patch
+index 3c678bef1c..ffb6a7796f 100644
+--- a/package/python3/0008-Add-an-option-to-disable-pydoc.patch
++++ b/package/python3/0008-Add-an-option-to-disable-pydoc.patch
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://infraroot.at/pub/mtd/mtd-utils-2.1.6.tar.bz2.asc
--sha256  c1d853bc4adf83bcabd2792fc95af33bdd8643c97e8f7b3f0180af36af76f0e5  mtd-utils-2.1.6.tar.bz2
-+# https://infraroot.at/pub/mtd/mtd-utils-2.2.0.tar.bz2.asc
-+sha256  250d082f67375ca8451b5fcfc9a23a53ced3ebebd8312c288daf2507bbab1324  mtd-utils-2.2.0.tar.bz2
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 998cc419b3..f71179c2de 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-From 77fcd90a1236d59d40aa32d3bc4bef4303eb4066 Mon Sep 17 00:00:00 2001
++From e6284624679a525440dc4bfddc1347f8add22fd8 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Wed, 22 Feb 2017 17:07:56 -0800
+ Subject: [PATCH] Add an option to disable pydoc
+@@ -12,6 +12,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ [ Adam Duskett: ported to Python 3.10.0 ]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
++[ Vincent Fazio: fix scripts array to reflect upstream ]
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+ ---
+  Makefile.pre.in | 7 ++++++-
+  configure.ac    | 6 ++++++
+@@ -19,7 +21,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+  3 files changed, 19 insertions(+), 3 deletions(-)
  
--MTD_VERSION = 2.1.6
-+MTD_VERSION = 2.2.0
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
- MTD_LICENSE = GPL-2.0
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index 5a40b7c5484..e87bc1fcd32 100644
++index 5a40b7c548..e87bc1fcd3 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+ @@ -1877,7 +1877,9 @@ bininstall: commoninstall altbininstall
+@@ -52,7 +54,7 @@ index 5a40b7c5484..e87bc1fcd32 100644
+  libinstall:	all $(srcdir)/Modules/xxmodule.c
+  	@for i in $(SCRIPTDIR) $(LIBDEST); \
+ diff --git a/configure.ac b/configure.ac
+-index b4d7d2cca6a..d56d8f9d1c5 100644
++index b4d7d2cca6..d56d8f9d1c 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -4222,6 +4222,12 @@ AS_VAR_IF([posix_threads], [stub], [
+@@ -69,7 +71,7 @@ index b4d7d2cca6a..d56d8f9d1c5 100644
+  AH_TEMPLATE(ENABLE_IPV6, [Define if --enable-ipv6 is specified])
+  AC_MSG_CHECKING([if --enable-ipv6 is specified])
+ diff --git a/setup.py b/setup.py
+-index 53b066cb18b..d8647724650 100644
++index 53b066cb18..25e6f4fc26 100644
+ --- a/setup.py
+ +++ b/setup.py
+ @@ -1597,6 +1597,12 @@ class DummyProcess:
+@@ -77,8 +79,8 @@ index 53b066cb18b..d8647724650 100644
+      import warnings
+      warnings.filterwarnings("ignore",category=DeprecationWarning)
+ +
+-+    scripts = ['Tools/scripts/idle3', 'Tools/scripts/2to3',
+-+               'Lib/smtpd.py']
+++    scripts = ['Tools/scripts/idle3', 'Tools/scripts/2to3']
+++
+ +    if not '--disable-pydoc' in sysconfig.get_config_var("CONFIG_ARGS"):
+ +        scripts += [ 'Tools/scripts/pydoc3' ]
+ +
+@@ -96,5 +98,5 @@ index 53b066cb18b..d8647724650 100644
+  
+  # --install-platlib
+ -- 
+-2.44.0
++2.34.1
+ 
+diff --git a/package/python3/0009-Add-an-option-to-disable-lib2to3.patch b/package/python3/0009-Add-an-option-to-disable-lib2to3.patch
+index 13cb273bf8..06f38e92b3 100644
+--- a/package/python3/0009-Add-an-option-to-disable-lib2to3.patch
++++ b/package/python3/0009-Add-an-option-to-disable-lib2to3.patch
+@@ -1,4 +1,4 @@
+-From 18e19402fab3939223a58481734e685d25c3102b Mon Sep 17 00:00:00 2001
++From 3fbd10c59a777c4ef7ee1bd3fb70808e25e11703 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Wed, 22 Feb 2017 17:15:31 -0800
+ Subject: [PATCH] Add an option to disable lib2to3
+@@ -14,14 +14,16 @@ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [ Bernd Kuhls: ported to Python 3.11.4]
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[ Vincent Fazio: fix scripts array to reflect upstream ]
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+ ---
+  Makefile.pre.in | 17 ++++++++++++-----
+  configure.ac    |  6 ++++++
+- setup.py        |  6 +++---
+- 3 files changed, 21 insertions(+), 8 deletions(-)
++ setup.py        |  4 +++-
++ 3 files changed, 21 insertions(+), 6 deletions(-)
+ 
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index e87bc1fcd32..1a0ab0de426 100644
++index e87bc1fcd3..1a0ab0de42 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+ @@ -1881,7 +1881,9 @@ ifeq (@PYDOC@,yes)
+@@ -82,7 +84,7 @@ index e87bc1fcd32..1a0ab0de426 100644
+  # bpo-21536: Misc/python-config.sh is generated in the build directory
+  # from $(srcdir)Misc/python-config.sh.in.
+ diff --git a/configure.ac b/configure.ac
+-index d56d8f9d1c5..bf91fb2f824 100644
++index d56d8f9d1c..bf91fb2f82 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -7147,6 +7147,12 @@ PY_STDLIB_MOD([xxlimited_35], [test "$with_trace_refs" = "no"], [test "$ac_cv_fu
+@@ -99,24 +101,23 @@ index d56d8f9d1c5..bf91fb2f824 100644
+  AC_CONFIG_FILES(Makefile.pre Misc/python.pc Misc/python-embed.pc Misc/python-config.sh)
+  AC_CONFIG_FILES([Modules/Setup.bootstrap Modules/Setup.stdlib])
+ diff --git a/setup.py b/setup.py
+-index d8647724650..e02591dae10 100644
++index 25e6f4fc26..78d880f9db 100644
+ --- a/setup.py
+ +++ b/setup.py
+-@@ -1598,11 +1598,11 @@ class DummyProcess:
++@@ -1598,10 +1598,12 @@ class DummyProcess:
+      import warnings
+      warnings.filterwarnings("ignore",category=DeprecationWarning)
+  
+--    scripts = ['Tools/scripts/idle3', 'Tools/scripts/2to3',
+--               'Lib/smtpd.py']
+-+    scripts = ['Tools/scripts/idle3', 'Lib/smtpd.py']
++-    scripts = ['Tools/scripts/idle3', 'Tools/scripts/2to3']
+++    scripts = ['Tools/scripts/idle3']
++ 
+      if not '--disable-pydoc' in sysconfig.get_config_var("CONFIG_ARGS"):
+          scripts += [ 'Tools/scripts/pydoc3' ]
+--
+ +    if not '--disable-lib2to3' in sysconfig.get_config_var("CONFIG_ARGS"):
+ +        scripts += [ 'Tools/scripts/2to3' ]
++ 
+      setup(# PyPI Metadata (PEP 301)
+            name = "Python",
+-           version = sys.version.split()[0],
+ -- 
+-2.44.0
++2.34.1
+ 
+diff --git a/package/python3/0017-Add-an-option-to-disable-IDLE.patch b/package/python3/0017-Add-an-option-to-disable-IDLE.patch
+index f0af3f53f4..fe44ef0d05 100644
+--- a/package/python3/0017-Add-an-option-to-disable-IDLE.patch
++++ b/package/python3/0017-Add-an-option-to-disable-IDLE.patch
+@@ -1,4 +1,4 @@
+-From f74c580b9e5bd8c710627b48cea4e152426e71e6 Mon Sep 17 00:00:00 2001
++From dd4ac2662ae1feaa3a29c4088193e48645b080f7 Mon Sep 17 00:00:00 2001
+ From: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Date: Wed, 22 Feb 2017 17:45:14 -0800
+ Subject: [PATCH] Add an option to disable IDLE
+@@ -11,14 +11,16 @@ Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+ [ Adam Duskett: ported to Python 3.10.0 ]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
++[ Vincent Fazio: fixup setup array to reflect upstream ]
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+ ---
+  Makefile.pre.in | 7 ++++++-
+  configure.ac    | 6 ++++++
+- setup.py        | 5 ++++-
+- 3 files changed, 16 insertions(+), 2 deletions(-)
++ setup.py        | 4 +++-
++ 3 files changed, 15 insertions(+), 2 deletions(-)
+ 
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index 8e5f6762d20..4e407cbcfa9 100644
++index 8e5f6762d2..4e407cbcfa 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+ @@ -1875,7 +1875,9 @@ bininstall: commoninstall altbininstall
+@@ -51,7 +53,7 @@ index 8e5f6762d20..4e407cbcfa9 100644
+  libinstall:	all $(srcdir)/Modules/xxmodule.c
+  	@for i in $(SCRIPTDIR) $(LIBDEST); \
+ diff --git a/configure.ac b/configure.ac
+-index cb7e980e5b5..fe497ec9dfb 100644
++index cb7e980e5b..fe497ec9df 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -7206,6 +7206,12 @@ AC_ARG_ENABLE(lib2to3,
+@@ -68,25 +70,25 @@ index cb7e980e5b5..fe497ec9dfb 100644
+  AC_CONFIG_FILES(Makefile.pre Misc/python.pc Misc/python-embed.pc Misc/python-config.sh)
+  AC_CONFIG_FILES([Modules/Setup.bootstrap Modules/Setup.stdlib])
+ diff --git a/setup.py b/setup.py
+-index e02591dae10..ada914c5501 100644
++index 78d880f9db..ca05faec97 100644
+ --- a/setup.py
+ +++ b/setup.py
+-@@ -1598,11 +1598,14 @@ class DummyProcess:
++@@ -1598,12 +1598,14 @@ class DummyProcess:
+      import warnings
+      warnings.filterwarnings("ignore",category=DeprecationWarning)
+  
+--    scripts = ['Tools/scripts/idle3', 'Lib/smtpd.py']
+-+    scripts = [ 'Lib/smtpd.py']
++-    scripts = ['Tools/scripts/idle3']
+++    scripts = []
++ 
+      if not '--disable-pydoc' in sysconfig.get_config_var("CONFIG_ARGS"):
+          scripts += [ 'Tools/scripts/pydoc3' ]
+      if not '--disable-lib2to3' in sysconfig.get_config_var("CONFIG_ARGS"):
+          scripts += [ 'Tools/scripts/2to3' ]
+ +    if not '--disable-idle3' in sysconfig.get_config_var("CONFIG_ARGS"):
+ +        scripts += [ 'Tools/scripts/idle3' ]
+-+
++ 
+      setup(# PyPI Metadata (PEP 301)
+            name = "Python",
+-           version = sys.version.split()[0],
+ -- 
+-2.44.0
++2.34.1
+ 
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 5d9d77af50..6859fc2274 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -36,8 +36,7 @@ HOST_PYTHON3_CONF_OPTS += \
+ # Make python believe we don't have 'hg', so that it doesn't try to
+ # communicate over the network during the build.
+ HOST_PYTHON3_CONF_ENV += \
+-	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
+-	ac_cv_prog_HAS_HG=/bin/false
++	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags"
+ 
+ PYTHON3_DEPENDENCIES = host-python3 libffi
+ 
+@@ -156,14 +155,11 @@ else
+ PYTHON3_CONF_OPTS += --disable-ossaudiodev
+ endif
+ 
+-# Make python believe we don't have 'hg', so that it doesn't try to
+-# communicate over the network during the build.
+ PYTHON3_CONF_ENV += \
+ 	ac_cv_have_long_long_format=yes \
+ 	ac_cv_file__dev_ptmx=yes \
+ 	ac_cv_file__dev_ptc=yes \
+-	ac_cv_working_tzset=yes \
+-	ac_cv_prog_HAS_HG=/bin/false
++	ac_cv_working_tzset=yes
+ 
+ # GCC is always compliant with IEEE754
+ ifeq ($(BR2_ENDIAN),"LITTLE")
+@@ -200,18 +196,11 @@ PYTHON3_CONF_OPTS += \
+ #
+ define PYTHON3_REMOVE_USELESS_FILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
+-	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python3-config
+-	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
+-	rm -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/distutils/command/wininst*.exe
+-	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m-*/ \
+-		-type f -not -name Makefile` ; do \
+-		rm -f $$i ; \
+-	done
+-	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/__pycache__/
+-	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/lib-dynload/sysconfigdata/__pycache__
+-	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/collections/__pycache__
+-	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/importlib/__pycache__
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)-*/ \
++		-type f -not -name Makefile -exec rm -rf {} \;
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/ -type d \
++		-name __pycache__ -exec rm -rf {} \;
+ endef
+ 
+ PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
