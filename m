@@ -4,51 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 132BAC25B78
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 13:28:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02D0EC25B78
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 13:36:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4A4961398;
-	Tue,  4 Jun 2024 13:28:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B261D6106E;
+	Tue,  4 Jun 2024 13:36:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SYlVsheeHEC1; Tue,  4 Jun 2024 13:28:45 +0000 (UTC)
+ id I0g5ektERP3j; Tue,  4 Jun 2024 13:36:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60E2F613A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAC7E61070
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60E2F613A0;
-	Tue,  4 Jun 2024 13:28:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A50341BF2A2
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:28:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAC7E61070;
+	Tue,  4 Jun 2024 13:36:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C28C61BF2A2
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89D4E80FF8
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:28:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD0816106E
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 13:36:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i9yGln_HtByz for <buildroot@lists.busybox.net>;
- Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id neQ0q-rPYVOp for <buildroot@lists.busybox.net>;
+ Tue,  4 Jun 2024 13:36:55 +0000 (UTC)
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 04 Jun 2024 13:36:54 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8F9E0606DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F9E0606DA
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.32.96.204;
+ helo=9.mo583.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5366847FC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B5366847FC
- for <buildroot@buildroot.org>; Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 54ADC87AAE; Tue,  4 Jun 2024 13:28:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from 9.mo583.mail-out.ovh.net (9.mo583.mail-out.ovh.net
+ [178.32.96.204])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8F9E0606DA
+ for <buildroot@buildroot.org>; Tue,  4 Jun 2024 13:36:53 +0000 (UTC)
+Received: from director2.ghost.mail-out.ovh.net (unknown [10.109.139.40])
+ by mo583.mail-out.ovh.net (Postfix) with ESMTP id 4VtrGD0PJJz1Dj2
+ for <buildroot@buildroot.org>; Tue,  4 Jun 2024 12:57:08 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-msz8m (unknown [10.110.168.247])
+ by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id A58F41FD80;
+ Tue,  4 Jun 2024 12:57:07 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.109])
+ by ghost-submission-6684bf9d7b-msz8m with ESMTPSA
+ id nqsAJSMPX2b6cCEAmvfe2g
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Tue, 04 Jun 2024 12:57:07 +0000
+X-OVh-ClientIp: 92.148.253.243
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Jun 2024 15:25:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d4896c52909b43e0c3049f8f79f77b5c502e2dd
-X-Git-Newrev: baaf7f738a76d363aed753888da0712c7c430976
-X-Patchwork-Hint: ignore
-Message-Id: <20240604132830.54ADC87AAE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- board/freescale/common/imx/imx8-bootloader-prepare.sh: fix FIT external
- position
+Date: Tue,  4 Jun 2024 14:57:01 +0200
+Message-ID: <20240604125701.26637-1-sebastien.szymanski@armadeus.com>
+X-Mailer: git-send-email 2.44.1
+MIME-Version: 1.0
+X-Ovh-Tracer-Id: 1090715537770343403
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrvdelgedgheegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeffueffgfevieffleetlefgteejffeuffeuhfffieekhfekgffhjeejueefudetgeenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrddutdelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehkeefpdhmohguvgepshhmthhpohhuth
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=armadeus.com
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-109S00379d1a54b-6cc3-4f14-999e-64ede07ef4e0,
+ 1C94CC713AF3A73937467F77B7C86ACFBFDD39AD)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: [Buildroot] [PATCH 1/1] package/imx-mkimage: bump version to
+ lf-6.6.3-1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,95 +82,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6834786567176043513=="
+Cc: Erik Larsson <karl.erik.larsson@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6834786567176043513==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=baaf7f738a76d363aed753888da0712c7c430976
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When using imx-mkimage 6.1.36_2.1.0 or later, an additional data structure
-is inserted in the generated image. The FIT external data position passed
-to the uboot mkimage program needs to be adjusted accordingly.
-
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=15973
-Fixes: 72de78902330 ("package/imx-mkimage: bump version to lf-6.1.36-2.1.0")
-Tested-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-[Sébastien: Tested on i.MX8MM EVK and i.MX8MP EVK]
-[Sébastien:
- - fix subject
- - add Tested-by tag
- - fix Fixes tags
-]
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/freescale/common/imx/imx8-bootloader-prepare.sh | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index a9ee154e9c..b353d506fe 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -8,6 +8,8 @@ main ()
- 		exit 1
- 	fi
- 
-+	FIT_EXTERNAL_POSITION=0x5000
-+
- 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
- 		dd if=${BINARIES_DIR}/u-boot-spl.bin of=${BINARIES_DIR}/u-boot-spl-padded.bin bs=4 conv=sync
- 		cat ${BINARIES_DIR}/u-boot-spl-padded.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-@@ -16,7 +18,7 @@ main ()
- 		else
- 			BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		fi
--		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
-+		${HOST_DIR}/bin/mkimage -E -p ${FIT_EXTERNAL_POSITION} -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-@@ -28,7 +30,7 @@ main ()
- 		else
- 			BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		fi
--		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
-+		${HOST_DIR}/bin/mkimage -E -p ${FIT_EXTERNAL_POSITION} -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-@@ -40,7 +42,7 @@ main ()
- 		else
- 			BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00960000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		fi
--		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
-+		${HOST_DIR}/bin/mkimage -E -p ${FIT_EXTERNAL_POSITION} -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -v v2 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x912000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-@@ -52,7 +54,7 @@ main ()
- 		else
- 			BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00970000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		fi
--		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
-+		${HOST_DIR}/bin/mkimage -E -p ${FIT_EXTERNAL_POSITION} -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -v v2 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x920000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-
---===============6834786567176043513==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6834786567176043513==--
+U2lnbmVkLW9mZi1ieTogU8OpYmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lA
+YXJtYWRldXMuY29tPgotLS0KIHBhY2thZ2UvaW14LW1raW1hZ2UvaW14LW1raW1hZ2UuaGFzaCB8
+IDIgKy0KIHBhY2thZ2UvaW14LW1raW1hZ2UvaW14LW1raW1hZ2UubWsgICB8IDIgKy0KIDIgZmls
+ZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvaW14LW1raW1hZ2UvaW14LW1raW1hZ2UuaGFzaCBiL3BhY2thZ2UvaW14LW1raW1h
+Z2UvaW14LW1raW1hZ2UuaGFzaAppbmRleCAwMzRiM2QwMmVkMzMuLjMxNjFkNjZhZDJlNSAxMDA2
+NDQKLS0tIGEvcGFja2FnZS9pbXgtbWtpbWFnZS9pbXgtbWtpbWFnZS5oYXNoCisrKyBiL3BhY2th
+Z2UvaW14LW1raW1hZ2UvaW14LW1raW1hZ2UuaGFzaApAQCAtMSwzICsxLDMgQEAKICMgTG9jYWxs
+eSBjYWxjdWxhdGVkCi1zaGEyNTYgIGZkNTM4ZGM1NzFjZTA2NjA5ZDZhNGQ5ZWU4Y2ZkN2QwYzkz
+ZWM0Njg1YWZhOWYxMDc5ZTVhNTkzMWFkM2JkYmMgIGlteC1ta2ltYWdlLWxmLTYuMS4zNl8yLjEu
+MC50YXIuZ3oKK3NoYTI1NiAgNDhlN2JhZDRhNDllNjkzNDE1NDE4ODU5YmIwMzMwYjYzOTM4YTc3
+YmJiMTI2NjBiYzY0NzYxYTVkYWE5MTVjOSAgaW14LW1raW1hZ2UtbGYtNi42LjNfMS4wLjAudGFy
+Lmd6CiBzaGEyNTYgIDIzMWY3ZWRjYzczNTJkNzczNGE5NmVlZjBiODAzMGY3Nzk4MjY3OGM1MTY4
+NzZmY2I4MWUyNWIzMmQ2ODU2NGMgIExJQ0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvaW14LW1r
+aW1hZ2UvaW14LW1raW1hZ2UubWsgYi9wYWNrYWdlL2lteC1ta2ltYWdlL2lteC1ta2ltYWdlLm1r
+CmluZGV4IDZlNzBhOTQ2YmY2NC4uYTgyODU0ZWI2ZTJmIDEwMDY0NAotLS0gYS9wYWNrYWdlL2lt
+eC1ta2ltYWdlL2lteC1ta2ltYWdlLm1rCisrKyBiL3BhY2thZ2UvaW14LW1raW1hZ2UvaW14LW1r
+aW1hZ2UubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1J
+TVhfTUtJTUFHRV9WRVJTSU9OID0gbGYtNi4xLjM2XzIuMS4wCitJTVhfTUtJTUFHRV9WRVJTSU9O
+ID0gbGYtNi42LjNfMS4wLjAKIElNWF9NS0lNQUdFX1NJVEUgPSAkKGNhbGwgZ2l0aHViLG54cC1p
+bXgsaW14LW1raW1hZ2UsJChJTVhfTUtJTUFHRV9WRVJTSU9OKSkKIElNWF9NS0lNQUdFX0xJQ0VO
+U0UgPSBHUEwtMi4wKwogSU1YX01LSU1BR0VfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKLS0gCjIu
+NDQuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
