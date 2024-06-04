@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A066C27C75
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F857C27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:11:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D2E5606DB;
-	Thu, 13 Jun 2024 10:11:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2637661021;
+	Thu, 13 Jun 2024 10:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d824yr6xjp59; Thu, 13 Jun 2024 10:11:34 +0000 (UTC)
+ id gSM5aGh8P2-S; Thu, 13 Jun 2024 10:11:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72DDE60780
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64AB760EF2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72DDE60780;
-	Thu, 13 Jun 2024 10:11:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64AB760EF2;
+	Thu, 13 Jun 2024 10:11:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2FF0D1BF354
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C242C1BF354
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B12EE413FA
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A680E413F3
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6PhVpvldwEdn for <buildroot@lists.busybox.net>;
- Thu, 13 Jun 2024 10:05:01 +0000 (UTC)
+ id 2UANvVHKuSEQ for <buildroot@lists.busybox.net>;
+ Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DF9F413FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB0B9413F4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DF9F413FE
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB0B9413F4
+ for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6901787F30; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id A351A87F58; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 17:15:05 +0200
+Date: Tue, 4 Jun 2024 08:18:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8e2f5c106f0774cc7b02d4853f9a4c46ebcb3c19
-X-Git-Newrev: c0ec5438d96cb10e6dfce409c8007c18c0f9349c
+X-Git-Oldrev: 1e81379b940f0b530c1c5f56c5e08a5d0b971098
+X-Git-Newrev: ca256b6d2c4aa0f1d04f99132f8948c0b09b43f2
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100500.6901787F30@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynqmp_zcu104_defconfig: bump to
- xilinx-v2024.1
+Message-Id: <20240613100459.A351A87F58@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dmidecode: bump to version 3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,71 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0ec5438d96cb10e6dfce409c8007c18c0f9349c
+commit: https://git.buildroot.net/buildroot/commit/?id=ca256b6d2c4aa0f1d04f99132f8948c0b09b43f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps the zynqmp_zcu104_defconfig to xilinx-v2024.1 which includes
-the following updates:
+For change log, see:
+https://git.savannah.gnu.org/cgit/dmidecode.git/tree/NEWS?h=dmidecode-3-6
 
-- Linux v6.6.10
-- U-Boot v2024.01
-- ATF v2.10
-- PMUFW xilinx-v2024.1
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/zynqmp_zcu104_defconfig | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ package/dmidecode/dmidecode.hash | 4 ++--
+ package/dmidecode/dmidecode.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
-index 452f2343c8..ef9c9bad49 100644
---- a/configs/zynqmp_zcu104_defconfig
-+++ b/configs/zynqmp_zcu104_defconfig
-@@ -1,11 +1,11 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu104-revC"
-@@ -15,13 +15,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.2)/xlnx_rebase_v2.8_2023.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.1)/xlnx_rebase_v2.10_2024.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu104-revC"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-@@ -30,11 +30,10 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/zcu104-zynqmp/pmufw.elf"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/zcu104-zynqmp/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu104/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
--BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches"
+diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
+index 654c4cc537..ab1f62be65 100644
+--- a/package/dmidecode/dmidecode.hash
++++ b/package/dmidecode/dmidecode.hash
+@@ -1,4 +1,4 @@
+ # Locally computed after checking pgp signature from:
+-# https://download.savannah.gnu.org/releases/dmidecode/dmidecode-3.5.tar.xz.sig
+-sha256  79d76735ee8e25196e2a722964cf9683f5a09581503537884b256b01389cc073  dmidecode-3.5.tar.xz
++# https://download.savannah.gnu.org/releases/dmidecode/dmidecode-3.6.tar.xz.sig
++sha256  e40c65f3ec3dafe31ad8349a4ef1a97122d38f65004ed66575e1a8d575dd8bae  dmidecode-3.6.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
+index 353978daa9..550e29d624 100644
+--- a/package/dmidecode/dmidecode.mk
++++ b/package/dmidecode/dmidecode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DMIDECODE_VERSION = 3.5
++DMIDECODE_VERSION = 3.6
+ DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
+ DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
+ DMIDECODE_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
