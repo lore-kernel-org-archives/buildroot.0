@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E5F2C25B78
-	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 14:33:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA539C25B78
+	for <buildroot@archiver.kernel.org>; Tue,  4 Jun 2024 14:35:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29DAB8478E;
-	Tue,  4 Jun 2024 14:33:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88B0482B53;
+	Tue,  4 Jun 2024 14:35:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nFYGrzuz6Bzc; Tue,  4 Jun 2024 14:33:29 +0000 (UTC)
+ id VVX-HG1NjMW3; Tue,  4 Jun 2024 14:35:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C86768475C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C53482893
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C86768475C;
-	Tue,  4 Jun 2024 14:33:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6CECF1BF869
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 14:33:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C53482893;
+	Tue,  4 Jun 2024 14:35:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C4B0A1BF869
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 14:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5993C4090F
- for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 14:33:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B147B61093
+ for <buildroot@lists.busybox.net>; Tue,  4 Jun 2024 14:35:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QQ4RMvrsu4Ey for <buildroot@lists.busybox.net>;
- Tue,  4 Jun 2024 14:33:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DWSBihvxdN2q for <buildroot@lists.busybox.net>;
+ Tue,  4 Jun 2024 14:35:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C2599405FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2599405FA
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C2599405FA
- for <buildroot@buildroot.org>; Tue,  4 Jun 2024 14:33:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B00F4E0006;
- Tue,  4 Jun 2024 14:33:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4959A6106C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4959A6106C
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4959A6106C
+ for <buildroot@buildroot.org>; Tue,  4 Jun 2024 14:35:14 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3038C2000D;
+ Tue,  4 Jun 2024 14:35:11 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sEVE1-006TSE-0I;
- Tue, 04 Jun 2024 16:33:21 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sEVFm-006Tg5-2O;
+ Tue, 04 Jun 2024 16:35:10 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <cover.1714243078.git.yann.morin.1998@free.fr>
- <11b8900360ce70a1cb64f3b992bd43ab4cf40aed.1714243078.git.yann.morin.1998@free.fr>
-Date: Tue, 04 Jun 2024 16:33:21 +0200
-In-Reply-To: <11b8900360ce70a1cb64f3b992bd43ab4cf40aed.1714243078.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 27 Apr 2024 20:37:56 +0200")
-Message-ID: <87cyoweq1a.fsf@dell.be.48ers.dk>
+References: <cover.1714858818.git.yann.morin.1998@free.fr>
+ <d38c18d5fb11a2df58f67b1b71634f84e7c55819.1714858818.git.yann.morin.1998@free.fr>
+Date: Tue, 04 Jun 2024 16:35:10 +0200
+In-Reply-To: <d38c18d5fb11a2df58f67b1b71634f84e7c55819.1714858818.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 4 May 2024 23:40:03 +0200")
+Message-ID: <878qzkepy9.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 09/15 v2] package/docker-compose: bump
- version
+Subject: Re: [Buildroot] [PATCH 02/22 v3] package/am33x-cm3: switch upstream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,23 +77,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > The current version of docker-compose is un-vendorable, because the
- > dependencies it referenmces (directly or indirectly) are not available:
+ > The upstream host, arago-project.org, has vanished, bringing down the
+ > git repository with it.
 
- > go: github.com/docker/compose/v2/cmd/compose imports
- >         github.com/moby/buildkit/util/progress/progressui:
- >         github.com/crazy-max/buildkit@v0.7.1-0.20240130133234-d9aa289bd124:
- >         invalid version: unknown revision d9aa289bd124
-
- > And indeed, that commit does not exist in that repository. The v0.7.1
- > tag does exist, but there is not commit that matches the short hash
- > d9aa289bd124, or even the while version string. Sigh...
-
- > There is no way anyone can vendor the version we currently package, and
- > all they and us can hope for is that we never lose s.b.o ever.
-
- > Bump the version. That one can be vendored. Well, at least it can
- > _still_ be vendored...
+ > Switch to another, github-hosted repository, that has the commit we're
+ > interested in.
 
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
