@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C5D6C27C55
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 17:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25A67C25B76
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 17:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C33FC42397;
-	Wed,  5 Jun 2024 17:54:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E107E423AA;
+	Wed,  5 Jun 2024 17:54:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lYdhB3FODN73; Wed,  5 Jun 2024 17:54:00 +0000 (UTC)
+ id m-rKNEWR7uRt; Wed,  5 Jun 2024 17:54:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CBEC42398
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF4EA423AD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CBEC42398;
-	Wed,  5 Jun 2024 17:54:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF4EA423AD;
+	Wed,  5 Jun 2024 17:54:03 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 07D781BF5B3
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0ABCF1BF5B3
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4AB6C81F56
+ by smtp1.osuosl.org (Postfix) with ESMTP id BBF4381EAF
  for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ULFr-fNZo5Qy for <buildroot@lists.busybox.net>;
- Wed,  5 Jun 2024 17:53:27 +0000 (UTC)
+ id 9d6l97_gM3ES for <buildroot@lists.busybox.net>;
+ Wed,  5 Jun 2024 17:53:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 74C2981EAF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74C2981EAF
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 74C2981EAF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D226E84648
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D226E84648
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D226E84648
  for <buildroot@buildroot.org>; Wed,  5 Jun 2024 17:53:27 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-35a264cb831so31132f8f.2
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4213485697fso1273965e9.1
  for <buildroot@buildroot.org>; Wed, 05 Jun 2024 10:53:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717610005; x=1718214805;
+ d=1e100.net; s=20230601; t=1717610006; x=1718214806;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=OIoktNVsMZgfcGdwdgXzE1r+gnrRJ43JujFCTZw2e04=;
- b=gR90MwMLqWfBIw8ynWlqhlWyE25GVcqEYktSY4UKfgNOdTQdqA87/Btdo3GGQR7vvK
- fxiyBqAojY5HJ7ZaQXXkxUyLeaqRQWv4kIp3NPNrTKSDX6ITsnx89diBo13jz/RUhUEi
- GiuK6DBz9EkUWCc9poMTGI4oiqWjW0Mzazcyb1wBAA0Nbzvb4Q/Y9CP6mntQftzSxgIM
- SBEUFqn1RSM9oi6DEEuJd2aGrg2UbFT4H+w6rmfIRgIQ1dsHwvMnxhQV6cshsTtJbKDs
- X8YX1mS4jNwbocPSvgKpVBZrLDzrfm+QhRT9PTQz/z2t7S672/uO5Hc4M6TMFFM1MzrU
- R5ww==
-X-Gm-Message-State: AOJu0Yxq8vBQWMqThtAbeMaisf++Wnd87cqOgsz42odxBbNG0RmcJHYX
- NXIESZg/QH4L/nCO3cg8AUlLYgrwuRvCiXmS0mxCF7ZC0arGboSu8UP4Bw==
-X-Google-Smtp-Source: AGHT+IG5ulh5bOm/p2e5MuxYDnWHSHNOjpVWyeT4jNODD0HGl7+C4fuQDHMYsnVpj/KBurq2RGZU3w==
-X-Received: by 2002:a5d:4689:0:b0:357:bedc:b53a with SMTP id
- ffacd0b85a97d-35e840688bamr2627473f8f.23.1717610005432; 
+ bh=41duCsHHGZoHGMxuV/Gm0MpQXhxgzasq31i8kRIrIsM=;
+ b=jadGZOwzfCs+qVp+wKyhBUEXMK7ML7cXdBeUdPDzUlHnBG9dNdJBKLdzlL5ms6Ni2l
+ sV6bRyyWO24WDvfI+q0IDkSKFYgeULddY5o863/q0J2rSbxEkjuv4CKMO/nWC1iWTA/G
+ ym9GC/djHNrzWlyc+7zeerYUbPwX2ja5onRqnmFG36jAYpdOzjnFgBnPMa8rDVRqgSdk
+ opryj+G8k/m0GbNMOyMID4YCO8rAeYamD8bzfuEQbBzPYuJ17z35qkdmeyvoCy8onnr+
+ EilgIi9QMSmJf6qClFIC/vwM3yGAFsQMzvR/SYhGMmk24yGshlyp06fmMaSfd/NM/+Xb
+ uPCw==
+X-Gm-Message-State: AOJu0YypiY7qFgCVcVDKxhT0AXCNOojIdKcyjGphMAeWP67EIoc0g68v
+ 17LfdK8vRup5AGpbK9ul14V0/5xcTNK3tFpIafUmvRcOOu62qO/oTHP4tw==
+X-Google-Smtp-Source: AGHT+IGcoEjeGU5tJ0sedsiUITqIBTzo5cjRtCDgwfm6Is14FHA2C+plZROCecZpI/rFQGMbsGuRjw==
+X-Received: by 2002:a05:600c:a42:b0:421:205f:52de with SMTP id
+ 5b1f17b1804b1-42156340d05mr25996395e9.26.1717610005863; 
  Wed, 05 Jun 2024 10:53:25 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
@@ -66,32 +66,32 @@ Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  Wed, 05 Jun 2024 10:53:25 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed,  5 Jun 2024 19:53:20 +0200
-Message-ID: <9f305da28a68ac346fc805d62843db711a0bc9fc.1717609998.git.yann.morin.1998@free.fr>
+Date: Wed,  5 Jun 2024 19:53:21 +0200
+Message-ID: <14bb90c566707dbbe9c66b7cf5ae2a05413eeb40.1717609998.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <cover.1717609998.git.yann.morin.1998@free.fr>
 References: <cover.1717609998.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717610005; x=1718214805; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1717610006; x=1718214806; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=OIoktNVsMZgfcGdwdgXzE1r+gnrRJ43JujFCTZw2e04=;
- b=f3S+9vNL7/4mf2zUQ8mFe8vNieGEM1Z6YFGr6dD/O4MNcQu+YLfPxNslliJkuHUR0q
- oF11kSKCllOp8qiHaQxYY7w9kZiIW5ZUyvs1khPYyZ2jPUDmP8fr16x2ZUih4Nv+2rG3
- IxUkRXGfPs3A/s1lEFdMQyCEzBnR/Jqo7EfCUxvspwIjckB2BHdSo4frBw6VAA8v1pHt
- c9oO8SDT3mTl2P+3IHkf4i31P+DdCxCQCH1cNUCb05DRpPlknVGFSvX4AYBoVmHhFYcs
- hrgJThBLQS61SpRmmSArPzCsciUkYZELcc/D54psD5fABVy+WiM7+k6CVDZEbPX6tm7e
- rC6g==
+ bh=41duCsHHGZoHGMxuV/Gm0MpQXhxgzasq31i8kRIrIsM=;
+ b=hlFHHjvkcUAZ0fHpfjYpdBrqfZhBtqwaYRPTH3fj8VDPkGsliCVmYPaisweQEkooC2
+ DW0Mm0OZoS2ySEghAVF9A9hm0HX3Pa+cyykwrNG/PqbajhQSyTdOnFXoc87in1WVrzST
+ StP5p6KpGiCubY9ZJcITPgqVL4Yf42UCNEbETGUi78TVZm68IdClgUMfVIGifOofV2Yp
+ BVrLa7NQH/aUya8Ho3G7QIdxVIuBZ+Seib4rakAkPwlMaLSyMx3kunFpjFZTaoS8DMcn
+ N/jiIT48tbTbaeQgLTU8Il7dvJcs0Bhcnqe8ruuz8Mjws/wFviH18pDLK3snUTQyivh7
+ BYCA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=f3S+9vNL
-Subject: [Buildroot] [PATCH 08/10 v2] support/download/cvs: use appropriate
- TAR
+ header.a=rsa-sha256 header.s=20230601 header.b=hlFHHjvk
+Subject: [Buildroot] [PATCH 09/10 v2] support/scripts/apply-patches: use
+ appropriate TAR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,27 +103,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, "Maier,
+ Brandon L Collins" <Brandon.Maier@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/download/cvs | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Cc: "Maier, Brandon L Collins" <Brandon.Maier@collins.com>
 
-diff --git a/support/download/cvs b/support/download/cvs
-index b771caf280..a6840fea7b 100755
---- a/support/download/cvs
-+++ b/support/download/cvs
-@@ -68,4 +68,4 @@ export TZ=UTC
- _cvs ${quiet} -z3 -d"'${uri}'" \
-      co "${@}" -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
+---
+Changes v1 -> v2:
+  - use ${TAR}, not $(TAR)  (Brandon)
+---
+ package/Makefile.in              | 2 +-
+ support/scripts/apply-patches.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index f415e55f84..9dc66bc674 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -231,7 +231,7 @@ endif
+ INSTALL := $(shell which install || type -p install)
+ UNZIP := $(shell which unzip || type -p unzip) -q
  
--tar czf "${output}" "${basename}"
-+${TAR} czf "${output}" "${basename}"
+-APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
++APPLY_PATCHES = TAR=$(TAR) PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
+ 
+ HOST_CPPFLAGS  = -I$(HOST_DIR)/include
+ HOST_CFLAGS   ?= -O2
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 6da83f6826..4e633b23be 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -146,7 +146,7 @@ function scan_patchdir {
+                 unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
+                 rm -rf "$unpackedarchivedir" 2> /dev/null
+                 mkdir "$unpackedarchivedir"
+-                tar -C "$unpackedarchivedir" -xaf "${path}/$i"
++                ${TAR} -C "$unpackedarchivedir" -xaf "${path}/$i"
+                 scan_patchdir "$unpackedarchivedir"
+             else
+                 apply_patch "$path" "$i"
 -- 
 2.45.1
 
