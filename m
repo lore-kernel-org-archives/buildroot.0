@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1659EC25B76
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 17:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C5D6C27C55
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 17:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEBDE41DBA;
-	Wed,  5 Jun 2024 17:53:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C33FC42397;
+	Wed,  5 Jun 2024 17:54:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xd1Ca52cDwPC; Wed,  5 Jun 2024 17:53:58 +0000 (UTC)
+ id lYdhB3FODN73; Wed,  5 Jun 2024 17:54:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B642B4238D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CBEC42398
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B642B4238D;
-	Wed,  5 Jun 2024 17:53:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CBEC42398;
+	Wed,  5 Jun 2024 17:54:00 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E7B0C1BF5B3
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 07D781BF5B3
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1D9608464E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4AB6C81F56
  for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8u2psLUEe7eX for <buildroot@lists.busybox.net>;
+ id ULFr-fNZo5Qy for <buildroot@lists.busybox.net>;
  Wed,  5 Jun 2024 17:53:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 389D181F56
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 389D181F56
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 389D181F56
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 74C2981EAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74C2981EAF
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 74C2981EAF
  for <buildroot@buildroot.org>; Wed,  5 Jun 2024 17:53:27 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-35dbfe31905so25433f8f.2
- for <buildroot@buildroot.org>; Wed, 05 Jun 2024 10:53:26 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-35a264cb831so31132f8f.2
+ for <buildroot@buildroot.org>; Wed, 05 Jun 2024 10:53:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1717610005; x=1718214805;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=vW4DRTSI0BWEtGbLD4robrFLCZfxpaSCOavddTcgAqA=;
- b=Ih5Qctqm3iOs+UVWsJ066GY1wAGKrn1AxX1Sajw2iaHjig+h9BuP/yuXiEU7aYXUMO
- rNe1D1I/mUGT3Q0NnQmLjs06rlwXGNrRuNLl7nemztg3IXOKwcxMPwuc6k5cbgMOW3fy
- 4svHLPISdSw3yr0GgeAUE/61c3GIm39MCcPptkrS6i8wHKlGZiExbhEMgifZ49i4/BC2
- mve7GXXb5WtQ5hu8782pm5+wdqZDTFoiUg4N5h84MfR2zBiIT4IVainIb8NmTioNm7oW
- pEC8haMt1gYQWEGStviYfSq+DIRBRCLLOcXFrRszwf5WLlJhX+lOW+zm9AhzK14+19W6
- QhWg==
-X-Gm-Message-State: AOJu0Yyp9xdbt1ld6ATs6Ee9RIhtsiRdVJ+9SnJNamA1HcM+tOznhdtQ
- D/L7YjImUZWjf/NWYovn1Y/ErtkW5i6DorRo1+Z7ArGBgEDkqMlxmW4RSQ==
-X-Google-Smtp-Source: AGHT+IEmq4u+6VlGU3vK7MBXvThAfusRsop6DiCnvInlAjxkQouWiwxPz0ILsc4ZyUgVURP/JWHRFA==
-X-Received: by 2002:a5d:49c5:0:b0:354:c934:efa1 with SMTP id
- ffacd0b85a97d-35e8ef888camr2267940f8f.56.1717610005073; 
+ bh=OIoktNVsMZgfcGdwdgXzE1r+gnrRJ43JujFCTZw2e04=;
+ b=gR90MwMLqWfBIw8ynWlqhlWyE25GVcqEYktSY4UKfgNOdTQdqA87/Btdo3GGQR7vvK
+ fxiyBqAojY5HJ7ZaQXXkxUyLeaqRQWv4kIp3NPNrTKSDX6ITsnx89diBo13jz/RUhUEi
+ GiuK6DBz9EkUWCc9poMTGI4oiqWjW0Mzazcyb1wBAA0Nbzvb4Q/Y9CP6mntQftzSxgIM
+ SBEUFqn1RSM9oi6DEEuJd2aGrg2UbFT4H+w6rmfIRgIQ1dsHwvMnxhQV6cshsTtJbKDs
+ X8YX1mS4jNwbocPSvgKpVBZrLDzrfm+QhRT9PTQz/z2t7S672/uO5Hc4M6TMFFM1MzrU
+ R5ww==
+X-Gm-Message-State: AOJu0Yxq8vBQWMqThtAbeMaisf++Wnd87cqOgsz42odxBbNG0RmcJHYX
+ NXIESZg/QH4L/nCO3cg8AUlLYgrwuRvCiXmS0mxCF7ZC0arGboSu8UP4Bw==
+X-Google-Smtp-Source: AGHT+IG5ulh5bOm/p2e5MuxYDnWHSHNOjpVWyeT4jNODD0HGl7+C4fuQDHMYsnVpj/KBurq2RGZU3w==
+X-Received: by 2002:a5d:4689:0:b0:357:bedc:b53a with SMTP id
+ ffacd0b85a97d-35e840688bamr2627473f8f.23.1717610005432; 
  Wed, 05 Jun 2024 10:53:25 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-35dd04d90a8sm15520821f8f.46.2024.06.05.10.53.24
+ ffacd0b85a97d-35dd04d90a8sm15520821f8f.46.2024.06.05.10.53.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 05 Jun 2024 10:53:24 -0700 (PDT)
+ Wed, 05 Jun 2024 10:53:25 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed,  5 Jun 2024 19:53:19 +0200
-Message-ID: <24eee82d7cade44c8ed6fc1675ea739a1ec70a18.1717609998.git.yann.morin.1998@free.fr>
+Date: Wed,  5 Jun 2024 19:53:20 +0200
+Message-ID: <9f305da28a68ac346fc805d62843db711a0bc9fc.1717609998.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <cover.1717609998.git.yann.morin.1998@free.fr>
 References: <cover.1717609998.git.yann.morin.1998@free.fr>
@@ -77,20 +77,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=vW4DRTSI0BWEtGbLD4robrFLCZfxpaSCOavddTcgAqA=;
- b=Z81asUSwMHlfCxDN4lQlDorMkJFg3RLcMf1OT6upaWqW5w0afd/zC+N80UHkEIOl+m
- J9y7zcHjirgQnJxCsXydlxckS4R6KdsV51kBBP4OgcRpfRYXajyv35caXfjORtvzt9yw
- ds1RBSsLPjOsepwRUPDv8Mhq90udfQJfeNG29oULyskh5e11XT2B/NayJAdyacIUM2Y0
- TXre60tp15ULy0bg7CWWLkr69bYLg4bNYGJeNnuSGVd3K70pPAQrGbx9XZOi1LfQQgEv
- 5sFgh/RpgCtGiZzuLA7csVfkBUEIBxPcOhLPy9z+da6eSi4J/HSS1qSZj64xiKTsHRDl
- 8Owg==
+ bh=OIoktNVsMZgfcGdwdgXzE1r+gnrRJ43JujFCTZw2e04=;
+ b=f3S+9vNL7/4mf2zUQ8mFe8vNieGEM1Z6YFGr6dD/O4MNcQu+YLfPxNslliJkuHUR0q
+ oF11kSKCllOp8qiHaQxYY7w9kZiIW5ZUyvs1khPYyZ2jPUDmP8fr16x2ZUih4Nv+2rG3
+ IxUkRXGfPs3A/s1lEFdMQyCEzBnR/Jqo7EfCUxvspwIjckB2BHdSo4frBw6VAA8v1pHt
+ c9oO8SDT3mTl2P+3IHkf4i31P+DdCxCQCH1cNUCb05DRpPlknVGFSvX4AYBoVmHhFYcs
+ hrgJThBLQS61SpRmmSArPzCsciUkYZELcc/D54psD5fABVy+WiM7+k6CVDZEbPX6tm7e
+ rC6g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Z81asUSw
-Subject: [Buildroot] [PATCH 07/10 v2] support/download/cvs: fix shellcheck
+ header.a=rsa-sha256 header.s=20230601 header.b=f3S+9vNL
+Subject: [Buildroot] [PATCH 08/10 v2] support/download/cvs: use appropriate
+ TAR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,41 +111,19 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore  | 1 -
- support/download/cvs | 3 ++-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/download/cvs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8825d644ab..f8c5837e0a 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1653,7 +1653,6 @@ support/dependencies/check-host-xzcat.sh Shellcheck
- support/dependencies/dependencies.sh Shellcheck
- support/download/bzr Shellcheck lib_shellscript.ConsecutiveEmptyLines
- support/download/cargo-post-process Shellcheck
--support/download/cvs Shellcheck
- support/download/dl-wrapper Shellcheck
- support/download/file Shellcheck
- support/download/go-post-process Shellcheck
 diff --git a/support/download/cvs b/support/download/cvs
-index 0c079e2403..b771caf280 100755
+index b771caf280..a6840fea7b 100755
 --- a/support/download/cvs
 +++ b/support/download/cvs
-@@ -40,12 +40,13 @@ shift $((OPTIND-1)) # Get rid of our options
- # 10 minutes should do the trick.
- _cvs() {
-     if [ -z "${quiet}" ]; then
--        printf '%s ' timeout 10m ${CVS} "${@}"; printf '\n'
-+        printf '%s ' timeout 10m "${CVS}" "${@}"; printf '\n'
-     fi
-     _plain_cvs "$@"
- }
- # Note: please keep command below aligned with what is printed above
- _plain_cvs() {
-+    # shellcheck disable=SC2086  # We really want word splitting in CVS
-     eval timeout 10m ${CVS} "${@}"
- }
+@@ -68,4 +68,4 @@ export TZ=UTC
+ _cvs ${quiet} -z3 -d"'${uri}'" \
+      co "${@}" -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
  
+-tar czf "${output}" "${basename}"
++${TAR} czf "${output}" "${basename}"
 -- 
 2.45.1
 
