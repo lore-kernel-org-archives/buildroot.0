@@ -1,93 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74321C25B76
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 09:55:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05E7DC25B76
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 11:14:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BD0B408B0;
-	Wed,  5 Jun 2024 09:55:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 79892400DA;
+	Wed,  5 Jun 2024 11:14:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DmszTuwlh0F8; Wed,  5 Jun 2024 11:14:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A29540A98
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A29540A98;
+	Wed,  5 Jun 2024 11:14:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D8B21BF5DD
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 11:14:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6575B401B4
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 11:14:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BioRcWbyfuzO; Wed,  5 Jun 2024 09:55:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDE43408D5
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDE43408D5;
-	Wed,  5 Jun 2024 09:55:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 17A911BF41D
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 09:55:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0502860ECC
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 09:55:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tOJwNkKxhpkO for <buildroot@lists.busybox.net>;
- Wed,  5 Jun 2024 09:55:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 485FE60ED4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 485FE60ED4
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 485FE60ED4
- for <buildroot@buildroot.org>; Wed,  5 Jun 2024 09:55:09 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-354b722fe81so4401343f8f.3
- for <buildroot@buildroot.org>; Wed, 05 Jun 2024 02:55:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717581307; x=1718186107;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=KP4P2fnVbA5UUier/ivASETMUrL85wpCvKQ1Hg/fGWA=;
- b=XlhIZFcErNv053wsFMdXNJCfkhYqEN1QIIMwNZM4lWqV4hyqZs02xWSMjve7fdWADO
- s0o4h/pfj4kOabuHqiNJhNTGL42m5dKr6xXEP+51kwFb1M6rmyaTVsiewRb9ZsXZ09e4
- 9+dTKyPpcz7Nfw0rzLEo4tTCuEqW3I+a9qIIIGlKakjb8WTNly5zyqeOAC5hpeyaLGlQ
- uPOnbCRpTq27t2quYH0cxBgS0b933tdfz9EEUWljzMX5MXTXKbGv0CVGvLfiTDfh/qKi
- GMCJMdZ9pF49ISCpCZifhokzLEhyT21tMCtpAMgc0XQuGjrqET+6W0j8WRNEUOCyJ26F
- JjyA==
-X-Gm-Message-State: AOJu0YwUJI1VQtiY8bTSpCCsASpqvZyXAOLUXZEEIPda5YU1wnonW6dK
- TTQ1e3rH0CrFA7W86bfmoRcEtM6FIZG3Z5DrTW/ygQS+VgGG9z9e5PptTKiZt/kvDWN+0RvRwKk
- S
-X-Google-Smtp-Source: AGHT+IHPQGmbvgs2JUGiRzB8PfMKTx1ViMn3d3DZrr7QbwLQa3qWmzvilboLWUgZgqH45aTsl7y9kQ==
-X-Received: by 2002:a05:6000:2aa:b0:355:161:b7e3 with SMTP id
- ffacd0b85a97d-35e8ef7ea4dmr1813433f8f.48.1717581307016; 
- Wed, 05 Jun 2024 02:55:07 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.41.12])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-35dd04c0e84sm14010719f8f.13.2024.06.05.02.55.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 05 Jun 2024 02:55:06 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ id tD3LyTsCvLC5 for <buildroot@lists.busybox.net>;
+ Wed,  5 Jun 2024 11:14:18 +0000 (UTC)
+X-Greylist: delayed 61947 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 05 Jun 2024 11:14:16 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9AF9E401A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF9E401A6
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9AF9E401A6
+ for <buildroot@buildroot.org>; Wed,  5 Jun 2024 11:14:16 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.116.39]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtOKc-1saKWR14qk-0144EX; Wed, 05
+ Jun 2024 13:14:13 +0200
 To: buildroot@buildroot.org
-Date: Wed,  5 Jun 2024 11:54:56 +0200
-Message-ID: <20240605095456.2994962-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Date: Wed,  5 Jun 2024 13:13:46 +0200
+Message-ID: <20240605111347.1581931-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:U/E01KF7VLWQxgS0Z3XjCM3Qr/dh5Mko5iJUA3bWuJ7inY8f9yT
+ ZRpv1zRVnKgUcJmAE0Sl2mWBIBh1MdqgnuLJ6qhwCBgn2VKXeKjqVJSHP9VghAsYxsMkWm0
+ pID2SUJR0M0PNIWcDOP8ngeS9JGiprOAU6QcevRQj5IhK2CIw2zFVowMKtXMWrztd4K4fmY
+ IgJqeVgjlU4PyIeU4ysxw==
+UI-OutboundReport: notjunk:1;M01:P0:fe/qxpqIV3E=;GP1KfWNAN6wP2vlWtyRnpU/U7AB
+ zMqCgWUS5wQr5bIn4Fc1P3b6FAIH8JuyZzEF2VJg9ePKWxpTcR+UvhmCrSsgl7dOcFhwYOUqn
+ MdgkdD8tPqAO2v9bNC8WW5QMs8leT7XnwsUqkyoQAZlSZcW35nFeAvuKplSiDblp1wLCyqOGf
+ PpGiRpK657cQt1E2K2nkmxCMpRwtT26B4Jkg8U5o37N4M7OyQG30bIW1+pUln1rOdSjjhDVNF
+ 2jt9dgWVQhaYgGSI/azJ/XA0npqlXSGKSSjJwtxngKkCTfH+EQMd/2/q98fqhVd3PSwWAXy87
+ hstjOTqmlQ57GP+OhuINKnaQrkVuziZ0JHGgWcW3VUe1JEVgmaXtmVH5jOrKg6kriSTeiJd1j
+ izgMpNzpZrr49RKBkHLWAkvU+e/iQH7SmzQPrcz4G+JEXynYbqA+ZjFs7u9RdtLboMOpMlXXi
+ oW2wlwqx7+K9EOIfzl9SWViMlbgsybZ9JI61f5jLJhK+vEqkYAn0Gq/Sg+rKikO+XQ49cL2tr
+ 1GFKURNOxppFaqe4nNfp+HCbMOdtykmjbqRVHShStDHVvQOfnfgZLseoEJaTJXwDqhRwHaZI2
+ naKfGi2Xhcc2bD647sqkpLZZHVyT5N8HZ3UWcoC3DQSR7DSg2qIbw4EbWGZ+GTiPgn5JXzQ0J
+ qJzoNkvezcrReXD8uXGTQN0A4rCrHZJoxkRhbBgDamOjOdHuWNYAk5vNQAF4AeXjDdEVFXv7k
+ 2sTBgCq/SJmeyf0/6GNVjtobxMmo22RpgorVxIYD+NnqwnGaVlxL9d9J7LUmuaDfPh18DA/qC
+ TDWGnODLbb6Wz9uBXnAwAG+9acXKGyKT2vai/gvZFsgMY=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1717581307; x=1718186107;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=KP4P2fnVbA5UUier/ivASETMUrL85wpCvKQ1Hg/fGWA=;
- b=fdRJfilFvlPjofh1DWswD+0ILhGObVqebLNUKa9ZsbYRqIGOQ9HjcuU1PN6an1CW7g
- wAjBPogF5JxY0+wrK0RbOIh61beCCLPAOQZBZUjX4QX1Ync56n+DS1/rUVF9/Fbam5qI
- P6n3tfcnKq1kUHgh7OJ8eE/QHpk5SYRwe7Yak=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=fdRJfilF
-Subject: [Buildroot] [PATCH 1/1] configs/imx8mn_bsh_smm_s2[_pro]: add hashes
+ d=gmx.de; 
+ s=s31663417; t=1717586053; x=1718190853; i=fiona.klute@gmx.de;
+ bh=ry6AElrwgUW/5KQMOZItKN4tXqckiF5WAEJYmzz8vdw=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=b4huylkSlG29fFO8cXnXqVyHqnWFyEj4xnCZQzW8V5HFyQeiQLcjuWceOTjKycBB
+ JIB713Q82Hh7nFErNVzi+2yt8NpPmnARbhkATQE9mRyfIRY03O1oAaxOQnP6E3c5J
+ qSh43gvQdtF8DIL3a30uWk0u7ahvmlsNo14ccF69Ob1yD6IdYuBGZIDExWeMkqcfm
+ 5bq+d/yFZpBXVkfHStA+fIJrfdzmj7KtSfiJkGRcduBKrYtEKM+IL7/MnkUW8TiXh
+ N58AhYe1Jcv+f32qOrf9kLpFdDP8w2GJWO4dEG4AHN4YqIss4ctX27YuYOuu+pFVu
+ KL5jOvt4831Iqb1Qjw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=b4huylkS
+Subject: [Buildroot] [PATCH 1/2] package/busybox: Add crond init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,105 +96,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com,
- Michael Trimarchi <michael@amarulasolutions.com>,
- Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Fiona Klute <fiona.klute@gmx.de>, "Alvaro G . M" <alvaro.gamez@hazent.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch adds .hash files for Arm trusted firmware, Linux, Linux headers
-and U-Boot and then enables BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we
-can now drop the defconfig from .checkpackageignore.
+The init script will be installed only if no other package provides
+cron (currently that could be package/dcron). Users will need to
+select a suitable location for their crontabs, using either runtime
+configuration in /etc/default/crond or Busybox build
+configuration. Note that crond fails to start if the crontabs
+directory doesn't exist.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
 ---
- .checkpackageignore                                             | 2 --
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash      | 2 ++
- .../imx8mn-bsh-smm-s2/patches/linux-headers/linux-headers.hash  | 1 +
- board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash     | 2 ++
- board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash     | 2 ++
- configs/imx8mn_bsh_smm_s2_defconfig                             | 2 ++
- configs/imx8mn_bsh_smm_s2_pro_defconfig                         | 2 ++
- 7 files changed, 11 insertions(+), 2 deletions(-)
- create mode 100644 board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
- create mode 120000 board/bsh/common/imx8mn-bsh-smm-s2/patches/linux-headers/linux-headers.hash
- create mode 100644 board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash
- create mode 100644 board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash
+ package/busybox/S50crond   | 65 ++++++++++++++++++++++++++++++++++++++
+ package/busybox/busybox.mk | 13 ++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 package/busybox/S50crond
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8825d644ab5f..6a0276759e10 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -196,8 +196,6 @@ configs/imx6ullevk_defconfig lib_defconfig.ForceCheckHash
- configs/imx6ulpico_defconfig lib_defconfig.ForceCheckHash
- configs/imx7d-sdb_defconfig lib_defconfig.ForceCheckHash
- configs/imx7dpico_defconfig lib_defconfig.ForceCheckHash
--configs/imx8mn_bsh_smm_s2_defconfig lib_defconfig.ForceCheckHash
--configs/imx8mn_bsh_smm_s2_pro_defconfig lib_defconfig.ForceCheckHash
- configs/imx8mpico_defconfig lib_defconfig.ForceCheckHash
- configs/imx8mqevk_defconfig lib_defconfig.ForceCheckHash
- configs/imxrt1050-evk_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+diff --git a/package/busybox/S50crond b/package/busybox/S50crond
 new file mode 100644
-index 000000000000..80e592dab606
+index 0000000000..834c2787fa
 --- /dev/null
-+++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  fc4cdac7c08fc398b6d4b705285dc13ac2d2b30a7449c6f07e9ccd81207241df  arm-trusted-firmware-v2.5.tar.gz
-diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux-headers/linux-headers.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 000000000000..5808d92afe89
---- /dev/null
-+++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash
-new file mode 100644
-index 000000000000..b017ef2a893e
---- /dev/null
-+++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  3e4d8e561da5703a205ae8d7b2bed6c5c64fc4299eebcbfd20481e63b57d5ee3  linux-6.1.6.tar.xz
-diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash
-new file mode 100644
-index 000000000000..7cef5b688ec3
---- /dev/null
-+++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  e31cac91545ff41b71cec5d8c22afd695645cd6e2a442ccdacacd60534069341  u-boot-2023.04.tar.bz2
-diff --git a/configs/imx8mn_bsh_smm_s2_defconfig b/configs/imx8mn_bsh_smm_s2_defconfig
-index 8b2b74395efc..841512ed1a16 100644
---- a/configs/imx8mn_bsh_smm_s2_defconfig
-+++ b/configs/imx8mn_bsh_smm_s2_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_GLOBAL_PATCH_DIR="board/bsh/common/imx8mn-bsh-smm-s2/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx8mn-bsh-smm-s2/post-build.sh"
- BR2_LINUX_KERNEL=y
-diff --git a/configs/imx8mn_bsh_smm_s2_pro_defconfig b/configs/imx8mn_bsh_smm_s2_pro_defconfig
-index e9ff244a3555..b4553ceb5214 100644
---- a/configs/imx8mn_bsh_smm_s2_pro_defconfig
-+++ b/configs/imx8mn_bsh_smm_s2_pro_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_GLOBAL_PATCH_DIR="board/bsh/common/imx8mn-bsh-smm-s2/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh"
--- 
-2.43.0
++++ b/package/busybox/S50crond
+@@ -0,0 +1,65 @@
++#!/bin/sh
++
++DAEMON="crond"
++PIDFILE="/var/run/$DAEMON.pid"
++
++# Note that the Busybox default location for crontabs
++# /var/spool/cron/crontabs is on a tmpfs in the default Buildroot
++# filesystem layout. If you want persistent crontabs, override that
++# either using either the "-c" runtime option of crond in CROND_ARGS,
++# or the CONFIG_FEATURE_CROND_DIR Busybox build configuration option.
++CROND_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++# BusyBox' crond does not create a pidfile, so pass "-f" on the command line
++# and use "-m" to instruct start-stop-daemon to create one.
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
++		-- -f $CROND_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON"
++	status=$?
++	# wait for process to be gone
++	while true; do
++		pid="$( cat "${PIDFILE}" 2>/dev/null || true )"
++		{ [ -n "${pid}" ] && [ -d "/proc/${pid}" ]; } || break
++		sleep 0.1
++	done
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++		rm -f "$PIDFILE"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index eb5e7ad922..a3ba12f8e2 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -312,6 +312,17 @@ define BUSYBOX_INSTALL_SYSCTL_SCRIPT
+ endef
+ endif
+
++# Only install our crond script if no other package does it.
++ifeq ($(BR2_PACKAGE_DCRON),)
++define BUSYBOX_INSTALL_CROND_SCRIPT
++	if grep -q CONFIG_CROND=y $(@D)/.config; \
++	then \
++		$(INSTALL) -m 0755 -D package/busybox/S50crond \
++			$(TARGET_DIR)/etc/init.d/S50crond; \
++	fi;
++endef
++endif
++
+ ifeq ($(BR2_INIT_BUSYBOX),y)
+ define BUSYBOX_INSTALL_INITTAB
+ 	if test ! -e $(TARGET_DIR)/etc/inittab; then \
+@@ -407,6 +418,7 @@ define BUSYBOX_INSTALL_INIT_OPENRC
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
++	$(BUSYBOX_INSTALL_CROND_SCRIPT)
+ 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
+ endef
+
+@@ -419,6 +431,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+ 	$(BUSYBOX_INSTALL_SYSCTL_SCRIPT)
++	$(BUSYBOX_INSTALL_CROND_SCRIPT)
+ 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
+ endef
+
+--
+2.45.1
 
 _______________________________________________
 buildroot mailing list
