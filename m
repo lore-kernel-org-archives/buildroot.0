@@ -1,89 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C16C25B76
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 11:14:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64194C27C53
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 12:18:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D6AE41483;
-	Wed,  5 Jun 2024 11:14:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IekLTAEqz3cl; Wed,  5 Jun 2024 11:14:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E206B414F8
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E206B414F8;
-	Wed,  5 Jun 2024 11:14:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B98AB1BF5DD
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 11:14:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A6806401B4
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 11:14:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DECA041754;
+	Wed,  5 Jun 2024 12:18:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4XxhihpAuSH2 for <buildroot@lists.busybox.net>;
- Wed,  5 Jun 2024 11:14:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 074DA401B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 074DA401B1
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 074DA401B1
- for <buildroot@buildroot.org>; Wed,  5 Jun 2024 11:14:19 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.116.39]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mnpru-1smXrO2l4M-00aMBF; Wed, 05
- Jun 2024 13:14:16 +0200
+ id h8nrMXaM47CW; Wed,  5 Jun 2024 12:18:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46BDC4081E
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46BDC4081E;
+	Wed,  5 Jun 2024 12:18:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D76A1BF5DC
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 12:18:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 596058455A
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 12:18:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4zc6hVEKTijn for <buildroot@lists.busybox.net>;
+ Wed,  5 Jun 2024 12:18:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.41;
+ helo=smtpcmd0641.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4CA1F8126A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CA1F8126A
+Received: from smtpcmd0641.aruba.it (smtpcmd0641.aruba.it [62.149.156.41])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4CA1F8126A
+ for <buildroot@buildroot.org>; Wed,  5 Jun 2024 12:18:12 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id EpajsA3oTmFXqEpajs3euU; Wed, 05 Jun 2024 14:18:10 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed,  5 Jun 2024 13:13:47 +0200
-Message-ID: <20240605111347.1581931-2-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240605111347.1581931-1-fiona.klute@gmx.de>
-References: <20240605111347.1581931-1-fiona.klute@gmx.de>
+Date: Wed,  5 Jun 2024 14:18:09 +0200
+Message-Id: <20240605121809.313685-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:JaxoXUt9bE+iegv/JOPVo4WeSwv2ZOgqz/u70DPZ+0EKa5McLJt
- 0eGe6Op+2QMSAMFs3vdYcs1BRbCrto4VUdrugrLBgGoFqzUYTAP9sDuEY6CH9AtuGMhEkFu
- Z4rpUkxZo0qBIwjL38dEyAH3cas494qAwu9SWLLUIIXSoF21+VpCIQUSrqpG+JCQYuj9tCO
- TIRBD6rNuvLjkfXQeMXmg==
-UI-OutboundReport: notjunk:1;M01:P0:ULrDG+nvF5U=;xHgEyHFuryIMEXp8qVXSFmzgCPm
- 0N/NiIrSKwJOMZxLx1idjNFKorHUTPksIM9toWClmbzQ6H4Z2/3schP8gG+wt404ph0LlyG5+
- yKOv167PK/ziz7brEn3BxevcJYozOqjyXxQEFEIHWLs/ytladYyxFmXXF2cvcEtEB2AJIyAEc
- cVprciLyZ9qfyRNfWs2T1ufR0uP7+zSfLMIUxDzhg1lLowv6gg/6gVVBZty+lf1UDcRsyQWrE
- HHTqEANi3HM6Dw+jrfo6RuxafgtNUTMLkcgiDaBTua8GdtjqA+z0TNXI3RoAW6lSJtCAVowGF
- y3qqse4drQuFD/Nj1j8Vo1cEiKlQNj+IM40JT/PpPo+xqNIj0VC3YsV60ZzOGHpMuFsgwmpF1
- 6RufoNXpOhY3jqsy7js34EcQExg2/dbOSj5r6L/35p9QQfx/yHVWISuiMosF8Z0bCVFOSDqaY
- cXVkNJ1TOXhvQ9JMgN8aLIL9bQvxnfV9/TjaM2+MYF8EWJoCvSX3vBRsjf7ylnVena1JU/S9V
- Ul6ixazXikzARDFDQVLYvy7FLjVnde8EydaWdnUvaVK4/c34d53uzf5G7SMj7Zudfcy06ga5W
- LzbkcNs3di9rUG8hBQc3i6W2jfGNedJ/BXOsvgZso2KJC98t+FakqvmEdNnydmemnWgR6nkMM
- wwuhzqmnYB+aMH13yWs1tQTZ18+62INhymGQKZUpSg44vyqkcQVzJ632I6Z237Wybv6qNtwyR
- LagghPFlnKAEHb0EnZTlmgo/gP77ciXb7X/51sN9HhQA3t7QS0/Sff4KaM+GTlIlFS+blBaA7
- VdJNmsPLG8XiN6cwW9MV2Te2nE+5hoWjuHwyRvChynQ9g=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1717586056; x=1718190856; i=fiona.klute@gmx.de;
- bh=eRRuiynKAPczRd49e78p4d3XAk0XAkjO6f8HVNF3yT8=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:cc:content-transfer-encoding:content-type:
- date:from:message-id:mime-version:reply-to:subject:to;
- b=nZ42pVE3Dmv76lY1lpffqXM0BTTokN5wTyqmqXmtTmRjW1IIBTEvI9tRZJEK4ThP
- ySEMBT0CmyXtN2UAbetb12PrATYAvlOxmTbPg5HjghAMQG6uB7zVtpH4U8vzcSp/H
- J3Yzl7e6My4UV2CfbaVJAd5W+O/dqsTwPBoTOewuWesa1tit6Sm7oXrlLmWUTf+gp
- lI3TwjMhHphHGwMr5sem+XZlz5RKj/tE8z2LBnYpfGb+ZFM5kSPlaOId74XlF/rqB
- GYl1m1yExfyEzGfPxyYSqQdjB0JPsA06NhaKxf+tiWYiiw+bIKQitOQ6ZBfNZ03Mb
- Pi3uYTsdDiWbiMnHeg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=nZ42pVE3
-Subject: [Buildroot] [PATCH 2/2] package/busybox: Add ifplugd init script
+X-CMAE-Envelope: MS4xfIynx5oFyRZz5f57OVnDc44plV+emCVyQ+/8IU8cz4iRbXtI64hXRhwVxvWGL3N5gV1yBMp8Mn2Ze+TPH9vX5ppIA9IWosGhc8ZpIVzDvuhtG42NcVZa
+ FSEENgwBf3WqRoPxMum+ULHiqtuc0vhZdwH1J2skDXYZ6o1kjSjAjPoY4RT/bYRS4xk7dLPKuyeKdkWaMhll+quy48J2XayC38S4cWLkjSJPBxquz4Up7xa0
+ +WPYpWNMkrU+0jzrjd5QLzLWVoWON1JAr1hcL0bMTfQ=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1717589890; bh=75jelZ3SG5WUedcb40sptQLydY4jR4vJcMh5w0EXO1E=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=aNZcFCAn6PXIomgEq6AHdWxF4Yuu4Oc2bVl/gGiQjqHsW2Fz/mYSqhzBWNb7Sk/eq
+ aUCimq/LyC+NUYSUFEULU0VnxjjeOUSzXqEanlbv3EAmPyt7LUgeQ4T2WD66d9oOQu
+ W2TMTbk++4AYIcrI9/N/BGrnBcUC6g1utrQnSosQ1yIEXbuKsDukscNazDyjeZZwzR
+ N3GN9HaXdDpZmwCJJyilDZnnzpqprEK4bXCe0saMBpDiK0L5MJG8skr9QKE/pAr6xV
+ oOa2P5/9mHZ9oCvONTGBlt6XqbqwmOnpeUx8c2RnjcXuhg1yeVmwCHcsEwrIM3OQFq
+ EMpc7gZoWVeHQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=aNZcFCAn
+Subject: [Buildroot] [PATCH] package/esp-hosted: bump version to 2024-06-05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,164 +78,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Fiona Klute <fiona.klute@gmx.de>, "Alvaro G . M" <alvaro.gamez@hazent.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The init script will be installed only if no other package provides
-ifplugd (currently that could be package/ifplugd). Users can configure
-the interface(s) which ifplugd should watch either using
-/etc/default/ifplugd (for one interface) or using per-interface
-symlinks to the script in /etc/init.d (for any number of
-interfaces). The action script that ifplugd runs when a link change is
-detected must be supplied separately.
+Drop both local patches that have been committed upstream.
 
-Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-make check-package complains about "Incorrect PIDFILE value" in the
-script. To support running multiple instances I need to support
-multiple (per-interface) PID files. Is there a better way to handle
-that, or explicitly silence the check?
+ ..._ng-fix-build-failure-on-Linux-6.9.0.patch | 37 -------------------
+ ...x-Bluetooth-build-failure-on-Linux-6.patch | 37 -------------------
+ package/esp-hosted/esp-hosted.hash            |  2 +-
+ package/esp-hosted/esp-hosted.mk              |  2 +-
+ 4 files changed, 2 insertions(+), 76 deletions(-)
+ delete mode 100644 package/esp-hosted/0001-esp_hosted_ng-fix-build-failure-on-Linux-6.9.0.patch
+ delete mode 100644 package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch
 
- package/busybox/S41ifplugd | 84 ++++++++++++++++++++++++++++++++++++++
- package/busybox/busybox.mk | 13 ++++++
- 2 files changed, 97 insertions(+)
- create mode 100644 package/busybox/S41ifplugd
+diff --git a/package/esp-hosted/0001-esp_hosted_ng-fix-build-failure-on-Linux-6.9.0.patch b/package/esp-hosted/0001-esp_hosted_ng-fix-build-failure-on-Linux-6.9.0.patch
+deleted file mode 100644
+index 21e8730d37..0000000000
+--- a/package/esp-hosted/0001-esp_hosted_ng-fix-build-failure-on-Linux-6.9.0.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 1cd8671eb64a1278466e7a9c90ceca1be0f8c0d5 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Mon, 1 Apr 2024 17:15:19 +0200
+-Subject: [PATCH] esp_hosted_ng: fix build failure on Linux 6.9.0
+-
+-With Linux commit:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=620d269f29a569ba37419cc03cf1da2d55f6252a
+-spi_master compatibility has gone, so let's redefine missing needed
+-macros spi_master and spi_master_put() locally if Linux version is >=
+-6.9.0.
+-
+-Upstream: https://github.com/espressif/esp-hosted/pull/358
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- esp_hosted_ng/host/spi/esp_spi.c | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/esp_hosted_ng/host/spi/esp_spi.c b/esp_hosted_ng/host/spi/esp_spi.c
+-index d0bd513bd6..9817056b2d 100644
+---- a/esp_hosted_ng/host/spi/esp_spi.c
+-+++ b/esp_hosted_ng/host/spi/esp_spi.c
+-@@ -378,6 +378,11 @@ static int __spi_controller_match(struct device *dev, const void *data)
+- 	return ctlr->bus_num == *bus_num;
+- }
+- 
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 9, 0))
+-+#define spi_master			spi_controller
+-+#define spi_master_put(_ctlr)		spi_controller_put(_ctlr)
+-+#endif
+-+
+- static struct spi_controller *spi_busnum_to_master(u16 bus_num)
+- {
+- 	struct platform_device *pdev = NULL;
+--- 
+-2.34.1
+-
+diff --git a/package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch b/package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch
+deleted file mode 100644
+index c701aaa82f..0000000000
+--- a/package/esp-hosted/0002-esp_hosted_ng-Fix-Bluetooth-build-failure-on-Linux-6.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From f8903bc2be7ae5ac9fb9bbeed8512e974c6e60ec Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Mon, 3 Jun 2024 21:53:38 +0200
+-Subject: [PATCH] esp_hosted_ng: Fix Bluetooth build failure on Linux 6.8.11+
+-
+-After Linux commit:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=84a4bb6548a29326564f0e659fb8064503ecc1c7
+-BT_HS has been removed and consequently AMP controllers can't be created,
+-so at this point only HCI_PRIMARY has been left as unique controller type
+-to be created and this became implicit with no need to define if the
+-controller if HCI_PRIMARY or HCI_AMP. So let's assign HCI_PRIMARY up to
+-Linux 6.8.11 only preventing build failure.
+-
+-Upstream: https://github.com/espressif/esp-hosted/pull/400
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- esp_hosted_ng/host/esp_bt.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/esp_hosted_ng/host/esp_bt.c b/esp_hosted_ng/host/esp_bt.c
+-index 3b78c11698..4598ac0e0a 100644
+---- a/esp_hosted_ng/host/esp_bt.c
+-+++ b/esp_hosted_ng/host/esp_bt.c
+-@@ -240,7 +240,9 @@ int esp_init_bt(struct esp_adapter *adapter)
+- 	hdev->set_bdaddr = esp_bt_set_bdaddr;
+- #endif
+- 
+-+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(6, 8, 11))
+- 	hdev->dev_type = HCI_PRIMARY;
+-+#endif
+- 
+- 	SET_HCIDEV_DEV(hdev, adapter->dev);
+- 
+--- 
+-2.34.1
+-
+diff --git a/package/esp-hosted/esp-hosted.hash b/package/esp-hosted/esp-hosted.hash
+index d449f5030e..3afee5aef4 100644
+--- a/package/esp-hosted/esp-hosted.hash
++++ b/package/esp-hosted/esp-hosted.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8f25c01522fdcb2003ffbfcc0ccf4981f27bddc8080ba978e33590d56f5ae20b  esp-hosted-669fd9cd1892bb8b364701968d5f06225346eea9.tar.gz
++sha256  2c87d68c2b74dd000b128696abc0cdc76d22abfefb6581ff61b7d7bcdaab51f5  esp-hosted-b1422afc4fe0a2ea1ffd6b5459edddc4d968ee71.tar.gz
+ sha256  ed57d96d27be775b22f9571d3724ef84e0d0b8f24b805ec7f87a32189de19a9c  LICENSE
+diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
+index 520ad5dc8c..70ca7bf572 100644
+--- a/package/esp-hosted/esp-hosted.mk
++++ b/package/esp-hosted/esp-hosted.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ESP_HOSTED_VERSION = 669fd9cd1892bb8b364701968d5f06225346eea9
++ESP_HOSTED_VERSION = b1422afc4fe0a2ea1ffd6b5459edddc4d968ee71
+ ESP_HOSTED_SITE = $(call github,espressif,esp-hosted,$(ESP_HOSTED_VERSION))
+ ESP_HOSTED_DEPENDENCIES = linux
+ ESP_HOSTED_LICENSE = GPL-2.0
+-- 
+2.34.1
 
-diff --git a/package/busybox/S41ifplugd b/package/busybox/S41ifplugd
-new file mode 100644
-index 0000000000..4d3b56ab6d
---- /dev/null
-+++ b/package/busybox/S41ifplugd
-@@ -0,0 +1,84 @@
-+#!/bin/sh
-+
-+DAEMON="ifplugd"
-+
-+# Each ifplugd instance handles only one interface, so this script is
-+# designed to be symlinked per interface. For each interface create a
-+# symlink with .IFACE appended to the name. E.g. to launch ifplugd for
-+# eth1 create a symlink from /etc/init.d/S41ifplugd.eth1 to this
-+# script. DEFAULT_IFACE sets the interface the non-symlink script will
-+# use, set it to empty in /etc/default/ifplugd to disable the default
-+# instance and use symlinked instances only.
-+DEFAULT_IFACE="eth0"
-+# If your action script is not in the default location
-+# /etc/ifplugd/ifplugd.action, use the "-r" option to set the
-+# location.
-+IFPLUGD_ARGS="-M"
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+NAME_IFACE="$(basename "$0" | cut -s -d. -f2)"
-+if [ -n "$NAME_IFACE" ]; then
-+	IFACE="${NAME_IFACE}"
-+elif [ -n "$DEFAULT_IFACE" ]; then
-+	IFACE="${DEFAULT_IFACE}"
-+else
-+	# no interface configured
-+	exit 0
-+fi
-+
-+PIDFILE="/var/run/${DAEMON}.${IFACE}.pid"
-+IFPLUGD_ARGS="${IFPLUGD_ARGS} -i ${IFACE}"
-+
-+# BusyBox' ifplugd does not create a pidfile, so pass "-n" in the
-+# command line and use "-m" to instruct start-stop-daemon to create
-+# one.
-+start() {
-+	printf 'Starting %s for %s: ' "$DAEMON" "$IFACE"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
-+		-- -n $IFPLUGD_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s for %s: ' "$DAEMON" "$IFACE"
-+	start-stop-daemon -K -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON"
-+	status=$?
-+	# wait for process to be gone
-+	while true; do
-+		pid="$( cat "${PIDFILE}" 2>/dev/null || true )"
-+		{ [ -n "${pid}" ] && [ -d "/proc/${pid}" ]; } || break
-+		sleep 0.1
-+	done
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index a3ba12f8e2..22ce04f473 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -323,6 +323,17 @@ define BUSYBOX_INSTALL_CROND_SCRIPT
- endef
- endif
-
-+# Only install our ifplugd script if no other package does it.
-+ifeq ($(BR2_PACKAGE_IFPLUGD),)
-+define BUSYBOX_INSTALL_IFPLUGD_SCRIPT
-+	if grep -q CONFIG_IFPLUGD=y $(@D)/.config; \
-+	then \
-+		$(INSTALL) -m 0755 -D package/busybox/S41ifplugd \
-+			$(TARGET_DIR)/etc/init.d/S41ifplugd; \
-+	fi;
-+endef
-+endif
-+
- ifeq ($(BR2_INIT_BUSYBOX),y)
- define BUSYBOX_INSTALL_INITTAB
- 	if test ! -e $(TARGET_DIR)/etc/inittab; then \
-@@ -418,6 +429,7 @@ define BUSYBOX_INSTALL_INIT_OPENRC
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-+	$(BUSYBOX_INSTALL_IFPLUGD_SCRIPT)
- 	$(BUSYBOX_INSTALL_CROND_SCRIPT)
- 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
- endef
-@@ -431,6 +443,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
- 	$(BUSYBOX_INSTALL_SYSCTL_SCRIPT)
-+	$(BUSYBOX_INSTALL_IFPLUGD_SCRIPT)
- 	$(BUSYBOX_INSTALL_CROND_SCRIPT)
- 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
- endef
---
-2.45.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
