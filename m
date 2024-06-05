@@ -4,80 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F9B9C25B76
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 17:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C236C27C52
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 18:10:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25A6940502;
-	Wed,  5 Jun 2024 17:54:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2343E417AB;
+	Wed,  5 Jun 2024 18:10:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7dY-W7hPf4a7; Wed,  5 Jun 2024 17:54:41 +0000 (UTC)
+ id NctSt430M81K; Wed,  5 Jun 2024 18:10:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C87BB41871
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8667D417BB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C87BB41871;
-	Wed,  5 Jun 2024 17:54:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8667D417BB;
+	Wed,  5 Jun 2024 18:10:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 468011BF5B3
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:54:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EF1CA1BF5AE
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 18:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 32A5D423D9
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:54:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA34B40975
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 18:10:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CbWpuZFDSOO8 for <buildroot@lists.busybox.net>;
- Wed,  5 Jun 2024 17:54:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
- helo=fllv0016.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ACC5740502
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACC5740502
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ACC5740502
- for <buildroot@buildroot.org>; Wed,  5 Jun 2024 17:54:36 +0000 (UTC)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
- by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 455HsZ7N087448;
- Wed, 5 Jun 2024 12:54:35 -0500
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
- by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 455HsZEt082559
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Wed, 5 Jun 2024 12:54:35 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 5
- Jun 2024 12:54:35 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 5 Jun 2024 12:54:35 -0500
-Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
- by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 455HsZFu080401;
- Wed, 5 Jun 2024 12:54:35 -0500
-Date: Wed, 5 Jun 2024 12:54:35 -0500
-To: Paresh Bhagat <p-bhagat@ti.com>
-Message-ID: <20240605175435.pbfqas47c7wpvj3r@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20240604061556.3167647-1-p-bhagat@ti.com>
+ id UnfW5npcKUd7 for <buildroot@lists.busybox.net>;
+ Wed,  5 Jun 2024 18:10:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::d34; helo=mail-io1-xd34.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6322740377
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6322740377
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6322740377
+ for <buildroot@buildroot.org>; Wed,  5 Jun 2024 18:10:19 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id
+ ca18e2360f4ac-7ead8882735so5376739f.3
+ for <buildroot@buildroot.org>; Wed, 05 Jun 2024 11:10:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1717611018; x=1718215818;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=vMniryS5AuWkUab6NL17qtg/8U6Pb4Z8T6rNudvwvd8=;
+ b=aLokInDKe2xtAtIis9vLEwGtC9teTkJnFiXQ7mDzYw4jmQTS6EBeGBFfo3SBNk4tOJ
+ 7c2r1HfL7G0J9YWHWwTMFxHiUHLxb5C2msIUqt6/BkP7Xl2ABFtHSzbISbE6RK3h2Pkm
+ F7uPuRfKD9YFENANPK1kQ6fIyB+OuTqqt5jjYbQHsOBPJxFWAjeUjObGGDGIqQq93x2/
+ b2U1EI08pHkUhfXVlcfznRtQknH1rYgGZOjZBqL94GueFCeKuntoNqIZyqy463yj/91b
+ b9tejElIwjXncgAM9C7Mubq2//scLs7Z+fWKrhPj+o2Xxi9WL8dc+3FqLyw8fKtM8sEj
+ DA1w==
+X-Gm-Message-State: AOJu0YzKgED/cqbQg3RjVa9wAQ7HUGkMxgj810Nn5OfJAaptK+Jsyy20
+ wUuhZYZ6LdeplALFa3bTvMiGUjh2iF5ctOQ5QmOIgvE8zBTfu4fE3dtLfkv3
+X-Google-Smtp-Source: AGHT+IGh7UPOVlxHls07KoLKmuMjRX3l/Lx9WDJJF+tZpHWDe5XDt1idYxs3kowYQCDco5LxlFdt1g==
+X-Received: by 2002:a05:6602:60cc:b0:7de:e6f5:b1ab with SMTP id
+ ca18e2360f4ac-7eb3c4b8f33mr403301939f.6.1717611017917; 
+ Wed, 05 Jun 2024 11:10:17 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
+ [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4b5de33cfdasm1456456173.21.2024.06.05.11.10.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 05 Jun 2024 11:10:17 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  5 Jun 2024 12:10:14 -0600
+Message-Id: <20240605181014.2250616-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240604061556.3167647-1-p-bhagat@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1717610075;
- bh=s2KZGxFGoewt7g5rXsdwXZ8A8XaQb+DieDAu45RTD0c=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=sIPe5fbK+WUudLid2qcbOptBufZytVzIDkYx4sYE17sjcdq5BcJFMiQFWWIQYvral
- 5U/b2LFHOa8U2DV2OLX3QV6ur65IC2et/HrXFI+ciJickKpoc2638r9OkW6CTQnRPL
- /G62D3V02crIPZ8fwY5Nvu31lwaoMxcDLt8G6L2U=
+ d=gmail.com; s=20230601; t=1717611018; x=1718215818; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=vMniryS5AuWkUab6NL17qtg/8U6Pb4Z8T6rNudvwvd8=;
+ b=axZAitXlQkax+7eLFOy0dDh9E1nMihtIL7jwYBbyQ89vaKZTu9hxOLqqCYkjEaFC/k
+ Gcs2GpMlQl7zOhIoThWM/4VW8TU4v6Wq0dToGvLgUAYKeoonDMxUQW0nMjrKqy6eg2JY
+ woeA10woheFotrmxCQGvvYTIaqimilb6TCjZtTHfGOuGXBDZjHuIiYSW/k3uCEWLrduz
+ W0P1L6HdgAlv0OCsGX2V9vrW+TnhPUpH5zoE3cP0xDGCefZmTrkPFXIGR//dyyfjefwG
+ iM/gEQb/ZtpNyaRmFxYcZLq1MyM5/j9KKJVfRS4RRZhw62FcrZQnhkC8YcI3S3UBit25
+ TJdw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=sIPe5fbK
-Subject: Re: [Buildroot] [PATCH 1/1] boot/ti-k3-boot-firmware: Add config
- option to specify version
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=axZAitXl
+Subject: [Buildroot] [PATCH 1/1] package/python-lxml: bump to version 5.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,67 +100,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Reply-To: Bryan Brattlof <bb@ti.com>
-Cc: Xuanhao Shi <X15000177@gmail.com>, Gyan Gupta <g-gupta@ti.com>,
- Chirag Shilwant <c-shilwant@ti.com>, Syed Mohammed Khasim <khasim@ti.com>,
- buildroot@buildroot.org, Sai Sree Kartheek Adivi <s-adivi@ti.com>,
- Anand Gadiyar <gadiyar@ti.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Oops! Just noticed some white-space issues while cleaning up.
+Fixes:
+http://autobuild.buildroot.net/results/99c/99c28a0b0bf0fd20b02289d7a73c5c2f7664778e
 
-On June  4, 2024 thus sayeth Paresh Bhagat via buildroot:
-> Previously the version of ti-k3-boot-firmware (TI_K3_BOOT_FIRMWARE_VERSION) was
-> fixed in mk file. Introduce a new config option 
-> BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION so that user can change the version
-> for ti-k3-boot-firmware using menuconfig.
-> 
-> This provides greater flexibilty for users to select different versions of
-> ti-k3-boot-firmware without modfying the build script directly.
-> 
-> Signed-off-by: Paresh Bhagat <p-bhagat@ti.com>
-> ---
->  boot/ti-k3-boot-firmware/Config.in            | 30 +++++++++++++++++++
->  .../ti-k3-boot-firmware.mk                    |  2 +-
->  2 files changed, 31 insertions(+), 1 deletion(-)
-> 
-> diff --git a/boot/ti-k3-boot-firmware/Config.in b/boot/ti-k3-boot-firmware/Config.in
-> index d80bb4bdb3..adc201c468 100644
-> --- a/boot/ti-k3-boot-firmware/Config.in
-> +++ b/boot/ti-k3-boot-firmware/Config.in
-> @@ -5,3 +5,33 @@ config BR2_TARGET_TI_K3_BOOT_FIRMWARE
->  	  This package downloads and installs the TI-specific ti-sysfw
->  	  and ti-dm firmware needed to boot TI K3 platforms (which
->  	  include AM62x, AM64x, AM65x and more).
-> +
-> +if BR2_TARGET_TI_K3_BOOT_FIRMWARE
-> +choice
-> +	prompt "ti-k3-boot-firmware version"
-> +	default BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
-> +	help
-> +		Select the version of Ti k3 boot firmware you want to use
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Do you mind replacing the indentation with a <Tab> + 2 <Space> here? to 
-align with the help label a little better. 
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index a23cdcec9e..3eb427a80d 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,5 +1,5 @@
+ # From https://pypi.org/project/lxml/
+-sha256  3eea6ed6e6c918e468e693c41ef07f3c3acc310b70ddd9cc72d9ef84bc9564ca  lxml-5.1.0.tar.gz
++sha256  bb2dc4898180bea79863d5487e5f9c7c34297414bad54bcd0f0852aee9cfdb87  lxml-5.2.2.tar.gz
+ # Locally computed
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 2da8b8056c..2a26c132a7 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_LXML_VERSION = 5.1.0
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/2b/b4/bbccb250adbee490553b6a52712c46c20ea1ba533a643f1424b27ffc6845
++PYTHON_LXML_VERSION = 5.2.2
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/63/f7/ffbb6d2eb67b80a45b8a0834baa5557a14a5ffce0979439e7cd7f0c4055b
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
+-- 
+2.34.1
 
-> +
-> +config BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
-> +	bool "09.02.00.009"
-> +
-> +config BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
-> +	bool "Custom version"
-> +	help
-> +      This option allows to use a specific official version from
-> +      git.ti.org.
-> +
-
-For now ;) but same here. <Tab> + 2 <Space>
-
-~Bryan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
