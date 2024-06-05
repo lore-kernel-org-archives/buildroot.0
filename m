@@ -4,49 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A70EC25B76
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 20:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB7E0C25B76
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 20:35:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2929A845A4;
-	Wed,  5 Jun 2024 20:34:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7ABF484539;
+	Wed,  5 Jun 2024 20:35:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id boqxpOolTT58; Wed,  5 Jun 2024 20:34:33 +0000 (UTC)
+ id z3TJtsPp1raq; Wed,  5 Jun 2024 20:35:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1FA884578
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7916D848F1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1FA884578;
-	Wed,  5 Jun 2024 20:34:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2306B1BF5A9
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 20:34:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7916D848F1;
+	Wed,  5 Jun 2024 20:35:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 761881BF5A9
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 20:35:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C93740543
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 20:34:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6210C84539
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 20:35:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GPXtUTr40CWR for <buildroot@lists.busybox.net>;
- Wed,  5 Jun 2024 20:34:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DCE340528
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9DCE340528
- for <buildroot@buildroot.org>; Wed,  5 Jun 2024 20:34:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9002687B4A; Wed,  5 Jun 2024 20:34:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 5 Jun 2024 22:33:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e26e0caf38e5dbf0085a117795c2964e6cc5c1f9
-X-Git-Newrev: 90167378de35a640ed07f18ded1e0a88aba11396
-X-Patchwork-Hint: ignore
-Message-Id: <20240605203430.9002687B4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lightning: fix build on mips64
- with n32 ABI
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZMDlx0W2P1Nh for <buildroot@lists.busybox.net>;
+ Wed,  5 Jun 2024 20:35:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B146584501
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B146584501
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B146584501
+ for <buildroot@buildroot.org>; Wed,  5 Jun 2024 20:35:31 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-35dceef429bso87847f8f.1
+ for <buildroot@buildroot.org>; Wed, 05 Jun 2024 13:35:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1717619730; x=1718224530;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=YLAs9tKRafvmxaMGZ2BnhfS+9kfqBKFCcfMiz+KXr6k=;
+ b=IzQQHL/nnuX7l/R3imq1RJFXv0l1sj85WvAanmRRcj257GfOdJVtOr2PxfUL+RofVK
+ sCV1hmUwOLnkkBGmwiB1arVAtysiC+wFkqbVkx/RcLmXGhg3qtBjnPsi6m0h6ZzN0vH5
+ UJFNCnrAvONjCyJwJVjUxeZmEtwSqX6CBc+iFLOhp8jcrANztYpUNpKZNEsWWSIzgACv
+ 40wYbLJn+1kDRu9sl64DZHPBsvGSZk/wcocTfNINazfJ4orooAzRRp6N2YRFUwUVObj5
+ GGvmFZIWgtxacfbb2lbjOkR7PmzIcO61KUBLBOA5jNkcn0CzdAKE9DzS9oz9mK26y8Jf
+ YOWw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWJ3bSxBSXESdWtIbvMZbTDZgvCqXkfV/PV2Oq5lNodxx0hRhvbkzz5FToZfvGmRHK9oXPabGohHFsmEXanJvquMIh5TdY3AA==
+X-Gm-Message-State: AOJu0YyxvMzwfnTZCgs7nsLqh/ven5wYLIIz2Drm1ou+l4k76m334TA+
+ lz/L+C8mgPNGm8owlU1Y6FP5bJUP18RzZIxvV83CPE3yYc28YsC14yFLTy33Z+Y=
+X-Google-Smtp-Source: AGHT+IH3agOf79dZojvTeaT6Zx+fBTO7nUjrmD6jI2PX7X6rHJ/EMOHZBfP9V8E/jA8+IfrrRRd7EA==
+X-Received: by 2002:a05:6000:cca:b0:354:df32:69da with SMTP id
+ ffacd0b85a97d-35ef0d7a119mr616693f8f.14.1717619729654; 
+ Wed, 05 Jun 2024 13:35:29 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-35dd04cad5bsm15779460f8f.38.2024.06.05.13.35.28
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 05 Jun 2024 13:35:28 -0700 (PDT)
+Message-ID: <7b7a70a4-d469-43dd-93a4-69e4fcdf976a@mind.be>
+Date: Wed, 5 Jun 2024 22:35:27 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+References: <20240604184127.1687685-1-peter@korsgaard.com>
+Content-Language: en-GB
+In-Reply-To: <20240604184127.1687685-1-peter@korsgaard.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1717619730; x=1718224530; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=YLAs9tKRafvmxaMGZ2BnhfS+9kfqBKFCcfMiz+KXr6k=;
+ b=EjjI3CioPPGuxedSaioMRZ7k7/LPB5Z+50NAlQ5twEPZGUYI3Dis5mTt43Jb9E1JVk
+ vik2/djZ3FNP6L9OxAc2Qzpf8Q4woQ6ULcbYMfggoG4pR/MP0W36vDC4sbTHdfPJgK90
+ KGbusQBm5pdm/EZ+7w+arlxNs6e+6mBPR3A7YzAcxVQRcgp+kr1NWKgaL4MriWbNjv71
+ rw5Kpa8tmmNDGgJmSNYkJsjxIgiUQYubHKwigabhEOsqc9RdgsrDvTqN8Xc28AiVEVLu
+ H9ESNhzGfKfhAwsBtb1fkaiTtTi5ynJMGYUz6HZ2lRphBUJgme6iTnmsG2lDCbrsFDhu
+ 8DtQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=EjjI3Cio
+Subject: Re: [Buildroot] [PATCH] support/testing: sample_python_pybind.py:
+ use python3 shebang
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,167 +110,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90167378de35a640ed07f18ded1e0a88aba11396
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Grab commit 778d326740f9893c398f959b419629935b613099 from upstream to
-fix the build on mips64 and mips64el when the n32 ABI is used.
 
-Fixes:
+On 04/06/2024 20:41, Peter Korsgaard wrote:
+> No functional change as we install a python symlink, but use python3 for
+> consistency with the other scripts.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-  http://autobuild.buildroot.net/results/27123bf0ddc84599bceb02ac987327817d498659/
+  Applied to master, thanks.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- ...001-mips-Fix-build-on-MIPS64-with-n32-ABI.patch | 133 +++++++++++++++++++++
- 1 file changed, 133 insertions(+)
+  Regards,
+  Arnout
 
-diff --git a/package/lightning/0001-mips-Fix-build-on-MIPS64-with-n32-ABI.patch b/package/lightning/0001-mips-Fix-build-on-MIPS64-with-n32-ABI.patch
-new file mode 100644
-index 0000000000..19582d143f
---- /dev/null
-+++ b/package/lightning/0001-mips-Fix-build-on-MIPS64-with-n32-ABI.patch
-@@ -0,0 +1,133 @@
-+From 66a9a994c03d65fc37d701a60b26506bede49ae1 Mon Sep 17 00:00:00 2001
-+From: Paul Cercueil <paul@crapouillou.net>
-+Date: Sun, 2 Jun 2024 22:35:24 +0200
-+Subject: [PATCH] mips: Fix build on MIPS64 with n32 ABI
-+
-+The build on MIPS64 with n32 ABI was broken for a few reasons.
-+
-+- The _movi_d_w() functions had a different prototype in jit_mips-fpu.c
-+  than in lightning.c;
-+- The movi_d_w() was still provided by lightning.c even though
-+  jit_mips-fpu.c provides its own version;
-+- The "ww" opcodes were allowed, which was probably not meant to happen.
-+
-+Fixes a build issue reported by Buildroot:
-+http://autobuild.buildroot.net/results/27123bf0ddc84599bceb02ac987327817d498659/
-+
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-+Upstream: http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=778d326740f9893c398f959b419629935b613099
-+---
-+ lib/jit_mips-fpu.c |  4 ++--
-+ lib/jit_mips.c     |  3 +--
-+ lib/lightning.c    | 43 +++++++++++++++++++++----------------------
-+ 3 files changed, 24 insertions(+), 26 deletions(-)
-+
-+diff --git a/lib/jit_mips-fpu.c b/lib/jit_mips-fpu.c
-+index 61db30e..8ad97e9 100644
-+--- a/lib/jit_mips-fpu.c
-++++ b/lib/jit_mips-fpu.c
-+@@ -349,7 +349,7 @@ static void _movi_f(jit_state_t*,jit_int32_t,jit_float32_t*);
-+ #    define movi64(r0, i0)		_movi64(_jit, r0, i0)
-+ static void _movi64(jit_state_t*,jit_int32_t,jit_int64_t);
-+ #    define movi_d_w(r0, i0)		_movi_d_w(_jit, r0, i0)
-+-static void _movi_d_w(jit_state_t*,jit_int32_t,jit_int64_t);
-++static void _movi_d_w(jit_state_t*,jit_int32_t,jit_float64_t);
-+ #  elif __WORDSIZE == 64
-+ #    define movi64(r0, i0)		movi(r0, i0)
-+ #  endif
-+@@ -1152,7 +1152,7 @@ _movi64(jit_state_t *_jit, jit_int32_t r0, jit_int64_t i0)
-+ }
-+ 
-+ static void
-+-_movi_d_w(jit_state_t *_jit, jit_int32_t r0, jit_int64_t i0)
-++_movi_d_w(jit_state_t *_jit, jit_int32_t r0, jit_float64_t i0)
-+ {
-+     union {
-+ 	jit_int64_t	l;
-+diff --git a/lib/jit_mips.c b/lib/jit_mips.c
-+index 4fb6c34..6eb41a0 100644
-+--- a/lib/jit_mips.c
-++++ b/lib/jit_mips.c
-+@@ -2184,8 +2184,7 @@ _emit_code(jit_state_t *_jit)
-+ 	    case jit_code_movi_w_d:
-+ 		movi_w_d(rn(node->u.w), node->v.w);
-+ 		break;
-+-#endif
-+-#if __WORDSIZE == 32
-++#else
-+ 	    case jit_code_movr_ww_d:
-+ 		movr_ww_d(rn(node->u.w), rn(node->v.w), rn(node->w.w));
-+ 		break;
-+diff --git a/lib/lightning.c b/lib/lightning.c
-+index b40d35b..2c10928 100644
-+--- a/lib/lightning.c
-++++ b/lib/lightning.c
-+@@ -4331,12 +4331,12 @@ static void _htoni_ul(jit_state_t*, jit_int32_t, jit_word_t);
-+ #endif
-+ #  define movi_f_w(r0, i0)		_movi_f_w(_jit, r0, i0)
-+ static void _movi_f_w(jit_state_t*, jit_int32_t, jit_float32_t);
-+-#if __WORDSIZE == 32 && !(defined(__mips__) && NEW_ABI)
-+-#  define movi_d_ww(r0, r1, i0)		_movi_d_ww(_jit, r0, r1, i0)
-+-static void _movi_d_ww(jit_state_t*, jit_int32_t, jit_int32_t, jit_float64_t);
-+-#else
-++#if __WORDSIZE == 64
-+ #  define movi_d_w(r0, i0)		_movi_d_w(_jit, r0, i0)
-+ static void _movi_d_w(jit_state_t*, jit_int32_t, jit_float64_t);
-++#elif !(defined(__mips__) && NEW_ABI)
-++#  define movi_d_ww(r0, r1, i0)		_movi_d_ww(_jit, r0, r1, i0)
-++static void _movi_d_ww(jit_state_t*, jit_int32_t, jit_int32_t, jit_float64_t);
-+ #endif
-+ #define cloi(r0, i0)			_cloi(_jit, r0, i0)
-+ static void _cloi(jit_state_t*, jit_int32_t, jit_word_t);
-+@@ -4803,7 +4803,23 @@ _movi_f_w(jit_state_t *_jit, jit_int32_t r0, jit_float32_t i0)
-+     movi(r0, data.i);
-+ }
-+ 
-+-#if __WORDSIZE == 32 && !(defined(__mips__) && NEW_ABI)
-++#if __WORDSIZE == 64
-++static void
-++_movi_d_w(jit_state_t *_jit, jit_int32_t r0, jit_float64_t i0)
-++{
-++    union {
-++	jit_int64_t	l;
-++	jit_float64_t	d;
-++    } data;
-++    data.d = i0;
-++#  if defined(__ia64__)
-++    /* Should be used only in this case (with out0 == 120) */
-++    if (r0 >= 120)
-++	r0 = _jitc->rout + (r0 - 120);
-++#  endif
-++    movi(r0, data.l);
-++}
-++#elif !(defined(__mips__) && NEW_ABI)
-+ static void
-+ _movi_d_ww(jit_state_t *_jit, jit_int32_t r0, jit_int32_t r1, jit_float64_t i0)
-+ {
-+@@ -4821,23 +4837,6 @@ _movi_d_ww(jit_state_t *_jit, jit_int32_t r0, jit_int32_t r1, jit_float64_t i0)
-+     movi(r0, data.i[1]);
-+ #  endif
-+ }
-+-
-+-#else
-+-static void
-+-_movi_d_w(jit_state_t *_jit, jit_int32_t r0, jit_float64_t i0)
-+-{
-+-    union {
-+-	jit_int64_t	l;
-+-	jit_float64_t	d;
-+-    } data;
-+-    data.d = i0;
-+-#  if defined(__ia64__)
-+-    /* Should be used only in this case (with out0 == 120) */
-+-    if (r0 >= 120)
-+-	r0 = _jitc->rout + (r0 - 120);
-+-#  endif
-+-    movi(r0, data.l);
-+-}
-+ #endif
-+ 
-+  void
-+-- 
-+2.43.0
-+
+> ---
+>   support/testing/tests/package/sample_python_pybind.py | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/testing/tests/package/sample_python_pybind.py b/support/testing/tests/package/sample_python_pybind.py
+> index 605c0bab15..9c605caf61 100644
+> --- a/support/testing/tests/package/sample_python_pybind.py
+> +++ b/support/testing/tests/package/sample_python_pybind.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/env python
+> +#!/usr/bin/env python3
+>   import example
+>   print(example.add(1, 2))
+>   print(example.says)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
