@@ -4,94 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 880B7C27C52
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 08:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B5C4C25B76
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 09:04:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B26F40708;
-	Wed,  5 Jun 2024 08:48:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A43F402EC;
+	Wed,  5 Jun 2024 09:04:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PhFJzjbK6Sga; Wed,  5 Jun 2024 08:48:45 +0000 (UTC)
+ id SQeIMXKUOBYs; Wed,  5 Jun 2024 09:04:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF46540729
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 236524167E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF46540729;
-	Wed,  5 Jun 2024 08:48:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 236524167E;
+	Wed,  5 Jun 2024 09:04:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8E9731BF5E6
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 08:48:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6EF251BF5E0
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 09:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 88B1B40729
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 08:48:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A9CF4167E
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 09:04:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rDRn9miyUyAS for <buildroot@lists.busybox.net>;
- Wed,  5 Jun 2024 08:48:42 +0000 (UTC)
+ id lCtIRzlJa90Z for <buildroot@lists.busybox.net>;
+ Wed,  5 Jun 2024 09:04:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12e; helo=mail-lf1-x12e.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0ADCD40708
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0ADCD40708
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
- [IPv6:2a00:1450:4864:20::12e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0ADCD40708
- for <buildroot@buildroot.org>; Wed,  5 Jun 2024 08:48:41 +0000 (UTC)
-Received: by mail-lf1-x12e.google.com with SMTP id
- 2adb3069b0e04-52b7e693b8aso621157e87.1
- for <buildroot@buildroot.org>; Wed, 05 Jun 2024 01:48:41 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2AC52402EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AC52402EC
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2AC52402EC
+ for <buildroot@buildroot.org>; Wed,  5 Jun 2024 09:04:54 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-421578c546eso4618835e9.0
+ for <buildroot@buildroot.org>; Wed, 05 Jun 2024 02:04:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717577320; x=1718182120;
+ d=1e100.net; s=20230601; t=1717578293; x=1718183093;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=t589apYqdmd3hGpVUn9uwwinYjJtb0xXjXua8dIABSg=;
- b=cR70NQl1B2/ge0M9rQA0bAp+afSFZaQ3xFVG+AoCE31gx5CbqV41THDWt4XUU8fi8x
- IKFKb4XKbXODEXHM1k+EMqfUcXUmqz0hpm6vtVLWsYxD3NgRNK74cwDwYEKngIrY32Xx
- kdzfVGdNMF649wZNDD3s3xrUMspLmcCtEghbtA7YTCgz4lzvy022ObP36FEQb288E5MZ
- CWL6hRYDUICWFklDOAlKjLam/2nm3DtlTMfW9ptF/IgLH/+djC1+zMt1+VhIXcp/JZOh
- MLcTrBwnc0Nzpmv39x3HdVczNlwNnS4IJ8jL9lxLHaBYiLO0FwY5em4wsG0k6t1xA68T
- E6MQ==
-X-Gm-Message-State: AOJu0Yw/5pQmuXfEerSW4Cbyu3CTPwQII8fDtIwxxHdAG0zIM5sszgF0
- pxAuqXo1wu+T9f17ATLH0ObfFglddqBjWirFxbc/vYI3PMf5Bg9a8c9htA==
-X-Google-Smtp-Source: AGHT+IGvgHmQqMFJPRa3K3RZt6tZBZMW5zpdhoBXzMn1kFg4p+Rbdz8ssjQ+X3dJER4HKPHO4N0Asg==
-X-Received: by 2002:a05:6512:1383:b0:52b:905e:1500 with SMTP id
- 2adb3069b0e04-52ba229b477mr1504631e87.22.1717577319331; 
- Wed, 05 Jun 2024 01:48:39 -0700 (PDT)
-Received: from precision7530-arch-roy.lan
- ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
+ bh=M0F6wCM/ywEvEi3hkWiiM28oGxRwly20qOG3ssX8oeU=;
+ b=v/eJvwHFmFIJNFV9IMgcLiwYpgDcVN18Sxh2OZcyKMZ2r3H3AeyaUwqVSqn/Ip3xRT
+ 3qYMlw6O7v3hjztBtmBYm8HulUgG63ggMMjQF4ojXUeMGiKLu5db54RVCpe5Dut8CGCk
+ YIK/Iiy8Ip19kTkLp1BQHv5Bc5aL0pL540E4J9+P2EQZASzuWoCB7pAYJigpRhIjW2X0
+ l/a91CPBPMiGzE099Mp7BInCTGpw49J9C18nnIYStf0yrCLanXdFX6ZUiCjTIYLfiE1a
+ Otp84yEHerjWIdI4U38unwIxs5h48+rWv6qzRIcVfZ9/uD6ed8b9UYm2o2WSQlTwnZwh
+ TUpA==
+X-Gm-Message-State: AOJu0Yxmeisyo9RptoYUGQ3fOZxx0ZEMmBj0NSBIHTouFy2Z1cYLZYQA
+ 8IFgtSfXtQ/A5KypOBbdC1Ozgo1lHrK7CWhqoFuTbgAFoM78v8rlBP2UzDBDYujLEEzrUFfjh6S
+ C
+X-Google-Smtp-Source: AGHT+IG+gP0lvhU3WUrNhyZIAP3locurPsuH+XMNohM4VWTC1WSl6CCAOEp24DlDoRH237vxxpmkEg==
+X-Received: by 2002:a05:600c:4707:b0:421:ad:f104 with SMTP id
+ 5b1f17b1804b1-421562e9513mr15443665e9.10.1717578292954; 
+ Wed, 05 Jun 2024 02:04:52 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.41.12])
  by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-2ea91d20cdfsm17107441fa.134.2024.06.05.01.48.38
+ ffacd0b85a97d-35dd066b47asm13732202f8f.112.2024.06.05.02.04.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 05 Jun 2024 01:48:38 -0700 (PDT)
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-X-Google-Original-From: Roy Kollen Svendsen
- <roy.kollen.svendsen@akersolutions.com>
+ Wed, 05 Jun 2024 02:04:52 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed,  5 Jun 2024 10:48:26 +0200
-Message-ID: <20240605084827.3155371-1-roy.kollen.svendsen@akersolutions.com>
-X-Mailer: git-send-email 2.45.1
+Date: Wed,  5 Jun 2024 11:04:40 +0200
+Message-ID: <20240605090440.2400647-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717577320; x=1718182120; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1717578293; x=1718183093;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=t589apYqdmd3hGpVUn9uwwinYjJtb0xXjXua8dIABSg=;
- b=eBR+B/K4ZLjXZt3cXguSSoB8B5MJCOdQhZJb0Dp1Hk3I2QPWV4zcT9gui+l96GU4wh
- ub9NWTyk4uGAaAbYzx906+tRmaHUMwJ/bYtKhngYoh3vjdg8kMk3pcbB8q74gp0S5sIg
- HZZryfYvdU9l2dWnbBx9L5AhNUJBzn+orrrgBTJhB7Msu5ZNslgW7tXRsIOT6KAhC0ig
- fR5goBxeYBJg8TxgJBmqlLNpUxw0Gp5AipeYOzboEBPQqsUITY6ajtFiJuj7omGW229/
- dTRlipeOkdIR9+a1W6G0LPEFlh6M1aSFbObW5trxVKNadlO3b51Nx9NEkL6ciUig6m0t
- gtuw==
+ bh=M0F6wCM/ywEvEi3hkWiiM28oGxRwly20qOG3ssX8oeU=;
+ b=lwe8VHqf5a7Oj5TlKzzq/IeGmFLWVDnQNuPqpVRoydbJZ+cmt5R7WhsTOYbTYDxpsN
+ Kg+OVbTM/kiWuTQ9CTuypeWwI7kWoQHEaZ7GImiiLGLctIJa8SvempQUWaY+K7gdOAL/
+ k4hQlJT7CyhCKu5D8MEBLuoyDN1FyGNlapnkA=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=eBR+B/K4
-Subject: [Buildroot] [PATCH 2024.02.x] package/libffi: Fix host build failure
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=lwe8VHqf
+Subject: [Buildroot] [PATCH 1/1] package/openssh: don't use stack protection
+ if BR2_SSP_NONE=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,68 +100,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SG9zdCBidWlsZCBmYWlscyBvbiB1cGRhdGVkIEFyY2ggTGludXggZGVza3RvcC4KCk15IGN1cnJl
-bnQgL3Vzci9iaW4vZ2NjIHZlcnNpb24gaXMgMTQuMS4xIDIwMjQwNTIyLCB3aGVyZQppbXBsaWNp
-dC1mdW5jdGlvbi1kZWNsYXJhdGlvbiBjYXVzZSBidWlsZCB0byBmYWlsOgoKMjAyNC0wNi0wNVQw
-NzowMzoyMCBsaWJ0b29sOiBjb21waWxlOiAgL2hvbWUvcm95L2h5bWF0ZWsvY29ubmV4aS10b3Vj
-aHBhbmVsLWZpcm13YXJlL214eGYxL291dHB1dC9ob3N0L2Jpbi9jY2FjaGUgL3Vzci9iaW4vZ2Nj
-IC1ESEFWRV9DT05GSUdfSCAtSS4gLUkuLiAtSS4gLUkuLi9pbmNsdWRlIC1JaW5jbHVkZSAtSS4u
-L3NyYyAtSS9ob21lL3JveS9oeW1hdGVrL2Nvbm5leGktdG91Y2hwYW5lbC1maXJtd2FyZS9teHhm
-MS9vdXRwdXQvaG9zdC9pbmNsdWRlIC1XYWxsIC1PMiAtSS9ob21lL3JveS9oeW1hdGVrL2Nvbm5l
-eGktdG91Y2hwYW5lbC1maXJtd2FyZS9teHhmMS9vdXRwdXQvaG9zdC9pbmNsdWRlIC1mZXhjZXB0
-aW9ucyAtYyAuLi9zcmMvdHJhbXAuYyAgLWZQSUMgLURQSUMgLW8gc3JjLy5saWJzL3RyYW1wLm8K
-MjAyNC0wNi0wNVQwNzowMzoyMCAuLi9zcmMvdHJhbXAuYzogSW4gZnVuY3Rpb24g4oCYZmZpX3Ry
-YW1wX2dldF90ZW1wX2ZpbGXigJk6CjIwMjQtMDYtMDVUMDc6MDM6MjAgLi4vc3JjL3RyYW1wLmM6
-MjYyOjIyOiBlcnJvcjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rpb24g4oCYb3Blbl90
-ZW1wX2V4ZWNfZmlsZeKAmSBbLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0KMjAyNC0w
-Ni0wNVQwNzowMzoyMCAyNjIgfCAgIHRyYW1wX2dsb2JhbHMuZmQgPSBvcGVuX3RlbXBfZXhlY19m
-aWxlICgpOwoyMDI0LTA2LTA1VDA3OjAzOjIwIHwgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+
-fn5+fn5+fn5+fn5+fgoKUGF0Y2ggZnJvbSBtYXN0ZXIgd2FzIGFkZGVkIHRvIGZpeCBidWlsZC4K
-ClNpZ25lZC1vZmYtYnk6IFJveSBLb2xsZW4gU3ZlbmRzZW4gPHJveS5rb2xsZW4uc3ZlbmRzZW5A
-YWtlcnNvbHV0aW9ucy5jb20+Ci0tLQptYXN0ZXIgYW5kIG5leHQgYXJlIG5vdCBhZmZlY3RlZCBh
-cyB0aGUgdmVyc2lvbiB3YXMgYnVtcGVkCgogLi4ud2FyZC1kZWNsYXJlLW9wZW5fdGVtcF9leGVj
-X2ZpbGUtNzY0LnBhdGNoIHwgNDkgKysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQs
-IDQ5IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xpYmZmaS8wMDA0
-LUZvcndhcmQtZGVjbGFyZS1vcGVuX3RlbXBfZXhlY19maWxlLTc2NC5wYXRjaAoKZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvbGliZmZpLzAwMDQtRm9yd2FyZC1kZWNsYXJlLW9wZW5fdGVtcF9leGVjX2Zp
-bGUtNzY0LnBhdGNoIGIvcGFja2FnZS9saWJmZmkvMDAwNC1Gb3J3YXJkLWRlY2xhcmUtb3Blbl90
-ZW1wX2V4ZWNfZmlsZS03NjQucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAw
-MDAwMC4uMzQxYTJlNGU0MwotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbGliZmZpLzAwMDQt
-Rm9yd2FyZC1kZWNsYXJlLW9wZW5fdGVtcF9leGVjX2ZpbGUtNzY0LnBhdGNoCkBAIC0wLDAgKzEs
-NDkgQEAKK0Zyb20gY2UwNzdlNTU2NTM2NjE3MWFhMWI0NDM4NzQ5YjA5MjJmY2U4ODdhNCBNb24g
-U2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IHNlcmdlLXNhbnMtcGFpbGxlIDxzZXJnZS5ndWVs
-dG9uQHRlbGVjb20tYnJldGFnbmUuZXU+CitEYXRlOiBUaHUsIDIgRmViIDIwMjMgMTQ6NDY6Mjkg
-KzAwMDAKK1N1YmplY3Q6IFtQQVRDSF0gRm9yd2FyZCBkZWNsYXJlIG9wZW5fdGVtcF9leGVjX2Zp
-bGUgKCM3NjQpCisKK0l0J3MgZGVmaW5lZCBpbiBjbG9zdXJlcy5jIGFuZCB1c2VkIGluIHRyYW1w
-LmMuCitBbHNvIGRlY2xhcmUgaXQgYXMgYW4gaGlkZGVuIHN5bWJvbCwgYXMgaXQgc2hvdWxkIGJl
-LgorCitDby1hdXRob3JlZC1ieTogc2VyZ2Utc2Fucy1wYWlsbGUgPHNndWVsdG9uQG1vemlsbGEu
-Y29tPgorVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9saWJmZmkvbGliZmZpL3B1bGwvNzY0
-CitTaWduZWQtb2ZmLWJ5OiBSb3kgS29sbGVuIFN2ZW5kc2VuIDxyb3kua29sbGVuLnN2ZW5kc2Vu
-QGFrZXJzb2x1dGlvbnMuY29tPgorLS0tCisgaW5jbHVkZS9mZmlfY29tbW9uLmggfCA0ICsrKysK
-KyBzcmMvdHJhbXAuYyAgICAgICAgICB8IDQgKysrKworIDIgZmlsZXMgY2hhbmdlZCwgOCBpbnNl
-cnRpb25zKCspCisKK2RpZmYgLS1naXQgYS9pbmNsdWRlL2ZmaV9jb21tb24uaCBiL2luY2x1ZGUv
-ZmZpX2NvbW1vbi5oCitpbmRleCAyYmQzMWIwLi5jNTNhNzk0IDEwMDY0NAorLS0tIGEvaW5jbHVk
-ZS9mZmlfY29tbW9uLmgKKysrKyBiL2luY2x1ZGUvZmZpX2NvbW1vbi5oCitAQCAtMTI4LDYgKzEy
-OCwxMCBAQCB2b2lkICpmZmlfZGF0YV90b19jb2RlX3BvaW50ZXIgKHZvaWQgKmRhdGEpIEZGSV9I
-SURERU47CisgICAgc3RhdGljIHRyYW1wb2xpbmUuICovCisgaW50IGZmaV90cmFtcF9pc19wcmVz
-ZW50ICh2b2lkICpjbG9zdXJlKSBGRklfSElEREVOOworIAorKy8qIFJldHVybiBhIGZpbGUgZGVz
-Y3JpcHRvciBvZiBhIHRlbXBvcmFyeSB6ZXJvLXNpemVkIGZpbGUgaW4gYQorKyAgIHdyaXRhYmxl
-IGFuZCBleGVjdXRhYmxlIGZpbGVzeXN0ZW0uICovCisraW50IG9wZW5fdGVtcF9leGVjX2ZpbGUo
-dm9pZCkgRkZJX0hJRERFTjsKKysKKyAvKiBFeHRlbmRlZCBjaWYsIHVzZWQgaW4gY2FsbGJhY2sg
-ZnJvbSBhc3NlbWJseSByb3V0aW5lICovCisgdHlwZWRlZiBzdHJ1Y3QKKyB7CitkaWZmIC0tZ2l0
-IGEvc3JjL3RyYW1wLmMgYi9zcmMvdHJhbXAuYworaW5kZXggN2UwMDViMC4uNWYxOWI1NSAxMDA2
-NDQKKy0tLSBhL3NyYy90cmFtcC5jCisrKysgYi9zcmMvdHJhbXAuYworQEAgLTM5LDYgKzM5LDEw
-IEBACisgI2lmZGVmIF9fbGludXhfXworICNkZWZpbmUgX0dOVV9TT1VSQ0UgMQorICNlbmRpZgor
-KworKyNpbmNsdWRlIDxmZmkuaD4KKysjaW5jbHVkZSA8ZmZpX2NvbW1vbi5oPgorKworICNpbmNs
-dWRlIDxzdGRpby5oPgorICNpbmNsdWRlIDx1bmlzdGQuaD4KKyAjaW5jbHVkZSA8c3RkbGliLmg+
-CistLSAKKzIuNDUuMQorCi0tIAoyLjQ1LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cg==
+The openssh package enables the use of compiler's stack protection by
+default, but allows this feature to be disabled using the
+"--without-stackprotect" configuration option.
+
+The patch disables the compilation of openssh with the compiler's stack
+protector if the Buildroot option BR2_SSP_NONE is selected, thus ensuring
+that the package is built consistently with the Buildroot configuration.
+All this also affects the size of the binaries created by the compilation.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ package/openssh/openssh.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index d7f4db59ca3d..699b084a5705 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -22,6 +22,7 @@ OPENSSH_CONF_OPTS = \
+ 	--sysconfdir=/etc/ssh \
+ 	--with-default-path=$(BR2_SYSTEM_DEFAULT_PATH) \
+ 	$(if $(BR2_PACKAGE_OPENSSH_SANDBOX),--with-sandbox,--without-sandbox) \
++	$(if $(BR2_SSP_NONE),--without-stackprotect,) \
+ 	--disable-lastlog \
+ 	--disable-utmp \
+ 	--disable-utmpx \
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
