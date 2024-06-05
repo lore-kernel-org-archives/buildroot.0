@@ -1,94 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E526EC27C53
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 07:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA139C27C52
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 08:15:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7D827402E4;
-	Wed,  5 Jun 2024 07:06:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P9A6U7PScYIB; Wed,  5 Jun 2024 07:06:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B7FA4048D
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B7FA4048D;
-	Wed,  5 Jun 2024 07:06:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3B40B1BF5E9
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 07:06:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 353B540975
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 07:06:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7834540218;
+	Wed,  5 Jun 2024 08:15:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KAtgNek3CN7T for <buildroot@lists.busybox.net>;
- Wed,  5 Jun 2024 07:06:18 +0000 (UTC)
+ id 7kPdONltLOCa; Wed,  5 Jun 2024 08:15:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51D9A4027A
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51D9A4027A;
+	Wed,  5 Jun 2024 08:15:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 53AC91BF5E6
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 08:15:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 414E1843A1
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 08:15:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QiPq5vnEXha1 for <buildroot@lists.busybox.net>;
+ Wed,  5 Jun 2024 08:15:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0704940972
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0704940972
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0704940972
- for <buildroot@buildroot.org>; Wed,  5 Jun 2024 07:06:17 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-35e4d6f7c5cso4036297f8f.2
- for <buildroot@buildroot.org>; Wed, 05 Jun 2024 00:06:17 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2FFCC8439D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FFCC8439D
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2FFCC8439D
+ for <buildroot@busybox.net>; Wed,  5 Jun 2024 08:15:47 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-a68fc86acfaso103279566b.1
+ for <buildroot@busybox.net>; Wed, 05 Jun 2024 01:15:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717571176; x=1718175976;
+ d=1e100.net; s=20230601; t=1717575346; x=1718180146;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8LjR9TMYY0ImjCXDUcWIzx2PTV4/uA0ctfEkMHzonbI=;
- b=oKH1uzLTmtAZy+6yjaD1BKU18BmNMx05Nv/KmmpkwSvZRE2nUlayJzMFjVoNYQbAcQ
- X/G4r/m4ZajfnN4XpiLhKizsbmVPUiLMHbRUkKMX94ULB1ukKqjKIzwOo0MoRTeR1mem
- qY7nwLvpmeefWTDP8j/w8YH8Yr/OtZiia9xMO0F4R4vs08DKuHAnYPNXfA6C+wAMoDCL
- opsOa3NOGclNBRnW2vtk0MccDITHH8pcMDzg5/iSOqn/1uHqyJlGsQ4zbnkCxiGxmqTh
- 4beWKqvXzdW5z9mMfB/sqVuKHs0Dj0jfA/v6yMg82TyVzjjD9BZwwS/O1zsSkpxAhUkD
- CAdQ==
-X-Gm-Message-State: AOJu0YybstCP7zicRH6nMDOEuklEEsO/qie9ZJ3xvBmm1+frLtR6aSaE
- HIjnxyTx+xH7g6X2q824gqHZiAwTDZX270hJFziL7Dv7KEM78jWShT2vC8SNtaZfEkY6snU+dXY
- j
-X-Google-Smtp-Source: AGHT+IGgwm4cCyc0gyReBTSPJOn6dkaeA1NOowqd4SRFyZ8FaeCOWFlF+THp6R8+DV1Lb7y4B6rAag==
-X-Received: by 2002:a5d:4e45:0:b0:354:f316:6189 with SMTP id
- ffacd0b85a97d-35e840677d9mr1152217f8f.24.1717571175768; 
- Wed, 05 Jun 2024 00:06:15 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.41.12])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-35dd04da29csm13525684f8f.55.2024.06.05.00.06.14
+ bh=BF2zrvNDjO5VG2KuAu4knYgJ14ab9VNGE/gNNzNddkU=;
+ b=iUFamDZxkm5KRK7D6RaQkucwhVUfSHjH2/Fdun+ePEiBSguZMVA8aTE74HjiCwvdp5
+ 8+JpF+KDW2DiRlIceBUPk/YPlwf730BV1nPsVlmsrGjDpLpkxo0htanCBb26FMa9S4rW
+ JZnEW7kwvC48deP9S8INovTTTZky3xToSj1yY3dU/1kit0hu+OB22ILE4WHYpz2gkW03
+ 6cRqInFWyxkHQ01RWo/RnllNsOdM061ZSKKDLj5HR2dyHOJ6OcFCGSoO8qhfDqUdRZpE
+ THi5HG/DP0PFsIDQvP/F7m9j3FgSyHTIK7W+9P/J0qljClRaTysP1XgjZSUG/fuE81GV
+ orwg==
+X-Gm-Message-State: AOJu0YyAIVn+ymkiu3uFGsc5N0LoKwxOKgWRnXrTuJIBqAwT83sWvnxq
+ 2wKJ2vUrjH5GTLWULC5dEHB4wxWPt1iPMmIEURAeGQHSW7XpgaWY/GUqJ9ZqUjaKbFaH0/B/bo6
+ A0Q==
+X-Google-Smtp-Source: AGHT+IE2A3xioNp61tbROJ0WnwSPDL0194LoNPQ+d8yxvRgJLdyilVLAGCYUowxLdQBuj+ZMKYUIjg==
+X-Received: by 2002:a17:906:c24f:b0:a68:be46:742f with SMTP id
+ a640c23a62f3a-a695414047emr399240966b.3.1717575345761; 
+ Wed, 05 Jun 2024 01:15:45 -0700 (PDT)
+Received: from vm-2404.. ([37.65.6.24]) by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-57a61b4e36dsm5140720a12.75.2024.06.05.01.15.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 05 Jun 2024 00:06:15 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Wed,  5 Jun 2024 09:06:04 +0200
-Message-ID: <20240605070604.2388248-1-dario.binacchi@amarulasolutions.com>
+ Wed, 05 Jun 2024 01:15:45 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Wed,  5 Jun 2024 10:15:41 +0200
+Message-ID: <20240605081541.1181630-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1717571176; x=1718175976;
- darn=buildroot.org; 
+ d=gadz.org; s=google; t=1717575346; x=1718180146; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8LjR9TMYY0ImjCXDUcWIzx2PTV4/uA0ctfEkMHzonbI=;
- b=ATtReP0TqvHJsRqq6cVELZos+TyheakjjIatkcCDbd2ZM/mF+vOyuFAaI29+H7uhjF
- rlWMy248DDRjfg75Oug3A+wauJN5kHmEsmbUSaBICCZH5xaMB5xFkabBGXP+bef3ZW5J
- reiVaV38/7AfYDEFMXw2AgYCQpsR/DwHbgpV4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=BF2zrvNDjO5VG2KuAu4knYgJ14ab9VNGE/gNNzNddkU=;
+ b=miH7LSAQpJXMn6qnNJYoujiUMY2fyvlsyiU7MtpVpqp+VEZx+ThrpfLFnc8Ubb11LY
+ npV7fOI0b+Fgw2SE+RgrZoig2r1jcSAqH9qof3vZRBNC8ztaQh7VJbUnJwm5E8aoi3px
+ PmXxuW/QgGW58meCQBe+C9WH5mVaSm1mqijI3EbGjYd9sXONYp0GxJ7sXhPrcU/pmJ0D
+ jI1hO3hPsMbZf2Zoke9zqqBwNY2XAw+nrTasZSCYIbov77FNoWfgenrrZfwLeEHKJdl5
+ Xw5qYRbm14gEbdLqn/VKuvI/V9+1bNNGSaTqfYFQG+YuiIe8FtBHXLawuxwv6nvsLccp
+ dKSg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=ATtReP0T
-Subject: [Buildroot] [PATCH 1/1] package/sudo: don't use stack protection if
- BR2_SSP_NONE=y
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=miH7LSAQ
+Subject: [Buildroot] [PATCH] package/iproute2: bump to version 6.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,40 +100,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The sudo package enables the use of compiler's stack protection by
-default, but allows this feature to be disabled using the "--disable-ssp"
-configuration option.
-
-The patch disables the compilation of sudo with the compiler's stack
-protector if the Buildroot option BR2_SSP_NONE is selected, thus
-ensuring that the package is built consistently with the Buildroot
-configuration. All this also affects the size of the binaries created by
-the compilation.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/sudo/sudo.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 7961a9900248..df86591ac554 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -18,6 +18,7 @@ SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
- SUDO_CONF_OPTS = \
- 	--with-tzdir=$(if $(BR2_PACKAGE_TZDATA),/usr/share/zoneinfo,no) \
- 	--enable-tmpfiles.d=$(if $(BR2_PACKAGE_SYSTEMD),/usr/lib/tmpfiles.d,no) \
-+	$(if $(BR2_SSP_NONE),--disable-ssp,) \
- 	--without-lecture \
- 	--without-sendmail \
- 	--without-umask \
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index d57a93de7..a716bf75a 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  03a6cca3d71a908d1f15f7b495be2b8fe851f941458dc4664900d7f45fcf68ce  iproute2-6.8.0.tar.xz
++sha256  2f643d09ea11a4a2a043c92e2b469b5f73228cbf241ae806760296ed0ec413d0  iproute2-6.9.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 3db2ab925..525101aff 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 6.8.0
++IPROUTE2_VERSION = 6.9.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
 2.43.0
 
