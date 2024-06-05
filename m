@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6C77C25B76
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 17:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93904C27C52
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 17:53:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E99D419B1;
-	Wed,  5 Jun 2024 17:53:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C66D419DA;
+	Wed,  5 Jun 2024 17:53:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1p_XgS_KFVnb; Wed,  5 Jun 2024 17:53:36 +0000 (UTC)
+ id 2owK4FXFsx0E; Wed,  5 Jun 2024 17:53:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4483A4180B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E776419C6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4483A4180B;
-	Wed,  5 Jun 2024 17:53:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E776419C6;
+	Wed,  5 Jun 2024 17:53:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6F1E71BF955
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 30E361BF5B3
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CB966110B
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0DC64610FE
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 17:53:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kftx57ZJxYio for <buildroot@lists.busybox.net>;
- Wed,  5 Jun 2024 17:53:25 +0000 (UTC)
+ id 2_IINy23kDzF for <buildroot@lists.busybox.net>;
+ Wed,  5 Jun 2024 17:53:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A561610FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A561610FE
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A561610FE
- for <buildroot@buildroot.org>; Wed,  5 Jun 2024 17:53:25 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-35dceef429bso19229f8f.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2E74461104
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E74461104
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2E74461104
+ for <buildroot@buildroot.org>; Wed,  5 Jun 2024 17:53:26 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-35dc1d8867eso52758f8f.0
  for <buildroot@buildroot.org>; Wed, 05 Jun 2024 10:53:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717610003; x=1718214803;
+ d=1e100.net; s=20230601; t=1717610004; x=1718214804;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=wZRiPMZlVwmxtnXwUijT/mthL0SRbNxRqfZesBf4o4o=;
- b=CBtGKQO7cVt+TDslnypdZMsAyQgtKUJUleABqCzU/I4btCiJWide4DgxFY/hsxcZcE
- GShTpHPfiMiv15odIYC5IYUKyuGjSVNDAm1/lOVPlxF8gEc2ii/agJzj3WAdxw3eiP72
- rP4wLZuq2cL3xxGtx0QqsS5V8DIPJnRmlb9lZvRhMewSi/fkeBRefoMFYex/AVJZZDuQ
- HY1VW9F3jxbvBFgvqZjNZBfTwRk525WIy7O7mxqO8+dxGAvYaB09SwpWKN+254D+YR1Y
- Dj45V9VyfvFGsyE+quDrMdjhZL99zH736nuwjEh0OmxB/ZFwM7MsB2/MQf8UQizsYsLH
- nmpQ==
-X-Gm-Message-State: AOJu0YweLGGY/9A72FwSAJXKUzJKfjnJjq1eLxZk64kmxV4vY8ymuHrq
- ju/1oXPc15dLk+3Y/QtXLUFO7fly5CYqXnk/rtvmSFU8MRKJccSrHW//rQ==
-X-Google-Smtp-Source: AGHT+IFR8NQIGievM6rbdpBOgJ7+kEqHbBn6X4og4L1+nlBlMvMmrZMkGOyO/yYB7OdLmy3naJTLqA==
-X-Received: by 2002:a05:6000:44:b0:357:4b59:18c0 with SMTP id
- ffacd0b85a97d-35ef0dc9b6bmr311583f8f.22.1717610003555; 
+ bh=zIUNVSyg58dJ2UEImd53H1aJD52m+l9UgPKX97lpp1w=;
+ b=tQC7bm3tvEXQFTt74yvlaYr1MHKZOOymVEfgazX56Q4xsCDg2QGMAxXP4gG8CtWPiN
+ uBw749WXFcsaSnpXjj4oqtsxNOdf5DoLcympQ3bp+3srXCmofcz8z15TugzbyysVCrV1
+ pLU5QSQcEkIBzAQg2mdh3UGAtKxmZI+0eyhvGBocm3bRaiG6jVSAtYNd9kJxG2hEgALs
+ jq1DLe+k9Qp2xB4HPFvkWD03zw9mM1KBT03xRwV+qycBfLYT2WXfhB0L35QumsMBv8Gl
+ 3aL5ajYavioNQerxuLt7FxRl4PP7FDZn+wYKZJZjMRCPyvYlUsqJvVPqabRxI2q72pJ+
+ eo4Q==
+X-Gm-Message-State: AOJu0YwZvz90IEZOGaUsbKdcEsx9d4qMZWiI/SJdqMnHcTdW3Ig+ZOOB
+ 49e0WJnpNf8SvugDEE3I89AuplNN6sJcQ/kt+XsjxagLscx3ipr59k2lrw==
+X-Google-Smtp-Source: AGHT+IH+7/sgcl8piq04UXpLW18ZzZ1NyNKiUDBotXUysq1wB9BGKl2greUS4xV3F+2EyB9H+41Vrg==
+X-Received: by 2002:a5d:4d0f:0:b0:355:a6:d3d8 with SMTP id
+ ffacd0b85a97d-35e98098f91mr2415004f8f.71.1717610003914; 
  Wed, 05 Jun 2024 10:53:23 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
@@ -66,32 +66,32 @@ Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  Wed, 05 Jun 2024 10:53:23 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed,  5 Jun 2024 19:53:15 +0200
-Message-ID: <4d4d105d0a6ab4998d85ebec807adfe5f56d6496.1717609998.git.yann.morin.1998@free.fr>
+Date: Wed,  5 Jun 2024 19:53:16 +0200
+Message-ID: <7e8ebad019c026217778280a99c9ade2d9970893.1717609998.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <cover.1717609998.git.yann.morin.1998@free.fr>
 References: <cover.1717609998.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717610003; x=1718214803; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1717610004; x=1718214804; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wZRiPMZlVwmxtnXwUijT/mthL0SRbNxRqfZesBf4o4o=;
- b=ITlPCb6pGbaFWFL7TZqAz9Nd/LzojWMRarVju92FnvrqQqkQtYuFvANhVd/TZZ8Mgd
- Yt4D2jcgQbgIm1b2wAkmge5e/EaiG7sECuvcHTQmPt4QjaM4m6hGosLGPLpjUp5Wxv+L
- 5o4agGq3YcgUhYDieWxvcT8B78vkKVOTC85Jlk7n/C0kqx2xz4XxWiq3TRac8pAMttqM
- mXyL+5Nvgxo5feSI1MMj8zzcGbwjy2jTRkN6onITj8xaOfenJgvMZgJG1u+rg/FDFjgC
- E74T3HObNIpbi9ILh8FwWc8EvZ8kZos50+DT2eVQXjzJGKDpGfg15hNB/vyGE2+ZAD8m
- 3ypw==
+ bh=zIUNVSyg58dJ2UEImd53H1aJD52m+l9UgPKX97lpp1w=;
+ b=GXqtQ42tYSY+ElwwPs48bU27HkZCXeajYPiHk0W25BXfUjFs6GuAY3K/R1yCN++Wu3
+ eWlag+wnWf1wrfu7MLWE2lWER02Yba4eYEokoC6nor/BYIbEliA8xW462Nnn8/UEgbNZ
+ Sr6ws2xMHxBsounWVWVZYlNTSWbSuIwlvnnLi57ktv4J9Uj5yKaiX+lEH54odtGoM+oF
+ Kcr65DLLXJOy8O0N6XGlZ4YewfPKiDFTxxA3m6UkBO9e1CeR4CghOxOAqf6+YPHf5QT4
+ 1f0Z6t++SG1DX+K8yN3ytaMh1zExUheNPlCP6nHqXy0IL5z7M225Gw0bMI9kaH3WF/79
+ 1dWQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=ITlPCb6p
-Subject: [Buildroot] [PATCH 03/10 v2] package/cvs: use appropriate TAR
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GXqtQ42t
+Subject: [Buildroot] [PATCH 04/10 v2] package/flutter-engine: use
+ appropriate TAR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,29 +103,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/cvs/cvs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/flutter-engine/flutter-engine.mk | 1 +
+ package/flutter-engine/gen-tarball       | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
-index 64c15f16fe..cf9127fc3a 100644
---- a/package/cvs/cvs.mk
-+++ b/package/cvs/cvs.mk
-@@ -31,7 +31,7 @@ CVS_CONF_OPTS += --with-external-zlib
- endif
+diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
+index d9c2b3dee5..9fb63094ef 100644
+--- a/package/flutter-engine/flutter-engine.mk
++++ b/package/flutter-engine/flutter-engine.mk
+@@ -176,6 +176,7 @@ endif
  
- define CVS_BZIP_UNPACK
--	$(BZCAT) $(@D)/cvs-$(CVS_VERSION).tar.bz2 | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	$(BZCAT) $(@D)/cvs-$(CVS_VERSION).tar.bz2 | $(TAR) -C $(BUILD_DIR) $(TAR_OPTIONS) -
- 	rm -f $(@D)/cvs-$(CVS_VERSION).tar.bz2
- endef
+ # Generate a tarball if one does not already exist.
+ define FLUTTER_ENGINE_GENERATE_TARBALL
++	TAR=$(TAR) \
+ 	PATH=$(HOST_DIR)/share/depot_tools:$(BR_PATH) \
+ 	PYTHONPATH=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR) \
+ 	PUB_CACHE=$(FLUTTER_SDK_BIN_PUB_CACHE) \
+diff --git a/package/flutter-engine/gen-tarball b/package/flutter-engine/gen-tarball
+index 2d2117b9be..23b121d1f9 100755
+--- a/package/flutter-engine/gen-tarball
++++ b/package/flutter-engine/gen-tarball
+@@ -70,7 +70,7 @@ gen_tarball() {
+     # - it insists on having a full git repositoy, with .git et al., which means
+     #   we can't generate a reproducible archive anyway.
+     # So we jsut create a plain tarball.
+-    tar -C "${SCRATCH_DIR}"/src -czf "${TARBALL_NAME}" .
++    ${TAR} -C "${SCRATCH_DIR}"/src -czf "${TARBALL_NAME}" .
+     mv "${TARBALL_NAME}" "${TARBALL_DL_PATH}"
+ }
  
 -- 
 2.45.1
