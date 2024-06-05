@@ -4,87 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05E7DC25B76
-	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 11:14:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C16C25B76
+	for <buildroot@archiver.kernel.org>; Wed,  5 Jun 2024 11:14:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79892400DA;
-	Wed,  5 Jun 2024 11:14:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D6AE41483;
+	Wed,  5 Jun 2024 11:14:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DmszTuwlh0F8; Wed,  5 Jun 2024 11:14:21 +0000 (UTC)
+ id IekLTAEqz3cl; Wed,  5 Jun 2024 11:14:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A29540A98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E206B414F8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A29540A98;
-	Wed,  5 Jun 2024 11:14:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E206B414F8;
+	Wed,  5 Jun 2024 11:14:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D8B21BF5DD
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 11:14:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B98AB1BF5DD
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 11:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6575B401B4
- for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 11:14:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6806401B4
+ for <buildroot@lists.busybox.net>; Wed,  5 Jun 2024 11:14:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tD3LyTsCvLC5 for <buildroot@lists.busybox.net>;
- Wed,  5 Jun 2024 11:14:18 +0000 (UTC)
-X-Greylist: delayed 61947 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 05 Jun 2024 11:14:16 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9AF9E401A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF9E401A6
+ id 4XxhihpAuSH2 for <buildroot@lists.busybox.net>;
+ Wed,  5 Jun 2024 11:14:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 074DA401B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 074DA401B1
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9AF9E401A6
- for <buildroot@buildroot.org>; Wed,  5 Jun 2024 11:14:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 074DA401B1
+ for <buildroot@buildroot.org>; Wed,  5 Jun 2024 11:14:19 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.116.39]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtOKc-1saKWR14qk-0144EX; Wed, 05
- Jun 2024 13:14:13 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mnpru-1smXrO2l4M-00aMBF; Wed, 05
+ Jun 2024 13:14:16 +0200
 To: buildroot@buildroot.org
-Date: Wed,  5 Jun 2024 13:13:46 +0200
-Message-ID: <20240605111347.1581931-1-fiona.klute@gmx.de>
+Date: Wed,  5 Jun 2024 13:13:47 +0200
+Message-ID: <20240605111347.1581931-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.1
+In-Reply-To: <20240605111347.1581931-1-fiona.klute@gmx.de>
+References: <20240605111347.1581931-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:U/E01KF7VLWQxgS0Z3XjCM3Qr/dh5Mko5iJUA3bWuJ7inY8f9yT
- ZRpv1zRVnKgUcJmAE0Sl2mWBIBh1MdqgnuLJ6qhwCBgn2VKXeKjqVJSHP9VghAsYxsMkWm0
- pID2SUJR0M0PNIWcDOP8ngeS9JGiprOAU6QcevRQj5IhK2CIw2zFVowMKtXMWrztd4K4fmY
- IgJqeVgjlU4PyIeU4ysxw==
-UI-OutboundReport: notjunk:1;M01:P0:fe/qxpqIV3E=;GP1KfWNAN6wP2vlWtyRnpU/U7AB
- zMqCgWUS5wQr5bIn4Fc1P3b6FAIH8JuyZzEF2VJg9ePKWxpTcR+UvhmCrSsgl7dOcFhwYOUqn
- MdgkdD8tPqAO2v9bNC8WW5QMs8leT7XnwsUqkyoQAZlSZcW35nFeAvuKplSiDblp1wLCyqOGf
- PpGiRpK657cQt1E2K2nkmxCMpRwtT26B4Jkg8U5o37N4M7OyQG30bIW1+pUln1rOdSjjhDVNF
- 2jt9dgWVQhaYgGSI/azJ/XA0npqlXSGKSSjJwtxngKkCTfH+EQMd/2/q98fqhVd3PSwWAXy87
- hstjOTqmlQ57GP+OhuINKnaQrkVuziZ0JHGgWcW3VUe1JEVgmaXtmVH5jOrKg6kriSTeiJd1j
- izgMpNzpZrr49RKBkHLWAkvU+e/iQH7SmzQPrcz4G+JEXynYbqA+ZjFs7u9RdtLboMOpMlXXi
- oW2wlwqx7+K9EOIfzl9SWViMlbgsybZ9JI61f5jLJhK+vEqkYAn0Gq/Sg+rKikO+XQ49cL2tr
- 1GFKURNOxppFaqe4nNfp+HCbMOdtykmjbqRVHShStDHVvQOfnfgZLseoEJaTJXwDqhRwHaZI2
- naKfGi2Xhcc2bD647sqkpLZZHVyT5N8HZ3UWcoC3DQSR7DSg2qIbw4EbWGZ+GTiPgn5JXzQ0J
- qJzoNkvezcrReXD8uXGTQN0A4rCrHZJoxkRhbBgDamOjOdHuWNYAk5vNQAF4AeXjDdEVFXv7k
- 2sTBgCq/SJmeyf0/6GNVjtobxMmo22RpgorVxIYD+NnqwnGaVlxL9d9J7LUmuaDfPh18DA/qC
- TDWGnODLbb6Wz9uBXnAwAG+9acXKGyKT2vai/gvZFsgMY=
+X-Provags-ID: V03:K1:JaxoXUt9bE+iegv/JOPVo4WeSwv2ZOgqz/u70DPZ+0EKa5McLJt
+ 0eGe6Op+2QMSAMFs3vdYcs1BRbCrto4VUdrugrLBgGoFqzUYTAP9sDuEY6CH9AtuGMhEkFu
+ Z4rpUkxZo0qBIwjL38dEyAH3cas494qAwu9SWLLUIIXSoF21+VpCIQUSrqpG+JCQYuj9tCO
+ TIRBD6rNuvLjkfXQeMXmg==
+UI-OutboundReport: notjunk:1;M01:P0:ULrDG+nvF5U=;xHgEyHFuryIMEXp8qVXSFmzgCPm
+ 0N/NiIrSKwJOMZxLx1idjNFKorHUTPksIM9toWClmbzQ6H4Z2/3schP8gG+wt404ph0LlyG5+
+ yKOv167PK/ziz7brEn3BxevcJYozOqjyXxQEFEIHWLs/ytladYyxFmXXF2cvcEtEB2AJIyAEc
+ cVprciLyZ9qfyRNfWs2T1ufR0uP7+zSfLMIUxDzhg1lLowv6gg/6gVVBZty+lf1UDcRsyQWrE
+ HHTqEANi3HM6Dw+jrfo6RuxafgtNUTMLkcgiDaBTua8GdtjqA+z0TNXI3RoAW6lSJtCAVowGF
+ y3qqse4drQuFD/Nj1j8Vo1cEiKlQNj+IM40JT/PpPo+xqNIj0VC3YsV60ZzOGHpMuFsgwmpF1
+ 6RufoNXpOhY3jqsy7js34EcQExg2/dbOSj5r6L/35p9QQfx/yHVWISuiMosF8Z0bCVFOSDqaY
+ cXVkNJ1TOXhvQ9JMgN8aLIL9bQvxnfV9/TjaM2+MYF8EWJoCvSX3vBRsjf7ylnVena1JU/S9V
+ Ul6ixazXikzARDFDQVLYvy7FLjVnde8EydaWdnUvaVK4/c34d53uzf5G7SMj7Zudfcy06ga5W
+ LzbkcNs3di9rUG8hBQc3i6W2jfGNedJ/BXOsvgZso2KJC98t+FakqvmEdNnydmemnWgR6nkMM
+ wwuhzqmnYB+aMH13yWs1tQTZ18+62INhymGQKZUpSg44vyqkcQVzJ632I6Z237Wybv6qNtwyR
+ LagghPFlnKAEHb0EnZTlmgo/gP77ciXb7X/51sN9HhQA3t7QS0/Sff4KaM+GTlIlFS+blBaA7
+ VdJNmsPLG8XiN6cwW9MV2Te2nE+5hoWjuHwyRvChynQ9g=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1717586053; x=1718190853; i=fiona.klute@gmx.de;
- bh=ry6AElrwgUW/5KQMOZItKN4tXqckiF5WAEJYmzz8vdw=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=b4huylkSlG29fFO8cXnXqVyHqnWFyEj4xnCZQzW8V5HFyQeiQLcjuWceOTjKycBB
- JIB713Q82Hh7nFErNVzi+2yt8NpPmnARbhkATQE9mRyfIRY03O1oAaxOQnP6E3c5J
- qSh43gvQdtF8DIL3a30uWk0u7ahvmlsNo14ccF69Ob1yD6IdYuBGZIDExWeMkqcfm
- 5bq+d/yFZpBXVkfHStA+fIJrfdzmj7KtSfiJkGRcduBKrYtEKM+IL7/MnkUW8TiXh
- N58AhYe1Jcv+f32qOrf9kLpFdDP8w2GJWO4dEG4AHN4YqIss4ctX27YuYOuu+pFVu
- KL5jOvt4831Iqb1Qjw==
+ s=s31663417; t=1717586056; x=1718190856; i=fiona.klute@gmx.de;
+ bh=eRRuiynKAPczRd49e78p4d3XAk0XAkjO6f8HVNF3yT8=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:cc:content-transfer-encoding:content-type:
+ date:from:message-id:mime-version:reply-to:subject:to;
+ b=nZ42pVE3Dmv76lY1lpffqXM0BTTokN5wTyqmqXmtTmRjW1IIBTEvI9tRZJEK4ThP
+ ySEMBT0CmyXtN2UAbetb12PrATYAvlOxmTbPg5HjghAMQG6uB7zVtpH4U8vzcSp/H
+ J3Yzl7e6My4UV2CfbaVJAd5W+O/dqsTwPBoTOewuWesa1tit6Sm7oXrlLmWUTf+gp
+ lI3TwjMhHphHGwMr5sem+XZlz5RKj/tE8z2LBnYpfGb+ZFM5kSPlaOId74XlF/rqB
+ GYl1m1yExfyEzGfPxyYSqQdjB0JPsA06NhaKxf+tiWYiiw+bIKQitOQ6ZBfNZ03Mb
+ Pi3uYTsdDiWbiMnHeg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=b4huylkS
-Subject: [Buildroot] [PATCH 1/2] package/busybox: Add crond init script
+ header.a=rsa-sha256 header.s=s31663417 header.b=nZ42pVE3
+Subject: [Buildroot] [PATCH 2/2] package/busybox: Add ifplugd init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,47 +104,72 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 The init script will be installed only if no other package provides
-cron (currently that could be package/dcron). Users will need to
-select a suitable location for their crontabs, using either runtime
-configuration in /etc/default/crond or Busybox build
-configuration. Note that crond fails to start if the crontabs
-directory doesn't exist.
+ifplugd (currently that could be package/ifplugd). Users can configure
+the interface(s) which ifplugd should watch either using
+/etc/default/ifplugd (for one interface) or using per-interface
+symlinks to the script in /etc/init.d (for any number of
+interfaces). The action script that ifplugd runs when a link change is
+detected must be supplied separately.
 
 Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
 ---
- package/busybox/S50crond   | 65 ++++++++++++++++++++++++++++++++++++++
- package/busybox/busybox.mk | 13 ++++++++
- 2 files changed, 78 insertions(+)
- create mode 100644 package/busybox/S50crond
+make check-package complains about "Incorrect PIDFILE value" in the
+script. To support running multiple instances I need to support
+multiple (per-interface) PID files. Is there a better way to handle
+that, or explicitly silence the check?
 
-diff --git a/package/busybox/S50crond b/package/busybox/S50crond
+ package/busybox/S41ifplugd | 84 ++++++++++++++++++++++++++++++++++++++
+ package/busybox/busybox.mk | 13 ++++++
+ 2 files changed, 97 insertions(+)
+ create mode 100644 package/busybox/S41ifplugd
+
+diff --git a/package/busybox/S41ifplugd b/package/busybox/S41ifplugd
 new file mode 100644
-index 0000000000..834c2787fa
+index 0000000000..4d3b56ab6d
 --- /dev/null
-+++ b/package/busybox/S50crond
-@@ -0,0 +1,65 @@
++++ b/package/busybox/S41ifplugd
+@@ -0,0 +1,84 @@
 +#!/bin/sh
 +
-+DAEMON="crond"
-+PIDFILE="/var/run/$DAEMON.pid"
++DAEMON="ifplugd"
 +
-+# Note that the Busybox default location for crontabs
-+# /var/spool/cron/crontabs is on a tmpfs in the default Buildroot
-+# filesystem layout. If you want persistent crontabs, override that
-+# either using either the "-c" runtime option of crond in CROND_ARGS,
-+# or the CONFIG_FEATURE_CROND_DIR Busybox build configuration option.
-+CROND_ARGS=""
++# Each ifplugd instance handles only one interface, so this script is
++# designed to be symlinked per interface. For each interface create a
++# symlink with .IFACE appended to the name. E.g. to launch ifplugd for
++# eth1 create a symlink from /etc/init.d/S41ifplugd.eth1 to this
++# script. DEFAULT_IFACE sets the interface the non-symlink script will
++# use, set it to empty in /etc/default/ifplugd to disable the default
++# instance and use symlinked instances only.
++DEFAULT_IFACE="eth0"
++# If your action script is not in the default location
++# /etc/ifplugd/ifplugd.action, use the "-r" option to set the
++# location.
++IFPLUGD_ARGS="-M"
 +
 +# shellcheck source=/dev/null
 +[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
 +
-+# BusyBox' crond does not create a pidfile, so pass "-f" on the command line
-+# and use "-m" to instruct start-stop-daemon to create one.
++NAME_IFACE="$(basename "$0" | cut -s -d. -f2)"
++if [ -n "$NAME_IFACE" ]; then
++	IFACE="${NAME_IFACE}"
++elif [ -n "$DEFAULT_IFACE" ]; then
++	IFACE="${DEFAULT_IFACE}"
++else
++	# no interface configured
++	exit 0
++fi
++
++PIDFILE="/var/run/${DAEMON}.${IFACE}.pid"
++IFPLUGD_ARGS="${IFPLUGD_ARGS} -i ${IFACE}"
++
++# BusyBox' ifplugd does not create a pidfile, so pass "-n" in the
++# command line and use "-m" to instruct start-stop-daemon to create
++# one.
 +start() {
-+	printf 'Starting %s: ' "$DAEMON"
++	printf 'Starting %s for %s: ' "$DAEMON" "$IFACE"
 +	# shellcheck disable=SC2086 # we need the word splitting
 +	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
-+		-- -f $CROND_ARGS
++		-- -n $IFPLUGD_ARGS
 +	status=$?
 +	if [ "$status" -eq 0 ]; then
 +		echo "OK"
@@ -156,7 +180,7 @@ index 0000000000..834c2787fa
 +}
 +
 +stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
++	printf 'Stopping %s for %s: ' "$DAEMON" "$IFACE"
 +	start-stop-daemon -K -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON"
 +	status=$?
 +	# wait for process to be gone
@@ -166,8 +190,8 @@ index 0000000000..834c2787fa
 +		sleep 0.1
 +	done
 +	if [ "$status" -eq 0 ]; then
-+		echo "OK"
 +		rm -f "$PIDFILE"
++		echo "OK"
 +	else
 +		echo "FAIL"
 +	fi
@@ -190,20 +214,20 @@ index 0000000000..834c2787fa
 +		exit 1
 +esac
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index eb5e7ad922..a3ba12f8e2 100644
+index a3ba12f8e2..22ce04f473 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
-@@ -312,6 +312,17 @@ define BUSYBOX_INSTALL_SYSCTL_SCRIPT
+@@ -323,6 +323,17 @@ define BUSYBOX_INSTALL_CROND_SCRIPT
  endef
  endif
 
-+# Only install our crond script if no other package does it.
-+ifeq ($(BR2_PACKAGE_DCRON),)
-+define BUSYBOX_INSTALL_CROND_SCRIPT
-+	if grep -q CONFIG_CROND=y $(@D)/.config; \
++# Only install our ifplugd script if no other package does it.
++ifeq ($(BR2_PACKAGE_IFPLUGD),)
++define BUSYBOX_INSTALL_IFPLUGD_SCRIPT
++	if grep -q CONFIG_IFPLUGD=y $(@D)/.config; \
 +	then \
-+		$(INSTALL) -m 0755 -D package/busybox/S50crond \
-+			$(TARGET_DIR)/etc/init.d/S50crond; \
++		$(INSTALL) -m 0755 -D package/busybox/S41ifplugd \
++			$(TARGET_DIR)/etc/init.d/S41ifplugd; \
 +	fi;
 +endef
 +endif
@@ -211,25 +235,24 @@ index eb5e7ad922..a3ba12f8e2 100644
  ifeq ($(BR2_INIT_BUSYBOX),y)
  define BUSYBOX_INSTALL_INITTAB
  	if test ! -e $(TARGET_DIR)/etc/inittab; then \
-@@ -407,6 +418,7 @@ define BUSYBOX_INSTALL_INIT_OPENRC
+@@ -418,6 +429,7 @@ define BUSYBOX_INSTALL_INIT_OPENRC
  	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
  	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
  	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-+	$(BUSYBOX_INSTALL_CROND_SCRIPT)
++	$(BUSYBOX_INSTALL_IFPLUGD_SCRIPT)
+ 	$(BUSYBOX_INSTALL_CROND_SCRIPT)
  	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
  endef
-
-@@ -419,6 +431,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
+@@ -431,6 +443,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
  	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
  	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
  	$(BUSYBOX_INSTALL_SYSCTL_SCRIPT)
-+	$(BUSYBOX_INSTALL_CROND_SCRIPT)
++	$(BUSYBOX_INSTALL_IFPLUGD_SCRIPT)
+ 	$(BUSYBOX_INSTALL_CROND_SCRIPT)
  	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
  endef
-
 --
 2.45.1
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
