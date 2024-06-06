@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29056C27C52
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 18:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70979C27C52
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 18:48:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EDCC74164D;
-	Thu,  6 Jun 2024 18:48:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 190A041782;
+	Thu,  6 Jun 2024 18:48:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4wK_Tjwuf75O; Thu,  6 Jun 2024 18:48:45 +0000 (UTC)
+ id 1tBl4Yt7k8tU; Thu,  6 Jun 2024 18:48:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D5E841686
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1A7E41858
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D5E841686;
-	Thu,  6 Jun 2024 18:48:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1A7E41858;
+	Thu,  6 Jun 2024 18:48:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8F3531BF592
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:48:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 03FC41BF592
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 798B384941
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1A9A8493C
  for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:48:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4gqvZ1pE-jcZ for <buildroot@lists.busybox.net>;
+ id Iock-zubnaLP for <buildroot@lists.busybox.net>;
  Thu,  6 Jun 2024 18:48:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 596018493C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DC3884939
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 596018493C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DC3884939
  for <buildroot@buildroot.org>; Thu,  6 Jun 2024 18:48:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 09C4487D17; Thu,  6 Jun 2024 18:48:43 +0000 (UTC)
+ id DF6A887D15; Thu,  6 Jun 2024 18:48:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 20:45:53 +0200
+Date: Thu, 6 Jun 2024 20:45:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9755de93360bf84801f551fb9da17b45359e8dfa
-X-Git-Newrev: 4fb7eb8285412c5fe410dbef47b42888240decbb
+X-Git-Oldrev: ee12457487e139f9ea0fc05941151f55bcbbeb1b
+X-Git-Newrev: 9755de93360bf84801f551fb9da17b45359e8dfa
 X-Patchwork-Hint: ignore
-Message-Id: <20240606184843.09C4487D17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/ti/am62x-sk/patches/linux: backport
+Message-Id: <20240606184842.DF6A887D15@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/ti/am64x-sk/patches/linux: backport
  linux clock fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -61,17 +61,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3384584800508858211=="
+Content-Type: multipart/mixed; boundary="===============8890996266525495008=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3384584800508858211==
+--===============8890996266525495008==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fb7eb8285412c5fe410dbef47b42888240decbb
+commit: https://git.buildroot.net/buildroot/commit/?id=9755de93360bf84801f551fb9da17b45359e8dfa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With newer versions of DM or DMSC firmware (>v09.02.07) invalid clock
+With newer versions of DM or DMSC firmware (v09.02.07+) invalid clock
 requests will be NAKed and generate a warning in the kernel logs rather
 than being ignored like in previous versions of firmware. This, together
 with the linux clk driver assuming that all clock IDs are contiguous,
@@ -86,17 +86,17 @@ Manually backport this fix while we're using the v6.8 kernel
 
 Signed-off-by: Bryan Brattlof <bb@ti.com>
 Tested-by: Gero Schwäricke <gero.schwaericke@grandcentrix.net>
-[Arnout: add Upsream tag]
+[Arnout: add Upstream tag]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
  ...e-sci-clk-Adding-support-for-non-contiguo.patch | 75 ++++++++++++++++++++++
  1 file changed, 75 insertions(+)
 
-diff --git a/board/ti/am62x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch b/board/ti/am62x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
+diff --git a/board/ti/am64x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch b/board/ti/am64x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
 new file mode 100644
 index 0000000000..788b6439d8
 --- /dev/null
-+++ b/board/ti/am62x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
++++ b/board/ti/am64x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
 @@ -0,0 +1,75 @@
 +From 750cdf4cb6791c45d479ed73a97728100394fb32 Mon Sep 17 00:00:00 2001
 +From: Udit Kumar <u-kumar1@ti.com>
@@ -174,7 +174,7 @@ index 0000000000..788b6439d8
 +2.43.2
 +
 
---===============3384584800508858211==
+--===============8890996266525495008==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -185,4 +185,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3384584800508858211==--
+--===============8890996266525495008==--
