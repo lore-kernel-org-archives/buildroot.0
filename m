@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81FCAC27C52
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:24:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 117FFC27C54
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9718641888;
-	Thu,  6 Jun 2024 19:24:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3B9D41807;
+	Thu,  6 Jun 2024 19:24:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HXqZkKQFMCTG; Thu,  6 Jun 2024 19:24:45 +0000 (UTC)
+ id 3Q24Y0Q4UySA; Thu,  6 Jun 2024 19:24:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DB1941807
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7152D4191C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DB1941807;
-	Thu,  6 Jun 2024 19:24:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7152D4191C;
+	Thu,  6 Jun 2024 19:24:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4C6561BF94D
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:24:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 400D11BF57B
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:24:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FAAC41782
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F70841782
  for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:24:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ry_Otrek1VGY for <buildroot@lists.busybox.net>;
+ id a0ISGDVEDKq8 for <buildroot@lists.busybox.net>;
  Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 770D54046B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8947B41720
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 770D54046B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8947B41720
  for <buildroot@buildroot.org>; Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70C7B87D5B; Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
+ id 82A7187D5C; Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 21:22:29 +0200
+Date: Thu, 6 Jun 2024 21:23:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5fcc4e19602ad37d018ccf3543fe82a291837f43
-X-Git-Newrev: d3f47c2486069fa6ee843f39a790d9bbde5de6f6
+X-Git-Oldrev: d3f47c2486069fa6ee843f39a790d9bbde5de6f6
+X-Git-Newrev: 4f8167b5cac41cc78e124236f41c0289fca6ee6c
 X-Patchwork-Hint: ignore
-Message-Id: <20240606192439.70C7B87D5B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sofia-sip: fix build with gcc 14.x
+Message-Id: <20240606192439.82A7187D5C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/unixodbc: fix build with gcc 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3f47c2486069fa6ee843f39a790d9bbde5de6f6
+commit: https://git.buildroot.net/buildroot/commit/?id=4f8167b5cac41cc78e124236f41c0289fca6ee6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...-incompatible-pointer-type-in-sip_basic-c.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ ...driver-Fix-incompatible-pointer-to-intege.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch b/package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch
+diff --git a/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch b/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
 new file mode 100644
-index 0000000000..7f890fd27b
+index 0000000000..8efe6dae4e
 --- /dev/null
-+++ b/package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch
-@@ -0,0 +1,27 @@
-+From 46b02f0655af0a9594e805f09a8ee99278f84777 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tomi=20L=C3=A4hteenm=C3=A4ki?= <lihis@lihis.net>
-+Date: Mon, 19 Feb 2024 09:06:20 +0200
-+Subject: [PATCH] Fix incompatible pointer type in sip_basic.c
++++ b/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
+@@ -0,0 +1,49 @@
++From 45f501e1be2db6b017cc242c79bfb9de32b332a1 Mon Sep 17 00:00:00 2001
++From: Florian Weimer <fweimer@redhat.com>
++Date: Mon, 29 Jan 2024 08:27:29 +0100
++Subject: [PATCH] PostgreSQL driver: Fix incompatible pointer-to-integer types
 +
-+Closes #248
++These result in out-of-bounds stack writes on 64-bit architectures
++(caller has 4 bytes, callee writes 8 bytes), and seem to have gone
++unnoticed on little-endian architectures (although big-endian
++architectures must be broken).
 +
-+Upstream: https://github.com/freeswitch/sofia-sip/pull/249
++This change is required to avoid a build failure with GCC 14.
++
++Upstream: https://github.com/lurcher/unixODBC/commit/45f501e1be2db6b017cc242c79bfb9de32b332a1
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ libsofia-sip-ua/sip/sip_basic.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ Drivers/Postgre7.1/info.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+diff --git a/libsofia-sip-ua/sip/sip_basic.c b/libsofia-sip-ua/sip/sip_basic.c
-+index 3444fb25..82e824e3 100644
-+--- a/libsofia-sip-ua/sip/sip_basic.c
-++++ b/libsofia-sip-ua/sip/sip_basic.c
-+@@ -2901,7 +2901,7 @@ issize_t sip_identity_d(su_home_t *home, sip_header_t *h, char *s, isize_t slen)
-+       ext = strchr(ppt, ';');
++diff --git a/Drivers/Postgre7.1/info.c b/Drivers/Postgre7.1/info.c
++index 63ac91f..2216ecd 100644
++--- a/Drivers/Postgre7.1/info.c
+++++ b/Drivers/Postgre7.1/info.c
++@@ -1779,14 +1779,14 @@ char *table_name;
++ char index_name[MAX_INFO_STRING];
++ short fields_vector[8];
++ char isunique[10], isclustered[10];
++-SDWORD index_name_len, fields_vector_len;
+++SQLLEN index_name_len, fields_vector_len;
++ TupleNode *row;
++ int i;
++ HSTMT hcol_stmt;
++ StatementClass *col_stmt, *indx_stmt;
++ char column_name[MAX_INFO_STRING], relhasrules[MAX_INFO_STRING];
++ char **column_names = 0;
++-Int4 column_name_len;
+++SQLLEN column_name_len;
++ int total_columns = 0;
++ char error = TRUE;
++ ConnInfo *ci;
++@@ -2136,7 +2136,7 @@ HSTMT htbl_stmt;
++ StatementClass *tbl_stmt;
++ char tables_query[STD_STATEMENT_LEN];
++ char attname[MAX_INFO_STRING];
++-SDWORD attname_len;
+++SQLLEN attname_len;
++ char pktab[MAX_TABLE_LEN + 1];
++ Int2 result_cols;
 + 
-+       if (ext) {
-+-          msg_param_t *params = su_alloc(home, sizeof(msg_param_t));
-++          msg_param_t const *params = su_alloc(home, sizeof(msg_param_t));
-+           if (msg_params_d(home, &ext, &params) >= 0) {
-+               id->id_info_params = params;
-+           }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
