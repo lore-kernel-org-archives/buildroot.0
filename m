@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 117FFC27C54
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA539C27C52
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:24:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3B9D41807;
-	Thu,  6 Jun 2024 19:24:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9944641937;
+	Thu,  6 Jun 2024 19:24:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Q24Y0Q4UySA; Thu,  6 Jun 2024 19:24:48 +0000 (UTC)
+ id jXCtuP6sEALY; Thu,  6 Jun 2024 19:24:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7152D4191C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9CC341936
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7152D4191C;
-	Thu,  6 Jun 2024 19:24:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D9CC341936;
+	Thu,  6 Jun 2024 19:24:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 400D11BF57B
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:24:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 495E41BF57B
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:24:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F70841782
+ by smtp2.osuosl.org (Postfix) with ESMTP id 875F64046B
  for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:24:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a0ISGDVEDKq8 for <buildroot@lists.busybox.net>;
+ id ItrkYMWTC0OQ for <buildroot@lists.busybox.net>;
  Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8947B41720
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7018B4042F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8947B41720
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7018B4042F
  for <buildroot@buildroot.org>; Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82A7187D5C; Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
+ id 5886B814C9; Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 21:23:01 +0200
+Date: Thu, 6 Jun 2024 21:21:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d3f47c2486069fa6ee843f39a790d9bbde5de6f6
-X-Git-Newrev: 4f8167b5cac41cc78e124236f41c0289fca6ee6c
+X-Git-Oldrev: 9c628fc1568d1f63dfbee0a7be6aa2be92dc89ab
+X-Git-Newrev: 5fcc4e19602ad37d018ccf3543fe82a291837f43
 X-Patchwork-Hint: ignore
-Message-Id: <20240606192439.82A7187D5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/unixodbc: fix build with gcc 14.x
+Message-Id: <20240606192439.5886B814C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/collectd: fix build with gcc 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,70 +65,174 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f8167b5cac41cc78e124236f41c0289fca6ee6c
+commit: https://git.buildroot.net/buildroot/commit/?id=5fcc4e19602ad37d018ccf3543fe82a291837f43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...driver-Fix-incompatible-pointer-to-intege.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ ...ac-src-nut-c-detect-int-types-required-by.patch | 153 +++++++++++++++++++++
+ 1 file changed, 153 insertions(+)
 
-diff --git a/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch b/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
+diff --git a/package/collectd/0003-configure.ac-src-nut-c-detect-int-types-required-by.patch b/package/collectd/0003-configure.ac-src-nut-c-detect-int-types-required-by.patch
 new file mode 100644
-index 0000000000..8efe6dae4e
+index 0000000000..f08dc1b731
 --- /dev/null
-+++ b/package/unixodbc/0001-PostgreSQL-driver-Fix-incompatible-pointer-to-intege.patch
-@@ -0,0 +1,49 @@
-+From 45f501e1be2db6b017cc242c79bfb9de32b332a1 Mon Sep 17 00:00:00 2001
-+From: Florian Weimer <fweimer@redhat.com>
-+Date: Mon, 29 Jan 2024 08:27:29 +0100
-+Subject: [PATCH] PostgreSQL driver: Fix incompatible pointer-to-integer types
++++ b/package/collectd/0003-configure.ac-src-nut-c-detect-int-types-required-by.patch
+@@ -0,0 +1,153 @@
++From d409ffa2a64cac3fc2abe2bb86ec3a80cb34d0a6 Mon Sep 17 00:00:00 2001
++From: Jim Klimov <jimklimov+nut@gmail.com>
++Date: Wed, 31 Aug 2022 11:40:01 +0200
++Subject: [PATCH] configure.ac, src/nut.c: detect int types required by NUT API
++ we build against
 +
-+These result in out-of-bounds stack writes on 64-bit architectures
-+(caller has 4 bytes, callee writes 8 bytes), and seem to have gone
-+unnoticed on little-endian architectures (although big-endian
-+architectures must be broken).
++Either use the stricter int types required by NUT headers since v2.8.0 release,
++or the relaxed (arch-dependent) types required by older NUT releases - depending
++on which NUT API version the collectd is building against at the moment.
 +
-+This change is required to avoid a build failure with GCC 14.
++Inspired by discussion at https://github.com/networkupstools/nut/issues/1638
 +
-+Upstream: https://github.com/lurcher/unixODBC/commit/45f501e1be2db6b017cc242c79bfb9de32b332a1
++Upstream: https://github.com/collectd/collectd/commit/d409ffa2a64cac3fc2abe2bb86ec3a80cb34d0a6
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ Drivers/Postgre7.1/info.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
++ configure.ac | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++
++ src/nut.c    |   4 +--
++ 2 files changed, 102 insertions(+), 2 deletions(-)
 +
-+diff --git a/Drivers/Postgre7.1/info.c b/Drivers/Postgre7.1/info.c
-+index 63ac91f..2216ecd 100644
-+--- a/Drivers/Postgre7.1/info.c
-++++ b/Drivers/Postgre7.1/info.c
-+@@ -1779,14 +1779,14 @@ char *table_name;
-+ char index_name[MAX_INFO_STRING];
-+ short fields_vector[8];
-+ char isunique[10], isclustered[10];
-+-SDWORD index_name_len, fields_vector_len;
-++SQLLEN index_name_len, fields_vector_len;
-+ TupleNode *row;
-+ int i;
-+ HSTMT hcol_stmt;
-+ StatementClass *col_stmt, *indx_stmt;
-+ char column_name[MAX_INFO_STRING], relhasrules[MAX_INFO_STRING];
-+ char **column_names = 0;
-+-Int4 column_name_len;
-++SQLLEN column_name_len;
-+ int total_columns = 0;
-+ char error = TRUE;
-+ ConnInfo *ci;
-+@@ -2136,7 +2136,7 @@ HSTMT htbl_stmt;
-+ StatementClass *tbl_stmt;
-+ char tables_query[STD_STATEMENT_LEN];
-+ char attname[MAX_INFO_STRING];
-+-SDWORD attname_len;
-++SQLLEN attname_len;
-+ char pktab[MAX_TABLE_LEN + 1];
-+ Int2 result_cols;
++diff --git a/configure.ac b/configure.ac
++index 1737aff316..f88ed26505 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -5881,6 +5881,106 @@ if test "x$with_libupsclient" = "xyes"; then
++   CPPFLAGS="$SAVE_CPPFLAGS"
++ fi
 + 
+++if test "x$with_libupsclient" = "xyes"; then
+++  dnl The m4 script logic below is modelled after NUT_FUNC_GETNAMEINFO_ARGTYPES
+++  dnl further originating in curl autoconf scripts or beyond. See there for an
+++  dnl example of general-case logic to handle matching of numerous possible
+++  dnl data types for each argument in supported API variants.
+++  dnl Note: techically compiler complains here not about int types themselves,
+++  dnl but about pointers to such data. We know "out of band" that e.g. NUT
+++  dnl change to "size_t" happened at once for all arguments in the API, so
+++  dnl simplify the handling here and now with that assumption.
+++  AC_LANG_PUSH([C])
+++  SAVE_CPPFLAGS="$CPPFLAGS"
+++  SAVE_LDFLAGS="$LDFLAGS"
+++  SAVE_CFLAGS="$CFLAGS"
+++  CPPFLAGS="$CPPFLAGS $with_libupsclient_cflags"
+++  LDFLAGS="$LDFLAGS $with_libupsclient_libs"
+++  CFLAGS="$CFLAGS $with_libupsclient_cflags"
+++  if test "x$GCC" = "xyes"; then
+++    CFLAGS="$CFLAGS -Wall -Werror"
+++  fi
+++
+++  dnl upscli_splitname() *is* there forever (2007 or older)
+++  dnl but int types e.g. "port" changed in NUT 2.8.0
+++  dnl Also this is the UPSCONN_t::port field type:
+++  AC_CACHE_CHECK([int type of port argument for NUT upscli_splitname],
+++    [collectd_cv_func_upscli_splitname_args], [
+++     collectd_cv_func_upscli_splitname_args="unknown"
+++     for port_arg in 'uint16_t' 'int' ; do
+++        AC_COMPILE_IFELSE([
+++            AC_LANG_PROGRAM([
+++#include <upsclient.h>
+++/* int upscli_splitname(const char *buf, char **upsname, char **hostname, <port_arg> *port); */
+++            ],[
+++const char *origname = "ups@localhost:3493";
+++$port_arg port=0;
+++char *hostname;
+++char *upsname;
+++int res = upscli_splitname(origname, &upsname, &hostname, &port);
+++return(res);
+++            ])
+++        ],[
+++            collectd_cv_func_upscli_splitname_args="$port_arg"
+++            break
+++        ])
+++     done
+++    ])
+++
+++  AS_IF([test x"$collectd_cv_func_upscli_splitname_args" = xunknown],
+++    [AC_MSG_WARN([Can not find proper port type for upscli_splitname()])
+++     with_libupsclient="no (required data types for NUT API were not detected)"],
+++    [AC_DEFINE_UNQUOTED(NUT_PORT_TYPE, $collectd_cv_func_upscli_splitname_args,
+++        [Define to the integer type for TCP/IP ports used by NUT API we build against])
+++    ])
+++
+++
+++  AC_CACHE_CHECK([int type of length/numbering arguments for NUT upscli_list_next],
+++    [collectd_cv_func_upscli_list_next_args], [
+++     collectd_cv_func_upscli_list_next_args="unknown"
+++     for size_arg in 'size_t' 'unsigned int' 'int' ; do
+++        AC_COMPILE_IFELSE([
+++            AC_LANG_PROGRAM([
+++#include <upsclient.h>
+++/* int upscli_list_next(UPSCONN_t *ups, <size_arg> numq, const char **query, <size_arg> *numa, char ***answer); */
+++
+++#if HAVE_UPSCONN_T
+++typedef UPSCONN_t collectd_upsconn_t;
+++#elif HAVE_UPSCONN
+++typedef UPSCONN collectd_upsconn_t;
+++#else
+++#error "Unable to determine the UPS connection type."
+++#endif
+++            ],[
+++$size_arg query_num=0;
+++$size_arg answer_num=0;
+++const char * query;
+++char** answer;
+++collectd_upsconn_t ups;
+++int res = upscli_list_next(&ups, query_num, &query, &answer_num, &answer);
+++return(res);
+++            ])
+++        ],[
+++            collectd_cv_func_upscli_list_next_args="$size_arg"
+++            break
+++        ])
+++     done
+++    ])
+++
+++  AS_IF([test x"$collectd_cv_func_upscli_list_next_args" = xunknown],
+++    [AC_MSG_WARN([Can not find proper type for array sizes and string lengths used by upscli_list_next()])
+++     with_libupsclient="no (required data types for NUT API were not detected)"],
+++    [AC_DEFINE_UNQUOTED(NUT_SIZE_TYPE, $collectd_cv_func_upscli_list_next_args,
+++        [Define to the integer type for array sizes and string lengths used by NUT API we build against])
+++    ])
+++
+++
+++  CPPFLAGS="$SAVE_CPPFLAGS"
+++  LDFLAGS="$SAVE_LDFLAGS"
+++  CFLAGS="$SAVE_CFLAGS"
+++  AC_LANG_POP([C])
+++fi
+++
++ if test "x$with_libupsclient" = "xyes"; then
++   BUILD_WITH_LIBUPSCLIENT_CFLAGS="$with_libupsclient_cflags"
++   BUILD_WITH_LIBUPSCLIENT_LIBS="$with_libupsclient_libs"
++diff --git a/src/nut.c b/src/nut.c
++index a9a6c98380..1a29438b07 100644
++--- a/src/nut.c
+++++ b/src/nut.c
++@@ -46,7 +46,7 @@ struct nut_ups_s {
++   collectd_upsconn_t *conn;
++   char *upsname;
++   char *hostname;
++-  int port;
+++  NUT_PORT_TYPE port;
++   nut_ups_t *next;
++ };
++ 
++@@ -250,7 +250,7 @@ static int nut_read(user_data_t *user_data) {
++   const char *query[3] = {"VAR", ups->upsname, NULL};
++   unsigned int query_num = 2;
++   char **answer;
++-  unsigned int answer_num;
+++  NUT_SIZE_TYPE answer_num;
++   int status;
++ 
++   /* (Re-)Connect if we have no connection */
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
