@@ -1,75 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15E67C27C54
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 17:12:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 999DDC27C55
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 18:09:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A69EE8430A;
-	Thu,  6 Jun 2024 17:12:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 420F8415EA;
+	Thu,  6 Jun 2024 18:09:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WjPvuZkM616T; Thu,  6 Jun 2024 18:09:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2D2141678
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2D2141678;
+	Thu,  6 Jun 2024 18:09:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 202491BF57B
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:09:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D11482139
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:09:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yTuBpfrgGCSf; Thu,  6 Jun 2024 17:12:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8809C847FB
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8809C847FB;
-	Thu,  6 Jun 2024 17:12:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 113661BF57C
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 17:12:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09FE940224
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 17:12:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wJlpzWQxc9u9 for <buildroot@lists.busybox.net>;
- Thu,  6 Jun 2024 17:12:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4DEC64013A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DEC64013A
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4DEC64013A
- for <buildroot@buildroot.org>; Thu,  6 Jun 2024 17:12:29 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C8BD613F8D5;
- Thu,  6 Jun 2024 19:12:20 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 06 Jun 2024 19:12:20 +0200
-Date: Thu, 6 Jun 2024 19:12:20 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Neal Frager <neal.frager@amd.com>
-Message-ID: <ZmHt9EUdlvHV30CY@landeda>
-References: <20240304074140.1537910-1-neal.frager@amd.com>
+ id d8oERPTkylwh for <buildroot@lists.busybox.net>;
+ Thu,  6 Jun 2024 18:09:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12a; helo=mail-lf1-x12a.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 78A4782134
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78A4782134
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
+ [IPv6:2a00:1450:4864:20::12a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 78A4782134
+ for <buildroot@buildroot.org>; Thu,  6 Jun 2024 18:09:29 +0000 (UTC)
+Received: by mail-lf1-x12a.google.com with SMTP id
+ 2adb3069b0e04-52b912198f1so1879502e87.0
+ for <buildroot@buildroot.org>; Thu, 06 Jun 2024 11:09:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1717697368; x=1718302168;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Wij1JJF0eMHbdHDd6tV4tdJmoJMfhyEZw6ZMZCVVBIs=;
+ b=q0xNFbVXLMiEMJBhE+ABPW/fMzY7oA6KjR9+HYqFGLURICyrqKCTXVf8z2rxwsQaYN
+ BlMhc2BIjWA54sJYWRTgql+hCooO210DOUa8v1K2b9/irHW+6qO/5EibzTiQ7YKy+E+t
+ cRHApSLQvRJEr1X88zlIqk8UnLA9TwSs2Akc1Mcn5AhBaWxkPNyC2yo2WzM7/n1nvOOw
+ 7ckCGT/xK6VRCL2ImqFONSlFmxjjE1pYGe8Jf1DGGiT4EElPS67YNa3HkaMTOEpmGcsM
+ rvg+dOr2lQVMQc8lXd5SuykoCVi9QCIqkTRWTioAkRPBSBpAzOeYlUaEuWnhMK1J38vH
+ 3New==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUrFN52laHXrHIZHDqsGIRautelwbpz05rJs30DRo7AbPDi3B82DLRuCf+8JUJl/PNv1DFMENt1u1sD4RwA5UujJhDmYLrJlw==
+X-Gm-Message-State: AOJu0YwS+J/JYGV+qKTw2t3PTcaAF6g1Gn4BXKhh+ce1z4gYW7JDobeM
+ 5Ext7IK4G3jKhuYfGp9BxjCPZWIjTFW8w5oCy72LUDjD4uLg8KKG1CBTh2KO3Tk=
+X-Google-Smtp-Source: AGHT+IFRsHVPDt/156VQynI2jRtYIUY3kWAotcbyRtOK+py/VxhNmqozqwrjHwqAhvk3X19b3tQv7g==
+X-Received: by 2002:ac2:4c15:0:b0:52b:4924:5348 with SMTP id
+ 2adb3069b0e04-52bb9f67b31mr261355e87.12.1717697367336; 
+ Thu, 06 Jun 2024 11:09:27 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-35ef5d685c9sm2208728f8f.53.2024.06.06.11.09.26
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 06 Jun 2024 11:09:26 -0700 (PDT)
+Message-ID: <13f2f3fb-31ed-4a20-a0c8-304f359da64d@mind.be>
+Date: Thu, 6 Jun 2024 20:09:24 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240304074140.1537910-1-neal.frager@amd.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1717693947;
- bh=U58QJIop8X8FPrxh/8AJodC/k768KNS40lqvvq6AtkI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=aUHyHR1+VmYxEn9lNkI8rKU9Ah5azHAXUkRNF1PPjd8PL0rzEEZ2SQ9PmYJ0IhqBR
- nBrh6nBPSdhr/0pvbNyR22z5D+QVy2Rvvaik0ofChVU3f3MUtE0Shd/Z13ZK8k1IaV
- co9caie4OSF84dg7AZXIK0Y6s/PdjJYXEd9758YAaThkHLyZwN5SGBlj/H4bxGtuoU
- MF30FlyD99+YWO0Ze5HGbBKGlcYG0Zr5dR4iZ+slbIWF+1C3srwLK9FOWnlD7soQ5h
- eHtFbrqGWxwMroy475ykLsX08zEHHWXuZM4QLu3esBJ5owKuJLRqdSj/MI7fPPnPF5
- 5CZuxm7YGEF5w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=aUHyHR1+
-Subject: Re: [Buildroot] [PATCH v11 1/6] boot/zynqmp-firmware: new boot
- firmware
+User-Agent: Mozilla Thunderbird
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Neal Frager <neal.frager@amd.com>
+References: <20240603115212.184529-1-neal.frager@amd.com>
+ <ZmHU1-EPxRFiHZDl@landeda>
+Content-Language: en-GB
+In-Reply-To: <ZmHU1-EPxRFiHZDl@landeda>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1717697368; x=1718302168; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Wij1JJF0eMHbdHDd6tV4tdJmoJMfhyEZw6ZMZCVVBIs=;
+ b=GQ+tZbsuXiizXOYcpZ4Uu5hjwpZncXtu7509+OdhG6ZCNqmWrCe7oPrO9HonsxQGrU
+ jPFsGLERR1yocdZSUpz5gbq4nw06+w56/vEeK9PSigv+C0xnUonpoHuG47OCGdjgNTkU
+ /+xbHjIQlB8eXkoS9yZzhN0PWUnudgnRdU+VHW8P9wNntZ6f8YSS4zsvlzUAeojlmGFT
+ RpFGknuCNb61KMdN5WveMAZtqlnWH/xEzYO8SK+bRuve4S+Ik+SPP8rYe+3qReMM6iMz
+ 9zWvC8L4I0I9hwMlxdGrP9u8yXZSmhw7K9v5mpNQM3qgUww3guasqJnsw5NtvL4v3cB2
+ HTIw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=GQ+tZbsu
+Subject: Re: [Buildroot] [PATCH v1 1/3] configs/zynqmp_zcu102_defconfig:
+ bump to xilinx-v2024.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,112 +109,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michal.simek@amd.com, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, thomas.petazzoni@bootlin.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
+ buildroot@buildroot.org, michal.simek@amd.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Neal, All,
 
-I had a quick look, and there is something I don;t really like...
 
-On 2024-03-04 07:41 +0000, Neal Frager via buildroot spake thusly:
-> This patch adds a new boot firmware to buildroot for building the zynqmp pmufw.
-> It requires the toolchain-bare-metal package that includes a bare-metal
-> binutils, gcc and newlib which can be built for the microblaze architecture.
-[--SNIP--]
-> diff --git a/boot/zynqmp-firmware/Config.in b/boot/zynqmp-firmware/Config.in
-> new file mode 100644
-> index 0000000000..d68ec2cf6a
-> --- /dev/null
-> +++ b/boot/zynqmp-firmware/Config.in
-> @@ -0,0 +1,22 @@
-> +config BR2_TARGET_ZYNQMP_FIRMWARE
-> +	bool "zynqmp-firmware"
-> +	select BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-
-This and [0]...
-
-[--SNIP--]
-> diff --git a/boot/zynqmp-firmware/zynqmp-firmware.mk b/boot/zynqmp-firmware/zynqmp-firmware.mk
-> new file mode 100644
-> index 0000000000..383d888fba
-> --- /dev/null
-> +++ b/boot/zynqmp-firmware/zynqmp-firmware.mk
-> @@ -0,0 +1,33 @@
-[--SNIP--]
-> +ZYNQMP_PMUFW = $(@D)/lib/sw_apps/zynqmp_pmufw/src/executable.elf
-
-    $ ./utils/docker-run make check-package
-    boot/zynqmp-firmware/zynqmp-firmware.mk:27: possible typo: ZYNQMP_PMUFW -> *ZYNQMP_FIRMWARE*
-
-[--SNIP--]
-> diff --git a/toolchain/toolchain-bare-metal-buildroot/Config.in b/toolchain/toolchain-bare-metal-buildroot/Config.in
-> index 6fe969357f..7d33a68c5c 100644
-> --- a/toolchain/toolchain-bare-metal-buildroot/Config.in
-> +++ b/toolchain/toolchain-bare-metal-buildroot/Config.in
-> @@ -2,6 +2,7 @@ if BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
->  
->  config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH
->  	string "architecture tuple"
-> +	default "microblazeel-xilinx-elf" if BR2_TARGET_ZYNQMP_FIRMWARE
-
-...[0] this are smelly to me.
-
-It wokrs in your specific case, because all you do is target a
-microblazeel-xilinx-elf and zynqmp-firmware is the first package that
-depends on a bare-metal toolchain to be built [2]
-
-But nothign prevents other situations:
-
-  - user manually changes BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH to
-    another tuple, e.g. arm-gnu
-
-  - another package does sopmething similar with another tuple, like
-    riscv64-elf
-
-The bare-metal toolchain can currently be built only for one and only
-one tuple, so this can't work nicely.
-
-Instead, I think we should go another rooute:
-
-    config BR2_TARGET_ZYNQMP_FIRMWARE
-        bool "zynqmp-firmware"
-        depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_TUPLE = "microblazeel-xilinx-elf"
-
-    comment "zynqmp-firmware needs a bare metal toolchain for tuple microblazeel-xilinx-elf"
-        depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_TUPLE != "microblazeel-xilinx-elf"
-
-[2] Note that we already have a few pre-built bare-metal toolchains:
-    - package/arm-gnu-toolchain/
-    package/riscv64-elf-toolchain/
-    So it is not unconceivalbe that at some point we will want to be
-    able to actually build suhc toolchains...
-
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  This option allows to define the architecture tuple for the
->  	  bare-metal toolchain.
-> -- 
-> 2.25.1
+On 06/06/2024 17:25, Yann E. MORIN wrote:
+> However, while applying, I noticed that those boards do not have
+> BR2_DOWNLOAD_FORCE_CHECK_HASHES=y (so my post-apply hooks triggered).
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> I wanted to add that and point to the newly introduced
+> board/xilinx/patches, but that will not be possible.
+> 
+> Indeed, those defconfig use BR2_TARGET_UBOOT_ZYNQMP_PMUFW, and that is
+> added to the extra downloads, and we would need a hash for that file.
+> 
+> But the filename is unversioned, which means that we can't differentiate
+> between pmufw.elf from yesterday, the one from today, and the one from
+> tomorrow.
+> 
+> So, when arbitrary downloads of unversioned files are done in a
+> defconfig (or in a package enabled by tht defconfig), we will not be
+> able to force checking the hashes...
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  We could re-introduce the "none" hash method... But that is perhaps going in 
+circles...
+
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
