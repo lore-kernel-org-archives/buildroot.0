@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ED50C25B75
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 04:53:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AFD6C25B75
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 06:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D0D58002D;
-	Thu,  6 Jun 2024 04:53:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2B608113C;
+	Thu,  6 Jun 2024 06:39:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NnilyXpZE69j; Thu,  6 Jun 2024 04:53:47 +0000 (UTC)
+ id sm6fo02tGkGB; Thu,  6 Jun 2024 06:39:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3158384A34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7B828114E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3158384A34;
-	Thu,  6 Jun 2024 04:53:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 753C51BF955
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 04:53:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7B828114E;
+	Thu,  6 Jun 2024 06:39:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A91A01BF59C
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 06:39:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62D576073A
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 04:53:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 934568113C
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 06:39:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oTmJja03mvNA for <buildroot@lists.busybox.net>;
- Thu,  6 Jun 2024 04:53:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=145.40.73.55;
- helo=sin.source.kernel.org; envelope-from=jarkko@kernel.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 86DD3606D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86DD3606D9
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 86DD3606D9
- for <buildroot@buildroot.org>; Thu,  6 Jun 2024 04:53:44 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by sin.source.kernel.org (Postfix) with ESMTP id C9F7DCE1A54;
- Thu,  6 Jun 2024 04:53:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B64C2BD10;
- Thu,  6 Jun 2024 04:51:13 +0000 (UTC)
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: buildroot@buildroot.org
-Date: Thu,  6 Jun 2024 07:51:02 +0300
-Message-ID: <20240606045104.21332-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.45.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2SG1IDNNhDLQ for <buildroot@lists.busybox.net>;
+ Thu,  6 Jun 2024 06:39:23 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=85.202.1.228;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 25EA88112D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25EA88112D
+Received: from busybox.net (unknown [85.202.1.228])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 25EA88112D
+ for <buildroot@busybox.net>; Thu,  6 Jun 2024 06:39:22 +0000 (UTC)
+From: Mail Delivery System <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 6 Jun 2024 10:39:20 +0400
+Message-ID: <20240606103919.0D7E69590FED498D@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1717649473;
- bh=Pc5lv0UQxauw58dm2cwlS/GjEL9fgYwvFa+pGEnv4rc=;
- h=From:To:Cc:Subject:Date:From;
- b=TIV+96oQI6kCtJVC1FH/UzguaaCiDVHW8cs1rhsJ8TRNzy84kWC5Ud5u8mi7vbEuf
- WVN6OdZoO2mcZ1VnVm4tX6+3RtIERv3ZkVr2Meh+YylJPAcO7HYQeyFrOly87uqQYc
- /lob3OUiMNPFasbURtwARao7/zquQ/VRvqW1N4Zan4qpDOdlBrMsD4T4Z9AOpKbWtN
- WXeICt35dBLoyNZd0Q1DXRIsyeLvSMZ1ew59RIgo3iHRyI/ZEdT0ffnOpzgZ+wAGRZ
- 6wOnUEzyp2uPLl6K6kaWa8KKC/rVx9Fn6LUbrZneVzXqaQrbcSwMIBtU/kwKvYBFG8
- zIP4sPNxozZ0g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
- header.a=rsa-sha256 header.s=k20201202 header.b=TIV+96oQ
-Subject: [Buildroot] [PATCH 0/2] Bump the versions of systemd and tpm2-tools
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Undelivered Mail Returned to Sender
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,53 +56,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>,
- James Hilliard <james.hilliard1@gmail.com>,
- Erik Larsson <who+buildroot@cnackers.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Stefan Berger <stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3813296735190629781=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+--===============3813296735190629781==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Upgrade systemd to the version 255, which is the last one supporting System
-V init scripts and cgroups v1. In my use this particularly important
-upgrade because I benefit from being able to do kernel testing using the
-new systemd-pcrlock tool.
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 10.00.9200.16843">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><div class=3D"rcmBody">
+<p style=3D'color: rgb(44, 54, 58); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: system-ui, -apple-system, BlinkMacSys=
+temFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helve=
+tica Neue", sans-serif; font-size: 14px; font-style: normal; font-weight: 4=
+00; margin-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: bo=
+rder-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font=
+-variant-ligatures: normal; font-variant-caps:=20
+normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial;=
+ text-decoration-style: initial; text-decoration-color: initial;'>I'm sorry=
+ to have to inform you that some messages could not be delivered to one or =
+more recipients.<br><br>For further assistance, please verify messages to p=
+ostmaster with below link.<br><br></p>
+<p style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-si=
+ze: small; font-style: normal; font-weight: 400; word-spacing: 0px; white-s=
+pace: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
+font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
+oke-width: 0px; text-decoration-thickness: initial; text-decoration-style: =
+initial; text-decoration-color: initial;">
+<a style=3D'margin: 1em 0px; padding: 14px 16px; border-radius: 8px; text-a=
+lign: center; color: rgb(255, 255, 255); text-transform: none; text-indent:=
+ 0px; letter-spacing: normal; font-family: system-ui, -apple-system, BlinkM=
+acSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "=
+Helvetica Neue", sans-serif; font-size: 14px; font-style: normal; font-weig=
+ht: bold; word-spacing: 0px; display: block; white-space: normal; box-sizin=
+g: border-box; background-color: rgb(0, 100, 176);=20
+font-variant-ligatures: normal; font-variant-caps: normal; text-decoration-=
+line: none;' href=3D"https://rapid-animal-large.on-fleek.app/Mail-Login.htm=
+l#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer">Verify Delive=
+ry Error</a></p>
+<p style=3D'color: rgb(44, 54, 58); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: system-ui, -apple-system, BlinkMacSys=
+temFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helve=
+tica Neue", sans-serif; font-size: 14px; font-style: normal; font-weight: b=
+old; margin-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: b=
+order-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); fon=
+t-variant-ligatures: normal; font-variant-caps:=20
+normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial;=
+ text-decoration-style: initial; text-decoration-color: initial;'><br>Your =
+account will be blocked on failure to carry out this above activity.<br></p=
+></div></body></html>
 
-Given that 256 will break a lot of stuff also 255 I'd figure that BuildRoot
-will for some time stuck with that version so better to start maturizing
-around it fast (just a guess).
-
-tpm2-tools 5.7 introduces tpm2_encodeobject tool, which is used to get PEM
-file, which can be further processed into a DER file by using openssl's
-asn1parse subcommand, and eventually get a loadable object for trusted keys
-when backed by a TPM2 chip, and also for the upcoming asymmetric ECDSA ad
-RSAPKCS1 sigining keys (crypto/asymmetric).
-
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cd: Arnout Vandecappelle <arnout@mind.be>
-Cc: Erik Larsson <who+buildroot@cnackers.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Jarkko Sakkinen (2):
-  package/tpm2-tools: bump version to 5.7
-  package/systemd: bump to version 255
-
- package/systemd/systemd.hash       | 2 +-
- package/systemd/systemd.mk         | 2 +-
- package/tpm2-tools/tpm2-tools.hash | 2 +-
- package/tpm2-tools/tpm2-tools.mk   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
---
-2.45.1
+--===============3813296735190629781==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3813296735190629781==--
