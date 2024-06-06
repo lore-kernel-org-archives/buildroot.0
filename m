@@ -4,70 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63D1EC25B75
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 10:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16BBDC27C54
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 11:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26CB761476;
-	Thu,  6 Jun 2024 10:49:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF67260604;
+	Thu,  6 Jun 2024 11:03:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vAek8hHGGSIb; Thu,  6 Jun 2024 10:49:04 +0000 (UTC)
+ id rVE7-cd9FNVK; Thu,  6 Jun 2024 11:03:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B84561479
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF5FE60780
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B84561479;
-	Thu,  6 Jun 2024 10:49:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C05BD1BF5E0
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 10:49:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF5FE60780;
+	Thu,  6 Jun 2024 11:03:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 83EB21BF5E0
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 11:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ADDA561481
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 10:49:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C91E401E4
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 11:03:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FoXHGL_j20uH for <buildroot@lists.busybox.net>;
- Thu,  6 Jun 2024 10:49:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2604:1380:4641:c500::1; helo=dfw.source.kernel.org;
- envelope-from=jarkko@kernel.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BBEC761476
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBEC761476
-Received: from dfw.source.kernel.org (dfw.source.kernel.org
- [IPv6:2604:1380:4641:c500::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BBEC761476
- for <buildroot@buildroot.org>; Thu,  6 Jun 2024 10:49:01 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by dfw.source.kernel.org (Postfix) with ESMTP id F118E61CB7;
- Thu,  6 Jun 2024 10:49:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45678C4AF10;
- Thu,  6 Jun 2024 10:48:30 +0000 (UTC)
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: buildroot@buildroot.org
-Date: Thu,  6 Jun 2024 13:48:12 +0300
-Message-ID: <20240606104813.1514-3-jarkko@kernel.org>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240606104813.1514-1-jarkko@kernel.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FaxniDGR26el for <buildroot@lists.busybox.net>;
+ Thu,  6 Jun 2024 11:03:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 38B3A401DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38B3A401DC
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 38B3A401DC
+ for <buildroot@buildroot.org>; Thu,  6 Jun 2024 11:03:47 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9643813F88D;
+ Thu,  6 Jun 2024 13:03:38 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 06 Jun 2024 13:03:38 +0200
+Date: Thu, 6 Jun 2024 13:03:38 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Message-ID: <ZmGXisKDjGBFJNFV@landeda>
 References: <20240606104813.1514-1-jarkko@kernel.org>
+ <20240606104813.1514-4-jarkko@kernel.org>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240606104813.1514-4-jarkko@kernel.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1717670910;
- bh=7UMaDZvgckeoF4NrkB7K7SKlvINgRD9wBwo+QRU58mU=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=QrZPoRHWjoBbJUQ2FIjtONhwyuaMtONCE9qYYlf64lcVD5QN7nbh+elrGpxPkM7ak
- bcEzhqWl6L/txnbfqzsML5QamkbfpQ9GEnu7mgFPiPW6O3WmXgrRr5LS48M2n6Jn+s
- sXO/y8rX7fP6/YOb+/pK+MqacSftSwYHS9DCEggBH9BWR0aYZFSqfql+AkzlDNfojE
- V5xYaJ4O/Cst26AKs/pUvHAwHK533D7f7ntZra1GN76MxQlYZgljpXE4I8YY0Ydoji
- BbJVXPVsfegqwCPXjUQ+A1WoCr/8Qfy5bQR/jFn3AGSpclIsvJ/Ds468VeSMb6DlfS
- Sa2s/IRgjc9iA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1717671825;
+ bh=fa/M66m8VK6wARBO8IUljjRcVoy5+o3EBCSOJW3IKHs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=aCm+Nu8qxMNdzdeXL8p6i/sLWlwfw8iP0vkWws3+At/GDsJ7/9Iy22RcfLEQhIQgY
+ xHb56bW15yWPkEMfZ1+b0EBSCwU7mfs7522MjIqMq8KLr9v0jWHSgUjkJ81t2T8Ao9
+ xxJ5ixsPp/tnbQ525Mv9+Q9fxIkHe10TxormwTgaNpQz25r+Y9FhfaXwgAYR+dZ7LH
+ EcOM3faL/JA7LDUzmGfmxFV49mHCw5K2Sajyjbyw1bL6geW6RyZcWax5juPiHvUJJ2
+ 2m8hAsFBs4BC23vwbLpQAT/B2X35q6Vi0TkWthgP13bStjHee5vkcAcxhtasvycWnr
+ m5Hl0JtgevwjA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
- header.a=rsa-sha256 header.s=k20201202 header.b=QrZPoRHW
-Subject: [Buildroot] [PATCH v2 2/3] package/systemd: bump to version 255
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=aCm+Nu8q
+Subject: Re: [Buildroot] [PATCH v2 3/3] package/systemd: add the missing
+ superblock identifiers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,56 +82,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
- Erik Larsson <karl.erik.larsson@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Stefan Berger <stefanb@linux.ibm.com>,
  James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Stefan Berger <stefanb@linux.ibm.com>
+ Erik Larsson <karl.erik.larsson@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The last version with System V init scripts and cgroups v1 support. After
-this version the upgrade will take mostly a longer period of time.
+Jarkko, All,
 
-Link: https://github.com/systemd/systemd/releases/tag/v255
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cd: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2024-06-06 13:48 +0300, Jarkko Sakkinen spake thusly:
+> The following superblock identifiers are missing:
+> 1. BCACHEFS_SUPER_MAGIC
+> 2. PID_FS_MAGIC
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index f999d0d34e..190e326e57 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  26ac73c2108132b1d11ff939e8b1bece42f1c1da03fdf4a242af5a7cf3ac34f1  systemd-254.13.tar.gz
-+sha256  a3eb766ee96eb9f4cc25c2a6c933f3299e1b7ae22e72507dade0a5c86d92534f  systemd-255.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
- sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 6b3553723c..e74eb9e830 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 254.13
-+SYSTEMD_VERSION = 255
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
+Does that already happen with systemd 254?
+
+  - if yes, then this change should be sent before the version bump:
+    first, bug fixes, then new features;
+  - if not, then this patch should be included in the patch that does
+    the version bump, otherwise the version bump by itself is broken.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.45.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
