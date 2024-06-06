@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 135F6C27C52
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 18:56:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AA95C27C52
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 18:59:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3A624048E;
-	Thu,  6 Jun 2024 18:56:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A7674177D;
+	Thu,  6 Jun 2024 18:59:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fg3GE3Zv88zK; Thu,  6 Jun 2024 18:56:32 +0000 (UTC)
+ id ammuhFXbWlMy; Thu,  6 Jun 2024 18:59:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DA86414BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E195417C4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DA86414BC;
-	Thu,  6 Jun 2024 18:56:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1774A1BF40D
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:56:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E195417C4;
+	Thu,  6 Jun 2024 18:59:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 29DBC1BF23C
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 110C5424C1
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:56:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1792A61160
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:59:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cFLB0v3Xtrwd for <buildroot@lists.busybox.net>;
- Thu,  6 Jun 2024 18:56:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M9XfOpYOJoys for <buildroot@lists.busybox.net>;
+ Thu,  6 Jun 2024 18:59:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 092C8424C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C18E608F2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 092C8424C0
- for <buildroot@buildroot.org>; Thu,  6 Jun 2024 18:56:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C18E608F2
+ for <buildroot@buildroot.org>; Thu,  6 Jun 2024 18:59:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F334387C00; Thu,  6 Jun 2024 18:56:27 +0000 (UTC)
+ id 5058187CF8; Thu,  6 Jun 2024 18:59:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 20:54:08 +0200
+Date: Thu, 6 Jun 2024 20:57:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4fb7eb8285412c5fe410dbef47b42888240decbb
-X-Git-Newrev: e4b8380503a4ae78564133d1be94ab54cfe108e4
+X-Git-Oldrev: e4b8380503a4ae78564133d1be94ab54cfe108e4
+X-Git-Newrev: 4dafb8b5c2adb6208f56e2abda954e264b8e6fdd
 X-Patchwork-Hint: ignore
-Message-Id: <20240606185627.F334387C00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt6base: avoid enabling both
- desktop and es2 opengl
+Message-Id: <20240606185939.5058187CF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/infra/builder.py: fix
+ missing $HOME during build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,103 +66,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4b8380503a4ae78564133d1be94ab54cfe108e4
+commit: https://git.buildroot.net/buildroot/commit/?id=4dafb8b5c2adb6208f56e2abda954e264b8e6fdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following error:
+When running a test that uses host-python-setuptools using the Buildroot
+Docker image, for example running the following command,
 
-ERROR: Feature "opengles2": Forcing to "ON" breaks its condition:
-    NOT WIN32 AND NOT WATCHOS AND NOT QT_FEATURE_opengl_desktop AND GLESv2_FOUND
-Condition values dump:
-    WIN32 = ""
-    WATCHOS = "0"
-    QT_FEATURE_opengl_desktop = "ON"
-    GLESv2_FOUND = "TRUE"
+> ./utils/docker-run ./support/testing/run-tests -o output -s -k tests.package.test_python_pytest.TestPythonPy3Pytest
 
-CMake Error at cmake/QtBuildInformation.cmake:209 (message):
-  Check the configuration messages for an error that has occurred.
-Call Stack (most recent call first):
-  cmake/QtBuildInformation.cmake:39 (qt_configure_print_summary)
-  cmake/QtBuildRepoHelpers.cmake:332 (qt_print_feature_summary)
-  CMakeLists.txt:208 (qt_build_repo_end)
+The build fails with the following error,
 
-To recreate the error, use the following defconfig (based on freescale_imx8mmevk_defconfig):
+>   File "/home/blmaier/buildroot/output/TestPythonPy3Pytest/build/host-python-setuptools-69.2.0/setuptools/_distutils/dist.py", line 354, in _gen_paths
+>     yield pathlib.Path('~').expanduser() / filename
+>           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   File "/home/blmaier/buildroot/output/TestPythonPy3Pytest/host/lib/python3.11/pathlib.py", line 1385, in expanduser
+>     raise RuntimeError("Could not determine home directory.")
+> RuntimeError: Could not determine home directory.
+>
+> ERROR Backend subprocess exited when trying to invoke get_requires_for_build_wheel
 
-BR2_aarch64=y
-BR2_ARM_FPU_VFPV3=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_GLOBAL_PATCH_DIR="board/freescale/common/patches"
-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-evk.dtb"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
-BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk freescale/imx8mm-evk-revb-qca-wifi"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_QT6=y
-BR2_PACKAGE_QT6BASE_GUI=y
-BR2_PACKAGE_QT6BASE_OPENGL=y
-BR2_PACKAGE_FREESCALE_IMX=y
-BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
-BR2_PACKAGE_FIRMWARE_IMX=y
-BR2_PACKAGE_IMX_GPU_VIV=y
-BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-BR2_TARGET_UBOOT=y
-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
-BR2_TARGET_UBOOT_NEEDS_DTC=y
-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
-BR2_TARGET_UBOOT_SPL=y
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+Python setuptools is looking for $HOME but failing to find it.
 
-Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/qt6/qt6base/qt6base.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ support/testing/infra/builder.py | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 6857725ef5..211808d2af 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -259,10 +259,15 @@ QT6BASE_CONF_OPTS += -DFEATURE_eglfs=OFF
- endif
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index a2abb9ed89..295bc7b83d 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -52,7 +52,10 @@ class Builder(object):
+                            "> end defconfig\n")
+         self.logfile.flush()
  
- ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_DESKTOP),y)
--QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengl_desktop=ON
-+QT6BASE_CONF_OPTS += \
-+	-DFEATURE_opengl=ON \
-+	-DFEATURE_opengl_desktop=ON
- QT6BASE_DEPENDENCIES += libgl
- else ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_ES2),y)
--QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengles2=ON
-+QT6BASE_CONF_OPTS += \
-+	-DFEATURE_opengl=ON \
-+	-DFEATURE_opengles2=ON \
-+	-DFEATURE_opengl_desktop=OFF
- QT6BASE_DEPENDENCIES += libgles
- else
- QT6BASE_CONF_OPTS += -DFEATURE_opengl=OFF -DINPUT_opengl=no
+-        env = {"PATH": os.environ["PATH"]}
++        env = {
++            "PATH": os.environ["PATH"],
++            "HOME": os.environ["HOME"]
++        }
+         env.update(make_extra_env)
+ 
+         cmd = ["make",
+@@ -79,7 +82,11 @@ class Builder(object):
+         in the environment that calls make.
+         e.g. make_extra_env={"BR2_DL_DIR": "/path"}
+         """
+-        env = {"PATH": os.environ["PATH"]}
++        env = {
++            "PATH": os.environ["PATH"],
++            "HOME": os.environ["HOME"]
++        }
++
+         if "http_proxy" in os.environ:
+             self.logfile.write("Using system proxy: " +
+                                os.environ["http_proxy"] + "\n")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
