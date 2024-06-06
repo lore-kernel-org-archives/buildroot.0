@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 278CBC27C52
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D500EC27C52
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D5CD41803;
-	Thu,  6 Jun 2024 19:30:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E15C4042F;
+	Thu,  6 Jun 2024 19:30:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zFdE_zfZ_rGg; Thu,  6 Jun 2024 19:29:59 +0000 (UTC)
+ id ID_62eqPfyhf; Thu,  6 Jun 2024 19:30:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 986C54180B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C53D44177D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 986C54180B;
-	Thu,  6 Jun 2024 19:29:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C53D44177D;
+	Thu,  6 Jun 2024 19:30:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 64B691BF57B
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:29:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7C1ED1BF57B
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 515634046B
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:29:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 683AB4177D
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:30:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ivOEUyH_PIQ2 for <buildroot@lists.busybox.net>;
- Thu,  6 Jun 2024 19:29:53 +0000 (UTC)
+ id VH0_mZ4wVSdy for <buildroot@lists.busybox.net>;
+ Thu,  6 Jun 2024 19:30:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 589444042F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A5EB4042F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 589444042F
- for <buildroot@buildroot.org>; Thu,  6 Jun 2024 19:29:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2A5EB4042F
+ for <buildroot@buildroot.org>; Thu,  6 Jun 2024 19:30:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3ED6A87D72; Thu,  6 Jun 2024 19:29:53 +0000 (UTC)
+ id 163FA87BCA; Thu,  6 Jun 2024 19:30:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 21:26:03 +0200
+Date: Thu, 6 Jun 2024 21:29:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 671b8f4c57dee15a65110c2f64873fc4fe104f05
-X-Git-Newrev: 311bb82c9e3a27f36639a1c93d8d5bc8e7eb034f
+X-Git-Oldrev: 311bb82c9e3a27f36639a1c93d8d5bc8e7eb034f
+X-Git-Newrev: e6b30e239289ed9d31fd8805551f72c9897affa2
 X-Patchwork-Hint: ignore
-Message-Id: <20240606192953.3ED6A87D72@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/syslog-ng: fix libcurl build
- without C++
+Message-Id: <20240606193048.163FA87BCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/p11-kit: fix build with gcc 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,49 +60,159 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8381408140141494253=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=311bb82c9e3a27f36639a1c93d8d5bc8e7eb034f
+--===============8381408140141494253==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e6b30e239289ed9d31fd8805551f72c9897affa2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following libcurl build failure without C++ raised since bump to
-version 4.7.1 in commit 105f0398c76f3288b2668e0b3ec722b2ebe55a0b and
-https://github.com/syslog-ng/syslog-ng/commit/86feed7bff068a48be477a5b702ca24abc441d70:
+Fix the following build failure with gcc 14:
 
-configure: error: C++ support is mandatory when the cloud-auth module is enabled.
+p11-kit/import-object.c: In function 'add_attrs_pubkey_rsa':
+p11-kit/import-object.c:223:62: error: passing argument 3 of 'p11_asn1_read' from incompatible pointer type [-Wincompatible-pointer-types]
+  223 |         attr_modulus.pValue = p11_asn1_read (asn, "modulus", &attr_modulus.ulValueLen);
+      |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                              |
+      |                                                              long unsigned int *
 
-Fixes: 105f0398c76f3288b2668e0b3ec722b2ebe55a0b
- - http://autobuild.buildroot.org/results/cf36fb119224ba50a768dbe363d4c381f76eb476
+Fixes:
+ - http://autobuild.buildroot.org/results/41508a057568ad715e9e00a67adfc3867445d6c1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/syslog-ng/syslog-ng.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ ...id-integer-truncation-on-32-bit-platforms.patch | 109 +++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 4f9a455e81..57ee46ce05 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -61,8 +61,13 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- SYSLOG_NG_DEPENDENCIES += libcurl
--SYSLOG_NG_CONF_OPTS += --enable-http --enable-cloud-auth
-+SYSLOG_NG_CONF_OPTS += --enable-http
- SYSLOG_NG_CONF_OPTS += --with-libcurl="$(STAGING_DIR)/usr"
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+SYSLOG_NG_CONF_OPTS += --enable-cloud-auth
-+else
-+SYSLOG_NG_CONF_OPTS += --disable-cloud-auth
-+endif
- else
- SYSLOG_NG_CONF_OPTS += --disable-http --disable-cloud-auth
- endif
+diff --git a/package/p11-kit/0001-import-object-Avoid-integer-truncation-on-32-bit-platforms.patch b/package/p11-kit/0001-import-object-Avoid-integer-truncation-on-32-bit-platforms.patch
+new file mode 100644
+index 0000000000..03f54b4408
+--- /dev/null
++++ b/package/p11-kit/0001-import-object-Avoid-integer-truncation-on-32-bit-platforms.patch
+@@ -0,0 +1,109 @@
++From d49c92c8420db6ee4c88515bdb014f68f4d471d9 Mon Sep 17 00:00:00 2001
++From: Daiki Ueno <ueno@gnu.org>
++Date: Sat, 2 Dec 2023 09:24:01 +0900
++Subject: [PATCH] import-object: Avoid integer truncation on 32-bit platforms
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The build fails when compiling for 32-bit platforms with
++-Werror=incompatible-pointer-types:
++
++  CFLAGS="-m32 -march=i686 -Werror=incompatible-pointer-types -Werror=implicit -Werror=int-conversion" setarch i686 -- meson setup _build
++  setarch i686 -- meson compile -C _build -v
++  ...
++
++  ../p11-kit/import-object.c: In function ‘add_attrs_pubkey_rsa’:
++  ../p11-kit/import-object.c:223:62: error: passing argument 3 of ‘p11_asn1_read’ from incompatible pointer type [-Werror=incompatible-pointer-types]
++    223 |         attr_modulus.pValue = p11_asn1_read (asn, "modulus", &attr_modulus.ulValueLen);
++        |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~
++        |                                                              |
++        |                                                              long unsigned int *
++
++Reported by Sam James in:
++https://github.com/p11-glue/p11-kit/issues/608
++
++Signed-off-by: Daiki Ueno <ueno@gnu.org>
++
++Upstream: https://github.com/p11-glue/p11-kit/commit/d49c92c8420db6ee4c88515bdb014f68f4d471d9
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ p11-kit/import-object.c | 30 +++++++++++++++++++++++++++---
++ 1 file changed, 27 insertions(+), 3 deletions(-)
++
++diff --git a/p11-kit/import-object.c b/p11-kit/import-object.c
++index feee0765..fb47b964 100644
++--- a/p11-kit/import-object.c
+++++ b/p11-kit/import-object.c
++@@ -55,6 +55,7 @@
++ #endif
++ 
++ #include <assert.h>
+++#include <limits.h>
++ #include <stdbool.h>
++ #include <stdlib.h>
++ #include <string.h>
++@@ -201,6 +202,7 @@ add_attrs_pubkey_rsa (CK_ATTRIBUTE *attrs,
++ 	CK_ATTRIBUTE attr_encrypt = { CKA_ENCRYPT, &tval, sizeof (tval) };
++ 	CK_ATTRIBUTE attr_modulus = { CKA_MODULUS, };
++ 	CK_ATTRIBUTE attr_exponent = { CKA_PUBLIC_EXPONENT, };
+++	size_t len = 0;
++ 
++ 	pubkey = p11_asn1_read (info, "subjectPublicKey", &pubkey_len);
++ 	if (pubkey == NULL) {
++@@ -220,17 +222,31 @@ add_attrs_pubkey_rsa (CK_ATTRIBUTE *attrs,
++ 		goto cleanup;
++ 	}
++ 
++-	attr_modulus.pValue = p11_asn1_read (asn, "modulus", &attr_modulus.ulValueLen);
+++	attr_modulus.pValue = p11_asn1_read (asn, "modulus", &len);
++ 	if (attr_modulus.pValue == NULL) {
++ 		p11_message (_("failed to obtain modulus"));
++ 		goto cleanup;
++ 	}
+++#if ULONG_MAX < SIZE_MAX
+++	if (len > ULONG_MAX) {
+++		p11_message (_("failed to obtain modulus"));
+++		goto cleanup;
+++	}
+++#endif
+++	attr_modulus.ulValueLen = len;
++ 
++-	attr_exponent.pValue = p11_asn1_read (asn, "publicExponent", &attr_exponent.ulValueLen);
+++	attr_exponent.pValue = p11_asn1_read (asn, "publicExponent", &len);
++ 	if (attr_exponent.pValue == NULL) {
++ 		p11_message (_("failed to obtain exponent"));
++ 		goto cleanup;
++ 	}
+++#if ULONG_MAX < SIZE_MAX
+++	if (len > ULONG_MAX) {
+++		p11_message (_("failed to obtain exponent"));
+++		goto cleanup;
+++	}
+++#endif
+++	attr_exponent.ulValueLen = len;
++ 
++ 	result = p11_attrs_build (attrs, &attr_key_type, &attr_encrypt, &attr_modulus, &attr_exponent, NULL);
++ 	if (result == NULL) {
++@@ -260,12 +276,20 @@ add_attrs_pubkey_ec (CK_ATTRIBUTE *attrs,
++ 	CK_ATTRIBUTE attr_key_type = { CKA_KEY_TYPE, &key_type, sizeof (key_type) };
++ 	CK_ATTRIBUTE attr_ec_params = { CKA_EC_PARAMS, };
++ 	CK_ATTRIBUTE attr_ec_point = { CKA_EC_POINT, };
+++	size_t len = 0;
++ 
++-	attr_ec_params.pValue = p11_asn1_read (info, "algorithm.parameters", &attr_ec_params.ulValueLen);
+++	attr_ec_params.pValue = p11_asn1_read (info, "algorithm.parameters", &len);
++ 	if (attr_ec_params.pValue == NULL) {
++ 		p11_message (_("failed to obtain EC parameters"));
++ 		goto cleanup;
++ 	}
+++#if ULONG_MAX < SIZE_MAX
+++	if (len > ULONG_MAX) {
+++		p11_message (_("failed to obtain EC parameters"));
+++		goto cleanup;
+++	}
+++#endif
+++	attr_ec_params.ulValueLen = len;
++ 
++ 	/* subjectPublicKey is read as BIT STRING value which contains
++ 	 * EC point data. We need to DER encode this data as OCTET STRING.
+
+--===============8381408140141494253==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8381408140141494253==--
