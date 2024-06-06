@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53DE6C27C52
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:29:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 278CBC27C52
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:30:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 068714042F;
-	Thu,  6 Jun 2024 19:29:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D5CD41803;
+	Thu,  6 Jun 2024 19:30:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E2jHdu6dVl55; Thu,  6 Jun 2024 19:29:56 +0000 (UTC)
+ id zFdE_zfZ_rGg; Thu,  6 Jun 2024 19:29:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B606D4046B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 986C54180B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B606D4046B;
-	Thu,  6 Jun 2024 19:29:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 194121BF57B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 986C54180B;
+	Thu,  6 Jun 2024 19:29:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 64B691BF57B
  for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:29:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1479E60751
+ by smtp2.osuosl.org (Postfix) with ESMTP id 515634046B
  for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:29:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5KVgB5J6P8-3 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ivOEUyH_PIQ2 for <buildroot@lists.busybox.net>;
  Thu,  6 Jun 2024 19:29:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40CD660730
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 589444042F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 40CD660730
+ by smtp2.osuosl.org (Postfix) with ESMTP id 589444042F
  for <buildroot@buildroot.org>; Thu,  6 Jun 2024 19:29:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 26BF287D71; Thu,  6 Jun 2024 19:29:53 +0000 (UTC)
+ id 3ED6A87D72; Thu,  6 Jun 2024 19:29:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 21:25:08 +0200
+Date: Thu, 6 Jun 2024 21:26:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4f8167b5cac41cc78e124236f41c0289fca6ee6c
-X-Git-Newrev: 671b8f4c57dee15a65110c2f64873fc4fe104f05
+X-Git-Oldrev: 671b8f4c57dee15a65110c2f64873fc4fe104f05
+X-Git-Newrev: 311bb82c9e3a27f36639a1c93d8d5bc8e7eb034f
 X-Patchwork-Hint: ignore
-Message-Id: <20240606192953.26BF287D71@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: fix compile issue with gcc
- 14.x
+Message-Id: <20240606192953.3ED6A87D72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/syslog-ng: fix libcurl build
+ without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,59 +66,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=671b8f4c57dee15a65110c2f64873fc4fe104f05
+commit: https://git.buildroot.net/buildroot/commit/?id=311bb82c9e3a27f36639a1c93d8d5bc8e7eb034f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- http://autobuild.buildroot.net/results/d9b924bdea3fd61060fa0e961c12534c1fff80de
+Fix the following libcurl build failure without C++ raised since bump to
+version 4.7.1 in commit 105f0398c76f3288b2668e0b3ec722b2ebe55a0b and
+https://github.com/syslog-ng/syslog-ng/commit/86feed7bff068a48be477a5b702ca24abc441d70:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+configure: error: C++ support is mandatory when the cloud-auth module is enabled.
+
+Fixes: 105f0398c76f3288b2668e0b3ec722b2ebe55a0b
+ - http://autobuild.buildroot.org/results/cf36fb119224ba50a768dbe363d4c381f76eb476
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- .../uclibc/0002-fix-kernel_stat64-definition.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/syslog-ng/syslog-ng.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/uclibc/0002-fix-kernel_stat64-definition.patch b/package/uclibc/0002-fix-kernel_stat64-definition.patch
-new file mode 100644
-index 0000000000..5a87586af8
---- /dev/null
-+++ b/package/uclibc/0002-fix-kernel_stat64-definition.patch
-@@ -0,0 +1,35 @@
-+From 186878405324e96f61d896a149f623e0c792c972 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 14 May 2024 23:18:56 -0700
-+Subject: [PATCH] fix kernel_stat64 definition
-+
-+The commit 74ca8d6f5d2e ("remove UCLIBC_HAS_LFS") removed conditional
-+compilation dependent on __UCLIBC_HAS_LFS__, assuming it to be always
-+defined, but removed the wrong branch in the definition of
-+kernel_stat64.
-+Fix kernel_stat64 definition to be stat64.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Tested-by: Chris Packham <judge.packham@gmail.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=186878405324e96f61d896a149f623e0c792c972
-+---
-+ libc/sysdeps/linux/common-generic/bits/kernel_stat.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libc/sysdeps/linux/common-generic/bits/kernel_stat.h b/libc/sysdeps/linux/common-generic/bits/kernel_stat.h
-+index 7a97bb4d7..e874a4a9f 100644
-+--- a/libc/sysdeps/linux/common-generic/bits/kernel_stat.h
-++++ b/libc/sysdeps/linux/common-generic/bits/kernel_stat.h
-+@@ -18,7 +18,7 @@
-+  * However that requires more #ifndef in relevant wrappers,
-+  * further uglifying them
-+  */
-+-#define kernel_stat64	stat
-++#define kernel_stat64	stat64
-+ 
-+ #endif	/*  _BITS_STAT_STRUCT_H */
-+ 
-+-- 
-+2.30.2
-+
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 4f9a455e81..57ee46ce05 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -61,8 +61,13 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ SYSLOG_NG_DEPENDENCIES += libcurl
+-SYSLOG_NG_CONF_OPTS += --enable-http --enable-cloud-auth
++SYSLOG_NG_CONF_OPTS += --enable-http
+ SYSLOG_NG_CONF_OPTS += --with-libcurl="$(STAGING_DIR)/usr"
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++SYSLOG_NG_CONF_OPTS += --enable-cloud-auth
++else
++SYSLOG_NG_CONF_OPTS += --disable-cloud-auth
++endif
+ else
+ SYSLOG_NG_CONF_OPTS += --disable-http --disable-cloud-auth
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
