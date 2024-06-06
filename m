@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20BABC27C4F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A1CEC27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4E3C6110B;
-	Thu, 13 Jun 2024 10:08:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 397606110C;
+	Thu, 13 Jun 2024 10:08:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bFcEP-DFn8-L; Thu, 13 Jun 2024 10:08:27 +0000 (UTC)
+ id R3Hc2C9x-k3E; Thu, 13 Jun 2024 10:08:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E57661104
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C27B6109C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E57661104;
-	Thu, 13 Jun 2024 10:08:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C27B6109C;
+	Thu, 13 Jun 2024 10:08:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 71F231BF354
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B753D1BF354
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 16BAD413DD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27758413EE
  for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y_0NzYx8MLoi for <buildroot@lists.busybox.net>;
- Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ id IEGLreUU9_L5 for <buildroot@lists.busybox.net>;
+ Thu, 13 Jun 2024 10:05:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 038EE413F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 195E9413F9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 038EE413F3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 195E9413F9
  for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F15B687F58; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
+ id 149F887F56; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 10:42:44 +0200
+Date: Thu, 6 Jun 2024 11:11:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3137e5bf8f06343e60096ef9e89b1d0788fb6c0f
-X-Git-Newrev: 49fa6ebb71f89e3c9e13d12070bea41ccf6ed700
+X-Git-Oldrev: 1608313efff353b65d8f7b4606aa86a178938acc
+X-Git-Newrev: b2eec8c6265a38cdba1afadf7f60e0fd00f3b448
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100459.F15B687F58@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynq_*: move hashes
+Message-Id: <20240613100500.149F887F56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libtpms: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,92 +64,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49fa6ebb71f89e3c9e13d12070bea41ccf6ed700
+commit: https://git.buildroot.net/buildroot/commit/?id=b2eec8c6265a38cdba1afadf7f60e0fd00f3b448
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch moves the linux and uboot hashes from 'board/zynq/patches' to
-'board/xilinx/patches'.  The reason for this is that all of the Xilinx boards
-including zynq, zynqmp and versal will be using the same linux and uboot repo.
-By putting the hashes in 'board/xilinx/patches', the same hashes can be shared
-amongst all of the Xilinx boards.
+Libtpms is a library that targets the integration of TPM functionality
+into hypervisors, primarily into Qemu. Libtpms provides a very narrow
+public API for this purpose so that integration is possible. Only the
+minimum of necessary APIs are made publicly available.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/{zynq => xilinx}/patches/linux-headers/linux-headers.hash | 0
- board/{zynq => xilinx}/patches/linux/linux.hash                 | 0
- board/{zynq => xilinx}/patches/uboot/uboot.hash                 | 0
- configs/zynq_microzed_defconfig                                 | 2 +-
- configs/zynq_zc702_defconfig                                    | 2 +-
- configs/zynq_zc706_defconfig                                    | 2 +-
- configs/zynq_zed_defconfig                                      | 2 +-
- 7 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/libtpms/libtpms.hash |  2 ++
+ package/libtpms/libtpms.mk   | 18 ++++++++++++++++++
+ 3 files changed, 21 insertions(+)
 
-diff --git a/board/zynq/patches/linux-headers/linux-headers.hash b/board/xilinx/patches/linux-headers/linux-headers.hash
-similarity index 100%
-rename from board/zynq/patches/linux-headers/linux-headers.hash
-rename to board/xilinx/patches/linux-headers/linux-headers.hash
-diff --git a/board/zynq/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
-similarity index 100%
-rename from board/zynq/patches/linux/linux.hash
-rename to board/xilinx/patches/linux/linux.hash
-diff --git a/board/zynq/patches/uboot/uboot.hash b/board/xilinx/patches/uboot/uboot.hash
-similarity index 100%
-rename from board/zynq/patches/uboot/uboot.hash
-rename to board/xilinx/patches/uboot/uboot.hash
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index c6ca5a6244..f955a0c4ad 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -3,7 +3,7 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
--BR2_GLOBAL_PATCH_DIR="board/zynq/patches"
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
-diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
-index 9e37678d9b..75ebc2a3ba 100644
---- a/configs/zynq_zc702_defconfig
-+++ b/configs/zynq_zc702_defconfig
-@@ -3,7 +3,7 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
--BR2_GLOBAL_PATCH_DIR="board/zynq/patches"
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 9ccf23f6e1..ce539eefaf 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -3,7 +3,7 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
--BR2_GLOBAL_PATCH_DIR="board/zynq/patches"
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index 95606caf5c..925faeac8e 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -3,7 +3,7 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
--BR2_GLOBAL_PATCH_DIR="board/zynq/patches"
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9cfc84dd65..d314398248 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1517,6 +1517,7 @@ N:	Jared Bents <jared.bents@rockwellcollins.com>
+ F:	package/libvirt/
+ 
+ N:	Jarkko Sakkinen <jarkko@kernel.org>
++F:	package/libtpms/
+ F:	package/quota/
+ 
+ N:	Jason Pruitt <jrspruitt@gmail.com>
+diff --git a/package/libtpms/libtpms.hash b/package/libtpms/libtpms.hash
+new file mode 100644
+index 0000000000..1026aaa4f4
+--- /dev/null
++++ b/package/libtpms/libtpms.hash
+@@ -0,0 +1,2 @@
++sha256  2807466f1563ebe45fdd12dd26e501e8a0c4fbb99c7c428fbb508789efd221c0  libtpms-0.9.6.tar.gz
++sha256  82f1e6bae374bb6a9d4f4596767fd33e499718d560de140fd9f3d402cc5e41fb  LICENSE
+diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
+new file mode 100644
+index 0000000000..19d7cef89f
+--- /dev/null
++++ b/package/libtpms/libtpms.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# libtpms
++#
++################################################################################
++
++LIBTPMS_VERSION = 0.9.6
++LIBTPMS_SITE = $(call github,stefanberger,libtpms,v$(LIBTPMS_VERSION))
++LIBTPMS_LICENSE = BSD-4-Clause
++LIBTPMS_LICENSE_FILES = LICENSE
++LIBTPMS_INSTALL_STAGING = YES
++
++# Required because a plain Git clone is used:
++HOST_LIBTPMS_AUTORECONF = YES
++HOST_LIBTPMS_DEPENDENCIES = host-pkgconf host-openssl
++HOST_LIBTPMS_CONF_OPTS = --with-openssl  -with-tpm2
++
++$(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
