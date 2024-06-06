@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70979C27C52
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 18:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 135F6C27C52
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 18:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 190A041782;
-	Thu,  6 Jun 2024 18:48:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3A624048E;
+	Thu,  6 Jun 2024 18:56:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1tBl4Yt7k8tU; Thu,  6 Jun 2024 18:48:50 +0000 (UTC)
+ id Fg3GE3Zv88zK; Thu,  6 Jun 2024 18:56:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1A7E41858
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DA86414BC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C1A7E41858;
-	Thu,  6 Jun 2024 18:48:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03FC41BF592
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:48:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DA86414BC;
+	Thu,  6 Jun 2024 18:56:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1774A1BF40D
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:56:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1A9A8493C
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:48:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 110C5424C1
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 18:56:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iock-zubnaLP for <buildroot@lists.busybox.net>;
- Thu,  6 Jun 2024 18:48:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cFLB0v3Xtrwd for <buildroot@lists.busybox.net>;
+ Thu,  6 Jun 2024 18:56:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DC3884939
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 092C8424C0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3DC3884939
- for <buildroot@buildroot.org>; Thu,  6 Jun 2024 18:48:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 092C8424C0
+ for <buildroot@buildroot.org>; Thu,  6 Jun 2024 18:56:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF6A887D15; Thu,  6 Jun 2024 18:48:42 +0000 (UTC)
+ id F334387C00; Thu,  6 Jun 2024 18:56:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 20:45:44 +0200
+Date: Thu, 6 Jun 2024 20:54:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ee12457487e139f9ea0fc05941151f55bcbbeb1b
-X-Git-Newrev: 9755de93360bf84801f551fb9da17b45359e8dfa
+X-Git-Oldrev: 4fb7eb8285412c5fe410dbef47b42888240decbb
+X-Git-Newrev: e4b8380503a4ae78564133d1be94ab54cfe108e4
 X-Patchwork-Hint: ignore
-Message-Id: <20240606184842.DF6A887D15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/ti/am64x-sk/patches/linux: backport
- linux clock fix
+Message-Id: <20240606185627.F334387C00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6base: avoid enabling both
+ desktop and es2 opengl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,128 +61,109 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8890996266525495008=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8890996266525495008==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=9755de93360bf84801f551fb9da17b45359e8dfa
+commit: https://git.buildroot.net/buildroot/commit/?id=e4b8380503a4ae78564133d1be94ab54cfe108e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With newer versions of DM or DMSC firmware (v09.02.07+) invalid clock
-requests will be NAKed and generate a warning in the kernel logs rather
-than being ignored like in previous versions of firmware. This, together
-with the linux clk driver assuming that all clock IDs are contiguous,
-can generate a significant amount of warnings during boot when many
-drivers are being probed.
+Fixes the following error:
 
-A fix for this has been merged into Linux (commit: ad3ac13c6ec31)
-however the backport to older kernels was missed which unfortunately
-affects the current v6.8 kernel.
+ERROR: Feature "opengles2": Forcing to "ON" breaks its condition:
+    NOT WIN32 AND NOT WATCHOS AND NOT QT_FEATURE_opengl_desktop AND GLESv2_FOUND
+Condition values dump:
+    WIN32 = ""
+    WATCHOS = "0"
+    QT_FEATURE_opengl_desktop = "ON"
+    GLESv2_FOUND = "TRUE"
 
-Manually backport this fix while we're using the v6.8 kernel
+CMake Error at cmake/QtBuildInformation.cmake:209 (message):
+  Check the configuration messages for an error that has occurred.
+Call Stack (most recent call first):
+  cmake/QtBuildInformation.cmake:39 (qt_configure_print_summary)
+  cmake/QtBuildRepoHelpers.cmake:332 (qt_print_feature_summary)
+  CMakeLists.txt:208 (qt_build_repo_end)
 
-Signed-off-by: Bryan Brattlof <bb@ti.com>
-Tested-by: Gero Schwäricke <gero.schwaericke@grandcentrix.net>
-[Arnout: add Upstream tag]
+To recreate the error, use the following defconfig (based on freescale_imx8mmevk_defconfig):
+
+BR2_aarch64=y
+BR2_ARM_FPU_VFPV3=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_GLOBAL_PATCH_DIR="board/freescale/common/patches"
+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-evk.dtb"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
+BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk freescale/imx8mm-evk-revb-qca-wifi"
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_PACKAGE_QT6=y
+BR2_PACKAGE_QT6BASE_GUI=y
+BR2_PACKAGE_QT6BASE_OPENGL=y
+BR2_PACKAGE_FREESCALE_IMX=y
+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
+BR2_PACKAGE_FIRMWARE_IMX=y
+BR2_PACKAGE_IMX_GPU_VIV=y
+BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
+BR2_TARGET_UBOOT_NEEDS_DTC=y
+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+BR2_TARGET_UBOOT_SPL=y
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+
+Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...e-sci-clk-Adding-support-for-non-contiguo.patch | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ package/qt6/qt6base/qt6base.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/board/ti/am64x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch b/board/ti/am64x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
-new file mode 100644
-index 0000000000..788b6439d8
---- /dev/null
-+++ b/board/ti/am64x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
-@@ -0,0 +1,75 @@
-+From 750cdf4cb6791c45d479ed73a97728100394fb32 Mon Sep 17 00:00:00 2001
-+From: Udit Kumar <u-kumar1@ti.com>
-+Date: Tue, 13 Feb 2024 13:56:40 +0530
-+Subject: [PATCH] clk: keystone: sci-clk: Adding support for non contiguous
-+ clocks
-+X-Developer-Signature: v=1; a=openpgp-sha256; l=1876; i=bb@ti.com;
-+ h=from:subject; bh=CKSvD6FpqwRzx8blynhoCEc3XUR5TlwjFJdcgjQwpgg=;
-+ b=owNCWmg5MUFZJlNZHYzOLwAAZP/////7puP/r7v/9q9s+8t7wa8/97UZO//d+XvPsvfv2/+wA
-+ RsYHaQAAAAAAAAGg09IPUGmgAaAANBoAAAGmnqAPU9Q0DQ0HqMQDQ8ptTeqeogaABoPU0NAPUAA
-+ 0GgDJ6gANAAMg0GmgNGgDEGh6jR6h6hp6mgepoPU2oDTIGho0IaHqA00yDQNBoGTRoDTRkAZNAD
-+ AmTIBkGjIGmQyAZDRkAaANAYIxBk0DQAAHODcFn1CAGBsJeG8ZtU3FQCBdLH7LjDIouHeAszY1j
-+ AFkqjaWIFXEVi8NV3giRplb1JjCYunXimTaK06SgQRYsUGRSbKOVQP2t1LlAYS93QjOMWF6CHXK
-+ 69KzHyBDpXR2mHAAkHcHX0X3SAYJkxPElwJ1ZnHK1RfDKRfJcRQKzxnryM+4x2mCxpIFIIjpVLk
-+ nItd1Vl1SEF2QiWZIYV4b0lawcUqLGgTQZ0+qpJ5QORYrvPXE4DR89JlJYBU4DjxAoyACH6KN0o
-+ AiaknqZTfMwmF8iREpU4SgDEVun3X3OFlkBp3hBO+Ynb12GJoLSFBSz9IWE2ooLKFalh5XJMZfl
-+ +GthEEOnlrMQHOF8qCr+JAKqXEqSrwLGuEIMFbnGEjJYruo4ENGOmGVlkvW+kLRp5ibCXAAcDMM
-+ TPOUZ/i7kinChIDsZnF4A==
-+X-Developer-Key: i=bb@ti.com; a=openpgp;
-+ fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
-+
-+Most of clocks and their parents are defined in contiguous range,
-+But in few cases, there is gap in clock numbers[0].
-+Driver assumes clocks to be in contiguous range, and add their clock
-+ids incrementally.
-+
-+New firmware started returning error while calling get_freq and is_on
-+API for non-available clock ids.
-+
-+In this fix, driver checks and adds only valid clock ids.
-+
-+[0] https://software-dl.ti.com/tisci/esd/latest/5_soc_doc/j7200/clocks.html
-+Section Clocks for NAVSS0_CPTS_0 Device, clock id 12-15 not present.
-+
-+Fixes: 3c13933c6033 ("clk: keystone: sci-clk: add support for dynamically probing clocks")
-+Signed-off-by: Udit Kumar <u-kumar1@ti.com>
-+Reviewed-by: Nishanth Menon <nm@ti.com>
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ad3ac13c6ec318b43e769cc9ffde67528e58e555
-+Signed-off-by: Bryan Brattlof <bb@ti.com>
-+---
-+ drivers/clk/keystone/sci-clk.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/drivers/clk/keystone/sci-clk.c b/drivers/clk/keystone/sci-clk.c
-+index 35fe197dd303c..eb2ef44869b23 100644
-+--- a/drivers/clk/keystone/sci-clk.c
-++++ b/drivers/clk/keystone/sci-clk.c
-+@@ -516,6 +516,7 @@ static int ti_sci_scan_clocks_from_dt(struct sci_clk_provider *provider)
-+ 	struct sci_clk *sci_clk, *prev;
-+ 	int num_clks = 0;
-+ 	int num_parents;
-++	bool state;
-+ 	int clk_id;
-+ 	const char * const clk_names[] = {
-+ 		"clocks", "assigned-clocks", "assigned-clock-parents", NULL
-+@@ -586,6 +587,15 @@ static int ti_sci_scan_clocks_from_dt(struct sci_clk_provider *provider)
-+ 				clk_id = args.args[1] + 1;
-+ 
-+ 				while (num_parents--) {
-++					/* Check if this clock id is valid */
-++					ret = provider->ops->is_auto(provider->sci,
-++						sci_clk->dev_id, clk_id, &state);
-++
-++					if (ret) {
-++						clk_id++;
-++						continue;
-++					}
-++
-+ 					sci_clk = devm_kzalloc(dev,
-+ 							       sizeof(*sci_clk),
-+ 							       GFP_KERNEL);
-+
-+base-commit: 9fbb5fcb41e7e96fb8769a9f5a12a35a984c23bd
-+-- 
-+2.43.2
-+
-
---===============8890996266525495008==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 6857725ef5..211808d2af 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -259,10 +259,15 @@ QT6BASE_CONF_OPTS += -DFEATURE_eglfs=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_DESKTOP),y)
+-QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengl_desktop=ON
++QT6BASE_CONF_OPTS += \
++	-DFEATURE_opengl=ON \
++	-DFEATURE_opengl_desktop=ON
+ QT6BASE_DEPENDENCIES += libgl
+ else ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_ES2),y)
+-QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengles2=ON
++QT6BASE_CONF_OPTS += \
++	-DFEATURE_opengl=ON \
++	-DFEATURE_opengles2=ON \
++	-DFEATURE_opengl_desktop=OFF
+ QT6BASE_DEPENDENCIES += libgles
+ else
+ QT6BASE_CONF_OPTS += -DFEATURE_opengl=OFF -DINPUT_opengl=no
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8890996266525495008==--
