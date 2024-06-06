@@ -4,90 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EF73C25B75
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 10:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAED1C25B75
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 10:41:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 202896083F;
-	Thu,  6 Jun 2024 10:22:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85E3E6110D;
+	Thu,  6 Jun 2024 10:41:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LKioKxUM8kJy; Thu,  6 Jun 2024 10:22:18 +0000 (UTC)
+ id 9P26bodnBfqs; Thu,  6 Jun 2024 10:41:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CEB76085D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76EED608B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CEB76085D;
-	Thu,  6 Jun 2024 10:22:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FAE41BF5AD
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 10:22:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76EED608B3;
+	Thu,  6 Jun 2024 10:41:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DBBC1BF5AD
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 10:41:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CAB86083F
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 10:22:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A1D440896
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 10:41:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nupv5PRguUyD for <buildroot@lists.busybox.net>;
- Thu,  6 Jun 2024 10:22:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::132; helo=mail-lf1-x132.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 24CD66077E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24CD66077E
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
- [IPv6:2a00:1450:4864:20::132])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 24CD66077E
- for <buildroot@buildroot.org>; Thu,  6 Jun 2024 10:22:15 +0000 (UTC)
-Received: by mail-lf1-x132.google.com with SMTP id
- 2adb3069b0e04-52b894021cbso1059790e87.0
- for <buildroot@buildroot.org>; Thu, 06 Jun 2024 03:22:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717669333; x=1718274133;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=v7N3GSvYb+iPX3IchbBlCJnHzgyBjXJvQbxWJJBC1og=;
- b=g+D2Alp65gUB1Z4g8hOz/LYBTl+/0VdtwFkciHye6cge4U/iCS6gPUZoviKSCdM44Z
- JOIVZJBo0hZ0UyyuFQPCUba+QqTHpxhr9DBkCa5h8ZpKk9+8dgIRTpU/ARwBm0gx8QLv
- r2zvYP8QyXeYidF9LILlVFX4EjAnn7kUi54m158Ejg1LAZismx+Mlsiq3eoOTkfI1Ukw
- UC3zSb8m6Hra0qLH25MO6Rny4lWrK9lMYuDb/i4Ph1evLuolss4+ZHNfJ87iOd0l4Ggd
- Y7f4QhH63PMsj2za76Xrlcrn7rQ7IJTJLRI5avmbqLZmCRVLGK8foGancNHe0KTWcN67
- WgJA==
-X-Gm-Message-State: AOJu0YySrENJw58DGaLDxT0tPHElI2A9lgfC+mrDnhru5PaI7aempgbD
- kKduevfK7GhdV5tkuiZ+RWdM/y4Lml/5RIIi04W2pIzZz+gxFRrF2MT/y/o118h9FQoLHEcsRK7
- h
-X-Google-Smtp-Source: AGHT+IGEHv/7YbyZi0WWObgrnOewocsCzE049JSWn3nr5WeaPyjkNNCTXGGllEIMkgE9Dt+i4iFuog==
-X-Received: by 2002:a19:2d4a:0:b0:523:90df:a9c6 with SMTP id
- 2adb3069b0e04-52bab4fa5b2mr2985490e87.50.1717669332659; 
- Thu, 06 Jun 2024 03:22:12 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.41.53])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-421581490c2sm50175585e9.37.2024.06.06.03.22.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 06 Jun 2024 03:22:12 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu,  6 Jun 2024 12:22:08 +0200
-Message-ID: <20240606102208.580103-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UmU3hQk_3NAM for <buildroot@lists.busybox.net>;
+ Thu,  6 Jun 2024 10:40:59 +0000 (UTC)
+X-Greylist: delayed 767 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 06 Jun 2024 10:40:58 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C37EB404D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C37EB404D0
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
+ helo=fllv0016.ext.ti.com; envelope-from=p-bhagat@ti.com; receiver=<UNKNOWN> 
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C37EB404D0
+ for <buildroot@buildroot.org>; Thu,  6 Jun 2024 10:40:58 +0000 (UTC)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+ by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 456ASAT8062920;
+ Thu, 6 Jun 2024 05:28:10 -0500
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+ by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 456ASA8G026863
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Thu, 6 Jun 2024 05:28:10 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 6
+ Jun 2024 05:28:10 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 6 Jun 2024 05:28:10 -0500
+Received: from [172.24.227.38] (ula0502350.dhcp.ti.com [172.24.227.38])
+ by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 456AS7sS109778;
+ Thu, 6 Jun 2024 05:28:08 -0500
+Message-ID: <0b898432-d7b4-49a5-92e2-e7ec0d733f0e@ti.com>
+Date: Thu, 6 Jun 2024 15:58:06 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bryan Brattlof <bb@ti.com>
+References: <20240604061556.3167647-1-p-bhagat@ti.com>
+ <20240605175435.pbfqas47c7wpvj3r@bryanbrattlof.com>
+Content-Language: en-US
+In-Reply-To: <20240605175435.pbfqas47c7wpvj3r@bryanbrattlof.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1717669333; x=1718274133;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=v7N3GSvYb+iPX3IchbBlCJnHzgyBjXJvQbxWJJBC1og=;
- b=YAsccc2QJbSdrPUTB3GKd0lJGfIgzweTBq9VEn2U+XhBLyvtinvzJ8ycK2JouCUuam
- lW9dGxEPvfamFRoAHaierN2sH4vWaScXstfhHv/NatTLIilSCeiKDU7mpeAEjIShDOhG
- h6cqyEfPbOM+wEEtTXcU0f8og8lvaeJl7sKy4=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=ti.com; s=ti-com-17Q1; t=1717669690;
+ bh=z6dyitP6iLOFNc4KT37poAkl1Weg3msoLpYeG549Px0=;
+ h=Date:Subject:To:CC:References:From:In-Reply-To;
+ b=w3Dz2YOypXkHk42lajRP9INyKs+ZHl9Vvs6p+ex1aqyWJMQIbbqS/vwrMZ5SnwUix
+ rFe95UyLDKkVEc6dju3pXWdcS6mKWnMXRTAAWtjgSnr/XHyYgRLNUIZsLgpfbY/saS
+ IylpRoolvQYTKfvZ0nIWz1HvUrFNX3pa+BJdjIkw=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=YAsccc2Q
-Subject: [Buildroot] [PATCH 1/1] configs/stm32f429_disco_xip: add hashes
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=w3Dz2YOy
+Subject: Re: [Buildroot] [PATCH 1/1] boot/ti-k3-boot-firmware: Add config
+ option to specify version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,72 +93,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Christophe Priouzeau <christophe.priouzeau@foss.st.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Paresh Bhagat via buildroot <buildroot@buildroot.org>
+Reply-To: Paresh Bhagat <p-bhagat@ti.com>
+Cc: Xuanhao Shi <X15000177@gmail.com>, Gyan Gupta <g-gupta@ti.com>,
+ Chirag Shilwant <c-shilwant@ti.com>, Syed Mohammed Khasim <khasim@ti.com>,
+ buildroot@buildroot.org, Sai Sree Kartheek Adivi <s-adivi@ti.com>,
+ Anand Gadiyar <gadiyar@ti.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch adds .hash files for Linux and Linux headers and then enables
-BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop the defconfig
-from .checkpackageignore.
+Hi Bryan,
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- .checkpackageignore                                             | 1 -
- .../stm32f429-disco/patches/linux-headers/linux-headers.hash    | 1 +
- .../stmicroelectronics/stm32f429-disco/patches/linux/linux.hash | 2 ++
- configs/stm32f429_disco_xip_defconfig                           | 2 ++
- 4 files changed, 5 insertions(+), 1 deletion(-)
- create mode 120000 board/stmicroelectronics/stm32f429-disco/patches/linux-headers/linux-headers.hash
- create mode 100644 board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
+Thanks for the review. I will send v2 with your suggested changes.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index d0bd179a5c02..437aafb41594 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -330,7 +330,6 @@ configs/solidrun_clearfog_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_clearfog_gt_8k_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
- configs/spike_riscv64_defconfig lib_defconfig.ForceCheckHash
--configs/stm32f429_disco_xip_defconfig lib_defconfig.ForceCheckHash
- configs/stm32f469_disco_sd_defconfig lib_defconfig.ForceCheckHash
- configs/stm32f469_disco_xip_defconfig lib_defconfig.ForceCheckHash
- configs/stm32f769_disco_sd_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux-headers/linux-headers.hash b/board/stmicroelectronics/stm32f429-disco/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 000000000000..5808d92afe89
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f429-disco/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-new file mode 100644
-index 000000000000..c1bd9f9100d5
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c2b74b96dd3d0cc9f300914ef7c4eef76d5fac9de6047961f49e69447ce9f905  linux-6.1.27.tar.xz
-diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
-index 99ae8cc7533b..e3d3cc38ff8e 100644
---- a/configs/stm32f429_disco_xip_defconfig
-+++ b/configs/stm32f429_disco_xip_defconfig
-@@ -3,6 +3,8 @@ BR2_cortex_m4=y
- BR2_KERNEL_HEADERS_6_1=y
- # BR2_UCLIBC_INSTALL_UTILS is not set
- BR2_ENABLE_LTO=y
-+BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--- 
-2.43.0
+Regards,
 
+Paresh
+
+On 05/06/24 23:24, Bryan Brattlof wrote:
+> Oops! Just noticed some white-space issues while cleaning up.
+>
+> On June  4, 2024 thus sayeth Paresh Bhagat via buildroot:
+>> Previously the version of ti-k3-boot-firmware (TI_K3_BOOT_FIRMWARE_VERSION) was
+>> fixed in mk file. Introduce a new config option
+>> BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION so that user can change the version
+>> for ti-k3-boot-firmware using menuconfig.
+>>
+>> This provides greater flexibilty for users to select different versions of
+>> ti-k3-boot-firmware without modfying the build script directly.
+>>
+>> Signed-off-by: Paresh Bhagat <p-bhagat@ti.com>
+>> ---
+>>   boot/ti-k3-boot-firmware/Config.in            | 30 +++++++++++++++++++
+>>   .../ti-k3-boot-firmware.mk                    |  2 +-
+>>   2 files changed, 31 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/boot/ti-k3-boot-firmware/Config.in b/boot/ti-k3-boot-firmware/Config.in
+>> index d80bb4bdb3..adc201c468 100644
+>> --- a/boot/ti-k3-boot-firmware/Config.in
+>> +++ b/boot/ti-k3-boot-firmware/Config.in
+>> @@ -5,3 +5,33 @@ config BR2_TARGET_TI_K3_BOOT_FIRMWARE
+>>   	  This package downloads and installs the TI-specific ti-sysfw
+>>   	  and ti-dm firmware needed to boot TI K3 platforms (which
+>>   	  include AM62x, AM64x, AM65x and more).
+>> +
+>> +if BR2_TARGET_TI_K3_BOOT_FIRMWARE
+>> +choice
+>> +	prompt "ti-k3-boot-firmware version"
+>> +	default BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
+>> +	help
+>> +		Select the version of Ti k3 boot firmware you want to use
+> Do you mind replacing the indentation with a <Tab> + 2 <Space> here? to
+> align with the help label a little better.
+>
+>> +
+>> +config BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
+>> +	bool "09.02.00.009"
+>> +
+>> +config BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
+>> +	bool "Custom version"
+>> +	help
+>> +      This option allows to use a specific official version from
+>> +      git.ti.org.
+>> +
+> For now ;) but same here. <Tab> + 2 <Space>
+>
+> ~Bryan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
