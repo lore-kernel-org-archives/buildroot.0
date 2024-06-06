@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CC23C27C52
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:24:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81FCAC27C52
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 19:24:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9883B4042F;
-	Thu,  6 Jun 2024 19:24:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9718641888;
+	Thu,  6 Jun 2024 19:24:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iV7sWxYJlE33; Thu,  6 Jun 2024 19:24:42 +0000 (UTC)
+ id HXqZkKQFMCTG; Thu,  6 Jun 2024 19:24:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 337E141720
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DB1941807
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 337E141720;
-	Thu,  6 Jun 2024 19:24:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3A0781BF57B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DB1941807;
+	Thu,  6 Jun 2024 19:24:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C6561BF94D
  for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31E7181E2C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FAAC41782
  for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 19:24:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H4sFWYNxKCrH for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ry_Otrek1VGY for <buildroot@lists.busybox.net>;
  Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44EFD81E1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 770D54046B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44EFD81E1C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 770D54046B
  for <buildroot@buildroot.org>; Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3633486FD5; Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
+ id 70C7B87D5B; Thu,  6 Jun 2024 19:24:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 21:20:38 +0200
+Date: Thu, 6 Jun 2024 21:22:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4dafb8b5c2adb6208f56e2abda954e264b8e6fdd
-X-Git-Newrev: ed05bfcab6b25653c997dbc98bef5604597471a9
+X-Git-Oldrev: 5fcc4e19602ad37d018ccf3543fe82a291837f43
+X-Git-Newrev: d3f47c2486069fa6ee843f39a790d9bbde5de6f6
 X-Patchwork-Hint: ignore
-Message-Id: <20240606192439.3633486FD5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bc: fix build with gcc 14.x
+Message-Id: <20240606192439.70C7B87D5B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sofia-sip: fix build with gcc 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,106 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed05bfcab6b25653c997dbc98bef5604597471a9
+commit: https://git.buildroot.net/buildroot/commit/?id=d3f47c2486069fa6ee843f39a790d9bbde5de6f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.net/results/4d3/4d3c0e0a08cd734699cb61412c99d705738e8ab4/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...read-and-write-errors-on-input-and-output.patch | 41 +++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+ ...-incompatible-pointer-type-in-sip_basic-c.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch b/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
-index cc72e5cd69..87654e3c14 100644
---- a/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
-+++ b/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
-@@ -26,6 +26,10 @@ Origin: other
- Bug-Debian: http://bugs.debian.org/488735
- 
- Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+diff --git a/package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch b/package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch
+new file mode 100644
+index 0000000000..7f890fd27b
+--- /dev/null
++++ b/package/sofia-sip/0001-Fix-incompatible-pointer-type-in-sip_basic-c.patch
+@@ -0,0 +1,27 @@
++From 46b02f0655af0a9594e805f09a8ee99278f84777 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tomi=20L=C3=A4hteenm=C3=A4ki?= <lihis@lihis.net>
++Date: Mon, 19 Feb 2024 09:06:20 +0200
++Subject: [PATCH] Fix incompatible pointer type in sip_basic.c
++
++Closes #248
++
++Upstream: https://github.com/freeswitch/sofia-sip/pull/249
++
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[Bernd:
-+ Updated to incorporate changes by Matthias Klose <doko@debian.org>
-+ on 2024-03-13 that fix Debian bug https://bugs.debian.org/1065375]
- ---
-  bc/execute.c | 10 +++++++++-
-  bc/main.c    |  3 +++
-@@ -276,6 +280,14 @@ diff --git a/dc/dc.c b/dc/dc.c
- index 6a2bb26..ccdb1c2 100644
- --- a/dc/dc.c
- +++ b/dc/dc.c
-+@@ -45,6 +45,7 @@
-+ #include <getopt.h>
-+ #include "dc.h"
-+ #include "dc-proto.h"
-++#include "number.h"
++---
++ libsofia-sip-ua/sip/sip_basic.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libsofia-sip-ua/sip/sip_basic.c b/libsofia-sip-ua/sip/sip_basic.c
++index 3444fb25..82e824e3 100644
++--- a/libsofia-sip-ua/sip/sip_basic.c
+++++ b/libsofia-sip-ua/sip/sip_basic.c
++@@ -2901,7 +2901,7 @@ issize_t sip_identity_d(su_home_t *home, sip_header_t *h, char *s, isize_t slen)
++       ext = strchr(ppt, ';');
 + 
-+ #ifndef EXIT_SUCCESS	/* C89 <stdlib.h> */
-+ # define EXIT_SUCCESS	0
- @@ -59,6 +59,7 @@ static void
-  bug_report_info DC_DECLVOID()
-  {
-@@ -304,6 +316,14 @@ diff --git a/dc/eval.c b/dc/eval.c
- index 05a3d9e..6c54e61 100644
- --- a/dc/eval.c
- +++ b/dc/eval.c
-+@@ -41,6 +41,7 @@
-+ #endif
-+ #include "dc.h"
-+ #include "dc-proto.h"
-++#include "number.h"
-+ 
-+ typedef enum {DC_FALSE, DC_TRUE} dc_boolean;
-+ 
- @@ -97,12 +97,15 @@ static int input_pushback;
-  static int
-  input_fil DC_DECLVOID()
-@@ -512,6 +532,14 @@ diff --git a/dc/misc.c b/dc/misc.c
- index cd23602..cd910b8 100644
- --- a/dc/misc.c
- +++ b/dc/misc.c
-+@@ -47,6 +47,7 @@
-+ #include <getopt.h>
-+ #include "dc.h"
-+ #include "dc-proto.h"
-++#include "number.h"
-+ 
-+ #ifndef EXIT_FAILURE	/* C89 <stdlib.h> */
-+ # define EXIT_FAILURE	1
- @@ -89,6 +89,7 @@ dc_show_id DC_DECLARG((fp, id, suffix))
-  		fprintf(fp, "'%c' (%#o)%s", (unsigned int) id, id, suffix);
-  	else
-@@ -593,8 +621,11 @@ diff --git a/dc/stack.c b/dc/stack.c
- index 49422df..174411d 100644
- --- a/dc/stack.c
- +++ b/dc/stack.c
--@@ -35,7 +35,10 @@
-+@@ -33,9 +33,13 @@
-+ #include "dc.h"
-+ #include "dc-proto.h"
-  #include "dc-regdef.h"
-++#include "number.h"
-  
-  /* an oft-used error message: */
- -#define Empty_Stack	fprintf(stderr, "%s: stack empty\n", progname)
-@@ -657,6 +688,14 @@ diff --git a/dc/string.c b/dc/string.c
- index dee9169..389d899 100644
- --- a/dc/string.c
- +++ b/dc/string.c
-+@@ -45,6 +45,7 @@
-+ #endif
-+ #include "dc.h"
-+ #include "dc-proto.h"
-++#include "number.h"
-+ 
-+ /* here is the completion of the dc_string type: */
-+ struct dc_string {
- @@ -94,6 +94,7 @@ dc_out_str DC_DECLARG((value, discard_flag))
-  	dc_discard discard_flag DC_DECLEND
-  {
++       if (ext) {
++-          msg_param_t *params = su_alloc(home, sizeof(msg_param_t));
+++          msg_param_t const *params = su_alloc(home, sizeof(msg_param_t));
++           if (msg_params_d(home, &ext, &params) >= 0) {
++               id->id_info_params = params;
++           }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
