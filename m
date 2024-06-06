@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88014C27C75
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D88BAC27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF8356113D;
-	Thu, 13 Jun 2024 10:08:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2E27610B9;
+	Thu, 13 Jun 2024 10:09:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ayb0YLtv338L; Thu, 13 Jun 2024 10:08:56 +0000 (UTC)
+ id meYD_XnJcRRN; Thu, 13 Jun 2024 10:09:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 690246115F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A31936115F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 690246115F;
-	Thu, 13 Jun 2024 10:08:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A31936115F;
+	Thu, 13 Jun 2024 10:08:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 32A3E1BF354
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BBE191BF354
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88EB7413F7
+ by smtp2.osuosl.org (Postfix) with ESMTP id A56E1413E0
  for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zSnfFVXLJjPp for <buildroot@lists.busybox.net>;
- Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ id HKQAawFvfB98 for <buildroot@lists.busybox.net>;
+ Thu, 13 Jun 2024 10:05:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2EF8413E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BD7A413FC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F2EF8413E0
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5BD7A413FC
+ for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E650487F57; Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
+ id 5396C87ED8; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 6 Jun 2024 10:42:42 +0200
+Date: Thu, 6 Jun 2024 16:18:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 24b6340bac612802c4d96403c2d05d214d05fdfe
-X-Git-Newrev: 3137e5bf8f06343e60096ef9e89b1d0788fb6c0f
+X-Git-Oldrev: c1554df688cb1563c8da2f8fcba21020dcf126a1
+X-Git-Newrev: d9a0954288c43c01633343a4a701692de8068cba
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100459.E650487F57@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynqmp_kria_kr260_defconfig: bump
- to xilinx-v2024.1
+Message-Id: <20240613100500.5396C87ED8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs: add raspberrypi 5 defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,117 +59,171 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1588178382583588734=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3137e5bf8f06343e60096ef9e89b1d0788fb6c0f
+--===============1588178382583588734==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d9a0954288c43c01633343a4a701692de8068cba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps the zynqmp_kria_kr260_defconfig to xilinx-v2024.1 which includes
-the following updates:
+This configuration builds an image for the RaspberryPi 5.
 
-- Linux v6.6.10
-- U-Boot v2024.01
-- ATF v2.10
-- PMUFW xilinx-v2024.1
-
-Migrated u-boot to xilinx_zynqmp_kria_defconfig, so uboot.fragment no longer
-needed.
-
-With u-boot 2024.1, CONFIG_SYS_SPI_U_BOOT_OFFS has a new meaning. It is now
-the offset between the base address of the boot.bin and u-boot.itb instead of
-a raw base address of u-boot.itb. This allows for A/B firmware updates since
-the u-boot.itb is set by default to a 0x80000 offset of the boot.bin.
-
-Thus, Kria SOMs come with the following QSPI address table.
-
-Partition A:
-0x200000 - boot.bin
-0x280000 - u-boot.itb
-
-Partition B:
-0xF80000 - boot.bin
-0x1000000 - u-boot.itb
-
-This patch updates the addressing in the readme.txt accordingly.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
+[yann.morin.1998@free.fr: check hashes]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/zynqmp/kria/readme.txt        |  4 ++--
- configs/zynqmp_kria_kr260_defconfig | 14 ++++++--------
- 2 files changed, 8 insertions(+), 10 deletions(-)
+ board/raspberrypi/cmdline_5.txt               |  1 +
+ board/raspberrypi/config_5.txt                | 14 ++++++++
+ board/raspberrypi/linux-4k-page-size.fragment |  1 +
+ board/raspberrypi/readme.txt                  |  6 ++++
+ board/raspberrypi5                            |  1 +
+ configs/raspberrypi5_defconfig                | 50 +++++++++++++++++++++++++++
+ 6 files changed, 73 insertions(+)
 
-diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
-index c6be22133c..ca3164383a 100644
---- a/board/zynqmp/kria/readme.txt
-+++ b/board/zynqmp/kria/readme.txt
-@@ -103,8 +103,8 @@ KD240 / KR260 Flashing Instructions:
- Flashing u-boot.itb:
-     $ sf probe
-     $ fatload usb 0 0x1000000 u-boot.itb
--    $ sf erase 0xf80000 +$filesize
--    $ sf write 0x1000000 0xf80000 $filesize
-+    $ sf erase 0x280000 +$filesize
-+    $ sf write 0x1000000 0x280000 $filesize
+diff --git a/board/raspberrypi/cmdline_5.txt b/board/raspberrypi/cmdline_5.txt
+new file mode 100644
+index 0000000000..ac457353e2
+--- /dev/null
++++ b/board/raspberrypi/cmdline_5.txt
+@@ -0,0 +1 @@
++root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA10,115200
+diff --git a/board/raspberrypi/config_5.txt b/board/raspberrypi/config_5.txt
+new file mode 100644
+index 0000000000..bbed19fe46
+--- /dev/null
++++ b/board/raspberrypi/config_5.txt
+@@ -0,0 +1,14 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++kernel=Image
++
++# To use an external initramfs file
++#initramfs rootfs.cpio.gz
++
++# Disable overscan assuming the display supports displaying the full resolution
++# If the text shown on the screen disappears off the edge, comment this out
++disable_overscan=1
+diff --git a/board/raspberrypi/linux-4k-page-size.fragment b/board/raspberrypi/linux-4k-page-size.fragment
+new file mode 100644
+index 0000000000..5df91df1aa
+--- /dev/null
++++ b/board/raspberrypi/linux-4k-page-size.fragment
+@@ -0,0 +1 @@
++CONFIG_ARM64_4K_PAGES=y
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 9202b5ff37..aa6421ea01 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -10,6 +10,7 @@ These instructions apply to all models of the Raspberry Pi:
+   - the model B3 (aka Raspberry Pi 3).
+   - the model B4 (aka Raspberry Pi 4).
+   - the model CM4 (aka Raspberry Pi Compute Module 4 and IO Board).
++  - the model B5 (aka Raspberry Pi 5).
  
- Flashing boot.bin:
-     $ sf probe
-diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
-index 2089c3f355..3bf269ab6b 100644
---- a/configs/zynqmp_kria_kr260_defconfig
-+++ b/configs/zynqmp_kria_kr260_defconfig
-@@ -1,11 +1,11 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kr260/kr260.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2 ${UBOOT_DIR}"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kr-g-revB"
-@@ -15,16 +15,15 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.2)/xlnx_rebase_v2.8_2023.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.1)/xlnx_rebase_v2.10_2024.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="ZYNQMP_CONSOLE=cadence1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.2)/xlnx_rebase_v2023.01_2023.2.tar.gz"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
--BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/kria/uboot.fragment"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_kria"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -32,11 +31,10 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/kr260-kria/pmufw.elf"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/kr260-kria/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kr260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
--BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches"
+ How to build it
+ ===============
+@@ -64,6 +65,10 @@ or for CM4 (on IO Board - 64 bit):
+ 
+   $ make raspberrypicm4io_64_defconfig
+ 
++For model 5 B:
++
++  $ make raspberrypi5_defconfig
++
+ Build the rootfs
+ ----------------
+ 
+@@ -94,6 +99,7 @@ After building, you should obtain this tree:
+     +-- bcm2710-rpi-cm3.dtb         [1]
+     +-- bcm2711-rpi-4-b.dtb         [1]
+     +-- bcm2711-rpi-cm4.dtb         [1]
++    +-- bcm2712-rpi-5-b.dtb         [1]
+     +-- bcm2837-rpi-3-b.dtb         [1]
+     +-- boot.vfat
+     +-- rootfs.ext4
+diff --git a/board/raspberrypi5 b/board/raspberrypi5
+new file mode 120000
+index 0000000000..fcdafc81ed
+--- /dev/null
++++ b/board/raspberrypi5
+@@ -0,0 +1 @@
++raspberrypi
+\ No newline at end of file
+diff --git a/configs/raspberrypi5_defconfig b/configs/raspberrypi5_defconfig
+new file mode 100644
+index 0000000000..73592c4a1a
+--- /dev/null
++++ b/configs/raspberrypi5_defconfig
+@@ -0,0 +1,50 @@
++BR2_aarch64=y
++BR2_cortex_a76_a55=y
++BR2_ARM_FPU_VFPV4=y
++
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++BR2_SYSTEM_DHCP="eth0"
++
++# Linux headers same as kernel, a 6.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/linux-4k-page-size.fragment"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,17f135b742c4edb340afb365873c3a574f7e16cb)/linux-17f135b742c4edb340afb365873c3a574f7e16cb.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="bcm2712"
++
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2712-rpi-5-b"
++
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi5/config_5.txt"
++BR2_PACKAGE_RPI_FIRMWARE_CMDLINE_FILE="board/raspberrypi5/cmdline_5.txt"
++# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi5/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi5/post-image.sh"
++
++# Enable compressed kernel module support
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
++
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_GLOBAL_PATCH_DIR="board/raspberrypi5/patches"
+
+--===============1588178382583588734==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1588178382583588734==--
