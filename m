@@ -4,71 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90EC6C25B75
-	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 08:47:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCC4CC27C55
+	for <buildroot@archiver.kernel.org>; Thu,  6 Jun 2024 08:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6039D8432E;
-	Thu,  6 Jun 2024 08:47:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B2208435A;
+	Thu,  6 Jun 2024 08:47:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3FNkfcte2X4w; Thu,  6 Jun 2024 08:47:28 +0000 (UTC)
+ id 8htAROVqCJ5n; Thu,  6 Jun 2024 08:47:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DD1784358
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC56F84330
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2DD1784358;
-	Thu,  6 Jun 2024 08:47:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2ED721BF95C
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 08:47:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC56F84330;
+	Thu,  6 Jun 2024 08:47:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 17AA61BF599
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 08:47:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28C35403D8
- for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 08:47:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04B206082C
+ for <buildroot@lists.busybox.net>; Thu,  6 Jun 2024 08:47:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ig-pmNdYxS2B for <buildroot@lists.busybox.net>;
- Thu,  6 Jun 2024 08:47:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oga5Ey2rP4VC for <buildroot@lists.busybox.net>;
+ Thu,  6 Jun 2024 08:47:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A07D8403C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A07D8403C9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A3768607D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3768607D8
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A07D8403C9
- for <buildroot@buildroot.org>; Thu,  6 Jun 2024 08:47:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A3768607D8
+ for <buildroot@buildroot.org>; Thu,  6 Jun 2024 08:47:36 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id B635113F86A;
- Thu,  6 Jun 2024 10:47:11 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id BAC1513F8C6;
+ Thu,  6 Jun 2024 10:47:27 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 06 Jun 2024 10:47:11 +0200
-Date: Thu, 6 Jun 2024 10:47:11 +0200
+ Thu, 06 Jun 2024 10:47:27 +0200
+Date: Thu, 6 Jun 2024 10:47:27 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Neal Frager <neal.frager@amd.com>
-Message-ID: <ZmF3j40sxQvzs-yC@landeda>
+Message-ID: <ZmF3nzjwI90NFZz7@landeda>
 References: <20240603121435.197680-1-neal.frager@amd.com>
+ <20240603121435.197680-2-neal.frager@amd.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240603121435.197680-1-neal.frager@amd.com>
+In-Reply-To: <20240603121435.197680-2-neal.frager@amd.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1717663639;
- bh=RjzDsFSwf/m6dDRj8H+pevDQ98T5GlXmpPsIUjSC0LY=;
+ d=free.fr; s=smtp-20201208; t=1717663655;
+ bh=loZSy4r8tHfXUB3YZxGZT4pww1eOhSjCdlvIF6y0I/M=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=hkkL9k30xrBHROyhQeQIi+ZCmzZxpMrdOm0LugyUkw1Yrc/f8TClhjoq/9fiR58zP
- 0eLyrnEtJfd4qI31MH0kC28O9xRx3Lvpp6+NNjhY5v2Z7GYwdJYi368L58IMWESmrH
- KdUsWqfHsf8CNA7hz+hpZxv1okjfNia+5LKaKaOVnfwSxIDt5x1zWXNESNeUaZfP9D
- BkjTvq1rcg8fhmy+afZ3roU0SSKb8oL7dbxYJLDQm2B8g2xTfp8vokNPluVqIQDPOC
- G50g89fAvpbDfHiTGBcT9MEpQV0Damhd/ija/0kipY2OSe7xy1N8bhx6UcCjiQ+VEc
- AGFlNOHqDiDUQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=GWp9U0W0JOjlgN0SLsJn1L2o4sOK6m2QMuyXOrcb/vatfREd+SkYmnedyg3lqtIDx
+ TZYbzNj0qcRzR9W/D8gPx+r+BieMac1xg7FCkKx0tCyQvdpJ3gezCvHTWoJlPEE7k1
+ 2O2HiYpfxvO+kEWWOn7jtey6MzAFs0HCOWnMi68tk/PxLnJFD2eTV/Xa25SOYAyBLA
+ p48XiZHw6qN4TsK9rFt4umGcxPIkTAk3qApeXNjgS0dFFisItvGaeW4IUTtYdcAloP
+ Mh0vaPfl4n2aRBAHFHVfpr3AyDX+ZFyExdWIfKB+6iL/bO14A7V/+Vgv0cBp7emVwU
+ iw4YUTmhlLI3g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hkkL9k30
-Subject: Re: [Buildroot] [PATCH v1 1/2] configs/zynqmp_kria_kv260_defconfig:
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=GWp9U0W0
+Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_kria_kr260_defconfig:
  bump to xilinx-v2024.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -92,7 +94,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Neal, All,
 
 On 2024-06-03 13:14 +0100, Neal Frager via buildroot spake thusly:
-> This patch bumps the zynqmp_kria_kv260_defconfig to xilinx-v2024.1 which includes
+> This patch bumps the zynqmp_kria_kr260_defconfig to xilinx-v2024.1 which includes
 > the following updates:
 > 
 > - Linux v6.6.10
@@ -129,17 +131,17 @@ Yann E. MORIN.
 
 > ---
 >  board/zynqmp/kria/readme.txt        |  4 ++--
->  configs/zynqmp_kria_kv260_defconfig | 14 ++++++--------
+>  configs/zynqmp_kria_kr260_defconfig | 14 ++++++--------
 >  2 files changed, 8 insertions(+), 10 deletions(-)
 > 
 > diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
-> index 96009804b3..c6be22133c 100644
+> index c6be22133c..ca3164383a 100644
 > --- a/board/zynqmp/kria/readme.txt
 > +++ b/board/zynqmp/kria/readme.txt
-> @@ -90,8 +90,8 @@ KV260 Flashing Instructions:
+> @@ -103,8 +103,8 @@ KD240 / KR260 Flashing Instructions:
 >  Flashing u-boot.itb:
 >      $ sf probe
->      $ fatload mmc 1 0x1000000 u-boot.itb
+>      $ fatload usb 0 0x1000000 u-boot.itb
 > -    $ sf erase 0xf80000 +$filesize
 > -    $ sf write 0x1000000 0xf80000 $filesize
 > +    $ sf erase 0x280000 +$filesize
@@ -147,24 +149,24 @@ Yann E. MORIN.
 >  
 >  Flashing boot.bin:
 >      $ sf probe
-> diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-> index a3a157267c..7b402e032c 100644
-> --- a/configs/zynqmp_kria_kv260_defconfig
-> +++ b/configs/zynqmp_kria_kv260_defconfig
+> diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+> index 2089c3f355..3bf269ab6b 100644
+> --- a/configs/zynqmp_kria_kr260_defconfig
+> +++ b/configs/zynqmp_kria_kr260_defconfig
 > @@ -1,11 +1,11 @@
 >  BR2_aarch64=y
 > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
 > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
->  BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kv260/kv260.sh"
+>  BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kr260/kr260.sh"
 >  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
->  BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2 ${UBOOT_DIR}"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2 ${UBOOT_DIR}"
 >  BR2_LINUX_KERNEL=y
 >  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 > -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.2)/xlnx_rebase_v6.1_LTS_2023.2.tar.gz"
 > +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
 >  BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
 >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kr-g-revB"
 > @@ -15,16 +15,15 @@ BR2_TARGET_ROOTFS_EXT2_4=y
 >  # BR2_TARGET_ROOTFS_TAR is not set
 >  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
@@ -189,9 +191,9 @@ Yann E. MORIN.
 >  BR2_TARGET_UBOOT_SPL=y
 >  BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
 >  BR2_TARGET_UBOOT_ZYNQMP=y
-> -BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/kv260-kria/pmufw.elf"
-> +BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/kv260-kria/pmufw.elf"
->  BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
+> -BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.2/kr260-kria/pmufw.elf"
+> +BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/kr260-kria/pmufw.elf"
+>  BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kr260/pm_cfg_obj.c"
 >  BR2_TARGET_UBOOT_FORMAT_ITB=y
 >  BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 >  BR2_PACKAGE_HOST_DOSFSTOOLS=y
