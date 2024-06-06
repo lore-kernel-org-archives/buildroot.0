@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65D1AC27C75
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:07:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E07D2C27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 10:08:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AB2261062;
-	Thu, 13 Jun 2024 10:07:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34D8361086;
+	Thu, 13 Jun 2024 10:08:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dTbprkvNwVTm; Thu, 13 Jun 2024 10:07:54 +0000 (UTC)
+ id fNi8qtvM4fWN; Thu, 13 Jun 2024 10:07:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D023610AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33DB7610B5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D023610AA;
-	Thu, 13 Jun 2024 10:07:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3FDE01BF354
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33DB7610B5;
+	Thu, 13 Jun 2024 10:07:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FC561BF354
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E00CB413E7
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6162760EC2
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 10:05:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GrIfgRdgww63 for <buildroot@lists.busybox.net>;
- Thu, 13 Jun 2024 10:04:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qPL3OfCtp5ru for <buildroot@lists.busybox.net>;
+ Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A969E413E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C95160ED3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A969E413E5
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C95160ED3
+ for <buildroot@buildroot.org>; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A43A687F5A; Thu, 13 Jun 2024 10:04:58 +0000 (UTC)
+ id 4793F87F56; Thu, 13 Jun 2024 10:05:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 31 May 2024 14:54:22 +0200
+Date: Thu, 6 Jun 2024 15:32:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9a629f5129d652960b203e53685aea24a4dd86a1
-X-Git-Newrev: f99862d63499619cf7e22e50b5331371bb5fc7c0
+X-Git-Oldrev: 7c286c345cf42bc341a3f0502e33fc8477fdd904
+X-Git-Newrev: c1554df688cb1563c8da2f8fcba21020dcf126a1
 X-Patchwork-Hint: ignore
-Message-Id: <20240613100458.A43A687F5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tbtools: bump to version 0.4.0
+Message-Id: <20240613100500.4793F87F56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/versal_vck190_defconfig: add hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f99862d63499619cf7e22e50b5331371bb5fc7c0
+commit: https://git.buildroot.net/buildroot/commit/?id=c1554df688cb1563c8da2f8fcba21020dcf126a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update against the latest release of tbtools.
-
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/tbtools/tbtools.hash | 2 +-
- package/tbtools/tbtools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                                                 | 1 -
+ board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 ++
+ board/xilinx/patches/versal-firmware/versal-firmware.hash           | 2 ++
+ configs/versal_vck190_defconfig                                     | 2 ++
+ 4 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/tbtools/tbtools.hash b/package/tbtools/tbtools.hash
-index ebd838ebe1..06705fc19d 100644
---- a/package/tbtools/tbtools.hash
-+++ b/package/tbtools/tbtools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e5ddbcb3dcf6315a1fe6fe2d4846b5208e75f24e626d43a0ea68358e8b15dba7  tbtools-0.3.2-cargo2.tar.gz
-+sha256  1276ded79276d42c06a16293e26de32566c023383416fb8c91f86d141acce691  tbtools-0.4.0-cargo2.tar.gz
- sha256  9b16a3add311d607af8d9b348a842a37840d0f47dfcc6cf2a7756ee02c24ed69  LICENSE
-diff --git a/package/tbtools/tbtools.mk b/package/tbtools/tbtools.mk
-index 36bfcd7f49..fc5ffc4215 100644
---- a/package/tbtools/tbtools.mk
-+++ b/package/tbtools/tbtools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TBTOOLS_VERSION = 0.3.2
-+TBTOOLS_VERSION = 0.4.0
- TBTOOLS_SITE = $(call github,intel,tbtools,v$(TBTOOLS_VERSION))
- TBTOOLS_LICENSE = MIT
- TBTOOLS_LICENSE_FILES = LICENSE
+diff --git a/.checkpackageignore b/.checkpackageignore
+index c3de61111f..eea412d01d 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -358,7 +358,6 @@ configs/ts4900_defconfig lib_defconfig.ForceCheckHash
+ configs/ts5500_defconfig lib_defconfig.ForceCheckHash
+ configs/ts7680_defconfig lib_defconfig.ForceCheckHash
+ configs/uevm5432_defconfig lib_defconfig.ForceCheckHash
+-configs/versal_vck190_defconfig lib_defconfig.ForceCheckHash
+ configs/visionfive_defconfig lib_defconfig.ForceCheckHash
+ configs/wandboard_defconfig lib_defconfig.ForceCheckHash
+ configs/warp7_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+new file mode 100644
+index 0000000000..e300398541
+--- /dev/null
++++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  c3369c89eab4e452bbc76c630e5dccb6c0ae588c0175b6c8549aa0241deb06ef  xlnx_rebase_v2.10_2024.1.tar.gz
+diff --git a/board/xilinx/patches/versal-firmware/versal-firmware.hash b/board/xilinx/patches/versal-firmware/versal-firmware.hash
+new file mode 100644
+index 0000000000..c4d745f22c
+--- /dev/null
++++ b/board/xilinx/patches/versal-firmware/versal-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  versal-firmware-xilinx_v2024.1.tar.gz
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index ecfc10cc91..69272e721c 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -39,3 +39,5 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_PACKAGE_HOST_BOOTGEN=y
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
