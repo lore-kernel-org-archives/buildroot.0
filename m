@@ -4,94 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAB87C27C53
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 17:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7E61C27C5F
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 17:06:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B72A04287E;
-	Fri,  7 Jun 2024 17:06:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B78F24282B;
+	Fri,  7 Jun 2024 17:06:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TFJQNOK_Hcze; Fri,  7 Jun 2024 17:06:47 +0000 (UTC)
+ id KNNZuO17qslg; Fri,  7 Jun 2024 17:06:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F22242881
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39EA842881
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F22242881;
-	Fri,  7 Jun 2024 17:06:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C08421BF479
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39EA842881;
+	Fri,  7 Jun 2024 17:06:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 14E951BF479
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF9B8403FB
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC79C42782
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6wKOOFdpg7xl for <buildroot@lists.busybox.net>;
- Fri,  7 Jun 2024 17:06:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8zFW7aWkV76r for <buildroot@lists.busybox.net>;
+ Fri,  7 Jun 2024 17:06:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D80C14004A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D80C14004A
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D80C14004A
- for <buildroot@buildroot.org>; Fri,  7 Jun 2024 17:06:09 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-35dc0472b7eso2057934f8f.2
- for <buildroot@buildroot.org>; Fri, 07 Jun 2024 10:06:09 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 33907427D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33907427D2
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33907427D2
+ for <buildroot@buildroot.org>; Fri,  7 Jun 2024 17:06:12 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-35e573c0334so2078093f8f.1
+ for <buildroot@buildroot.org>; Fri, 07 Jun 2024 10:06:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717779968; x=1718384768;
+ d=1e100.net; s=20230601; t=1717779970; x=1718384770;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=AxOi7Znm8e5Y3HVPxFJcN/1hPCnLaEc3juQ2n41eSxw=;
- b=rOtlNlzSVU+WFotxtiwJ/YLxABN0WQFSxwNZAlBHYn+Q5HKf+U6YJN5Cc9WMhC/vQb
- jegWhOEshRh9GKBBGJZM/8sYiGp0AwK8w6hKaKQwu2WmiWQ1S3MkZoKNSTmTknOuEhM3
- 2nWHZkvZDZZdLkoaGycT1XefCY55nM3RZyH3RiACAPGsBQsB7fYXelQjHVRSizfvwZO5
- 9hDZWxpLL6DWsIHD/7/KmgV8uX5azj1mzaYo9n1oUK5xsTHy2KtAMeWxqcog6gI67C9h
- zbqViDfsCnQi8PdUBcKXg4o3wBeTQOH8PgS5zbGGl6q0uAYzSYEDKk3TXhOSuDcboMP1
- eVew==
-X-Gm-Message-State: AOJu0YwFPAo5zOzQpV+lPGQ8gjspg5DFqrkDPy7AQMszeT5Kgw33vaGW
- XQ88RtKz3vwNsPijLWH9k3prYSXgHks8J7VcXiDBy9CHtjYkVAEK1U7RyA==
-X-Google-Smtp-Source: AGHT+IHuoml33IeOtiL9PM4K/5D2drOY0Ggq19pu7+02Xw+tfhBRDbXIQ6LxSxMUvtwo/193sxCYpQ==
-X-Received: by 2002:a05:6000:bce:b0:354:fb50:c1ef with SMTP id
- ffacd0b85a97d-35efee8c5b8mr2123824f8f.68.1717779967881; 
- Fri, 07 Jun 2024 10:06:07 -0700 (PDT)
+ bh=a3/c0kPGljHWAWKZOugtNG79rMb4zJwSUr93HA3/FOs=;
+ b=SXyqCsFOrvr91zs/9UeBEwD98tDNxQqt26QRDf1SquFqMXk5achbBNRVToh6Iihm1y
+ YUe0fr69m5BtmHAmT02Lu+3DlAe0W0ivaxkzei0y8eBlJD9qpM6RtF/s3fiPgOxE7/1T
+ bBPxzCqqV0RE9YJZz4UoJ0SzRSmvYxqR3nFCvrArbLJrYgP1oTdr3YC8eKGvT6jf45kI
+ sz3ro+MeooBYjVLy1Bv0eMlsSwdNvm4ixCjfOo8v75PLCApfiy3Yonvruf/HvLDwgY6d
+ /FXlVJsMSoHR3rS5tJUFNPTtCigX9KicVzYOfWaR1/k8WwLT73XtskeqPj1GoJrXLo1M
+ tAIw==
+X-Gm-Message-State: AOJu0YxpEMKgvwIFPFkUh/iLIJy8LMWDn3Ik5nLX7JwiArdkq2QBeBEj
+ LqAbjcAe60HAJ7Z+AbczytfxsbkJgAwAgUQSCpvJw5Gun1fDUfeari4DuQ==
+X-Google-Smtp-Source: AGHT+IF0kxVZr+OfZZUG0DFJoxQjbRnN1bPoMMDo5ObIlXvoyMPS5hgVpI9zqFROhAsQqiaLn01wew==
+X-Received: by 2002:a5d:640a:0:b0:354:e22c:ea86 with SMTP id
+ ffacd0b85a97d-35efea19068mr3081083f8f.9.1717779969971; 
+ Fri, 07 Jun 2024 10:06:09 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-35ef5e989c9sm4355379f8f.73.2024.06.07.10.06.07
+ ffacd0b85a97d-35ef5e989c9sm4355379f8f.73.2024.06.07.10.06.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Jun 2024 10:06:07 -0700 (PDT)
+ Fri, 07 Jun 2024 10:06:09 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri,  7 Jun 2024 19:05:53 +0200
-Message-ID: <8f7f18c9f67543b5e6b534bc0562c4a8a44a73c4.1717779951.git.yann.morin.1998@free.fr>
+Date: Fri,  7 Jun 2024 19:05:58 +0200
+Message-ID: <c69c41c0fbdd9495fef8c5bbfadd7069cd2ff48c.1717779951.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <cover.1717779951.git.yann.morin.1998@free.fr>
 References: <cover.1717779951.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717779968; x=1718384768; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1717779970; x=1718384770; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=AxOi7Znm8e5Y3HVPxFJcN/1hPCnLaEc3juQ2n41eSxw=;
- b=PWBXW+qcYp4qBt69RIKEkGw6BfI4dxz7b1jAU4YBxzoCSFMDccf7dYij5XvAAEymqg
- 7e0LY+jN+L6NzSEmBWB5hwUuNe5SNCaCUhiePV+NqYNv0VPgZJqq0Q6M32rVQimNl7/E
- Ep8e6UfdI3+i/bft5uTxdIllzXFTX23dADU0vetu9sDGGlCsWdvHFpFrzUgPsBrqKL07
- QlsLRjFewI4JKMLNm4g5sGnisXffu02mOwfZNrVdOc+v90Scd/xIl9rGH8It0AS39+VC
- HMcQ1uIO6UazO0k5MIfzRWgHI1zd4cqASWtNyVKDDmnQdf0+HvaWOCSWvclp2gYyuZmj
- ZHEg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=a3/c0kPGljHWAWKZOugtNG79rMb4zJwSUr93HA3/FOs=;
+ b=WEWdmJhdAKT7pANbSPmHPie4sYyrgSUc6dFbLu7IWweTFzwHCtHJRlDO7SOjygP6GT
+ Mi9h4/HapdkHR63kpYjSUx6O0fQKoAw0G6GN2u2Ee28vX86DSUnhI/VNOExdni9wp8sk
+ wDwF6N7gmULw8bb4xZQYhNazWQbDMQ1Otqbq743xBblCuXjMajuIHOz17ON5GwOSlvm/
+ Ql19MgfUXFNWZLNPGYNYpH+T1WeGf69fhhUUJ1Ea8yGlDx721I4knuiahbqj7QmMMIsh
+ CUTkXKjaBU6NoEZT74Qfz33UmjyGRoUvHrWAS6kv7qVqZTYQyAO4m4z0b4ysV+qlSAZ/
+ APtQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=PWBXW+qc
-Subject: [Buildroot] [PATCH 12/20 v2] package/python-bcrypt: use
- post-process opts to pass Cargo manifest path
+ header.a=rsa-sha256 header.s=20230601 header.b=WEWdmJhd
+Subject: [Buildroot] [PATCH 17/20 v2] RFC: package/anvil: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,37 +102,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, Asaf Kahlon <asafka7@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-bcrypt/python-bcrypt.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Thie is an RFC, because it has only been build-tested to validate the
+cargo-unlocked case; there has been no runtime test of anvil.
 
-diff --git a/package/python-bcrypt/python-bcrypt.mk b/package/python-bcrypt/python-bcrypt.mk
-index f3137401d7..f09c67441e 100644
---- a/package/python-bcrypt/python-bcrypt.mk
-+++ b/package/python-bcrypt/python-bcrypt.mk
-@@ -19,9 +19,8 @@ PYTHON_BCRYPT_ENV = \
- 	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
- # We need to vendor the Cargo crates at download time
- PYTHON_BCRYPT_DOWNLOAD_POST_PROCESS = cargo
-+PYTHON_BCRYPT_DOWNLOAD_POST_PROCESS_OPTS = -m src/_bcrypt/Cargo.toml
- PYTHON_BCRYPT_DOWNLOAD_DEPENDENCIES = host-rustc
--PYTHON_BCRYPT_DL_ENV = \
--	$(PKG_CARGO_ENV) \
--	BR_CARGO_MANIFEST_PATH=src/_bcrypt/Cargo.toml
-+PYTHON_BCRYPT_DL_ENV = $(PKG_CARGO_ENV)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/Config.in       |  1 +
+ package/anvil/Config.in | 20 ++++++++++++++++++++
+ package/anvil/anvil.mk  | 30 ++++++++++++++++++++++++++++++
+ 3 files changed, 51 insertions(+)
+ create mode 100644 package/anvil/Config.in
+ create mode 100644 package/anvil/anvil.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index bfbec1c21d..3f4fbf0543 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -313,6 +313,7 @@ endmenu
+ menu "Graphic libraries and applications (graphic/text)"
  
- $(eval $(python-package))
+ comment "Graphic applications"
++	source "package/anvil/Config.in"
+ 	source "package/cage/Config.in"
+ 	source "package/cog/Config.in"
+ 	source "package/dmenu-wayland/Config.in"
+diff --git a/package/anvil/Config.in b/package/anvil/Config.in
+new file mode 100644
+index 0000000000..eb65a9fb53
+--- /dev/null
++++ b/package/anvil/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_ANVIL
++	bool "anvil"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on !BR2_STATIC_LIBS  # wayland
++	depends on BR2_TOOLCHAIN_HAS_THREADS  # wayland
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_PACKAGE_MESA3D_GBM
++	select BR2_PACKAGE_HOST_RUSTC
++	select BR2_PACKAGE_LIBINPUT
++	select BR2_PACKAGE_LIBXKBCOMMON
++	select BR2_PACKAGE_PIXMAN
++	select BR2_PACKAGE_SEATD
++	select BR2_PACKAGE_WAYLAND
++
++comment "anvil needs udev /dev amangement, mesa3d w/ gbm, a toolchain w/ threads, shared libs"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_PACKAGE_HAS_UDEV \
++		|| !BR2_PACKAGE_MESA3D_GBM
+diff --git a/package/anvil/anvil.mk b/package/anvil/anvil.mk
+new file mode 100644
+index 0000000000..7de9f3e06d
+--- /dev/null
++++ b/package/anvil/anvil.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# anvil
++#
++################################################################################
++
++ANVIL_VERSION = fb44b240ea4a3aa39a6b92f5bede23301ab9a26e
++ANVIL_SITE = https://github.com/Smithay/smithay
++ANVIL_SITE_METHOD = git
++
++# Upstream refuses to lock their package:
++# https://github.com/Smithay/smithay/issues/496
++ANVIL_CARGO_LOCKED = NO
++
++ANVIL_SUBDIR = anvil
++
++ANVIL_DEPENDENCIES = \
++	libinput \
++	libxkbcommon \
++	mesa3d \
++	pixman \
++	seatd \
++	udev \
++	wayland
++
++ifeq ($(BR2_PACKAGE_XWAYLAND),y)
++ANVIL_DEPENDENCIES += xwayland
++endif
++
++$(eval $(cargo-package))
 -- 
 2.45.1
 
