@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08C59C27C53
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 09:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C1FAC27C55
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 09:47:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E629419DF;
-	Fri,  7 Jun 2024 09:47:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3B1041A03;
+	Fri,  7 Jun 2024 09:47:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qPnfIAwOBS1Y; Fri,  7 Jun 2024 09:47:22 +0000 (UTC)
+ id HaqJY0DPs5eh; Fri,  7 Jun 2024 09:47:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C703040B0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A415D419F8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C703040B0A;
-	Fri,  7 Jun 2024 09:47:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB3241BF4D5
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 09:47:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A415D419F8;
+	Fri,  7 Jun 2024 09:47:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1422C1BF4D5
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 09:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9775440B0A
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 09:47:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01F096150B
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 09:47:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mfxu5lEW1aZh for <buildroot@lists.busybox.net>;
- Fri,  7 Jun 2024 09:47:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f0PSP7PlM9Fi for <buildroot@lists.busybox.net>;
+ Fri,  7 Jun 2024 09:47:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2412::627;
- helo=nam10-mw2-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2407::603;
+ helo=nam02-bn1-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3E8AF4049F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E8AF4049F
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam10on20627.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2412::627])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3E8AF4049F
- for <buildroot@buildroot.org>; Fri,  7 Jun 2024 09:47:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1D20B61504
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D20B61504
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com
+ (mail-bn1nam02on20603.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2407::603])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1D20B61504
+ for <buildroot@buildroot.org>; Fri,  7 Jun 2024 09:47:20 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j7apDAPQAxr7K3WowvJguEkJVnIgeLGjb5PvRyun1e9Iv0SyV91zogBtZf9bXoJbKycbK8erTGon/AFnc8i75tgUD2beFB+5N0OhNO6cUxer031yaVP1L7IUdaC1W8EvmlGPiAqgRhychPUja/57/nAxweTDY+VLTHhzLw+P4IMCGx/g+iz1eMNy25rIZpWemKg72vUoPWtVnwVd3ly4Eb8v/KkuWetdgj3mDAzwKb/ez5fJ4j1Tx5cMxjtoah1OXUFmvYkDcZYN7/KbxerfJ5d4xoWBdsMs1zRjpCLgzFDh7ZTj2oVShbJfmmhvFg9bU0fdkAdk0vk4wpEXbfK8/g==
+ b=IaFgnzOaPRMX5cUoO4REcm6D9/URuAdaEaL6dkzI7auEirkIkipwATSCyhoT4oeySE+gCT2/T1WcxLGpbHF0FDcfk/r/6Y5auazgaTPS6txtqWrla1y4Nc+i3StMM0HmU3Iki0LaGYesVwInKxBOSvLO63uuFcyGTYFG347FJeoABbFGrp7cnRr8bYHx99I1Sv1/UDltC2taZt0GeJ7MsuJJr5fGnnU7vE+QFCcmOT4zhfI+2/3aKolc5OXXnYSIi14Ph/fBH1SKodq6BqDdzobz5JMGx635DnVw3Ef+f+zqNUtU0rmJLFymHInUtJm6pnAMfFWoaeSS76jrMH3cZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tM/u65ZP6Uc/mt22lKgSCjGR4XcolIMC3FtLVppj6WE=;
- b=jgTzHzB4XM8R9NEzm4ylgI8YO4d6Ao1L1C+dz4w3I+6BQqTQXCU8/MVRAHhmlCHnU7IIdK7yLIerCCuUNnkCtLrgTFOMapM8gSLavcmiZCXdySmAf2h/AQRJjgdriKo0bCW3VlX3xmz2DA97nx55Az8sPOxPJfAdICNkYuvG2HZUB9j4SCmsxYRz7DADWmK5KKoFkDvYnoN8HWeCpXpsn+z8DeLhog5EO+sJJazXbIFoQ2abDkNVCWrU5koORRxn5E06/F064Q1SbJZrCH2VD3YEshndREUoB1dr41mimXfb366/IPlK5oqJN6LIk1wl5NiSadu9K2mtCJx8MUegHQ==
+ bh=ieiDOft0nu+r0PSyHH3vf1vrA9JqCGPyffRAuRrPePI=;
+ b=F8dhqnBSbYoaBFyaUDc3jdAVlHopznO26Nsgels52uXswl6DaTunaxNjNZsJViXwHOZPIYRXTccYm+6FggWpJoIU7XOMuEP9Dk68oPGyZpZdcmjR07RJENl6cOsTZBmcG65P2SZvQR4qPhOHaNIrVU+lpI/dfwTYYPE+r4DKpf8HX9ov6ZNlnBYTmycDVVHFcxeKfNPFgzVKUJT/+QQNx/pwzUiI2WHP12GHzBx3yO9D5Zw31MQmAu3AELIqdB6zfzWG45utB6vTnx0XIsm/2nMuCgmKcy1DqPM0ZR4tshNU1nRRUF9fuQJsyQbMfYm9yhhYeL/N2Ekgyv4jkOAgcQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SJ0PR03CA0088.namprd03.prod.outlook.com (2603:10b6:a03:331::33)
- by MW3PR12MB4428.namprd12.prod.outlook.com (2603:10b6:303:57::15)
+Received: from SJ0PR03CA0073.namprd03.prod.outlook.com (2603:10b6:a03:331::18)
+ by BY5PR12MB4114.namprd12.prod.outlook.com (2603:10b6:a03:20c::12)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.34; Fri, 7 Jun
- 2024 09:47:16 +0000
+ 2024 09:47:17 +0000
 Received: from CO1PEPF000044EF.namprd05.prod.outlook.com
- (2603:10b6:a03:331:cafe::20) by SJ0PR03CA0088.outlook.office365.com
- (2603:10b6:a03:331::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.30 via Frontend
- Transport; Fri, 7 Jun 2024 09:47:16 +0000
+ (2603:10b6:a03:331:cafe::89) by SJ0PR03CA0073.outlook.office365.com
+ (2603:10b6:a03:331::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7656.16 via Frontend
+ Transport; Fri, 7 Jun 2024 09:47:17 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -70,81 +70,84 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
  CO1PEPF000044EF.mail.protection.outlook.com (10.167.241.69) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7633.15 via Frontend Transport; Fri, 7 Jun 2024 09:47:15 +0000
+ 15.20.7633.15 via Frontend Transport; Fri, 7 Jun 2024 09:47:17 +0000
 Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 7 Jun
- 2024 04:47:09 -0500
+ 2024 04:47:12 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Fri, 7 Jun 2024 04:47:08 -0500
+ Transport; Fri, 7 Jun 2024 04:47:11 -0500
 To: <buildroot@buildroot.org>
-Date: Fri, 7 Jun 2024 10:47:03 +0100
-Message-ID: <20240607094705.1962913-1-neal.frager@amd.com>
+Date: Fri, 7 Jun 2024 10:47:04 +0100
+Message-ID: <20240607094705.1962913-2-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240607094705.1962913-1-neal.frager@amd.com>
+References: <20240607094705.1962913-1-neal.frager@amd.com>
 MIME-Version: 1.0
 Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
  permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044EF:EE_|MW3PR12MB4428:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96193383-281a-456e-dcf9-08dc86d6d05d
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044EF:EE_|BY5PR12MB4114:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3825e5c8-be68-4350-0bc0-08dc86d6d170
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230031|36860700004|376005|1800799015|82310400017|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?djnMF9A8o0Y7ovCQ1MiAgVnvV9tlgH9qoFiNYvrYZml6zccTAfQEnMpCZJhu?=
- =?us-ascii?Q?Vidj9jsYEFmmjT52o5UkmIxmGqgVZ4mwTUCfpY+hVuQiIk02jo28gx4UxumI?=
- =?us-ascii?Q?kjFkmRL5iS6V+h+g5T5HQfzfNgSaylXHxXrHcKQDghJyQGI/agdI5VNsJVuQ?=
- =?us-ascii?Q?WM/els8D0zPxmoIx86tBJIUKRna8tYHe7Intl91IWXvwuMI0LZAfinf3eKbk?=
- =?us-ascii?Q?KcFhNY31tvmtgEChCXALZc5d4oqWuJjNlq5pfYlWfpu2z6ly33DMMu2Zmcbq?=
- =?us-ascii?Q?S48EN6wmimg2w12CjziDh6IfcqDX9tNeOJssYzOPe9ErgHM23ftrRGoWLgPe?=
- =?us-ascii?Q?dAYH39Bh2uktjsGi1dixOvkoeJ1ymIEV6yXKc4ABrOQST4k/08Yn3zgPr37+?=
- =?us-ascii?Q?1DSptb8ZI+uQyFOUDhu8j96u56MMoRvP1ZfKoMc9yvsQHYiW748toHYJPmVa?=
- =?us-ascii?Q?lKmEyj9Ol7lptwr6rHLEYR2NhalLVtHC03joRzFBVvIuDKJK/kWxIERPjnH0?=
- =?us-ascii?Q?iLNZFk15rT3T2Ac9XfX43OiF3VLvhY3FH9VU87/N65UxI4H17ieeVthO6vdp?=
- =?us-ascii?Q?NJckUyOOE2RHRbyzvPFiA4kHW3gg0YtekG1BKO5WrnpdnYHatJyrexkrZjby?=
- =?us-ascii?Q?X5daLwsUE7F85pAdPzHs3KQPzjykHanNYs43Eank5P4Um4io7icGn9yFyKK6?=
- =?us-ascii?Q?UW5rqnjxu9J7AGRPq7/MJtVQpWtUoGSbnSIvmqYQFtpkwjRNnG2Mz/fhIjlC?=
- =?us-ascii?Q?Qn3D0moPhm75jneugDEo1G0wCiIejg9opUb/m9Pv+JvLbDj1LkBKk8Ey8Oop?=
- =?us-ascii?Q?rmDup4brK5FzCWj0ZfmaTsh9qYHTXwXDJS43f/mg84+QPQ4lBJZUdTeEpxkn?=
- =?us-ascii?Q?YxOeofnmdkxEqRRZ0x/MsCyp/mHeqWlNRAy0nl/nxhSPbcxH0JLIxjYPghz3?=
- =?us-ascii?Q?5FH6NPIchrl6Ih5L1maIl2Hh1EjTNhkqZuBNb7n78H6oKxDAvxs6QVK8Dh1o?=
- =?us-ascii?Q?37jgmnipLCqoNzjJBFazSPZF1EIGM9dlCtNNblsumbLhn/ecLewWNwggo0JC?=
- =?us-ascii?Q?O8swYjx9lZDI0GmGIjBEmIoPxdWVPTeXWE9K4tgk/tIs3cSsGv3Ix0FcJzx7?=
- =?us-ascii?Q?h9X9vzOFDjNZY+N60+GWIyhbjc6uxO7lX54Fz1QBxhttKPFe/9csoLfokNfJ?=
- =?us-ascii?Q?FHdhuQZ3lYzZCwfIEv+09U9HwRYng8fNdqWy76ab2r3WN3C06NqrlYfOE1bP?=
- =?us-ascii?Q?1J7uBJp4cH0/UCLA5nq5N66ZGzQH2SL+r17KzFo3HZphijNbUWpkn6X3qFch?=
- =?us-ascii?Q?YmDA27ikYt1qg5RM+Zm93VBxK+IYoqKXBwsEof9TMeVgnxE+vevPA2y6jPdK?=
- =?us-ascii?Q?Ip9Yz+sH8iblfLg6VfSKrSkRnrx+Owi4TzgqiA2bugLaIVaovhYHNwdN2OY3?=
- =?us-ascii?Q?nIoYKNIdCxbGE2xYmto0i3jnjtkqsWJY?=
+ ARA:13230031|36860700004|1800799015|376005|82310400017|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?dbdJKBG0nbf4iZ5mPPNMc2k+hSanoK4VSYAR7FlcduZjFDgtT0rt6blHKFT1?=
+ =?us-ascii?Q?HaG9qxpOys8XKO1ySa55gC3OcXbNuUvv5bJfzwd4RPMvVUhCJS+e8GGal7iY?=
+ =?us-ascii?Q?FHjM4z+P7IHTKX/wmdcfMJ0QVSORDGShNivCfMDD6UNRbAkhi38lgVEZQkST?=
+ =?us-ascii?Q?ktiIPsGDz5SlsiOTw2PXXAjIoCFv9u4FNiLwvsskf5YIf4liU2hm/zofpEAp?=
+ =?us-ascii?Q?3AnTH0uAIvpTUATFzz2dAt5p/NEvkzdaHoGQ0m1kZuz/N9IsaUCPmu+EWUdn?=
+ =?us-ascii?Q?YEJHa7JEgwa8fZQycRbxdWLjx82wro0K2x83Tnn9u653OJgLZsHNAyisT3U7?=
+ =?us-ascii?Q?IRA8bSlXunGapRv0kAIJ/8OPqH0dkd+Z1NsxN6zAX5i0hI8/VdtuhHXaZIdQ?=
+ =?us-ascii?Q?d2I63nv+mGIShD8S608M3oiTfciqx/mufqbrT1o55A6CRq0ddSyj6keFT+3w?=
+ =?us-ascii?Q?12ZVX8yy+U+8ImnB6pD/Ro8Z02+8kAy7noUPUkCjL+y1KOrch5RqSlQiE5ch?=
+ =?us-ascii?Q?+mc1e6XcLlgGB2DV7kQ4AUnWya8kzngBh2ZLSyxPmnA1YxIC6vwRVJx7jIPg?=
+ =?us-ascii?Q?vU8Gs+vl/ujcPKl2r+LJyt2ix4TcUGmGxeT8fk/hM69MLwuvphNjZd1kVvDk?=
+ =?us-ascii?Q?5FIOXVHIF4zg3/gNOlRNs6zw66mIq343XZa0i/SDm+3izUYj7ttOmVZiBpYi?=
+ =?us-ascii?Q?zGnFg/jQ46+Bwyt8o5Ig2rpu9vKqPj+zXyM3iTWOC4Qhqc7TSlkP0MzL88c0?=
+ =?us-ascii?Q?+ROIn+CsA6lg3iazzE5EgysZjuExB1BwP01WXiwQccRKYqbD1AA4ix2M7yex?=
+ =?us-ascii?Q?mfDlXU5O91SNq2Y4oorU7io9udFmXvxwVuGVf4A5uTzLWqKNYiGp36B8PF6U?=
+ =?us-ascii?Q?iqQPqIodGQ7OkL9Z1pcnGXE+f3Sb3LOOmNd9OCAZ9usd6dQQuShoWvpIBeGT?=
+ =?us-ascii?Q?ApUwNxFqdFYOQnklc3vM/+csqoqISvNII6h7tcU10V4KwH4eTLAUZ+EukpEl?=
+ =?us-ascii?Q?ldEfAn6Omq+yhEEbA/aJ0Awi1cl0XU7mwrA3F+XQkTVSUEmT1enEHMQLkshc?=
+ =?us-ascii?Q?k9YY8Ck7TRiPF+AMqi5tuur/y5LOcyDwpdxv9LQsUD9AfSkjILcQnuSuZHpp?=
+ =?us-ascii?Q?fVnwe/syQSkLNl3XkBSYKJFV6vGqjgTyJA4KUdMPMAbak/DFZ0UMeChefJn3?=
+ =?us-ascii?Q?DN+TxXD8ghfu73dJOJf8mr01g4N0llOz6iVqjdo2VwgfzWGVyXs08faZJ+92?=
+ =?us-ascii?Q?wQGAYGpxoc+SybaBbb7hxZtAbELn2CzObINNyl+vwOQjLfrS1V0LTV2I4eQH?=
+ =?us-ascii?Q?2+D/Zlq9EUEnfbxsdif9XJvXxw/S4OyuTXPIfwcFccXSrdEKX0mRyty0uJCB?=
+ =?us-ascii?Q?GFT6MuyJC19TenNFG2m1VFLf5hOF2g/dpX16/EaSybFA7Qq3FzfprxRFGwF8?=
+ =?us-ascii?Q?CdSOcCNtbprrpinU1zeCwqRTPqRV2I6y?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230031)(36860700004)(376005)(1800799015)(82310400017)(41080700001);
+ SFS:(13230031)(36860700004)(1800799015)(376005)(82310400017)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2024 09:47:15.5141 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96193383-281a-456e-dcf9-08dc86d6d05d
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2024 09:47:17.3109 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3825e5c8-be68-4350-0bc0-08dc86d6d170
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
  Helo=[SATLEXMB03.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044EF.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4428
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4114
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tM/u65ZP6Uc/mt22lKgSCjGR4XcolIMC3FtLVppj6WE=;
- b=o334DrPX3G2Jn6zM6/fHqFHIHVlXZiQE8AbuzldIOLUKKdJD5XoQvfII3gybW5lFtPukftAsPl4zjh3+9U7XKcR14zm/e6ileo9jOZ9dbcnWotEsVd2G0BznlGtru3mjZSX3N1I8mkdlcAZD6TapQP2EqOEczQUw4dTJ0uGuRk8=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ieiDOft0nu+r0PSyHH3vf1vrA9JqCGPyffRAuRrPePI=;
+ b=NrTdU0pjkavyz8zhWMsLSKU91/jIsDZwBcc+3XcQSkpe39qomjXH9eiww6wNgqOEGPdDmOAzjufuqBRnyt8DNOJYXttSPJ1lDkHPnaeKqwo7xPJInhIeKP/PxZCjDkPuCTcBZWQpbETVyaMGhKRbYgXMFBQQeMAylOAx4VpYVuA=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=o334DrPX
-Subject: [Buildroot] [PATCH v12 1/3] boot/zynqmp-firmware: new boot firmware
+ header.s=selector1 header.b=NrTdU0pj
+Subject: [Buildroot] [PATCH v12 2/3] boot/uboot.mk: new zynqmp pmufw build
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -167,141 +170,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds a new boot firmware to buildroot for building the zynqmp pmufw.
-It requires the toolchain-bare-metal package that includes a bare-metal
-binutils, gcc and newlib which can be built for the microblaze architecture.
+The new BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE option will enable u-boot to
+use the zynqmp-firmware package for building a pmufw.elf that gets included in
+the generated boot.bin.
+
+If the BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE option is enabled, then the
+BR2_TARGET_UBOOT_ZYNQMP_PMUFW config for downloading a prebuilt pmufw will
+be ignored.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
 V1->V2:
- - builds a bare-metal gcc toolchain instead of requiring an external
-   microblaze toolchain
+ - patch is now backwards compatible for users already using the
+   BR2_TARGET_UBOOT_ZYNQMP_PMUFW config for downloading a prebuilt pmufw
 V2->V3:
- - corrected custom cflags option
- - added support for xilinx_v2022.2 version
- - added zynqmp-firmware.hash
+ - no changes
 V3->V4:
+ - BR2_TARGET_UBOOT_ZYNQMP_PMUFW removed when
+   BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE selected
+V4->V12:
  - no changes
-V4->V5:
- - reduced all lines to <80 chars
-V5->V6:
- - migrated to toolchain-bare-metal-buildroot
-V6->V7:
- - removed patch numbers
- - changed dependency to toolchain-bare-metal-buildroot
- - removed hash since version is configurable
-V7->V9:
- - no changes
-V9->V10:
- - removed patches for supporting versions older than xilinx_v2023.2
-V10->V11:
- - set default BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH to
-   "microblazeel-xilinx-elf" to avoid stand-alone build failure
-V11->V12:
- - replace select BR2_TOOLCHAIN_BARE_METAL_BUILDROOT with depends
- - change variable name for check-package warning
 ---
- DEVELOPERS                              |  1 +
- boot/Config.in                          |  1 +
- boot/zynqmp-firmware/Config.in          | 25 +++++++++++++++++++
- boot/zynqmp-firmware/zynqmp-firmware.mk | 33 +++++++++++++++++++++++++
- 4 files changed, 60 insertions(+)
- create mode 100644 boot/zynqmp-firmware/Config.in
- create mode 100644 boot/zynqmp-firmware/zynqmp-firmware.mk
+ boot/uboot/Config.in | 19 +++++++++++++++++--
+ boot/uboot/uboot.mk  |  5 +++++
+ 2 files changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cf48e01037..f3ff2cbbd5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2337,6 +2337,7 @@ N:	Neal Frager <neal.frager@amd.com>
- F:	board/versal/
- F:	board/zynq/
- F:	board/zynqmp/
-+F:	boot/zynqmp-firmware/
- F:	configs/versal_vck190_defconfig
- F:	configs/zynq_zc702_defconfig
- F:	configs/zynq_zc706_defconfig
-diff --git a/boot/Config.in b/boot/Config.in
-index 87e1b7c00e..64b1c8c420 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -23,5 +23,6 @@ source "boot/ti-k3-boot-firmware/Config.in"
- source "boot/ti-k3-r5-loader/Config.in"
- source "boot/uboot/Config.in"
- source "boot/vexpress-firmware/Config.in"
-+source "boot/zynqmp-firmware/Config.in"
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index d0901edc9d..f0c26af25c 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -512,11 +512,26 @@ config BR2_TARGET_UBOOT_ZYNQMP
  
- endmenu
-diff --git a/boot/zynqmp-firmware/Config.in b/boot/zynqmp-firmware/Config.in
-new file mode 100644
-index 0000000000..478d58d552
---- /dev/null
-+++ b/boot/zynqmp-firmware/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_TARGET_ZYNQMP_FIRMWARE
-+	bool "zynqmp-firmware"
-+	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH = "microblazeel-xilinx-elf"
+ if BR2_TARGET_UBOOT_ZYNQMP
+ 
++config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE
++	bool "Build zynqmp PMU firmware from source"
++	select BR2_TARGET_ZYNQMP_FIRMWARE
++	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
 +	help
-+	  This package builds the PMU Firmware application required
-+	  to run U-Boot and Linux in the Zynq MPSoC devices.
++	  This option instructs u-boot to build the zynqmp pmufw using
++	  the zynqmp-firmware package.  u-boot will then include this
++	  pmufw.elf in the generated boot.bin.
 +
-+if BR2_TARGET_ZYNQMP_FIRMWARE
++	  If this option is selected, the BR2_TARGET_UBOOT_ZYNQMP_PMUFW
++	  prebuilt option will be ignored.
 +
-+comment "zynqmp-firmware needs a bare metal toolchain for tuple microblazeel-xilinx-elf"
-+	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-xilinx-elf"
++	  This feature requires U-Boot >= 2018.07.
 +
-+config BR2_TARGET_ZYNQMP_FIRMWARE_VERSION
-+	string "firmware version"
-+	default "xilinx_v2024.1"
-+	help
-+	  Release version of zynqmp firmware.
-+	  Only versions xilinx_v2023.2 and newer are supported.
-+
-+config BR2_TARGET_ZYNQMP_FIRMWARE_CUSTOM_CFLAGS
-+	string "custom cflags"
-+	help
-+	  Adds additional CFLAGS for building zynqmp firmware.
-+
-+endif # BR2_TARGET_ZYNQMP_FIRMWARE
-diff --git a/boot/zynqmp-firmware/zynqmp-firmware.mk b/boot/zynqmp-firmware/zynqmp-firmware.mk
-new file mode 100644
-index 0000000000..dafb2dbe55
---- /dev/null
-+++ b/boot/zynqmp-firmware/zynqmp-firmware.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# zynqmp-firmware
-+#
-+################################################################################
-+
-+ZYNQMP_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ZYNQMP_FIRMWARE_VERSION))
-+ZYNQMP_FIRMWARE_SITE = \
-+	$(call github,Xilinx,embeddedsw,$(ZYNQMP_FIRMWARE_VERSION))
-+ZYNQMP_FIRMWARE_LICENSE = MIT
-+ZYNQMP_FIRMWARE_LICENSE_FILES = license.txt
-+ZYNQMP_FIRMWARE_INSTALL_IMAGES = YES
-+ZYNQMP_FIRMWARE_INSTALL_TARGET = NO
-+ZYNQMP_FIRMWARE_DEPENDENCIES = toolchain-bare-metal-buildroot
-+
-+CUSTOM_CFLAGS = $(call qstrip,$(BR2_TARGET_ZYNQMP_FIRMWARE_CUSTOM_CFLAGS))
-+ZYNQMP_FIRMWARE_CFLAGS = "-Os -flto -ffat-lto-objects $(CUSTOM_CFLAGS)"
-+
-+define ZYNQMP_FIRMWARE_BUILD_CMDS
-+	$(MAKE) -C $(@D)/lib/sw_apps/zynqmp_pmufw/src \
-+		COMPILER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
-+		ARCHIVER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc-ar \
-+		CC=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
-+		CFLAGS=$(ZYNQMP_FIRMWARE_CFLAGS)
-+endef
-+
-+ZYNQMP_FIRMWARE = $(@D)/lib/sw_apps/zynqmp_pmufw/src/executable.elf
-+
-+define ZYNQMP_FIRMWARE_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D -m 0755 $(ZYNQMP_FIRMWARE) $(BINARIES_DIR)/pmufw.elf
-+endef
-+
-+$(eval $(generic-package))
+ config BR2_TARGET_UBOOT_ZYNQMP_PMUFW
+-	string "PMU firmware location"
++	string "Pre-built zynqmp PMU firmware location"
+ 	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
++	depends on !BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE
+ 	help
+-	  Location of a PMU firmware binary.
++	  Location of a pre-built PMU firmware binary.
+ 
+ 	  If not empty, instructs the U-Boot build process to generate
+ 	  a boot.bin (to be loaded by the ZynqMP boot ROM) containing
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index b9f165f041..18c02a4430 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -436,7 +436,12 @@ endef
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
+ 
++ifeq ($(BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE),y)
++UBOOT_DEPENDENCIES += zynqmp-firmware
++UBOOT_ZYNQMP_PMUFW = $(BINARIES_DIR)/pmufw.elf
++else
+ UBOOT_ZYNQMP_PMUFW = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PMUFW))
++endif #BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE
+ 
+ ifneq ($(findstring ://,$(UBOOT_ZYNQMP_PMUFW)),)
+ UBOOT_EXTRA_DOWNLOADS += $(UBOOT_ZYNQMP_PMUFW)
 -- 
 2.25.1
 
