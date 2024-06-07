@@ -4,79 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D68BC27C5F
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 17:26:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A90C27C53
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 18:11:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E57D340272;
-	Fri,  7 Jun 2024 17:26:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B32A3412F6;
+	Fri,  7 Jun 2024 18:11:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HvR4qIp83C4o; Fri,  7 Jun 2024 17:26:21 +0000 (UTC)
+ id T8USrKV9UtFE; Fri,  7 Jun 2024 18:11:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CA20405EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29EE040BC3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8CA20405EC;
-	Fri,  7 Jun 2024 17:26:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 29EE040BC3;
+	Fri,  7 Jun 2024 18:11:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B78071BF479
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:26:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4BB451BF476
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 18:11:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF87684C93
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:26:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3874184C72
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 18:11:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id enWrPsf9DEZh for <buildroot@lists.busybox.net>;
- Fri,  7 Jun 2024 17:26:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.141;
- helo=fllv0015.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 515CB84C92
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 515CB84C92
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 515CB84C92
- for <buildroot@buildroot.org>; Fri,  7 Jun 2024 17:26:18 +0000 (UTC)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
- by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 457HQIeT044842;
- Fri, 7 Jun 2024 12:26:18 -0500
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
- by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 457HQIE4005999
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Fri, 7 Jun 2024 12:26:18 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 7
- Jun 2024 12:26:18 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 7 Jun 2024 12:26:17 -0500
-Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
- by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 457HQHWa112821;
- Fri, 7 Jun 2024 12:26:17 -0500
-Date: Fri, 7 Jun 2024 12:26:17 -0500
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20240607172617.s42p343dw4ijgck4@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+ id 9erhdDHqWo4S for <buildroot@lists.busybox.net>;
+ Fri,  7 Jun 2024 18:10:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E299084C0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E299084C0E
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E299084C0E
+ for <buildroot@buildroot.org>; Fri,  7 Jun 2024 18:10:58 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 56AA513F8A9;
+ Fri,  7 Jun 2024 20:10:50 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 07 Jun 2024 20:10:49 +0200
+Date: Fri, 7 Jun 2024 20:10:49 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Bryan Brattlof <bb@ti.com>
+Message-ID: <ZmNNKV_vaTkG0JpW@landeda>
 References: <20240607093712.2880785-1-yann.morin.1998@free.fr>
+ <20240607172617.s42p343dw4ijgck4@bryanbrattlof.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240607093712.2880785-1-yann.morin.1998@free.fr>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1717781178;
- bh=i42CU3ZoPihtedtCrE8L83jOQWK12ft/9Z5VV2U1jN0=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=MP48IW+bJAebbcGqh9C1ndqPQrI0dW6XSTJFeTtPq+hj91M6EfoBaW5aFSESFUxp5
- q3RaUZbfLtxJiwypJVfItYL62+3WZdDvD1p9UAxdVYMDCmBMiFcv2GjwQTMs+BPBcM
- uVDLnAOQxtP1HbCiTNQR8apAgecqNeGqpeeQ4oss=
+In-Reply-To: <20240607172617.s42p343dw4ijgck4@bryanbrattlof.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1717783855;
+ bh=YvSMrXkgwXURlxUl96KtJscGJQmVCsJRC4N66xSLGBc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=unf3fcyoUnwJ59TDD1RUG3gmlSmqpiRqElbongb1llsa9eEoBHWJWEMBVUsnEgiWR
+ 9Xc5h2xTGlW1mEa6iQ2IJ+zL+O8IOEu9O0T6pwZKb0SfNkVi9qIEIgSEv+7faX/eOu
+ iN+Q+TSRDvE/2JSzwtTgUyVzYxn+La24wmNs7Ztf4TKaOPynqxlx8SB8p1ITihnNhp
+ yvRslpCAXiT0uufxDjdKvQJ7DiM7OXvy4sZ0C7vnt21tjqDvHBIb/aSWdVUiPxLEy3
+ GOsXBu6M94pymJvEeMZEL4TU9JO1U4MnKbkebzGwmX2jYXA3swFbnZfFez1ZObcCOK
+ CQv2ZJvPFTs/w==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=MP48IW+b
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=unf3fcyo
 Subject: Re: [Buildroot] [PATCH] boot/ti-k3-r5-loader: share download files
  with uboot
 X-BeenThere: buildroot@buildroot.org
@@ -90,103 +83,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Reply-To: Bryan Brattlof <bb@ti.com>
-Cc: Xuanhao Shi <X15000177@gmail.com>, Anand Gadiyar <gadiyar@ti.com>,
- Paresh Bhagat <p-bhagat@ti.com>, buildroot@buildroot.org
+Cc: Xuanhao Shi <X15000177@gmail.com>, Paresh Bhagat <p-bhagat@ti.com>,
+ buildroot@buildroot.org, Anand Gadiyar <gadiyar@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On June  7, 2024 thus sayeth Yann E. MORIN:
-> ti-k3-r5-loader is just a U-Boot SPL running on the R5 core on TI's K3
-> processors, so it makes sense to just share the downloads with U-Boot.
-> 
-> With commit ebe238f2b595 (package/pkg-download: use _DL_SUBDIR as root
-> dir of generated archives), the root of the generated archive will also
-> be based on _DL_SUBDIR, but the name of the archive, _SOURCE, is still
-> based on the current package unless explicitly set. For ti-k3-r5-loader,
-> that would create an archive which fiename does not match its root
-> directory; although Buildroot does not care (we --strip-components=1
-> when extracting), this would be a bit surprising to anyone manually
-> extrating the archive, as it diverges from the usual expectations.
-> 
-> Do like we do for linux-headers, and force the ti-k3-r4-loader archive
-> filename to be u-boot-VERSION.tar.gz
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Anand Gadiyar <gadiyar@ti.com>
-> Cc: Bryan Brattlof <bb@ti.com>
-> Cc: Xuanhao Shi <X15000177@gmail.com>
-> Cc: Paresh Bhagat <p-bhagat@ti.com>
-> 
+Bryan, All,
 
-Nice! Thank you.
+On 2024-06-07 12:26 -0500, Bryan Brattlof via buildroot spake thusly:
+> On June  7, 2024 thus sayeth Yann E. MORIN:
+> > ti-k3-r5-loader is just a U-Boot SPL running on the R5 core on TI's K3
+> > processors, so it makes sense to just share the downloads with U-Boot.
+[--SNIP--]
+> This should also free us from the ti-k3-r5-loader.hash files correct? I 
+> can send the cleanup once this is merged unless you would like to.
+>     $ find -iname ti-k3-r5-loader.hash
+>     ./boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+>     ./board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+>     ./board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
 
-Reviewed-by: Bryan Brattlof <bb@ti.com>
+I also pondered that. However, it is going to be a little bit
+complicated, INHO. Indeed, the two can use different versions, so it
+would be difficult to maintain the uboot.hash file: it would be easy to
+drop a hash in uboot.hash while it is still used by ti-k3-r5-loader;
+similarly for defconfigs: since they can be different versions, we can't
+even share the hashes for the two, so they will have different hashes.
 
-This should also free us from the ti-k3-r5-loader.hash files correct? I 
-can send the cleanup once this is merged unless you would like to.
+So that's why I did not merge the hash files.
 
-    $ find -iname ti-k3-r5-loader.hash
-    ./boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
-    ./board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
-    ./board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+Of course, now I notice that the two defconfigs use the same versions
+for uboot and ti-k3-r5-loader. Which got me thinking that maybe we
+should make that explicit (and easier!) in the menuconfig:
 
->
-> ---
-> PS. Not sure if we should do that in the package infra, though, or even
-> if we can even do it. It's a special case for packages that are both
-> sharing their downloads, *and* being downloaded from a VCS, which is
-> not a situation common enough to warrant a generic implementation in the
-> infras... Thoughts?
 
-My thinking is these are unique enough cases and I'm not too sure how 
-common the need will be to do this kind of thing. So it should be fine 
-to keep it out of the core package system.
+    diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
+    index c276528fad..303f448f8b 100644
+    --- a/boot/ti-k3-r5-loader/Config.in
+    +++ b/boot/ti-k3-r5-loader/Config.in
+    @@ -16,6 +16,10 @@ choice
+          use cases you will want to use the exact same version/source
+          here as it is used to build the main U-Boot package.
 
-~Bryan
+    +config BR2_TARGET_TI_K3_R5_LOADER_SAME_AS_UBOOT
+    +   bool "same as uboot"
+    +   depends on BR2_TARGET_UBOOT
+    +
+     config BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
+        bool "2024.04"
 
-> ---
->  boot/ti-k3-r5-loader/ti-k3-r5-loader.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> index 98a6d473f1..e426f039e0 100644
-> --- a/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> +++ b/boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
-> @@ -5,6 +5,7 @@
->  ################################################################################
->  
->  TI_K3_R5_LOADER_VERSION = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_VERSION))
-> +TI_K3_R5_LOADER_DL_SUBDIR = uboot
->  
->  ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_TARBALL),y)
->  # Handle custom U-Boot tarballs as specified by the configuration
-> @@ -14,12 +15,15 @@ TI_K3_R5_LOADER_SOURCE = $(notdir $(TI_K3_R5_LOADER_TARBALL))
->  else ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_GIT),y)
->  TI_K3_R5_LOADER_SITE = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_URL))
->  TI_K3_R5_LOADER_SITE_METHOD = git
-> +TI_K3_R5_LOADER_SOURCE = u-boot-$(TI_K3_R5_LOADER_VERSION).tar.gz
->  else ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_HG),y)
->  TI_K3_R5_LOADER_SITE = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_URL))
->  TI_K3_R5_LOADER_SITE_METHOD = hg
-> +TI_K3_R5_LOADER_SOURCE = u-boot-$(TI_K3_R5_LOADER_VERSION).tar.gz
->  else ifeq ($(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_SVN),y)
->  TI_K3_R5_LOADER_SITE = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_REPO_URL))
->  TI_K3_R5_LOADER_SITE_METHOD = svn
-> +TI_K3_R5_LOADER_SOURCE = u-boot-$(TI_K3_R5_LOADER_VERSION).tar.gz
->  else
->  # Handle stable official U-Boot versions
->  TI_K3_R5_LOADER_SITE = https://ftp.denx.de/pub/u-boot
-> -- 
-> 2.45.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+And then with a bit of sorcey/trickery in ti-k3-r5-loader (like we have
+in package/linux-headers for example) to handle the same-as case.
+
+Then that would make sense to merge the hash files, maybe.
+
+Thoughts?
+
+> > ---
+> > PS. Not sure if we should do that in the package infra, though, or even
+> > if we can even do it. It's a special case for packages that are both
+> > sharing their downloads, *and* being downloaded from a VCS, which is
+> > not a situation common enough to warrant a generic implementation in the
+> > infras... Thoughts?
+> My thinking is these are unique enough cases and I'm not too sure how 
+> common the need will be to do this kind of thing. So it should be fine 
+> to keep it out of the core package system.
+
+Exactly my thinking too.
+
+Thanks for the review! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
