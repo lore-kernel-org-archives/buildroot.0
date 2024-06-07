@@ -4,149 +4,162 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C2AC27C53
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 09:47:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BF3AC27C55
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 10:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38A4D4049F;
-	Fri,  7 Jun 2024 09:47:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE749400EF;
+	Fri,  7 Jun 2024 10:05:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CQbRkqczGBKU; Fri,  7 Jun 2024 09:47:36 +0000 (UTC)
+ id ppJrm4fZpcav; Fri,  7 Jun 2024 10:05:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06AD141A14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67C7640217
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06AD141A14;
-	Fri,  7 Jun 2024 09:47:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 192101BF4D5
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 09:47:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67C7640217;
+	Fri,  7 Jun 2024 10:05:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 216891BF48C
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 10:05:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1326F4086C
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 09:47:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1ADED40217
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 10:05:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TqaEvGZCaqUg for <buildroot@lists.busybox.net>;
- Fri,  7 Jun 2024 09:47:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jD3e7uzCRpCW for <buildroot@lists.busybox.net>;
+ Fri,  7 Jun 2024 10:05:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2417::601;
- helo=nam12-dm6-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2416::600;
+ helo=nam11-co1-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 83FB340871
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83FB340871
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on20601.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2417::601])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 83FB340871
- for <buildroot@buildroot.org>; Fri,  7 Jun 2024 09:47:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8C346400EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C346400EF
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com
+ (mail-co1nam11on20600.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2416::600])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8C346400EF
+ for <buildroot@buildroot.org>; Fri,  7 Jun 2024 10:05:01 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RcSwQ6dri9hFzgrsl09n2r3s1JRF0u0/88bgXL7plfj8fVESnvNCCXhYT8SyCX4Qpk52LP3IohYX878LDZ/baIxOS01aQ3ioHYT9v8n11q+f31xy7QIdxCQKgzVN33qyLCPvo4FMQl5ki+gnoIPZQW42cijUOMDs9w/n98avwQdp5gs9e51IOTPtgThllE21CL87uRC/CoqyGgjcK9LOQ6Vl6I8GiR47l81ohFvwZw4WdpzGKNvAZndN7FXb1LlZPRnIQCjTjJCJRDuU8d8pAyuoxvtCvafoWIA7ULrrIB6JuOpUGAPBAG4ievrE5y+jqmg/mwKB4Fs1J1IP0cmnYA==
+ b=QdkH/b2tSI/QuoEXHT6DkAp9GorJfLUEsTIUJ9K88dK3Z1J3UjK2gan29bcxNMkDTnbk41oyIHyXGumagg1WfzpDSv1S03+z4PsAhG4JHz6M+ojV2/QKVUvvMYwTeWNr6N/jYtFXQebPZfXoeZZVDoLnbt0G4AsJRbEhYf4Jt/Y3ufx3NDsQO04dowb02ORtuj9pxrTjErwfdPvt9+rFrzxAe/CaxIJLOIl3p+DbwX4k6kNyUITJiaXbAT48YkSDcPOT/Qahrssyo43We01pgTphY5wggxu0s3zde0GR11Jot9EIzOI9BuFy69yYZUqFnx1EqyBAD+waBwpu8mWztQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OHM92spYPO6eZ7tvmQyeDxOeyJxwxq17QGyuW40UpOs=;
- b=AT4VDxlTLtgm1wPBMvkg8bq6vb+0WzohLiVqkUiDwnuTvetpu0/b2ceTrlHEvZdaPdhrXFlo6iFc8aMEhQ/xUmsHegTe7UK3g8xbYBM0+2u/uJGHhQFs2Bse7Eqex5R5Syl3/QtuS5tyQMQXmnA/HgOZ9B12Dp6j53yv0seRjgDuuXK5QGeEsXqIAwHcW8nOX9bHScNBnRwa9VIezi5BYXwOJCXgdNkMHGx5n9/dLJcoBb7TdmhuHphDYE02L0P1p1b3hcXaRiL7ui2wDDlzI5ExqXvXX+5OpnegL5vdzalNI/PaT+dfqBbDj6LRtPT3gHOCpxXPvo8hxRUiXh1NcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SJ0PR03CA0364.namprd03.prod.outlook.com (2603:10b6:a03:3a1::9)
- by SA1PR12MB5672.namprd12.prod.outlook.com (2603:10b6:806:23c::5)
+ bh=nNyddXsd6TW6HDgOEcc49fG6bDERQgF/t8ldfBm25MQ=;
+ b=EZLi7lQxU2fV4sOrqy/8fBbPowwrML/N/daGyMRjd0o3f+y2iSvwET2G90oATqmh2imeVG2HS6L3H/KQ9VhiJ1PD6/lo4b+eq3PAiFCtKldiXOAUIRWCmxAbZ5xWYZzrgR3glzuawO6GA5UslZl/AZilm92DFyZZc0x1kASHw1WaiaILYFyRoJn2cKJ/Gvl/2r9OclSSM6p5GvLOEYrjqfjh0N395dtEOqD1HsjTbKSGKq7M6ZtlnZs/BZAWX6FqHJ9PKptWH2bgge1Ww9cWRbL89pQUeAwWOkGxs+33V1YrYRXX23k+t+VdZlohJD9qI7N2OV4VYz1njL5wVhpNfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by BL1PR12MB5729.namprd12.prod.outlook.com (2603:10b6:208:384::14)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.24; Fri, 7 Jun
- 2024 09:47:24 +0000
-Received: from CO1PEPF000044F4.namprd05.prod.outlook.com
- (2603:10b6:a03:3a1:cafe::b5) by SJ0PR03CA0364.outlook.office365.com
- (2603:10b6:a03:3a1::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7656.16 via Frontend
- Transport; Fri, 7 Jun 2024 09:47:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1PEPF000044F4.mail.protection.outlook.com (10.167.241.74) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7633.15 via Frontend Transport; Fri, 7 Jun 2024 09:47:23 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 7 Jun
- 2024 04:47:15 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Fri, 7 Jun 2024 04:47:13 -0500
-To: <buildroot@buildroot.org>
-Date: Fri, 7 Jun 2024 10:47:05 +0100
-Message-ID: <20240607094705.1962913-3-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240607094705.1962913-1-neal.frager@amd.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.22; Fri, 7 Jun
+ 2024 10:04:57 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b%7]) with mapi id 15.20.7633.033; Fri, 7 Jun 2024
+ 10:04:57 +0000
+To: "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
+Thread-Topic: [PATCH v12 1/3] boot/zynqmp-firmware: new boot firmware
+Thread-Index: AQHauL+w9GZ3wdE+SE+CYlYttlT1wbG8Dv/w
+Date: Fri, 7 Jun 2024 10:04:57 +0000
+Message-ID: <CH2PR12MB50045B54E49332170D4CD222F0FB2@CH2PR12MB5004.namprd12.prod.outlook.com>
 References: <20240607094705.1962913-1-neal.frager@amd.com>
+In-Reply-To: <20240607094705.1962913-1-neal.frager@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|BL1PR12MB5729:EE_
+x-ms-office365-filtering-correlation-id: 970aa85a-7f24-46f4-d9b3-08dc86d9492c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230031|366007|376005|1800799015|38070700009|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?XA0F5N997A/S7akIoKuL4aenA7ikGXiiMAqOKDV1WNGQiTjhewqVM/ceQUDB?=
+ =?us-ascii?Q?xZryEj29+xM0FIMnD38SwB6zZnV02N/QfECkVr+Kb3eSJJsFc4bmhHJavNXk?=
+ =?us-ascii?Q?RLyajsIXonp5mVK/ggjjGMvcZy50gWs3JzNWHE5br/u2mJZBQGKO0AlORGPv?=
+ =?us-ascii?Q?cLiAX8qxZXwA2tFemFAy0Zb/D9Lh1ql6IBlAuph9AWMQwAA3M5Uxv7mG33oV?=
+ =?us-ascii?Q?Sa/Qrsal+jrO02FrhcarHegeUkIDYzWheENuq9RPN70O4dWcQZ8RnSfCJYs2?=
+ =?us-ascii?Q?nJGwp3vfyxss6UwXTdtBz1qUEHbHdtBC8h+g5SOhwN3YwvwpDInQ4XGQCkBv?=
+ =?us-ascii?Q?Dj1vutSPTtyKbymC7Y+p2nH7mpSlGzzFxTadJ8zM9j1tscuK7CvjO1XV43yN?=
+ =?us-ascii?Q?mBg2Zla0eRsCh0/WNtbB3tRn+c/PpHVoL8M+d+kqc30beVlEu5nFvP8anRQn?=
+ =?us-ascii?Q?fWiApyWVmSX+RGAWGILVlT7cL6wi985FKLUn2J+XSphxiwe7qCuX/GjUvEM4?=
+ =?us-ascii?Q?gzDkNuG/Lcv7I/XqyLPHUTcqaPsUoPoQUwHQshj4r/vmRdYySMkedEcLKuej?=
+ =?us-ascii?Q?D2IzvVk9G2xCsVGKRIREvvFGuzM1KGJETuhj2q/TNpB1lpUZcr1X3NLUZDvw?=
+ =?us-ascii?Q?BAu6ih6YUD74JVzkaISwLv3oYjNxUqVtG1HYc3zXijbFLDOYurCn8eD7tZgH?=
+ =?us-ascii?Q?KAtGH6Ljjza6wMzJU5v29yzW5JE01j32wyTpuMZxct5JIw7lszjOG87yEy11?=
+ =?us-ascii?Q?vLjOeziTufvacJWf4NAK/5XDRPXoVdO/J+sDqJGthwhYLfVXkoKBTQya9zdj?=
+ =?us-ascii?Q?qmSKW5y6aZ1q2/LeBOn7DkhCQuUDIa+pmT6BoPYjSnnF9hgilCRJImbeVqMX?=
+ =?us-ascii?Q?6Ch6SBfAa3k87zOZn30Xnj0gehNtmyR+Bv+ldNOmzyF+azRMCo5ZwqrhNYYZ?=
+ =?us-ascii?Q?ecpXoa1wtlKOGtUCv7paDZND6d/Ua37wJsNeQ7VwicOST3iSuPy54vRZrYPi?=
+ =?us-ascii?Q?ds4CCEhRed0oJpdmDQ/cHN1W5e/pM75eMnhljj2dlAd8+ZB3UXy07+RM97EP?=
+ =?us-ascii?Q?hKUd9rarc8ZuwRSFrhsITZapA81VL0AT7pwdxBJeeqahhq9pR8NFJb56zJND?=
+ =?us-ascii?Q?+4u25e+4uOfjs901fTqdXfyxIfvuZtJq9pdwYtll35MszB0B3xm0IPMzGPfr?=
+ =?us-ascii?Q?01BZP76oxeDxz7Q5+oHql1E7uWgMLpwDJN4p+vIIf4XIVdCYIer9IADBzRfa?=
+ =?us-ascii?Q?s3ovxoI4wCl+lklszwgf9qpQB2rZAjVOkMxnaqQg7jXUp4zkQrR/WbLKmoOV?=
+ =?us-ascii?Q?+g46G6nLQUWF8xdrCibbBPV010o+othT965eJeAdgQjVuSxnQjPEK09RDdU0?=
+ =?us-ascii?Q?q/GAhfDO2UDluB8lswo55eJcbtwgZ3iUx+g3U99lebPQ1SB7og=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230031)(366007)(376005)(1800799015)(38070700009)(41080700001); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9X7tmEW4T+yAReigQfqrUUoTQagaxL58oRtEZPkFHUN0rW+jpuAPpAPSDOdx?=
+ =?us-ascii?Q?9MQoxwlnlbUa9eWjrGc2my04zlqxhvFfWL3AkIgtmpnKMu0rSSnfcsQJUirI?=
+ =?us-ascii?Q?8XQuO4tozlHwYDRuZr0FD88bf7QtQGmJJKMbQMgSC83UqB0D/yQDH65+6uaS?=
+ =?us-ascii?Q?sNZHic9rMgwEOuJDwWma5rKlJy4lrpKy8EmS5Fz1nj8SA/4YNzlNUzt396Hn?=
+ =?us-ascii?Q?fzznu1LROVDabIRhZTf1tuoRGHK+DoxGWiBIfATy0EfMmHedkY+UyOuxjl92?=
+ =?us-ascii?Q?TmeodmVMOlrPQ0nss1M8Tg3aNpIpxcyXGkhvCeVDlZPOfh+k6iEJ+aD+MPS9?=
+ =?us-ascii?Q?hDk9OSCGHIH7h+z7TAFHsYnRZbkrZU9XHuHb2bW7p6/3fiBFZAHYgK3IcL4S?=
+ =?us-ascii?Q?12sibQ2y1/Ua9ApndMGUJtgs1gr+yU10wXWhYmShj2TPNYgZA54y1TRCKZS3?=
+ =?us-ascii?Q?YtMnQbmSaE7CcdVE55WNwHH4xgk/E7KYOf05WL01XghOPhAHPBX4Zi9Vwv6d?=
+ =?us-ascii?Q?JVU3pXj5HGJTg2qtzXSnMRj0ZmouRCDDa0449qOtp2UV5omcP+XnfE4okrC3?=
+ =?us-ascii?Q?EYQ9O3CONg9btUexUj0aWSe+w9nnMS00t8+fIqUxBzWo79WacNmKZdEixpRu?=
+ =?us-ascii?Q?dXbrDWAZsxLclFg3EsNKn7FBCzeeGX5Bjg2vf3ytHA0xeTsUASslTO5NZe1S?=
+ =?us-ascii?Q?AdeTrOLX9fMrVB1znLwKweHxVzwBDqF5xwF66aIC/FkEPnK7TE/Mm2U+pZhr?=
+ =?us-ascii?Q?DNmc72kLTTYJ6GQgL2UWWsl/UfCWVhvoUlPW+sCgySMkd718QCvNjvPT7A6p?=
+ =?us-ascii?Q?+Cd4Xb4rZQnVMFr8EcrNETW+rCUFB1snx5iVkBlcFdFq4f7+6jUzfsjHXWmu?=
+ =?us-ascii?Q?zL9ASxfoQGnNiafieNs4cPnqeiluAgdcMx7IT11NmnObwaKXo16Dn7vzdLF4?=
+ =?us-ascii?Q?NaH/C8S/MR5IoQ76W2NCaLlAMUdGyC5t7TiTZYAjOlXxsUw6sU6/XJt9H0C7?=
+ =?us-ascii?Q?gkEOGo/YZPQq5ZPMB5T+qaMMg3zJRwcUd3OUc7eHJ59oeig4oaGKCARTpX0a?=
+ =?us-ascii?Q?5ZHU4TN5DxDxe8GN+w9ueCqmUAqsiEjsAODEdN3hrUYOeFw/MSPqGDtRpHEL?=
+ =?us-ascii?Q?J8G/6kjlZmym7aBUDILzd51MLWZR3cLk4L/yguXaoptgDRvhU98WCwB/gL1S?=
+ =?us-ascii?Q?jJmF7Jx/kqRve6p843pg94MA7JakiegIROtYnvoCnO33+p+sO2zqIVRdas09?=
+ =?us-ascii?Q?qG1ozuuN6MJ7QYmribNITEcE8YaiV4zjDI1shF8065HEUeJlW+KC1yK39BI3?=
+ =?us-ascii?Q?Q7FM2HHk1EdoRsVqbeeAH0jEZfWBUKIXtuwgBMnE8zJ0edAyJfmz1jHY2K2Z?=
+ =?us-ascii?Q?brihfxP0byCr1BrkpuNvnKOz8PjhrCPLfbRIfHVwMOLlwiBjVmJfGms0ljef?=
+ =?us-ascii?Q?sZtCSqyrfFHWfA/qP3rVekjyFEMXiY1e+4BpEKHaNpoZxe+8RHstycuHGbeT?=
+ =?us-ascii?Q?B7hn50Qy9Avu8BM3x4tpegQzr5PBAA04nbLLNeazQEqTemqKsB0A+soD+CP4?=
+ =?us-ascii?Q?yRjgOjh+jY/jj1XECvg=3D?=
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044F4:EE_|SA1PR12MB5672:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53017f3a-b81c-42bc-0e71-08dc86d6d504
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230031|1800799015|376005|36860700004|82310400017|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?xslWlTG1jQ2PRAUZnC2EKToR/t+oPkn4mnPQIgcIbr5+cLNgb0GgoXWhbMes?=
- =?us-ascii?Q?vhG+UD1lQTgslkCUqIy6r6dBC6EGZUxDqW1KYjStHZXaHLT0wiqZkmS34Jtm?=
- =?us-ascii?Q?4vGhxjfPDZXnRBestEYQspNou4TVPKHNsG19A1O8i90RnS7Q8ZwaHgZURllb?=
- =?us-ascii?Q?ZchTjWlRJd+i8GBvXtSBqP3kgWAk2MGpbAYBxl6v3DC4WWIvFpxVg6rFJZjs?=
- =?us-ascii?Q?+PqgCIGpw87LEvGgbScGFApKUcD28YiQhqA9rxHFyi2KmJFgByG3UHoqITCo?=
- =?us-ascii?Q?9gokL8g/1zkrQKVtnBvXoMzXzBUQcwDLiaLpUzH+/feT+j5jrAz5ZyKoURMI?=
- =?us-ascii?Q?pfnRpzlB7B0kWG9aXck5cP5pUyBcZiPTjiY2/I3bUBqYB8PGwhoaZa5Lgc4h?=
- =?us-ascii?Q?aHx+Kn6UWsyM0XicHgdSRyJzJIIJqspmyyyd9IiZaayJtIh6+fnUo71MTdAh?=
- =?us-ascii?Q?HMYzZK+RapmmPPqdl+Uxkz2KF9rm8te5QTzfUfGIJ4Kf1Zlm6UhJ++X+FAbI?=
- =?us-ascii?Q?eVrQBW9zEjDzecNbETxjV7Ky6GsBCtUZQtaTlZAKgKVm8nChDYQd0R0fnvAd?=
- =?us-ascii?Q?8ve4vQdJVkK/YwOvmb19UlvuHjvfFXOLL6T6BfsuHdiSW/JqDWTBNv1bE2/f?=
- =?us-ascii?Q?APWrJhHR4JIuZAX2Ni0Ue1NraaOQPdlmIDVB07fMWGjaFiPaWDSHRWZoH7Mu?=
- =?us-ascii?Q?I0E5MY0lfZMv2f39/2z3ihyTklyBARWrcHAA4nx4RWdB0cmprdGB+nzyKcVU?=
- =?us-ascii?Q?XgI6lHDM1YXISCpjOZm8fw8zPlzJZEK4tdoxLpaZaCKWPAcku4Dv5rkpxuF4?=
- =?us-ascii?Q?ADROQSOhLDlir3eY0ZX3cdPfBBbZZsx8J6dpxaZJTwUw4TkXpS5+qwrE6auI?=
- =?us-ascii?Q?jjaU7MtL+qZaqnXXg9XZETrBzq6woNRYxdI2rdmm27Gk3+Zf4PsoP8vOg1Fs?=
- =?us-ascii?Q?+osVoZr5eXn6V6RJSvsmYnqeFjOwJMBzXWxY0Kd8M+NkJhHTwPOMy8fk1cgq?=
- =?us-ascii?Q?X72Yxs0d5YzTe0gJWz4A/SM7sZoVaal1oIzaFQTTdl1m2MuiuqgTlYmNi839?=
- =?us-ascii?Q?k7I3DWOhCfIXBR0396uVfAODO0RCwtxBoru4muEy15LI3NENpZNV3aDETtY/?=
- =?us-ascii?Q?ADwqXRbLyIHMpU81tsJfvNYulhDTLC6flGn7girHlV+v1L1oy4IELESvUkxx?=
- =?us-ascii?Q?uwpyKJi5RNgnrgiP57KIZTXFy/7R6XSeKHB/1gJIiaN901Wyc6NWayqRRkWA?=
- =?us-ascii?Q?+R7deAHkOsB54NrCnW8+OlsMf0z5cqtPXJwfKmVVpptUZaDsQLZglF9rXsCv?=
- =?us-ascii?Q?l15RcQjH9q6IbRtp1DqB6kWTyxFsNBq5nd3P9V+9n1KDf/EjspdfavnPg9m3?=
- =?us-ascii?Q?p7STobpYN8Xc2wKNpbsFd2hCGI0IhHQ3ubjQ3Q2cHKA96o2ypdAH+qXc7w8m?=
- =?us-ascii?Q?ynL8/5+slWXnxAqWRbAGeayfQko/dkvD?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230031)(1800799015)(376005)(36860700004)(82310400017)(41080700001);
- DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2024 09:47:23.3141 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53017f3a-b81c-42bc-0e71-08dc86d6d504
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044F4.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5672
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 970aa85a-7f24-46f4-d9b3-08dc86d9492c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2024 10:04:57.3195 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tjLykDL3L5CU6Cfxb2Dm90x2kkitPFgRr6Iycf/mPZZlzXQ3g+t56dhhcU1VPIMz
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5729
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OHM92spYPO6eZ7tvmQyeDxOeyJxwxq17QGyuW40UpOs=;
- b=WQHdv6dW9jp19gFFYaOG6XK/EUkd7NsA/B9f90et/VDBeT6ov1RdcenVWqpEtBagWcWLydAOxsuZXPTUpBCSAyjdggp1qNRvGdD0o6s+eHWG+fD0UWjAnyOSXbm93tITuw67ja71ea8ZXPXbtOZUKq5Wb8TSL3yS1ZjAzw1nLXU=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=nNyddXsd6TW6HDgOEcc49fG6bDERQgF/t8ldfBm25MQ=;
+ b=VxU7Vw+oDNQMwS+J/HC5L/KZPY9XT7Pk7ik97ppw4/3wYDo2xj/Twsf/1BrnO9VypxTI6d9tiHO2pU/3QBGdqY/Edf202vd+4n8az3lBAzy2pTF8oWLack8nLkym4hD66IOfgTwHR6AhIRmrEYdCmGZDRZPqsAf+MUsJ/9NII9k=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=WQHdv6dW
-Subject: [Buildroot] [PATCH v12 3/3] configs/zynqmp*: build pmufw source
+ header.s=selector1 header.b=VxU7Vw+o
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v12 1/3] boot/zynqmp-firmware: new boot
+ firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -158,143 +171,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
- Neal Frager <neal.frager@amd.com>, michal.simek@amd.com,
- yann.morin.1998@free.fr
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ "brandon.maier@collins.com" <brandon.maier@collins.com>,
+ "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>, "Simek,
+ Michal" <michal.simek@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch migrates the zynqmp config files to use the new
-zynqmp-firmware package for building the zynqmp pmufw from source.
+Hi Yann, et all,
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
-V4->V7:
- - no changes
-V7->V8:
- - bump to xilinx_v2023.2
-V8->V9:
- - add the new zynqmp defconfigs
- - add BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH definition
-V9->V10:
- - no changes
-V10->V11:
- - BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH is set by zynqmp-firmware
-V11->V12:
- - BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH is set in each defconfig
----
- configs/zynqmp_kria_kr260_defconfig | 6 +++++-
- configs/zynqmp_kria_kv260_defconfig | 6 +++++-
- configs/zynqmp_zcu102_defconfig     | 5 ++++-
- configs/zynqmp_zcu104_defconfig     | 5 ++++-
- configs/zynqmp_zcu106_defconfig     | 5 ++++-
- 5 files changed, 22 insertions(+), 5 deletions(-)
+> This patch adds a new boot firmware to buildroot for building the zynqmp pmufw.
+> It requires the toolchain-bare-metal package that includes a bare-metal
+> binutils, gcc and newlib which can be built for the microblaze architecture.
 
-diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
-index 3bf269ab6b..3f475af882 100644
---- a/configs/zynqmp_kria_kr260_defconfig
-+++ b/configs/zynqmp_kria_kr260_defconfig
-@@ -31,10 +31,14 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/kr260-kria/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kr260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
-+BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2024.1"
-+BR2_TARGET_ZYNQMP_FIRMWARE_CUSTOM_CFLAGS="-DK26_SOM"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index 7b402e032c..313b324a13 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -31,10 +31,14 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/kv260-kria/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
-+BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2024.1"
-+BR2_TARGET_ZYNQMP_FIRMWARE_CUSTOM_CFLAGS="-DK26_SOM"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index f40002f6d9..302ad1394e 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -30,10 +30,13 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/zcu102-zynqmp/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
-+BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2024.1"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
-index ef9c9bad49..059858fff6 100644
---- a/configs/zynqmp_zcu104_defconfig
-+++ b/configs/zynqmp_zcu104_defconfig
-@@ -30,10 +30,13 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/zcu104-zynqmp/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu104/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
-+BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2024.1"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index 07c595436f..39dd5c8ab3 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -30,10 +30,13 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/zcu106-zynqmp/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
-+BR2_TARGET_ZYNQMP_FIRMWARE_VERSION="xilinx_v2024.1"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
--- 
-2.25.1
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+[--SNIP--]
 
+> V11->V12:
+>  - replace select BR2_TOOLCHAIN_BARE_METAL_BUILDROOT with depends
+>  - change variable name for check-package warning
+
+I implemented the changes you requested and submitted a new v12 version.
+
+I left out the following things from this patch set.
+
+1. No forced hashing for zynqmp:
+As we have not resolved how we will handle the hash for files downloaded with
+EXTRA_DOWNLOADS, I left the force hashing out of this patch set.
+
+2. No versal-firmware patches:
+Since BR2_DOWNLOAD_FORCE_CHECK_HASHES is already included in the
+versal_vck190_defconfig, the new versal-firmware will fail because it uses
+EXTRA_DOWNLOADS to download a PDI file which has no version in the filename.
+
+3. zynqmp_kd240_defconfig:
+I did not update this defconfig since it has not yet been bumped to 2024.1.
+
+Please let me know if you think this zynqmp-firmware is ready to be applied,
+and if you have any additional feedback.
+
+[--SNIP--]
+
+> +++ b/boot/zynqmp-firmware/Config.in
+> @@ -0,0 +1,25 @@
+> +config BR2_TARGET_ZYNQMP_FIRMWARE
+> +	bool "zynqmp-firmware"
+> +	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH = "microblazeel-xilinx-elf"
+> +	help
+> +	  This package builds the PMU Firmware application required
+> +	  to run U-Boot and Linux in the Zynq MPSoC devices.
+> +
+> +if BR2_TARGET_ZYNQMP_FIRMWARE
+> +
+> +comment "zynqmp-firmware needs a bare metal toolchain for tuple microblazeel-xilinx-elf"
+> +	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-xilinx-elf"
+
+Resolves issue of a user building a bare-metal toolchain for another tuple.
+
+[--SNIP--]
+
+> +ZYNQMP_FIRMWARE = $(@D)/lib/sw_apps/zynqmp_pmufw/src/executable.elf
+> +
+> +define ZYNQMP_FIRMWARE_INSTALL_IMAGES_CMDS
+> +	$(INSTALL) -D -m 0755 $(ZYNQMP_FIRMWARE) $(BINARIES_DIR)/pmufw.elf
+
+Changed variable name to resolve check-package warning.
+
+[--SNIP--]
+
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
