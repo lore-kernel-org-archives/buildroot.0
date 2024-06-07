@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0434C27C53
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 17:07:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4AC7C27C53
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 17:07:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A737042805;
-	Fri,  7 Jun 2024 17:07:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77A88428BA;
+	Fri,  7 Jun 2024 17:07:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GkwkCWljdjNu; Fri,  7 Jun 2024 17:06:59 +0000 (UTC)
+ id TnFwwcRsZcUB; Fri,  7 Jun 2024 17:07:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34E25428A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41B5D42830
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34E25428A4;
-	Fri,  7 Jun 2024 17:06:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 04C4E1BF969
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41B5D42830;
+	Fri,  7 Jun 2024 17:07:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D14D71BF479
  for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 27F676158A
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5ED084C2F
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4JK5Cf73_lkU for <buildroot@lists.busybox.net>;
- Fri,  7 Jun 2024 17:06:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FCkpBXqsrQZr for <buildroot@lists.busybox.net>;
+ Fri,  7 Jun 2024 17:06:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::12e; helo=mail-lf1-x12e.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 60ACC6152F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60ACC6152F
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 60ACC6152F
- for <buildroot@buildroot.org>; Fri,  7 Jun 2024 17:06:12 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-421396e3918so27987525e9.0
- for <buildroot@buildroot.org>; Fri, 07 Jun 2024 10:06:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E88E084C87
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E88E084C87
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
+ [IPv6:2a00:1450:4864:20::12e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E88E084C87
+ for <buildroot@buildroot.org>; Fri,  7 Jun 2024 17:06:08 +0000 (UTC)
+Received: by mail-lf1-x12e.google.com with SMTP id
+ 2adb3069b0e04-52b87e8ba1eso3182860e87.3
+ for <buildroot@buildroot.org>; Fri, 07 Jun 2024 10:06:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717779970; x=1718384770;
+ d=1e100.net; s=20230601; t=1717779967; x=1718384767;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=5YQleT/TDJcFKTolFgGtJfr3uSBdKxReksMWVGli+Ew=;
- b=rAPMVPF1wL8jJMv5r0wMohUMrUl9RjazQjwHNP2y9hB5F3567aCeyuI+i4OOEAjjuz
- A29Kp+3ynC5GEpRMK/jcR/ghKrMn8LJsZ/KGrA+zuu/iHeeIqUFPDxSsqQ4xUSQc5p1C
- 2eiliYV3SkPC3F5yJGlVamZC4S9pxGfRkUjn2Vha+PnN0+cHOaiQBnvW0lYJI2+9LyzO
- XFrVv9g257GcAeEeRQiyHajI3gUUzCJl+qti7TUOdW1mWSEsVG9ChSNYCBNHod0Ru1pZ
- o8yl9+8KnKCY+S3Q/A/M/umDhMbAFh8Bb0J9TqJRyp+bM7EMly0TBYa94zqSO7bEAs3J
- 7NLQ==
-X-Gm-Message-State: AOJu0YyjyW05/XGWFH87Qy1owt0Yf0FTrMGEPR+20WZXAqjWkD7bddPq
- tYhBA0iO3y757xVNHbpUNMJIytK6L5HOCnSacOjVAYvHG1ifKFIjUdEfJQ==
-X-Google-Smtp-Source: AGHT+IE2eAmlOZXfZNtE8Pfd8ggtuxUO17y8Ur8YLUjLuzoD1lCNE1yby9P8tyDLZWDi1qjIsNt/9Q==
-X-Received: by 2002:a5d:64c1:0:b0:354:f8a9:351 with SMTP id
- ffacd0b85a97d-35efed15b7bmr3498658f8f.3.1717779970346; 
- Fri, 07 Jun 2024 10:06:10 -0700 (PDT)
+ bh=C84M+3JQced14KoZJRrr/p2t+lgR4PQVqdRFeupsGd4=;
+ b=K30FN1nnPG5eoB5V7JTn1bp5sOD3WGmEI/3VC9c3W+b5L7c7b1SlF2+cVQlwyRrsQR
+ mDxat2ZfMRmN+TspBSpGznIzCJ5mwT+ENwX1JB+/j+r6g1LrLFG8aB7n9AJGuTPXCAoB
+ ADxkHKAcalogJcvK/sAwUIFfINilJrSrgaKWMMO0ljzYHoxSQiUDdkqt7qdw8iMQgl7p
+ 8Cd1XJtMMcwOWnjAzzbrth5XiVTsK6sHjTyiyIXeveQcOdcp+N6wtr1vqTx4D3m7c8dS
+ ygja2KgHFLsEgddh5kAAYniowDc9H3hYSgdZVz1PCt31USCYjNnlq+8GRjcLP5ejszIR
+ 9fjw==
+X-Gm-Message-State: AOJu0YzOL+OziAaSheFcc8avxbBIz1Hq6g2qaC7H6m9vuNL7zw64u6km
+ fU41gvgeZAXUR3YnnePOvMvxmCCrQJbj2jBWtvTuZCV4rKwVDeR2IfLGnA==
+X-Google-Smtp-Source: AGHT+IHFYmkRJfOQ28LxOrfNtoP+45L01pOi1ZVqvtQpn+ZtV/sI2EAuT27wYTRvNVkvWfbgZ4D1BQ==
+X-Received: by 2002:a19:6b0d:0:b0:52b:bbdf:bfab with SMTP id
+ 2adb3069b0e04-52bbbdfc083mr1819850e87.65.1717779966584; 
+ Fri, 07 Jun 2024 10:06:06 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-35ef5e989c9sm4355379f8f.73.2024.06.07.10.06.10
+ ffacd0b85a97d-35ef5e989c9sm4355379f8f.73.2024.06.07.10.06.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Jun 2024 10:06:10 -0700 (PDT)
+ Fri, 07 Jun 2024 10:06:05 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri,  7 Jun 2024 19:05:59 +0200
-Message-ID: <bb6a8adec9ee1abff34dd0e043841a77aa529987.1717779951.git.yann.morin.1998@free.fr>
+Date: Fri,  7 Jun 2024 19:05:50 +0200
+Message-ID: <988e6677f7328c33638a5e4b1063e17f5260b01c.1717779951.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <cover.1717779951.git.yann.morin.1998@free.fr>
 References: <cover.1717779951.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1717779970; x=1718384770; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1717779967; x=1718384767; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=5YQleT/TDJcFKTolFgGtJfr3uSBdKxReksMWVGli+Ew=;
- b=nOF6XszN1r20emnvFK4ToM7DzJCGkr/whBixDfKcNqM4zcVthPaIc6dBCIthpcRWxM
- FMQvDbmIMLzEARD+WvVjrlyCGC2RDWjL3jCVt142noMFHzJ+eCzby3yLrdcc1Pmqh9/5
- Nv36rdFnkp9sB3YCmxmiODTV/x9luJae/xTAUSwwb5arfrE20+emIwQLGULSN63xyIHd
- KNc6w6xStnkKpTzZJKb+cQs1RofBURv3EoY8fTZEfLBr36/6+hzcG6if2/5lYVwE0KU2
- jeSiThAmOvk8YbGYuRmF7Y7WAreD8CtomNAH4tlLsu+xI61BTcY7VB+tA59mpi5+hTUF
- oouQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=C84M+3JQced14KoZJRrr/p2t+lgR4PQVqdRFeupsGd4=;
+ b=fuS8+26fQFsGtPGYNX2Dl+GE1FFFNYuOtQs2UrWQTzG1YOgTw/tyv+5rPB78JUuqae
+ GaOrD0akajL/eFCqM4biL39jif3ElzK03ytHIrk+jpHTRnVv1s2dFVZn/P3AS+P2jBJF
+ Pv1xOGiHXmvdQcRZlMYJT+S4TNhsHgz7aZiP+ESKAzrtUTFe9luVRojkCXvRhCQOz++x
+ JA30bs+l4HVVA5GLIZSdDj6iqJlF9QjSXcgEzpXmxbbv0AI+FXaDc+MkJc5wRp09alAY
+ 9anyG2n1yyTcT/kOqeMkwx5i3AimEelYXt+kotvaqHWxehLK7i+CmpOjXGkmmDowpJfQ
+ RTJg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=nOF6XszN
-Subject: [Buildroot] [PATCH 18/20 v2] package/pkg-utils: accept
- pacakge-specific archive format version
+ header.a=rsa-sha256 header.s=20230601 header.b=fuS8+26f
+Subject: [Buildroot] [PATCH 09/20 v2] support/download: accept manifest path
+ as a post-process option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,24 +111,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-utils.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ support/download/cargo-post-process | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index d1964299af..598ae6605e 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -47,8 +47,9 @@ pkgname = $(lastword $(subst /, ,$(pkgdir)))
+diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
+index b94b160315..a9fbced466 100755
+--- a/support/download/cargo-post-process
++++ b/support/download/cargo-post-process
+@@ -5,10 +5,12 @@ set -e
+ # shellcheck source=helpers source-path=SCRIPTDIR
+ . "${0%/*}/helpers"
  
- # Helper to build the extension for a package archive, based on various
- # conditions.
-+# NOTE! _EXTRA_FMT_VERSION should only be set by the infra, not individual packages!
- # $(1): upper-case package name
--pkg_source_ext = $(BR_FMT_VERSION_$($(1)_SITE_METHOD))$(BR_FMT_VERSION_$($(1)_DOWNLOAD_POST_PROCESS)).tar.gz
-+pkg_source_ext = $(BR_FMT_VERSION_$($(1)_SITE_METHOD))$(BR_FMT_VERSION_$($(1)_DOWNLOAD_POST_PROCESS))$($(1)_EXTRA_FMT_VERSION).tar.gz
+-while getopts "n:o:" OPT; do
++manifest="${BR_CARGO_MANIFEST_PATH-Cargo.toml}"
++while getopts "n:o:m:" OPT; do
+     case "${OPT}" in
+     o)  output="${OPTARG}";;
+     n)  base_name="${OPTARG}";;
++    m)  manifest="${OPTARG}";;
+     :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+     \?) error "unknown option '%s'\n" "${OPTARG}";;
+     esac
+@@ -29,7 +31,7 @@ mkdir -p .cargo/
+ mkdir -p "${CARGO_HOME}"
+ flock "${CARGO_HOME}"/.br-lock \
+ cargo vendor \
+-    --manifest-path "${BR_CARGO_MANIFEST_PATH-Cargo.toml}" \
++    --manifest-path "${manifest}" \
+     --locked VENDOR \
+     > .cargo/config
  
- # Define extractors for different archive suffixes
- INFLATE.bz2  = $(BZCAT)
 -- 
 2.45.1
 
