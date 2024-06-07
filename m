@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADC08C27C55
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 20:31:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6743FC27C53
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 20:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8425184BD6;
-	Fri,  7 Jun 2024 20:31:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 761E784D5D;
+	Fri,  7 Jun 2024 20:31:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R8NsXrBkOIO3; Fri,  7 Jun 2024 20:31:17 +0000 (UTC)
+ id fi_TL4rN0X9x; Fri,  7 Jun 2024 20:31:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 597BF84CF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99DAA84BF7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 597BF84CF2;
-	Fri,  7 Jun 2024 20:31:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 24FA01BF473
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 20:30:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99DAA84BF7;
+	Fri,  7 Jun 2024 20:31:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 04E4C1BF473
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 20:31:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0224B42818
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 20:30:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D316B84CA4
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 20:31:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mJDcvBif8yxR for <buildroot@lists.busybox.net>;
- Fri,  7 Jun 2024 20:30:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yxzR7MIwpqSS for <buildroot@lists.busybox.net>;
+ Fri,  7 Jun 2024 20:31:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 244A942813
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4440584D44
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 244A942813
- for <buildroot@buildroot.org>; Fri,  7 Jun 2024 20:30:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4440584D44
+ for <buildroot@buildroot.org>; Fri,  7 Jun 2024 20:30:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8DBE87D80; Fri,  7 Jun 2024 20:30:33 +0000 (UTC)
+ id 7B46987D7B; Fri,  7 Jun 2024 20:30:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 7 Jun 2024 22:25:17 +0200
+Date: Fri, 7 Jun 2024 22:20:23 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 1be26aad93ba97243d0c3a8e4dae81cefd4eca8a
-X-Git-Newrev: 8886594d59fc8bcba40fd90a3d659100aa7ec538
+X-Git-Oldrev: da56f2dc4c4281e3dfec55a0619c21c6b80d0484
+X-Git-Newrev: aa9dfe9ae7e74e34f4c4909647f11cda0289b79e
 X-Patchwork-Hint: ignore
-Message-Id: <20240607203033.B8DBE87D80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/{mesa3d,
- mesa3d-headers}: bump version to 24.0.6
+Message-Id: <20240607203033.7B46987D7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/privoxy: fix
+ build with root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,62 +65,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8886594d59fc8bcba40fd90a3d659100aa7ec538
+commit: https://git.buildroot.net/buildroot/commit/?id=aa9dfe9ae7e74e34f4c4909647f11cda0289b79e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2024-April/000754.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-April/000755.html
+Set GROUP_T when installing configuration files as root to avoid the
+following build failure raised since commit
+b6816034ebddd522a8fef9daa454c28fa1230dd6:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+/usr/bin/install: missing destination file operand after '/home/buildroot/instance-0/output-1/target/etc'
+
+Fixes: b6816034ebddd522a8fef9daa454c28fa1230dd6
+ - http://autobuild.buildroot.org/results/eb4ccf248c9c5048e9b71058bb0311b1e0763883
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e1e4237dc7bd182709b9e28ccb2cc451da157f49)
+(cherry picked from commit 981d25e5bcedee0dee8efcfbaa1dedb466a5445f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .../0002-GNUMakefile.in-fix-root-install.patch     | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 0756296a01..e1f6211e17 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 24.0.4
-+MESA3D_HEADERS_VERSION = 24.0.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index e2e0be2641..fb3df96555 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-dev/2024-March/226176.html
--sha256  90febd30a098cbcd97ff62ecc3dcf5c93d76f7fa314de944cfce81951ba745f0  mesa-24.0.4.tar.xz
--sha512  1d05b07026417fbe9cf18f7b18f2db9fe5fe327555c590283d87f69bbdd51f64135928a1dbe155d750187fc268bbdbb070bc1ae9ffc3e013b8707b391969d515  mesa-24.0.4.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2024-April/000755.html
-+sha256  8b7a92dbe6468c18f2383700135b5fe9de836cdf0cc8fd7dbae3c7110237d604  mesa-24.0.6.tar.xz
-+sha512  60fcc77132c3cb0c98e650d97d3324bfd18abe7f8f8a3aa5209f71b2fddd94510f939bbf5272b2241749307184d5badde9da4842be57ce13f5760875885ea6fc  mesa-24.0.6.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index c2343488ed..39cbb4c23b 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 24.0.4
-+MESA3D_VERSION = 24.0.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+diff --git a/package/privoxy/0002-GNUMakefile.in-fix-root-install.patch b/package/privoxy/0002-GNUMakefile.in-fix-root-install.patch
+new file mode 100644
+index 0000000000..89347c214e
+--- /dev/null
++++ b/package/privoxy/0002-GNUMakefile.in-fix-root-install.patch
+@@ -0,0 +1,35 @@
++From 25bd5ae1664f5603c05c72b2c38525602f33da0a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 31 Mar 2024 19:17:45 +0200
++Subject: [PATCH] GNUMakefile.in: fix root install
++
++Set GROUP_T when installing configuration files as root to avoid the
++following build failure since commit
++4b3b267db159dc23314de3062859481b7c397e32:
++
++/usr/bin/install: missing destination file operand after '/home/buildroot/instance-0/output-1/target/etc'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/eb4ccf248c9c5048e9b71058bb0311b1e0763883
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://lists.privoxy.org/pipermail/privoxy-devel/2024-March/000760.html
++---
++ GNUmakefile.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/GNUmakefile.in b/GNUmakefile.in
++index cf79aae1..db1bab59 100644
++--- a/GNUmakefile.in
+++++ b/GNUmakefile.in
++@@ -927,6 +927,7 @@ install: CONF_DEST LOG_DEST PID_DEST check_doc GROUP_T
++ 					$(ECHO)  " and to install the config files as that user and/or group!" ;\
++ 					$(ECHO)  " Please read INSTALL, and create a privoxy user and group!" ;\
++ 					$(ECHO)  "*******************************************************************" ;\
+++					GROUP_T=$(GROUP) ;\
++ 				fi ;\
++ 			else \
++ 				GROUP_T=$(GROUP) ;\
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
