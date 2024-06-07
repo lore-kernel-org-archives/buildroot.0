@@ -4,74 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A90C27C53
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 18:11:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75330C27C53
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 18:17:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B32A3412F6;
-	Fri,  7 Jun 2024 18:11:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0DD14405EC;
+	Fri,  7 Jun 2024 18:17:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T8USrKV9UtFE; Fri,  7 Jun 2024 18:11:02 +0000 (UTC)
+ id BFkOC1Q9ExPS; Fri,  7 Jun 2024 18:17:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29EE040BC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A471C40C11
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 29EE040BC3;
-	Fri,  7 Jun 2024 18:11:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4BB451BF476
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 18:11:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A471C40C11;
+	Fri,  7 Jun 2024 18:17:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C579E1BF476
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 18:17:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3874184C72
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 18:11:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B11CB40C11
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 18:17:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9erhdDHqWo4S for <buildroot@lists.busybox.net>;
- Fri,  7 Jun 2024 18:10:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E299084C0E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E299084C0E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E299084C0E
- for <buildroot@buildroot.org>; Fri,  7 Jun 2024 18:10:58 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 56AA513F8A9;
- Fri,  7 Jun 2024 20:10:50 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 07 Jun 2024 20:10:49 +0200
-Date: Fri, 7 Jun 2024 20:10:49 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bryan Brattlof <bb@ti.com>
-Message-ID: <ZmNNKV_vaTkG0JpW@landeda>
-References: <20240607093712.2880785-1-yann.morin.1998@free.fr>
- <20240607172617.s42p343dw4ijgck4@bryanbrattlof.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AFoKWSyBBlhg for <buildroot@lists.busybox.net>;
+ Fri,  7 Jun 2024 18:17:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::a2f; helo=mail-vk1-xa2f.google.com;
+ envelope-from=pholden@nklabs.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EF6A4405EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF6A4405EC
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com
+ [IPv6:2607:f8b0:4864:20::a2f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EF6A4405EC
+ for <buildroot@buildroot.org>; Fri,  7 Jun 2024 18:17:12 +0000 (UTC)
+Received: by mail-vk1-xa2f.google.com with SMTP id
+ 71dfb90a1353d-4eb11869d5bso764466e0c.3
+ for <buildroot@buildroot.org>; Fri, 07 Jun 2024 11:17:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1717784231; x=1718389031;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=qQeBKp09PdN5L3guoiaOaSve1P6HBPs7O9DAjsdnlRs=;
+ b=EQbIE+yaOz7ucAU+pNmboGF7+L8p8kqg2w61uf4TH097/dGZeOIwMk3kbQiI3ZSAC9
+ oG0KOo7yNd47iwoNI1mv1JJajm7TPOGWmjd+ot9sND1oLfmKLxjPFfbnx/HQGfrVBQY1
+ 2S8A7smQza3R3SJRVf/Sj/6AabnEzkmp/hEhVTMwVGBBHdY0uPdz6B93A6EQ1vFsWbTt
+ nPI+06W0+8oCHkeVyXJ9M6fcE3DM7DDhEh55tYZs9+tre+w77FIuEUriDRVpIbkHAqHq
+ tHLMhHO/VznSA5EKnxjGOm77D1PgsmQCpgsuogNbcCTMRxoXYvv6G9BOTr3dwL4H4ya4
+ J1qQ==
+X-Gm-Message-State: AOJu0Yz9CBhMyjgjMceK4lKD0rTV2fWt5nyP7x/0HCPVVe98prvM0MSh
+ WB6dRvEusox+kmfAWdMRXHiXcCtkCftcRuKbyty3KxQ9a7BRgAIc5niTZ6PWo2NZwqxHzt+pDaW
+ PFUwkCos4uHwWBFi8wIJXiMPKhOnarkhCN9G1HM1xgVEv8JpH+Is=
+X-Google-Smtp-Source: AGHT+IG98ppX7ZZi8BQCDTYky0N/fGcwuIm377N3EvXVY4UzcuOzJLOzCtj+5tM0255QjFjKU7uHyLCdZVr/VeZej1Y=
+X-Received: by 2002:a05:6122:c91:b0:4d8:df31:6b34 with SMTP id
+ 71dfb90a1353d-4eb56255ef4mr3877202e0c.8.1717784231141; Fri, 07 Jun 2024
+ 11:17:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240607172617.s42p343dw4ijgck4@bryanbrattlof.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1717783855;
- bh=YvSMrXkgwXURlxUl96KtJscGJQmVCsJRC4N66xSLGBc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=unf3fcyoUnwJ59TDD1RUG3gmlSmqpiRqElbongb1llsa9eEoBHWJWEMBVUsnEgiWR
- 9Xc5h2xTGlW1mEa6iQ2IJ+zL+O8IOEu9O0T6pwZKb0SfNkVi9qIEIgSEv+7faX/eOu
- iN+Q+TSRDvE/2JSzwtTgUyVzYxn+La24wmNs7Ztf4TKaOPynqxlx8SB8p1ITihnNhp
- yvRslpCAXiT0uufxDjdKvQJ7DiM7OXvy4sZ0C7vnt21tjqDvHBIb/aSWdVUiPxLEy3
- GOsXBu6M94pymJvEeMZEL4TU9JO1U4MnKbkebzGwmX2jYXA3swFbnZfFez1ZObcCOK
- CQv2ZJvPFTs/w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+From: Patricia Holden <pholden@nklabs.com>
+Date: Fri, 7 Jun 2024 14:17:00 -0400
+Message-ID: <CAJ6EmCeAFeqGEy5Hq=UhFo8b6twQKD3++6Et9+jKH1U8d=vDEw@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=nklabs.com; s=google; t=1717784231; x=1718389031; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=qQeBKp09PdN5L3guoiaOaSve1P6HBPs7O9DAjsdnlRs=;
+ b=W3lWe6QoNKr6yoDB8H+LFuRtEphMxGFqXUedII4/HmUVXfetG/sMyQM3Lw2Y8at+BL
+ mU8qVJ9H5j3JM1D23ERgop4FN5ffg1iogo8Ce6x/BoPzuigwKNeLVqx6qbS2lDUVf0TR
+ Ic/7Tl32648EhzQS1p7KljrwAGHlAM2rkB0VOvDKauvMqSn0Fm+L4nPXnRNVB+LmyEXQ
+ r/RTSXyB+wsMEqn+5ajSN9ommg1p8SGYR+WH5mzBsP0uYLR6+4D8IKtMA2/vRA/x9Izp
+ gcF2RcsZxZ/dg9nQ3hQix1IeTMCzjH/DdqpPaXxi4gScXmeg9h1Y4+PEma6BW2qEeTcI
+ WvSQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=nklabs.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=unf3fcyo
-Subject: Re: [Buildroot] [PATCH] boot/ti-k3-r5-loader: share download files
- with uboot
+ unprotected) header.d=nklabs.com header.i=@nklabs.com header.a=rsa-sha256
+ header.s=google header.b=W3lWe6Qo
+Subject: [Buildroot] QT5webkit build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,88 +94,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Xuanhao Shi <X15000177@gmail.com>, Paresh Bhagat <p-bhagat@ti.com>,
- buildroot@buildroot.org, Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5747415647277343908=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bryan, All,
+--===============5747415647277343908==
+Content-Type: multipart/alternative; boundary="000000000000e60258061a50ce9e"
 
-On 2024-06-07 12:26 -0500, Bryan Brattlof via buildroot spake thusly:
-> On June  7, 2024 thus sayeth Yann E. MORIN:
-> > ti-k3-r5-loader is just a U-Boot SPL running on the R5 core on TI's K3
-> > processors, so it makes sense to just share the downloads with U-Boot.
-[--SNIP--]
-> This should also free us from the ti-k3-r5-loader.hash files correct? I 
-> can send the cleanup once this is merged unless you would like to.
->     $ find -iname ti-k3-r5-loader.hash
->     ./boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
->     ./board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
->     ./board/beagleboard/beagleboneai64/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+--000000000000e60258061a50ce9e
+Content-Type: text/plain; charset="UTF-8"
 
-I also pondered that. However, it is going to be a little bit
-complicated, INHO. Indeed, the two can use different versions, so it
-would be difficult to maintain the uboot.hash file: it would be easy to
-drop a hash in uboot.hash while it is still used by ti-k3-r5-loader;
-similarly for defconfigs: since they can be different versions, we can't
-even share the hashes for the two, so they will have different hashes.
+I just downloaded and started using Buildroot 2024.02.2 for a Beagleplay
+project I am working on for a client.  I am getting the following error
+when QT5webkit is being built.  I found a couple patches in an online
+search, but  they don't seem to be related to the problem I'm seeing.
+Output of build below.  Has anyone seen this and is there a patch available
+for this problem?
 
-So that's why I did not merge the hash files.
+ from
+/media/Projects/Edvotek/edvotek-edvocycler3/buildroot-2024.02.2/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/generate_offset_extractor.rb:68:in
+`<main>'
+make[4]: ***
+[Source/JavaScriptCore/CMakeFiles/LLIntOffsetsExtractor.dir/build.make:96:
+DerivedSources/JavaScriptCore/LLIntDesiredOffsets.h] Error 1
+make[3]: *** [CMakeFiles/Makefile2:1430:
+Source/JavaScriptCore/CMakeFiles/LLIntOffsetsExtractor.dir/all] Error 2
+make[3]: *** Waiting for unfinished jobs....
+[  4%] Linking CXX shared library ../../../lib/libgtest.so
+[  4%] Built target gtest
+make[2]: *** [Makefile:166: all] Error 2
+make[1]: *** [package/pkg-generic.mk:283:
+/media/Projects/Edvotek/edvotek-edvocycler3/buildroot-2024.02.2/output/build/qt5webkit-5.212.0-alpha4/.stamp_built]
+Error 2
+make: *** [Makefile:82: _all] Error 2
 
-Of course, now I notice that the two defconfigs use the same versions
-for uboot and ti-k3-r5-loader. Which got me thinking that maybe we
-should make that explicit (and easier!) in the menuconfig:
+--000000000000e60258061a50ce9e
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+<div dir=3D"ltr">I just=C2=A0downloaded and started using Buildroot 2024.02=
+.2 for a Beagleplay project I am=C2=A0working on for=C2=A0a client.=C2=A0 I=
+ am getting the following error when QT5webkit is being built.=C2=A0 I foun=
+d a couple patches in an online search, but=C2=A0 they don&#39;t seem to be=
+ related to the problem I&#39;m seeing.=C2=A0 Output of build below.=C2=A0 =
+Has anyone seen this and is there a patch available for this problem?<div><=
+br></div><div>=C2=A0from /media/Projects/Edvotek/edvotek-edvocycler3/buildr=
+oot-2024.02.2/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/o=
+fflineasm/generate_offset_extractor.rb:68:in `&lt;main&gt;&#39;<br>make[4]:=
+ *** [Source/JavaScriptCore/CMakeFiles/LLIntOffsetsExtractor.dir/build.make=
+:96: DerivedSources/JavaScriptCore/LLIntDesiredOffsets.h] Error 1<br>make[3=
+]: *** [CMakeFiles/Makefile2:1430: Source/JavaScriptCore/CMakeFiles/LLIntOf=
+fsetsExtractor.dir/all] Error 2<br>make[3]: *** Waiting for unfinished jobs=
+....<br>[ =C2=A04%] Linking CXX shared library ../../../lib/libgtest.so<br>=
+[ =C2=A04%] Built target gtest<br>make[2]: *** [Makefile:166: all] Error 2<=
+br>make[1]: *** [package/<a href=3D"http://pkg-generic.mk:283">pkg-generic.=
+mk:283</a>: /media/Projects/Edvotek/edvotek-edvocycler3/buildroot-2024.02.2=
+/output/build/qt5webkit-5.212.0-alpha4/.stamp_built] Error 2<br>make: *** [=
+Makefile:82: _all] Error 2<br></div></div>
 
-    diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
-    index c276528fad..303f448f8b 100644
-    --- a/boot/ti-k3-r5-loader/Config.in
-    +++ b/boot/ti-k3-r5-loader/Config.in
-    @@ -16,6 +16,10 @@ choice
-          use cases you will want to use the exact same version/source
-          here as it is used to build the main U-Boot package.
+--000000000000e60258061a50ce9e--
 
-    +config BR2_TARGET_TI_K3_R5_LOADER_SAME_AS_UBOOT
-    +   bool "same as uboot"
-    +   depends on BR2_TARGET_UBOOT
-    +
-     config BR2_TARGET_TI_K3_R5_LOADER_LATEST_VERSION
-        bool "2024.04"
+--===============5747415647277343908==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-And then with a bit of sorcey/trickery in ti-k3-r5-loader (like we have
-in package/linux-headers for example) to handle the same-as case.
-
-Then that would make sense to merge the hash files, maybe.
-
-Thoughts?
-
-> > ---
-> > PS. Not sure if we should do that in the package infra, though, or even
-> > if we can even do it. It's a special case for packages that are both
-> > sharing their downloads, *and* being downloaded from a VCS, which is
-> > not a situation common enough to warrant a generic implementation in the
-> > infras... Thoughts?
-> My thinking is these are unique enough cases and I'm not too sure how 
-> common the need will be to do this kind of thing. So it should be fine 
-> to keep it out of the core package system.
-
-Exactly my thinking too.
-
-Thanks for the review! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5747415647277343908==--
