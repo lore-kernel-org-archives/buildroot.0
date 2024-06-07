@@ -4,50 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE227C27C65
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 20:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5463DC27C53
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 20:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A97F084D67;
-	Fri,  7 Jun 2024 20:31:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 252A684BD6;
+	Fri,  7 Jun 2024 20:32:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5SBBIdxC3fAS; Fri,  7 Jun 2024 20:31:23 +0000 (UTC)
+ id q-WABPdKs7hy; Fri,  7 Jun 2024 20:32:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E6FE84D6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24C8A84C03
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E6FE84D6D;
-	Fri,  7 Jun 2024 20:31:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1B8161BF473
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 20:31:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24C8A84C03;
+	Fri,  7 Jun 2024 20:32:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 591551BF473
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 20:32:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 28A0984D01
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 20:31:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 47094608BE
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 20:32:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Esx_ZkAlmQS for <buildroot@lists.busybox.net>;
- Fri,  7 Jun 2024 20:31:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lzSUAyAum7MB for <buildroot@lists.busybox.net>;
+ Fri,  7 Jun 2024 20:32:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.117;
+ helo=smtpdh17-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8416A84CA5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8416A84CA5
- for <buildroot@buildroot.org>; Fri,  7 Jun 2024 20:30:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C762D87D85; Fri,  7 Jun 2024 20:30:33 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5579660899
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5579660899
+Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5579660899
+ for <buildroot@buildroot.org>; Fri,  7 Jun 2024 20:32:03 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id FgFlsAR1ZJLbHFgFlsDrUP; Fri, 07 Jun 2024 22:32:01 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 7 Jun 2024 22:28:50 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 8886594d59fc8bcba40fd90a3d659100aa7ec538
-X-Git-Newrev: d50049e60f6162ac59cbeb3edae4d0ed756bd357
-X-Patchwork-Hint: ignore
-Message-Id: <20240607203033.C762D87D85@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libdrm: fix
- install of test programs
+Date: Fri,  7 Jun 2024 22:29:11 +0200
+Message-Id: <20240607202911.2644280-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfMgW+Zz7syFXv0V4b28Sg1Wbx7iFC4ioNPq43CLa9IsSn/a5wIOyI0nb6wE+NpUtr72jBb1lD/mu/HSTi/+gsh2p0rdTHquLSnbYzLATb4BbK7NlwxgF
+ xr1KjdeORZBwi82RcBBGr10cDWsX3apL3aLnwN+m2lPc6GnUTMhLJo/fl21Ymbot6C1OFjm+3mdwArWsBjDByWX7tioB/aNXDPQYUHwHrA18OHrce/XbZEaC
+ 1hD5IfpYYsvw0z/c3s0lQgRVC75+tooXzgL7D8KD/hGGjMufRmLfPkcLi5S+SmcKIvSDRJR3Sm7+67JNmBj9aA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1717792321; bh=PZtvtBe7p3BaAFJrKO9U+utVOR1XNATm6/fl33pdHzE=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=URYDk6es27yvZUwCtgTL++P0z5cFfYNohQ4fkXPPDeHqh+cHKwwCcSmDaL/0gFVM5
+ x8WZEST5HAcL4ecWeFO3VsjHdINN3AViDuD2RCXaAoNBzD1QvcWuTt8Uf4Iv1SdjLm
+ ucAS/cCSIHt/Mdn+0fuT3YX899E2Nv031B7Yvwn4tAsnqmWx3wh1513egnWn/YCjNx
+ MqsNP91oBHgEiayy3IhCpEl9mTQWbAsRzTost0SLJUvz38dVOfsz6a1fz61QXj7JhQ
+ pyczA9rgR+LGlGCgIvz/UiFNbV+PMj9OY4yn2isYEwaAJsl5YqQVqtFCQSfFiH9TIy
+ sQiHkj1oEOfaA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=URYDk6es
+Subject: [Buildroot] [PATCH/for-next] package/libnss: bump version to 3.101
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,55 +78,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d50049e60f6162ac59cbeb3edae4d0ed756bd357
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Buildroot commit f95069814bd68cfc10ccf2dbc41efa6f1e127495 disabled the
-build of test programs unconditionally without considering the option
-BR2_PACKAGE_LIBDRM_INSTALL_TESTS.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 91848e73ae6f5ad6ca0568f8e7309247379e51f1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libdrm/libdrm.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index a04331c2da..e0c1217b38 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -17,8 +17,7 @@ LIBDRM_DEPENDENCIES = \
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 1a69398f0d..0e4fbd21e3 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_100_RTM/src/SHA256SUMS
+-sha256  1e35373ce9cb5b776f678bb341b0625c437520d09ebd91d1abd622e072e38d88  nss-3.100.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_101_RTM/src/SHA256SUMS
++sha256  859748f0b4b7bb51e7e600ae5a88ef4d71f93e6964b1beed2727784dd9ed85e7  nss-3.101.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 5cdc494b16..c6e2af7b5c 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LIBDRM_CONF_OPTS = \
- 	-Dcairo-tests=disabled \
--	-Dman-pages=disabled \
--	-Dtests=false
-+	-Dman-pages=disabled
- 
- ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
- LIBDRM_DEPENDENCIES += libatomic_ops
-@@ -109,10 +108,12 @@ LIBDRM_CONF_OPTS += -Dvalgrind=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBDRM_INSTALL_TESTS),y)
--LIBDRM_CONF_OPTS += -Dinstall-test-programs=true
-+LIBDRM_CONF_OPTS += -Dtests=true -Dinstall-test-programs=true
- ifeq ($(BR2_PACKAGE_CUNIT),y)
- LIBDRM_DEPENDENCIES += cunit
- endif
-+else
-+LIBDRM_CONF_OPTS += -Dtests=false
- endif
- 
- $(eval $(meson-package))
+-LIBNSS_VERSION = 3.100
++LIBNSS_VERSION = 3.101
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
