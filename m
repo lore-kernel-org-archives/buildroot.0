@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 535CDC27C53
-	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 17:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAB87C27C53
+	for <buildroot@archiver.kernel.org>; Fri,  7 Jun 2024 17:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18809427D3;
-	Fri,  7 Jun 2024 17:06:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B72A04287E;
+	Fri,  7 Jun 2024 17:06:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OlpYFsVn4JWZ; Fri,  7 Jun 2024 17:06:44 +0000 (UTC)
+ id TFJQNOK_Hcze; Fri,  7 Jun 2024 17:06:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 865EC42850
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F22242881
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 865EC42850;
-	Fri,  7 Jun 2024 17:06:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2D2D91BF95D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F22242881;
+	Fri,  7 Jun 2024 17:06:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C08421BF479
  for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 729CF61562
- for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF9B8403FB
+ for <buildroot@lists.busybox.net>; Fri,  7 Jun 2024 17:06:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zIJnRciAgd5O for <buildroot@lists.busybox.net>;
- Fri,  7 Jun 2024 17:06:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6wKOOFdpg7xl for <buildroot@lists.busybox.net>;
+ Fri,  7 Jun 2024 17:06:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::136; helo=mail-lf1-x136.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B8FB06152F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8FB06152F
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B8FB06152F
- for <buildroot@buildroot.org>; Fri,  7 Jun 2024 17:06:10 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-52bc335e49aso586371e87.3
- for <buildroot@buildroot.org>; Fri, 07 Jun 2024 10:06:10 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D80C14004A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D80C14004A
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D80C14004A
+ for <buildroot@buildroot.org>; Fri,  7 Jun 2024 17:06:09 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-35dc0472b7eso2057934f8f.2
+ for <buildroot@buildroot.org>; Fri, 07 Jun 2024 10:06:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1717779968; x=1718384768;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=aW0KPdXqg31QOR1NgVyCotG7b7qyuH9mpNJstlewNSI=;
- b=f8WCG6OrU+0IjT8jvpPlFIPa9eRxOFoxGSE7/stm1MuTWNHHsIkRwToBXjVG8/ofxs
- UlkSLc3Z0CSDxB2KioEDwPSOwxrB2fHPiyqBEHyh8uS6QQ5j8tJjl2kVGUmGscp8HcPt
- gO5uXSfNzLLYjN8nMe1k1RKoOQk9HikRkxwTo74LU7eeuBL9E95LEjYWan9/D5ccsuf3
- uQ2ypOwT5WOpfHbpLhX2dePJ7DH/W31AyfMkeFcUm1FFl3bk67TVLXxqk6w3djVY5pkN
- uA0NXw11Ump+gWOzT18Bxjo/yV95vowW6dVhPnaDv/GSA6n+r5ag2VeeCj1UHX6QM5N3
- ZQxg==
-X-Gm-Message-State: AOJu0YwX5jCAF26Fn2MgVUfetwtCyJzoQfd2CSkfcRFmbQkhuKVI3xTd
- 7WTj1hZXI1jezQxxqGV8MXJZ/fPkUPF8qIQCTL3+EL6aU3lPSjPGQ9k2tw==
-X-Google-Smtp-Source: AGHT+IGqYu4rsv0HzBok5NeIbSPj0WrP064WSiE+Syn4Wbf1cmCJYQV/sjgM9U69VwKM5+0isz3I5Q==
-X-Received: by 2002:a05:6512:68a:b0:52a:4217:d6e1 with SMTP id
- 2adb3069b0e04-52bb9f5e45amr2897733e87.4.1717779968274; 
- Fri, 07 Jun 2024 10:06:08 -0700 (PDT)
+ bh=AxOi7Znm8e5Y3HVPxFJcN/1hPCnLaEc3juQ2n41eSxw=;
+ b=rOtlNlzSVU+WFotxtiwJ/YLxABN0WQFSxwNZAlBHYn+Q5HKf+U6YJN5Cc9WMhC/vQb
+ jegWhOEshRh9GKBBGJZM/8sYiGp0AwK8w6hKaKQwu2WmiWQ1S3MkZoKNSTmTknOuEhM3
+ 2nWHZkvZDZZdLkoaGycT1XefCY55nM3RZyH3RiACAPGsBQsB7fYXelQjHVRSizfvwZO5
+ 9hDZWxpLL6DWsIHD/7/KmgV8uX5azj1mzaYo9n1oUK5xsTHy2KtAMeWxqcog6gI67C9h
+ zbqViDfsCnQi8PdUBcKXg4o3wBeTQOH8PgS5zbGGl6q0uAYzSYEDKk3TXhOSuDcboMP1
+ eVew==
+X-Gm-Message-State: AOJu0YwFPAo5zOzQpV+lPGQ8gjspg5DFqrkDPy7AQMszeT5Kgw33vaGW
+ XQ88RtKz3vwNsPijLWH9k3prYSXgHks8J7VcXiDBy9CHtjYkVAEK1U7RyA==
+X-Google-Smtp-Source: AGHT+IHuoml33IeOtiL9PM4K/5D2drOY0Ggq19pu7+02Xw+tfhBRDbXIQ6LxSxMUvtwo/193sxCYpQ==
+X-Received: by 2002:a05:6000:bce:b0:354:fb50:c1ef with SMTP id
+ ffacd0b85a97d-35efee8c5b8mr2123824f8f.68.1717779967881; 
+ Fri, 07 Jun 2024 10:06:07 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
  ffacd0b85a97d-35ef5e989c9sm4355379f8f.73.2024.06.07.10.06.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Jun 2024 10:06:08 -0700 (PDT)
+ Fri, 07 Jun 2024 10:06:07 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri,  7 Jun 2024 19:05:54 +0200
-Message-ID: <ba9acd94a239b084dcb03ccbd76e0ffd93d06042.1717779951.git.yann.morin.1998@free.fr>
+Date: Fri,  7 Jun 2024 19:05:53 +0200
+Message-ID: <8f7f18c9f67543b5e6b534bc0562c4a8a44a73c4.1717779951.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <cover.1717779951.git.yann.morin.1998@free.fr>
 References: <cover.1717779951.git.yann.morin.1998@free.fr>
@@ -77,21 +77,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=aW0KPdXqg31QOR1NgVyCotG7b7qyuH9mpNJstlewNSI=;
- b=NCPfu8N5QALQ7dcjl1AsOdIeox5MpC5K9nVylg7G+1ApF2ogw3amFHPCD0SKpZtdr8
- J1WuARWTI9rT7BAdv7uQHoVdOzx3n6CCNJ9feqwcotcwFXR/D69yoyPiVhrwTZIs2exZ
- zHfCQvrHSg7yG8iKGBd1J99lOrkaNGHrB3FZYsBXQXiYPh69UeHfQM5W1hsDpogC7yYt
- SQvXicWXrPJXGbRciItGiHXeZzxzl+gbrH7lZoq4Tiuk3eoLkuoXSd/jqvTsG4VQe+VF
- JwCRExqxbTxekaQcgRrKckZeT7uWrl2pOFI98pMjzrPOnYWaZGj8vyZbyJNNfh35Q2MU
- vbkw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=AxOi7Znm8e5Y3HVPxFJcN/1hPCnLaEc3juQ2n41eSxw=;
+ b=PWBXW+qcYp4qBt69RIKEkGw6BfI4dxz7b1jAU4YBxzoCSFMDccf7dYij5XvAAEymqg
+ 7e0LY+jN+L6NzSEmBWB5hwUuNe5SNCaCUhiePV+NqYNv0VPgZJqq0Q6M32rVQimNl7/E
+ Ep8e6UfdI3+i/bft5uTxdIllzXFTX23dADU0vetu9sDGGlCsWdvHFpFrzUgPsBrqKL07
+ QlsLRjFewI4JKMLNm4g5sGnisXffu02mOwfZNrVdOc+v90Scd/xIl9rGH8It0AS39+VC
+ HMcQ1uIO6UazO0k5MIfzRWgHI1zd4cqASWtNyVKDDmnQdf0+HvaWOCSWvclp2gYyuZmj
+ ZHEg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NCPfu8N5
-Subject: [Buildroot] [PATCH 13/20 v2] support/download: no longer support
- BR_CARGO_MANIFEST_PATH in cargo post-process
+ header.a=rsa-sha256 header.s=20230601 header.b=PWBXW+qc
+Subject: [Buildroot] [PATCH 12/20 v2] package/python-bcrypt: use
+ post-process opts to pass Cargo manifest path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,35 +103,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- support/download/cargo-post-process | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/python-bcrypt/python-bcrypt.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
-index a9fbced466..12198051a4 100755
---- a/support/download/cargo-post-process
-+++ b/support/download/cargo-post-process
-@@ -5,7 +5,12 @@ set -e
- # shellcheck source=helpers source-path=SCRIPTDIR
- . "${0%/*}/helpers"
+diff --git a/package/python-bcrypt/python-bcrypt.mk b/package/python-bcrypt/python-bcrypt.mk
+index f3137401d7..f09c67441e 100644
+--- a/package/python-bcrypt/python-bcrypt.mk
++++ b/package/python-bcrypt/python-bcrypt.mk
+@@ -19,9 +19,8 @@ PYTHON_BCRYPT_ENV = \
+ 	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+ # We need to vendor the Cargo crates at download time
+ PYTHON_BCRYPT_DOWNLOAD_POST_PROCESS = cargo
++PYTHON_BCRYPT_DOWNLOAD_POST_PROCESS_OPTS = -m src/_bcrypt/Cargo.toml
+ PYTHON_BCRYPT_DOWNLOAD_DEPENDENCIES = host-rustc
+-PYTHON_BCRYPT_DL_ENV = \
+-	$(PKG_CARGO_ENV) \
+-	BR_CARGO_MANIFEST_PATH=src/_bcrypt/Cargo.toml
++PYTHON_BCRYPT_DL_ENV = $(PKG_CARGO_ENV)
  
--manifest="${BR_CARGO_MANIFEST_PATH-Cargo.toml}"
-+if [ "${BR_CARGO_MANIFEST_PATH}" ]; then
-+    printf 'Setting BR_CARGO_MANIFEST_PATH is no longer supported; use post-process options.\n' >&2
-+    exit 1
-+fi
-+
-+manifest=Cargo.toml
- while getopts "n:o:m:" OPT; do
-     case "${OPT}" in
-     o)  output="${OPTARG}";;
+ $(eval $(python-package))
 -- 
 2.45.1
 
