@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CE1AC25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:53:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F203C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 08:11:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E8B142876;
-	Sat,  8 Jun 2024 07:53:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6DA940632;
+	Sat,  8 Jun 2024 08:11:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KWf2q4wRFyOA; Sat,  8 Jun 2024 07:53:45 +0000 (UTC)
+ id JbcQR2GlxpP9; Sat,  8 Jun 2024 08:11:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7C054287B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6D9F40990
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7C054287B;
-	Sat,  8 Jun 2024 07:53:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6D9F40990;
+	Sat,  8 Jun 2024 08:11:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E5381BF422
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:53:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 711C71BF421
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 08:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A43D060793
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:52:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B61A60727
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 08:11:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y0nm0fAagrjD for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 5Nb2jw-fGBgM for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 08:11:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F7666077B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F7666077B
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 541C487D85; Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 21BC5606B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21BC5606B8
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 21BC5606B8
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 08:11:20 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CE664E0002;
+ Sat,  8 Jun 2024 08:11:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sFrAT-00GXxP-0g;
+ Sat, 08 Jun 2024 10:11:17 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 09:28:50 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: f3248d0b5c0d59eb3543c9b6d54b7bfe30367b22
-X-Git-Newrev: 188d0e5f6f3685db4c0228e7a91a876a5f887465
-X-Patchwork-Hint: ignore
-Message-Id: <20240608075253.541C487D85@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add zip
- test
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20240511221817.6024B87000@busybox.osuosl.org>
+Date: Sat, 08 Jun 2024 10:11:17 +0200
+In-Reply-To: <20240511221817.6024B87000@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Sun, 12 May 2024 00:17:19 +0200")
+Message-ID: <87jziz97mi.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [git commit] docs/website/index.html: refer to
+ Gitlab and lore
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,57 +69,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=188d0e5f6f3685db4c0228e7a91a876a5f887465
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 23ef540288e86c50d24f9a7ab8e1e2e66500e024)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                                |  1 +
- support/testing/tests/package/test_zip.py | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=3e3bcd633875db0e1f366e86fe8763b5b2d9112e
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 823bbad88d..e5f5f56881 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -534,6 +534,7 @@ F:	package/python-pysensors/
- F:	package/qoriq-fm-ucode/
- F:	package/unifdef/
- F:	package/vmtouch/
-+F:	support/testing/tests/package/test_zip.py
- 
- N:	Brock Williams <brock@cottonwoodcomputer.com>
- F:	package/pdmenu/
-diff --git a/support/testing/tests/package/test_zip.py b/support/testing/tests/package/test_zip.py
-new file mode 100644
-index 0000000000..eb2e016988
---- /dev/null
-+++ b/support/testing/tests/package/test_zip.py
-@@ -0,0 +1,15 @@
-+from tests.package.test_compressor_base import TestCompressorBase
-+
-+
-+class TestZip(TestCompressorBase):
-+    __test__ = True
-+    config = TestCompressorBase.config + \
-+        """
-+        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+        BR2_PACKAGE_ZIP=y
-+        BR2_PACKAGE_UNZIP=y
-+        """
-+    compress_cmd = "/bin/sh -c 'zip $1.zip $1' /bin/sh"
-+    decompress_cmd = "unzip"
-+    check_integrity_cmd = "unzip -t"
-+    compressed_file_ext = ".zip"
+ > Our index.html page still points to git.buildroot.net as the Git
+ > repository, and to the defunct gmane for the mailing list
+ > activity. Fix these by pointing to Gitlab and lore respectively.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2024.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
