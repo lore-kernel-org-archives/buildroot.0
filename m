@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A660C27C65
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AADA9C27C55
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4437980EB0;
-	Sat,  8 Jun 2024 13:08:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5BB0981444;
+	Sat,  8 Jun 2024 13:08:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Gd-hLr-D6cb; Sat,  8 Jun 2024 13:08:54 +0000 (UTC)
+ id aoD1UwQETXPW; Sat,  8 Jun 2024 13:08:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ED2B80F0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E23CD81178
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2ED2B80F0F;
-	Sat,  8 Jun 2024 13:08:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E23CD81178;
+	Sat,  8 Jun 2024 13:08:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C079E1BF41A
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:08:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F35371BF41A
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:08:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE5EA60603
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF7C760603
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:08:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pknm-U8FLikq for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 13:08:51 +0000 (UTC)
+ id De6a_xUGTtWg for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 13:08:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C543460606
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18C2F605E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C543460606
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:08:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18C2F605E4
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:08:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B95A27F980; Sat,  8 Jun 2024 13:08:51 +0000 (UTC)
+ id 065AA8193D; Sat,  8 Jun 2024 13:08:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 15:01:30 +0200
+Date: Sat, 8 Jun 2024 15:05:14 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 96ed028f030e757650cdcf410076853f97a31ded
-X-Git-Newrev: d0bdeb09aceb3caed3e22d21ff4bebde0f505890
+X-Git-Oldrev: 491271b4fe4379c8c3d422e645b75efabf1c14b9
+X-Git-Newrev: 46871affea6c39b212735fcb1f91312318357e73
 X-Patchwork-Hint: ignore
-Message-Id: <20240608130851.B95A27F980@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/{mesa3d,
- mesa3d-headers}: bump version to 24.0.7
+Message-Id: <20240608130852.065AA8193D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/ruby: build
+ host-ruby with yaml support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,61 +65,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0bdeb09aceb3caed3e22d21ff4bebde0f505890
+commit: https://git.buildroot.net/buildroot/commit/?id=46871affea6c39b212735fcb1f91312318357e73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2024-May/000758.html
+webkitgtk/wpewebkit needs a host-ruby with yaml support, otherwise the build
+fails with errors like:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+cd /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore && \
+  /home/peko/source/buildroot/output/host/bin/ruby \
+    /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/GenerateSettings.rb \
+    --outputDir /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/WebCore/DerivedSources \
+    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.cpp.erb \
+    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.idl.erb \
+    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.h.erb \
+    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/Settings.cpp.erb \
+    --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/Settings.h.erb \
+    /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/WTF/Scripts/Preferences/UnifiedWebPreferences.yaml \
+    /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/page/Settings.yaml
+/home/peko/source/buildroot/output/host/lib/ruby/3.3.0/yaml.rb:3: warning: It seems your ruby installation is missing psych (for YAML output).
+To eliminate this warning, please install libyaml and reinstall your ruby.
+
+We do not currently have any Config.in.host options for ruby or libyaml, but
+given how small/fast libyaml is to build just do it unconditionally.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4b18f32e5d9c3537a05405201092d65148b1bdbf)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 95093854e4c6ce69ee54df17fce20417312a3d0a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/ruby/ruby.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index e1f6211e17..e35774a942 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 4b9ce80e67..00fa0e0f65 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -20,7 +20,7 @@ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
+ RUBY_CPE_ID_VENDOR = ruby-lang
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 24.0.6
-+MESA3D_HEADERS_VERSION = 24.0.7
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index fb3df96555..f2c25464f4 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2024-April/000755.html
--sha256  8b7a92dbe6468c18f2383700135b5fe9de836cdf0cc8fd7dbae3c7110237d604  mesa-24.0.6.tar.xz
--sha512  60fcc77132c3cb0c98e650d97d3324bfd18abe7f8f8a3aa5209f71b2fddd94510f939bbf5272b2241749307184d5badde9da4842be57ce13f5760875885ea6fc  mesa-24.0.6.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2024-May/000758.html
-+sha256  7454425f1ed4a6f1b5b107e1672b30c88b22ea0efea000ae2c7d96db93f6c26a  mesa-24.0.7.tar.xz
-+sha512  77b0fae80ab0a07e2e528c113eadef0e3004b8df3e6e98fffe6fc2d8ac39f5ce7fa38ebe5c2ae32bfbac993dd7cbe288ace18ebb03cf2fb445fe7114f74dd45c  mesa-24.0.7.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 39cbb4c23b..6bccdaed04 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 24.0.6
-+MESA3D_VERSION = 24.0.7
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+-HOST_RUBY_DEPENDENCIES = host-pkgconf host-openssl
++HOST_RUBY_DEPENDENCIES = host-libyaml host-pkgconf host-openssl
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_CONF_OPTS = \
+ 	--disable-install-doc \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
