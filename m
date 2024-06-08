@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2730EC25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49299C27C55
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDA0284364;
-	Sat,  8 Jun 2024 13:06:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1650B8446C;
+	Sat,  8 Jun 2024 13:07:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ErvODCtTaZhF; Sat,  8 Jun 2024 13:06:44 +0000 (UTC)
+ id eJzM0N8p3hdg; Sat,  8 Jun 2024 13:07:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBB348436D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0702784471
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBB348436D;
-	Sat,  8 Jun 2024 13:06:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 294AC1BF41A
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:06:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0702784471;
+	Sat,  8 Jun 2024 13:07:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 52F991BF41A
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:07:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 23544400D8
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:06:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F34F4060E
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:07:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U_ZLP-K0kvOs for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 13:06:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mAtBluZN8rN2 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 13:07:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7BB9C40119
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BB9C40119
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7BB9C40119
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:06:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 65CD560003;
- Sat,  8 Jun 2024 13:06:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D4E2D4059F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4E2D4059F
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D4E2D4059F
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:07:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B909FFF807;
+ Sat,  8 Jun 2024 13:07:37 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sFvmG-001jc6-2j;
- Sat, 08 Jun 2024 15:06:36 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sFvnF-001jjo-0j;
+ Sat, 08 Jun 2024 15:07:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20240517142732.5B32A87422@busybox.osuosl.org>
-Date: Sat, 08 Jun 2024 15:06:36 +0200
-In-Reply-To: <20240517142732.5B32A87422@busybox.osuosl.org> (Yann E. MORIN's
- message of "Fri, 17 May 2024 16:23:06 +0200")
-Message-ID: <871q5760tf.fsf@dell.be.48ers.dk>
+References: <20240517143849.AD62387455@busybox.osuosl.org>
+Date: Sat, 08 Jun 2024 15:07:37 +0200
+In-Reply-To: <20240517143849.AD62387455@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Fri, 17 May 2024 16:37:36 +0200")
+Message-ID: <87wmmz4m7a.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/ruby: build host-ruby with
- yaml support
+Subject: Re: [Buildroot] [git commit] package/libvncserver: correct
+ WITH_THREADS=ON/OFF logic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,28 +77,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=95093854e4c6ce69ee54df17fce20417312a3d0a
+ > commit: https://git.buildroot.net/buildroot/commit/?id=7b3c0b19d4d587f52546ac92386e8a890022bb24
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > webkitgtk/wpewebkit needs a host-ruby with yaml support, otherwise the build
- > fails with errors like:
+ > Commit ee59023794f5540e5 (package/libvncserver: bump to version 0.9.12)
+ > changes the package from autotools to cmake and accidently inverted the
+ > threads logic.
 
- > cd /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore && \
- >   /home/peko/source/buildroot/output/host/bin/ruby \
- >     /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/GenerateSettings.rb \
- >     --outputDir /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/WebCore/DerivedSources \
- >     --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.cpp.erb \
- >     --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.idl.erb \
- >     --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/InternalSettingsGenerated.h.erb \
- >     --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/Settings.cpp.erb \
- >     --template /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/Scripts/SettingsTemplates/Settings.h.erb \
- >     /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/WTF/Scripts/Preferences/UnifiedWebPreferences.yaml \
- >     /home/peko/source/buildroot/output/build/webkitgtk-2.42.2/Source/WebCore/page/Settings.yaml
- > /home/peko/source/buildroot/output/host/lib/ruby/3.3.0/yaml.rb:3: warning: It seems your ruby installation is missing psych (for YAML output).
- > To eliminate this warning, please install libyaml and reinstall your ruby.
+ > The reason this was not noticed is that the build system verifies if threads
+ > support works and otherwise disables it even when -DWITH_THREADS=ON is
+ > passed, E.G.  for a nothread configuration:
 
- > We do not currently have any Config.in.host options for ruby or libyaml, but
- > given how small/fast libyaml is to build just do it unconditionally.
+ > cmake ... -DWITH_THREADS=ON ...
+ > ..
+ > -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+ > -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+ > -- Looking for pthread_create in pthreads
+ > -- Looking for pthread_create in pthreads - not found
+ > -- Looking for pthread_create in pthread
+ > -- Looking for pthread_create in pthread - not found
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
