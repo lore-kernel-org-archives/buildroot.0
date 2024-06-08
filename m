@@ -1,53 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B33D9C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 11:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59AACC25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 12:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F58B4280B;
-	Sat,  8 Jun 2024 11:40:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24C5D81BBD;
+	Sat,  8 Jun 2024 12:56:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jqSd8FxchmXv; Sat,  8 Jun 2024 11:40:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rfFSsJQArOji; Sat,  8 Jun 2024 12:56:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F3F42815
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DC0781CA3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18F3F42815;
-	Sat,  8 Jun 2024 11:40:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 20F2A1BF5DA
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 11:39:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DC0781CA3;
+	Sat,  8 Jun 2024 12:56:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 22FC41BF47E
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 12:56:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF87542725
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 11:39:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1CCF0401EB
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 12:56:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S56B8SOfxASw for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 11:39:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6bYiSS2GHEV6 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 12:56:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 761E442718
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 761E442718
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 11:39:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4287A87A52; Sat,  8 Jun 2024 11:39:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4AAAB400D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AAAB400D8
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4AAAB400D8
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 12:56:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BEE6FE0005;
+ Sat,  8 Jun 2024 12:56:01 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sFvc1-001iGy-0W;
+ Sat, 08 Jun 2024 14:56:01 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 13:27:07 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: e8345d32e05189d101b9d92f8825fbb42e8c71bb
-X-Git-Newrev: eeb0abb2e177f3c98778fe1af96bb613063d1308
-X-Patchwork-Hint: ignore
-Message-Id: <20240608113948.4287A87A52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/smcroute: bump to
- version v2.5.7
+To: =?utf-8?Q?Ga=C3=ABl?= PORTAY <gael.portay@rtone.fr>
+References: <20240218011118.1077002-1-gael.portay@rtone.fr>
+Date: Sat, 08 Jun 2024 14:56:01 +0200
+In-Reply-To: <20240218011118.1077002-1-gael.portay@rtone.fr>
+ (=?utf-8?Q?=22Ga=C3=ABl?= PORTAY"'s
+ message of "Sun, 18 Feb 2024 02:11:17 +0100")
+Message-ID: <87v82j61b2.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/musl: enable on s390x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +69,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eeb0abb2e177f3c98778fe1af96bb613063d1308
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Fixes segfault on kernel without IPv6 support.  For details, see
-https://github.com/troglobit/smcroute/releases/tag/2.5.7
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 86a5cd42db6acc1ee4f312a55b40ab38f8743d72)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/smcroute/smcroute.hash | 5 ++---
- package/smcroute/smcroute.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/package/smcroute/smcroute.hash b/package/smcroute/smcroute.hash
-index b472dfbc04..d51745c076 100644
---- a/package/smcroute/smcroute.hash
-+++ b/package/smcroute/smcroute.hash
-@@ -1,5 +1,4 @@
--# Hash from https://github.com/troglobit/smcroute/releases/download/2.5.6/smcroute-2.5.6.tar.gz.sha256
--sha256  0be38f617e322daafaa941c02423239f5c117b940cf0f45bacadb6733c4b3916  smcroute-2.5.6.tar.gz
--
-+# Hash from https://github.com/troglobit/smcroute/releases/ generated by GitHub
-+sha256  7d2c83e11908fe37844fa9b49ae50924555c4e1bb440fb059a95c94e442ea8a5  smcroute-2.5.7.tar.gz
- # Locally generated
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/smcroute/smcroute.mk b/package/smcroute/smcroute.mk
-index 0c4f88ab1b..f7476f1100 100644
---- a/package/smcroute/smcroute.mk
-+++ b/package/smcroute/smcroute.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SMCROUTE_VERSION = 2.5.6
-+SMCROUTE_VERSION = 2.5.7
- SMCROUTE_SITE = https://github.com/troglobit/smcroute/releases/download/$(SMCROUTE_VERSION)
- SMCROUTE_LICENSE = GPL-2.0+
- SMCROUTE_LICENSE_FILES = COPYING
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkdhw6tsIiA9PSBHYcOrbCBQT1JUQVkgPGdhZWwucG9ydGF5QHJ0b25lLmZyPiB3cml0
+ZXM6CgogPiBBZGQgczM5MHggbXVzbCBzdXBwb3J0ZWQgYXJjaHMuIFVwc3RyZWFtIG11c2wgYWxy
+ZWFkeSBzdXBwb3J0cyBzMzkweFsxXS4KID4gVGVzdGVkIHdpdGggcWVtdV9zMzkwc19kZWZjb25m
+aWc6CgogPiAJJCBvdXRwdXQvaG9zdC9iaW4vcWVtdS1zeXN0ZW0tczM5MHggLU0gczM5MC1jY3ct
+dmlydGlvIC1jcHUgbWF4LHpwY2k9b24gLW0gNEcgLXNtcCAyIC1rZXJuZWwgb3V0cHV0L2J6SW1h
+Z2UgLWRyaXZlIGZpbGU9b3V0cHV0L2ltYWdlcy9yb290ZnMuZXh0MixpZj12aXJ0aW8sZm9ybWF0
+PXJhdyAtYXBwZW5kICJyb290d2FpdCByb290PS9kZXYvdmRhIG5ldC5pZm5hbWVzPTAgYmlvc2Rl
+dm5hbWU9MCIgLWRpc3BsYXkgbm9uZSAtc2VyaWFsIG1vbjpzdGRpbyAtbmV0IG5pYyxtb2RlbD12
+aXJ0aW8gLW5ldCB1c2VyCiA+IAkoLi4uKQogPiAJV2VsY29tZSB0byBCdWlsZHJvb3QKID4gCWJ1
+aWxkcm9vdCBsb2dpbjogcm9vdAogPiAJIyB1bmFtZSAtYQogPiAJTGludXggYnVpbGRyb290IDYu
+MS40NCAjMiBTTVAgU3VuIEZlYiAxOCAwMTozMzo0MiBDRVQgMjAyNCBzMzkweCBHTlUvTGludXgK
+ID4gCSMgL2xpYi9sZC1tdXNsLXMzOTB4LnNvLjEKID4gCW11c2wgbGliYyAoczM5MHgpCiA+IAlW
+ZXJzaW9uIDEuMi40CiA+IAlEeW5hbWljIFByb2dyYW0gTG9hZGVyCiA+IAlVc2FnZTogL2xpYi9s
+ZC1tdXNsLXMzOTB4LnNvLjEgW29wdGlvbnNdIFstLV0gcGF0aG5hbWUgW2FyZ3NdCgogPiBbMV06
+IGh0dHBzOi8vZ2l0Lm11c2wtbGliYy5vcmcvY2dpdC9tdXNsL2NvbW1pdC8/aWQ9MTUwOTQ5NDMw
+NTBlYjlhNTY0ZjQwOTMyMzA3MGU1MGI0MGY3ODgxNgoKID4gU2lnbmVkLW9mZi1ieTogR2HDq2wg
+UE9SVEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4KCkNvbW1pdHRlZCB0byAyMDI0LjAyLngsIHRo
+YW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
+dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
