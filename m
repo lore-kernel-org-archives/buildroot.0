@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96E44C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97454C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 579F4417A1;
-	Sat,  8 Jun 2024 07:44:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5848F406B1;
+	Sat,  8 Jun 2024 07:44:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ssEkrz4CsjUs; Sat,  8 Jun 2024 07:44:17 +0000 (UTC)
+ id dGmteF-iNat3; Sat,  8 Jun 2024 07:44:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ADC641A41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DE6A41A74
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1ADC641A41;
-	Sat,  8 Jun 2024 07:44:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DC37A1BF422
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:44:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2DE6A41A74;
+	Sat,  8 Jun 2024 07:44:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9565E1BF422
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:44:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C986560653
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:44:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E84A41A74
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:44:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7xjSpzVOQ7OD for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 07:44:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mmT8AdTEkmS5 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 07:44:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AD4C560626
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD4C560626
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AD4C560626
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:44:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7425460002;
- Sat,  8 Jun 2024 07:44:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 50B5B406B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50B5B406B1
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 50B5B406B1
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:44:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1DA30C0003;
+ Sat,  8 Jun 2024 07:44:49 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sFqkD-00GUyu-1s;
- Sat, 08 Jun 2024 09:44:09 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sFqkr-00GV1m-1T;
+ Sat, 08 Jun 2024 09:44:49 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Brandon Maier via buildroot <buildroot@buildroot.org>
-References: <20240510235510.2454216-1-brandon.maier@collins.com>
- <20240510235510.2454216-2-brandon.maier@collins.com>
-Date: Sat, 08 Jun 2024 09:44:09 +0200
-In-Reply-To: <20240510235510.2454216-2-brandon.maier@collins.com> (Brandon
- Maier via buildroot's message of "Fri, 10 May 2024 23:55:10 +0000")
-Message-ID: <871q57ang6.fsf@dell.be.48ers.dk>
+References: <20240510220704.1924373-1-brandon.maier@collins.com>
+Date: Sat, 08 Jun 2024 09:44:49 +0200
+In-Reply-To: <20240510220704.1924373-1-brandon.maier@collins.com> (Brandon
+ Maier via buildroot's message of "Fri, 10 May 2024 22:07:04 +0000")
+Message-ID: <87wmmz98um.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/2] package/zip: fix build with GCC 14
+Subject: Re: [Buildroot] [PATCH] package/gcc: add patch to fix gcc 11 build
+ warning
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,7 +69,9 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jan Pedersen <jp@jp-embedded.com>,
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
  Brandon Maier <brandon.maier@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -78,20 +80,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Brandon" == Brandon Maier via buildroot <buildroot@buildroot.org> writes:
 
- > Builds with GCC 14 print the following error
- >> zip.h:726:10: error: conflicting types for 'memset'; have 'char *(char *, int,  unsigned int)'
+ > When building GCC 11 with GCC 14 the following error occurs
+ >> ../../../libiberty/simple-object-mach-o.c:1231:17: error: passing
+ > argument 1 of 'set_32' from incompatible pointer type
+ > [-Wincompatible-pointer-types]
 
- > This is because with GCC 14, Zip incorrectly detects that the memset functions
- > exist. Which enables the ZMEM flag and declares its own version of memset.
+ > This was fixed upstream in GCC12[1]. It is applied to the GCC 11 release
+ > branch[2], but has not been officially released yet.
 
- > This is because the ./unix/configure script attempts to compile a C file using
- > 'memset' but it does not include the <string.h>. This was allowed in gnu89, but
- > in GCC 14 -Werror=implicit-function-declaration is enabled by default[1].
-
- > We forcefully set '-std=gnu89' so that Zip will compile everything against
- > gnu89, which suppresses the warning.
-
- > [1] https://gcc.gnu.org/gcc-14/porting_to.html#warnings-as-errors
+ > [1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=38757aa88735ab2e511bc428e2407a5a5e9fa0be
+ > [2] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=02cd761eb1198df50453b2e39653f48053609ffc
 
  > Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 
