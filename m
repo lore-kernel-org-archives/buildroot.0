@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9748C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:50:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 456B3C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:52:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73E8E8355F;
-	Sat,  8 Jun 2024 13:50:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08E9F60676;
+	Sat,  8 Jun 2024 13:52:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PeZv9ixk3Qb3; Sat,  8 Jun 2024 13:50:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g2B3VkcHmZbi; Sat,  8 Jun 2024 13:51:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 904ED83A83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31DCD60679
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 904ED83A83;
-	Sat,  8 Jun 2024 13:50:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1E2D91BF41A
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:50:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31DCD60679;
+	Sat,  8 Jun 2024 13:51:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C4091BF41A
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 17BC283A83
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:50:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48F4840242
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:51:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UHEJfcaY8yYG for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 13:50:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id allvMxYPMeIs for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 13:51:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E46BE8355F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E46BE8355F
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E46BE8355F
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:50:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0163AC0003;
- Sat,  8 Jun 2024 13:50:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DF87E400D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF87E400D8
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DF87E400D8
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:51:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EDEE920003;
+ Sat,  8 Jun 2024 13:51:52 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sFwSo-001oS8-1Q;
- Sat, 08 Jun 2024 15:50:34 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sFwU4-001ob0-0h;
+ Sat, 08 Jun 2024 15:51:52 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-References: <20240521194441.102448-1-ju.o@free.fr>
-Date: Sat, 08 Jun 2024 15:50:34 +0200
-In-Reply-To: <20240521194441.102448-1-ju.o@free.fr> (Julien Olivain's message
- of "Tue, 21 May 2024 21:44:41 +0200")
-Message-ID: <8734pn4k7p.fsf@dell.be.48ers.dk>
+To: Romain Naour <romain.naour@smile.fr>
+References: <20240522160946.1844987554@busybox.osuosl.org>
+Date: Sat, 08 Jun 2024 15:51:52 +0200
+In-Reply-To: <20240522160946.1844987554@busybox.osuosl.org> (Romain Naour's
+ message of "Wed, 22 May 2024 17:53:48 +0200")
+Message-ID: <87y17f35l3.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: improve
- python-magic-wormhole test reliability
+Subject: Re: [Buildroot] [git commit] configs/orangepi_r1_defconfig: drop
+ double _HOST_UBOOT_TOOLS=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,29 +75,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
- > The python-magic-wormhole runtime test can randomly fail on slow
- > runners, see [1].
+ > commit: https://git.buildroot.net/buildroot/commit/?id=0ba568276a3432abc877624ce6fe4980e4b3b4b4
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The issue is that the sending command is started first in background
- > _without_ redirecting its output to /dev/null. The receiving command
- > is started after, expecting the message to be printed on the first
- > standard output line. On slower systems, the sending command still
- > print messages while the test controller expect output from the
- > receiving command. The expected string finally appear, but not on the
- > first line. This makes the test fail.
+ > Fixes the following warning:
+ > orangepi_r1_defconfig:35:warning: override: reassigning to symbol BR2_PACKAGE_HOST_UBOOT_TOOLS
 
- > This commit fixes the issue by redirecting all outputs (stdout, stderr)
- > of the sending command to /dev/null. To help even more, the sleep time
- > is moved from the emulator to the test controller. The sleep time is
- > also multiplied by the timeout_multiplier.
+ > While we're at it, move the HOST_UBOOT_TOOLS_* options where savedefconfig
+ > would put them.
 
- > Fixes: [1]
-
- > [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/6888691508
-
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
 Committed to 2024.02.x, thanks.
 
