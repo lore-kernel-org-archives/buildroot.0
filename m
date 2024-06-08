@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E00DC25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E32BEC27C5F
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:27:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BA5742459;
-	Sat,  8 Jun 2024 07:26:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A974242457;
+	Sat,  8 Jun 2024 07:27:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fL7xRg9TfbIv; Sat,  8 Jun 2024 07:26:53 +0000 (UTC)
+ id 6SyEIvpaX-Mu; Sat,  8 Jun 2024 07:27:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9CA84245B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 828674245B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9CA84245B;
-	Sat,  8 Jun 2024 07:26:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 828674245B;
+	Sat,  8 Jun 2024 07:27:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 688411BF422
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:26:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 222281BF422
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:27:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5602D60671
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:26:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C9A760671
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:27:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LboGT8CQzIJK for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 07:26:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id vbHg3BF4SjFO for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 07:27:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2D1006066C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D1006066C
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D1006066C
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:26:49 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 939DA1C0002;
- Sat,  8 Jun 2024 07:26:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 33A7B6066C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33A7B6066C
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 33A7B6066C
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:27:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A55360002;
+ Sat,  8 Jun 2024 07:27:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sFqTQ-00GGec-0M;
- Sat, 08 Jun 2024 09:26:48 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sFqTx-00GGhB-34;
+ Sat, 08 Jun 2024 09:27:21 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240307101638.15609-1-fontaine.fabrice@gmail.com>
-Date: Sat, 08 Jun 2024 09:26:48 +0200
-In-Reply-To: <20240307101638.15609-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 7 Mar 2024 11:16:38 +0100")
-Message-ID: <87ed97ao93.fsf@dell.be.48ers.dk>
+References: <20240307102535.20447-1-fontaine.fabrice@gmail.com>
+Date: Sat, 08 Jun 2024 09:27:21 +0200
+In-Reply-To: <20240307102535.20447-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 7 Mar 2024 11:25:35 +0100")
+Message-ID: <87a5jvao86.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/zxing-cpp: needs threads
+Subject: Re: [Buildroot] [PATCH 1/1] package/zxing-cpp: drop opencv and qt
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,14 +77,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > threads are mandatory since switch to an active fork in commit
- > 456a7398316655ad0b669635f580e4887c24a700:
+ > opencv and qt handling can be dropped since switch to an active fork in
+ > commit 456a7398316655ad0b669635f580e4887c24a700 as they are only used
+ > when examples are enabled resulting in the following warning:
 
- > CMake Error at /home/buildroot/autobuild/run/instance-1/output-1/host/share/cmake-3.28/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
- >   Could NOT find Threads (missing: Threads_FOUND)
+ > CMake Warning:
+ >   Manually-specified variables were not used by the project:
+
+ >     BUILD_DOC
+ >     BUILD_DOCS
+ >     BUILD_EXAMPLE
+ >     BUILD_TEST
+ >     BUILD_TESTING
+ >     BUILD_TESTS
+ >     CMAKE_DISABLE_FIND_PACKAGE_OpenCV
+ >     CMAKE_DISABLE_FIND_PACKAGE_Qt5
+
+ > While at it, also drop BUILD_EXAMPLES which is already passed by
+ > pkg-cmake.mk
 
  > Fixes: 456a7398316655ad0b669635f580e4887c24a700
- >  - http://autobuild.buildroot.org/results/b600582d9c5407c7324af70d61fa5c1f96d929f6
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
