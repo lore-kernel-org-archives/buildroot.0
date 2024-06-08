@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB085C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:55:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3330C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:56:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8420E605C4;
-	Sat,  8 Jun 2024 13:55:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF82B60679;
+	Sat,  8 Jun 2024 13:56:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iWqsAemyOS8O; Sat,  8 Jun 2024 13:55:24 +0000 (UTC)
+ id qSDAakmUA86K; Sat,  8 Jun 2024 13:56:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6CD160679
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE2F06074B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6CD160679;
-	Sat,  8 Jun 2024 13:55:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 440EF1BF41A
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:55:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE2F06074B;
+	Sat,  8 Jun 2024 13:56:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C4F531BF41A
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:56:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 312F440242
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:55:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE3F9842E2
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:56:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l8CoBts8p318 for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 13:55:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lDe3dyn270jK for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 13:56:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
  helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1DD59400D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DD59400D8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5ED76842D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ED76842D6
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1DD59400D8
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:55:21 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6EBAC1C0006;
- Sat,  8 Jun 2024 13:55:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5ED76842D6
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:56:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6EF5C1C0003;
+ Sat,  8 Jun 2024 13:56:27 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sFwXP-001p9L-34;
- Sat, 08 Jun 2024 15:55:19 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sFwYU-001pIq-2r;
+ Sat, 08 Jun 2024 15:56:26 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240517213307.959706-1-fontaine.fabrice@gmail.com>
-Date: Sat, 08 Jun 2024 15:55:19 +0200
-In-Reply-To: <20240517213307.959706-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 17 May 2024 23:33:07 +0200")
-Message-ID: <87cyor35fc.fsf@dell.be.48ers.dk>
+References: <20240523173640.1510882-1-fontaine.fabrice@gmail.com>
+Date: Sat, 08 Jun 2024 15:56:26 +0200
+In-Reply-To: <20240523173640.1510882-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 23 May 2024 19:36:40 +0200")
+Message-ID: <878qzf35dh.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/mutt: bump to version 2.2.13
+Subject: Re: [Buildroot] [PATCH 1/1] package/x11vnc: drop unrecognized
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,7 +69,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Martin Kepplinger <martink@posteo.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -76,8 +77,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Mutt 2.2.13 was released on March 9, 2024. This is a bug-fix release,
- > fixing a possible dangling pointer reference in the SMTP client.
+ > --without-{jpeg,sdl,zlib} are unrecognized since bump to version
+ > 0.9.14 in commit aeea662fb12e69073a233fe1058287212fbbca33 and
+ > https://github.com/LibVNC/x11vnc/commit/d287ed9a77c647f35e85e0b10621a6661e911fad
+ > because those dependencies were linked to libvncserver, not x11vnc
+
+ > Fixes: aeea662fb12e69073a233fe1058287212fbbca33
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
