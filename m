@@ -4,60 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A768C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C143C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:03:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F4218822D9;
-	Sat,  8 Jun 2024 13:02:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53D1084380;
+	Sat,  8 Jun 2024 13:03:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Km0j9UZXl3vd; Sat,  8 Jun 2024 13:02:20 +0000 (UTC)
+ id B59CBE2FksQ6; Sat,  8 Jun 2024 13:03:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AA0C82FF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5628584AE6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AA0C82FF9;
-	Sat,  8 Jun 2024 13:02:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7CF3D1BF47E
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:02:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5628584AE6;
+	Sat,  8 Jun 2024 13:03:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 93DF61BF47E
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68E9E822D9
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:02:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FE87426E8
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:03:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D4ArkBG6KXJC for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 13:02:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5KoJHHIStRZY for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 13:03:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.147;
+ helo=smtpweb147.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 85F9082231
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85F9082231
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 85F9082231
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:02:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 90D7DE0004;
- Sat,  8 Jun 2024 13:02:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sFvi4-001j4D-07;
- Sat, 08 Jun 2024 15:02:16 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240514215636.2866720-1-bernd@kuhls.net>
-Date: Sat, 08 Jun 2024 15:02:16 +0200
-In-Reply-To: <20240514215636.2866720-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Tue, 14 May 2024 23:56:36 +0200")
-Message-ID: <87ed97610n.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E2E1D426E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2E1D426E4
+Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E2E1D426E4
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:03:03 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id Fvims7ayCmsStFvinsPddp; Sat, 08 Jun 2024 15:03:01 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Sat,  8 Jun 2024 15:02:58 +0200
+Message-Id: <20240608130258.3295823-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/squid: security bump version to
- 6.9
+X-CMAE-Envelope: MS4xfCYiS4/zKn3mu/6Pu0H6bQyFALOUqPVVJ5niJ/AkYm1cBmk2oARMk1+mJKBUcHNT43IdPDNi9BDj+Ykh+S6iJA7U6K+oNjCbbX5QTdRMrHNGcUnkfawz
+ 0C8ZYqT3sfxyLD6dH6OkqYdxiny7EVM1tsJ6sxO7yF5efJcwqKJBAX5XW5gAvx2Qs68WHFcgWhieP5PRAxYaOTHy2HqHnyxyEMv20oP9400dZFRDUsmopUur
+ qZx7lrP9rA3h4/EYNmpB1ma8u4IH09q4/kGhiNUu7abJJkpGmcjeVdtTRovYjuF2fIfqryoptoLR2Oxm5GMF9w==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1717851781; bh=ut/fBt29Rv6CGn5xw0OYVDwCKH2dXwT4bZSdcwX/VdU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=gF2REzDHxRCfaOZGixihQaGRj5M8PClgEQ5UNQuNzNTbLW/GcyThQLfmDB07y7UnE
+ P8Xn8nfBvBLCNRsRODC9uCOJjfruAkY7QhwofRzqh8/Xgr1E8KX66C4FkUj9AB9ozy
+ dVqRrE4S9rgZIPsNSDv0amLJIvhKkTCGBftx40Z53kvjWdR1U/iP2nJbY2BM4jc3b3
+ NowzAFNnVAKmnr6NNXPOqM/sodXkO9qv2OzC1dlvxxGGxc586CC/olessoSNuCkU0m
+ 22lmJtZj77P1eiFnrzFH2XJYbaTpYVpqcuhsFA/ZnS63xAwObUtNITTY+rY0QSIZuR
+ /jB9dQwIiVjiQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=gF2REzDH
+Subject: [Buildroot] [PATCH/for-next] package/erlang-jiffy: bump version to
+ 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,23 +79,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Johan Oudinet <johan.oudinet@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/erlang-jiffy/erlang-jiffy.hash | 2 +-
+ package/erlang-jiffy/erlang-jiffy.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Fixes CVE-2024-25111:
- > https://github.com/squid-cache/squid/security/advisories/GHSA-72c2-c3wm-8qxc
-
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-Committed to 2024.02.x, thanks.
-
+diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
+index f172d1476e..7c314694e7 100644
+--- a/package/erlang-jiffy/erlang-jiffy.hash
++++ b/package/erlang-jiffy/erlang-jiffy.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a999351d956d3ed10c33a6dd7e9435e674e519b5b82a46d60361afdb83062fd8  erlang-jiffy-1.1.1.tar.gz
++sha256  f43bafc1ae5c9c1a7843a4c6b2d0b7ef57188e567381bf734035ef9701a7458f  erlang-jiffy-1.1.2.tar.gz
+ sha256  0fa8afad2f02c08850a16e36fe55376ee19732b3a116a0207f2a73c857777a49  LICENSE
+diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
+index de2e4749fb..b3f7cf82c7 100644
+--- a/package/erlang-jiffy/erlang-jiffy.mk
++++ b/package/erlang-jiffy/erlang-jiffy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ERLANG_JIFFY_VERSION = 1.1.1
++ERLANG_JIFFY_VERSION = 1.1.2
+ ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
+ ERLANG_JIFFY_LICENSE = MIT (core), \
+ 	BSD-3-Clause (Google double conversion library), \
 -- 
-Bye, Peter Korsgaard
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
