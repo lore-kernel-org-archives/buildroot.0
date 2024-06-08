@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AAFBC25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 406A8C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 13:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14278824E3;
-	Sat,  8 Jun 2024 13:01:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02E5384498;
+	Sat,  8 Jun 2024 13:01:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7PePidBhQqgN; Sat,  8 Jun 2024 13:01:31 +0000 (UTC)
+ id pJsoqtMcTV7z; Sat,  8 Jun 2024 13:01:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E753184456
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E88B784424
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E753184456;
-	Sat,  8 Jun 2024 13:01:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E88B784424;
+	Sat,  8 Jun 2024 13:01:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9B2081BF47E
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:01:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F0D11BF47E
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 759AE606A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8706B606B3
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 13:01:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3737o21mARDU for <buildroot@lists.busybox.net>;
+ id CgN_w8XjSVJk for <buildroot@lists.busybox.net>;
  Sat,  8 Jun 2024 13:01:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B711606B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B18A7606B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B711606B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id B18A7606B1
  for <buildroot@buildroot.org>; Sat,  8 Jun 2024 13:01:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 86ADB87DCF; Sat,  8 Jun 2024 13:01:22 +0000 (UTC)
+ id 9DB7A87DCE; Sat,  8 Jun 2024 13:01:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 13:53:09 +0200
+Date: Sat, 8 Jun 2024 15:00:13 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: ab0d9104e924847eacb1759a304d545b48ae1bda
-X-Git-Newrev: 9da3d9a04f8c92d440b873219acc6300d9fe70c5
+X-Git-Oldrev: 9da3d9a04f8c92d440b873219acc6300d9fe70c5
+X-Git-Newrev: 7b3a49aa4394988a526d3a96db771821c88194da
 X-Patchwork-Hint: ignore
-Message-Id: <20240608130122.86ADB87DCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/musl: enable on
- s390x
+Message-Id: <20240608130122.9DB7A87DCE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/cjson: security
+ bump to version 1.7.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,64 +60,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1529180514908643308=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1529180514908643308==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=9da3d9a04f8c92d440b873219acc6300d9fe70c5
+commit: https://git.buildroot.net/buildroot/commit/?id=7b3a49aa4394988a526d3a96db771821c88194da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Add s390x musl supported archs. Upstream musl already supports s390x[1].
+Add NULL check to cJSON_SetValuestring() (CVE-2024-31755)
 
-Tested with qemu_s390s_defconfig:
+https://github.com/DaveGamble/cJSON/releases/tag/v1.7.18
 
-	$ output/host/bin/qemu-system-s390x -M s390-ccw-virtio -cpu max,zpci=on -m 4G -smp 2 -kernel output/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "rootwait root=/dev/vda net.ifnames=0 biosdevname=0" -display none -serial mon:stdio -net nic,model=virtio -net user
-	(...)
-	Welcome to Buildroot
-	buildroot login: root
-	# uname -a
-	Linux buildroot 6.1.44 #2 SMP Sun Feb 18 01:33:42 CET 2024 s390x GNU/Linux
-	# /lib/ld-musl-s390x.so.1
-	musl libc (s390x)
-	Version 1.2.4
-	Dynamic Program Loader
-	Usage: /lib/ld-musl-s390x.so.1 [options] [--] pathname [args]
-
-[1]: https://git.musl-libc.org/cgit/musl/commit/?id=15094943050eb9a564f409323070e50b40f78816
-
-Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ab990cf58a724a178dbdd55afdb520212f7197c0)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0c091c15ea22d0f5b1e2114bc56e16d77d77247c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/musl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/musl/Config.in b/package/musl/Config.in
-index 89f41d2ff1..44654eff34 100644
---- a/package/musl/Config.in
-+++ b/package/musl/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_MUSL_ARCH_SUPPORTS
- 	default y if BR2_powerpc64
- 	default y if BR2_powerpc64le
- 	default y if BR2_RISCV_64
-+	default y if BR2_s390x
- 	default y if BR2_sh
- 	default y if BR2_x86_64
- 	depends on !BR2_POWERPC_CPU_HAS_SPE # not supported, build breaks
-
---===============1529180514908643308==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 305dc0d7b8..e07ae0f7bf 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  c91d1eeb7175c50d49f6ba2a25e69b46bd05cffb798382c19bfb202e467ec51c  cjson-1.7.17.tar.gz
++sha256  3aa806844a03442c00769b83e99970be70fbef03735ff898f4811dd03b9f5ee5  cjson-1.7.18.tar.gz
+ sha256  a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 4719a3dc9b..35304ec618 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = 1.7.17
++CJSON_VERSION = 1.7.18
+ CJSON_SITE = $(call github,DaveGamble,cjson,v$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1529180514908643308==--
