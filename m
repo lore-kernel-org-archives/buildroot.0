@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ADC1C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 19:15:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54ED7C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 19:15:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D697B84740;
-	Sat,  8 Jun 2024 19:15:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22D4284711;
+	Sat,  8 Jun 2024 19:15:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gqxbk3FNUQ-j; Sat,  8 Jun 2024 19:15:11 +0000 (UTC)
+ id zgmd5ZbaHLaL; Sat,  8 Jun 2024 19:15:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5BBD8472A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D340B84764
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5BBD8472A;
-	Sat,  8 Jun 2024 19:15:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D340B84764;
+	Sat,  8 Jun 2024 19:15:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7490B1BF407
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 19:15:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1AF441BF407
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 19:15:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A83E403C0
+ by smtp2.osuosl.org (Postfix) with ESMTP id B63DF403C0
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 19:15:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z0DlL0tBXu_T for <buildroot@lists.busybox.net>;
+ id p66SH9-HmhMx for <buildroot@lists.busybox.net>;
  Sat,  8 Jun 2024 19:14:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 550C64036F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4B9540364
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 550C64036F
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4B9540364
  for <buildroot@buildroot.org>; Sat,  8 Jun 2024 19:14:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 510A887E93; Sat,  8 Jun 2024 19:14:59 +0000 (UTC)
+ id A08B6814F1; Sat,  8 Jun 2024 19:14:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 18:49:46 +0200
+Date: Sat, 8 Jun 2024 18:54:51 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 3283e5f595757a7523bd0322958dd2cbe302a8fc
-X-Git-Newrev: 2a1f89db053ec8aa90f09e19b3fa40b0a581bb7e
+X-Git-Oldrev: 6c2a12f96d4c94c69f191e32124250b5deb3e2bb
+X-Git-Newrev: bb0164a6d27d6513033f41c6418164b887430174
 X-Patchwork-Hint: ignore
-Message-Id: <20240608191459.510A887E93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/cog: bump to
- version 0.18.4
+Message-Id: <20240608191459.A08B6814F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add mtd
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,53 +65,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a1f89db053ec8aa90f09e19b3fa40b0a581bb7e
+commit: https://git.buildroot.net/buildroot/commit/?id=bb0164a6d27d6513033f41c6418164b887430174
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-This is a small bugfix release, with a rendering fix for popup menus
-and that can use weston-protocols version 14 for building. Release
-notes:
-
-  https://wpewebkit.org/release/cog-0.18.4.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 091ad8455da98fb7abc5af22e7a4c36f64c0783e)
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+[yann.morin.1998@free.fr:
+  - don't set an empty BR2_ENABLE_LOCALE_WHITELIST
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5806419b9150e7d019a2a8fe13f184c6943cc171)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ support/testing/tests/package/test_mtd.py | 47 +++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index c0e99e14aa..b59b5f4795 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.18.3.tar.xz.sums
--md5  e457de5b5ac8994ae9971c0a5a22b8a2  cog-0.18.3.tar.xz
--sha1  21df2a84c651b45e78d08e45e71631250a0078c3  cog-0.18.3.tar.xz
--sha256  cd4ec937175a290ccd7c8ec398e4569aec04084cd94b11b2d83518778ba9d055  cog-0.18.3.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.18.4.tar.xz.sums
-+md5  0566ab6676b499ebcff372fbe39e24fc  cog-0.18.4.tar.xz
-+sha1  2d6f88cfb07eaac1be2bf9954832f19f8a856631  cog-0.18.4.tar.xz
-+sha256  31d7079db2eeed790899d2f1f824dd6a54bf30d072d196d737be572f105d99b1  cog-0.18.4.tar.xz
- 
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 11c0e3b502..7f680bb700 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COG_VERSION = 0.18.3
-+COG_VERSION = 0.18.4
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
+diff --git a/support/testing/tests/package/test_mtd.py b/support/testing/tests/package/test_mtd.py
+new file mode 100644
+index 0000000000..bdb09c39ec
+--- /dev/null
++++ b/support/testing/tests/package/test_mtd.py
+@@ -0,0 +1,47 @@
++import os
++
++import infra.basetest
++
++
++class TestMtd(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_MTD=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_TARGET_ROOTFS_CPIO=y
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++
++        self.emulator.login()
++
++        mtd = "/dev/mtd0"
++        erasesize = 256 * 1024
++        test_sectors = 4
++        test_size = erasesize * test_sectors
++
++        output, exit_code = self.emulator.run(f"mtd_debug info {mtd}")
++        output = [x.strip() for x in output if x.strip()]
++        self.assertEqual(output, [
++            "mtd.type = MTD_NORFLASH",
++            "mtd.flags = MTD_CAP_NORFLASH",
++            "mtd.size = 134217728 (128M)",
++            "mtd.erasesize = 262144 (256K)",
++            "mtd.writesize = 1",
++            "mtd.oobsize = 0",
++            "regions = 0",
++        ])
++
++        # Test flashcp
++        self.assertRunOk(f"dd if=/dev/urandom of=random.bin bs={test_size} count=1")
++        self.assertRunOk(f"flashcp random.bin {mtd}")
++        self.assertRunOk(f"cmp -s -n {test_size} random.bin {mtd}")
++
++        # Test flash_erase
++        self.assertRunOk(f"dd if=/dev/zero bs={test_size} count=1 | tr '\\000' '\\377' >nor-erase.bin")
++        self.assertRunOk(f"flash_erase {mtd} 0 {test_sectors}")
++        self.assertRunOk(f"cmp -s -n {test_size} nor-erase.bin {mtd}")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
