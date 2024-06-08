@@ -4,62 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1824FC25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 18:19:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23245C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 18:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CECC8405AB;
-	Sat,  8 Jun 2024 18:19:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88F69406BC;
+	Sat,  8 Jun 2024 18:19:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uhZlfkDO3ceZ; Sat,  8 Jun 2024 18:19:30 +0000 (UTC)
+ id zEaiRRCRLUk0; Sat,  8 Jun 2024 18:19:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D4E3406BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 598F04258F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D4E3406BC;
-	Sat,  8 Jun 2024 18:19:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1FD731BF408
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 18:18:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 598F04258F;
+	Sat,  8 Jun 2024 18:19:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 949AC1BF408
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 18:19:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1679D40677
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 18:18:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FDB7819D1
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 18:19:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mMU2kVKlJ4-b for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 18:18:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jfpq8-hjhyG3 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 18:19:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4AE28405EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AE28405EF
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4AE28405EF
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 18:18:46 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 89D9020003;
- Sat,  8 Jun 2024 18:18:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A8DB481414
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8DB481414
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A8DB481414
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 18:19:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B695240003;
+ Sat,  8 Jun 2024 18:19:15 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sG0eJ-002HgR-39;
- Sat, 08 Jun 2024 20:18:43 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sG0eo-002HjF-2l;
+ Sat, 08 Jun 2024 20:19:14 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@smile.fr>
-References: <20240601223120.2123976-1-romain.naour@smile.fr>
- <20240601223120.2123976-2-romain.naour@smile.fr>
- <87bk4ijpey.fsf@dell.be.48ers.dk>
-Date: Sat, 08 Jun 2024 20:18:43 +0200
-In-Reply-To: <87bk4ijpey.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 03 Jun 2024 12:23:17 +0200")
-Message-ID: <878qzfwb5o.fsf@dell.be.48ers.dk>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20240601011733.2964473-1-james.hilliard1@gmail.com>
+Date: Sat, 08 Jun 2024 20:19:14 +0200
+In-Reply-To: <20240601011733.2964473-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Fri, 31 May 2024 19:17:33 -0600")
+Message-ID: <874ja3wb4t.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/2] package/systemd: add optional tpm2
- dependency
+Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: drop glibc Linaro
+ toolchain version check
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,19 +75,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
- >> When tpm2-tss package is selected, systemd can enable its TPM2 support
- >> [1] used by systemd-boot, systemd-cryptenroll (when cryptsetup package
- >> is also enabled) [2] and other tool systemd-pcr{extend,lock,machine}.
+ > It has been well over 10 years since glibc 2.14 was released, I don't
+ > think we need this check anymore.
 
- >> [1] https://github.com/systemd/systemd/blob/db11bab38ccf1ed257f310d29070843d4c58ea01/meson.build#L1341
- >> [2] https://www.freedesktop.org/software/systemd/man/latest/systemd-cryptenroll.html
+ > The distutils module is no longer bundled with python 3.12 so this
+ > eliminates the need to install additional python modules under python
+ > 3.12.
 
- >> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-
- > Committed, thanks.
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Committed to 2024.02.x, thanks.
 
