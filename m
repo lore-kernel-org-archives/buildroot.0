@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 919C3C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:53:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F194C27C55
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:53:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F795427F8;
-	Sat,  8 Jun 2024 07:53:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DE1E42824;
+	Sat,  8 Jun 2024 07:53:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YKMszIhF3pOT; Sat,  8 Jun 2024 07:53:09 +0000 (UTC)
+ id p320T3KXIsJ9; Sat,  8 Jun 2024 07:53:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EBCF4275E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 892B94280D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EBCF4275E;
-	Sat,  8 Jun 2024 07:53:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B89AF1BF422
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:52:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 892B94280D;
+	Sat,  8 Jun 2024 07:53:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AA0F1BF422
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:52:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3C09607AF
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7234740158
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:52:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pqs9ZI7VhCcl for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id smELZBnZ_o79 for <buildroot@lists.busybox.net>;
  Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FBEB60743
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76E9140154
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0FBEB60743
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 76E9140154
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:52:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0953B87D85; Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
+ id CC12B87D7C; Sat,  8 Jun 2024 07:52:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 09:15:11 +0200
+Date: Sat, 8 Jun 2024 09:07:26 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 9862d0c271ae08c26c37b12e8cf69afc38c68136
-X-Git-Newrev: 1669a9efc0ac16f9b3c4a1cb816055eda43af3fb
+X-Git-Oldrev: de7c48ade7ec6d36b3178dace42e16f3b17cf9d4
+X-Git-Newrev: 4e2b6908659772d7dcedd465754ac59338f64d07
 X-Patchwork-Hint: ignore
-Message-Id: <20240608075253.0953B87D85@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/redis-plus-plus:
- bump to version 1.3.12
+Message-Id: <20240608075252.CC12B87D7C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/postgresql: bump
+ version to 16.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1669a9efc0ac16f9b3c4a1cb816055eda43af3fb
+commit: https://git.buildroot.net/buildroot/commit/?id=4e2b6908659772d7dcedd465754ac59338f64d07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-https://github.com/sewenew/redis-plus-plus/releases/tag/1.3.11
-https://github.com/sewenew/redis-plus-plus/releases/tag/1.3.12
-https://github.com/sewenew/redis-plus-plus/compare/1.3.10...1.3.12
+Release notes: https://www.postgresql.org/docs/release/16.2/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The hash of the license file is updated due to a change in copyright
+years:
+
+-Portions Copyright (c) 1996-2023, PostgreSQL Global Development Group
++Portions Copyright (c) 1996-2024, PostgreSQL Global Development Group
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ee2a9a5e4167dc86511568bd5b136f00d099481f)
+(cherry picked from commit 360d2da3fad01db3aa737f0efd4faffa53f243a4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis-plus-plus/redis-plus-plus.hash | 2 +-
- package/redis-plus-plus/redis-plus-plus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.hash | 6 +++---
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/redis-plus-plus/redis-plus-plus.hash b/package/redis-plus-plus/redis-plus-plus.hash
-index 1d88365bc0..4cdc176025 100644
---- a/package/redis-plus-plus/redis-plus-plus.hash
-+++ b/package/redis-plus-plus/redis-plus-plus.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  85d9d9ff84c873c4a14bd28bee569a1f311285fad8d4f2fb0e472f65d4bb842a  redis-plus-plus-1.3.10.tar.gz
-+sha256  26c1e45cdbafe1af4d2cf756957b2268baab6f802b53bcdd435864620e2c03c7  redis-plus-plus-1.3.12.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/redis-plus-plus/redis-plus-plus.mk b/package/redis-plus-plus/redis-plus-plus.mk
-index a286e2de33..167d8bfa01 100644
---- a/package/redis-plus-plus/redis-plus-plus.mk
-+++ b/package/redis-plus-plus/redis-plus-plus.mk
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index cf859e3505..6c3f561f7e 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v16.1/postgresql-16.1.tar.bz2.sha256
+-sha256  ce3c4d85d19b0121fe0d3f8ef1fa601f71989e86f8a66f7dc3ad546dd5564fec  postgresql-16.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v16.2/postgresql-16.2.tar.bz2.sha256
++sha256  446e88294dbc2c9085ab4b7061a646fa604b4bec03521d5ea671c2e5ad9b2952  postgresql-16.2.tar.bz2
+ # License file, Locally calculated
+-sha256  1a7d13c3ab31961b91ba256f77d6e82e0b54bf992253060fe93bdb5466df416a  COPYRIGHT
++sha256  9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 644f93d88a..0448e71892 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REDIS_PLUS_PLUS_VERSION = 1.3.10
-+REDIS_PLUS_PLUS_VERSION = 1.3.12
- REDIS_PLUS_PLUS_SITE = $(call github,sewenew,redis-plus-plus,$(REDIS_PLUS_PLUS_VERSION))
- REDIS_PLUS_PLUS_LICENSE = Apache-2.0
- REDIS_PLUS_PLUS_LICENSE_FILES = LICENSE
+-POSTGRESQL_VERSION = 16.1
++POSTGRESQL_VERSION = 16.2
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
