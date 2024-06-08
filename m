@@ -4,50 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2934C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 06:42:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AB12C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:06:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2EDD4265F;
-	Sat,  8 Jun 2024 06:42:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DF3E42710;
+	Sat,  8 Jun 2024 07:06:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RkEcqvnfjKl3; Sat,  8 Jun 2024 06:42:52 +0000 (UTC)
+ id 0xlYVtKHCzit; Sat,  8 Jun 2024 07:06:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DF104278A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1EEA42721
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DF104278A;
-	Sat,  8 Jun 2024 06:42:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 152591BF47F
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 06:42:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1EEA42721;
+	Sat,  8 Jun 2024 07:06:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3348B1BF422
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 015874265D
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 06:42:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2CFFD40142
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:06:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ieobVUpap4gP for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 06:42:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pWEUpwLrEJZM for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 07:06:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB3234264D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB3234264D
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 06:42:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D541E87CA5; Sat,  8 Jun 2024 06:42:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D5A2E400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5A2E400FE
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D5A2E400FE
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:06:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1D68D1C0006;
+ Sat,  8 Jun 2024 07:06:09 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sFq9R-00GDrZ-1p;
+ Sat, 08 Jun 2024 09:06:09 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 08:41:42 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 1781340fa382466f64e048a3a3f5f468d46062a9
-X-Git-Newrev: c243e5549419068e7224a87b35534dcc417fd123
-X-Patchwork-Hint: ignore
-Message-Id: <20240608064243.D541E87CA5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/cog: bump to
- version 0.18.3
+To: Adrian Perez de Castro <aperez@igalia.com>
+References: <20240325143917.2620448-1-aperez@igalia.com>
+Date: Sat, 08 Jun 2024 09:06:09 +0200
+In-Reply-To: <20240325143917.2620448-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Mon, 25 Mar 2024 16:39:15 +0200")
+Message-ID: <87h6e3c3ry.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/libmanette: bump to version 0.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,59 +68,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c243e5549419068e7224a87b35534dcc417fd123
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-This is a small bugfix release, with fixes for device scaling handling
-(i.e. HiDPI displays), and with support to toggle WebKit runtime
-features. Release notes:
+ > This is a bugfix release which mainly imroves device detection,
+ > specially inside the Flatpak sandbox. Additionally, this version
+ > includes the patch for building as a static library, and the patch
+ > file can be removed.
 
-  https://wpewebkit.org/release/cog-0.18.3.html
+ > Release notes:
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e695da731ffe3a8b06526840055cb38c71b47fde)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ >   https://gitlab.gnome.org/GNOME/libmanette/-/commit/27554bd118c08141134d4147cc34794057eb36e2
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index 387666969a..c0e99e14aa 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.18.2.tar.xz.sums
--md5  7fbfc2e19304132be0d73f5e5512151c  cog-0.18.2.tar.xz
--sha1  045294f7fa878db86e4b8a617ee4ac056a71cb75  cog-0.18.2.tar.xz
--sha256  3c4237cff6323b8c3eaf52c6f3f6415b898a22c0127c6c396c1eaa6eef46c279  cog-0.18.2.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.18.3.tar.xz.sums
-+md5  e457de5b5ac8994ae9971c0a5a22b8a2  cog-0.18.3.tar.xz
-+sha1  21df2a84c651b45e78d08e45e71631250a0078c3  cog-0.18.3.tar.xz
-+sha256  cd4ec937175a290ccd7c8ec398e4569aec04084cd94b11b2d83518778ba9d055  cog-0.18.3.tar.xz
- 
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index e96909f779..11c0e3b502 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COG_VERSION = 0.18.2
-+COG_VERSION = 0.18.3
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+Committed to 2024.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
