@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66341C27C5F
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 19:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34BC9C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 19:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38A5484BBB;
-	Sat,  8 Jun 2024 19:16:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45943830C1;
+	Sat,  8 Jun 2024 19:16:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6zC2s59lS9PH; Sat,  8 Jun 2024 19:16:37 +0000 (UTC)
+ id a23JqkXGZaDK; Sat,  8 Jun 2024 19:16:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6DC884920
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FD26846F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6DC884920;
-	Sat,  8 Jun 2024 19:16:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FD26846F9;
+	Sat,  8 Jun 2024 19:16:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2CB5E1BF407
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 19:15:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2FDC81BF407
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 19:15:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5080240407
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68A5340434
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 19:15:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F_fmScHi0pNz for <buildroot@lists.busybox.net>;
+ id 5m2sQ1DBocC8 for <buildroot@lists.busybox.net>;
  Sat,  8 Jun 2024 19:15:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F06A40376
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4762840412
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F06A40376
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4762840412
  for <buildroot@buildroot.org>; Sat,  8 Jun 2024 19:15:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 68B528614C; Sat,  8 Jun 2024 19:15:01 +0000 (UTC)
+ id 41D697FDCD; Sat,  8 Jun 2024 19:15:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 20:08:25 +0200
+Date: Sat, 8 Jun 2024 20:08:05 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: a8485982aaf721f0b71cdb3ae85967a746471672
-X-Git-Newrev: 61564410c95d58ed7b5f735f4d24dac15c85f056
+X-Git-Oldrev: 76528f05b59d0c9cfdcbd490b6925cab08d12d1e
+X-Git-Newrev: 8c03a60b3a78f13fe2aeea815b5653c63f32eb29
 X-Patchwork-Hint: ignore
-Message-Id: <20240608191501.68B528614C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- package/newlib-bare-metal: use https:// _SITE
+Message-Id: <20240608191501.41D697FDCD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/lynx: use
+ https:// _SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,39 +60,63 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1176869325037724684=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61564410c95d58ed7b5f735f4d24dac15c85f056
+--===============1176869325037724684==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8c03a60b3a78f13fe2aeea815b5653c63f32eb29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The tarballs are also available over https, so use that instead.
+The ftp server does not allow anonymous login, causing the download to fail:
+
+wget --passive-ftp -nd -t 3 -O '/home/peko/source/buildroot/output-qt/build/.lynx2.8.9rel.1.tar.bz2.XlcdCK/output' 'ftp://ftp.invisible-island.net/lynx/tarballs/lynx2.8.9rel.1.tar.bz2'
+--2024-06-02 22:21:49--  ftp://ftp.invisible-island.net/lynx/tarballs/lynx2.8.9rel.1.tar.bz2
+           => ‘/home/peko/source/buildroot/output-qt/build/.lynx2.8.9rel.1.tar.bz2.XlcdCK/output’
+Resolving ftp.invisible-island.net (ftp.invisible-island.net)... 216.194.253.29
+Connecting to ftp.invisible-island.net (ftp.invisible-island.net)|216.194.253.29|:21... connected.
+Logging in as anonymous ...
+Login incorrect.
+
+Luckily the tarball is also available over https://, so use that instead.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Neal Frager <neal.frager@amd.com>
+[yann.morin.1998@free.fr:
+  - use https, not http
+  - drop trailing '/' in _SITE
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1f7de59273144a9c6c173ff14e2cc7eb6649a078)
+(cherry picked from commit d946d31325af3ca388d4d3bbff4ad8f786fabb06)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/newlib-bare-metal/newlib-bare-metal.mk | 2 +-
+ package/lynx/lynx.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk b/package/newlib-bare-metal/newlib-bare-metal.mk
-index 9f5d765751..89092eb973 100644
---- a/package/newlib-bare-metal/newlib-bare-metal.mk
-+++ b/package/newlib-bare-metal/newlib-bare-metal.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+index da57eb2601..8317329262 100644
+--- a/package/lynx/lynx.mk
++++ b/package/lynx/lynx.mk
+@@ -6,7 +6,7 @@
  
- NEWLIB_BARE_METAL_VERSION = 4.4.0.20231231
--NEWLIB_BARE_METAL_SITE = ftp://sourceware.org/pub/newlib
-+NEWLIB_BARE_METAL_SITE = https://sourceware.org/ftp/newlib
- NEWLIB_BARE_METAL_SOURCE = newlib-$(NEWLIB_BARE_METAL_VERSION).tar.gz
- NEWLIB_BARE_METAL_DEPENDENCIES = host-gcc-bare-metal
- NEWLIB_BARE_METAL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ LYNX_VERSION = 2.8.9rel.1
+ LYNX_SOURCE = lynx$(LYNX_VERSION).tar.bz2
+-LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
++LYNX_SITE = https://invisible-mirror.net/archives/lynx/tarballs
+ LYNX_PATCH = \
+ 	https://salsa.debian.org/lynx-team/lynx/-/raw/debian/2.9.0dev.6-3_deb11u1/debian/patches/90_CVE-2021-38165.patch
+ # 90_CVE-2021-38165.patch
+
+--===============1176869325037724684==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1176869325037724684==--
