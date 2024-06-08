@@ -4,79 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D80FEC25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 10:25:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54288C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 10:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 901EB846C7;
-	Sat,  8 Jun 2024 10:25:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B83C681DFF;
+	Sat,  8 Jun 2024 10:25:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 36W9t_OMkgjR; Sat,  8 Jun 2024 10:25:40 +0000 (UTC)
+ id VGUlKiz_Xnx0; Sat,  8 Jun 2024 10:25:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20DC6824E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27CAA846D3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20DC6824E3;
-	Sat,  8 Jun 2024 10:25:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B51E51BF41F
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 10:25:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27CAA846D3;
+	Sat,  8 Jun 2024 10:25:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 168CB1BF41F
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 10:25:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1ADA401EB
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 10:25:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0314D4272F
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 10:25:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R3XiAxEro9ym for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 10:25:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.45;
- helo=mail-wm1-f45.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GVrgc7a-5lu4 for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 10:25:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.50;
+ helo=mail-wm1-f50.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6BAE540169
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BAE540169
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com
- [209.85.128.45])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6BAE540169
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 10:25:37 +0000 (UTC)
-Received: by mail-wm1-f45.google.com with SMTP id
- 5b1f17b1804b1-42178999284so7256095e9.0
- for <buildroot@buildroot.org>; Sat, 08 Jun 2024 03:25:37 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9AF93405ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF93405ED
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com
+ [209.85.128.50])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9AF93405ED
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 10:25:38 +0000 (UTC)
+Received: by mail-wm1-f50.google.com with SMTP id
+ 5b1f17b1804b1-42160f2dc32so18741585e9.3
+ for <buildroot@buildroot.org>; Sat, 08 Jun 2024 03:25:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1717842335; x=1718447135;
+ d=1e100.net; s=20230601; t=1717842337; x=1718447137;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=T12tjArwNcCdHdWbL/uDrVdH2Hy3mM/vcTfMRQYNqeE=;
- b=fF6Y9VwG3fL5Zc+CPNFYdF6OAJxomq/OBpz2QlaI4nKlyCSpbP0z68LGcKTqlCst+v
- HgnlSy5eP64nFdnnzJpXDx38FGAhv3F7TSlqXZz6aI/GDSQdLyjO7rTRYqimtaJnt57B
- 0iUmSmKdH5qrcrsPlV1FiqT61szPz+RIrdK/sEaC4IG0j5y1JIh3xjzl2Z9CBcwBAdgT
- /TX3NPCP85mSBac6BL+zHt+bqZfc79vJHs7pK9viES3LGgc+LqlZf82Zxm6QL8m3hijI
- 1ea22FJ+bvAhmx7vf+QtcgYgaJQKQ5V3adxnnmOxJkRixGRdcVjwXkm91id9XBK9uB+o
- eRNg==
-X-Gm-Message-State: AOJu0Yxef/mUBHCtmOWuJh5ZiZ67sd8BOymIZBysrcWPtHMA1LKRHl7U
- boakTNojR8UH+UsZfaD0fzIBNUs6jiUCJqKsvcrvfmGHNIXeyxLe7CYF/A==
-X-Google-Smtp-Source: AGHT+IEnZ1ccjmYstiNROTJvaW9VPkouco2t9xPrx97Q1cWPKStS/88EXdhGVNNc3EB4U2h+U+RVRQ==
-X-Received: by 2002:a05:6000:1006:b0:35f:1a8a:a2e2 with SMTP id
- ffacd0b85a97d-35f1a8ab0famr376420f8f.59.1717842334985; 
- Sat, 08 Jun 2024 03:25:34 -0700 (PDT)
+ bh=Mmm81ZQokELfVtCOusDGIXXJ6H0JHf64QdBmoDeCbOo=;
+ b=JFKF5QBG8Rux2/zOHypJ7wbbht3AtoIjFzMZDz+FHZ+lXsQ+EWdpaR20lXKC/xp4QQ
+ 4Zmrjkl7HgC0NyGGp33LXj/yKOm+fDppnjVxOQ7DxsQV/ruvKAAcAw7VMVJYbz5kh2vd
+ QlHlNaHOcHxd3MtG6EgO/22J8zF8kg/B1ZmM/yOdttYhkDpvdmgQRDYo/D8aOf3aeaeT
+ +RGzdlKEZm0PjwF9wzSUVBHSllc3Yar5usWJ6uEV+LIX0KZfcYfsR3JEY0uj8RJrQmsM
+ dhmBdX0DjnWdRiKOSCsusLCHJVCLLZQdRE1VYImTGH/f/TK6mw5usTsUUMRaAJRQZHcA
+ S1TA==
+X-Gm-Message-State: AOJu0Yz98D+BCtFQGrQutU9IlLukbLCtd2tbMPt8Mo0jL3Myf/+YUUem
+ 9yO12SNnFnj9PoWW2aqY6z7iVP7AAnb/n0yqG+zrP5LAqi9JmJkBW+rSIQ==
+X-Google-Smtp-Source: AGHT+IFzYYrG4W/UDzdvT+HM9LefxoctX8quoPD89SuzT98s5/Ba54bzHuUx2+O91MLOSAO+Jc/XLA==
+X-Received: by 2002:a05:600c:4f07:b0:421:661d:89cd with SMTP id
+ 5b1f17b1804b1-421661d8d81mr39278135e9.25.1717842336577; 
+ Sat, 08 Jun 2024 03:25:36 -0700 (PDT)
 Received: from localhost.localdomain
  ([2a02:a03f:eb68:2f00:3a9a:8c80:dbb9:3d10])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-35ef5d66cf6sm5981739f8f.49.2024.06.08.03.25.34
+ ffacd0b85a97d-35ef5d66cf6sm5981739f8f.49.2024.06.08.03.25.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 08 Jun 2024 03:25:34 -0700 (PDT)
+ Sat, 08 Jun 2024 03:25:36 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Sat,  8 Jun 2024 12:25:26 +0200
-Message-Id: <20240608102527.2467188-2-thomas@devoogdt.com>
+Date: Sat,  8 Jun 2024 12:25:27 +0200
+Message-Id: <20240608102527.2467188-3-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240608102527.2467188-1-thomas@devoogdt.com>
 References: <20240608102527.2467188-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1 2/3] package/weston: bump to 13.0.3
+Subject: [Buildroot] [PATCH v1 3/3] package/wayland: bump to 1.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,39 +97,44 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Announce:
-  https://lists.freedesktop.org/archives/wayland-devel/2024-June/043655.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-May/043636.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-May/043625.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-May/043614.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-April/043580.html
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/weston/weston.hash | 6 +++---
- package/weston/weston.mk   | 2 +-
+ package/wayland/wayland.hash | 6 +++---
+ package/wayland/wayland.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index 5fa0c9d2be..62322ac639 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,4 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2024-April/043575.html
--sha256  ea1566ab4f5ffce7e9fd4f7a1fca5b30caae4d50023bf459213994094e02b29a  weston-13.0.1.tar.xz
--sha512  4a0fd0b1aec823219421d701030bc534576be64b71ede70c7d33f131e9e64c0e0dc209e62f75cecb9368df7604c1d5b2321932eccc818b529d246ec2e3114122  weston-13.0.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2024-June/043655.html
-+sha256  27f68d96e3b97d98daadef13a202356524924fa381418fa6716b9136ef099093  weston-13.0.3.tar.xz
-+sha512  60e655b57cf418902ec6e4371883354165241d9a99a712aabe2165e11ac190dec22836fd885f5178def5416dc5f00e70042b022c96a8e0aa74827bbd4563f9cb  weston-13.0.3.tar.xz
- sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index b708d03743..bd5a0550b1 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 5da527e318..627cb5a1b0 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2023-April/042647.html
+-sha256  1540af1ea698a471c2d8e9d288332c7e0fd360c8f1d12936ebb7e7cbc2425842  wayland-1.22.0.tar.xz
+-sha512  fb1974efc8433e97254eb83fe28974198f2b4d8246418eb3d34ce657055461e0c97bc06dd52e5066ae91bbe05bac611dc49a0937ba226ac6388d5a47241efb12  wayland-1.22.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2024-May/043636.html
++sha256  05b3e1574d3e67626b5974f862f36b5b427c7ceeb965cb36a4e6c2d342e45ab2  wayland-1.23.0.tar.xz
++sha512  9c525231a7ea3e68d3178230d476285a960d23e38571ac96d885f86c0588c52ef01460bff6833db5adb9456ce8db7b996613611187aac972736748ba91b8fd81  wayland-1.23.0.tar.xz
+ 
+ # Locally calculated
+ sha256  6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  COPYING
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 1a764d5580..06adafc3e1 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WESTON_VERSION = 13.0.1
-+WESTON_VERSION = 13.0.3
- WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
+-WAYLAND_VERSION = 1.22.0
++WAYLAND_VERSION = 1.23.0
+ WAYLAND_SITE = https://gitlab.freedesktop.org/wayland/wayland/-/releases/$(WAYLAND_VERSION)/downloads
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
 -- 
 2.34.1
 
