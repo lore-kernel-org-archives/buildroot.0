@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75EADC25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:53:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 919C3C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:53:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38F88427C1;
-	Sat,  8 Jun 2024 07:53:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F795427F8;
+	Sat,  8 Jun 2024 07:53:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ekFVTwCUDB39; Sat,  8 Jun 2024 07:53:06 +0000 (UTC)
+ id YKMszIhF3pOT; Sat,  8 Jun 2024 07:53:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6FA442762
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EBCF4275E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6FA442762;
-	Sat,  8 Jun 2024 07:53:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 362E61BF422
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EBCF4275E;
+	Sat,  8 Jun 2024 07:53:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B89AF1BF422
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20A0684585
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:52:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3C09607AF
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZoeSoBjduOoh for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pqs9ZI7VhCcl for <buildroot@lists.busybox.net>;
  Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CFE784593
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FBEB60743
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4CFE784593
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0FBEB60743
  for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E467987D82; Sat,  8 Jun 2024 07:52:52 +0000 (UTC)
+ id 0953B87D85; Sat,  8 Jun 2024 07:52:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 09:10:02 +0200
+Date: Sat, 8 Jun 2024 09:15:11 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 8364c23d91b557d18cb03cbbc65c7940ca57cbe5
-X-Git-Newrev: e83f6edf43baad06632927498f4ac0136f187229
+X-Git-Oldrev: 9862d0c271ae08c26c37b12e8cf69afc38c68136
+X-Git-Newrev: 1669a9efc0ac16f9b3c4a1cb816055eda43af3fb
 X-Patchwork-Hint: ignore
-Message-Id: <20240608075252.E467987D82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libuhttpd:
- disable -Werror
+Message-Id: <20240608075253.0953B87D85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/redis-plus-plus:
+ bump to version 1.3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,85 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e83f6edf43baad06632927498f4ac0136f187229
+commit: https://git.buildroot.net/buildroot/commit/?id=1669a9efc0ac16f9b3c4a1cb816055eda43af3fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Disable -Werror to fix the following build failure raised at least since
-bump to version 3.9.0 in commit e76d9868c940f2d19968077b97e79c49376aa464
-and
-https://github.com/zhaojh329/libuhttpd/commit/81db1fa371bc80f40c1bfe60010e7d64bdf30b46:
-
-/home/autobuild/autobuild/instance-8/output-1/build/libuhttpd-3.14.1/src/file.c: In function '__serve_file':
-/home/autobuild/autobuild/instance-8/output-1/build/libuhttpd-3.14.1/src/file.c:322:50: error: format '%llu' expects argument of type 'long long unsigned int', but argument 4 has type '__off_t' {aka 'long int'} [-Werror=format=]
-  322 |         conn->send_header(conn, "Content-Range", "bytes */%" PRIu64, st->st_size);
-      |                                                  ^~~~~~~~~~~         ~~~~~~~~~~~
-      |                                                                        |
-      |                                                                        __off_t {aka long int}
-In file included from /home/autobuild/autobuild/instance-8/output-1/build/libuhttpd-3.14.1/src/file.c:36:
-/home/autobuild/autobuild/instance-8/output-1/per-package/libuhttpd/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/inttypes.h:91:41: note: format string is defined here
-   91 | # define PRIu64         __PRI64_PREFIX "u"
-cc1: all warnings being treated as errors
-
-Fixes: e76d9868c940f2d19968077b97e79c49376aa464
- - http://autobuild.buildroot.org/results/46349a1409f9cff027b462456078284459e75511
+https://github.com/sewenew/redis-plus-plus/releases/tag/1.3.11
+https://github.com/sewenew/redis-plus-plus/releases/tag/1.3.12
+https://github.com/sewenew/redis-plus-plus/compare/1.3.10...1.3.12
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5961b219180c180ad816faa18681674d89eccaa9)
+(cherry picked from commit ee2a9a5e4167dc86511568bd5b136f00d099481f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...03-CMakeLists.txt-add-BUILD_WERROR-option.patch | 30 ++++++++++++++++++++++
- package/libuhttpd/libuhttpd.mk                     |  1 +
- 2 files changed, 31 insertions(+)
+ package/redis-plus-plus/redis-plus-plus.hash | 2 +-
+ package/redis-plus-plus/redis-plus-plus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libuhttpd/0003-CMakeLists.txt-add-BUILD_WERROR-option.patch b/package/libuhttpd/0003-CMakeLists.txt-add-BUILD_WERROR-option.patch
-new file mode 100644
-index 0000000000..2e87014e87
---- /dev/null
-+++ b/package/libuhttpd/0003-CMakeLists.txt-add-BUILD_WERROR-option.patch
-@@ -0,0 +1,30 @@
-+From c0f2260d8b7e435bce765e7ac91d51f1b349b87b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 10 Mar 2024 13:43:12 +0100
-+Subject: [PATCH] CMakeLists.txt: add BUILD_WERROR option
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/zhaojh329/libuhttpd/commit/c0f2260d8b7e435bce765e7ac91d51f1b349b87b
-+---
-+ CMakeLists.txt | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 6fb9651..6719e5f 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -7,7 +7,13 @@ include(CheckLibraryExists)
-+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-+ 
-+ add_definitions(-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64)
-+-add_compile_options(-O -Wall -Werror --std=gnu99)
-++add_compile_options(-O -Wall --std=gnu99)
-++
-++option(BUILD_WERROR "Build with -Werror" ON)
-++
-++if(BUILD_WERROR)
-++    add_compile_options(-Werror)
-++endif()
-+ 
-+ option(BUILD_STATIC "Build static library" OFF)
-+ 
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 0d5306c6dd..78e0f42b22 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -10,6 +10,7 @@ LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
- LIBUHTTPD_INSTALL_STAGING = YES
- LIBUHTTPD_DEPENDENCIES = libev
-+LIBUHTTPD_CONF_OPTS = -DBUILD_WERROR=OFF
+diff --git a/package/redis-plus-plus/redis-plus-plus.hash b/package/redis-plus-plus/redis-plus-plus.hash
+index 1d88365bc0..4cdc176025 100644
+--- a/package/redis-plus-plus/redis-plus-plus.hash
++++ b/package/redis-plus-plus/redis-plus-plus.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated:
+-sha256  85d9d9ff84c873c4a14bd28bee569a1f311285fad8d4f2fb0e472f65d4bb842a  redis-plus-plus-1.3.10.tar.gz
++sha256  26c1e45cdbafe1af4d2cf756957b2268baab6f802b53bcdd435864620e2c03c7  redis-plus-plus-1.3.12.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/redis-plus-plus/redis-plus-plus.mk b/package/redis-plus-plus/redis-plus-plus.mk
+index a286e2de33..167d8bfa01 100644
+--- a/package/redis-plus-plus/redis-plus-plus.mk
++++ b/package/redis-plus-plus/redis-plus-plus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBUHTTPD_DEPENDENCIES += openssl
+-REDIS_PLUS_PLUS_VERSION = 1.3.10
++REDIS_PLUS_PLUS_VERSION = 1.3.12
+ REDIS_PLUS_PLUS_SITE = $(call github,sewenew,redis-plus-plus,$(REDIS_PLUS_PLUS_VERSION))
+ REDIS_PLUS_PLUS_LICENSE = Apache-2.0
+ REDIS_PLUS_PLUS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
