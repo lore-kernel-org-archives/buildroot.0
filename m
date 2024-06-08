@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A31F7C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 11:40:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C95DC27C55
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 11:40:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E68E427C9;
-	Sat,  8 Jun 2024 11:40:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BCBC427D2;
+	Sat,  8 Jun 2024 11:40:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tClnmfBnt2mo; Sat,  8 Jun 2024 11:40:03 +0000 (UTC)
+ id n4fUac7I4R7U; Sat,  8 Jun 2024 11:40:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 402A24275E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF53142801
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 402A24275E;
-	Sat,  8 Jun 2024 11:40:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 834961BF5DA
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF53142801;
+	Sat,  8 Jun 2024 11:40:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DC6B61BF5DA
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 11:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DB7240109
+ by smtp4.osuosl.org (Postfix) with ESMTP id C6A4942725
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 11:39:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jHySEcIkres3 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 62W1RX_nUlhH for <buildroot@lists.busybox.net>;
  Sat,  8 Jun 2024 11:39:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D7BB400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91E4C4271D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D7BB400FE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 91E4C4271D
  for <buildroot@buildroot.org>; Sat,  8 Jun 2024 11:39:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 68A3A87B5E; Sat,  8 Jun 2024 11:39:48 +0000 (UTC)
+ id 56CBD87B59; Sat,  8 Jun 2024 11:39:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 13:37:51 +0200
+Date: Sat, 8 Jun 2024 13:29:30 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 6cdbb9ae17c2f8b44e3a65f9ab8c2022b53d753e
-X-Git-Newrev: 72b0c440e8914357b9a699ad9b9ed34c38f91041
+X-Git-Oldrev: eeb0abb2e177f3c98778fe1af96bb613063d1308
+X-Git-Newrev: 6cdbb9ae17c2f8b44e3a65f9ab8c2022b53d753e
 X-Patchwork-Hint: ignore
-Message-Id: <20240608113948.68A3A87B5E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/qemu: fix typo in
- help text of BR2_PACKAGE_QEMU_TARGET_RISCV32
+Message-Id: <20240608113948.56CBD87B59@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/duma: set
+ HOST_CFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72b0c440e8914357b9a699ad9b9ed34c38f91041
+commit: https://git.buildroot.net/buildroot/commit/?id=6cdbb9ae17c2f8b44e3a65f9ab8c2022b53d753e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-33-bit was obviously a typo.
+Set HOST_CFLAGS to avoid the following build failure raised since bump
+to version 2.5.21 in commit af2cd694e3903131d6e2f00646adfa83a89a23e2:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+/usr/bin/gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O2 -g0   -c createconf.c -o createconf.o
+gcc: error: unrecognized command-line option '-mlongcalls'
+gcc: error: unrecognized command-line option '-mauto-litpools'
+
+Fixes: af2cd694e3903131d6e2f00646adfa83a89a23e2
+ - http://autobuild.buildroot.org/results/28be2acc6d58754c7431df81d0b63b30e6af8554
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e23a44bbcba067935708d9949c23fae9c5814cd0)
+(cherry picked from commit b8c70f67017ebe08459992ac575ae4989243c232)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/duma/duma.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 8d53ced300..91e0de884f 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -289,7 +289,7 @@ config BR2_PACKAGE_QEMU_TARGET_RISCV32
- 	bool "riscv32"
- 	select BR2_PACKAGE_QEMU_FDT if BR2_PACKAGE_QEMU_SYSTEM
- 	help
--	  RISC-V 33-bit architecture.
-+	  RISC-V 32-bit architecture.
+diff --git a/package/duma/duma.mk b/package/duma/duma.mk
+index 6bbdf41f4a..80fe8a5d64 100644
+--- a/package/duma/duma.mk
++++ b/package/duma/duma.mk
+@@ -20,6 +20,7 @@ define DUMA_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) \
+ 		OS=linux \
+ 		DUMA_OPTIONS="$(DUMA_OPTIONS)" \
++		HOST_CFLAGS="$(HOST_CFLAGS)" \
+ 		CPPFLAGS="$(TARGET_CXXFLAGS) -std=c++11" -C $(@D)
+ endef
  
- config BR2_PACKAGE_QEMU_TARGET_RISCV64
- 	bool "riscv64"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
