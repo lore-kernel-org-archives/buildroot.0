@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91B66C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 08:16:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F53CC27C55
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 08:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 507BF405C8;
-	Sat,  8 Jun 2024 08:16:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47B544275F;
+	Sat,  8 Jun 2024 08:16:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9WoDL604-24G; Sat,  8 Jun 2024 08:16:19 +0000 (UTC)
+ id s-_eXlhGSsGA; Sat,  8 Jun 2024 08:16:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C6314275F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6A38427E4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C6314275F;
-	Sat,  8 Jun 2024 08:16:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B5B951BF421
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6A38427E4;
+	Sat,  8 Jun 2024 08:16:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D05D61BF863
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 08:16:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ACC1984AAF
+ by smtp4.osuosl.org (Postfix) with ESMTP id C986F4275F
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 08:16:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UGyTxGgAGReA for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 08:16:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qgSe85juN0ZE for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 08:16:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBE3484AAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8E89405C8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EBE3484AAC
+ by smtp4.osuosl.org (Postfix) with ESMTP id C8E89405C8
  for <buildroot@buildroot.org>; Sat,  8 Jun 2024 08:16:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3DFC8101F; Sat,  8 Jun 2024 08:16:16 +0000 (UTC)
+ id B16BB7FCBA; Sat,  8 Jun 2024 08:16:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 10:15:07 +0200
+Date: Sat, 8 Jun 2024 10:10:57 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 21d699511580582d0090f0d848fd85c28abc73ca
-X-Git-Newrev: 38b224d6028aa6a640fb3db3433f54fad649d1c6
+X-Git-Oldrev: bacb1c67eca1c007a23a134db1830a04482a0855
+X-Git-Newrev: 7d89442eeed37aea8efd93e9806ee87128575e5c
 X-Patchwork-Hint: ignore
-Message-Id: <20240608081616.D3DFC8101F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/dmraid: set -fPIC
+Message-Id: <20240608081616.B16BB7FCBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] docs/website/index.html:
+ refer to Gitlab and lore
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,39 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38b224d6028aa6a640fb3db3433f54fad649d1c6
+commit: https://git.buildroot.net/buildroot/commit/?id=7d89442eeed37aea8efd93e9806ee87128575e5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Add -fPIC to CFLAGS to fix the following build failure raised since
-commit de6415ad9c35b2013af1f1821bcac12ba3959674:
+Our index.html page still points to git.buildroot.net as the Git
+repository, and to the defunct gmane for the mailing list
+activity. Fix these by pointing to Gitlab and lore respectively.
 
-/home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/x86_64-buildroot-linux-gnu/12.3.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: misc/misc.o: warning: relocation against `stdout@@GLIBC_2.2.5' in read-only section `.text'
-/home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/x86_64-buildroot-linux-gnu/12.3.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: log/log.o: relocation R_X86_64_PC32 against symbol `stdout@@GLIBC_2.2.5' can not be used when making a shared object; recompile with -fPIC
-
-Fixes: de6415ad9c35b2013af1f1821bcac12ba3959674
- - http://autobuild.buildroot.org/results/0349c6bfd66f5e50429e4a5cc07fb7abf2b07345
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 880066bad68bf881cc0636cd51c177625d4fa837)
+(cherry picked from commit 3e3bcd633875db0e1f366e86fe8763b5b2d9112e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dmraid/dmraid.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/website/index.html | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
-index 9a78c2ae07..97c729aa70 100644
---- a/package/dmraid/dmraid.mk
-+++ b/package/dmraid/dmraid.mk
-@@ -13,7 +13,7 @@ DMRAID_MAKE = $(MAKE1)
- DMRAID_INSTALL_STAGING = YES
- DMRAID_LICENSE = GPL-2.0
- DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE
--DMRAID_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
-+DMRAID_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -fPIC"
- 
- DMRAID_DEPENDENCIES = lvm2
- 
+diff --git a/docs/website/index.html b/docs/website/index.html
+index 300adbb83d..d68436c721 100644
+--- a/docs/website/index.html
++++ b/docs/website/index.html
+@@ -133,14 +133,14 @@
+   <div class="row">
+     <div class="col-sm-6">
+       <div class="panel panel-primary">
+-	<div class="panel-heading"><a href="http://git.buildroot.net/buildroot"><h5>Recent commits</h5></a></div>
++	<div class="panel-heading"><a href="https://gitlab.com/buildroot.org/buildroot/"><h5>Recent commits</h5></a></div>
+ 	<div class="panel-box panel-body ellipsis" id="commit-activity">
+ 	</div>
+       </div>
+     </div>
+     <div class="col-sm-6" >
+       <div class="panel panel-primary">
+-	<div class="panel-heading"><a href="http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot"><h5>Recent discussions</h5></a></div>
++	<div class="panel-heading"><a href="https://lore.kernel.org/buildroot/"><h5>Recent discussions</h5></a></div>
+ 	<div class="panel-box panel-body ellipsis" id="mailing-list-activity">
+ 	</div>
+       </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
