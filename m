@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6000C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9803BC25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 07:21:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83159406B2;
-	Sat,  8 Jun 2024 07:20:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A9CA406C3;
+	Sat,  8 Jun 2024 07:21:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4PP2O5WA8KFx; Sat,  8 Jun 2024 07:20:51 +0000 (UTC)
+ id ZcH0q1oAIPYu; Sat,  8 Jun 2024 07:21:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59D60406B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25979408A7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59D60406B8;
-	Sat,  8 Jun 2024 07:20:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25979408A7;
+	Sat,  8 Jun 2024 07:21:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1599C1BF422
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:20:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 19F051BF422
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F5FB401B7
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:20:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 067F4401B7
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 07:21:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NxSyu9RuOea0 for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 07:20:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id pFlnu_Sp4Ojp for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 07:21:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0524E400FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0524E400FE
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0524E400FE
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:20:48 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8DA28240003;
- Sat,  8 Jun 2024 07:20:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 98CFA400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98CFA400FE
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 98CFA400FE
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 07:21:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 60E691C0005;
+ Sat,  8 Jun 2024 07:21:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sFqNY-00GFt5-2K;
- Sat, 08 Jun 2024 09:20:44 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sFqOX-00GG2F-2U;
+ Sat, 08 Jun 2024 09:21:45 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240326172822.1820862-1-nerv@dawncrow.de>
- <20240510233224.7682c02d@windsurf>
-Date: Sat, 08 Jun 2024 09:20:44 +0200
-In-Reply-To: <20240510233224.7682c02d@windsurf> (Thomas Petazzoni via
- buildroot's message of "Fri, 10 May 2024 23:32:24 +0200")
-Message-ID: <87r0d7aoj7.fsf@dell.be.48ers.dk>
+References: <20240307143227.548555-1-fontaine.fabrice@gmail.com>
+ <20240510233329.149a2e5e@windsurf>
+Date: Sat, 08 Jun 2024 09:21:45 +0200
+In-Reply-To: <20240510233329.149a2e5e@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Fri, 10 May 2024 23:33:29 +0200")
+Message-ID: <87msnvaohi.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/libkrb5: bump to 1.21.2
+Subject: Re: [Buildroot] [PATCH 1/1] package/rtl8189fs: bump to latest git
+ commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,23 +70,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?Andr=C3=A9?= Zwing <nerv@dawncrow.de>,
+Cc: Sergey Matyukevich <geomatsi@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlRob21hcyIgPT0gVGhvbWFzIFBldGF6em9uaSB2aWEgYnVpbGRyb290IDxidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZz4gd3JpdGVzOgoKID4gT24gVHVlLCAyNiBNYXIgMjAyNCAxODoyODoy
-MiArMDEwMAogPiBBbmRyw6kgWndpbmcgPG5lcnZAZGF3bmNyb3cuZGU+IHdyb3RlOgoKID4+IFNp
-Z25lZC1vZmYtYnk6IEFuZHLDqSBad2luZyA8bmVydkBkYXduY3Jvdy5kZT4KID4+IC0tLQogPj4g
-cGFja2FnZS9saWJrcmI1L2xpYmtyYjUuaGFzaCB8IDIgKy0KID4+IHBhY2thZ2UvbGlia3JiNS9s
-aWJrcmI1Lm1rICAgfCA1ICsrKy0tCiA+PiAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygr
-KSwgMyBkZWxldGlvbnMoLSkKCiA+IEFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgoxLjIxLjEg
-YW5kIDEuMjEuMiBib3RoIGZpeCBzZWN1cml0eSBpc3N1ZXMsIHNvIHRoaXMgc2hvdWxkIGhhdmUg
-YmVlbgptYXJrZWQgYXMgYSBzZWN1cml0eSBidW1wIGFuZCBtZW50aW9uZWQgdGhhdC4KCkNvbW1p
-dHRlZCB0byAyMDI0LjAyLnggd2l0aCB0aGF0IGZpeGVkLCB0aGFua3MuCgotLSAKQnllLCBQZXRl
-ciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+
+ > On Thu,  7 Mar 2024 15:32:27 +0100
+ > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+ >> Bump to latest git commit to fix the following powerpc64 build failure
+ >> raised at least since commit 25956b29e4d63f599b9baf7298f69538ba2f22fa
+ >> thanks to
+ >> https://github.com/jwrdegoede/rtl8189ES_linux/commit/c7bf7590bc0d7252005fd0496898ad420a85e1ae:
+ >> 
+ >> In file included from /home/autobuild/autobuild/instance-7/output-1/build/rtl8189fs-5d523593f41c0b8d723c6aa86b217ee1d0965786/./include/drv_types.h:30,
+ >> from /home/autobuild/autobuild/instance-7/output-1/build/rtl8189fs-5d523593f41c0b8d723c6aa86b217ee1d0965786/./core/rtw_cmd.c:17:
+ >> /home/autobuild/autobuild/instance-7/output-1/build/rtl8189fs-5d523593f41c0b8d723c6aa86b217ee1d0965786/./include/wifi.h:459:32: error: conflicting types for 'get_ra'; have 'unsigned char *(unsigned char *)'
+ >> 459 | __inline static unsigned char *get_ra(unsigned char *pframe)
+ >> |                                ^~~~~~
+ >> 
+ >> Fixes: 25956b29e4d63f599b9baf7298f69538ba2f22fa
+ >> - http://autobuild.buildroot.org/results/83153ed38a583ce2712df9b142ac3fc55a8413e3
+ >> - http://autobuild.buildroot.org/results/63186c7adb5ecc8b8a16a6ae641ecfb9c03478bd
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> ---
+ >> package/rtl8189fs/rtl8189fs.hash | 2 +-
+ >> package/rtl8189fs/rtl8189fs.mk   | 2 +-
+ >> 2 files changed, 2 insertions(+), 2 deletions(-)
+
+ > Applied to master, thanks.
+
+Committed to 2024.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
