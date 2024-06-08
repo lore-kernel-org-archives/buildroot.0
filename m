@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D3A5C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 19:15:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FA39C25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 19:16:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21D9984777;
-	Sat,  8 Jun 2024 19:15:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D78984A79;
+	Sat,  8 Jun 2024 19:16:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3OT_h-Rewy1x; Sat,  8 Jun 2024 19:15:56 +0000 (UTC)
+ id PmoJ351CHE4j; Sat,  8 Jun 2024 19:15:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0473484A98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8136E84AA5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0473484A98;
-	Sat,  8 Jun 2024 19:15:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2ADA31BF407
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8136E84AA5;
+	Sat,  8 Jun 2024 19:15:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DD8FF1BF407
  for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 19:15:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A9EB40363
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 19:15:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB620410C5
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 19:15:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fJQEZSDPg0Xc for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BIsmGVDQOiG0 for <buildroot@lists.busybox.net>;
  Sat,  8 Jun 2024 19:15:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F80E4038E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B84154099C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F80E4038E
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 19:15:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B84154099C
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 19:14:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 392D187E93; Sat,  8 Jun 2024 19:15:00 +0000 (UTC)
+ id B3DAC8710D; Sat,  8 Jun 2024 19:14:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Jun 2024 20:04:02 +0200
+Date: Sat, 8 Jun 2024 18:54:57 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 29df0eb414a8f0ac90c5b7199471a974a2a7eb3e
-X-Git-Newrev: 90b9302e8357f9ef8266f9491b6c7a1f5bb32e01
+X-Git-Oldrev: bb0164a6d27d6513033f41c6418164b887430174
+X-Git-Newrev: 1605614475e0b7bd04228e4b563ef0333b4a643d
 X-Patchwork-Hint: ignore
-Message-Id: <20240608191500.392D187E93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/qt5base: fix
- download
+Message-Id: <20240608191459.B3DAC8710D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/mtd: switch to
+ https mirror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,77 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90b9302e8357f9ef8266f9491b6c7a1f5bb32e01
+commit: https://git.buildroot.net/buildroot/commit/?id=1605614475e0b7bd04228e4b563ef0333b4a643d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Since qt5base was last bumped in 8ab4a0a348b2 (package/qt5: bump packages
-to latest kde submodule versions), the hash for the downloaded tarball
-has changed:
+As mentioned in the last release notes, there is an https mirror[1].
+Switch to this as ftp is not as widely supported anymore.
 
-    $ make qt5base-source
-    [...]
-    ERROR: expected: 935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d
-    ERROR: got     : 3067c4d84ba9927bfe65bf606c17af082199e0a3b22781fbf9bc6c6bc3de26dd
+[1] https://lists.infradead.org/pipermail/linux-mtd/2023-August/100922.html
 
-We know the hash was good back when 8ab4a0a348b2 was applied, because
-the tarball has been cached on sources.buildroot.org with the expected
-hash:
-
-    $ curl 'https://sources.buildroot.net/qt5base/qtbase-da6e958319e95fe564d3b30c931492dd666bfaff.tar.bz2' 2>/dev/null |sha256sum -
-    935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d  -
-
-But now, the archive generated by the KDE gorge (Gitlab underneath) has
-another hash (as seen above). This means that the KDE forge (Gitlab) has
-changed the way it generates archives. So, what's the delta? It turns
-out that the only changes are about CRLF that were present in the
-original archive, and are no longer in the new one. It is to be noted
-that the affected files do not have CRLFS in the repository. It further
-turns out that the archive was previously generated with .gitattibutes
-of the main branch ('dev' in Qt repositories), while now they are
-generated with the .gitattibutes of the commit for which they are
-generated.
-
-Switch to using the git download method for really reproducible
-archives...
-
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 75da04c817b07a9c426cf2e438b0f8883096f4ef)
-[Peter: adjust for filename/hash used on 2024.02.x]
+(cherry picked from commit 7eb1ea5b6548270eb736054be87a250ea975ff6d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5base/qt5base.hash | 2 +-
- package/qt5/qt5base/qt5base.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mtd/mtd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-index ffc474f49e..8f28cdb556 100644
---- a/package/qt5/qt5base/qt5base.hash
-+++ b/package/qt5/qt5base/qt5base.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  935d01f5c34903ad9e979431cec7a8a59332ed3fc539e639f5ba87e8d6989b9d  qtbase-da6e958319e95fe564d3b30c931492dd666bfaff.tar.bz2
-+sha256  7fdd81fc6c157c3e65e16b306e90c8dd4363d10b752d7379251dfb7214cb0574  qt5base-da6e958319e95fe564d3b30c931492dd666bfaff-br1.tar.gz
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 998cc419b3..39b9f2a523 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -6,7 +6,7 @@
  
- # Hashes for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e173639cca..bbab9b3de1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- QT5BASE_VERSION = da6e958319e95fe564d3b30c931492dd666bfaff
--QT5BASE_SITE = $(QT5_SITE)/qtbase/-/archive/$(QT5BASE_VERSION)
--QT5BASE_SOURCE = qtbase-$(QT5BASE_VERSION).tar.bz2
-+QT5BASE_SITE = $(QT5_SITE)/qtbase
-+QT5BASE_SITE_METHOD = git
- QT5BASE_CPE_ID_VENDOR = qt
- QT5BASE_CPE_ID_PRODUCT = qt
- 
+ MTD_VERSION = 2.1.6
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+-MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
++MTD_SITE = https://infraroot.at/pub/mtd
+ MTD_LICENSE = GPL-2.0
+ MTD_LICENSE_FILES = COPYING
+ MTD_CPE_ID_VENDOR = mtd-utils_project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
