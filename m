@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49286C25B76
-	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 15:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E78AC25B76
+	for <buildroot@archiver.kernel.org>; Sat,  8 Jun 2024 15:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 064788316A;
-	Sat,  8 Jun 2024 15:25:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C5AC82C04;
+	Sat,  8 Jun 2024 15:25:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ktvvabprgNzq; Sat,  8 Jun 2024 15:25:33 +0000 (UTC)
+ id JLRTWyKHfNar; Sat,  8 Jun 2024 15:25:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CD9F83196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F82E839E6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0CD9F83196;
-	Sat,  8 Jun 2024 15:25:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0B82E1BF417
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 15:25:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F82E839E6;
+	Sat,  8 Jun 2024 15:25:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E45401BF417
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 15:25:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F275E82231
- for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 15:25:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D09B5406AF
+ for <buildroot@lists.busybox.net>; Sat,  8 Jun 2024 15:25:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BJyvmkzH_5gm for <buildroot@lists.busybox.net>;
- Sat,  8 Jun 2024 15:25:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hCURcXDw5Kpx for <buildroot@lists.busybox.net>;
+ Sat,  8 Jun 2024 15:25:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E8C8582EAD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8C8582EAD
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E8C8582EAD
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 15:25:29 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AEAC61BF203
- for <buildroot@buildroot.org>; Sat,  8 Jun 2024 15:25:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE444400D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE444400D5
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CE444400D5
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 15:25:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DEF2D40003
+ for <buildroot@buildroot.org>; Sat,  8 Jun 2024 15:25:32 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sFxwd-001xzw-0s
- for buildroot@buildroot.org; Sat, 08 Jun 2024 17:25:27 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sFxwi-001y00-1F
+ for buildroot@buildroot.org; Sat, 08 Jun 2024 17:25:32 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
 References: <20240525090436.364553-1-peter@korsgaard.com>
- <87ikz1hm4q.fsf@dell.be.48ers.dk>
-Date: Sat, 08 Jun 2024 17:25:27 +0200
-In-Reply-To: <87ikz1hm4q.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sat, 25 May 2024 18:49:57 +0200")
-Message-ID: <87msnv1moo.fsf@dell.be.48ers.dk>
+ <20240525090436.364553-2-peter@korsgaard.com>
+ <87ed9phm4e.fsf@dell.be.48ers.dk>
+Date: Sat, 08 Jun 2024 17:25:32 +0200
+In-Reply-To: <87ed9phm4e.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sat, 25 May 2024 18:50:09 +0200")
+Message-ID: <87ikyj1moj.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] configs/orangepi_r1_defconfig: u-boot
+Subject: Re: [Buildroot] [PATCH 2/2] configs/orangepi_pc_defconfig: u-boot
  2024.01 needs host-openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -78,10 +79,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
- >> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/6918689094
- >> Commit 113eeb55d67 (configs/orangepi_r1_defconfig: bump U-boot to v2024.01
- >> to fix compatibility with setuptools >= 69) bumped U-Boot, but forgot to add
- >> a dependency on host-openssl.  Fix that.
+ >> Commit 2e349be94a87db05d (configs/orangepi_pc_defconfig: bump U-boot to
+ >> v2024.01 to fix compatibility with setuptools >= 69) bumped U-Boot, but
+ >> forgot to add a dependency on host-openssl.  Fix that.
 
  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
