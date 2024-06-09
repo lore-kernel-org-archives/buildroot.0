@@ -1,65 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B43E4C27C55
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jun 2024 08:33:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88186C27C53
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jun 2024 10:05:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77CDB60671;
-	Sun,  9 Jun 2024 08:33:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2AA881BD9;
+	Sun,  9 Jun 2024 10:05:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h7fQ7tjFznqN; Sun,  9 Jun 2024 08:33:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vcK67xT8FHIu; Sun,  9 Jun 2024 10:05:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71B6160766
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB8AA81BC0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71B6160766;
-	Sun,  9 Jun 2024 08:33:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB8AA81BC0;
+	Sun,  9 Jun 2024 10:05:17 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB2E91BF3F3
- for <buildroot@lists.busybox.net>; Sun,  9 Jun 2024 08:33:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1173A1BF3F0
+ for <buildroot@lists.busybox.net>; Sun,  9 Jun 2024 10:05:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 970C540139
- for <buildroot@lists.busybox.net>; Sun,  9 Jun 2024 08:33:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EED6740106
+ for <buildroot@lists.busybox.net>; Sun,  9 Jun 2024 10:05:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gDaHPfU0ZUTo for <buildroot@lists.busybox.net>;
- Sun,  9 Jun 2024 08:33:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 498F440106
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 498F440106
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 498F440106
- for <buildroot@buildroot.org>; Sun,  9 Jun 2024 08:33:49 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 19FC140004;
- Sun,  9 Jun 2024 08:33:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sGDzm-004tyi-0d;
- Sun, 09 Jun 2024 10:33:46 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Baruch Siach <baruch@tkos.co.il>
-References: <20240529-ztext-v2-0-82985032f169@gmx.net>
- <20240529-ztext-v2-2-82985032f169@gmx.net>
- <878qzfxta2.fsf@dell.be.48ers.dk> <87bk4avjoa.fsf@tarshish>
-Date: Sun, 09 Jun 2024 10:33:46 +0200
-In-Reply-To: <87bk4avjoa.fsf@tarshish> (Baruch Siach's message of "Sun, 09 Jun
- 2024 07:12:21 +0300")
-Message-ID: <87tti2tt05.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+ id lurR5plASQ6l for <buildroot@lists.busybox.net>;
+ Sun,  9 Jun 2024 10:05:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
+ envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7D097400D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D097400D6
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7D097400D6
+ for <buildroot@buildroot.org>; Sun,  9 Jun 2024 10:05:13 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id
+ 4fb4d7f45d1cf-57a1fe63947so4360465a12.1
+ for <buildroot@buildroot.org>; Sun, 09 Jun 2024 03:05:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1717927512; x=1718532312;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0lKuTN30/bzkxmhQyq8dM+pFvacENo+A4ML5m4t1LFs=;
+ b=wz5vOx6MFd1DQigAwgC2MhgEfRQDiVX0NzE9tKzpVcbh13TnZQpEAAoGBxzHZcCXX5
+ 4yFiZJwfUjh4p1W8NyGh1zP25yKsb9hHc45pGOqQ4XTYqK7aNmAU6/WylaVX6htldBRV
+ 1vCkbPtzKwfprqNUPeekIFwxrJkAlCg6MhcfmcXsBBDLYSJD/zhpWcJ/YTtWWE6IAsIm
+ NQpH8jPVmK0h7q33703Gu+IofuDQKtKTq0D8p7Ra7VKyGwb+zZ/MM2bZ2PHpbcDaM3Bg
+ UhGFtif+eDUngXIAKpTm/MAUFiVsSw1ujZwe+Mc387DmqXdrwfy/dR8lLwavaA1FWu8n
+ 9wMA==
+X-Gm-Message-State: AOJu0YxXZrqvw/3Vu+TCwKmHJFs6zGcihs9N9VtjuyMOypnH47P4Lg0r
+ X+yFzCv+Sx44oaelRYhiDQKHWORodwIugEFK2IrM8ZXMeVZbF1duIuCz0A==
+X-Google-Smtp-Source: AGHT+IERA6L9+UtuP4sUwyfQ8BbseqVxhPQIsA+BoMXniuxfLB/wlQy70sdQ3obWsd1W8vARBwOrYQ==
+X-Received: by 2002:a50:8a8c:0:b0:57c:6871:e04d with SMTP id
+ 4fb4d7f45d1cf-57c6871e15emr2420956a12.22.1717927511502; 
+ Sun, 09 Jun 2024 03:05:11 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8070:2483:7e00::fde5])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-57aae0db916sm5470545a12.35.2024.06.09.03.05.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 09 Jun 2024 03:05:11 -0700 (PDT)
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  9 Jun 2024 10:04:25 +0000
+Message-ID: <20240609100425.10701-1-raphael.pavlidis@gmail.com>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1717927512; x=1718532312; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0lKuTN30/bzkxmhQyq8dM+pFvacENo+A4ML5m4t1LFs=;
+ b=iTB3Ty1oUvaAY6D4OGZ134WhKHGkpyCmKwhlQDGUcD9u5ERojut5pID03LAm5QIoJd
+ JznbOWcf0JQrMVIci+RnZvWkNxqL44fLdM5z9BLqLbxVWX0PEuDtRS+OeHNr+Dbg4TKy
+ z2jAcqT3MmrRHmFxEBiF7P4d0XjcWqrKUvCxwwBSKVVAUxAcRQdOobLza8j12apiSjAh
+ icLMpDsPKopDq0hC9iTZAfe9L8oIW29reWY0IfH22/yLF6ZEpAVl6kq+2eK7ykVMyU7n
+ q+LvYwc24xwv7mvxcuhgtinWF7Zt38S21+sI2pgN6w2+FgI8xGI+b+ayqkoAooRYWAfN
+ oUdw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2 2/2] micropython: Add patch to avoid
- textrel on arm/thumb
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=iTB3Ty1o
+Subject: [Buildroot] [PATCH v1 1/1] package/shadow: bump to version 4.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,23 +100,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "J. =?utf-8?Q?Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "J. =?utf-8?Q?Neusch=C3=A4fer?= via buildroot" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkJhcnVjaCIgPT0gQmFydWNoIFNpYWNoIDxiYXJ1Y2hAdGtvcy5jby5pbD4gd3JpdGVz
-OgoKID4gSGkgUGV0ZXIsCiA+IE9uIFNhdCwgSnVuIDA4IDIwMjQsIFBldGVyIEtvcnNnYWFyZCB3
-cm90ZToKCiA+Pj4+Pj4+ICJKIiA9PSBKIE5ldXNjaMOkZmVyIHZpYSBidWlsZHJvb3QgPGJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnPiB3cml0ZXM6CiA+PiAKID4+ID4gU2lnbmVkLW9mZi1ieTogSi4g
-TmV1c2Now6RmZXIgPGoubmV1c2NoYWVmZXJAZ214Lm5ldD4KID4+IAogPj4gQ29tbWl0dGVkIHRv
-IDIwMjQuMDIueCwgdGhhbmtzLgoKID4gTm90IGluIDIwMjQuMDIueCBhcyBvZiBjb21taXQgZWU2
-Njk0ZTk3MDRiICgicGFja2FnZS9saWJvcGVuc3NsOgogPiBzZWN1cml0eSBidW1wIHRvIHZlcnNp
-b24gMy4yLjIiKS4KClVwcywgdGhhbmtzIGZvciB0aGUgaGVhZHMgdXAgLSBGaXhlZCBub3cuCgot
-LSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+---
+ package/shadow/shadow.hash | 4 ++--
+ package/shadow/shadow.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
+index 23c292d659..1d83272cec 100644
+--- a/package/shadow/shadow.hash
++++ b/package/shadow/shadow.hash
+@@ -1,4 +1,4 @@
+ # Verified from https://github.com/shadow-maint/shadow/releases/download/4.14.5/shadow-4.14.5.tar.xz.asc
+-# with key A9348594CE31283A826FBDD8D57633D441E25BB5
+-sha256  cba74bc7b05d89c015afe23131f9159ece38779d40a8af4cf162852e6e85ca23  shadow-4.14.5.tar.xz
++# with key 66D0387DB85D320F8408166DB175CFA98F192AF2
++sha256  bb5f70639a0581f9d626f227ce45b31ac137daa7c451c0f672ce14f2731a96ee  shadow-4.15.1.tar.xz
+ sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
+diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
+index e4d8b67b8a..59771b9182 100644
+--- a/package/shadow/shadow.mk
++++ b/package/shadow/shadow.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHADOW_VERSION = 4.14.5
++SHADOW_VERSION = 4.15.1
+ SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/$(SHADOW_VERSION)
+ SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
+ SHADOW_LICENSE = BSD-3-Clause
+-- 
+2.45.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
