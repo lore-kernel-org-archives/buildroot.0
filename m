@@ -4,89 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 450DCC27C53
-	for <buildroot@archiver.kernel.org>; Sun,  9 Jun 2024 12:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CCAAC27C53
+	for <buildroot@archiver.kernel.org>; Sun,  9 Jun 2024 12:55:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFD686064B;
-	Sun,  9 Jun 2024 12:38:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 082E36074C;
+	Sun,  9 Jun 2024 12:55:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uPCGkXbi8phY; Sun,  9 Jun 2024 12:38:55 +0000 (UTC)
+ id TcEQWi_ZDCn7; Sun,  9 Jun 2024 12:55:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E33946061A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC679606E3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E33946061A;
-	Sun,  9 Jun 2024 12:38:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AC36B1BF3EE
- for <buildroot@lists.busybox.net>; Sun,  9 Jun 2024 12:38:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC679606E3;
+	Sun,  9 Jun 2024 12:55:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CC4FE1BF3EE
+ for <buildroot@lists.busybox.net>; Sun,  9 Jun 2024 12:55:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9737380CE1
- for <buildroot@lists.busybox.net>; Sun,  9 Jun 2024 12:38:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7C20405EB
+ for <buildroot@lists.busybox.net>; Sun,  9 Jun 2024 12:55:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vt5hRWstJvbi for <buildroot@lists.busybox.net>;
- Sun,  9 Jun 2024 12:38:53 +0000 (UTC)
-X-Greylist: delayed 319 seconds by postgrey-1.37 at util1.osuosl.org;
- Sun, 09 Jun 2024 12:38:52 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A7C8B80C63
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7C8B80C63
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:868:100:600::216; helo=shout01.mail.de;
- envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A7C8B80C63
- for <buildroot@buildroot.org>; Sun,  9 Jun 2024 12:38:52 +0000 (UTC)
-Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
- by shout01.mail.de (Postfix) with ESMTP id C183E240C9B;
- Sun,  9 Jun 2024 14:33:31 +0200 (CEST)
-Received: from smtp01.mail.de (smtp02.bt.mail.de [10.0.121.212])
- by postfix02.mail.de (Postfix) with ESMTP id A4ACBA03C4;
- Sun,  9 Jun 2024 14:33:31 +0200 (CEST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id F03CC240EB5;
- Sun,  9 Jun 2024 14:33:29 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Sun, 09 Jun 2024 14:33:29 +0200
-Message-ID: <6052941.lOV4Wx5bFT@laptop>
-In-Reply-To: <8b75fd72-c3e4-4359-9691-2bf824904d45@benettiengineering.com>
-References: <20240217083525.561684-1-kilian.zinnecker@mail.de>
- <8b75fd72-c3e4-4359-9691-2bf824904d45@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pCqJi1EuioHx for <buildroot@lists.busybox.net>;
+ Sun,  9 Jun 2024 12:55:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 11BCB404CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11BCB404CB
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 11BCB404CB
+ for <buildroot@buildroot.org>; Sun,  9 Jun 2024 12:54:58 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([89.1.59.208]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4s4r-1sFSae2Wlr-000VoQ; Sun, 09
+ Jun 2024 14:54:55 +0200
+Date: Sun, 9 Jun 2024 14:54:55 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <ZmWmH6p7qlp3DHbT@probook>
+References: <20240529-ztext-v2-0-82985032f169@gmx.net>
+ <20240529-ztext-v2-1-82985032f169@gmx.net>
+ <ZluLyQ7JHFYedvcv@landeda>
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 505
-X-purgate-ID: 154282::1717936411-FD52E878-803D668F/0/0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1717936411;
- bh=XThn6lGGmriEzeG4Chx5aqcOZTTr22xHWHsxskeIkTY=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=Fsg1tf570Rqpeq3+DnN4WckZr9Fpppay458/cxC/3Xq3N1M3jbi/i1ezYqQm3Qacc
- HAsEvWR8yRbGXklN9v0rg+015uQo9/Ej4GNd1I6aebYTK+wod0/DsiJM3XyjLjcIZF
- Sn8v/uiopQDsgPkdt0TQ3719JlUpvNbDP/56rOjiKcPuIC+8lLqYBm+BsINsOeEV1T
- jzyBfGRCqCDF1GrTwbFT/0BCAdBSvtmaboIuz/SNuWV7qwuYZ3WspQw0BgLs1Zyh1R
- i3NpiM+4E5nZjmAO5afC0zxrtYely9AR5oDhKZRlo/BmGmr2Uuaz+HHAC2fFvj6yaw
- SRi0LovIxm/iQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <ZluLyQ7JHFYedvcv@landeda>
+X-Provags-ID: V03:K1:3J+Nf4tDag8JAQ6yCKaYAVjqyeHqVuX/OM98+btbVHtw3d/htwr
+ MBNQnSDgx8DZWtq/g5XwJtHGDzdBeE2ck8wPjE6OZTuzJ0CUY+xv7MOU9QNGSHyBT6Anrtt
+ xMvyExBKmCcHBGOsghQBJ4PmUX5jwbrkrwWu7phnwi4/6JZ2043S+TlsWT3o/wY6GOcBa1Q
+ JWSTx52+6D3qXUdkBkRLw==
+UI-OutboundReport: notjunk:1;M01:P0:vpKasYvwdeY=;CTrRSvLtxhqEWx7bcAUj1x5i5bh
+ 3+orpOfAQCsNzS24U3L0JJwEwsEXlfJOPnVPJZ+CynKY+PP1bzL/npAP+4pQ3uO+NJxP5CaMf
+ JKxt0TISKmOu0UNRibSsso46YKnicSauwT6/MK6NMSyxy51xAg3k1L7Dz0UPdCwK1BADq2/Ri
+ 5pwz/jSCd9sQ3tu+7I6OkzjDNxrYkQSCwIxv5tYmvQyIfDEQa3rgVtxKij5qdy5fY/aUSh9oc
+ OjOnQyQ4N1tA7j8BdYmzYgWNZ7ajdzXPWwLvGItKwPqFTUEpoa8pEHxKshNdf63+4fV1S5mgg
+ OppOtsmB7JpLhUOPZK9FLwZcoHcTgKOTPO9cAqqptJkT/jqrmFqy2gUes/W5/FE+BjxWNif77
+ 0v/76xOLvhHPcb+d7S7YfJ2hs9HR9e31z8x/bntD2h3eh9l5FBWTAfg9rMw6lhx6TCH3LNLls
+ U74pVd0eceCZK2uv7k1wdZfp2QrnxnTnFayX4oeanTBRtnbtcYD9IIdResGVScTnQVtHVj2Ke
+ cam3BxqVtfHgM+k46eEnohPTem3La+42VJSmw7yGM60UE25oZHeP8yInNLbNN6gZ18SxbNfhD
+ bLIUPaaFpgS4may3TLeI6rLt6IUMjZR4HhPOx3jZDBNVIasUMkx+SKpEo/bFEjwVosFyKnhI6
+ /Y6cmDXeJK65hhRY3Ix8L2qxfDXi+3tnIyh5BlDAW1jvW9XypEt+2hmFOpl2tcLUl8RzY4+1Y
+ W8zoDyngAkBw0XSb3LiOgbfrnFQ7B5sMe8vVPEsftKcEosBUGq90ZtGfxe4CyEDW+g4/ZlY67
+ zOsVejr/HdLBpmKcJaqfm1FIl6PrPUJGPtDe3fSMajngA=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.net; 
+ s=s31663417; t=1717937695; x=1718542495; i=j.neuschaefer@gmx.net;
+ bh=0gE4la1SnQ23CX9NHjxs7H3hnK2PmlWLSMKQFcftKJs=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:References:
+ MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:
+ cc:content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=BD/B4cwp2/959HSr0SIuIdiTBgKF4HXRiGTyrNvWqF9JALF044CGeprYf3bRWXdM
+ ZiT80/HiE0aGSCANhWl4OfLxev3ldfZKcloBQ1pnxkhZ8Ug7JDyX+Lr9DhpFQC/ta
+ +FpyzM6rcM8xnRvNFUIe9c9Uy7HSE3XVdmx2rZGLEEcPoS/D4ma0H5f1BOaImSWXl
+ 37QFGMC48vkFZdMb9a7S9QOJuZvlNAfxaLcziK0RxEnHK3R3C2uNlvxrM/OT8Xc6d
+ 3V5SmGUeNDv567kZVkkE+pu6VCMaVkvUc9Zg0BqNs4IMRQ64w5ccsMPTQTUT1tR/q
+ a8EGsKIrTGfJkzmZCQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mail.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=fail reason="signature verification failed" (2048-bit key,
- unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=Fsg1tf57
-Subject: Re: [Buildroot] [PATCH v3] configs/rock5b_defconfig: switch to
- mainline linux
+ header.from=gmx.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.net header.i=j.neuschaefer@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=BD/B4cwp
+Subject: Re: [Buildroot] [PATCH v2 1/2] Config.in: ban textrels on musl
+ toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,31 +100,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "kilian.zinnecker--- via buildroot" <buildroot@buildroot.org>
-Reply-To: kilian.zinnecker@mail.de
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio, All,
-
-> it looks everything good to me now, so:
-> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Thanks for all the feedback and for reviewing Giulio!
-
-@all: Are there still things which I may fix or improve, so that the patch may 
-finally be applied? From my side its not urgent, but of course I would like to 
-see the patch hopefully get accepted at some point, and ofc if needed, I would 
-give it a try to improve the patch.
-
-Best regards,
-Kilian 
-
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gWWFubiwgc29ycnkgZm9yIHRoZSBkZWxheSwKCk9uIFNhdCwgSnVuIDAxLCAyMDI0IGF0
+IDEwOjU5OjUzUE0gKzAyMDAsIFlhbm4gRS4gTU9SSU4gd3JvdGU6Cj4gT24gMjAyNC0wNS0yOSAy
+MDoyMiArMDIwMCwgSi4gTmV1c2Now6RmZXIgdmlhIGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4g
+PiBtdXNsLWxpYmMgZG9lc24ndCBzdXBwb3J0IFRFWFRSRUxzWzFdIGFuZCBwcm9ncmFtcyB3aXRo
+IFRFWFRSRUxzIHdpbGwKPiA+IGNyYXNoIG9uIHN0YXJ0LXVwIHVuZGVyIG11c2wuCj4gPgo+ID4g
+VGhpcyBwYXRjaCBmb3JiaWRzIHRoZSB1c2Ugb2YgVEVYVFJFTHMgb24gbXVzbCwgYnV0IGFkZHMg
+YW4gb3B0aW9uIHRvCj4gPiBlaXRoZXIgZm9yYmlkIHRoZW0gb24gb3RoZXIgbGliY3MgYXMgd2Vs
+bCwgb3IgYWxsb3cgdGhlbSBvbiBtdXNsLgo+Cj4gSW4geW91ciB2MSwgVGhvbWFzIHN1Z2dlc3Rl
+ZCB0aGF0IHRleHRyZWxzIGJlIHNpbXBseSBhbHdheXMgZGlzYWJsZWQgZm9yCj4gbXVzbCwgYmVj
+YXVzZSB0aGVyZSBpcyBubyB3YXkgdGhleSBjYW4gd29yay4gQWxsb3dpbmcgcGVvcGxlIHRvIGVu
+YWJsZQo+IHRoZW0gb24gbXVzbCB3aWxsIG9ubHkgbWFrZSB0aGluZ3MgcmVhayBhdCBydW50aW1l
+LCByYXRoZXIgdGhhbiBhdCBidWlsZAo+IHRpbWUuCj4KPiBJJ20gb24gdGhlIHNhbWUgcGFnZSBh
+cyBUaG9tYXMgaGVyZTogaWYgdGV4dHJlbHMgYXJlIHVuc3VwcG9ydGVkIG9uCj4gbXVzbCwgdGhl
+biBsZXQncyBub3QgYWxsb3cgdGhlbSBhdCBhbGwuCgpBbHJpZ2h0LCBJIHdhc24ndCBmdWxseSBj
+ZXJ0YWluIGFib3V0IGl0LCBidXQgSSdsbCBjaGFuZ2UgdGhlIEtjb25maWcKbG9naWMgYWNjb3Jk
+aW5nbHkuCgo+Cj4gPiBbMV06IGh0dHBzOi8vd3d3Lm9wZW53YWxsLmNvbS9saXN0cy9tdXNsLzIw
+MjAvMDkvMjUvNAo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IEouIE5ldXNjaMOkZmVyIDxqLm5ldXNj
+aGFlZmVyQGdteC5uZXQ+Cj4gPiAtLS0KPiBbLS1TTklQLS1dCj4gPiBkaWZmIC0tZ2l0IGEvQ29u
+ZmlnLmluIGIvQ29uZmlnLmluCj4gPiBpbmRleCBiNWE5NDMyNWM0Li45MmU4OWVkMzJkIDEwMDY0
+NAo+ID4gLS0tIGEvQ29uZmlnLmluCj4gPiArKysgYi9Db25maWcuaW4KPiA+IEBAIC05MTAsNiAr
+OTEwLDIwIEBAIGVuZGNob2ljZQo+ID4gIGNvbW1lbnQgIlJFTG9jYXRpb24gUmVhZCBPbmx5IChS
+RUxSTykgbmVlZHMgc2hhcmVkIGxpYnJhcmllcyIKPiA+ICAJZGVwZW5kcyBvbiAhQlIyX1NIQVJF
+RF9MSUJTCj4gPgo+ID4gK2NvbmZpZyBCUjJfTElOS19aVEVYVAo+ID4gKwlib29sICJEaXNhbGxv
+dyB0ZXh0IHNlY3Rpb24gcmVsb2NhdGlvbnMgKFRFWFRSRUxzKSIKPgo+IFdlIHByZWZlciBwb3Np
+dGl2ZSBsb2dpYzoKPgo+ICAgICBjb25maWcgQlIyX0xJTktfWlRFWFQKPiAgICAgICAgIGJvb2wg
+IkFsbG93IHRleHQgc2VjdGlvbiByZWxvY2F0aW9ucyAoVEVYVFJFTHMpIgo+ICAgICAgICAgZGVm
+YXVsdCB5ICAjIExlZ2FjeQo+ICAgICAgICAgZGVwZW5kcyBvbiAhQlIyX1RPT0xDSEFJTl9VU0VT
+X01VU0wKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUwoKR29vZCBpZGVhLCB0
+aGlzIGxvb2tzIGEgYml0IGVhc2llciB0byB1bmRlcnN0YW5kLgoKPgo+IGFuZCBpbiB0aGUgLm1r
+Ogo+Cj4gICAgIGlmZXEgKCQoQlIyX0xJTktfWlRFWFQpLCkKPiAgICAgVEFSR0VUX0xERkxBR1Mg
+Kz0gLXogdGV4dAo+ICAgICBlbmRpZgo+Cj4gKE5vdGUgdGhlICdkZWZhdWx0IHknOiB0ZXh0cmVs
+cyB3ZXJlIHByZXZpb3VzbHkgYWx3YXlzIGFsbG93ZWQsIHNvIHdlCj4gd2FudCB0byBrZWVwIHRo
+YXQgYmVoYXZpb3VyIGJ5IGRlZmF1bHQpCj4KPiBSZWdhcmRzLAo+IFlhbm4gRS4gTU9SSU4uCgpU
+aGFua3MgZm9yIHlvdXIgcmV2aWV3IQotLWpuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
