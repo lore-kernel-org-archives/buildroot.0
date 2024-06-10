@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EA35C27C5E
-	for <buildroot@archiver.kernel.org>; Mon, 10 Jun 2024 08:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C89A6C27C6E
+	for <buildroot@archiver.kernel.org>; Mon, 10 Jun 2024 08:32:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 360FE60655;
-	Mon, 10 Jun 2024 08:32:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CBC7607D0;
+	Mon, 10 Jun 2024 08:32:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Cf3N0957Yrn; Mon, 10 Jun 2024 08:32:52 +0000 (UTC)
+ id myPNeoKnXu4w; Mon, 10 Jun 2024 08:32:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1834606F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0188607D3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1834606F0;
-	Mon, 10 Jun 2024 08:32:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ABE101BF3CE
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0188607D3;
+	Mon, 10 Jun 2024 08:32:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CAA311BF3CE
  for <buildroot@lists.busybox.net>; Mon, 10 Jun 2024 08:32:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9642382047
+ by smtp2.osuosl.org (Postfix) with ESMTP id B70E54025D
  for <buildroot@lists.busybox.net>; Mon, 10 Jun 2024 08:32:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uApQGRH20dbE for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H7aHOkemPr01 for <buildroot@lists.busybox.net>;
  Mon, 10 Jun 2024 08:32:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8214B80FF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77D1840142
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8214B80FF4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77D1840142
  for <buildroot@buildroot.org>; Mon, 10 Jun 2024 08:32:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D89D87ED4; Mon, 10 Jun 2024 08:32:49 +0000 (UTC)
+ id 5EE5387ED3; Mon, 10 Jun 2024 08:32:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Jun 2024 10:32:27 +0200
+Date: Mon, 10 Jun 2024 10:30:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 893c39ba4c273c261329a2997e28e710beee184a
-X-Git-Newrev: 12b2860d7562d5cf1b7492b58f4f10f0405444c4
+X-Git-Oldrev: 436d86840af0de56ded6843d02d3b2f3805d53e2
+X-Git-Newrev: 893c39ba4c273c261329a2997e28e710beee184a
 X-Patchwork-Hint: ignore
-Message-Id: <20240610083249.6D89D87ED4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: Update for 2024.02.3
+Message-Id: <20240610083249.5EE5387ED3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2024.02.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,96 +64,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12b2860d7562d5cf1b7492b58f4f10f0405444c4
+commit: https://git.buildroot.net/buildroot/commit/?id=893c39ba4c273c261329a2997e28e710beee184a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a73dd8f787ae8f303fbfb4791a1f77d6c5280692)
+[Peter: drop Makefile change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES                  | 58 ++++++++++++++++++++++++++++++++++++++++++++++++
+ support/misc/Vagrantfile |  2 +-
+ 2 files changed, 59 insertions(+), 1 deletion(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 33b9b63537..127c004e36 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/CHANGES b/CHANGES
+index 8978a2ba7e..c5c71bd6ef 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -109,6 +109,64 @@
+         #16036: android-tools version is too old
+         #16075: Cannot use linux kernel extensions from external tree..
  
--      <h3 style="text-align: center;">Latest stable / long term support release: <b>2024.02.2</b></h3>
-+      <h3 style="text-align: center;">Latest stable / long term support release: <b>2024.02.3</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2024.02.2.tar.gz">buildroot-2024.02.2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.02.2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.02.3.tar.gz">buildroot-2024.02.3.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.02.3.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.02.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.02.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2024.02.2.tar.xz">buildroot-2024.02.2.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.02.2.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.02.3.tar.xz">buildroot-2024.02.3.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.02.3.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index f817c0ef74..c57a8e3175 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2024.02.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 June 2024</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2024.02.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2024.02.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2024.02.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87plsptdoq.fsf@dell.be.48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2024.02.3.tar.xz">2024.02.3 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2024.02.3, released June 10th, 2024
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Misc:
++	- Fixed a number of compilation issues for hosts using GCC
++          14.x, including for kconfig.
++
++	Download:
++	- Drop redundant --passive-ftp from default wget options and
++	  migrate a number of packages using FTP upstreams to HTTP(S)
++	  for compatibility with wget2 which does not have FTP support
++
++	- Ensure downloads are correctly shared for host packages that
++	  try to do so using <pkg>_DL_SUBDIR and ensure the correct
++	  toplevel directory name is used in generated tarballs when
++	  downloads are shared.
++
++	Arch: Enable SSE2 support for x86 Pentium M variant.
++
++	Defconfigs: Orangepi PC/R1, Raspberrypi zero2w, Sipeed
++	licheepi nano, Wandboard: Fix compilation issues. PC x86-64
++	bios/efi: add wireless regdb to fix kernel warning during
++	boot, iMX.8 boards: Adjust FIT external data position to match
++	imx-mkimage changes, fixing boot issues.
++
++	Updated/fixed packages: am33x-cm, apcupsd,
++	arm-trusted-firmware, binutils-bare-metal, bpftool, catch2,
++	ccache, cjson, clamav, cog, coreutils, cryptodev-linux,
++	dhcpcd, dmraid, dnsmasq, docker-cli, docker-compose,
++	docker-engine, doom-wad, duma, elf2flt, ebtables, elfutils,
++	evemu, file, fluidsynth, freeradius-client, freeradius-server,
++	freerdp, fwts, gcc, gcc-bare-metal, git, gnuplot, go,
++	gr-osmosdr, gst1-plugins-good, hidapi, imagemagick,
++	intel-gmmlib, ivi-homescreen, janus-gateway, kexec, kmod,
++	kodi, libarchive, libdrm, libedit, libffi, libglib2, libhtp,
++	libjwt, libkrb5, libmanette, libmdbx, libmnl,
++	libnetfilter_acct, libnetfilter_log, libnpth, libopenssl,
++	libpng, libuhttpd, liburiparser, libutempter, libvncserver,
++	libwpe, lightning, linux-firmware, linux-pam, lua-cffi,
++	luajit, lvm2, lynx, mariadb, mesa3d, micropython, minisign,
++	musl, mutt, ncftp, network-manager, newlib-bare-metal, nfacct,
++	nfs-utils, octave, openjpeg, openocd, oprofile,
++	perl-dbd-mysql, php, postgresql, pppd, privoxy, procps-ng,
++	proftpd, proj, putty, python-ml-dtypes, python-pillow,
++	python-rds-py, qemu, qt5base, redis-plus-plus, rtl8189fs,
++	ruby, samba4, shadow, smcroute, speech, squid, sscep,
++	suricata, swupdate, systemd, ti-sgx-km, tinycbor, tinyproxy,
++	tor, tpm2-tss, ttyd, uboot-tools, ulogd, vala, weston,
++	wpewebkit, x11vnc, zbar, zeromq, zfs, zip, zxing-cpp
++
++	Issues resolved (http://bugs.uclibc.org):
++
++        #15766: BR2_PACKAGE_WESTON_XWAYLAND -- 12.0.1 -- fails to build..
++	#15973: imx8m bootloader image generation broken since update..
++        #16075: Cannot use linux kernel extensions from external tree..
++	#16093: kmod and gcc-14 build error
++
+ 2024.02.2, released May 7th, 2024
+ 
+ 	Important / security related fixes.
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index ac595f5749..983f2f58b3 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2024.02.2'
++RELEASE='2024.02.3'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
