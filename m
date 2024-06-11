@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54BFBC27C79
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 15:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 398C6C27C75
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 15:22:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4FD8405FB;
-	Tue, 11 Jun 2024 15:22:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2E784069E;
+	Tue, 11 Jun 2024 15:22:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GTasMc1hqeBv; Tue, 11 Jun 2024 15:22:15 +0000 (UTC)
+ id O3uMVylOWYf9; Tue, 11 Jun 2024 15:22:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98A7740647
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C039540647
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98A7740647;
-	Tue, 11 Jun 2024 15:22:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4DA7A1BF391
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 15:22:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C039540647;
+	Tue, 11 Jun 2024 15:22:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AF711BF391
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 15:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 430024060E
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 15:22:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27EB1405DE
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 15:22:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j_h-LcNsERmy for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WJgh4UV9FTOc for <buildroot@lists.busybox.net>;
  Tue, 11 Jun 2024 15:22:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E0BF340596
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0BF340596
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 85CEE40273
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85CEE40273
 Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
  [IPv6:2607:f8b0:4864:20::d29])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E0BF340596
- for <buildroot@buildroot.org>; Tue, 11 Jun 2024 15:22:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 85CEE40273
+ for <buildroot@buildroot.org>; Tue, 11 Jun 2024 15:22:11 +0000 (UTC)
 Received: by mail-io1-xd29.google.com with SMTP id
- ca18e2360f4ac-7eb85e80661so96051439f.1
- for <buildroot@buildroot.org>; Tue, 11 Jun 2024 08:22:10 -0700 (PDT)
+ ca18e2360f4ac-7ea0b5e0977so274238339f.2
+ for <buildroot@buildroot.org>; Tue, 11 Jun 2024 08:22:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1718119330; x=1718724130;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=r7TcNGQcAXCilyRF09bq9LJb/ej82E8TMxk1aPYsN9A=;
- b=mAPYRC2bJb63B49yxhApoDza5JGEzzWSfed4VhIA3H7jTx/L2fhBRJM8g/PmCVNVyX
- kwThVNSXaaBlliCwr+OOIiwsSIegcxj5UZByM4g6hd/Awe0WicvoU9+t1ja2EDNJdwPn
- KNCt4sN+nGsa/+1PUPT/OF9sn5h96DR/9fRjMj6oED7xrc4qPoz1X+gdj3sucTy4gbd/
- 9BtXWA07pIkS+z6Y9leDDa7249ZhkEjtjPxtnGYUD6uXbenGGbByftYi57G5umrarKzS
- nIhkidpMHJvkv8wUQ6oBx3GdDOfSG6HoMO5bwyqmVCXrFXazwVaj92Hrvqsq2fHzDvii
- Q97Q==
-X-Gm-Message-State: AOJu0Yw9B5se92k3pvI6RgXVVkFzDGepk1OPmQI7/xDSRl9+NMHGndFO
- ozWBUlVbUDKpszREq1kRyMnPMF7f0PyQzgYR7slTDK+zBpV2geE/SToSGU1U
-X-Google-Smtp-Source: AGHT+IEDp3fRUMukEqDywzKp/cCErKHAwsGyEXsVCpPWlCXi/XzCWVZSU4+dX1KcwKyduJ6+xZd/0w==
-X-Received: by 2002:a05:6602:160a:b0:7eb:7ebd:1f9f with SMTP id
- ca18e2360f4ac-7eb7ebd2365mr769795739f.9.1718119327345; 
- Tue, 11 Jun 2024 08:22:07 -0700 (PDT)
+ bh=uGYBpcBlKvtor+x4Mn5/PU5SIPa9ZoMtnpLWeI2JdFU=;
+ b=YmudvtvkR8RRphKIZXgY19OVvFtru5Eu9FrFGV2jCW/LIaa0EXvsUeGFowmL7TjRMn
+ VLESrGuMtPtmMpM2xDhfZ5YOIBknfRuXS1uTF959KQCmwOIBUBM8zXGEfRWzJow4cqqn
+ IhCeDpSsjEJI4JKK4mYPWjmWS/zlbOh/fQpuxXMkDtWAKn32Lk9ESjF+/wHJ5TXtbkUU
+ c0slV9QiUTZ2oMv/IJeOZmKQQTZp1sVo3CNWLBFQIotfpS5xPKLa+qvzgRKa/utRsex7
+ 2X0fLsJh/WzXjOyn+e9ERrjM005qulQEgXW5Od41vvU/+rLWBz9ipyqwPRFPt5er7OjV
+ sdfA==
+X-Gm-Message-State: AOJu0YzSvfupiz7qbV5CgfI3sa+Fmz03TT0KEDf0+KtH8lUGjdmHPzk0
+ VUitskVJgU7AJzJzNY1oq/d7O/04wPEeEF1t6zKOOP5Hs6IsLZ10APZSkyFL
+X-Google-Smtp-Source: AGHT+IGlWjVveZjQMsdbrqjpsLerb812pmMK8czM+yan02Wn1VIRvZeT0cLNM0uLHVVzRuBM9aM+/w==
+X-Received: by 2002:a05:6602:1495:b0:7eb:699d:c3fb with SMTP id
+ ca18e2360f4ac-7eb699dcaafmr1211577539f.19.1718119330110; 
+ Tue, 11 Jun 2024 08:22:10 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
  [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-7eb81f14c0dsm128268939f.28.2024.06.11.08.22.07
+ ca18e2360f4ac-7eb81f14c0dsm128268939f.28.2024.06.11.08.22.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 11 Jun 2024 08:22:07 -0700 (PDT)
+ Tue, 11 Jun 2024 08:22:09 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 11 Jun 2024 09:22:00 -0600
-Message-Id: <20240611152202.951202-2-james.hilliard1@gmail.com>
+Date: Tue, 11 Jun 2024 09:22:01 -0600
+Message-Id: <20240611152202.951202-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240611152202.951202-1-james.hilliard1@gmail.com>
 References: <20240611152202.951202-1-james.hilliard1@gmail.com>
@@ -77,20 +77,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=r7TcNGQcAXCilyRF09bq9LJb/ej82E8TMxk1aPYsN9A=;
- b=WvspL/kiChdaKV2+GHuVncfxT7nLFeBZEg6DMGbkuQV5Ir3gCO+WvYGKBnNVdwQGmM
- ORn02f6xmpCVOGFePfi7aBFKwRPNHzUj3OzQ+q+islgPUowIKA7/jaAp9p1ukWdUquuu
- ITpRuCLIv3cnG/i9or9tpJRYAo7HLcPthmQbnKbuJhcIGXkUvD4cXQyYsRBE3Sm3xwTz
- AcWYS18n05GEYcTL061ZHiDMXel14aJCJoPhlsysqZMUPZ+50ktARaPu/xe799L6o3XA
- FiFlIZ7TbMpR2kniOi8y/xruMMo2Cke/ACmjKlXngmwhvKkdMESbf3rmXomBcTEOGC9p
- YkVw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=uGYBpcBlKvtor+x4Mn5/PU5SIPa9ZoMtnpLWeI2JdFU=;
+ b=SHkpsCN6AXJ6oLX17j5WGUlxER2RY+nwKi2bg0epN0DPyZFXWe0SBey6AwNozyRJzR
+ oyyIUlZOccWTkwXyvXduJnBr4KyXHapQqczRDzwHKeK75Rlz+HmIZGLKNi3VLS1Q57wn
+ vWuppFpcGn4r/k00vithryJTB9pwfP8b3Fj6CcIACMOIL9W+/B/ynHt5AbbioZIFFZbR
+ bEUUfHPWv+Jgs4PaIuVmQttcu9pe7zD8nGxXaXwflQIZu6LjtlvmuHc5hgl1uE1RDfW0
+ PG+zcOsOPD1vTq4LqMjbKuEhkDqRRveLQjNbLPX+ti4G4s+X4tjvOb5e7bvHPhD2/0Hg
+ fGog==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=WvspL/ki
-Subject: [Buildroot] [PATCH v2 2/4] package/fwupd-efi: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=SHkpsCN6
+Subject: [Buildroot] [PATCH v2 3/4] package/flashrom: install to staging
+ with meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,85 +111,204 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This will be needed for the upcoming fwupd flashrom plugin to work
+as only the meson build correctly installs the pkgconfig files
+needed by fwupd.
+
+Drop Makefile patch which is no longer relevant.
+
+Backport a patch removing _LARGEFILE64_SOURCE which can result in a
+redefination build error.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v1 -> v2:
-  - use gitlab for efi_sbat_distro_url
----
- package/Config.in                |  1 +
- package/fwupd-efi/Config.in      |  8 ++++++++
- package/fwupd-efi/fwupd-efi.hash |  3 +++
- package/fwupd-efi/fwupd-efi.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/fwupd-efi/Config.in
- create mode 100644 package/fwupd-efi/fwupd-efi.hash
- create mode 100644 package/fwupd-efi/fwupd-efi.mk
+ ...G_INTERNAL-depends-on-raw-mem-access.patch | 35 ---------
+ ...et_enable.c-Drop-_LARGEFILE64_SOURCE.patch | 38 ++++++++++
+ package/flashrom/flashrom.mk                  | 74 +++++++++++++------
+ 3 files changed, 88 insertions(+), 59 deletions(-)
+ delete mode 100644 package/flashrom/0001-Makefile-CONFIG_INTERNAL-depends-on-raw-mem-access.patch
+ create mode 100644 package/flashrom/0001-chipset_enable.c-Drop-_LARGEFILE64_SOURCE.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 9a948c5536..2be39f98c7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -519,6 +519,7 @@ endmenu
- 	source "package/fmtools/Config.in"
- 	source "package/freeipmi/Config.in"
- 	source "package/freescale-imx/Config.in"
-+	source "package/fwupd-efi/Config.in"
- 	source "package/fxload/Config.in"
- 	source "package/gcnano-binaries/Config.in"
- 	source "package/gpm/Config.in"
-diff --git a/package/fwupd-efi/Config.in b/package/fwupd-efi/Config.in
+diff --git a/package/flashrom/0001-Makefile-CONFIG_INTERNAL-depends-on-raw-mem-access.patch b/package/flashrom/0001-Makefile-CONFIG_INTERNAL-depends-on-raw-mem-access.patch
+deleted file mode 100644
+index 9d3f3d9c51..0000000000
+--- a/package/flashrom/0001-Makefile-CONFIG_INTERNAL-depends-on-raw-mem-access.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From aac91025386aa9d7b8214f8ad1746ef5c02f2d8d Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 5 Nov 2023 10:38:32 +0100
+-Subject: [PATCH] Makefile: CONFIG_INTERNAL depends on raw mem access
+-
+-CONFIG_INTERNAL depends on raw mem access resulting in the following
+-build failure on sh4 since version 1.3.0:
+-
+-/home/thomas/autobuild/instance-3/output-1/per-package/flashrom/host/bin/../lib/gcc/sh4a-buildroot-linux-gnu/12.3.0/../../../../sh4a-buildroot-linux-gnu/bin/ld: libflashrom.a(internal.o): in function `internal_chip_readn':
+-internal.c:(.text+0x8): undefined reference to `mmio_readn'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/f74a9d315fb519f284428234713f43fcf4e35fd0
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://review.coreboot.org/c/flashrom/+/78930
+----
+- Makefile | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/Makefile b/Makefile
+-index bf01d0f8..cd21f22f 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -115,6 +115,7 @@ DEPENDS_ON_RAW_MEM_ACCESS := \
+- 	CONFIG_ATAPROMISE \
+- 	CONFIG_DRKAISER \
+- 	CONFIG_GFXNVIDIA \
+-+	CONFIG_INTERNAL \
+- 	CONFIG_INTERNAL_X86 \
+- 	CONFIG_IT8212 \
+- 	CONFIG_NICINTEL \
+--- 
+-2.42.0
+-
+diff --git a/package/flashrom/0001-chipset_enable.c-Drop-_LARGEFILE64_SOURCE.patch b/package/flashrom/0001-chipset_enable.c-Drop-_LARGEFILE64_SOURCE.patch
 new file mode 100644
-index 0000000000..3d82f480be
+index 0000000000..1ee8d0f7e3
 --- /dev/null
-+++ b/package/fwupd-efi/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_FWUPD_EFI
-+	bool "fwupd-efi"
-+	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
-+	select BR2_PACKAGE_GNU_EFI
-+	help
-+	  EFI Application used by uefi-capsule plugin in fwupd.
++++ b/package/flashrom/0001-chipset_enable.c-Drop-_LARGEFILE64_SOURCE.patch
+@@ -0,0 +1,38 @@
++From 59287a0bd0e4d58a4d2b434bde3db9b2376ac7c1 Mon Sep 17 00:00:00 2001
++From: Angel Pons <th3fanbus@gmail.com>
++Date: Tue, 16 May 2023 11:13:17 +0200
++Subject: [PATCH] chipset_enable.c: Drop `_LARGEFILE64_SOURCE`
 +
-+	  https://github.com/fwupd/fwupd-efi
-diff --git a/package/fwupd-efi/fwupd-efi.hash b/package/fwupd-efi/fwupd-efi.hash
-new file mode 100644
-index 0000000000..35dc9625ca
---- /dev/null
-+++ b/package/fwupd-efi/fwupd-efi.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  afd0805a2ad081a7caff2ef5bc004ce3a0147b538015e8eca966341716b1260e  fwupd-efi-1.6.tar.xz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/fwupd-efi/fwupd-efi.mk b/package/fwupd-efi/fwupd-efi.mk
-new file mode 100644
-index 0000000000..a01bb2913b
---- /dev/null
-+++ b/package/fwupd-efi/fwupd-efi.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# fwupd-efi
-+#
-+################################################################################
++This file does not access any large files, so there's no need to define
++this feature test macro.
 +
-+FWUPD_EFI_VERSION = 1.6
-+FWUPD_EFI_SITE = https://github.com/fwupd/fwupd-efi/releases/download/$(FWUPD_EFI_VERSION)
-+FWUPD_EFI_SOURCE = fwupd-efi-$(FWUPD_EFI_VERSION).tar.xz
-+FWUPD_EFI_LICENSE = LGPL-2.1+
-+FWUPD_EFI_LICENSE_FILES = COPYING
-+FWUPD_EFI_INSTALL_STAGING = YES
-+FWUPD_EFI_DEPENDENCIES = gnu-efi
-+FWUPD_EFI_CONF_OPTS = \
-+	-Defi-libdir=$(STAGING_DIR)/usr/lib \
-+	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
-+	-Defi-includedir=$(STAGING_DIR)/usr/include/efi \
-+	-Defi_sbat_fwupd_generation=1 \
-+	-Defi_sbat_distro_id=buildroot \
-+	-Defi_sbat_distro_summary=Buildroot \
-+	-Defi_sbat_distro_pkgname=fwupd-efi \
-+	-Defi_sbat_distro_version=fwupd-efi-$(FWUPD_EFI_VERSION) \
-+	-Defi_sbat_distro_url=https://gitlab.com/buildroot.org/buildroot/-/tree/master/package/fwupd-efi
++Change-Id: I866cfa2f996eeea5846e5d9189647ad7a4a4e3e4
++Signed-off-by: Angel Pons <th3fanbus@gmail.com>
++Reviewed-on: https://review.coreboot.org/c/flashrom/+/75271
++Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
++Reviewed-by: Nico Huber <nico.h@gmx.de>
++Reviewed-by: Anastasia Klimchuk <aklm@chromium.org>
++Reviewed-by: Alexander Goncharov <chat@joursoir.net>
 +
++Upstream: https://github.com/flashrom/flashrom/commit/59287a0bd0e4d58a4d2b434bde3db9b2376ac7c1
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++---
++ chipset_enable.c | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/chipset_enable.c b/chipset_enable.c
++index 9d3df5f8..3846ecfb 100644
++--- a/chipset_enable.c
+++++ b/chipset_enable.c
++@@ -24,8 +24,6 @@
++  * Contains the chipset specific flash enables.
++  */
++ 
++-#define _LARGEFILE64_SOURCE
++-
++ #include <stdbool.h>
++ #include <stdlib.h>
++ #include <string.h>
++-- 
++2.34.1
++
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 86bfec40cc..be6cac3cc2 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -9,41 +9,67 @@ FLASHROM_SOURCE = flashrom-v$(FLASHROM_VERSION).tar.bz2
+ FLASHROM_SITE = https://download.flashrom.org/releases
+ FLASHROM_LICENSE = GPL-2.0+
+ FLASHROM_LICENSE_FILES = COPYING
+-FLASHROM_MAKE_OPTS = WARNERROR=no
++FLASHROM_INSTALL_STAGING = YES
++FLASHROM_CONF_OPTS = \
++	-Dclassic_cli=enabled \
++	-Dclassic_cli_print_wiki=disabled \
++	-Dich_descriptors_tool=enabled \
++	-Dtests=disabled \
++	-Duse_internal_dmi=true
++
++FLASHROM_PROGRAMMERS = \
++	buspirate_spi \
++	linux_mtd \
++	linux_spi \
++	parade_lspcon \
++	mediatek_i2c_spi \
++	mstarddc_spi \
++	pony_spi \
++	rayer_spi \
++	realtek_mst_i2c_spi \
++	serprog
+ 
+ ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
+ FLASHROM_DEPENDENCIES += host-pkgconf libftdi1
+-FLASHROM_MAKE_OPTS += \
+-	CONFIG_FT2232_SPI=yes \
+-	CONFIG_USBBLASTER_SPI=yes
+-else
+-FLASHROM_MAKE_OPTS += \
+-	CONFIG_FT2232_SPI=no \
+-	CONFIG_USBBLASTER_SPI=no
++FLASHROM_PROGRAMMERS += \
++	ft2232_spi \
++	usbblaster_spi
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ FLASHROM_DEPENDENCIES += host-pkgconf libusb
+-FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBUSB1_PROGRAMMERS=yes
+-else
+-FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBUSB1_PROGRAMMERS=no
++FLASHROM_PROGRAMMERS += \
++	ch341a_spi \
++	dediprog \
++	developerbox_spi \
++	digilent_spi \
++	dirtyjtag_spi \
++	pickit2_spi \
++	raiden_debug_spi \
++	stlinkv3_spi
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PCIUTILS),y)
+ FLASHROM_DEPENDENCIES += pciutils
+-FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBPCI_PROGRAMMERS=yes
+-else
+-FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBPCI_PROGRAMMERS=no
++FLASHROM_PROGRAMMERS += \
++	atahpt \
++	atapromise \
++	atavia \
++	drkaiser \
++	gfxnvidia \
++	internal \
++	it8212 \
++	nic3com \
++	nicintel \
++	nicintel_eeprom \
++	nicintel_spi \
++	nicnatsemi \
++	nicrealtek \
++	ogp_spi \
++	satamv \
++	satasii
+ endif
+ 
+-define FLASHROM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" \
+-		$(FLASHROM_MAKE_OPTS) -C $(@D)
+-endef
+-
+-define FLASHROM_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/flashrom $(TARGET_DIR)/usr/sbin/flashrom
+-endef
++FLASHROM_CONF_OPTS += -Dprogrammer=$(subst $(space),$(comma),$(strip $(FLASHROM_PROGRAMMERS)))
+ 
+-$(eval $(generic-package))
 +$(eval $(meson-package))
 -- 
 2.34.1
