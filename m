@@ -4,90 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3481C27C78
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 18:02:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47E58C27C65
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 18:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8455260629;
-	Tue, 11 Jun 2024 18:02:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE33260A55;
+	Tue, 11 Jun 2024 18:02:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ua4qhpkNglds; Tue, 11 Jun 2024 18:02:14 +0000 (UTC)
+ id 6Hemzz5IEkT9; Tue, 11 Jun 2024 18:02:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84B9F608F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23ABB60B2D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84B9F608F6;
-	Tue, 11 Jun 2024 18:02:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 05DDD1BF312
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 18:02:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23ABB60B2D;
+	Tue, 11 Jun 2024 18:02:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A7BA1BF312
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 18:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7EA1608F6
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 18:02:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8531C81F8E
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 18:02:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7pn1IIUr6dry for <buildroot@lists.busybox.net>;
- Tue, 11 Jun 2024 18:02:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a08U9kNAiHWE for <buildroot@lists.busybox.net>;
+ Tue, 11 Jun 2024 18:02:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::102f; helo=mail-pj1-x102f.google.com;
+ client-ip=2607:f8b0:4864:20::52c; helo=mail-pg1-x52c.google.com;
  envelope-from=cdimich2188@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4BBF260629
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BBF260629
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com
- [IPv6:2607:f8b0:4864:20::102f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4BBF260629
- for <buildroot@buildroot.org>; Tue, 11 Jun 2024 18:02:12 +0000 (UTC)
-Received: by mail-pj1-x102f.google.com with SMTP id
- 98e67ed59e1d1-2c2ef6617bfso1259833a91.3
- for <buildroot@buildroot.org>; Tue, 11 Jun 2024 11:02:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9FE8281F81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FE8281F81
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com
+ [IPv6:2607:f8b0:4864:20::52c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9FE8281F81
+ for <buildroot@buildroot.org>; Tue, 11 Jun 2024 18:02:13 +0000 (UTC)
+Received: by mail-pg1-x52c.google.com with SMTP id
+ 41be03b00d2f7-681ad26f4a5so920481a12.2
+ for <buildroot@buildroot.org>; Tue, 11 Jun 2024 11:02:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718128931; x=1718733731;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=l9B/ZH9TnTZWc0D5ya35vMWY51bV7zyjWLEOoeGxxMg=;
- b=t5H4GK5FjhmD6wf3ozTLek30UpOraXj0n4OJ+CFTPbizEyKDvmtqbVhZYh3dpTfNEq
- KnlQXPpR7tV9oeDeOVkaSitcvRzYHO9XuRb25ZHq4pHFwZr6kfp2RcXX0PqlmoSZEUex
- PaLkKF7FEOLTRAI38c45V/hDMVa5Rym7yAx2CknKNeFBL4Xx6u2IglZ3mRSB3zu03w0w
- 9egMZQAqD6Cze6tKzbAJ9ZpzQXSR9R4lZPf4XDKUZLOfrwq4AK+Di0GUFyRe+A0KdksV
- 9wwCo+No2fcMVRzqrPOyojEOJIBPOIdLJXJHGcKzDZUKsrMMvHfSWWE0JkLTTlbL+zyn
- Ytcw==
-X-Gm-Message-State: AOJu0Yxju5TA6RbWRW3pa5MDNKUB0duhqc+WsPy/88Sc5pilYV9pVaEY
- rafv+dL5A4TnpRfxe52dDl3xXU3+DBuHLukclQATm0bgPiNHpxgSCcOJLGKl
-X-Google-Smtp-Source: AGHT+IFbtNmMi5/sWY3mNhKYL865WBJX3OF63pbZ0EAZwNXd++ZsrgK5wK7AWH0wBpAye35lfV1TRA==
-X-Received: by 2002:a17:90a:ac17:b0:2c2:d4b8:832b with SMTP id
- 98e67ed59e1d1-2c2d4b887d3mr11941445a91.23.1718128931298; 
- Tue, 11 Jun 2024 11:02:11 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1718128932; x=1718733732;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=wtH+2Z+Z6ofLdU7pZEnAbSCTKRaC2XQ0iGlR+Ah8sq4=;
+ b=t/t7z7hZJI9ZyYV6A+BuHVDt6OSp6n7VHIE7b4iQPG/9IPkljA9qw/q5Zb9sFRXLWA
+ n0jCxRoU9X0K7OhDcx5Yx7CLz/vBLyXMSuJ7PnIMSI+XwsBq6A0nqgOahqagThkNoX5u
+ uLPZe2MTnfWY2Azob4N3lH9+Ed/20qlaRPrV5xy5bTlV1IZ5oLN/VCf5DhKfI2vbNEgm
+ gBpPneopTfZguY7MDV7okMNhDynHS/kyjGwpK72qqem+SI+zpMPnahTUhBlMWCQmCuWe
+ 5jhoW6wQeeTZ+TMGnM2S/Jt+6l5K9ZO8S4iQXETUj51rMwMPm8N8xzT5qDOiOCQtyfzc
+ mT9Q==
+X-Gm-Message-State: AOJu0YyxsfURpfwp3lWw17ciau8oowf12hbKuvYyjPR+Y5D1BfSYo3U0
+ 6P42MPPSBfHbrrot4FTKEEqJA87839x3PDbP8Pv9OFf2hFFDyszrndKcRfBA
+X-Google-Smtp-Source: AGHT+IHu+SOKLEiy2p0IELHI7SBtDh3h7GVPEmxsE9MknB7WsoCyu5fn5l5TV7xdg1tPaT2LGM+zeQ==
+X-Received: by 2002:a17:90a:ea92:b0:2c2:dfbe:7327 with SMTP id
+ 98e67ed59e1d1-2c2dfbe779bmr7461722a91.45.1718128932338; 
+ Tue, 11 Jun 2024 11:02:12 -0700 (PDT)
 Received: from chris-jammy.lan ([136.52.56.126])
  by smtp.googlemail.com with ESMTPSA id
- 98e67ed59e1d1-2c2fbde41ccsm5673927a91.11.2024.06.11.11.02.10
+ 98e67ed59e1d1-2c2fbde41ccsm5673927a91.11.2024.06.11.11.02.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 11 Jun 2024 11:02:10 -0700 (PDT)
+ Tue, 11 Jun 2024 11:02:11 -0700 (PDT)
 From: Chris Dimich <cdimich2188@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 11 Jun 2024 11:01:59 -0700
-Message-ID: <20240611180207.2138847-1-cdimich2188@gmail.com>
+Date: Tue, 11 Jun 2024 11:02:00 -0700
+Message-ID: <20240611180207.2138847-2-cdimich2188@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240611180207.2138847-1-cdimich2188@gmail.com>
+References: <20240611180207.2138847-1-cdimich2188@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718128931; x=1718733731; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=l9B/ZH9TnTZWc0D5ya35vMWY51bV7zyjWLEOoeGxxMg=;
- b=J8n4kRlZJiAR6XLN/bf7MRDpQtI9yco9VeErnRBm2KY8lB55FxgdkUPOogba6yLtrD
- i4fdriPppmBbvHM7Qd1c6ssW19ONM/EYJUS79Sf5scs2TWEGHxhvpZpYaAEVgijmJJcg
- c+V6Fwy/MYR+ZOIYJU2Uv6U7D4HHNncB9khc7wFzuCq56ViMDNmLRXjJabXlYoKUVwa2
- f3nhPqaMItX4kyNVGPGzYh7xYLKOgxEJ3GIfOR0n9mFsNSquRi5PAoYEb/7niHXt4qqu
- 53o+eska64BxnOVWLtoTMb591Y92wwBK+CPgPuLZTtonYxn7Fe24YelsRTpR2JB6+yXp
- Q56A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1718128932; x=1718733732; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=wtH+2Z+Z6ofLdU7pZEnAbSCTKRaC2XQ0iGlR+Ah8sq4=;
+ b=GEk/yHOwvvn4gQjpEHeKUWhARkYKG4osBSzZIa1lfipo8TAgyvD9awWGaDxmPQTTOn
+ qLcGJnf4sla7mR7bZ8uMyFHcwKivtJdRwjK7/wwbjjxetIvEfHmKLagP2/liLj4DbKy9
+ gtmYj+cTe1FgpbwJcCl8cTZMD0BaHCLjW+ce2ldgUs7BXQ8R/MNR9Vs1MHEeQiaoxSSY
+ jJ8vXFRoWRKv0UqeksHSShQv/RXM5S4WQ3UtaWPH53Fim+vISNJSHa2FCEcTuijEWg3d
+ d7iohePUQ0l7XteB8v92Ewo9vwzK7ks2rmN8l0Rp825ZuqA8xZIXpJHnHpPV1iNfL8cC
+ 2djg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=J8n4kRlZ
-Subject: [Buildroot] [PATCH 0/8] boundarydevices: update/add defconfigs
+ header.a=rsa-sha256 header.s=20230601 header.b=GEk/yHOw
+Subject: [Buildroot] [PATCH 1/8] board/boundarydevices: update boot scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,35 +113,198 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This series updates boundarydevices defconfigs and also adds support 
-for two new defconfigs -> nitrogen8ulp and nitrogen93.
+- Add support for i.MX 8ULP and i.MX 93.
 
-Chris Dimich (8):
-  board/boundarydevices: update boot scripts
-  board/boundarydevices: add i.MX 93 support to post-build.sh
-  configs/nitrogen*: bump kernel revision to f789d32c
-  configs/nitrogen*: bump u-boot revision to e3228228
-  configs/nitrogen8*: bump atf revision to d18357b7
-  configs/nitrogen8mm_defconfig: add SMARC support
-  configs/nitrogen8ulp: new defconfig
-  configs/nitrogen93: new defconfig
+Signed-off-by: Chris Dimich <cdimich2188@gmail.com>
+---
+ board/boundarydevices/common/boot.cmd    | 111 +++++++++++++++--------
+ board/boundarydevices/common/upgrade.cmd |  11 +++
+ 2 files changed, 85 insertions(+), 37 deletions(-)
 
- board/boundarydevices/common/boot.cmd      | 111 ++++++++++++++-------
- board/boundarydevices/common/post-build.sh |   6 +-
- board/boundarydevices/common/upgrade.cmd   |  11 ++
- configs/nitrogen6sx_defconfig              |   4 +-
- configs/nitrogen6x_defconfig               |   4 +-
- configs/nitrogen7_defconfig                |   4 +-
- configs/nitrogen8m_defconfig               |   8 +-
- configs/nitrogen8mm_defconfig              |  10 +-
- configs/nitrogen8mn_defconfig              |   8 +-
- configs/nitrogen8mp_defconfig              |   8 +-
- configs/nitrogen8ulp_defconfig             |  63 ++++++++++++
- configs/nitrogen93_defconfig               |  60 +++++++++++
- 12 files changed, 236 insertions(+), 61 deletions(-)
- create mode 100644 configs/nitrogen8ulp_defconfig
- create mode 100644 configs/nitrogen93_defconfig
-
+diff --git a/board/boundarydevices/common/boot.cmd b/board/boundarydevices/common/boot.cmd
+index 2f2bd8d045..285cab7b20 100644
+--- a/board/boundarydevices/common/boot.cmd
++++ b/board/boundarydevices/common/boot.cmd
+@@ -1,10 +1,13 @@
+ setenv bootargs ''
+ 
+-m4=''
+ kernelimage=zImage
+ bootcommand=bootz
+ a_base=0x10000000
+ 
++if test -z "${imx_cpu}"; then
++	setexpr imx_cpu sub ".*(..?..?)$" "\\1" "${soc_type}"
++fi
++
+ #grab 1st 2/3 characters of string
+ setexpr cpu2 sub "^(..?).*" "\\1" "${imx_cpu}"
+ setexpr cpu3 sub "^(..?.?).*" "\\1" "${imx_cpu}"
+@@ -18,10 +21,10 @@ elif itest.s x8M == "x${cpu2}"; then
+ 	a_base=0x40000000
+ 	kernelimage=Image
+ 	bootcommand=booti
+-fi
+-if itest.s "x1" == "x${m4enabled}" ; then
+-	run m4boot;
+-	m4='-m4';
++elif itest.s x8U == "x${cpu2}"  || itest.s x93 == "${cpu3}"; then
++	a_base=0x80000000
++	kernelimage=Image
++	bootcommand=booti
+ fi
+ 
+ setexpr a_script  ${a_base} + 0x00800000
+@@ -36,36 +39,72 @@ if itest.s "x" == "x${board}" ; then
+ 	exit;
+ fi
+ 
+-if itest.s "x" == "x${fdt_file}" ; then
+-	if itest.s x51 == "x${cpu2}" ; then
+-		fdt_file=imx51-${board}${m4}.dtb;
+-	elif itest.s x53 == "x${cpu2}" ; then
+-		fdt_file=imx53-${board}${m4}.dtb;
+-	elif itest.s x6DL == "x${cpu3}" || itest.s x6SO == "x${cpu3}" ; then
+-		fdt_file=imx6dl-${board}.dtb;
+-	elif itest.s x6QP == "x${cpu3}" ; then
+-		fdt_file=imx6qp-${board}.dtb;
+-	elif itest.s x6SX == "x${cpu3}" ; then
+-		fdt_file=imx6sx-${board}${m4}.dtb;
+-	elif itest.s x6UL == "x${cpu3}" ; then
+-		fdt_file=imx6ull-${board}.dtb;
+-	elif itest.s x7D == "x${cpu2}" ; then
+-		fdt_file=imx7d-${board}${m4}.dtb;
+-	elif itest.s x8MM == "x${cpu3}" ; then
+-		fdt_file=imx8mm-${board}${m4}.dtb;
+-	elif itest.s x8MN == "x${cpu3}" ; then
+-		fdt_file=imx8mn-${board}${m4}.dtb;
+-	elif itest.s x8MP == "x${cpu3}" ; then
+-		if itest *0x30360800 == 0x00824310 ; then
+-			fdt_file=imx8mp-a0-${board}${m4}.dtb;
+-		else
+-			fdt_file=imx8mp-${board}${m4}.dtb;
+-		fi
+-	elif itest.s x8MQ == "x${cpu3}" ; then
+-		fdt_file=imx8mq-${board}${m4}.dtb;
++if itest.s x51 == "x${cpu2}" ; then
++	dtb_prefix=imx51;
++elif itest.s x53 == "x${cpu2}" ; then
++	dtb_prefix=imx53;
++elif itest.s x6DL == "x${cpu3}" || itest.s x6SO == "x${cpu3}" ; then
++	dtb_prefix=imx6dl;
++elif itest.s x6QP == "x${cpu3}" ; then
++	dtb_prefix=imx6qp;
++elif itest.s x6SX == "x${cpu3}" ; then
++	dtb_prefix=imx6sx;
++elif itest.s x6UL == "x${cpu3}" ; then
++	dtb_prefix=imx6ull;
++elif itest.s x7D == "x${cpu2}" ; then
++	dtb_prefix=imx7d;
++elif itest.s x8MM == "x${cpu3}" ; then
++	dtb_prefix=imx8mm;
++elif itest.s x8MN == "x${cpu3}" ; then
++	dtb_prefix=imx8mn;
++elif itest.s x8MP == "x${cpu3}" ; then
++	if itest *0x30360800 == 0x00824310 ; then
++		dtb_prefix=imx8mp-a0;
+ 	else
+-		fdt_file=imx6q-${board}.dtb;
++		dtb_prefix=imx8mp;
+ 	fi
++elif itest.s x8MQ == "x${cpu3}" ; then
++	dtb_prefix=imx8mq;
++elif itest.s x8ULP == "x${imx_cpu}" ; then
++	dtb_prefix=imx8ulp;
++elif itest.s x93 == "${cpu3}" ; then
++	dtb_prefix=imx93;
++else
++	dtb_prefix=imx6q;
++fi
++
++if test ! -z "${mcore_enabled}"; then
++    if test ! -z "${mcoreboot}"; then
++            run mcoreboot;
++    fi
++    mcore_dtb=1
++fi
++if test ! -z "${m4enabled}"; then
++    if test ! -z "${m4boot}"; then
++            run m4boot;
++    fi
++    mcore_dtb=1
++fi
++
++if test -z "${fdtfile}" ; then
++	if test -z "${fdt_file}" ; then
++	    bn=${dtb_prefix}-${board}${board_rv}${board_carrier}${board_modifier};
++	    if test ! -z "${mcore_dtb}" ; then
++		    if test -e ${devtype} ${devnum}:${distro_bootpart} ${prefix}${bn}-rpmsg.dtb; then
++		            fdt_file=${bn}-rpmsg.dtb
++		    else
++		            fdt_file=${bn}-m4.dtb
++		    fi
++	    else
++		    fdt_file=${bn}.dtb
++	    fi
++	fi
++else
++	fdt_file=${fdtfile}
++fi
++
++if test ! -z "${mcore_dtb}" ; then
++    setenv bootargs ${bootargs} ${mcore_bootargs}
+ fi
+ 
+ if itest.s x${distro_bootpart} == x ; then
+@@ -79,13 +118,11 @@ fi
+ if itest.s x${console} != x ; then
+ 	setenv bootargs ${bootargs} console=${console},115200
+ fi
+-if itest.s "x" == "x$vmalloc" ; then
+-	vmalloc=400M
+-fi
++
+ if itest.s x${consoleblank} == x ; then
+ 	consoleblank=0
+ fi
+-setenv bootargs ${bootargs} vmalloc=${vmalloc} consoleblank=${consoleblank} rootwait fixrtc cpu=${imx_cpu} board=${board} uboot_release=${uboot_release}
++setenv bootargs ${bootargs} consoleblank=${consoleblank} rootwait
+ 
+ if load ${devtype} ${devnum}:${distro_bootpart} ${a_fdt} ${prefix}${fdt_file} ; then
+ 	fdt addr ${a_fdt}
+diff --git a/board/boundarydevices/common/upgrade.cmd b/board/boundarydevices/common/upgrade.cmd
+index a26bacd9aa..ca23648cca 100644
+--- a/board/boundarydevices/common/upgrade.cmd
++++ b/board/boundarydevices/common/upgrade.cmd
+@@ -9,6 +9,10 @@ qspi_offset=0x0
+ a_base=0x12000000
+ block_size=0x200
+ 
++if test -z "${imx_cpu}"; then
++	setexpr imx_cpu sub ".*(..?..?)$" "\\1" "${soc_type}"
++fi
++
+ #grab 1st 2/3 characters of string
+ setexpr cpu2 sub "^(..?).*" "\\1" "${imx_cpu}"
+ setexpr cpu3 sub "^(..?.?).*" "\\1" "${imx_cpu}"
+@@ -27,6 +31,12 @@ elif itest.s x8M == "x${cpu2}"; then
+ 			offset=0x0
+ 		fi
+ 	fi
++elif itest.s x8U == "x${cpu2}"  || itest.s x93 == "${cpu3}"; then
++	a_base=0x82000000
++	offset=0x8000
++	if itest ${env_part} != 0 ; then
++		offset=0x0
++	fi
+ fi
+ 
+ qspi_match=1
+@@ -228,3 +238,4 @@ echo "---- U-Boot upgraded. The board will now reset."
+ sleep 1
+ reset
+ done
++
 -- 
 2.43.0
 
