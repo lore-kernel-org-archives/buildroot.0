@@ -4,95 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20418C27C65
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 18:00:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D43C1C27C65
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 18:00:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 676A86064A;
-	Tue, 11 Jun 2024 18:00:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1522060AFF;
+	Tue, 11 Jun 2024 18:00:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oZnacvdQ5Zke; Tue, 11 Jun 2024 18:00:48 +0000 (UTC)
+ id GGSKLGCTapH1; Tue, 11 Jun 2024 18:00:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A55360A7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE2D360A8B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A55360A7B;
-	Tue, 11 Jun 2024 18:00:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D19691BF312
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 18:00:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE2D360A8B;
+	Tue, 11 Jun 2024 18:00:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F9361BF312
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 18:00:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A91C860A3A
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 18:00:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1CE8381F8E
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 18:00:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 78Kp8FTnhrbM for <buildroot@lists.busybox.net>;
- Tue, 11 Jun 2024 18:00:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sntFxsWRAIbZ for <buildroot@lists.busybox.net>;
+ Tue, 11 Jun 2024 18:00:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::430; helo=mail-pf1-x430.google.com;
+ client-ip=2607:f8b0:4864:20::431; helo=mail-pf1-x431.google.com;
  envelope-from=cdimich2188@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 953AC60608
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 953AC60608
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com
- [IPv6:2607:f8b0:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 953AC60608
- for <buildroot@buildroot.org>; Tue, 11 Jun 2024 18:00:43 +0000 (UTC)
-Received: by mail-pf1-x430.google.com with SMTP id
- d2e1a72fcca58-70423e8e6c9so2941000b3a.0
- for <buildroot@buildroot.org>; Tue, 11 Jun 2024 11:00:43 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D9E6D81F65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9E6D81F65
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com
+ [IPv6:2607:f8b0:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D9E6D81F65
+ for <buildroot@buildroot.org>; Tue, 11 Jun 2024 18:00:45 +0000 (UTC)
+Received: by mail-pf1-x431.google.com with SMTP id
+ d2e1a72fcca58-70109d34a16so5558201b3a.2
+ for <buildroot@buildroot.org>; Tue, 11 Jun 2024 11:00:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718128842; x=1718733642;
+ d=1e100.net; s=20230601; t=1718128845; x=1718733645;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=vn95o9FvDaLC5ANqrpdzKUV0RHttB3XiRjEkEqs0sb8=;
- b=wrOrflE/CU++D4KCf9PpCRmBNgoIomJFth0q/Zz7yeVwHUwHUik5A5DEkXCTDLOc4+
- xGH2CVYRPrZr6gwrfLIKYBx8rxUi2RNsXhu0iFcEyGCDnscyVHoEN1jICJLirntYKU5n
- ABBOjmZnhGR3Yx7WaDf1XQ/QJREYnexH3SlH9xial/3fR2Gy0UzX3lkAfGhF8fkrhLRs
- kutoStlbvmibDoPBfHYB3jZhZBl29FAVqlUXvhfy7ThoHRNMVa4cbh6tDULMsR0t7pa8
- i+0ldmY2w3YAbQYfH22Uauab5dfyhJlQ9mhmHZdysORawcRIigRx0a7Do+SJjUIn20Ig
- /Ndg==
-X-Gm-Message-State: AOJu0YyteuR19HLQ21u//HVOIpPW7TQ1RfOAueOxc1fCKjqsFzplQRCn
- iyqqx/vvUGSC9D1vPvT9ETEeLrVc+jwwHB6iBBRKW5dWVN2jyqkuafS1Vwe+
-X-Google-Smtp-Source: AGHT+IEN0h1weNRdVgwFoU22TKP2WpLSBgqB8D66JcwtI3INRi2n6UUY9xiCAacLgKcSlLUuz9JOqQ==
-X-Received: by 2002:a05:6a20:9151:b0:1b5:fd58:30fc with SMTP id
- adf61e73a8af0-1b5fd586324mr8727764637.41.1718128842293; 
- Tue, 11 Jun 2024 11:00:42 -0700 (PDT)
+ bh=TnC7DJUnU++TkP4OY4ujXBI5dAOnArOeVvPCOiPdWU8=;
+ b=rrbXCcXbpSBt/kZjMynLeRgfTKH+ifXvShhXem+Es29IabtSaxJlqLOi/zIbLRngWh
+ 9AfiwWSRJc2nw0OufFPfbqu3l1sg5sewcjjENef/e+rqxI/q1AApbf/w9zf76pf7MtGu
+ 8wup+tNElPJULu1W/dBBW1oKYs4u5pOgfRESLOaogAZhKGo0VVQFwW8eatKLYKjGZlgQ
+ KJwDvFDzM8EnMXJsK6i50HqHbYc834vopDtGov07zAkNvef3+zIKXemZPuWpKtkILinL
+ VODpBo7YQJpWDBbmimMtkcjuw+z8uJdbhVuaT0fYUum1HJXLz3ELRiaHN4t5lssTsp99
+ d+Zg==
+X-Gm-Message-State: AOJu0YytsCU6l/AOzhhjDz4NGDgPoUin1lhoIqnZJD2A8kH1m1jDdtpC
+ pksW5+ezhDwTSwWfXvPtzuy5IuJC1NDCtLoMGdpbrG5W3u/b/+Rn8tIP1xZ1
+X-Google-Smtp-Source: AGHT+IFP6nZekFC7J5cf7b02At5m2VmAU0XedIFEclG64vc+ICa5IotSaFDCs7Can4g9w5SM5bzbvw==
+X-Received: by 2002:a05:6a00:4650:b0:6f3:ea4b:d235 with SMTP id
+ d2e1a72fcca58-7040c4ba8e0mr16059139b3a.0.1718128844339; 
+ Tue, 11 Jun 2024 11:00:44 -0700 (PDT)
 Received: from chris-jammy.lan ([136.52.56.126])
  by smtp.googlemail.com with ESMTPSA id
- d2e1a72fcca58-7041cff68d0sm6670410b3a.185.2024.06.11.11.00.41
+ d2e1a72fcca58-7041cff68d0sm6670410b3a.185.2024.06.11.11.00.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 11 Jun 2024 11:00:41 -0700 (PDT)
+ Tue, 11 Jun 2024 11:00:43 -0700 (PDT)
 From: Chris Dimich <cdimich2188@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 11 Jun 2024 10:59:57 -0700
-Message-ID: <20240611180007.2127244-3-cdimich2188@gmail.com>
+Date: Tue, 11 Jun 2024 10:59:59 -0700
+Message-ID: <20240611180007.2127244-5-cdimich2188@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240611180007.2127244-1-cdimich2188@gmail.com>
 References: <20240611180007.2127244-1-cdimich2188@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718128842; x=1718733642; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1718128845; x=1718733645; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=vn95o9FvDaLC5ANqrpdzKUV0RHttB3XiRjEkEqs0sb8=;
- b=eZe70M1OXvz4FNQjvPFVppNOVIL4q2RUXTNw3mbDnvFHe3UXUU6hNDIjEiFZP+zzsv
- 45LxyAnMKOUxjsRM4vqwHy4D4IMQH1vYv4RZCd/rFQkvijURFU4lF2eiQ+h7Y+kgbLVR
- 53vrDqWOQ4hpUNyOplpoNOOTf7ZvTNBjQrV9NQgFd22kzdbldM5LEhxxyp0HL8XWEv2G
- mxUgmme59S8KxvRLl7pXuGHe21MeeYZhlW7y5q6K4B2KLmh3jxVypqkO1pA6OWSB+2tz
- fenrwOgt6F0M0JE7M3VKzNsEkHwYekDrQKErnITbnQI3Vkr7Cs3dPRkfBoebRS441nyW
- qLig==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=TnC7DJUnU++TkP4OY4ujXBI5dAOnArOeVvPCOiPdWU8=;
+ b=OEdXXNaoezzMmaTy+Xw1p+apYxgPfDvx7eRfYpAU8KBaYCREdReWxHPQQe+fNbxYD7
+ O5UA7/0ZMMYEN4JnQtJ+MXjfuvh+pzfOI7U9zCbG2VvIAvgmGG86qaoWPaW6hT57QOjS
+ SWf/q+p+EK5BhiugfYJvySYljyJSqKvEmpDde8TPCrCIL2W+UiVrKUKQxJEuVTXpVv1s
+ Zp2m6sFZFalNoPUu/2sD8hOXgLULH2TwRWR65njSvm1G8bAd5Ov27TMrVPDhFRdkvzLG
+ 9NaiwGIwe8jNqisbAn2MCIMXT3bYZXenWojdIe/2YJMTzvPNJOsjCrklr4ahcOuA37jq
+ HubQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=eZe70M1O
-Subject: [Buildroot] [PATCH 02/12] package/freescale-imx/imx-codec: bump to
- version 4.8.2
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=OEdXXNao
+Subject: [Buildroot] [PATCH 04/12] package/freescale-imx/imx-gpu-viv: bump
+ to version 6.4.11.p2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -120,35 +119,40 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Chris Dimich <cdimich2188@gmail.com>
 ---
- package/freescale-imx/imx-codec/imx-codec.hash | 6 +++---
- package/freescale-imx/imx-codec/imx-codec.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 8 ++++----
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/freescale-imx/imx-codec/imx-codec.hash b/package/freescale-imx/imx-codec/imx-codec.hash
-index 8dab5a5c4c..666d38d001 100644
---- a/package/freescale-imx/imx-codec/imx-codec.hash
-+++ b/package/freescale-imx/imx-codec/imx-codec.hash
-@@ -1,4 +1,4 @@
- # locally computed
--sha256  6bb54f91c3ca18567e14d95d3858022dc9be00dc86e9edfdb544d1240a3b2b04  imx-codec-4.3.5.bin
--sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
--sha256  fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
-+sha256  b0744a91c265202a79a019c72f17cae01fd5b63a3ba451592b6c8349d95719e0  imx-codec-4.8.2.bin
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+index a380e1b712..b350443a51 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  491ac012d691e27856769296e2334ad1b6f45e31ffe7313fcdb028c75b3b69ae  imx-gpu-viv-6.4.11.p1.2-aarch32-1e0c396.bin
+-sha256  d5904cbbe33a3c1160e9cd15c44d78df25d0dbd7b251add796673af53d3046f6  imx-gpu-viv-6.4.11.p1.2-aarch64-1e0c396.bin
+-sha256  913ba38d4be97361c3d0fa9bf2f6dbe7b1c0c41213dd268fb6738db9704dbe32  COPYING
+-sha256  4fd8bb45a2ec22117d20cfea84370e2a3a2cd99e8e177138bed0938137b1aeb3  EULA
++sha256  15efe6da5d4bac2a6067c2a898190be8754df6f14128c3db4756cff59c6da049  imx-gpu-viv-6.4.11.p2.2-aarch32-fd0148d.bin
++sha256  6e34f3718925ba37c362cd09a3228cc56d03cfad323ebae0932f64449dbaeb2e  imx-gpu-viv-6.4.11.p2.2-aarch64-fd0148d.bin
 +sha256  24d7cb3a7e51011466a149bd99acf89387b832be2d0890ce2e183dfbc9d7cb84  COPYING
 +sha256  3282d88fad766897f93b0827297a70c2707d9358db24cccd5777abf7c997da77  EULA
-diff --git a/package/freescale-imx/imx-codec/imx-codec.mk b/package/freescale-imx/imx-codec/imx-codec.mk
-index 2b7c346a6e..54ba6f126e 100644
---- a/package/freescale-imx/imx-codec/imx-codec.mk
-+++ b/package/freescale-imx/imx-codec/imx-codec.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 5a13419e3e..3cfbfe3ccc 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -5,9 +5,9 @@
  ################################################################################
  
--IMX_CODEC_VERSION = 4.3.5
-+IMX_CODEC_VERSION = 4.8.2
- IMX_CODEC_SITE = $(FREESCALE_IMX_SITE)
- IMX_CODEC_SOURCE = imx-codec-$(IMX_CODEC_VERSION).bin
- IMX_CODEC_INSTALL_STAGING = YES
+ ifeq ($(BR2_aarch64),y)
+-IMX_GPU_VIV_VERSION = 6.4.11.p1.2-aarch64-1e0c396
++IMX_GPU_VIV_VERSION = 6.4.11.p2.2-aarch64-fd0148d
+ else
+-IMX_GPU_VIV_VERSION = 6.4.11.p1.2-aarch32-1e0c396
++IMX_GPU_VIV_VERSION = 6.4.11.p2.2-aarch32-fd0148d
+ endif
+ IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
+ IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
 -- 
 2.43.0
 
