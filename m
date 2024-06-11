@@ -4,94 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 398C6C27C75
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 15:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B766C27C79
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 15:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2E784069E;
-	Tue, 11 Jun 2024 15:22:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B6F440647;
+	Tue, 11 Jun 2024 15:22:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O3uMVylOWYf9; Tue, 11 Jun 2024 15:22:18 +0000 (UTC)
+ id urSPRSlftUYy; Tue, 11 Jun 2024 15:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C039540647
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4BA7406A1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C039540647;
-	Tue, 11 Jun 2024 15:22:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3AF711BF391
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4BA7406A1;
+	Tue, 11 Jun 2024 15:22:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DB89A1BF391
  for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 15:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27EB1405DE
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0F124060E
  for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 15:22:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WJgh4UV9FTOc for <buildroot@lists.busybox.net>;
- Tue, 11 Jun 2024 15:22:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rgVN_hIatXaP for <buildroot@lists.busybox.net>;
+ Tue, 11 Jun 2024 15:22:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
+ client-ip=2607:f8b0:4864:20::d2f; helo=mail-io1-xd2f.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 85CEE40273
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85CEE40273
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 85CEE40273
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1F3F840600
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F3F840600
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1F3F840600
  for <buildroot@buildroot.org>; Tue, 11 Jun 2024 15:22:11 +0000 (UTC)
-Received: by mail-io1-xd29.google.com with SMTP id
- ca18e2360f4ac-7ea0b5e0977so274238339f.2
+Received: by mail-io1-xd2f.google.com with SMTP id
+ ca18e2360f4ac-7e238fa7b10so50499539f.0
  for <buildroot@buildroot.org>; Tue, 11 Jun 2024 08:22:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718119330; x=1718724130;
+ d=1e100.net; s=20230601; t=1718119331; x=1718724131;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=uGYBpcBlKvtor+x4Mn5/PU5SIPa9ZoMtnpLWeI2JdFU=;
- b=YmudvtvkR8RRphKIZXgY19OVvFtru5Eu9FrFGV2jCW/LIaa0EXvsUeGFowmL7TjRMn
- VLESrGuMtPtmMpM2xDhfZ5YOIBknfRuXS1uTF959KQCmwOIBUBM8zXGEfRWzJow4cqqn
- IhCeDpSsjEJI4JKK4mYPWjmWS/zlbOh/fQpuxXMkDtWAKn32Lk9ESjF+/wHJ5TXtbkUU
- c0slV9QiUTZ2oMv/IJeOZmKQQTZp1sVo3CNWLBFQIotfpS5xPKLa+qvzgRKa/utRsex7
- 2X0fLsJh/WzXjOyn+e9ERrjM005qulQEgXW5Od41vvU/+rLWBz9ipyqwPRFPt5er7OjV
- sdfA==
-X-Gm-Message-State: AOJu0YzSvfupiz7qbV5CgfI3sa+Fmz03TT0KEDf0+KtH8lUGjdmHPzk0
- VUitskVJgU7AJzJzNY1oq/d7O/04wPEeEF1t6zKOOP5Hs6IsLZ10APZSkyFL
-X-Google-Smtp-Source: AGHT+IGlWjVveZjQMsdbrqjpsLerb812pmMK8czM+yan02Wn1VIRvZeT0cLNM0uLHVVzRuBM9aM+/w==
-X-Received: by 2002:a05:6602:1495:b0:7eb:699d:c3fb with SMTP id
- ca18e2360f4ac-7eb699dcaafmr1211577539f.19.1718119330110; 
+ bh=lWxnywAIrIyIaA/oSlnKAUNCF93YzGpX2zPu+djuCvg=;
+ b=D9/7byu7Q5BTeCMOdgO4eXMv7xBTXK6R43XDqrjPYf2jtbJyFZBieAlHVrkbub7Xb/
+ 25sDnW93ES1YWL9eaW0tp5f6xI1wgxkJ5EqCu+gpcifs8os5sNtH+n4wtmlJLrBp1kcO
+ R3m3C0v/+NcpgcVFt6p7/HsDqGnmaLZYs21rHsCANDtZNEfvmWBJ+6Nonx9UZKeX6CSC
+ 6hswTSZvYi/I/siBkviwy5MvM/rpUleSBf3McCRi8MPKlWQRfCaG7TqMyME+tpfIdu/l
+ OSdm9gFSTZapGX4rifHk/lLdx/IjtXxuhqGYSsjxgkAwJmZG1k5VhBYeEBIhvFAVpA97
+ ViOA==
+X-Gm-Message-State: AOJu0YxXSvJae0okxf8LKMfmuOlNOfPM7ReYkI+VyXt7nhWX1Q254fYt
+ QtXWRKmWTo3YxkCWIPQjlA/npj+iJu/I7dZ0Qfd2iP7NAaxB0NRrtcjhlx5S
+X-Google-Smtp-Source: AGHT+IHGUPWS93hiYh9fI8c3uzi5qNd98YCNUJLXBsSAv9wz5V85qXhLDyuyEF7ixAsb7GeAZv6l5Q==
+X-Received: by 2002:a05:6602:15ce:b0:7eb:c8a4:7f4e with SMTP id
+ ca18e2360f4ac-7ebc8a482cdmr82645739f.5.1718119330661; 
  Tue, 11 Jun 2024 08:22:10 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
  [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-7eb81f14c0dsm128268939f.28.2024.06.11.08.22.09
+ ca18e2360f4ac-7eb81f14c0dsm128268939f.28.2024.06.11.08.22.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 11 Jun 2024 08:22:09 -0700 (PDT)
+ Tue, 11 Jun 2024 08:22:10 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 11 Jun 2024 09:22:01 -0600
-Message-Id: <20240611152202.951202-3-james.hilliard1@gmail.com>
+Date: Tue, 11 Jun 2024 09:22:02 -0600
+Message-Id: <20240611152202.951202-4-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240611152202.951202-1-james.hilliard1@gmail.com>
 References: <20240611152202.951202-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718119330; x=1718724130; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1718119331; x=1718724131; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=uGYBpcBlKvtor+x4Mn5/PU5SIPa9ZoMtnpLWeI2JdFU=;
- b=SHkpsCN6AXJ6oLX17j5WGUlxER2RY+nwKi2bg0epN0DPyZFXWe0SBey6AwNozyRJzR
- oyyIUlZOccWTkwXyvXduJnBr4KyXHapQqczRDzwHKeK75Rlz+HmIZGLKNi3VLS1Q57wn
- vWuppFpcGn4r/k00vithryJTB9pwfP8b3Fj6CcIACMOIL9W+/B/ynHt5AbbioZIFFZbR
- bEUUfHPWv+Jgs4PaIuVmQttcu9pe7zD8nGxXaXwflQIZu6LjtlvmuHc5hgl1uE1RDfW0
- PG+zcOsOPD1vTq4LqMjbKuEhkDqRRveLQjNbLPX+ti4G4s+X4tjvOb5e7bvHPhD2/0Hg
- fGog==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=lWxnywAIrIyIaA/oSlnKAUNCF93YzGpX2zPu+djuCvg=;
+ b=Xt6tiglD2J26/zptMooo+QT3HTIthZ+37LYQpyVQd8VtwMRRtgLA8CkGlXSngPzEHD
+ yqiVYiAY4xD/qRarxgT7fAbpAojrCJILBT8C024iswLHOXntzgbOofmb7R1ETFpDYnW7
+ i7MN05ob/bCw+RZTAnYNxS5CC7raV9fkRFji+yUbALU3h9UJp5aPyDa5sMpKxoRUJRqs
+ 0Oq2FWhkASIHZKWMgWmVaFlzklLu/okEZH0QsrKA5SEWUz92RNMteHLjl0NQlT1vgNUs
+ lacK1uQNuIPAoGc/wUygU/oItv0u9hlZYk/wBsVbinYsHvKrYN/dXF9MJ9D+Exx2LI+X
+ GYMw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=SHkpsCN6
-Subject: [Buildroot] [PATCH v2 3/4] package/flashrom: install to staging
- with meson
+ header.a=rsa-sha256 header.s=20230601 header.b=Xt6tiglD
+Subject: [Buildroot] [PATCH v2 4/4] package/fwupd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,204 +110,276 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This will be needed for the upcoming fwupd flashrom plugin to work
-as only the meson build correctly installs the pkgconfig files
-needed by fwupd.
-
-Drop Makefile patch which is no longer relevant.
-
-Backport a patch removing _LARGEFILE64_SOURCE which can result in a
-redefination build error.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...G_INTERNAL-depends-on-raw-mem-access.patch | 35 ---------
- ...et_enable.c-Drop-_LARGEFILE64_SOURCE.patch | 38 ++++++++++
- package/flashrom/flashrom.mk                  | 74 +++++++++++++------
- 3 files changed, 88 insertions(+), 59 deletions(-)
- delete mode 100644 package/flashrom/0001-Makefile-CONFIG_INTERNAL-depends-on-raw-mem-access.patch
- create mode 100644 package/flashrom/0001-chipset_enable.c-Drop-_LARGEFILE64_SOURCE.patch
+ package/Config.in        |   1 +
+ package/fwupd/Config.in  |  19 ++++
+ package/fwupd/fwupd.hash |   3 +
+ package/fwupd/fwupd.mk   | 208 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 231 insertions(+)
+ create mode 100644 package/fwupd/Config.in
+ create mode 100644 package/fwupd/fwupd.hash
+ create mode 100644 package/fwupd/fwupd.mk
 
-diff --git a/package/flashrom/0001-Makefile-CONFIG_INTERNAL-depends-on-raw-mem-access.patch b/package/flashrom/0001-Makefile-CONFIG_INTERNAL-depends-on-raw-mem-access.patch
-deleted file mode 100644
-index 9d3f3d9c51..0000000000
---- a/package/flashrom/0001-Makefile-CONFIG_INTERNAL-depends-on-raw-mem-access.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From aac91025386aa9d7b8214f8ad1746ef5c02f2d8d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 5 Nov 2023 10:38:32 +0100
--Subject: [PATCH] Makefile: CONFIG_INTERNAL depends on raw mem access
--
--CONFIG_INTERNAL depends on raw mem access resulting in the following
--build failure on sh4 since version 1.3.0:
--
--/home/thomas/autobuild/instance-3/output-1/per-package/flashrom/host/bin/../lib/gcc/sh4a-buildroot-linux-gnu/12.3.0/../../../../sh4a-buildroot-linux-gnu/bin/ld: libflashrom.a(internal.o): in function `internal_chip_readn':
--internal.c:(.text+0x8): undefined reference to `mmio_readn'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/f74a9d315fb519f284428234713f43fcf4e35fd0
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://review.coreboot.org/c/flashrom/+/78930
-----
-- Makefile | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/Makefile b/Makefile
--index bf01d0f8..cd21f22f 100644
----- a/Makefile
--+++ b/Makefile
--@@ -115,6 +115,7 @@ DEPENDS_ON_RAW_MEM_ACCESS := \
-- 	CONFIG_ATAPROMISE \
-- 	CONFIG_DRKAISER \
-- 	CONFIG_GFXNVIDIA \
--+	CONFIG_INTERNAL \
-- 	CONFIG_INTERNAL_X86 \
-- 	CONFIG_IT8212 \
-- 	CONFIG_NICINTEL \
---- 
--2.42.0
--
-diff --git a/package/flashrom/0001-chipset_enable.c-Drop-_LARGEFILE64_SOURCE.patch b/package/flashrom/0001-chipset_enable.c-Drop-_LARGEFILE64_SOURCE.patch
+diff --git a/package/Config.in b/package/Config.in
+index 2be39f98c7..02ca6472d2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -519,6 +519,7 @@ endmenu
+ 	source "package/fmtools/Config.in"
+ 	source "package/freeipmi/Config.in"
+ 	source "package/freescale-imx/Config.in"
++	source "package/fwupd/Config.in"
+ 	source "package/fwupd-efi/Config.in"
+ 	source "package/fxload/Config.in"
+ 	source "package/gcnano-binaries/Config.in"
+diff --git a/package/fwupd/Config.in b/package/fwupd/Config.in
 new file mode 100644
-index 0000000000..1ee8d0f7e3
+index 0000000000..6a96358e5b
 --- /dev/null
-+++ b/package/flashrom/0001-chipset_enable.c-Drop-_LARGEFILE64_SOURCE.patch
-@@ -0,0 +1,38 @@
-+From 59287a0bd0e4d58a4d2b434bde3db9b2376ac7c1 Mon Sep 17 00:00:00 2001
-+From: Angel Pons <th3fanbus@gmail.com>
-+Date: Tue, 16 May 2023 11:13:17 +0200
-+Subject: [PATCH] chipset_enable.c: Drop `_LARGEFILE64_SOURCE`
++++ b/package/fwupd/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_FWUPD
++	bool "fwupd"
++	depends on !BR2_STATIC_LIBS # libxmlb
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBJCAT
++	select BR2_PACKAGE_LIBXMLB
++	select BR2_PACKAGE_ZLIB
++	help
++	  Fwupd is a simple daemon to allow session software
++	  to update device firmware on your local machine.
 +
-+This file does not access any large files, so there's no need to define
-+this feature test macro.
++	  https://fwupd.org/
 +
-+Change-Id: I866cfa2f996eeea5846e5d9189647ad7a4a4e3e4
-+Signed-off-by: Angel Pons <th3fanbus@gmail.com>
-+Reviewed-on: https://review.coreboot.org/c/flashrom/+/75271
-+Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
-+Reviewed-by: Nico Huber <nico.h@gmx.de>
-+Reviewed-by: Anastasia Klimchuk <aklm@chromium.org>
-+Reviewed-by: Alexander Goncharov <chat@joursoir.net>
++comment "fwupd needs a toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/fwupd/fwupd.hash b/package/fwupd/fwupd.hash
+new file mode 100644
+index 0000000000..8da9dc3c66
+--- /dev/null
++++ b/package/fwupd/fwupd.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  b86a2d7fe1b6cc0ac4f75f3351a78cb3c225880c9e20b932fa078ef472e9fcb2  fwupd-1.9.20.tar.xz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/fwupd/fwupd.mk b/package/fwupd/fwupd.mk
+new file mode 100644
+index 0000000000..b7497707f5
+--- /dev/null
++++ b/package/fwupd/fwupd.mk
+@@ -0,0 +1,208 @@
++################################################################################
++#
++# fwupd
++#
++################################################################################
 +
-+Upstream: https://github.com/flashrom/flashrom/commit/59287a0bd0e4d58a4d2b434bde3db9b2376ac7c1
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+---
-+ chipset_enable.c | 2 --
-+ 1 file changed, 2 deletions(-)
++FWUPD_VERSION = 1.9.20
++FWUPD_SITE = https://github.com/fwupd/fwupd/releases/download/$(FWUPD_VERSION)
++FWUPD_SOURCE = fwupd-$(FWUPD_VERSION).tar.xz
++FWUPD_LICENSE = LGPL-2.1+
++FWUPD_LICENSE_FILES = COPYING
++FWUPD_DEPENDENCIES = \
++	host-pkgconf \
++	libglib2 \
++	libjcat \
++	libxmlb \
++	zlib
 +
-+diff --git a/chipset_enable.c b/chipset_enable.c
-+index 9d3df5f8..3846ecfb 100644
-+--- a/chipset_enable.c
-++++ b/chipset_enable.c
-+@@ -24,8 +24,6 @@
-+  * Contains the chipset specific flash enables.
-+  */
-+ 
-+-#define _LARGEFILE64_SOURCE
-+-
-+ #include <stdbool.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-- 
-+2.34.1
++FWUPD_CONF_OPTS = \
++	-Dstatic_analysis=false \
++	-Dconsolekit=disabled \
++	-Dfirmware-packager=true \
++	-Ddocs=disabled \
++	-Dlvfs=true \
++	-Dman=false \
++	-Dgusb=disabled \
++	-Dpassim=disabled \
++	-Dp2p_policy=none \
++	-Dcbor=disabled \
++	-Dplugin_acpi_phat=enabled \
++	-Dplugin_cfu=disabled \
++	-Dplugin_ep963x=enabled \
++	-Dplugin_fastboot=disabled \
++	-Dplugin_logitech_bulkcontroller=disabled \
++	-Dplugin_logitech_scribe=disabled \
++	-Dplugin_logitech_tap=disabled \
++	-Dplugin_pixart_rf=enabled \
++	-Dplugin_tpm=disabled \
++	-Dplugin_uefi_capsule=enabled \
++	-Dplugin_uefi_capsule_splash=false \
++	-Dplugin_nitrokey=enabled \
++	-Dplugin_mtd=enabled \
++	-Dplugin_intel_me=enabled \
++	-Dplugin_upower=enabled \
++	-Dplugin_powerd=enabled \
++	-Dqubes=false \
++	-Dsupported_build=enabled \
++	-Dlaunchd=disabled \
++	-Dtests=false \
++	-Dmetainfo=true \
++	-Dfish_completion=false \
++	-Doffline=enabled \
++	-Dcompat_cli=false \
++	-Dthinklmi_compat=false \
++	-Dpython="$(HOST_DIR)/bin/python3"
 +
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 86bfec40cc..be6cac3cc2 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -9,41 +9,67 @@ FLASHROM_SOURCE = flashrom-v$(FLASHROM_VERSION).tar.bz2
- FLASHROM_SITE = https://download.flashrom.org/releases
- FLASHROM_LICENSE = GPL-2.0+
- FLASHROM_LICENSE_FILES = COPYING
--FLASHROM_MAKE_OPTS = WARNERROR=no
-+FLASHROM_INSTALL_STAGING = YES
-+FLASHROM_CONF_OPTS = \
-+	-Dclassic_cli=enabled \
-+	-Dclassic_cli_print_wiki=disabled \
-+	-Dich_descriptors_tool=enabled \
-+	-Dtests=disabled \
-+	-Duse_internal_dmi=true
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++FWUPD_DEPENDENCIES += gobject-introspection
++FWUPD_CONF_OPTS += -Dintrospection=enabled
++else
++FWUPD_CONF_OPTS += -Dintrospection=disabled
++endif
 +
-+FLASHROM_PROGRAMMERS = \
-+	buspirate_spi \
-+	linux_mtd \
-+	linux_spi \
-+	parade_lspcon \
-+	mediatek_i2c_spi \
-+	mstarddc_spi \
-+	pony_spi \
-+	rayer_spi \
-+	realtek_mst_i2c_spi \
-+	serprog
- 
- ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
- FLASHROM_DEPENDENCIES += host-pkgconf libftdi1
--FLASHROM_MAKE_OPTS += \
--	CONFIG_FT2232_SPI=yes \
--	CONFIG_USBBLASTER_SPI=yes
--else
--FLASHROM_MAKE_OPTS += \
--	CONFIG_FT2232_SPI=no \
--	CONFIG_USBBLASTER_SPI=no
-+FLASHROM_PROGRAMMERS += \
-+	ft2232_spi \
-+	usbblaster_spi
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
- FLASHROM_DEPENDENCIES += host-pkgconf libusb
--FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBUSB1_PROGRAMMERS=yes
--else
--FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBUSB1_PROGRAMMERS=no
-+FLASHROM_PROGRAMMERS += \
-+	ch341a_spi \
-+	dediprog \
-+	developerbox_spi \
-+	digilent_spi \
-+	dirtyjtag_spi \
-+	pickit2_spi \
-+	raiden_debug_spi \
-+	stlinkv3_spi
- endif
- 
- ifeq ($(BR2_PACKAGE_PCIUTILS),y)
- FLASHROM_DEPENDENCIES += pciutils
--FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBPCI_PROGRAMMERS=yes
--else
--FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBPCI_PROGRAMMERS=no
-+FLASHROM_PROGRAMMERS += \
-+	atahpt \
-+	atapromise \
-+	atavia \
-+	drkaiser \
-+	gfxnvidia \
-+	internal \
-+	it8212 \
-+	nic3com \
-+	nicintel \
-+	nicintel_eeprom \
-+	nicintel_spi \
-+	nicnatsemi \
-+	nicrealtek \
-+	ogp_spi \
-+	satamv \
-+	satasii
- endif
- 
--define FLASHROM_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STRNLEN" \
--		$(FLASHROM_MAKE_OPTS) -C $(@D)
--endef
--
--define FLASHROM_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/flashrom $(TARGET_DIR)/usr/sbin/flashrom
--endef
-+FLASHROM_CONF_OPTS += -Dprogrammer=$(subst $(space),$(comma),$(strip $(FLASHROM_PROGRAMMERS)))
- 
--$(eval $(generic-package))
++ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
++FWUPD_DEPENDENCIES += libarchive
++FWUPD_CONF_OPTS += -Dlibarchive=enabled
++else
++FWUPD_CONF_OPTS += -Dlibarchive=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
++FWUPD_DEPENDENCIES += libgudev
++FWUPD_CONF_OPTS += \
++	-Dgudev=enabled \
++	-Dplugin_android_boot=enabled \
++	-Dplugin_bcm57xx=enabled \
++	-Dplugin_emmc=enabled \
++	-Dplugin_gpio=enabled \
++	-Dplugin_igsc=enabled \
++	-Dplugin_kinetic_dp=enabled \
++	-Dplugin_parade_lspcon=enabled \
++	-Dplugin_realtek_mst=enabled \
++	-Dplugin_synaptics_mst=enabled \
++	-Dplugin_mediatek_scaler=enabled \
++	-Dplugin_scsi=enabled \
++	-Dplugin_nvme=enabled \
++	-Dplugin_uf2=enabled
++else
++FWUPD_CONF_OPTS += \
++	-Dgudev=disabled \
++	-Dplugin_android_boot=disabled \
++	-Dplugin_bcm57xx=disabled \
++	-Dplugin_emmc=disabled \
++	-Dplugin_gpio=disabled \
++	-Dplugin_igsc=disabled \
++	-Dplugin_kinetic_dp=disabled \
++	-Dplugin_parade_lspcon=disabled \
++	-Dplugin_realtek_mst=disabled \
++	-Dplugin_synaptics_mst=disabled \
++	-Dplugin_mediatek_scaler=disabled \
++	-Dplugin_scsi=disabled \
++	-Dplugin_nvme=disabled \
++	-Dplugin_uf2=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
++FWUPD_DEPENDENCIES += bluez5_utils
++FWUPD_CONF_OPTS += -Dbluez=enabled
++else
++FWUPD_CONF_OPTS += -Dbluez=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_POLKIT),y)
++FWUPD_DEPENDENCIES += polkit
++FWUPD_CONF_OPTS += -Dpolkit=enabled
++else
++FWUPD_CONF_OPTS += -Dpolkit=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++FWUPD_DEPENDENCIES += gnutls
++FWUPD_CONF_OPTS += -Dgnutls=enabled -Dplugin_uefi_pk=enabled
++else
++FWUPD_CONF_OPTS += -Dgnutls=disabled -Dplugin_uefi_pk=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_SQLITE),y)
++FWUPD_DEPENDENCIES += sqlite
++FWUPD_CONF_OPTS += -Dsqlite=enabled
++else
++FWUPD_CONF_OPTS += -Dsqlite=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_XZ),y)
++FWUPD_DEPENDENCIES += xz
++FWUPD_CONF_OPTS += -Dlzma=enabled
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++FWUPD_CONF_OPTS += -Dplugin_intel_spi=true
++else
++FWUPD_CONF_OPTS += -Dplugin_intel_spi=false
++endif
++else
++FWUPD_CONF_OPTS += -Dlzma=disabled -Dplugin_intel_spi=false
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_AMDGPU)$(BR2_PACKAGE_LIBGUDEV),yy)
++FWUPD_DEPENDENCIES += libdrm libgudev
++FWUPD_CONF_OPTS += -Dplugin_amdgpu=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_amdgpu=disabled
++endif
++
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++FWUPD_CONF_OPTS += -Dplugin_cpu=enabled -Dplugin_msr=enabled -Dhsi=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_cpu=disabled -Dplugin_msr=disabled -Dhsi=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGUDEV),yy)
++FWUPD_DEPENDENCIES += gnutls libgudev
++FWUPD_CONF_OPTS += -Dplugin_synaptics_rmi=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_synaptics_rmi=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++FWUPD_DEPENDENCIES += libcurl
++FWUPD_CONF_OPTS += -Dplugin_redfish=enabled -Dcurl=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_redfish=disabled -Dcurl=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGUDEV)$(BR2_PACKAGE_LIBMBIM)$(BR2_PACKAGE_LIBQMI)$(BR2_PACKAGE_MODEM_MANAGER),yyyy)
++FWUPD_DEPENDENCIES += libgudev libmbim libqmi modem-manager
++FWUPD_CONF_OPTS += -Dplugin_modem_manager=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_modem_manager=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_FLASHROM),y)
++FWUPD_DEPENDENCIES += flashrom
++FWUPD_CONF_OPTS += -Dplugin_flashrom=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_flashrom=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++FWUPD_DEPENDENCIES += systemd
++FWUPD_CONF_OPTS += -Dsystemd=enabled -Delogind=enabled
++else
++FWUPD_CONF_OPTS += -Dsystemd=disabled -Delogind=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_FWUPD_EFI),y)
++FWUPD_DEPENDENCIES += fwupd-efi
++FWUPD_CONF_OPTS += -Defi_binary=true
++else
++FWUPD_CONF_OPTS += -Defi_binary=false
++endif
++
++ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
++FWUPD_DEPENDENCIES += bash-completion
++FWUPD_CONF_OPTS += -Dbash_completion=true
++else
++FWUPD_CONF_OPTS += -Dbash_completion=false
++endif
++
 +$(eval $(meson-package))
 -- 
 2.34.1
