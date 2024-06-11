@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C55DC27C65
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 20:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72169C27C75
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 21:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C819A400D1;
-	Tue, 11 Jun 2024 20:52:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3A33400D1;
+	Tue, 11 Jun 2024 21:42:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J0sTu0p9ifZL; Tue, 11 Jun 2024 20:52:07 +0000 (UTC)
+ id 3dVROD88or_a; Tue, 11 Jun 2024 21:42:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B660404C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABCCF404C1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B660404C1;
-	Tue, 11 Jun 2024 20:52:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3CCB21BF387
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 20:52:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABCCF404C1;
+	Tue, 11 Jun 2024 21:42:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 728581BF386
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 21:42:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36544404EB
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 20:52:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6006760857
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 21:42:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZABH52maQQ_K for <buildroot@lists.busybox.net>;
- Tue, 11 Jun 2024 20:52:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cVbEsS8MVkUn for <buildroot@lists.busybox.net>;
+ Tue, 11 Jun 2024 21:42:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 283964033C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 283964033C
- for <buildroot@buildroot.org>; Tue, 11 Jun 2024 20:52:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C12587EEE; Tue, 11 Jun 2024 20:52:05 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 11 Jun 2024 21:55:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8b8f5e336609e3b8f24786f8029d02bcae593a84
-X-Git-Newrev: 85736a27c8cdddcc65ff769852fde60834f302c7
-X-Patchwork-Hint: ignore
-Message-Id: <20240611205205.1C12587EEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] editorconfig: leave patch files alone wrt
- trainling spaces
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 08E71606CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08E71606CB
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 08E71606CB
+ for <buildroot@buildroot.org>; Tue, 11 Jun 2024 21:42:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7244F240002;
+ Tue, 11 Jun 2024 21:42:40 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sH9GJ-00AYit-1h;
+ Tue, 11 Jun 2024 23:42:39 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20240606102208.580103-1-dario.binacchi@amarulasolutions.com>
+ <ZmG4tZkQRcP2pAPx@landeda>
+Date: Tue, 11 Jun 2024 23:42:39 +0200
+In-Reply-To: <ZmG4tZkQRcP2pAPx@landeda> (Yann E. MORIN's message of "Thu, 6
+ Jun 2024 15:25:09 +0200")
+Message-ID: <87jzivtauo.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f429_disco_xip: add hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +69,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: linux-amarula@amarulasolutions.com,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85736a27c8cdddcc65ff769852fde60834f302c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-It is perfectly valid for a patch file to have trailing spaces, when for
-example an empty or space-only line is appears in a hunk: if the line if
-part of the context, whether it be empty or with only spaces, there will
-aways be the leading space introduced by the patch itsef, making for a
-sapce-only line; if the line is space-only and removed (or added) that
-will also appear as a space-only line.
+Hi,
 
-Currently, our editorconfig wants to unconditionally drop trailing
-spaces, so when one edits a patch file to add their SoB and Upstream
-tags, such a patch would get badly mangled and would not apply, causing
-quite some grief and questioning (sad experience looming in the recent
-past here)...
+ >> +++ b/board/stmicroelectronics/stm32f429-disco/patches/linux-headers/linux-headers.hash
+ >> @@ -0,0 +1 @@
+ >> +../linux/linux.hash
+ >> \ No newline at end of file
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .editorconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ > This symlink is not needed in that defconfig: it uses linux-headers that
+ > are not the same as the kernel, and instead use the 6.1.x from the
+ > linux-headers version choice.
 
-diff --git a/.editorconfig b/.editorconfig
-index af6cf4b449..f7c3c7ddc3 100644
---- a/.editorconfig
-+++ b/.editorconfig
-@@ -29,6 +29,9 @@ indent_size = tab
- indent_style = tab
- indent_size = tab
- 
-+[*.patch]
-+trim_trailing_whitespace = false
-+
- [S{0..9}{0..9}*]
- indent_style = tab
- indent_size = tab
+Is there any valid reason why it does so? If not, I would suggest to
+change it to match the other defconfigs.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
