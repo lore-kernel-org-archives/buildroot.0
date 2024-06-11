@@ -1,95 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3FB2C27C75
-	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 15:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E4DC27C65
+	for <buildroot@archiver.kernel.org>; Tue, 11 Jun 2024 16:55:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67A0140637;
-	Tue, 11 Jun 2024 15:31:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27C4F60034;
+	Tue, 11 Jun 2024 16:55:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WrDWNjFi6uFb; Tue, 11 Jun 2024 15:31:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9jiXHa5gAbLi; Tue, 11 Jun 2024 16:55:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2118A40644
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33C2E608EB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2118A40644;
-	Tue, 11 Jun 2024 15:31:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33C2E608EB;
+	Tue, 11 Jun 2024 16:55:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19A1F1BF391
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 15:31:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B58F1BF391
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 16:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0690D816A4
- for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 15:31:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 15CF881FF7
+ for <buildroot@lists.busybox.net>; Tue, 11 Jun 2024 16:55:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ghIAW_pYQwpo for <buildroot@lists.busybox.net>;
- Tue, 11 Jun 2024 15:31:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::30; helo=mail-oa1-x30.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2EE3C8164A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EE3C8164A
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com
- [IPv6:2001:4860:4864:20::30])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2EE3C8164A
- for <buildroot@buildroot.org>; Tue, 11 Jun 2024 15:31:37 +0000 (UTC)
-Received: by mail-oa1-x30.google.com with SMTP id
- 586e51a60fabf-254a9b89be2so688793fac.2
- for <buildroot@buildroot.org>; Tue, 11 Jun 2024 08:31:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718119896; x=1718724696;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=LeLgxYNehHu1hX0RJ7cYJBe7F7al1B3KsN6o7fLIUgs=;
- b=OmtACYSEipSf3ehjnt74gpdOt8DCPw1XNa1UgeUmheXT0ILPN6mmn0kmi1y91m1nxI
- rSUfeK0BzElXKmPMtbzjbGlqDCXgyLoeXFpdr9fQJ5E23an26FJLR5AnPqRQhZbLytSM
- cdhnK2tvhWYca1RFVi6LZzKpuxG6BfPrBtyrisqgsKZLNEfIAAuFG/96zcafKEhvN78T
- SeB6E3ZnHLDjMpOJLKjT036c/vKIe5o+Rq7JmptuXqCBrjoI3CgW2mI63O5+OlmeyOPi
- yeCRyqV2xgtGKjyuajUjHuPhiI1gxff5V+s15SRKQMIJ1dueJABJuK+LMhS5/0kp7L3y
- ht3A==
-X-Gm-Message-State: AOJu0YwRAJgPJsEROIRFU1HzQ0Ihp1Dkt2iDHejxKet0aOalwlZq4YiL
- Cs/b7pihSd3z4pl71pOA+vkCpCJFqe9epE2I4BYmmPdjXRnfdV5MM0Uo36ir
-X-Google-Smtp-Source: AGHT+IFAi21eLHJfffwJtlZc/dDfhCSH8vzDFXa4fYwdm5/cbx9vcrboNd2qsOM3QBZr8rIM5XQ5HQ==
-X-Received: by 2002:a05:6870:32d0:b0:24d:9c4d:f609 with SMTP id
- 586e51a60fabf-254647f0af2mr12970421fac.38.1718119895931; 
- Tue, 11 Jun 2024 08:31:35 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
- [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4b7a23808c2sm3063743173.113.2024.06.11.08.31.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 11 Jun 2024 08:31:35 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ id 4-CCH8uSNh6m for <buildroot@lists.busybox.net>;
+ Tue, 11 Jun 2024 16:55:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=139.178.84.217;
+ helo=dfw.source.kernel.org; envelope-from=jarkko@kernel.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1355E81FF6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1355E81FF6
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1355E81FF6
+ for <buildroot@buildroot.org>; Tue, 11 Jun 2024 16:55:46 +0000 (UTC)
+Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
+ by dfw.source.kernel.org (Postfix) with ESMTP id 841D560F2A;
+ Tue, 11 Jun 2024 16:55:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1D85C2BD10;
+ Tue, 11 Jun 2024 16:55:44 +0000 (UTC)
+From: Jarkko Sakkinen <jarkko@kernel.org>
 To: buildroot@buildroot.org
-Date: Tue, 11 Jun 2024 09:30:40 -0600
-Message-Id: <20240611153040.954034-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue, 11 Jun 2024 19:55:39 +0300
+Message-ID: <20240611165539.658551-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718119896; x=1718724696; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LeLgxYNehHu1hX0RJ7cYJBe7F7al1B3KsN6o7fLIUgs=;
- b=g0YUL9kdOQIhavmE4Ktkm2QFppG7Laag5tVMuGv2N8VGoRW35bI11kPBEEq0NghdE6
- X2nnuAb1iFL+K5fFE+Sc0whGrzmOzKV4QjFQNst5MdsaSGFgzBdl0WztXTFstGnLHpkJ
- 7I4vzlDvxxrLkh1mt0Uftnf2kz1UvD/uv0hq3jxKc/Occh+U5N33oYtRVq/xdkM7aFh6
- 3JTwV5sSzYifeaKSjdn7QBxmf1GoLQa3LIgDhkv2sbCt2qI+CqK56clu/D9nDZvD3+eD
- 85HQd2tLAkvxZNp+NzNWBcfBzbXwA0waO422vN3OhJlVnYuSC2mbyB6DhfE+MZsJM/qx
- uvWg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=kernel.org; s=k20201202; t=1718124945;
+ bh=qOmi/iIOJhx3o3yASm2AdgN5BEygmEvlEISFzqx5TdU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=A69IbuNIwVDcpYBU/qsW8kuvjzdX30y7mJR6sCh4XsrMctRK77lSansrln6VHoAon
+ iNrd+4aMN/Nt2gOpsT9dUXi08lGb1VGFPmu1313/l3L8oiZu4ZFvWjlp7XqbRvxxbY
+ sqI6lgZNTdp2QlLv61vVIh5GuHM2wnXNFXrggmTe4Ofo++IvSNePIQMeReIjj6yiiw
+ V44z6xmU6u5603Xs37AmUfRaKKTqYADucQ1BWVq4waD1xqCtup5LLajYk61bk8PFWH
+ Gf57XvO/NOJsJB7Ur10WJbquMRlkf7qEye/bMplkkp1NUrrcp3eqPYa4tGeiAnkriP
+ 4IUS6qYdRhqwA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=kernel.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=g0YUL9kd
-Subject: [Buildroot] [PATCH v3 1/1] utils/genrandconfig: allow overriding
- KCONFIG_PROBABILITY
+ unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
+ header.s=k20201202 header.b=A69IbuNI
+Subject: [Buildroot] [PATCH] package/systemd: Add BCACHEFS superblock magic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,73 +77,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, Norbert Lange <nolange79@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, Sen Hastings <sen@hastings.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tweaking this variable should allow us to get better coverage of
-packages with larger dependency trees.
+Add the magic number for the bcachefs superblock. Otherwise, systemd
+254.13 fails to compile with the latest kernel versions.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v2 -> v3:
-  - rebase
-Changes v1 -> v2:
-  - rebase
----
- utils/genrandconfig | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+Upstream commit ID:  201148b08de6 ("basic: Add BCACHEFS magic")
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index fb493f3f31..b5e250a24f 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -736,7 +736,7 @@ async def gen_config(args):
-         proc = await asyncio.create_subprocess_exec(
-             "make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
-             "KCONFIG_SEED=0x%s" % hexlify(os.urandom(4)).decode("ascii").upper(),
--            "KCONFIG_PROBABILITY=%d" % randint(1, 20),
-+            "KCONFIG_PROBABILITY=%d" % args.probability,
-             "randpackageconfig" if args.toolchains_csv else "randconfig")
-         ret = await proc.wait()
-         if ret:
-@@ -764,6 +764,21 @@ async def gen_config(args):
- 
- if __name__ == '__main__':
-     import argparse
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Sen Hastings <sen@hastings.org>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Link: https://social.kernel.org/notice/Aie4Z8s4zYztoFTWUq
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+Cc-list picked from DEVELOPERS with the associated package mentioned.
+ .../0001-basic-add-bcachefs-magic.patch       | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/systemd/0001-basic-add-bcachefs-magic.patch
+
+diff --git a/package/systemd/0001-basic-add-bcachefs-magic.patch b/package/systemd/0001-basic-add-bcachefs-magic.patch
+new file mode 100644
+index 0000000000..ca13067f6a
+--- /dev/null
++++ b/package/systemd/0001-basic-add-bcachefs-magic.patch
+@@ -0,0 +1,50 @@
++From e5ff9b585d7dc54f50085d518d7d588c250b0690 Mon Sep 17 00:00:00 2001
++From: Chris Packham <chris.packham@alliedtelesis.co.nz>
++Date: Fri, 31 May 2024 09:51:38 +1200
++Subject: [PATCH 2/2] basic: Add BCACHEFS magic
 +
-+    class Range(argparse.Action):
-+        def __init__(self, minimum=None, maximum=None, *args, **kwargs):
-+            self.min = minimum
-+            self.max = maximum
-+            kwargs["metavar"] = "[%d-%d]" % (self.min, self.max)
-+            super(Range, self).__init__(*args, **kwargs)
++Import magic.h from Linux 6.9 to get the definition of
++BCACHEFS_SUPER_MAGIC. Update filesystems-gperf.gperf to add knowledge of
++bcachefs.
 +
-+        def __call__(self, parser, namespace, value, option_string=None):
-+            if not (self.min <= value <= self.max):
-+                msg = 'invalid choice: %r (choose from [%d-%d])' % \
-+                    (value, self.min, self.max)
-+                raise argparse.ArgumentError(self, msg)
-+            setattr(namespace, self.dest, value)
++This fixes the following error building against a bleeding edge kernel.
++```
++src/basic/meson.build:234:8: ERROR: Problem encountered: Unknown filesystems defined in kernel headers:
 +
-     parser = argparse.ArgumentParser(description="Generate a random configuration")
-     parser.add_argument("--outputdir", "-o",
-                         help="Output directory (relative to current directory)",
-@@ -771,6 +786,10 @@ if __name__ == '__main__':
-     parser.add_argument("--buildrootdir", "-b",
-                         help="Buildroot directory (relative to current directory)",
-                         type=str, default='.')
-+    parser.add_argument("--probability", "-p",
-+                        help="Override the KCONFIG_PROBABILITY value",
-+                        type=int, action=Range, minimum=0, maximum=100,
-+                        default=randint(1, 20))
- 
-     toolchains_csv = parser.add_mutually_exclusive_group(required=False)
-     toolchains_csv.add_argument("--toolchains-csv",
--- 
-2.34.1
++Filesystem found in kernel header but not in filesystems-gperf.gperf: BCACHEFS_SUPER_MAGIC
++```
++---
++ src/basic/filesystems-gperf.gperf | 1 +
++ src/basic/missing_magic.h         | 7 +++++++
++ 2 files changed, 8 insertions(+)
++
++diff --git a/src/basic/filesystems-gperf.gperf b/src/basic/filesystems-gperf.gperf
++index 1cd66b5a5f..c82fe98227 100644
++--- a/src/basic/filesystems-gperf.gperf
+++++ b/src/basic/filesystems-gperf.gperf
++@@ -28,6 +28,7 @@ afs,             {AFS_FS_MAGIC, AFS_SUPER_MAGIC}
++ anon_inodefs,    {ANON_INODE_FS_MAGIC}
++ autofs,          {AUTOFS_SUPER_MAGIC}
++ balloon-kvm,     {BALLOON_KVM_MAGIC}
+++bcachefs,        {BCACHEFS_SUPER_MAGIC}
++ bdev,            {BDEVFS_MAGIC}
++ binder,          {BINDERFS_SUPER_MAGIC}
++ binfmt_misc,     {BINFMTFS_MAGIC}
++diff --git a/src/basic/missing_magic.h b/src/basic/missing_magic.h
++index 82d71c8ad1..b3d2ee9f57 100644
++--- a/src/basic/missing_magic.h
+++++ b/src/basic/missing_magic.h
++@@ -197,3 +197,10 @@
++ #ifndef NTFS3_SUPER_MAGIC
++ #define NTFS3_SUPER_MAGIC 0x7366746e
++ #endif
+++
+++/* Added in Linux commit e2f48c48090dea172c0c571101041de64634dae5. Remove when next sync'd */
+++#ifndef BCACHEFS_SUPER_MAGIC
+++#  define BCACHEFS_SUPER_MAGIC 0xca451a4e
+++#else
+++assert_cc(BCACHEFS_SUPER_MAGIC == 0xca451a4e)
+++#endif
++--
++2.45.1
++
+--
+2.45.2
 
 _______________________________________________
 buildroot mailing list
