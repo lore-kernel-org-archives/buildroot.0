@@ -4,91 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA40BC27C75
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jun 2024 09:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 629F4C27C53
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jun 2024 09:48:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D09A400F9;
-	Wed, 12 Jun 2024 09:43:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CFDF740605;
+	Wed, 12 Jun 2024 09:48:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IzJuJvwbSARP; Wed, 12 Jun 2024 09:43:00 +0000 (UTC)
+ id zxb9xhvnSDLo; Wed, 12 Jun 2024 09:48:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D74DA402E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F1E0408C0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D74DA402E5;
-	Wed, 12 Jun 2024 09:42:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DEB791BF3A9
- for <buildroot@lists.busybox.net>; Wed, 12 Jun 2024 09:42:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F1E0408C0;
+	Wed, 12 Jun 2024 09:48:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 477D41BF3A9
+ for <buildroot@lists.busybox.net>; Wed, 12 Jun 2024 09:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C8B6E81EDD
- for <buildroot@lists.busybox.net>; Wed, 12 Jun 2024 09:42:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35C5E60761
+ for <buildroot@lists.busybox.net>; Wed, 12 Jun 2024 09:48:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YUqQm63j0EWD for <buildroot@lists.busybox.net>;
- Wed, 12 Jun 2024 09:42:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8373C81EDB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8373C81EDB
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8373C81EDB
- for <buildroot@buildroot.org>; Wed, 12 Jun 2024 09:42:57 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-a689ad8d1f6so800914666b.2
- for <buildroot@buildroot.org>; Wed, 12 Jun 2024 02:42:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718185375; x=1718790175;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Cvr5cuFDNRqPLLGf/sDyvbHZ3Is009XywII6MYTbXBE=;
- b=TBcQM/0m8Bomrxk1HOFRXDO9Y+INZpAzFtjMbQ3sGFyZsSU0Atl2giAk+W/CV0IqZo
- GS7gWaZq3ODoohupjHccF+xZRRaP+tykjmhoPh6ZJQX9Pp0S8rByAu9xdhsstwt481DN
- EgaGa6zvfba9WfN3Rnq+OtFKx4b2m/fmOcOqq2CN3l3llQZHaRllsQnbUoQA7lKmcIjO
- rvBUMQQDEqI8yOg5/Id1b5Kb1yD4Q9t3Jasqy7nSWM7U0vrRXffubuwLHJ1qGLXFUwkI
- pVqvjDnrPUSARlhaJoPwsQZMnPDBJuJK6C6O3famFNFfZ7cx1w14ZAQcsc/EBpNrt3v+
- 38Sg==
-X-Gm-Message-State: AOJu0YzOq2e/Yb3O5zELChHH26l/lkyaOzXA82ZwTELkTOt0dtV3mA+7
- HtfRHi4jBo7Y3rguQi9+ziTNq03ItchQTyXqzbkNkCmGeqFRI0gb0U9yb3m6El9idwQPrchTYZe
- y
-X-Google-Smtp-Source: AGHT+IGkPp/ZMCNIa92dsbgHpjVX8xoNpeQJkPjUHk1/OQ1uS/KelbP7KFM48hEboaUxsJ9iDOeBpA==
-X-Received: by 2002:a17:906:f8d3:b0:a6f:4aa4:c7a8 with SMTP id
- a640c23a62f3a-a6f4aa4c87cmr54601666b.27.1718185375219; 
- Wed, 12 Jun 2024 02:42:55 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.40.113])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a6f2d4138ccsm277687666b.220.2024.06.12.02.42.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 12 Jun 2024 02:42:54 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jgEqbbKHZ3To for <buildroot@lists.busybox.net>;
+ Wed, 12 Jun 2024 09:48:07 +0000 (UTC)
+X-Greylist: delayed 948 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 12 Jun 2024 09:48:07 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 58EDE6059D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58EDE6059D
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.71.1.220;
+ helo=relay-b03.edpnet.be; envelope-from=dev.kurt@vandijck-laurijssen.be;
+ receiver=<UNKNOWN> 
+Received: from relay-b03.edpnet.be (relay-b03.edpnet.be [212.71.1.220])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 58EDE6059D
+ for <buildroot@buildroot.org>; Wed, 12 Jun 2024 09:48:06 +0000 (UTC)
+X-ASG-Debug-ID: 1718184732-24639c182f3878870001-rUBnyj
+Received: from srv21.vandijck-laurijssen.be (77.109.96.193.adsl.dyn.edpnet.net
+ [77.109.96.193]) by relay-b03.edpnet.be with ESMTP id gAy3mvfwze81uEuY for
+ <buildroot@buildroot.org>; Wed, 12 Jun 2024 11:32:12 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
+X-Barracuda-Apparent-Source-IP: 77.109.96.193
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be
+ [IPv6:fd01::1a1d:eaff:fe02:d339])
+ by srv21.vandijck-laurijssen.be (Postfix) with ESMTPSA id 128E25A2379;
+ Wed, 12 Jun 2024 11:32:09 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Wed, 12 Jun 2024 11:42:51 +0200
-Message-ID: <20240612094251.3336896-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Date: Wed, 12 Jun 2024 11:30:57 +0200
+X-ASG-Orig-Subj: [PATCH] bcusdk: fix build without libxml
+Message-ID: <20240612093118.22195-1-dev.kurt@vandijck-laurijssen.be>
+X-Mailer: git-send-email 2.44.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1718185375; x=1718790175;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Cvr5cuFDNRqPLLGf/sDyvbHZ3Is009XywII6MYTbXBE=;
- b=lWPYyazd0dbLWcRren5neDo7rgh7EEoHchpIkvE6QLMIir+R8O4PPzzhBEJ+h1sbN8
- 3QQqjNdVWCOzFxOiWl3WBD0vCPwijJbE3fR200fHUl+ECYR+zz1SXEwIQuXWoB9AXreU
- zMAb3rSDpLUh1c1/sTxNICex55D8B2wKdsxjc=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=lWPYyazd
-Subject: [Buildroot] [PATCH 1/1] package/libnss: fix build failure for
- missing sqlite header
+X-Barracuda-Connect: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
+X-Barracuda-Start-Time: 1718184732
+X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 1572
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0
+ QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.126144
+ Rule breakdown below
+ pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=vandijck-laurijssen.be; s=default; t=1718184730;
+ bh=f9CXLGw2kbof7pEO8vz9H3WAaEaz0reGP7WAJ0LFXY4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=rqsuP5vkpIK88kvuUu1scuouxcKkE46zJCBmvz4c2bpVG8syxaZYAp2I7BHk2cnjC
+ USKOM1y6B196lASvBEWCHTpgb3EfTabNCaRLwKKMt9nbaAPvE7LTLxKzRHfCuG9c4s
+ WQhCe3mLl8J8tY12C+OC39I0mWe+SyEUSVxGM7XN842NU/3FLk5yNRxPFEqBobIuOk
+ RDHgT+rjPxgkIZac+RLSAg8f7lW/1kt3H8GLSGj74i7twlWenAtty9SoDA5NQH/EnL
+ rY9nfZA1m5tfs6EOK5kmcL3/oIDALsp3u0PJBQZ/+h69vk5TMkqLZlhTWaBkEJgPlu
+ qsawWM0ZjcaNA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=vandijck-laurijssen.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=vandijck-laurijssen.be header.i=@vandijck-laurijssen.be
+ header.a=rsa-sha256 header.s=default header.b=rqsuP5vk
+Subject: [Buildroot] [PATCH] bcusdk: fix build without libxml
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,78 +98,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+From: Kurt Van Dijck via buildroot <buildroot@buildroot.org>
+Reply-To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The host compilation of the package fails with the following error:
+bcusdk is configured without libxml.
+This commit removes the autotools libxml dependency.
 
-../../coreconf/nsinstall/Linux6.2_x86_64_gcc_glibc_PTH_64_DBG.OBJ/nsinstall -R -m 775
-Linux6.2_x86_64_gcc_glibc_PTH_64_DBG.OBJ/bltest buildroot/output/build/host-libnss-3.100/dist/bin
-/usr/bin/gcc -o Linux6.2_x86_64_gcc_glibc_PTH_64_DBG.OBJ/sdb.o -c -std=c99 -g -g -fPIC
--m64 -pipe -ffunction-sections -fdata-sections -DHAVE_STRERROR -DLINUX -Dlinux -Wall
--Wshadow -DNSS_NO_GCC48 -DXP_UNIX -DXP_UNIX -DDEBUG -UNDEBUG -D_DEFAULT_SOURCE -D_BSD_SOURCE
--D_POSIX_SOURCE -DSDB_MEASURE_USE_TEMP_DIR -D_REENTRANT -DDEBUG -UNDEBUG -D_DEFAULT_SOURCE
--D_BSD_SOURCE -D_POSIX_SOURCE -DSDB_MEASURE_USE_TEMP_DIR -D_REENTRANT -DNSS_DISABLE_SSE3
--DNSS_NO_INIT_SUPPORT -DUSE_UTIL_DIRECTLY -DNO_NSPR_10_SUPPORT -DSSL_DISABLE_DEPRECATED_CIPHER_SUITE_NAMES
--DNSS_USE_STATIC_LIBS -Ibuildroot/output/host/include/nspr -Ibuildroot/output/build/host-libnss-3.100/dist/include
--I../../../dist/public/nss -I../../../dist/private/nss  sdb.c
-sdb.c:24:10: fatal error: sqlite3.h: No such file or directory
-   24 | #include <sqlite3.h>
-      |          ^~~~~~~~~~~
-
-Link: https://bugzilla.mozilla.org/show_bug.cgi?id=1901932
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 ---
- ...ing-sqlite-header.-r-jmux-kaie-gland.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/libnss/0002-Bug-1901932-missing-sqlite-header.-r-jmux-kaie-gland.patch
+ package/bcusdk/0003-remove-xml-autoconf.patch | 11 +++++++++++
+ package/bcusdk/bcusdk.mk                      |  2 ++
+ 2 files changed, 13 insertions(+)
+ create mode 100644 package/bcusdk/0003-remove-xml-autoconf.patch
 
-diff --git a/package/libnss/0002-Bug-1901932-missing-sqlite-header.-r-jmux-kaie-gland.patch b/package/libnss/0002-Bug-1901932-missing-sqlite-header.-r-jmux-kaie-gland.patch
+diff --git a/package/bcusdk/0003-remove-xml-autoconf.patch b/package/bcusdk/0003-remove-xml-autoconf.patch
 new file mode 100644
-index 000000000000..3aae8d7e156a
+index 0000000000..33ce45fe12
 --- /dev/null
-+++ b/package/libnss/0002-Bug-1901932-missing-sqlite-header.-r-jmux-kaie-gland.patch
-@@ -0,0 +1,31 @@
-+From a236a40dc9055a66903efb537aa25230a767d0af Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Sat, 8 Jun 2024 18:47:25 +0200
-+Subject: [PATCH] Bug 1901932 - missing sqlite header. r=jmux,kaie,glandium
-+
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+
-+Differential Revision: https://phabricator.services.mozilla.com/D213397
-+Upstream: https://phabricator.services.mozilla.com/D213397
-+---
-+ nss/coreconf/location.mk | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/nss/coreconf/location.mk b/nss/coreconf/location.mk
-+index 9c43394d8cb0..16e8cc7169a3 100644
-+--- a/nss/coreconf/location.mk
-++++ b/nss/coreconf/location.mk
-+@@ -64,6 +64,10 @@ ifndef SOFTOKEN_LIB_DIR
-+     SOFTOKEN_LIB_DIR = $(DIST)/lib
-+ endif
++++ b/package/bcusdk/0003-remove-xml-autoconf.patch
+@@ -0,0 +1,11 @@
++--- a/configure.in	2024-06-12 11:20:16.800828493 +0200
+++++ b/configure.in	2024-06-12 11:18:19.275693151 +0200
++@@ -81,7 +81,7 @@
 + 
-++ifdef SQLITE_INCLUDE_DIR
-++    INCLUDES += -I$(SQLITE_INCLUDE_DIR)
-++endif
-++
-+ ifndef SQLITE_LIB_DIR
-+     SQLITE_LIB_DIR = $(DIST)/lib
-+ endif
-+-- 
-+2.43.0
++ if test x$onlyeibd = xfalse ; then
++ 
++-AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
+++#AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
++ AC_PATH_PROG(TAS,[m68hc05-as],,[$PATH:$bindir:$prefix/bin])
++ AC_PATH_PROG(TLD,[m68hc05-ld],,[$PATH:$bindir:$prefix/bin])
++ AC_PATH_PROG(TAR,[m68hc05-ar],,[$PATH:$bindir:$prefix/bin])
+diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
+index f14b23c7cc..c572df725d 100644
+--- a/package/bcusdk/bcusdk.mk
++++ b/package/bcusdk/bcusdk.mk
+@@ -23,6 +23,8 @@ BCUSDK_CONF_OPTS = \
+ 
+ BCUSDK_DEPENDENCIES = libpthsem
+ 
++BCUSDK_AUTORECONF=YES
 +
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+ BCUSDK_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
+ BCUSDK_CONF_ENV += LIBS=$(TARGET_NLS_LIBS)
 -- 
-2.43.0
+2.44.0
 
 _______________________________________________
 buildroot mailing list
