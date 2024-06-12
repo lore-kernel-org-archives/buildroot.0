@@ -4,70 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAC4AC27C75
-	for <buildroot@archiver.kernel.org>; Wed, 12 Jun 2024 19:23:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FF59C27C75
+	for <buildroot@archiver.kernel.org>; Wed, 12 Jun 2024 19:23:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E67D400B9;
-	Wed, 12 Jun 2024 19:23:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E618400B9;
+	Wed, 12 Jun 2024 19:23:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kQ6uj2fB3qkw; Wed, 12 Jun 2024 19:23:27 +0000 (UTC)
+ id SDNF7tCwC7Fj; Wed, 12 Jun 2024 19:23:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 461E241303
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00D7841303
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 461E241303;
-	Wed, 12 Jun 2024 19:23:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C43611BF369
- for <buildroot@lists.busybox.net>; Wed, 12 Jun 2024 19:23:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00D7841303;
+	Wed, 12 Jun 2024 19:23:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 635861BF369
+ for <buildroot@lists.busybox.net>; Wed, 12 Jun 2024 19:23:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0E69810D0
- for <buildroot@lists.busybox.net>; Wed, 12 Jun 2024 19:23:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5096360678
+ for <buildroot@lists.busybox.net>; Wed, 12 Jun 2024 19:23:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p6lD_5klyzde for <buildroot@lists.busybox.net>;
- Wed, 12 Jun 2024 19:23:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j8UA83Jw2VEo for <buildroot@lists.busybox.net>;
+ Wed, 12 Jun 2024 19:23:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F10B80E2E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F10B80E2E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EA38F6061D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA38F6061D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9F10B80E2E
- for <buildroot@buildroot.org>; Wed, 12 Jun 2024 19:23:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EA38F6061D
+ for <buildroot@buildroot.org>; Wed, 12 Jun 2024 19:23:36 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cd5a.dip0.t-ipconnect.de [79.214.205.90])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D78DAA4C3194
- for <buildroot@buildroot.org>; Wed, 12 Jun 2024 21:22:46 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:57132)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D8546A4C2E27;
+ Wed, 12 Jun 2024 21:23:17 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57454)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1sHTYU-000000007pL-1Mrl
- for buildroot@buildroot.org; Wed, 12 Jun 2024 19:22:46 +0000
+ (envelope-from <bernd@kuhls.net>) id 1sHTYz-000000007uA-1LRc;
+ Wed, 12 Jun 2024 19:23:17 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 12 Jun 2024 21:22:46 +0200
-Message-Id: <20240612192246.52305-1-bernd@kuhls.net>
+Date: Wed, 12 Jun 2024 21:23:17 +0200
+Message-Id: <20240612192317.52329-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1718220166;
- bh=oQeupnCPLkydZlJ2Kt/a/fRFyQL0UACBSYtocJhqdgs=;
- h=From:To:Subject:Date:From;
- b=iloLfel2N0OBzUsoM2n9h20I+O/FFuyvzknYIox2O0mBT1xTtp+sIT3qBuDDU7fIX
- RrPGMpwpIm7emB6rVzOopTwkX81EIAIlvEiXIc3hVuNXxKzu47T/Ku66kpSe4FFKzi
- LlP7SsWU+GALAWlyrQu71/opSIZwYYMcgcY876i5Y8E8kXK/ft+lV0e+0IikvkUpxd
- znr1ZoZovMlmW0/b1LBXraV96ZYmxnY8f9vI5l0oyqq4NDtlmbTikJvB0W29wyf2bb
- 9W8NJhKN2JR+tnlTkmv7A8Uc0cy7PvyV1Dd6KOCYKJImoyEzInxFldaJKW/J4dTRgQ
- EFqn071w5qdSw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202406071026; t=1718220197;
+ bh=VuVPsdU0pJSToyERe+Elw1gzOJ97DyMbih2y47FmeGE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Kfa2cuubN1oDoGnKjAAfGOty+a+WpibwGD02Mvc0NNTC6UITocrOQ6k3GJnn972Y5
+ F7L+aEmcuKNWP/h8UUvEuV/wYnpbCfA5/nSNVptRSsSLckazTKC/5ynjk9XM50u31b
+ 4LTIeqCg+oU89S26A81uh4zAQl4mhDCxS6Zi7c5puUosvnUwWYsw8/wV//Pclf0NES
+ hI6C2l88Nmb6YLkNQTqCU/isL79vNPQZMYTzoONq25i4OcNz+gVdYJUR4xD+E3+cRL
+ bVDhpQcCYbBNRnzCisMKfq6idbBlsBxekFHYof+fmXfMjnPL9fBzrPII3bRbQcATnA
+ 8fJiBTnH1sUaQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202406071026 header.b=iloLfel2
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.8.12
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=Kfa2cuub
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 8.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,40 +85,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
-https://forum.torproject.org/t/stable-release-0-4-8-12/13060
+Changelog: https://curl.se/changes.html#8_8_0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 4052f11736..bea590b133 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.11.tar.gz.sha256sum
--sha256  8f2bdf90e63380781235aa7d604e159570f283ecee674670873d8bb7052c8e07  tor-0.4.8.11.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.12.tar.gz.sha256sum
-+sha256  ca7cc735d98e3747b58f2f3cc14f804dd789fa0fb333a84dcb6bd70adbb8c874  tor-0.4.8.12.tar.gz
- # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 9986a5f472..4d7fabc79f 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 7fcad973c3..7ba45b79d7 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.7.1.tar.xz.asc
++# https://curl.se/download/curl-8.8.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  6fea2aac6a4610fbd0400afb0bcddbe7258a64c63f1f68e5855ebc0c659710cd  curl-8.7.1.tar.xz
++sha256  0f58bb95fc330c8a46eeb3df5701b0d90c9d9bfcc42bd1cd08791d12551d4400  curl-8.8.0.tar.xz
+ sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 99320c1315..172dd22071 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.8.11
-+TOR_VERSION = 0.4.8.12
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-LIBCURL_VERSION = 8.7.1
++LIBCURL_VERSION = 8.8.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
 2.39.2
 
