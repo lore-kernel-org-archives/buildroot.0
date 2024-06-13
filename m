@@ -1,92 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 062A8C27C4F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 11:49:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D217C27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 12:32:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 82EB7401AD;
-	Thu, 13 Jun 2024 11:49:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 02D1860EF2;
+	Thu, 13 Jun 2024 12:32:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xy3WtUkIatbp; Thu, 13 Jun 2024 12:32:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19EF260775
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19EF260775;
+	Thu, 13 Jun 2024 12:32:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F5FC1BF34E
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 12:32:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48E6B4012E
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 12:32:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rgg4Kp502w1j; Thu, 13 Jun 2024 11:49:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42A8A402D7
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42A8A402D7;
-	Thu, 13 Jun 2024 11:49:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 93F7D1BF359
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 11:49:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 812AC40931
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 11:49:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QmCfQ5PbTw9s for <buildroot@lists.busybox.net>;
- Thu, 13 Jun 2024 11:49:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12a; helo=mail-lf1-x12a.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D8B89403E5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8B89403E5
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D8B89403E5
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 11:49:10 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id
- 2adb3069b0e04-52bc1261f45so1081903e87.0
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 04:49:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718279347; x=1718884147;
- h=content-transfer-encoding:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=5HDnFXhstt5aM8m5l0A76CWd+BNb8U8at2gkmmRy1yA=;
- b=Nq3zTtyzz7h/8LHITBQ6aiJIlXU7uLea3gDE4U5cB/t0nG2MepmWGI4ZvkglUIgnoS
- 1l9BSNmhhgWbXOl3N+NX8wlQ7s0Ml7tNoYYiE1z8bGEU5E+fjuGGQOdfKjJWebX/NW1+
- fm5cTcBmGNvY+lwhnhxt3N2zKe+rz8gFpFm1NtVwcZlTFuHX+7ZkKJ1J6bX3VweWNHs9
- /27u0Jnw0tw66TAn809qbU4O2SYyWU6L0JeowpRRpwRBrWCmxjuXcB87FOtkfG3eAMfS
- pYUAG0eN8D/v3bk/fZqr7NapdpVk3MeezhpCgNU8hdw4A2nUGffYqxbKiE+uHog2javy
- ztPA==
-X-Gm-Message-State: AOJu0Yy7SO1Hq5+wOXAva7A9JFZdQ144ja/6I5ZquVsBjpr3fdqlPX5g
- SSUPj90++R3HumPccAW47bVUBkc9YsewmHcPfZ92QkEtq3RX/ZBrdLGHpOdrjujS+UgYQFfOfv4
- BuLDYK+FzuoWHD6x1Kp7xLUAYX2mCGi4h
-X-Google-Smtp-Source: AGHT+IFL6+hxaJSaRwQOUqsZVywTwEgrGDLfrwG6Dv/9+EOno64eQ8LArC4WweGEAzPqN70BU72gZv8w7c4bSkkjIx4=
-X-Received: by 2002:a19:a416:0:b0:52c:247c:b874 with SMTP id
- 2adb3069b0e04-52c9a40533amr2514730e87.56.1718279346861; Thu, 13 Jun 2024
- 04:49:06 -0700 (PDT)
+ id axbamBW1vd4K for <buildroot@lists.busybox.net>;
+ Thu, 13 Jun 2024 12:32:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
+ helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9956040450
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9956040450
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9956040450
+ for <buildroot@buildroot.org>; Thu, 13 Jun 2024 12:32:53 +0000 (UTC)
+Received: from pps.filterd (m0346904.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 45DBUoZA007344; Thu, 13 Jun 2024 12:32:48 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3yqeu50ven-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Thu, 13 Jun 2024 12:32:48 +0000
+Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 45DCWWxl005087
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Thu, 13 Jun 2024 12:32:32 GMT
+Received: from crulimr02.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 45DCWVSE015595
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Thu, 13 Jun 2024 12:32:31 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by crulimr02.rockwellcollins.com (Postfix) with ESMTP id 4C7543069861;
+ Thu, 13 Jun 2024 07:32:31 -0500 (CDT)
+Date: Thu, 13 Jun 2024 12:32:30 +0000
+To: Neal Frager via buildroot <buildroot@buildroot.org>
+Message-ID: <Zmrm3sXCClxX6U2l@bspbox.kirk>
+Mail-Followup-To: Neal Frager via buildroot <buildroot@buildroot.org>,
+ ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
+ michal.simek@amd.com, yann.morin.1998@free.fr
+References: <20240613061423.1737631-1-neal.frager@amd.com>
 MIME-Version: 1.0
-References: <20240613113924.3778837-1-yegorslists@googlemail.com>
-In-Reply-To: <20240613113924.3778837-1-yegorslists@googlemail.com>
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 13 Jun 2024 13:51:33 +0200
-Message-ID: <CAGm1_ktpb1JiBSBjNNoZDgS8iJZyYrO28nGzcER9BnFe0dDYew@mail.gmail.com>
-To: buildroot@buildroot.org
+Content-Disposition: inline
+In-Reply-To: <20240613061423.1737631-1-neal.frager@amd.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-13_04,2024-06-13_02,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-13_04,2024-06-13_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ mlxscore=0 mlxlogscore=999
+ malwarescore=0 phishscore=0 spamscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2406130091
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ adultscore=0 bulkscore=0
+ phishscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2406130090
+X-Proofpoint-GUID: EXhnoRQjBeIA30aO-0maIw6v57jEdJoF
+X-Proofpoint-ORIG-GUID: EXhnoRQjBeIA30aO-0maIw6v57jEdJoF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-13_05,2024-06-13_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0 mlxscore=0
+ bulkscore=0 suspectscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ clxscore=1015 priorityscore=1501 malwarescore=0 adultscore=0
+ impostorscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2405010000 definitions=main-2406130091
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1718279347; x=1718884147; darn=buildroot.org; 
- h=content-transfer-encoding:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=5HDnFXhstt5aM8m5l0A76CWd+BNb8U8at2gkmmRy1yA=;
- b=jgCLCj573BCmrOao2GzAAnDXPPE7Zw0HUH42vbxVm5sfdCxtUPKsiuGCZ1GzT7TGyp
- iS43W3j165rRm1CN76I6cmRKo0ezgSSUO2M9ndGVhiQzWwsmv7/18nY1DqQuFS84w7CN
- KbCDiIAJN2zc/HaHxKWPXGWD0IxuRRh3M40Dapo7Th0DyD1rp2qCMhEx6+vlnoK4vlYb
- 7kt4oLbU+sLwVGAjgfsnSWjcjdvp1ZHQt5JVWSsyq0wTi48nj/8xq80+OjZYttOP4xdB
- /61kH5yOWC9k1oVa6e4aizqcPRzjzm18z3fr57bt7k7DoBxT7daRlFC1h85x4Tu1Pjuo
- IchQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jgCLCj57
-Subject: Re: [Buildroot] [PATCH] package/ncftp: fix GCC 14.x related build
- errors
+ d=collins.com; h=cc : content-type :
+ date : from : in-reply-to : message-id : mime-version : references :
+ subject : to; s=POD051818;
+ bh=4sUzvLDrb9za+51blu+XUr6E4SkmVHEivBAOLrKfbDs=;
+ b=E/46VSfCb7GEMCj2w8UnFk+7BTqQo4UA5WqDPAXVBmkYjO+AsSPGdZQXmgBxmVaTDDiH
+ 2lx4WWb+gWI7fk9fIzRPJ1D8TdfVnDIWQq5qVJqkVxESquFhgU9bYMXheKPW9KMlmHV9
+ RgjeAXnfkfiSMBNpE8dSELWJ6wdqngJc/TH5p+rUzAgFqmRk4utl3XyUf0L06Pac0Plt
+ fLe93I7TVcWLIWg4dTu6v6bXttTIE0tVU8nWYNacjw2Ml9+PtwQuWb2geIBx7kWefd0+
+ HDSgSCxUCULVMhlEuAwhBDnQG2aV8sci04XX6r/fmhHRTO0NaVXzl+svw0x/f0H4oqDK QA== 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=E/46VSfC
+Subject: Re: [Buildroot] [PATCH v2 1/5] boot/xilinx-prebuilt: new boot
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,120 +126,179 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
+ michal.simek@amd.com, yann.morin.1998@free.fr
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQWxsLAoKT24gVGh1LCBKdW4gMTMsIDIwMjQgYXQgMTo0MOKAr1BNIDx5ZWdvcnNsaXN0c0Bn
-b29nbGVtYWlsLmNvbT4gd3JvdGU6Cj4KPiBGcm9tOiBZZWdvciBZZWZyZW1vdiA8eWVnb3JzbGlz
-dHNAZ29vZ2xlbWFpbC5jb20+Cj4KPiBQYXRjaGVzIHdlcmUgdGFrZW4gZnJvbSBHZW50b286Cj4K
-PiBodHRwczovL2J1Z3MuZ2VudG9vLm9yZy85MjE0ODcKPiBodHRwczovL2dpdHdlYi5nZW50b28u
-b3JnL3JlcG8vZ2VudG9vLmdpdC90cmVlL25ldC1mdHAvbmNmdHAvZmlsZXMvbmNmdHAtMy4yLjct
-Zml4LWNsYW5nLnBhdGNoCj4KPiBGaXhlczoKPiBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5u
-ZXQvcmVzdWx0cy8wNTg1NzhlYWU4ODVjZTZlMjA2YzI1YjVhMjRhYTExYjYyNWFkZjg4Lwo+Cj4g
-U2lnbmVkLW9mZi1ieTogWWVnb3IgWWVmcmVtb3YgPHllZ29yc2xpc3RzQGdvb2dsZW1haWwuY29t
-Pgo+IC0tLQo+ICAuY2hlY2twYWNrYWdlaWdub3JlICAgICAgICAgICAgICAgICAgICAgICAgICAg
-fCAgMiArCj4gIC4uLi9uY2Z0cC8wMDAxLW5jZnRwLTMuMi43LWZpeC1nY2MxNC5wYXRjaCAgICB8
-IDE3ICsrKysrCj4gIC4uLi9uY2Z0cC8wMDAyLW5jZnRwLTMuMi43LWZpeC1jbGFuZy5wYXRjaCAg
-ICB8IDcwICsrKysrKysrKysrKysrKysrKysKPiAgMyBmaWxlcyBjaGFuZ2VkLCA4OSBpbnNlcnRp
-b25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL25jZnRwLzAwMDEtbmNmdHAtMy4y
-LjctZml4LWdjYzE0LnBhdGNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL25jZnRwLzAw
-MDItbmNmdHAtMy4yLjctZml4LWNsYW5nLnBhdGNoCj4KPiBkaWZmIC0tZ2l0IGEvLmNoZWNrcGFj
-a2FnZWlnbm9yZSBiLy5jaGVja3BhY2thZ2VpZ25vcmUKPiBpbmRleCBkZDFmZDMxZTg2Li41MmI1
-MDkwMDM0IDEwMDY0NAo+IC0tLSBhLy5jaGVja3BhY2thZ2VpZ25vcmUKPiArKysgYi8uY2hlY2tw
-YWNrYWdlaWdub3JlCj4gQEAgLTEwNjcsNiArMTA2Nyw4IEBAIHBhY2thZ2UvbXVzbC8wMDAxLWF2
-b2lkLWtlcm5lbC1pZl9ldGhlci5oLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICBwYWNrYWdl
-L211c2wvMDAwMi1wYWNrYWdlLW11c2wtTWFrZS1zY2hlZHVsZXItZnVuY3Rpb25zLUxpbnV4LWNv
-bXBhdGliLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICBwYWNrYWdlL25hbm8vMDAwMS1saWIt
-Z2V0cmFuZG9tLmMtZml4LWJ1aWxkLXdpdGgtdWNsaWJjLTEuMC4zNS5wYXRjaCBsaWJfcGF0Y2gu
-VXBzdHJlYW0KPiAgcGFja2FnZS9uYW5vY29tLzAwMDEtZml4LWJ1aWxkLXdpdGgtZ2NjLTEwLnBh
-dGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICtwYWNrYWdlL25jZnRwLzAwMDEtbmNmdHAtMy4yLjct
-Zml4LWdjYzE0LnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICtwYWNrYWdlL25jZnRwLzAwMDIt
-bmNmdHAtMy4yLjctZml4LWNsYW5nLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICBwYWNrYWdl
-L25jbXBjLzAwMDEtbWVzb24uYnVpbGQtYWRkLWF0b21pYy1kZXBlbmRlbmN5LWZvci1zcGFyYy5w
-YXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KPiAgcGFja2FnZS9uZTEwLzAwMDEtQ01ha2VMaXN0cy1k
-b24tdC1oYXJkLWNvZGUtdGh1bWItY29kZS1nZW5lcmF0aW9uLnBhdGNoIGxpYl9wYXRjaC5VcHN0
-cmVhbQo+ICBwYWNrYWdlL25lMTAvMDAwMi1maXgtYnVpbGQtd2l0aG91dC1DLnBhdGNoIGxpYl9w
-YXRjaC5VcHN0cmVhbQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL25jZnRwLzAwMDEtbmNmdHAtMy4y
-LjctZml4LWdjYzE0LnBhdGNoIGIvcGFja2FnZS9uY2Z0cC8wMDAxLW5jZnRwLTMuMi43LWZpeC1n
-Y2MxNC5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uZjkz
-YWJiMTE0Mgo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL25jZnRwLzAwMDEtbmNmdHAt
-My4yLjctZml4LWdjYzE0LnBhdGNoCj4gQEAgLTAsMCArMSwxNyBAQAo+ICtmaXggc2VsZWN0IGFy
-ZyBkZXRlY3Rpb24KPiArCj4gK1JlZmVyZW5jZToKPiArIGh0dHBzOi8vYnVncy5nZW50b28ub3Jn
-LzkyMTQ4Nwo+ICsKPiArU2lnbmVkLW9mZi1ieTogWWVnb3IgWWVmcmVtb3YgPHllZ29yc2xpc3Rz
-QGdvb2dsZW1haWwuY29tPgo+ICstLS0gYS9hdXRvY29uZl9sb2NhbC9hY2xvY2FsLm00Cj4gKysr
-KyBiL2F1dG9jb25mX2xvY2FsL2FjbG9jYWwubTQKPiArQEAgLTQxOTYsNyArNDE5Niw3IEBACj4g
-KyAjaW5jbHVkZSA8c3lzL3NlbGVjdC5oPgo+ICsgI2VuZGlmCj4gKyAjaW5jbHVkZSA8c3lzL3Nv
-Y2tldC5oPiAgICAgICAvKiBNRzogYWx3YXlzIGluY2wgKi8KPiArLWV4dGVybiBzZWxlY3QgKCRh
-Y19jdl9mdW5jX3NlbGVjdF9hcmcxLCRhY19jdl9mdW5jX3NlbGVjdF9hcmcyMzQsJGFjX2N2X2Z1
-bmNfc2VsZWN0X2FyZzIzNCwkYWNfY3ZfZnVuY19zZWxlY3RfYXJnMjM0LCRhY19jdl9mdW5jX3Nl
-bGVjdF9hcmc1KTtdLCxkbmwKPiArK2V4dGVybiBpbnQgc2VsZWN0ICgkYWNfY3ZfZnVuY19zZWxl
-Y3RfYXJnMSwkYWNfY3ZfZnVuY19zZWxlY3RfYXJnMjM0LCRhY19jdl9mdW5jX3NlbGVjdF9hcmcy
-MzQsJGFjX2N2X2Z1bmNfc2VsZWN0X2FyZzIzNCwkYWNfY3ZfZnVuY19zZWxlY3RfYXJnNSk7XSws
-ZG5sCj4gKyAgICAgICAgIFthY19ub3RfZm91bmQ9bm8gOyBicmVhayAzXSxhY19ub3RfZm91bmQ9
-eWVzKQo+ICsgICAgICAgZG9uZQo+ICsgICAgICBkb25lCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
-bmNmdHAvMDAwMi1uY2Z0cC0zLjIuNy1maXgtY2xhbmcucGF0Y2ggYi9wYWNrYWdlL25jZnRwLzAw
-MDItbmNmdHAtMy4yLjctZml4LWNsYW5nLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBp
-bmRleCAwMDAwMDAwMDAwLi44YTcxZmEzMjg0Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2th
-Z2UvbmNmdHAvMDAwMi1uY2Z0cC0zLjIuNy1maXgtY2xhbmcucGF0Y2gKPiBAQCAtMCwwICsxLDcw
-IEBACj4gK0ZpeCBjb21waWxhdGlvbiB3aXRoIGNsYW5nLTE2Cj4gKwo+ICthY2xvY2FsLm00IGNv
-bnRhaW5zIGNvZGUgdGhhdCBubyBsb25nZXIgY29tcGlsZXM6IG1pc3NpbmcgaGVhZGVycyBhbmQg
-bWlzc2luZwo+ICtyZXR1cm4gdHlwZXMuCj4gKwo+ICtSZWZlcmVuY2U6Cj4gKyBodHRwczovL2dp
-dHdlYi5nZW50b28ub3JnL3JlcG8vZ2VudG9vLmdpdC90cmVlL25ldC1mdHAvbmNmdHAvZmlsZXMv
-bmNmdHAtMy4yLjctZml4LWNsYW5nLnBhdGNoCj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBZZWdvciBZ
-ZWZyZW1vdiA8eWVnb3JzbGlzdHNAZ29vZ2xlbWFpbC5jb20+Cj4gKy0tLSBhL2F1dG9jb25mX2xv
-Y2FsL2FjbG9jYWwubTQKPiArKysrIGIvYXV0b2NvbmZfbG9jYWwvYWNsb2NhbC5tNAo+ICtAQCAt
-MzA1Nyw2ICszMDU3LDcgQEAKPiArICNpbmNsdWRlIDxzeXMvdWlvLmg+Cj4gKyAjaW5jbHVkZSA8
-c3lzL3NvY2tldC5oPgo+ICsgI2luY2x1ZGUgPHN5cy91bi5oPgo+ICsrI2luY2x1ZGUgPHN0cmlu
-Zy5oPgo+ICsgXSxbCj4gKyBzdHJ1Y3Qgc29ja2FkZHJfdW4gdWFkZHI7Cj4gKwo+ICtAQCAtMzI4
-NSw2ICszMjg2LDcgQEAKPiArICNpZmRlZiBIQVZFX1JFU09MVl9ICj4gKyAjICAgICBpbmNsdWRl
-IDxyZXNvbHYuaD4KPiArICNlbmRpZgo+ICsrI2luY2x1ZGUgPHN0cmluZy5oPgo+ICsgXSxbCj4g
-KyAgICAgICAvKiBmdW5jdGlvbi1ib2R5ICovCj4gKyAgICAgICBpbnQgbGVuOwo+ICtAQCAtMzM2
-Myw2ICszMzY1LDcgQEAKPiArICNpbmNsdWRlIDxzdGRpby5oPgo+ICsgI2luY2x1ZGUgPHN0ZGxp
-Yi5oPgo+ICsKPiArKyAgICAgICAgICAgICAgICAgICAgICBpbnQKPiArICAgICAgICAgICAgICAg
-ICAgICAgICBtYWluKGludCBhcmdjLCBjaGFyICoqYXJndikKPiArICAgICAgICAgICAgICAgICAg
-ICAgICB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAvKiBOb3RlOiAgZG9uJ3Qg
-YWN0dWFsbHkgY2FsbCByZWFkbGluZSwKPiArQEAgLTUxNDUsNiArNTE0OCw3IEBACj4gKyAjaWZk
-ZWYgSEFWRV9TVERMSUJfSAo+ICsgIyAgICAgaW5jbHVkZSA8c3RkbGliLmg+Cj4gKyAjZW5kaWYK
-PiArKyNpbmNsdWRlIDxzdHJpbmcuaD4KPiArCj4gKyAjaWZkZWYgSEFWRV9OQ1VSU0VTX0gKPiAr
-ICMgICAgIGRlZmluZSBOQ1VSU0VTX09QQVFVRSAwCj4gK0BAIC01MTc2LDYgKzUxODAsNyBAQAo+
-ICsgI2VuZGlmCj4gKwo+ICsKPiArK2ludAo+ICsgbWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3Yp
-Cj4gKyB7Cj4gKyAgICAgICAvKiBOb3RlOiAgZG9uJ3QgYWN0dWFsbHkgY2FsbCBjdXJzZXMsIHNp
-bmNlIGl0IG1heSBibG9jazsKPiArQEAgLTY1MTAsNyArNjUxNSw2IEBACj4gKyAjZW5kaWYKPiAr
-ICNlbmRpZiAgICAgICAgICAgICAgICAgICAgICAgIC8qIE1HICovCj4gKwo+ICstaW50Cj4gKyBp
-bnQgIG1haW4odm9pZCkKPiArIHsKPiArICAgICAgIGNoYXIgKmRhdGEsICpkYXRhMiwgKmRhdGEz
-Owo+ICtAQCAtNjYwNyw4ICs2NjExLDkgQEAKPiArICAgICAgIEFDX0NBQ0hFX0NIRUNLKHdoZXRo
-ZXIgc2V0dmJ1ZiBhcmd1bWVudHMgYXJlIHJldmVyc2VkLAo+ICsgICAgICAgICBhY19jdl9mdW5j
-X3NldHZidWZfcmV2ZXJzZWQsCj4gKyAgICAgICBbQUNfVFJZX1JVTihbI2luY2x1ZGUgPHN0ZGlv
-Lmg+Cj4gKysgICAgICAkaW5jbHVkZSA8c3RkbGliLmg+Cj4gKyAgICAgICAvKiBJZiBzZXR2YnVm
-IGhhcyB0aGUgcmV2ZXJzZWQgZm9ybWF0LCBleGl0IDAuICovCj4gKy0gICAgICBtYWluICgpIHsK
-PiArKyAgICAgIGludCBtYWluICh2b2lkKSB7Cj4gKyAgICAgICAgIC8qIFRoaXMgY2FsbCBoYXMg
-dGhlIGFyZ3VtZW50cyByZXZlcnNlZC4KPiArICAgICAgICAgICAgQSByZXZlcnNlZCBzeXN0ZW0g
-bWF5IGNoZWNrIGFuZCBzZWUgdGhhdCB0aGUgYWRkcmVzcyBvZiBtYWluCj4gKyAgICAgICAgICAg
-IGlzIG5vdCBfSU9MQkYsIF9JT05CRiwgb3IgX0lPRkJGLCBhbmQgcmV0dXJuIG5vbnplcm8uICAq
-Lwo+IC0tCj4gMi4zNC4xCgpCdXQgdGhlIHRoaXJkIHByb2JsZW0gcmVtYWlucyBhbmQgSSBkb24n
-dCBrbm93IGhvdyB0byBmaXggdGhpczoKCnNwb29sdXRpbC5jOiBJbiBmdW5jdGlvbiDigJhXcml0
-ZVNwb29sRW50cnnigJk6CnNwb29sdXRpbC5jOjI4NjozODogZXJyb3I6IHBhc3NpbmcgYXJndW1l
-bnQgMiBvZiDigJhsc3RhdOKAmSBmcm9tCmluY29tcGF0aWJsZSBwb2ludGVyIHR5cGUgWy1XaW5j
-b21wYXRpYmxlLXBvaW50ZXItdHlwZXNdCiAgMjg2IHwgICAgICAgICAgICAgICAgIGlmIChsc3Rh
-dChscGF0aG5hbWUsICZzdCkgPT0gMCkgewogICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBefn4KICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgfAogICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1
-Y3Qgc3RhdDY0ICoKSW4gZmlsZSBpbmNsdWRlZCBmcm9tCi9ob21lL3VzZXIvYnVpbGRyb290L2Jz
-cC1iYXJlYm94L3Blci1wYWNrYWdlL25jZnRwL2hvc3QvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVl
-YWJpaGYvc3lzcm9vdC91c3IvaW5jbHVkZS9mZWF0dXJlcy5oOjUwMywKICAgICAgICAgICAgICAg
-ICBmcm9tCi9ob21lL3VzZXIvYnVpbGRyb290L2JzcC1iYXJlYm94L3Blci1wYWNrYWdlL25jZnRw
-L2hvc3QvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdC91c3IvaW5jbHVkZS91
-bmlzdGQuaDoyNSwKICAgICAgICAgICAgICAgICBmcm9tIHN5c2hkcnMuaDoxNDMsCiAgICAgICAg
-ICAgICAgICAgZnJvbSBzcG9vbHV0aWwuYzo4OgovaG9tZS91c2VyL2J1aWxkcm9vdC9ic3AtYmFy
-ZWJveC9wZXItcGFja2FnZS9uY2Z0cC9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhm
-L3N5c3Jvb3QvdXNyL2luY2x1ZGUvc3lzL3N0YXQuaDozMjc6MTI6Cm5vdGU6IGV4cGVjdGVkIOKA
-mHN0cnVjdCBzdGF0ICogcmVzdHJpY3TigJkgYnV0IGFyZ3VtZW50IGlzIG9mIHR5cGUK4oCYc3Ry
-dWN0IHN0YXQ2NCAq4oCZCiAgMzI3IHwgZXh0ZXJuIGludCBfX1JFRElSRUNUX05USCAobHN0YXQs
-CiAgICAgIHwgICAgICAgICAgICBefn5+fn5+fn5+fn5+fgoKVGhlIHRvb2xjaGFpbiB3YXMgYnVp
-bHQgdmlhIEJSIGZvciBhcm12NyBhbmQgZ2xpYmMuIEFueSBpZGVhcz8gV2h5CnNob3VsZCBvbmUg
-dXNlIHN0cnVjdCBzdGF0NjQgZGlyZWN0bHk/CgpSZWdhcmRzLApZZWdvcgpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
-CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi Neal,
+
+On 2024.06.13 07:14, Neal Frager via buildroot wrote:
+> This patch add a new boot package for downloading prebuilt firmware for Xilinx
+> versal and zynqmp evaluation boards.
+> 
+> It solves the problem of being able to verify the hash when downloading a
+> prebuilt zynqmp pmufw.elf binary.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+
+When there are no changes on a new version, you can add any
+Reviewed/Tested-by tags from previous versions.
+
+Reviewed-by: Brandon Maier <brandon.maier@collins.com>
+
+> ---
+> V1->V2:
+> - no changes
+> ---
+>  DEVELOPERS                                    |  2 +
+>  .../xilinx-prebuilt/xilinx-prebuilt.hash      |  2 +
+>  boot/Config.in                                |  1 +
+>  boot/xilinx-prebuilt/Config.in                | 40 +++++++++++++++++++
+>  boot/xilinx-prebuilt/xilinx-prebuilt.mk       | 39 ++++++++++++++++++
+>  5 files changed, 84 insertions(+)
+>  create mode 100644 board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
+>  create mode 100644 boot/xilinx-prebuilt/Config.in
+>  create mode 100644 boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index cf48e01037..93627a0064 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2335,8 +2335,10 @@ F:	package/qt5/qt5opcua/
+>  
+>  N:	Neal Frager <neal.frager@amd.com>
+>  F:	board/versal/
+> +F:	board/xilinx/
+>  F:	board/zynq/
+>  F:	board/zynqmp/
+> +F:	boot/xilinx-prebuilt/
+>  F:	configs/versal_vck190_defconfig
+>  F:	configs/zynq_zc702_defconfig
+>  F:	configs/zynq_zc706_defconfig
+> diff --git a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
+> new file mode 100644
+> index 0000000000..c955cd79f5
+> --- /dev/null
+> +++ b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
+> diff --git a/boot/Config.in b/boot/Config.in
+> index 87e1b7c00e..1378a04d19 100644
+> --- a/boot/Config.in
+> +++ b/boot/Config.in
+> @@ -23,5 +23,6 @@ source "boot/ti-k3-boot-firmware/Config.in"
+>  source "boot/ti-k3-r5-loader/Config.in"
+>  source "boot/uboot/Config.in"
+>  source "boot/vexpress-firmware/Config.in"
+> +source "boot/xilinx-prebuilt/Config.in"
+>  
+>  endmenu
+> diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
+> new file mode 100644
+> index 0000000000..ec38e41993
+> --- /dev/null
+> +++ b/boot/xilinx-prebuilt/Config.in
+> @@ -0,0 +1,40 @@
+> +config BR2_TARGET_XILINX_PREBUILT
+> +	bool "xilinx-prebuilt"
+> +	depends on BR2_aarch64
+> +	help
+> +	  Pre-built firmware files for Xilinx boards.
+> +
+> +	  https://github.com/Xilinx/soc-prebuilt-firmware
+> +
+> +if BR2_TARGET_XILINX_PREBUILT
+> +
+> +config BR2_TARGET_XILINX_PREBUILT_VERSION
+> +	string "prebuilt version"
+> +	default "xilinx_v2024.1"
+> +	help
+> +	  Release version of Xilinx firmware.
+> +	  Must be xilinx_v2023.1 or newer.
+> +
+> +config BR2_TARGET_XILINX_PREBUILT_BOARD
+> +	string "board name"
+> +	default "zcu102"
+> +	help
+> +	  Name of Xilinx target board.
+> +	  Used for installing the appropriate firmware.
+> +
+> +choice
+> +	bool "family variant"
+> +	default BR2_TARGET_XILINX_PREBUILT_ZYNQMP
+> +
+> +config BR2_TARGET_XILINX_PREBUILT_ZYNQMP
+> +	bool "zynqmp"
+> +
+> +config BR2_TARGET_XILINX_PREBUILT_KRIA
+> +	bool "kria"
+> +
+> +config BR2_TARGET_XILINX_PREBUILT_VERSAL
+> +	bool "versal"
+> +
+> +endchoice
+> +
+> +endif # BR2_TARGET_XILINX_PREBUILT
+> diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> new file mode 100644
+> index 0000000000..98dd18da0d
+> --- /dev/null
+> +++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> @@ -0,0 +1,39 @@
+> +################################################################################
+> +#
+> +# xilinx-prebuilt
+> +#
+> +################################################################################
+> +
+> +XILINX_PREBUILT_VERSION = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_VERSION))
+> +XILINX_PREBUILT_SITE = $(call github,Xilinx,soc-prebuilt-firmware,$(XILINX_PREBUILT_VERSION))
+> +XILINX_PREBUILT_LICENSE = MIT
+> +XILINX_PREBUILT_LICENSE_FILES = LICENSE
+> +XILINX_PREBUILT_INSTALL_TARGET = NO
+> +XILINX_PREBUILT_INSTALL_IMAGES = YES
+> +
+> +ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
+> +define XILINX_PREBUILT_INSTALL_IMAGES_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/$(BR2_TARGET_XILINX_PREBUILT_BOARD)-versal/plm.elf \
+> +		$(BINARIES_DIR)/plm.elf
+> +	$(INSTALL) -D -m 0755 $(@D)/$(BR2_TARGET_XILINX_PREBUILT_BOARD)-versal/psmfw.elf \
+> +		$(BINARIES_DIR)/psmfw.elf
+> +	$(INSTALL) -D -m 0755 $(@D)/$(BR2_TARGET_XILINX_PREBUILT_BOARD)-versal/*.pdi \
+> +		$(BINARIES_DIR)/vpl_gen_fixed.pdi
+> +endef
+> +endif #BR2_TARGET_XILINX_PREBUILT_VERSAL
+> +
+> +ifeq ($(BR2_TARGET_XILINX_PREBUILT_ZYNQMP),y)
+> +define XILINX_PREBUILT_INSTALL_IMAGES_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/$(BR2_TARGET_XILINX_PREBUILT_BOARD)-zynqmp/pmufw.elf \
+> +		$(BINARIES_DIR)/pmufw.elf
+> +endef
+> +endif #BR2_TARGET_XILINX_PREBUILT_ZYNQMP
+> +
+> +ifeq ($(BR2_TARGET_XILINX_PREBUILT_KRIA),y)
+> +define XILINX_PREBUILT_INSTALL_IMAGES_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/$(BR2_TARGET_XILINX_PREBUILT_BOARD)-kria/pmufw.elf \
+> +		$(BINARIES_DIR)/pmufw.elf
+> +endef
+> +endif #BR2_TARGET_XILINX_PREBUILT_KRIA
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
