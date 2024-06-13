@@ -1,94 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BDC7C27C4F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 13:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31D98C27C4F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Jun 2024 15:59:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F6206100E;
-	Thu, 13 Jun 2024 13:45:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFA9C41426;
+	Thu, 13 Jun 2024 15:59:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AdG5Cacrutid; Thu, 13 Jun 2024 13:45:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pkxMC1ZjgRev; Thu, 13 Jun 2024 15:59:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7773E61013
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B611A413B4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7773E61013;
-	Thu, 13 Jun 2024 13:45:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E69121BF34C
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 13:45:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B611A413B4;
+	Thu, 13 Jun 2024 15:59:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BB00B1BF341
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 15:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D10F684298
- for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 13:45:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A3E34413B4
+ for <buildroot@lists.busybox.net>; Thu, 13 Jun 2024 15:59:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 56DiS2IFuVCd for <buildroot@lists.busybox.net>;
- Thu, 13 Jun 2024 13:45:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
- envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 195D780E6D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 195D780E6D
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 195D780E6D
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 13:45:00 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-7eb6b1045f7so37879439f.3
- for <buildroot@buildroot.org>; Thu, 13 Jun 2024 06:45:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718286300; x=1718891100;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=h2SH7uJgGFnl20alLDbTx/6HA6zK/g7NXxDe5tib6PE=;
- b=b5zz25H+IDqX8W7ijp8tDuzkfq+43w9Llr/4KoIhvSP43s0cZ7bx2sVQ5bv8T2sIsc
- lcQ4hjmih74KOaKh/sr7R9SMoCcQjEzXak9xNCBqPYruDgjhgp1DKLM0bPMuw5RgbwOk
- Ch9Ezyy79wv2Ed7LQW+IaZLpRB+gsGSz0aBGbJA/eH7Leu5FVjAWeOzThZHhYKAyd2OS
- QoJJVKSQQaweXteqwi11xnkB4R5Z3d+qxy8E+w8YxrXVPcIDw3H6hQz7qIN8M4OQ5mDM
- x/JvFhmNxLUq93TykSXa0UjGxGH9BinzoHUXh63krE5m2aQs174u9j4T3oYuzTexRsRK
- GghQ==
-X-Gm-Message-State: AOJu0Yya7tQExRNse70sgGJDwFe57vEecyeKs0aA90rZo0KlcP4u9KdP
- tFH/bojHPCDpSI5v9P078tB+H6aw/E3LoyIJdpMbxuJ/GwZLsEyx5XVxdg==
-X-Google-Smtp-Source: AGHT+IEi2VmDYo8qn/Rmnx1gqG6QfBEec5FuMbLIrRF8CfyMsWTlyoEoswrXZrmAhvoKw6ykXfyo0Q==
-X-Received: by 2002:a05:6602:3fc4:b0:7eb:861e:8bd7 with SMTP id
- ca18e2360f4ac-7ebcd0c6716mr565313539f.2.1718286299768; 
- Thu, 13 Jun 2024 06:44:59 -0700 (PDT)
-Received: from ProgramPC.bm.local ([76.8.199.226])
- by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4b956a409b7sm353661173.154.2024.06.13.06.44.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 13 Jun 2024 06:44:59 -0700 (PDT)
-From: lancethepants <lancethepants@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YbvSO7nTSgL9 for <buildroot@lists.busybox.net>;
+ Thu, 13 Jun 2024 15:59:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1C9EA400D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C9EA400D0
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1C9EA400D0
+ for <buildroot@buildroot.org>; Thu, 13 Jun 2024 15:59:43 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.119.11]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MaJ7v-1rwh4K22dB-00Vo1w; Thu, 13
+ Jun 2024 17:59:41 +0200
 To: buildroot@buildroot.org
-Date: Thu, 13 Jun 2024 07:44:51 -0600
-Message-Id: <20240613134451.3523957-1-lancethepants@gmail.com>
-X-Mailer: git-send-email 2.39.2
+Date: Thu, 13 Jun 2024 17:59:31 +0200
+Message-ID: <20240613155931.3986107-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:uwHyYQwdRDbu88QV/yw6o/7IstVQDUsdC9hTyW9AtkcVu4OITUK
+ MquaDa8RwD+mx9wValfpWeP+jbNOBuWpwpD2DBI14+1C70RfQbUHNWYmqGXWZfefgTtppzy
+ JXbTzu4zD1GklyyVevzmNstpYeXRbvqK/IMQNDxU2naNf1K3wB4H8LLw6DslfdkM1Mu0tBG
+ p0PzL/2IFCveYSqnr56wg==
+UI-OutboundReport: notjunk:1;M01:P0:M8uHf1OGNd4=;RbbV3zJJRImxv9DvUeHY+4hjgRR
+ dtjWKUiAaFAYJGTk4SCuF1sqpnihhflgTEMxCRpyA+7db0ZDQMeeIc9IEmQnv9oG8gm5QWJ+i
+ Ir56+51emuHv1f4FaWNP8R6aiq6p+JYa/0tTflQVKv6gnBiGm9WjE0unKzLghHzFDCzxD0Jpo
+ EAFq7N3WfbFkn5C5Ep8e4cJu2hX9G9AAudTpEm8rkUwqYO89/KkWypGzUty08m6r/vUYqxx9w
+ r+HtrQXlNwF/ZM8gwQrwNoTSRbofrH+mBalyR0L4+hIT/ADMm26rD0Q1352ZyIfcBB4stJWwL
+ +BEXCSLO04T2f14G5Ezyhyw/w474/4EA5fdX5G7nmgdV43cVPyCSFJKj/T2cAoL57xESzzNLW
+ 3+zgj3YcOANzWI1PlVcHSAZpZ3s6+aWzvmFx7UtaHzZI71Qaa1dyu1oRAqhjDgpxxCgfn3yuU
+ yQZw9jcBXDjpZr+yVGDovbOw0dDOHYS+g44S2RdUdKHjjSlp9sUhi1yEzV2pO40fomGBVuAXG
+ 4oZabXQk0YqkhLu7wXfRL80LWD/Rdxl9ol5smB7rkWKvMYGk2ehdVkTrWw2dTi85RoXuu4dLO
+ tfLEMe83uEGGkxTbq0ckIoXfWXilX25ljUEbeiD3xy2bWa6RQErnH57tGBgDke989WNlW1G0a
+ CvJWIifgSTTFo4PmjCKnf95r3GDoZEPSLzFFabYAZSNI/R/F4//vCJeTN83jDwqrjNPgwJTPA
+ iyPgwsSCP8PysHeoY0e4f+htYsIxkmxKEQEsPVJbb389N8tSn3ppvL6iYl4Zf0IzD5+Vdy8QK
+ yMYizky/5+A+Bn64pbmomt5KgNJNRHpentJhYhJ/CMGUc=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718286300; x=1718891100; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=h2SH7uJgGFnl20alLDbTx/6HA6zK/g7NXxDe5tib6PE=;
- b=GOYBenENoZJNZg3TKRWGPRzbDE6PMWin3Z/NiDrMr6x1LPpehQoeRkmu2GlEfkiLB6
- wHvmruWxjgQieRY0GqA6IwSQc+WFOSQb1fyh/DM+EyMkRu9RnSaiuAJUTqnOcmpy51Ox
- /yptnLQGafZDo7y7q5S4maeqWEyYJCTrBKBcGgiVdBMaMPQPjdSV62Sdzuo900IC88y3
- Xau0zftVKAn8M0pcL9Us3fB+WS33sHmv04i9n79DW5lnXBZDOgsowrlK8fLJqV+/DVEf
- 7HTSuR5n+MiabQthYNq4QIRSNUx9pXVo7farMieWXGLwWFC5HFdsc9QwjKv1h2xdCcfJ
- PuYg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=GOYBenEN
-Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: Add additional
- firmware fo Intel iwlwifi 9xxx
+ d=gmx.de; 
+ s=s31663417; t=1718294381; x=1718899181; i=fiona.klute@gmx.de;
+ bh=I/Cfceg3J5j0XIyJqCG8RooZnVqGCrwS5LHdd266I2U=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=bdwOxptxG7cOnCrbKte47op30zawq8kZKV+LgDUDOiptJW+WPnrBGUgmm7L6jgg1
+ sIwuIcdL//tdY+SpwoqDq7yVo8906vj6uoO6oOfvD3aA3UkJ8rjVAmfZtjlCNlzJe
+ pI83XIm7VlURmZ4HDABjKJlkTuFUJqxN7ZCGM8PiJHLQXDF/F0gEAE7oJMshdLWhp
+ 64hfE1Qh53ennaSAJ0c9M6rZZYQEwGvuh12HDS+rXDfXilY93YQjw0tsj3hga/s46
+ x0KPCAEZJSOKtBQ4fDwCZ4aj4P5Dnc7/rzlFPo/YQDRTkwyYJA1KhsN9bX9jsJ2gU
+ h4xaicmFPV9DEeDPmA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=bdwOxptx
+Subject: [Buildroot] [PATCH 1/1] package/nftables: add init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,34 +94,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, lancethepants <lancethepants@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Intel Wireless-AC 9560 looks for iwlwifi-so-a0-jf-b0-*.ucode.
+The init script handles a ruleset file with support for atomic
+reloading. By default the ruleset is expected in /etc/nftables.conf,
+the location can be changed in /etc/default/nftables. If the ruleset
+file does not exist the script does nothing but echos a warning about
+that fact.
 
-Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
 ---
- package/linux-firmware/linux-firmware.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/nftables/S35nftables | 53 ++++++++++++++++++++++++++++++++++++
+ package/nftables/nftables.mk |  5 ++++
+ 2 files changed, 58 insertions(+)
+ create mode 100644 package/nftables/S35nftables
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 8dcd57fb7c..13dbc6d98c 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -583,6 +583,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_9XXX),y)
- LINUX_FIRMWARE_FILES += iwlwifi-9???-*.ucode
-+LINUX_FIRMWARE_FILES += iwlwifi-so-a0-jf-b0*.ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
--- 
-2.39.2
+diff --git a/package/nftables/S35nftables b/package/nftables/S35nftables
+new file mode 100644
+index 0000000000..03f7821a48
+--- /dev/null
++++ b/package/nftables/S35nftables
+@@ -0,0 +1,53 @@
++#!/bin/sh
++
++DAEMON="nftables"
++
++# Main ruleset file, override in /etc/default/nftables if you want a
++# different location. The file should include a "flush ruleset"
++# command to atomically replace any previous rules.
++NFTABLES_CONFIG="/etc/nftables.conf"
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++# Run only if the ruleset file exists.
++if [ ! -f "${NFTABLES_CONFIG}" ]; then
++	echo "No nftables config file, nothing to do."
++	exit 0
++fi
++
++start() {
++	printf "Loading nftables rules: "
++	if /usr/sbin/nft -f "${NFTABLES_CONFIG}"; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++}
++
++stop() {
++	printf "Clearing nftables rules: "
++	if /usr/sbin/nft flush ruleset; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++}
++
++case "$1" in
++	start|reload)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart)
++		stop
++		start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
++
++exit $?
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 9cba243372..d74ca2da64 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -57,6 +57,11 @@ define NFTABLES_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_INET)
+ endef
+
++define NFTABLES_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/nftables/S35nftables \
++		$(TARGET_DIR)/etc/init.d/S35nftables
++endef
++
+ $(eval $(autotools-package))
+
+ # Legacy: we used to handle it in this .mk
+--
+2.45.1
 
 _______________________________________________
 buildroot mailing list
