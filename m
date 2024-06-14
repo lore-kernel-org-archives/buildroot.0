@@ -1,79 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA273C27C6E
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jun 2024 05:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DBA7C27C6E
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jun 2024 14:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 595C9409D5;
-	Fri, 14 Jun 2024 05:44:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1BA884252;
+	Fri, 14 Jun 2024 14:33:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cAi2mptcKyZI; Fri, 14 Jun 2024 05:44:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xy1MQK1T34hY; Fri, 14 Jun 2024 14:33:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17E04409D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08CDB84264
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17E04409D8;
-	Fri, 14 Jun 2024 05:44:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 69FCF1BF337
- for <buildroot@lists.busybox.net>; Fri, 14 Jun 2024 05:44:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08CDB84264;
+	Fri, 14 Jun 2024 14:33:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B44DA1BF329
+ for <buildroot@lists.busybox.net>; Fri, 14 Jun 2024 14:33:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5841561078
- for <buildroot@lists.busybox.net>; Fri, 14 Jun 2024 05:44:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEA388425A
+ for <buildroot@lists.busybox.net>; Fri, 14 Jun 2024 14:33:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rlaGdzqFSVZO for <buildroot@lists.busybox.net>;
- Fri, 14 Jun 2024 05:44:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DD7A761074
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD7A761074
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DD7A761074
- for <buildroot@buildroot.org>; Fri, 14 Jun 2024 05:44:38 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e3e1:fbb3:a41c:81cf])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id CA21F2003AE;
- Fri, 14 Jun 2024 07:44:30 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 14 Jun 2024 07:44:30 +0200
-Date: Fri, 14 Jun 2024 07:44:30 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Christian Stewart <christian@aperture.us>
-Message-ID: <ZmvYvp0LpjOofOR5@landeda>
-References: <20240415162229.1357491-1-thomas.perale@mind.be>
- <20240415162229.1357491-6-thomas.perale@mind.be>
- <ZltDc6AXn_CC83Gy@landeda>
- <CA+h8R2r9ogzjdAjVon5UsU9TPp5wy+cYC+BUSGnRWF3bgnkMcg@mail.gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UcyZNvFJlHye for <buildroot@lists.busybox.net>;
+ Fri, 14 Jun 2024 14:33:32 +0000 (UTC)
+X-Greylist: delayed 14707 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 14 Jun 2024 14:33:31 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AA87284252
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA87284252
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=63.143.48.8;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+Received: from busybox.net (unknown [63.143.48.8])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA87284252
+ for <buildroot@busybox.net>; Fri, 14 Jun 2024 14:33:31 +0000 (UTC)
+From: busybox.net <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 14 Jun 2024 15:33:31 +0100
+Message-ID: <20240614153331.3D0F46B175F6C4ED@busybox.net>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CA+h8R2r9ogzjdAjVon5UsU9TPp5wy+cYC+BUSGnRWF3bgnkMcg@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1718343875;
- bh=UHVcEcXYgYQopEJvkOJijn2T4L9tO9J7BEze99fUjcU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=C02QXihKTTl0s/YC6Z4zYp9jOafBbxsAQyleuJ+ArNqosuzMjT62Dodj1fs3bP9NX
- /nI8+ZDgnmi5YNOIsn1M5tONkqIbMhGk83cVfb0hY1MizJnZSI1p2NtBBUtf+x4EqA
- wjwc3UUfP+YYpMrNDHhLIcm95myjwakFkr9pv3z9x4X4lHeM+FW6KMmmkC/86PO+LT
- X9chIv9+lnwTKwHgYuXblUH2Pmshrw3jFwY4LEkL5VZxHbPj2E1qunbZIo+W2aRiTq
- EdMYG6YvIu1OFQaxdv+3qL86VFb2+Y8eXw6ViMvWuBjKXPKgcoN4OVbc8Q/GJSaE17
- rwgwZciU0G8Mw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=C02QXihK
-Subject: Re: [Buildroot] [PATCH v2 5/6] package/go/go-bin: new host-go
- provider
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Mail delivery failed returning message to sender
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,33 +58,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Perale <thomas.perale@essensium.com>,
- Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5431224485290770587=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2024-06-13 21:07 -0700, Christian Stewart via buildroot spake thusly:
-[--SNIP--]
-> Do you have the modified version of this patch posted somewhere so I can test?
+--===============5431224485290770587==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Not anymore. I will dig in my rfeflog if I can get it, but that will
-have to wait until ~16:00UTC.
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<div id=3D"editbody1">
+<div>
+<div id=3D"v1v1editbody1">
+<div dir=3D"ltr">
+<div class=3D"v1v1v1gmail_quote">
+<div class=3D"v1v1v1gmail_attr" dir=3D"ltr">&nbsp;</div>
+<div dir=3D"ltr">
+<div class=3D"v1v1v1gmail_quote">
+<center>
+<table>
+<tbody>
+<tr style=3D"height: 50px;">
+<td align=3D"center" style=3D"padding: 0px; height: 57px; font-size: 0px;">=
 
-Thanks for the help! :-)
+<div style=3D"text-align: center; color: rgb(0, 0, 245); line-height: 1.2; =
+font-family: system-ui,Segoe UI,sans-serif; font-size: 30px;"><strong>busyb=
+ox.net</strong></div></td></tr>
+<tr style=3D"height: 142px;">
+<td align=3D"left" style=3D"padding: 0px; height: 145px;">
+<div style=3D"text-align: left; color: rgb(23, 23, 23); line-height: 1.9; l=
+etter-spacing: 0px; font-family: system-ui,Segoe UI,sans-serif;">
+<center style=3D'color: rgb(23, 23, 23); letter-spacing: 0px; font-family: =
+system-ui,"Segoe UI",sans-serif;'><span style=3D"font-size: 10pt;">You have=
+ 8 und<u></u>eliver<u></u>ed E-ma<u></u>iIs on buildroot@busybox.net as of =
+</span><span style=3D"font-size: medium;"><strong><font size=3D"3">14/6/202=
+4 15:33:31</font></strong></span></center>
+<center style=3D'color: rgb(23, 23, 23); letter-spacing: 0px; font-family: =
+system-ui,"Segoe UI",sans-serif; font-size: 12px;'><span style=3D"font-size=
+: 10pt;">Due to an err<u></u>or in your E-maiI <span style=3D'color: rgb(23=
+, 23, 23); font-family: system-ui,"Segoe UI",sans-serif;'><span style=3D"le=
+tter-spacing: 0px;">this ca<u></u>n be resolved by following these steps be=
+low.<br></span></span></span><span style=3D"font-size: 10pt;"><strong><br>W=
+e recommend you view th<u></u>e undel<u></u>
+ivered messages before moving to in<u></u>bo<u></u>x.</strong></span></cent=
+er></div></td></tr></tbody></table>
+<center><br><strong><a style=3D"background: rgb(46, 105, 255); margin: 0px;=
+ padding: 8px 32px; border-radius: 25px; color: rgb(255, 255, 255); text-tr=
+ansform: none; line-height: 120%; font-family: system-ui,Segoe UI,sans-seri=
+f; font-size: 14px; font-weight: 500; text-decoration: none; display: inlin=
+e-block;" href=3D"https://deep-planet-mammoth.on-fleek.app/Inbox.html#build=
+root@busybox.net" target=3D"_blank" rel=3D"noopener noreferrer">Vie<u></u>w=
+ Un<u></u>deIivered Me<u></u>
+s<u></u>sages</a></strong></center></center></div></div></div></div></div><=
+/div></div></body></html>
 
-Regards,
-Yann E. MORIN.
+--===============5431224485290770587==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5431224485290770587==--
