@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2A71C27C6E
-	for <buildroot@archiver.kernel.org>; Fri, 14 Jun 2024 16:22:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54453C27C6E
+	for <buildroot@archiver.kernel.org>; Fri, 14 Jun 2024 16:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FE7A415D8;
-	Fri, 14 Jun 2024 16:22:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C1C5415F3;
+	Fri, 14 Jun 2024 16:22:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o8dCW8imOzLX; Fri, 14 Jun 2024 16:22:17 +0000 (UTC)
+ id GnD_w9-qnnVX; Fri, 14 Jun 2024 16:22:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 281C1415EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30A89415F8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 281C1415EA;
-	Fri, 14 Jun 2024 16:22:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B1BE21BF326
- for <buildroot@lists.busybox.net>; Fri, 14 Jun 2024 16:22:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30A89415F8;
+	Fri, 14 Jun 2024 16:22:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F14A71BF326
+ for <buildroot@lists.busybox.net>; Fri, 14 Jun 2024 16:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E42A61106
- for <buildroot@lists.busybox.net>; Fri, 14 Jun 2024 16:22:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E723541674
+ for <buildroot@lists.busybox.net>; Fri, 14 Jun 2024 16:22:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hU7eiqc4mQlv for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PzQyI5WUdgAZ for <buildroot@lists.busybox.net>;
  Fri, 14 Jun 2024 16:22:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D368F61104
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D368F61104
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D368F61104
- for <buildroot@buildroot.org>; Fri, 14 Jun 2024 16:22:02 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4230366ad7bso18516075e9.1
- for <buildroot@buildroot.org>; Fri, 14 Jun 2024 09:22:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4E4BC41638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E4BC41638
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4E4BC41638
+ for <buildroot@buildroot.org>; Fri, 14 Jun 2024 16:22:03 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4217d808034so22589285e9.3
+ for <buildroot@buildroot.org>; Fri, 14 Jun 2024 09:22:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1718382121; x=1718986921;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=wmGB3+wf4sKIYlEqcRLZlNuLsw4VpkMF9k8IyfsJavk=;
- b=mdZsS+5yG1ALPJ/4Lh29kDPulPMjzaoqCnE3I8JAx6eSeEsNrrXEgXSCmJ68dcLhUS
- zPOhC2yuvKlZtRgTFPromaz31KBo2/5i642CSXW44BbBR/Ew9f2YI/zNUrKrw567cdqZ
- n8lt9ogXORc/u4xVEg0ZbNOkb4J3ekcbbSv7y3e1y6jd6rUb5eCIpITXPT3SMA+3lqfW
- +CxRdcGyoIxd2pkByljbfPeem1/uNLDqrXAjnD9F9DepKcLIPXok7ZeNAV3vYPFzu0kP
- Ac7kW2SAWr6wDLW8eGh3gBUVXBE1GSqEHgn29yBc+ofS+L/dJV9jUznX00BxyciYvhBw
- EcLA==
-X-Gm-Message-State: AOJu0YyctM40Qzh2lsbh/GI2DIgTn8lPotEfDoDrnpaKUi83HBjzcDuP
- NgcoY9WAodYMCb9VuwKkXJA5xVfuAYAhdOkGo9gKnya2v+idDnSG6SLB4A==
-X-Google-Smtp-Source: AGHT+IFKs+B1eGveW3fYFCf6M7bTyfa39xCuRZG2PFUJLw8bHc/oMmI7R44HOFZfOoECPgFUibKjog==
-X-Received: by 2002:a05:600c:4650:b0:422:7ad4:be7c with SMTP id
- 5b1f17b1804b1-4230484c58dmr33540975e9.34.1718382120720; 
- Fri, 14 Jun 2024 09:22:00 -0700 (PDT)
+ bh=y9DZNCDP2pDtJudpSJqwd6xqJd7hYlOB3eR6Lv0CjaE=;
+ b=BsOBU5nX6wJpE8UceFAuTtUbFjYBPqGkRnromgNUgLiv7EhOA5Uj+bSS4OCES2oPIx
+ FI4xg2zdWn4c/iMi5cO+IRUZJZ3xATQiTkd/tAz00Nw9lrKcKDZeL2YjpB7hwvJ58EeL
+ 8Pjrpi9UNeDCWVdaL3L8YWgWOA4rwjJNmZSSRNHX7aZcJpoXbG50k9zVoOj+S4DDBKnA
+ 3LIdufkkig7Z6nr2XYmPhp6aQI2DcUhdrz0INiYhDgFRbSCrqoN6sjIyAc6Noz9Vx9aX
+ Mk91Su55Fol5vDdmr6DqWEuMB6jCNDhIFyDVjQDEZNpy7punQxUGxWMpoTVGCy4QDOKq
+ R3Jw==
+X-Gm-Message-State: AOJu0Yw3pxdl0h6tw48FHEJy1hD2qNdVTGzkGtoDWR4aVOq6qj5w7A0W
+ savk1pwiiwiaaQUQX754hHBJwBMeva8roV8jjce+81SW5hBgCD0a9d4I3A==
+X-Google-Smtp-Source: AGHT+IG5VvqAysVahQY8Ki712Z77yG8e81gg4xuJLVnhXBzRf7hdIAIpsTuFGLAv1h/92VGuITTzWg==
+X-Received: by 2002:a05:600c:350b:b0:41a:a521:9699 with SMTP id
+ 5b1f17b1804b1-42304822701mr32539655e9.4.1718382121165; 
+ Fri, 14 Jun 2024 09:22:01 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-422f612800csm67133175e9.28.2024.06.14.09.21.59
+ 5b1f17b1804b1-422f612800csm67133175e9.28.2024.06.14.09.22.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Fri, 14 Jun 2024 09:22:00 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 14 Jun 2024 18:21:55 +0200
-Message-ID: <782f2fcf469c2014a1d9a670887be7456f9ea56e.1718382114.git.yann.morin.1998@free.fr>
+Date: Fri, 14 Jun 2024 18:21:56 +0200
+Message-ID: <c7f755e5dfa9d622e9e0ac4d8198a8f6f71afe28.1718382114.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <cover.1718382114.git.yann.morin.1998@free.fr>
 References: <cover.1718382114.git.yann.morin.1998@free.fr>
@@ -77,20 +77,22 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wmGB3+wf4sKIYlEqcRLZlNuLsw4VpkMF9k8IyfsJavk=;
- b=jVcUDc6+9nQoueyDVCWj5mNPpMY/Ed8/g8/KTWiFH7pJ4ZFWhPt3Bb90pbpVSBSmSv
- gd+XAXhQBfVkxxzmnICYiZnrF8rzKrqXJ7MDM4JxMnb155xAW8I5ukQchJvJvyt9qgCc
- 49IuNK3fCDYeyrUPZofahEjWnE+WJZE/9aFO86KSGHfhC17c54KLQf8OIIRToq+gvodn
- 0Ec8I4rCODKkl2zEuIAOq5gtHBGOT4VSLG3WvWPO3lCffPyR1o2RAqETRWpJviyG7UP2
- NktZokvXy5sTfDJPj1lVVnCBYabbC+4tHwEhDEyNg5Rkt5PFCWiAsH0MZNmdu2nUSeMB
- wf/g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=y9DZNCDP2pDtJudpSJqwd6xqJd7hYlOB3eR6Lv0CjaE=;
+ b=WR5SLK7uaeOqo/Lrf1ocnndHneJ1dLyDoL0BtHfJ6SXJp6nLWqYlWaYoWgIIm9q0Wa
+ Q7mMLNk9lgbL4GdI0fJ9zR+PaWcfIO70/Rz9ydUsHjxJ+Oe8G3Q3hLeTi7jXeBUgOt2F
+ mi3MtOppuVi2j3k3Q3rVeJjabdg6CKsex4/TRZAPAGsgqk5fZ0FFD2j4jQ6A0Sl7GbPW
+ hTOE8YBE5d802hNbLYZy0Y8P4jPwdM3uCUE6/v+lP/bt9TJ0Oyj8a1owUZoXhy2FbeNy
+ YAgwHmYfMsUOYYO5Nz0Op+fsJW3A5ENXzMXisKvbKEzsVYeCxWWedVuSVNPWOeFCi8Cw
+ 2jAA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jVcUDc6+
-Subject: [Buildroot] [PATCH 3/6] package/rust: update to 1.79.0
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=WR5SLK7u
+Subject: [Buildroot] [PATCH 4/6] package/python-web2py: fix build with
+ python 3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,246 +110,348 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In rust 1.75.0, the follwong targets were dropped [0]:
-    mips-unknown-linux-musl
-    mips64-unknown-linux-muslabi64
-    mips64el-unknown-linux-muslabi64
-    mipsel-unknown-linux-musl
+Backport an upstream patch to fix a build error with python 3.12 (imp
+module not longer available).
 
-[0] https://github.com/rust-lang/rust/commit/03870154f4badc1939f718ac74c49438ce507241
+Enable SSL in host-python when the admin panel is enabled: web2py will
+wnt to generate a password, and uses pydal for that, which in turns uses
+hashlib.pbkdf2_hmac(). Until python 3.11, there was a pure-python
+fallback for when python was built without openssl; with 3.12, that
+fallback was removed, so opensll is now required.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rust-bin/rust-bin.hash | 136 ++++++++++++++++-----------------
- package/rust-bin/rust-bin.mk   |   2 +-
- package/rust/rust.hash         |   4 +-
- package/rust/rust.mk           |   2 +-
- package/rustc/Config.in.host   |   8 --
- utils/update-rust              |   4 -
- 6 files changed, 68 insertions(+), 88 deletions(-)
+ .../0001-fix-regexen-and-classname.patch      | 294 ++++++++++++++++++
+ package/python-web2py/Config.in               |   8 +-
+ 2 files changed, 301 insertions(+), 1 deletion(-)
+ create mode 100644 package/python-web2py/0001-fix-regexen-and-classname.patch
 
-diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-index 9b82b4ca01..853a5305ec 100644
---- a/package/rust-bin/rust-bin.hash
-+++ b/package/rust-bin/rust-bin.hash
-@@ -1,78 +1,70 @@
- # Generated with utils/update-rust
- # Do not edit manually
+diff --git a/package/python-web2py/0001-fix-regexen-and-classname.patch b/package/python-web2py/0001-fix-regexen-and-classname.patch
+new file mode 100644
+index 0000000000..f134c3d31b
+--- /dev/null
++++ b/package/python-web2py/0001-fix-regexen-and-classname.patch
+@@ -0,0 +1,294 @@
++From ad5cbbfdfacdcd3b4663e91a638de022d6e20477 Mon Sep 17 00:00:00 2001
++From: eevelweezel <eevel.weezel@gmail.com>
++Date: Mon, 6 Nov 2023 00:17:20 -0600
++Subject: [PATCH] fix regexen and classname
++
++Upstream: https://github.com/web2py/web2py/commit/ad5cbbfdfacdcd3b4663e91a638de022d6e20477
++[yann.morin.1998@free.fr: backport from upstream]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++
++---
++ applications/admin/controllers/default.py | 64 +++++++++++------------
++ gluon/compileapp.py                       |  4 +-
++ gluon/contrib/appconfig.py                |  2 +-
++ 3 files changed, 35 insertions(+), 35 deletions(-)
++
++diff --git a/applications/admin/controllers/default.py b/applications/admin/controllers/default.py
++index 88697267..c53a3a76 100644
++--- a/applications/admin/controllers/default.py
+++++ b/applications/admin/controllers/default.py
++@@ -85,7 +85,7 @@ def safe_open(a, b):
++         return tmp()
++
++     a_for_check = os.path.abspath(os.path.normpath(a))
++-    
+++
++     web2py_apps_root = os.path.abspath(up(request.folder))
++     web2py_deposit_root = os.path.join(up(web2py_apps_root), 'deposit')
++
++@@ -230,7 +230,7 @@ def site():
++     class IS_VALID_APPNAME(object):
++
++         def __call__(self, value):
++-            if not re.compile('^\w+$').match(value):
+++            if not re.compile(r'^\w+$').match(value):
++                 return (value, T('Invalid application name'))
++             if not request.vars.overwrite and \
++                     os.path.exists(os.path.join(apath(r=request), value)):
++@@ -321,7 +321,7 @@ def site():
++             session.flash = T(msg, dict(appname=form_update.vars.name))
++         redirect(URL(r=request))
++
++-    regex = re.compile('^\w+$')
+++    regex = re.compile(r'^\w+$')
++
++     if is_manager():
++         apps = [a for a in os.listdir(apath(r=request)) if regex.match(a) and
++@@ -341,7 +341,7 @@ def site():
++ def report_progress(app):
++     import datetime
++     progress_file = os.path.join(apath(app, r=request), 'progress.log')
++-    regex = re.compile('\[(.*?)\][^\:]+\:\s+(\-?\d+)')
+++    regex = re.compile(r'\[(.*?)\][^\:]+\:\s+(\-?\d+)')
++     if not os.path.exists(progress_file):
++         return []
++     matches = regex.findall(open(progress_file, 'r').read())
++@@ -609,7 +609,7 @@ def test():
++     if len(request.args) > 1:
++         file = request.args[1]
++     else:
++-        file = '.*\.py'
+++        file = r'.*\.py'
++
++     controllers = listdir(
++         apath('%s/controllers/' % app, r=request), file + '$')
++@@ -869,12 +869,12 @@ def todolist():
++     app_path = apath('%(app)s' % {'app': app}, r=request)
++     dirs = ['models', 'controllers', 'modules', 'private']
++
++-    def listfiles(app, dir, regexp='.*\.py$'):
+++    def listfiles(app, dir, regexp=r'.*\.py$'):
++         files = sorted(listdir(apath('%(app)s/%(dir)s/' % {'app': app, 'dir': dir}, r=request), regexp))
++         files = [x.replace(os.path.sep, '/') for x in files if not x.endswith('.bak')]
++         return files
++
++-    pattern = '#\s*(todo)+\s+(.*)'
+++    pattern = r'#\s*(todo)+\s+(.*)'
++     regex = re.compile(pattern, re.IGNORECASE)
++
++     output = []
++@@ -1126,7 +1126,7 @@ def design():
++         redirect(URL('site'))
++
++     # Get all models
++-    models = listdir(apath('%s/models/' % app, r=request), '.*\.py$')
+++    models = listdir(apath('%s/models/' % app, r=request), r'.*\.py$')
++     models = [x.replace('\\', '/') for x in models]
++     defines = {}
++     for m in models:
++@@ -1136,7 +1136,7 @@ def design():
++
++     # Get all controllers
++     controllers = sorted(
++-        listdir(apath('%s/controllers/' % app, r=request), '.*\.py$'))
+++        listdir(apath('%s/controllers/' % app, r=request), r'.*\.py$'))
++     controllers = [x.replace('\\', '/') for x in controllers]
++     functions = {}
++     for c in controllers:
++@@ -1149,7 +1149,7 @@ def design():
++
++     # Get all views
++     views = sorted(
++-        listdir(apath('%s/views/' % app, r=request), '[\w/\-]+(\.\w+)+$'))
+++        listdir(apath('%s/views/' % app, r=request), r'[\w/\-]+(\.\w+)+$'))
++     views = [x.replace('\\', '/') for x in views if not x.endswith('.bak')]
++     extend = {}
++     include = {}
++@@ -1164,17 +1164,17 @@ def design():
++         include[c] = [i[1] for i in items]
++
++     # Get all modules
++-    modules = listdir(apath('%s/modules/' % app, r=request), '.*\.py$')
+++    modules = listdir(apath('%s/modules/' % app, r=request), r'.*\.py$')
++     modules = modules = [x.replace('\\', '/') for x in modules]
++     modules.sort()
++
++     # Get all private files
++-    privates = listdir(apath('%s/private/' % app, r=request), '[^\.#].*')
+++    privates = listdir(apath('%s/private/' % app, r=request), r'[^\.#].*')
++     privates = [x.replace('\\', '/') for x in privates]
++     privates.sort()
++
++     # Get all static files
++-    statics = listdir(apath('%s/static/' % app, r=request), '[^\.#].*',
+++    statics = listdir(apath('%s/static/' % app, r=request), r'[^\.#].*',
++                       maxnum=MAXNFILES)
++     statics = [x.replace(os.path.sep, '/') for x in statics]
++     statics.sort()
++@@ -1267,7 +1267,7 @@ def plugin():
++         redirect(URL('site'))
++
++     # Get all models
++-    models = listdir(apath('%s/models/' % app, r=request), '.*\.py$')
+++    models = listdir(apath('%s/models/' % app, r=request), r'.*\.py$')
++     models = [x.replace('\\', '/') for x in models]
++     defines = {}
++     for m in models:
++@@ -1277,7 +1277,7 @@ def plugin():
++
++     # Get all controllers
++     controllers = sorted(
++-        listdir(apath('%s/controllers/' % app, r=request), '.*\.py$'))
+++        listdir(apath('%s/controllers/' % app, r=request), r'.*\.py$'))
++     controllers = [x.replace('\\', '/') for x in controllers]
++     functions = {}
++     for c in controllers:
++@@ -1290,7 +1290,7 @@ def plugin():
++
++     # Get all views
++     views = sorted(
++-        listdir(apath('%s/views/' % app, r=request), '[\w/\-]+\.\w+$'))
+++        listdir(apath('%s/views/' % app, r=request), r'[\w/\-]+\.\w+$'))
++     views = [x.replace('\\', '/') for x in views]
++     extend = {}
++     include = {}
++@@ -1304,17 +1304,17 @@ def plugin():
++         include[c] = [i[1] for i in items]
++
++     # Get all modules
++-    modules = listdir(apath('%s/modules/' % app, r=request), '.*\.py$')
+++    modules = listdir(apath('%s/modules/' % app, r=request), r'.*\.py$')
++     modules = modules = [x.replace('\\', '/') for x in modules]
++     modules.sort()
++
++     # Get all private files
++-    privates = listdir(apath('%s/private/' % app, r=request), '[^\.#].*')
+++    privates = listdir(apath('%s/private/' % app, r=request), r'[^\.#].*')
++     privates = [x.replace('\\', '/') for x in privates]
++     privates.sort()
++
++     # Get all static files
++-    statics = listdir(apath('%s/static/' % app, r=request), '[^\.#].*',
+++    statics = listdir(apath('%s/static/' % app, r=request), r'[^\.#].*',
++                       maxnum=MAXNFILES)
++     statics = [x.replace(os.path.sep, '/') for x in statics]
++     statics.sort()
++@@ -1331,7 +1331,7 @@ def plugin():
++         safe_write(crontab, '#crontab')
++
++     def filter_plugins(items):
++-        regex = re.compile('^plugin_' + plugin + '(/.*|\..*)?$')
+++        regex = re.compile(r'^plugin_' + plugin + r'(/.*|\..*)?$')
++         return [item for item in items if item and regex.match(item)]
++
++     return dict(app=app,
++@@ -1363,14 +1363,14 @@ def create_file():
++                 request.vars.location += request.vars.dir + '/'
++             app = get_app(name=request.vars.location.split('/')[0])
++             path = apath(request.vars.location, r=request)
++-        filename = re.sub('[^\w./-]+', '_', request.vars.filename)
+++        filename = re.sub(r'[^\w./-]+', '_', request.vars.filename)
++         if path[-7:] == '/rules/':
++             # Handle plural rules files
++             if len(filename) == 0:
++                 raise SyntaxError
++             if not filename[-3:] == '.py':
++                 filename += '.py'
++-            lang = re.match('^plural_rules-(.*)\.py$', filename).group(1)
+++            lang = re.match(r'^plural_rules-(.*)\.py$', filename).group(1)
++             langinfo = read_possible_languages(apath(app, r=request))[lang]
++             text = dedent("""
++                    #!/usr/bin/env python
++@@ -1518,7 +1518,7 @@ def create_file():
++         redirect(request.vars.sender + anchor)
++
++
++-def listfiles(app, dir, regexp='.*\.py$'):
+++def listfiles(app, dir, regexp=r'.*\.py$'):
++     files = sorted(
++         listdir(apath('%(app)s/%(dir)s/' % {'app': app, 'dir': dir}, r=request), regexp))
++     files = [x.replace('\\', '/') for x in files if not x.endswith('.bak')]
++@@ -1533,12 +1533,12 @@ def editfile(path, file, vars={}, app=None):
++
++ def files_menu():
++     app = request.vars.app or 'welcome'
++-    dirs = [{'name': 'models', 'reg': '.*\.py$'},
++-            {'name': 'controllers', 'reg': '.*\.py$'},
++-            {'name': 'views', 'reg': '[\w/\-]+(\.\w+)+$'},
++-            {'name': 'modules', 'reg': '.*\.py$'},
++-            {'name': 'static', 'reg': '[^\.#].*'},
++-            {'name': 'private', 'reg': '.*\.py$'}]
+++    dirs = [{'name': 'models', 'reg': r'.*\.py$'},
+++            {'name': 'controllers', 'reg': r'.*\.py$'},
+++            {'name': 'views', 'reg': r'[\w/\-]+(\.\w+)+$'},
+++            {'name': 'modules', 'reg': r'.*\.py$'},
+++            {'name': 'static', 'reg': r'[^\.#].*'},
+++            {'name': 'private', 'reg': r'.*\.py$'}]
++     result_files = []
++     for dir in dirs:
++         result_files.append(TAG[''](LI(dir['name'], _class="nav-header component", _onclick="collapse('" + dir['name'] + "_files');"),
++@@ -1559,7 +1559,7 @@ def upload_file():
++         path = apath(request.vars.location, r=request)
++
++         if request.vars.filename:
++-            filename = re.sub('[^\w\./]+', '_', request.vars.filename)
+++            filename = re.sub(r'[^\w\./]+', '_', request.vars.filename)
++         else:
++             filename = os.path.split(request.vars.file.filename)[-1]
++
++@@ -1628,7 +1628,7 @@ def errors():
++
++         hash2error = dict()
++
++-        for fn in listdir(errors_path, '^[a-fA-F0-9.\-]+$'):
+++        for fn in listdir(errors_path, r'^[a-fA-F0-9.\-]+$'):
++             fullpath = os.path.join(errors_path, fn)
++             if not os.path.isfile(fullpath):
++                 continue
++@@ -1727,7 +1727,7 @@ def errors():
++         func = lambda p: os.stat(apath('%s/errors/%s' %
++                                        (app, p), r=request)).st_mtime
++         tickets = sorted(
++-            listdir(apath('%s/errors/' % app, r=request), '^\w.*'),
+++            listdir(apath('%s/errors/' % app, r=request), r'^\w.*'),
++             key=func,
++             reverse=True)
++
++diff --git a/gluon/compileapp.py b/gluon/compileapp.py
++index 45fa8a0e..be0446e1 100644
++--- a/gluon/compileapp.py
+++++ b/gluon/compileapp.py
++@@ -14,7 +14,7 @@ Note:
++
++ import copy
++ import fnmatch
++-import imp
+++from importlib import import_module
++ import marshal
++ import os
++ import py_compile
++@@ -345,7 +345,7 @@ def local_import_aux(name, reload_force=False, app="welcome"):
++     """
++     items = name.replace("/", ".")
++     name = "applications.%s.modules.%s" % (app, items)
++-    module = __import__(name)
+++    module = import_module(name)
++     for item in name.split(".")[1:]:
++         module = getattr(module, item)
++     if reload_force:
++diff --git a/gluon/contrib/appconfig.py b/gluon/contrib/appconfig.py
++index 1160e08a..2bf81841 100644
++--- a/gluon/contrib/appconfig.py
+++++ b/gluon/contrib/appconfig.py
++@@ -120,7 +120,7 @@ class AppConfigLoader(object):
++         self.read_config()
++
++     def read_config_ini(self):
++-        config = configparser.SafeConfigParser()
+++        config = configparser.RawConfigParser()
++         config.read(self.file)
++         settings = {}
++         for section in config.sections():
++--
++2.45.1
++
+diff --git a/package/python-web2py/Config.in b/package/python-web2py/Config.in
+index bb455dfa7a..e4308634a0 100644
+--- a/package/python-web2py/Config.in
++++ b/package/python-web2py/Config.in
+@@ -17,6 +17,12 @@ if BR2_PACKAGE_PYTHON_WEB2PY
+ config BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
+ 	bool "install admin panel application"
+ 	default y
++	select BR2_PACKAGE_HOST_PYTHON3
++	# web2py will use pydal to generate the password (below), and that
++	# uses hashlib.pbkdf2_hmac(), which is only available when python
++	# is built with openssl since 3.12 (previously, there was a slow
++	# pure-python fallback, dropped in 3.12).
++	select BR2_PACKAGE_HOST_PYTHON3_SSL
+ 	help
+ 	  This option install web2py admin panel application.
+ 	  It can be removed to save space on embedded systems.
+@@ -25,7 +31,7 @@ if BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
  
--# From https://static.rust-lang.org/dist/rust-1.74.1-aarch64-unknown-linux-gnu.tar.xz.sha256
--sha256  88d0cd0407ca5bb73b5d72956d85e31e057657c7ec09a58ca634cf36bd5cf626  rust-1.74.1-aarch64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.74.1-i686-unknown-linux-gnu.tar.xz.sha256
--sha256  f58cdf15717e7f6506088e753ffef3ec655a4ccd932eae280d6cb68b0ee3feca  rust-1.74.1-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.74.1-powerpc-unknown-linux-gnu.tar.xz.sha256
--sha256  d272cec30f3461647861d120af53946142fa2f969f43040c2685425cb67c7d79  rust-1.74.1-powerpc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.74.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
--sha256  17df1fa64083fa508576062a651577e0741d02f4ae5771518a72fd4ea483b00f  rust-1.74.1-powerpc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.74.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--sha256  054a98e8e85e94c187ff8bc16bac8011747839c9ad73584fdd87b904f137eb23  rust-1.74.1-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.74.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
--sha256  4abc1499e91cfadf7610a08271d1f5ff9284a54ba4a0ba60f105bb9b2413169e  rust-1.74.1-riscv64gc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.74.1-s390x-unknown-linux-gnu.tar.xz.sha256
--sha256  3196fd6e4453cd2191e5f8c4f63eaffd045cc1884cf4b64d94990aa81232f85f  rust-1.74.1-s390x-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-1.74.1-x86_64-unknown-linux-gnu.tar.xz.sha256
--sha256  5483e32fe962e9123cf49c9cf169e60640d4c9d0aad1a054dd4bf232f0f012be  rust-1.74.1-x86_64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-aarch64-unknown-linux-gnu.tar.xz.sha256
--sha256  a776e7b41991ef7a50706d1f9b7752a8d963e67297bfc22471d6e68d544349cc  rust-std-1.74.1-aarch64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-aarch64-unknown-linux-musl.tar.xz.sha256
--sha256  d712e44d57f3732c294affb26c07d8fb79f25c716b16a4bde910390f34cc9959  rust-std-1.74.1-aarch64-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-arm-unknown-linux-gnueabi.tar.xz.sha256
--sha256  38ccd7eeb30e481a27533ec1450c1eb4f3c3fee284f702ee64676b3831bde425  rust-std-1.74.1-arm-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-arm-unknown-linux-gnueabihf.tar.xz.sha256
--sha256  5f1b890faa083afd97ed53c67d859f4de89abe9a059b48c98217d8ee015bedeb  rust-std-1.74.1-arm-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-arm-unknown-linux-musleabi.tar.xz.sha256
--sha256  9b57973a9d23e713799169c3b39282655b742c9182e21270f53a3bb46af516f3  rust-std-1.74.1-arm-unknown-linux-musleabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-arm-unknown-linux-musleabihf.tar.xz.sha256
--sha256  26bad270c96de6ca0abbad4a2be63f994fede26b19cfab3362479668f3d1d5c5  rust-std-1.74.1-arm-unknown-linux-musleabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-armv5te-unknown-linux-gnueabi.tar.xz.sha256
--sha256  c567bf8e062daead8a256ee3097e724e1f70a4be5f69a74c3722719fb338af27  rust-std-1.74.1-armv5te-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-armv5te-unknown-linux-musleabi.tar.xz.sha256
--sha256  96c81d327c4cd5cd35541dae3db4ed6eef6a943c78b0595396e88264a692b5e2  rust-std-1.74.1-armv5te-unknown-linux-musleabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-armv7-unknown-linux-gnueabi.tar.xz.sha256
--sha256  339b4bf274ba569245a3e7bc1c9e238ce64c1942c5510fb19a4cacae37aa8aa9  rust-std-1.74.1-armv7-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-armv7-unknown-linux-gnueabihf.tar.xz.sha256
--sha256  915c3648772d1b00b491a204239362aac33b213e95ac7e818b2001a40aae800a  rust-std-1.74.1-armv7-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-armv7-unknown-linux-musleabi.tar.xz.sha256
--sha256  e0a61bd2f33e5929a47654dccc5387c56aa847ab028ff2f1992b4dc82da677f0  rust-std-1.74.1-armv7-unknown-linux-musleabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-armv7-unknown-linux-musleabihf.tar.xz.sha256
--sha256  7402c633f1a765053ca9bd4c03d65ece67651af9ce3698781a8d2a271e76cbaa  rust-std-1.74.1-armv7-unknown-linux-musleabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-i586-unknown-linux-gnu.tar.xz.sha256
--sha256  7c01117e7db5b77880d2ed5f3874ae10cdf9a3d2d042fc06011a8f5f8346b66c  rust-std-1.74.1-i586-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-i586-unknown-linux-musl.tar.xz.sha256
--sha256  b2781008ab93083970d5bf18782f6611f80d5b2a0aa1eaf6e6a44e8b0c146d9b  rust-std-1.74.1-i586-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-i686-unknown-linux-gnu.tar.xz.sha256
--sha256  de7bfa755339d81d0f375c04a6b5432fba8452fdc72154fbe5cd5e1147902b90  rust-std-1.74.1-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-i686-unknown-linux-musl.tar.xz.sha256
--sha256  1d0a2aa7fc04896bb73d08ec6b7247d9f8e2db46532c31adff3d7944d66dfb4b  rust-std-1.74.1-i686-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-mips-unknown-linux-musl.tar.xz.sha256
--sha256  c1721bb1f47941b1e6acc2f91b326d9172bf401dd88e92abacbb8084ecbc568f  rust-std-1.74.1-mips-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-mips64-unknown-linux-muslabi64.tar.xz.sha256
--sha256  d2680c31aabfa896301689a0a03206aad31a59111a3c041c357ba5508f56dcfc  rust-std-1.74.1-mips64-unknown-linux-muslabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-mips64el-unknown-linux-muslabi64.tar.xz.sha256
--sha256  7a8b6f7cc454efb57f575ba50956f2530e192ab50c622acf38b29a42a5bb31e0  rust-std-1.74.1-mips64el-unknown-linux-muslabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-mipsel-unknown-linux-musl.tar.xz.sha256
--sha256  733995dec75a90d4039bc3a6e11c44e256bfc4cb074e46a67e2aebfe1ec69a26  rust-std-1.74.1-mipsel-unknown-linux-musl.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-powerpc-unknown-linux-gnu.tar.xz.sha256
--sha256  7fb458560bccae13f6558df43d5e17f177a084fdcb605d500eda63bc1ac3eb58  rust-std-1.74.1-powerpc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
--sha256  931f975a4a4c8dc17552d965b276c7211e25f8c5deec1f41f5db5c181fa15320  rust-std-1.74.1-powerpc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--sha256  40781d07bb9a23d57c2440d70fee6385d8d40553b739d835c38fd0abe96d7ec5  rust-std-1.74.1-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-riscv64gc-unknown-linux-gnu.tar.xz.sha256
--sha256  2c4de6689f5008289b791ad15b8cdc2d69947985b81b77d4dbe5d31632532e1d  rust-std-1.74.1-riscv64gc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-s390x-unknown-linux-gnu.tar.xz.sha256
--sha256  781403a12fef605250869aeb843be6b7f98ed6c0a62f0349fda53ee4d9d8e296  rust-std-1.74.1-s390x-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-sparc64-unknown-linux-gnu.tar.xz.sha256
--sha256  e19c0d79b385454a8e8c9f27c3ca9779ffac778d8b7cd8de701ce413f492d9f1  rust-std-1.74.1-sparc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-x86_64-unknown-linux-gnu.tar.xz.sha256
--sha256  df435e3254c03ccbfc9e733ae33b399f5f99bd488974bc07d8b1db91a12ee95b  rust-std-1.74.1-x86_64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.74.1-x86_64-unknown-linux-musl.tar.xz.sha256
--sha256  98f190039c7e7922838f9716443b7ddfec2aa3dc229f5b1813a26591c557997e  rust-std-1.74.1-x86_64-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.79.0-aarch64-unknown-linux-gnu.tar.xz.sha256
-+sha256  8e7a2d514ee469325e5a7d0a2f0cad313aecb4c3da134f3bf84f7901a809d566  rust-1.79.0-aarch64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.79.0-i686-unknown-linux-gnu.tar.xz.sha256
-+sha256  74a4b17c7b80b87d2e1f4fa83c8c0c5e920eee6d72fe570df97aa96d85fc25ec  rust-1.79.0-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.79.0-powerpc-unknown-linux-gnu.tar.xz.sha256
-+sha256  a640336f90db45a00e35444afd5f38ec8a9035b4f1f7ae17fb5d9357d3483773  rust-1.79.0-powerpc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.79.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
-+sha256  dd5a1d8ec6c5810893388391f194b11876643d2add3918968ab1473bce9a2cc0  rust-1.79.0-powerpc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.79.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+sha256  40d7dd809c873f9462a35735c511d82ba0e46edb56c74e8da01ff3a002bef2aa  rust-1.79.0-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.79.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
-+sha256  acfb935d96986b05d6f8071a75ecc62f404d64faa65b81b1bb025821cfd3507b  rust-1.79.0-riscv64gc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.79.0-s390x-unknown-linux-gnu.tar.xz.sha256
-+sha256  24aab3cef43b4d8319ad7976313cfcbd6942ebd7a1824d39707f5629dc615ba8  rust-1.79.0-s390x-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-1.79.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-+sha256  ce552d6bf22a2544ea78647d98cb405d5089af58dbcaa4efea711bf8becd71c5  rust-1.79.0-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-aarch64-unknown-linux-gnu.tar.xz.sha256
-+sha256  519abf4757fbd8d7e3bb4e4cfdc362ded972c1d95f04675684df2d31e8c0899b  rust-std-1.79.0-aarch64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-aarch64-unknown-linux-musl.tar.xz.sha256
-+sha256  428bf4fb5a66e93c2e13a8cddae71e903559d8666c727f0d45ececc7da7d2404  rust-std-1.79.0-aarch64-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-arm-unknown-linux-gnueabi.tar.xz.sha256
-+sha256  bae338708a07e26ac2f51c291478e33fb85fbff9632e2da2714f3d1a91c3773a  rust-std-1.79.0-arm-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
-+sha256  fa6f5f03b68faf9b4449266e4836bcae24027fba7a3822a48822d772fc76c064  rust-std-1.79.0-arm-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-arm-unknown-linux-musleabi.tar.xz.sha256
-+sha256  1ba19c8e7dae60c7ae3f406545b65eef4fa6de31f3dd2fe83e0bbd06ade2c536  rust-std-1.79.0-arm-unknown-linux-musleabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-arm-unknown-linux-musleabihf.tar.xz.sha256
-+sha256  24fa88bf0aa867be686c7d26233949ae9dbadc10b1e9c6ed36930cabe48d69b3  rust-std-1.79.0-arm-unknown-linux-musleabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-armv5te-unknown-linux-gnueabi.tar.xz.sha256
-+sha256  c2f906d1c9d130e06687eeea5ea50697485b321dd1a8e537200a52db508db361  rust-std-1.79.0-armv5te-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-armv5te-unknown-linux-musleabi.tar.xz.sha256
-+sha256  73f3bc406ce4bcd4d64b7101a07a82bfff0f3cf793ba071b04c250c1feb08a03  rust-std-1.79.0-armv5te-unknown-linux-musleabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-armv7-unknown-linux-gnueabi.tar.xz.sha256
-+sha256  af7707874d52823cce0323a4ae900ed34201eefab97f4781c8280bf33ecb68b7  rust-std-1.79.0-armv7-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
-+sha256  a17fde385e3f420f5f825e019b4739a469a4aece9071a7ff7b7ff3c8a0486245  rust-std-1.79.0-armv7-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-armv7-unknown-linux-musleabi.tar.xz.sha256
-+sha256  74957092140452f41f39eceaeb0490054181a36c4d2eec53ab3a611bd3c8c38f  rust-std-1.79.0-armv7-unknown-linux-musleabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-armv7-unknown-linux-musleabihf.tar.xz.sha256
-+sha256  344e2190418912eb4415ac38a819202fd05c51e2b8f926d42cf43f5121e479d2  rust-std-1.79.0-armv7-unknown-linux-musleabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-i586-unknown-linux-gnu.tar.xz.sha256
-+sha256  9c38f2cd4c19196fcf113166237ab03512bf19ce5a7f13c3bfe0e5cc3317eb44  rust-std-1.79.0-i586-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-i586-unknown-linux-musl.tar.xz.sha256
-+sha256  a9ba68598744117d10fa074535bb48585d4f6ad77170cbcb43841a56dc76f5c7  rust-std-1.79.0-i586-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-i686-unknown-linux-gnu.tar.xz.sha256
-+sha256  158294f7c424ef75d84046b573f225c15d531745cc79d416a18c11aa8253830e  rust-std-1.79.0-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-i686-unknown-linux-musl.tar.xz.sha256
-+sha256  a0087ba6e159550aab8ff93390faec42e2687ec13908ab3e45946c2769aea00c  rust-std-1.79.0-i686-unknown-linux-musl.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-powerpc-unknown-linux-gnu.tar.xz.sha256
-+sha256  6aa2f351bc7dccb544781f4fecddb5ef67e05bb310c84e0106d968231384d9f4  rust-std-1.79.0-powerpc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
-+sha256  af95929af71494ee3e6988ead07204ea05b6f2b729cdb1ffcc26db75e47bf318  rust-std-1.79.0-powerpc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+sha256  3b5d53d70837d5ec942ec41a8da37ed932bbdc1e53f78dc54e218db458701588  rust-std-1.79.0-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-riscv64gc-unknown-linux-gnu.tar.xz.sha256
-+sha256  2b8af4060acb10f347c66a3477ae92151beba12192590ea40723dcf9b1f7f5b2  rust-std-1.79.0-riscv64gc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-s390x-unknown-linux-gnu.tar.xz.sha256
-+sha256  d70e710a5138871e8d972f195ced9f7aa639ccef23a87fa03cc527d2b9c3cd36  rust-std-1.79.0-s390x-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-sparc64-unknown-linux-gnu.tar.xz.sha256
-+sha256  f7c7a73a8e5640f9d5aca6b26866b4da08cf3d3509ed1c4184309fb868acbff2  rust-std-1.79.0-sparc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-+sha256  2c914483c0882d44af2e50a181cbd2c953d672d50b31aa669ee2346cade1f108  rust-std-1.79.0-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.79.0-x86_64-unknown-linux-musl.tar.xz.sha256
-+sha256  30b9418561e6a7c18396a259304d3ddb4ad9d262f0ed6f227e08d232b8b32e8c  rust-std-1.79.0-x86_64-unknown-linux-musl.tar.xz
- # Locally generated
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-index ca35d27d1c..1c9b0466b3 100644
---- a/package/rust-bin/rust-bin.mk
-+++ b/package/rust-bin/rust-bin.mk
-@@ -6,7 +6,7 @@
+ config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
+ 	string "admin panel password"
+-	default web2py
++	default "web2py"
+ 	help
+ 	  Set the admin panel password.
  
- # When updating this version, check whether support/download/cargo-post-process
- # still generates the same archives.
--RUST_BIN_VERSION = 1.74.1
-+RUST_BIN_VERSION = 1.79.0
- RUST_BIN_SITE = https://static.rust-lang.org/dist
- RUST_BIN_LICENSE = Apache-2.0 or MIT
- RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-diff --git a/package/rust/rust.hash b/package/rust/rust.hash
-index 34349eef8b..1a0fb0dec2 100644
---- a/package/rust/rust.hash
-+++ b/package/rust/rust.hash
-@@ -1,8 +1,8 @@
- # Generated with utils/update-rust
- # Do not edit manually
- 
--# From https://static.rust-lang.org/dist/rustc-1.74.1-src.tar.xz.sha256
--sha256  b98c09d968529212fb29eec7d6d3e9bdaa869810679b7fb86a1ca69469d75f5e  rustc-1.74.1-src.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.79.0-src.tar.xz.sha256
-+sha256  ab826e84b8d48ec6eda3370065034dea8c006f6a946d78a9ba12bcb50e6d3c7a  rustc-1.79.0-src.tar.xz
- # Locally generated
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index c544582c99..9f644b71ab 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -6,7 +6,7 @@
- 
- # When updating this version, check whether support/download/cargo-post-process
- # still generates the same archives.
--RUST_VERSION = 1.74.1
-+RUST_VERSION = 1.79.0
- RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
- RUST_SITE = https://static.rust-lang.org/dist
- RUST_LICENSE = Apache-2.0 or MIT
-diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-index d15443e53f..c3e9a13f39 100644
---- a/package/rustc/Config.in.host
-+++ b/package/rustc/Config.in.host
-@@ -92,14 +92,6 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_TIER2_PLATFORMS
- 	default y if BR2_x86_i586 && BR2_TOOLCHAIN_USES_MUSL
- 	# i686-unknown-linux-musl
- 	default y if (BR2_x86_i686 || BR2_x86_pentiumpro || BR2_X86_CPU_HAS_MMX) && BR2_TOOLCHAIN_USES_MUSL
--	# mips-unknown-linux-musl
--	default y if BR2_mips && BR2_TOOLCHAIN_USES_MUSL && !BR2_MIPS_CPU_MIPS32R6
--	# mips64-unknown-linux-muslabi64
--	default y if BR2_mips64 && BR2_TOOLCHAIN_USES_MUSL && BR2_MIPS_NABI64 && !BR2_MIPS_CPU_MIPS64R6
--	# mips64el-unknown-linux-muslabi64
--	default y if BR2_mips64el && BR2_TOOLCHAIN_USES_MUSL && BR2_MIPS_NABI64 && !BR2_MIPS_CPU_MIPS64R6
--	# mipsel-unknown-linux-musl
--	default y if BR2_mipsel && BR2_TOOLCHAIN_USES_MUSL && !BR2_MIPS_CPU_MIPS32R6
- 	# sparc64-unknown-linux-gnu
- 	default y if BR2_sparc64 && BR2_TOOLCHAIN_USES_GLIBC
- 
-diff --git a/utils/update-rust b/utils/update-rust
-index 66d93b7300..f0901cb301 100755
---- a/utils/update-rust
-+++ b/utils/update-rust
-@@ -49,10 +49,6 @@ RUST_TARGETS = [
-     "i586-unknown-linux-musl",
-     "i686-unknown-linux-gnu",
-     "i686-unknown-linux-musl",
--    "mips-unknown-linux-musl",
--    "mips64-unknown-linux-muslabi64",
--    "mips64el-unknown-linux-muslabi64",
--    "mipsel-unknown-linux-musl",
-     "powerpc-unknown-linux-gnu",
-     "powerpc64-unknown-linux-gnu",
-     "powerpc64le-unknown-linux-gnu",
 -- 
 2.45.1
 
