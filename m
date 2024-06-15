@@ -4,72 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF2FBC27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 18:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37FE6C27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 18:20:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D90976079D;
-	Sat, 15 Jun 2024 18:09:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C324160749;
+	Sat, 15 Jun 2024 18:20:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PUupAImXud8V; Sat, 15 Jun 2024 18:09:57 +0000 (UTC)
+ id Jhqhbd8lVkCX; Sat, 15 Jun 2024 18:20:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA8AF60753
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B70CD60774
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA8AF60753;
-	Sat, 15 Jun 2024 18:09:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4C6DC1BF2FD
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 18:09:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B70CD60774;
+	Sat, 15 Jun 2024 18:20:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 802081BF2FD
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 18:20:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A36B8210B
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 18:09:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7AC6560774
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 18:20:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZvLLrDka6TNE for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 18:09:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 920AC820C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 920AC820C9
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 920AC820C9
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 18:09:54 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 30F7813F861;
- Sat, 15 Jun 2024 20:09:49 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 15 Jun 2024 20:09:48 +0200
-Date: Sat, 15 Jun 2024 20:09:48 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <Zm3Y7Fd-Zpga_LAv@landeda>
-References: <20240615091612.9579-1-ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9ID9_1czantf for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 18:20:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 43D9160749
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43D9160749
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 43D9160749
+ for <buildroot@buildroot.org>; Sat, 15 Jun 2024 18:20:32 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-35f089e35e7so2075076f8f.0
+ for <buildroot@buildroot.org>; Sat, 15 Jun 2024 11:20:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1718475630; x=1719080430;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wThLgkJXO6KmzwYsQAJ7uGefgJ7aWwnThz13Fp+cXhk=;
+ b=nK+pn2lOt8WBDyKtEjJ1x40qyDlYN6ZpuRDIL7FbmVPdQJWJWZLB3+z/tGBlLej9CK
+ KigIiELLRoMKw4LsNyyno94hQkNJJgs4SVcuOluQqt0FnJ3XxmJFaNipCpE8iJPcDh0X
+ Nsts4Ho6b7e/5Jrd7EtC4OPWJbsqYP3Y8PJooQqFG6epDhVxVh6fIfTjFqhr1xTTDUUt
+ PxIYC95y4KLtb33YNFM32UiA6sYA0jJqKR+3xA9pqXzhn4kCbgcQi1yZHogghvCDHf8F
+ ts4slpgi4miV/3MI8mSBC/q+b5Q2HqGF+vG9bVcsXz2eGn+FS0LavI7OVtjPM7YRKOlt
+ /GSg==
+X-Gm-Message-State: AOJu0Yxp8RTwQYIpdZvGtvsBYEOx0NIVBAanlOR053XMF2LAEMNHLg5C
+ ZwOn96tJFBCy8EjD0VXUrfazAwrw8B/9UdbK0tZskCKrfi71povw6quCag==
+X-Google-Smtp-Source: AGHT+IH1DNw4SPNDBu9/WrPAra/5QsQUGG2d4E2DvgF7Ib7x1DiAeLgoswRyPf5J5rUTntiE0yRTZA==
+X-Received: by 2002:adf:f249:0:b0:35f:10ac:ea50 with SMTP id
+ ffacd0b85a97d-3607a7c3179mr4554330f8f.37.1718475629525; 
+ Sat, 15 Jun 2024 11:20:29 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-360750ad082sm7616742f8f.59.2024.06.15.11.20.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 15 Jun 2024 11:20:28 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 15 Jun 2024 20:20:23 +0200
+Message-ID: <20240615182023.2963494-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240615091612.9579-1-ju.o@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1718474991;
- bh=BBZ04iXG5116C+HsEEUDxne5GSi9cR+RPKvpsyo7Rqc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=DO2w4Q8ELkjLIpOnkoH0dvquSRBXjamwB3uXToIDoS5q8d54+PxPisl62najBk85w
- bM7TfOE9ij21UsZqvLFT2LnbNlh1B1mW45ZFo9wwifWl0IyOtAN847nkuhVDGK93h+
- 6owbnWV9h3ZuW37DNR0btxBM6Lx7U0YlIauDiFW8R12+Fz3cSBjzwPdsHI0cHOo/Ac
- JqKA6md8lbk32TLdK/QLAm+PkUdkX2j+fVIVlwVuwPV5ha95f2Zynky4Quk3Ya8xpk
- cFRCCxXm2MfBHIl2vdbYZlc33usKTKkdPzPr8qj7wFL+RcTaUQHHyjg9tSvdpgRb7Q
- A14sKvWdgBGnA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1718475630; x=1719080430; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wThLgkJXO6KmzwYsQAJ7uGefgJ7aWwnThz13Fp+cXhk=;
+ b=Iklax0UdcU7vsx+Vs8PHmNwS4P1bTfliyB98BhVdiKC6O7DvZ2sjN64A9C2w1QKOFL
+ OgbRoL2URAfa1KKO15oN7eOVPZUjg8tUURJvat/3bklJJzqrgFEvN1wFanEByNGA2d2i
+ gQy5T8UxytP4QGhSWtnwXeciztlIMd9dizbvUUYh3JAa8zU2DaT01J0QX72seUan1mYU
+ 4MB2UsQVFZ4LjPyJF+HDkA8cDvRlD+hDSJuT84p7Bf1Cc7hOEvrxeW9drTHL9ZzEVi05
+ L4MLffWCbaOppJwFv2xLAd00KYcsm9rilLPXpTgXQdS8lyMSqgJwj+k1oocyRNpNCb4I
+ IJNQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DO2w4Q8E
-Subject: Re: [Buildroot] [PATCH 1/2] support/testing:
- test_audio_codec_base.py: new helper class
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Iklax0Ud
+Subject: [Buildroot] [PATCH 1/1] package/nut: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,99 +99,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Asaf Kahlon <asafka7@gmail.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
+threads are mandantory since bump to version 2.8.2 in commit
+4edd837ac0193db83202030ee2997ac811e6bc45 and
+https://github.com/networkupstools/nut/commit/ff401e538bcbead62a3532887135518ef9e779df:
 
-On 2024-06-15 11:16 +0200, Julien Olivain spake thusly:
-> This is a helper class providing a template for testing audio codec
-> programs such as lame mp3 encoder, flac tools, ogg vorbis-tools, ...
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-[--SNIP--]
-> diff --git a/support/testing/tests/package/test_audio_codec_base.py b/support/testing/tests/package/test_audio_codec_base.py
-> new file mode 100644
-> index 00000000000..59c7efcad3c
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_audio_codec_base.py
-> @@ -0,0 +1,86 @@
-> +import math
-> +import os
-> +
-> +import infra.basetest
-> +
-> +
-> +class TestAudioCodecBase(infra.basetest.BRTest):
-> +    """Common class to test an audio codec package.
-> +
-> +    This base class builds a Buildroot system image containing the
-> +    package enabled in its config, start the emulator, login to it. It
-> +    prepares an input test WAV file containing a tone. This WAV file
-> +    is encoded into a new output file in the native encoder format. It
-> +    is then decoded to a new output WAV file. This final output WAV
-> +    file is checked to contain the expected tone generated in the
-> +    initial input WAV file. There is no specific check about file
-> +    size, nor audio quality. The acceptance criteria is the
-> +    recognition of the tone. Note: the tone generation is made with
-> +    the Sox package, and the tone recognition is made with the Aubio
-> +    package.
-> +
-> +    Each test case that inherits from this class must have:
-> +    __test__ = True  - to let nose2 know that it is a test case
+In file included from nutipc.cpp:38:
+../include/nutipc.hpp:455:3: error: 'pthread_t' does not name a type
+  455 |   pthread_t m_impl;
+      |   ^~~~~~~~~
 
-If the class name does not stat with "Test", then nose2 will not
-consider it a test case, it would not be necxessary to set __test__ =
-False here, and rely on inheriters to set it.
+Fixes: 4edd837ac0193db83202030ee2997ac811e6bc45
+ - http://autobuild.buildroot.org/results/d16a24d60b298d7616a516ec0c6c30696ed93a58
 
-I see that there are many such cases already in the tree, but I don;t
-think we should continue in that direction.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/collectd/Config.in | 5 +++--
+ package/nut/Config.in      | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Maybe just name this base calss as such:
-
-    class BaseAudioCodec(infra.basetest.BRTest):
-
-But see below: I think we should consider it a test by itself: it
-validates that the sox-aubio combo does work as expected.
-
-[--SNIP--]
-> +    def encode_test(self, input_filename):
-> +        msg = "method must be implemented in derived class"
-> +        raise NotImplementedError(msg)
-
-I am not python expert, but I think that would be better handled by an
-"ABC", and Abstract Base Class (https://docs.python.org/3/library/abc.html),
-which I think would look like:
-
-    import abc
-    class BaseAudioCodec(abc.ABC):
-        @abc.abstractmethod
-        def encode_test(self, input_filename):
-            ...
-
-Note that the ellipsis is really a real ellipsis, not a placeholder (see
-https://docs.python.org/3/reference/datamodel.html#ellipsis).
-
-But as I suggested above, we should just make this class a proper test,
-and have empty encode() and decode() functions.
-
-It would validate that the tone generated by sox can be decoded by
-aubio.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 80759e9566..35f544b626 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -430,13 +430,14 @@ config BR2_PACKAGE_COLLECTD_NTPD
+ config BR2_PACKAGE_COLLECTD_NUT
+ 	bool "nut"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_NUT
+ 	help
+ 	  The NUT plugin collects uninterruptible power supply (UPS)
+ 	  statistics using the Network UPS Tools (NUT).
+ 
+-comment "nut needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "nut needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_COLLECTD_OLSRD
+ 	bool "olsrd"
+diff --git a/package/nut/Config.in b/package/nut/Config.in
+index df647b9b48..0ecd33d583 100644
+--- a/package/nut/Config.in
++++ b/package/nut/Config.in
+@@ -1,11 +1,12 @@
+-comment "nut needs a toolchain w/ C++"
++comment "nut needs a toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_NUT
+ 	bool "nut"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Network UPS tools
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
