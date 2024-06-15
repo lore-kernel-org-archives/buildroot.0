@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CABF4C27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 19:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ACA6C27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 19:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F38E40603;
-	Sat, 15 Jun 2024 19:27:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A4EE403EB;
+	Sat, 15 Jun 2024 19:55:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qKB5Kh2MjUCy; Sat, 15 Jun 2024 19:27:49 +0000 (UTC)
+ id zS3k9nvOdbqn; Sat, 15 Jun 2024 19:55:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10DCC40588
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02A3D4060E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 10DCC40588;
-	Sat, 15 Jun 2024 19:27:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 685E31BF2FC
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 19:27:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 02A3D4060E;
+	Sat, 15 Jun 2024 19:55:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 02A3B1BF306
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 19:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62D6460659
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 19:27:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F08AE4044D
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 19:55:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eBumpjH5x23q for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 19:27:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pGwcgkuAIuLR for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 19:55:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 467AC607D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 467AC607D6
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 467AC607D6
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 19:27:45 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id B9C0F13F88F;
- Sat, 15 Jun 2024 21:27:38 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 15 Jun 2024 21:27:38 +0200
-Date: Sat, 15 Jun 2024 21:27:38 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <Zm3rKpH7d0vM4MJe@landeda>
-References: <20240615182023.2963494-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240615182023.2963494-1-fontaine.fabrice@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1718479663;
- bh=fYbMJjo/tif5DcAQGn4NKFs/Q3ey6j4k/HxZNflAhz8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=D/btS9ZKelbKMtWcYF9M0bx9G+6ia+w6B1RTYK9ign8K0zcbLGAQ9NAZfd54LVSNI
- Ntm7at7MAxenm1owrbdxZdXwynN/pSPIW0Mi7cBwFSbMMXClnFLf29bipEM5MwfJki
- BBJnVTCMAVrnQzQTLUvC+PgiVhCnvy16Zl/bq7ScufWV1ZbNT22DWBrOPauC0xjtLc
- xpcKJXrOheCyl6KLNV9/NV+g94bsIbGuVJYVV0qe0fX4fZBAyNjk0RI6Fxf3rMnDyr
- YranL4fQ+MfR4MwzAr17MWhXeQjxZY7j5E96/KbmTClPT1TpXtRrXe6nFRzec2E8o5
- 9wAyYKrgWk3kw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=D/btS9ZK
-Subject: Re: [Buildroot] [PATCH 1/1] package/nut: needs threads
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04A2F403EB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04A2F403EB
+ for <buildroot@buildroot.org>; Sat, 15 Jun 2024 19:55:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E0ABE84F18; Sat, 15 Jun 2024 19:55:32 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 15 Jun 2024 21:55:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ddc46ee1a2024ec9eb38718e34ab9aca38a7302b
+X-Git-Newrev: 106e43e3036f4c71419c698445ab979e3f32007a
+X-Patchwork-Hint: ignore
+Message-Id: <20240615195532.E0ABE84F18@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/execline: fix uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,95 +58,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=106e43e3036f4c71419c698445ab979e3f32007a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-06-15 20:20 +0200, Fabrice Fontaine spake thusly:
-> threads are mandantory since bump to version 2.8.2 in commit
-> 4edd837ac0193db83202030ee2997ac811e6bc45 and
-> https://github.com/networkupstools/nut/commit/ff401e538bcbead62a3532887135518ef9e779df:
-> 
-> In file included from nutipc.cpp:38:
-> ../include/nutipc.hpp:455:3: error: 'pthread_t' does not name a type
->   455 |   pthread_t m_impl;
->       |   ^~~~~~~~~
-> 
-> Fixes: 4edd837ac0193db83202030ee2997ac811e6bc45
->  - http://autobuild.buildroot.org/results/d16a24d60b298d7616a516ec0c6c30696ed93a58
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix the following uclibc build failure raised since bump to version
+2.9.5.1 in commit 42fad03182ed53de8003b66d50e893f42b72145e and
+https://github.com/skarnet/execline/commit/6dfe54be869c117676dcc004400ac68096945531:
 
-Applied to master, thanks.
+src/execline/eltest.c: In function 'eltest_run':
+src/execline/eltest.c:366:31: error: 'struct stat' has no member named 'st_mtim'; did you mean 'st_mtime'?
+  366 |       return timespec_cmp(&st.st_mtim, &st.st_atim) > 0 ;
+      |                               ^~~~~~~
+      |                               st_mtime
 
-Regards,
-Yann E. MORIN.
+Fixes: 42fad03182ed53de8003b66d50e893f42b72145e
+ - http://autobuild.buildroot.org/results/64bf2928f36e07332052854cbaaa7a6f8f347e29
 
-> ---
->  package/collectd/Config.in | 5 +++--
->  package/nut/Config.in      | 5 +++--
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-> index 80759e9566..35f544b626 100644
-> --- a/package/collectd/Config.in
-> +++ b/package/collectd/Config.in
-> @@ -430,13 +430,14 @@ config BR2_PACKAGE_COLLECTD_NTPD
->  config BR2_PACKAGE_COLLECTD_NUT
->  	bool "nut"
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_NUT
->  	help
->  	  The NUT plugin collects uninterruptible power supply (UPS)
->  	  statistics using the Network UPS Tools (NUT).
->  
-> -comment "nut needs a toolchain w/ C++"
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> +comment "nut needs a toolchain w/ C++, threads"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
->  
->  config BR2_PACKAGE_COLLECTD_OLSRD
->  	bool "olsrd"
-> diff --git a/package/nut/Config.in b/package/nut/Config.in
-> index df647b9b48..0ecd33d583 100644
-> --- a/package/nut/Config.in
-> +++ b/package/nut/Config.in
-> @@ -1,11 +1,12 @@
-> -comment "nut needs a toolchain w/ C++"
-> +comment "nut needs a toolchain w/ C++, threads"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
->  
->  config BR2_PACKAGE_NUT
->  	bool "nut"
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	help
->  	  Network UPS tools
->  
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/execline/execline.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+index 842ded6b88..b3d2d98216 100644
+--- a/package/execline/execline.mk
++++ b/package/execline/execline.mk
+@@ -12,6 +12,7 @@ EXECLINE_INSTALL_STAGING = YES
+ EXECLINE_DEPENDENCIES = skalibs
+ 
+ EXECLINE_CONF_OPTS = \
++	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+ 	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
