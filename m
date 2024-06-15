@@ -4,91 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2528FC27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 06:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0C57C27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 06:54:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 007E1406DC;
-	Sat, 15 Jun 2024 06:46:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83C854018B;
+	Sat, 15 Jun 2024 06:54:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xix5uDDf1XUD; Sat, 15 Jun 2024 06:46:47 +0000 (UTC)
+ id sRPsyIG9e3OL; Sat, 15 Jun 2024 06:54:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EC90406DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55D0840174
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EC90406DD;
-	Sat, 15 Jun 2024 06:46:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8C2311BF30D
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 06:46:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55D0840174;
+	Sat, 15 Jun 2024 06:54:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C0E01BF30D
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 06:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F112842AE
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 06:46:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8836E403F8
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 06:54:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wlWzvZmafbEG for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 06:46:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::230; helo=mail-lj1-x230.google.com;
- envelope-from=francois.dugast.foss@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BF52E842A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF52E842A5
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
- [IPv6:2a00:1450:4864:20::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF52E842A5
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 06:46:43 +0000 (UTC)
-Received: by mail-lj1-x230.google.com with SMTP id
- 38308e7fff4ca-2ebdfe26242so31818831fa.0
- for <buildroot@buildroot.org>; Fri, 14 Jun 2024 23:46:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718434001; x=1719038801;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=9DWOfty6SVYL4/UlV+vmH7B3uxYNYNpePAUakc4xAlY=;
- b=SoYYO6JXfMVLI1UZyxWP3EvdJIjV202AuRqMmMSgdWE5a0S2WU24z4isVGaNWaUTD0
- cSyDxoefUSRbh/XQWnhr77i7auLC+UMj5bzhx5QtvqErasIgs+K9YPQUV6VC4RKLAyHW
- u1At/uNaMCHC9yMFKAmhsFK6O2p/fnQ/OhoGh7X0K2gIrDN9G8u4DFriP5ctHb1S/v2Q
- N6eq9SB4b6f/Qhv4D/bzoESfJWdataXKAxjZBiD1cUvuHGlfP8Im80oQLJWSz2+3EOAc
- D6mhP15PT+j9S5yKRps+h1qk1fOgrX1+oHDXU2tpbwvGotaI7CFL23ZGIZY6SZtSRHQA
- Fv6A==
-X-Gm-Message-State: AOJu0Yxv0u05kM411p+G7e7M5BofwDS4Xw3WtYe9ssoEQ8//5uEiYPnR
- xrUCqao+BFp/w8qIJjinVeYizLEAZF3Fw5DozCLaxsVzJknRBFDv7dEaJw==
-X-Google-Smtp-Source: AGHT+IHCtz2+bCunnsxvfU2HgOXv1p1qYkBPQ/2A5GAxx0a+X8w6pi35SbOfq4ywi3QAtSSAAqy9XQ==
-X-Received: by 2002:a2e:9244:0:b0:2eb:e405:dc with SMTP id
- 38308e7fff4ca-2ec0e46db18mr31248671fa.14.1718434000698; 
- Fri, 14 Jun 2024 23:46:40 -0700 (PDT)
-Received: from comet.lan (lfbn-ren-1-1629-205.w86-253.abo.wanadoo.fr.
- [86.253.181.205]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-422f61277fesm88251085e9.21.2024.06.14.23.46.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 14 Jun 2024 23:46:40 -0700 (PDT)
-From: Francois Dugast <francois.dugast.foss@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 15 Jun 2024 08:46:32 +0200
-Message-Id: <20240615064632.1708859-1-francois.dugast.foss@gmail.com>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y0Pdmh24Zu-H for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 06:54:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.116;
+ helo=smtpcmd03116.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 691E84027A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 691E84027A
+Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 691E84027A
+ for <buildroot@buildroot.org>; Sat, 15 Jun 2024 06:54:10 +0000 (UTC)
+Received: from [192.168.50.221] ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id INIbsdsdWL6IKINIbsQ1RV; Sat, 15 Jun 2024 08:54:07 +0200
+Message-ID: <00df5e12-8db4-460a-b1fd-7c5c8c4f317e@benettiengineering.com>
+Date: Sat, 15 Jun 2024 08:54:05 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718434001; x=1719038801; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9DWOfty6SVYL4/UlV+vmH7B3uxYNYNpePAUakc4xAlY=;
- b=SzKt44o+zITKkAh1nimUBI/p6etq3eoTKEbraMdDjiugsuhAjuNJDUn90/akd8xiD+
- q56Lk68VtI8Tb6tcCDQKyeK6fvFWinq4WPtk6byl2O2TxuFfwW6G4QZLOP+VNvC4iQMH
- sTQJKJcQqaw/PXaHMOYeqCNXhC6y3pB0NO8n4ZYIfB4VvyeqS0/a7zda4/ZvOztVsP8i
- p/xc5uykUwz5gkY+TD34CJUThI6guzlyKfDUsHX6HUKEq6WId3fuU8GdwNNS5AFwWqrD
- u/PiyT8J9zOtmjZDG0WFdhRxMWtkcHiwQaTB46F8ABDpK1w3F2Lnh3U2rAbboGRfJd5Q
- BJUg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20240208095531.99049-1-aperez@igalia.com>
+ <20240208112940.6fa6e89b@windsurf> <20240615024513.GB58848@igalia.com>
+Content-Language: it
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20240615024513.GB58848@igalia.com>
+X-CMAE-Envelope: MS4xfCaxK7rjdxB6z4uU/ze3R6lwleEu5YQBrawuDhU7E+JfR+pKKLjZGVROL2lHscECp0E1QqA1MVLP6w0igMRRDQurwHdM+50KE+9bYwu78xr2F+u70yVi
+ RvIXTbA5b/Z+1h1wbbFufeUll2ckzP1NYolaopIP3VdSz5Rabz1QECu79j/340OSa6PkcxD7jEJJS18ERF1JXhszOL8RNs7MWKy6JOSAZvMS0eWNvt86RvjY
+ DxF9r0uACxnIYvVn6AYpf4UrVGXZWZr5RwNQJvfG7BB2MHs9sbZe37+GUcNfkCwGGgf1FDSJzfqDUc4Nrfqlxw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1718434447; bh=5JQ9X0ox8BhR00MtywWzbAw0/m6B7Tfpt375GG0Hqg4=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=icKqEoXYkixxji24kSptdA0zbwIHrtx+MrMn24LBuQmWHp3cKQOoAhRbnk9gNBaYU
+ NRuZ5O2p+yQuegjDKDnszvdR6MshdlPwop2fiY3+bs7X8TGw46TZlOe1s6Vgrcsbd+
+ +PYupScmK3kBJ2CajxVkqTPo0fjhITSNz7loinUC3OX+d8r19StGu/H3nJRUtNpKvR
+ Y1hdp6mvQ9OH9r1jhMr64Ka6fbFlUTgp1waZdcFD8NyDOQ1EUmqdtvMQpuDMBoFhZI
+ DkpAvl5QonOhOrsPK3rVyrkcLTPemjLFz9YN7W4ZekgAi8mprDUMG+B9kDgGJ5rufW
+ m+gDk03Npdixw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=SzKt44o+
-Subject: [Buildroot] [PATCH 1/1] configs/hifive_unmatched: new board
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=icKqEoXY
+Subject: Re: [Buildroot] [PATCH 0/3] Add support for the WPE WebKit RDK
+ backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,238 +84,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alistair Francis <alistair@alistair23.me>,
- Francois Dugast <francois.dugast.foss@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for the HiFive Unmatched with mainline components:
- - U-Boot 2023.04
- - Linux 6.8
+Hello All,
 
-Board homepage:
- - https://www.sifive.com/boards/hifive-unmatched
+On 15/06/24 01:45, Adrian Perez de Castro wrote:
+[ SNIP ]
 
-The configuration for the HiFive Unmatched is based on the existing
-configuration for the HiFive Unleashed. The files which can be shared
-between the two are moved to a common directory under board/sifive.
+>> We also have twice the same (?) patch from Giulio:
+>>
+>> https://patchwork.ozlabs.org/project/buildroot/patch/20230221161522.3749804-1-giulio.benetti@benettiengineering.com/
+>> https://patchwork.ozlabs.org/project/buildroot/patch/20230221161522.3749804-2-giulio.benetti@benettiengineering.com/
+>>
+>> is it relevant?
+> 
+> I think these two shouldn't be needed anymore, Giulio sent a PR to
+> upstream WebKit which ended up being merged [1] and it was included
+> in the 2.44.x releases as well.
+> 
 
-Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
----
- .../genimage_sdcard.cfg                       |  0
- .../genimage_spi-nor.cfg                      |  0
- .../linux.config.fragment                     |  0
- .../post-build.sh                             |  0
- board/sifive/hifive-unmatched/boot.cmd        |  4 ++
- board/sifive/hifive-unmatched/readme.txt      | 71 +++++++++++++++++++
- configs/hifive_unleashed_defconfig            |  6 +-
- configs/hifive_unmatched_defconfig            | 58 +++++++++++++++
- 8 files changed, 136 insertions(+), 3 deletions(-)
- rename board/sifive/{hifive-unleashed => common}/genimage_sdcard.cfg (100%)
- rename board/sifive/{hifive-unleashed => common}/genimage_spi-nor.cfg (100%)
- rename board/sifive/{hifive-unleashed => common}/linux.config.fragment (100%)
- rename board/sifive/{hifive-unleashed => common}/post-build.sh (100%)
- create mode 100644 board/sifive/hifive-unmatched/boot.cmd
- create mode 100644 board/sifive/hifive-unmatched/readme.txt
- create mode 100644 configs/hifive_unmatched_defconfig
+I have missed Github notification on merge 1 year ago. Anyway I've
+marked both patches as rejected on Patchwork since they are upstreamed.
 
-diff --git a/board/sifive/hifive-unleashed/genimage_sdcard.cfg b/board/sifive/common/genimage_sdcard.cfg
-similarity index 100%
-rename from board/sifive/hifive-unleashed/genimage_sdcard.cfg
-rename to board/sifive/common/genimage_sdcard.cfg
-diff --git a/board/sifive/hifive-unleashed/genimage_spi-nor.cfg b/board/sifive/common/genimage_spi-nor.cfg
-similarity index 100%
-rename from board/sifive/hifive-unleashed/genimage_spi-nor.cfg
-rename to board/sifive/common/genimage_spi-nor.cfg
-diff --git a/board/sifive/hifive-unleashed/linux.config.fragment b/board/sifive/common/linux.config.fragment
-similarity index 100%
-rename from board/sifive/hifive-unleashed/linux.config.fragment
-rename to board/sifive/common/linux.config.fragment
-diff --git a/board/sifive/hifive-unleashed/post-build.sh b/board/sifive/common/post-build.sh
-similarity index 100%
-rename from board/sifive/hifive-unleashed/post-build.sh
-rename to board/sifive/common/post-build.sh
-diff --git a/board/sifive/hifive-unmatched/boot.cmd b/board/sifive/hifive-unmatched/boot.cmd
-new file mode 100644
-index 0000000000..3f7b1d9ce3
---- /dev/null
-+++ b/board/sifive/hifive-unmatched/boot.cmd
-@@ -0,0 +1,4 @@
-+setenv bootargs earlycon=sbi root=/dev/mmcblk0p3 rootwait
-+load mmc 0:3 ${kernel_addr_r} boot/Image
-+load mmc 0:3 ${fdt_addr_r} boot/hifive-unmatched-a00.dtb
-+booti ${kernel_addr_r} - ${fdt_addr_r}
-diff --git a/board/sifive/hifive-unmatched/readme.txt b/board/sifive/hifive-unmatched/readme.txt
-new file mode 100644
-index 0000000000..d77847dc3c
---- /dev/null
-+++ b/board/sifive/hifive-unmatched/readme.txt
-@@ -0,0 +1,71 @@
-+SiFive HiFive Unmatched
-+=======================
-+
-+This file describes how to use the pre-defined Buildroot
-+configuration for the SiFive HiFive Unmatched board.
-+
-+Further information about the HiFive Unmatched board can be found
-+at https://www.sifive.com/boards/hifive-unmatched.
-+
-+Building
-+========
-+
-+Configure Buildroot using the default board configuration:
-+
-+  $ make hifive_unmatched_defconfig
-+
-+Customise the build as necessary:
-+
-+  $ make menuconfig
-+
-+Start the build:
-+
-+  $ make
-+
-+Result of the build
-+===================
-+
-+Once the build has finished you will have the following files:
-+
-+    output/images/
-+    +-- boot.scr
-+    +-- fw_dynamic.bin
-+    +-- fw_dynamic.elf
-+    +-- fw_jump.bin
-+    +-- fw_jump.elf
-+    +-- hifive-unmatched-a00.dtb
-+    +-- Image
-+    +-- rootfs.cpio
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4
-+    +-- rootfs.tar
-+    +-- sdcard.img
-+    +-- u-boot.bin
-+    +-- u-boot.itb
-+    +-- u-boot-spl.bin
-+
-+
-+Creating a bootable SD card with genimage
-+=========================================
-+
-+By default Buildroot builds a SD card image for you. All you need to do
-+is dd the image to your SD card, which can be done with the following
-+command on your development host:
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdb bs=4096
-+
-+The above example command assumes the SD card is accessed via a USB card
-+reader and shows up as /dev/sdb on the host. Adjust it accordingly per
-+your actual setup.
-+
-+Booting the SD card on the board
-+================================
-+
-+Make sure that the all DIP switches are set to the off position for
-+default boot mode (MSEL mode = 1011), insert the SD card and power
-+up the board.
-+
-+Connect the USB cable and open minicom (/dev/ttyUSB1, 115200, 8N1).
-+
-+See the 'SiFive HiFive Unmatched Getting Started Guide' for
-+more details (https://www.sifive.com/documentation).
-diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
-index 1aa06f59e7..dabd1aefd4 100644
---- a/configs/hifive_unleashed_defconfig
-+++ b/configs/hifive_unleashed_defconfig
-@@ -13,9 +13,9 @@ BR2_RISCV_ABI_LP64D=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttySIF0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/sifive/hifive-unleashed/post-build.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/sifive/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sifive/hifive-unleashed/genimage_sdcard.cfg"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sifive/common/genimage_sdcard.cfg"
- 
- # Filesystem
- BR2_TARGET_ROOTFS_CPIO=y
-@@ -30,7 +30,7 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.190"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/hifive-unleashed/linux.config.fragment"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/common/linux.config.fragment"
- BR2_LINUX_KERNEL_IMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sifive/hifive-unleashed-a00"
-diff --git a/configs/hifive_unmatched_defconfig b/configs/hifive_unmatched_defconfig
-new file mode 100644
-index 0000000000..ddda96e35d
---- /dev/null
-+++ b/configs/hifive_unmatched_defconfig
-@@ -0,0 +1,58 @@
-+# Architecture
-+BR2_riscv=y
-+BR2_riscv_custom=y
-+BR2_RISCV_ISA_RVM=y
-+BR2_RISCV_ISA_RVA=y
-+BR2_RISCV_ISA_RVF=y
-+BR2_RISCV_ISA_RVD=y
-+BR2_RISCV_ISA_RVC=y
-+BR2_RISCV_64=y
-+BR2_RISCV_ABI_LP64D=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttySIF0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/sifive/common/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sifive/common/genimage_sdcard.cfg"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/common/linux.config.fragment"
-+BR2_LINUX_KERNEL_IMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sifive/hifive-unmatched-a00"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Bootloader
-+BR2_TARGET_OPENSBI=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
-+BR2_TARGET_OPENSBI_PLAT="generic"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sifive_unmatched"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+BR2_TARGET_UBOOT_SPL=y
-+
-+# Host tools
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/sifive/hifive-unmatched/boot.cmd"
+Best regards
 -- 
-2.30.2
-
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
