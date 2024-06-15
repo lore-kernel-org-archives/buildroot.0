@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 208EAC27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:12:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD7CC27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A993D84553;
-	Sat, 15 Jun 2024 15:12:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C180844A5;
+	Sat, 15 Jun 2024 15:12:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Hss-Ma2fx2X; Sat, 15 Jun 2024 15:12:15 +0000 (UTC)
+ id dQy5pFQ0ic6s; Sat, 15 Jun 2024 15:12:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 640588449A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 830B684658
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 640588449A;
-	Sat, 15 Jun 2024 15:12:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E05901BF301
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:12:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 830B684658;
+	Sat, 15 Jun 2024 15:12:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C0E831BF301
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67BD14034A
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:12:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7A3D40346
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:12:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hlcYfHtGVDZO for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 15:12:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dTpQcMdLJwo0 for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 15:12:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33AE440572
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0C25404CA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33AE440572
- for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:12:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0C25404CA
+ for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:12:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 1B4E487BF5; Sat, 15 Jun 2024 15:12:10 +0000 (UTC)
+ id AE4B687B3E; Sat, 15 Jun 2024 15:12:15 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 15 Jun 2024 15:12:09 +0000
+Date: Sat, 15 Jun 2024 15:12:15 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2023.02
+X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: trivial
+X-Bugzilla-Severity: normal
 X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: MOVED
@@ -56,15 +56,15 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution cc bug_status
-Message-ID: <bug-15718-163-GfQmNgYGbl@https.bugs.busybox.net/>
-In-Reply-To: <bug-15718-163@https.bugs.busybox.net/>
-References: <bug-15718-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_status resolution cc
+Message-ID: <bug-15721-163-3w9BhfG0zN@https.bugs.busybox.net/>
+In-Reply-To: <bug-15721-163@https.bugs.busybox.net/>
+References: <bug-15721-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15718] Cross-compiler called through
- toolchain-wrapper generates bogus error messages
+Subject: [Buildroot] [Bug 15721] fakeroot 1.32.1 fails to build on CentOS
+ 7.x machines
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,15 +81,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15718
+https://bugs.busybox.net/show_bug.cgi?id=15721
 
 Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
          Resolution|---                         |MOVED
                  CC|                            |yann.morin.1998@free.fr
-             Status|NEW                         |RESOLVED
 
 --- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 Thank you for your report.
