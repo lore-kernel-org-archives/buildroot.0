@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1DA8C27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 19:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E24BC27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 19:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ACF1F4097B;
-	Sat, 15 Jun 2024 19:04:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 45B3E40A45;
+	Sat, 15 Jun 2024 19:04:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LkgR1Co_ya9l; Sat, 15 Jun 2024 19:04:40 +0000 (UTC)
+ id z3MYFSPOx-RK; Sat, 15 Jun 2024 19:04:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73C04409A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52B2640A15
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73C04409A7;
-	Sat, 15 Jun 2024 19:04:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52B2640A15;
+	Sat, 15 Jun 2024 19:04:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3B54D1BF2FD
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 19:04:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 192281BF2FC
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 19:04:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5E0F4032B
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8A0D4044D
  for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 19:04:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8DUM2JGk42_y for <buildroot@lists.busybox.net>;
+ id SRMAjapP36L1 for <buildroot@lists.busybox.net>;
  Sat, 15 Jun 2024 19:04:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D641F40603
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D55C405FD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D641F40603
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 19:04:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D55C405FD
+ for <buildroot@buildroot.org>; Sat, 15 Jun 2024 19:04:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D0E2687F0B; Sat, 15 Jun 2024 19:04:15 +0000 (UTC)
+ id 044D687F0B; Sat, 15 Jun 2024 19:04:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jun 2024 20:29:54 +0200
+Date: Sat, 15 Jun 2024 20:39:20 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: c091bd89cf58c19cdd49cb79f031effd1123e896
-X-Git-Newrev: 276917e32a5df6c483cfb8a1cec4b22e2490f75a
+X-Git-Oldrev: 9a780d2acaf54e7798c74448d50f4d9e7331a96e
+X-Git-Newrev: f3a29033a7202ddf90c1cc70cc90f00c3ac63685
 X-Patchwork-Hint: ignore
-Message-Id: <20240615190415.D0E2687F0B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/download/cvs: use
- appropriate TAR
+Message-Id: <20240615190416.044D687F0B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/composer: fix
+ improperly scoped variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,27 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=276917e32a5df6c483cfb8a1cec4b22e2490f75a
+commit: https://git.buildroot.net/buildroot/commit/?id=f3a29033a7202ddf90c1cc70cc90f00c3ac63685
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
+Fixes: ef57da23b9950a8820c64c268672265f233cfb00
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit c013836ae6c3026aae16a0465ddc1288274e63ee)
+(cherry picked from commit 139e47861724cfdd82f4e77396e34c43f7f4825f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/cvs | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/composer/composer.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/cvs b/support/download/cvs
-index b771caf280..a6840fea7b 100755
---- a/support/download/cvs
-+++ b/support/download/cvs
-@@ -68,4 +68,4 @@ export TZ=UTC
- _cvs ${quiet} -z3 -d"'${uri}'" \
-      co "${@}" -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
- 
--tar czf "${output}" "${basename}"
-+${TAR} czf "${output}" "${basename}"
+diff --git a/package/composer/composer.mk b/package/composer/composer.mk
+index 9bfabc28af..5ade9ccccf 100644
+--- a/package/composer/composer.mk
++++ b/package/composer/composer.mk
+@@ -9,8 +9,8 @@ COMPOSER_SOURCE = composer-$(COMPOSER_VERSION).phar
+ # Here, we pass a dummy URL parameter in order to control the name the file
+ # will have once downloaded.
+ # Otherwise, the names will clash ifever we update the version.
+-BASE_SITE = https://getcomposer.org/download/$(COMPOSER_VERSION)/composer.phar
+-COMPOSER_SITE = $(BASE_SITE)?n=f/$(COMPOSER_SOURCE)
++COMPOSER_BASE_SITE = https://getcomposer.org/download/$(COMPOSER_VERSION)/composer.phar
++COMPOSER_SITE = $(COMPOSER_BASE_SITE)?n=f/$(COMPOSER_SOURCE)
+ COMPOSER_LICENSE = MIT
+ COMPOSER_LICENSE_FILES = LICENSE
+ COMPOSER_CPE_ID_VENDOR = getcomposer
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
