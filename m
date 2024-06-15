@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 168B5C27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3FF6C27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBC64842BF;
-	Sat, 15 Jun 2024 15:00:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB95184449;
+	Sat, 15 Jun 2024 15:00:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dm0T2kePQ7VC; Sat, 15 Jun 2024 15:00:21 +0000 (UTC)
+ id 69qBozVyjBcJ; Sat, 15 Jun 2024 15:00:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8D3B8442B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B206A8446F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8D3B8442B;
-	Sat, 15 Jun 2024 15:00:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BB0A91BF302
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:00:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B206A8446F;
+	Sat, 15 Jun 2024 15:00:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A48A1BF302
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:00:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A6460405F8
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:00:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8736140672
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:00:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nr-ALpRqmZqr for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 15:00:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iGFmpJkTXEaY for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 15:00:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE245405A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ED474067C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE245405A8
- for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:00:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8ED474067C
+ for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:00:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id AA36887C23; Sat, 15 Jun 2024 15:00:16 +0000 (UTC)
+ id 8A31887B24; Sat, 15 Jun 2024 15:00:21 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 15 Jun 2024 15:00:16 +0000
+Date: Sat, 15 Jun 2024 15:00:21 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
+X-Bugzilla-Version: 2021.08.2
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
+X-Bugzilla-Severity: major
 X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: MOVED
@@ -57,13 +57,14 @@ X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: bug_status resolution cc
-Message-ID: <bug-14406-163-k54kxCsqAY@https.bugs.busybox.net/>
-In-Reply-To: <bug-14406-163@https.bugs.busybox.net/>
-References: <bug-14406-163@https.bugs.busybox.net/>
+Message-ID: <bug-14461-163-rXpkGynOYC@https.bugs.busybox.net/>
+In-Reply-To: <bug-14461-163@https.bugs.busybox.net/>
+References: <bug-14461-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14406] Support LPDDR4 variant i.MX8MN EVK board
+Subject: [Buildroot] [Bug 14461] Qt5webenegine does not build due to
+ fontconfig/freetype dependency problem
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,7 +81,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14406
+https://bugs.busybox.net/show_bug.cgi?id=14461
 
 Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
@@ -90,7 +91,7 @@ Yann E. MORIN <yann.morin.1998@free.fr> changed:
          Resolution|---                         |MOVED
                  CC|                            |yann.morin.1998@free.fr
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+--- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 Thank you for your report.
 
 The issue tracker for the Buildroot project has been moved to
