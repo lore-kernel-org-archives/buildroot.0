@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A36EC27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 963C7C27C7B
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:08:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 299F1812ED;
-	Sat, 15 Jun 2024 15:08:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6679A8457D;
+	Sat, 15 Jun 2024 15:08:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WJ7R9MzRII0V; Sat, 15 Jun 2024 15:08:16 +0000 (UTC)
+ id Nqk8vvK6SL1K; Sat, 15 Jun 2024 15:08:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3373E84576
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DA168457E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3373E84576;
-	Sat, 15 Jun 2024 15:08:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DA168457E;
+	Sat, 15 Jun 2024 15:08:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F087F1BF301
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:08:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D54D31BF301
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:08:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0B074034A
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:08:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C30D8405F0
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:08:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q6DQuB28fZny for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 15:08:13 +0000 (UTC)
+ id 6qBosSnlTSBd for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 15:08:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC7CA405ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7655405ED
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC7CA405ED
- for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:08:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7655405ED
+ for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:08:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id DB95785D3E; Sat, 15 Jun 2024 15:08:12 +0000 (UTC)
+ id A2FAC87BF5; Sat, 15 Jun 2024 15:08:18 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 15 Jun 2024 15:08:12 +0000
+Date: Sat, 15 Jun 2024 15:08:18 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2020.02
+X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
+X-Bugzilla-Severity: minor
 X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: MOVED
 X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Assigned-To: cheikh.taib@gmail.com
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status cc resolution
-Message-ID: <bug-15541-163-rD4jiAWwQA@https.bugs.busybox.net/>
-In-Reply-To: <bug-15541-163@https.bugs.busybox.net/>
-References: <bug-15541-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_status resolution cc
+Message-ID: <bug-15546-163-uUQQlZQYNu@https.bugs.busybox.net/>
+In-Reply-To: <bug-15546-163@https.bugs.busybox.net/>
+References: <bug-15546-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15541] support/downloads/git generates deceptive
- archive of Linux repo
+Subject: [Buildroot] [Bug 15546] raspberry pi zero 2 w no Wi-Fi device
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,17 +80,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15541
+https://bugs.busybox.net/show_bug.cgi?id=15546
 
 Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
              Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998@free.fr
          Resolution|---                         |MOVED
+                 CC|                            |yann.morin.1998@free.fr
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+--- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 Thank you for your report.
 
 The issue tracker for the Buildroot project has been moved to
