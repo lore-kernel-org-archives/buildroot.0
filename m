@@ -1,74 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6587BC27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 12:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0E4EC27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 14:30:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D35046066F;
-	Sat, 15 Jun 2024 12:46:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 891648215C;
+	Sat, 15 Jun 2024 14:30:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wu5u7oIvCgXz; Sat, 15 Jun 2024 12:46:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Epgl73Eip-Qi; Sat, 15 Jun 2024 14:30:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA26F60731
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4A1B82113
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA26F60731;
-	Sat, 15 Jun 2024 12:46:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B1DB31BF304
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 12:46:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E4A1B82113;
+	Sat, 15 Jun 2024 14:30:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CEA311BF302
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A02F660764
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 12:46:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC0764026F
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:30:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MXFbRVdM4yqK for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 12:46:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Bi_6V__vBoD for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 14:30:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2860260749
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2860260749
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2860260749
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 12:46:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E9C72C0007;
- Sat, 15 Jun 2024 12:46:51 +0000 (UTC)
-Date: Sat, 15 Jun 2024 14:46:51 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20240615144651.5f2e05f5@windsurf>
-In-Reply-To: <Zm1L7ZlBXIV2iowQ@landeda>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6B605400D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B605400D7
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6B605400D7
+ for <buildroot@buildroot.org>; Sat, 15 Jun 2024 14:30:22 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 4962413F88D;
+ Sat, 15 Jun 2024 16:30:13 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 15 Jun 2024 16:30:13 +0200
+Date: Sat, 15 Jun 2024 16:30:13 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <Zm2ldZk5DZ966rGj@landeda>
 References: <20240514085801.3202503-1-thomas.petazzoni@bootlin.com>
- <Zm1L7ZlBXIV2iowQ@landeda>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+ <Zm1L7ZlBXIV2iowQ@landeda> <20240615144651.5f2e05f5@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1718455612;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=TP29eTBMfauvcO3MX54NRu9JYBOxz8QreF9ISYjyn8s=;
- b=UyYzNdFOsB4IdjLc44+Pw5e5aG6fhvQMckiFTA9qj2Z4ghYomMsjt6qMuJQ/E0L+joNOMP
- t4rvPJzdKLsnlVW+9UF06KfuaQhHpif2Saz20MkA05MmOqFfwJ9Hc2zxZ+IyIPPIrDqxQ+
- Xd6pbnyxFhQ5WyBPsYoltzkSNeWKkYSKAu6vmryV2+EWQcD6t6W3kXabJLhZr2ITG7Z8Xq
- QBtNxH0SstK6BkPLffRgzwmBqAHzYO+d8fzJDTHsD9ereepmZKokp4QZkAoAz/zU3hRp28
- 2NCeqzGFsoo9BKv1pMUqMUbS+rU5EBChFZWQWy4t/Xe4/5KC4WXmJLTkvF2oeg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UyYzNdFO
+Content-Disposition: inline
+In-Reply-To: <20240615144651.5f2e05f5@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1718461819;
+ bh=LkuWZlOFzNEPEumgmJ47meTWN+qTEFvQNQnsE52i3i0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ObTd0FwlbnpXEJei4g/xZPu4zylvLbVhvNHXsZa7UoGQhOzLoAFCyfGYA6t5myS5a
+ wjs9JXoUp1QXC7xsc1mIfvqb98pTjLpJXbaml9lbF2E4tDA0e+MTPnucGzSoZZp7Pn
+ CjmPnvEWN5+tBWf42ikrJYxi2dMB6bckJtE5mIPP9rqtqem89T/SOZW8oWHktwNWXB
+ 00NKRI1zi+VBU3yEMQ3S8FNEzCZ/S5vTsi6LQnoklbuI4U/p0ot8r6bysyEZl4YwVH
+ dPlNzOFEQl5y40Go4Nrlchw23SztmcqbYkXarZVDLP5uDfkvmgvQYMB4ewixR2+feg
+ HMAyITmxG4xBg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ObTd0Fwl
 Subject: Re: [Buildroot] [PATCH] docs,
  package/gcc: switch to Gitlab issue tracker
 X-BeenThere: buildroot@buildroot.org
@@ -82,8 +82,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Romain Naour <romain.naour@gmail.com>,
  Buildroot List <buildroot@buildroot.org>
@@ -92,43 +90,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 15 Jun 2024 10:08:13 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Thomas, All,
 
-> It would have been nice if you had suggested a plan to deal with the
-> existing issues.
-
-Indeed, but there was a reason, see below :-)
-
-> We can extract the list of bugs from Bugzilla (as CSV):
->     https://bugs.busybox.net/buglist.cgi?bug_status=__all__&limit=0&list_id=26023&product=buildroot&query_format=specific&ctype=csv&human=1
+On 2024-06-15 14:46 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 15 Jun 2024 10:08:13 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 > 
-> And then we can extract individual bugs (as XML):
->     https://bugs.busybox.net/show_bug.cgi?ctype=xml&id=3
-> 
-> Gitlab can import from CSV:
->     https://docs.gitlab.com/ee/user/project/issues/csv_import.html
-> 
-> However, the Gitlab import is ultra limited: it can only import issues
-> as a title, a description, a due date (optional), and a milestone
-> (optional).
-> 
-> There is no place for comments, attachments, status...
-> 
-> So, what do we do for the existing issues?
+> > It would have been nice if you had suggested a plan to deal with the
+> > existing issues.
+[--SNIP--]
+> My plan was to have no plan at all, and simply "ignore" the existing
+> issues. But alternatively, we could do a massive close of all existing
+> open issues with a message saying that we moved to Gitlab and that if
+> the issue still exists, it should be reopened in Gitlab.
+> To me, this is probably good enough.
 
-My plan was to have no plan at all, and simply "ignore" the existing
-issues. But alternatively, we could do a massive close of all existing
-open issues with a message saying that we moved to Gitlab and that if
-the issue still exists, it should be reopened in Gitlab.
+I am fine with that.
 
-To me, this is probably good enough.
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
