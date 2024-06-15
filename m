@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68754C27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08768C27C7B
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:21:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 041A281E68;
-	Sat, 15 Jun 2024 15:21:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7B3A8132A;
+	Sat, 15 Jun 2024 15:21:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dPN3sc0h6hQP; Sat, 15 Jun 2024 15:21:32 +0000 (UTC)
+ id XvQAPHeQC_CA; Sat, 15 Jun 2024 15:21:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8EDE81FE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9675818A1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8EDE81FE6;
-	Sat, 15 Jun 2024 15:21:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 55F7A1BF301
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:20:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9675818A1;
+	Sat, 15 Jun 2024 15:21:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 50F8A1BF301
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:21:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44515605F7
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:20:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A8FB81BB4
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:21:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vY6ew4usk8vL for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 15:20:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2pVn6GANOOG5 for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 15:21:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FFF360616
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77A86818A1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FFF360616
- for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:20:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77A86818A1
+ for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:21:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 279EC86AC1; Sat, 15 Jun 2024 15:20:58 +0000 (UTC)
+ id 66B0587C41; Sat, 15 Jun 2024 15:21:43 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 15 Jun 2024 15:20:57 +0000
+Date: Sat, 15 Jun 2024 15:21:43 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -56,14 +56,15 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc bug_status resolution
-Message-ID: <bug-16087-163-wiSbLR2PaH@https.bugs.busybox.net/>
-In-Reply-To: <bug-16087-163@https.bugs.busybox.net/>
-References: <bug-16087-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution cc bug_status
+Message-ID: <bug-16078-163-q5bJTK5Prt@https.bugs.busybox.net/>
+In-Reply-To: <bug-16078-163@https.bugs.busybox.net/>
+References: <bug-16078-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 16087] Make file compilation error
+Subject: [Buildroot] [Bug 16078] ClamAV: FD_PASSING test fails when it
+ should not.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,15 +81,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=16087
+https://bugs.busybox.net/show_bug.cgi?id=16078
 
 Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
+         Resolution|---                         |MOVED
                  CC|                            |yann.morin.1998@free.fr
              Status|NEW                         |RESOLVED
-         Resolution|---                         |MOVED
 
 --- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 Thank you for your report.
