@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5389BC27C53
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 14:59:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1525C27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 14:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 273AB82BEB;
-	Sat, 15 Jun 2024 14:59:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B33F983083;
+	Sat, 15 Jun 2024 14:59:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QWdCjWWwjIWs; Sat, 15 Jun 2024 14:59:09 +0000 (UTC)
+ id O6LMFPluBm_t; Sat, 15 Jun 2024 14:59:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FDED82C3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C46282F19
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FDED82C3E;
-	Sat, 15 Jun 2024 14:59:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 032711BF302
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:59:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C46282F19;
+	Sat, 15 Jun 2024 14:59:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 152481BF2C3
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:59:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E544A6079D
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:59:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8EE880C67
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:59:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AYdUfWCLsviS for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 14:59:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MDSjO9JwchCv for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 14:59:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D26D4605FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8DFF82F19
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D26D4605FF
- for <buildroot@uclibc.org>; Sat, 15 Jun 2024 14:59:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8DFF82F19
+ for <buildroot@uclibc.org>; Sat, 15 Jun 2024 14:59:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id CD74487BF7; Sat, 15 Jun 2024 14:59:06 +0000 (UTC)
+ id AB13B87BF7; Sat, 15 Jun 2024 14:59:12 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 15 Jun 2024 14:59:06 +0000
+Date: Sat, 15 Jun 2024 14:59:12 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2021.02.3
+X-Bugzilla-Version: 2021.05
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
+X-Bugzilla-Severity: major
 X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: MOVED
@@ -58,13 +58,12 @@ X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone resolution
-Message-ID: <bug-13986-163@https.bugs.busybox.net/>
+ target_milestone resolution attachments.created
+Message-ID: <bug-14006-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 13986] New: Host python3 fails to run after
- relocate-sdk.sh
+Subject: [Buildroot] [Bug 14006] New: op-tee not start on imx8mm_evk
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,80 +80,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=13986
+https://bugs.busybox.net/show_bug.cgi?id=14006
 
-            Bug ID: 13986
-           Summary: Host python3 fails to run after relocate-sdk.sh
+            Bug ID: 14006
+           Summary: op-tee not start on imx8mm_evk
            Product: buildroot
-           Version: 2021.02.3
-          Hardware: All
-                OS: Linux
+           Version: 2021.05
+          Hardware: Other
+                OS: Other
             Status: RESOLVED
-          Severity: normal
+          Severity: major
           Priority: P5
          Component: Other
           Assignee: unassigned@buildroot.uclibc.org
-          Reporter: dennis.peeten@heliox-energy.com
+          Reporter: v9sd@yandex.ru
                 CC: buildroot@uclibc.org, yann.morin.1998@free.fr
   Target Milestone: ---
                 CC: yann.morin.1998@free.fr
-            Status: RESOLVED
         Resolution: MOVED
+            Status: RESOLVED
 
-The host python3 fails to start after relocating an SDK.
+Hello!
+I have a problem with op-tee start on imx8mm_evk
+(https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-8m-mini-applications-processor:8MMINILPD4-EVK).
 
-Reproduce:
-
-Build an sdk with BR2_PACKAGE_HOST_PYTHON3=y
-Untar the sdk to some location ${RELOCATED_SDK}.
-Relocate the sdk by running ${RELOCATED_SDK}/relocate-sdk.sh
-Run ${RELOCATED_SDK}/bin/python3
-
-Result:
-
-python fails to start, spewing confusing error messages.
-
-Expected:
-
-python starts with an interactive prompt. 
-
-Note: running python3 from the build dir and running python3 from the relocated
-sdk dir WITHOUT running the relocate-sdk.sh script does result in the expected
-behaviour.
-
-The problem is that the relocate-sdk.sh script also substitutes paths in the
-.pyc byte code files, after which they become corrupted.
-
-The relocate-sdk.sh script converts files who's MIME type starts with 'text/'.
-The `file` utility on my machine (Debian 11) reports the MIME type of .pyc
-files to be 'text/x-bytecode.python'. 
-
-I'm not sure what the best solution is. But for now I've just changed the
-relocate script on my end:
-
-diff --git a/support/misc/relocate-sdk.sh b/support/misc/relocate-sdk.sh
-index caabeaa6f6..8d381c41c3 100755
---- a/support/misc/relocate-sdk.sh
-+++ b/support/misc/relocate-sdk.sh
-@@ -36,7 +36,9 @@ echo "Relocating the buildroot SDK from ${OLDPATH} to
-${NEWPATH} ..."
- export LC_ALL=C
- # Replace the old path with the new one in all text files
- grep -lr "${OLDPATH}" . | while read -r FILE ; do
--    if file -b --mime-type "${FILE}" | grep -q '^text/' && [ "${FILE}" !=
-"${LOCFILE}" ]
-+    MIME="$(file -b --mime-type "${FILE}")"
-+    if echo ${MIME} | grep -q '^text/' && [ "${FILE}" != "${LOCFILE}" ] &&
-+        ! ( echo ${MIME} | grep -q '^text/x-bytecode' )
-     then
-         sed -i "s|${OLDPATH}|${NEWPATH}|g" "${FILE}"
-     fi
+My .config file is attached.
 
 
-Kind regards,
-Dennis Peeten.
+I write output/images/sdcard.img on sdcadr, connect terminal emultaion with
+serial port and start imx8.
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+After below output imx8mm_evk is output nothing.
+U-Boot SPL 2020.04 (Jul 12 2021 - 16:19:50 +0300)
+Can't find PMIC:PCA9450
+DDRINFO: start DRAM init
+DDRINFO: DRAM rate 3000MTS
+DDRINFO:ddrphy calibration done
+DDRINFO: ddrmix config done
+Normal Boot
+Trying to boot from MMC1
+NOTICE:  BL31: v2.4(release):2021.05-393-gb928074e2d
+NOTICE:  BL31: Built : 16:16:43, Jul 12 2021
+
+
+Problem arises after jump execution on op-tee entry point address (0xbe000000)
+
+
+After reaching the above address breakpoint, we have content in memory: 
+
+(gdb) x/10i $pc
+=> [34m0xbe000000[m <[33m_start[m>:     .inst   0x00150000 ; undefined
+   [34m0xbe000004[m <[33m_start[m+4>:   .inst   0x00000000 ; undefined
+   [34m0xbe000008[m <[33m_start[m+8>:   .inst   0x00000000 ; undefined
+   [34m0xbe00000c[m <[33m_start[m+12>:  .inst   0x00000000 ; undefined
+   [34m0xbe000010[m <[33m_start[m+16>:  .inst   0x00000000 ; undefined
+   [34m0xbe000014[m <[33m_start[m+20>:  .inst   0x00000000 ; undefined
+   [34m0xbe000018[m <[33m_start[m+24>:  .inst   0x00000000 ; undefined
+   [34m0xbe00001c[m <[33m_start[m+28>:  .inst   0x00000000 ; undefined
+   [34m0xbe000020[m <[33m_start[m+32>:  .inst   0x00000000 ; undefined
+   [34m0xbe000024[m <[33m_start[m+36>:  .inst   0x00400000 ; undefined
+
+As we look, it is not valid instructions opcode.
+
+After continue execution, imx8 freezes.
+
+Guess that the op-tee was not load in memory in uboot-spl.
+
+--- Comment #1 from v9sd@yandex.ru ---
+Created attachment 9061
+  --> https://bugs.busybox.net/attachment.cgi?id=9061&action=edit
+My config (without comments and empty lines)
+
+--- Comment #2 from v9sd@yandex.ru ---
+*** Bug 14001 has been marked as a duplicate of this bug. ***
+
+--- Comment #3 from v9sd@yandex.ru ---
+*** Bug 14011 has been marked as a duplicate of this bug. ***
+
+--- Comment #4 from v9sd@yandex.ru ---
+*** Bug 14016 has been marked as a duplicate of this bug. ***
+
+--- Comment #5 from v9sd@yandex.ru ---
+*** Bug 14021 has been marked as a duplicate of this bug. ***
+
+--- Comment #6 from v9sd@yandex.ru ---
+Data from  op-tee entry point address without service info:
+(gdb) x/10i $pc
+=> 0xbe000000 <_start>:     .inst   0x00150000 ; undefined
+   0xbe000004 <_start+4>:   .inst   0x00000000 ; undefined
+   0xbe000008 <_start+8>:   .inst   0x00000000 ; undefined
+   0xbe00000c <_start+12>:  .inst   0x00000000 ; undefined
+   0xbe000010 <_start+16>:  .inst   0x00000000 ; undefined
+   0xbe000014 <_start+20>:  .inst   0x00000000 ; undefined
+   0xbe000018 <_start+24>:  .inst   0x00000000 ; undefined
+   0xbe00001c <_start+28>:  .inst   0x00000000 ; undefined
+   0xbe000020 <_start+32>:  .inst   0x00000000 ; undefined
+   0xbe000024 <_start+36>:  .inst   0x00400000 ; undefined
+
+--- Comment #7 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 Thank you for your report.
 
 The issue tracker for the Buildroot project has been moved to
