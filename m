@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1238FC27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 14:48:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDB42C27C53
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 14:48:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C793C80FA6;
-	Sat, 15 Jun 2024 14:48:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6478480BDC;
+	Sat, 15 Jun 2024 14:48:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pj1x2Pqd4k-M; Sat, 15 Jun 2024 14:48:35 +0000 (UTC)
+ id TMRuZ77xTcXd; Sat, 15 Jun 2024 14:48:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D20DB81FA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1B3880B9A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D20DB81FA9;
-	Sat, 15 Jun 2024 14:48:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7F18C1BF302
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:48:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1B3880B9A;
+	Sat, 15 Jun 2024 14:48:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D740E1BF302
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:48:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78FD8400D7
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:48:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C2BE880B87
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 14:48:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GD00K_gJ5Hnb for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 14:48:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nbRZ70pTciwe for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 14:48:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A8ED4026F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E956880B53
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A8ED4026F
- for <buildroot@uclibc.org>; Sat, 15 Jun 2024 14:48:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E956880B53
+ for <buildroot@uclibc.org>; Sat, 15 Jun 2024 14:48:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 695DE87D19; Sat, 15 Jun 2024 14:48:32 +0000 (UTC)
+ id D7ADB87B8C; Sat, 15 Jun 2024 14:48:53 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 15 Jun 2024 14:48:32 +0000
+Date: Sat, 15 Jun 2024 14:48:53 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -53,18 +53,18 @@ X-Bugzilla-Who: yann.morin.1998@free.fr
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: MOVED
 X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: ps.report@gmx.net
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc resolution bug_status
-Message-ID: <bug-11346-163-DIglPXqVw6@https.bugs.busybox.net/>
-In-Reply-To: <bug-11346-163@https.bugs.busybox.net/>
-References: <bug-11346-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cc bug_status resolution
+Message-ID: <bug-11401-163-UZBLyTEj9Z@https.bugs.busybox.net/>
+In-Reply-To: <bug-11401-163@https.bugs.busybox.net/>
+References: <bug-11401-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 11346] qt5base-5.11.1 Assertion failed: ret == 0
- after getentropy() inside fillBuffer() on arm
+Subject: [Buildroot] [Bug 11401] Impossible do build a qt program using
+ kf5-networkmanager-qt with qmake
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,17 +81,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=11346
+https://bugs.busybox.net/show_bug.cgi?id=11401
 
 Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
                  CC|                            |yann.morin.1998@free.fr
+             Status|ASSIGNED                    |RESOLVED
          Resolution|---                         |MOVED
-             Status|NEW                         |RESOLVED
 
---- Comment #7 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+--- Comment #12 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 Thank you for your report.
 
 The issue tracker for the Buildroot project has been moved to
