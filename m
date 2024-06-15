@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A701AC27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:08:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A7CC27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:08:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79A968183D;
-	Sat, 15 Jun 2024 15:08:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B705A84520;
+	Sat, 15 Jun 2024 15:08:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FC5pgYGu0jBG; Sat, 15 Jun 2024 15:08:02 +0000 (UTC)
+ id SZwg23JRQryl; Sat, 15 Jun 2024 15:08:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81AD984520
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B546F84600
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81AD984520;
-	Sat, 15 Jun 2024 15:08:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B546F84600;
+	Sat, 15 Jun 2024 15:08:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 201311BF301
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:08:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 56B061BF301
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:08:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4680D406BD
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:08:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4332F40284
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:08:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iiZh_A5Yk7P8 for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 15:07:59 +0000 (UTC)
+ id TU9j-38Zt5OX for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 15:08:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49D7A4066F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AC324066F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49D7A4066F
- for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:07:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4AC324066F
+ for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:08:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 37FBF85D3E; Sat, 15 Jun 2024 15:07:59 +0000 (UTC)
+ id 38DA985D3E; Sat, 15 Jun 2024 15:08:05 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 15 Jun 2024 15:07:58 +0000
+Date: Sat, 15 Jun 2024 15:08:04 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -56,14 +56,14 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution bug_status
-Message-ID: <bug-15531-163-dB0OLLTNiE@https.bugs.busybox.net/>
-In-Reply-To: <bug-15531-163@https.bugs.busybox.net/>
-References: <bug-15531-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cc bug_status resolution
+Message-ID: <bug-15536-163-JMculWT9Ky@https.bugs.busybox.net/>
+In-Reply-To: <bug-15536-163@https.bugs.busybox.net/>
+References: <bug-15536-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15531] shim doesn't provide hooks for signing
+Subject: [Buildroot] [Bug 15536] Dependencies for python-cherrypy out of date
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,16 +80,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15531
+https://bugs.busybox.net/show_bug.cgi?id=15536
 
 Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         Resolution|---                         |MOVED
+                 CC|                            |yann.morin.1998@free.fr
              Status|NEW                         |RESOLVED
+         Resolution|---                         |MOVED
 
---- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 Thank you for your report.
 
 The issue tracker for the Buildroot project has been moved to
