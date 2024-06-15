@@ -4,90 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C76C27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 07:56:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10FC4C27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 08:08:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B2FE60717;
-	Sat, 15 Jun 2024 07:56:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6421860717;
+	Sat, 15 Jun 2024 08:08:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EPECFwe78mFI; Sat, 15 Jun 2024 07:56:28 +0000 (UTC)
+ id 6kP4sZtUuMVm; Sat, 15 Jun 2024 08:08:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AFD6606E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27113606ED
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AFD6606E5;
-	Sat, 15 Jun 2024 07:56:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27113606ED;
+	Sat, 15 Jun 2024 08:08:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5EE921BF30C
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 07:56:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 391841BF30B
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 08:08:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 471284091D
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 07:56:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25AD0405E2
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 08:08:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RmOCXIqc9j55 for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 07:56:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::236; helo=mail-lj1-x236.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 93584406CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93584406CC
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 93584406CC
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 07:56:24 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id
- 38308e7fff4ca-2ebeefb9a6eso28779971fa.1
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 00:56:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718438182; x=1719042982;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=QAkML8bFW9ilgGqpH9va/8Ow+D4QV861w+11s07lIt0=;
- b=UtGayk24UTT0aBz/eMi2ZqIzRo1+Gzql38Wd99CKn5FDBdPv+o7Xz7cbyOS/3sSute
- dNnwL9aiB1M8YYdmSDzmjEGResUmBnywDvOUkFsFj5EIFXpkxkYAUELvp7FQ6mFSDTJz
- X/IMBfsTqSPmClP6nXQilSBzOx+gubmnTutVV56GX1wWWpxZcl4yG5FNKOHWKH5HkPnz
- hwtmSOrbi8QURZPBmVsX3qzkY8jy4NC+MXAISajG9FWcElQusByC/zSjHmoJ2Ffb3EB/
- j212ABjO56QDOvtJHVmMXjyMOPUecJo65aQDY8F9+QXSfhDyQXlAir99VTSb4t2lHJIC
- 5DbQ==
-X-Gm-Message-State: AOJu0Yxhm1VGX5m5H8EjH2KniLwnY4DQJpilQ/uG7UOsoQ9KSGwPvkQh
- 731urqUOIc7Pg0oFosEYOQz4ntWjAM4oLTUugpk3Cwoqzz5n7Zc2nA06uw==
-X-Google-Smtp-Source: AGHT+IHfNN22MEkVdpivh0IQvhBpSEd9iiqVh0w4YMaxmfXbC5PXDT9EpCLD5FFWhoDOKoq2BEu1iQ==
-X-Received: by 2002:a2e:92c5:0:b0:2eb:ec28:62f2 with SMTP id
- 38308e7fff4ca-2ec0e47c214mr29120081fa.28.1718438181721; 
- Sat, 15 Jun 2024 00:56:21 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-422f6320bfdsm87626245e9.37.2024.06.15.00.56.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 15 Jun 2024 00:56:21 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 15 Jun 2024 09:56:19 +0200
-Message-ID: <20240615075619.2410679-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ id RhvwqugCl_oO for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 08:08:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3F2E64050D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F2E64050D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3F2E64050D
+ for <buildroot@buildroot.org>; Sat, 15 Jun 2024 08:08:23 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id D1F5F13F88F;
+ Sat, 15 Jun 2024 10:08:13 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 15 Jun 2024 10:08:13 +0200
+Date: Sat, 15 Jun 2024 10:08:13 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <Zm1L7ZlBXIV2iowQ@landeda>
+References: <20240514085801.3202503-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718438182; x=1719042982; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=QAkML8bFW9ilgGqpH9va/8Ow+D4QV861w+11s07lIt0=;
- b=fmXWeHHKrEm1PbQOHLwapY4ZubflKBknB7FSfPvE5h50eVbtS56xybCoQavmofW9HV
- Ek99hLz/RhpYAVkBLbLeut93VEpPoCpV5bKh2muYVi4JkOrkBZhzAQiFsKtl/qMMBfGs
- R8nVp+pAJd9AXUzBzimXZ5M7gCvUGBDeOTHL+6o579Lzloj+f0zouI3zXDCGhnoodPE/
- 9Sz7/lpTotoBEMYykuNKt+UzDMpRQAYkP6I5cMs6NyXGEZ/szgM3N5cUF/6PuWohGS7K
- wqGAui7oz81o2gjeq+xbobGKiyqxo+H5UdSng32JL4nlk9f+lqakg4+hdz45TAfcpI8H
- blBg==
+Content-Disposition: inline
+In-Reply-To: <20240514085801.3202503-1-thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1718438900;
+ bh=2SQeCBKgIlUBPzuNG0FP7Sv/WAFiIbMlWPdMsB4+b10=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ZIn0rdcdjdDNvUpWwDXCnrjsiug6aleZ8m0rOCQBXv4K20wHmmTvJ41SEkVFN+5cH
+ Ukp/uzp0O4ku+oAX4+ZS84+6GInrjO3+noJEZRe1uEUoVpqTz5MUKON7ELoDjFZ3xp
+ LD2eCoNQFFVEUTFqKZj3UAE3JDIpE92+c3SH8lI/akWzdUuATho/092gBdHxfXypg0
+ wR2LByJcNBVuscwE9TW9iIrwg5kta9kbnfqhKRetyVc6XmE9pW0t5o/T3FPWmiTEpE
+ jthjoSgtabJXYCuuGtN8Z70cpSq1o39adTI1PKjI9YchoiXuVAMg5iB25haEeE9G7q
+ kA57bzAuh0hkQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=fmXWeHHK
-Subject: [Buildroot] [PATCH 1/1] package/execline: fix uclibc build
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ZIn0rdcd
+Subject: Re: [Buildroot] [PATCH] docs,
+ package/gcc: switch to Gitlab issue tracker
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,46 +82,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following uclibc build failure raised since bump to version
-2.9.5.1 in commit 42fad03182ed53de8003b66d50e893f42b72145e and
-https://github.com/skarnet/execline/commit/6dfe54be869c117676dcc004400ac68096945531:
+Thomas, All,
 
-src/execline/eltest.c: In function 'eltest_run':
-src/execline/eltest.c:366:31: error: 'struct stat' has no member named 'st_mtim'; did you mean 'st_mtime'?
-  366 |       return timespec_cmp(&st.st_mtim, &st.st_atim) > 0 ;
-      |                               ^~~~~~~
-      |                               st_mtime
+On 2024-05-14 10:58 +0200, Thomas Petazzoni via buildroot spake thusly:
+> Our Bugzilla is so slow and unstable that it has become
+> unusable. Let's switch to using the Gitlab issue tracker instead.
 
-Fixes: 42fad03182ed53de8003b66d50e893f42b72145e
- - http://autobuild.buildroot.org/results/64bf2928f36e07332052854cbaaa7a6f8f347e29
+It would have been nice if you had suggested a plan to deal with the
+existing issues.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/execline/execline.mk | 1 +
- 1 file changed, 1 insertion(+)
+We can extract the list of bugs from Bugzilla (as CSV):
+    https://bugs.busybox.net/buglist.cgi?bug_status=__all__&limit=0&list_id=26023&product=buildroot&query_format=specific&ctype=csv&human=1
 
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 842ded6b88..b3d2d98216 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
-@@ -12,6 +12,7 @@ EXECLINE_INSTALL_STAGING = YES
- EXECLINE_DEPENDENCIES = skalibs
- 
- EXECLINE_CONF_OPTS = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
- 	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
+And then we can extract individual bugs (as XML):
+    https://bugs.busybox.net/show_bug.cgi?ctype=xml&id=3
+
+Gitlab can import from CSV:
+    https://docs.gitlab.com/ee/user/project/issues/csv_import.html
+
+However, the Gitlab import is ultra limited: it can only import issues
+as a title, a description, a due date (optional), and a milestone
+(optional).
+
+There is no place for comments, attachments, status...
+
+So, what do we do for the existing issues?
+
+Regards,
+Yann E. MORIN.
+
+> There are still lots of references to the Bugzilla bug tracker in our
+> News page at https://buildroot.org/news.html, but these are for older
+> news.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  docs/manual/contribute.adoc  | 2 +-
+>  docs/manual/resources.adoc   | 2 +-
+>  docs/website/contribute.html | 2 +-
+>  docs/website/support.html    | 5 +++--
+>  package/gcc/gcc.mk           | 2 +-
+>  5 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
+> index 6ff6c15314..c88035597e 100644
+> --- a/docs/manual/contribute.adoc
+> +++ b/docs/manual/contribute.adoc
+> @@ -25,7 +25,7 @@ for more information on obtaining a Buildroot git tree.
+>  === Reproducing, analyzing and fixing bugs
+>  
+>  A first way of contributing is to have a look at the open bug reports in
+> -the https://bugs.buildroot.org/buglist.cgi?product=buildroot[Buildroot bug
+> +the https://gitlab.com/buildroot.org/buildroot/-/issues[Buildroot bug
+>  tracker]. As we strive to keep the bug count as small as possible, all
+>  help in reproducing, analyzing and fixing reported bugs is more than
+>  welcome. Don't hesitate to add a comment to bug reports reporting your
+> diff --git a/docs/manual/resources.adoc b/docs/manual/resources.adoc
+> index 68b7eb9062..4ef709c317 100644
+> --- a/docs/manual/resources.adoc
+> +++ b/docs/manual/resources.adoc
+> @@ -40,7 +40,7 @@ better as it will reach more people, both developers and users.
+>  Bug tracker::
+>  +
+>  Bugs in Buildroot can be reported via the mailing list or alternatively
+> -via the https://bugs.buildroot.org/buglist.cgi?product=buildroot[Buildroot
+> +via the https://gitlab.com/buildroot.org/buildroot/-/issues[Buildroot
+>  bugtracker]. Please refer to xref:reporting-bugs[] before creating a bug
+>  report.
+>  
+> diff --git a/docs/website/contribute.html b/docs/website/contribute.html
+> index aa1cf93f1b..95028ee788 100644
+> --- a/docs/website/contribute.html
+> +++ b/docs/website/contribute.html
+> @@ -13,7 +13,7 @@
+>  
+>        <ul>
+>  	<li>Reproducing, analyzing and fixing bugs from our
+> -	  <a href="https://bugs.buildroot.org/">bug tracker</a></li>
+> +	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a></li>
+>  	<li>Analyzing and fixing <a href="http://autobuild.buildroot.org/">
+>  	    autobuild failures</a></li>
+>  	<li>Reviewing and testing patches sent by other developers. See the
+> diff --git a/docs/website/support.html b/docs/website/support.html
+> index 28873c6d76..75551b770e 100644
+> --- a/docs/website/support.html
+> +++ b/docs/website/support.html
+> @@ -80,8 +80,9 @@
+>  		  <img class="img-responsive" src="images/bug-buddy.png" style="max-width:50px; margin-bottom:10px;">
+>  		</div>
+>  		<div class="col-sm-11">
+> -		  <p>If you think you found a bug in Buildroot, you can use the
+> -		    <a href="https://bugs.buildroot.org/">Bug Tracker</a> to post your bugs and/or
+> +		  <p>If you think you found a bug in Buildroot, you
+> +		  can use the
+> +		    <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">Bug Tracker</a> to post your bugs and/or
+>  		    participate to find solutions to existing problems.</p>
+>  
+>  		  <p>Note: patches are only accepted through the mailing list.</p>
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 672f9472a9..e4780353cb 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -83,7 +83,7 @@ HOST_GCC_COMMON_CONF_OPTS = \
+>  	--with-mpc=$(HOST_DIR) \
+>  	--with-mpfr=$(HOST_DIR) \
+>  	--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
+> -	--with-bugurl="http://bugs.buildroot.net/" \
+> +	--with-bugurl="https://gitlab.com/buildroot.org/buildroot/-/issues" \
+>  	--without-zstd
+>  
+>  ifeq ($(BR2_REPRODUCIBLE),y)
+> -- 
+> 2.45.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.43.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
