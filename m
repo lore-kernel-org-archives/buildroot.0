@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17CE3C27C77
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 21:19:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BF40C27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 21:19:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1B9D8115A;
-	Sat, 15 Jun 2024 21:19:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B69CC811A0;
+	Sat, 15 Jun 2024 21:19:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fy09y3eXur-K; Sat, 15 Jun 2024 21:19:24 +0000 (UTC)
+ id 2j-KUvIljtcx; Sat, 15 Jun 2024 21:19:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD01481185
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5363A81153
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD01481185;
-	Sat, 15 Jun 2024 21:19:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DE08E1BF86B
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 21:19:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5363A81153;
+	Sat, 15 Jun 2024 21:19:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 137181BF2F8
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 21:19:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D83A380FEF
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 21:19:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D6E4402A8
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 21:19:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JnWLhUDLqxpm for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 21:19:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b7HYizBDTnin for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 21:19:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE82280F52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD45F40018
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE82280F52
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD45F40018
  for <buildroot@buildroot.org>; Sat, 15 Jun 2024 21:19:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A687F84686; Sat, 15 Jun 2024 21:19:15 +0000 (UTC)
+ id C8715874FA; Sat, 15 Jun 2024 21:19:15 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jun 2024 23:09:31 +0200
+Date: Sat, 15 Jun 2024 23:13:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 106e43e3036f4c71419c698445ab979e3f32007a
-X-Git-Newrev: a6648ad8dacc4d40ead5e54aeb5be9969b1e8529
+X-Git-Oldrev: 35a4ec05533b97bdff48a6f2c07e4b8bb1074467
+X-Git-Newrev: 551ba16a0f09fe550acb3ef6d12a1b2587d03292
 X-Patchwork-Hint: ignore
-Message-Id: <20240615211915.A687F84686@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: new boot package
+Message-Id: <20240615211915.C8715874FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynqmp_*: migrate to
+ xilinx-prebuilt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,172 +65,145 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6648ad8dacc4d40ead5e54aeb5be9969b1e8529
+commit: https://git.buildroot.net/buildroot/commit/?id=551ba16a0f09fe550acb3ef6d12a1b2587d03292
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch add a new boot package for downloading prebuilt firmware for Xilinx
-versal and zynqmp evaluation boards.
-
-It solves the problem of being able to verify the hash when downloading a
-prebuilt zynqmp pmufw.elf binary.
+Migrate zynqmp defconfigs to xilinx-prebuilt.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Reviewed-by: Brandon Maier <brandon.maier@collins.com>
-[yann.morin.1998@free.fr:
-  - move the hash file to the package dir, not the board dir
-  - move board name after familly choice
-  - add default board name for each family
-  - qstrip the Kconfig strings before use
-  - introduce XILINX_PREBUILT_BOARD_DIR to simplify paths
-  - explain the *.pdi glob
-  - simplify non-versal install
-]
+[yann.morin.1998@free.fr: drop defaults from defconfigs]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                |  2 ++
- boot/Config.in                            |  1 +
- boot/xilinx-prebuilt/Config.in            | 48 +++++++++++++++++++++++++++++++
- boot/xilinx-prebuilt/xilinx-prebuilt.hash |  2 ++
- boot/xilinx-prebuilt/xilinx-prebuilt.mk   | 43 +++++++++++++++++++++++++++
- 5 files changed, 96 insertions(+)
+ .checkpackageignore                 | 5 -----
+ configs/zynqmp_kria_kr260_defconfig | 7 ++++++-
+ configs/zynqmp_kria_kv260_defconfig | 8 +++++++-
+ configs/zynqmp_zcu102_defconfig     | 6 +++++-
+ configs/zynqmp_zcu104_defconfig     | 7 ++++++-
+ configs/zynqmp_zcu106_defconfig     | 7 ++++++-
+ 6 files changed, 30 insertions(+), 10 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 52a7572d41..75642ed77f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2336,8 +2336,10 @@ F:	package/qt5/qt5opcua/
- 
- N:	Neal Frager <neal.frager@amd.com>
- F:	board/versal/
-+F:	board/xilinx/
- F:	board/zynq/
- F:	board/zynqmp/
-+F:	boot/xilinx-prebuilt/
- F:	configs/versal_vck190_defconfig
- F:	configs/zynq_zc702_defconfig
- F:	configs/zynq_zc706_defconfig
-diff --git a/boot/Config.in b/boot/Config.in
-index 14e0ca65fa..25a50265d2 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -21,5 +21,6 @@ source "boot/ti-k3-boot-firmware/Config.in"
- source "boot/ti-k3-r5-loader/Config.in"
- source "boot/uboot/Config.in"
- source "boot/vexpress-firmware/Config.in"
-+source "boot/xilinx-prebuilt/Config.in"
- 
- endmenu
-diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-new file mode 100644
-index 0000000000..7c992e6de3
---- /dev/null
-+++ b/boot/xilinx-prebuilt/Config.in
-@@ -0,0 +1,48 @@
-+config BR2_TARGET_XILINX_PREBUILT
-+	bool "xilinx-prebuilt"
-+	depends on BR2_aarch64
-+	help
-+	  Pre-built firmware files for Xilinx boards.
-+
-+	  https://github.com/Xilinx/soc-prebuilt-firmware
-+
-+if BR2_TARGET_XILINX_PREBUILT
-+
-+config BR2_TARGET_XILINX_PREBUILT_VERSION
-+	string "prebuilt version"
-+	default "xilinx_v2024.1"
-+	help
-+	  Release version of Xilinx firmware.
-+	  Must be xilinx_v2023.1 or newer.
-+
-+choice
-+	bool "family variant"
-+	default BR2_TARGET_XILINX_PREBUILT_ZYNQMP
-+
-+config BR2_TARGET_XILINX_PREBUILT_ZYNQMP
-+	bool "zynqmp"
-+
-+config BR2_TARGET_XILINX_PREBUILT_KRIA
-+	bool "kria"
-+
-+config BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	bool "versal"
-+
-+endchoice
-+
-+config BR2_TARGET_XILINX_PREBUILT_FAMILY
-+	string
-+	default "zynqmp" if BR2_TARGET_XILINX_PREBUILT_ZYNQMP
-+	default "kria" if BR2_TARGET_XILINX_PREBUILT_KRIA
-+	default "versal" if BR2_TARGET_XILINX_PREBUILT_VERSAL
-+
-+config BR2_TARGET_XILINX_PREBUILT_BOARD
-+	string "board name"
-+	default "zcu102" if BR2_TARGET_XILINX_PREBUILT_ZYNQMP
-+	default "kr260" if BR2_TARGET_XILINX_PREBUILT_KRIA
-+	default "vck190" if BR2_TARGET_XILINX_PREBUILT_VERSAL
-+	help
-+	  Name of Xilinx target board.
-+	  Used for installing the appropriate firmware.
-+
-+endif # BR2_TARGET_XILINX_PREBUILT
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.hash b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-new file mode 100644
-index 0000000000..c955cd79f5
---- /dev/null
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-new file mode 100644
-index 0000000000..eb78ed10cd
---- /dev/null
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# xilinx-prebuilt
-+#
-+################################################################################
-+
-+XILINX_PREBUILT_VERSION = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_VERSION))
-+XILINX_PREBUILT_SITE = $(call github,Xilinx,soc-prebuilt-firmware,$(XILINX_PREBUILT_VERSION))
-+XILINX_PREBUILT_LICENSE = MIT
-+XILINX_PREBUILT_LICENSE_FILES = LICENSE
-+XILINX_PREBUILT_INSTALL_TARGET = NO
-+XILINX_PREBUILT_INSTALL_IMAGES = YES
-+
-+XILINX_PREBUILT_FAMILY = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_FAMILY))
-+XILINX_PREBUILT_BOARD = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_BOARD))
-+
-+XILINX_PREBUILT_BOARD_DIR = $(@D)/$(XILINX_PREBUILT_BOARD)-$(XILINX_PREBUILT_FAMILY)
-+
-+ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
-+# We need the *.pdi glob, because the file has different names for the
-+# different boards, but htere is only one, and it has to be named
-+# vpl_gen_fixed.pdi when installed.
-+define XILINX_PREBUILT_INSTALL_VERSAL
-+	$(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/plm.elf \
-+		$(BINARIES_DIR)/plm.elf
-+	$(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf \
-+		$(BINARIES_DIR)/psmfw.elf
-+	$(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/*.pdi \
-+		$(BINARIES_DIR)/vpl_gen_fixed.pdi
-+endef
-+else # BR2_TARGET_XILINX_PREBUILT_VERSAL
-+define XILINX_PREBUILT_INSTALL_OTHERS
-+	$(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/pmufw.elf \
-+		$(BINARIES_DIR)/pmufw.elf
-+endef
-+endif # BR2_TARGET_XILINX_PREBUILT_VERSAL
-+
-+define XILINX_PREBUILT_INSTALL_IMAGES_CMDS
-+	$(XILINX_PREBUILT_INSTALL_VERSAL)
-+	$(XILINX_PREBUILT_INSTALL_OTHERS)
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/.checkpackageignore b/.checkpackageignore
+index dd1fd31e86..34cdc40675 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -345,11 +345,6 @@ configs/visionfive_defconfig lib_defconfig.ForceCheckHash
+ configs/wandboard_defconfig lib_defconfig.ForceCheckHash
+ configs/warp7_defconfig lib_defconfig.ForceCheckHash
+ configs/zynqmp_kria_kd240_defconfig lib_defconfig.ForceCheckHash
+-configs/zynqmp_kria_kr260_defconfig lib_defconfig.ForceCheckHash
+-configs/zynqmp_kria_kv260_defconfig lib_defconfig.ForceCheckHash
+-configs/zynqmp_zcu102_defconfig lib_defconfig.ForceCheckHash
+-configs/zynqmp_zcu104_defconfig lib_defconfig.ForceCheckHash
+-configs/zynqmp_zcu106_defconfig lib_defconfig.ForceCheckHash
+ linux/5.10.162-cip24-rt10/0001-arch-microblaze-mm-init.c-fix-build.patch lib_patch.Upstream
+ package/18xx-ti-utils/0001-plt.h-fix-build-with-gcc-10.patch lib_patch.Upstream
+ package/4th/0001-avoid-regen-during-install.patch lib_patch.Upstream
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index 3bf269ab6b..24fdea9c30 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -31,10 +31,15 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/kr260-kria/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kr260/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
++BR2_TARGET_XILINX_PREBUILT_KRIA=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index 7b402e032c..a16da66e38 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -31,10 +31,16 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/kv260-kria/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
++BR2_TARGET_XILINX_PREBUILT_BOARD="kv260"
++BR2_TARGET_XILINX_PREBUILT_KRIA=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index f40002f6d9..3f1726a13f 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -30,10 +30,14 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/zcu102-zynqmp/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index ef9c9bad49..b6d943333f 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -30,10 +30,15 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/zcu104-zynqmp/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu104/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
++BR2_TARGET_XILINX_PREBUILT_BOARD="zcu104"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 07c595436f..c10ec70ed8 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -30,10 +30,15 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2024.1/zcu106-zynqmp/pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
++BR2_TARGET_XILINX_PREBUILT_BOARD="zcu106"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
