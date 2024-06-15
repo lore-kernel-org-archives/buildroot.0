@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8659C27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 18:33:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45488C27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 18:34:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A70E760716;
-	Sat, 15 Jun 2024 18:33:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DF85607AF;
+	Sat, 15 Jun 2024 18:34:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eSR5QsBiR-_h; Sat, 15 Jun 2024 18:33:07 +0000 (UTC)
+ id PG8C1LONWFym; Sat, 15 Jun 2024 18:34:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF9426079D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CBFE606B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF9426079D;
-	Sat, 15 Jun 2024 18:33:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96D931BF2FD
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 18:33:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CBFE606B0;
+	Sat, 15 Jun 2024 18:34:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B3BA1BF2FD
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 18:34:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83C3E406BB
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 18:33:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 55DA8606B0
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 18:34:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JVa0EhABn57D for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 18:33:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 68ACXBzsaI40 for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 18:34:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
  helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 94FF240661
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94FF240661
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6827F6063C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6827F6063C
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 94FF240661
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 18:33:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1770F240004;
- Sat, 15 Jun 2024 18:32:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6827F6063C
+ for <buildroot@buildroot.org>; Sat, 15 Jun 2024 18:34:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5866B240004;
+ Sat, 15 Jun 2024 18:34:14 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sIYCw-000iaO-1n;
- Sat, 15 Jun 2024 20:32:58 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sIYE9-000ib4-2T;
+ Sat, 15 Jun 2024 20:34:13 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 References: <cover.1717609998.git.yann.morin.1998@free.fr>
- <9f305da28a68ac346fc805d62843db711a0bc9fc.1717609998.git.yann.morin.1998@free.fr>
-Date: Sat, 15 Jun 2024 20:32:58 +0200
-In-Reply-To: <9f305da28a68ac346fc805d62843db711a0bc9fc.1717609998.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Wed, 5 Jun 2024 19:53:20 +0200")
-Message-ID: <87tthuqco5.fsf@dell.be.48ers.dk>
+ <14bb90c566707dbbe9c66b7cf5ae2a05413eeb40.1717609998.git.yann.morin.1998@free.fr>
+Date: Sat, 15 Jun 2024 20:34:13 +0200
+In-Reply-To: <14bb90c566707dbbe9c66b7cf5ae2a05413eeb40.1717609998.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Wed, 5 Jun 2024 19:53:21 +0200")
+Message-ID: <87plsiqcm2.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 08/10 v2] support/download/cvs: use
+Subject: Re: [Buildroot] [PATCH 09/10 v2] support/scripts/apply-patches: use
  appropriate TAR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -70,7 +70,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: "Maier, Brandon L Collins" <Brandon.Maier@collins.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -79,8 +80,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: "Maier, Brandon L Collins" <Brandon.Maier@collins.com>
 
-Committed to 2024.02.x, thanks.
+ > ---
+ > Changes v1 -> v2:
+ >   - use ${TAR}, not $(TAR)  (Brandon)
+ > ---
+ >  package/Makefile.in              | 2 +-
+ >  support/scripts/apply-patches.sh | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
+
+ > diff --git a/package/Makefile.in b/package/Makefile.in
+ > index f415e55f84..9dc66bc674 100644
+ > --- a/package/Makefile.in
+ > +++ b/package/Makefile.in
+ > @@ -231,7 +231,7 @@ endif
+ >  INSTALL := $(shell which install || type -p install)
+ >  UNZIP := $(shell which unzip || type -p unzip) -q
+ 
+ > -APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
+ > +APPLY_PATCHES = TAR=$(TAR) PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
+ 
+ >  HOST_CPPFLAGS  = -I$(HOST_DIR)/include
+ >  HOST_CFLAGS   ?= -O2
+ > diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+ > index 6da83f6826..4e633b23be 100755
+ > --- a/support/scripts/apply-patches.sh
+ > +++ b/support/scripts/apply-patches.sh
+ > @@ -146,7 +146,7 @@ function scan_patchdir {
+ >                  unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
+ >                  rm -rf "$unpackedarchivedir" 2> /dev/null
+ >                  mkdir "$unpackedarchivedir"
+ > -                tar -C "$unpackedarchivedir" -xaf "${path}/$i"
+ > +                ${TAR} -C "$unpackedarchivedir" -xaf "${path}/$i"
+
+This means that you can not directly/manually execute
+apply-patches.sh. I am not sure if there is any use case for doing so,
+but as it is not really fixing anything I have NOT backported it to
+2024.02.x.
 
 -- 
 Bye, Peter Korsgaard
