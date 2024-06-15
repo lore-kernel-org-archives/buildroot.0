@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46DCEC27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:07:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8FABC27C7B
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 15:07:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1BDB484532;
-	Sat, 15 Jun 2024 15:07:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 977EA845A6;
+	Sat, 15 Jun 2024 15:07:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id luuQl536Qbzf; Sat, 15 Jun 2024 15:07:18 +0000 (UTC)
+ id QQXJPwTdyA64; Sat, 15 Jun 2024 15:07:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8CEF845A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8629B845B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8CEF845A5;
-	Sat, 15 Jun 2024 15:07:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DCC51BF301
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:07:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8629B845B0;
+	Sat, 15 Jun 2024 15:07:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 427381BF301
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26E42845A0
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:07:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C597405ED
+ for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 15:07:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nqv0ouoyyTDb for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 15:07:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ei-9jNH9w3SF for <buildroot@lists.busybox.net>;
+ Sat, 15 Jun 2024 15:07:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7075482768
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 377A1405A8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7075482768
- for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:07:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 377A1405A8
+ for <buildroot@uclibc.org>; Sat, 15 Jun 2024 15:07:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 5C1D78755D; Sat, 15 Jun 2024 15:07:15 +0000 (UTC)
+ id 2620B82860; Sat, 15 Jun 2024 15:07:19 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 15 Jun 2024 15:07:14 +0000
+Date: Sat, 15 Jun 2024 15:07:18 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -56,15 +56,15 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution cc
-Message-ID: <bug-15446-163-TTCL9fNSiw@https.bugs.busybox.net/>
-In-Reply-To: <bug-15446-163@https.bugs.busybox.net/>
-References: <bug-15446-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cc resolution bug_status
+Message-ID: <bug-15451-163-xYfxJj0Ybq@https.bugs.busybox.net/>
+In-Reply-To: <bug-15451-163@https.bugs.busybox.net/>
+References: <bug-15451-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15446] snps_arc700_axs101_defconfig;
- msort.c:200: Error: opcode 'dmb' not supported for target arc700
+Subject: [Buildroot] [Bug 15451] pcengines_apu2_defconfig: possibly
+ truncated output in
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,15 +81,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15446
+https://bugs.busybox.net/show_bug.cgi?id=15451
 
 Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |MOVED
                  CC|                            |yann.morin.1998@free.fr
+         Resolution|---                         |MOVED
+             Status|NEW                         |RESOLVED
 
 --- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 Thank you for your report.
