@@ -4,74 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CBA6C27C53
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jun 2024 14:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 098BAC27C53
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jun 2024 15:41:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53BD740597;
-	Sun, 16 Jun 2024 14:32:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76AAB4054D;
+	Sun, 16 Jun 2024 15:41:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2vry5WHT86hT; Sun, 16 Jun 2024 14:32:08 +0000 (UTC)
+ id qt2Y_geDj4Cj; Sun, 16 Jun 2024 15:41:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39B9F40575
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3411A4055A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39B9F40575;
-	Sun, 16 Jun 2024 14:32:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 840121BF36E
- for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 14:32:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3411A4055A;
+	Sun, 16 Jun 2024 15:41:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F4331BF2C0
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 15:41:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7123A60657
- for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 14:32:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7BF074055A
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 15:41:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ju8ilzEYr4UR for <buildroot@lists.busybox.net>;
- Sun, 16 Jun 2024 14:32:04 +0000 (UTC)
-X-Greylist: delayed 760 seconds by postgrey-1.37 at util1.osuosl.org;
- Sun, 16 Jun 2024 14:32:02 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 99B1360618
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99B1360618
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8haAsYRZrssl for <buildroot@lists.busybox.net>;
+ Sun, 16 Jun 2024 15:41:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a02:598:128:8a00::1000:4ca; helo=mxd-1-4ca.seznam.cz;
- envelope-from=havran.jan@email.cz; receiver=<UNKNOWN> 
-Received: from mxd-1-4ca.seznam.cz (mxd-1-4ca.seznam.cz
- [IPv6:2a02:598:128:8a00::1000:4ca])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 99B1360618
- for <buildroot@buildroot.org>; Sun, 16 Jun 2024 14:32:02 +0000 (UTC)
-Received: from email.seznam.cz by smtpc-mxd-545d6b795f-xc798
- (smtpc-mxd-545d6b795f-xc798 [2a02:598:128:8a00::1000:4ca])
- id 6f0e6310efe9098d6d7a5d7e; Sun, 16 Jun 2024 16:32:00 +0200 (CEST)
-Received: from arch-zen.localdomain (havhav.seb.rev-fortech.cz [213.250.223.2])
- by smtpd-relay-5b77f69495-g4m7t (szn-email-smtpd/2.0.19) with ESMTPA
- id a1900334-1689-46d0-b6c6-baae256bb545;
- Sun, 16 Jun 2024 16:19:18 +0200
-Date: Sun, 16 Jun 2024 16:19:14 +0200
-From: Jan Havran <havran.jan@email.cz>
+ client-ip=2a00:1450:4864:20::52c; helo=mail-ed1-x52c.google.com;
+ envelope-from=alex.suykov@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4908E4054D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4908E4054D
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4908E4054D
+ for <buildroot@buildroot.org>; Sun, 16 Jun 2024 15:41:36 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id
+ 4fb4d7f45d1cf-57c76497cefso4214778a12.1
+ for <buildroot@buildroot.org>; Sun, 16 Jun 2024 08:41:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1718552494; x=1719157294;
+ h=content-disposition:mime-version:message-id:subject:to:from:date
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=dSqdv9tilncYroz6M6gqYfxAkduqa/TnwUNMpxRTWDA=;
+ b=iv2lLDpykTWzWMUBnTOIZIwHXBK3waLosqpkwGtbIoMjS5szXHsN0EcPu9Y3GjXYQc
+ 1ZZ/ofP867rQXRGw+p3C3oj01d1UJvMRPaw73XPznbgt4OAN54g03IfIa8SasEH17KM3
+ RGt+wue5FMsbxT/abAyTuvqu4SZiWyYZ6nXVGhOSwhUNSYInny2s3O1vkJStPP+fKJIQ
+ q1JI0PKd6pV2HxZF8iBpJn4zefmJSWyK1Y4k2/Yhamv6PJIegJMNhd8Cd5N3Gfy3dtCN
+ d1XLzPYwKPIybLU/ygI7AQDMxlIvIBqvfI2xFd85yWQQ7Pnbk/FiESstdJw4ckkNZeDu
+ AycA==
+X-Gm-Message-State: AOJu0Yy9VTlS5JEj1jIR7knOuszgXB8lxDXfZ/7ewJN0J7WNyZ+ov9ZR
+ KvIYJszkOCkW9/RZN1Wc127jRlCmbBQhKjFvucHzhQsyfTRwZBF4xsGIAA==
+X-Google-Smtp-Source: AGHT+IERDZFkQw2aM/ZulPeFIVwMJy968PHn+qppgMXevyqDW2W9Xx0/pH9xGbX4ZrhqxiNh3jMgyQ==
+X-Received: by 2002:a05:6402:8c9:b0:57c:cdb5:cd68 with SMTP id
+ 4fb4d7f45d1cf-57ccdb5d22dmr2747657a12.10.1718552493471; 
+ Sun, 16 Jun 2024 08:41:33 -0700 (PDT)
+Received: from localhost ([46.119.184.249]) by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-57cb72da713sm5164239a12.30.2024.06.16.08.41.32
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 16 Jun 2024 08:41:33 -0700 (PDT)
+Date: Sun, 16 Jun 2024 18:41:31 +0300
+From: Alex Suykov <alex.suykov@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <Zm70YkR_roWwY-ms@arch-zen.localdomain>
+Message-ID: <Zm8HqxlyfhIbYhdt@latitude.localdomain>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=email.cz; s=szn20221014; t=1718548320;
- bh=btOn8XxdxkwhBQ+qfcFDyM+EFC5NEK54Fxa3vglddqA=;
- h=Received:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
- Content-Type:Content-Disposition;
- b=S7KPjto4I2+sYpWd8aBzJ9IoT5+bBoyr8tyzbfd/hbUB1+UOrZsHk9Bbvj1Ccfebx
- FWRB7Yse15LHi7+qVuUZWqHqxvIjziGVecKMxcXQh9A5ReUI+6C+mqGRATcOwDJ8Gx
- DNPDN1OBjYxRws3nqz7JuYKM8yPUzFGO+7ZU2N5sG1VOHCib0ZeK29M6sxGopGPXL/
- t5+vtkCq87RKEA4pRaSn36RoLWUK7CrYYbSFKfCtqE25A/EvxoAEL+uXN9A9iPh+2z
- bVxfp5/fK+MdnpPXiEKeBJKF4F0cL3K8JTl5uAE17IEi2ZGvJmVPPro5k1SygDqrXt
- +WJvxjOb3yXAw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1718552494; x=1719157294; darn=buildroot.org;
+ h=content-disposition:mime-version:message-id:subject:to:from:date
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=dSqdv9tilncYroz6M6gqYfxAkduqa/TnwUNMpxRTWDA=;
+ b=XIjvD3C8DJjmsHN/X3vWZECCyOT6u3Uk5HCvcW7a631Y4KIDV1PmHSJdQCA7c5dLpx
+ 6pEwG39ati9f5nJ5P21zQNsG9FtpgcU0fCoQ8/OQ9ac1rkZdCSjtY+nTWvS8mwH6Of+K
+ /7jJKx2dbOSoJZA2P6s2dXuE3pjAs89Bl5N7PpbEzmEGlA7J8/ArY1dePJzK07nH/GCd
+ o9MiG6E1A40W3zA2XDOX0b61u4opH+qV3hddggd9pX6ykK9apu7LDWGSo+Y2igko8DQW
+ +1yC6xceIAo9JjTyhgqvtBaWxiNsijL14lGo+QSVo8h2swHO9iLKYV8+UVGig8hp7HpR
+ zzEA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=email.cz
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=email.cz header.i=@email.cz header.a=rsa-sha256
- header.s=szn20221014 header.b=S7KPjto4
-Subject: [Buildroot] [PATCH 1/1] package/ubus: remove obsolete systemd option
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=XIjvD3C8
+Subject: [Buildroot] [PATCH] vboot-utils: fix failing builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,41 +99,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ENABLE_SYSTEMD option has been removed from ubus by commit:
-96ab0b3032f5 ubusd: remove systemd socket activation support
+A typo in the RSA patch and a missing include, which current gcc
+apparently treats as hard errors and earlier ones probably didn't.
 
-Signed-off-by: Jan Havran <havran.jan@email.cz>
----
- package/ubus/ubus.mk | 7 -------
- 1 file changed, 7 deletions(-)
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 
-diff --git a/package/ubus/ubus.mk b/package/ubus/ubus.mk
-index 1f9891411a..cc2ed81786 100644
---- a/package/ubus/ubus.mk
-+++ b/package/ubus/ubus.mk
-@@ -25,13 +25,6 @@ else
- UBUS_CONF_OPTS += -DBUILD_LUA=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--UBUS_DEPENDENCIES += systemd
--UBUS_CONF_OPTS += -DENABLE_SYSTEMD=ON
--else
--UBUS_CONF_OPTS += -DENABLE_SYSTEMD=OFF
--endif
--
- ifeq ($(BR2_PACKAGE_UBUS_EXAMPLES),y)
- UBUS_CONF_OPTS += -DBUILD_EXAMPLES=ON
- else
--- 
-2.45.2
-
+diff --git a/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch b/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch
+index 86374ca854..259b2bb7b4 100644
+--- a/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch
++++ b/package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch
+@@ -35,7 +35,7 @@ index 9f98ccc..c2d01a5 100644
+  /* Private key data */
+  typedef struct VbPrivateKey {
+ -  RSA* rsa_private_key;  /* Private key data */
+-+  struct rsa_rt* rsa_private_key;  /* Private key data */
+++  struct rsa_st* rsa_private_key;  /* Private key data */
+    uint64_t algorithm;    /* Algorithm to use when signing */
+  } VbPrivateKey;
+  
+diff --git a/package/vboot-utils/0008-firmware-stub-assert.patch b/package/vboot-utils/0008-firmware-stub-assert.patch
+new file mode 100644
+index 0000000000..01fc2c5abd
+--- /dev/null
++++ b/package/vboot-utils/0008-firmware-stub-assert.patch
+@@ -0,0 +1,17 @@
++Missing include, assert() is used without <assert.h>.
++
++Most likely it was getting included indirectly somehow but that
++changed in some recent glibc version so it fails to compile now.
++
++Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++
++--- a/firmware/stub/tpm_lite_stub.c
+++++ b/firmware/stub/tpm_lite_stub.c
++@@ -25,6 +25,7 @@
++ #include <sys/stat.h>
++ #include <time.h>
++ #include <unistd.h>
+++#include <assert.h>
++ 
++ 
++ #define TPM_DEVICE_PATH "/dev/tpm0"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
