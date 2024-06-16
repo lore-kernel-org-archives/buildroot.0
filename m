@@ -4,58 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4C8C27C79
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jun 2024 12:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15B60C27C79
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jun 2024 12:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38ED0405B0;
-	Sun, 16 Jun 2024 12:43:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21DCF40313;
+	Sun, 16 Jun 2024 12:53:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 82ElRUYhqkc8; Sun, 16 Jun 2024 12:43:35 +0000 (UTC)
+ id X18Lfo3mZ6vF; Sun, 16 Jun 2024 12:53:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09B254028D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95BC940579
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09B254028D;
-	Sun, 16 Jun 2024 12:43:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BC59B1BF2C5
- for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 12:43:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95BC940579;
+	Sun, 16 Jun 2024 12:53:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 45C0C1BF2C7
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 12:53:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A82BF81E9A
- for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 12:43:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2779A40579
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 12:53:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sOi7uZ0SolcU for <buildroot@lists.busybox.net>;
- Sun, 16 Jun 2024 12:43:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B71D781E9F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B71D781E9F
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B71D781E9F
- for <buildroot@buildroot.org>; Sun, 16 Jun 2024 12:43:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 544E340003;
- Sun, 16 Jun 2024 12:43:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1sIpEC-002u6o-1z;
- Sun, 16 Jun 2024 14:43:24 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 16 Jun 2024 14:43:22 +0200
-Message-Id: <20240616124322.692320-2-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240616124322.692320-1-peter@korsgaard.com>
-References: <20240616124322.692320-1-peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id simSMNjJUegg for <buildroot@lists.busybox.net>;
+ Sun, 16 Jun 2024 12:53:16 +0000 (UTC)
+X-Greylist: delayed 322 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 16 Jun 2024 12:53:15 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 10B0740313
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B0740313
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 10B0740313
+ for <buildroot@buildroot.org>; Sun, 16 Jun 2024 12:53:15 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id A3DBCBDE5CB1;
+ Sun, 16 Jun 2024 14:47:50 +0200 (CEST)
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Date: Sun, 16 Jun 2024 12:47:50 +0000
+From: Andreas Ziegler <br015@umbiko.net>
+To: James Knight <james.d.knight@live.com>
+In-Reply-To: <mailman.7053.1718427304.112976.buildroot@buildroot.org>
+References: <mailman.7053.1718427304.112976.buildroot@buildroot.org>
+Message-ID: <84ac29e17f0f002f287bad75081ea73c@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 1.0.3 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1718542070; bh=WEUrR5PWYJCAvX+OomRi50nfS/0Vq6EJizstGDfILlg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=eA8CcpQNigvJ+rb3b/8sSv9DduHhB48SrAaEDDSKrw5Il/Uwhfe3kMZMgqobPDcJv
+ 1bsKraEXNXmxsoqz5T7E+JkKqhDKMdDNeuKjjI68/yR8kn/A4E2yYqKcb982nf3t0i
+ zE8tTRaTSYYTNjBPyvAeJf7n+3bQnmPYxgMAugGc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH 2/2] package/glibc: security bump to 2.39-74 for
- post-2.39 security fixes
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=eA8CcpQN
+Subject: Re: [Buildroot] inquiry | configuring for a specific linux lts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,145 +76,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
+Hi James,
 
-  GLIBC-SA-2024-0004:
-    ISO-2022-CN-EXT: fix out-of-bound writes when writing escape
-    sequence (CVE-2024-2961)
+also probably not what you are looking for; and does not incorporate the 
+hash topic, since I use CUSTOM_KERNEL_VERSION ...
 
-  GLIBC-SA-2024-0005:
-    nscd: Stack-based buffer overflow in netgroup cache (CVE-2024-33599)
+On 2024-06-14 14:35, James Knight wrote:
+> 
+> Trying to figure out the best way with Buildroot to target a specific
+> Linux LTS branch for images. At this time, using a setup that has an
+> external toolchain build (v6.6.x Linux headers) and inside each
+> project configurations a `BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE`
+> option is specified to a value of (for example) `6.6.32`. As Buildroot
+> evolves, it may update its own configuration and Linux hashes to a
+> more recent version (e.g. v6.6.33). In turn, when updating the
+> Buildroot version to use, there is a need to update all configurations
+> to use the most recent LTS version.
+> 
+> I am looking for a capability somewhat provided by the existing
+> `BR2_LINUX_KERNEL_LATEST_VERSION` option, but targeting a specific LTS
+> version. For example:
+> 
+>     BR2_LINUX_KERNEL_LATEST_VERSION
+>     BR2_LINUX_KERNEL_LATEST_LTS_0606_VERSION
+>     BR2_LINUX_KERNEL_LATEST_LTS_0601_VERSION
+>     BR2_LINUX_KERNEL_LATEST_LTS_0516_VERSION
+>     ...
+> 
+> Then these configurations can use whatever the latest LTS version of a
+> configured major-minor without updating.
 
-  GLIBC-SA-2024-0006:
-    nscd: Null pointer crash after notfound response (CVE-2024-33600)
 
-  GLIBC-SA-2024-0007:
-    nscd: netgroup cache may terminate daemon on memory allocation
-    failure (CVE-2024-33601)
+I used to use a script to bulk-replace specific kernel versions, but 
+recently switched to a few definitions in BR2_EXTERNAL/Config.in:
 
-  GLIBC-SA-2024-0008:
-    nscd: netgroup cache assumes NSS callback uses in-buffer strings
-    (CVE-2024-33602)
 
-In addition, the following bugs are fixed:
+# latest release candidate
+if BR2_TOOLCHAIN_HEADERS_LATEST
 
-  [19622] network: Support aliasing with struct sockaddr
-  [30701] time: getutxent misbehaves on 32-bit x86 when _TIME_BITS=64
-  [30994] REP MOVSB performance suffers from page aliasing on Zen 4
-  [31339] libc: arm32 loader crash after cleanup in 2.36
-  [31325] mips: clone3 is wrong for o32
-  [31335] math: Compile glibc with -march=x86-64-v3 should disable FMA4
-    multi-arch version
-  [31402] libc: clone (NULL, NULL, ...) clobbers %r7 register on
-    s390{,x}
-  [31479] libc: Missing #include <sys/rseq.h> in sched_getcpu.c may
-    result in a loss of rseq acceleration
-  [31316] build: Fails test misc/tst-dirname "Didn't expect signal from
-    child: got `Illegal instruction'" on non SSE CPUs
-  [31371] x86-64: APX and Tile registers aren't preserved in ld.so
-    trampoline
-  [31372] dynamic-link: _dl_tlsdesc_dynamic doesn't preserve all caller-
-    saved registers
-  [31429] build: Glibc failed to build with -march=x86-64-v3
-  [31501] dynamic-link: _dl_tlsdesc_dynamic_xsavec may clobber %rbx
-  [31640] dynamic-link: POWER10 ld.so crashes in
-    elf_machine_load_address with GCC 14
-  [31676] Configuring with CC="gcc -march=x86-64-v3"
-    --with-rtld-early-cflags=-march=x86-64 results in linker failure
-  [31677] nscd: nscd: netgroup cache: invalid memcpy under low
-    memory/storage conditions
-  [31678] nscd: nscd: Null pointer dereferences after failed netgroup
-    cache insertion
-  [31679] nscd: nscd: netgroup cache may terminate daemon on memory
-    allocation failure
-  [31680] nscd: nscd: netgroup cache assumes NSS callback uses in-buffer
-    strings
-  [31686] dynamic-link: Stack-based buffer overflow in
-    parse_tunables_string
-  [31719] dynamic-link: --enable-hardcoded-path-in-tests doesn't work
-    with -Wl,--enable-new-dtags
-  [31782] Test build failure with recent GCC trunk
-    (x86/tst-cpu-features-supports.c:69:3: error: parameter to builtin
-    not valid: avx5124fmaps)
-  [31798] pidfd_getpid.c is miscompiled by GCC 6.4
-  [31867] build: "CPU ISA level is lower than required" on SSE2-free
-    CPUs
-  [31883] build: ISA level support configure check relies on bashism /
-    is otherwise broken for arithmetic
+config NABLA_LINUX_VERSION
+	string
+	default "6.10-rc3"
+config NABLA_LINUX_PATCH
+	string
+	default 
+"https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/6.10/patch-6.10-rc3-rt5.patch.xz"
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/glibc/glibc.hash       |  2 +-
- package/glibc/glibc.mk         | 14 +++++++++++++-
- package/localedef/localedef.mk |  2 +-
- 3 files changed, 15 insertions(+), 3 deletions(-)
+endif # BR2_TOOLCHAIN_HEADERS_LATEST
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 94b7819a30..aaf7848a7c 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  2ba018b344e0e8330dcadd6130f4174f0fc2502b2e032210345e0e5a2f7ed12e  glibc-2.39-5-ge0910f1d3278f05439fb434ee528fc9be1b6bd5e.tar.gz
-+sha256  2858e8e47c4c0df32b526c56d5590ec939e8178201ee9526bb070999ce4aa1f2  glibc-2.39-74-g198632a05f6c7b9ab67d3331d8caace9ceabb685.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 8bc4cd4666..db6fa55819 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.39-5-ge0910f1d3278f05439fb434ee528fc9be1b6bd5e
-+GLIBC_VERSION = 2.39-74-g198632a05f6c7b9ab67d3331d8caace9ceabb685
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
-@@ -24,6 +24,18 @@ GLIBC_CPE_ID_VENDOR = gnu
- # allow proper matching with the CPE database.
- GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
- 
-+# Fixed by glibc-2.39-31-g31da30f23cddd36db29d5b6a1c7619361b271fb4
-+GLIBC_IGNORE_CVES += CVE-2024-2961
-+
-+# Fixed by glibc-2.39-35-g1263d583d2e28afb8be53f8d6922f0842036f35d
-+GLIBC_IGNORE_CVES += CVE-2024-33599
-+
-+# Fixed by glibc-2.39-37-gc99f886de54446cd4447db6b44be93dabbdc2f8b
-+GLIBC_IGNORE_CVES += CVE-2024-33600
-+
-+# Fixed by glibc-2.39-38-ga9a8d3eebb145779a18d90e3966009a1daa63cd
-+GLIBC_IGNORE_CVES += CVE-2024-33601 CVE-2024-33602
-+
- # All these CVEs are considered as not being security issues by
- # upstream glibc:
- #  https://security-tracker.debian.org/tracker/CVE-2010-4756
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index f304ba8021..6940900f8d 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.39-5-ge0910f1d3278f05439fb434ee528fc9be1b6bd5e
-+LOCALEDEF_VERSION = 2.39-74-g198632a05f6c7b9ab67d3331d8caace9ceabb685
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
--- 
-2.39.2
+# stable kernel for 64-bit systems
+if BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6 && (BR2_aarch64 || 
+BR2_x86_64)
 
+config NABLA_LINUX_VERSION
+	string
+	default "6.6.33"
+
+config NABLA_LINUX_PATCH
+	string
+	default 
+"https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/6.6/patch-6.6.32-rt32.patch.xz"
+
+endif # BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6
+
+# stable kernel for older architectures
+if BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10 && BR2_i386
+
+config NABLA_LINUX_VERSION
+	string
+	default "5.10.218" if BR2_i386
+
+config NABLA_LINUX_PATCH
+	string
+	default 
+"https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/5.10/patch-5.10.218-rt110.patch.xz"
+
+endif # BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10
+
+
+Variables are referred in the project configuration:
+
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="$(NABLA_LINUX_VERSION)"
+BR2_LINUX_KERNEL_PATCH="$(NABLA_LINUX_PATCH)"
+
+Not elegant, but at least allows central management of the kernel 
+version(s) for all projects.
+
+Kind regards,
+Andreas
+
+
+> I imagine this may not be implemented since these additional
+> configuration options may be a bit too much to maintain. Assuming such
+> an approach is not desired, I wonder if it may be possible to support
+> a `BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE` option where users can
+> define a value such as `6.6.` (or `6.6.x` or whatever) and have
+> Buildroot use whatever the most recent version it "supports" (e.g. has
+> a hash reference).
+> 
+> For now, it seems the tasks needed to handle an updated Buildroot
+> framework with a custom Linux version is to first have projects
+> track/patch the hash version of Linux any time a custom version is
+> set; and update both the version and patch-hash in a board
+> configuration when wanting to update.
+> 
+> If I am overlooking another way to approach this, please let me know.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
