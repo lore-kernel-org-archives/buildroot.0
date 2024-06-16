@@ -1,75 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 355E9C27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jun 2024 21:26:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70BE9C27C6E
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jun 2024 06:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF8398112E;
-	Sat, 15 Jun 2024 21:26:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BF6B6069A;
+	Sun, 16 Jun 2024 06:55:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bP-Veh0t9ON4; Sat, 15 Jun 2024 21:26:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TDKSQA-oZOz9; Sun, 16 Jun 2024 06:55:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF57E812E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 094FB606A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF57E812E7;
-	Sat, 15 Jun 2024 21:26:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 52E271BF2F8
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 21:26:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 094FB606A8;
+	Sun, 16 Jun 2024 06:55:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B5B1B1BF2CE
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 06:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 409D4811C1
- for <buildroot@lists.busybox.net>; Sat, 15 Jun 2024 21:26:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2504406A0
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 06:55:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M0IpCt6PhMtv for <buildroot@lists.busybox.net>;
- Sat, 15 Jun 2024 21:26:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2885E8112E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2885E8112E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2885E8112E
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 21:26:04 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3CF7C13F86E;
- Sat, 15 Jun 2024 23:25:55 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 15 Jun 2024 23:25:55 +0200
-Date: Sat, 15 Jun 2024 23:25:55 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Neal Frager <neal.frager@amd.com>
-Message-ID: <Zm4G42bruKUQ40Y-@landeda>
-References: <20240613061423.1737631-1-neal.frager@amd.com>
- <20240613061423.1737631-5-neal.frager@amd.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uoIgvLcQzxqb for <buildroot@lists.busybox.net>;
+ Sun, 16 Jun 2024 06:55:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::b2b; helo=mail-yb1-xb2b.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AFB4F4069D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFB4F4069D
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com
+ [IPv6:2607:f8b0:4864:20::b2b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AFB4F4069D
+ for <buildroot@buildroot.org>; Sun, 16 Jun 2024 06:55:31 +0000 (UTC)
+Received: by mail-yb1-xb2b.google.com with SMTP id
+ 3f1490d57ef6-dff2df7de4aso744528276.2
+ for <buildroot@buildroot.org>; Sat, 15 Jun 2024 23:55:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1718520931; x=1719125731;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wSRtADwyAQ6ZI0IUjwWbntFhcvjSZQGRC05wrZcLL5U=;
+ b=TPUz7co+LDSKFJF0cwCL3qDrKVZAIE4KLNp1uxcM46x3001ly8+6G1hcWw1y+7rv9X
+ 3teEmoi6g79ZZ/CNh80ssXoWst6WxbRYtO7RZN2wRiXM685n7yO2iy5eQvcXbcVEN0iR
+ IHRUkthGLJi5c4ntkK7jhAR45rwfv1q79acl7jX0DG7BgLrMMNwqOVqHrdXCwTNo4KsG
+ 01eVSBH2Rb8EZ+xWd2L/pZ0mbzq2zpP+6A2q5SOg7ffX/kF9vpJoBPe4thaSr4NZ54UF
+ ZlLYKKqneKGnppYriXYrhJj2fJS5mYXv+wtxCu2e0lZTIfDPxsnM8K0RzcQGdS9t2I7o
+ 6Uyw==
+X-Gm-Message-State: AOJu0Yxy1PR+9INnEWnvo9LBwsnSdy7OtP1/gfWuhRQipV/ZDzmi4D+p
+ aJ3Eboyq6f6vOOMGgdc116+WmjFgCpR7sneOXwTIqcSYIp04coB3hCwkWfLKtflUdme3xkfNSlX
+ QiwVXHLUij+W/Zwfu4XUlRVRCB0o=
+X-Google-Smtp-Source: AGHT+IFx4P4ioZIPcd2Heev691Gr75g52IFwx+ax7X+jLFyzfi8o5Emj41YFdVEt7ARS82uU0m0Q+7xfZlz9Gd/y5ag=
+X-Received: by 2002:a25:c70c:0:b0:dff:2f86:defd with SMTP id
+ 3f1490d57ef6-dff2f86e5cbmr2077327276.53.1718520930793; Sat, 15 Jun 2024
+ 23:55:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240613061423.1737631-5-neal.frager@amd.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1718486762;
- bh=2t5Ag8FpclyKq1yb+tEzgFs42kp/OrzuZjUeREHl1+E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=hFGma1J3ik8muEhaoi3fLWwiJesPgY1Xc3ziiUJqJWWcbPAY+2zF+y4xXTVTciaqI
- VglXc4og4u+r5Wl/b9CdSfl6tC3X2KLEcqq5AgKYKxuGuvdARqAcxt1yepb9cLwHzz
- 3wJmio/iHQpu4IWr1EdTIEg7n8N3E8E48mdSL4qyAg7WhE3KxsOdLSxDhIuo3pE73A
- BAD483LLFEIhsvSuJykqRK0ZXYB8ihali4FWqpFzmDxTtVwbZ7qupwnq8cjmS6Mao9
- G7/JIkPVoGQvWXOo+YoacslzDJNm9KN07jqrEk7WzB6b+38HD4HwZrN5zrkk38AiNE
- E31EtBtvK9EKA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+References: <20240531151325.2443323-9-roy.kollen.svendsen@akersolutions.com>
+ <20240603115206.3583474-1-roy.kollen.svendsen@akersolutions.com>
+ <20240603115206.3583474-9-roy.kollen.svendsen@akersolutions.com>
+ <CAP07Bnk1GgNw_Ltz1Y2e52PvPBL8CLLM0KzeavNbDvGWQ+EdWg@mail.gmail.com>
+In-Reply-To: <CAP07Bnk1GgNw_Ltz1Y2e52PvPBL8CLLM0KzeavNbDvGWQ+EdWg@mail.gmail.com>
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Date: Sun, 16 Jun 2024 08:55:19 +0200
+Message-ID: <CA+R_deqgaqq8icBRc0Ey6LDXknca1vxhr2H+x2GSgfFisgaV4A@mail.gmail.com>
+To: Hannah Kiekens <hannah.kiekens@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1718520931; x=1719125731; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=wSRtADwyAQ6ZI0IUjwWbntFhcvjSZQGRC05wrZcLL5U=;
+ b=BOSP3I+jk2ImGi78YJjZztoxHqIhYy5jtuV44nee3Wta2NoH5JAsuXJBYsqy2mKtMf
+ Q1XlNy/F2oFexY8sShbEi7sNT44Xx8HUrcuqJPQT6tRwUV2c5Q4M1+HEmph//MYpEA9r
+ 0y7BvorL1bu3/naYgI/2G0ZSJa8R91L36ElLXE94nMvn1GI6JFel+5SglHqq5iMxEn88
+ +sbKw8iLQBoGvPKT7ReSCpKiTvrMv3pnnFtjyhOC9X9ISX/Q2ibSG6ucNO2Qz61LMk/S
+ DcKb/JgNK/eSxd5Q7k/hQIR9w44O11cfV9sAkK6OqltyX0Z946u9gcC9NZuyfrEOMDFb
+ gOnw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hFGma1J3
-Subject: Re: [Buildroot] [PATCH v2 5/5] package/versal-firmware: remove
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=BOSP3I+j
+Subject: Re: [Buildroot] [PATCH v6 09/14] package/qt6/qt6declarative: new
  package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -82,146 +100,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
- buildroot@buildroot.org, michal.simek@amd.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Jesse Van Gavere <jesseevg@gmail.com>
+Content-Type: multipart/mixed; boundary="===============7116191131224036611=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Neal, All,
+--===============7116191131224036611==
+Content-Type: multipart/alternative; boundary="0000000000009e822e061afc5557"
 
-On 2024-06-13 07:14 +0100, Neal Frager via buildroot spake thusly:
-> This patch removes the package/versal-firmware as this package is replaced
-> by the boot/xilinx-prebuilt target boot firmware package.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+--0000000000009e822e061afc5557
+Content-Type: text/plain; charset="UTF-8"
 
-I've applied to master, after adding legacy handling.
+Hi Hannah,
 
-Regards,
-Yann E. MORIN.
+Thank you for testing and and reporting this.
 
-> ---
-> V1->V2:
->  - no changes
-> ---
->  DEVELOPERS                                    |  1 -
->  .../versal-firmware/versal-firmware.hash      |  2 --
->  package/Config.in                             |  1 -
->  package/versal-firmware/Config.in             | 24 -------------------
->  package/versal-firmware/versal-firmware.mk    | 21 ----------------
->  5 files changed, 49 deletions(-)
->  delete mode 100644 board/xilinx/patches/versal-firmware/versal-firmware.hash
->  delete mode 100644 package/versal-firmware/Config.in
->  delete mode 100644 package/versal-firmware/versal-firmware.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 93627a0064..e5706e493b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2352,7 +2352,6 @@ F:	package/binutils-bare-metal/
->  F:	package/bootgen/
->  F:	package/gcc-bare-metal/
->  F:	package/newlib-bare-metal/
-> -F:	package/versal-firmware/
->  F:	toolchain/toolchain-bare-metal-buildroot/
->  
->  N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
-> diff --git a/board/xilinx/patches/versal-firmware/versal-firmware.hash b/board/xilinx/patches/versal-firmware/versal-firmware.hash
-> deleted file mode 100644
-> index c4d745f22c..0000000000
-> --- a/board/xilinx/patches/versal-firmware/versal-firmware.hash
-> +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -# Locally calculated
-> -sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  versal-firmware-xilinx_v2024.1.tar.gz
-> diff --git a/package/Config.in b/package/Config.in
-> index 1b6a5b0dab..13af2978dd 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -460,7 +460,6 @@ menu "Firmware"
->  	source "package/sunxi-boards/Config.in"
->  	source "package/ts4900-fpga/Config.in"
->  	source "package/ux500-firmware/Config.in"
-> -	source "package/versal-firmware/Config.in"
->  	source "package/wilc-firmware/Config.in"
->  	source "package/wilink-bt-firmware/Config.in"
->  	source "package/zd1211-firmware/Config.in"
-> diff --git a/package/versal-firmware/Config.in b/package/versal-firmware/Config.in
-> deleted file mode 100644
-> index 01daefd204..0000000000
-> --- a/package/versal-firmware/Config.in
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -config BR2_PACKAGE_VERSAL_FIRMWARE
-> -	bool "versal-firmware"
-> -	depends on BR2_aarch64
-> -	help
-> -	  Pre-built firmware files for Xilinx Versal boards.
-> -
-> -	  https://github.com/Xilinx/soc-prebuilt-firmware
-> -
-> -if BR2_PACKAGE_VERSAL_FIRMWARE
-> -
-> -config BR2_PACKAGE_VERSAL_FIRMWARE_VERSION
-> -	string "firmware version"
-> -	default "xilinx_v2023.1"
-> -	help
-> -	  Release version of Versal firmware.
-> -
-> -config BR2_PACKAGE_VERSAL_FIRMWARE_BOARD
-> -	string "board name"
-> -	default "vck190"
-> -	help
-> -	  Name of Versal target board.
-> -	  Used for installing the appropriate firmware.
-> -
-> -endif # BR2_PACKAGE_VERSAL_FIRMWARE
-> diff --git a/package/versal-firmware/versal-firmware.mk b/package/versal-firmware/versal-firmware.mk
-> deleted file mode 100644
-> index 1ced259be1..0000000000
-> --- a/package/versal-firmware/versal-firmware.mk
-> +++ /dev/null
-> @@ -1,21 +0,0 @@
-> -################################################################################
-> -#
-> -# versal-firmware
-> -#
-> -################################################################################
-> -
-> -VERSAL_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
-> -VERSAL_FIRMWARE_SITE = $(call github,Xilinx,soc-prebuilt-firmware,$(VERSAL_FIRMWARE_VERSION))
-> -VERSAL_FIRMWARE_LICENSE = MIT
-> -VERSAL_FIRMWARE_LICENSE_FILES = LICENSE
-> -VERSAL_FIRMWARE_INSTALL_TARGET = NO
-> -VERSAL_FIRMWARE_INSTALL_IMAGES = YES
-> -
-> -define VERSAL_FIRMWARE_INSTALL_IMAGES_CMDS
-> -	$(foreach f,plm.elf psmfw.elf vpl_gen_fixed.pdi,\
-> -		$(INSTALL) -D -m 0755 $(@D)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)-versal/$(f) \
-> -			$(BINARIES_DIR)/$(f)
-> -	)
-> -endef
-> -
-> -$(eval $(generic-package))
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+I will try to fix this and other dependency related problems.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best Regards,
+Roy
+
+fre. 14. juni 2024 kl. 00:01 skrev Hannah Kiekens <hannah.kiekens@mind.be>:
+
+> config BR2_PACKAGE_QT6DECLARATIVE needs to have
+>     select BR2_PACKAGE_QT6SVG
+>
+> otherwise I get:
+> Makefile:574: *** qt6svg is in the dependency chain of qt6declarative that
+> has added it to its _DEPENDENCIES variable without selecting it or
+> depending on it from Config.in.  Stop.
+>
+
+--0000000000009e822e061afc5557
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Hannah,</div><div><br></div><div>Thank you for tes=
+ting and and reporting this.</div><div><br></div><div>I will try to fix thi=
+s and other dependency related problems.</div><div><br></div><div>Best Rega=
+rds,</div><div>Roy<br></div></div><br><div class=3D"gmail_quote"><div dir=
+=3D"ltr" class=3D"gmail_attr">fre. 14. juni 2024 kl. 00:01 skrev Hannah Kie=
+kens &lt;<a href=3D"mailto:hannah.kiekens@mind.be">hannah.kiekens@mind.be</=
+a>&gt;:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
+0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=
+=3D"ltr"><div>config BR2_PACKAGE_QT6DECLARATIVE needs to have</div><div>=C2=
+=A0=C2=A0=C2=A0 select BR2_PACKAGE_QT6SVG</div><div><br></div><div>otherwis=
+e I get:<br>Makefile:574: *** qt6svg is in the dependency chain of qt6decla=
+rative that has added it to its _DEPENDENCIES variable without selecting it=
+ or depending on it from Config.in.=C2=A0 Stop.<br></div></div>
+</blockquote></div>
+
+--0000000000009e822e061afc5557--
+
+--===============7116191131224036611==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7116191131224036611==--
