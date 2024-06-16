@@ -4,91 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF962C2BA15
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jun 2024 14:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75E85C27C53
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jun 2024 14:21:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33E9040503;
-	Sun, 16 Jun 2024 14:11:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 261A940433;
+	Sun, 16 Jun 2024 14:21:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rcM5yuvgwxsa; Sun, 16 Jun 2024 14:10:59 +0000 (UTC)
+ id i0SPfOXqnZNe; Sun, 16 Jun 2024 14:21:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A84B404E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3A0F40177
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9A84B404E5;
-	Sun, 16 Jun 2024 14:10:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3A0F40177;
+	Sun, 16 Jun 2024 14:21:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E252F1BF2C1
- for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 14:10:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AF96F1BF36E
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 14:21:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E3754033F
- for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 14:10:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9BA3440177
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 14:21:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cIE2lm05fqqD for <buildroot@lists.busybox.net>;
- Sun, 16 Jun 2024 14:10:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::133; helo=mail-lf1-x133.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4601040177
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4601040177
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
- [IPv6:2a00:1450:4864:20::133])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4601040177
- for <buildroot@buildroot.org>; Sun, 16 Jun 2024 14:10:47 +0000 (UTC)
-Received: by mail-lf1-x133.google.com with SMTP id
- 2adb3069b0e04-52bc335e49aso4104661e87.3
- for <buildroot@buildroot.org>; Sun, 16 Jun 2024 07:10:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718547045; x=1719151845;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mtofEhQszTnWKHad5bHFBih9CdLjBuNXISyQP+mrywA=;
- b=eb0y15BFnzDxcxs2UHcbI7Zm4WkUzg1POqDCWu3GccBA4Oym03IOT7e8eT6OS9SxuV
- CLjCxAAtHAGHYD1HbDYZBh0P4HSgW+1fqQ9zbG1B/ZDe5XYLZp78e2h27nfAsDyKMI48
- zR9DValw0wkud+KqeQthWKl6W5gIVxw1a8x0vo+aXqgJfCzqWxYjPSqMVWS32MHHl7Mm
- PIYdJcfscijxouspiKXwUNwF0DEULFpXGqwQ76RQR2sGQml08/vDqwA9TdQQ7r8kxW1I
- GKitLbzsp9Xbf6lCUlBjEHyqdSmLAtPqxsnf9FaNzJ/ChW/PpfSpxF9eoFznWYzGdbMN
- Bs/A==
-X-Gm-Message-State: AOJu0Yxm/sPwYMGZRLaoxVTy6EXLpbOdSOBW7JP/VVqjCYOs4lchx3bR
- 3dOr04sGNCxEEdZi4kEgBhHH1bK1ldYQlcu1MuH3u0l54L5wFDUK+itliQ==
-X-Google-Smtp-Source: AGHT+IGChzgcbG7D8kQfTYdt+gojk06RkzoQcXbhuPC4DS4FA11RA8M4zYlrVCzSnSVjEisM8l7MCg==
-X-Received: by 2002:a05:6512:370f:b0:52c:8b72:3cdd with SMTP id
- 2adb3069b0e04-52ca6e94665mr5395463e87.47.1718547044604; 
- Sun, 16 Jun 2024 07:10:44 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4246a2db4fbsm4421575e9.5.2024.06.16.07.10.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 16 Jun 2024 07:10:44 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ id yS8H7NsypAyb for <buildroot@lists.busybox.net>;
+ Sun, 16 Jun 2024 14:21:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peko@48ers.dk; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4F56F40156
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F56F40156
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4F56F40156
+ for <buildroot@buildroot.org>; Sun, 16 Jun 2024 14:20:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 101EC1C0002;
+ Sun, 16 Jun 2024 14:20:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1sIqkZ-004Cd8-1L;
+ Sun, 16 Jun 2024 16:20:55 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jun 2024 16:10:41 +0200
-Message-ID: <20240616141043.2775083-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.45.1
+Date: Sun, 16 Jun 2024 16:20:48 +0200
+Message-Id: <20240616142048.1001850-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718547045; x=1719151845; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=mtofEhQszTnWKHad5bHFBih9CdLjBuNXISyQP+mrywA=;
- b=gtXEoX9ytAZlUe/QF9nFbppu8b4aH2Pnt/Wfw87ioDse5IRJnYtiByUlMgaKv8ZaGS
- IpbWkXI/BWS8bFP7O9zD204fR211YyJLHsSFrfG+jiMOa/zCF8sAUm62X3KLtCGemUTL
- +HNx/IPYQg12og1azz3firjhzQpRqfB+BVbWjOsTqqnJc9iBspT2cK21IxiTJUkcdst6
- tustQxG2UZnv1zPrTK6VFnAjvbFsvurZeCkaL/PDDaA9O0WJAL5/mqcV4XL9kTpwTqP8
- JqTaEIlq0fHtqSdGpYQtcJlo6P5bG9R+cpxQy/ijRGDqSgvhTHxcS+moH2pQ6gMmamV+
- BRag==
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=gtXEoX9y
-Subject: [Buildroot] [PATCH 1/3] board/chromebook: use global-patch-dir for
- kernel patch
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH-2024.02.x] package/glibc: security bump to
+ 2.38-81 for post-2.38 security fixes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,76 +65,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We're going to add hashes soon, so we'll need to have that directory
-populated with hash files, and it would then be a bit confusing to not
-have the patch file in the patches directory...
+Fixes the following security issues:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Alex Suykov <alex.suykov@gmail.com>
+GLIBC-SA-2024-0004:
+  ISO-2022-CN-EXT: fix out-of-bound writes when writing escape
+  sequence (CVE-2024-2961)
+
+GLIBC-SA-2024-0005:
+  nscd: Stack-based buffer overflow in netgroup cache (CVE-2024-33599)
+
+GLIBC-SA-2024-0006:
+  nscd: Null pointer crash after notfound response (CVE-2024-33600)
+
+GLIBC-SA-2024-0007:
+  nscd: netgroup cache may terminate daemon on memory allocation
+  failure (CVE-2024-33601)
+
+GLIBC-SA-2024-0008:
+  nscd: netgroup cache assumes NSS callback uses in-buffer strings
+  (CVE-2024-33602)
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                            | 1 -
- .../linux/0001-linux-4.15-dts-tpm.patch}                       | 3 +++
- configs/chromebook_snow_defconfig                              | 2 +-
- 3 files changed, 4 insertions(+), 2 deletions(-)
- rename board/chromebook/snow/{linux-4.15-dts-tpm.patch => patches/linux/0001-linux-4.15-dts-tpm.patch} (85%)
+ package/glibc/glibc.hash       |  2 +-
+ package/glibc/glibc.mk         | 15 ++++++++++++++-
+ package/localedef/localedef.mk |  2 +-
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index dd1fd31e86..c39c6a257f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -26,7 +26,6 @@ board/canaan/k210-soc/post-build.sh Shellcheck
- board/canaan/k210-soc/rootfs_overlay/sbin/init Shellcheck
- board/chromebook/elm/sign.sh Shellcheck
- board/chromebook/mksd.sh Shellcheck
--board/chromebook/snow/linux-4.15-dts-tpm.patch lib_patch.ApplyOrder lib_patch.Upstream
- board/chromebook/snow/sign.sh Shellcheck
- board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch lib_patch.Upstream
- board/cubietech/cubieboard2/post-image.sh Shellcheck
-diff --git a/board/chromebook/snow/linux-4.15-dts-tpm.patch b/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
-similarity index 85%
-rename from board/chromebook/snow/linux-4.15-dts-tpm.patch
-rename to board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
-index c71ff1b584..01f452b563 100644
---- a/board/chromebook/snow/linux-4.15-dts-tpm.patch
-+++ b/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
-@@ -9,6 +9,9 @@ See https://code.google.com/p/chromium/issues/detail?id=220169
- and https://lkml.org/lkml/2013/3/4/242
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 15ae55b9e6..9f404afeaf 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  e38f4284d6909c6b5db7d79c6e450daeaf136a67e547290eec0b063a55eaaa42  glibc-2.38-44-gd37c2b20a4787463d192b32041c3406c2bd91de0.tar.gz
++sha256  f36243d2500f714e1333a93f0d029f92d6b0e2e8e80ccb3936b7b40ceeb36d54  glibc-2.38-81-gc8cb4d2b86ece572793e31a3422ea29e88d77df5.tar.gz
  
- Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+Upstream: Not Applicable
-+[yann.morin.1998@free.fr: add Upstream tag]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index d198d6f04c..104c844907 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.38-44-gd37c2b20a4787463d192b32041c3406c2bd91de0
++GLIBC_VERSION = 2.38-81-gc8cb4d2b86ece572793e31a3422ea29e88d77df5
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+@@ -52,6 +52,19 @@ GLIBC_IGNORE_CVES += CVE-2023-6779
+ # 2.38 and the version we're really using.
+ GLIBC_IGNORE_CVES += CVE-2023-6780
  
- --- a/arch/arm/boot/dts/exynos5250-snow-common.dtsi
- +++ b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
-diff --git a/configs/chromebook_snow_defconfig b/configs/chromebook_snow_defconfig
-index bcb94b716b..50e355647c 100644
---- a/configs/chromebook_snow_defconfig
-+++ b/configs/chromebook_snow_defconfig
-@@ -1,6 +1,7 @@
- BR2_arm=y
- BR2_cortex_a15=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+BR2_GLOBAL_PATCH_DIR="board/chromebook/snow/patches"
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_GENERIC_GETTY_TERM="linux"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/chromebook/snow/sign.sh"
-@@ -8,7 +9,6 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/chromebook/mksd.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
--BR2_LINUX_KERNEL_PATCH="board/chromebook/snow/linux-4.15-dts-tpm.patch"
- BR2_LINUX_KERNEL_DEFCONFIG="exynos"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/chromebook/snow/linux-4.15.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
++# Fixed by glibc-2.38-66-ge1135387deded5d73924f6ca20c72a35dc8e1bda
++GLIBC_IGNORE_CVES += CVE-2024-2961
++
++# Fixed by glibc-2.38-72-g5968aebb86164034b8f8421b4abab2f837a5bdaf
++GLIBC_IGNORE_CVES += CVE-2024-33599
++
++# Fixed by glibc-2.38-73-g541ea5172aa658c4bd5c6c6d6fd13903c3d5bb0a +
++# glibc-2.38-74-g2ae9446c1b7a3064743b4a51c0bbae668ee43e4c
++GLIBC_IGNORE_CVES += CVE-2024-33600
++
++# Fixed by glibc-2.38-75-g71af8ca864345d39b746d5cee84b94b430fad5db
++GLIBC_IGNORE_CVES += CVE-2024-33601 CVE-2024-33602
++
+ # All these CVEs are considered as not being security issues by
+ # upstream glibc:
+ #  https://security-tracker.debian.org/tracker/CVE-2010-4756
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index c017c0e00e..bade28fdcb 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.38-44-gd37c2b20a4787463d192b32041c3406c2bd91de0
++LOCALEDEF_VERSION = 2.38-81-gc8cb4d2b86ece572793e31a3422ea29e88d77df5
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 -- 
-2.45.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
