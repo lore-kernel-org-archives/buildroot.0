@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70BE9C27C6E
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jun 2024 06:55:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8627C27C77
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jun 2024 07:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BF6B6069A;
-	Sun, 16 Jun 2024 06:55:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D28160790;
+	Sun, 16 Jun 2024 07:09:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TDKSQA-oZOz9; Sun, 16 Jun 2024 06:55:35 +0000 (UTC)
+ id 4ry69Ec7GrHW; Sun, 16 Jun 2024 07:08:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 094FB606A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDD9360621
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 094FB606A8;
-	Sun, 16 Jun 2024 06:55:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B5B1B1BF2CE
- for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 06:55:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDD9360621;
+	Sun, 16 Jun 2024 07:08:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 94AEE1BF2CA
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 07:08:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2504406A0
- for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 06:55:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FC5680B1C
+ for <buildroot@lists.busybox.net>; Sun, 16 Jun 2024 07:08:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uoIgvLcQzxqb for <buildroot@lists.busybox.net>;
- Sun, 16 Jun 2024 06:55:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VwEXzlVeOtpD for <buildroot@lists.busybox.net>;
+ Sun, 16 Jun 2024 07:08:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b2b; helo=mail-yb1-xb2b.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AFB4F4069D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFB4F4069D
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com
- [IPv6:2607:f8b0:4864:20::b2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AFB4F4069D
- for <buildroot@buildroot.org>; Sun, 16 Jun 2024 06:55:31 +0000 (UTC)
-Received: by mail-yb1-xb2b.google.com with SMTP id
- 3f1490d57ef6-dff2df7de4aso744528276.2
- for <buildroot@buildroot.org>; Sat, 15 Jun 2024 23:55:31 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3F03080AE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F03080AE9
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3F03080AE9
+ for <buildroot@buildroot.org>; Sun, 16 Jun 2024 07:08:52 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-35f23f3da44so3085843f8f.0
+ for <buildroot@buildroot.org>; Sun, 16 Jun 2024 00:08:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718520931; x=1719125731;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=wSRtADwyAQ6ZI0IUjwWbntFhcvjSZQGRC05wrZcLL5U=;
- b=TPUz7co+LDSKFJF0cwCL3qDrKVZAIE4KLNp1uxcM46x3001ly8+6G1hcWw1y+7rv9X
- 3teEmoi6g79ZZ/CNh80ssXoWst6WxbRYtO7RZN2wRiXM685n7yO2iy5eQvcXbcVEN0iR
- IHRUkthGLJi5c4ntkK7jhAR45rwfv1q79acl7jX0DG7BgLrMMNwqOVqHrdXCwTNo4KsG
- 01eVSBH2Rb8EZ+xWd2L/pZ0mbzq2zpP+6A2q5SOg7ffX/kF9vpJoBPe4thaSr4NZ54UF
- ZlLYKKqneKGnppYriXYrhJj2fJS5mYXv+wtxCu2e0lZTIfDPxsnM8K0RzcQGdS9t2I7o
- 6Uyw==
-X-Gm-Message-State: AOJu0Yxy1PR+9INnEWnvo9LBwsnSdy7OtP1/gfWuhRQipV/ZDzmi4D+p
- aJ3Eboyq6f6vOOMGgdc116+WmjFgCpR7sneOXwTIqcSYIp04coB3hCwkWfLKtflUdme3xkfNSlX
- QiwVXHLUij+W/Zwfu4XUlRVRCB0o=
-X-Google-Smtp-Source: AGHT+IFx4P4ioZIPcd2Heev691Gr75g52IFwx+ax7X+jLFyzfi8o5Emj41YFdVEt7ARS82uU0m0Q+7xfZlz9Gd/y5ag=
-X-Received: by 2002:a25:c70c:0:b0:dff:2f86:defd with SMTP id
- 3f1490d57ef6-dff2f86e5cbmr2077327276.53.1718520930793; Sat, 15 Jun 2024
- 23:55:30 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1718521730; x=1719126530;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=b9WoZdJbxemBdFGRrOl4Z7OugqGG9pRjdoX0YpZ9g44=;
+ b=QY+Z7LBNgrDp+/gDKVKVrXNImntwjJKQNS6kqLXELzCI0tF5yAdil1FHNYRQvgHQMm
+ SJ1dMrqr7D/sW2hf5/UPQd1VMFRTJkV2H0xb7FhCcyDbtkUqB57Za1YhiN+JGoUZ7DQr
+ xpBoMQjcwB3dmk0wvyKCuywmx8CkmXmjzINVu4EvHn/mlPg7m1M4eYlroV15kXj4IMos
+ La+X/0o9oPX2fk4p3ko9m5BKw3C+ZCgCaeapryzUgefw7nHH+IPALT8hm9Ei2V38jn7R
+ +nKajSl+bP8yXG9FDOFYL9QqmjFQo9ZP8lSwABUTeQ2rT92OI/Bpk0aj+jnZC6eIPD5a
+ utrA==
+X-Gm-Message-State: AOJu0YxKgYTCCu5rtR1T+VSxXYQ6V0BMdQdNZUzuV2m5FVAfonjxnDkp
+ Cqe4w/PXoGu+wlwdyOaxM3zGFZgTmk9izfmMfg/4jGhvjfR2KlUJr9qvDQ==
+X-Google-Smtp-Source: AGHT+IFXfLyA+pP3g27ktFdoTvrG+dHxgLorOYIe3I1PJCIj3BgA6x4pEXCdY9KGHdJNTG1MTDgEKw==
+X-Received: by 2002:a5d:5f90:0:b0:360:82a0:ba4 with SMTP id
+ ffacd0b85a97d-36082a00c65mr4551294f8f.57.1718521729890; 
+ Sun, 16 Jun 2024 00:08:49 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-36075093615sm8792985f8f.6.2024.06.16.00.08.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 16 Jun 2024 00:08:49 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 16 Jun 2024 09:08:49 +0200
+Message-ID: <20240616070849.2608438-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-References: <20240531151325.2443323-9-roy.kollen.svendsen@akersolutions.com>
- <20240603115206.3583474-1-roy.kollen.svendsen@akersolutions.com>
- <20240603115206.3583474-9-roy.kollen.svendsen@akersolutions.com>
- <CAP07Bnk1GgNw_Ltz1Y2e52PvPBL8CLLM0KzeavNbDvGWQ+EdWg@mail.gmail.com>
-In-Reply-To: <CAP07Bnk1GgNw_Ltz1Y2e52PvPBL8CLLM0KzeavNbDvGWQ+EdWg@mail.gmail.com>
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Date: Sun, 16 Jun 2024 08:55:19 +0200
-Message-ID: <CA+R_deqgaqq8icBRc0Ey6LDXknca1vxhr2H+x2GSgfFisgaV4A@mail.gmail.com>
-To: Hannah Kiekens <hannah.kiekens@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718520931; x=1719125731; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=wSRtADwyAQ6ZI0IUjwWbntFhcvjSZQGRC05wrZcLL5U=;
- b=BOSP3I+jk2ImGi78YJjZztoxHqIhYy5jtuV44nee3Wta2NoH5JAsuXJBYsqy2mKtMf
- Q1XlNy/F2oFexY8sShbEi7sNT44Xx8HUrcuqJPQT6tRwUV2c5Q4M1+HEmph//MYpEA9r
- 0y7BvorL1bu3/naYgI/2G0ZSJa8R91L36ElLXE94nMvn1GI6JFel+5SglHqq5iMxEn88
- +sbKw8iLQBoGvPKT7ReSCpKiTvrMv3pnnFtjyhOC9X9ISX/Q2ibSG6ucNO2Qz61LMk/S
- DcKb/JgNK/eSxd5Q7k/hQIR9w44O11cfV9sAkK6OqltyX0Z946u9gcC9NZuyfrEOMDFb
- gOnw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1718521730; x=1719126530; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=b9WoZdJbxemBdFGRrOl4Z7OugqGG9pRjdoX0YpZ9g44=;
+ b=DfoZ86HpL6FTAbhIkXMgid+ftjXRIhvJMOWS4Af/C7AGkJFL4R/qS2XgOudiWzVpbt
+ M1Hjl/RN3H0NFHXvD/S+ufAA9nEtHoYy2mPmRzqxy6c5RWzWzVO05TApsJHyNFm2hMVM
+ EaWb7B1+vBiCSfxs+8Svm0ou5Z9/QyliBkTHYJGbpOBFfZM7VnhK8SJZti4GYVT0uvcR
+ bgEPfZrnBm/n29YgoBSx14Vu1vrtoYEyoQw90WJtPf+4XY2F6OAGb62G7VzHclXwUGI0
+ 8Nl4yWzEenjKhk/AGZGS2RwtgonYDx4zoT9ZXZBzXV9UE8/lmowKFKo1p7gH0SGWWewO
+ Wx4g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=BOSP3I+j
-Subject: Re: [Buildroot] [PATCH v6 09/14] package/qt6/qt6declarative: new
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=DfoZ86Hp
+Subject: [Buildroot] [PATCH] board/xilinx: re-add hash file for
+ xilinx-prebuilt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,71 +100,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
- Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
- Jesse Van Gavere <jesseevg@gmail.com>
-Content-Type: multipart/mixed; boundary="===============7116191131224036611=="
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Neal Frager <neal.frager@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7116191131224036611==
-Content-Type: multipart/alternative; boundary="0000000000009e822e061afc5557"
+When xilinx pre-built was added in a6648ad8da (boot/xilinx-prebuilt:
+new boot package), the hash file was initially a board-specific hash
+file. However, that hash file, in commit a6648ad8da, really belonged
+to the xilinx-prebuilt package, for two reasons: the package needs a
+hash file for the version it installs, and no defconfig was using it
+at that time. So the hash file was moved out of the boar directory,
+and into the package directory when the patch was applied.
 
---0000000000009e822e061afc5557
-Content-Type: text/plain; charset="UTF-8"
+When the xilinx-related boards were changed to use xilinx-prebuilt,  in
+551ba16a0f (configs/zynqmp_*: migrate to xilinx-prebuilt) and 8271323649
+(configs/versal_vck190_defconfig: migrate to xilinx-prebuilt), they were
+correctly made to use a custom, non-default version. But then, it meant
+that those defconfig would no longer have a hash when we would bump the
+default version in xilinx-prebuilt.
 
-Hi Hannah,
+Re-add the initial board-specific hash file now that it is required.
 
-Thank you for testing and and reporting this.
+Fixes: 551ba16a0f09fe550acb3ef6d12a1b2587d03292
+Fixes: 8271323649c42420adaf4513b0472a7203f7784d
 
-I will try to fix this and other dependency related problems.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Neal Frager <neal.frager@amd.com>
+---
+ board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
 
-Best Regards,
-Roy
-
-fre. 14. juni 2024 kl. 00:01 skrev Hannah Kiekens <hannah.kiekens@mind.be>:
-
-> config BR2_PACKAGE_QT6DECLARATIVE needs to have
->     select BR2_PACKAGE_QT6SVG
->
-> otherwise I get:
-> Makefile:574: *** qt6svg is in the dependency chain of qt6declarative that
-> has added it to its _DEPENDENCIES variable without selecting it or
-> depending on it from Config.in.  Stop.
->
-
---0000000000009e822e061afc5557
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi Hannah,</div><div><br></div><div>Thank you for tes=
-ting and and reporting this.</div><div><br></div><div>I will try to fix thi=
-s and other dependency related problems.</div><div><br></div><div>Best Rega=
-rds,</div><div>Roy<br></div></div><br><div class=3D"gmail_quote"><div dir=
-=3D"ltr" class=3D"gmail_attr">fre. 14. juni 2024 kl. 00:01 skrev Hannah Kie=
-kens &lt;<a href=3D"mailto:hannah.kiekens@mind.be">hannah.kiekens@mind.be</=
-a>&gt;:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
-0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=
-=3D"ltr"><div>config BR2_PACKAGE_QT6DECLARATIVE needs to have</div><div>=C2=
-=A0=C2=A0=C2=A0 select BR2_PACKAGE_QT6SVG</div><div><br></div><div>otherwis=
-e I get:<br>Makefile:574: *** qt6svg is in the dependency chain of qt6decla=
-rative that has added it to its _DEPENDENCIES variable without selecting it=
- or depending on it from Config.in.=C2=A0 Stop.<br></div></div>
-</blockquote></div>
-
---0000000000009e822e061afc5557--
-
---===============7116191131224036611==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
+new file mode 100644
+index 0000000000..c955cd79f5
+--- /dev/null
++++ b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
+-- 
+2.45.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7116191131224036611==--
