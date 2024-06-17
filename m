@@ -4,89 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61553C2BA1A
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 18:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9E76C2BA1A
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 18:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBD87605C2;
-	Mon, 17 Jun 2024 18:06:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C721605B7;
+	Mon, 17 Jun 2024 18:08:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B1-c0Bci_KvS; Mon, 17 Jun 2024 18:06:17 +0000 (UTC)
+ id KgBoq2jwfvFz; Mon, 17 Jun 2024 18:08:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F22DE60A40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86BE1605C2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F22DE60A40;
-	Mon, 17 Jun 2024 18:06:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86BE1605C2;
+	Mon, 17 Jun 2024 18:08:51 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 898831BF293
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 18:06:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E5D611BF293
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 18:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8323B608FA
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 18:06:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E04F8605C2
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 18:08:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QMgKAGdTeZne for <buildroot@lists.busybox.net>;
- Mon, 17 Jun 2024 18:06:14 +0000 (UTC)
-X-Greylist: delayed 327 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 17 Jun 2024 18:06:14 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3C02060A3E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C02060A3E
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:67c:2050:0:465::101; helo=mout-p-101.mailbox.org;
- envelope-from=a.wellbrock@mailbox.org; receiver=<UNKNOWN> 
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org
- [IPv6:2001:67c:2050:0:465::101])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3C02060A3E
- for <buildroot@buildroot.org>; Mon, 17 Jun 2024 18:06:14 +0000 (UTC)
+ id Vojp3tJuX-hI for <buildroot@lists.busybox.net>;
+ Mon, 17 Jun 2024 18:08:49 +0000 (UTC)
+X-Greylist: delayed 478 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 17 Jun 2024 18:08:48 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B33CD605B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B33CD605B7
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.241.56.161;
+ helo=mout-p-103.mailbox.org; envelope-from=a.wellbrock@mailbox.org;
+ receiver=<UNKNOWN> 
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B33CD605B7
+ for <buildroot@buildroot.org>; Mon, 17 Jun 2024 18:08:48 +0000 (UTC)
 Received: from smtp102.mailbox.org (smtp102.mailbox.org
  [IPv6:2001:67c:2050:b231:465::102])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4W2yNY20SMz9sWN;
- Mon, 17 Jun 2024 20:00:45 +0200 (CEST)
+ by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4W2yQ43zTBz9scd;
+ Mon, 17 Jun 2024 20:02:04 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Mon, 17 Jun 2024 20:00:39 +0200
-Message-ID: <20240617180039.3770876-1-a.wellbrock@mailbox.org>
+Date: Mon, 17 Jun 2024 20:01:57 +0200
+Message-ID: <20240617180157.3771298-1-a.wellbrock@mailbox.org>
 MIME-Version: 1.0
-X-MBO-RS-META: s5d4ff85inxrhb8yg71uf9a8hjzpbebp
-X-MBO-RS-ID: 281ae8a18689cc1cfbc
-X-Rspamd-Queue-Id: 4W2yNY20SMz9sWN
+X-MBO-RS-META: 1wquid1f6guo9x1iqod9qb6tp4yuserj
+X-MBO-RS-ID: 04880443dbbcf0a19f9
+X-Rspamd-Queue-Id: 4W2yQ43zTBz9scd
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailbox.org; s=mail20150812; 
- t=1718647245;
+ t=1718647324;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=Mrr+aNVdeAEnb5b6xeB2i2FiOloo4PpUyApqSbH2knA=;
- b=d6cuF5H/lE0DOwxLkRh5HQtZ9JzQWJ7QfhN1gKDTcfPoiAiPx8+1xsTXO8DViITIsr1m1C
- KrRD96LfiJ27le/jCjSDoRcfWr/nu/j6/TdOMW1ezaZFg2mkHO/y+UHwCOh9KbkaL9sAE0
- 3iIhWoTCZH5dUiA5H8d1wmaQtQEpyIPA/OdqIAZQfiF2rdM9FjadBm4RifkHeGvc5JDgXz
- d7de0cKmo7+I420p8d8LHNiL2EQtmYRO/tS+R8N4SAjvLo2+2YwW/4oI/VUGUcJe8HlJBf
- voNVomstXK8mZ4BFv8D+cfMG+rFWLTa091v1BFgHG+ayCpHpGzdPj8mC3RVegg==
+ bh=KtJ2QfbCcjdT53fK1MdLRXM0xmVyhIoMYughl7NBEX8=;
+ b=UH14cI2aWMQ8BnqmwZZeafcziQzw1mdYCM+wO33CfWBHvxHyxO7Rg+ZGRLhw7SAJnAgLkv
+ l7A94RJpaDLTfZUbfUXIWsiD2/Z98NgEIYq0zCGTaiL0gnwi9xp3hwDp2SiTqFMj2FJJqq
+ ko3N2ABNDAThJq2zCjmZiT+8bp/6mKJ++hCM+8AN5CuXrbI5fHwpHg8nEKnzgS4/1THyOT
+ RCeKgFe25Jr1fIks+w0lInuMBbhNayICCc3VCpJO7DQHeMlQb2SU1AY1EQuj++8xbtE/UP
+ SlaKCUvW8Vet6GEmK0Vnue6DqKg4xuBySh4+HDP0nmk9Bv4Fh2tBvoFbw53NDg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailbox.org; s=mail20150812; 
- t=1718647243;
+ t=1718647322;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=Mrr+aNVdeAEnb5b6xeB2i2FiOloo4PpUyApqSbH2knA=;
- b=YAUxKnUV55lsiMfDaVqsLH9c4TVPByUM+5exPv2bPXyIe0VGYiOZAM/qioOy2xz7DghqNO
- D/vtiPqYbQ+F/1JFPRBaktLZEzJhNZCjlzO63aaR6dx+KxpgIfR3J9fQXpwn48ZGc4NXGY
- rLbeo2yHSsv9xbUP6tqHvdIsD/GF0NEFYGW/BbckcYi1KeEdNH93MJxgmRbsHT6HL9yd3f
- 7qOFoJS3Gufo7VSu7XDgLeuTzVUW/56D9f288aTyz5WmFPHQ3o+n6+lI5RX0GvgJi8lZyW
- NooqkF2RPS4McbHqPacsfEkBCPTG0SBzcTEeH4tyy4KHQD1krFKm+pdx+Spppw==
+ bh=KtJ2QfbCcjdT53fK1MdLRXM0xmVyhIoMYughl7NBEX8=;
+ b=Hhz3cW/i0sLiJcNB8kgIcTT7mQZpp5d4msfv3ZKGJZRxvD6dEoz24lPQhKwzqomyFDdi3x
+ PDPjVSIx9lGdOudigZ3jelYYErI9Fw3r11iPtkRf0JDy7RuePmArk3C6fkkuwZU1mEpnfX
+ S0/r9EY66xtV6nIGH0DL9NQrwvD6NFx16LhLxZp14Tw07PxkV0vW+UHatH+LDqss+72ED4
+ H3YWKVCObESdIexaVCY7QJWWtMyWPBhY09Vp+t/q8YUUdq22p3HP7trZF7LQtR+xoMfbLE
+ MKL6SM5gCDsavJvbTabpfTYj7U1PK1XPJ9/LIAH83noVDI8R3HJa4Hg8KSvY+w==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=mailbox.org
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=mailbox.org
- header.i=@mailbox.org header.a=rsa-sha256 header.s=mail20150812
- header.b=d6cuF5H/; 
  dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org
- header.a=rsa-sha256 header.s=mail20150812 header.b=YAUxKnUV
+ header.a=rsa-sha256 header.s=mail20150812 header.b=UH14cI2a; 
+ dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org
+ header.a=rsa-sha256 header.s=mail20150812 header.b=Hhz3cW/i
 Subject: [Buildroot] [PATCH 1/1] package/c-ares: update site url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -132,7 +130,7 @@ index c4441255a2..a75a40da70 100644
  
  C_ARES_VERSION = 1.27.0
 -C_ARES_SITE = http://c-ares.haxx.se/download
-+C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/cares-1_28_1
++C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/cares-1_27_0
  C_ARES_INSTALL_STAGING = YES
  C_ARES_CONF_OPTS = --with-random=/dev/urandom
  C_ARES_LICENSE = MIT
