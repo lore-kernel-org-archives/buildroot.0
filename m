@@ -1,91 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D093AC2BA15
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 12:01:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC804C2BA15
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 15:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4EC2481EE0;
-	Mon, 17 Jun 2024 12:01:03 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qEJ5_BzICu-D; Mon, 17 Jun 2024 12:01:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11D1F81EA5
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11D1F81EA5;
-	Mon, 17 Jun 2024 12:01:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A3D481BF2A3
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 12:01:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 909E7405EB
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 12:01:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 69E8C408C5;
+	Mon, 17 Jun 2024 15:11:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FlNE6W3eDtae for <buildroot@lists.busybox.net>;
- Mon, 17 Jun 2024 12:00:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.71.1.220;
- helo=relay-b03.edpnet.be; envelope-from=dev.kurt@vandijck-laurijssen.be;
+ id tquRBr1HQ3o9; Mon, 17 Jun 2024 15:11:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24DFB4064A
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24DFB4064A;
+	Mon, 17 Jun 2024 15:11:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B73FE1BF296
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:11:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AFFED81C67
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:11:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R_0TR-LdhNJG for <buildroot@lists.busybox.net>;
+ Mon, 17 Jun 2024 15:11:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=13.77.154.182;
+ helo=linux.microsoft.com; envelope-from=flaniel@linux.microsoft.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8B4A540556
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B4A540556
-Received: from relay-b03.edpnet.be (relay-b03.edpnet.be [212.71.1.220])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8B4A540556
- for <buildroot@buildroot.org>; Mon, 17 Jun 2024 12:00:59 +0000 (UTC)
-X-ASG-Debug-ID: 1718625652-24639c5cad86a880001-rUBnyj
-Received: from srv21.vandijck-laurijssen.be (77.109.96.193.adsl.dyn.edpnet.net
- [77.109.96.193]) by relay-b03.edpnet.be with ESMTP id 8mYe8C18CN7ABJKh for
- <buildroot@buildroot.org>; Mon, 17 Jun 2024 14:00:52 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
-X-Barracuda-Apparent-Source-IP: 77.109.96.193
-Received: from x1 (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
- by srv21.vandijck-laurijssen.be (Postfix) with ESMTPSA id 62F345A9D0E
- for <buildroot@buildroot.org>; Mon, 17 Jun 2024 14:00:52 +0200 (CEST)
-Date: Mon, 17 Jun 2024 14:00:50 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0D76B81C44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D76B81C44
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D76B81C44
+ for <buildroot@buildroot.org>; Mon, 17 Jun 2024 15:11:19 +0000 (UTC)
+Received: from pwmachine.numericable.fr
+ (75.red-83-59-17.dynamicip.rima-tde.net [83.59.17.75])
+ by linux.microsoft.com (Postfix) with ESMTPSA id 9E3E120B7007;
+ Mon, 17 Jun 2024 08:11:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9E3E120B7007
+From: Francis Laniel <flaniel@linux.microsoft.com>
 To: buildroot@buildroot.org
-Message-ID: <ZnAlcjgzFAilB92v@x1>
-X-ASG-Orig-Subj: [Buildroot] [PATCH RESEND] bcusdk: fix build
-References: <20240612093118.22195-1-dev.kurt@vandijck-laurijssen.be>
+Date: Mon, 17 Jun 2024 16:10:16 +0100
+Message-Id: <20240617151020.31120-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240612093118.22195-1-dev.kurt@vandijck-laurijssen.be>
-X-Barracuda-Connect: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
-X-Barracuda-Start-Time: 1718625652
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 1557
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0
- QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.126369
- Rule breakdown below
- pts rule name              description
- ---- ---------------------- --------------------------------------------------
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=vandijck-laurijssen.be; s=default; t=1718625652;
- bh=HMJtQDJ8WiIEcBsnwH/zJwixMv9zp6KcEjky7UP1dZ8=;
- h=Date:From:To:Subject:References:In-Reply-To:From;
- b=JOKDqK18fpBD8DvzrUAkgpAlsWzQVcGLg+ooMJwzjozIoAl7+6Q6P+S4MgY/35eDI
- Sws6dX7UhfKF5WirKS5veT6FlvshArQDs6sj5oyujT1iCALYC1NPIjZItB2mgtZzUy
- WzhQSpxpOFkPY7kif3D4KMOe6DGBjjFhBWR3mk4uA02/9/ouftZHe4TkEWpdPgXY0l
- 58TEdbbOQkEtCs3t+brBOBxKoxeAPZHii3YbAPXDusgGWF55oahIFHvBOFfpHMB7hh
- PIRpbD0UxoWF8ztbu9QXXr3kGIKLpnUi5xw6ENxaWgNAJIt159mFWcafppw/weupb1
- KrwHgahGLfZQg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=vandijck-laurijssen.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=vandijck-laurijssen.be header.i=@vandijck-laurijssen.be
- header.a=rsa-sha256 header.s=default header.b=JOKDqK18
-Subject: [Buildroot] [PATCH RESEND] bcusdk: fix build
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=linux.microsoft.com; 
+ s=default; t=1718637077;
+ bh=tCepCY7vaiHUtToLqKOk2NhTMmqGatbyuHN1vNx2JRk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=TYlaHiK78Gi8io2r0SHdTLQPiFcZXK9k9jmmGynE2N2/9tNDhX+L3mt9xWMNWlIYi
+ ViYvd3/anaUdV367xoT5YylWbw5XCEQast3+AHgYdV/WcZmpe42R4zaOckXy4g0JvN
+ 04NXVamFLDPcLriXQFYzwtx4qXEFi06zqNnIMpNY=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=linux.microsoft.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=linux.microsoft.com header.i=@linux.microsoft.com
+ header.a=rsa-sha256 header.s=default header.b=TYlaHiK7
+Subject: [Buildroot] [RFC PATCH v1 0/4] Bump pahole and tbb and remove sysdig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,53 +75,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kurt Van Dijck via buildroot <buildroot@buildroot.org>
-Reply-To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Cc: Francis Laniel <flaniel@linux.microsoft.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-bcusdk is configured without libxml.
-This commit removes the autotools libxml dependency.
+Hi,
 
-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
----
- package/bcusdk/0003-remove-xml-autoconf.patch | 11 +++++++++++
- package/bcusdk/bcusdk.mk                      |  2 ++
- 2 files changed, 13 insertions(+)
- create mode 100644 package/bcusdk/0003-remove-xml-autoconf.patch
+With this contribution, I am bumping pahole and tbb to the latest
+available versions.
+Also, I am removing package related to sysdig: falcosecurity-libs
+and sysdig itself.
 
-diff --git a/package/bcusdk/0003-remove-xml-autoconf.patch b/package/bcusdk/0003-remove-xml-autoconf.patch
-new file mode 100644
-index 0000000000..33ce45fe12
---- /dev/null
-+++ b/package/bcusdk/0003-remove-xml-autoconf.patch
-@@ -0,0 +1,11 @@
-+--- a/configure.in	2024-06-12 11:20:16.800828493 +0200
-++++ b/configure.in	2024-06-12 11:18:19.275693151 +0200
-+@@ -81,7 +81,7 @@
-+ 
-+ if test x$onlyeibd = xfalse ; then
-+ 
-+-AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
-++#AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
-+ AC_PATH_PROG(TAS,[m68hc05-as],,[$PATH:$bindir:$prefix/bin])
-+ AC_PATH_PROG(TLD,[m68hc05-ld],,[$PATH:$bindir:$prefix/bin])
-+ AC_PATH_PROG(TAR,[m68hc05-ar],,[$PATH:$bindir:$prefix/bin])
-diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
-index f14b23c7cc..c572df725d 100644
---- a/package/bcusdk/bcusdk.mk
-+++ b/package/bcusdk/bcusdk.mk
-@@ -23,6 +23,8 @@ BCUSDK_CONF_OPTS = \
- 
- BCUSDK_DEPENDENCIES = libpthsem
- 
-+BCUSDK_AUTORECONF=YES
-+
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- BCUSDK_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
- BCUSDK_CONF_ENV += LIBS=$(TARGET_NLS_LIBS)
+On this point, I would like to have your opinion, hence the RFC
+label.
+Maintaining sysdig has been complicated as this software changes
+really fast which has impact on the way to build it.
+Sadly, I cannot cope with this changes as fast as they arrive to
+be able to maintain it in buildroot.
+So, rather than having a very outdated package, I think this is
+better to remove it.
+
+Francis Laniel (4):
+  package/pahole: bump to version 1.27
+  package/tbb: bump to version 2021.12.0.
+  package/sysdig: remove package.
+  package/falcosecurity-libs: remove package.
+
+ DEVELOPERS                                    |  3 -
+ package/Config.in                             |  2 -
+ ...cmake-Permit-setting-GRPC_CPP_PLUGIN.patch | 34 --------
+ package/falcosecurity-libs/Config.in          | 32 --------
+ .../falcosecurity-libs.hash                   |  5 --
+ .../falcosecurity-libs/falcosecurity-libs.mk  | 82 -------------------
+ package/pahole/pahole.hash                    |  2 +-
+ package/pahole/pahole.mk                      |  2 +-
+ package/sysdig/Config.in                      | 34 --------
+ package/sysdig/sysdig.hash                    |  3 -
+ package/sysdig/sysdig.mk                      | 38 ---------
+ package/tbb/tbb.hash                          |  2 +-
+ package/tbb/tbb.mk                            |  2 +-
+ 13 files changed, 4 insertions(+), 237 deletions(-)
+ delete mode 100644 package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
+ delete mode 100644 package/falcosecurity-libs/Config.in
+ delete mode 100644 package/falcosecurity-libs/falcosecurity-libs.hash
+ delete mode 100644 package/falcosecurity-libs/falcosecurity-libs.mk
+ delete mode 100644 package/sysdig/Config.in
+ delete mode 100644 package/sysdig/sysdig.hash
+ delete mode 100644 package/sysdig/sysdig.mk
+
+Best regards.
+--
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
