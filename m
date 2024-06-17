@@ -1,95 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9808C2BB85
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 09:39:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D093AC2BA15
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 12:01:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C249403B7;
-	Mon, 17 Jun 2024 09:39:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EC2481EE0;
+	Mon, 17 Jun 2024 12:01:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qEJ5_BzICu-D; Mon, 17 Jun 2024 12:01:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11D1F81EA5
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11D1F81EA5;
+	Mon, 17 Jun 2024 12:01:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A3D481BF2A3
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 12:01:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 909E7405EB
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 12:01:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LzPkbZA3XGjM; Mon, 17 Jun 2024 09:39:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29655403CC
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 29655403CC;
-	Mon, 17 Jun 2024 09:39:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7D07E1BF2A4
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 09:39:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B7E760708
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 09:39:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id keQxqJInVxmn for <buildroot@lists.busybox.net>;
- Mon, 17 Jun 2024 09:39:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 79CCC60704
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79CCC60704
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
- [IPv6:2a00:1450:4864:20::129])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 79CCC60704
- for <buildroot@buildroot.org>; Mon, 17 Jun 2024 09:39:06 +0000 (UTC)
-Received: by mail-lf1-x129.google.com with SMTP id
- 2adb3069b0e04-52bc121fb1eso4970370e87.1
- for <buildroot@buildroot.org>; Mon, 17 Jun 2024 02:39:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718617144; x=1719221944;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=6BGNDFPyelUnzpAsOMuqNflngWyWDgE/T2DmDtyVT3Y=;
- b=JoegEOK9rceHQbNZIFhu4BgS/j0oVsPRSfTTMsn70KZIsamXrmrMrcLDAnbE5lXu3P
- 8VGIS4exGmniB1z6YPMUb2zraowIASaiMK99oBBjJiJvBvw2LLQLicm8ZhUA52LmhBpu
- Da3KI0j4NXSHmN658Va2Ad9XgRB1H0/hU9+x0V3V+nxibTGpNNOvCXxRPiA4U8cVv6HN
- NM9Fb50iKIz3plA5okCer699Q/pYgawRWNHwM369IsA44a/fMT2l6RKQurQ2ToBqq9UP
- pQSAs3Efnvq6Wj4thcwkuM3kRYC/EKY9BuHodt2X+W3TFg37YvuwUQMBKWRpL4k+kgbC
- mVPg==
-X-Gm-Message-State: AOJu0Yx9am3WIYiV3N3+W8lhKjFY36ab9r5TWzhqiDYsYSopzB5/ebIV
- m3qIZLvy3X4LJi9qOtN/kydlfprDZjm3XnWQtKBuvVf7yxJzKXB98vhwpmx2oMMkql5lxtT51K0
- 4EeRnRvp82ZqV6rGpVcOX3c6lPu8eVw==
-X-Google-Smtp-Source: AGHT+IE2iOYmjCfF449Fvo0a6qVDjRVic36u+3IgaNprcKOxcPEZ5y/wOEEk+yWKloQzPUkZnHeVqzaVSNGX3cnp1vA=
-X-Received: by 2002:a05:6512:3aa:b0:52c:9421:e986 with SMTP id
- 2adb3069b0e04-52ca6e6556dmr5259800e87.23.1718617143900; Mon, 17 Jun 2024
- 02:39:03 -0700 (PDT)
+ id FlNE6W3eDtae for <buildroot@lists.busybox.net>;
+ Mon, 17 Jun 2024 12:00:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.71.1.220;
+ helo=relay-b03.edpnet.be; envelope-from=dev.kurt@vandijck-laurijssen.be;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8B4A540556
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B4A540556
+Received: from relay-b03.edpnet.be (relay-b03.edpnet.be [212.71.1.220])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B4A540556
+ for <buildroot@buildroot.org>; Mon, 17 Jun 2024 12:00:59 +0000 (UTC)
+X-ASG-Debug-ID: 1718625652-24639c5cad86a880001-rUBnyj
+Received: from srv21.vandijck-laurijssen.be (77.109.96.193.adsl.dyn.edpnet.net
+ [77.109.96.193]) by relay-b03.edpnet.be with ESMTP id 8mYe8C18CN7ABJKh for
+ <buildroot@buildroot.org>; Mon, 17 Jun 2024 14:00:52 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
+X-Barracuda-Apparent-Source-IP: 77.109.96.193
+Received: from x1 (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
+ by srv21.vandijck-laurijssen.be (Postfix) with ESMTPSA id 62F345A9D0E
+ for <buildroot@buildroot.org>; Mon, 17 Jun 2024 14:00:52 +0200 (CEST)
+Date: Mon, 17 Jun 2024 14:00:50 +0200
+To: buildroot@buildroot.org
+Message-ID: <ZnAlcjgzFAilB92v@x1>
+X-ASG-Orig-Subj: [Buildroot] [PATCH RESEND] bcusdk: fix build
+References: <20240612093118.22195-1-dev.kurt@vandijck-laurijssen.be>
 MIME-Version: 1.0
-References: <20240613113924.3778837-1-yegorslists@googlemail.com>
- <Zm7K9fkXOlLrekgS@landeda>
- <CAGm1_ktfU00dOE7n7SdnK25-1AB0ca5KSYYtQPKUaOy+1vob5A@mail.gmail.com>
- <Zm7Syz8a9T09RrRf@landeda>
-In-Reply-To: <Zm7Syz8a9T09RrRf@landeda>
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 17 Jun 2024 11:41:30 +0200
-Message-ID: <CAGm1_ktf6=TgqyzBadMUX1d+jqB4Qtrsp4H8TD=54DjSGcpE0Q@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1718617144; x=1719221944; darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=6BGNDFPyelUnzpAsOMuqNflngWyWDgE/T2DmDtyVT3Y=;
- b=k4NrTc2COq5Mea3ThPGs81vJ7Z6VgFMwOoNtNKnZZ9XLvR+kkv1Hjvrw14VkOSqc4T
- ilbNq8dKnExgvGe6WtXpQ7O1EqGbMR+Cncq1C9jSlgqDNBM1JbVD4wUKp/4VCLdfxypc
- ve0ss15DEgjI2l2bT7621BD8IOQS3sLurrvH9nDJPewFtXJe6VRKOCkuSYiBmmtwWvnY
- 4/P88KJf/CFj2rMALBc66GOMik74tE3f/tx4M53JPTiN9sXpyNBWdXdV5ggUklO1X6Dt
- g9d5iA8lvGH1rzDisfQmxP9ycSZgt3IxuZQ9oNadwtGHptMXCTzTDgJOCAkjq7OY6lwa
- zreg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=k4NrTc2C
-Subject: Re: [Buildroot] [PATCH] package/ncftp: fix GCC 14.x related build
- errors
+Content-Disposition: inline
+In-Reply-To: <20240612093118.22195-1-dev.kurt@vandijck-laurijssen.be>
+X-Barracuda-Connect: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
+X-Barracuda-Start-Time: 1718625652
+X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 1557
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0
+ QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.126369
+ Rule breakdown below
+ pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=vandijck-laurijssen.be; s=default; t=1718625652;
+ bh=HMJtQDJ8WiIEcBsnwH/zJwixMv9zp6KcEjky7UP1dZ8=;
+ h=Date:From:To:Subject:References:In-Reply-To:From;
+ b=JOKDqK18fpBD8DvzrUAkgpAlsWzQVcGLg+ooMJwzjozIoAl7+6Q6P+S4MgY/35eDI
+ Sws6dX7UhfKF5WirKS5veT6FlvshArQDs6sj5oyujT1iCALYC1NPIjZItB2mgtZzUy
+ WzhQSpxpOFkPY7kif3D4KMOe6DGBjjFhBWR3mk4uA02/9/ouftZHe4TkEWpdPgXY0l
+ 58TEdbbOQkEtCs3t+brBOBxKoxeAPZHii3YbAPXDusgGWF55oahIFHvBOFfpHMB7hh
+ PIRpbD0UxoWF8ztbu9QXXr3kGIKLpnUi5xw6ENxaWgNAJIt159mFWcafppw/weupb1
+ KrwHgahGLfZQg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=vandijck-laurijssen.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=vandijck-laurijssen.be header.i=@vandijck-laurijssen.be
+ header.a=rsa-sha256 header.s=default header.b=JOKDqK18
+Subject: [Buildroot] [PATCH RESEND] bcusdk: fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,40 +97,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Kurt Van Dijck via buildroot <buildroot@buildroot.org>
+Reply-To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-WWFubiwgQWxsLAoKT24gU3VuLCBKdW4gMTYsIDIwMjQgYXQgMTo1NeKAr1BNIFlhbm4gRS4gTU9S
-SU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPgo+IFllZ29yLCBBbGwsCj4KPiBP
-biAyMDI0LTA2LTE2IDEzOjQyICswMjAwLCBZZWdvciBZZWZyZW1vdiBzcGFrZSB0aHVzbHk6Cj4g
-PiBPbiBTdW4sIEp1biAxNiwgMjAyNCBhdCAxOjIy4oCvUE0gWWFubiBFLiBNT1JJTiA8eWFubi5t
-b3Jpbi4xOTk4QGZyZWUuZnI+IHdyb3RlOgo+IFstLVNOSVAtLV0KPiA+ID4gPiBkaWZmIC0tZ2l0
-IGEvLmNoZWNrcGFja2FnZWlnbm9yZSBiLy5jaGVja3BhY2thZ2VpZ25vcmUKPiA+ID4gPiBpbmRl
-eCBkZDFmZDMxZTg2Li41MmI1MDkwMDM0IDEwMDY0NAo+ID4gPiA+IC0tLSBhLy5jaGVja3BhY2th
-Z2VpZ25vcmUKPiA+ID4gPiArKysgYi8uY2hlY2twYWNrYWdlaWdub3JlCj4gPiA+ID4gQEAgLTEw
-NjcsNiArMTA2Nyw4IEBAIHBhY2thZ2UvbXVzbC8wMDAxLWF2b2lkLWtlcm5lbC1pZl9ldGhlci5o
-LnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ID4gPiA+ICBwYWNrYWdlL211c2wvMDAwMi1wYWNr
-YWdlLW11c2wtTWFrZS1zY2hlZHVsZXItZnVuY3Rpb25zLUxpbnV4LWNvbXBhdGliLnBhdGNoIGxp
-Yl9wYXRjaC5VcHN0cmVhbQo+ID4gPiA+ICBwYWNrYWdlL25hbm8vMDAwMS1saWItZ2V0cmFuZG9t
-LmMtZml4LWJ1aWxkLXdpdGgtdWNsaWJjLTEuMC4zNS5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0K
-PiA+ID4gPiAgcGFja2FnZS9uYW5vY29tLzAwMDEtZml4LWJ1aWxkLXdpdGgtZ2NjLTEwLnBhdGNo
-IGxpYl9wYXRjaC5VcHN0cmVhbQo+ID4gPiA+ICtwYWNrYWdlL25jZnRwLzAwMDEtbmNmdHAtMy4y
-LjctZml4LWdjYzE0LnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ID4gPiA+ICtwYWNrYWdlL25j
-ZnRwLzAwMDItbmNmdHAtMy4yLjctZml4LWNsYW5nLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+
-ID4gPgo+ID4gPiBEbyBub3QgYWRkIGFuIGV4Y2x1c2lvbiBmb3IgbmV3IHBhdGNoZXM7IGluc3Rl
-YWQsIGFkZCBhbiBVcHN0cmVhbSB0YWcuCj4gWy0tU05JUC0tXQo+ID4gVGhlIHJlYXNvbiBmb3Ig
-dGhlIG1pc3NpbmcgVXBzdHJlYW0gdGFnIGlzIHRoYXQgdGhlcmUgaXMgbmVpdGhlciBidWcKPiA+
-IHRyYWNrZXIgbm9yIG1haWxpbmcgbGlzdC4gVGhlIG9ubHkgY29tbXVuaWNhdGlvbiBjaGFubmVs
-IGlzIGFuIGUtbWFpbAo+ID4gYWRkcmVzcy4gSSBoYXZlIGFscmVhZHkgc2VudCBib3RoIHBhdGNo
-ZXMgYW5kIGFza2VkIGdhemlsbGlvbnMgb2YKPiA+IHF1ZXN0aW9ucyBidXQgYWxsIHdhcyBpbiB2
-YWluIDotKAo+Cj4gQWgsIG5vdyB0aGF0IEkgbG9va2VkLCBpdCBpbmRlZWRzIGxvb2sgYmxlYWsu
-Li4gOi0oCj4KPiBJbiB0aGF0IGNhc2UsIHN0YXRlIGJyaWVmbHkgc286Cj4KPiAgICAgVXBzdHJl
-YW06IE4vQSwgdW5yZXNwb25zaXZlIGNvbnRhY3QgZW1haWwgYWRkcmVzcwo+Cj4gVGhhbmtzIGZv
-ciB0cnlpbmchIDotKQoKSSBoYXZlIHNlbnQgdjIuIE1lYW53aGlsZSwgSSdsbCB0cnkgdG8gZml4
-IHRoZSBzdGF0NjQgaXNzdWUuCgpZZWdvcgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+bcusdk is configured without libxml.
+This commit removes the autotools libxml dependency.
+
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+---
+ package/bcusdk/0003-remove-xml-autoconf.patch | 11 +++++++++++
+ package/bcusdk/bcusdk.mk                      |  2 ++
+ 2 files changed, 13 insertions(+)
+ create mode 100644 package/bcusdk/0003-remove-xml-autoconf.patch
+
+diff --git a/package/bcusdk/0003-remove-xml-autoconf.patch b/package/bcusdk/0003-remove-xml-autoconf.patch
+new file mode 100644
+index 0000000000..33ce45fe12
+--- /dev/null
++++ b/package/bcusdk/0003-remove-xml-autoconf.patch
+@@ -0,0 +1,11 @@
++--- a/configure.in	2024-06-12 11:20:16.800828493 +0200
+++++ b/configure.in	2024-06-12 11:18:19.275693151 +0200
++@@ -81,7 +81,7 @@
++ 
++ if test x$onlyeibd = xfalse ; then
++ 
++-AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
+++#AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
++ AC_PATH_PROG(TAS,[m68hc05-as],,[$PATH:$bindir:$prefix/bin])
++ AC_PATH_PROG(TLD,[m68hc05-ld],,[$PATH:$bindir:$prefix/bin])
++ AC_PATH_PROG(TAR,[m68hc05-ar],,[$PATH:$bindir:$prefix/bin])
+diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
+index f14b23c7cc..c572df725d 100644
+--- a/package/bcusdk/bcusdk.mk
++++ b/package/bcusdk/bcusdk.mk
+@@ -23,6 +23,8 @@ BCUSDK_CONF_OPTS = \
+ 
+ BCUSDK_DEPENDENCIES = libpthsem
+ 
++BCUSDK_AUTORECONF=YES
++
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+ BCUSDK_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
+ BCUSDK_CONF_ENV += LIBS=$(TARGET_NLS_LIBS)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
