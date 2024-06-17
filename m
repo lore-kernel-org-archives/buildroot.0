@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C32BC27C79
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 14:52:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3011FC2BA15
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 15:09:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA3B3401D8;
-	Mon, 17 Jun 2024 14:52:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D49C7408D5;
+	Mon, 17 Jun 2024 15:09:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HPgOhal8mD5f; Mon, 17 Jun 2024 14:52:31 +0000 (UTC)
+ id 9TCjPTRSJu_O; Mon, 17 Jun 2024 15:09:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8631240319
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1B3940907
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8631240319;
-	Mon, 17 Jun 2024 14:52:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7C8E51BF377
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 14:52:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1B3940907;
+	Mon, 17 Jun 2024 15:09:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 365AD1BF296
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7625440319
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 14:52:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 24481606BD
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:09:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j3UQ6Atu5ig9 for <buildroot@lists.busybox.net>;
- Mon, 17 Jun 2024 14:52:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fXzX875HcnZE for <buildroot@lists.busybox.net>;
+ Mon, 17 Jun 2024 15:09:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=bugzilla@busybox.net;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67D77401D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 570736063F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67D77401D8
- for <buildroot@uclibc.org>; Mon, 17 Jun 2024 14:52:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 570736063F
+ for <buildroot@uclibc.org>; Mon, 17 Jun 2024 15:09:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 5084D87BCE; Mon, 17 Jun 2024 14:52:28 +0000 (UTC)
+ id 4FF3C8690B; Mon, 17 Jun 2024 15:09:20 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Mon, 17 Jun 2024 14:52:27 +0000
+Date: Mon, 17 Jun 2024 15:09:20 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2024.05
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ciprian.craciun@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: MOVED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-16111-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cc bug_status resolution
+Message-ID: <bug-16111-163-5E8xERSdRx@https.bugs.busybox.net/>
+In-Reply-To: <bug-16111-163@https.bugs.busybox.net/>
+References: <bug-16111-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 16111] New: QuickJS binaries in `/usr/local/bin`
+Subject: [Buildroot] [Bug 16111] QuickJS binaries in `/usr/local/bin`
  (instead of `/usr/bin`)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,63 +83,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=16111
 
-            Bug ID: 16111
-           Summary: QuickJS binaries in `/usr/local/bin` (instead of
-                    `/usr/bin`)
-           Product: buildroot
-           Version: 2024.05
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: ciprian.craciun@gmail.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-After BuildRoot has updated QuickJS to version 2024-01-13, now QuickJS installs
-it's binaries under `/usr/local/bin` as opposed to `/usr/bin` (as it was before
-the update of QuickJS release).
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998@free.fr
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |MOVED
 
-Apparently the BuildRoot `quickjs.mk` script uses `prefix=/usr`, but the latest
-QuickJS makefile seems to expect `PREFIX=/usr`.
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Thank you for your report.
 
-The following minor patch solves the issue:
-~~~~
-diff --git i/package/quickjs/quickjs.mk w/package/quickjs/quickjs.mk
---- i/package/quickjs/quickjs.mk
-+++ w/package/quickjs/quickjs.mk
-@@ -22,25 +22,25 @@ define QUICKJS_BUILD_CMDS
-        EXTRA_LIBS="$(QUICKJS_EXTRA_LIBS)" \
-        all
- endef
+The issue tracker for the Buildroot project has been moved to
+the Gitlab.com issue tracker:
+    https://gitlab.com/buildroot.org/buildroot/-/issues
 
- define QUICKJS_INSTALL_STAGING_CMDS
-    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-        CROSS_PREFIX="$(TARGET_CROSS)" \
-        EXTRA_LIBS="$(QUICKJS_EXTRA_LIBS)" \
-        DESTDIR=$(STAGING_DIR) \
-        STRIP=/bin/true \
--       prefix=/usr \
-+       PREFIX=/usr \
-        install
- endef
+Please open an issue there.
 
- define QUICKJS_INSTALL_TARGET_CMDS
-    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-        CROSS_PREFIX="$(TARGET_CROSS)" \
-        EXTRA_LIBS="$(QUICKJS_EXTRA_LIBS)" \
-        DESTDIR=$(TARGET_DIR) \
-        STRIP=/bin/true \
--       prefix=/usr \
-+       PREFIX=/usr \
-        install
- endef
-
- $(eval $(generic-package))
-~~~~
+Thank you!
 
 -- 
 You are receiving this mail because:
