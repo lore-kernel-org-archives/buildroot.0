@@ -1,72 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 156B2C27C79
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 15:11:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9CE2C27C79
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 16:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC24B40A15;
-	Mon, 17 Jun 2024 15:11:36 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lJ8dlhTLSmCa; Mon, 17 Jun 2024 15:11:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 732D2409DB
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 732D2409DB;
-	Mon, 17 Jun 2024 15:11:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2EBF11BF296
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:11:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B72B406CB
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:11:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7962940675;
+	Mon, 17 Jun 2024 16:01:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f6UAqxEfrX24 for <buildroot@lists.busybox.net>;
- Mon, 17 Jun 2024 15:11:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=13.77.154.182;
- helo=linux.microsoft.com; envelope-from=flaniel@linux.microsoft.com;
+ id UD93Hvht7M1w; Mon, 17 Jun 2024 16:01:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 067D54067E
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 067D54067E;
+	Mon, 17 Jun 2024 16:01:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DEC611BF2AA
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 16:01:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CCCD3607B2
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 16:01:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MBgbENRY0Mdo for <buildroot@lists.busybox.net>;
+ Mon, 17 Jun 2024 16:01:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
+ helo=mslow1.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6A1F3406C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A1F3406C0
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A1F3406C0
- for <buildroot@buildroot.org>; Mon, 17 Jun 2024 15:11:25 +0000 (UTC)
-Received: from pwmachine.numericable.fr
- (75.red-83-59-17.dynamicip.rima-tde.net [83.59.17.75])
- by linux.microsoft.com (Postfix) with ESMTPSA id AEC0F20B7004;
- Mon, 17 Jun 2024 08:11:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AEC0F20B7004
-From: Francis Laniel <flaniel@linux.microsoft.com>
-To: buildroot@buildroot.org
-Date: Mon, 17 Jun 2024 16:10:20 +0100
-Message-Id: <20240617151020.31120-5-flaniel@linux.microsoft.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240617151020.31120-1-flaniel@linux.microsoft.com>
-References: <20240617151020.31120-1-flaniel@linux.microsoft.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B36956079A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B36956079A
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B36956079A
+ for <buildroot@buildroot.org>; Mon, 17 Jun 2024 16:01:13 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id AEA25C658E
+ for <buildroot@buildroot.org>; Mon, 17 Jun 2024 16:01:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1D4EA240007;
+ Mon, 17 Jun 2024 16:01:03 +0000 (UTC)
+Date: Mon, 17 Jun 2024 18:00:50 +0200
 MIME-Version: 1.0
+Message-Id: <20240617-uboot-default-env-v1-1-9ac88f0e1789@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIALFdcGYC/x3MQQqAIBBA0avErBtIKYuuEi0sxxoIDS0JpLsnL
+ d/i/wyRAlOEscoQKHFk7wpEXcG6a7cRsikG2ci2UaLHe/H+QkNW38eF5BK2Sg1DJ4VdNEHpzkC
+ Wn/85ze/7ATyThMJjAAAA
+To: buildroot@buildroot.org
+X-Mailer: b4 0.13.0
+X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=linux.microsoft.com; 
- s=default; t=1718637084;
- bh=g+bd0kfwyJS/A8As8otzwLxTJFx1hIToo3uUSEbFHM0=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=mH0dutQV0WK6YT27HEB8ups0W46am5POyN46UXMfAuJM+qvbX+FYb9rr0Yj0FIJgi
- JKHuCCdAW6JOsIhRRCYBNsFkob0+VOBFtjKNX7BAJXVZs1ffwMbigOANGUN2rJG69k
- BERkAr3KHJ/vY4Nxw+inzVS2CUw45KvwkLMAaDrc=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=linux.microsoft.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=linux.microsoft.com header.i=@linux.microsoft.com
- header.a=rsa-sha256 header.s=default header.b=mH0dutQV
-Subject: [Buildroot] [RFC PATCH v1 4/4] package/falcosecurity-libs: remove
- package.
+ d=bootlin.com; s=gm1; t=1718640063;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=TWJDpMCrR8mcZ8Rwt7jV3cARWnn2q6+CfB9FDRvud24=;
+ b=RkgU2nfRP5skhty4StG8CaMsQ0G5c0aJWCGuv02ak+Pu0NzDfPxNz7pcJaZjkuNEsh7fWk
+ +c/AuRRFk9gs2dL7+h2/OdcS4fe5+hOkcaPDH99Qlcd8tIpnQGEG7ikJdXAYb2hM6PPlf2
+ kI6+vNgiRREbXj9z3ZJGEGMyxyCBqVlqi7cs50lfgxdUKynpUsDomZkh2pGAE0qcebriKW
+ Vmjnu9hBJuG2ILwn5uOOgX9kgZKFQELhMYV6s9UiiFiqrkB0Xs5iU0wvaPhh6g33Eg1UIT
+ Av7xu/p0YEqTyTp+jqcIL6J2sQ12GniO9/+Zl9pd97QEorlQ4/nZGNGZpeKJyA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RkgU2nfR
+Subject: [Buildroot] [PATCH] uboot: allow taking the entire default
+ environment from a text file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,233 +82,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Francis Laniel <flaniel@linux.microsoft.com>
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: =?utf-8?q?K=C3=B6ry_Maincent?= <kory.maincent@bootlin.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Like sysdig, building this library in buildroot is complicated.
-Moreover, the build process has shown to change at each release
-of the upstream project which complexifies maintainability.
+By default U-Boot builds a default environment from its own configuration
+and a board-specific set of variables. However it also allows to bypass
+this entirely and define the entire default environment from a text file.
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+Expose this feature to Buildroot. This allows to have a file e.g. in
+board/.../uboot.env which contains an easy to maintain text file with the
+wanted default environment, without patching the U-Boot source code.
+
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- DEVELOPERS                                    |  1 -
- package/Config.in                             |  1 -
- ...cmake-Permit-setting-GRPC_CPP_PLUGIN.patch | 34 --------
- package/falcosecurity-libs/Config.in          | 32 --------
- .../falcosecurity-libs.hash                   |  5 --
- .../falcosecurity-libs/falcosecurity-libs.mk  | 82 -------------------
- 6 files changed, 155 deletions(-)
- delete mode 100644 package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
- delete mode 100644 package/falcosecurity-libs/Config.in
- delete mode 100644 package/falcosecurity-libs/falcosecurity-libs.hash
- delete mode 100644 package/falcosecurity-libs/falcosecurity-libs.mk
+ boot/uboot/Config.in | 29 +++++++++++++++++++++++++++++
+ boot/uboot/uboot.mk  |  9 +++++++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5bddb0303b..d4de5fc920 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1102,7 +1102,6 @@ F:	package/ipmitool/
- F:	package/odhcploc/
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index f37040a28a97..a3bf3e009c52 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -136,6 +136,35 @@ config BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES
+ 	  that will be merged to the main U-Boot configuration file.
+ endif
  
- N:	Francis Laniel <flaniel@linux.microsoft.com>
--F:	package/falcosecurity-libs
- F:	package/pahole/
- F:	package/tbb/
++config BR2_TARGET_UBOOT_USE_DEFAULT_ENV_FILE
++	bool "Generate default environment from text file"
++	select BR2_TARGET_UBOOT_NEEDS_XXD
++	help
++	  Define the entire U-Boot default environment from a file,
++	  disabling all the logic to generate it from the U-Boot source
++	  code and other configuration values.
++
++	  Based on the USE_DEFAULT_ENV_FILE and DEFAULT_ENV_FILE U-Boot
++	  configuration variables.
++
++	  Requires U-Boot >= v2018.05.
++
++config BR2_TARGET_UBOOT_DEFAULT_ENV_FILE
++	string "Text file with default environment"
++	depends on BR2_TARGET_UBOOT_USE_DEFAULT_ENV_FILE
++	help
++	  Text file containing the variables to be used as the default
++	  environment in U-Boot.
++
++	  From the U-Boot documentation:
++
++	    The format is the same as accepted by the mkenvimage tool, with
++	    lines containing key=value pairs. Blank lines and lines
++	    beginning with '#' are ignored.
++
++	  For more info see:
++	  https://docs.u-boot.org/en/latest/usage/environment.html#external-environment-file
++
+ config BR2_TARGET_UBOOT_NEEDS_DTC
+ 	bool "U-Boot needs dtc"
+ 	select BR2_PACKAGE_HOST_DTC
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 19f4cdb557e6..3b3d3a13e711 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -390,6 +390,14 @@ UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ # override again. In addition, host-ccache is not ready at kconfig
+ # time, so use HOSTCC_NOCCACHE.
+ UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTLDFLAGS=""
++
++ifeq ($(BR2_TARGET_UBOOT_USE_DEFAULT_ENV_FILE),y)
++UBOOT_DEFAULT_ENV_FILE = $(call qstrip,$(BR2_TARGET_UBOOT_DEFAULT_ENV_FILE))
++define UBOOT_KCONFIG_DEFAULT_ENV_FILE
++	$(call KCONFIG_SET_OPT,CONFIG_USE_DEFAULT_ENV_FILE,y)
++	$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENV_FILE,"$(shell readlink -f $(UBOOT_DEFAULT_ENV_FILE))")
++endef
++endif
+ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
  
-diff --git a/package/Config.in b/package/Config.in
-index 1d0fab2695..17dce7a836 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2122,7 +2122,6 @@ menu "Other"
- 	source "package/eigen/Config.in"
- 	source "package/elfutils/Config.in"
- 	source "package/ell/Config.in"
--	source "package/falcosecurity-libs/Config.in"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
- 	source "package/flatbuffers/Config.in"
-diff --git a/package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch b/package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
-deleted file mode 100644
-index 6141d8ef72..0000000000
---- a/package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 2e8a50cd4975df3ab60ee07c9675831cd5ad397f Mon Sep 17 00:00:00 2001
--From: Francis Laniel <flaniel@linux.microsoft.com>
--Date: Tue, 12 Apr 2022 19:54:11 +0100
--Subject: [PATCH] cmake: Permit setting GRPC_CPP_PLUGIN.
--
--This patch enables users to set GRPC_CPP_PLUGIN while calling cmake with:
--cmake -DGRPC_CPP_PLUGIN=/path
--
--Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-----
-- cmake/modules/grpc.cmake | 6 ++++--
-- 1 file changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/cmake/modules/grpc.cmake b/cmake/modules/grpc.cmake
--index e5fd16b8..9d8f5934 100644
----- a/cmake/modules/grpc.cmake
--+++ b/cmake/modules/grpc.cmake
--@@ -12,9 +12,11 @@ elseif(NOT USE_BUNDLED_GRPC)
-- 		set(GRPCPP_LIB gRPC::grpc++)
-- 
-- 		# gRPC C++ plugin
---		get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin LOCATION)
-- 		if(NOT GRPC_CPP_PLUGIN)
---			message(FATAL_ERROR "System grpc_cpp_plugin not found")
--+			get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin LOCATION)
--+			if(NOT GRPC_CPP_PLUGIN)
--+				message(FATAL_ERROR "System grpc_cpp_plugin not found")
--+			endif()
-- 		endif()
-- 
-- 		# gRPC include dir + properly handle grpc{++,pp}
---- 
--2.25.1
--
-diff --git a/package/falcosecurity-libs/Config.in b/package/falcosecurity-libs/Config.in
-deleted file mode 100644
-index 028a0ed28b..0000000000
---- a/package/falcosecurity-libs/Config.in
-+++ /dev/null
-@@ -1,32 +0,0 @@
--config BR2_PACKAGE_FALCOSECURITY_LIBS
--	bool
--	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
--	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_LINUX_KERNEL
--	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # grpc -> libabseil-cpp
--	depends on BR2_TOOLCHAIN_HAS_THREADS # jq, protobuf, tbb
--	depends on !BR2_STATIC_LIBS # protobuf, tbb
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
--	depends on BR2_TOOLCHAIN_USES_GLIBC # tbb
--	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
--	select BR2_PACKAGE_C_ARES
--	select BR2_PACKAGE_ELFUTILS
--	select BR2_PACKAGE_GRPC
--	select BR2_PACKAGE_GTEST
--	select BR2_PACKAGE_HOST_GRPC
--	select BR2_PACKAGE_HOST_PROTOBUF
--	select BR2_PACKAGE_JQ
--	select BR2_PACKAGE_JSONCPP
--	select BR2_PACKAGE_LIBB64
--	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_PROTOBUF
--	select BR2_PACKAGE_TBB
--	select BR2_PACKAGE_VALIJSON
--	select BR2_PACKAGE_ZLIB
--	help
--	  falcosecurity/libs provides libsinsp, libscap, the kernel
--	  module driver and the eBPF driver sources.
--
--	  https://github.com/falcosecurity/libs
-diff --git a/package/falcosecurity-libs/falcosecurity-libs.hash b/package/falcosecurity-libs/falcosecurity-libs.hash
-deleted file mode 100644
-index 2e239ca2fe..0000000000
---- a/package/falcosecurity-libs/falcosecurity-libs.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# sha256 locally computed
--sha256  80903bc57b7f9c5f24298ecf1531cf66ef571681b4bd1e05f6e4db704ffb380b  falcosecurity-libs-e5c53d648f3c4694385bbe488e7d47eaa36c229a.tar.gz
--sha256  21ec9433a87459b3477faf542bacec419dc03af841309eac35edeffe481cf10b  COPYING
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  driver/GPL2.txt
--sha256  f17d3f2c2d565a74a7d5bf96f880c43701e141897e8dff0c8aa13e5d07aaf226  driver/MIT.txt
-diff --git a/package/falcosecurity-libs/falcosecurity-libs.mk b/package/falcosecurity-libs/falcosecurity-libs.mk
-deleted file mode 100644
-index 4245f9581a..0000000000
---- a/package/falcosecurity-libs/falcosecurity-libs.mk
-+++ /dev/null
-@@ -1,82 +0,0 @@
--################################################################################
--#
--# falcosecurity-libs
--#
--################################################################################
--
--FALCOSECURITY_LIBS_VERSION = e5c53d648f3c4694385bbe488e7d47eaa36c229a
--FALCOSECURITY_LIBS_SITE = $(call github,falcosecurity,libs,$(FALCOSECURITY_LIBS_VERSION))
--FALCOSECURITY_LIBS_LICENSE = Apache-2.0 (userspace), MIT or GPL-2.0 (driver)
--FALCOSECURITY_LIBS_LICENSE_FILES = COPYING driver/MIT.txt driver/GPL2.txt
--
--FALCOSECURITY_LIBS_DEPENDENCIES = \
--	c-ares \
--	elfutils \
--	grpc \
--	gtest \
--	host-grpc \
--	host-protobuf \
--	jq \
--	jsoncpp \
--	libb64 \
--	libcurl \
--	luainterpreter \
--	openssl \
--	protobuf \
--	tbb \
--	valijson \
--	zlib
--
--FALCOSECURITY_LIBS_DRIVER_NAME = scap
--FALCOSECURITY_LIBS_MODULE_SUBDIRS = driver
--FALCOSECURITY_LIBS_MODULE_MAKE_OPTS = KERNELDIR=$(LINUX_DIR)
--
--# falcosecurity-libs module needs these two kernel options to be set:
--# CONFIG_TRACEPOINTS
--# CONFIG_HAVE_SYSCALL_TRACEPOINTS
--# https://github.com/draios/sysdig/wiki/How-to-Install-Sysdig-from-the-Source-Code#linux-and-osx
--# CONFIG_FTRACE and CONFIG_SCHED_TRACER selects CONFIG_GENERIC_TRACER which in
--# turns select CONFIG_TRACING which in turns select CONFIG_TRACEPOINTS
--define FALCOSECURITY_LIBS_LINUX_CONFIG_FIXUPS
--	$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_SCHED_TRACER)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_SYSCALL_TRACEPOINTS)
--endef
--
--# falcosecurity-libs creates the module Makefile from a template, which contains
--# a single place-holder, KBUILD_FLAGS, wich is only replaced with debug flags,
--# which we don't care about here.
--# So, just replace the place-holder with the only meaningful value: nothing.
--# For the DRIVER_NAME, we set it to FALCOSECURITY_LIBS_DRIVER_NAME.
--# So, when sysdig will be run, it will automatically load
--# FALCOSECURITY_LIBS_DRIVER_NAME.ko.
--# We also need to do the same process for driver_config.h.in.
--# PPM_API_CURRENT_VERSION_* were take from driver/API_VERSION and
--# PPM_SCHEMA_CURRENT_VERSION_* from driver/SCHEMA_VERSION.
--# For the others, it was taken by inspecting
--# falcosecurity-libs/*/CMakeLists.txt, which normally creates these
--# files, but doesn't work well with the kernel-module infrastructure.
--define FALCOSECURITY_LIBS_MODULE_GEN_MAKEFILE
--	$(INSTALL) -m 0644 $(@D)/driver/Makefile.in $(@D)/driver/Makefile
--	$(SED) 's/@KBUILD_FLAGS@//;' $(@D)/driver/Makefile
--	$(SED) 's/@DRIVER_NAME@/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/Makefile
--
--	$(INSTALL) -m 0644 $(@D)/driver/driver_config.h.in $(@D)/driver/driver_config.h
--	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MAJOR}/1/;' $(@D)/driver/driver_config.h
--	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MINOR}/0/;' $(@D)/driver/driver_config.h
--	$(SED) 's/\$${PPM_API_CURRENT_VERSION_PATCH}/0/;' $(@D)/driver/driver_config.h
--	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MAJOR}/1/;' $(@D)/driver/driver_config.h
--	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MINOR}/0/;' $(@D)/driver/driver_config.h
--	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_PATCH}/0/;' $(@D)/driver/driver_config.h
--	$(SED) 's/\$${DRIVER_VERSION}//;' $(@D)/driver/driver_config.h
--	$(SED) 's/\$${DRIVER_NAME}/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/driver_config.h
--	$(SED) 's/\$${DRIVER_DEVICE_NAME}/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/driver_config.h
--	$(SED) 's/\$${GIT_COMMIT}/0.1.1dev/;' $(@D)/driver/driver_config.h
--endef
--FALCOSECURITY_LIBS_POST_PATCH_HOOKS += FALCOSECURITY_LIBS_MODULE_GEN_MAKEFILE
--
--# Userspace components are not built and installed, because it this
--# package is intended to be included as source in another build.
--
--$(eval $(kernel-module))
--$(eval $(generic-package))
+ UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
+@@ -530,6 +538,7 @@ define UBOOT_KCONFIG_FIXUP_CMDS
+ 	$(UBOOT_ZYNQMP_KCONFIG_PMUFW)
+ 	$(UBOOT_ZYNQMP_KCONFIG_PM_CFG)
+ 	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
++	$(UBOOT_KCONFIG_DEFAULT_ENV_FILE)
+ endef
+ 
+ ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
+
+---
+base-commit: 7bfea9372f1842279a8f57b5fc4428bbae822e91
+change-id: 20240617-uboot-default-env-46688521fbae
+
+Best regards,
 -- 
-2.34.1
+Luca Ceresoli <luca.ceresoli@bootlin.com>
 
 _______________________________________________
 buildroot mailing list
