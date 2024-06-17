@@ -4,68 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D00FC27C79
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 15:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 156B2C27C79
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 15:11:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24FE94094B;
-	Mon, 17 Jun 2024 15:11:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC24B40A15;
+	Mon, 17 Jun 2024 15:11:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id srm9TLlujsy3; Mon, 17 Jun 2024 15:11:32 +0000 (UTC)
+ id lJ8dlhTLSmCa; Mon, 17 Jun 2024 15:11:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0245409A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 732D2409DB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0245409A7;
-	Mon, 17 Jun 2024 15:11:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F0431BF296
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:11:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 732D2409DB;
+	Mon, 17 Jun 2024 15:11:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2EBF11BF296
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:11:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C78B81C44
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:11:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B72B406CB
+ for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 15:11:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zxRIZJg5WUbR for <buildroot@lists.busybox.net>;
- Mon, 17 Jun 2024 15:11:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f6UAqxEfrX24 for <buildroot@lists.busybox.net>;
+ Mon, 17 Jun 2024 15:11:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=13.77.154.182;
  helo=linux.microsoft.com; envelope-from=flaniel@linux.microsoft.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E081A81C67
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E081A81C67
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6A1F3406C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A1F3406C0
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp1.osuosl.org (Postfix) with ESMTP id E081A81C67
- for <buildroot@buildroot.org>; Mon, 17 Jun 2024 15:11:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A1F3406C0
+ for <buildroot@buildroot.org>; Mon, 17 Jun 2024 15:11:25 +0000 (UTC)
 Received: from pwmachine.numericable.fr
  (75.red-83-59-17.dynamicip.rima-tde.net [83.59.17.75])
- by linux.microsoft.com (Postfix) with ESMTPSA id D4D2A20B7007;
- Mon, 17 Jun 2024 08:11:21 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D4D2A20B7007
+ by linux.microsoft.com (Postfix) with ESMTPSA id AEC0F20B7004;
+ Mon, 17 Jun 2024 08:11:23 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AEC0F20B7004
 From: Francis Laniel <flaniel@linux.microsoft.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Jun 2024 16:10:19 +0100
-Message-Id: <20240617151020.31120-4-flaniel@linux.microsoft.com>
+Date: Mon, 17 Jun 2024 16:10:20 +0100
+Message-Id: <20240617151020.31120-5-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240617151020.31120-1-flaniel@linux.microsoft.com>
 References: <20240617151020.31120-1-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=linux.microsoft.com; 
- s=default; t=1718637083;
- bh=DQzxenU0O/X6VEUYRm952DgRv3r4qfYDwj2Nr78dgBE=;
+ s=default; t=1718637084;
+ bh=g+bd0kfwyJS/A8As8otzwLxTJFx1hIToo3uUSEbFHM0=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=nPxwK+h0bCw1a4fSzY2n4mQCClznMmsrKBIV+YU5MkSj/5mUgrHeqTi/uJ5IavEog
- Ox1jJT447JQXZfxVsiJUe/Idfur3wMFdSD12eO5KxkKK4Av0olOKEuxqq+QqTcfQzm
- FVVKb+iu2lavvD6oiNvHmsTmozz/kH4eO60g9TDc=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=mH0dutQV0WK6YT27HEB8ups0W46am5POyN46UXMfAuJM+qvbX+FYb9rr0Yj0FIJgi
+ JKHuCCdAW6JOsIhRRCYBNsFkob0+VOBFtjKNX7BAJXVZs1ffwMbigOANGUN2rJG69k
+ BERkAr3KHJ/vY4Nxw+inzVS2CUw45KvwkLMAaDrc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=linux.microsoft.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=linux.microsoft.com
- header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default
- header.b=nPxwK+h0
-Subject: [Buildroot] [RFC PATCH v1 3/4] package/sysdig: remove package.
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=linux.microsoft.com header.i=@linux.microsoft.com
+ header.a=rsa-sha256 header.s=default header.b=mH0dutQV
+Subject: [Buildroot] [RFC PATCH v1 4/4] package/falcosecurity-libs: remove
+ package.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,148 +84,225 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building sysdig within buildroot is a complicated task which
-has changed at each of their release.
-As the package seems to not be really used in buildroot, it
-seems wise to remove it.
+Like sysdig, building this library in buildroot is complicated.
+Moreover, the build process has shown to change at each release
+of the upstream project which complexifies maintainability.
 
 Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 ---
- DEVELOPERS                 |  2 --
- package/Config.in          |  1 -
- package/sysdig/Config.in   | 34 ----------------------------------
- package/sysdig/sysdig.hash |  3 ---
- package/sysdig/sysdig.mk   | 38 --------------------------------------
- 5 files changed, 78 deletions(-)
- delete mode 100644 package/sysdig/Config.in
- delete mode 100644 package/sysdig/sysdig.hash
- delete mode 100644 package/sysdig/sysdig.mk
+ DEVELOPERS                                    |  1 -
+ package/Config.in                             |  1 -
+ ...cmake-Permit-setting-GRPC_CPP_PLUGIN.patch | 34 --------
+ package/falcosecurity-libs/Config.in          | 32 --------
+ .../falcosecurity-libs.hash                   |  5 --
+ .../falcosecurity-libs/falcosecurity-libs.mk  | 82 -------------------
+ 6 files changed, 155 deletions(-)
+ delete mode 100644 package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
+ delete mode 100644 package/falcosecurity-libs/Config.in
+ delete mode 100644 package/falcosecurity-libs/falcosecurity-libs.hash
+ delete mode 100644 package/falcosecurity-libs/falcosecurity-libs.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8bfd36f1d8..5bddb0303b 100644
+index 5bddb0303b..d4de5fc920 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -225,7 +225,6 @@ F:	package/rtl8723ds-bt/
- F:	package/sam-ba/
- F:	package/sshguard/
- F:	package/sunwait/
--F:	package/sysdig/
+@@ -1102,7 +1102,6 @@ F:	package/ipmitool/
+ F:	package/odhcploc/
  
- N:	Andy Shevchenko <andy.shevchenko@gmail.com>
- F:	package/fb-test-app/
-@@ -1105,7 +1104,6 @@ F:	package/odhcploc/
  N:	Francis Laniel <flaniel@linux.microsoft.com>
- F:	package/falcosecurity-libs
+-F:	package/falcosecurity-libs
  F:	package/pahole/
--F:	package/sysdig/
  F:	package/tbb/
  
- N:	Francisco Gonzalez <gzmorell@gmail.com>
 diff --git a/package/Config.in b/package/Config.in
-index 550fdc1f41..1d0fab2695 100644
+index 1d0fab2695..17dce7a836 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -153,7 +153,6 @@ menu "Debugging, profiling and benchmark"
- 	source "package/strace/Config.in"
- 	source "package/stress/Config.in"
- 	source "package/stress-ng/Config.in"
--	source "package/sysdig/Config.in"
- 	source "package/sysprof/Config.in"
- 	source "package/tbtools/Config.in"
- 	source "package/tcf-agent/Config.in"
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+@@ -2122,7 +2122,6 @@ menu "Other"
+ 	source "package/eigen/Config.in"
+ 	source "package/elfutils/Config.in"
+ 	source "package/ell/Config.in"
+-	source "package/falcosecurity-libs/Config.in"
+ 	source "package/fftw/Config.in"
+ 	source "package/flann/Config.in"
+ 	source "package/flatbuffers/Config.in"
+diff --git a/package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch b/package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
 deleted file mode 100644
-index 3a3670f5cb..0000000000
---- a/package/sysdig/Config.in
+index 6141d8ef72..0000000000
+--- a/package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch
 +++ /dev/null
 @@ -1,34 +0,0 @@
--config BR2_PACKAGE_SYSDIG
--	bool "sysdig"
--	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # falcosecurity-libs
--	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # falcosecurity-libs
--	depends on BR2_LINUX_KERNEL # falcosecurity-libs
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # falcosecurity-libs -> grpc -> libabseil-cpp
--	depends on BR2_TOOLCHAIN_HAS_THREADS # falcosecurity-libs
--	depends on !BR2_STATIC_LIBS # falcosecurity-libs
--	depends on BR2_TOOLCHAIN_USES_GLIBC # falcosecurity-libs
--	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1 # falcosecurity-libs
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # falcosecurity-libs
--	select BR2_PACKAGE_FALCOSECURITY_LIBS
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
--	select BR2_PACKAGE_YAML_CPP
+-From 2e8a50cd4975df3ab60ee07c9675831cd5ad397f Mon Sep 17 00:00:00 2001
+-From: Francis Laniel <flaniel@linux.microsoft.com>
+-Date: Tue, 12 Apr 2022 19:54:11 +0100
+-Subject: [PATCH] cmake: Permit setting GRPC_CPP_PLUGIN.
+-
+-This patch enables users to set GRPC_CPP_PLUGIN while calling cmake with:
+-cmake -DGRPC_CPP_PLUGIN=/path
+-
+-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+----
+- cmake/modules/grpc.cmake | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/cmake/modules/grpc.cmake b/cmake/modules/grpc.cmake
+-index e5fd16b8..9d8f5934 100644
+---- a/cmake/modules/grpc.cmake
+-+++ b/cmake/modules/grpc.cmake
+-@@ -12,9 +12,11 @@ elseif(NOT USE_BUNDLED_GRPC)
+- 		set(GRPCPP_LIB gRPC::grpc++)
+- 
+- 		# gRPC C++ plugin
+--		get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin LOCATION)
+- 		if(NOT GRPC_CPP_PLUGIN)
+--			message(FATAL_ERROR "System grpc_cpp_plugin not found")
+-+			get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin LOCATION)
+-+			if(NOT GRPC_CPP_PLUGIN)
+-+				message(FATAL_ERROR "System grpc_cpp_plugin not found")
+-+			endif()
+- 		endif()
+- 
+- 		# gRPC include dir + properly handle grpc{++,pp}
+--- 
+-2.25.1
+-
+diff --git a/package/falcosecurity-libs/Config.in b/package/falcosecurity-libs/Config.in
+deleted file mode 100644
+index 028a0ed28b..0000000000
+--- a/package/falcosecurity-libs/Config.in
++++ /dev/null
+@@ -1,32 +0,0 @@
+-config BR2_PACKAGE_FALCOSECURITY_LIBS
+-	bool
+-	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
+-	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+-	depends on BR2_LINUX_KERNEL
+-	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # grpc -> libabseil-cpp
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # jq, protobuf, tbb
+-	depends on !BR2_STATIC_LIBS # protobuf, tbb
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # tbb
+-	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+-	select BR2_PACKAGE_C_ARES
+-	select BR2_PACKAGE_ELFUTILS
+-	select BR2_PACKAGE_GRPC
+-	select BR2_PACKAGE_GTEST
+-	select BR2_PACKAGE_HOST_GRPC
+-	select BR2_PACKAGE_HOST_PROTOBUF
+-	select BR2_PACKAGE_JQ
+-	select BR2_PACKAGE_JSONCPP
+-	select BR2_PACKAGE_LIBB64
+-	select BR2_PACKAGE_LIBCURL
+-	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_PROTOBUF
+-	select BR2_PACKAGE_TBB
+-	select BR2_PACKAGE_VALIJSON
+-	select BR2_PACKAGE_ZLIB
 -	help
--	  Sysdig is open source, system-level exploration:
--	  capture system state and activity from a running Linux
--	  instance, then save, filter and analyze.
--	  Think of it as strace + tcpdump + lsof + awesome sauce.
--	  With a little Lua cherry on top.
+-	  falcosecurity/libs provides libsinsp, libscap, the kernel
+-	  module driver and the eBPF driver sources.
 -
--	  https://github.com/draios/sysdig/wiki
--
--comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 8, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
--	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_USES_GLIBC \
--		|| !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
+-	  https://github.com/falcosecurity/libs
+diff --git a/package/falcosecurity-libs/falcosecurity-libs.hash b/package/falcosecurity-libs/falcosecurity-libs.hash
 deleted file mode 100644
-index cda3de5e7c..0000000000
---- a/package/sysdig/sysdig.hash
+index 2e239ca2fe..0000000000
+--- a/package/falcosecurity-libs/falcosecurity-libs.hash
 +++ /dev/null
-@@ -1,3 +0,0 @@
+@@ -1,5 +0,0 @@
 -# sha256 locally computed
--sha256  6b96797859002ab69a2bed4fdba1c7fe8064ecf8661621ae7d8fbf8599ffa636  sysdig-0.29.3.tar.gz
--sha256  a88fbf820b38b1c7fabc6efe291b8259e02ae21326f56fe31c6c9adf374b2702  COPYING
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+-sha256  80903bc57b7f9c5f24298ecf1531cf66ef571681b4bd1e05f6e4db704ffb380b  falcosecurity-libs-e5c53d648f3c4694385bbe488e7d47eaa36c229a.tar.gz
+-sha256  21ec9433a87459b3477faf542bacec419dc03af841309eac35edeffe481cf10b  COPYING
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  driver/GPL2.txt
+-sha256  f17d3f2c2d565a74a7d5bf96f880c43701e141897e8dff0c8aa13e5d07aaf226  driver/MIT.txt
+diff --git a/package/falcosecurity-libs/falcosecurity-libs.mk b/package/falcosecurity-libs/falcosecurity-libs.mk
 deleted file mode 100644
-index bafe534a16..0000000000
---- a/package/sysdig/sysdig.mk
+index 4245f9581a..0000000000
+--- a/package/falcosecurity-libs/falcosecurity-libs.mk
 +++ /dev/null
-@@ -1,38 +0,0 @@
+@@ -1,82 +0,0 @@
 -################################################################################
 -#
--# sysdig
+-# falcosecurity-libs
 -#
 -################################################################################
 -
--SYSDIG_VERSION = 0.29.3
--SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
--SYSDIG_LICENSE = Apache-2.0
--SYSDIG_LICENSE_FILES = COPYING
--SYSDIG_CPE_ID_VENDOR = sysdig
--SYSDIG_CONF_OPTS = \
--	-DENABLE_DKMS=OFF \
--	-DUSE_BUNDLED_DEPS=OFF \
--	-DCREATE_TEST_TARGETS=OFF
--SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+-FALCOSECURITY_LIBS_VERSION = e5c53d648f3c4694385bbe488e7d47eaa36c229a
+-FALCOSECURITY_LIBS_SITE = $(call github,falcosecurity,libs,$(FALCOSECURITY_LIBS_VERSION))
+-FALCOSECURITY_LIBS_LICENSE = Apache-2.0 (userspace), MIT or GPL-2.0 (driver)
+-FALCOSECURITY_LIBS_LICENSE_FILES = COPYING driver/MIT.txt driver/GPL2.txt
 -
--SYSDIG_DEPENDENCIES = \
--	falcosecurity-libs \
--	ncurses \
--	json-for-modern-cpp \
--	yaml-cpp
+-FALCOSECURITY_LIBS_DEPENDENCIES = \
+-	c-ares \
+-	elfutils \
+-	grpc \
+-	gtest \
+-	host-grpc \
+-	host-protobuf \
+-	jq \
+-	jsoncpp \
+-	libb64 \
+-	libcurl \
+-	luainterpreter \
+-	openssl \
+-	protobuf \
+-	tbb \
+-	valijson \
+-	zlib
 -
--# Don't build the driver as part of the 'standard' procedure, it has been built
--# by falcosecurity-libs.mk.
--# grpc_cpp_plugin is needed to build falcosecurity libs, so we give the host
--# one there.
--SYSDIG_CONF_OPTS += -DFALCOSECURITY_LIBS_SOURCE_DIR=$(FALCOSECURITY_LIBS_SRCDIR) \
--	-DBUILD_DRIVER=OFF \
--	-DGRPC_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin \
--	-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME) \
--	-DENABLE_DKMS=OFF \
--	-DUSE_BUNDLED_DEPS=OFF \
--	-DWITH_CHISEL=ON \
--	-DVALIJSON_INCLUDE=$(BUILD_DIR)/valijson-0.6/include/valijson \
--	-DSYSDIG_VERSION=$(SYSDIG_VERSION)
+-FALCOSECURITY_LIBS_DRIVER_NAME = scap
+-FALCOSECURITY_LIBS_MODULE_SUBDIRS = driver
+-FALCOSECURITY_LIBS_MODULE_MAKE_OPTS = KERNELDIR=$(LINUX_DIR)
 -
--$(eval $(cmake-package))
+-# falcosecurity-libs module needs these two kernel options to be set:
+-# CONFIG_TRACEPOINTS
+-# CONFIG_HAVE_SYSCALL_TRACEPOINTS
+-# https://github.com/draios/sysdig/wiki/How-to-Install-Sysdig-from-the-Source-Code#linux-and-osx
+-# CONFIG_FTRACE and CONFIG_SCHED_TRACER selects CONFIG_GENERIC_TRACER which in
+-# turns select CONFIG_TRACING which in turns select CONFIG_TRACEPOINTS
+-define FALCOSECURITY_LIBS_LINUX_CONFIG_FIXUPS
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE)
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_SCHED_TRACER)
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_SYSCALL_TRACEPOINTS)
+-endef
+-
+-# falcosecurity-libs creates the module Makefile from a template, which contains
+-# a single place-holder, KBUILD_FLAGS, wich is only replaced with debug flags,
+-# which we don't care about here.
+-# So, just replace the place-holder with the only meaningful value: nothing.
+-# For the DRIVER_NAME, we set it to FALCOSECURITY_LIBS_DRIVER_NAME.
+-# So, when sysdig will be run, it will automatically load
+-# FALCOSECURITY_LIBS_DRIVER_NAME.ko.
+-# We also need to do the same process for driver_config.h.in.
+-# PPM_API_CURRENT_VERSION_* were take from driver/API_VERSION and
+-# PPM_SCHEMA_CURRENT_VERSION_* from driver/SCHEMA_VERSION.
+-# For the others, it was taken by inspecting
+-# falcosecurity-libs/*/CMakeLists.txt, which normally creates these
+-# files, but doesn't work well with the kernel-module infrastructure.
+-define FALCOSECURITY_LIBS_MODULE_GEN_MAKEFILE
+-	$(INSTALL) -m 0644 $(@D)/driver/Makefile.in $(@D)/driver/Makefile
+-	$(SED) 's/@KBUILD_FLAGS@//;' $(@D)/driver/Makefile
+-	$(SED) 's/@DRIVER_NAME@/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/Makefile
+-
+-	$(INSTALL) -m 0644 $(@D)/driver/driver_config.h.in $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MAJOR}/1/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MINOR}/0/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_API_CURRENT_VERSION_PATCH}/0/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MAJOR}/1/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MINOR}/0/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_PATCH}/0/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${DRIVER_VERSION}//;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${DRIVER_NAME}/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${DRIVER_DEVICE_NAME}/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/driver_config.h
+-	$(SED) 's/\$${GIT_COMMIT}/0.1.1dev/;' $(@D)/driver/driver_config.h
+-endef
+-FALCOSECURITY_LIBS_POST_PATCH_HOOKS += FALCOSECURITY_LIBS_MODULE_GEN_MAKEFILE
+-
+-# Userspace components are not built and installed, because it this
+-# package is intended to be included as source in another build.
+-
+-$(eval $(kernel-module))
+-$(eval $(generic-package))
 -- 
 2.34.1
 
