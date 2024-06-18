@@ -1,72 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A14FC2BA15
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 09:23:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB94BC2BA1A
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 10:18:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0243A820E7;
-	Tue, 18 Jun 2024 09:23:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78439404C5;
+	Tue, 18 Jun 2024 10:18:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HvenaoJCOQXf; Tue, 18 Jun 2024 09:23:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TEBcSgTslCZ3; Tue, 18 Jun 2024 10:18:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21F598210C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3276640578
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21F598210C;
-	Tue, 18 Jun 2024 09:23:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E81441BF281
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 09:23:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3276640578;
+	Tue, 18 Jun 2024 10:18:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F7E01BF280
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 10:18:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D39D18210C
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 09:23:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4AE6D413B5
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 10:18:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TmLS1NtJf9ED for <buildroot@lists.busybox.net>;
- Tue, 18 Jun 2024 09:23:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.149;
- helo=smtpdh19-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 086D5820E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 086D5820E7
-Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 086D5820E7
- for <buildroot@buildroot.org>; Tue, 18 Jun 2024 09:23:34 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id JV3qsp0SMGPpWJV3qsz1qM; Tue, 18 Jun 2024 11:23:30 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Tue, 18 Jun 2024 11:23:29 +0200
-Message-Id: <20240618092329.800791-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1Au7FmNGDHvt for <buildroot@lists.busybox.net>;
+ Tue, 18 Jun 2024 10:18:07 +0000 (UTC)
+X-Greylist: delayed 563 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 18 Jun 2024 10:18:06 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A14F5413A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A14F5413A0
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A14F5413A0
+ for <buildroot@buildroot.org>; Tue, 18 Jun 2024 10:18:06 +0000 (UTC)
+Received: from [192.168.178.36] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id C44742C838D0;
+ Tue, 18 Jun 2024 12:08:40 +0200 (CEST)
+Message-ID: <1014df63-f67d-45fd-9f9e-95ee1a17bd10@bubu1.eu>
+Date: Tue, 18 Jun 2024 12:08:39 +0200
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfG7++udntdj06JPojqqFIfTNu2tSZOb4y/BWq26eIGdwTAGSQ7jIK2PCxdPRraSUk/Rfb0/om314E0YlO5fpLwp2GJy081wYATk9pAbCpvpPekMv3dzV
- umBQuE00beursUXyXxcMtuNtL8gAsd4GJeSixqrAwc43vF+fryhWbE2Qbgq8MFNIOfcQ3sulxeOUKdcpWoovcZmBj/yjw8V46HP8ZQIUO6pjzT3tX4jEM7QP
- dNjk/6yAUKruk/o0l8ejjmZHkdlQUr6N1dExpeXbat0=
+User-Agent: Mozilla Thunderbird
+To: a.wellbrock@mailbox.org, buildroot@buildroot.org
+References: <20240617180157.3771298-1-a.wellbrock@mailbox.org>
+Content-Language: en-US
+In-Reply-To: <20240617180157.3771298-1-a.wellbrock@mailbox.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1718702610; bh=a3J22fq+f5mirbhQshAqAXAvsLOkwBwfcAh79EuLJsI=;
- h=From:To:Subject:Date:MIME-Version;
- b=cWmvWSTnWyqn0LKTghiWKomU0DZ3owhIaEW/mZgoW/2zwYZcq6hYZ3ir7DCgdFQkc
- kT+c2XDGzbaVX+9UnKRvDuNerdMl22Jj2nETdV6ShsNXm1+h2Yd8Lq2VaWkZVU1odS
- IBjW7y0IBjOZEWM4LSEUXweApKCSJHKQjHWUkk5cAMnF3S2xbF9UP7xzKpD4oEXX9m
- e0+fsVU3Sdn9FOFfor8wktR7cGPQOBRbXuJriosNlrU4wbqVZoREWbHj+fNe93qjvk
- Coj8n7bNKkvjS5s7YTqXMrT6sikAZC+vpytuWld98Yp9BtWiia298HgVpQBz8/hiPj
- KuP0itgexw8jQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=bubu1.eu; s=bubu; 
+ t=1718705320; bh=Fd4VifaJNKLuUtEMkiLIifar3iyVScQ+88ZZPFN3aH4=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=ZOqHvNAo0GsaOiARFaA8h9BWAhHfYJZ6NuVvifLqQd6WhvfCYURLePWQDjBDSE5Px
+ omUADS1/O8T1FL63hvQ70ZV9GXR20Dr7etbgQeAA0SQIEiGcirILdEXfy/pEqgUmjo
+ +0xvkMtJs1VJ9ZxIQJHS2CXin3swO7iyqAv7D2WR4a4nxg2px7h1M7JHcG9Zrwarsq
+ /Ce1AxS/1aqE5TvB9iv0giHD68clS0k8GJFY55OrIs/q8NabqqTPJuhDYTczMBWjzD
+ /B7r9BsYTS8T76Gbg3M9tdO/MLkOHktZ8qXf8weDc97YKwIcyIDoHH+5yDC1LDGMB/
+ lVIRsWJ7pvqhA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=cWmvWSTn
-Subject: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.7.3
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=ZOqHvNAo
+Subject: Re: [Buildroot] [PATCH 1/1] package/c-ares: update site url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,44 +81,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: alex <alexander.wellbrock@othermo.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Alex,
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index 531432aaaf..dfee537a4a 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/sha256sums.asc
--sha256  da5d1419e2a86e01aa32fd79582cd54d208857cb541bca2fd426a5ff1aaabbc3  cryptsetup-2.7.1.tar.xz
-+sha256  b772ae4f6df0cee7200b28cea960e4daaff2a203d2fd502beab3c1317b07a456  cryptsetup-2.7.3.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index b15f458576..d5046d9943 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CRYPTSETUP_VERSION_MAJOR = 2.7
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
--- 
-2.34.1
+On 17.06.24 20:01, Alexander Wellbrock via buildroot wrote:
+> From: alex <alexander.wellbrock@othermo.de>
+> 
+> Download URLs changed after hosting of the c-ares website changed
+> ownership:
+> https://daniel.haxx.se/blog/2024/06/06/bye-bye-hosting-c-ares-web/
+> 
+> This cannot be fixed upstream as github pages does not support .htaccess
+> files according to:
+> https://github.com/c-ares/c-ares.github.io/issues/2
+> 
+> Signed-off-by: Alexander Wellbrock <a.wellbrock@mailbox.org>
+> ---
+>   package/c-ares/c-ares.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+> index c4441255a2..a75a40da70 100644
+> --- a/package/c-ares/c-ares.mk
+> +++ b/package/c-ares/c-ares.mk
+> @@ -5,7 +5,7 @@
+>   ################################################################################
+>   
+>   C_ARES_VERSION = 1.27.0
+> -C_ARES_SITE = http://c-ares.haxx.se/download
+> +C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/cares-1_27_0
 
+Sorry, I missed that yesterday, this should use the github site helper 
+macro like this:
+
+C_ARES_SITE = $(call github,c-ares,c-ares,v$(C_ARES_VERSION))
+
+With the additional benefit of not having to change the SITE variable 
+for every version again here.
+
+>   C_ARES_INSTALL_STAGING = YES
+>   C_ARES_CONF_OPTS = --with-random=/dev/urandom
+>   C_ARES_LICENSE = MIT
+
+
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
