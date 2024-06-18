@@ -1,96 +1,152 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D78C2BB85
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jun 2024 20:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71BB6C27C79
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 03:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38CA260B12;
-	Mon, 17 Jun 2024 20:12:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 66F63432B3;
+	Tue, 18 Jun 2024 03:39:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JWunFLbWhOiW; Tue, 18 Jun 2024 03:39:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22B15432B5
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22B15432B5;
+	Tue, 18 Jun 2024 03:39:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EE3DD1BF31D
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 03:39:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E9255608E0
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 03:39:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ku0PT0fyDN04; Mon, 17 Jun 2024 20:12:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEC7E60AFB
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEC7E60AFB;
-	Mon, 17 Jun 2024 20:12:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0263F1BF290
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 20:12:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC0D4409D8
- for <buildroot@lists.busybox.net>; Mon, 17 Jun 2024 20:12:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cqmVa9MEZFxJ for <buildroot@lists.busybox.net>;
- Mon, 17 Jun 2024 20:12:48 +0000 (UTC)
+ id VecxB6n05aRl for <buildroot@lists.busybox.net>;
+ Tue, 18 Jun 2024 03:39:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=francois.dugast.foss@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 238F2414B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 238F2414B8
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 238F2414B8
- for <buildroot@buildroot.org>; Mon, 17 Jun 2024 20:12:48 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-36181b9bb16so35094f8f.2
- for <buildroot@buildroot.org>; Mon, 17 Jun 2024 13:12:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718655166; x=1719259966;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=7lHSEiux7bQ/m/9NBZ1cQdPuwjMGXRPHwCnGpKQ0Bj8=;
- b=UFUernLBJW227ID4oEPMAp+ec1NsG+qWdoeTRfhR4w25KaRW6HKXITdEiJZtDwmM7Y
- Nz0/IwI5YNaeefmb26kYQqJLt+YpPjXccqX4M1Tq/PZugYFDj3mAVsUOQjD+Og0NsEmR
- 0TrF7HPcgw1+C445X9ierB7UT8VxrBMr++bE+ArFLdpLT6SY+YQi4wOf8mlFGpZHMmp4
- uhiYBsIBJxpyqDx1V0u0UdMNDe5klgC4nUuefJcwPA/WBMKMJkxA/hAIny+rkN+FUV+b
- AHuzJI0axfcbY8WOwwItA14Q60t/TOxq0dQPr1q28T+4hJ/r22MhBozqDKSQdQQjv2iB
- 7y8g==
-X-Gm-Message-State: AOJu0YwhVmRlkXfhvzf4v/OkiodmS7dZEnLgc+cZM1Hf3ajwjQR1mmBS
- mha6F+pZo/6eifzaCkel4b7nAGTRZRBps0NKdCwN2TmH//SSziB8jwkP0A==
-X-Google-Smtp-Source: AGHT+IGJwkGHEkpZJOxPawEE8uguTMgY7WpjOIWdENEcMaeTJ+s4NOs3ketUOuobk7aQKiwul3EeUQ==
-X-Received: by 2002:a5d:4f0d:0:b0:360:9a40:3dd8 with SMTP id
- ffacd0b85a97d-3609a403e35mr2792474f8f.65.1718655165872; 
- Mon, 17 Jun 2024 13:12:45 -0700 (PDT)
-Received: from comet.lan (lfbn-ren-1-1629-205.w86-253.abo.wanadoo.fr.
- [86.253.181.205]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-360750f23cdsm12636048f8f.77.2024.06.17.13.12.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 17 Jun 2024 13:12:45 -0700 (PDT)
-From: Francois Dugast <francois.dugast.foss@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 17 Jun 2024 22:12:32 +0200
-Message-Id: <20240617201232.1804524-3-francois.dugast.foss@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240617201232.1804524-1-francois.dugast.foss@gmail.com>
-References: <20240617201232.1804524-1-francois.dugast.foss@gmail.com>
+ client-ip=2a01:111:f403:2408::613;
+ helo=nam04-bn8-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D0DC8607A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0DC8607A4
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam04on20613.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2408::613])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D0DC8607A4
+ for <buildroot@buildroot.org>; Tue, 18 Jun 2024 03:38:59 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IsCsSuuQbW7rKrV7UXq8zXxgcLXnkMWp6gpGzGq7V+6r+C0qqW1X7jhwCti2gmgR/zsLx4Xkv2TgQbFXVkfNW1rBkkF9lAn1cmh47ODItG2q6rKcdrSOmr1xGqVn5zxwtilpJQMOK6Z0mB3SFmTForiQqrREmVV2lp1Xlad0XAtSDA98/xRVCNd0wIeMkHerv7kHROcdK5YVLqbobV6481FCoKuQ9cAxPsxwyTuKpEfHC5J/dKc/kFpjDPjHRLQ06CTOZCyZVbiSbaVwzJMwjCAyp0vxODUk1mCQdelx2jHLac5ES0H8jDX06BpHO+PTYvzZQQZ+lmcM/dvXvhuK1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2FkkYsTvQbferkTnPQWaqWykn7HDCpJHLEorHU/6KH4=;
+ b=MIAGcPF1BBjf0mhm/oXm5dSJAaWA41LuLfrJKy3RwPRjLQ09i+qUfE9nE7H/Jp7E8SonJ4dAMaai0Klf9bEzfLj1zEAZOiE7jMa1PCETRDNnJHAwW3VJNU2mZ8tIgVvxW47P7E5897dAN5tGjb3jSHhwr2gjtSK1MZDlPbzKtl5McD/8OomruCWxHuYaZDpWipkmldudgztmhLXAt/+z0SrR6kMRRxAdX9It+Nskobk/TonCM5izp0NWQATmape4ABQ+NliDP39YGYQv7G+giJSpbC8N2o3ru4MtzndgjPLxxIi69C+ZYkHqmR2ABfuBqVe7JKdWyFRP673c+we7hA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from BL1PR13CA0122.namprd13.prod.outlook.com (2603:10b6:208:2bb::7)
+ by DS0PR12MB7581.namprd12.prod.outlook.com (2603:10b6:8:13d::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.30; Tue, 18 Jun
+ 2024 03:38:55 +0000
+Received: from BL6PEPF00022574.namprd02.prod.outlook.com
+ (2603:10b6:208:2bb:cafe::33) by BL1PR13CA0122.outlook.office365.com
+ (2603:10b6:208:2bb::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.31 via Frontend
+ Transport; Tue, 18 Jun 2024 03:38:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BL6PEPF00022574.mail.protection.outlook.com (10.167.249.42) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7677.15 via Frontend Transport; Tue, 18 Jun 2024 03:38:55 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 17 Jun
+ 2024 22:38:54 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Mon, 17 Jun 2024 22:38:53 -0500
+To: <buildroot@buildroot.org>
+Date: Tue, 18 Jun 2024 04:38:49 +0100
+Message-ID: <20240618033849.2389758-2-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240618033849.2389758-1-neal.frager@amd.com>
+References: <20240618033849.2389758-1-neal.frager@amd.com>
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF00022574:EE_|DS0PR12MB7581:EE_
+X-MS-Office365-Filtering-Correlation-Id: 33a696ac-55fb-48be-6151-08dc8f482df5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230037|36860700010|1800799021|376011|82310400023|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?giz4dad9Jqk9ae6Oq3fH1EISe/LLCMu1ZYSOGSayoC4C8vagipq1X63XzHMv?=
+ =?us-ascii?Q?QlbuVsB6WXg+t0loPYwAG7ILSN3FgT6apCjtCCZgEJ95ssB58l2dYTOTRzEz?=
+ =?us-ascii?Q?KHY68c+O9DLcQmqpONWPifNWiDdR9gtGTrTwMwUdKW9xtu1QRhnh9/xcFB5v?=
+ =?us-ascii?Q?pIgd6+BQ+jiWW3Le3erlJuwJkNybIPeJZD3yDQLPq7NBjZ9rbEXgomAjCalu?=
+ =?us-ascii?Q?adzBODa0vikVFuK5ryf0RtHSz8XtcIOARskRZ3K5Ff/lMFJbe9H91hJmZdgZ?=
+ =?us-ascii?Q?HJH2j8aQqfnxUKjATxVe3E9kT9XNsAb9b38Hixwo/weknhBggA5KD6Bo4r8K?=
+ =?us-ascii?Q?znoaWn2k2vyKltKgyloSkG6RaXS65E1MdQhYiy1m87u7iAr5rTFOuLfuQZKQ?=
+ =?us-ascii?Q?a1umccemHn/zptJ5TNVxfbIxDDSS2JOyAvs39MiMMjTKuq6JpsnrMV9NwuWQ?=
+ =?us-ascii?Q?JkUZO/OmtWbClGZOJUFyA0tKw2sl+DjZlRYjVfydyUoZZqmowAY/TIjJufA/?=
+ =?us-ascii?Q?vWDEp8OTtf1m2Ep1zUPcQyxrW/uyjUGUNznGPFqeUn4kcFHjJ82UQJs1dTDF?=
+ =?us-ascii?Q?zEUrmi0vL4qLXeMuS6zJARYeyuI32oyyr+VMwPC0CjAO6XsW39YHzqHiuH8O?=
+ =?us-ascii?Q?1rd1Kdm/JYwSUvgFpxz8CAtpDKJ4tCirxK0FMXSpGjRyenSQKGLGkb1RC7C0?=
+ =?us-ascii?Q?0bnYJJn41r3SI2t7AridfsI2BoLZkorrIBR3FayHg2GV4m9RgzZOCWmezMRv?=
+ =?us-ascii?Q?wV6Y7oR/weEkIITkaW4BBawHzW5VuR7YRok7lz/dDU+a5Ljd6x6HvnrvOvlw?=
+ =?us-ascii?Q?6EZLxIF+NzwQpwDW2f8KdK/hyHOO7M4uhgsudob+Fdcx0bPn04O+2CPcn9F3?=
+ =?us-ascii?Q?OHMb3ZQ1FTI1aiAhvu3smKt0itMiBuJU+uJwq/MpB3NNad9i1LyLpYa1Akv5?=
+ =?us-ascii?Q?5oFBywJc/z4s++Xk5x289NEeYUPmaf7s4aNPhrlu5twcpBHmEugTAgAYF3Xd?=
+ =?us-ascii?Q?DchWMup84hg453vCaoF2642HSownWXL404Aht3NbSJ0MrLfAo39HuuEh9t2l?=
+ =?us-ascii?Q?J8uVTlnLdwpHwKgnwd6rDje2Bwe1YKSu2+7/yTS0A4aU3BNMtLLZ9l14y6zp?=
+ =?us-ascii?Q?A5yLhD3/xOugLY1uljC9GMd+IIcLYkBo3KEjqfsXJZKvblLoMg3r/SZU9b7O?=
+ =?us-ascii?Q?RfCp4ltskr1/il0ooI1uTs5hyokP8BJZ5til/4MtdI0tP4WgeGMb3Ulhnlbl?=
+ =?us-ascii?Q?uXHBqCXDy/39yOFGxtzzEoBe9y021nio8zTpJQ79QbT4ROBbWiXlap2F3Xt8?=
+ =?us-ascii?Q?dR/QhxjHGtTYL4ttzMMsXW6Ygmrt+TVG5c5bFWA43N6926G9c3OK+O5jC6Am?=
+ =?us-ascii?Q?Q+A0MZKhrJVV6vCVyRuZC2jfhqNDcaBqubvIjVjBS7AMVX8KMIxNFKpJBIE+?=
+ =?us-ascii?Q?W0NoJ/wWVMfDduJnXkqkGyOUVJH6LcaF?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230037)(36860700010)(1800799021)(376011)(82310400023)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2024 03:38:55.0459 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33a696ac-55fb-48be-6151-08dc8f482df5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF00022574.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7581
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718655166; x=1719259966; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=7lHSEiux7bQ/m/9NBZ1cQdPuwjMGXRPHwCnGpKQ0Bj8=;
- b=AWz7vjp4IJsKRW2BIcv1CI9Bd1JCFDbucyZBjnt7bj+01z33MNloIJeo8cN3MY2VV/
- 5oLhfjO2FiishN0krfneoo27cr1/GVXyRhM56pr8QbDVOxO5KCVoFzBr5Fqng4GH4vqc
- LBbx+85Gs3JnJHrsTHeI57qJHne95tYA+8o+7Z9LYz8y+QuhBUZyFYpi6Co4VanJGDOz
- Av3LjqszTw+HMdwr2F2wNoUY/Q/am8jH1GdzrL0DiYCd8sqbLQKFvvEjsZzaRq7/aeDA
- CfIEVgSd+dQRG9QD7+0Do9fecdkmU28tlGIPsyhYjA5laXYKxOXNWeCZ1ZK2Bl22FCLD
- RAkA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=AWz7vjp4
-Subject: [Buildroot] [PATCH 3/3] configs/hifive_unmatched: new board
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2FkkYsTvQbferkTnPQWaqWykn7HDCpJHLEorHU/6KH4=;
+ b=eIm3op1ujz7Fh0NuttvSjtGhXA7oC+7qP+QdtJ3OnLgTf87W9FxeJ3y0T5N93AyqmtZ+vFu9n7cErkOmh375gUbVEjPh5+KAm4otdrbvRvddw2c9Dkhepdr+cCzua2D8N0j/ygEjHiahl2SYywlg6ros60wfdXye0JEjbLgmgSQ=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=eIm3op1u
+Subject: [Buildroot] [PATCH v4 2/2] board/zynqmp: cleanup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,228 +158,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Francois Dugast <francois.dugast.foss@gmail.com>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, michal.simek@amd.com,
+ yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for the HiFive Unmatched with mainline components:
- - U-Boot 2023.04
- - Linux 6.8
+Now that all zynqmp defconfigs have been bumped to xilinx-v2024.1, this patch
+cleans up the board/zynqmp dir by removing files that are no longer necessary.
 
-Board homepage:
- - https://www.sifive.com/boards/hifive-unmatched
-
-The configuration for the HiFive Unmatched is based on the existing
-configuration for the HiFive Unleashed.
-
-Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- board/sifive/hifive-unmatched/boot.cmd        |  4 ++
- .../patches/linux-headers/linux-headers.hash  |  2 +
- .../hifive-unmatched/patches/linux/linux.hash |  2 +
- .../patches/opensbi/opensbi.hash              |  2 +
- .../hifive-unmatched/patches/uboot/uboot.hash |  2 +
- board/sifive/hifive-unmatched/readme.txt      | 71 +++++++++++++++++++
- configs/hifive_unmatched_defconfig            | 60 ++++++++++++++++
- 7 files changed, 143 insertions(+)
- create mode 100644 board/sifive/hifive-unmatched/boot.cmd
- create mode 100644 board/sifive/hifive-unmatched/patches/linux-headers/linux-headers.hash
- create mode 100644 board/sifive/hifive-unmatched/patches/linux/linux.hash
- create mode 100644 board/sifive/hifive-unmatched/patches/opensbi/opensbi.hash
- create mode 100644 board/sifive/hifive-unmatched/patches/uboot/uboot.hash
- create mode 100644 board/sifive/hifive-unmatched/readme.txt
- create mode 100644 configs/hifive_unmatched_defconfig
+V4:
+- new patch included with v4
+---
+ board/zynqmp/kria/uboot.fragment                      | 11 -----------
+ ...-build-add-support-for-new-binutils-versions.patch |  1 -
+ .../0002-build-tools-avoid-unnecessary-link.patch     |  1 -
+ 3 files changed, 13 deletions(-)
+ delete mode 100644 board/zynqmp/kria/uboot.fragment
+ delete mode 120000 board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
+ delete mode 120000 board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
 
-diff --git a/board/sifive/hifive-unmatched/boot.cmd b/board/sifive/hifive-unmatched/boot.cmd
-new file mode 100644
-index 0000000000..3f7b1d9ce3
---- /dev/null
-+++ b/board/sifive/hifive-unmatched/boot.cmd
-@@ -0,0 +1,4 @@
-+setenv bootargs earlycon=sbi root=/dev/mmcblk0p3 rootwait
-+load mmc 0:3 ${kernel_addr_r} boot/Image
-+load mmc 0:3 ${fdt_addr_r} boot/hifive-unmatched-a00.dtb
-+booti ${kernel_addr_r} - ${fdt_addr_r}
-diff --git a/board/sifive/hifive-unmatched/patches/linux-headers/linux-headers.hash b/board/sifive/hifive-unmatched/patches/linux-headers/linux-headers.hash
-new file mode 100644
-index 0000000000..2b6769d4d1
---- /dev/null
-+++ b/board/sifive/hifive-unmatched/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	c969dea4e8bb6be991bbf7c010ba0e0a5643a3a8d8fb0a2aaa053406f1e965f3  linux-6.8.tar.xz
-diff --git a/board/sifive/hifive-unmatched/patches/linux/linux.hash b/board/sifive/hifive-unmatched/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..2b6769d4d1
---- /dev/null
-+++ b/board/sifive/hifive-unmatched/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	c969dea4e8bb6be991bbf7c010ba0e0a5643a3a8d8fb0a2aaa053406f1e965f3  linux-6.8.tar.xz
-diff --git a/board/sifive/hifive-unmatched/patches/opensbi/opensbi.hash b/board/sifive/hifive-unmatched/patches/opensbi/opensbi.hash
-new file mode 100644
-index 0000000000..c0fc3f683c
---- /dev/null
-+++ b/board/sifive/hifive-unmatched/patches/opensbi/opensbi.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 8fcbce598a73acc2c7f7d5607d46b9d5107d3ecbede8f68f42631dcfc25ef2b2  opensbi-1.2.tar.gz
-diff --git a/board/sifive/hifive-unmatched/patches/uboot/uboot.hash b/board/sifive/hifive-unmatched/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..57451c7afe
---- /dev/null
-+++ b/board/sifive/hifive-unmatched/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 e31cac91545ff41b71cec5d8c22afd695645cd6e2a442ccdacacd60534069341  u-boot-2023.04.tar.bz2
-diff --git a/board/sifive/hifive-unmatched/readme.txt b/board/sifive/hifive-unmatched/readme.txt
-new file mode 100644
-index 0000000000..d77847dc3c
---- /dev/null
-+++ b/board/sifive/hifive-unmatched/readme.txt
-@@ -0,0 +1,71 @@
-+SiFive HiFive Unmatched
-+=======================
-+
-+This file describes how to use the pre-defined Buildroot
-+configuration for the SiFive HiFive Unmatched board.
-+
-+Further information about the HiFive Unmatched board can be found
-+at https://www.sifive.com/boards/hifive-unmatched.
-+
-+Building
-+========
-+
-+Configure Buildroot using the default board configuration:
-+
-+  $ make hifive_unmatched_defconfig
-+
-+Customise the build as necessary:
-+
-+  $ make menuconfig
-+
-+Start the build:
-+
-+  $ make
-+
-+Result of the build
-+===================
-+
-+Once the build has finished you will have the following files:
-+
-+    output/images/
-+    +-- boot.scr
-+    +-- fw_dynamic.bin
-+    +-- fw_dynamic.elf
-+    +-- fw_jump.bin
-+    +-- fw_jump.elf
-+    +-- hifive-unmatched-a00.dtb
-+    +-- Image
-+    +-- rootfs.cpio
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4
-+    +-- rootfs.tar
-+    +-- sdcard.img
-+    +-- u-boot.bin
-+    +-- u-boot.itb
-+    +-- u-boot-spl.bin
-+
-+
-+Creating a bootable SD card with genimage
-+=========================================
-+
-+By default Buildroot builds a SD card image for you. All you need to do
-+is dd the image to your SD card, which can be done with the following
-+command on your development host:
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdb bs=4096
-+
-+The above example command assumes the SD card is accessed via a USB card
-+reader and shows up as /dev/sdb on the host. Adjust it accordingly per
-+your actual setup.
-+
-+Booting the SD card on the board
-+================================
-+
-+Make sure that the all DIP switches are set to the off position for
-+default boot mode (MSEL mode = 1011), insert the SD card and power
-+up the board.
-+
-+Connect the USB cable and open minicom (/dev/ttyUSB1, 115200, 8N1).
-+
-+See the 'SiFive HiFive Unmatched Getting Started Guide' for
-+more details (https://www.sifive.com/documentation).
-diff --git a/configs/hifive_unmatched_defconfig b/configs/hifive_unmatched_defconfig
-new file mode 100644
-index 0000000000..a9afaada45
---- /dev/null
-+++ b/configs/hifive_unmatched_defconfig
-@@ -0,0 +1,60 @@
-+# Architecture
-+BR2_riscv=y
-+BR2_riscv_custom=y
-+BR2_RISCV_ISA_RVM=y
-+BR2_RISCV_ISA_RVA=y
-+BR2_RISCV_ISA_RVF=y
-+BR2_RISCV_ISA_RVD=y
-+BR2_RISCV_ISA_RVC=y
-+BR2_RISCV_64=y
-+BR2_RISCV_ABI_LP64D=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttySIF0"
-+BR2_GLOBAL_PATCH_DIR="board/sifive/hifive-unmatched/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/sifive/common/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sifive/common/genimage_sdcard.cfg"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/common/linux.config.fragment"
-+BR2_LINUX_KERNEL_IMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sifive/hifive-unmatched-a00"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Bootloader
-+BR2_TARGET_OPENSBI=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
-+BR2_TARGET_OPENSBI_PLAT="generic"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sifive_unmatched"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+BR2_TARGET_UBOOT_SPL=y
-+
-+# Host tools
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/sifive/hifive-unmatched/boot.cmd"
+diff --git a/board/zynqmp/kria/uboot.fragment b/board/zynqmp/kria/uboot.fragment
+deleted file mode 100644
+index d8efc230a0..0000000000
+--- a/board/zynqmp/kria/uboot.fragment
++++ /dev/null
+@@ -1,11 +0,0 @@
+-CONFIG_SYS_SPI_U_BOOT_OFFS=0xF80000
+-CONFIG_MULTI_DTB_FIT=y
+-CONFIG_DTB_RESELECT=y
+-CONFIG_DMA=y
+-CONFIG_XILINX_DPDMA=y
+-CONFIG_PHY=y
+-CONFIG_PHY_XILINX_ZYNQMP=y
+-CONFIG_PINCTRL=y
+-CONFIG_PINCONF=y
+-CONFIG_VIDEO_ZYNQMP_DPSUB=y
+-CONFIG_SF_DEFAULT_SPEED=40000000
+diff --git a/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch b/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
+deleted file mode 120000
+index 8ad996914b..0000000000
+--- a/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
++++ /dev/null
+@@ -1 +0,0 @@
+-../../../../boot/arm-trusted-firmware/v2.8/0001-feat-build-add-support-for-new-binutils-versions.patch
+\ No newline at end of file
+diff --git a/board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch b/board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
+deleted file mode 120000
+index fecdee5449..0000000000
+--- a/board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
++++ /dev/null
+@@ -1 +0,0 @@
+-../../../../boot/arm-trusted-firmware/v2.8/0002-build-tools-avoid-unnecessary-link.patch
+\ No newline at end of file
 -- 
-2.30.2
+2.25.1
 
 _______________________________________________
 buildroot mailing list
