@@ -4,152 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 857EBC27C4F
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 07:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C4AFC27C4F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 08:10:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 577A1605EB;
-	Tue, 18 Jun 2024 07:49:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09C3060B5C;
+	Tue, 18 Jun 2024 08:10:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gv4GonxCGMng; Tue, 18 Jun 2024 07:49:49 +0000 (UTC)
+ id ZNvjEjaPe04D; Tue, 18 Jun 2024 08:10:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E0B66122A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D827F60B6C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E0B66122A;
-	Tue, 18 Jun 2024 07:49:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8E04E1BF283
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 07:49:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D827F60B6C;
+	Tue, 18 Jun 2024 08:10:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B15781BF282
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 08:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7747C60B5B
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 07:49:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB44440BB9
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 08:10:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a4q5wBhVWxga for <buildroot@lists.busybox.net>;
- Tue, 18 Jun 2024 07:49:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f400:7e88::625;
- helo=nam10-dm6-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 486B960B72
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 486B960B72
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on20625.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e88::625])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 486B960B72
- for <buildroot@buildroot.org>; Tue, 18 Jun 2024 07:49:39 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XFAvtroZ4Yb+3Qei5HpVAYRbsYgJG6pIeRJvXUNyldE45wBQd+LIIoid03RmrdppghROAOFX1yvH51quRgADpz7/AfqWkZ4/cvayUCa+mRAsVpKT84SuiLyCQAO66NGoi6XWOu1sFTxQSfNsn0G49JO4vfISN7UN150dr083yGLOBh8yYMgaXCWERy9i99Hq+sEenGLw2NzIh6FbQS/VKAhCPUkeES4dwZ5Oe9lu3mRCNjnKG32R29xh9hQLcvL2e7Z4x9LRp6UVgLVqTD59IISz3DXmSwDyllQoFGqZW7jqWSjI5zwhOo+5Uc11CL7qTDLHIYjUbHFH+twM95ATXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nObobgDxxVHGWDxekjL7WLF57ecNmtdfuUkdrWsaJdA=;
- b=dsoK0KudNTgJC9MFv5vbOSMAEqjX6J2PUt0vS8Ta0fO8G4Qotcu/75LomjcRZuIrltHIHcF0QPIYREopCzv95k1qqCZvWOvLQIiUlOdWQdHYJdZi3fK1JcVD/eLMgqOBC2iVHLWfY58S5zRP96gY2PPJJSloAlHZLO3rDjtiKl1mEOnkVGzXj1mPJJYOtiaXRtl57PGcpzEXY1q7/VtFYqH3HoDeWHBMEontSCX3Ucd0YmueW5pq9lTy7lil7zHjj6YWFOuFGWT9kNMF/GImICQNY5LwfvjGu6lAdFxig2lRywkZms37aDTB7VkQZjL1CLelH7wWpuPO7A/kfVRQQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MW4PR04CA0366.namprd04.prod.outlook.com (2603:10b6:303:81::11)
- by SA1PR12MB8744.namprd12.prod.outlook.com (2603:10b6:806:38c::10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.31; Tue, 18 Jun
- 2024 07:49:35 +0000
-Received: from CO1PEPF000042A7.namprd03.prod.outlook.com
- (2603:10b6:303:81:cafe::f5) by MW4PR04CA0366.outlook.office365.com
- (2603:10b6:303:81::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.31 via Frontend
- Transport; Tue, 18 Jun 2024 07:49:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1PEPF000042A7.mail.protection.outlook.com (10.167.243.36) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7677.15 via Frontend Transport; Tue, 18 Jun 2024 07:49:34 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 18 Jun
- 2024 02:49:33 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 18 Jun
- 2024 02:49:32 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 18 Jun 2024 02:49:31 -0500
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8lbnjTNnJr0r for <buildroot@lists.busybox.net>;
+ Tue, 18 Jun 2024 08:10:28 +0000 (UTC)
+X-Greylist: delayed 430 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 18 Jun 2024 08:10:28 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6611140154
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6611140154
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.154.123;
+ helo=esa.microchip.iphmx.com;
+ envelope-from=prvs=892ae8cca=jamie.gibbons@microchip.com; receiver=<UNKNOWN> 
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
+ [68.232.154.123])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6611140154
+ for <buildroot@buildroot.org>; Tue, 18 Jun 2024 08:10:28 +0000 (UTC)
+X-CSE-ConnectionGUID: UNLDkdqiTgqQ0IXG/4pWEw==
+X-CSE-MsgGUID: iuYJ4UVOSFmpcflIJhJzGQ==
+X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; d="scan'208";a="195414587"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+ by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 18 Jun 2024 01:03:17 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 18 Jun 2024 01:03:11 -0700
+Received: from jamie-dev.microchip.com (10.10.85.11) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Tue, 18 Jun 2024 01:03:10 -0700
 To: <buildroot@buildroot.org>
-Date: Tue, 18 Jun 2024 08:49:22 +0100
-Message-ID: <20240618074922.3555070-4-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240618074922.3555070-1-neal.frager@amd.com>
-References: <20240618074922.3555070-1-neal.frager@amd.com>
+Date: Tue, 18 Jun 2024 09:05:04 +0100
+Message-ID: <20240618080504.3964101-1-jamie.gibbons@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000042A7:EE_|SA1PR12MB8744:EE_
-X-MS-Office365-Filtering-Correlation-Id: 832e6760-9bd6-4d0a-ef84-08dc8f6b320c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230037|36860700010|376011|82310400023|1800799021|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?JQI0HHrGN/lYP4IbGKNAtdBi9PL7Jijk39racc9hw5Xqb9GLeoT+ZbzEAOd4?=
- =?us-ascii?Q?Zvu/IlkKKvyIoNOT/ByTVdYT2oisahECvGIWlEtRNBcpHeeHeRXaofPcBoyM?=
- =?us-ascii?Q?5kDVdjGh+n5G03vzduSV1shvSyBSEk3KO2yqzOwp/o0Pa6X4HrGI6bmZngRN?=
- =?us-ascii?Q?NU3qQZ6Ms0ruEPf9edTqo1dNR/b668ILah3I2iJhUGTx7W4v7p4jl2K8hhx1?=
- =?us-ascii?Q?nNMsoNw+3UluX8DuOJe/3DslgQUTTqU2vfuKNIIYfG4k2i4g1IaxkmjmZkR+?=
- =?us-ascii?Q?Jjz3wRuJXJNZPkgb9wkczM9gsVxynpeUw8ieJp4SpML6y9GyzeglCYW+uCR0?=
- =?us-ascii?Q?YZyygfEyJ+AwRjh5MeMWvCP2q3zkHMFSminM7I/SrehaJtm67IsiwmfxbfmU?=
- =?us-ascii?Q?h/6QR0xtFQi8HluYKQBzuGH4AMUOBMeiWD5qf4dXcACkfW0YQXaffTReRhHA?=
- =?us-ascii?Q?Y1vwp/PrnjjAjAAXoA4QLEKuf8keMfBMMfj790i5Wp0qdbVZtCI7bLqrH7ko?=
- =?us-ascii?Q?rKFf3DD2rzMiTn2739i75vFtYT2geB+hQmmmD1su++NVc4qJcIVomX+qy3db?=
- =?us-ascii?Q?2beuQdBAV2njK7lF9S8GIG0VX27JZMntDvNLGcZFohZqtAfhZsX4xk5PygjX?=
- =?us-ascii?Q?86VoNWzfgzL0kkFRMqTRvemMIWiHBamX4Ln0ndRV85EMpQWi4s5rDIYHPMWD?=
- =?us-ascii?Q?EamjzfChGZ6rHJrkXNJofhhqJDC/0smBHEEz17v24HAsAkqo9PitOB/y/x+r?=
- =?us-ascii?Q?TycvjTcGSBUimDVioAaeskFRgdNWc00j/5U0UT5mOWKmwMit+VRbw0B3Dykx?=
- =?us-ascii?Q?kGe12fgfQGEMD4yp8W0SRIG/IQy9/QjVJXwcWjbOvjM9phRBcJUJZNgqvdFr?=
- =?us-ascii?Q?mOghhC5lLguFdyozIvgyg65jFq9tPNtq840QCZm2VpwrNBtAC03uDs9bjUVi?=
- =?us-ascii?Q?GPGuM6k1j9RhhTff0ToGBjEpH3qwkakJFhHCQJTIKOvJeM5CLIE8elE+Oxeu?=
- =?us-ascii?Q?57EovvkyimvVhsEY/sQKgO/dDn7bSUa3vJ0x3CzK7uD0ZUcaOOQstQapYWfD?=
- =?us-ascii?Q?Dsh4t3bbog6yKHkOSc83HQoDSpuQgExPqGLNZh97Vlk2lCpnXSnCsrnIVaSi?=
- =?us-ascii?Q?khWnkZPnA+DxS9eLJyMt2hEv8jBN81sYuifyU376EtMbYJzg3mQsjQEAg9Mr?=
- =?us-ascii?Q?pesJx377Rw021UGwx/Nk/gykoz7VcEaZxAZdDXJu2lBtJx9RpFijD//zuD7h?=
- =?us-ascii?Q?jJaRSxD+MEW+fPEjT7LcOa3O80vD348nG4GEV3WjAv+vjyVeQuWIjHIySA9v?=
- =?us-ascii?Q?oZxoj0UdnpvfQUWTm6yjdIzAlfA/4wB6HcIF8Xg+5x6IWjWSdX6s7yAoNvCQ?=
- =?us-ascii?Q?u2WLEGd2XGKGbo+wIIHKGtvcPnbF6nxBswhFF9WACie10XM9zQCrirvSB45A?=
- =?us-ascii?Q?81i7uaOgMkZxcGDpumJqfz0evgekO+9+?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230037)(36860700010)(376011)(82310400023)(1800799021)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2024 07:49:34.2030 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 832e6760-9bd6-4d0a-ef84-08dc8f6b320c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042A7.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8744
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nObobgDxxVHGWDxekjL7WLF57ecNmtdfuUkdrWsaJdA=;
- b=ulOCKxxR5YAD9lryS3u2LHmoKoSpmQVQ64KiGd/72aweksrTKD7O8NCJWagNBQGc717cPf2E7/Errru8cQ+GV1+DETcJKcU87Zv39eJd3uXpuYRCtRm7Kr+Z6Uac+GdR7Gsz5iDBDhcJ59m2NhnKQr1dH2FE9UbG5gJxyddsxHI=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=ulOCKxxR
-Subject: [Buildroot] [PATCH v3 4/4] configs/zynqmp|versal: migrate to
- xilinx-source
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1718698228; x=1750234228;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=URL3H1PFwkNeK1Z/lkfGqrvoBZo9yAvJFMwYa4W8scA=;
+ b=a6KfjT4NoJD3QIZ6cG8WxxcTQU856p5XvlMrBEer3ZrL3FumNuLMvM93
+ gJ12CE88eRyR30EeGL+/Qu8gvNKF7sYcq5tTsvGmaqvYlyHb9Mv1sVfy6
+ wJ7+sZXSVkr0d8fiWw7sKnKCTEsROABlOdi3DEWbqp3R95057fckDKCm8
+ A5zwdxTMGkaubblw48j8EDO3hEQqBICZGD2USzrMxs9Gwzt4uWrG6IJaU
+ RLlPE9V5nP+IIXoPqmUlFlTY+68HPItkyycbqxJyGHZT8/g7AN+g735+e
+ dyHu5jxQccG3B0+ptBbc945qPvtzSL21e9IYQ7ygeMGVMwjcBuRMKFvR0
+ A==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=microchip.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=microchip.com header.i=@microchip.com
+ header.a=rsa-sha256 header.s=mchp header.b=a6KfjT4N
+Subject: [Buildroot] [PATCH v2 1/1] configs/beaglev_fire: add support for
+ BeagleV Fire
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -161,106 +92,498 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
- Neal Frager <neal.frager@amd.com>, michal.simek@amd.com,
- yann.morin.1998@free.fr
+From: Jamie Gibbons via buildroot <buildroot@buildroot.org>
+Reply-To: Jamie Gibbons <jamie.gibbons@microchip.com>
+Cc: Conor Dooley <Conor.Dooley@microchip.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Valentina Fernandez <valentina.fernandezalanis@microchip.com>, Jamie
+ Gibbons <jamie.gibbons@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate one defconfig from kria, zynqmp and versal to xilinx-source.
+Add support for the BeagleV Fire, the Beagleboard SBC powered by
+Microchip's PolarFire SoC.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
-Comment: This can be used just for testing the xilinx-source patch set or we
-can commit this patch.  My preference would be to move all zynqmp, kria and
-versal defconfigs to xilinx-source, but I know this comes at a significant
-build time penalty, so I am ok with leaving the example defconfigs on
-xilinx-prebuilt.  Up to the buildroot maintainers to decide.
----
- configs/versal_vck190_defconfig     |  5 +++++
- configs/zynqmp_kria_kv260_defconfig | 11 ++++++-----
- configs/zynqmp_zcu106_defconfig     | 10 ++++++----
- 3 files changed, 17 insertions(+), 9 deletions(-)
+The configuration file is beaglev_fire_defconfig. It builds a
+bootable kernel image with an embedded root file system. The image
+built can be flashed to the board using the eMMC.
 
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index 21dfe2577a..3a1a8be688 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
-@@ -35,9 +35,14 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_XILINX_PREBUILT=y
- BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
- BR2_TARGET_XILINX_PREBUILT_VERSAL=y
-+BR2_TARGET_XILINX_SOURCE=y
-+BR2_TARGET_XILINX_SOURCE_VERSION="xilinx_v2024.1"
-+BR2_TARGET_XILINX_SOURCE_VERSAL=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_PACKAGE_HOST_BOOTGEN=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index a16da66e38..82ebf2e247 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -31,16 +31,17 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_XILINX_PREBUILT=y
--BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
--BR2_TARGET_XILINX_PREBUILT_BOARD="kv260"
--BR2_TARGET_XILINX_PREBUILT_KRIA=y
-+BR2_TARGET_XILINX_SOURCE=y
-+BR2_TARGET_XILINX_SOURCE_VERSION="xilinx_v2024.1"
-+BR2_TARGET_XILINX_SOURCE_KRIA=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index c10ec70ed8..89269dfb5b 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -30,15 +30,17 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT=y
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_XILINX_PREBUILT=y
--BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
--BR2_TARGET_XILINX_PREBUILT_BOARD="zcu106"
-+BR2_TARGET_XILINX_SOURCE=y
-+BR2_TARGET_XILINX_SOURCE_VERSION="xilinx_v2024.1"
-+BR2_TARGET_XILINX_SOURCE_ZYNQMP=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
+The yaml configuration file is used by the hss payload generator. It
+maps the ELF binaries or binary blobs to the application hart.
+
+The image generator script sets the partitions of the image.
+
+The image tree souce file creates a FIT image.
+
+The post image script creates the payload using the payload generator
+host package and finally, creates the FIT image using the ITS after the
+kernel build. It also creates the BMAP file for use with the BMAP
+command line tool to transfer the image to the board.
+
+The U-Boot script and additional U-Boot configurations ensure that
+U-Boot behaves as expected for the BeagleV-Fire and boots the FIT image.
+
+The rootfs-overlay contains script for updating the BeagleV-Fire
+gateware.
+
+The README.txt documents how to build and boot the Beagle-V Fire with
+this configuration. It also explains how to program a custom bitstream.
+
+Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
+Reviewed-by: Valentina Fernandez <valentina.fernandezalanis@microchip.com>
+---
+v1 -> v2:
+- README updates
+- renamed U-Boot boot script
+- combined gateware update scripts
+- replaced mtd_debug with flash_erase and dd in gateware update script
+- fixed genimage for initramfs image generation
+- removed unused target packages
+---
+ DEVELOPERS                                    |   2 +
+ board/beaglev_fire/README.txt                 | 134 ++++++++++++++++++
+ board/beaglev_fire/beaglev_fire.its           |  55 +++++++
+ board/beaglev_fire/boot.cmd                   |  15 ++
+ board/beaglev_fire/config.yaml                |  28 ++++
+ board/beaglev_fire/genimage.cfg               |  35 +++++
+ board/beaglev_fire/post-image.sh              |  14 ++
+ .../usr/share/microchip/update-gateware.sh    |  32 +++++
+ board/beaglev_fire/uboot-fragment.config      |   3 +
+ configs/beaglev_fire_defconfig                |  32 +++++
+ 10 files changed, 350 insertions(+)
+ create mode 100644 board/beaglev_fire/README.txt
+ create mode 100644 board/beaglev_fire/beaglev_fire.its
+ create mode 100644 board/beaglev_fire/boot.cmd
+ create mode 100644 board/beaglev_fire/config.yaml
+ create mode 100644 board/beaglev_fire/genimage.cfg
+ create mode 100755 board/beaglev_fire/post-image.sh
+ create mode 100644 board/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
+ create mode 100644 board/beaglev_fire/uboot-fragment.config
+ create mode 100644 configs/beaglev_fire_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8bfd36f1d8..59783cc989 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1489,7 +1489,9 @@ F:	package/swaybg/
+ F:	package/yad/
+ 
+ N:	Jamie Gibbons <jamie.gibbons@microchip.com>
++F:	board/beaglev_fire/
+ F:	board/microchip/mpfs_icicle/
++F:	configs/beaglev_fire_defconfig
+ F:	configs/microchip_mpfs_icicle_defconfig
+ F:	package/microchip-hss-payload-generator/
+ 
+diff --git a/board/beaglev_fire/README.txt b/board/beaglev_fire/README.txt
+new file mode 100644
+index 0000000000..f78f30ba5d
+--- /dev/null
++++ b/board/beaglev_fire/README.txt
+@@ -0,0 +1,134 @@
++Beagle-V Fire
++==============
++
++BeagleV Fire is a low-cost RISC-V 64-bit based platform, powered by
++Microchip's PolarFire SoC. This file describes how to use the
++pre-defined Buildroot configuration for the Beagle-V Fire board.
++
++Further information about the Beagle-V Fire can be found at
++https://docs.beagleboard.org/latest/boards/beaglev/fire/index.html.
++
++
++Building
++========
++
++Configure Buildroot using the default board configuration:
++
++  '$ make beaglev_fire_defconfig'
++
++Customise the build as necessary:
++
++  '$ make menuconfig'
++
++Start the build:
++
++  '$ make'
++
++
++Result of the build
++===================
++
++Once the build has finished you will have the following files:
++
++    output/images/
++    +-- boot.scr
++    +-- boot.vfat
++    +-- Image
++    +-- Image.gz
++    +-- beaglev_fire.itb
++    +-- beaglev_fire.its
++    +-- mpfs-beaglev-fire.dtb
++    +-- payload.bin
++    +-- rootfs.ext2
++    +-- rootfs.ext4
++    +-- rootfs.tar
++    +-- sdcard.img
++    +-- u-boot.bin
++
++
++Flashing the image to your eMMC
++===============================
++
++By default Buildroot builds an image suitable for the eMMC. The first partition
++of this image contains a U-Boot binary, embedded in a Hart Software Services
++(HSS) payload. The second partition contains a FAT filesystem with a U-Boot env
++and an ITB file containing the kernel and the device tree. The third partition
++contains the file system. This image can be written directly to the eMMC. 
++
++To do so, follow the below steps:
++
++1. Connect to BeagleV-Fire UART debug port using a 3.3v USB to UART bridge.
++
++2. Now you can run `tio <port>` in a terminal window to access the UART debug
++port connection.
++  e.g `tio /dev/ttyUSB4`
++
++3. Once you are connected properly, you can press the Reset button which will
++show you a progress bar.
++
++4. Press any key in the terminal application to stop the HSS from booting. This
++will give you access to the HSS command line interface and a ">>" for input
++will be displayed in the terminal.
++
++5. Type `usbdmsc` in the HSS command line interface. The HSS `usbdmsc` command
++exposes the eMMC as a USB mass storage device using the USB type C connector.
++If successful, a message saying "USB Host connected" will be displayed.
++
++6. The eMMC should now appear as mass storage device/drive on your host PC, as
++it is mounted through your USB type C connector.
++
++7. Now, all you need to do is dd the image to the eMMC, which can be done with
++the following command on your development host:
++
++  '$ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=1M'
++
++You will have to replace /dev/sdX by the actual device name of your eMMC.
++Please, be especially cautious not to overwrite the wrong drive as this cannot
++be undone.
++
++8. Once the image transfer has completed you can type `CTRL+C` to disconnect
++your device.
++
++9. Finally, type `boot` or reset your board to boot your new Linux image.
++
++Customize BeagleV-Fire Cape Gateware Using Verilog (Optional)
++=============================================================
++
++To customize your Beagle-V Fire gateware please follow the guide below to
++create your custom bitstream (steps 1 - 6):
++https://docs.beagleboard.org/latest/boards/beaglev/fire/demos-and-tutorials/gateware/customize-cape-gateware-verilog.html
++
++
++  Program BeagleV-Fire With Your Custom Bitstream with Buildroot
++  ==============================================================
++
++  After following the steps 1-6 from the above tutorial, you should now have a
++  artifacts.zip file on your local host.
++
++  Unzip the downloaded artifacts.zip file. 
++
++  Go to the custom FPGA design directory:
++    'cd artifacts/bitstreams/my_custom_fpga_design'
++
++  On your Linux host development computer, copy the bitstream to BeagleV-Fire
++  board, replacing </path/to/your/> with the path to your BeagleV-Fire root file
++  system.
++    'cp -r ./LinuxProgramming /path/to/your/buildroot/board/beaglev_fire/rootfs-overlay/etc/'
++
++  To apply these changes to your image, make sure to re-build it with:
++    `make`
++
++  Then, re-flash your image - to ensure you have the necessary firmware files - by
++  following the above section "Flashing the image to your eMMC".
++
++  On BeagleV-Fire,
++    1. Make your update gateware script executable
++      'chmod +x /usr/share/microchip/update-gateware.sh'
++    2. Create a firmware directory
++      'mkdir /lib/firmware'
++    3. Change to the directory of your gateware script
++      `cd /usr/share/microchip/`
++    3. initiate the reprogramming of the FPGA with your gateware bitstream:
++      './update-gateware.sh /etc/LinuxProgramming/'
++
++  Wait for a couple of minutes for the BeagleV-Fire to reprogram itself.
+\ No newline at end of file
+diff --git a/board/beaglev_fire/beaglev_fire.its b/board/beaglev_fire/beaglev_fire.its
+new file mode 100644
+index 0000000000..97c878c118
+--- /dev/null
++++ b/board/beaglev_fire/beaglev_fire.its
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Flattened Image Tree file for BVF
++ *
++ * Copyright (C) 2024 Microchip Technology Inc. and its subsidiaries.
++ *
++ */
++
++/dts-v1/;
++
++/ {
++	description = "U-Boot fitImage for the BeagleV-Fire";
++	#address-cells = <2>;
++
++		images {
++			kernel {
++				description = "Linux kernel";
++				data = /incbin/("./Image.gz");
++				type = "kernel";
++				arch = "riscv";
++				os = "linux";
++				compression = "gzip";
++				load = <0x80200000>;
++				entry = <0x80200000>;
++				hash-1 {
++					algo = "sha256";
++				};
++			};
++			base_fdt {
++				description = "Flattened Device Tree blob";
++				data = /incbin/("./mpfs-beaglev-fire.dtb");
++				type = "flat_dt";
++				arch = "riscv";
++				compression = "none";
++				load = <0x8a000000>;
++				hash-1 {
++					algo = "sha256";
++				};
++			};
++		};
++
++		configurations {
++			default = "kernel_dtb";
++			kernel_dtb {
++				description = "1 Linux kernel, FDT blob";
++				kernel = "kernel";
++				fdt = "base_fdt";
++			};
++
++			base_dtb {
++				description = "Base FDT blob for BeagleV-Fire board";
++				fdt = "base_fdt";
++			};
++		};
++};
+diff --git a/board/beaglev_fire/boot.cmd b/board/beaglev_fire/boot.cmd
+new file mode 100644
+index 0000000000..05f4858bac
+--- /dev/null
++++ b/board/beaglev_fire/boot.cmd
+@@ -0,0 +1,15 @@
++# this assumes ${scriptaddr} is already set!!
++
++# Try to boot a fitImage from eMMC/SD
++
++setenv fdt_high 0xffffffffffffffff
++setenv initrd_high 0xffffffffffffffff
++
++load mmc 0:${distro_bootpart} ${scriptaddr} beaglev_fire.itb;
++bootm start ${scriptaddr}#kernel_dtb;
++bootm loados ${scriptaddr};
++# Try to load a ramdisk if available inside fitImage
++bootm ramdisk;
++bootm prep;
++fdt set /soc/ethernet@20110000 mac-address ${beaglevfire_mac_addr0};
++bootm go;
+diff --git a/board/beaglev_fire/config.yaml b/board/beaglev_fire/config.yaml
+new file mode 100644
+index 0000000000..5fccdfd34f
+--- /dev/null
++++ b/board/beaglev_fire/config.yaml
+@@ -0,0 +1,28 @@
++#
++# HSS Payload Generator - buildroot configuration file
++#
++
++# First, we can optionally set a name for our image, otherwise one will be created dynamically
++set-name: 'PolarFire-SoC-HSS::U-Boot'
++
++#
++# Next, we'll define the entry point addresses for each hart, as follows:
++#
++hart-entry-points: {u54_1: '0x80200000', u54_2: '0x80200000', u54_3: '0x80200000', u54_4: '0x80200000'}
++#
++# Finally, we'll define a payloads (source binary file) that will be placed at certain regions in memory
++# The payload section is defined with the keyword payloads, and then a number of individual
++# payload descriptors.
++#
++# Each payload has a name (path to its ELF/bin file), an owner-hart, and optionally 1-3 secondary-harts.
++#
++# Additionally, it has a privilege mode in which it will start execution.
++#  * Valid privilege modes are PRV_M, PRV_S and PRV_U.
++#
++#
++# In this case, the only payload is the u-boot s-mode binary.
++#
++# Case only matters for the ELF path names, not the keywords.
++#
++payloads:
++  u-boot.bin: {exec-addr: '0x80200000', owner-hart: u54_1, secondary-hart: u54_2, secondary-hart: u54_3, secondary-hart: u54_4, priv-mode: prv_s}
+diff --git a/board/beaglev_fire/genimage.cfg b/board/beaglev_fire/genimage.cfg
+new file mode 100644
+index 0000000000..ef650704c6
+--- /dev/null
++++ b/board/beaglev_fire/genimage.cfg
+@@ -0,0 +1,35 @@
++# Image for eMMC boot on the Microchip PolarFire SOC BeagleV-Fire Board
++#
++image boot.vfat {
++	vfat {
++		files = {
++			 "beaglev_fire.itb",
++		}
++
++		file boot.scr {
++			image = "boot.scr"
++		}
++	}
++	size = 60M
++}
++
++image sdcard.img {
++	hdimage {
++		partition-table-type = "gpt"
++	}
++
++	partition uboot {
++		partition-type-uuid = 21686148-6449-6E6F-744E-656564454649
++		image = "payload.bin"
++	}
++
++	partition kernel {
++		partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition root {
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/beaglev_fire/post-image.sh b/board/beaglev_fire/post-image.sh
+new file mode 100755
+index 0000000000..43be1356cf
+--- /dev/null
++++ b/board/beaglev_fire/post-image.sh
+@@ -0,0 +1,14 @@
++#!/bin/bash
++set -e
++
++HSS_PAYLOAD_GENERATOR="${HOST_DIR}"/bin/hss-payload-generator
++MKIMAGE="${HOST_DIR}"/bin/mkimage
++BOARD_DIR="$(pwd)"/"${0%/*}"
++
++pushd "${BINARIES_DIR}"
++"${HSS_PAYLOAD_GENERATOR}" -c "${BOARD_DIR}"/config.yaml payload.bin
++cp "${BOARD_DIR}"/beaglev_fire.its "${BINARIES_DIR}"/beaglev_fire.its
++gzip -9 Image -c > Image.gz
++"${MKIMAGE}" -f beaglev_fire.its beaglev_fire.itb
++popd
++support/scripts/genimage.sh -c "${BOARD_DIR}"/genimage.cfg
+diff --git a/board/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh b/board/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
+new file mode 100644
+index 0000000000..f455037b60
+--- /dev/null
++++ b/board/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
+@@ -0,0 +1,32 @@
++#!/bin/sh
++
++if [ ! -e "$1"/mpfs_bitstream.spi ]; then
++        echo "No gateware file found."
++        exit 1
++fi
++
++if [ ! -d /lib/firmware ]
++then
++    mkdir /lib/firmware
++fi
++
++cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
++cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
++
++mount -t debugfs none /sys/kernel/debug
++
++# Trash existing device tree overlay in case the rest of the process fails:
++flash_erase /dev/mtd0 0 1024
++
++# # Write device tree overlay
++dd if=/lib/firmware/mpfs_dtbo.spi of=/dev/mtd0 seek=1024
++
++# Fake the presence of a golden image for now.
++dd if=/dev/zero of=/dev/mtd0 count=4 bs=1
++
++# Initiate FPGA update.
++echo 1 > /sys/kernel/debug/fpga/microchip_exec_update
++
++# Reboot Linux for the gateware update to take effect.
++# FPGA reprogramming takes places between Linux shut-down and HSS restarting the board.
++reboot
+diff --git a/board/beaglev_fire/uboot-fragment.config b/board/beaglev_fire/uboot-fragment.config
+new file mode 100644
+index 0000000000..e2a5eb9438
+--- /dev/null
++++ b/board/beaglev_fire/uboot-fragment.config
+@@ -0,0 +1,3 @@
++CONFIG_USE_BOOTARGS=y
++CONFIG_BOOTARGS="root=/dev/mmcblk0p3 rootwait uio_pdrv_genirq.of_id=generic-uio"
++CONFIG_MPFS_PRIORITISE_QSPI_BOOT=n
+diff --git a/configs/beaglev_fire_defconfig b/configs/beaglev_fire_defconfig
+new file mode 100644
+index 0000000000..277c8329fd
+--- /dev/null
++++ b/configs/beaglev_fire_defconfig
+@@ -0,0 +1,32 @@
++BR2_riscv=y
++BR2_RISCV_ISA_RVC=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="6.1.30"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_OVERLAY="board/beaglev_fire/rootfs-overlay/"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglev_fire/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux-6.1-mchp+fpga)/linux4microchip+fpga-2024.02.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="mpfs"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="microchip/mpfs-beaglev-fire"
++BR2_PACKAGE_MTD=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,polarfire-soc,u-boot)linux4microchip+fpga-2024.02.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="beaglev_fire"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/beaglev_fire/uboot-fragment.config"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/beaglev_fire/boot.cmd"
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
