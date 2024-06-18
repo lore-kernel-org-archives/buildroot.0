@@ -4,120 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27F7CC2BA15
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 20:30:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 793BCC27C4F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 21:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD0A2402CE;
-	Tue, 18 Jun 2024 20:30:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6488410E9;
+	Tue, 18 Jun 2024 21:27:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XC3k2KsmCH5E; Tue, 18 Jun 2024 20:30:42 +0000 (UTC)
+ id 04EbRPFcd5Bd; Tue, 18 Jun 2024 21:27:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DB51402D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4E0E412F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DB51402D6;
-	Tue, 18 Jun 2024 20:30:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4E0E412F9;
+	Tue, 18 Jun 2024 21:27:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3D3181BF4DD
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 20:30:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 39C391BF2EA
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 21:27:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2963C402D6
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 20:30:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 32D76410E9
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 21:27:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cLpnBtbvWmVY for <buildroot@lists.busybox.net>;
- Tue, 18 Jun 2024 20:30:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
- helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CA8A4402CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA8A4402CE
-Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
- [67.231.152.184])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CA8A4402CE
- for <buildroot@buildroot.org>; Tue, 18 Jun 2024 20:30:39 +0000 (UTC)
-Received: from pps.filterd (m0346901.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 45IHEojF020275; Tue, 18 Jun 2024 20:30:33 GMT
-Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3yucqu3vh3-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 18 Jun 2024 20:30:32 +0000
-Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
- by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 45IKUVOc031336
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 18 Jun 2024 20:30:31 GMT
-Received: from crulimr02.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 45IKUV3n015469
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Tue, 18 Jun 2024 20:30:31 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by crulimr02.rockwellcollins.com (Postfix) with ESMTP id E27A1300631C;
- Tue, 18 Jun 2024 15:30:30 -0500 (CDT)
-Date: Tue, 18 Jun 2024 20:30:30 +0000
-To: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@rtone.fr>
-Message-ID: <ZnHuZvpbeTN-bKVC@bspbox.kirk>
-Mail-Followup-To: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@rtone.fr>,
- buildroot@buildroot.org,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- Martin Bark <martin@barkynet.com>,
- Athaariq Ardhiansyah <foss@athaariq.my.id>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-References: <20240607071359.767329-1-gael.portay@rtone.fr>
- <20240607071359.767329-3-gael.portay@rtone.fr>
+ id fqlUSgydRDXQ for <buildroot@lists.busybox.net>;
+ Tue, 18 Jun 2024 21:27:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::235; helo=mail-lj1-x235.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 77B5A410C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77B5A410C5
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
+ [IPv6:2a00:1450:4864:20::235])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 77B5A410C5
+ for <buildroot@buildroot.org>; Tue, 18 Jun 2024 21:27:09 +0000 (UTC)
+Received: by mail-lj1-x235.google.com with SMTP id
+ 38308e7fff4ca-2e72224c395so59934551fa.3
+ for <buildroot@buildroot.org>; Tue, 18 Jun 2024 14:27:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1718746027; x=1719350827;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=3A4NmuM7mY13RY/iB8WV1vQZCqwd3thMBosyUiiGmd8=;
+ b=T085S3oYkAhwSUZajlF7LlPESMAyJOQUr7XnQPReWWxOmrXFWqgoAv51PO6s+TnccZ
+ UqmvVdCedaLnV+mldHJ7V/uGrmR6tJAbCyE9+P8pVZzZAgtiRcEct2dc6oAL0y0KXoNA
+ pHB0DLslSNh76Yd4VKWdSLdWImiPOM8o2owdvIpKV93US1L72G6IJh9TXySJkVsXrjhm
+ LY4bm39W3c+ShUuucIlYOCUoT1lM4FP6MnjSdL0NiW/8ENVXdmdjQtiyMycvTf7QMWDp
+ wVUY2Wsv66DN8fZYobOR+RV7r4E37KH3zCIs86VkimNTIXtC1K+u/nh3wEkHDuRQImOn
+ fb0w==
+X-Gm-Message-State: AOJu0Yy7YCr6qVTHhzBeRrXvgKuDbGn7BQWv0Hc+D28NFO538K82MWu0
+ ztOw/YgXMJ6fESlROBSi7DyENELYlTuQoq9HgGtqvE/NamzXdtozsG38ng==
+X-Google-Smtp-Source: AGHT+IGRR7kaJYEMsln3ASqsTl0FSb0o/aEFQ0dOSyBbXa2REIFYp4EWHRJ/+IXvB3Z+TEVDfqsbGA==
+X-Received: by 2002:a2e:a0d6:0:b0:2ec:28ae:288 with SMTP id
+ 38308e7fff4ca-2ec3cfea4f5mr5848681fa.39.1718746025733; 
+ Tue, 18 Jun 2024 14:27:05 -0700 (PDT)
+Received: from precision7530-arch-roy.lan
+ ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
+ by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-2ec05c7838fsm17240521fa.100.2024.06.18.14.27.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 18 Jun 2024 14:27:05 -0700 (PDT)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 18 Jun 2024 23:26:24 +0200
+Message-ID: <20240618212646.4154474-1-roykollensvendsen@gmail.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240618131902.2912459-9-roykollensvendsen@gmail.com>
+References: <20240618131902.2912459-9-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240607071359.767329-3-gael.portay@rtone.fr>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_03,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_03,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- spamscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=999 adultscore=0 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2406180151
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- spamscore=0 phishscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2406180150
-X-Proofpoint-ORIG-GUID: 0aOhyPAZ-vyAB9uqv4GrR33Pyy0W7Kjd
-X-Proofpoint-GUID: 0aOhyPAZ-vyAB9uqv4GrR33Pyy0W7Kjd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_03,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0 bulkscore=0
- phishscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
- malwarescore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501
- mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2405010000 definitions=main-2406180150
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=POD051818;
- bh=mzY/dGjfc9YiAomQD3hHuatJ+/bEMiwo74WYdBRB030=;
- b=RpQs9zUjsJ/uyFxb/PaEmv/m74Ebqtqv47Rvylz8JHzM9b1BvVOMuJJYMsfoaDvjo+b9
- OTInjLPfB4SXc3jbTwc/ldscVcgHIamguLe9Er2hJ7XhgEiLMrxdb/ntoY+7yFuyJqTF
- 4bKPxOt0MEbAUgYCFEUNHjmUy2S12In0hJg+7pH2U0KOC0sNTX+IDUQrE7b3/8SuPiYs
- 1P+NA+GYii6cN0rjMx7mMszCbr/DPwAGbVz8lq4ikWncf3/qRI2LQ7ncG4Ii/oDsW2YV
- RyNWAd/DJDHxakjI6Nvq51Kxe8bbGQ2i0/lzrM9m+XUhWhXn1XzNus2lmu/vdEP5yfxs iw== 
+ d=gmail.com; s=20230601; t=1718746027; x=1719350827; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=3A4NmuM7mY13RY/iB8WV1vQZCqwd3thMBosyUiiGmd8=;
+ b=mi+zTrEdFY6QJ/G+Lq9TpbnVkimbERH2/PxFOt/NN/fGTOENvGuRiukpdsr+K2lbJp
+ 4CQ4MhhMOCSBvPTM2fAOOIhjdftgQixyFVfRukTr4y4YLYwdfoz+yu29DASQin40umyp
+ LnTgY8OiKRB1to1tUki/SRjBm8jYV5Husdn6ZbgQo+aQQlaxGlym9zUnbuxg8iJ8t+9K
+ T6xYqDUCDMBtQCx/gb5va0eQbaBXxWXiCCdypBNRDwPR+D+rFQDOE1wwf13PEZCbd//H
+ BncxV6Xygm4JjxPLT0oOf1lRlyM3cgCfynotGlNv8HHqQjtvm3gs4aAFcRVllXSXe0Fn
+ jjYg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
- header.a=rsa-sha256 header.s=POD051818 header.b=RpQs9zUj
-Subject: Re: [Buildroot] [next v2 2/2] package/rpi-firmware: bump version to
- 5476720
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=mi+zTrEd
+Subject: [Buildroot] [PATCH v8 01/14] package/qt6: bump version to 6.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -129,75 +104,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- Martin Bark <martin@barkynet.com>, Athaariq Ardhiansyah <foss@athaariq.my.id>,
- buildroot@buildroot.org, "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Ga=EBl,
+For details see [1], [2], [3], [4], [5], [6], [7], [8], [9] and [10].
 
-On 2024.06.07 09:13, Ga=EBl PORTAY wrote:
-> Version 5476720 match the with kernel 6.6.28.
-> =
+[1] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.0/release-note.md
+[2] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.1/release-note.md
+[3] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.2/release-note.md
+[4] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.3/release-note.md
 
-> Signed-off-by: Ga=EBl PORTAY <gael.portay@rtone.fr>
+[5] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.0/release-note.md
+[6] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.1/release-note.md
+[7] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.2/release-note.md
+[8] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.3/release-note.md
 
-Boot tested on a rpi2
+[9] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.0/release-note.md
+[10] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.1/release-note.md
 
-Reviewed-by: Brandon Maier <brandon.maier@collins.com>
-Tested-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+---
+ package/qt6/qt6.mk                             | 4 ++--
+ package/qt6/qt6base/qt6base.hash               | 4 ++--
+ package/qt6/qt6base/qt6base.mk                 | 1 -
+ package/qt6/qt6core5compat/qt6core5compat.hash | 4 ++--
+ package/qt6/qt6serialbus/qt6serialbus.hash     | 4 ++--
+ package/qt6/qt6serialport/qt6serialport.hash   | 4 ++--
+ package/qt6/qt6svg/qt6svg.hash                 | 4 ++--
+ 7 files changed, 12 insertions(+), 13 deletions(-)
 
-> ---
->  package/rpi-firmware/rpi-firmware.hash | 2 +-
->  package/rpi-firmware/rpi-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> =
+diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
+index 1edb252c96..ee426884f9 100644
+--- a/package/qt6/qt6.mk
++++ b/package/qt6/qt6.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-QT6_VERSION_MAJOR = 6.4
+-QT6_VERSION = $(QT6_VERSION_MAJOR).3
++QT6_VERSION_MAJOR = 6.7
++QT6_VERSION = $(QT6_VERSION_MAJOR).1
+ QT6_SOURCE_TARBALL_PREFIX = everywhere-src
+ QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
+ 
+diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
+index cb111bd405..488f4b0136 100644
+--- a/package/qt6/qt6base/qt6base.hash
++++ b/package/qt6/qt6base/qt6base.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtbase-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  5087c9e5b0165e7bc3c1a4ab176b35d0cd8f52636aea903fa377bdba00891a60  qtbase-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtbase-everywhere-src-6.7.1.tar.xz.sha256
++sha256  b7338da1bdccb4d861e714efffaa83f174dfe37e194916bfd7ec82279a6ace19  qtbase-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files
+ sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 211808d2af..13999bbd44 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -9,7 +9,6 @@ QT6BASE_SITE = $(QT6_SITE)
+ QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
+ QT6BASE_CPE_ID_VENDOR = qt
+ QT6BASE_CPE_ID_PRODUCT = qt
+-
+ QT6BASE_CMAKE_BACKEND = ninja
+ 
+ QT6BASE_LICENSE = \
+diff --git a/package/qt6/qt6core5compat/qt6core5compat.hash b/package/qt6/qt6core5compat/qt6core5compat.hash
+index 0735df3af2..c50093c0a9 100644
+--- a/package/qt6/qt6core5compat/qt6core5compat.hash
++++ b/package/qt6/qt6core5compat/qt6core5compat.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  d4b249abb823d575eee9045c24d924ba8d1276e6be7735b287689991d998aa7a  qt5compat-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qt5compat-everywhere-src-6.7.1.tar.xz.sha256
++sha256  41c4bbe419158fc170ee3ef3ecffead506e70802109deec036d86e4244086009  qt5compat-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialbus/qt6serialbus.hash b/package/qt6/qt6serialbus/qt6serialbus.hash
+index 98c8931962..d9cf2260c1 100644
+--- a/package/qt6/qt6serialbus/qt6serialbus.hash
++++ b/package/qt6/qt6serialbus/qt6serialbus.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialbus-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  b6446a7516d1f04e561c00f9c50ce4d39dad72150f067722ba759f00b4b34366  qtserialbus-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtserialbus-everywhere-src-6.7.1.tar.xz.sha256
++sha256  513905d545b81b040fc9d7a996aa2d6fa310048c36b24919a973f2a6a555628f  qtserialbus-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialport/qt6serialport.hash b/package/qt6/qt6serialport/qt6serialport.hash
+index 9341978d86..527bc14fe4 100644
+--- a/package/qt6/qt6serialport/qt6serialport.hash
++++ b/package/qt6/qt6serialport/qt6serialport.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  5f97ad9067efa39a8a2a39fbbc1e03d2191f305733d9c2f3060f8017ecfc95de  qtserialport-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtserialport-everywhere-src-6.7.1.tar.xz.sha256
++sha256  e543a3788bfd522f2e4a111ba568214f1f5be6e55f08318c2dcd376124ea5886  qtserialport-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6svg/qt6svg.hash b/package/qt6/qt6svg/qt6svg.hash
+index bb239cb012..80924035f0 100644
+--- a/package/qt6/qt6svg/qt6svg.hash
++++ b/package/qt6/qt6svg/qt6svg.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtsvg-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  88315f886cf81898705e487cedba6e6160724359d23c518c92c333c098879a4a  qtsvg-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.1/submodules/qtsvg-everywhere-src-6.7.1.tar.xz.sha256
++sha256  3ed5b80f7228c41dd463b7a57284ed273d224d1c323c0dd78c5209635807cbce  qtsvg-everywhere-src-6.7.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+-- 
+2.45.2
 
-> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmwar=
-e/rpi-firmware.hash
-> index 33e05a2f4a..4501db739c 100644
-> --- a/package/rpi-firmware/rpi-firmware.hash
-> +++ b/package/rpi-firmware/rpi-firmware.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  dd43e77ca1a8969cdb7f05dd72a57f90862071d5a93bdd6aea8246aba85689cf=
-  rpi-firmware-83dafbc92c0e63f76ca2ecdd42462d56489d1c77.tar.gz
-> +sha256  00fe5487376e9d5ed14cbc72a9b7a5bd8d6900c84aee10f6d656f192a26d161c=
-  rpi-firmware-5476720d52cf579dc1627715262b30ba1242525e.tar.gz
->  sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b=
-  boot/LICENCE.broadcom
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/=
-rpi-firmware.mk
-> index 11177aee02..7ae9ff6c28 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  ########################################################################=
-########
->  =
-
-> -RPI_FIRMWARE_VERSION =3D 83dafbc92c0e63f76ca2ecdd42462d56489d1c77
-> +RPI_FIRMWARE_VERSION =3D 5476720d52cf579dc1627715262b30ba1242525e
->  RPI_FIRMWARE_SITE =3D $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_=
-VERSION))
->  RPI_FIRMWARE_LICENSE =3D BSD-3-Clause
->  RPI_FIRMWARE_LICENSE_FILES =3D boot/LICENCE.broadcom
-> -- =
-
-> 2.45.2
-> =
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
