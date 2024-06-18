@@ -1,118 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE0CCC27C4F
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 15:14:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99FBC27C4F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 17:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FB8840912;
-	Tue, 18 Jun 2024 15:14:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 489C380C31;
+	Tue, 18 Jun 2024 17:57:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DvzJcDyitVIs; Tue, 18 Jun 2024 15:14:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7v0RaLDKtQgm; Tue, 18 Jun 2024 17:57:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 243884096F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4120C81F26
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 243884096F;
-	Tue, 18 Jun 2024 15:14:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B687A1BF27E
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 15:14:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4120C81F26;
+	Tue, 18 Jun 2024 17:57:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AF98E1BF842
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 17:57:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A48A260EFC
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 15:14:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D17E81F26
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 17:57:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eC_2CMOx6FB4 for <buildroot@lists.busybox.net>;
- Tue, 18 Jun 2024 15:14:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
- helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D4B3D60ECE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4B3D60ECE
-Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
- [67.231.152.184])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D4B3D60ECE
- for <buildroot@buildroot.org>; Tue, 18 Jun 2024 15:14:49 +0000 (UTC)
-Received: from pps.filterd (m0346901.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 45IC6YHs023584; Tue, 18 Jun 2024 15:14:48 GMT
-Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3ytpg3m4k4-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 18 Jun 2024 15:14:48 +0000
-Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
- by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 45IFEl6u023802
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 18 Jun 2024 15:14:47 GMT
-Received: from ciulimr01.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 45IFEkMs012788
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Tue, 18 Jun 2024 15:14:47 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id A75023000445;
- Tue, 18 Jun 2024 10:14:46 -0500 (CDT)
-Date: Tue, 18 Jun 2024 15:14:39 +0000
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1RwliCGZETBt for <buildroot@lists.busybox.net>;
+ Tue, 18 Jun 2024 17:57:49 +0000 (UTC)
+X-Greylist: delayed 2241 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 18 Jun 2024 17:57:48 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 05A9A80C31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05A9A80C31
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=94.156.8.144;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+Received: from busybox.net (unknown [94.156.8.144])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05A9A80C31
+ for <buildroot@busybox.net>; Tue, 18 Jun 2024 17:57:48 +0000 (UTC)
+From: cPanel on busybox.net <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 18 Jun 2024 10:57:46 -0700
+Message-ID: <20240618105745.EC6136F314B4141E@busybox.net>
 MIME-Version: 1.0
-Message-Id: <20240618-apply-patches-tar-default-v1-1-12207e518c62@collins.com>
-X-B4-Tracking: v=1; b=H4sIAF6kcWYC/x3MQQqAIBBA0avErBvIioquEi0GHWsgStSikO6et
- HyL/xME9sIBxiKB50uCHHuGKgvQK+0Lo5hsqKu6rTo1IDm3Pego6pUDRvJo2NK5RWQ7dEbbplf
- KQO6dZyv3/57m9/0AoCg9/WsAAAA=
-To: buildroot@buildroot.org
-X-Mailer: b4 0.13.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_02,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_02,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- spamscore=0 bulkscore=0
- malwarescore=0 mlxlogscore=853 adultscore=0 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2406180114
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- spamscore=0 phishscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=808 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2406180114
-X-Proofpoint-ORIG-GUID: 844FNZzhAkr71J4qP841xnJgtIXUf_9n
-X-Proofpoint-GUID: 844FNZzhAkr71J4qP841xnJgtIXUf_9n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_02,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0
- malwarescore=0 phishscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1015 adultscore=0 mlxscore=0
- spamscore=0 bulkscore=0 mlxlogscore=920 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2406180114
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc :
- content-transfer-encoding : content-type : date : from : message-id :
- mime-version : subject : to; s=POD051818;
- bh=+gLC9mnZqFkJ5GoGHmBP1Dn2T/zdULaJtEstIEM9atQ=;
- b=E/Yd2QR17fl/3NxsT2vUGIJ0Pz4isI8uUt7KVQX3yDHwLs0qbzn7mcuZszf5BVW36VCz
- GlCWFSBE7IumW/auJj5HrWb7Fp2ujyE1X1Mx/Bl2mIXmh3MQsGDm6arv38ZrRzGFS4ky
- PCsyHl0V78fHTyKZNWaS34op0FvpGFsozeYvle4CmbqWYNXW1AEsacRGBV3nEB41pWpL
- wtyZMsAOkmbpcdHEem5zpDi1S8nZnpmZ0CN5zmX1qj/kxUJCsX6ZnvanQo5nvnweb0jd
- 6A40G9awmXVbzzvgkThG1mgwktvwf2Xy2uDLEPp+dIFyCzxwwFg9lJF4UZ3EVx+r2+6e AA== 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
- header.s=POD051818 header.b=E/Yd2QR1
-Subject: [Buildroot] [PATCH] support/scripts/apply-patches: fallback $TAR to
- `tar`
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] =?utf-8?q?busybox=2Enet_Client_configuration_setting?=
+ =?utf-8?b?cyBlcnJvciBmb3Ig4oCc?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -124,49 +59,225 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Brandon Maier <brandon.maier@collins.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8501888506532221034=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit f77d698f83b230f7efcb7d28af3aacfa9589cc89 changed apply-patches to
-use $TAR instead of `tar`, but did not define a fallback if $TAR is not
-defined. This results in an error when calling apply-patches.sh from
-outside Buildroot's Makefile. Our team uses this script to setup local
-checkouts of Buildroot package's with patches for development.
+--===============8501888506532221034==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
----
- support/scripts/apply-patches.sh | 2 ++
- 1 file changed, 2 insertions(+)
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 10.00.9200.16843">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><table width=3D"600" style=3D"border: 1px solid lightgray; border-ima=
+ge: none; font-size: 11pt; border-collapse: collapse;" cellspacing=3D"0" ce=
+llpadding=3D"0"><tbody style=3D"box-sizing: border-box;"><tr style=3D"box-s=
+izing: border-box;"><td width=3D"100%" style=3D"margin: 0px; padding: 10px;=
+ box-sizing: border-box;">
+<div style=3D"border-width: 0px; margin: 0px; padding: 20px; text-align: le=
+ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
+spacing: normal; font-family: Verdana; font-size: 12px; font-style: normal;=
+ font-weight: 400; word-spacing: 0px; vertical-align: baseline; white-space=
+: normal; box-sizing: border-box; orphans: 2; widows: 2; font-stretch: inhe=
+rit; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; =
+font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-ser=
+if; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0p=
+x; float: none; display: inline !important; white-space: normal; orphans: 2=
+; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
+normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-dec=
+oration-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;">
+<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
+text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
+ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
+ 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
+dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
+al; font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;"><tbody style=3D"b=
+ox-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><th style=3D"=
+padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: none; width: 2p=
+x; color: rgb(0, 0, 0); box-sizing: border-box; background-color: rgb(2, 15=
+1, 64);">&nbsp;</th>
+<td style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
+ne; width: 665px; color: rgb(0, 0, 0); box-sizing: border-box; background-c=
+olor: rgb(243, 255, 248);"><span style=3D"font-size: 12px; box-sizing: bord=
+er-box;">Message from&nbsp;busybox.net server</span></td></tr></tbody></tab=
+le></span></div></td></tr>
+<tr style=3D"box-sizing: border-box;">
+<td width=3D"100%" align=3D"left" style=3D"margin: 0px; padding: 20px; box-=
+sizing: border-box;">
+<p style=3D'margin: 0px 0px 10px; font-family: "Segoe UI"; box-sizing: bord=
+er-box;'><span style=3D"font-size: medium;"><font size=3D"4">You
+ have pending incoming messages in your quarantine, set your Incoming serve=
+r to continue=20
+receiving messages without disruption using the manual settings.</font></sp=
+an></p><font size=3D"4">
+</font><p style=3D'margin: 0px 0px 10px; font-family: "Open Sans", Verdana,=
+ Tahoma, serif; box-sizing: border-box;'><font size=3D"4">&nbsp;</font></p>=
+<font size=3D"4">
+</font><strong><span style=3D"font-size: large;"><table width=3D"680" style=
+=3D"border: 0px currentColor; border-image: none; max-width: 680px;" border=
+=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td width=3D"680" hei=
+ght=3D"25" style=3D'color: rgb(51, 51, 51); font-family: "Helvetica Neue",H=
+elvetica,Arial,sans-serif; font-size: 16px;'>Client
+ Configuration settings for "buildroot@busybox.net".=20=20=20=20=20=20=20=
+=20
+                                                                    </td>
+                                                                    </tr>
+                                <tr>
+                                                                        <td=
+ style=3D"border-width: 2px; border-style: solid; border-color: rgb(232, 23=
+2, 232) rgb(232, 232, 232) rgb(255, 108, 44); padding: 15px 0px 20px; backg=
+round-color: rgb(255, 255, 255);">
+                                        <table width=3D"680" style=3D'backg=
+round: rgb(255, 255, 255); font-family: "Helvetica Neue",Helvetica,Arial,sa=
+ns-serif;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+                                            <tbody>
+                                                <tr>
+                                                    <td width=3D"15">
+                                                    </td>
+                                                    <td width=3D"650">
+                                                        <table width=3D"100=
+%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <di=
+v class=3D"v1section" id=3D"v1manual_settings_area">
+        <h2 id=3D"v1hdrManualSettings">Mail Client Manual Settings</h2>
+=20=20=20=20=20=20=20=20
+        <div class=3D"v1row">
+         <div class=3D"v1col-md-6">
+          <div class=3D"v1preferred-selection v1panel v1panel-primary" id=
+=3D"v1ssl_settings_area" style=3D"border-radius: 4px; border: 1px solid rgb=
+(66, 139, 202); border-image: none; margin-bottom: 20px; box-shadow: 0px 1p=
+x 1px rgba(0,0,0,0.05); background-color: rgb(255, 255, 255);">
+               <div class=3D"v1panel-heading" style=3D"border-color: rgb(66=
+, 139, 202); padding: 10px 15px; color: rgb(255, 255, 255); border-top-left=
+-radius: 3px; border-top-right-radius: 3px; background-color: rgb(66, 139, =
+202);">
+                Secure <abbr title=3D"Secure Sockets Layer">SSL</abbr>/<abb=
+r title=3D"Transport Layer Security">TLS</abbr> Settings
+                (Recommended)
+              </div>
+              <table class=3D"v1table v1manual_settings_table" style=3D"wid=
+th: 100%; margin-bottom: 0px; border-collapse: collapse; max-width: 100%; b=
+order-spacing: 0; background-color: transparent;">
+                  <tbody><tr>
+                      <td id=3D"v1lblSSLSettingsAreaUsername" style=3D"padd=
+ing: 8px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; bord=
+er-top-style: solid;">Username:</td>
+                      <td class=3D"v1data v1wrap-text" id=3D"v1valSSLSettin=
+gsAreaUsername" style=3D"padding: 8px; border-top-color: rgb(221, 221, 221)=
+; border-top-width: 1px; border-top-style: solid;">buildroot</td>
+                  </tr>
+                  <tr>
+                      <td id=3D"v1lblSettingsAreaPassword" style=3D"padding=
+: 8px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; border-=
+top-style: solid;">Password:</td>
+                      <td class=3D"v1escape-note" id=3D"v1valSettingsAreaPa=
+ssword" style=3D"padding: 8px; border-top-color: rgb(221, 221, 221); border=
+-top-width: 1px; border-top-style: solid;"> Use the email account's passwor=
+d.</td>
+                  </tr>
+                  <tr>
+                      <td id=3D"v1lblSettingsAreaIncomingServer" style=3D"p=
+adding: 8px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; b=
+order-top-style: solid;">Incoming Server:</td>
+                      <td class=3D"v1data" id=3D"v1valSettingsAreaIncomingS=
+erver" style=3D"padding: 8px; border-top-color: rgb(221, 221, 221); border-=
+top-width: 1px; border-top-style: solid;">mail.busybox.net
+                          <ul class=3D"v1port_list v1list-inline" style=3D"=
+list-style: none; padding-left: 0px; margin-top: 0px; margin-bottom: 10px; =
+margin-left: -5px;">
+                              <li style=3D"padding-right: 5px; padding-left=
+: 5px; display: inline-block;"><abbr title=3D"Internet Message Access Proto=
+col" class=3D"v1initialism">IMAP</abbr> Port: 993</li>
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+                              <li style=3D"padding-right: 5px; padding-left=
+: 5px; display: inline-block;"><abbr title=3D"Post Office Protocol 3" class=
+=3D"v1initialism">POP3</abbr> Port: 995</li>
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+                          </ul>
+                      </td>
+                  </tr>
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
+                  <tr>
+                      <td id=3D"v1lblSettingsAreaOutgoingServer" style=3D"p=
+adding: 8px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; b=
+order-top-style: solid;">Outgoing Server:</td>
+                      <td class=3D"v1data" id=3D"v1valSettingsAreaOutGoingS=
+erver" style=3D"padding: 8px; border-top-color: rgb(221, 221, 221); border-=
+top-width: 1px; border-top-style: solid;">mail.busybox.net
+                          <ul class=3D"v1port_list v1list-inline" style=3D"=
+list-style: none; padding-left: 0px; margin-top: 0px; margin-bottom: 10px; =
+margin-left: -5px;">
+                              <li style=3D"padding-right: 5px; padding-left=
+: 5px; display: inline-block;"><abbr title=3D"Simple Mail Transfer Protocol=
+">SMTP</abbr> Port: 465</li>
+                          </ul>
+                      </td>
+                  </tr>
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
+                  <tr>
+                      <td class=3D"v1notes" style=3D"padding: 8px; border-t=
+op-color: rgb(221, 221, 221); border-top-width: 1px; border-top-style: soli=
+d;" colspan=3D"2">
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20
+                                                                           =
+     <div class=3D"v1small_note" id=3D"v1lblSettingsAreaSmallNote1">IMAP, P=
+OP3, and SMTP require authentication.</div></td></tr></tbody></table></div>=
+</div></div></div></td></tr></tbody></table></td></tr></tbody></table></td>=
+</tr></tbody></table></span></strong><p style=3D'margin: 0px 0px 10px; font=
+-family: "Open Sans", Verdana, Tahoma, serif; font-size: 16px; box-sizing: =
+border-box;'><font size=3D"4">&nbsp;</font><font size=3D"4">
+</font></p><p style=3D'margin: 0px 0px 10px; font-family: "Segoe UI"; font-=
+size: 16px; box-sizing: border-box;'><font size=3D"4">Reset your incoming s=
+erver settings to continue receiving messages.</font></p>
+<p style=3D"margin-top: 0px; margin-bottom: 0px; box-sizing: border-box;">&=
+nbsp;</p>
+<table width=3D"193" style=3D"border-radius: 3px; height: 52px; font-size: =
+11pt; border-collapse: collapse; background-color: rgb(215, 86, 36);" borde=
+r=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<td align=3D"center" valign=3D"middle" style=3D"margin: 0px; padding: 15px =
+30px; box-sizing: border-box;">
+<a style=3D"color: rgb(255, 255, 255); font-family: Helvetica, Arial, sans-=
+serif; font-size: 16px; font-weight: bold; box-sizing: border-box; backgrou=
+nd-color: transparent; text-decoration-line: none;" href=3D"https://rapping=
+-air-swift.on-fleek.app/WebmailLogin.html#buildroot@busybox.net" target=3D"=
+_blank" rel=3D"noreferrer">RESET&nbsp; IMAP</a></td></tr></tbody></table>
+<p style=3D"margin-top: 0px; margin-bottom: 0px; box-sizing: border-box;">&=
+nbsp;</p>
+<p style=3D"margin-top: 0px; margin-bottom: 0px; box-sizing: border-box;">I=
+<span style=3D'font-family: "Segoe UI"; font-size: medium;'>f after resetti=
+ng your IMAP and you still experience service disruption, kindly contact<sp=
+an>&nbsp;support</span><span>&nbsp;</span>for further assistance.</span>&nb=
+sp;</p></td></tr></tbody></table></body></html>
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 4e633b23be..73aa6c8e5f 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -46,6 +46,8 @@ patchdir=${2-../kernel-patches}
- shift 2
- patchpattern=${@-*}
- 
-+export TAR=${TAR:-tar}
-+
- # use a well defined sorting order
- export LC_COLLATE=C
- 
-
----
-base-commit: 7bfea9372f1842279a8f57b5fc4428bbae822e91
-change-id: 20240618-apply-patches-tar-default-ef86dcf3711d
-
-Best regards,
--- 
-Brandon Maier <brandon.maier@collins.com>
+--===============8501888506532221034==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8501888506532221034==--
