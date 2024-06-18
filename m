@@ -4,96 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A98E1C27C4F
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 13:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5ED8C2BA18
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jun 2024 13:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71D2C60EC8;
-	Tue, 18 Jun 2024 13:20:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8245060EE9;
+	Tue, 18 Jun 2024 13:20:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R4U_qlPkTogr; Tue, 18 Jun 2024 13:20:34 +0000 (UTC)
+ id yEIGtsqGN3B9; Tue, 18 Jun 2024 13:20:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAFD560F04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CCDF60EE1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAFD560F04;
-	Tue, 18 Jun 2024 13:20:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CCDF60EE1;
+	Tue, 18 Jun 2024 13:20:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 385741BF3BB
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 13:19:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 267181BF3BB
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 13:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3182681770
- for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 13:19:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14E1B81779
+ for <buildroot@lists.busybox.net>; Tue, 18 Jun 2024 13:20:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ZJtig6X-eOM for <buildroot@lists.busybox.net>;
- Tue, 18 Jun 2024 13:19:56 +0000 (UTC)
+ id opqiN4C6FLxZ for <buildroot@lists.busybox.net>;
+ Tue, 18 Jun 2024 13:19:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::235; helo=mail-lj1-x235.google.com;
+ client-ip=2a00:1450:4864:20::12c; helo=mail-lf1-x12c.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 379708175E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 379708175E
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
- [IPv6:2a00:1450:4864:20::235])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 379708175E
- for <buildroot@buildroot.org>; Tue, 18 Jun 2024 13:19:56 +0000 (UTC)
-Received: by mail-lj1-x235.google.com with SMTP id
- 38308e7fff4ca-2ec17eb4493so64066481fa.2
- for <buildroot@buildroot.org>; Tue, 18 Jun 2024 06:19:55 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3240A81774
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3240A81774
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3240A81774
+ for <buildroot@buildroot.org>; Tue, 18 Jun 2024 13:19:59 +0000 (UTC)
+Received: by mail-lf1-x12c.google.com with SMTP id
+ 2adb3069b0e04-52c819f6146so7264851e87.1
+ for <buildroot@buildroot.org>; Tue, 18 Jun 2024 06:19:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718716794; x=1719321594;
+ d=1e100.net; s=20230601; t=1718716797; x=1719321597;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=IFknuf6txIWrvv3BiGpCnuovvD0K5IoEVeWoxGrMwAc=;
- b=W9zd6ZOiNkIiULt03Hu8M2xXuasX4GW3/bZNM3ALqY0o0bBPCm/Chi4JD7bdE9iF95
- Orv9AbZALSHRdDQ+Tx4WVju4UDhavLkClbF9jxippxB4J0sm57GtfZfDfDvChPkR3Fii
- YByAlGTpnJxmv85oomBb8SWGvO8/eYOfk19PkliPcxnFMt0ITZ3XyANuLLGaV9NM6nZF
- tJRDvjzCboVqXl2c3N5xpbxbomaCNJbfFp8zswWPBWUBA0O6jkHc6G6qheqQueKei/b7
- H8w1QVcOT3poMoNYHxpyCAvh+R8COEkuvKsnSho9LBbVhfEwKgcJqiJDqqswQtbMx0DN
- R1Lw==
-X-Gm-Message-State: AOJu0Ywml2HZf4T+vi/vsKKM8IcLbDbQbf26zBOUeWMIT9QhCM9KzUJc
- qAifcNoZQiM6Sd/6epLUvBCZL11j9KK8Edu5fd/JJW/q2h0WLjva9b/JMw==
-X-Google-Smtp-Source: AGHT+IGaLtk9hsIapdhaN0Jri8I5ooAQlg/4APJJXMxr2yXhSOdx+sWvl1G3hRY1U4FJ0V/8vSOcmA==
-X-Received: by 2002:a05:6512:473:b0:52c:9f9d:d55a with SMTP id
- 2adb3069b0e04-52ca6e92849mr9270213e87.51.1718716792785; 
- Tue, 18 Jun 2024 06:19:52 -0700 (PDT)
+ bh=dHP2ySsKeNM3ESiKUCHE7DISVeuo3mfuK9VTk/LtBvI=;
+ b=mcDFqJsn9FAwsiER9Wm84EsF3thtyrake6hbwWqjw2lI/P9bxzE8sFGP2YJa8wPYZD
+ FK1fz7Oa4J6AWqQRg6wm7wuxc/pWkXneC4EUNr/qrFQtHDYzkVqxGJ0IciINKnQx10Br
+ r+RCJytf1Yrj87GT5DMbcFFp+fj/+oDvupZk6mhKy36SJtkYRPD0HU3ZJB/XnC7xJV2L
+ +bZLtmVzPTRd93XAUcdkrsGGGGnGvdNo/1VRuOPWzFmXR9/kg6FgS113fnZ09BB9RJOP
+ WvuakhK6Th00LRn4BgKbiUSygeFhaHHQ48MaO8eXv+k2mvNEMvYj3PrgkV9ISAo67rtP
+ McwA==
+X-Gm-Message-State: AOJu0YwqjQsQ5k6EpGKV6KOsquoTJ+Xds0vpATv1n9czukA/w9m7YjGS
+ GxK1zmBiIZ5XwxTQ/1kW0WSWuN6rUh5RxqVqRmTLq+EjZdUZpUVz4NRPVQ==
+X-Google-Smtp-Source: AGHT+IHm9TnM5oJzjJjg/FE9Pmuxj/5VdU4IO/tLGn2EBK/Jx9MoeKVw1MMOPwSGGQuuMFs5MuOhig==
+X-Received: by 2002:a19:914a:0:b0:52c:897b:4c5a with SMTP id
+ 2adb3069b0e04-52ca6e6bf36mr7387745e87.34.1718716796764; 
+ Tue, 18 Jun 2024 06:19:56 -0700 (PDT)
 Received: from precision7530-arch-roy.lan
  ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
  by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-52ca287228bsm1497540e87.163.2024.06.18.06.19.51
+ 2adb3069b0e04-52ca287228bsm1497540e87.163.2024.06.18.06.19.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 18 Jun 2024 06:19:52 -0700 (PDT)
+ Tue, 18 Jun 2024 06:19:56 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Jun 2024 15:18:25 +0200
-Message-ID: <20240618131902.2912459-4-roykollensvendsen@gmail.com>
+Date: Tue, 18 Jun 2024 15:18:26 +0200
+Message-ID: <20240618131902.2912459-5-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240618131902.2912459-1-roykollensvendsen@gmail.com>
 References: <20240603115206.3583474-9-roy.kollen.svendsen@akersolutions.com>
  <20240618131902.2912459-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718716794; x=1719321594; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1718716797; x=1719321597; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=IFknuf6txIWrvv3BiGpCnuovvD0K5IoEVeWoxGrMwAc=;
- b=Pgx2WFVLZyc9berPtmO/CPCoyA2ujDEKNCfls4eWIg8+7y4rqxZGC+wduFyZwIkmSc
- B+mHQyTc8cWQ6wFGe8wK1NRVIjCUrMAMikjlOGkrdEbOMElmHRh2MznrBLVCnsOokzjX
- 2n3WpzRrbDkzrugdELSvQWd+e8eNRYv7C+EChBG5Y/KL3uoFfzvb6fWJjPUe3it0rUMw
- ZfEXdjiFCBq2hSb9KkY8IBf3CWNmECdjRkacifRxn+sJLbKcR9xM/HAM4C/GqXgK/27H
- aKj1bQyn1eAzt+bh5imdyBirhyMpGttewXPjeZU6IsKs/orH2UDvEQIfyVpuhBJK2IRx
- pYwQ==
+ bh=dHP2ySsKeNM3ESiKUCHE7DISVeuo3mfuK9VTk/LtBvI=;
+ b=nFqoqReMofrjWOpRIr3JPNH7XLtBwI1avPUVX6gbHGfUAq+vzrKMsKtHqp5K3Y8Vlj
+ 04xcVogHugIiPbJKv+D9xY50TTU9mfrwSD2r7XLhECpyQLlT7lOJyE86vvm7HoKm3aeb
+ HxqiEG3p9Wk0tS7vg2OOEKCjiZUc6lb6Li3tMgIUEmHPXEJzlG87rHKAGYNgke8P6QQ7
+ 2pUzLS5GUV71/hHWMS6FKOjktDTfWxxaJP8vxnIdrMZeF8rmeGIx+/p85QXfm9loh8s4
+ G9x9sbUrciXEqcQn9UHwfQoEiyCa5lJPn2Xk4FaefcYZ4eesNBBeiZxdcJ27750mcWeF
+ PIAQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Pgx2WFVL
-Subject: [Buildroot] [PATCH v7 04/14] package/qt6/qt6base: add blind option
- to enable Test support on host
+ header.a=rsa-sha256 header.s=20230601 header.b=nFqoqReM
+Subject: [Buildroot] [PATCH v7 05/14] package/qt6/qt6base: add blind option
+ to enable Sql support on host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -114,59 +114,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We need host-qt6base with Testlib support when building host-qt6declarative
-with QuickTest support. QuickTest support is further required for building the
-qmltestrunner host tool. qt6declarative will fail to build if qmltestrunner is
-not available.
+We need host qt6base with Sql support for host-qt6tools to generate the
+qhelpgenerator host tool. qt6tools will fail to build if qhelpgenerator is not
+available.
 
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
  package/qt6/qt6base/Config.in.host |  5 +++++
- package/qt6/qt6base/qt6base.mk     | 11 ++++++++++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ package/qt6/qt6base/qt6base.mk     | 10 +++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/package/qt6/qt6base/Config.in.host b/package/qt6/qt6base/Config.in.host
-index 286da0ff03..80bc13c7dc 100644
+index 80bc13c7dc..46fb668817 100644
 --- a/package/qt6/qt6base/Config.in.host
 +++ b/package/qt6/qt6base/Config.in.host
-@@ -7,3 +7,8 @@ config BR2_PACKAGE_HOST_QT6BASE_GUI
- # (e.g. Qt Tools).
- config BR2_PACKAGE_HOST_QT6BASE_NETWORK
+@@ -12,3 +12,8 @@ config BR2_PACKAGE_HOST_QT6BASE_NETWORK
+ # (e.g. qmltestrunner).
+ config BR2_PACKAGE_HOST_QT6BASE_TEST
  	bool
 +
-+# Select this if you need host qt6 tools that require the Qt::Test module
-+# (e.g. qmltestrunner).
-+config BR2_PACKAGE_HOST_QT6BASE_TEST
++# Select this if you need host qt6 tools that require the Qt::Sql module
++# (e.g. qhelpgenerator).
++config BR2_PACKAGE_HOST_QT6BASE_SQL
 +	bool
 diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 509c6b0066..6b9f425255 100644
+index 6b9f425255..d8d68e5254 100644
 --- a/package/qt6/qt6base/qt6base.mk
 +++ b/package/qt6/qt6base/qt6base.mk
-@@ -86,7 +86,6 @@ HOST_QT6BASE_CONF_OPTS = \
+@@ -85,7 +85,6 @@ HOST_QT6BASE_DEPENDENCIES = \
+ HOST_QT6BASE_CONF_OPTS = \
  	-DFEATURE_concurrent=OFF \
  	-DFEATURE_xml=ON \
- 	-DFEATURE_sql=OFF \
--	-DFEATURE_testlib=OFF \
+-	-DFEATURE_sql=OFF \
  	-DFEATURE_dbus=OFF \
  	-DFEATURE_icu=OFF \
  	-DFEATURE_glib=OFF \
-@@ -111,6 +110,16 @@ else
+@@ -110,6 +109,15 @@ else
  HOST_QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
  endif
  
-+# We need host-qt6base with Testlib support when building host-qt6declarative
-+# with QuickTest support. QuickTest support is further required for building the
-+# qmltestrunner host tool. qt6declarative will fail to build if qmltestrunner is
-+# not available.
-+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_TEST),y)
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_testlib=ON
++# We need host qt6base with Sql support for host-qt6tools to generate the
++# qhelpgenerator host tool. qt6tools will fail to build if qhelpgenerator is not
++# available.
++ifeq ($(BR2_PACKAGE_HOST_QT6BASE_SQL),y)
++HOST_QT6BASE_CONF_OPTS += -DFEATURE_sql=ON
 +else
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_testlib=OFF
++HOST_QT6BASE_CONF_OPTS += -DFEATURE_sql=OFF
 +endif
 +
- # Conditional blocks below are ordered by alphabetic ordering of the
- # BR2_PACKAGE_* option.
- 
+ # We need host-qt6base with Testlib support when building host-qt6declarative
+ # with QuickTest support. QuickTest support is further required for building the
+ # qmltestrunner host tool. qt6declarative will fail to build if qmltestrunner is
 -- 
 2.45.2
 
