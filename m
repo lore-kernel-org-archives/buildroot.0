@@ -1,101 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FA92C27C53
-	for <buildroot@archiver.kernel.org>; Wed, 19 Jun 2024 20:25:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD960C27C53
+	for <buildroot@archiver.kernel.org>; Wed, 19 Jun 2024 20:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 19F17401FE;
-	Wed, 19 Jun 2024 20:25:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 475AF842C0;
+	Wed, 19 Jun 2024 20:33:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vTGvbzkFDk7t; Wed, 19 Jun 2024 20:25:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vk86uVdyxaUN; Wed, 19 Jun 2024 20:33:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB6214036F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A3478421D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB6214036F;
-	Wed, 19 Jun 2024 20:25:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0DFD61BF846
- for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 20:25:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A3478421D;
+	Wed, 19 Jun 2024 20:33:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0858A1BF846
+ for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 20:33:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA9CB401FE
- for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 20:25:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 023AD4029E
+ for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 20:33:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uz6DLqRrUz_R for <buildroot@lists.busybox.net>;
- Wed, 19 Jun 2024 20:25:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fUA1uRRfEgmZ for <buildroot@lists.busybox.net>;
+ Wed, 19 Jun 2024 20:33:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D11D34036F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D11D34036F
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D11D34036F
- for <buildroot@buildroot.org>; Wed, 19 Jun 2024 20:25:39 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-42172ab4b60so2008055e9.0
- for <buildroot@buildroot.org>; Wed, 19 Jun 2024 13:25:39 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 77B6940279
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77B6940279
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 77B6940279
+ for <buildroot@buildroot.org>; Wed, 19 Jun 2024 20:33:39 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-3621ac606e1so860506f8f.1
+ for <buildroot@buildroot.org>; Wed, 19 Jun 2024 13:33:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718828737; x=1719433537;
+ d=1e100.net; s=20230601; t=1718829217; x=1719434017;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=yTGh2HreuIdE4TMAHFrmBEwrDYFz9+mf2mMMyNNgGZ0=;
- b=CB4GeD7uL74UBraY1EPgE/TTisHdRFPxMZPy6K5H7vTa0MImlEupUt/0C1NgiMcYQs
- J+Wv8HX8fZd2lAw6+Q/LwkOs3unmkNMCgZJdjRP+tWbD/O6TlLrCPsy8ZJcrSdY0zGAa
- jvf5UY7hJ58lVpK3aAkI0TaGbEvwGz1Wxs4hnbWtWjChFh12++P9bSb3ojgj12ZbnF17
- CHkgChInM5AieqpX77KXW7KMGk7L7q+hB69ubLXs6gLOFGs+1kYklqvlh/hphLrCnSJr
- v8lGLWaT1Tz6N5jpt9bmS3g8OSpfa9fKDz4FwGqUUUy8QtX5ros6eNDHHNm64QDAe2KZ
- jnog==
+ bh=reI8ux6TPVL2UqjDLdc3bC5au8UnYNz1jWeuoEvcItk=;
+ b=bLznWEkIqZ/Dpu0Xo6RLja+/DKLVxO4DeKfwsILEE8jdiCC797+hV/oLMaZkFKmKxj
+ EiOAlq5lFeJQ5juGxUpkV05CGiph+WsQmeIL9Rq6WXlJQS6W8pjXQ8MMTQekBK2ZPkg8
+ qQKwYi8ZIWs7Ns//UkYpXA/m4ze+2Wt0/Zeg1jdntiEjtx8ROKSnJMLuJYyOmGCiYqec
+ swbvrjiI30prHzlVo6EjjzguiqQYLHfz5DA9E/6236xcjtLp0J8uDv2XDMEK9ap/RteC
+ ZK2RTl6dkYGQvhrLj+7OBE9bZbWYFzq1K3e0Xr9ClCg3jRjYmFp1NWq1dxuNTHdEh188
+ kzUQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWhewAq4vhPJ9mjpMSh10xXf1+OBl8zVK8oEJWsFN3eeMaF69pQQrv8K6WOU09rdI7zLWd9/0N+mEeMkQhf1YBDE/y3KAXuag==
-X-Gm-Message-State: AOJu0YwrBMpkCeknWqi+K6adVIOSFkPDvLPwpVtCqXC43d7yxRR2LYrC
- 20DafvpTKhToeHNIMAbCYYlrZGH9nrbHu6VzxYpaPPB3l4TyFWmw5O70NynJSOFHgIIjbSch6CK
- E
-X-Google-Smtp-Source: AGHT+IEhPro0UXXmS81VbRboxI5i0oqA3MvqtgE/rfbNEZ5UhojUEWBbNn6h02oJZKTb8bkLkVUCfg==
-X-Received: by 2002:a05:600c:4a14:b0:421:5554:744c with SMTP id
- 5b1f17b1804b1-4247517550amr25847185e9.11.1718828737280; 
- Wed, 19 Jun 2024 13:25:37 -0700 (PDT)
+ AJvYcCVNmZSR5gDOAcOxioQBoEh+MwocZxpFsuXE1m0IuHfcp5TPefRcnSwEZCs8+NDOhl/C3VgDp+qO0qPWxeFnggGPqEdirJ85Yw==
+X-Gm-Message-State: AOJu0YyP2Lk/sTf1GgzKy5E0l2GraftQJrCq1ivAglrvlhe83agIP2i6
+ wGs5ilAzs4zi86JgbCZZ/WX59KcIvTXJp3179xc115YZXunzaX0OKYWq/xHzjX8N6PldVYA6NV2
+ f
+X-Google-Smtp-Source: AGHT+IHBnXZ+0YKYc6Bp8+8z+4tZRsDoxbUnral5I2huTSaAuVEoSrAkKDZZd/ENDFvFwIroo9wA8Q==
+X-Received: by 2002:a5d:4e87:0:b0:362:862d:f7b3 with SMTP id
+ ffacd0b85a97d-362ff0b2cf4mr3519197f8f.3.1718829217191; 
+ Wed, 19 Jun 2024 13:33:37 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4247d1f728asm1372575e9.48.2024.06.19.13.25.35
+ ffacd0b85a97d-3607509c9absm18056807f8f.46.2024.06.19.13.33.36
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 19 Jun 2024 13:25:36 -0700 (PDT)
-Message-ID: <10907897-c3bc-48c9-9d11-b8966b58a612@mind.be>
-Date: Wed, 19 Jun 2024 22:25:33 +0200
+ Wed, 19 Jun 2024 13:33:36 -0700 (PDT)
+Message-ID: <1436214b-0df3-4ce9-8c8d-c07816cb2bb9@mind.be>
+Date: Wed, 19 Jun 2024 22:33:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: lancethepants <lancethepants@gmail.com>, buildroot@buildroot.org
-References: <20240605212001.1724218-1-lancethepants@gmail.com>
+To: yegorslists@googlemail.com, buildroot@buildroot.org
+References: <20240606182124.4069700-1-yegorslists@googlemail.com>
 Content-Language: en-GB
-In-Reply-To: <20240605212001.1724218-1-lancethepants@gmail.com>
+In-Reply-To: <20240606182124.4069700-1-yegorslists@googlemail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1718828737; x=1719433537; darn=buildroot.org;
+ d=mind.be; s=google; t=1718829217; x=1719434017; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=yTGh2HreuIdE4TMAHFrmBEwrDYFz9+mf2mMMyNNgGZ0=;
- b=HMTaPcmYJ1FzLBLYBNtl2nOdRAT4gu+dSX6xYxAmFoGVL6M+CzgzN9I9Zm6TgC5B4J
- 1nbw35s1NyZQ6dtSvNAXn9kxIa5+XkvwYLuyHj0DoL8siQGvZYEIBU9hFihtC+SV8EHb
- u58WESZQxJ8tncHORgcyeMipF3iRM66QYoyASB30gqBDxD1CIP23/XzdDV0EyCzpfXmo
- XP/zAFeIOsrU53PTd/AnoUocEz++X6gOkbQHxky0HGHC8OcW6nDzut04rktycmvto8HM
- 2GGiPwvVvWtvY9tT8NU040X+EPbZ+zwWP5Usw0/RB/5olcV5Sr30Dvj4ppwUer/hJIAu
- ZaAw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=reI8ux6TPVL2UqjDLdc3bC5au8UnYNz1jWeuoEvcItk=;
+ b=UshS8na+k94IaT80+Z3cIMhUjQqMurXnbsoIXA4ORHeYh7AmoFa5MYFpTLL0SQhKR1
+ U3mW4Z/Z5lLwkzCJeKRHDfIA3kamIDIaTf88+KGrGDOn6Lj7xi/JDLAiOnvLa1GojTFN
+ bXZx4IslUexZ1yczh8MCCmZVq2OyYiiwFNGcrvUP50iuexWXtZyJ1vS6oLXsu9VMVWFV
+ 3AlMss+gwFPI/BIiLwh88ZvPcqd7qzFhyaIUPpuJdmsvGdN9hzyzRkC22hWY7uaaoCc4
+ troH1Kbv5tJblY9sOo/0E4IMSQPPPaShFpW5Ohg9lhRY/3tMESzgpZygMK83gY2gtfsj
+ PzjA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=HMTaPcmY
-Subject: Re: [Buildroot] [PATCH 1/1] boot/syslinux: fix build with GCC 14.x
+ header.a=rsa-sha256 header.s=google header.b=UshS8na+
+Subject: Re: [Buildroot] [PATCH] package/ntp: remove the obsolete patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,45 +109,97 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Bernd Kuhls <bernd@kuhls.net>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBIaSBMYW5jZSwKCk9uIDA1LzA2LzIwMjQgMjM6MjAsIGxhbmNldGhlcGFudHMgd3JvdGU6Cj4g
-QWRkIG1pc3Npbmcgc3RkaW8uaCBpbmNsdWRlLiBXaXRob3V0IGl0IHJlc3VsdHMgaW4gdGhlIGZv
-bGxvd2luZyBlcnJvciB1bmRlciBHQ0MgMTQueAo+IAo+IC4uLy4uLy4uL2NvbTMyL2xpYi9zeXNs
-aW51eC9kZWJ1Zy5jOiBJbiBmdW5jdGlvbiDigJhzeXNsaW51eF9kZWJ1Z+KAmToKPiAuLi8uLi8u
-Li9jb20zMi9saWIvc3lzbGludXgvZGVidWcuYzo5MTo1OiBlcnJvcjogaW1wbGljaXQgZGVjbGFy
-YXRpb24gb2YgZnVuY3Rpb24g4oCYcHJpbnRm4oCZIFstV2ltcGxpY2l0LWZ1bmN0aW9uLWRlY2xh
-cmF0aW9uXQo+ICAgICA5MSB8ICAgICBwcmludGYoIkR5bmFtaWMgZGVidWcgdW5hdmFpbGFibGVc
-biIpOwo+IAo+IFNpZ25lZC1vZmYtYnk6IExhbmNlIEZyZWRyaWNrc29uIDxsYW5jZXRoZXBhbnRz
-QGdtYWlsLmNvbT4KPiAtLS0KPiAgIC4uLi8wMDIwLXB1bGwtaW4tc3RkaW8taC1mb3ItZ2NjMTQu
-cGF0Y2ggICAgICB8IDI1ICsrKysrKysrKysrKysrKysrKysKPiAgIDEgZmlsZSBjaGFuZ2VkLCAy
-NSBpbnNlcnRpb25zKCspCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9vdC9zeXNsaW51eC8wMDIw
-LXB1bGwtaW4tc3RkaW8taC1mb3ItZ2NjMTQucGF0Y2gKPiAKPiBkaWZmIC0tZ2l0IGEvYm9vdC9z
-eXNsaW51eC8wMDIwLXB1bGwtaW4tc3RkaW8taC1mb3ItZ2NjMTQucGF0Y2ggYi9ib290L3N5c2xp
-bnV4LzAwMjAtcHVsbC1pbi1zdGRpby1oLWZvci1nY2MxNC5wYXRjaAo+IG5ldyBmaWxlIG1vZGUg
-MTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uNjcxMWM3YWE3OAo+IC0tLSAvZGV2L251bGwKPiAr
-KysgYi9ib290L3N5c2xpbnV4LzAwMjAtcHVsbC1pbi1zdGRpby1oLWZvci1nY2MxNC5wYXRjaAo+
-IEBAIC0wLDAgKzEsMjUgQEAKPiArRnJvbSBkZmEyNzA1MTAwYTg5M2JjMDE3ZDIzNDA2ZGFhOWEz
-ODNmYmMzYzk1IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBsYW5jZXRoZXBhbnRz
-IDxsYW5jZXRoZXBhbnRzQGdtYWlsLmNvbT4KPiArRGF0ZTogV2VkLCA1IEp1biAyMDI0IDE0OjMx
-OjM4IC0wNjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gY29tMzIvbGliL3N5c2xpbnV4L2RlYnVnLmM6
-IGFkZCBtaXNzaW5nIHN0ZGlvLmggaW5jbHVkZS4KPiArCj4gK0ZpeGVzIGJ1aWxkaW5nIHdpdGgg
-R0NDIDE0LngKCiAgQXMgY2hlY2stcGFja2FnZSByZXBvcnRzLCB0aGUgcGF0Y2ggaXMgbWlzc2lu
-ZyBhIFNpZ25lZC1vZmYtYnkgKHRvIGluZGljYXRlIAp0aGF0IHlvdSBhcmUgYWxsb3dlZCB0byBj
-b250cmlidXRlIGl0IHVuZGVyIHRoZSBzeXNsaW51eCBsaWNlbnNlKSBhbmQgYW4gClVwc3RyZWFt
-OiBpbmRpY2F0b3IuIFdlIGV4cGVjdCB5b3UgdG8gc3VibWl0IHRoZSBwYXRjaCB1cHN0cmVhbSBi
-ZWZvcmUgeW91IApzdWJtaXQgaXQgdG8gYnVpbGRyb290LgoKICBSZWdhcmRzLAogIEFybm91dAoK
-PiArLS0tCj4gKyBjb20zMi9saWIvc3lzbGludXgvZGVidWcuYyB8IDEgKwo+ICsgMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4gKwo+ICtkaWZmIC0tZ2l0IGEvY29tMzIvbGliL3N5c2xp
-bnV4L2RlYnVnLmMgYi9jb20zMi9saWIvc3lzbGludXgvZGVidWcuYwo+ICtpbmRleCBkOWFiODYz
-Zi4uZThmNTNkNTcgMTAwNjQ0Cj4gKy0tLSBhL2NvbTMyL2xpYi9zeXNsaW51eC9kZWJ1Zy5jCj4g
-KysrKyBiL2NvbTMyL2xpYi9zeXNsaW51eC9kZWJ1Zy5jCj4gK0BAIC0xLDYgKzEsNyBAQAo+ICsg
-I2luY2x1ZGUgPGxpbnV4L2xpc3QuaD4KPiArICNpbmNsdWRlIDxzdHJpbmcuaD4KPiArICNpbmNs
-dWRlIDxzdGRib29sLmg+Cj4gKysjaW5jbHVkZSA8c3RkaW8uaD4KPiArCj4gKyAjaWZkZWYgRFlO
-QU1JQ19ERUJVRwo+ICsKPiArLS0KPiArMi4zOS4yCj4gKwpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+
+
+On 06/06/2024 20:21, yegorslists@googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> 0001-nano.patch: both MOD_NANO and MOD_TAI were added to glibc
+> on 2011-03-30 in commit 83fe108b0a9bc4f2deb14695bb0c8b2011e79f28.
+> 
+> Renumber the remaining patches.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+  Applied to master with an extended commit log containing all the research Yann 
+did, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   .checkpackageignore                           |  3 +-
+>   package/ntp/0001-nano.patch                   | 28 -------------------
+>   ...patch => 0001-ntp-syscalls-fallback.patch} |  0
+>   ...ch => 0002-fix-pthread-detach-check.patch} |  0
+>   4 files changed, 1 insertion(+), 30 deletions(-)
+>   delete mode 100644 package/ntp/0001-nano.patch
+>   rename package/ntp/{0002-ntp-syscalls-fallback.patch => 0001-ntp-syscalls-fallback.patch} (100%)
+>   rename package/ntp/{0003-fix-pthread-detach-check.patch => 0002-fix-pthread-detach-check.patch} (100%)
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index d0bd179a5c..a7d353e7d8 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -1118,8 +1118,7 @@ package/norm/0001-protolib-drop-linux-version-check.patch lib_patch.Upstream
+>   package/norm/0002-Use-print-as-function-call-for-Python3-compatibility.patch lib_patch.Upstream
+>   package/norm/0003-Fix-mixed-tabs-spaces-in-protolib-wscript.patch lib_patch.Upstream
+>   package/nss-pam-ldapd/S45nslcd Shellcheck lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
+> -package/ntp/0001-nano.patch lib_patch.Upstream
+> -package/ntp/0002-ntp-syscalls-fallback.patch lib_patch.Upstream
+> +package/ntp/0001-ntp-syscalls-fallback.patch lib_patch.Upstream
+>   package/ntp/S49ntp.in lib_sysv.Variables
+>   package/ntpsec/0001-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch lib_patch.Upstream
+>   package/numactl/0001-link-with-latomic-if-needed-again.patch lib_patch.Upstream
+> diff --git a/package/ntp/0001-nano.patch b/package/ntp/0001-nano.patch
+> deleted file mode 100644
+> index bce3478261..0000000000
+> --- a/package/ntp/0001-nano.patch
+> +++ /dev/null
+> @@ -1,28 +0,0 @@
+> -Fixes issues with glibc header files, see
+> -http://bugs.gentoo.org/show_bug.cgi?id=270483
+> -
+> -Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> -
+> -Rebase to apply cleanly.
+> -
+> -Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> -
+> -
+> -diff -purN a/include/ntp_syscall.h b/include/ntp_syscall.h
+> ---- a/include/ntp_syscall.h	2015-02-11 08:42:37.794576469 -0500
+> -+++ b/include/ntp_syscall.h	2015-02-11 08:43:03.216957279 -0500
+> -@@ -10,6 +10,14 @@
+> - # include <sys/timex.h>
+> - #endif
+> -
+> -+#if defined(ADJ_NANO) && !defined(MOD_NANO)
+> -+#define MOD_NANO ADJ_NANO
+> -+#endif
+> -+
+> -+#if defined(ADJ_TAI) && !defined(MOD_TAI)
+> -+#define MOD_TAI ADJ_TAI
+> -+#endif
+> -+
+> - #ifndef NTP_SYSCALLS_LIBC
+> - # ifdef NTP_SYSCALLS_STD
+> - #  define ntp_adjtime(t)	syscall(SYS_ntp_adjtime, (t))
+> diff --git a/package/ntp/0002-ntp-syscalls-fallback.patch b/package/ntp/0001-ntp-syscalls-fallback.patch
+> similarity index 100%
+> rename from package/ntp/0002-ntp-syscalls-fallback.patch
+> rename to package/ntp/0001-ntp-syscalls-fallback.patch
+> diff --git a/package/ntp/0003-fix-pthread-detach-check.patch b/package/ntp/0002-fix-pthread-detach-check.patch
+> similarity index 100%
+> rename from package/ntp/0003-fix-pthread-detach-check.patch
+> rename to package/ntp/0002-fix-pthread-detach-check.patch
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
