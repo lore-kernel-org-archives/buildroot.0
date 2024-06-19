@@ -4,77 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A207C27C79
-	for <buildroot@archiver.kernel.org>; Wed, 19 Jun 2024 15:12:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F5A4C27C79
+	for <buildroot@archiver.kernel.org>; Wed, 19 Jun 2024 18:35:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A290940491;
-	Wed, 19 Jun 2024 15:12:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D2AD40025;
+	Wed, 19 Jun 2024 18:35:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QSzy2eYG4EBg; Wed, 19 Jun 2024 15:12:45 +0000 (UTC)
+ id 3HlohSg0ETV4; Wed, 19 Jun 2024 18:34:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E2104049A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25F3E40531
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E2104049A;
-	Wed, 19 Jun 2024 15:12:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 100E61BF3D2
- for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 15:12:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 25F3E40531;
+	Wed, 19 Jun 2024 18:34:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 35EE11BF83C
+ for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 18:34:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EFE136108B
- for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 15:12:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E93040633
+ for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 18:34:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u8PL6OcWncfD for <buildroot@lists.busybox.net>;
- Wed, 19 Jun 2024 15:12:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.208.47;
- helo=mail-ed1-f47.google.com; envelope-from=jdknight@jdknight.me;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C7D5160760
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7D5160760
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com
- [209.85.208.47])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C7D5160760
- for <buildroot@buildroot.org>; Wed, 19 Jun 2024 15:12:41 +0000 (UTC)
-Received: by mail-ed1-f47.google.com with SMTP id
- 4fb4d7f45d1cf-57c75464e77so8386708a12.0
- for <buildroot@buildroot.org>; Wed, 19 Jun 2024 08:12:41 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MKfNRwzzIAPm for <buildroot@lists.busybox.net>;
+ Wed, 19 Jun 2024 18:34:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1C5F440547
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C5F440547
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1C5F440547
+ for <buildroot@buildroot.org>; Wed, 19 Jun 2024 18:34:55 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-42249a4f9e4so857525e9.2
+ for <buildroot@buildroot.org>; Wed, 19 Jun 2024 11:34:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718809959; x=1719414759;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=TWs7MIKRQI9hjV6lpXVcCi8mJRPmApd4mYYpYwy7et4=;
- b=C6c8Z/SIIYD0UcMgiApavgJA4I7xfp2durbslZ6k9MP7Rj8l7w6yUF3WPn5xDrDB4E
- qt2uEM78gzOogbysxsSNRfoWfoZGHrJWQhADNN5PRFhoSM2S3UBjQKv0xgUG8MMBsVS/
- ZWg4G9F7+VBv0o6qjIB976wuCQep9qDQxeYI75sbicug7UN5nGfX3oLoGCS1Er9VDaEL
- hFhWy4TUTSlrpRyTOJbuddcmIUFQfT4cT5wujy6Uiax1gV8WfkGpZibyx7Wkd9ae2yq2
- WgWYWykNLB0LCZgTGMywRFVe/5sXcS691EHxUiFeHbA8XMtQl7KqtOMeRMNeNq85kUUI
- SyAA==
+ d=1e100.net; s=20230601; t=1718822093; x=1719426893;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=ANU5x5n/tm0vXEw72jBbSxY9H2bagZ7pJm/RQE5SuIY=;
+ b=ttbh2hRm9v1lwYqbzuE+Njz5AlFGu0hV4qdKzHbGQWdMSXj/Wph7UNzqmTes+nuhRz
+ o6cX0fBJl26ZqvvUcQd2y3S7g899PA7sKdAMhXMVqFidwYt5tq5dnSGo9Cn7TNLphIt2
+ SLto0OVvjY3r3hiFqj6ImIrtuuXAuuMcpHxb83nWtLk6prMLCJjnD+271N9WXARzoZL3
+ KyFJpCtCGv8PTz83qOicHFRbFFpWK2UbyJ9XrPddxUjssZ/StzPsu7y/IvkvKzKQ6g5J
+ HfnKTz88N5vHhjTB1s5o4/pJxL/aX+rF5l29P/k/js1NcGxJ8V2uDehiFsO+MtqBSqvo
+ 2lQA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVGds23O5AsKa+KWtvPfDxwgueyNFG26NbQp+/h7SC5Q4/ofKCPFU7lYtGaPdMEZ2R59BDpctNRLgjh28Qiudn53M/v58NLQw==
-X-Gm-Message-State: AOJu0YwKwpHTNlczydxYRkn4Dky8JgFRTT8v7kap6oCZq/0ZbudOk6uy
- 24oE/El10DKDhzoc2ZDzYgnD2ZxK2jUMGPuXnkgnlRj7aFQKSlZz+Gg3mZ8CdHNrcdxOSFzrB7S
- QQr1yKcDDjBnr0hiUhS0fZiaAoQI7sSfdNZmgAg==
-X-Google-Smtp-Source: AGHT+IHJjsIXePEcGM61MJ0FYEq0dWiK76UEZRMliD3IWEnsWREQroaFsKUqrcNCo9BgfMS1v4br1LmjeDRO9ZzOwME=
-X-Received: by 2002:a50:c309:0:b0:57a:3424:b36e with SMTP id
- 4fb4d7f45d1cf-57d07e5aac1mr1743398a12.13.1718809959392; Wed, 19 Jun 2024
- 08:12:39 -0700 (PDT)
+ AJvYcCUoSkHPnwNuT7xI4vreHAkCKRi0A1qDf5axA9cZFV7WZ/QBfl23l0GJVurzSws7m7lwfJu7kVi3JiUi2JlSJyoMhnaZATaLYg==
+X-Gm-Message-State: AOJu0YzB8zEr+onjs0UBq1jpNzjWlnL6iAJeZrmwBL9cY7AhNhRXqDvg
+ o+8ob3OybvDCsyUY9yOgTZfkejF7cRUpP+kNBktx+CFXtTejE18GWTjxoWeigNI=
+X-Google-Smtp-Source: AGHT+IELp4DNixANCrP1GvbyOf+lpbcckY3mlWf0gpAKH+679GBQet/81Y5fAbzPRjoJ0gv4e6Wq2Q==
+X-Received: by 2002:a7b:cd17:0:b0:424:72ea:c4b with SMTP id
+ 5b1f17b1804b1-4247518649cmr23571835e9.24.1718822093341; 
+ Wed, 19 Jun 2024 11:34:53 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-422f602efc4sm240479375e9.15.2024.06.19.11.34.52
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 19 Jun 2024 11:34:52 -0700 (PDT)
+Message-ID: <3ce1eba6-5137-42ed-840b-b6fab9bebb3e@mind.be>
+Date: Wed, 19 Jun 2024 20:34:48 +0200
 MIME-Version: 1.0
-References: <SN4P221MB0682E582104B524681EBE0C9A0729@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM>
- <20231001103844.GK2579@scaer>
-In-Reply-To: <20231001103844.GK2579@scaer>
-From: James Knight <james.d.knight@live.com>
-Date: Wed, 19 Jun 2024 11:12:27 -0400
-Message-ID: <CALAjcgU2viMsYr_29Cmx+JsE_4fKkhgYEbvQv7t62djYbv+7sg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=live.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/skeleton-init-systemd: copy
- over etc-factory content
+User-Agent: Mozilla Thunderbird
+To: James Knight <james.d.knight@live.com>, buildroot@buildroot.org
+References: <CALAjcgXZKYjpsFV1E7Ry-0N5NEGV01hebSb8tEgoAtHvkfvCOA@mail.gmail.com>
+Content-Language: en-GB
+In-Reply-To: <CALAjcgXZKYjpsFV1E7Ry-0N5NEGV01hebSb8tEgoAtHvkfvCOA@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1718822093; x=1719426893; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=ANU5x5n/tm0vXEw72jBbSxY9H2bagZ7pJm/RQE5SuIY=;
+ b=Jwn3XpR8sXo39w717bUw0oOtYXcJaYg556BWloxKlSHXmE5Wmm6/0KJKZtBWmJ/udt
+ R9HnVtsmJLof7Tq3JByajSs1Aqcfnowmqy9j5YBjHZYBXEaDQ6qwNTugGPBTFi+Xk5/w
+ m0K/885waFpYaI2rqAXIS+1Pl/9LQU78XXmdWk/N1/LKZg7GNhkNpHOVdGy2QziMGAGd
+ 2c9oqYaar0nwfrjqwiMA47vJtg6N20uJX6/9MsiULQIzrumgpxawWG+KBQQyHiMAaiDv
+ 46U+YyT4Jw9d9dd9giGXgmqE1Wj/2btRKVZQZxVIGLTCrrkGQnLk0K31uZBu9ElUYvA4
+ oynw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=Jwn3XpR8
+Subject: Re: [Buildroot] inquiry | configuring for a specific linux lts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,50 +107,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Knight <james.d.knight@live.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-WWFubiwKCk9uIFN1biwgT2N0IDEsIDIwMjMgYXQgNjozOOKAr0FNIFlhbm4gRS4gTU9SSU4gPHlh
-bm4ubW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPiBXaHkgaXMgdGhhdCBub3QgbGlzdGVkIGlu
-IHRoZSBzeXN0ZW1kIHRtcGZpbGVzLCBzbyB0aGF0IGl0IGlzIGluc3RhbGxlZAo+IHdoZW4gcnVu
-bmluZyBzeXN0ZW1kLXRtcGZpbGVzLCBlaXRoZXIgYXQgcnVudGltZSBieSBzeXN0ZW1kIG9uIGEg
-ci93Cj4gZmlsZXN5c3RlbSwgb3IgYXQgYnVpbGR0aW1lIHdpdGggQlIyX0lOSVRfU1lTVEVNRF9Q
-T1BVTEFURV9UTVBGSUxFUyA/CgpTb3JyeSwgSSBhbSBub3QgdG9vIGtub3dsZWRnZWFibGUgb24g
-dGhlIGNvbmNlcHRzIG9mIHN5c3RlbWQgdG1wZmlsZXMKYW5kIHRtcGZpbGVzIHByZS1zZWVkIGNv
-bmNlcHRzIChqdXN0IHJlY2VudGx5IHN0dW1ibGVkIHVwb24gYSBjb21taXQKWzFdIHdoaWNoIHBy
-b3ZpZGVzIHNvbWUgaGVscCBpbmZvcm1hdGlvbiB0byBsZWFybiBtb3JlKS4KClRoZSBwcm9wb3Nl
-ZCBjaGFuZ2Ugd2FzIGp1c3QgbWUgb2JzZXJ2aW5nIHRoYXQgdGhlIGltYWdlIEkgYnVpbHQKbmVl
-ZGVkIGAvZXRjL3BhbS5kL3N5c3RlbS1hdXRoYCB0byBsb2dpbi4gTm90aWNlZCB0aGUgc3RvY2sg
-ZmlsZSB3YXMKc3RvcmVkIGluIHRoaXMgZmFjdG9yeSBmaWxlIGFuZCBhc3N1bWVkIGl0IHNob3Vs
-ZCBoYXZlIGJlZW4gY29waWVkIGF0CmJ1aWxkIHRpbWUgKHNvbWV3aGF0IGZvbGxvd2luZyB3aGF0
-IHRoZSBjYXRhbG9nLWRiIGxvZ2ljIHdhcyBkb2luZykuCgo+IEFsc28sIG5vbmUgb2Ygb3VyIHJ1
-bnRpbWUgdGVzdHMgZm9yIHN5c3RlbWQgZXhoaWJpdHMgdGhpcyBsb2dpbiBpc3N1ZToKPiAuLi4K
-PiBDb3VsZCB5b3UgdHJ5IHRvIGFkZCBhIGJpdCBtb3JlIGV4cGxhbmF0aW9ucyBhbmQgY29udGV4
-dCwgcGxlYXNlPwoKVGhlIGxvZ2luIGlzc3VlIGFwcGVhcnMgdG8gaGFwcGVuIGluIGEgYm9hcmQg
-Y29uZmlndXJhdGlvbiB0aGF0IGlzCnVzaW5nIHN5c3RlbWQsIGxpbnV4LXBhbSBhbmQgc2hhZG93
-IHBhY2thZ2VzIGluc3RhbGxlZCAobm90ClNFTGludXgtc3BlY2lmaWMpLiBBbm90aGVyIHVzZXIg
-aGFzIHJlcG9ydGVkIHRoaXMgc2NlbmFyaW8gWzJdLgoKRnJvbSB3aGF0IEkgY2FuIHRlbGwsIHRo
-ZSBzaGFkb3cgcGFja2FnZSBhZGRzIGEgUEFNIGNvbmZpZ3VyYXRpb24Kd2hpY2ggcmVxdWlyZXMg
-YHN5c3RlbS1hdXRoYCBbM10gYW5kIGxlYXZlcyB0aGUgcmVzcG9uc2liaWxpdHkgb2YgdGhlCnN5
-c3RlbSB0byBkZWZpbmUgdGhpcy4gc3lzdGVtZCBwcm92aWRlcyBhIHN0b2NrIGNvbmZpZ3VyYXRp
-b24gYW5kIGFsc28Kbm90ZXMgdGhhdCBpdCBzaG91bGQgYmUgdXNlZCBhcyBhIHRlbXBsYXRlIG9u
-bHkgYW5kIHRhaWxvcmVkIGZvciB0aGUKc3BlY2lmaWMgZW52aXJvbm1lbnQuIEZvciBteSBib2Fy
-ZCBjb25maWd1cmF0aW9uLCBJIHdpbGwgbW9zdCBsaWtlbHkKYmUgYWRkaW5nIGEgY3VzdG9tIHZl
-cnNpb24gaW4gYSBib2FyZC1zcGVjaWZpYyBza2VsZXRvbiB3aGVuIEkgcGxhbiB0bwpmb2N1cyBv
-biBhdXRoZW50aWNhdGlvbi1yZWxhdGVkIGZlYXR1cmVzL2lzc3Vlcy4gSG93ZXZlciwgZm9yIHRo
-ZQppbml0aWFsIGRldmVsb3BtZW50IG9mIGEgYm9hcmQsIEkgZG8gbm90IG1pbmQgdXNpbmcgdGhl
-IHN0b2NrCnRlbXBsYXRlLiBJIGFzc3VtZWQgaGF2aW5nIHRoaXMgZmlsZSBieSBkZWZhdWx0IHdv
-dWxkIGhlbHAgd2l0aAppbml0aWFsIGJvYXJkIGNvbmZpZ3VyYXRpb25zIGF2b2lkIGxvZ2luIGlz
-c3Vlcy4KClsxXTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290LzMwOTE4XzE2NjYx
-MjIxOTlfNjM0RjAxRDdfMzA5MThfMzY0XzFfM2ZlNjhhZmRiYjc5NTA1MTYxYWM3NmUzMWU2MDU0
-ZGM0NGRkMzQwZC4xNjY2MTIyMTg0LmdpdC55YW5uLm1vcmluQG9yYW5nZS5jb20vClsyXTogaHR0
-cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290LzIwMjIxMjI0MTcxOTIwLjExMjU2LTEtcmFw
-aGFlbC5wYXZsaWRpc0BnbWFpbC5jb20vVC8KWzNdOiBodHRwczovL2dpdGh1Yi5jb20vc2hhZG93
-LW1haW50L3NoYWRvdy9ibG9iL2NkZTA4ZTQyMmQ4YzE3OWQ0YmE2MjJkYTIyOTBjMzFlYzY0NWM2
-MTEvZXRjL3BhbS5kL2xvZ2luI0wzCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+
+
+On 14/06/2024 20:35, James Knight wrote:
+> Trying to figure out the best way with Buildroot to target a specific
+> Linux LTS branch for images. At this time, using a setup that has an
+> external toolchain build (v6.6.x Linux headers) and inside each
+> project configurations a `BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE`
+> option is specified to a value of (for example) `6.6.32`. As Buildroot
+> evolves, it may update its own configuration and Linux hashes to a
+> more recent version (e.g. v6.6.33). In turn, when updating the
+> Buildroot version to use, there is a need to update all configurations
+> to use the most recent LTS version.
+> 
+> I am looking for a capability somewhat provided by the existing
+> `BR2_LINUX_KERNEL_LATEST_VERSION` option, but targeting a specific LTS
+> version. For example:
+> 
+>      BR2_LINUX_KERNEL_LATEST_VERSION
+>      BR2_LINUX_KERNEL_LATEST_LTS_0606_VERSION
+>      BR2_LINUX_KERNEL_LATEST_LTS_0601_VERSION
+>      BR2_LINUX_KERNEL_LATEST_LTS_0516_VERSION
+
+  You probably meant 5.15 here :-)
+
+>      ...
+> 
+> Then these configurations can use whatever the latest LTS version of a
+> configured major-minor without updating.
+
+  I agree with this approach, and I pushed my colleague Marleen to do exactly 
+that for TF-A:
+
+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_8_VERSION
+
+  (Note that I'd make it LTS_6_6 and not LTS_0606, because upstream is also 6.6 
+and not 6.06, but that's nitpicking).
+
+  And the idea is that the in-tree defconfigs also use this LTS option - this 
+means that our defconfigs get security updates "for free", but on the other hand 
+they won't have been runtime tested with the exact same kernel version.
+
+
+> I imagine this may not be implemented since these additional
+> configuration options may be a bit too much to maintain.
+
+  Since upstream is going to fade out LTS maintenance to just 3 years, it's not 
+going to be that bad on the longer term. By 2027 there should be just 3 active 
+LTS branches.
+
+  Also it's super easy to script updates to the LTS versions.
+
+
+> Assuming such
+> an approach is not desired, I wonder if it may be possible to support
+> a `BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE` option where users can
+> define a value such as `6.6.` (or `6.6.x` or whatever) and have
+> Buildroot use whatever the most recent version it "supports" (e.g. has
+> a hash reference).
+
+  Maintaining the hashes is actually most of the work, the Config.in symbols 
+themselves don't need to be modified.
+
+
+  Regards,
+  Arnout
+
+> For now, it seems the tasks needed to handle an updated Buildroot
+> framework with a custom Linux version is to first have projects
+> track/patch the hash version of Linux any time a custom version is
+> set; and update both the version and patch-hash in a board
+> configuration when wanting to update.
+> 
+> If I am overlooking another way to approach this, please let me know.
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
