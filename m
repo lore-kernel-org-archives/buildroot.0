@@ -4,98 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD960C27C53
-	for <buildroot@archiver.kernel.org>; Wed, 19 Jun 2024 20:33:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB5A2C27C53
+	for <buildroot@archiver.kernel.org>; Wed, 19 Jun 2024 20:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 475AF842C0;
-	Wed, 19 Jun 2024 20:33:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A616E80D7D;
+	Wed, 19 Jun 2024 20:34:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vk86uVdyxaUN; Wed, 19 Jun 2024 20:33:42 +0000 (UTC)
+ id foo8ld6c5CEF; Wed, 19 Jun 2024 20:34:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A3478421D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 921CA80E3F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A3478421D;
-	Wed, 19 Jun 2024 20:33:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 921CA80E3F;
+	Wed, 19 Jun 2024 20:34:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0858A1BF846
- for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 20:33:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 490091BF846
+ for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 20:34:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 023AD4029E
- for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 20:33:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 35EFF413CD
+ for <buildroot@lists.busybox.net>; Wed, 19 Jun 2024 20:34:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fUA1uRRfEgmZ for <buildroot@lists.busybox.net>;
- Wed, 19 Jun 2024 20:33:39 +0000 (UTC)
+ id Sh7it9cJ6wQp for <buildroot@lists.busybox.net>;
+ Wed, 19 Jun 2024 20:34:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 77B6940279
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77B6940279
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 77B6940279
- for <buildroot@buildroot.org>; Wed, 19 Jun 2024 20:33:39 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-3621ac606e1so860506f8f.1
- for <buildroot@buildroot.org>; Wed, 19 Jun 2024 13:33:39 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B8242410C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8242410C5
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B8242410C5
+ for <buildroot@buildroot.org>; Wed, 19 Jun 2024 20:34:04 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-354b722fe81so133747f8f.3
+ for <buildroot@buildroot.org>; Wed, 19 Jun 2024 13:34:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718829217; x=1719434017;
+ d=1e100.net; s=20230601; t=1718829242; x=1719434042;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=reI8ux6TPVL2UqjDLdc3bC5au8UnYNz1jWeuoEvcItk=;
- b=bLznWEkIqZ/Dpu0Xo6RLja+/DKLVxO4DeKfwsILEE8jdiCC797+hV/oLMaZkFKmKxj
- EiOAlq5lFeJQ5juGxUpkV05CGiph+WsQmeIL9Rq6WXlJQS6W8pjXQ8MMTQekBK2ZPkg8
- qQKwYi8ZIWs7Ns//UkYpXA/m4ze+2Wt0/Zeg1jdntiEjtx8ROKSnJMLuJYyOmGCiYqec
- swbvrjiI30prHzlVo6EjjzguiqQYLHfz5DA9E/6236xcjtLp0J8uDv2XDMEK9ap/RteC
- ZK2RTl6dkYGQvhrLj+7OBE9bZbWYFzq1K3e0Xr9ClCg3jRjYmFp1NWq1dxuNTHdEh188
- kzUQ==
+ bh=h1b6Nowb2HfYWFmWnlvKHqUPU/tC+orbHxu0YZeKvEc=;
+ b=W3D4nrFyXs/vgickEtJsSDYSNuaG3BA5q4JnjSAUGnl55F25l0+MRmhH0kwayNfgHo
+ cLiJGc4NKKX3Wssq+IMCjV47VP5IwzpHXO5gAcMZgQfdE/rV0oLG1HD6xZerv8Xrk4ub
+ t95QGrVSyCv88iG64rAdqCiiazOvD3rBhNY9qXyqdTqzcuEpoTNwzJnFabGyWQdwBv8t
+ cXoQB7lBKwFSqKlV28lqf306o+OEPY2MARKLbvo7c35YhCzN111le29CqdGgRtzXj1Oe
+ FL8rvCNPtILKYd2dGjlc2xHqLtzHtiO3yeWNsDmwwXYiD2W00olIB71DY96nOBiGNscZ
+ rJVA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVNmZSR5gDOAcOxioQBoEh+MwocZxpFsuXE1m0IuHfcp5TPefRcnSwEZCs8+NDOhl/C3VgDp+qO0qPWxeFnggGPqEdirJ85Yw==
-X-Gm-Message-State: AOJu0YyP2Lk/sTf1GgzKy5E0l2GraftQJrCq1ivAglrvlhe83agIP2i6
- wGs5ilAzs4zi86JgbCZZ/WX59KcIvTXJp3179xc115YZXunzaX0OKYWq/xHzjX8N6PldVYA6NV2
- f
-X-Google-Smtp-Source: AGHT+IHBnXZ+0YKYc6Bp8+8z+4tZRsDoxbUnral5I2huTSaAuVEoSrAkKDZZd/ENDFvFwIroo9wA8Q==
-X-Received: by 2002:a5d:4e87:0:b0:362:862d:f7b3 with SMTP id
- ffacd0b85a97d-362ff0b2cf4mr3519197f8f.3.1718829217191; 
- Wed, 19 Jun 2024 13:33:37 -0700 (PDT)
+ AJvYcCUOBbRACAFb7VvsdS8VazLWbnLF6jZkUoeW8U0fobhV8Z/+IoIy5+0dmD+Urg3k8t7kfWfz9MvyrMGOtUt1te+G0BuXfyTOVA==
+X-Gm-Message-State: AOJu0Yy2xJcWlX0QvpuxwnyKL330AvP+/s5q8hV5u2eKccHO5tTxB8VQ
+ f3tdEYP3QRNMAkulp1Nyr1ieFPU5kDQJJ58QRc15HyKPGvXymTVvjqztOhkqIaMffl49Z0VOC52
+ i
+X-Google-Smtp-Source: AGHT+IFKLCw/lUKgQf4npo8squuSBrP6xS8uCp6g5VwT3exQyLsHzVodA0pU0yTNXe3pCOJ5DV7rxA==
+X-Received: by 2002:a05:6000:1c3:b0:362:9c7f:6df9 with SMTP id
+ ffacd0b85a97d-363171e2c5emr2701672f8f.7.1718829242126; 
+ Wed, 19 Jun 2024 13:34:02 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3607509c9absm18056807f8f.46.2024.06.19.13.33.36
+ ffacd0b85a97d-360750ad1absm17878014f8f.62.2024.06.19.13.34.01
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 19 Jun 2024 13:33:36 -0700 (PDT)
-Message-ID: <1436214b-0df3-4ce9-8c8d-c07816cb2bb9@mind.be>
-Date: Wed, 19 Jun 2024 22:33:34 +0200
+ Wed, 19 Jun 2024 13:34:01 -0700 (PDT)
+Message-ID: <0dd31e7e-32b9-4f48-a4c7-a45c7ab160df@mind.be>
+Date: Wed, 19 Jun 2024 22:33:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: yegorslists@googlemail.com, buildroot@buildroot.org
-References: <20240606182124.4069700-1-yegorslists@googlemail.com>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20240609172148.88446-1-ju.o@free.fr>
 Content-Language: en-GB
-In-Reply-To: <20240606182124.4069700-1-yegorslists@googlemail.com>
+In-Reply-To: <20240609172148.88446-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1718829217; x=1719434017; darn=buildroot.org;
+ d=mind.be; s=google; t=1718829242; x=1719434042; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=reI8ux6TPVL2UqjDLdc3bC5au8UnYNz1jWeuoEvcItk=;
- b=UshS8na+k94IaT80+Z3cIMhUjQqMurXnbsoIXA4ORHeYh7AmoFa5MYFpTLL0SQhKR1
- U3mW4Z/Z5lLwkzCJeKRHDfIA3kamIDIaTf88+KGrGDOn6Lj7xi/JDLAiOnvLa1GojTFN
- bXZx4IslUexZ1yczh8MCCmZVq2OyYiiwFNGcrvUP50iuexWXtZyJ1vS6oLXsu9VMVWFV
- 3AlMss+gwFPI/BIiLwh88ZvPcqd7qzFhyaIUPpuJdmsvGdN9hzyzRkC22hWY7uaaoCc4
- troH1Kbv5tJblY9sOo/0E4IMSQPPPaShFpW5Ohg9lhRY/3tMESzgpZygMK83gY2gtfsj
- PzjA==
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=h1b6Nowb2HfYWFmWnlvKHqUPU/tC+orbHxu0YZeKvEc=;
+ b=LdY8q/DSMp2qZEXihBtDEEYKtClWvyxUAhJVWbQv1OEqlfHKvLeJaGrzT3q6yagjaP
+ qW3HFcFENuUOzub7TVmG5Z/PfeJxXZFa6Cnq2qwQw0mRyfbwOrbSDWbxzaFi3pUhgPQM
+ C8vKN7RyIP4jiHM64dBkWTXJzzhU6JBarSWnGIXnnlKrtu7KJb35S7G9TdeUGEJ7GGQ1
+ rTwVIYoIT49qesbg+PzF54d3KyGMpfm5/A9tM981yZiaR0XAIlY1tDk92BeB97h9jPw8
+ CNURQSw5GB9zmdW5A8aTFNP1yiDp1qOxYKh2nnBw+fG1odCdGL0zideJ8gipO35ylJvt
+ v9wg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=UshS8na+
-Subject: Re: [Buildroot] [PATCH] package/ntp: remove the obsolete patch
+ header.a=rsa-sha256 header.s=google header.b=LdY8q/DS
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add ntp runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,7 +109,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Bernd Kuhls <bernd@kuhls.net>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -117,88 +116,143 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 06/06/2024 20:21, yegorslists@googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> 0001-nano.patch: both MOD_NANO and MOD_TAI were added to glibc
-> on 2011-03-30 in commit 83fe108b0a9bc4f2deb14695bb0c8b2011e79f28.
-> 
-> Renumber the remaining patches.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On 09/06/2024 19:21, Julien Olivain wrote:
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-  Applied to master with an extended commit log containing all the research Yann 
-did, thanks.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   .checkpackageignore                           |  3 +-
->   package/ntp/0001-nano.patch                   | 28 -------------------
->   ...patch => 0001-ntp-syscalls-fallback.patch} |  0
->   ...ch => 0002-fix-pthread-detach-check.patch} |  0
->   4 files changed, 1 insertion(+), 30 deletions(-)
->   delete mode 100644 package/ntp/0001-nano.patch
->   rename package/ntp/{0002-ntp-syscalls-fallback.patch => 0001-ntp-syscalls-fallback.patch} (100%)
->   rename package/ntp/{0003-fix-pthread-detach-check.patch => 0002-fix-pthread-detach-check.patch} (100%)
+>   DEVELOPERS                                    |  2 +
+>   support/testing/tests/package/test_ntp.py     | 86 +++++++++++++++++++
+>   .../test_ntp/rootfs-overlay/etc/ntp.conf      | 10 +++
+>   3 files changed, 98 insertions(+)
+>   create mode 100644 support/testing/tests/package/test_ntp.py
+>   create mode 100644 support/testing/tests/package/test_ntp/rootfs-overlay/etc/ntp.conf
 > 
-> diff --git a/.checkpackageignore b/.checkpackageignore
-> index d0bd179a5c..a7d353e7d8 100644
-> --- a/.checkpackageignore
-> +++ b/.checkpackageignore
-> @@ -1118,8 +1118,7 @@ package/norm/0001-protolib-drop-linux-version-check.patch lib_patch.Upstream
->   package/norm/0002-Use-print-as-function-call-for-Python3-compatibility.patch lib_patch.Upstream
->   package/norm/0003-Fix-mixed-tabs-spaces-in-protolib-wscript.patch lib_patch.Upstream
->   package/nss-pam-ldapd/S45nslcd Shellcheck lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
-> -package/ntp/0001-nano.patch lib_patch.Upstream
-> -package/ntp/0002-ntp-syscalls-fallback.patch lib_patch.Upstream
-> +package/ntp/0001-ntp-syscalls-fallback.patch lib_patch.Upstream
->   package/ntp/S49ntp.in lib_sysv.Variables
->   package/ntpsec/0001-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch lib_patch.Upstream
->   package/numactl/0001-link-with-latomic-if-needed-again.patch lib_patch.Upstream
-> diff --git a/package/ntp/0001-nano.patch b/package/ntp/0001-nano.patch
-> deleted file mode 100644
-> index bce3478261..0000000000
-> --- a/package/ntp/0001-nano.patch
-> +++ /dev/null
-> @@ -1,28 +0,0 @@
-> -Fixes issues with glibc header files, see
-> -http://bugs.gentoo.org/show_bug.cgi?id=270483
-> -
-> -Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> -
-> -Rebase to apply cleanly.
-> -
-> -Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> -
-> -
-> -diff -purN a/include/ntp_syscall.h b/include/ntp_syscall.h
-> ---- a/include/ntp_syscall.h	2015-02-11 08:42:37.794576469 -0500
-> -+++ b/include/ntp_syscall.h	2015-02-11 08:43:03.216957279 -0500
-> -@@ -10,6 +10,14 @@
-> - # include <sys/timex.h>
-> - #endif
-> -
-> -+#if defined(ADJ_NANO) && !defined(MOD_NANO)
-> -+#define MOD_NANO ADJ_NANO
-> -+#endif
-> -+
-> -+#if defined(ADJ_TAI) && !defined(MOD_TAI)
-> -+#define MOD_TAI ADJ_TAI
-> -+#endif
-> -+
-> - #ifndef NTP_SYSCALLS_LIBC
-> - # ifdef NTP_SYSCALLS_STD
-> - #  define ntp_adjtime(t)	syscall(SYS_ntp_adjtime, (t))
-> diff --git a/package/ntp/0002-ntp-syscalls-fallback.patch b/package/ntp/0001-ntp-syscalls-fallback.patch
-> similarity index 100%
-> rename from package/ntp/0002-ntp-syscalls-fallback.patch
-> rename to package/ntp/0001-ntp-syscalls-fallback.patch
-> diff --git a/package/ntp/0003-fix-pthread-detach-check.patch b/package/ntp/0002-fix-pthread-detach-check.patch
-> similarity index 100%
-> rename from package/ntp/0003-fix-pthread-detach-check.patch
-> rename to package/ntp/0002-fix-pthread-detach-check.patch
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 03aa7bfa742..0fc43592c26 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1870,6 +1870,8 @@ F:	support/testing/tests/package/test_netsnmp/
+>   F:	support/testing/tests/package/test_nftables.py
+>   F:	support/testing/tests/package/test_nftables/
+>   F:	support/testing/tests/package/test_ngrep.py
+> +F:	support/testing/tests/package/test_ntp.py
+> +F:	support/testing/tests/package/test_ntp/
+>   F:	support/testing/tests/package/test_numactl.py
+>   F:	support/testing/tests/package/test_numactl/
+>   F:	support/testing/tests/package/test_octave.py
+> diff --git a/support/testing/tests/package/test_ntp.py b/support/testing/tests/package/test_ntp.py
+> new file mode 100644
+> index 00000000000..13fff6419be
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_ntp.py
+> @@ -0,0 +1,86 @@
+> +import os
+> +import re
+> +import time
+> +
+> +import infra.basetest
+> +
+> +
+> +class TestNtp(infra.basetest.BRTest):
+> +    rootfs_overlay = \
+> +        infra.filepath("tests/package/test_ntp/rootfs-overlay")
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +        f"""
+> +        BR2_PACKAGE_NTP=y
+> +        BR2_PACKAGE_NTP_NTPD=y
+> +        BR2_PACKAGE_NTP_NTPQ=y
+> +        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        """
+> +
+> +    def dict_from_ntpq_output(self, output):
+> +        d = {}
+> +        for line in output:
+> +            if ':' not in line:
+> +                continue
+> +            fields = re.split(r":", line, maxsplit=2)
+> +            name = fields[0].strip()
+> +            value = fields[1].strip()
+> +            d[name] = value
+> +        return d
+> +
+> +    def test_run(self):
+> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+> +        self.emulator.boot(arch="armv5",
+> +                           kernel="builtin",
+> +                           options=["-initrd", cpio_file])
+> +        self.emulator.login()
+> +
+> +        # Check our binaries can execute.
+> +        self.assertRunOk("ntpd --version")
+> +        self.assertRunOk("ntpq --version")
+> +
+> +        # The ntp daemon is expected to be started from init startup
+> +        # scripts, for the Buildroot package recipe. We wait a bit
+> +        # here to let the daemon settle. The next test step checks for
+> +        # the local peer to be the system peer (by checking the
+> +        # '*'). If querying the peers too soon after startup the peer
+> +        # will not be marked as such.
+> +        time.sleep(3 * self.timeout_multiplier)
+> +
+> +        # We query the ntp daemon peers. From our test configuration
+> +        # file, we should have exactly one.
+> +        out, ret = self.emulator.run("ntpq --peers")
+> +        self.assertEqual(ret, 0)
+> +        # ntpq --peers produces two lines of headers. So we check we
+> +        # have at least 3 lines of output.
+> +        self.assertGreaterEqual(len(out), 3)
+> +        # We check we see our undisciplined local clock and it's the
+> +        # system peer.
+> +        self.assertTrue(out[2].startswith("*LOCAL(0)"))
+> +
+> +        # We query the refid variable. We expect to see our
+> +        # undisciplined local clock.
+> +        out, ret = self.emulator.run("ntpq -c 'readvar 0 refid'")
+> +        self.assertEqual(ret, 0)
+> +        self.assertEqual(out[0], "refid=LOCAL(0)")
+> +
+> +        # We query the ntp system info. We check the reference ID is
+> +        # the same as in the test configuration file.
+> +        out, ret = self.emulator.run("ntpq -c sysinfo")
+> +        self.assertEqual(ret, 0)
+> +        sysinfo = self.dict_from_ntpq_output(out)
+> +        refid = "reference ID"
+> +        self.assertIn(refid, sysinfo)
+> +        self.assertEqual(sysinfo[refid], "127.127.1.0")
+> +
+> +        # Finally, we query the ntp system statistics. We check we can
+> +        # see some uptime. We waited a bit at the beginning of this
+> +        # test, plus the few queries we previously did should have
+> +        # accumulated some uptime.
+> +        out, ret = self.emulator.run("ntpq -c sysstats")
+> +        self.assertEqual(ret, 0)
+> +        sysstats = self.dict_from_ntpq_output(out)
+> +        up = "uptime"
+> +        self.assertIn(up, sysstats)
+> +        self.assertGreater(int(sysstats[up]), 0)
+> diff --git a/support/testing/tests/package/test_ntp/rootfs-overlay/etc/ntp.conf b/support/testing/tests/package/test_ntp/rootfs-overlay/etc/ntp.conf
+> new file mode 100644
+> index 00000000000..2ead3deb6ab
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_ntp/rootfs-overlay/etc/ntp.conf
+> @@ -0,0 +1,10 @@
+> +# Set an undisciplined local clock for testing without the need of
+> +# network connectivity.
+> +server 127.127.1.0 iburst prefer
+> +fudge  127.127.1.0 stratum 10
+> +
+> +# Keep standard access control setup. The test is doing local queries
+> +# from 127.0.0.1.
+> +restrict default nomodify nopeer noquery limited kod
+> +restrict 127.0.0.1
+> +restrict [::1]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
