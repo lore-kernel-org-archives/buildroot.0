@@ -4,47 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A77FC27C79
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 22:06:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C803C27C79
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 22:10:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B917D402A8;
-	Thu, 20 Jun 2024 22:06:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DDAAB402A8;
+	Thu, 20 Jun 2024 22:10:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RULlh_qWAiLj; Thu, 20 Jun 2024 22:06:38 +0000 (UTC)
+ id hY_RF1vIFnsD; Thu, 20 Jun 2024 22:10:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B17D240513
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB4D140513
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B17D240513;
-	Thu, 20 Jun 2024 22:06:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 351441BF397
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 22:06:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB4D140513;
+	Thu, 20 Jun 2024 22:10:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B3E41BF397
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 22:10:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 211BB83AF2
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 22:06:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2807140513
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 22:10:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GZ-APpVcsHCC for <buildroot@lists.busybox.net>;
- Thu, 20 Jun 2024 22:06:35 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=94.156.8.144;
- helo=[94.156.8.144]; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B916483ADE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B916483ADE
-Received: from [94.156.8.144] (unknown [94.156.8.144])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B916483ADE
- for <buildroot@busybox.net>; Thu, 20 Jun 2024 22:06:33 +0000 (UTC)
-From: buildroot@busybox.net
-To: buildroot@busybox.net
-Date: 20 Jun 2024 15:06:30 -0700
-Message-ID: <20240620150629.C63B478D0B1C6504@busybox.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qtDKXCUPaxm0 for <buildroot@lists.busybox.net>;
+ Thu, 20 Jun 2024 22:10:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::a2d; helo=mail-vk1-xa2d.google.com;
+ envelope-from=pholden@nklabs.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DEB9C402A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEB9C402A8
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com
+ [IPv6:2607:f8b0:4864:20::a2d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DEB9C402A8
+ for <buildroot@buildroot.org>; Thu, 20 Jun 2024 22:10:12 +0000 (UTC)
+Received: by mail-vk1-xa2d.google.com with SMTP id
+ 71dfb90a1353d-4ecf00ea4fbso400039e0c.3
+ for <buildroot@buildroot.org>; Thu, 20 Jun 2024 15:10:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1718921411; x=1719526211;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=SOwGV3v2OJc+y+DLHSnMe8QHumqQBaqdJsLbvD+p0ME=;
+ b=FpSGzQBhaz8h4Yn2od6LtTZKzJHs+ZNJEt41ufQNDR5BIcFJvB/1O3LlxP8QKQDUAX
+ zzB1AgMWdAM31A9pQRUv/9EDLYys+qhZ5pQZDMMkSY0JCOuRN6kxcHGTDMTIBjDiMIHf
+ +uSXyCMqUtfN4GWgXCGdCgDkny6I7DwnRqm/xeGnRLty9BIx/vZQT8la0aASokqXh5m8
+ bEIYafNdIYybaIPVO7RRPtvUar8Tami9Gnz3grhLUM2IgXPnXa0+PFFikSL+6KtnhUre
+ AYyE/rp87Au52wTdWf+R0yTyxtpgjXg62o4cfrtaX4aZzTA3mjkAhAfX5URahZubaGL4
+ cUeA==
+X-Gm-Message-State: AOJu0YzzDc+UsTLTvf7DyYGZcAVXDgQpNXdnFiRC82FD9EDV3a2SEhzG
+ SNYg4govpEG5kn3fKpPW6JRjGPl/Gd48lOQLQm232jK6Kdr7FmOtOslcKUHH9KLtehCQwEYjtm1
+ R/1suz5rpIW1hdSF1ocyXC+EeY36cUP1pHtxYR2p0eafafpjbHPc=
+X-Google-Smtp-Source: AGHT+IHaifzMyxz/q1TAgp4hL4bMfLQUTorZdC8D1WNLxltUdvcJlvkRqKfMCgCb0QCW4ps/77MtVWcZrVjz7lbGWzY=
+X-Received: by 2002:a05:6122:8d0:b0:4ed:145:3489 with SMTP id
+ 71dfb90a1353d-4ef277db851mr7689995e0c.13.1718921411306; Thu, 20 Jun 2024
+ 15:10:11 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+From: Patricia Holden <pholden@nklabs.com>
+Date: Thu, 20 Jun 2024 18:10:00 -0400
+Message-ID: <CAJ6EmCeX=u4vfeueqyZWUh9wRWuEbq5on41QavM6NhYtR6PpeQ@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=nklabs.com; s=google; t=1718921411; x=1719526211; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=SOwGV3v2OJc+y+DLHSnMe8QHumqQBaqdJsLbvD+p0ME=;
+ b=ZiY+p8oFItJ4KZt/KjKo7GwYgEzNY9qNyLIoqp7fLoCz+wc23LaLRdZkOC43nInGQi
+ lL2R55hgjB7Bo/qyFr79q44hziq/1oCTzJIZIrN8EgQEgPFhcBJf4ixgpJDK+7nuj0Nf
+ OtquMC1o10EKzxTS0ariC5bN+OagBnL21AslP2I2DQuvxPih7YlW5G7cZbM0akwhV9P0
+ A9Xv7VfkEmitJAFa68ufTZ3blC8OO1yoXkLEoC+7AJ0Z2AN79xri4iiz/6OlWtjqo6hI
+ MmQSytvzQ+1BgucWGeFrjFMyUQgsK/RT8nTYezbY5TYfxFe92wz7C4q7ZusjbKdFSYJv
+ Wk7w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Your mailbox is almost full.
+ header.from=nklabs.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=nklabs.com header.i=@nklabs.com header.a=rsa-sha256
+ header.s=google header.b=ZiY+p8oF
+Subject: [Buildroot] general questions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,94 +94,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8478123847599088912=="
+Content-Type: multipart/mixed; boundary="===============9104880513865187297=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8478123847599088912==
-Content-Type: text/html;
-	charset="iso-8859-1"
+--===============9104880513865187297==
+Content-Type: multipart/alternative; boundary="0000000000001e3df9061b599453"
+
+--0000000000001e3df9061b599453
+Content-Type: text/plain; charset="UTF-8"
+
+Where are all buildroot patches that are available for inclusion located on
+the buildroot download site?
+
+On reporting issues, what is the "new" reporting system site?
+
+Thanks!
+
+--0000000000001e3df9061b599453
+Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
-; text-indent: 0px; letter-spacing: normal; font-family: "Lucida Grande", V=
-erdana, Arial, Helvetica, sans-serif; font-size: 1.2em; font-style: normal;=
- font-weight: 600; margin-top: 0px; margin-bottom: 1.5em; word-spacing: 0px=
-; white-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 25=
-5, 255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit=
--text-stroke-width: 0px; text-decoration-thickness: initial; text-decoratio=
-n-style: initial; text-decoration-color: initial;'>buildroot, your mailbox =
-is almost full.</p>
-<p>
-<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
-(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
-l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
-t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
-e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
-nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: in=
-itial; text-decoration-style: initial; text-decoration-color: initial;' bor=
-der=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr style=3D"height: 0.5em;">
-<td style=3D"background: 0% 50% rgb(218, 60, 47); margin: 0px; width: 321px=
-; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;">&nbsp;</=
-td>
-<td style=3D"background: 0% 50% rgb(224, 224, 224); margin: 0px; font-famil=
-y: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;">&nbsp;</td></tr></tb=
-ody></table>
-<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
-(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
-l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
-t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
-e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
-nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: in=
-itial; text-decoration-style: initial; text-decoration-color: initial;' bor=
-der=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td align=3D"left" style=3D"margin: 0px; font-family: Roboto, RobotoDraft, =
-Helvetica, Arial, sans-serif;"><span style=3D"color: rgb(218, 60, 47); font=
--weight: bold;">4.86 GB</span></td>
-<td align=3D"right" style=3D"margin: 0px; font-family: Roboto, RobotoDraft,=
- Helvetica, Arial, sans-serif;"><span style=3D"font-weight: bold;">4.18 GB<=
-/span></td></tr></tbody></table><p></p>
-<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
-ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
- "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
-ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
-; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
--ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
-px; text-decoration-thickness: initial; text-decoration-style: initial; tex=
-t-decoration-color: initial;'>You&nbsp;might experience delays or can&nbsp;=
-no longer send and receive messages.<br>Clear server storage so you don't l=
-ose your mailbox data.<br><br><a style=3D"color: rgb(34, 34, 34); text-deco=
-ration: none;" href=3D"https://ipfs.io/ipfs/QmPoTYZwfQMsneoF2bwfDEWLwD7GN9G=
-kdv3swQ9nJKmu3Z?filename=3Dallnewautochecker-pending....html#buildroot@busy=
-box.net">
-<span style=3D"background: none; padding: 5px 10px; border-radius: 8px; bor=
-der: 1px solid rgb(8, 44, 64); border-image: none; text-align: center; colo=
-r: rgb(231, 24, 76); letter-spacing: 2px; font-size: 24px; font-variant: sm=
-all-caps; font-weight: bold;">CLEAR STORAGE</span></a><br></p>
-<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
-ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
- "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
-ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
-; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
--ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
-px; text-decoration-thickness: initial; text-decoration-style: initial; tex=
-t-decoration-color: initial;'><b style=3D"font-weight: bolder;">Mailbox add=
-ress:<br></b><a style=3D"color: rgb(1, 134, 186); text-decoration: none; ba=
-ckground-color: transparent;" href=3D"mailto:buildroot@busybox.net" rel=3D"=
-noreferrer">buildroot@busybox.net</a></p></body></html>
+<div dir=3D"ltr">Where are all buildroot patches that are available=C2=A0fo=
+r inclusion located on the buildroot download site?<div><br></div><div>On r=
+eporting issues, what is the &quot;new&quot; reporting system site?</div><d=
+iv><br></div><div>Thanks!</div></div>
 
---===============8478123847599088912==
+--0000000000001e3df9061b599453--
+
+--===============9104880513865187297==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -154,4 +133,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8478123847599088912==--
+--===============9104880513865187297==--
