@@ -4,73 +4,182 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 577B8C2BA18
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 08:43:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CDCEC27C79
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 09:26:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9DD442ECD;
-	Thu, 20 Jun 2024 08:43:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9663B42D12;
+	Thu, 20 Jun 2024 09:26:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kk7pe0TpLWLv; Thu, 20 Jun 2024 08:43:01 +0000 (UTC)
+ id 9_byQi8s_LX7; Thu, 20 Jun 2024 09:26:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 394E142EF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49C5242D36
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 394E142EF0;
-	Thu, 20 Jun 2024 08:43:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CE7831BF488
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 08:42:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49C5242D36;
+	Thu, 20 Jun 2024 09:26:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6948C1BF82C
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 09:26:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B8C0F42EC7
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 08:42:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 638776151C
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 09:26:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ztkKjuGmiNzb for <buildroot@lists.busybox.net>;
- Thu, 20 Jun 2024 08:42:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=kory.maincent@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hzpKr2uz6bQj for <buildroot@lists.busybox.net>;
+ Thu, 20 Jun 2024 09:26:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.150.181.156;
+ helo=mail.sensor-technik.de; envelope-from=alex.michel@wiedemann-group.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2BF9342E22
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BF9342E22
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2BF9342E22
- for <buildroot@buildroot.org>; Thu, 20 Jun 2024 08:42:46 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 47AA5C7980
- for <buildroot@buildroot.org>; Thu, 20 Jun 2024 08:39:46 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 15DDD240005;
- Thu, 20 Jun 2024 08:39:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 20 Jun 2024 10:39:24 +0200
-Message-Id: <20240620083924.2104785-5-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240620083924.2104785-1-kory.maincent@bootlin.com>
-References: <20240620083924.2104785-1-kory.maincent@bootlin.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5D876614ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D876614ED
+Received: from mail.sensor-technik.de (mail.sensor-technik.de [80.150.181.156])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5D876614ED
+ for <buildroot@buildroot.org>; Thu, 20 Jun 2024 09:25:58 +0000 (UTC)
+Received: from stwz1.stww2k.local (HELO stwz1.wiedemann-group.com)
+ ([172.25.209.3])
+ by mail.sensor-technik.de with ESMTP; 20 Jun 2024 11:25:54 +0200
+Received: from stwz1.stww2k.local (localhost [127.0.0.1])
+ by stwz1.wiedemann-group.com (Postfix) with ESMTP id 560AAB5AD4
+ for <buildroot@buildroot.org>; Thu, 20 Jun 2024 11:25:54 +0200 (CEST)
+Received: from mail.wiedemann-group.com (stwexm.stww2k.local [172.25.2.110])
+ by stwz1.wiedemann-group.com (Postfix) with ESMTP id 762F8B5AC9
+ for <buildroot@buildroot.org>; Thu, 20 Jun 2024 11:25:42 +0200 (CEST)
+Received: from stwexm.stww2k.local (172.25.2.111) by stwexm.stww2k.local
+ (172.25.2.111) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Thu, 20 Jun
+ 2024 11:25:42 +0200
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (104.47.11.233)
+ by stwexm.stww2k.local (172.25.2.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32 via Frontend Transport; Thu, 20 Jun 2024 11:25:42 +0200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b+LgZKShUfAEXep9ruqJTXQEVY7A+w13KcfZf3R1Dn3Mm2zQDh0XA8MDdgIIA6/1mQ+Kv7Z2Pu0CidqvcF0IZPUp2ZY2K5kkzzxtX/gLPjyENFWVVLyamd9bppvC3Oitx9YHsTNxjf5u6CIBcj2P6RJlASmLBhAJaVc6l/o5JSbWyRZac7U5C8CAIrjzUO7WUbYqSMXeVFtB+ETsp7uCqezMNb+FYsza8VbyUeuxfQrl39PmvBVIzVx2voWjaZOVCQMLqJdMGc1fTQKzPutgTU0RcUZyKqLrds4iVaZ6gb4z2j0HlHmqzohsUlrhhEAacd46jx6/+xEQg4hUidYEpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1iZrgH3xGCYwwoF4lDYZCFeLnolQZJzRLvfgDm4vfLQ=;
+ b=GmG7dW+Y4R787bipGwtmiI399YuXyhAJjW7cPjeZedPZ5mz3cby69bziaYQWooZWiCLoyq7gyRbtDmbdWjkrIWiEkaQpNehrJkOjCFpI+aIoL/gEftLWAD7aIbfWBaNKEMF9gfRa1aeoJ2rWQGSYUZHLykH8BOMATLjzVwEPymqxhhfDGq6JeqW9Zggg7HjjZlVI2h/uZo0baKh47hkRJICeIZansEmCzdnLC1Lxk5xxN4hNIhwUFLIG8l6miDoW0tM+JoTryzIAmtMBSJJBO85+8/V5T5AXMHSlp2nMdwuhipBXqBG7K3S42Bv5KI7qE1I6xsZURU4biijT4DxD1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wiedemann-group.com; dmarc=pass action=none
+ header.from=wiedemann-group.com; dkim=pass header.d=wiedemann-group.com;
+ arc=none
+Received: from AS1P250MB0608.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:48d::22)
+ by PR3P250MB0195.EURP250.PROD.OUTLOOK.COM (2603:10a6:102:17a::14)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.19; Thu, 20 Jun
+ 2024 09:25:40 +0000
+Received: from AS1P250MB0608.EURP250.PROD.OUTLOOK.COM
+ ([fe80::b4a:3a:227e:8da2]) by AS1P250MB0608.EURP250.PROD.OUTLOOK.COM
+ ([fe80::b4a:3a:227e:8da2%7]) with mapi id 15.20.7698.020; Thu, 20 Jun 2024
+ 09:25:39 +0000
+From: Michel Alex <Alex.Michel@wiedemann-group.com>
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [PATCH 2/2] package/libzenoh-pico: bump version to 0.11.0
+Thread-Index: AdrC87bpOP8FpP1MTB69YBvFkxBZgg==
+Date: Thu, 20 Jun 2024 09:25:39 +0000
+Message-ID: <AS1P250MB0608E8FE5DBDAC4A58AC5308A9C82@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS1P250MB0608:EE_|PR3P250MB0195:EE_
+x-ms-office365-filtering-correlation-id: 33b47960-0650-4144-dd7f-08dc910af362
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0; ARA:13230037|376011|366013|1800799021|38070700015;
+x-microsoft-antispam-message-info: =?us-ascii?Q?SJRrw6HxMgUhWB1jJu65IOHf/e0pAkWYKCT0SKj4Wd009oHswPWotBmUA1cn?=
+ =?us-ascii?Q?soNpW76YABb5GdZ4FD98URtRm/rv51piKJM/CbJYNAM4jqTh8NHYzxUgIjHW?=
+ =?us-ascii?Q?+C26JCEZ1SdsAIkGxRD3sWHi8/8WQMWmgNbJHmwZaYIHvalpB/tyfBzvs0IF?=
+ =?us-ascii?Q?i3typWi7ZxO0Rrt815CETQVlLzcf/jZ7tV3YbmUKNhuZDTgeHkqUYpbQ27BJ?=
+ =?us-ascii?Q?2a32LuaiK+eKP9rvf45BJvl/RD7uUl18LssLOoO6zV8UbOOvFKFPbFtdNWWq?=
+ =?us-ascii?Q?nCCfTKUZdCzVcapSwqUX82wpheM78uWBoKwMT/drpCYl78t0MvTWsQrXh0u/?=
+ =?us-ascii?Q?vP5vx1URxXSIYOKKChw1OF1YCBMQDZfy+FbJ1fAZ3ZVKkYKJMNNZOuulwoLx?=
+ =?us-ascii?Q?sN0EnpoxNyjVCPzVwimbCI72virZKU4yW1VCOZMKI12g/FMd/cH+nXCutwtq?=
+ =?us-ascii?Q?5FBP0N2sQNuke0vgXhUM8JTS4pcuZtzk88aWhntrTK1SHVhoGSOti9/NIxWt?=
+ =?us-ascii?Q?3U2DwrnagQKwf2SUCEVY9IRTA1fonDIQc3PaR/oCjUZOOt6BhOMQQchsmChF?=
+ =?us-ascii?Q?EoSo/DRoRwOBnKAJ3W868rDVCM0HS/FNaCS+eXc8tPcT+5I6TLzgwOlQPEmQ?=
+ =?us-ascii?Q?qoQe9nrov+xRnAYP5cmK0B4tuGDif0oC6nr0KZAXovwUKoWISNYpMOdKHlUL?=
+ =?us-ascii?Q?r1wWCNOf7kxfMUlNdGA69hG+ToZlc+Bz9Fg6fIEodX7eC7L7C71q6WQE1WoQ?=
+ =?us-ascii?Q?sFkhhnOyaFxbJ9LlvPutpmCPV5gy9FXmfdrmYU+yqpmrx4Mn9uA8DhN32NEr?=
+ =?us-ascii?Q?pIAmAKL8JpsworGzTuwJedLydnqdKpAvvNkej9fl6i7N0UuC5kcNKvDXSJ74?=
+ =?us-ascii?Q?WhwqAIqTeAt6ut4ZqgjiMecz7kUtYXjRfcnbmCW7FKLCsBBZLYm5LC7n3Ooz?=
+ =?us-ascii?Q?FtecixGGBIySN1UlPIWNA7sBaKWnbPP8TXn9Ja7DeFx48Kd/eYAFMFJTIPZ4?=
+ =?us-ascii?Q?uTTGfwkS8kZ7YU0Nm4LDF95v0OWEhgjqvj5jLmelYBBsF+gXm2jq3gwxGNcP?=
+ =?us-ascii?Q?QPxHnRIOk8j+9Z1Z8FPCcqBJ6MK2qia7XtCAuxuAI7GVD0mbVVMuiZeI6XqR?=
+ =?us-ascii?Q?UFjWvDWUCSgR93uqdDWBUnhS9KadoLGiSDfwAHf2yBoxVct64taRDn1ZWedV?=
+ =?us-ascii?Q?asZCfwVZN5m3e1zkr3qabQXj0zNjavkphT6c5+jbTsddmhIQQaFAsC8ycv2I?=
+ =?us-ascii?Q?Ben7yHxsz0D7cLIAhJ+8l48G7NhxQrhq9fAlxJ7gQcEzLqlcSMQC8BySC7DB?=
+ =?us-ascii?Q?ZGR9V+tR/6wXTxofHV8r+hzL?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AS1P250MB0608.EURP250.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230037)(376011)(366013)(1800799021)(38070700015); DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yOn/H/NylUHbFld8B2WtO6fuJf4FxGRkbKux3s3DjWn35VDs/IjRZQnKi2u4?=
+ =?us-ascii?Q?fmW0nZTI87EIsZYw4Kzf/pe0MUseVI35+2nYxvSMppldwsMG+3SfITi54dMU?=
+ =?us-ascii?Q?ClB0+2UgKJHHZArFaBpuplnhR1TCiBwyCzsgHkPIpxmYsJVceuAOk7/GIg1d?=
+ =?us-ascii?Q?H5dMYumTJBjn0Zxf/KIYWjrhESy7/9f7l/KCiCXODPpPBFqLLrDmsnE4js89?=
+ =?us-ascii?Q?at3rJnf/oDJRf05cPfs1vGSGj93+LfWtdNqL0h4lKOYIChWhhjhePwO77mon?=
+ =?us-ascii?Q?Qqeu7xBjT/JSDuzXATJm9X7s5d/RsZ35ZyZLMCivkcrCFTundF+uwWVjlPeU?=
+ =?us-ascii?Q?SgKeSr+6NooEKZqWV7iq1TCzjiUy0TntbXxvdFTX+oyhMpdR8nLw8RzJtLkL?=
+ =?us-ascii?Q?7tOBG6zhhphlJDF3nLAtQZgrHFYDUr2YWqzATpmDpTbcLpYR5NOuwo2llyZp?=
+ =?us-ascii?Q?QrxXrhIqWAUCpGtlOIPv6uz941TKITaNEMfTU8Y03PZzK8m/qWONAg4E3nQU?=
+ =?us-ascii?Q?MF7yRjZEFeVbL3BCyIwFzgcgUknj1m286uyX3R6iO5dOpDvVnhhRAh1+9ZAZ?=
+ =?us-ascii?Q?G+a8yTx2vrNusDufbz/YxFrPmkNjzSh/+RqULOZse7jBDmfh3q6bLilnSODh?=
+ =?us-ascii?Q?hJBRPUesBh4M66Wide4V1msQWdo6X0NxWOrM0hFOM2F7GcGM9r9/FKeb2Hth?=
+ =?us-ascii?Q?13e2qYtlD63+EBuJ5l7HU5pUOyHGEDooKmy6HBkaOdTlN70n2J55lPzAN3Od?=
+ =?us-ascii?Q?qz/3O+hgmzMsZTvwjvEeJBSxAOFC6M0EdyTy4myzk6vHGpCdn9C2tCAX1pcc?=
+ =?us-ascii?Q?scHrLnDsgut5gNIfbV4kO0vHw+9gsBuc/xyWuCBV/ClSXqa632vyfcKxl3dy?=
+ =?us-ascii?Q?3q53zXTDYhi8CTpo8YpBlEbidXQoPXfvTeBm8EkyN1hTTevvBRbXYfLrmrVB?=
+ =?us-ascii?Q?/1QxWh5wxiJ5X7IBAhUHad4ZWGD9OW+4ZXBi/b04B8jT3K2lRqwWe5Z1cknA?=
+ =?us-ascii?Q?qeO7uZm7svLShUngA1xH0hT9aemLVemXBWrhEXm0Er7KghP9upqETWNYASk9?=
+ =?us-ascii?Q?u5PTtG3bYv2r/bZKUT9L0A5wM4jzFQzkG8fPJhBsZNNjwyJ/+alP3AmxERH9?=
+ =?us-ascii?Q?7TPTK8k93LGG58IoUlSVwGGDGbxkwnKv1zIj+BF8zHipZvsDwCsqKdlmWKVl?=
+ =?us-ascii?Q?oO9qFT9Qy1KZJ2Cr8iNNz0GI4msq44OhpYGND9+Y0GqXsojXROjfTCBWYjF3?=
+ =?us-ascii?Q?F/6iTM17LzFmDlfxImdYPxdhdAvyMTbeO3MEDX5X/S8BUR/XGsiB8HANE3Dw?=
+ =?us-ascii?Q?58uW/8a35wUp8BaOnj716vIQ5R/LMspKIBUxisF0VoMP1IF2JqIHb/LC3Yo7?=
+ =?us-ascii?Q?hd4T4ttV9Bob5jebzsu5L1BcuJGocL9wYokh0fm/p1YOoTIdwsECkEvAswCa?=
+ =?us-ascii?Q?dFweu9KGM2pVIeGsX7Az0rj0hYMH6opuYy+Ax+fmACceWZxIo1FwbT3dy3mT?=
+ =?us-ascii?Q?9wxVBW2IbJ1gHb81ke3Aep/rOQUSBl21MMytFWtfZNCd7FiCex0hPKHzeK1w?=
+ =?us-ascii?Q?13bKBRTm4OITrx3fAYGrIkVkhHyd+SRPjmamAUgmIObScxLjumNTn+6WNFmB?=
+ =?us-ascii?Q?uA=3D=3D?=
 MIME-Version: 1.0
-X-GND-Sasl: kory.maincent@bootlin.com
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: dlGqt440VDzzo5DuRUykbwoTZ2xTNMmMx23+qSwrbtKodDRHqYBTNIEy+XJW9G0m4fG/MWL57zh+nCLGXeKomMtqTc+bS1U5lRS6hORlXjrN98Hv+wzvoR3gmQGLIKUqV2lhajbuGp4VA0hAuIZyZ36Uk2dW+GKm3om1TAmw/hjzIsw2iqW7XNlY1BnBA6HoQVovVDK8KPsOFNxroCy75NjVvpAZuAGEL21CxJP9erDFpdo/YPEUoRC6uho2C0GJKjSrZbNKJNdpWsjbMHmw/j7n+Ke7ob1uJ6oNYGNaB+qq7yZoYpBDdHMbY+5bO6ZB+sYIziKFaPGKxh8KrF5U1IuEcYS1dvzWaRcoLPeNYW7cYW4WrhoOi2N0ZfkaSFOkVu6VXBfu6Ca/EVr8byvFXQJNSnwu6oegmQ4uT2nUieJJeqrcWmI+WlgS2m+omgwN7l2H5wqMDRNePI8wIubVMMUI5ZR9tc2C4b7VEQ9WN94+AOH6v9G64VsBPGaUpA87a3zi6tFcbRWPyFQWtyIdpeD1I7iuRMr9XoChqxrqPXK51cQf2hFHALz++my+IPUcq8UIj6gVukmXQII+p5ly+g==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS1P250MB0608.EURP250.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33b47960-0650-4144-dd7f-08dc910af362
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2024 09:25:39.8471 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f92d38a3-9c84-427f-afc3-aef091509c71
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4AOjyf4AST0On/586O79QodP7+1F9QnVDqZdgIQ0mMmfhduGYSx5JZD+6f3aBeveKO9az+JL6zdlFPGKexDU3nanjkujtrbDMPXML0fjrCg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P250MB0195
+X-C2ProcessedOrg: 71f8fb5e-29e9-40bb-a2d4-613e155b19df
+X-TBoneOriginalFrom: Michel Alex <Alex.Michel@wiedemann-group.com>
+X-TBoneOriginalTo: "buildroot@buildroot.org" <buildroot@buildroot.org>
+X-TBoneOriginalCC: Michel Alex <Alex.Michel@wiedemann-group.com>
+X-TBoneDomainSigned: false
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1718872782;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mU8KfIm/+OB2diiYGmATHX+7JSAoAC0q3bW8k8QOyiY=;
- b=DZHugg5fiCsu8teOOvu5C1YyrV93ylwNuSfOY8Zt7WxaqP9PenJSNl765hODD5AmKgl5N7
- rxLA2taXFeJc1JR7GcvH0pkeJNXfH5poHPsfdJb5cJsiXrepMmaqMqhpBzwbkGnALkNnwv
- isu40dDUJz77HnmieE9CAKj8qFXE4SrUJtiAUXBp4wbcAC7CmiR5d9BVa87UuR/Kxdwl0D
- nCjs3Pn9cCDww7mCNLVvD6gof4FMUEqzZa8P3KonsTzgg7Fq54S3skliRWOHpoXxgphG2+
- PZXSilkt/On0LxdvdNHO4cYh444Q2YY7/AJw/UMQcE+a8KScNw4b8dfp3YlepA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DZHugg5f
-Subject: [Buildroot] [PATCH 4/4] boot: Add support for TrustedFirmware-M
- package
+ d=stwmm.onmicrosoft.com; 
+ s=selector1-stwmm-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1iZrgH3xGCYwwoF4lDYZCFeLnolQZJzRLvfgDm4vfLQ=;
+ b=CF4qTgGq7H1d9UKPpVKl1LA871Kk6UCQqsUAewuW1iivc19AGP+sxyRqXnCHb+TYwpozapP1wYtdgLfizS7aowPaiNtvGlr9qp9MuQighluCRXDMm+GAUAhFqdWgL2GTkk+UDcaNS3Z7VT5Dyw4TFPFvDyJUyhCOhDLV0Y2wuxM=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=wiedemann-group.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=stwmm.onmicrosoft.com header.i=@stwmm.onmicrosoft.com
+ header.a=rsa-sha256 header.s=selector1-stwmm-onmicrosoft-com
+ header.b=CF4qTgGq
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wiedemann-group.com;
+Subject: [Buildroot] [PATCH 2/2] package/libzenoh-pico: bump version to
+ 0.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,648 +191,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kory Maincent via buildroot <buildroot@buildroot.org>
-Reply-To: Kory Maincent <kory.maincent@bootlin.com>
-Cc: Kory Maincent <kory.maincent@bootlin.com>, Asaf Kahlon <asafka7@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, thomas.petazzoni@bootlin.com,
- Mauro Condarelli <mc5686@mclink.it>
+Cc: Michel Alex <Alex.Michel@wiedemann-group.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for TrustedFirmware-M:
-https://trustedfirmware-m.readthedocs.io
-https://git.trustedfirmware.org/TF-M/trusted-firmware-m.git
-
-Use subpackages to download the third-party project sources to be able to
-apply patches located in the TF-M sources. This approach is also necessary
-because the tfm-tests git host produces non-reproducible tarballs.
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+https://github.com/eclipse-zenoh/zenoh-pico/releases/tag/0.11.0
+Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
 ---
- boot/Config.in                                |   1 +
- boot/trusted-firmware-m/Config.in             | 101 +++++++++++++++++
- boot/trusted-firmware-m/tfm-3rdparty.mk       |   7 ++
- boot/trusted-firmware-m/tfm-cmsis/Config.in   |  10 ++
- .../tfm-cmsis/tfm-cmsis.hash                  |   3 +
- .../trusted-firmware-m/tfm-cmsis/tfm-cmsis.mk |  31 +++++
- boot/trusted-firmware-m/tfm-mbedtls/Config.in |  10 ++
- .../tfm-mbedtls/tfm-mbedtls.hash              |   3 +
- .../tfm-mbedtls/tfm-mbedtls.mk                |  30 +++++
- boot/trusted-firmware-m/tfm-mcuboot/Config.in |  10 ++
- .../tfm-mcuboot/tfm-mcuboot.hash              |   3 +
- .../tfm-mcuboot/tfm-mcuboot.mk                |  29 +++++
- boot/trusted-firmware-m/tfm-qcbor/Config.in   |  10 ++
- .../tfm-qcbor/tfm-qcbor.hash                  |   3 +
- .../trusted-firmware-m/tfm-qcbor/tfm-qcbor.mk |  29 +++++
- boot/trusted-firmware-m/tfm-tests/Config.in   |  10 ++
- .../tfm-tests/tfm-tests.hash                  |   3 +
- .../trusted-firmware-m/tfm-tests/tfm-tests.mk |  30 +++++
- .../trusted-firmware-m.hash                   |   3 +
- boot/trusted-firmware-m/trusted-firmware-m.mk | 107 ++++++++++++++++++
- support/testing/tests/boot/test_tfm.py        |  12 ++
- 21 files changed, 445 insertions(+)
- create mode 100644 boot/trusted-firmware-m/Config.in
- create mode 100644 boot/trusted-firmware-m/tfm-3rdparty.mk
- create mode 100644 boot/trusted-firmware-m/tfm-cmsis/Config.in
- create mode 100644 boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.hash
- create mode 100644 boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.mk
- create mode 100644 boot/trusted-firmware-m/tfm-mbedtls/Config.in
- create mode 100644 boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.hash
- create mode 100644 boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.mk
- create mode 100644 boot/trusted-firmware-m/tfm-mcuboot/Config.in
- create mode 100644 boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.hash
- create mode 100644 boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.mk
- create mode 100644 boot/trusted-firmware-m/tfm-qcbor/Config.in
- create mode 100644 boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.hash
- create mode 100644 boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.mk
- create mode 100644 boot/trusted-firmware-m/tfm-tests/Config.in
- create mode 100644 boot/trusted-firmware-m/tfm-tests/tfm-tests.hash
- create mode 100644 boot/trusted-firmware-m/tfm-tests/tfm-tests.mk
- create mode 100644 boot/trusted-firmware-m/trusted-firmware-m.hash
- create mode 100644 boot/trusted-firmware-m/trusted-firmware-m.mk
- create mode 100644 support/testing/tests/boot/test_tfm.py
+ package/libzenoh-pico/libzenoh-pico.hash | 2 +-
+ package/libzenoh-pico/libzenoh-pico.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index e5fdf7ad43..bf0cfaae86 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -22,6 +22,7 @@ source "boot/syslinux/Config.in"
- source "boot/ti-k3-boot-firmware/Config.in"
- source "boot/ti-k3-image-gen/Config.in"
- source "boot/ti-k3-r5-loader/Config.in"
-+source "boot/trusted-firmware-m/Config.in"
- source "boot/uboot/Config.in"
- source "boot/vexpress-firmware/Config.in"
+diff --git a/package/libzenoh-pico/libzenoh-pico.hash b/package/libzenoh-pico/libzenoh-pico.hash
+index 9ea45969aa..3e017b79c8 100644
+--- a/package/libzenoh-pico/libzenoh-pico.hash
++++ b/package/libzenoh-pico/libzenoh-pico.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a5bc5cae6fd4ade3d69d8a2ed0aef89f4c8f752f79d74b7462f5bb3437680b72  libzenoh-pico-0.11.0.3.tar.gz
++sha256  db1eca9d84ca581731cf1f3f88aca785d58fb2b1972f2f07d09a0cf022ee02f9  libzenoh-pico-0.11.0.tar.gz
+ sha256  d386df32cf327bbb25abe894277d3d7e0f447bafc59f4ad362615b0136f30db5  LICENSE
+diff --git a/package/libzenoh-pico/libzenoh-pico.mk b/package/libzenoh-pico/libzenoh-pico.mk
+index 9163ba30ad..4b05df14fe 100644
+--- a/package/libzenoh-pico/libzenoh-pico.mk
++++ b/package/libzenoh-pico/libzenoh-pico.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/boot/trusted-firmware-m/Config.in b/boot/trusted-firmware-m/Config.in
-new file mode 100644
-index 0000000000..8e37a2b805
---- /dev/null
-+++ b/boot/trusted-firmware-m/Config.in
-@@ -0,0 +1,101 @@
-+config BR2_TARGET_TRUSTED_FIRMWARE_M
-+	bool "TrustedFirmware-M (TF-M)"
-+	select BR2_TARGET_TFM_TESTS
-+	select BR2_TARGET_TFM_MBEDTLS
-+	select BR2_TARGET_TFM_MCUBOOT
-+	select BR2_TARGET_TFM_QCBOR
-+	select BR2_TARGET_TFM_CMSIS
-+	help
-+	  Enable this option if you want to build the TF-M for your
-+	  ARMv8 microcontroller.
-+
-+	  https://git.trustedfirmware.org/TF-M/trusted-firmware-m.git
-+
-+if BR2_TARGET_TRUSTED_FIRMWARE_M
-+choice
-+	prompt "TF-M Version"
-+	help
-+	  Select the specific TF-M version you want to use
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_LATEST_VERSION
-+	bool "TF-Mv2.1.0"
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_VERSION
-+	bool "Custom version"
-+	select BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY
-+	help
-+	  This option allows to use a specific official versions
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL
-+	bool "Custom tarball"
-+	select BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_GIT
-+	bool "Custom Git repository"
-+	select BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY
-+
-+endchoice
-+
-+if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom TF-M tarball"
-+
-+endif
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_VERSION_VALUE
-+	string "TF-M version"
-+	depends on BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_VERSION
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_VERSION
-+	string
-+	default "0c4c99ba33b3e66deea070e149279278dc7647f4" \
-+				if BR2_TARGET_TRUSTED_FIRMWARE_M_LATEST_VERSION
-+	default "custom"	if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL
-+	default BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_REPO_VERSION \
-+				if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_GIT
-+	default BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_VERSION_VALUE \
-+				if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_VERSION
-+
-+if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_GIT
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by Git
-+	  E.G. a sha id, a tag, ..
-+
-+endif
-+
-+menu "TF-M 3rd party projects"
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY
-+	bool "Use custom tarball for TF-M 3rd party projects"
-+
-+source "boot/trusted-firmware-m/tfm-mbedtls/Config.in"
-+source "boot/trusted-firmware-m/tfm-mcuboot/Config.in"
-+source "boot/trusted-firmware-m/tfm-qcbor/Config.in"
-+source "boot/trusted-firmware-m/tfm-cmsis/Config.in"
-+source "boot/trusted-firmware-m/tfm-tests/Config.in"
-+
-+endmenu
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_PLATFORM
-+	string "TF-M platform path"
-+	help
-+	  Target plaform path to build for.
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_ADDITIONAL_VARIABLES
-+	string "Additional TF-M build variables"
-+	help
-+	  Additional parameters for the TF-M build
-+	  E.G. '-DTFM_ISOLATION_LEVEL=2 -DTFM_PROFILE=large'
-+
-+config BR2_TARGET_TRUSTED_FIRMWARE_M_DEBUG
-+	bool "Build in debug mode"
-+	help
-+	  Enable this option to build TF-M with -DCMAKE_BUILD_TYPE=Debug.
-+
-+endif
-diff --git a/boot/trusted-firmware-m/tfm-3rdparty.mk b/boot/trusted-firmware-m/tfm-3rdparty.mk
-new file mode 100644
-index 0000000000..1a7bab4011
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-3rdparty.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# TrustedFirmware-M 3rd parties
-+#
-+################################################################################
-+
-+include $(sort $(wildcard boot/trusted-firmware-m/*/*.mk))
-diff --git a/boot/trusted-firmware-m/tfm-cmsis/Config.in b/boot/trusted-firmware-m/tfm-cmsis/Config.in
-new file mode 100644
-index 0000000000..3774b2d9bc
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-cmsis/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_TARGET_TFM_CMSIS
-+	bool
-+
-+if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY
-+
-+config BR2_TARGET_TFM_CMSIS_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom cmcis tarball"
-+	default "$(call github,arm-software,cmsis_6)/d0c460c169.tar.gz"
-+
-+endif
-diff --git a/boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.hash b/boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.hash
-new file mode 100644
-index 0000000000..4811118a79
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256  d846342840831f9124157b69b8edcdfcacc5427691f5b3341f714f0235c3cc49  tfm-cmsis-d0c460c1697d210b49a4b90998195831c0cd325c.tar.gz
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.mk b/boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.mk
-new file mode 100644
-index 0000000000..28a38c8ed6
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# cmcis
-+#
-+################################################################################
-+
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY),y)
-+TFM_CMSIS_VERSION = custom
-+TFM_CMSIS_TARBALL = $(call qstrip,$(BR2_TARGET_TFM_CMSIS_CUSTOM_TARBALL_LOCATION))
-+TFM_CMSIS_SITE = $(patsubst %/,%,$(dir $(TFM_CMSIS_TARBALL)))
-+TFM_CMSIS_SOURCE = $(notdir $(TFM_CMSIS_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(TFM_CMSIS_SOURCE)
-+else
-+TFM_CMSIS_VERSION = d0c460c1697d210b49a4b90998195831c0cd325c
-+TFM_CMSIS_SITE = $(call github,arm-software,cmsis_6,$(TFM_CMSIS_VERSION))
-+TFM_CMSIS_LICENSE = Apache-2.0
-+TFM_CMSIS_LICENSE_FILES = LICENSE
-+endif
-+
-+TFM_CMSIS_PATCH_DEPENDENCIES = trusted-firmware-m
-+define TFM_CMSIS_APPLY_TFM_PATCHES
-+	if [ -d $(TRUSTED_FIRMWARE_M_SRCDIR)lib/ext/cmsis ]; then \
-+		$(APPLY_PATCHES) $(@D) $(TRUSTED_FIRMWARE_M_SRCDIR)lib/ext/cmsis \*.patch; \
-+	fi
-+endef
-+TFM_CMSIS_POST_PATCH_HOOKS += TFM_CMSIS_APPLY_TFM_PATCHES
-+
-+# This components is not built and installed, because it is intended to
-+# be included as source in TrustedFirmware-M build.
-+
-+$(eval $(generic-package))
-diff --git a/boot/trusted-firmware-m/tfm-mbedtls/Config.in b/boot/trusted-firmware-m/tfm-mbedtls/Config.in
-new file mode 100644
-index 0000000000..91f18c9bc1
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-mbedtls/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_TARGET_TFM_MBEDTLS
-+	bool
-+
-+if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY
-+
-+config BR2_TARGET_TFM_MBEDTLS_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom mbedtls tarball"
-+	default "https://github.com/Mbed-TLS/mbedtls/releases/download/v3.6.0/mbedtls-3.6.0.tar.bz2"
-+
-+endif
-diff --git a/boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.hash b/boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.hash
-new file mode 100644
-index 0000000000..e90b632187
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256  3ecf94fcfdaacafb757786a01b7538a61750ebd85c4b024f56ff8ba1490fcd38  mbedtls-3.6.0.tar.bz2
-+sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.mk b/boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.mk
-new file mode 100644
-index 0000000000..65d145ae4d
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# mbedtls
-+#
-+################################################################################
-+
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY),y)
-+TFM_MBEDTLS_VERSION = custom
-+TFM_MBEDTLS_TARBALL = $(call qstrip,$(BR2_TARGET_TFM_MBEDTLS_CUSTOM_TARBALL_LOCATION))
-+TFM_MBEDTLS_SITE = $(patsubst %/,%,$(dir $(TFM_MBEDTLS_TARBALL)))
-+TFM_MBEDTLS_SOURCE = $(notdir $(TFM_MBEDTLS_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(TFM_MBEDTLS_SOURCE)
-+else
-+TFM_MBEDTLS_VERSION = 3.6.0
-+TFM_MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/v$(TFM_MBEDTLS_VERSION)
-+TFM_MBEDTLS_SOURCE = mbedtls-$(TFM_MBEDTLS_VERSION).tar.bz2
-+TFM_MBEDTLS_LICENSE = Apache-2.0 or GPL-2.0-or-later
-+TFM_MBEDTLS_LICENSE_FILES = LICENSE
-+endif
-+
-+TFM_MBEDTLS_PATCH_DEPENDENCIES = trusted-firmware-m
-+define TFM_MBEDTLS_APPLY_TFM_PATCHES
-+	$(APPLY_PATCHES) $(@D) $(TRUSTED_FIRMWARE_M_SRCDIR)lib/ext/mbedcrypto \*.patch;
-+endef
-+TFM_MBEDTLS_POST_PATCH_HOOKS += TFM_MBEDTLS_APPLY_TFM_PATCHES
-+
-+# This components is not built and installed, because it is intended to
-+# be included as source in TrustedFirmware-M build.
-+
-+$(eval $(generic-package))
-diff --git a/boot/trusted-firmware-m/tfm-mcuboot/Config.in b/boot/trusted-firmware-m/tfm-mcuboot/Config.in
-new file mode 100644
-index 0000000000..be1e83be35
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-mcuboot/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_TARGET_TFM_MCUBOOT
-+	bool
-+
-+if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY
-+
-+config BR2_TARGET_TFM_MCUBOOT_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom mcuboot tarball"
-+	default "$(call github,mcu-tools,mcuboot)/v2.1.0.tar.gz"
-+
-+endif
-diff --git a/boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.hash b/boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.hash
-new file mode 100644
-index 0000000000..1fbd254b34
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256  bcee8c4b5a51477b27c6c587d11f46388823626aba7bd5082c77864a89dcf1b7  tfm-mcuboot-v2.1.0.tar.gz
-+sha256  86438164119907debf649e2f9f18a43ad506d75421c9d9675700066b0456205d  LICENSE
-diff --git a/boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.mk b/boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.mk
-new file mode 100644
-index 0000000000..7002ddf87b
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# mcuboot
-+#
-+################################################################################
-+
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY),y)
-+TFM_MCUBOOT_VERSION = custom
-+TFM_MCUBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_TFM_MCUBOOT_CUSTOM_TARBALL_LOCATION))
-+TFM_MCUBOOT_SITE = $(patsubst %/,%,$(dir $(TFM_MCUBOOT_TARBALL)))
-+TFM_MCUBOOT_SOURCE = $(notdir $(TFM_MCUBOOT_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(TFM_MCUBOOT_SOURCE)
-+else
-+TFM_MCUBOOT_VERSION = v2.1.0
-+TFM_MCUBOOT_SITE = $(call github,mcu-tools,mcuboot,$(TFM_MCUBOOT_VERSION))
-+TFM_MCUBOOT_LICENSE = Apache-2.0
-+TFM_MCUBOOT_LICENSE_FILES = LICENSE
-+endif
-+
-+TFM_MCUBOOT_PATCH_DEPENDENCIES = trusted-firmware-m
-+define TFM_MCUBOOT_APPLY_TFM_PATCHES
-+	$(APPLY_PATCHES) $(@D) $(TRUSTED_FIRMWARE_M_SRCDIR)lib/ext/mcuboot \*.patch;
-+endef
-+TFM_MCUBOOT_POST_PATCH_HOOKS += TFM_MCUBOOT_APPLY_TFM_PATCHES
-+
-+# This components is not built and installed, because it is intended to
-+# be included as source in TrustedFirmware-M build.
-+
-+$(eval $(generic-package))
-diff --git a/boot/trusted-firmware-m/tfm-qcbor/Config.in b/boot/trusted-firmware-m/tfm-qcbor/Config.in
-new file mode 100644
-index 0000000000..1ec74ce558
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-qcbor/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_TARGET_TFM_QCBOR
-+	bool
-+
-+if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY
-+
-+config BR2_TARGET_TFM_QCBOR_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom qcbor tarball"
-+	default "$(call github,laurencelundblade,qcbor)/v1.2.tar.gz"
-+
-+endif
-diff --git a/boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.hash b/boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.hash
-new file mode 100644
-index 0000000000..2c27cdeb84
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256  0f706ad90ada600bd1ddbdf8dc6f2f5910e11de355bb4454b9b4123f0e4ff525  tfm-qcbor-v1.2.tar.gz
-+sha256  fc6db297a2751188d9c2ece6ee468a295f285b9a24f96eab954a1a823c71be3b  README.md
-diff --git a/boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.mk b/boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.mk
-new file mode 100644
-index 0000000000..c8793aff04
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# qcbor
-+#
-+################################################################################
-+
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY),y)
-+TFM_QCBOR_VERSION = custom
-+TFM_QCBOR_TARBALL = $(call qstrip,$(BR2_TARGET_TFM_QCBOR_CUSTOM_TARBALL_LOCATION))
-+TFM_QCBOR_SITE = $(patsubst %/,%,$(dir $(TFM_QCBOR_TARBALL)))
-+TFM_QCBOR_SOURCE = $(notdir $(TFM_QCBOR_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(TFM_QCBOR_SOURCE)
-+else
-+TFM_QCBOR_VERSION = v1.2
-+TFM_QCBOR_SITE = $(call github,laurencelundblade,qcbor,$(TFM_QCBOR_VERSION))
-+TFM_QCBOR_LICENSE = BSD-3-Clause
-+TFM_QCBOR_LICENSE_FILES = README.md
-+endif
-+
-+TFM_QCBOR_PATCH_DEPENDENCIES = trusted-firmware-m
-+define TFM_QCBOR_APPLY_TFM_PATCHES
-+	$(APPLY_PATCHES) $(@D) $(TRUSTED_FIRMWARE_M_SRCDIR)lib/ext/qcbor \*.patch;
-+endef
-+TFM_QCBOR_POST_PATCH_HOOKS += TFM_QCBOR_APPLY_TFM_PATCHES
-+
-+# This components is not built and installed, because it is intended to
-+# be included as source in TrustedFirmware-M build.
-+
-+$(eval $(generic-package))
-diff --git a/boot/trusted-firmware-m/tfm-tests/Config.in b/boot/trusted-firmware-m/tfm-tests/Config.in
-new file mode 100644
-index 0000000000..758e66b8c4
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-tests/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_TARGET_TFM_TESTS
-+	bool
-+
-+if BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY
-+
-+config BR2_TARGET_TFM_TESTS_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom TF-M-tests tarball"
-+	default "https://git.trustedfirmware.org/TF-M/tf-m-tests.git/+archive/TF-Mv2.1.0.tar.gz"
-+
-+endif
-diff --git a/boot/trusted-firmware-m/tfm-tests/tfm-tests.hash b/boot/trusted-firmware-m/tfm-tests/tfm-tests.hash
-new file mode 100644
-index 0000000000..d48f0cfdfc
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-tests/tfm-tests.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256  409dee3cbbceb3f1ea2543cfc9e06a9de23706f5ae798b866d0f12b0c21a7bd5  tfm-tests-TF-Mv2.1.0-br1.tar.gz
-+sha256  42195e7f4ae4655d000688af4d4b143048352461dff5849d24e5afe6d1d84808  license.rst
-diff --git a/boot/trusted-firmware-m/tfm-tests/tfm-tests.mk b/boot/trusted-firmware-m/tfm-tests/tfm-tests.mk
-new file mode 100644
-index 0000000000..bfe1f5aba7
---- /dev/null
-+++ b/boot/trusted-firmware-m/tfm-tests/tfm-tests.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# TF-M tests
-+#
-+################################################################################
-+
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_3RD_PARTY),y)
-+TFM_TESTS_VERSION = custom
-+TFM_TESTS_TARBALL = $(call qstrip,$(BR2_TARGET_TFM_TESTS_CUSTOM_TARBALL_LOCATION))
-+TFM_TESTS_SITE = $(patsubst %/,%,$(dir $(TFM_TESTS_TARBALL)))
-+TFM_TESTS_SOURCE = $(notdir $(TFM_TESTS_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(TFM_TESTS_SOURCE)
-+else
-+TFM_TESTS_VERSION = TF-Mv2.1.0
-+TFM_TESTS_SITE = https://git.trustedfirmware.org/TF-M/trusted-firmware-m.git
-+TFM_TESTS_SITE_METHOD = git
-+TFM_TESTS_LICENSE = BSD-3-Clause
-+TFM_TESTS_LICENSE_FILES = license.rst
-+endif
-+
-+TFM_TESTS_PATCH_DEPENDENCIES = trusted-firmware-m
-+define TFM_TESTS_APPLY_TFM_PATCHES
-+	$(APPLY_PATCHES) $(@D) $(TRUSTED_FIRMWARE_M_SRCDIR)lib/ext/tf-m-tests \*.patch;
-+endef
-+TFM_TESTS_POST_PATCH_HOOKS += TFM_TESTS_APPLY_TFM_PATCHES
-+
-+# This components is not built and installed, because it is intended to
-+# be included as source in TrustedFirmware-M build.
-+
-+$(eval $(generic-package))
-diff --git a/boot/trusted-firmware-m/trusted-firmware-m.hash b/boot/trusted-firmware-m/trusted-firmware-m.hash
-new file mode 100644
-index 0000000000..571c2e7a25
---- /dev/null
-+++ b/boot/trusted-firmware-m/trusted-firmware-m.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  5da6aee3e3dffbde61ee061fed8fc0b693ce934a8a707c91b19916e9b1ade638  trusted-firmware-m-0c4c99ba33b3e66deea070e149279278dc7647f4-br1.tar.gz
-+sha256  c16df600171bfdae60d22a01f046d742f89ba1046e2e5ed135bbf091b21be34f  license.rst
-diff --git a/boot/trusted-firmware-m/trusted-firmware-m.mk b/boot/trusted-firmware-m/trusted-firmware-m.mk
-new file mode 100644
-index 0000000000..45937e2776
---- /dev/null
-+++ b/boot/trusted-firmware-m/trusted-firmware-m.mk
-@@ -0,0 +1,107 @@
-+################################################################################
-+#
-+# TrustedFirmware-M
-+#
-+################################################################################
-+
-+TRUSTED_FIRMWARE_M_VERSION = $(call qstrip,$(BR2_TARGET_TRUSTED_FIRMWARE_M_VERSION))
-+
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL),y)
-+# Handle custom FT-M tarballs as specified by the configuration
-+TRUSTED_FIRMWARE_M_TARBALL = $(call qstrip,$(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL_LOCATION))
-+TRUSTED_FIRMWARE_M_SITE = $(patsubst %/,%,$(dir $(TRUSTED_FIRMWARE_M_TARBALL)))
-+TRUSTED_FIRMWARE_M_SOURCE = $(notdir $(TRUSTED_FIRMWARE_M_TARBALL))
-+else ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_GIT),y)
-+TRUSTED_FIRMWARE_M_SITE = $(call qstrip,$(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_REPO_URL))
-+TRUSTED_FIRMWARE_M_SITE_METHOD = git
-+else
-+# Handle stable official TF-M versions
-+TRUSTED_FIRMWARE_M_SITE = https://git.trustedfirmware.org/TF-M/trusted-firmware-m.git
-+TRUSTED_FIRMWARE_M_SITE_METHOD = git
-+# The licensing of custom or from-git versions is unknown.
-+# This is valid only for the latest (i.e. known) version.
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_LATEST_VERSION),y)
-+TRUSTED_FIRMWARE_M_LICENSE = BSD-3-Clause
-+TRUSTED_FIRMWARE_M_LICENSE_FILES = license.rst
-+endif
-+endif
-+
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M):$(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_VERSION)$(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL)$(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_GIT),y:y)
-+BR_NO_CHECK_HASH_FOR += $(TRUSTED_FIRMWARE_M_SOURCE)
-+endif
-+
-+TRUSTED_FIRMWARE_M_DEPENDENCIES += \
-+	$(BR2_CMAKE_HOST_DEPENDENCY) \
-+	host-arm-gnu-toolchain \
-+	host-python-cbor2 \
-+	host-python-click \
-+	host-python-cryptography \
-+	host-python-jinja2 \
-+	host-python-intelhex \
-+	host-python-pyyaml \
-+	tfm-mbedtls \
-+	tfm-mcuboot \
-+	tfm-qcbor \
-+	tfm-cmsis \
-+	tfm-tests
-+
-+TRUSTED_FIRMWARE_M_CONF_OPTS += \
-+	-DCMAKE_TOOLCHAIN_FILE="$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
-+	-DFETCHCONTENT_FULLY_DISCONNECTED=ON \
-+	-DMBEDCRYPTO_PATH=$(TFM_MBEDTLS_SRCDIR) \
-+	-DTFM_TEST_REPO_PATH=$(TFM_TESTS_SRCDIR) \
-+	-DMCUBOOT_PATH=$(TFM_MCUBOOT_SRCDIR) \
-+	-DQCBOR_PATH=$(TFM_QCBOR_SRCDIR) \
-+	-DCMSIS_PATH=$(TFM_CMSIS_SRCDIR) \
-+	-DTFM_PLATFORM=$(call qstrip,$(BR2_TARGET_TRUSTED_FIRMWARE_M_PLATFORM))
-+
-+ifeq ($(BR3_TARGET_TRUSTED_FIRMWARE_M_DEBUG),y)
-+TRUSTED_FIRMWARE_M_CONF_OPTS += -DCMAKE_BUILD_TYPE=Debug
-+endif
-+
-+TRUSTED_FIRMWARE_M_CONF_ENV += \
-+	CROSS_COMPILE=$(HOST_DIR)/bin/arm-none-eabi-
-+
-+define TRUSTED_FIRMWARE_M_CONFIGURE_CMDS
-+	rm -f $(@D)/CMakeCache.txt
-+	PATH=$(BR_PATH) \
-+	$(TRUSTED_FIRMWARE_M_CONF_ENV) $(BR2_CMAKE) -S $(@D) -B $(@D) \
-+		$(TRUSTED_FIRMWARE_M_CONF_OPTS) \
-+		$(call qstrip,$(BR2_TARGET_TRUSTED_FIRMWARE_M_ADDITIONAL_VARIABLES))
-+endef
-+
-+define TRUSTED_FIRMWARE_M_BUILD_CMDS
-+	PATH=$(BR_PATH) \
-+	$(TRUSTED_FIRMWARE_M_CONF_ENV) $(BR2_CMAKE) \
-+		--build $(@D) -- install
-+endef
-+
-+define TRUSTED_FIRMWARE_M_INSTALL_TARGET_CMDS
-+	# Install path for old version of TF-M
-+	if [ -d $(@D)/install/outputs ]; then \
-+		$(INSTALL) -D -m 0755 $(@D)/install/outputs/*.bin $(BINARIES_DIR); \
-+		$(INSTALL) -D -m 0755 $(@D)/install/outputs/*.elf $(BINARIES_DIR); \
-+	else \
-+		$(INSTALL) -D -m 0755 $(@D)/api_ns/bin/*.bin $(BINARIES_DIR); \
-+		$(INSTALL) -D -m 0755 $(@D)/api_ns/bin/*.elf $(BINARIES_DIR); \
-+	fi
-+endef
-+
-+# Configuration check
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M)$(BR_BUILDING),yy)
-+
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL),y)
-+ifeq ($(call qstrip,$(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL_LOCATION)),)
-+$(error No tarball location specified. Please check BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_TARBALL_LOCATION)
-+endif
-+endif
-+
-+ifeq ($(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_GIT),y)
-+ifeq ($(call qstrip,$(BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_REPO_URL)),)
-+$(error No repository specified. Please check BR2_TARGET_TRUSTED_FIRMWARE_M_CUSTOM_REPO_URL)
-+endif
-+endif
-+
-+endif
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/boot/test_tfm.py b/support/testing/tests/boot/test_tfm.py
-new file mode 100644
-index 0000000000..77650aaec1
---- /dev/null
-+++ b/support/testing/tests/boot/test_tfm.py
-@@ -0,0 +1,12 @@
-+import infra.basetest
-+
-+
-+class TestTFMBuild(infra.basetest.BRTest):
-+    config = \
-+        """
-+	BR2_TARGET_TRUSTED_FIRMWARE_M=y
-+	BR2_TARGET_TRUSTED_FIRMWARE_M_PLATFORM="arm/mps2/an521"
-+        """
-+
-+    def test_run(self):
-+        pass
+-LIBZENOH_PICO_VERSION = 0.11.0.3
++LIBZENOH_PICO_VERSION = 0.11.0
+ LIBZENOH_PICO_SITE = $(call github,eclipse-zenoh,zenoh-pico,$(LIBZENOH_PICO_VERSION))
+ LIBZENOH_PICO_LICENSE = Apache-2.0 or EPL-2.0
+ LIBZENOH_PICO_LICENSE_FILES = LICENSE
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
