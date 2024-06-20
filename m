@@ -4,91 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A31EDC27C79
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 15:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E60B8C27C79
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 16:04:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B32E6614EA;
-	Thu, 20 Jun 2024 15:57:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB94160627;
+	Thu, 20 Jun 2024 16:04:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QfRMg79KJfxq; Thu, 20 Jun 2024 15:57:29 +0000 (UTC)
+ id 0z4UoGupo4wX; Thu, 20 Jun 2024 16:04:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEEB0614D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3AC360724
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEEB0614D8;
-	Thu, 20 Jun 2024 15:57:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 13BE51BF3EA
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 15:57:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3AC360724;
+	Thu, 20 Jun 2024 16:04:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 111761BF3EA
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 16:04:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D1C4844DD
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 15:57:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AA64405A1
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 16:04:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VLMNAbXvDKGw for <buildroot@lists.busybox.net>;
- Thu, 20 Jun 2024 15:57:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HKefd5YBI_nX for <buildroot@lists.busybox.net>;
+ Thu, 20 Jun 2024 16:04:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8DCC1828A9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DCC1828A9
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8DCC1828A9
- for <buildroot@buildroot.org>; Thu, 20 Jun 2024 15:57:25 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-421757d217aso12544005e9.3
- for <buildroot@buildroot.org>; Thu, 20 Jun 2024 08:57:25 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::231; helo=mail-lj1-x231.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B8C4C40572
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8C4C40572
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
+ [IPv6:2a00:1450:4864:20::231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B8C4C40572
+ for <buildroot@buildroot.org>; Thu, 20 Jun 2024 16:04:02 +0000 (UTC)
+Received: by mail-lj1-x231.google.com with SMTP id
+ 38308e7fff4ca-2eaa89464a3so13016241fa.3
+ for <buildroot@buildroot.org>; Thu, 20 Jun 2024 09:04:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718899043; x=1719503843;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=L6Cb5m6u1hJDzIc7TljMXzKfrEi/O8wjgMgwh7gInhg=;
- b=pnF3V784/O8JkDTZrnZIekEoC5lWmTj22YFSx10AMcppT/TnXzOU8NbE/FVEPvvnkx
- aonslbynnVpKEJbFrrtdth8zn/UtQFaBIKraa/f5SDrP+WxwxGIShErQP7zmhqNBKiXq
- MSo3oEVyQo+YAlzWtUPWOtlMpFcLFAZtZcF9tr3RRTWTtiRdQ6WAttHQ3cw7n4u2ioF6
- MW7MtawAYF7cXd/s8pqAjPZBZfvDEwPvJKMOwtwVR8DtHztpXh/oeMLFH/YOrzQTKdHk
- MiRORSQtcdVLj8czoP8Fd4lkvx/T9rULG++kPnpJI9cKcXf1aG9CGoPpLoJbFg76mA5Y
- CKzA==
-X-Gm-Message-State: AOJu0YyH+MExTCCvXArXHMqAZo3vr4lbTkkBKceOvc5LaubyMGyPw8gI
- qzXEHyljhpElZbHVEv+ysTgMwLx/1XZuDif38FFfixqsJ7S3e34+iQVIJw==
-X-Google-Smtp-Source: AGHT+IFYaVfqkPgtCh/gd1iR9ld7yT84ENRmQHmqBZQj30ZEZ9KooPQSTG4nnD5Lb12SQtt1lhKeKQ==
-X-Received: by 2002:a5d:464a:0:b0:35f:28eb:5a46 with SMTP id
- ffacd0b85a97d-363170ed434mr6062102f8f.10.1718899043104; 
- Thu, 20 Jun 2024 08:57:23 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3640afbd532sm3642903f8f.22.2024.06.20.08.57.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 20 Jun 2024 08:57:22 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 20 Jun 2024 17:57:22 +0200
-Message-ID: <20240620155722.2931020-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.45.1
+ d=1e100.net; s=20230601; t=1718899440; x=1719504240;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=U4dFNEMck72okzm9sIFr7+vFkzFVBf3dhaC35wkgJ/0=;
+ b=kFRFyAS6XPuC9p+hnKoVPLF8RAkMSDd+XmSZPVWfjR7x/QGzlHMIO2J7DBMdLbsVS7
+ rnfsf2Gdsnhe+qImPvsYd0sAx2Fp1f+yBc6oR1R4WNQhFm1vqG8amhuxj7Hxjqqogt49
+ KPOB3RBc+rZuG+IPvlG+TocxAKmVFvsoVnP98BN3HVpL8cUlxyq3XbzXmNO66MfbgXsn
+ gVJkNrIzhnEZvfsNPwQzFFBINGFJv2nmFD8iNL2AzPwVQ12ZSuoQrYqa9Sufv+EeTeTg
+ eSdMiTERuEHFgqH2s/YKTpast51eYJcdqCj8JBMNp2eeSH5bOhQY5kIVfdbG7D2IwfO3
+ sw5w==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVwc2Qjxt036nXEyNwykFiL0qC35dTfVnbCnoUyg2/YGTYp8SLjPw7lYu9Bgyce111L/rwnlWGQozVr92TNeCWApJf9S31wQw==
+X-Gm-Message-State: AOJu0YwQlX3ZQfOsGuZCX30NaQf3ul7Zp0xmR9vnqD2f1UEA73Y5Vg3p
+ iyNCdtXx3J0ihSO5xArFsklR9p1FQ9cAWMEh32JYVrsEGvA59idr567HFdsyrwtZDvSM8wZm4NH
+ 5
+X-Google-Smtp-Source: AGHT+IG7TBSGL/oz3/8hE3Wu5M89qR/JySkX/uCIQhSa5VQB6Hlo5KHQoTehIuN/cYw4KCEpHbeU/g==
+X-Received: by 2002:a2e:2416:0:b0:2ea:e56c:f898 with SMTP id
+ 38308e7fff4ca-2ec3cfd666fmr42425151fa.33.1718899439752; 
+ Thu, 20 Jun 2024 09:03:59 -0700 (PDT)
+Received: from [10.1.0.155] (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-364a5b38996sm2273705f8f.3.2024.06.20.09.03.58
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 20 Jun 2024 09:03:59 -0700 (PDT)
+Message-ID: <7e24df50-3710-4700-a644-901528a1a939@mind.be>
+Date: Thu, 20 Jun 2024 18:03:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Michel Alex <Alex.Michel@wiedemann-group.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <AS1P250MB060825741529F073326AA014A9C82@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+Content-Language: en-GB
+In-Reply-To: <AS1P250MB060825741529F073326AA014A9C82@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1718899043; x=1719503843; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=L6Cb5m6u1hJDzIc7TljMXzKfrEi/O8wjgMgwh7gInhg=;
- b=VmO4OO+hVNGseAuwLGQ8qtkOLB7pnqnnyl5xUrbaioh61DTzq+9j0ubozHcmHmbDQb
- o/o5kQROLJDYd55nmnMvhn3iP1iDCasCqgzBhZhpSAEy3zKYitKGiRXxpQJSEPQAHJ8O
- BMvZkWFx8ETSFNPRHia0Id1QJr8ZcNrNWeT0K6JAvb7klwca6cGRWCAUAbAw5I24rFDR
- m5SGDZV5fxpjM4JeOU8rD4u+rOZwxYe4Dh36D4fB0+i6jv2lskI6/0CFpBHgbTirdmUV
- azabTO5V64oXYWqHKr5uXQXvIHZHpN96T54I/4F5YXejuzkynxg9DGH+dlpk7ECUSyCI
- owKg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=VmO4OO+h
-Subject: [Buildroot] [PATCH] package/go: ensure there is a host-go provider
+ d=mind.be; s=google; t=1718899440; x=1719504240; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=U4dFNEMck72okzm9sIFr7+vFkzFVBf3dhaC35wkgJ/0=;
+ b=CqGYSmLtkGrXBnI92CoICstBvYO5OtE7UIP/jnFcwamwzr8HHfGRcdbGuHGNDnjAyS
+ rCdMM408X3ujZRtHo6sYd6JSkD5WE1MbC6MlA39DVTyUjAayRSSq6wbsdsh/7m3UrIBH
+ Td1Qf/U1MjB8kLo3MddKiIsATZqtvu3K/hTF+afO0JUpvf6W71f0kS+WtfollEpYOmqy
+ fVVSuKfVSIygioShyzFuLM5tVVd2VxvIA85IpDeYpLI6/moAlvOZokPTOkQL8Z+UTnXl
+ Vtu5v3Ssm5XNUGZBJDUiFjsXGM5YM8ZAkFzVy5OiGUUJosmxi+cVHql9a2lqOf4W4tYU
+ /qYA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=CqGYSmLt
+Subject: Re: [Buildroot] [PATCH 1/2] package/libzenoh-c: bump to version
+ 0.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,75 +107,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit fa2536ec9401 (package/go: make host package a virtual package)
-introduced host-go as a host-only virtual package, which had a single
-provider, the choice of which is only exposed when a (target or host)
-package has selected BR2_PACKAGE_HOST_GO to indicate it needs host-go.
+  Hi Alex,
 
-However, this forgot to account for prompt-less, host-only packages,
-which have no way of selecting that symbol.
+On 20/06/2024 11:25, Michel Alex wrote:
+> https://github.com/eclipse-zenoh/zenoh-c/releases/tag/0.11.0
+> Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
+> ---
+>   package/libzenoh-c/libzenoh-c.hash | 2 +-
+>   package/libzenoh-c/libzenoh-c.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libzenoh-c/libzenoh-c.hash b/package/libzenoh-c/libzenoh-c.hash
+> index 559c9122ad..66bb5282f4 100644
+> --- a/package/libzenoh-c/libzenoh-c.hash
+> +++ b/package/libzenoh-c/libzenoh-c.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  c86e468527e573d92b01bf454333dda4dc1217f14d5d5f94c24311961313c234  libzenoh-c-0.11.0.3-cargo2.tar.gz
+> +sha256  cf8ca9382a17564ceedadf8fe574cd7c73440cd298d2adfbe88fa452427f8526  libzenoh-c-0.11.0-cargo2.tar.gz
+>   sha256  01a44774f7b1a453595c7c6d7f7308284ba6a1059dc49e14dad6647e1d44a338  LICENSE
+> diff --git a/package/libzenoh-c/libzenoh-c.mk b/package/libzenoh-c/libzenoh-c.mk
+> index 07c153e328..6dd79f3727 100644
+> --- a/package/libzenoh-c/libzenoh-c.mk
+> +++ b/package/libzenoh-c/libzenoh-c.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -LIBZENOH_C_VERSION = 0.11.0.3
+> +LIBZENOH_C_VERSION = 0.11.0
 
-Having prompt-less, host-only packages is a totally unexceptional,
-supported case; for example a host package can be depended upon by
-another (target or host) package, or by a filesystem, and we do not
-require Kconfig symbols to be exposed for those packages.
+  Does 0.11.0 come _after_ 0.11.0.3? I.e. should the final .3 be interpreted as 
+something like a -rc3? This is very counter-intuitive... And it breaks 
+release-monitoring.org...
 
-As a consequence, when not package is enabled, that can select that
-symbol, we can't run 'make source' or 'make host-foo-source':
+  Regards,
+  Arnout
 
-    make[1]: *** No rule to make target 'host-', needed by
-    '[...]/build/host-go-1.22.4/.stamp_configured'. Stop.
 
-Fix that by moving the provider symbol out of the if-block, so that
-there is always a provider defined.
-
-Now, we only have host-go-src as a provider, but the symbol is still
-part of the choice that is conditional (and that _has_ to be
-conditional), so the BR2_PACKAGE_HOST_GO_SRC can never be set unless
-there is a package that explicitly select BR2_PACKAGE_HOST_GO.
-
-So, drop the conditional on the default, so that there is always a
-provider available.
-
-This mirrors other similar situations, like the rust case.
-
-Fixes: fa2536ec940105acc71630144bd1187c931462ac
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/go/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 483393f8e4..92c1f4cdc3 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -54,12 +54,12 @@ config BR2_PACKAGE_HOST_GO_SRC
- 
- endchoice
- 
-+endif
-+
- config BR2_PACKAGE_PROVIDES_HOST_GO
- 	string
--	# Default to host-go-src
--	default "host-go-src" if BR2_PACKAGE_HOST_GO_SRC
--
--endif
-+	# Default to host-go-src, as the only provider for now
-+	default "host-go-src"
- 
- source "package/go/go-bootstrap-stage1/Config.in.host"
- source "package/go/go-bootstrap-stage2/Config.in.host"
--- 
-2.45.1
-
+>   LIBZENOH_C_SITE = $(call github,eclipse-zenoh,zenoh-c,$(LIBZENOH_C_VERSION))
+>   LIBZENOH_C_LICENSE = Apache-2.0 or EPL-2.0
+>   LIBZENOH_C_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
