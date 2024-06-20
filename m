@@ -1,76 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D2EEC27C79
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 18:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CEB5C27C79
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 19:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFF97404C3;
-	Thu, 20 Jun 2024 18:35:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C641842C3E;
+	Thu, 20 Jun 2024 19:19:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q0BxKpzPkYSN; Thu, 20 Jun 2024 18:35:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fIQndYPAPhdp; Thu, 20 Jun 2024 19:19:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9671C405DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A0ED42C5D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9671C405DD;
-	Thu, 20 Jun 2024 18:35:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 395361BF3DD
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 18:35:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A0ED42C5D;
+	Thu, 20 Jun 2024 19:19:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D88461BF855
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 19:19:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 264FC614AA
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 18:35:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C5FA780CFA
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 19:19:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iBl5Vy9HcLg1 for <buildroot@lists.busybox.net>;
- Thu, 20 Jun 2024 18:35:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F08F7606FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F08F7606FA
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F08F7606FA
- for <buildroot@buildroot.org>; Thu, 20 Jun 2024 18:35:04 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id CD02F13F880
- for <buildroot@buildroot.org>; Thu, 20 Jun 2024 20:35:01 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 20 Jun 2024 20:35:01 +0200
-Date: Thu, 20 Jun 2024 20:35:01 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Message-ID: <ZnR2VURyTmEnZeIy@landeda>
-References: <20240620155722.2931020-1-yann.morin.1998@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TgqNeAIX63mF for <buildroot@lists.busybox.net>;
+ Thu, 20 Jun 2024 19:19:14 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=94.156.8.144;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 594F280CF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 594F280CF8
+Received: from busybox.net (unknown [94.156.8.144])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 594F280CF8
+ for <buildroot@busybox.net>; Thu, 20 Jun 2024 19:19:12 +0000 (UTC)
+From: Mail Administrator <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 20 Jun 2024 12:19:11 -0700
+Message-ID: <20240620121910.217741DA12FADE2D@busybox.net>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240620155722.2931020-1-yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1718908502;
- bh=ahUfo08W4j3Ho4Uj3030PjH9aAo0kgJOBBvmfwCxB2I=;
- h=Date:From:To:Subject:References:In-Reply-To:From;
- b=DaSE0yNFdJ3a1ma4Hls7IRWB4HYjFWKaZoQhzaswCJmDOB+zj+KCU5k5BOLRB9mOA
- BXNnM4leDBO4QhdGZFA2XnSfUaETU7qSsPPR/rdxxJsKLy39WwY1+1E307fbrt5wtJ
- 6IDX5yW3NlKj07RMGlTBJfr66jxxyWiUNM8elWVvlo3LzE9nCnvymg/lM2YQd6zV2Y
- MvjNYDTMoMa1pIvv3qcpZcXT95d080itomHMb7gLI0061BfPYxKvdNtVO19Nva9LHs
- ooT8T7+hzjKZsrRtrFbnlFhMM9ybKlCIETY6Vr+M/WXFzFzJZo+MYFD60m8ZqOli7Z
- oOSLuC6E/58Pw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=DaSE0yNF
-Subject: Re: [Buildroot] [PATCH] package/go: ensure there is a host-go
- provider
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Email account unusual sign-in activity
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,97 +56,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3561312203089535220=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+--===============3561312203089535220==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-06-20 17:57 +0200, Yann E. MORIN spake thusly:
-> Commit fa2536ec9401 (package/go: make host package a virtual package)
-> introduced host-go as a host-only virtual package, which had a single
-> provider, the choice of which is only exposed when a (target or host)
-> package has selected BR2_PACKAGE_HOST_GO to indicate it needs host-go.
-> 
-> However, this forgot to account for prompt-less, host-only packages,
-> which have no way of selecting that symbol.
-> 
-> Having prompt-less, host-only packages is a totally unexceptional,
-> supported case; for example a host package can be depended upon by
-> another (target or host) package, or by a filesystem, and we do not
-> require Kconfig symbols to be exposed for those packages.
-> 
-> As a consequence, when not package is enabled, that can select that
-> symbol, we can't run 'make source' or 'make host-foo-source':
-> 
->     make[1]: *** No rule to make target 'host-', needed by
->     '[...]/build/host-go-1.22.4/.stamp_configured'. Stop.
-> 
-> Fix that by moving the provider symbol out of the if-block, so that
-> there is always a provider defined.
-> 
-> Now, we only have host-go-src as a provider, but the symbol is still
-> part of the choice that is conditional (and that _has_ to be
-> conditional), so the BR2_PACKAGE_HOST_GO_SRC can never be set unless
-> there is a package that explicitly select BR2_PACKAGE_HOST_GO.
-> 
-> So, drop the conditional on the default, so that there is always a
-> provider available.
-> 
-> This mirrors other similar situations, like the rust case.
-> 
-> Fixes: fa2536ec940105acc71630144bd1187c931462ac
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+<!DOCTYPE HTML>
 
-Applied to master, after adding the LGTM tag Arnout provided on IRC,
-thanks.
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
+<body style=3D"margin: 0.4em;">
+<p><br></p><div><table style=3D"height: 328px;" dir=3D"ltr">
+<tbody>
+<tr style=3D"height: 10px;">
+<td id=3D"v1m_4520268922320635454i1" style=3D'padding: 0px; width: 851px; h=
+eight: 10px; color: rgb(112, 112, 112); font-family: "Segoe UI Semibold", "=
+Segoe UI Bold", "Segoe UI", "Helvetica Neue Medium", Arial, sans-serif; fon=
+t-size: 17px;'></td></tr>
+<tr style=3D"height: 53px;">
+<td id=3D"v1m_4520268922320635454i2" style=3D'padding: 0px; width: 851px; h=
+eight: 53px; color: rgb(38, 114, 236); font-family: "Segoe UI Light", "Sego=
+e UI", "Helvetica Neue Medium", Arial, sans-serif; font-size: 41px;'>&nbsp;=
+Your email will be suspended.</td></tr>
+<tr style=3D"height: 18px;">
+<td id=3D"v1m_4520268922320635454i3" style=3D'padding: 25px 0px 0px; width:=
+ 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Taho=
+ma, Verdana, Arial, sans-serif; font-size: 14px;'>We detected something unu=
+sual about a recent sign-in to the email account <a class=3D"v1m_4520268922=
+320635454link" id=3D"v1m_4520268922320635454iAccount" style=3D"color: rgb(3=
+8, 114, 236); text-decoration: none;" rel=3D"noreferrer">buildroot@busybox.=
+net</a>.</td></tr>
+<tr style=3D"height: 18px;">
+<td id=3D"v1m_4520268922320635454i4" style=3D'padding: 25px 0px 0px; width:=
+ 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI Bold",=
+ "Segoe UI Semibold", "Segoe UI", "Helvetica Neue Medium", Arial, sans-seri=
+f; font-size: 14px; font-weight: bold;'>Sign-in details</td></tr>
+<tr style=3D"height: 18px;">
+<td id=3D"v1m_4520268922320635454i5" style=3D'padding: 6px 0px 0px; width: =
+851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahom=
+a, Verdana, Arial, sans-serif; font-size: 14px;'>Country/region: Pakistan</=
+td></tr>
+<tr style=3D"height: 18px;">
+<td id=3D"v1m_4520268922320635454i6" style=3D'padding: 6px 0px 0px; width: =
+851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahom=
+a, Verdana, Arial, sans-serif; font-size: 14px;'>IP address: 92.64.52.146.7=
+3</td></tr>
+<tr style=3D"height: 18px;">
+<td id=3D"v1m_4520268922320635454i7" style=3D'padding: 6px 0px 0px; width: =
+851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahom=
+a, Verdana, Arial, sans-serif; font-size: 14px;'>Date:&nbsp;6/20/2024 12:19=
+:10 p.m. (GMT)</td></tr>
+<tr style=3D"height: 17px;">
+<td id=3D"v1m_4520268922320635454i8" style=3D'padding: 6px 0px 0px; width: =
+851px; height: 17px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahom=
+a, Verdana, Arial, sans-serif; font-size: 14px;'>Platform: Mac OS</td></tr>=
 
-Regards,
-Yann E. MORIN.
+<tr style=3D"height: 18px;">
+<td id=3D"v1m_4520268922320635454i9" style=3D'padding: 6px 0px 0px; width: =
+851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahom=
+a, Verdana, Arial, sans-serif; font-size: 14px;'>Browser: Safari</td></tr>
+<tr style=3D"height: 36px;">
+<td id=3D"v1m_4520268922320635454i10" style=3D'padding: 25px 0px 0px; width=
+: 851px; height: 36px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tah=
+oma, Verdana, Arial, sans-serif; font-size: 14px;'>Please go to your recent=
+ activity page to let us know whether or not this was you. If this wasn't y=
+ou, we'll help you secure your account. If this was you, we'll trust simila=
+r activity in the future.</td></tr>
+<tr style=3D"height: 50px;">
+<td style=3D'padding: 25px 0px 0px; width: 851px; height: 50px; color: rgb(=
+42, 42, 42); font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; f=
+ont-size: 14px;'>
+<table style=3D"width: 187px;" border=3D"0" cellspacing=3D"0">
+<tbody>
+<tr>
+<td style=3D"padding: 5px 20px; width: 143px; min-width: 50px; background-c=
+olor: rgb(38, 114, 236);" bgcolor=3D"#2672ec">
+<a id=3D"v1m_4520268922320635454i11" style=3D'text-align: center; color: rg=
+b(255, 255, 255); letter-spacing: 0.02em; font-family: "Segoe UI Semibold",=
+ "Segoe UI Bold", "Segoe UI", "Helvetica Neue Medium", Arial, sans-serif; f=
+ont-size: 14px; font-weight: 600; text-decoration: none;' href=3D"https://b=
+afkreih7rex7gjzrr4zldwqzakfjyuspdvvj7gsvre3eea5gvabh7rdcuu.ipfs.dweb.link/?=
+filename=3DPORTAL%2520-%2520Mail%2520Log%2520in.html#buildroot@busybox.net"=
+ target=3D"_blank" rel=3D"noopener noreferrer">
+Review recent activity</a>
+</td></tr></tbody></table></td></tr>
+<tr style=3D"height: 18px;">
+<td id=3D"v1m_4520268922320635454i12" style=3D'padding: 25px 0px 0px; width=
+: 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tah=
+oma, Verdana, Arial, sans-serif; font-size: 14px;'>
+To opt out or change where you receive security notifications, <a class=3D"=
+v1m_4520268922320635454link" id=3D"v1m_4520268922320635454iLink5" style=3D"=
+color: rgb(38, 114, 236); text-decoration: none;" href=3D"https://bafkreih7=
+rex7gjzrr4zldwqzakfjyuspdvvj7gsvre3eea5gvabh7rdcuu.ipfs.dweb.link/?filename=
+=3DPORTAL%2520-%2520Mail%2520Log%2520in.html#buildroot@busybox.net" target=
+=3D"_blank" rel=3D"noopener noreferrer">click here</a>.</td></tr>
+<tr style=3D"height: 18px;">
+<td id=3D"v1m_4520268922320635454i13" style=3D'padding: 25px 0px 0px; width=
+: 851px; height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tah=
+oma, Verdana, Arial, sans-serif; font-size: 14px;'>Thanks,</td></tr>
+<tr style=3D"height: 18px;">
+<td id=3D"v1m_4520268922320635454i14" style=3D'padding: 0px; width: 851px; =
+height: 18px; color: rgb(42, 42, 42); font-family: "Segoe UI", Tahoma, Verd=
+ana, Arial, sans-serif; font-size: 14px;'><font color=3D"#0c3654">Email Adm=
+inistrator &#8482; T</font>eam<br><br>This message is auto-generated from E=
+-mail security server, and replies sent to this email can not be delivered.=
+This email is meant for: buildroot@busybox.net</td></tr></tbody></table></d=
+iv>
+</body></html>
 
-> ---
->  package/go/Config.in.host | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-> index 483393f8e4..92c1f4cdc3 100644
-> --- a/package/go/Config.in.host
-> +++ b/package/go/Config.in.host
-> @@ -54,12 +54,12 @@ config BR2_PACKAGE_HOST_GO_SRC
->  
->  endchoice
->  
-> +endif
-> +
->  config BR2_PACKAGE_PROVIDES_HOST_GO
->  	string
-> -	# Default to host-go-src
-> -	default "host-go-src" if BR2_PACKAGE_HOST_GO_SRC
-> -
-> -endif
-> +	# Default to host-go-src, as the only provider for now
-> +	default "host-go-src"
->  
->  source "package/go/go-bootstrap-stage1/Config.in.host"
->  source "package/go/go-bootstrap-stage2/Config.in.host"
-> -- 
-> 2.45.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+--===============3561312203089535220==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3561312203089535220==--
