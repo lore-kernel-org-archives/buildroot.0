@@ -1,84 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60335C27C79
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 15:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A31EDC27C79
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jun 2024 15:57:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1514C844AF;
-	Thu, 20 Jun 2024 15:41:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B32E6614EA;
+	Thu, 20 Jun 2024 15:57:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d1xfUbxE-NIZ; Thu, 20 Jun 2024 15:41:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QfRMg79KJfxq; Thu, 20 Jun 2024 15:57:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34F96844B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEEB0614D8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34F96844B3;
-	Thu, 20 Jun 2024 15:41:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEEB0614D8;
+	Thu, 20 Jun 2024 15:57:29 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 590461BF3EA
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 15:41:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13BE51BF3EA
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 15:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44337844AF
- for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 15:41:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D1C4844DD
+ for <buildroot@lists.busybox.net>; Thu, 20 Jun 2024 15:57:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tl0jMmrJEK68 for <buildroot@lists.busybox.net>;
- Thu, 20 Jun 2024 15:41:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
- helo=fllv0016.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 738D184498
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 738D184498
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 738D184498
- for <buildroot@buildroot.org>; Thu, 20 Jun 2024 15:41:41 +0000 (UTC)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
- by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45KFfeqW127979;
- Thu, 20 Jun 2024 10:41:40 -0500
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
- by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45KFfeEv039539
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Thu, 20 Jun 2024 10:41:40 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 20
- Jun 2024 10:41:40 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 20 Jun 2024 10:41:40 -0500
-Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
- by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45KFfeHU081079;
- Thu, 20 Jun 2024 10:41:40 -0500
-Date: Thu, 20 Jun 2024 10:41:40 -0500
-To: Gero =?utf-8?Q?Schw=C3=A4ricke?= <gero.schwaericke@grandcentrix.net>
-Message-ID: <20240620154140.cyqqxxfn5mwdmmur@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20240620110905.1205820-1-gero.schwaericke@grandcentrix.net>
+ id VLMNAbXvDKGw for <buildroot@lists.busybox.net>;
+ Thu, 20 Jun 2024 15:57:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8DCC1828A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DCC1828A9
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8DCC1828A9
+ for <buildroot@buildroot.org>; Thu, 20 Jun 2024 15:57:25 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-421757d217aso12544005e9.3
+ for <buildroot@buildroot.org>; Thu, 20 Jun 2024 08:57:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1718899043; x=1719503843;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=L6Cb5m6u1hJDzIc7TljMXzKfrEi/O8wjgMgwh7gInhg=;
+ b=pnF3V784/O8JkDTZrnZIekEoC5lWmTj22YFSx10AMcppT/TnXzOU8NbE/FVEPvvnkx
+ aonslbynnVpKEJbFrrtdth8zn/UtQFaBIKraa/f5SDrP+WxwxGIShErQP7zmhqNBKiXq
+ MSo3oEVyQo+YAlzWtUPWOtlMpFcLFAZtZcF9tr3RRTWTtiRdQ6WAttHQ3cw7n4u2ioF6
+ MW7MtawAYF7cXd/s8pqAjPZBZfvDEwPvJKMOwtwVR8DtHztpXh/oeMLFH/YOrzQTKdHk
+ MiRORSQtcdVLj8czoP8Fd4lkvx/T9rULG++kPnpJI9cKcXf1aG9CGoPpLoJbFg76mA5Y
+ CKzA==
+X-Gm-Message-State: AOJu0YyH+MExTCCvXArXHMqAZo3vr4lbTkkBKceOvc5LaubyMGyPw8gI
+ qzXEHyljhpElZbHVEv+ysTgMwLx/1XZuDif38FFfixqsJ7S3e34+iQVIJw==
+X-Google-Smtp-Source: AGHT+IFYaVfqkPgtCh/gd1iR9ld7yT84ENRmQHmqBZQj30ZEZ9KooPQSTG4nnD5Lb12SQtt1lhKeKQ==
+X-Received: by 2002:a5d:464a:0:b0:35f:28eb:5a46 with SMTP id
+ ffacd0b85a97d-363170ed434mr6062102f8f.10.1718899043104; 
+ Thu, 20 Jun 2024 08:57:23 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3640afbd532sm3642903f8f.22.2024.06.20.08.57.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 20 Jun 2024 08:57:22 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 20 Jun 2024 17:57:22 +0200
+Message-ID: <20240620155722.2931020-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240620110905.1205820-1-gero.schwaericke@grandcentrix.net>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1718898100;
- bh=iW/B4UH8ugk2SjZ2f262yXeA42pKnMGPnj1dI/B2Czw=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=PSZnQ8+VukxscTazGrhzgTLCTVVokYYzDh3xYBo7PjSqDWQORXdoBpOezULCs9RAV
- IpBdWEFwF2VIzrB3quxqvOKi21fSc/QfKXEHb830nWezIcG0406qZvIhXAaUem/XEh
- BiEkkARZgeozfm0BJmIzupO1BNAWxIFqdjJVuEi4=
+ d=gmail.com; s=20230601; t=1718899043; x=1719503843; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=L6Cb5m6u1hJDzIc7TljMXzKfrEi/O8wjgMgwh7gInhg=;
+ b=VmO4OO+hVNGseAuwLGQ8qtkOLB7pnqnnyl5xUrbaioh61DTzq+9j0ubozHcmHmbDQb
+ o/o5kQROLJDYd55nmnMvhn3iP1iDCasCqgzBhZhpSAEy3zKYitKGiRXxpQJSEPQAHJ8O
+ BMvZkWFx8ETSFNPRHia0Id1QJr8ZcNrNWeT0K6JAvb7klwca6cGRWCAUAbAw5I24rFDR
+ m5SGDZV5fxpjM4JeOU8rD4u+rOZwxYe4Dh36D4fB0+i6jv2lskI6/0CFpBHgbTirdmUV
+ azabTO5V64oXYWqHKr5uXQXvIHZHpN96T54I/4F5YXejuzkynxg9DGH+dlpk7ECUSyCI
+ owKg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=PSZnQ8+V
-Subject: Re: [Buildroot] [PATCH 0/2] board/ti/am6{2,
- 4}x-sk: update custom hashes
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=VmO4OO+h
+Subject: [Buildroot] [PATCH] package/go: ensure there is a host-go provider
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,26 +100,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Reply-To: Bryan Brattlof <bb@ti.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gSnVuZSAyMCwgMjAyNCB0aHVzIHNheWV0aCBHZXJvIFNjaHfDpHJpY2tlIHZpYSBidWlsZHJv
-b3Q6Cj4gVGhlIGZvbGxvd2luZyB0d28gY29tbWl0cyBidW1wZWQgdGhlIHUtYm9vdCB2ZXJzaW9u
-LCBidXQgbWlzc2VkIHVwZGF0aW5nCj4gdGhlIGN1c3RvbSBoYXNoZXM6Cj4gCj4gICBjYzI5MTBh
-N2RiIGNvbmZpZ3MvdGlfYW02Mnhfc2tfZGVmY29uZmlnOiB1cGRhdGUgVS1Cb290IHRvIHYyMDI0
-LjA0Cj4gICA3ZWZkNzU4NjdjIGNvbmZpZ3MvdGlfYW02NHhfc2tfZGVmY29uZmlnOiB1cGRhdGUg
-VS1Cb290IHRvIHYyMDI0LjA0Cj4gCj4gR2VuZXJhdGVkIHdpdGgKPiAKPiAgIC4vdXRpbHMvYWRk
-LWN1c3RvbS1oYXNoZXMKPiAKPiBCdWlsZCBzdWNjZWVkZWQgc2luY2UgdS1ib290IGxhdGVzdCBp
-cyBjdXJyZW5seSBhbHNvIHYyMDI0LjA0LCBidXQgdGhpcwo+IHdpbGwgYnJlYWsgaW4gdGhlIGZ1
-dHVyZS4KPiAKPiAtLQo+IEdlcm8gU2Nod8Okcmlja2UgKDIpOgo+ICAgYm9hcmQvdGkvYW02Mngt
-c2s6IHVwZGF0ZSBjdXN0b20gaGFzaGVzCj4gICBib2FyZC90aS9hbTY0eC1zazogdXBkYXRlIGN1
-c3RvbSBoYXNoZXMKCk5pY2UgY2F0Y2ghIFRoYW5rIHlvdQoKUmV2aWV3ZWQtYnk6IEJyeWFuIEJy
-YXR0bG9mIDxiYkB0aS5jb20+Cgp+QnJ5YW4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Commit fa2536ec9401 (package/go: make host package a virtual package)
+introduced host-go as a host-only virtual package, which had a single
+provider, the choice of which is only exposed when a (target or host)
+package has selected BR2_PACKAGE_HOST_GO to indicate it needs host-go.
+
+However, this forgot to account for prompt-less, host-only packages,
+which have no way of selecting that symbol.
+
+Having prompt-less, host-only packages is a totally unexceptional,
+supported case; for example a host package can be depended upon by
+another (target or host) package, or by a filesystem, and we do not
+require Kconfig symbols to be exposed for those packages.
+
+As a consequence, when not package is enabled, that can select that
+symbol, we can't run 'make source' or 'make host-foo-source':
+
+    make[1]: *** No rule to make target 'host-', needed by
+    '[...]/build/host-go-1.22.4/.stamp_configured'. Stop.
+
+Fix that by moving the provider symbol out of the if-block, so that
+there is always a provider defined.
+
+Now, we only have host-go-src as a provider, but the symbol is still
+part of the choice that is conditional (and that _has_ to be
+conditional), so the BR2_PACKAGE_HOST_GO_SRC can never be set unless
+there is a package that explicitly select BR2_PACKAGE_HOST_GO.
+
+So, drop the conditional on the default, so that there is always a
+provider available.
+
+This mirrors other similar situations, like the rust case.
+
+Fixes: fa2536ec940105acc71630144bd1187c931462ac
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/go/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index 483393f8e4..92c1f4cdc3 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -54,12 +54,12 @@ config BR2_PACKAGE_HOST_GO_SRC
+ 
+ endchoice
+ 
++endif
++
+ config BR2_PACKAGE_PROVIDES_HOST_GO
+ 	string
+-	# Default to host-go-src
+-	default "host-go-src" if BR2_PACKAGE_HOST_GO_SRC
+-
+-endif
++	# Default to host-go-src, as the only provider for now
++	default "host-go-src"
+ 
+ source "package/go/go-bootstrap-stage1/Config.in.host"
+ source "package/go/go-bootstrap-stage2/Config.in.host"
+-- 
+2.45.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
