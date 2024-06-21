@@ -4,78 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FF13C27C4F
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 20:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCD13C27C4F
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 21:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B1178435E;
-	Fri, 21 Jun 2024 20:58:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C7B482092;
+	Fri, 21 Jun 2024 21:09:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ScYVmQGmEU9; Fri, 21 Jun 2024 20:57:59 +0000 (UTC)
+ id y1gT_5Omrd10; Fri, 21 Jun 2024 21:09:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8B9084373
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B2FD820B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8B9084373;
-	Fri, 21 Jun 2024 20:57:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CAF541BF344
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 20:57:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B2FD820B0;
+	Fri, 21 Jun 2024 21:09:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 27D4E1BF834
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:09:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8B4A60725
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 20:57:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1112E4090C
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:09:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gzYslYr1-SYD for <buildroot@lists.busybox.net>;
- Fri, 21 Jun 2024 20:57:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:67c:2050:0:465::103; helo=mout-p-103.mailbox.org;
- envelope-from=a.wellbrock@mailbox.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3ABEC607A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ABEC607A2
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org
- [IPv6:2001:67c:2050:0:465::103])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3ABEC607A2
- for <buildroot@buildroot.org>; Fri, 21 Jun 2024 20:57:51 +0000 (UTC)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org
- [IPv6:2001:67c:2050:b231:465::202])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4W5V6w6vJPz9sbL;
- Fri, 21 Jun 2024 22:57:44 +0200 (CEST)
-Date: Fri, 21 Jun 2024 22:57:44 +0200 (CEST)
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <1625348116.29441.1719003464483@ox75.mailbox.org>
-In-Reply-To: <ZnXe4zvx1Dm_Yk34@landeda>
-References: <20240617180157.3771298-1-a.wellbrock@mailbox.org>
- <ZnXe4zvx1Dm_Yk34@landeda>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RZVm20zzDXa7 for <buildroot@lists.busybox.net>;
+ Fri, 21 Jun 2024 21:09:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B415540693
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B415540693
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B415540693
+ for <buildroot@buildroot.org>; Fri, 21 Jun 2024 21:09:25 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 009C6B0053E;
+ Fri, 21 Jun 2024 23:09:17 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 21 Jun 2024 23:09:04 +0200
+Message-ID: <20240621210904.319172-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Priority: 3
-Importance: Normal
-X-MBO-RS-ID: c0aba077fbd2983829d
-X-MBO-RS-META: znknc3sj6dposbwitjjxrzqjjfqz1bjz
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailbox.org; s=mail20150812; 
- t=1719003464;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- in-reply-to:in-reply-to:references:references;
- bh=DhtH3fTmwdl8ExNCpWAc/MuqU0opQTIInBM5l5kc9Xc=;
- b=q0fbEGTUrIidUHnGY5dBG8pe0rkcbs31qzBzHJWzfpy+r+oziRcZ7ipcsF86GZBlf93lUH
- gN5fc7v/1vLBw/4cOKBCoGEhKwrwRMiLwbgWPQaP8KPS75phcejhmp+PTa5dcqKnNb4jbX
- Lnrw0yZmmFHgo6IYsjOUNIw7SIXOF8G9mL3SJ+6LBStu4aQbXVSwtqoVd/hf1t3j7Q25P2
- KdlpVtYUMuSn369bIe54+QYJP4kFaOoqTQNvb3ojXeZPON4wdX/SXyneNvtwczKDYUJ0Q/
- jMagxUrjdy2hIt64uMOfyL5USQrmaUgfnNnY3GRDlxgO+xw2r7Omg7UxwFP2/Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=mailbox.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mailbox.org header.i=@mailbox.org header.a=rsa-sha256
- header.s=mail20150812 header.b=q0fbEGTU
-Subject: Re: [Buildroot] [PATCH 1/1] package/c-ares: update site url
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1719004162;
+ bh=PdEftHefDN7mYOorI4y5amvO+8+yRGAScn3vZpaulPI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=HB+deTvtjH/flyXWpw9cXYkkoYtj6kEveH0+GRkUZ9N63v7aER56RH8U86txP5yVg
+ 1khJvvJ+TyHeqkg3ToPrEXBe8jPGJ0p/i88hQyRXZYp9Zi1Otw5viC2a0uV6+IlS7w
+ 9w2CxWCD3CZTaMU2f8wmfTcPPYWtL5npbEyjkVN0I0REaS2M6Mx8CE6Pww0eEfiumg
+ bPNMPCFCCftQEZS8jRSUXWNMuhn8ye/pbfvWcf8+yZDNor+G0jfX7VfXgKgjKL7ZjU
+ O1HqTiaG1uOYCfym59pXd5RtqLlK0VHYrgy1EWNVTxXihQfRJ6b6Mf8AONOXdOruv+
+ LSoTJGrTyrULw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=HB+deTvt
+Subject: [Buildroot] [PATCH 1/1] package/python-pyalsa: bump to version
+ 1.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,116 +76,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Alexander Wellbrock via buildroot <buildroot@buildroot.org>
-Reply-To: Alexander Wellbrock <a.wellbrock@mailbox.org>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============3135934052547285825=="
+Cc: Julien Olivain <ju.o@free.fr>, James Hilliard <james.hilliard1@gmail.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3135934052547285825==
-Content-Type: multipart/signed; micalg=pgp-sha512; protocol="application/pgp-signature"; 
-	boundary="----=_Part_29440_1747369335.1719003464483"
+For change log since 1.2.7, see:
+- https://github.com/alsa-project/alsa-python/releases/tag/v1.2.12
 
-------=_Part_29440_1747369335.1719003464483
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+This commit also adds a comment about the pgp signature check in the
+hash file.
 
-Ah, damn. alexander.wellbrock@othermo.de is my work email (found this at work). My intention was to contribute using my private address a.wellbrock@mailbox.org.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested on branch master at commit 4ae18c5 with commands:
 
-> Yann E. MORIN <yann.morin.1998@free.fr> hat am 21.06.2024 22:13 CEST geschrieben:
->
->
-> On 2024-06-17 20:01 +0200, Alexander Wellbrock via buildroot spake thusly:
-> > From: alex <alexander.wellbrock@othermo.de>
->
-> This, the authorship... [0]
->
-> > Download URLs changed after hosting of the c-ares website changed
-> > ownership:
-> > https://daniel.haxx.se/blog/2024/06/06/bye-bye-hosting-c-ares-web/
-> >
-> > This cannot be fixed upstream as github pages does not support .htaccess
-> > files according to:
-> > https://github.com/c-ares/c-ares.github.io/issues/2
-> >
-> > Signed-off-by: Alexander Wellbrock <a.wellbrock@mailbox.org>
->
-> [0]... does not match your sign-off tag, neither in real name nor in
-> email.
->
-> Can you just reply to clarify this, please?
->
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  package/c-ares/c-ares.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-> > index c4441255a2..a75a40da70 100644
-> > --- a/package/c-ares/c-ares.mk
-> > +++ b/package/c-ares/c-ares.mk
-> > @@ -5,7 +5,7 @@
-> >  ################################################################################
-> >
-> >  C_ARES_VERSION = 1.27.0
-> > -C_ARES_SITE = http://c-ares.haxx.se/download
-> > +C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/cares-1_27_0
-> >  C_ARES_INSTALL_STAGING = YES
-> >  C_ARES_CONF_OPTS = --with-random=/dev/urandom
-> >  C_ARES_LICENSE = MIT
-> > --
-> > 2.42.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+    utils/docker-run make check-package
+    ...
+    0 warnings generated
 
-------=_Part_29440_1747369335.1719003464483
-Content-Type: application/pgp-signature
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename=signature.asc
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_python_pyalsa
+    ...
+    OK
+---
+ package/python-pyalsa/python-pyalsa.hash | 6 ++++--
+ package/python-pyalsa/python-pyalsa.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
------BEGIN PGP SIGNATURE-----
-Version: BCPG v1.65
-
-iQIcBAABCgAGBQJmdelIAAoJEEt5V9I9V2bP9nMP/i93aSGd/o7oJ2wjG1UnEFuw
-Jk75tYJmvSAeYFUd90HES2mV8KKJfZGDy0MYO/3MNJNRRy7rwqOQCUF1C+JLvFMI
-ixtYRBt+GQ6uNQ4gNNuscju3k2ymk1aV55+lEvndxgeqMVSwH2dUT60MiYfsX+LK
-5rXEoaoK7UoKfNptM6TBTDMnn3kHQ5HDCMGuTASgrornv/bHXpscSLERW5zYNgIG
-3ggQX0yApm0kL6j44EFQ+uaBLvCpdI8ripHpBXS5rsOmZwig9y6FjV1c5z3Cr15N
-vS1MoTWD2HK5WLrqPoLdoqMsZUy2StNtUQ+WAHEUCWpOraqTEcVDTDyw4Mxk5Lca
-KMMnPz2ALrpnQa1ACvZ9ZHBd117gNwyFy/zYGGK45woiBdpFbp4T0tPvqV0pUIkF
-ttTnvti4NzvANvr11okeYkHO3wK7GJtmBVdivvPw0HdQj6VOrqKB2lCy8MrIKEkf
-m1qDofdATuTAmP+sv1ESrSeXzo7CrTAryb5ok1P46GVtxU3Vt2yZDOBXaB3IUF9m
-YocaIPwrdsYFtUocZSUwC91ayNdMOk08cDWrIRx3mwYBIAXbbEZRqUJJkeDQMiJh
-ReaLPD9sRkTvjaJHkaJQmc8ECp2X3Jbj2rszQ9kk1VhrrqaaoPRs1CJV6KS9ReP9
-ZTB+BQ2txk4+QTZSjBtO
-=ytOg
------END PGP SIGNATURE-----
-
-------=_Part_29440_1747369335.1719003464483--
-
---===============3135934052547285825==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/python-pyalsa/python-pyalsa.hash b/package/python-pyalsa/python-pyalsa.hash
+index d4cfe0d61f8..206107d29ad 100644
+--- a/package/python-pyalsa/python-pyalsa.hash
++++ b/package/python-pyalsa/python-pyalsa.hash
+@@ -1,2 +1,4 @@
+-# Locally computed
+-sha256  67d8f99f1ccf23e7ebdfa2c3be0b09f147949fd9511d1e6748b7f412ef046e1f  pyalsa-1.2.7.tar.bz2
++# Locally computed, after checking pgp signature from:
++# https://www.alsa-project.org/files/pub/pyalsa/pyalsa-1.2.12.tar.bz2.sig
++# with key F04DF50737AC1A884C4B3D718380596DA6E59C91
++sha256  8abeaf41e5f48f617a52d1078932da89ab303d4a1d8f9919f947bdb1b7d03f50  pyalsa-1.2.12.tar.bz2
+diff --git a/package/python-pyalsa/python-pyalsa.mk b/package/python-pyalsa/python-pyalsa.mk
+index 1661fe47b49..19d2c91d237 100644
+--- a/package/python-pyalsa/python-pyalsa.mk
++++ b/package/python-pyalsa/python-pyalsa.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYALSA_VERSION = 1.2.7
++PYTHON_PYALSA_VERSION = 1.2.12
+ PYTHON_PYALSA_SOURCE = pyalsa-$(PYTHON_PYALSA_VERSION).tar.bz2
+ PYTHON_PYALSA_SITE = https://www.alsa-project.org/files/pub/pyalsa
+ PYTHON_PYALSA_SETUP_TYPE = setuptools
+-- 
+2.45.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3135934052547285825==--
