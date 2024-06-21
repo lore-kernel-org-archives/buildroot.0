@@ -1,76 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFBB8C27C4F
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 14:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ABA1C2BB85
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 15:44:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A52C616B2;
-	Fri, 21 Jun 2024 14:40:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A45EC42EF7;
+	Fri, 21 Jun 2024 15:44:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id liUeEdk27BLU; Fri, 21 Jun 2024 14:40:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kVRhX_mb6z2C; Fri, 21 Jun 2024 15:44:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AA1A61690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D72342F79
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3AA1A61690;
-	Fri, 21 Jun 2024 14:40:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 16B531BF36F
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 14:40:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D72342F79;
+	Fri, 21 Jun 2024 15:44:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F62F1BF3DE
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 15:44:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 03B5F61690
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 14:40:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A9EF80F66
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 15:44:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kvuLYMgWyAgx for <buildroot@lists.busybox.net>;
- Fri, 21 Jun 2024 14:40:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 920EC6167B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 920EC6167B
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 920EC6167B
- for <buildroot@buildroot.org>; Fri, 21 Jun 2024 14:40:25 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 836E22003C8;
- Fri, 21 Jun 2024 16:40:20 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:35104])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 21 Jun 2024 14:40:20 +0000
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AQ8aL7HdiNPw for <buildroot@lists.busybox.net>;
+ Fri, 21 Jun 2024 15:44:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 691F380F62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 691F380F62
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 691F380F62
+ for <buildroot@busybox.net>; Fri, 21 Jun 2024 15:44:25 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([82.135.81.221]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MMXQ5-1s2Jw80YVz-00YUFE; Fri, 21
+ Jun 2024 17:44:23 +0200
+To: buildroot@busybox.net
+Date: Fri, 21 Jun 2024 17:44:22 +0200
+Message-ID: <20240621154422.18332-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-Date: Fri, 21 Jun 2024 14:40:20 +0000
-From: Julien Olivain <ju.o@free.fr>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-In-Reply-To: <Zm3Y7Fd-Zpga_LAv@landeda>
-References: <20240615091612.9579-1-ju.o@free.fr> <Zm3Y7Fd-Zpga_LAv@landeda>
-User-Agent: Webmail Free/1.6.7
-Message-ID: <bad5f692bff295e22fdebc46c043a661@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1718980821;
- bh=3HGULoiC3bA0su57jY0SZ7HpSrf/6MGVHnv4KYYRlzc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=stpuSyY13lNfr1NFEo5R6ur94e9+0CcNfMGeI5NkVkd7r6jM5GZYKOm47KhIW8fix
- iUMoguOAmV5Ygmp1sTl1aDsMm1d1XmKPqZRZKCjXZTlWxWOq5zkxW/SqdFlKd/ddl5
- 8RzB5dJEY08IovQ6zViEWknkRpiTuYheVq++6r0FgyLarGIDETMF0b9O4eKK+0Z8Wz
- UZThfy+/z2Mp39QQOOJ+S77q/UF8keZvk8jk7OXO1iMMTfBImJJR9Z/z+gwdV8XWfo
- BtPDRuDmTcOEpZOKf4jvfZvRPCFzqgaa//tE0EpnxQRvPHOyQzU2PnbuLBtyBr2jjL
- LCAtdwIUoPydw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=stpuSyY1
-Subject: Re: [Buildroot] [PATCH 1/2] support/testing:
- test_audio_codec_base.py: new helper class
+X-Provags-ID: V03:K1:CJBiJLSdRLc31DtF0PJu4XU3Rg6SjIWJfR++Xbm2QJ51sJMXMlc
+ 4GckT0TdZ5pXGcYUTHbPqSjl3V9LXNNBeB+PKuqoGQ3j7ZPo19T1HpzKc//gL6FxmMDkNMC
+ 949yeqoSZB0k9bKmsIvcGVX/N5Jd+7ZvB7pd9TCwczgQjOB+sDd3Uow87yURRYmgIYDsI8t
+ Vh60kvOKrdyY6lFmKyKNA==
+UI-OutboundReport: notjunk:1;M01:P0:WbQpFbLB7YQ=;H8Px3Wu0Ud3/cX4oXZz3HWlAMg/
+ 2nHNJc928vJWCo3QSyjhmjLQwEbYweU9AmCo4TpJNekOcxtpPeCkaHnp6zaZZ3yQBqSOQG9xb
+ QIF/4lzXGKT17Mgpy7PAu/hHHpl/nziNyw5UA4sPhtJo9t+hM6XK+E73J+NkgaoOezeRhFZM3
+ fnBxwAPzsTxyB1Gp/Cg4aptjZPnmGrUyMWM9adXre91DLtr9+NGhvK3aXP0gWPsDffTPBKNRs
+ dFNCDnGJg7hIIl69GBi8M8drzKXFiV9lQ8t3Z7AblRU5ZDtIadQ8KUNL2V1lC/aal1jxg+PST
+ Z03v92IS/SY/GBf7TKRberd3HYaKmV0iSgISWjbxPE0cdDcPO1qfxlVFSMR67buWU/5ZnHGsD
+ ZIRvOXfNMTZfX6fwQGk4nhcMjWB+c792D1wEW1usxhHE4tJix0nNLgQXmKWMhP4xFOu16MH7S
+ YGfkXDXBSqbk5TJqyOtN3psJ8xTc22lvvSvyGAB/gf0w6cg3LCv/ks4/DXwLkMw8Wap6Skuhk
+ DBepn87mM1c5GqLD2Iippj24DHm+hpy0X90CSGVie8zK+Sr16RoXzossaxYFsTmlHB1T+68Mg
+ GmmtPWEwGGD3pv/u9aKa6mpcX0bHdU9HEWcumQC3pPyCS6PWFQ6Kc0Y3FZSJGNhNFML4i4Nav
+ rQiV4ciQV9F77V+1I0sXIADrLnGxrWnjdVUbzXKenpv0+IMCY7Bk2se7oV2cmT5hnMyaWTVCn
+ UEEMEJROcgKd/ySH35eML1Zu0KycKRnFWl1glypQOZKck7Z3FbaYE8HhFneNjcbflqIWdUSYw
+ VYscCFrSwv9Pl9ei7WyPbe3mBiphBT3e1moHUhuOLCeoc=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.net; 
+ s=s31663417; t=1718984663; x=1719589463; i=ps.report@gmx.net;
+ bh=07XCvtx09Rb7B7jcYC8Z+bFdh6uoP18JgpvQbaJB6VI=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=BfPPNu0vGhUXhdP087zbSeqbLXeVErwmqnu8jYYfbZXhcJNTKWOippL7rjBFl3m2
+ YemTH/fP268fearxk8zqsbxXwOt//ys28tsk8ou6pYP8/l5n0JLEBsiRuo9Y/Rdza
+ Avb3FG58k7E3hvM8rARLxIgUNzKGENruPYy8ttibHXVpwF1bcgs5QlZymYdwq4id4
+ UrfgHh5U55AFCxUHlG6x3Yf555ag9NILmWc3AlWkAUxQ8TIMkge7QmfrGK7+ynXZR
+ saql5VBf1vnrL172cL8Xc2mdEcL/YgarGqN00tFI3l1c3SzvNcPpZdst0ob8/MXvs
+ OA1ZjkTqardoFFGMUg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.net header.i=ps.report@gmx.net header.a=rsa-sha256
+ header.s=s31663417 header.b=BfPPNu0v
+Subject: [Buildroot] [PATCH v1] package/apr: bump version to 1.7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,190 +95,214 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Peter Seiderer via buildroot <buildroot@buildroot.org>
+Reply-To: Peter Seiderer <ps.report@gmx.net>
+Cc: Bernd Kuhls <bernd@kuhls.net>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann, All,
+- remove 0002-Revert-Backport-r1872164.-Fix-the-name-of-libtool-wh.patch and
+  0003-Revert-Add-the-ability-to-cross-compile-APR.patch (cross compile
+  hopefully fixes by upstream commit [1])
 
-On 15/06/2024 18:09, Yann E. MORIN wrote:
-> Julien, All,
-> 
-> On 2024-06-15 11:16 +0200, Julien Olivain spake thusly:
->> This is a helper class providing a template for testing audio codec
->> programs such as lame mp3 encoder, flac tools, ogg vorbis-tools, ...
->> 
->> Signed-off-by: Julien Olivain <ju.o@free.fr>
->> ---
-> [--SNIP--]
->> diff --git a/support/testing/tests/package/test_audio_codec_base.py 
->> b/support/testing/tests/package/test_audio_codec_base.py
->> new file mode 100644
->> index 00000000000..59c7efcad3c
->> --- /dev/null
->> +++ b/support/testing/tests/package/test_audio_codec_base.py
->> @@ -0,0 +1,86 @@
->> +import math
->> +import os
->> +
->> +import infra.basetest
->> +
->> +
->> +class TestAudioCodecBase(infra.basetest.BRTest):
->> +    """Common class to test an audio codec package.
->> +
->> +    This base class builds a Buildroot system image containing the
->> +    package enabled in its config, start the emulator, login to it. 
->> It
->> +    prepares an input test WAV file containing a tone. This WAV file
->> +    is encoded into a new output file in the native encoder format. 
->> It
->> +    is then decoded to a new output WAV file. This final output WAV
->> +    file is checked to contain the expected tone generated in the
->> +    initial input WAV file. There is no specific check about file
->> +    size, nor audio quality. The acceptance criteria is the
->> +    recognition of the tone. Note: the tone generation is made with
->> +    the Sox package, and the tone recognition is made with the Aubio
->> +    package.
->> +
->> +    Each test case that inherits from this class must have:
->> +    __test__ = True  - to let nose2 know that it is a test case
-> 
-> If the class name does not stat with "Test", then nose2 will not
-> consider it a test case, it would not be necxessary to set __test__ =
-> False here, and rely on inheriters to set it.
-> 
-> I see that there are many such cases already in the tree, but I don;t
-> think we should continue in that direction.
-> 
-> Maybe just name this base calss as such:
-> 
->     class BaseAudioCodec(infra.basetest.BRTest):
-> 
-> But see below: I think we should consider it a test by itself: it
-> validates that the sox-aubio combo does work as expected.
+For details see [2].
 
-Renaming the "test_audio_codec_base.py" file to "audio_codec_base.py",
-and the "TestAudioCodecBase" class to "AudioCodecBase" will not
-prevent the test to be discovered by Nose2. This will prevent the file
-and class to be selected at first. But if "__test__ = False" is not
-present, it will still be indirectly loaded from the TestLame
-import. This can be seen by adding "--log-level debug" in nose2
-arguments.
+[1] https://github.com/apache/apr/commit/130cf8cb3c6fe713095e560ade1df050aa2a6a14
+[2] https://downloads.apache.org/apr/CHANGES-APR-1.7
 
-While I do agree we could rename the file and class to better show the
-intent this is an "abstract" class which does not include a test, I
-think the "__test__ = False" needs to stay here to really prevent it
-being loaded.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...r1872164.-Fix-the-name-of-libtool-wh.patch |  30 -----
+ ...Add-the-ability-to-cross-compile-APR.patch | 112 ------------------
+ package/apr/apr.hash                          |   4 +-
+ package/apr/apr.mk                            |   2 +-
+ 4 files changed, 3 insertions(+), 145 deletions(-)
+ delete mode 100644 package/apr/0002-Revert-Backport-r1872164.-Fix-the-name-of-libtool-wh.patch
+ delete mode 100644 package/apr/0003-Revert-Add-the-ability-to-cross-compile-APR.patch
 
-I'm not sure Nose2 was initially designed to support class hierarchy
-like this. Nose2 has helpers to generate test case layers:
-https://docs.nose2.io/en/latest/such_dsl.html
-https://docs.nose2.io/en/latest/plugins/layers.html
+diff --git a/package/apr/0002-Revert-Backport-r1872164.-Fix-the-name-of-libtool-wh.patch b/package/apr/0002-Revert-Backport-r1872164.-Fix-the-name-of-libtool-wh.patch
+deleted file mode 100644
+index f80db1cb6b..0000000000
+--- a/package/apr/0002-Revert-Backport-r1872164.-Fix-the-name-of-libtool-wh.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 0aa7e33372b479a26e5f04dfc4801e24573a8737 Mon Sep 17 00:00:00 2001
+-From: Graham Leggett <minfrin@apache.org>
+-Date: Wed, 1 Jan 2020 10:43:39 +0000
+-Subject: [PATCH] Revert: Backport r1872164. Fix the name of libtool when
+- cross compiling.
+-
+-git-svn-id: https://svn.apache.org/repos/asf/apr/apr/branches/1.7.x@1872165 13f79535-47bb-0310-9956-ffa450edef68
+-
+-[Revert upstream commit https://github.com/apache/apr/commit/f82374627b3a6500a7a6cb11e48bcac59bcbb6a1]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- apr-config.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/apr-config.in b/apr-config.in
+-index bed47ca..4873fc0 100644
+---- a/apr-config.in
+-+++ b/apr-config.in
+-@@ -246,7 +246,7 @@ while test $# -gt 0; do
+-     if test "$location" = "installed"; then
+-         echo "${installbuilddir}/libtool"
+-     elif test "$location" = "crosscompile"; then
+--        echo "$APR_TARGET_DIR/${installbuilddir}/libtool"
+-+        echo "$APR_TARGET_DIR/${installbuilddir}/build"
+-     else
+-         echo "$APR_BUILD_DIR/libtool"
+-     fi
+--- 
+-2.39.2
+-
+diff --git a/package/apr/0003-Revert-Add-the-ability-to-cross-compile-APR.patch b/package/apr/0003-Revert-Add-the-ability-to-cross-compile-APR.patch
+deleted file mode 100644
+index ad250d4427..0000000000
+--- a/package/apr/0003-Revert-Add-the-ability-to-cross-compile-APR.patch
++++ /dev/null
+@@ -1,112 +0,0 @@
+-From ed1daed074fba0dabff825e63525d751b6bb7b8d Mon Sep 17 00:00:00 2001
+-From: Graham Leggett <minfrin@apache.org>
+-Date: Tue, 31 Dec 2019 21:26:02 +0000
+-Subject: [PATCH] Revert: Add the ability to cross compile APR.
+-
+-git-svn-id: https://svn.apache.org/repos/asf/apr/apr/branches/1.7.x@1872147 13f79535-47bb-0310-9956-ffa450edef68
+-
+-[Revert upstream commit https://github.com/apache/apr/commit/b6dbbc77da35a7b46754c99f465827f2a583e23c]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- CHANGES       |  2 --
+- apr-config.in | 22 ----------------------
+- 2 files changed, 24 deletions(-)
+-
+-diff --git a/CHANGES b/CHANGES
+-index 71b2f0e..e751c90 100644
+---- a/CHANGES
+-+++ b/CHANGES
+-@@ -56,8 +56,6 @@ Changes for APR 1.7.1
+-   *) Don't try to use PROC_PTHREAD by default when cross compiling.
+-      [Yann Ylavic]
+- 
+--  *) Add the ability to cross compile APR. [Graham Leggett]
+--
+-   *) While cross-compiling, the tools/gen_test_char could not
+-      be executed at build time, use AX_PROG_CC_FOR_BUILD to
+-      build native tools/gen_test_char
+-diff --git a/apr-config.in b/apr-config.in
+-index 4873fc0..84b4073 100644
+---- a/apr-config.in
+-+++ b/apr-config.in
+-@@ -48,14 +48,6 @@ APR_LIBNAME="@APR_LIBNAME@"
+- # NOTE: the following line is modified during 'make install': alter with care!
+- location=@APR_CONFIG_LOCATION@
+- 
+--# absolute path, but not installed path - we're cross compiling
+--case "$0" in
+--  "${bindir}/"*) ;;
+--  "/"*)         location=crosscompile;
+--                APR_TARGET_DIR=${0%${bindir}/apr-${APR_MAJOR_VERSION}-config} ;;
+--  *)            ;;
+--esac
+--
+- show_usage()
+- {
+-     cat << EOF
+-@@ -101,8 +93,6 @@ fi
+- 
+- if test "$location" = "installed"; then
+-     LA_FILE="$libdir/lib${APR_LIBNAME}.la"
+--elif test "$location" = "crosscompile"; then
+--    LA_FILE="$APR_TARGET_DIR/$libdir/lib${APR_LIBNAME}.la"
+- else
+-     LA_FILE="$APR_BUILD_DIR/lib${APR_LIBNAME}.la"
+- fi
+-@@ -132,8 +122,6 @@ while test $# -gt 0; do
+-     --includedir)
+-     if test "$location" = "installed"; then
+-         flags="$includedir"
+--    elif test "$location" = "crosscompile"; then
+--        flags="$APR_TARGET_DIR/$includedir"
+-     elif test "$location" = "source"; then
+-         flags="$APR_SOURCE_DIR/include"
+-     else
+-@@ -166,8 +154,6 @@ while test $# -gt 0; do
+-     --includes)
+-     if test "$location" = "installed"; then
+-         flags="$flags -I$includedir $EXTRA_INCLUDES"
+--    elif test "$location" = "crosscompile"; then
+--        flags="$flags -I$APR_TARGET_DIR/$includedir $EXTRA_INCLUDES"
+-     elif test "$location" = "source"; then
+-         flags="$flags -I$APR_SOURCE_DIR/include $EXTRA_INCLUDES"
+-     else
+-@@ -182,8 +168,6 @@ while test $# -gt 0; do
+-     --installbuilddir)
+-     if test "$location" = "installed"; then
+-         echo "${installbuilddir}"
+--    elif test "$location" = "crosscompile"; then
+--        echo "$APR_TARGET_DIR/${installbuilddir}"
+-     elif test "$location" = "source"; then
+-         echo "$APR_SOURCE_DIR/build"
+-     else
+-@@ -200,8 +184,6 @@ while test $# -gt 0; do
+-     if test "$location" = "installed"; then
+-         ### avoid using -L if libdir is a "standard" location like /usr/lib
+-         flags="$flags -L$libdir -l${APR_LIBNAME}"
+--    elif test "$location" = "crosscompile"; then
+--        flags="$flags -L$APR_TARGET_DIR/$libdir -l${APR_LIBNAME}"
+-     else
+-         ### this surely can't work since the library is in .libs?
+-         flags="$flags -L$APR_BUILD_DIR -l${APR_LIBNAME}"
+-@@ -219,8 +201,6 @@ while test $# -gt 0; do
+-         # Since the user is specifying they are linking with libtool, we
+-         # *know* that -R will be recognized by libtool.
+-         flags="$flags -L$libdir -R$libdir -l${APR_LIBNAME}"
+--    elif test "$location" = "crosscompile"; then
+--        flags="$flags  -L${APR_TARGET_DIR}/$libdir  -l${APR_LIBNAME}"
+-     else
+-         flags="$flags $LA_FILE"
+-     fi
+-@@ -245,8 +225,6 @@ while test $# -gt 0; do
+-     --apr-libtool)
+-     if test "$location" = "installed"; then
+-         echo "${installbuilddir}/libtool"
+--    elif test "$location" = "crosscompile"; then
+--        echo "$APR_TARGET_DIR/${installbuilddir}/build"
+-     else
+-         echo "$APR_BUILD_DIR/libtool"
+-     fi
+--- 
+-2.39.2
+-
+diff --git a/package/apr/apr.hash b/package/apr/apr.hash
+index 96f43d3710..66a183c11d 100644
+--- a/package/apr/apr.hash
++++ b/package/apr/apr.hash
+@@ -1,4 +1,4 @@
+-# From https://archive.apache.org/dist/apr/apr-1.7.2.tar.bz2.sha256
+-sha256  75e77cc86776c030c0a5c408dfbd0bf2a0b75eed5351e52d5439fa1e5509a43e  apr-1.7.2.tar.bz2
++# From https://archive.apache.org/dist/apr/apr-1.7.4.tar.bz2.sha256
++sha256  fc648de983f3a2a6c9e78dea1f180639bd2fad6c06d556d4367a701fe5c35577  apr-1.7.4.tar.bz2
+ # Locally calculated
+ sha256  f854aeef66ecd55a126226e82b3f26793fc3b1c584647f6a0edc5639974c38ad  LICENSE
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index cb8c12dd65..4eb6eb12ad 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APR_VERSION = 1.7.2
++APR_VERSION = 1.7.4
+ APR_SOURCE = apr-$(APR_VERSION).tar.bz2
+ APR_SITE = https://archive.apache.org/dist/apr
+ APR_LICENSE = Apache-2.0
+-- 
+2.45.2
 
-
-> [--SNIP--]
->> +    def encode_test(self, input_filename):
->> +        msg = "method must be implemented in derived class"
->> +        raise NotImplementedError(msg)
-> 
-> I am not python expert, but I think that would be better handled by an
-> "ABC", and Abstract Base Class 
-> (https://docs.python.org/3/library/abc.html),
-> which I think would look like:
-> 
->     import abc
->     class BaseAudioCodec(abc.ABC):
->         @abc.abstractmethod
->         def encode_test(self, input_filename):
->             ...
-> 
-> Note that the ellipsis is really a real ellipsis, not a placeholder 
-> (see
-> https://docs.python.org/3/reference/datamodel.html#ellipsis).
-> 
-> But as I suggested above, we should just make this class a proper test,
-> and have empty encode() and decode() functions.
-> 
-> It would validate that the tone generated by sox can be decoded by
-> aubio.
-
-Regarding the use of "abc", I initially though and tried to use
-it. The base class need to inherit from both abc.ABC and
-infra.basetest.BRTest. Doing so makes Nose2 fail in test discovery
-(probably because it tries to instantiate it). For example, running:
-
-     support/testing/run-tests -l ...
-
-fails with output:
-
-     TypeError: Can't instantiate abstract class AudioCodecBase without 
-an implementation for abstract methods 'decode_test', 'encode_test'
-
-The error happen even if files/classes are not beginning by "Test",
-and the abstract class has "__test__ = False". Directly calling a
-test works, though.
-
-Disregarding the use of ABC or "raise NotImplementedError()", I still
-think the class should remain "abstract". The purpose is to catch
-forgotten implementations of encode_test()/decode_test() in new test
-cases.
-
-I agree the base class audio codec sequence, relying on sox and aubio
-_could_ be tested in itself, with a "null" or "passthough" codec,
-emulated with cp/mv commands. I think we can do that by adding a new
-test inheriting from the base abstract class. We could argue that a
-problem in this sox/aubio sequence could be detected in any test (if
-not all) using this base class. The reason I did not included this is
-because this test takes some time to compile and run, due to the
-presence of the target Python. I also think child classes will cover
-for most issues in this base class.
-
-If you think this base class test is not needed, I believe the series
-can be applied as is.
-
-If you think the base class still need to be self-tested, I can send a
-v2 with the following changes:
-- rename the "TestAudioCodecBase" class to "AudioCodecBase",
-- add a new "TestAudioCodecBase" class for testing "AudioCodecBase"
-   using cp/mv as a "null codec", in test_audio_codec_base.py.
-
-This means that such a v2 would:
-- keep the file name as test_audio_codec_base.py,
-- keep __test__ = False/True,
-- keep the "raise NotImplementedError()" (i.e don't use abc.ABC)
-
-In the long term, we could also:
-- improve or propose changes in Nose2 to handle or exclude abstract
-   classes,
-- switch to another test framework, there was a proposal for pytest
-   in:
-https://patchwork.ozlabs.org/project/buildroot/patch/20221021091531.2989489-2-oguz.ozhan@mind.be/
-- ...
-
-What to you think?
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___        
->        |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There 
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   
-> conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
