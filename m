@@ -4,77 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1945EC27C4F
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 19:59:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C189C2BB85
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 20:07:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C72564090C;
-	Fri, 21 Jun 2024 19:58:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1DCB42AEB;
+	Fri, 21 Jun 2024 20:07:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xsnxdvJEVJ5V; Fri, 21 Jun 2024 19:58:58 +0000 (UTC)
+ id xaAy5iIDu06t; Fri, 21 Jun 2024 20:07:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80F2D40636
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C035842A83
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80F2D40636;
-	Fri, 21 Jun 2024 19:58:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EAADA1BF228
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 19:58:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C035842A83;
+	Fri, 21 Jun 2024 20:07:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 776971BF344
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 20:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D69264011D
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 19:58:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 708F584263
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 20:07:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KgYmkkHFhzCW for <buildroot@lists.busybox.net>;
- Fri, 21 Jun 2024 19:58:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gGITb9FaSCAq for <buildroot@lists.busybox.net>;
+ Fri, 21 Jun 2024 20:07:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 71D84400C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71D84400C6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 40EDE8425F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40EDE8425F
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 71D84400C6
- for <buildroot@buildroot.org>; Fri, 21 Jun 2024 19:58:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 40EDE8425F
+ for <buildroot@buildroot.org>; Fri, 21 Jun 2024 20:07:51 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 659DC13F8C6;
- Fri, 21 Jun 2024 21:58:50 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2905313FB05;
+ Fri, 21 Jun 2024 22:07:46 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 21 Jun 2024 21:58:50 +0200
-Date: Fri, 21 Jun 2024 21:58:50 +0200
+ Fri, 21 Jun 2024 22:07:45 +0200
+Date: Fri, 21 Jun 2024 22:07:45 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <ZnXbepvruXKajEcz@landeda>
-References: <cover.1718382114.git.yann.morin.1998@free.fr>
- <185f954c798e7d8e7e1400a8b39abe1b273e849b.1718382114.git.yann.morin.1998@free.fr>
- <CADvTj4p=iYe8wK4UMnvCSmsV02JesvY9BWQDZOfcbV_PeSAkNQ@mail.gmail.com>
- <Zm9KqRyiYxLxVfwy@landeda>
- <CADvTj4r+O-RTMRMTSWmhW-Tb1UThcjsRM0mA1=H0DsNM3cGuTg@mail.gmail.com>
+To: Marcus Hoffmann <buildroot@bubu1.eu>
+Message-ID: <ZnXdkRHE-kUQb-xg@landeda>
+References: <20240617180157.3771298-1-a.wellbrock@mailbox.org>
+ <1014df63-f67d-45fd-9f9e-95ee1a17bd10@bubu1.eu>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <CADvTj4r+O-RTMRMTSWmhW-Tb1UThcjsRM0mA1=H0DsNM3cGuTg@mail.gmail.com>
+In-Reply-To: <1014df63-f67d-45fd-9f9e-95ee1a17bd10@bubu1.eu>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1718999932;
- bh=aO1EYaTMg2jtUXNJS0k9nzbzj4gxaF8aR69Vnd8R6Ro=;
+ d=free.fr; s=smtp-20201208; t=1719000470;
+ bh=dX1v/HSLgiu0ic9cZHgqpp/yu2OMb5jNxXSYgqLalSw=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qmOImL/oWoNbmLLq6geV1J6mCcaTP1zUWy6bJ7NxG8sCLGINtKle4fyjxuvQ217tx
- JV3gRVHsCNZLcg7/G4l7T9KxU0YyIDqH5ZotTplRZ6uPON+IMJOhyKMrWTy63L2lMO
- GOOt3mmzJQhYm90RKM+9zKSJx2TNoVCacrFd5Pu+q3oMs365SVnXRFRNfGmB15VAS6
- mem9iKGsAQyALiuZBQvIxzKQ2sdLt6MPIHd8NS0rB3y9J0FIULNo/oI5zFa+ua2Z8R
- WojyT2FY4Um7oK7dCeHnYXbnJhPAuFpP/8geDoji5E/kpPzaS/LaY4EuDI9RkXFH5L
- R3wK+gBW1B6ZQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=lpwGKgWrWxjO2oKiFHKRYeD5OhnBilJl48mQuUfI4WSzxGJeiAvCv9qr3kMA1HOsC
+ j+kiphuHc0ut1wi3mtrqSgvSeWznfVPSjz0Wdemw1AeoQJ7ZfHM/wXV94CoLGWyccf
+ c7F0QqcJGXPD4ZIngW6vUzWXnb1oTyCD8e17aok2Ebdij/Nn3Mivalr+PLe76IFkls
+ bOjRQnyxLVVtpwSPoLvTUC0oQYP3GAn6rxt1ePLN29hiQqtOE4AA6HXfZYLrOMg3JL
+ QYBDwm8T5zeW7BvQWZrBxKnDZAv8EYiiCd7tMBzQAOIPtL5O1cbLTF3pt6IiC6n3fb
+ 0QmyFtC+eQvqg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=qmOImL/o
-Subject: Re: [Buildroot] [PATCH 2/6] utils/update-rust: add script to
- automatically update the rust version
+ header.s=smtp-20201208 header.b=lpwGKgWr
+Subject: Re: [Buildroot] [PATCH 1/1] package/c-ares: update site url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,56 +82,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: alex <alexander.wellbrock@othermo.de>, a.wellbrock@mailbox.org,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+Marcus, Alex, All,
 
-On 2024-06-20 12:13 -0600, James Hilliard spake thusly:
-[--SNIP--]
-> I don't think there's really any meaningful advantage to requests vs
-> urllib.request.urlopen which is part of the standard library for this
-> particular use case.
+On 2024-06-18 12:08 +0200, Marcus Hoffmann via buildroot spake thusly:
+> On 17.06.24 20:01, Alexander Wellbrock via buildroot wrote:
+> > From: alex <alexander.wellbrock@othermo.de>
+> > Download URLs changed after hosting of the c-ares website changed
+> > ownership:
+> > https://daniel.haxx.se/blog/2024/06/06/bye-bye-hosting-c-ares-web/
+> > 
+> > This cannot be fixed upstream as github pages does not support .htaccess
+> > files according to:
+> > https://github.com/c-ares/c-ares.github.io/issues/2
+> > 
+> > Signed-off-by: Alexander Wellbrock <a.wellbrock@mailbox.org>
+> > ---
+> >   package/c-ares/c-ares.mk | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+> > index c4441255a2..a75a40da70 100644
+> > --- a/package/c-ares/c-ares.mk
+> > +++ b/package/c-ares/c-ares.mk
+> > @@ -5,7 +5,7 @@
+> >   ################################################################################
+> >   C_ARES_VERSION = 1.27.0
+> > -C_ARES_SITE = http://c-ares.haxx.se/download
+> > +C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/cares-1_27_0
+> 
+> Sorry, I missed that yesterday, this should use the github site helper macro
+> like this:
+> C_ARES_SITE = $(call github,c-ares,c-ares,v$(C_ARES_VERSION))
 
-requests.get() is shorter! ;-)
-
-So, I ended up keeping use of requests. This script is not part of the
-build process; it is jus ta helper script, so it is acceptable that we
-depend on a non-stdlib module, especialy such a widely available one as
-requests is.
-
-> >     os.path.basename(mk_file)[:-3].upper().replace("-", "_") + "_VERSION"
-> >     pathlib.Path(mk_file).name[:-3].upper().replace("-", "_") + "_VERSION"
-> > One char longer... ;-)
-> pathlib.Path(mk_file).stem.upper().replace("-", "_") + "_VERSION"
-> Four characters shorter. ;-)
-
-OK, you win. ;-)
-
-I used that in the final script.
-
-[--SNIP--]
-> > Is that really important that the script can be run from anywhere? I
-> > don't think so. I can however add a check that the files we want to
-> > generate and tweak do already exist, though; that's a good point.
-> I'm not sure, but it should be pretty easy to implement, may also
-> want to use pathlib types here.
-
-I wanted to keep the script as simple-stupid as possible. Requiring that
-it be run from Buildroot's top dir is not too strong a limitation, and
-adding support for running from anywhere would just add more complexity
-(evenm if not too much). So, I erred on the simplicity side, and just
-catches the case where a file is not found, assuming then that we're not
-running from the top dir.
-
-Thank you for the review in any case, it is always interesting to be
-challenged and to explain the choices. Thanks!
+Actually, that's not the case in this situation: the maintainers have
+uploaded their release tarball, so that's what we want to use; see the
+manual, section 18.25.4. How to add a package from GitHub. So Wat Alex
+did is correct.
 
 Regards,
 Yann E. MORIN.
+
+> With the additional benefit of not having to change the SITE variable for
+> every version again here.
+> 
+> >   C_ARES_INSTALL_STAGING = YES
+> >   C_ARES_CONF_OPTS = --with-random=/dev/urandom
+> >   C_ARES_LICENSE = MIT
+> 
+> 
+> Marcus
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
