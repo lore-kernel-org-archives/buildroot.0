@@ -4,67 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCD13C27C4F
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 21:09:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0FB2C27C4F
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 21:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C7B482092;
-	Fri, 21 Jun 2024 21:09:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E75383B34;
+	Fri, 21 Jun 2024 21:09:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y1gT_5Omrd10; Fri, 21 Jun 2024 21:09:29 +0000 (UTC)
+ id bMwayNF4Ub_G; Fri, 21 Jun 2024 21:09:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B2FD820B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66FA783B45
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B2FD820B0;
-	Fri, 21 Jun 2024 21:09:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 27D4E1BF834
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:09:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66FA783B45;
+	Fri, 21 Jun 2024 21:09:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CDE7A1BF834
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:09:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1112E4090C
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:09:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BAA23401E1
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:09:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RZVm20zzDXa7 for <buildroot@lists.busybox.net>;
- Fri, 21 Jun 2024 21:09:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B415540693
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B415540693
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B415540693
- for <buildroot@buildroot.org>; Fri, 21 Jun 2024 21:09:25 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 009C6B0053E;
- Fri, 21 Jun 2024 23:09:17 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 21 Jun 2024 23:09:04 +0200
-Message-ID: <20240621210904.319172-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uNmLgaHL2qr1 for <buildroot@lists.busybox.net>;
+ Fri, 21 Jun 2024 21:09:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 61D5E40153
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61D5E40153
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 61D5E40153
+ for <buildroot@buildroot.org>; Fri, 21 Jun 2024 21:09:49 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-42122ac2f38so14605075e9.1
+ for <buildroot@buildroot.org>; Fri, 21 Jun 2024 14:09:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1719004187; x=1719608987;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=bSZtzbmiD5IQFqrOu9sdZ2+HF+1TamHA1ZjJ/pG8/nU=;
+ b=LGGUj4XOCLzxXmgY0OcJE8llY7WmhwDroLeJIrED/bk5mU58g7Ter3VJSL4MwP9RBq
+ xCGjjI5cM0GDOXiqe8k1RuWFTlu47oxnjd/V2v+oBg2nCYi2Yui9UnGBp/jiDaOghd3y
+ TLD0JSC12paw0wzMthK0jGCMGYL2/Qqn9IqLtBnVqu9jEX2WHwW6Q2KVJ2KTSlzSGvCy
+ SVgR+UZ1BrnOQyM+qQs4OV+XpTZ+7kHbWtNFTqoufS8ZgRh549d9e5leSxLkRpxpxPCQ
+ f+j8Jpm4+R11AJwzRMDI4rsILT84OaZb5pyt7qiZFhMuG3Msx3udycOhPJZoI+lh1kBJ
+ aHLw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCX+h51CifKTyungxyoOUBranH4ao7DzXgklthijJy8edGhvgJvFUf2lInxooeZ3/jemfGqCb9Q9QYpNhTcxi0HyZzuEdWB19w==
+X-Gm-Message-State: AOJu0Yw73jcg9F6RzzE87jZUo3Gj3sFoquUQsB8RdMzpuYnNHGJsqSN9
+ mGm8q6as/GfZu/cvBExweD0C2QDzGutcxdDuQgLojfu7WPHqXw+SEgLnGA4dAoU=
+X-Google-Smtp-Source: AGHT+IFV2/bc467XTl7XsqXRTx1QpezRqVRb2BsNM5J/4EWaV5VWzHdawbBktXSgePRWNQ22pMD8ew==
+X-Received: by 2002:a05:600c:45d0:b0:421:741d:5c31 with SMTP id
+ 5b1f17b1804b1-42486346458mr6677495e9.15.1719004187325; 
+ Fri, 21 Jun 2024 14:09:47 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4247d0bea05sm79666815e9.18.2024.06.21.14.09.46
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 21 Jun 2024 14:09:46 -0700 (PDT)
+Message-ID: <e72e7d50-c1a1-41a6-aa10-36bddaaac66b@mind.be>
+Date: Fri, 21 Jun 2024 23:09:44 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1719004162;
- bh=PdEftHefDN7mYOorI4y5amvO+8+yRGAScn3vZpaulPI=;
- h=From:To:Cc:Subject:Date:From;
- b=HB+deTvtjH/flyXWpw9cXYkkoYtj6kEveH0+GRkUZ9N63v7aER56RH8U86txP5yVg
- 1khJvvJ+TyHeqkg3ToPrEXBe8jPGJ0p/i88hQyRXZYp9Zi1Otw5viC2a0uV6+IlS7w
- 9w2CxWCD3CZTaMU2f8wmfTcPPYWtL5npbEyjkVN0I0REaS2M6Mx8CE6Pww0eEfiumg
- bPNMPCFCCftQEZS8jRSUXWNMuhn8ye/pbfvWcf8+yZDNor+G0jfX7VfXgKgjKL7ZjU
- O1HqTiaG1uOYCfym59pXd5RtqLlK0VHYrgy1EWNVTxXihQfRJ6b6Mf8AONOXdOruv+
- LSoTJGrTyrULw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=HB+deTvt
-Subject: [Buildroot] [PATCH 1/1] package/python-pyalsa: bump to version
- 1.2.12
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ buildroot@buildroot.org
+References: <20240522144211.464748-1-vincent.stehle@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20240522144211.464748-1-vincent.stehle@arm.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1719004187; x=1719608987; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=bSZtzbmiD5IQFqrOu9sdZ2+HF+1TamHA1ZjJ/pG8/nU=;
+ b=cSwzmCRWpDB8+4QpqdN/fPRDpY8OtWJaOTh0Gi+WfLDwTtjJZcsfdUSoltKrutTb0D
+ rRuuvxYiJ+1JuRDpnrBY7oODP7Ipx9mlRqUen/9AQJTV9ez3KeE2bGOsZIv6dceFdcQc
+ CHiqnjUqZYqwh0WxoxQhMdnka0nT283IKA3sUgpSoGmK72I8rJVmQMakEoRD0Npck1qW
+ sE+Nb8xmgRsd9C+CAs5R3kSFhKSbxU7InKUPEd5D99eG9tQh6otlwc3S9203spljyYGF
+ Slf/Hl6pV5Jg2hc2exNSRUnapIUl4icR6nPJ4Dwwm04w4Joz4p8Ro6Ul1DpdRXJ/KKn9
+ qYLg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=cSwzmCRW
+Subject: Re: [Buildroot] [PATCH] configs/arm_foundationv8_defconfig: bump to
+ Linux 6.8.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,65 +108,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, James Hilliard <james.hilliard1@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 1.2.7, see:
-- https://github.com/alsa-project/alsa-python/releases/tag/v1.2.12
-
-This commit also adds a comment about the pgp signature check in the
-hash file.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on branch master at commit 4ae18c5 with commands:
-
-    utils/docker-run make check-package
-    ...
-    0 warnings generated
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_python_pyalsa
-    ...
-    OK
----
- package/python-pyalsa/python-pyalsa.hash | 6 ++++--
- package/python-pyalsa/python-pyalsa.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/python-pyalsa/python-pyalsa.hash b/package/python-pyalsa/python-pyalsa.hash
-index d4cfe0d61f8..206107d29ad 100644
---- a/package/python-pyalsa/python-pyalsa.hash
-+++ b/package/python-pyalsa/python-pyalsa.hash
-@@ -1,2 +1,4 @@
--# Locally computed
--sha256  67d8f99f1ccf23e7ebdfa2c3be0b09f147949fd9511d1e6748b7f412ef046e1f  pyalsa-1.2.7.tar.bz2
-+# Locally computed, after checking pgp signature from:
-+# https://www.alsa-project.org/files/pub/pyalsa/pyalsa-1.2.12.tar.bz2.sig
-+# with key F04DF50737AC1A884C4B3D718380596DA6E59C91
-+sha256  8abeaf41e5f48f617a52d1078932da89ab303d4a1d8f9919f947bdb1b7d03f50  pyalsa-1.2.12.tar.bz2
-diff --git a/package/python-pyalsa/python-pyalsa.mk b/package/python-pyalsa/python-pyalsa.mk
-index 1661fe47b49..19d2c91d237 100644
---- a/package/python-pyalsa/python-pyalsa.mk
-+++ b/package/python-pyalsa/python-pyalsa.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_PYALSA_VERSION = 1.2.7
-+PYTHON_PYALSA_VERSION = 1.2.12
- PYTHON_PYALSA_SOURCE = pyalsa-$(PYTHON_PYALSA_VERSION).tar.bz2
- PYTHON_PYALSA_SITE = https://www.alsa-project.org/files/pub/pyalsa
- PYTHON_PYALSA_SETUP_TYPE = setuptools
--- 
-2.45.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyMi8wNS8yMDI0IDE2OjQyLCBWaW5jZW50IFN0ZWhsw6kgd3JvdGU6Cj4gLSBCdW1wIExp
+bnV4IGtlcm5lbCB0byB2Ni44LjEwLgo+IC0gQnVtcCB0aGUgRlZQIGluIHRoZSByZWFkbWUgdG8g
+dmVyc2lvbiAxMS4yNSBidWlsZCAxNS4KCiAgQ291bGQgeW91IHBsZWFzZSBhbHNvIGFkZCBhIGhh
+c2ggZmlsZSBmb3IgdGhlIGN1c3RvbSBrZXJuZWwgdmVyc2lvbj8gWW91IGNhbiAKdXNlIHV0aWxz
+L2FkZC1jdXN0b20taGFzaGVzLgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAKPiBTaWduZWQtb2Zm
+LWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+Cj4gQ2M6IE1hc2Fo
+aXJvIFlhbWFkYSA8eWFtYWRhLm1hc2FoaXJvQHNvY2lvbmV4dC5jb20+Cj4gLS0tCj4gICBib2Fy
+ZC9hcm0vZm91bmRhdGlvbi12OC9yZWFkbWUudHh0IHwgMiArLQo+ICAgY29uZmlncy9hcm1fZm91
+bmRhdGlvbnY4X2RlZmNvbmZpZyB8IDYgKysrLS0tCj4gICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5z
+ZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvYXJtL2Zv
+dW5kYXRpb24tdjgvcmVhZG1lLnR4dCBiL2JvYXJkL2FybS9mb3VuZGF0aW9uLXY4L3JlYWRtZS50
+eHQKPiBpbmRleCBjYjBmZTA4Yjg3Li43MDFjZjNjZWIwIDEwMDY0NAo+IC0tLSBhL2JvYXJkL2Fy
+bS9mb3VuZGF0aW9uLXY4L3JlYWRtZS50eHQKPiArKysgYi9ib2FyZC9hcm0vZm91bmRhdGlvbi12
+OC9yZWFkbWUudHh0Cj4gQEAgLTMsNyArMyw3IEBAIEFSTSBzb2Z0d2FyZSBzaW11bGF0b3Igb2Yg
+dGhlIEFBcmNoNjQgYXJjaGl0ZWN0dXJlLgo+ICAgCj4gICBGaXJzdCwgb25lIGhhcyB0byBkb3du
+bG9hZCB0aGUgQUFyY2g2NCBzb2Z0d2FyZSBzaW11bGF0b3IgZnJvbToKPiAgIAo+IC0gIGh0dHBz
+Oi8vYXJta2VpbC5ibG9iLmNvcmUud2luZG93cy5uZXQvZGV2ZWxvcGVyL0ZpbGVzL2Rvd25sb2Fk
+cy9lY29zeXN0ZW0tbW9kZWxzL0ZvdW5kYXRpb25fUGxhdGZvcm1fMTEuMjBfMTVfTGludXg2NC50
+Z3oKPiArICBodHRwczovL2RldmVsb3Blci5hcm0uY29tLy0vbWVkaWEvRmlsZXMvZG93bmxvYWRz
+L2Vjb3N5c3RlbS1tb2RlbHMvRk1fMTFfMjUvRm91bmRhdGlvbl9QbGF0Zm9ybV8xMS4yNV8xNV9M
+aW51eDY0LnRnego+ICAgCj4gICBUaGVuLCB1c2UgdGhlIGFybV9mb3VuZGF0aW9udjhfZGVmY29u
+ZmlnIGNvbmZpZ3VyYXRpb24gdG8gYnVpbGQgeW91cgo+ICAgQnVpbGRyb290IHN5c3RlbS4KPiBk
+aWZmIC0tZ2l0IGEvY29uZmlncy9hcm1fZm91bmRhdGlvbnY4X2RlZmNvbmZpZyBiL2NvbmZpZ3Mv
+YXJtX2ZvdW5kYXRpb252OF9kZWZjb25maWcKPiBpbmRleCAxMDJmZThmZDA5Li5kNTM5ZDBiNzMx
+IDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3MvYXJtX2ZvdW5kYXRpb252OF9kZWZjb25maWcKPiArKysg
+Yi9jb25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVmY29uZmlnCj4gQEAgLTEsMTAgKzEsMTAgQEAK
+PiAgIEJSMl9hYXJjaDY0PXkKPiAtIyBMaW51eCBoZWFkZXJzIHNhbWUgYXMga2VybmVsLCBhIDYu
+MSBzZXJpZXMKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE9eQo+
+ICsjIExpbnV4IGhlYWRlcnMgc2FtZSBhcyBrZXJuZWwsIGEgNi44IHNlcmllcwo+ICtCUjJfUEFD
+S0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfOD15Cj4gICBCUjJfVEFSR0VUX0dFTkVS
+SUNfR0VUVFlfUE9SVD0idHR5QU1BMCIKPiAgIEJSMl9MSU5VWF9LRVJORUw9eQo+ICAgQlIyX0xJ
+TlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZF
+UlNJT05fVkFMVUU9IjYuMS4xMyIKPiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9W
+QUxVRT0iNi44LjEwIgo+ICAgQlIyX0xJTlVYX0tFUk5FTF9VU0VfQVJDSF9ERUZBVUxUX0NPTkZJ
+Rz15Cj4gICBCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPiAgIEJSMl9MSU5VWF9LRVJO
+RUxfSU5UUkVFX0RUU19OQU1FPSJhcm0vZm91bmRhdGlvbi12OC1naWN2My1wc2NpIgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
