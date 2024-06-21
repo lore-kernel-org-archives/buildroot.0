@@ -4,93 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7032C2BB85
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 16:11:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FAA9C27C4F
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 19:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87CFA45A57;
-	Fri, 21 Jun 2024 16:11:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D849409C8;
+	Fri, 21 Jun 2024 19:11:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eZu3U1Q6WGoS; Fri, 21 Jun 2024 16:11:22 +0000 (UTC)
+ id YD0jZtebr1eX; Fri, 21 Jun 2024 19:11:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5935C45BE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B51C6409C9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5935C45BE9;
-	Fri, 21 Jun 2024 16:11:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 422C41BF232
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 16:11:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B51C6409C9;
+	Fri, 21 Jun 2024 19:11:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 886761BF59A
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 19:11:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 279888486D
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 16:11:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82213409E4
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 19:11:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sfQuZHi7c-F1 for <buildroot@lists.busybox.net>;
- Fri, 21 Jun 2024 16:11:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0324984326
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0324984326
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0324984326
- for <buildroot@buildroot.org>; Fri, 21 Jun 2024 16:11:04 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-362bc731810so1984391f8f.1
- for <buildroot@buildroot.org>; Fri, 21 Jun 2024 09:11:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1718986262; x=1719591062;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=t4zwgpZCPj7Dee+tJiG+ItzrV6SyfSs41zr7fma1DVA=;
- b=oez5y5izTI5b4YZMTvoJ4Dpa0vSsL9qhWREEbzFob+h5Z/VhTWBo5usVPs9lrmG3bR
- vz1Acb/qSYkQT/1xkitwp0v35P2miA5FdScpYAkS1SjlFeEjKwVMGEmW4R8GN4M4IRjA
- Lr/ia7z/C8O35+AhfL9w9NCYanJBZdGB4OkfPlP7hSsPMjXGLTXvRmW+Jy6lySfQKflM
- TImGuIPdOXiemDn4jC7DEytfDhZqp16V7QnmT1oRP7iylIuetlROEAVLT2Pi4Ve860sv
- zdgjhRbCSEmovjiaPxtbwamuE3HMzRluWjRxCUXAm9EHk6b1IAHBegRdtJX0ZrETXlTQ
- OR0A==
-X-Gm-Message-State: AOJu0Yy4V1v9tdwTR82vxu0OgXD+AKWvBkAnMq5OunGq2CVzUSELlEPF
- 23lWlDi+Kda4VqIvnRPuz7qawXge0KIu7qRuAJJIHNtOtjJpFBxTOFBrvnVGvsY29jjB0JHUjE3
- r
-X-Google-Smtp-Source: AGHT+IGMzFoVbgqetJDn456+1B9dQifazPvrg+fe4hY0+2BNfxE2tecJrSZDZTmdFnHBIqprw6nNRw==
-X-Received: by 2002:a5d:6148:0:b0:362:f396:42b with SMTP id
- ffacd0b85a97d-363192d088cmr8336656f8f.51.1718986262433; 
- Fri, 21 Jun 2024 09:11:02 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.43.112])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-366389b8922sm2185522f8f.28.2024.06.21.09.11.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 21 Jun 2024 09:11:02 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bbmyxkpj3pXk for <buildroot@lists.busybox.net>;
+ Fri, 21 Jun 2024 19:11:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71F0F409C9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71F0F409C9
+ for <buildroot@buildroot.org>; Fri, 21 Jun 2024 19:11:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6AA218058F; Fri, 21 Jun 2024 19:11:19 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 21 Jun 2024 18:10:48 +0200
-Message-ID: <20240621161049.4085310-5-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240621161049.4085310-1-dario.binacchi@amarulasolutions.com>
-References: <20240621161049.4085310-1-dario.binacchi@amarulasolutions.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1718986262; x=1719591062;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=t4zwgpZCPj7Dee+tJiG+ItzrV6SyfSs41zr7fma1DVA=;
- b=EF1a0D6KQ056KdtPyFa9ee7DMlaqmXBR9LT0MdRpncsi1Q3OIDFKp6NF8D9VTF549i
- s6dhefKoZfMPR8cvDjmKHlQ7gdfhjY9fQIv9jnOaWH94YZY8JNyznEWt6bnMUxkmPWYe
- bgxZGeu9q4xYP0C3yNBzmKHnLrkI8T8nN4oHg=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=EF1a0D6K
-Subject: [Buildroot] [PATCH 5/6] package/libopenssl: no-engine
+Date: Fri, 21 Jun 2024 21:10:36 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 129042be12517d9d028ac846e7531c08d31ce597
+X-Git-Newrev: 9959277125ee34c7d778b00e8b83ea78dc74e6e0
+X-Patchwork-Hint: ignore
+Message-Id: <20240621191119.6AA218058F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pydantic-core: bump for
+ fixes with python 3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,39 +59,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Even though the "no-engine" option effectively disables the compilation
-of the engine, it still creates the installation directory, which ends up
-being empty. For this reason, the patch does not remove the hook for
-removing the directory if the BR2_PACKAGE_LIBOPENSSL_ENGINES option is
-not enabled.
+commit: https://git.buildroot.net/buildroot/commit/?id=9959277125ee34c7d778b00e8b83ea78dc74e6e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+The package is not yet available on PyPI, so go fetch it at the source.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libopenssl/libopenssl.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-pydantic-core/python-pydantic-core.hash | 2 +-
+ package/python-pydantic-core/python-pydantic-core.mk   | 7 +++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index fe472e2c7a19..89a9189bb851 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -85,6 +85,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			no-fuzz-afl \
- 			no-afalgeng \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_BIN),,no-apps) \
-+			$(if $(BR2_PACKAGE_LIBOPENSSL_ENGINES),,no-engine) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA),,no-chacha) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2),,no-rc2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
--- 
-2.43.0
-
+diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
+index b5d975cb3b..d11b3bfbb4 100644
+--- a/package/python-pydantic-core/python-pydantic-core.hash
++++ b/package/python-pydantic-core/python-pydantic-core.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  23f5e10872d9c3d49ebc1fcbd317612eb63d65a7afd88dbef8d23cb63d830cb4  python-pydantic-core-2.14.6-cargo2.tar.gz
++sha256  3359b437ca74c8f7e1b8ec477b1ff1e39f0fff08abb0eb171953f9bc3e8773c6  python-pydantic-core-v2.19.0-git4-cargo2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
+diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
+index 38128ebe46..79d06deab2 100644
+--- a/package/python-pydantic-core/python-pydantic-core.mk
++++ b/package/python-pydantic-core/python-pydantic-core.mk
+@@ -4,10 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYDANTIC_CORE_VERSION = 2.14.6
+-PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
+-PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/b2/7d/8304d8471cfe4288f95a3065ebda56f9790d087edc356ad5bd83c89e2d79
+-PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
++PYTHON_PYDANTIC_CORE_VERSION = v2.19.0
++PYTHON_PYDANTIC_CORE_SITE = https://github.com/pydantic/pydantic-core
++PYTHON_PYDANTIC_CORE_SITE_METHOD = git
+ PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
+ PYTHON_PYDANTIC_CORE_LICENSE = MIT
+ PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
