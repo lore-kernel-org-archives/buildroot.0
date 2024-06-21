@@ -4,66 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2032C27C78
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 21:45:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B32A3C27C4F
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jun 2024 21:51:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 882036062C;
-	Fri, 21 Jun 2024 21:45:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 670D16063C;
+	Fri, 21 Jun 2024 21:51:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pPsZkLv7Rbfd; Fri, 21 Jun 2024 21:45:00 +0000 (UTC)
+ id NIJMx8o6fg6x; Fri, 21 Jun 2024 21:51:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 885A6607BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 651AB607BA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 885A6607BA;
-	Fri, 21 Jun 2024 21:45:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 341761BF834
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:44:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 651AB607BA;
+	Fri, 21 Jun 2024 21:51:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C8AF1BF834
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:51:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1D6B6842A1
- for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:44:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0918442A83
+ for <buildroot@lists.busybox.net>; Fri, 21 Jun 2024 21:51:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UXYykXN5HJWQ for <buildroot@lists.busybox.net>;
- Fri, 21 Jun 2024 21:44:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E592283AEB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E592283AEB
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E592283AEB
- for <buildroot@buildroot.org>; Fri, 21 Jun 2024 21:44:56 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id A0A29B00535;
- Fri, 21 Jun 2024 23:44:52 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iZat4KIerm_q for <buildroot@lists.busybox.net>;
+ Fri, 21 Jun 2024 21:51:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.146;
+ helo=smtpcmd13146.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5B2E442A7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B2E442A7E
+Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5B2E442A7E
+ for <buildroot@buildroot.org>; Fri, 21 Jun 2024 21:51:46 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id KmAasROhA8U42KmAas6QGX; Fri, 21 Jun 2024 23:51:44 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Fri, 21 Jun 2024 23:44:47 +0200
-Message-ID: <20240621214447.479094-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+Date: Fri, 21 Jun 2024 23:51:43 +0200
+Message-Id: <20240621215143.283984-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfL8jjyZctHJH3FhS+iV2F04mSi7l9DlN/A9tP+Gyni/QWed37XGNaR018hKsCfgNjZ4rxsA0ZWgxeVw1YWdg9E2UfLCN7OdTAXVwOu75fGgpiNc4xATh
+ /8GXHvnXX0hFtsv5FkDjArd7TzN4aPVbZ/I56NkaZF6fjvC0RBGG4pb50yqgNQzaKXo7DKXUJ9J+yrjQKMLnP+CfqunFZ75zpYPwgTjN7hpWiDYnIYMWcobs
+ 9Qp77O3ggQQi+g7u0xjBEQHTbM19AoQiSNbjezjiG0I=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1719006293;
- bh=8JYdf4Fl9bNXlMwiYEBwlPuIVkZx8bCNA0rDiABJTZ8=;
- h=From:To:Cc:Subject:Date:From;
- b=sL/RXTKnd9lIhMMbdbcLabQV1BnfraXS5dmWAD5kyosBu6DfVld1Ic9wQDwMdvW3P
- uXU8kLyF/t1Bt4FIPOMkwXXFCahrG0Pqe5C3H3EudGGyRRT3iXYHYgbq21yq/Ie37Y
- eiFZg10uvVT8FkNiQvDY/ExoKw/oJ9laogW1f4HdA8Flqu+AGnmSHfBHYPGMzCKbFn
- uH2NNXcJSKQLUTBu/PUVP7KY7a14agwbcyDbyZjFIPux+9HT0DpmOXw+2odVcoMLz/
- vbhI2wvwT8SgsB28rFLbdMpQhBtQIsg0woHsckeP7c7Xb3dM6oY4RcRme3BV/NCqFA
- 4DThYl+WEBSCQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=aruba.it; s=a1; 
+ t=1719006704; bh=Uqt1AXr+vmWZElujgwU3jBflJUB5CSL0/t3Ciqof4nE=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=J1MVycWf4ICmc3B/8lTGLGKYr/LsBxKRjNOPP8DlE1/FrAOHN7gQYXkHAvzWn9fi6
+ aEeTpt1pVk6TFGdqwANy6D/GBOX9yHTtwUuZchSF2Vb/duWlS/QrwjhuonnnUrf2PT
+ UaDjA0PbPm/KsEaXuDtXZny5y014MSp4tbH6DDvXr1O0qcXPFiSlQj9UMa1Bs1q0Zs
+ VdVPV3pvMBYjqJJR6G+YCMNcwcjidbgSeJlgC8SfO8bl+Gc9PeK9CZ0jHHu6xFKaS7
+ ytIXiBg6mn9a0EcHJYC7k7ZLyxHdmjdPJuLLk506Q2JUoX+Hxpsx+2Hzgv29f9Pgac
+ 1K3Ulzt7EVf8Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=sL/RXTKn
-Subject: [Buildroot] [PATCH 1/1] package/highway: bump to version 1.2.0
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=J1MVycWf
+Subject: [Buildroot] [PATCH] package/swupdate: bump to version 2024.05.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,62 +78,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For release note, see:
-- https://github.com/google/highway/releases/tag/1.2.0
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-Patch tested on branch master at commit 4aff617 with commands:
-
-    utils/docker-run make check-package
-    ...
-    0 warnings generated
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_highway
-    ...
-    OK
-
-    utils/test-pkg -p highway
-    ...
-    6 builds, 0 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- package/highway/highway.hash | 2 +-
- package/highway/highway.mk   | 2 +-
+ package/swupdate/swupdate.hash | 2 +-
+ package/swupdate/swupdate.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/highway/highway.hash b/package/highway/highway.hash
-index 270131134ec..5addf50eee7 100644
---- a/package/highway/highway.hash
-+++ b/package/highway/highway.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  354a8b4539b588e70b98ec70844273e3f2741302c4c377bcc4e81b3d1866f7c9  highway-1.1.0.tar.gz
-+sha256  7e0be78b8318e8bdbf6fa545d2ecb4c90f947df03f7aadc42c1967f019e63343  highway-1.2.0.tar.gz
- sha256  43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1  LICENSE
- sha256  d25e82e26acd42ca3ccc9993622631163425b869b9e16284226d534cff6470f2  LICENSE-BSD3
-diff --git a/package/highway/highway.mk b/package/highway/highway.mk
-index 3eb0d7a4aa2..a74bc90dd36 100644
---- a/package/highway/highway.mk
-+++ b/package/highway/highway.mk
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index 13964351f6..ac28acb1f4 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  c8af1e964d0123a7d4bbba981170eff723db87dcd37e5881c584ffee54194d1a  swupdate-2024.05.tar.gz
++sha256  2736045e885ad6c5dcba8dcc6c7582d0b76ef29a3d6ab7c4080908356e35e3b2  swupdate-2024.05.2.tar.gz
+ sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
+ sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
+ sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index b36aabb1e7..75e4af5db4 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HIGHWAY_VERSION = 1.1.0
-+HIGHWAY_VERSION = 1.2.0
- HIGHWAY_SITE = $(call github,google,highway,$(HIGHWAY_VERSION))
- HIGHWAY_LICENSE = Apache-2.0 or BSD-3-Clause
- HIGHWAY_LICENSE_FILES = LICENSE LICENSE-BSD3
+-SWUPDATE_VERSION = 2024.05
++SWUPDATE_VERSION = 2024.05.2
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
+ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
 -- 
-2.45.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
