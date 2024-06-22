@@ -4,71 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B907AC27C53
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 08:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E67C27C53
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 08:39:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71B9240503;
-	Sat, 22 Jun 2024 08:35:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4B1740567;
+	Sat, 22 Jun 2024 08:39:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tKg2yiX4hlAq; Sat, 22 Jun 2024 08:35:01 +0000 (UTC)
+ id mxya5vS3p5OT; Sat, 22 Jun 2024 08:39:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09ADF4052B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ADE440534
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09ADF4052B;
-	Sat, 22 Jun 2024 08:35:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EB4421BF5EA
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:34:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5ADE440534;
+	Sat, 22 Jun 2024 08:39:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C96431BF5EA
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:39:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4F6A4069B
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:34:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7AB26067D
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:39:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IPyJ15xCD53k for <buildroot@lists.busybox.net>;
- Sat, 22 Jun 2024 08:34:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KPDKfhQs7LRu for <buildroot@lists.busybox.net>;
+ Sat, 22 Jun 2024 08:39:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7F04A4065A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F04A4065A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9BBBF6063D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BBBF6063D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7F04A4065A
- for <buildroot@buildroot.org>; Sat, 22 Jun 2024 08:34:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9BBBF6063D
+ for <buildroot@buildroot.org>; Sat, 22 Jun 2024 08:39:27 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cf60.dip0.t-ipconnect.de [79.214.207.96])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 9E8D6A4C0403;
- Sat, 22 Jun 2024 10:34:56 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58240)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BE334A4C0287;
+ Sat, 22 Jun 2024 10:39:25 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40940)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1sKwD2-000000000VL-0Sqn;
- Sat, 22 Jun 2024 08:34:56 +0000
+ (envelope-from <bernd@kuhls.net>) id 1sKwHN-000000001A7-18pX;
+ Sat, 22 Jun 2024 08:39:25 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 22 Jun 2024 10:34:56 +0200
-Message-Id: <20240622083456.9596-1-bernd@kuhls.net>
+Date: Sat, 22 Jun 2024 10:39:19 +0200
+Message-Id: <20240622083925.10149-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: ++++++
 X-Spam: Yes
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1719045296;
+ s=kas202406071026; t=1719045565;
  bh=8+xd+puE9yqlhw6aoJ+UiYpC1QIWW6jecY0FGgj+4v8=;
  h=From:To:Cc:Subject:Date:From;
- b=TayP6eginTpwpASaClF0r/iLvv9RXL/Ow2Xn99DwpU7lalmKxC41sv0oslr4783q0
- wsl7+68pYhvdfgu8bQrKJZyksfKCdRB/R8o1aH2F5/xwVXyXKHyrxtIRsJ/Sm4Yxob
- YIvSM01PSliSlswmlntHp7YzGBotFlvz1N3aWCc8xNZWEON7WJJV6Nz9XZskfORhgQ
- /4fJ6Sq34cVf393vbKVrgVN1iQFByPdpknWEeaDCQS037IctkXwwgqvg0PvpFVkZ/Y
- rIatInKOt+NYvHAKMOHh6egrMZcFi6kYVppVJCM64wcZvbaZV6FBoeBc3nOiyBx7/m
- IsC6q4/RHn1vQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Vus1RvjQ9n3ap9+pgKMaEo7fbTAxoVbceIxTSZ1bH+rkjPi8Xemt2Qw6pWPp+TW2b
+ wyA/bMgGUiFNStt405xg1raaRJ+whO9CuKUrOrgQ90To4WvO/Yn0HQsFKz61nuxOzp
+ 3+yOW70xR8Poc8lyp/QMAtzhI8cXyMloaH+Q5GF1TEMSi/anqhjJ+8Z2r+KAV/7YMT
+ X2XGIngZ3BJ6UQUXvZT2HNJPUUUuvxfESomMvcb9H5R6LUN734/Pz7Q51QjZ2pHyKA
+ oJgh/sk++w3pgSFG91Sbj3n7g7nCqUWuhDf+aO9g2j456ebGs964oh7U49l78KJuHz
+ 648hxKgqTkIfA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=TayP6egi
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=Vus1RvjQ
 Subject: [Buildroot] [PATCH 1/1] package/cmake: bump version to 3.29.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
