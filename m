@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDFC2C27C53
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 16:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62802C27C53
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 16:43:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 420864057F;
-	Sat, 22 Jun 2024 16:43:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1DBE54055E;
+	Sat, 22 Jun 2024 16:43:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YPO20AJqkIK6; Sat, 22 Jun 2024 16:43:06 +0000 (UTC)
+ id he_Pe1jO7mc5; Sat, 22 Jun 2024 16:43:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F28DC40497
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D91524056E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F28DC40497;
-	Sat, 22 Jun 2024 16:43:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D91524056E;
+	Sat, 22 Jun 2024 16:43:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 127791BF5DC
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 16:43:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 00DFB1BF5DC
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 16:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1F7D606E5
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 16:43:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E25FE607BB
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 16:43:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M3yjmDEJnZbt for <buildroot@lists.busybox.net>;
- Sat, 22 Jun 2024 16:43:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id H7gwTsXip9Dr for <buildroot@lists.busybox.net>;
+ Sat, 22 Jun 2024 16:43:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1996A606C8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1996A606C8
- for <buildroot@buildroot.org>; Sat, 22 Jun 2024 16:43:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B4DE58268F; Sat, 22 Jun 2024 16:43:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 22 Jun 2024 18:42:16 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 853b7661bf5ddca5d4b81964ef1a19a133beac85
-X-Git-Newrev: d6b635db9bddd4ca7d4463c9c36d03bafe1ba71f
-X-Patchwork-Hint: ignore
-Message-Id: <20240622164301.B4DE58268F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.121
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E96B6077D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E96B6077D
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E96B6077D
+ for <buildroot@buildroot.org>; Sat, 22 Jun 2024 16:43:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 02FA41C0003;
+ Sat, 22 Jun 2024 16:43:09 +0000 (UTC)
+Date: Sat, 22 Jun 2024 18:43:09 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20240622184309.62a68711@windsurf>
+In-Reply-To: <20240612192125.52199-1-bernd@kuhls.net>
+References: <20240612192125.52199-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1719074590;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=v6K3YJstlgWkWyanp4odrtDj5jQe4uDWudbjFWdVoB0=;
+ b=DyrS0EqnVUDgGbyKaTpmHcaouSxRljNXMldSilzfFgcaCrdLzZxu8aTGjxLihC8FZC3G6h
+ z6JnHjZMhKzA5I2LJqplCVnj0zEzgqdUnfbpM3AogkjEp37sRh0e3cBuc9ZxnoVchQAer2
+ INuEsCeGnPTy7sMB9xTGC2BsrRUf0BYt29bFqcCzuNhPwn+e4rsRpt9d6mmvxxvN24bNIW
+ eDo/mll0JnSlEqQ3PDJVExI6xiqbEloUaDjGPegbuOk2fUT0kk8BS+0Xn/QiaVbtunofLl
+ ai5iRSsfhQr+m5HKY/MMZAoOdMhAdFjOjtWky3IVxTCOW/LP35YXa1o5aRjfOA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=DyrS0Eqn
+Subject: Re: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.121
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6b635db9bddd4ca7d4463c9c36d03bafe1ba71f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 12 Jun 2024 21:21:25 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2024-June/003516.html
+> Release notes:
+> https://lists.x.org/archives/xorg-announce/2024-June/003516.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/libdrm/libdrm.hash | 6 +++---
+>  package/libdrm/libdrm.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index dd43a89d68..8b0f7c0d74 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2024-January/003441.html
--sha256  3bf55363f76c7250946441ab51d3a6cc0ae518055c0ff017324ab76cdefb327a  libdrm-2.4.120.tar.xz
--sha512  6dc16e5134a669eeb59debb1dc2d15b857483ab7476dc2b94bd05a32d8953f046f5656f6cf9e1a63e97e7156fb65ebb58b6a29fe45cb6326058baaf820626e70  libdrm-2.4.120.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-June/003516.html
-+sha256  909084a505d7638887f590b70791b3bbd9069c710c948f5d1f1ce6d080cdfcab  libdrm-2.4.121.tar.xz
-+sha512  cc8816d61884caa0e404348d1caeb0b2952fb50e1dc401716adfe08121096e2a67826db0bda0d8b163d67c5ee048870177670d5eac28a5abe5792d09ba77ab2e  libdrm-2.4.121.tar.xz
- 
- # Hash for license file
- sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index e0c1217b38..c87a225515 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.120
-+LIBDRM_VERSION = 2.4.121
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
