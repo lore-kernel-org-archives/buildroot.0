@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B71FEC27C53
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 08:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35A83C27C53
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 08:34:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1DCE3404E5;
-	Sat, 22 Jun 2024 08:33:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF13640185;
+	Sat, 22 Jun 2024 08:34:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id clR12Yk-3GeI; Sat, 22 Jun 2024 08:33:47 +0000 (UTC)
+ id QwcMW3V4eX3U; Sat, 22 Jun 2024 08:34:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 814A7404A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA7D8404A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 814A7404A5;
-	Sat, 22 Jun 2024 08:33:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BBC3A1BF5EA
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:33:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA7D8404A5;
+	Sat, 22 Jun 2024 08:34:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 585A41BF5EA
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4DAC404A5
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:33:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 46AE060675
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:34:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eXO8v5n7MJ2g for <buildroot@lists.busybox.net>;
- Sat, 22 Jun 2024 08:33:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qksdX3KOEHcJ for <buildroot@lists.busybox.net>;
+ Sat, 22 Jun 2024 08:34:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 960C340185
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 960C340185
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 257A8605D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 257A8605D8
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 960C340185
- for <buildroot@buildroot.org>; Sat, 22 Jun 2024 08:33:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 257A8605D8
+ for <buildroot@buildroot.org>; Sat, 22 Jun 2024 08:34:10 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cf60.dip0.t-ipconnect.de [79.214.207.96])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 37F2CA4C0287
- for <buildroot@buildroot.org>; Sat, 22 Jun 2024 10:33:39 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46458)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4BD90A4C0287
+ for <buildroot@buildroot.org>; Sat, 22 Jun 2024 10:34:08 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52444)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1sKwBm-000000000JT-0mCU
- for buildroot@buildroot.org; Sat, 22 Jun 2024 08:33:38 +0000
+ (envelope-from <bernd@kuhls.net>) id 1sKwCF-000000000O7-3Ti2
+ for buildroot@buildroot.org; Sat, 22 Jun 2024 08:34:08 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 22 Jun 2024 10:33:38 +0200
-Message-Id: <20240622083338.9077-1-bernd@kuhls.net>
+Date: Sat, 22 Jun 2024 10:34:07 +0200
+Message-Id: <20240622083407.9499-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1719045219;
- bh=P5LtdgTyJFpaMcae2ixdCtzR1carDyOL13A4Hb6M4ug=;
+ s=kas202406071026; t=1719045248;
+ bh=xCc6iF7moE28uXGJ3ovYPYZqW/dlyfGETobNqS+KMvE=;
  h=From:To:Subject:Date:From;
- b=vrLGcUc2MKs3EpRAaCWsgVdOHIpigrvu4ktKVoxyonhCshkRtiLjX7phY4ejkwtGO
- iZJrzMI7KRv7XRE9lhSBbSVLZQhiMVP3Jm2qFEqTjIOiTow07ylLU8o2jqMGEFwjVG
- 0lJTI9qI1HEB2XyoyqTj62ZFoeJetVfXFrbR+V6Xvn2GM9JSB8SwiZS7FsnNY71NyC
- BH4LIklcPDnymCwQx2fqqpCPG52Ep1WwCihpNgohkOhpbdpoDtLLmKisdICpDnkMwL
- 1ls9r5wX+z638gQG7TVVe7bqTxu1yWrcd5GKI2ErSNai9rpUc7NGhw6ut9m/6ArcuV
- qFa8/h0Dq6HOw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=Foy2fwh+VZDjoPOeH/fGkV2APHo5+VBTmQBDk5/+9chNF62JYk8ksyArtb1AwaKaH
+ bCtxXoDE6k1yxOT+U3n1OUI7UG+rDhwMjDo+2B1ncgrdeN3FO7OrFb7bsXb7zq/lwm
+ KDULNLwIr5T57w4fR58XpA2f8hkMzYbLL4cYqtKNpyMjX1DGxFA/uVoyq2BP4f2Oeg
+ MWCzE88VUmLOgR9xQMG7dSGrG0oTKH6yQ3Sjru8bPjpeHTg+b3CDAB8Xq8xoormOM5
+ iGKE33v8d7spp6TjkEB64bfHKFsLR4cvvp39WGRZSLorIf/Lr72hgcTMCltXt4Rkxt
+ vrNzQM6UJqnjw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=vrLGcUc2
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.20.2
+ header.s=kas202406071026 header.b=Foy2fwh+
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.10.x / 6.{1,
+ 6, 9}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,131 +86,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch which is included in this release.
-Renumbered remaining patches.
-
-Release notes:
-- https://www.samba.org/samba/history/samba-4.20.0rc1.html
-- https://www.samba.org/samba/history/samba-4.20.0rc2.html
-- https://www.samba.org/samba/history/samba-4.20.0rc3.html
-- https://www.samba.org/samba/history/samba-4.20.0rc4.html
-- https://www.samba.org/samba/history/samba-4.20.0.html
-- https://www.samba.org/samba/history/samba-4.20.1.html
-- https://www.samba.org/samba/history/samba-4.20.2.html
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  5 +-
- ...ilt-heimdal-build-tools-in-case-of-.patch} |  0
- ...01-libreplace-disable-libbsd-support.patch | 46 -------------------
- ...t.c-include-stdint.h-before-cmoka.h.patch} |  0
- package/samba4/samba4.hash                    |  4 +-
- package/samba4/samba4.mk                      |  2 +-
- 6 files changed, 5 insertions(+), 52 deletions(-)
- rename package/samba4/{0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch => 0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch} (100%)
- delete mode 100644 package/samba4/0001-libreplace-disable-libbsd-support.patch
- rename package/samba4/{0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch => 0002-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch} (100%)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 8 ++++----
+ package/linux-headers/Config.in.host | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 807cee1a08..be8fbec086 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1339,9 +1339,8 @@ package/rygel/0001-meson.build-fix-g_ir_compiler-calls.patch lib_patch.Upstream
- package/rygel/S99rygel Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/s6-linux-init/0001-configure-add-D_GNU_SOURCE.patch lib_patch.Upstream
- package/safeclib/0001-fix-armv7-asm-inline-error-GH-115.patch lib_patch.Upstream
--package/samba4/0001-libreplace-disable-libbsd-support.patch lib_patch.Upstream
--package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch lib_patch.Upstream
--package/samba4/0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch lib_patch.Upstream
-+package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch lib_patch.Upstream
-+package/samba4/0002-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch lib_patch.Upstream
- package/samba4/S91smb Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/sane-backends/0001-sane_backend-add-missing-config.h.patch lib_patch.Upstream
- package/screen/0001-Do-not-use-memcpy-as-an-alternative-for-bcopy-memmov.patch lib_patch.Upstream
-diff --git a/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch b/package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-similarity index 100%
-rename from package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-rename to package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-diff --git a/package/samba4/0001-libreplace-disable-libbsd-support.patch b/package/samba4/0001-libreplace-disable-libbsd-support.patch
-deleted file mode 100644
-index 8259e91fc6..0000000000
---- a/package/samba4/0001-libreplace-disable-libbsd-support.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 4df82c9e03b68dc1621fe4c9ac6a29ae3e64e07e Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Wed, 7 Sep 2016 23:03:43 -0300
--Subject: [PATCH] libreplace: disable libbsd support
--
--Disable libbsd support, samba4 uses a global config.h for its own
--codebase and that of heimdal (when building with builtin).
--This causes redefinition conflicts for link(2) when both standard
--unistd.h and bsd/unistd.h get included.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--[Bernd: rebased for versions 4.7.3, 4.8.0, 4.8.5 & 4.11.13]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- lib/replace/wscript | 15 ---------------
-- 1 file changed, 15 deletions(-)
--
--diff --git a/lib/replace/wscript b/lib/replace/wscript
--index 240d730cbee..c6d8df43c74 100644
----- a/lib/replace/wscript
--+++ b/lib/replace/wscript
--@@ -436,21 +436,6 @@ def configure(conf):
-- 
--     strlcpy_in_bsd = False
-- 
---    # libbsd on some platforms provides strlcpy and strlcat
---    if not conf.CHECK_FUNCS('strlcpy strlcat'):
---        if conf.CHECK_FUNCS_IN('strlcpy strlcat', 'bsd', headers='bsd/string.h',
---                               checklibc=True):
---            strlcpy_in_bsd = True
---    if not conf.CHECK_FUNCS('getpeereid'):
---        conf.CHECK_FUNCS_IN('getpeereid', 'bsd', headers='sys/types.h bsd/unistd.h')
---    if not conf.CHECK_FUNCS_IN('setproctitle', 'setproctitle', headers='setproctitle.h'):
---        conf.CHECK_FUNCS_IN('setproctitle', 'bsd', headers='sys/types.h bsd/unistd.h')
---    if not conf.CHECK_FUNCS('setproctitle_init'):
---        conf.CHECK_FUNCS_IN('setproctitle_init', 'bsd', headers='sys/types.h bsd/unistd.h')
---
---    if not conf.CHECK_FUNCS('closefrom'):
---        conf.CHECK_FUNCS_IN('closefrom', 'bsd', headers='bsd/unistd.h')
---
--     conf.CHECK_CODE('''
--                 struct ucred cred;
--                 socklen_t cred_len;
---- 
--2.20.1
--
-diff --git a/package/samba4/0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0002-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
-similarity index 100%
-rename from package/samba4/0003-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
-rename to package/samba4/0002-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 457423f9e1..353736f3b2 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.19.7.tar.asc
--sha256  2bbb800af2d6bc7b9c23e708cd58d008da3bfa6ef7e621d9ec8b53387efee445  samba-4.19.7.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.20.2.tar.asc
-+sha256  f969ffed58ccf3e85cbbcc0e33a1726d025c2b40f42a653b1125b82b92d2e0e5  samba-4.20.2.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 72b9d1ae02..5536b6b121 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 588d7cab10..decc520680 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
--SAMBA4_VERSION = 4.19.7
-+SAMBA4_VERSION = 4.20.2
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.9.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.9.6" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 3e2b923cfe..85a2e7e391 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  a51fb4ab5003a6149bd9bf4c18c9b1f0f4945c272549095ab154b9d1052f95b1  linux-6.9.5.tar.xz
+-sha256  c4e0ec8f593aa3717e85abad940466e7d7cbc362989426eb37f499330a461ba0  linux-6.6.34.tar.xz
+-sha256  38ea71ad22ae0187fd8ee5ff879b33b0d9bd58161ac9a3e868ae0b4c66b95369  linux-6.1.94.tar.xz
++sha256  5d4366e2b89998f274abe03557ef3bc78b58e47fc62c102d51e6f49e5ed96b4b  linux-6.9.6.tar.xz
++sha256  fce3ee728712ed063aa8c14a8756c8ff8c7a46ba3827f61d2b04a73c7cf5dd9e  linux-6.6.35.tar.xz
++sha256  2960f0aa1d75665f39114ad3c272a999c54796e553a2355d0379f5188d14dfbd  linux-6.1.95.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  d629f78680dc4b65e3d78b61406fb7757b960c83c206e63ad8c2606b3e3c474c  linux-5.15.161.tar.xz
+-sha256  93b73f15cc376463e6422cce09ccd9d0a20fb113921ffebddf3352c44d84cd30  linux-5.10.219.tar.xz
++sha256  7cc3aff924e9707a5dbf1200c79a7f01617e097b9b175d02bda8ca762aeee19b  linux-5.10.220.tar.xz
+ sha256  e5a00606115545f444ef2766af5652f5539e3c96f46a9778bede89b98ffb8588  linux-5.4.278.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  e4ff378baca72149d685abed9b59ba784fc97412b161796adcf3284a3287be52  linux-4.19.316.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7fd603db2e..0a17e7947b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -421,11 +421,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.19.316"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.278"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.219"	if BR2_KERNEL_HEADERS_5_10
++	default "5.10.220"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.161"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.94"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.34"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.9.5"		if BR2_KERNEL_HEADERS_6_9
++	default "6.1.95"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.35"	if BR2_KERNEL_HEADERS_6_6
++	default "6.9.6"		if BR2_KERNEL_HEADERS_6_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
 2.39.2
 
