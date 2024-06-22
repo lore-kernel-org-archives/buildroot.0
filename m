@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EA2FC27C53
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 17:34:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2FD0C27C53
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 17:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE458400DD;
-	Sat, 22 Jun 2024 17:34:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A0F1400DD;
+	Sat, 22 Jun 2024 17:40:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8aApIq7pLjZ3; Sat, 22 Jun 2024 17:34:14 +0000 (UTC)
+ id rmCxh-X8LRvh; Sat, 22 Jun 2024 17:40:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58E1F40278
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC7FC405C1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58E1F40278;
-	Sat, 22 Jun 2024 17:34:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC7FC405C1;
+	Sat, 22 Jun 2024 17:40:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 011F91BF5DB
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:34:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE2CB1BF5DB
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:40:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2BC6402A6
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:34:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B778F4056F
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:40:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UcwNMhqO_U-3 for <buildroot@lists.busybox.net>;
- Sat, 22 Jun 2024 17:34:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 5nvZGFw7WDMq for <buildroot@lists.busybox.net>;
+ Sat, 22 Jun 2024 17:40:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4E411402A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E411402A3
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4E411402A3
- for <buildroot@buildroot.org>; Sat, 22 Jun 2024 17:34:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F87A20002;
- Sat, 22 Jun 2024 17:34:08 +0000 (UTC)
-Date: Sat, 22 Jun 2024 19:34:07 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240622193407.1981d92d@windsurf>
-In-Reply-To: <Zm/ksIQncNtMkBcv@waldemar-brodkorb.de>
-References: <Zm/ksIQncNtMkBcv@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1719077648;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tnKNWsV6FLkKJA2uBx3SqYOHm1oeBJjMbYhU38AlQpw=;
- b=FHIVD0ltYhIG+pXB5k8UFrx0jNSY61s8br0HpvzKa2JYQyvqXkcbqiLiVdnm2vx4Xk98Yr
- omYZMHgPsW/nKwXRu8DOW7pdCFhK3k2rjWQLFIADMDqv6ANgmkYbOvENL/5Wj1Gu4cN8KE
- DVUirKjpjl8KGcqU/GEXBj7A0X6QSKXlQYqL6HpldG6Ki0RpEwC1JiJZx7lXutGjfULVXp
- 9b2QV77IMzcF4B5tY4c1TzGoMOQWKKnJt66e/dOER4mlthNbX4O54oWsp56L41dVub9e8U
- PfpjhkEyayJTEVDHrlBlzioLH22CbL5YOiv1yseWTtH156OZIoJo0fGViYoN3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FHIVD0lt
-Subject: Re: [Buildroot] [PATCH] configs/qemu: Update defconfigs to Linux
- 6.6.32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FEFA40563
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FEFA40563
+ for <buildroot@buildroot.org>; Sat, 22 Jun 2024 17:40:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 625077FC34; Sat, 22 Jun 2024 17:40:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 22 Jun 2024 19:38:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 50bdb2a3b7ace71065dc0b8a81bebc173f84a8c4
+X-Git-Newrev: 127ddbe5118f68395c0305fb9ff44342bfc1d64b
+X-Patchwork-Hint: ignore
+Message-Id: <20240622174039.625077FC34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uclibc: update to 1.0.49
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,70 +59,163 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Waldemar,
+commit: https://git.buildroot.net/buildroot/commit/?id=127ddbe5118f68395c0305fb9ff44342bfc1d64b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 17 Jun 2024 09:24:32 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+git shortlog v1.0.49...v1.0.48
+Dmitry Chestnykh (6):
+      Correct uClibc compilation.
+      Fix uClibc build for nds32 with gcc-14.
+      Fix riscv32 build with gcc-14.
+      riscv32: Fix `struct ucontext` definition.
+      Fix wrong `struct ucontext_t` typedef for all arches.
+      Cast to proper types inside atomic macroses.
 
-> Linux version are changed to 6.6.32 (LTS) for all qemu defconfigs,
-> 
-> Qemu 9.0.0/9.0.1 has introduced a Bug in sh4/sh4eb emulation so
-> that the system doesn't boot anymore.
-> The issue is already reported by Guenter Roeck:
-> https://lists.nongnu.org/archive/html/qemu-devel/2024-05/msg00606.html
+Fabrice Fontaine (1):
+      libc/sysdeps/linux/common/utime.c: fix riscv32 build
 
-So this is not a regression introduced by this patch, right?
+Joe Damato (1):
+      epoll.h: Add epoll ioctls
 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> Should we switch sh4/sh4eb to initramfs?
+Max Filippov (9):
+      iconv: fix type mismatches
+      ldso: FDPIC: fix type mismatches
+      ldso: arm: fix build with gcc-14
+      malloc/memalign: avoid integer overflow
+      fix kernel_stat64 definition
+      linuxthreads: enable unwinding over signal frames
+      xtensa: use compiler-provided XCHAL macros
+      xtensa: make _init and _fini hidden
+      xtensa: add FDPIC support
 
-I guess it would be good to have those defconfigs working yes.
+Waldemar Brodkorb (9):
+      futimesat: add missing header
+      sparc64: Fix incorrect sigreturn stub function implementation
+      csky: allow time64
+      m68k: fix noMMU ELF compile with gcc 14.x
+      Revert "nds32: sync with binutils 2.37, gcc 11.2 and linux 5.10.93 changes"
+      m68k: fix for m68000 cpu
+      config: make ctor/dtor visible again
+      config: enable TIME64 by default
+      bump version for 1.0.49 release
 
-> diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-> index ac724d5c15..d332445779 100644
-> --- a/package/binutils/binutils.hash
-> +++ b/package/binutils/binutils.hash
-> @@ -9,3 +9,6 @@ sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a5
->  # locally computed
->  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
->  sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
-> +
-> +# locally computed
-> +sha256  a76052c0c71d4025b117dcfc18ca7e189ac495a7645fa98c1bdaddca15cce815  xtensa_dc233c.tar.gz
-> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-> index 0b48a1acdd..0dbcd82ed1 100644
-> --- a/package/gcc/gcc.hash
-> +++ b/package/gcc/gcc.hash
-> @@ -20,3 +20,6 @@ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYIN
->  sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING3.LIB
->  sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
->  sha256  9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74  COPYING.RUNTIME
-> +
-> +# Locally calculated
-> +sha256  a76052c0c71d4025b117dcfc18ca7e189ac495a7645fa98c1bdaddca15cce815  xtensa_dc233c.tar.gz
+Yuriy Kolerov (1):
+      libc: cast free() argument to void * in wchar.c
 
-I believe those hashes should not be in package/binutils/binutils.hash
-and package/gcc/gcc.hash, because they are specific to the Qemu Xtensa
-defconfigs. Instead, they should go in board/qemu/patches/gcc/gcc.hash
-and board/qemu/patches/binutils/binutils.hash. My understanding of the
-hash checking code is that hashes are looked *both* into the main hash
-file (package/gcc/gcc.hash) and into any existing hash file provided in
-the BR2_GLOBAL_PATCH_DIR directory.
+Patches applied upstream.
 
-Best regards,
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../uclibc/0001-futimesat-add-missing-header.patch | 26 ----------------
+ .../uclibc/0002-fix-kernel_stat64-definition.patch | 35 ----------------------
+ package/uclibc/uclibc.hash                         |  4 +--
+ package/uclibc/uclibc.mk                           |  2 +-
+ 4 files changed, 3 insertions(+), 64 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/uclibc/0001-futimesat-add-missing-header.patch b/package/uclibc/0001-futimesat-add-missing-header.patch
+deleted file mode 100644
+index f8af3290fa..0000000000
+--- a/package/uclibc/0001-futimesat-add-missing-header.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 4bcf25e75df857806623ff80924675bf849a60d2 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Wed, 8 May 2024 10:08:08 +0200
+-Subject: [PATCH] futimesat: add missing header
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=4bcf25e75df857806623ff80924675bf849a60d2
+----
+- libc/sysdeps/linux/common/futimesat.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/libc/sysdeps/linux/common/futimesat.c b/libc/sysdeps/linux/common/futimesat.c
+-index fd19fea7c..bf36550dd 100644
+---- a/libc/sysdeps/linux/common/futimesat.c
+-+++ b/libc/sysdeps/linux/common/futimesat.c
+-@@ -7,6 +7,7 @@
+-  */
+- 
+- #include <sys/syscall.h>
+-+#include <sys/stat.h>
+- #include <sys/time.h>
+- 
+- #ifdef __NR_futimesat
+--- 
+-2.30.2
+-
+diff --git a/package/uclibc/0002-fix-kernel_stat64-definition.patch b/package/uclibc/0002-fix-kernel_stat64-definition.patch
+deleted file mode 100644
+index 5a87586af8..0000000000
+--- a/package/uclibc/0002-fix-kernel_stat64-definition.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 186878405324e96f61d896a149f623e0c792c972 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Tue, 14 May 2024 23:18:56 -0700
+-Subject: [PATCH] fix kernel_stat64 definition
+-
+-The commit 74ca8d6f5d2e ("remove UCLIBC_HAS_LFS") removed conditional
+-compilation dependent on __UCLIBC_HAS_LFS__, assuming it to be always
+-defined, but removed the wrong branch in the definition of
+-kernel_stat64.
+-Fix kernel_stat64 definition to be stat64.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+-Tested-by: Chris Packham <judge.packham@gmail.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=186878405324e96f61d896a149f623e0c792c972
+----
+- libc/sysdeps/linux/common-generic/bits/kernel_stat.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libc/sysdeps/linux/common-generic/bits/kernel_stat.h b/libc/sysdeps/linux/common-generic/bits/kernel_stat.h
+-index 7a97bb4d7..e874a4a9f 100644
+---- a/libc/sysdeps/linux/common-generic/bits/kernel_stat.h
+-+++ b/libc/sysdeps/linux/common-generic/bits/kernel_stat.h
+-@@ -18,7 +18,7 @@
+-  * However that requires more #ifndef in relevant wrappers,
+-  * further uglifying them
+-  */
+--#define kernel_stat64	stat
+-+#define kernel_stat64	stat64
+- 
+- #endif	/*  _BITS_STAT_STRUCT_H */
+- 
+--- 
+-2.30.2
+-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 7097bbf99a..1067ea9b0f 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.47/uClibc-ng-1.0.48.tar.xz.sha256
+-sha256  3bf5fc6cc5cbc454b6c478424755c6f71e7c15578a2c966f02606aa5c5596e21  uClibc-ng-1.0.48.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.49/uClibc-ng-1.0.49.tar.xz.sha256
++sha256  340f9d5dd1159c69c3380654e39e567cbb304afcd3f9dfa2e9833f0fa13f5bbe  uClibc-ng-1.0.49.tar.xz
+ # Locally calculated
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index b7aba27b00..31f9899f00 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.48
++UCLIBC_VERSION = 1.0.49
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
