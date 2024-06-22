@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D917C2BB85
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 08:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2B3FC27C53
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 08:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A81340185;
-	Sat, 22 Jun 2024 08:40:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8420540185;
+	Sat, 22 Jun 2024 08:40:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oIU3Pzb2gzsD; Sat, 22 Jun 2024 08:40:06 +0000 (UTC)
+ id BUsIDxSrjad7; Sat, 22 Jun 2024 08:40:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7A08404F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61258404F5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B7A08404F5;
-	Sat, 22 Jun 2024 08:40:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A14831BF5EA
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:40:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 61258404F5;
+	Sat, 22 Jun 2024 08:40:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E91E31BF5EA
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:40:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8EFA96067D
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:40:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4CB040735
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:40:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OKF1WVwE7OE4 for <buildroot@lists.busybox.net>;
- Sat, 22 Jun 2024 08:40:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hQKbdZ66K6zg for <buildroot@lists.busybox.net>;
+ Sat, 22 Jun 2024 08:40:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B61F66063D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B61F66063D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CEBD640727
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEBD640727
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B61F66063D
- for <buildroot@buildroot.org>; Sat, 22 Jun 2024 08:40:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CEBD640727
+ for <buildroot@buildroot.org>; Sat, 22 Jun 2024 08:40:16 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cf60.dip0.t-ipconnect.de [79.214.207.96])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2EFA5A4C09C5;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5E796A4C0D1F;
  Sat, 22 Jun 2024 10:39:26 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40940)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1sKwHN-000000001A7-2eFf;
- Sat, 22 Jun 2024 08:39:25 +0000
+ (envelope-from <bernd@kuhls.net>) id 1sKwHN-000000001A7-3X0J;
+ Sat, 22 Jun 2024 08:39:26 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 22 Jun 2024 10:39:23 +0200
-Message-Id: <20240622083925.10149-5-bernd@kuhls.net>
+Date: Sat, 22 Jun 2024 10:39:25 +0200
+Message-Id: <20240622083925.10149-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240622083925.10149-1-bernd@kuhls.net>
 References: <20240622083925.10149-1-bernd@kuhls.net>
@@ -55,22 +55,21 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202406071026; t=1719045566;
- bh=QLoZFMeFaEUPx0m7xfkVuqXJRb/UtH6TmBIolNzOC2w=;
+ bh=XxvL0AcVUlCKB72gsjyxRmxvYXHbEUaQxJGH+rERhxw=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=WrjfYQOxFZc2/t8bjKa8pAPAwowfxPjF7hskMzXGS7uHOJllpI/dTYo4iTXygVOz+
- IRPIYZ1MlMgvHqfhDIz0ZbP0Rrd0a1u0W4GOYorWxI/p6cf5OYljsZCW3/jg5EG0PU
- +sPi57IJI5jbCXRq41bLZGMXt93cgH2Mt3XVqFn2VCXrVUij4T5+hTmQMjPWnIsbvT
- qkt0FisFXgK29erQb0lFxqXC5zuX/fXNRvLCe5AnOccNF+Fy6kYayYGFoWJHf72Qjv
- 27+igqVmsxBxOrlRstf8rL0AF9maWLct8l8LBxkrTBkwegdrHvrnCEW4n15H4QU64d
- eT0Yq/7ip/xug==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=KyxoRDWC8bzLcpU4hQPQMh5faD59j1wLAmFxcFmOu82e9ezr4BO5nda/Two473NU9
+ wm5vTZHqFzBj1bjeSozIl3O2v0FwT2Z/fZEUTr2pGY8qJIdyFXSHHnuYwK/hnhEvEp
+ g0RUI2Ubx0c4k5psVDQC0Ny6k1kdzgyhVo/vc9ZJd8bw+XqAcP/GliIE7c2FnRqM7c
+ mPPSpOvsVohtozCm0Erri2yu/eVRMtyfBQfYUfTVWMkgrgHP6H8pyi6SQohyGXm7mf
+ aZzYiRam79OP1s9ky+xZAgQRjaughmi6ssGPyCy0YUBs4fhYjHwq6rQqI09nmi6NC3
+ hAffO8y67672A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202406071026 header.b=WrjfYQOx
-Subject: [Buildroot] [PATCH 4/6] package/kodi-pvr-waipu: bump version to
- 21.8.1-Omega
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=KyxoRDWC
+Subject: [Buildroot] [PATCH 6/6] package/kodi-skin-confluence: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,32 +89,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-index 6377f36e80..acd3ff7955 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index e8098abed4..482da25cf2 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  96c558f02d820c43994da05a89693f3e787c2adb8faa2ff28127a6e97d33525c  kodi-pvr-waipu-21.6.1-Omega.tar.gz
-+sha256  b1e354dccb60fff50ce9e6fe7ee3cc876de17aba43f89938196f5846cba1f891  kodi-pvr-waipu-21.8.1-Omega.tar.gz
- sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-index 222abcaa1b..dd826b75af 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+-sha256  99b243b7ccb9e0f3e1455e8967f99fd7d98d8924be0d9fe82de12448fe2ecc4e  kodi-skin-confluence-f8479bece875313049943fba834e551f6b7d2cf5.tar.gz
++sha256  d66fe75a261c6c2b9ac2923dc51d469ccc1df45a2462188e6a024a87bbe27311  kodi-skin-confluence-7bd4a396c492adb2d424d7f51d415fb565cda358.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index 68d25e184c..03aa4261cd 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_WAIPU_VERSION = 21.6.1-Omega
-+KODI_PVR_WAIPU_VERSION = 21.8.1-Omega
- KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
- KODI_PVR_WAIPU_LICENSE = GPL-2.0+
- KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
+-KODI_SKIN_CONFLUENCE_VERSION = f8479bece875313049943fba834e551f6b7d2cf5
++KODI_SKIN_CONFLUENCE_VERSION = 7bd4a396c492adb2d424d7f51d415fb565cda358
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
 -- 
 2.39.2
 
