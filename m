@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE315C2BB85
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 17:42:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D300CC2BB85
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 17:42:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 80192400DD;
-	Sat, 22 Jun 2024 17:42:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8551A405B9;
+	Sat, 22 Jun 2024 17:42:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VNv2PLVqkcrv; Sat, 22 Jun 2024 17:42:21 +0000 (UTC)
+ id 2CJBDfjshNNd; Sat, 22 Jun 2024 17:42:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45F3540278
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4F22405BE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45F3540278;
-	Sat, 22 Jun 2024 17:42:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4FF801BF5DB
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4F22405BE;
+	Sat, 22 Jun 2024 17:42:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E6DE1BF5DB
  for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A7A86070E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9795B40278
  for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:42:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 79-1h6o0TUR3 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6acRJGo1cB_7 for <buildroot@lists.busybox.net>;
  Sat, 22 Jun 2024 17:42:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91893606E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6280400DD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 91893606E2
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6280400DD
  for <buildroot@buildroot.org>; Sat, 22 Jun 2024 17:42:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89BD582789; Sat, 22 Jun 2024 17:42:19 +0000 (UTC)
+ id 936FC8278A; Sat, 22 Jun 2024 17:42:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 22 Jun 2024 19:40:52 +0200
+Date: Sat, 22 Jun 2024 19:41:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 127ddbe5118f68395c0305fb9ff44342bfc1d64b
-X-Git-Newrev: fd5623150dcc23441c4f0bd586378daeb91d66ea
+X-Git-Oldrev: fd5623150dcc23441c4f0bd586378daeb91d66ea
+X-Git-Newrev: 61a7edc0c89b336d63551469f5a2291418fdbc19
 X-Patchwork-Hint: ignore
-Message-Id: <20240622174219.89BD582789@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/waf: bump to v2.1.1
+Message-Id: <20240622174219.936FC8278A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/redis: bump to v7.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd5623150dcc23441c4f0bd586378daeb91d66ea
+commit: https://git.buildroot.net/buildroot/commit/?id=61a7edc0c89b336d63551469f5a2291418fdbc19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+From the release notes:
+================================================================================
+Redis 7.2.5    Released Thu 16 May 2024 12:00:00 IST
+================================================================================
+
+Upgrade urgency MODERATE: Program an upgrade of the server, but it's not urgent.
+
+Bug fixes
+=========
+
+* A single shard cluster leaves failed replicas in CLUSTER SLOTS instead of removing them (#12824)
+* Crash in LSET command when replacing small items and exceeding 4GB (#12955)
+* Blocking commands timeout is reset due to re-processing command (#13004)
+* Conversion of numbers in Lua args to redis args can fail. Bug introduced in 7.2.0 (#13115)
+
+Bug fixes in CLI tools
+======================
+
+* redis-cli: --count (for --scan, --bigkeys, etc) was ignored unless --pattern was also used (#13092)
+* redis-check-aof: incorrectly considering data in manifest format as MP-AOF (#12958)
 
 Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/waf/waf.hash | 6 +++---
- package/waf/waf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-index 1ad535febb..543bea5d7b 100644
---- a/package/waf/waf.hash
-+++ b/package/waf/waf.hash
-@@ -1,7 +1,7 @@
- # Locally computed
--sha1  e310e29a44f23f80591f2aa6c2d4c30e5f1a26a8  waf-2.0.26
--sha256  dcec3e179f9c33a66544f1b3d7d91f20f6373530510fa6a858cddb6bfdcde14b  waf-2.0.26
-+sha1  9ee587d802ffd15a2e7cae579560d00754db4fad  waf-2.1.1
-+sha256  2e66e01fd564f09106419389119c78143327c89a35f26ee3ed376f0ee410a14d  waf-2.1.1
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 378b930374..5c3a5ea4d8 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  8d104c26a154b29fd67d6568b4f375212212ad41e0c2caa3d66480e78dbd3b59  redis-7.2.4.tar.gz
++sha256  5981179706f8391f03be91d951acafaeda91af7fac56beffb2701963103e423d  redis-7.2.5.tar.gz
  
- # The waf script also contains its license, but is renamed `waf` in the extract
- # step, so this is a synonym for the above, to check WAF_LICENSE
--sha256  dcec3e179f9c33a66544f1b3d7d91f20f6373530510fa6a858cddb6bfdcde14b  waf
-+sha256  2e66e01fd564f09106419389119c78143327c89a35f26ee3ed376f0ee410a14d  waf
-diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-index bffa27a926..a12d15a228 100644
---- a/package/waf/waf.mk
-+++ b/package/waf/waf.mk
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 2680b11b74..852bf31ca0 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAF_VERSION = 2.0.26
-+WAF_VERSION = 2.1.1
- WAF_SOURCE = waf-$(WAF_VERSION)
- WAF_SITE = https://waf.io
- WAF_LICENSE = BSD-3-Clause
+-REDIS_VERSION = 7.2.4
++REDIS_VERSION = 7.2.5
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
