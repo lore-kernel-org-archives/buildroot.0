@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30474C2BB85
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 08:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D917C2BB85
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 08:40:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC69040185;
-	Sat, 22 Jun 2024 08:39:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A81340185;
+	Sat, 22 Jun 2024 08:40:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dC1TqZWF4q6b; Sat, 22 Jun 2024 08:39:53 +0000 (UTC)
+ id oIU3Pzb2gzsD; Sat, 22 Jun 2024 08:40:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E4824056B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7A08404F5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E4824056B;
-	Sat, 22 Jun 2024 08:39:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7A08404F5;
+	Sat, 22 Jun 2024 08:40:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0CD701BF5EA
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:39:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A14831BF5EA
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:40:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0830260683
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:39:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8EFA96067D
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 08:40:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2kNLWIEa_6no for <buildroot@lists.busybox.net>;
- Sat, 22 Jun 2024 08:39:52 +0000 (UTC)
+ id OKF1WVwE7OE4 for <buildroot@lists.busybox.net>;
+ Sat, 22 Jun 2024 08:40:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3F1436067D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F1436067D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B61F66063D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B61F66063D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3F1436067D
- for <buildroot@buildroot.org>; Sat, 22 Jun 2024 08:39:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B61F66063D
+ for <buildroot@buildroot.org>; Sat, 22 Jun 2024 08:40:03 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cf60.dip0.t-ipconnect.de [79.214.207.96])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EA946A4C0BE1;
- Sat, 22 Jun 2024 10:39:25 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2EFA5A4C09C5;
+ Sat, 22 Jun 2024 10:39:26 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:40940)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1sKwHN-000000001A7-1ujq;
+ (envelope-from <bernd@kuhls.net>) id 1sKwHN-000000001A7-2eFf;
  Sat, 22 Jun 2024 08:39:25 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 22 Jun 2024 10:39:21 +0200
-Message-Id: <20240622083925.10149-3-bernd@kuhls.net>
+Date: Sat, 22 Jun 2024 10:39:23 +0200
+Message-Id: <20240622083925.10149-5-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240622083925.10149-1-bernd@kuhls.net>
 References: <20240622083925.10149-1-bernd@kuhls.net>
@@ -54,23 +54,23 @@ MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1719045565;
- bh=nCjOF+wZFuSRhAFeXaU2VYfOA6K+SGFr7/t2+yZrHME=;
+ s=kas202406071026; t=1719045566;
+ bh=QLoZFMeFaEUPx0m7xfkVuqXJRb/UtH6TmBIolNzOC2w=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=gRWlBGkbQR8UVFQb1TOTTtcm66EUT7kuLgukZkO6OB8Xo3ehy3phPOGyHLBXREnp8
- DXykX/VXmsCNr+l+c5CVwMfALZVmEdSG402EQHplSW5IWNWoWNZ7xOt8Iw9jtHd7BF
- hHdTYlocgGUe5slhAQQv5t7FKvBKz3eSP3JLNSIgBtjvdcNJLtRs8W66oZfZP7yH90
- B9Eh+8YTSA9Det0kl39n/zZOdpdqzJP0QPKfhhg1/a+ju8A8yvy7xA9KdsRM1jsKq4
- akZYewT5BxR3etNM9SYwscOQywvUOnK0GcCoeB5tgN4t7roIsZlm1v/+vaerc6PW+L
- 3SBfQtVUSHbLw==
+ b=WrjfYQOxFZc2/t8bjKa8pAPAwowfxPjF7hskMzXGS7uHOJllpI/dTYo4iTXygVOz+
+ IRPIYZ1MlMgvHqfhDIz0ZbP0Rrd0a1u0W4GOYorWxI/p6cf5OYljsZCW3/jg5EG0PU
+ +sPi57IJI5jbCXRq41bLZGMXt93cgH2Mt3XVqFn2VCXrVUij4T5+hTmQMjPWnIsbvT
+ qkt0FisFXgK29erQb0lFxqXC5zuX/fXNRvLCe5AnOccNF+Fy6kYayYGFoWJHf72Qjv
+ 27+igqVmsxBxOrlRstf8rL0AF9maWLct8l8LBxkrTBkwegdrHvrnCEW4n15H4QU64d
+ eT0Yq/7ip/xug==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202406071026 header.b=gRWlBGkb
-Subject: [Buildroot] [PATCH 2/6] package/kodi-peripheral-joystick: bump
- version to 21.1.18-Omega
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=WrjfYQOx
+Subject: [Buildroot] [PATCH 4/6] package/kodi-pvr-waipu: bump version to
+ 21.8.1-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,32 +90,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
+ package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index 9cea40965f..a9d27bd70d 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+index 6377f36e80..acd3ff7955 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b152c6f17291ede48850bf307e6d619ff803e1b26217ccec532d5c49a3ef7b84  kodi-peripheral-joystick-21.1.15-Omega.tar.gz
-+sha256  226366b69536579d1adccb8548ba20c1b094876ce481bab81f744affa71bb305  kodi-peripheral-joystick-21.1.18-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index 34ea45855e..aceefba55a 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+-sha256  96c558f02d820c43994da05a89693f3e787c2adb8faa2ff28127a6e97d33525c  kodi-pvr-waipu-21.6.1-Omega.tar.gz
++sha256  b1e354dccb60fff50ce9e6fe7ee3cc876de17aba43f89938196f5846cba1f891  kodi-pvr-waipu-21.8.1-Omega.tar.gz
+ sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+index 222abcaa1b..dd826b75af 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PERIPHERAL_JOYSTICK_VERSION = 21.1.15-Omega
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 21.1.18-Omega
- KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
+-KODI_PVR_WAIPU_VERSION = 21.6.1-Omega
++KODI_PVR_WAIPU_VERSION = 21.8.1-Omega
+ KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
+ KODI_PVR_WAIPU_LICENSE = GPL-2.0+
+ KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
 -- 
 2.39.2
 
