@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C1DCC2BB85
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 17:06:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7281CC2BB85
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 17:12:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E61B440364;
-	Sat, 22 Jun 2024 17:06:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22E2340364;
+	Sat, 22 Jun 2024 17:12:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aJmNtTCQbfZc; Sat, 22 Jun 2024 17:06:11 +0000 (UTC)
+ id UIdj1oTZVXVI; Sat, 22 Jun 2024 17:12:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF58E40497
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFEC34056B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CF58E40497;
-	Sat, 22 Jun 2024 17:06:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CEC911BF5DB
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:06:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFEC34056B;
+	Sat, 22 Jun 2024 17:12:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C6C531BF5DB
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:12:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2E3140711
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:06:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3D464056B
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:12:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6TKTt-whA9SU for <buildroot@lists.busybox.net>;
- Sat, 22 Jun 2024 17:06:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3PkUoxcluF_3 for <buildroot@lists.busybox.net>;
+ Sat, 22 Jun 2024 17:12:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D9726407BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9726407BE
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D9726407BE
- for <buildroot@buildroot.org>; Sat, 22 Jun 2024 17:06:03 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E821040005;
- Sat, 22 Jun 2024 17:06:00 +0000 (UTC)
-Date: Sat, 22 Jun 2024 19:06:00 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240622190600.63d3b9c8@windsurf>
-In-Reply-To: <20240612192246.52305-1-bernd@kuhls.net>
-References: <20240612192246.52305-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1719075961;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=v2VisJhC6v2nkTaiOfZt7m3rU9GxIcAumKZIThoFkxQ=;
- b=ML27S7neJvGvP2dJBWxpbnOd7Ef125kd29nJT32WYFWLKPNnNHLKYnM/LAGuXAs8SpAxe+
- Zv6cLk6jpL7DGllQh/F6lM2J5MfguRbfyXyhsdfyerAM1TtJ3oABAbhOUhb4K7EvQqmzbp
- kfXgcystM54RK3pn0OouzdcRSD9tjBM9fBuZEyvXT5NTqbV3avp5wAmoRuNod/EWm40M0U
- ZNr3ClDWzszzwffoGio+Z9LO5nrwx5Z1Nw4Sb7weoxHwnkdf6KEitQNeJLsU9al+8LHjjx
- J9UTiyLcmJQ9Iob0VwIeqUMdwlYM/FMFomZgPwT/lM35Lpdfgc5pdHvFtJZ/Ug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ML27S7ne
-Subject: Re: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.8.12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B710640364
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B710640364
+ for <buildroot@buildroot.org>; Sat, 22 Jun 2024 17:12:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A234A82745; Sat, 22 Jun 2024 17:12:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 22 Jun 2024 19:10:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b0fe6d1be9b306addf45e3722f45daa2de4ac4e5
+X-Git-Newrev: 50bdb2a3b7ace71065dc0b8a81bebc173f84a8c4
+X-Patchwork-Hint: ignore
+Message-Id: <20240622171243.A234A82745@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcurl: bump version to 8.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,32 +59,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 12 Jun 2024 21:22:46 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=50bdb2a3b7ace71065dc0b8a81bebc173f84a8c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes:
-> https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
-> https://forum.torproject.org/t/stable-release-0-4-8-12/13060
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/tor/tor.hash | 4 ++--
->  package/tor/tor.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Changelog: https://curl.se/changes.html#8_8_0
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 7fcad973c3..7ba45b79d7 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.7.1.tar.xz.asc
++# https://curl.se/download/curl-8.8.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  6fea2aac6a4610fbd0400afb0bcddbe7258a64c63f1f68e5855ebc0c659710cd  curl-8.7.1.tar.xz
++sha256  0f58bb95fc330c8a46eeb3df5701b0d90c9d9bfcc42bd1cd08791d12551d4400  curl-8.8.0.tar.xz
+ sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 99320c1315..172dd22071 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 8.7.1
++LIBCURL_VERSION = 8.8.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
