@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1C04C27C53
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 17:42:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBBFEC27C53
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jun 2024 17:43:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D920405B6;
-	Sat, 22 Jun 2024 17:42:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 947CD40278;
+	Sat, 22 Jun 2024 17:43:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WKsymSC9-9bq; Sat, 22 Jun 2024 17:42:29 +0000 (UTC)
+ id LxfdgNQRE5TZ; Sat, 22 Jun 2024 17:43:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C406405BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DC8D4059E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C406405BE;
-	Sat, 22 Jun 2024 17:42:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5CD941BF5DB
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:42:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6DC8D4059E;
+	Sat, 22 Jun 2024 17:43:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3B14F1BF5DB
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:43:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45BBA81EDE
- for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:42:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 28321403AD
+ for <buildroot@lists.busybox.net>; Sat, 22 Jun 2024 17:43:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gma9rGU6ucVi for <buildroot@lists.busybox.net>;
- Sat, 22 Jun 2024 17:42:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I3CRKneWU9xX for <buildroot@lists.busybox.net>;
+ Sat, 22 Jun 2024 17:43:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1CD7A81ECF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CD7A81ECF
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1CD7A81ECF
- for <buildroot@buildroot.org>; Sat, 22 Jun 2024 17:42:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CEF0E1BF205;
- Sat, 22 Jun 2024 17:42:22 +0000 (UTC)
-Date: Sat, 22 Jun 2024 19:42:22 +0200
-To: Titouan Christophe <titouanchristophe@gmail.com>
-Message-ID: <20240622194222.234c5296@windsurf>
-In-Reply-To: <20240617075538.938635-1-titouanchristophe@gmail.com>
-References: <20240617075538.938635-1-titouanchristophe@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CC12D403A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC12D403A5
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CC12D403A5
+ for <buildroot@buildroot.org>; Sat, 22 Jun 2024 17:43:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 025391C0002;
+ Sat, 22 Jun 2024 17:43:05 +0000 (UTC)
+Date: Sat, 22 Jun 2024 19:43:05 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240622194305.21900f07@windsurf>
+In-Reply-To: <20240612150730.382801-1-ju.o@free.fr>
+References: <20240612150730.382801-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1719078143;
+ d=bootlin.com; s=gm1; t=1719078186;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=CIHiqqY8HfGQ1YMbB5OUK7mah67dCQiy8Koaj9MkZt4=;
- b=echPWcXycFHAm/qwm+vu0cN63jO8zwkU7y6tP5lPzG47NVhU1yU1tlqemEeIs6Rpc5hy9U
- j3uGtySSo+vrFTC9zRBAUTRInFUWNpoc4Iy0ZcxmB7RXkTINbjSNWptR6I0fwuFdjdsZ7J
- dgUNAYzceY7/pPihE6DJvyZszdHzc672ix5idkTYeA+15ihOZ3h2p9n/EfAQg8SNiYmPE3
- wYHD3oJb5XykX2AfnS8f4AaVfv1nEEh7jh5I7XXqEht5A9H+9Ta84CohjyQwRjEdHmLvi7
- Q+r6B55DgOWS8UuNOSTdMZwowEmFDzsmkBhX9SH2Ch+W2gq7+nvSX6sc9TGUcw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=zNFc/yF2tIfy0GAPzQCLoQWH65sUaDX400XK30GfscM=;
+ b=FZo0YPZHi5kQ3zRX3gtU6gApzT/swG3BHX0nItMCPYoswNlbVHXBfLpXgcYDltubtFE3ZS
+ jhRugdEHs1Ro21gq2LmvWfCe2Y6P7PrT5+5omDcBWTdtcq7BlrcRgElJ5tf5W4jG/nj9El
+ jrcIBO7bHi/p/mx8sBCW8K9f4/pQCiK2OzTvbXUN6FI2ZNk2dVTrm3ODyt2qswuYbnJFzP
+ poZzl7/QHdVhBJA70zTbiKtVUqLZiygJulEaYtWJuVNXx3hpXth8fd1mdFatep263hwAu2
+ Kyp47NmNz27ZZVUcL9gyUYJeonb48WifkJHyR0nXvb6ayBbrVc4gX5SyZ6P+lA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=echPWcXy
-Subject: Re: [Buildroot] [PATCH 1/1] package/redis: bump to v7.2.5
+ header.s=gm1 header.b=FZo0YPZH
+Subject: Re: [Buildroot] [PATCH 1/1] package/rdma-core: bump to version v52.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,35 +88,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 17 Jun 2024 09:55:38 +0200
-Titouan Christophe <titouanchristophe@gmail.com> wrote:
+On Wed, 12 Jun 2024 17:07:30 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> From the release notes:
-> ================================================================================
-> Redis 7.2.5    Released Thu 16 May 2024 12:00:00 IST
-> ================================================================================
+> For change log since v51.0, see:
+> https://github.com/linux-rdma/rdma-core/releases/tag/v52.0
 > 
-> Upgrade urgency MODERATE: Program an upgrade of the server, but it's not urgent.
-> 
-> Bug fixes
-> =========
-> 
-> * A single shard cluster leaves failed replicas in CLUSTER SLOTS instead of removing them (#12824)
-> * Crash in LSET command when replacing small items and exceeding 4GB (#12955)
-> * Blocking commands timeout is reset due to re-processing command (#13004)
-> * Conversion of numbers in Lua args to redis args can fail. Bug introduced in 7.2.0 (#13115)
-> 
-> Bug fixes in CLI tools
-> ======================
-> 
-> * redis-cli: --count (for --scan, --bigkeys, etc) was ignored unless --pattern was also used (#13092)
-> * redis-check-aof: incorrectly considering data in manifest format as MP-AOF (#12958)
-> 
-> Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/redis/redis.hash | 2 +-
->  package/redis/redis.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Patch tested on branch master at tag 2024.05 with commands:
 
 Applied to master, thanks.
 
