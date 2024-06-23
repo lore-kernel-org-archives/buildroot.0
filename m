@@ -4,56 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0DDDC27C4F
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 09:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC84FC27C4F
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 09:09:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F11460733;
-	Sun, 23 Jun 2024 09:09:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C80860733;
+	Sun, 23 Jun 2024 09:09:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LRX7-1gLuQlK; Sun, 23 Jun 2024 09:09:24 +0000 (UTC)
+ id Jo41r_m_jhvt; Sun, 23 Jun 2024 09:09:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4AA060751
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B04F760751
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4AA060751;
-	Sun, 23 Jun 2024 09:09:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80F2A1BF2EB
- for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 09:09:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B04F760751;
+	Sun, 23 Jun 2024 09:09:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7635E1BF2EB
+ for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 09:09:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C0CE60751
- for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 09:09:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2941F4066C
+ for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 09:09:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qbQVHzyGEJ2H for <buildroot@lists.busybox.net>;
- Sun, 23 Jun 2024 09:09:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PjZdBnXTHyBY for <buildroot@lists.busybox.net>;
+ Sun, 23 Jun 2024 09:09:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A5A3F60733
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5A3F60733
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A5A3F60733
- for <buildroot@buildroot.org>; Sun, 23 Jun 2024 09:09:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6B2E51BF204;
- Sun, 23 Jun 2024 09:09:20 +0000 (UTC)
-Message-ID: <063785e8-ed63-42ab-85fc-4a17ee2ee92d@korsgaard.com>
-Date: Sun, 23 Jun 2024 11:09:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
-References: <20240609205345.679518-1-petr.vorel@gmail.com>
-Content-Language: en-US
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2249240659
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2249240659
+ for <buildroot@buildroot.org>; Sun, 23 Jun 2024 09:09:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0E65382889; Sun, 23 Jun 2024 09:09:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <20240609205345.679518-1-petr.vorel@gmail.com>
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/ltp-testsuite: Bump version to
+To: buildroot@buildroot.org
+Date: Sun, 23 Jun 2024 11:08:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 118c824b565442bfe1d4ae1c0a39d330e624b854
+X-Git-Newrev: 74b0e7ebabc3cbe33b28d899cba169657762ad52
+X-Patchwork-Hint: ignore
+Message-Id: <20240623090933.0E65382889@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ltp-testsuite: Bump version to
  20240524
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,35 +59,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- Petr Vorel <pvorel@suse.cz>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 6/9/24 22:53, Petr Vorel wrote:
-> From: Petr Vorel <pvorel@suse.cz>
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Tested:
-> 
->                      bootlin-armv5-uclibc [1/6]: OK
->                       bootlin-armv7-glibc [2/6]: OK
->                     bootlin-armv7m-uclibc [3/6]: SKIPPED
->                       bootlin-x86-64-musl [4/6]: SKIPPED
->                        br-arm-full-static [5/6]: OK
->                               arm-aarch64 [6/6]: OK
-> 
-> Kind regards,
-> Petr
+commit: https://git.buildroot.net/buildroot/commit/?id=74b0e7ebabc3cbe33b28d899cba169657762ad52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ltp-testsuite/ltp-testsuite.hash | 4 ++--
+ package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
-
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index 1562f346b4..03aa586156 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,4 +1,4 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20240129/ltp-full-20240129.tar.xz.sha256
+-sha256  c302f6b2ca09cbb7835f549777bdb9233fe31f7086d7ad8e65472a0804e3e025  ltp-full-20240129.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20240524/ltp-full-20240524.tar.xz.sha256
++sha256  2b7c07bb281b7ec49981eeb06c4b66f147b103977254632678d384034f6e9663  ltp-full-20240524.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 0996b77e58..bbeb80c732 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20240129
++LTP_TESTSUITE_VERSION = 20240524
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
