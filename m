@@ -1,98 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 557A0C27C4F
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 21:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBD11C2BA18
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 22:03:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0137981227;
-	Sun, 23 Jun 2024 21:05:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OhxXTmmyLCfG; Sun, 23 Jun 2024 21:05:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E292B811F3
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E292B811F3;
-	Sun, 23 Jun 2024 21:05:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 72C3E1BF580
- for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 21:05:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6091160837
- for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 21:05:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3F5860857;
+	Sun, 23 Jun 2024 22:03:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k9GD5z4xa96b for <buildroot@lists.busybox.net>;
- Sun, 23 Jun 2024 21:05:13 +0000 (UTC)
+ id zuLL-aKNX45i; Sun, 23 Jun 2024 22:03:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DAA260831
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DAA260831;
+	Sun, 23 Jun 2024 22:03:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D98001BF580
+ for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 22:03:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C765280BB5
+ for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 22:03:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xFIKAo3RIy4y for <buildroot@lists.busybox.net>;
+ Sun, 23 Jun 2024 22:03:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::31; helo=mail-oa1-x31.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6177960638
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6177960638
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com
- [IPv6:2001:4860:4864:20::31])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6177960638
- for <buildroot@buildroot.org>; Sun, 23 Jun 2024 21:05:13 +0000 (UTC)
-Received: by mail-oa1-x31.google.com with SMTP id
- 586e51a60fabf-2598ae41389so2039002fac.3
- for <buildroot@buildroot.org>; Sun, 23 Jun 2024 14:05:13 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::136; helo=mail-il1-x136.google.com;
+ envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 08BE780B88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08BE780B88
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
+ [IPv6:2607:f8b0:4864:20::136])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 08BE780B88
+ for <buildroot@buildroot.org>; Sun, 23 Jun 2024 22:03:50 +0000 (UTC)
+Received: by mail-il1-x136.google.com with SMTP id
+ e9e14a558f8ab-37636c3872bso6135535ab.3
+ for <buildroot@buildroot.org>; Sun, 23 Jun 2024 15:03:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719176712; x=1719781512;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=KRVezl5aNyZWYsm+a92X8j+S8Z1MQsVUzd3yNRh2DXI=;
- b=snnpWQKsBpLanifQVfWcjGpQJJ4ZYtIkym4rd2c1rTp7Y4WFO+3ncWZAxpym5puTug
- HrSDDnbqgyEwdQb78ujQDKAMJ/lVMzWQsJJVlMSKMPwVyrFVWcCz0xTZKzGt75BEJz5y
- TF5gv39TeHLgkLCqXVCoWXspOv6nR7/PGfwJYlAOFNzV5R/pxhsOmIej3Rv7Dyg01Vhp
- SKFBC7kRQ7qSOf46hcUpVlUuQdSsL22LsQCVNdUYWIny+T72f0Up89MQnj0FOzaC/Egy
- tRrHDsDlkGoGE6KT/6kGNDOZTKfIdTLZRusiBOBucZDE8LtX0cjnsQkEwHvdM4Sxco9c
- z3mw==
-X-Gm-Message-State: AOJu0YwQNStyQQdfmI+/HqACUcj1Ev2bm6jLyUIhekEWt2tuX6lhFpzd
- jSIjc0reQl434b7TRrAApmHaR/X9d9vI1qHeuuD0BnJeWu+lGAymKZqFi3Y3IYXQfXVOCVR/yQQ
- xQB9WsHBA9BWiOEm72b/1poWo5pJn+xjh
-X-Google-Smtp-Source: AGHT+IGbNEYYW8jXLu3wT2vb6E9EFbEMDQRNQM47/BZOViKHVrtDzYQ2HX8LGipSn3et87h1EPl3AMYvhagS1TkxIf4=
-X-Received: by 2002:a05:6870:89aa:b0:24f:dad3:97c with SMTP id
- 586e51a60fabf-25d06e57b0bmr3284829fac.46.1719176711874; Sun, 23 Jun 2024
- 14:05:11 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1719180229; x=1719785029;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8xn6KNr9xyOSimT8WsKNKC1/cNZS+0gTIyEFDD4VDvk=;
+ b=QlAq1NNw4teYvqr1e/OXla/z/t9CXMWuPJkKKZUIyDcE/0PE/w0KWWpDR5JpxYfEj/
+ ydkPKMA8loemoGA7WSyfkeowFElcjhXpqtcFrQYoQgiLkKgqjx8/SOkPFdrEPh4wHLwO
+ R+7rCF3YWKiFBZDJkuwfaRZbvqr3ys+QhRqqI12rAhW4ed7u3N2f1JqB+rEe/4mvqt8t
+ PImn+dWONjFGM80wfz1kF00y9js8jIvi9KOuw383seaCsbJ5FX5+vySG+y7Efw7BmDRY
+ YiK1NIAsYP7vsHbbqYj5oS2qskilrsUxT49sXRK4BP7yj/QMUVQpmzvFEhTwRGsNof5m
+ JhtQ==
+X-Gm-Message-State: AOJu0YwIHa+qCwTFN9sBaIxqcbm8tf90SLPIch7WUVGfFhHvOavO3OyQ
+ LJ+eHOc0YjgMiD1LWbFAritrXvRcuIK9vxvQ6HZGadYpgDy0STWvSoTPJw==
+X-Google-Smtp-Source: AGHT+IGkJo6FimU80yxJ9wwqPz3zwtCEDbhns17irQepvZAIB40fDAFSI0F4ISNw1+gh2qjpHv68ZQ==
+X-Received: by 2002:a05:6e02:12c2:b0:375:8a71:4cbe with SMTP id
+ e9e14a558f8ab-3763f695927mr34038855ab.21.1719180229433; 
+ Sun, 23 Jun 2024 15:03:49 -0700 (PDT)
+Received: from ProgramPC.bm.local ([76.8.199.226])
+ by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3762f2fb209sm14438625ab.10.2024.06.23.15.03.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 23 Jun 2024 15:03:49 -0700 (PDT)
+From: Lance Fredrickson <lancethepants@gmail.com>
+X-Google-Original-From: Lance Fredrickson
+To: buildroot@buildroot.org
+Date: Sun, 23 Jun 2024 16:03:47 -0600
+Message-Id: <20240623220347.1967206-1-lancethepants@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <cover.1718382114.git.yann.morin.1998@free.fr>
- <185f954c798e7d8e7e1400a8b39abe1b273e849b.1718382114.git.yann.morin.1998@free.fr>
- <CADvTj4p=iYe8wK4UMnvCSmsV02JesvY9BWQDZOfcbV_PeSAkNQ@mail.gmail.com>
- <Zm9KqRyiYxLxVfwy@landeda>
- <CADvTj4r+O-RTMRMTSWmhW-Tb1UThcjsRM0mA1=H0DsNM3cGuTg@mail.gmail.com>
- <ZnXbepvruXKajEcz@landeda>
-In-Reply-To: <ZnXbepvruXKajEcz@landeda>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 23 Jun 2024 15:05:00 -0600
-Message-ID: <CADvTj4qMjDsW6CWNwo0sNJ9SbOKsUaQ7fDBg6z=gHB5uesZ1WA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1719176712; x=1719781512; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=KRVezl5aNyZWYsm+a92X8j+S8Z1MQsVUzd3yNRh2DXI=;
- b=cgxUTcQMAk1d45WY11rnUjTuqXuCqWL0DpWTPVReBEeV/eybhRhsnQNLQFkY9n1xTq
- nO1twwjDN2KIE5w4fj2bINCoJ98YeE7Y9DWtzQ4k3od+MyWd24qaz0oXkbrSJ/FtLAqw
- aRbOYEBldtfD7ht4iM4bgZqBtb8e/BdSHw12VL9/SzWBNjZeCf1QQj4EholN6Boi4tSb
- a0c12HaqzFm+hf4vxg+27Tyq4rJAnyTj7izOVcnhPvRlaLQT2TzU+toNz1ogGmNbHuaG
- TTlQiGYwzfo4fLRIj7PDL1/qqzbKYQYeXsgGkvIALyjWra7vS8vJuXuIA3wlCwaCQAA+
- EMMA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1719180229; x=1719785029; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8xn6KNr9xyOSimT8WsKNKC1/cNZS+0gTIyEFDD4VDvk=;
+ b=D4ZTOaqSeXCx1xJnQWZTrt8W89YjA4cMDBMNVt54/vN1hqoHaxfZfxPuUT25NmcfVe
+ hKAAfdV4KCB7PdR8rnFM4nKKH9dfT1Z+eJFRtzcMI0oVe6Qkx0ZYNeZqsJKfi0ZAXcdx
+ TwwY9B5iitpPEdofJQVsUScjh+JXoQfm/kDi/aPStVEeMKi8fHZ/Wr2EHGTg47Pv7pC8
+ usBIp+jjIYj3HxY+O6RDN0NzqHlUn9czAl+5aKyRa7p0TQlmEnR2NgbC+QABuCTCQB7G
+ v4rB7JspM6v6DXYFFPMG0d7UOMIW9/yvLRRk+MDsjicdaiZJv/oDla5EKd4mGD8TZnI2
+ tQnA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=cgxUTcQM
-Subject: Re: [Buildroot] [PATCH 2/6] utils/update-rust: add script to
- automatically update the rust version
+ header.s=20230601 header.b=D4ZTOaqS
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add WiFi and BT
+ firmware for MT7925
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,69 +102,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd@kuhls.net>, Lance Fredrickson <lancethepants@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCBKdW4gMjEsIDIwMjQgYXQgMTo1OOKAr1BNIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9y
-aW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPgo+IEphbWVzLCBBbGwsCj4KPiBPbiAyMDI0LTA2LTIw
-IDEyOjEzIC0wNjAwLCBKYW1lcyBIaWxsaWFyZCBzcGFrZSB0aHVzbHk6Cj4gWy0tU05JUC0tXQo+
-ID4gSSBkb24ndCB0aGluayB0aGVyZSdzIHJlYWxseSBhbnkgbWVhbmluZ2Z1bCBhZHZhbnRhZ2Ug
-dG8gcmVxdWVzdHMgdnMKPiA+IHVybGxpYi5yZXF1ZXN0LnVybG9wZW4gd2hpY2ggaXMgcGFydCBv
-ZiB0aGUgc3RhbmRhcmQgbGlicmFyeSBmb3IgdGhpcwo+ID4gcGFydGljdWxhciB1c2UgY2FzZS4K
-Pgo+IHJlcXVlc3RzLmdldCgpIGlzIHNob3J0ZXIhIDstKQo+Cj4gU28sIEkgZW5kZWQgdXAga2Vl
-cGluZyB1c2Ugb2YgcmVxdWVzdHMuIFRoaXMgc2NyaXB0IGlzIG5vdCBwYXJ0IG9mIHRoZQo+IGJ1
-aWxkIHByb2Nlc3M7IGl0IGlzIGp1cyB0YSBoZWxwZXIgc2NyaXB0LCBzbyBpdCBpcyBhY2NlcHRh
-YmxlIHRoYXQgd2UKPiBkZXBlbmQgb24gYSBub24tc3RkbGliIG1vZHVsZSwgZXNwZWNpYWx5IHN1
-Y2ggYSB3aWRlbHkgYXZhaWxhYmxlIG9uZSBhcwo+IHJlcXVlc3RzIGlzLgoKVGhlIG1haW4gaXNz
-dWUgd2l0aCByZXF1ZXN0cyBJIHRoaW5rIGlzIHRoYXQgdGhlcmUncyBzb21lIHBvdGVudGlhbCBm
-b3IgdmVyc2lvbgppbmNvbXBhdGliaWxpdGllcyB3aXRoIHJlcXVlc3RzIGRlcGVuZGVuY2llcyBh
-cyBpdCBkZXBlbmRzIG9uIG5vbi1zdGRsaWIKcGFja2FnZXMuCgpGb3IgZXhhbXBsZSBJIHNlZSB0
-aGlzIHdhcm5pbmcgd2hlbiBydW5uaW5nIHRoZSBzY3JpcHQgd2l0aCByZXF1ZXN0cyBvbgpvbmUg
-c3lzdGVtIG9mIG1pbmU6Ci91c3IvbGliL3B5dGhvbjMvZGlzdC1wYWNrYWdlcy9yZXF1ZXN0cy9f
-X2luaXRfXy5weTo4NzoKUmVxdWVzdHNEZXBlbmRlbmN5V2FybmluZzogdXJsbGliMyAoMS4yNi41
-KSBvciBjaGFyZGV0ICg1LjEuMCkgZG9lc24ndAptYXRjaCBhIHN1cHBvcnRlZCB2ZXJzaW9uIQog
-IHdhcm5pbmdzLndhcm4oInVybGxpYjMgKHt9KSBvciBjaGFyZGV0ICh7fSkgZG9lc24ndCBtYXRj
-aCBhIHN1cHBvcnRlZCAiCgpBbnl3YXlzIHdlIGNhbiB1c2UgdXJsbGliLnJlcXVlc3Qgd2l0aG91
-dCBhbnkgZXh0cmEgbGluZXMgb2YgY29kZSwgc2VlOgpodHRwczovL3BhdGNod29yay5vemxhYnMu
-b3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjQwNjIzMjAzNTU3LjM4MzAxMjItMS1qYW1l
-cy5oaWxsaWFyZDFAZ21haWwuY29tLwoKPgo+ID4gPiAgICAgb3MucGF0aC5iYXNlbmFtZShta19m
-aWxlKVs6LTNdLnVwcGVyKCkucmVwbGFjZSgiLSIsICJfIikgKyAiX1ZFUlNJT04iCj4gPiA+ICAg
-ICBwYXRobGliLlBhdGgobWtfZmlsZSkubmFtZVs6LTNdLnVwcGVyKCkucmVwbGFjZSgiLSIsICJf
-IikgKyAiX1ZFUlNJT04iCj4gPiA+IE9uZSBjaGFyIGxvbmdlci4uLiA7LSkKPiA+IHBhdGhsaWIu
-UGF0aChta19maWxlKS5zdGVtLnVwcGVyKCkucmVwbGFjZSgiLSIsICJfIikgKyAiX1ZFUlNJT04i
-Cj4gPiBGb3VyIGNoYXJhY3RlcnMgc2hvcnRlci4gOy0pCj4KPiBPSywgeW91IHdpbi4gOy0pCj4K
-PiBJIHVzZWQgdGhhdCBpbiB0aGUgZmluYWwgc2NyaXB0Lgo+Cj4gWy0tU05JUC0tXQo+ID4gPiBJ
-cyB0aGF0IHJlYWxseSBpbXBvcnRhbnQgdGhhdCB0aGUgc2NyaXB0IGNhbiBiZSBydW4gZnJvbSBh
-bnl3aGVyZT8gSQo+ID4gPiBkb24ndCB0aGluayBzby4gSSBjYW4gaG93ZXZlciBhZGQgYSBjaGVj
-ayB0aGF0IHRoZSBmaWxlcyB3ZSB3YW50IHRvCj4gPiA+IGdlbmVyYXRlIGFuZCB0d2VhayBkbyBh
-bHJlYWR5IGV4aXN0LCB0aG91Z2g7IHRoYXQncyBhIGdvb2QgcG9pbnQuCj4gPiBJJ20gbm90IHN1
-cmUsIGJ1dCBpdCBzaG91bGQgYmUgcHJldHR5IGVhc3kgdG8gaW1wbGVtZW50LCBtYXkgYWxzbwo+
-ID4gd2FudCB0byB1c2UgcGF0aGxpYiB0eXBlcyBoZXJlLgo+Cj4gSSB3YW50ZWQgdG8ga2VlcCB0
-aGUgc2NyaXB0IGFzIHNpbXBsZS1zdHVwaWQgYXMgcG9zc2libGUuIFJlcXVpcmluZyB0aGF0Cj4g
-aXQgYmUgcnVuIGZyb20gQnVpbGRyb290J3MgdG9wIGRpciBpcyBub3QgdG9vIHN0cm9uZyBhIGxp
-bWl0YXRpb24sIGFuZAo+IGFkZGluZyBzdXBwb3J0IGZvciBydW5uaW5nIGZyb20gYW55d2hlcmUg
-d291bGQganVzdCBhZGQgbW9yZSBjb21wbGV4aXR5Cj4gKGV2ZW5tIGlmIG5vdCB0b28gbXVjaCku
-IFNvLCBJIGVycmVkIG9uIHRoZSBzaW1wbGljaXR5IHNpZGUsIGFuZCBqdXN0Cj4gY2F0Y2hlcyB0
-aGUgY2FzZSB3aGVyZSBhIGZpbGUgaXMgbm90IGZvdW5kLCBhc3N1bWluZyB0aGVuIHRoYXQgd2Un
-cmUgbm90Cj4gcnVubmluZyBmcm9tIHRoZSB0b3AgZGlyLgoKSXQncyBwb3NzaWJsZSB0byByZW1v
-dmUgdGhhdCBsaW1pdGF0aW9uIHdoaWxlIHNpbXBsaWZ5aW5nIGl0IGZ1cnRoZXIgdXNpbmcKcGF0
-aGxpYiwgaXQncyBsZXNzIG92ZXJhbGwgbGluZXMgb2YgY29kZSBldmVuLCBzZWU6Cmh0dHBzOi8v
-cGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyNDA2MjMyMDU4
-MjEuMzgzMzMyMS0xLWphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20vCgo+Cj4gVGhhbmsgeW91IGZv
-ciB0aGUgcmV2aWV3IGluIGFueSBjYXNlLCBpdCBpcyBhbHdheXMgaW50ZXJlc3RpbmcgdG8gYmUK
-PiBjaGFsbGVuZ2VkIGFuZCB0byBleHBsYWluIHRoZSBjaG9pY2VzLiBUaGFua3MhCj4KPiBSZWdh
-cmRzLAo+IFlhbm4gRS4gTU9SSU4uCj4KPiAtLQo+IC4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0t
-LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCj4g
-fCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9O
-IHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKPiB8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBE
-ZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAo+IHwgKzMz
-IDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBc
-ZS8gIFRoZXJlIGlzIG5vICB8Cj4gfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8q
-XF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKPiAnLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0t
-LS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+From: Lance Fredrickson <lancethepants@gmail.com>
+
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+---
+ package/linux-firmware/Config.in         | 10 ++++++++++
+ package/linux-firmware/linux-firmware.mk | 13 +++++++++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index fa08b342f1..1f00afe4e8 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -79,6 +79,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7922_BT
+ 	help
+ 	  Firmware files for MediaTek MT7922 bluetooth support
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7925_BT
++	bool "MediaTek MT7925"
++	help
++	  Firmware files for MediaTek MT7925 bluetooth support
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT
+ 	bool "Qualcomm Atheros Rome 6174A Bluetooth"
+ 	help
+@@ -444,6 +449,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7922
+ 	help
+ 	  MediaTek MT7922
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7925
++	bool "MediaTek MT7925"
++	help
++	  MediaTek MT7925
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174
+ 	bool "Qualcomm Atheros 6174"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 13dbc6d98c..c06e229c63 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -404,6 +404,19 @@ LINUX_FIRMWARE_FILES += mediatek/BT_RAM_CODE_MT7922_1_1_hdr.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.mediatek
+ endif
+ 
++# MT7925
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7925),y)
++LINUX_FIRMWARE_FILES += mediatek/mt7925/WIFI_MT7925_PATCH_MCU_1_1_hdr.bin \
++			mediatek/mt7925/WIFI_RAM_CODE_MT7925_1_1.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.mediatek
++endif
++
++# Mediatek MT7925 Bluetooth
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7925_BT),y)
++LINUX_FIRMWARE_FILES += mediatek/mt7925/BT_RAM_CODE_MT7925_1_1_hdr.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.mediatek
++endif
++
+ # qca6174
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174),y)
+ LINUX_FIRMWARE_FILES += ath10k/QCA6174
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
