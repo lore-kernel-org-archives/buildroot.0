@@ -4,74 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B29CC27C4F
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 10:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDFBDC27C4F
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 10:26:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E5434068D;
-	Sun, 23 Jun 2024 10:11:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F9724063E;
+	Sun, 23 Jun 2024 10:26:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iYTickKtdAq7; Sun, 23 Jun 2024 10:11:08 +0000 (UTC)
+ id O9X-ui-7noS6; Sun, 23 Jun 2024 10:26:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 246B14063C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F25C40644
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 246B14063C;
-	Sun, 23 Jun 2024 10:11:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D100F1BF59C
- for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 10:11:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F25C40644;
+	Sun, 23 Jun 2024 10:26:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 528531BF59C
+ for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 10:26:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CAF1160613
- for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 10:11:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40A9C813B7
+ for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 10:26:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aBpQO4HXtlVo for <buildroot@lists.busybox.net>;
- Sun, 23 Jun 2024 10:11:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EEE5560606
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEE5560606
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EEE5560606
- for <buildroot@buildroot.org>; Sun, 23 Jun 2024 10:11:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DIe0zHsShwN6 for <buildroot@lists.busybox.net>;
+ Sun, 23 Jun 2024 10:26:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 97F808137D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97F808137D
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 97F808137D
+ for <buildroot@buildroot.org>; Sun, 23 Jun 2024 10:26:23 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 48C537802D6;
- Sun, 23 Jun 2024 12:10:59 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:49298])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 23 Jun 2024 10:10:59 +0000
-MIME-Version: 1.0
-Date: Sun, 23 Jun 2024 10:10:59 +0000
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 47D6CB00583;
+ Sun, 23 Jun 2024 12:26:20 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
-To: Lance Fredrickson <lancethepants@gmail.com>
-In-Reply-To: <20240623033804.105858-1-lancethepants@gmail.com>
-References: <20240623033804.105858-1-lancethepants@gmail.com>
-User-Agent: Webmail Free/1.6.7
-Message-ID: <38e42162ab203dcbf1b02124a5d6a402@free.fr>
-X-Sender: ju.o@free.fr
+To: buildroot@buildroot.org
+Date: Sun, 23 Jun 2024 12:26:15 +0200
+Message-ID: <20240623102615.20501-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.2
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1719137460;
- bh=79wbivLDRw6lsfj/hdHnGI0bxn7KgYRx4KehOGG0O/4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=glsiCDHx6M7KW9P7gZy7URvpTCPwb9ioQAAtB+fYohuuuSzRjHujadLgalo4CVAd0
- tN+fONIANoucddWrnLAdH7rgz3iwgPBDn6We+X5nxLKpRGLu5klXK2LPy7O2Vm+kfI
- iT31Jcu227sVsrNy7D2HFs7xl6imwZsi7CAFvmcl/zQ5R2n+AtfOpbTvzYwFqaKSYq
- qjwmYF9pypCqaBhQ6IewfprVUI4WHHHvkS+SNsoQWi7I8GVNsOeKE9XLb4bv2hcXQ2
- 9lqasRaXXTYjmJ5ElH7/rz5zIpCIXqYDCd/nrdTWVOKPWWbXGlrkvUL6J8YBYJQkQ7
- EhQ2w1j0eszcw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1719138381;
+ bh=D9iXgQoAOmpG14pXe9vcjA1co0/TUNq6Mafly6Hbxa0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=s3VBc1KBE3WKK2V9LCT/kZBCyICXt6GqraDG3+IJuoJCH6zk3yJu02+zYzLCAMsOy
+ 0Cf1lqPl+889offLDH8CglCWyZ5r31bTBaB/gaBA9KjhrAxXZSYrRP+Vsl5jzH+O2J
+ usbD7vAYZo4ilsSvNvFptI0LnR1UmXkBrLLgJMbjArTkFYoWm9cPNiyGY1SHBZ2vzq
+ 9FnRErICOar91wNuQfUgyF1QTfeYfoP4Yw1Sf5wrnPxAiN+Mg11KkchboLRfqdk0hi
+ f8XWqyBgMl623i+DIXenjtDH2orzrjcp0p6VxOIS1mkRzbYmm7Cq6q/Uo7GFgrspTr
+ bZVwKMzTrbn/g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=glsiCDHx
-Subject: Re: [Buildroot] [PATCH 1/1] boot/syslinux: Fix building syslinux
- with GCC 14.x
+ header.s=smtp-20201208 header.b=s3VBc1KB
+Subject: [Buildroot] [PATCH 1/1] package/octave: add optional openssl support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,62 +76,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgTGFuY2UsIEFsbCwKCk9uIDIzLzA2LzIwMjQgMDM6MzgsIExhbmNlIEZyZWRyaWNrc29uIHdy
-b3RlOgo+IEZyb206IExhbmNlIEZyZWRyaWNrc29uIDxsYW5jZXRoZXBhbnRzQGdtYWlsLmNvbT4K
-PiAKPiBBZGQgbWlzc2luZyBzdGRpby5oIGluY2x1ZGUuIFdpdGhvdXQgaXQgcmVzdWx0cyBpbiB0
-aGUgZm9sbG93aW5nIGVycm9yIAo+IHVuZGVyIEdDQyAxNC54Cj4gCj4gLi4vLi4vLi4vY29tMzIv
-bGliL3N5c2xpbnV4L2RlYnVnLmM6IEluIGZ1bmN0aW9uIOKAmHN5c2xpbnV4X2RlYnVn4oCZOgo+
-IC4uLy4uLy4uL2NvbTMyL2xpYi9zeXNsaW51eC9kZWJ1Zy5jOjkxOjU6IGVycm9yOiBpbXBsaWNp
-dCBkZWNsYXJhdGlvbiAKPiBvZiBmdW5jdGlvbiDigJhwcmludGbigJkgWy1XaW1wbGljaXQtZnVu
-Y3Rpb24tZGVjbGFyYXRpb25dCj4gICAgOTEgfCAgICAgcHJpbnRmKCJEeW5hbWljIGRlYnVnIHVu
-YXZhaWxhYmxlXG4iKTsKPiAKPiBVcHN0cmVhbTogZGVhZCAobGFzdCByZWxlYXNlIGluIDIwMTQp
-CgpFdmVuIHN5c2xpbnV4IGhhZCBubyByZWxlYXNlIHNpbmNlIDIwMTQsIGl0cyBtYWlsaW5nIGxp
-c3QgaXMgc3RpbGwgbW9yZQpvciBsZXNzIG9wZXJhdGluZzogaHR0cHM6Ly93d3cuc3lzbGludXgu
-b3JnL2FyY2hpdmVzLwpUaGUgcGF0Y2ggY291bGQgYmUgc2VudCBvbiB0aGF0IGxpc3QsIGluIGNh
-c2UgdGhlIHByb2plY3QgZ2V0cyBhIG5ldwptYWludGFpbmVyIG9yIGdldCBmb3JrZWQgYnkgc29t
-ZWJvZHkgZWxzZS4uLgoKU2VlLCBmb3IgZXhhbXBsZToKaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxk
-cm9vdC5vcmcvYnVpbGRyb290Ly0vYmxvYi8yMDI0LjA1L2Jvb3Qvc3lzbGludXgvMDAxOS1zdGRk
-ZWYuaC1hZGQtd2NoYXJfdC10eXBlLWRlZmluaXRpb24ucGF0Y2g/cmVmX3R5cGU9dGFncyNMNDAK
-Cj4gU2lnbmVkLW9mZi1ieTogTGFuY2UgRnJlZHJpY2tzb24gPGxhbmNldGhlcGFudHNAZ21haWwu
-Y29tPgo+IC0tLQo+ICAuLi4vMDAyMC1wdWxsLWluLXN0ZGlvLWgtZm9yLWdjYzE0LnBhdGNoICAg
-ICAgfCAzNCArKysrKysrKysrKysrKysrKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCAzNCBpbnNlcnRp
-b25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib290L3N5c2xpbnV4LzAwMjAtcHVsbC1pbi1z
-dGRpby1oLWZvci1nY2MxNC5wYXRjaAo+IAo+IGRpZmYgLS1naXQgYS9ib290L3N5c2xpbnV4LzAw
-MjAtcHVsbC1pbi1zdGRpby1oLWZvci1nY2MxNC5wYXRjaCAKPiBiL2Jvb3Qvc3lzbGludXgvMDAy
-MC1wdWxsLWluLXN0ZGlvLWgtZm9yLWdjYzE0LnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-PiBpbmRleCAwMDAwMDAwMDAwLi4wOWEwMDc0YjMxCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2Jv
-b3Qvc3lzbGludXgvMDAyMC1wdWxsLWluLXN0ZGlvLWgtZm9yLWdjYzE0LnBhdGNoCj4gQEAgLTAs
-MCArMSwzNCBAQAo+ICtGcm9tIGRmYTI3MDUxMDBhODkzYmMwMTdkMjM0MDZkYWE5YTM4M2ZiYzNj
-OTUgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IExhbmNlIEZyZWRyaWNrc29uIDxs
-YW5jZXRoZXBhbnRzQGdtYWlsLmNvbT4KPiArRGF0ZTogV2VkLCA1IEp1biAyMDI0IDE0OjMxOjM4
-IC0wNjAwCj4gK1N1YmplY3Q6IFtQQVRDSF0gY29tMzIvbGliL3N5c2xpbnV4L2RlYnVnLmM6IGFk
-ZCBtaXNzaW5nIHN0ZGlvLmggCj4gaW5jbHVkZS4KPiArCj4gK0ZpeCBidWlsZGluZyBzeXNsaW51
-eCB3aXRoIEdDQyAxNC54Cj4gKwo+ICtBZGQgbWlzc2luZyBzdGRpby5oIGluY2x1ZGUuIFdpdGhv
-dXQgaXQgcmVzdWx0cyBpbiB0aGUgZm9sbG93aW5nIGVycm9yIAo+IHVuZGVyIEdDQyAxNC54Cj4g
-Kwo+ICsuLi8uLi8uLi9jb20zMi9saWIvc3lzbGludXgvZGVidWcuYzogSW4gZnVuY3Rpb24g4oCY
-c3lzbGludXhfZGVidWfigJk6Cj4gKy4uLy4uLy4uL2NvbTMyL2xpYi9zeXNsaW51eC9kZWJ1Zy5j
-OjkxOjU6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiAKPiBvZiBmdW5jdGlvbiDigJhwcmlu
-dGbigJkgWy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCj4gKyAgIDkxIHwgICAgIHBy
-aW50ZigiRHluYW1pYyBkZWJ1ZyB1bmF2YWlsYWJsZVxuIik7Cj4gKwo+ICtVcHN0cmVhbTogZGVh
-ZCAobGFzdCByZWxlYXNlIGluIDIwMTQpCj4gK1NpZ25lZC1vZmYtYnk6IExhbmNlIEZyZWRyaWNr
-c29uIDxsYW5jZXRoZXBhbnRzQGdtYWlsLmNvbT4KPiArLS0tCj4gKyBjb20zMi9saWIvc3lzbGlu
-dXgvZGVidWcuYyB8IDEgKwo+ICsgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4gKwo+
-ICtkaWZmIC0tZ2l0IGEvY29tMzIvbGliL3N5c2xpbnV4L2RlYnVnLmMgYi9jb20zMi9saWIvc3lz
-bGludXgvZGVidWcuYwo+ICtpbmRleCBkOWFiODYzZi4uZThmNTNkNTcgMTAwNjQ0Cj4gKy0tLSBh
-L2NvbTMyL2xpYi9zeXNsaW51eC9kZWJ1Zy5jCj4gKysrKyBiL2NvbTMyL2xpYi9zeXNsaW51eC9k
-ZWJ1Zy5jCj4gK0BAIC0xLDYgKzEsNyBAQAo+ICsgI2luY2x1ZGUgPGxpbnV4L2xpc3QuaD4KPiAr
-ICNpbmNsdWRlIDxzdHJpbmcuaD4KPiArICNpbmNsdWRlIDxzdGRib29sLmg+Cj4gKysjaW5jbHVk
-ZSA8c3RkaW8uaD4KPiArCj4gKyAjaWZkZWYgRFlOQU1JQ19ERUJVRwo+ICsKPiArLS0KPiArMi4z
-OS4yCj4gKwo+IC0tCj4gMi4zOS4yCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QKCkJlc3QgcmVnYXJkcywKCkp1bGllbi4KX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+GNU Octave supports the --with-openssl configure option since v4.0.0.
+
+For reference, commit 40ea68b4b2 "package/octave: new package"
+introduced the package at v7.1.0.
+
+This commits adds this optional support.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/octave/octave.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+index d879fd67303..0c7c4116921 100644
+--- a/package/octave/octave.mk
++++ b/package/octave/octave.mk
+@@ -43,6 +43,13 @@ else
+ OCTAVE_CONF_OPTS += --without-curl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++OCTAVE_CONF_OPTS += --with-openssl=yes
++OCTAVE_DEPENDENCIES += openssl
++else
++OCTAVE_CONF_OPTS += --without-openssl
++endif
++
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ OCTAVE_CONF_OPTS += \
+ 	--enable-readline \
+-- 
+2.45.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
