@@ -4,72 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2376EC2BA18
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 21:00:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 557A0C27C4F
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 21:05:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3DE280F05;
-	Sun, 23 Jun 2024 21:00:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0137981227;
+	Sun, 23 Jun 2024 21:05:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ur89zDd_ed0i; Sun, 23 Jun 2024 21:00:46 +0000 (UTC)
+ id OhxXTmmyLCfG; Sun, 23 Jun 2024 21:05:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF8E180EC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E292B811F3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF8E180EC9;
-	Sun, 23 Jun 2024 21:00:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C38F31BF2EB
- for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 21:00:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E292B811F3;
+	Sun, 23 Jun 2024 21:05:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 72C3E1BF580
+ for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 21:05:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B137580E86
- for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 21:00:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6091160837
+ for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 21:05:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1ps2_cDLHujg for <buildroot@lists.busybox.net>;
- Sun, 23 Jun 2024 21:00:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 93D3A80E7E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93D3A80E7E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 93D3A80E7E
- for <buildroot@buildroot.org>; Sun, 23 Jun 2024 21:00:43 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6B3D813F8B9
- for <buildroot@buildroot.org>; Sun, 23 Jun 2024 23:00:40 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 23 Jun 2024 23:00:40 +0200
-Date: Sun, 23 Jun 2024 23:00:40 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Message-ID: <ZniM-NFO98HzQCxT@landeda>
-References: <20240620182144.3027565-1-yann.morin.1998@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k9GD5z4xa96b for <buildroot@lists.busybox.net>;
+ Sun, 23 Jun 2024 21:05:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:4860:4864:20::31; helo=mail-oa1-x31.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6177960638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6177960638
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com
+ [IPv6:2001:4860:4864:20::31])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6177960638
+ for <buildroot@buildroot.org>; Sun, 23 Jun 2024 21:05:13 +0000 (UTC)
+Received: by mail-oa1-x31.google.com with SMTP id
+ 586e51a60fabf-2598ae41389so2039002fac.3
+ for <buildroot@buildroot.org>; Sun, 23 Jun 2024 14:05:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1719176712; x=1719781512;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=KRVezl5aNyZWYsm+a92X8j+S8Z1MQsVUzd3yNRh2DXI=;
+ b=snnpWQKsBpLanifQVfWcjGpQJJ4ZYtIkym4rd2c1rTp7Y4WFO+3ncWZAxpym5puTug
+ HrSDDnbqgyEwdQb78ujQDKAMJ/lVMzWQsJJVlMSKMPwVyrFVWcCz0xTZKzGt75BEJz5y
+ TF5gv39TeHLgkLCqXVCoWXspOv6nR7/PGfwJYlAOFNzV5R/pxhsOmIej3Rv7Dyg01Vhp
+ SKFBC7kRQ7qSOf46hcUpVlUuQdSsL22LsQCVNdUYWIny+T72f0Up89MQnj0FOzaC/Egy
+ tRrHDsDlkGoGE6KT/6kGNDOZTKfIdTLZRusiBOBucZDE8LtX0cjnsQkEwHvdM4Sxco9c
+ z3mw==
+X-Gm-Message-State: AOJu0YwQNStyQQdfmI+/HqACUcj1Ev2bm6jLyUIhekEWt2tuX6lhFpzd
+ jSIjc0reQl434b7TRrAApmHaR/X9d9vI1qHeuuD0BnJeWu+lGAymKZqFi3Y3IYXQfXVOCVR/yQQ
+ xQB9WsHBA9BWiOEm72b/1poWo5pJn+xjh
+X-Google-Smtp-Source: AGHT+IGbNEYYW8jXLu3wT2vb6E9EFbEMDQRNQM47/BZOViKHVrtDzYQ2HX8LGipSn3et87h1EPl3AMYvhagS1TkxIf4=
+X-Received: by 2002:a05:6870:89aa:b0:24f:dad3:97c with SMTP id
+ 586e51a60fabf-25d06e57b0bmr3284829fac.46.1719176711874; Sun, 23 Jun 2024
+ 14:05:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240620182144.3027565-1-yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1719176441;
- bh=XKOnKXck5la1Wo/aldz96wbS2P51F74OgZ1+K8va66A=;
- h=Date:From:To:Subject:References:In-Reply-To:From;
- b=YOka5nY5fPKELIusd4Pn9BWx+JEhL5rCxXwhShS6Ck+vDm2lO5Wr+XZkAXWbmptx8
- y86dURIFa3l2FdgqqbLlgySJuk2+78upTVCLrHxNg1kbzeCWto1hEkqnTxbnBxZk8D
- tRs4eScQVb/dRue1EYH0EiOqgggl4JL3qH9LLz9ZNfZFwUcoyyB+zOi0PFhOMJwCNO
- 01rDylfJwFcgrIY7JQFC5PC7TLoHJch0dZs5zoBhuSLGIVYtC0XMcK3LAcElwPhavg
- l0xgGouoBB+C5cibvV7QtwEVsPQSfHmF6R564J/uIfuCCE7F1YkGcv/fQiF0txkCNo
- XtwovvJA2/Xtg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+References: <cover.1718382114.git.yann.morin.1998@free.fr>
+ <185f954c798e7d8e7e1400a8b39abe1b273e849b.1718382114.git.yann.morin.1998@free.fr>
+ <CADvTj4p=iYe8wK4UMnvCSmsV02JesvY9BWQDZOfcbV_PeSAkNQ@mail.gmail.com>
+ <Zm9KqRyiYxLxVfwy@landeda>
+ <CADvTj4r+O-RTMRMTSWmhW-Tb1UThcjsRM0mA1=H0DsNM3cGuTg@mail.gmail.com>
+ <ZnXbepvruXKajEcz@landeda>
+In-Reply-To: <ZnXbepvruXKajEcz@landeda>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 23 Jun 2024 15:05:00 -0600
+Message-ID: <CADvTj4qMjDsW6CWNwo0sNJ9SbOKsUaQ7fDBg6z=gHB5uesZ1WA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1719176712; x=1719781512; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=KRVezl5aNyZWYsm+a92X8j+S8Z1MQsVUzd3yNRh2DXI=;
+ b=cgxUTcQMAk1d45WY11rnUjTuqXuCqWL0DpWTPVReBEeV/eybhRhsnQNLQFkY9n1xTq
+ nO1twwjDN2KIE5w4fj2bINCoJ98YeE7Y9DWtzQ4k3od+MyWd24qaz0oXkbrSJ/FtLAqw
+ aRbOYEBldtfD7ht4iM4bgZqBtb8e/BdSHw12VL9/SzWBNjZeCf1QQj4EholN6Boi4tSb
+ a0c12HaqzFm+hf4vxg+27Tyq4rJAnyTj7izOVcnhPvRlaLQT2TzU+toNz1ogGmNbHuaG
+ TTlQiGYwzfo4fLRIj7PDL1/qqzbKYQYeXsgGkvIALyjWra7vS8vJuXuIA3wlCwaCQAA+
+ EMMA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YOka5nY5
-Subject: Re: [Buildroot] [PATCH] package/go: ensure the toolchain is
- available
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=cgxUTcQM
+Subject: Re: [Buildroot] [PATCH 2/6] utils/update-rust: add script to
+ automatically update the rust version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,125 +104,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
-
-On 2024-06-20 20:21 +0200, Yann E. MORIN spake thusly:
-> The toolchain is needed to build the final-stage go compiler, when it
-> should have CGO support.
-> 
-> However, in commit 0290c543dec8 (package/go: new subdirectory for go
-> variants), the HOST_GO_DEPENDENCIES assignment was only partially split
-> off to the new location; part of it was left in the ole go.mk to act as
-> common variables. With that commit, the go package had not been renamed,
-> which meant that the dependencies were still correct.
-> 
-> But in commit fa2536ec9401 (package/go: make host package a virtual
-> package), the 'go' package was renamed to 'go-src', and replaced by a
-> 'go' virtual package.
-> 
-> The variables in the go-src package were properly renamed, and the
-> variables in the go virtual package were properly _not_ renamed. As a
-> consequence, the go-src package lost its dependency on the toolchain
-> when needed, while the go virtual package still had it.
-> 
-> However, that was not correct when CGO is enabled (i.e. when the target
-> has threads): go-src then fails to build:
-> 
->     Building Go cmd/dist using [...]/host/lib/go-1.21.8. (go1.21.8 linux/amd64)
->     go tool dist: cannot invoke C compiler ["[...]/host/bin/aarch64-linux-gcc"]:
->     fork/exec [...]/host/bin/aarch64-linux-gcc: no such file or directory
-> 
->     Go needs a system C compiler for use with cgo.
->     To set a C compiler, set CC=the-compiler.
->     To disable cgo, set CGO_ENABLED=0.
-> 
-> After some retro-thinking, the reasoning behind this was that the
-> toolchain would _also_ be needed when using the prebuilt go-bin, which
-> is indeed correct, so by having it as a dependency of the virtual
-> package, it would ensure the toolchain be present in both cases, when
-> building from scratch or when using a prebuilt go.
-> 
-> The oversight being that the toolchain is _also_ needed to actually
-> build go when CGO is enabled.
-> 
-> We fix this by handling the toolchain dependency for CGO by exposing it
-> in a variable, that can be used as a dependency in go-src, like is done
-> to actually enable or disable CGO support.
-> 
-> We still ensure that host-go still depends on it, for a future go-bin
-> provider.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/go/go-src/go-src.mk | 4 +++-
->  package/go/go.mk            | 5 ++++-
->  2 files changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/go/go-src/go-src.mk b/package/go/go-src/go-src.mk
-> index 1e061e20bc..0d1a9b3187 100644
-> --- a/package/go/go-src/go-src.mk
-> +++ b/package/go/go-src/go-src.mk
-> @@ -12,7 +12,9 @@ GO_SRC_LICENSE_FILES = LICENSE
->  GO_SRC_CPE_ID_VENDOR = golang
->  
->  HOST_GO_SRC_PROVIDES = host-go
-> -HOST_GO_SRC_DEPENDENCIES = host-go-bootstrap-stage3
-> +HOST_GO_SRC_DEPENDENCIES = \
-> +	host-go-bootstrap-stage3 \
-> +	$(HOST_GO_DEPENDENCIES_CGO)
->  
->  ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
->  
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index 6f92893204..91a8fb828f 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -83,7 +83,7 @@ HOST_GO_TARGET_ENV = \
->  # any target package needing cgo support must include
->  # 'depends on BR2_TOOLCHAIN_HAS_THREADS' in its config file.
->  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> -HOST_GO_DEPENDENCIES += toolchain
-> +HOST_GO_DEPENDENCIES_CGO += toolchain
->  HOST_GO_CGO_ENABLED = 1
->  else
->  HOST_GO_CGO_ENABLED = 0
-> @@ -95,6 +95,9 @@ else # !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
->  HOST_GO_CGO_ENABLED = 1
->  endif # BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
->  
-> +# Ensure the toolchain is available, whatever the provider
-> +HOST_GO_DEPENDENCIES += $(HOST_GO_DEPENDENCIES_CGO)
-> +
->  # For the convenience of host golang packages
->  HOST_GO_HOST_ENV = \
->  	$(HOST_GO_COMMON_ENV) \
-> -- 
-> 2.45.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gRnJpLCBKdW4gMjEsIDIwMjQgYXQgMTo1OOKAr1BNIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9y
+aW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPgo+IEphbWVzLCBBbGwsCj4KPiBPbiAyMDI0LTA2LTIw
+IDEyOjEzIC0wNjAwLCBKYW1lcyBIaWxsaWFyZCBzcGFrZSB0aHVzbHk6Cj4gWy0tU05JUC0tXQo+
+ID4gSSBkb24ndCB0aGluayB0aGVyZSdzIHJlYWxseSBhbnkgbWVhbmluZ2Z1bCBhZHZhbnRhZ2Ug
+dG8gcmVxdWVzdHMgdnMKPiA+IHVybGxpYi5yZXF1ZXN0LnVybG9wZW4gd2hpY2ggaXMgcGFydCBv
+ZiB0aGUgc3RhbmRhcmQgbGlicmFyeSBmb3IgdGhpcwo+ID4gcGFydGljdWxhciB1c2UgY2FzZS4K
+Pgo+IHJlcXVlc3RzLmdldCgpIGlzIHNob3J0ZXIhIDstKQo+Cj4gU28sIEkgZW5kZWQgdXAga2Vl
+cGluZyB1c2Ugb2YgcmVxdWVzdHMuIFRoaXMgc2NyaXB0IGlzIG5vdCBwYXJ0IG9mIHRoZQo+IGJ1
+aWxkIHByb2Nlc3M7IGl0IGlzIGp1cyB0YSBoZWxwZXIgc2NyaXB0LCBzbyBpdCBpcyBhY2NlcHRh
+YmxlIHRoYXQgd2UKPiBkZXBlbmQgb24gYSBub24tc3RkbGliIG1vZHVsZSwgZXNwZWNpYWx5IHN1
+Y2ggYSB3aWRlbHkgYXZhaWxhYmxlIG9uZSBhcwo+IHJlcXVlc3RzIGlzLgoKVGhlIG1haW4gaXNz
+dWUgd2l0aCByZXF1ZXN0cyBJIHRoaW5rIGlzIHRoYXQgdGhlcmUncyBzb21lIHBvdGVudGlhbCBm
+b3IgdmVyc2lvbgppbmNvbXBhdGliaWxpdGllcyB3aXRoIHJlcXVlc3RzIGRlcGVuZGVuY2llcyBh
+cyBpdCBkZXBlbmRzIG9uIG5vbi1zdGRsaWIKcGFja2FnZXMuCgpGb3IgZXhhbXBsZSBJIHNlZSB0
+aGlzIHdhcm5pbmcgd2hlbiBydW5uaW5nIHRoZSBzY3JpcHQgd2l0aCByZXF1ZXN0cyBvbgpvbmUg
+c3lzdGVtIG9mIG1pbmU6Ci91c3IvbGliL3B5dGhvbjMvZGlzdC1wYWNrYWdlcy9yZXF1ZXN0cy9f
+X2luaXRfXy5weTo4NzoKUmVxdWVzdHNEZXBlbmRlbmN5V2FybmluZzogdXJsbGliMyAoMS4yNi41
+KSBvciBjaGFyZGV0ICg1LjEuMCkgZG9lc24ndAptYXRjaCBhIHN1cHBvcnRlZCB2ZXJzaW9uIQog
+IHdhcm5pbmdzLndhcm4oInVybGxpYjMgKHt9KSBvciBjaGFyZGV0ICh7fSkgZG9lc24ndCBtYXRj
+aCBhIHN1cHBvcnRlZCAiCgpBbnl3YXlzIHdlIGNhbiB1c2UgdXJsbGliLnJlcXVlc3Qgd2l0aG91
+dCBhbnkgZXh0cmEgbGluZXMgb2YgY29kZSwgc2VlOgpodHRwczovL3BhdGNod29yay5vemxhYnMu
+b3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjQwNjIzMjAzNTU3LjM4MzAxMjItMS1qYW1l
+cy5oaWxsaWFyZDFAZ21haWwuY29tLwoKPgo+ID4gPiAgICAgb3MucGF0aC5iYXNlbmFtZShta19m
+aWxlKVs6LTNdLnVwcGVyKCkucmVwbGFjZSgiLSIsICJfIikgKyAiX1ZFUlNJT04iCj4gPiA+ICAg
+ICBwYXRobGliLlBhdGgobWtfZmlsZSkubmFtZVs6LTNdLnVwcGVyKCkucmVwbGFjZSgiLSIsICJf
+IikgKyAiX1ZFUlNJT04iCj4gPiA+IE9uZSBjaGFyIGxvbmdlci4uLiA7LSkKPiA+IHBhdGhsaWIu
+UGF0aChta19maWxlKS5zdGVtLnVwcGVyKCkucmVwbGFjZSgiLSIsICJfIikgKyAiX1ZFUlNJT04i
+Cj4gPiBGb3VyIGNoYXJhY3RlcnMgc2hvcnRlci4gOy0pCj4KPiBPSywgeW91IHdpbi4gOy0pCj4K
+PiBJIHVzZWQgdGhhdCBpbiB0aGUgZmluYWwgc2NyaXB0Lgo+Cj4gWy0tU05JUC0tXQo+ID4gPiBJ
+cyB0aGF0IHJlYWxseSBpbXBvcnRhbnQgdGhhdCB0aGUgc2NyaXB0IGNhbiBiZSBydW4gZnJvbSBh
+bnl3aGVyZT8gSQo+ID4gPiBkb24ndCB0aGluayBzby4gSSBjYW4gaG93ZXZlciBhZGQgYSBjaGVj
+ayB0aGF0IHRoZSBmaWxlcyB3ZSB3YW50IHRvCj4gPiA+IGdlbmVyYXRlIGFuZCB0d2VhayBkbyBh
+bHJlYWR5IGV4aXN0LCB0aG91Z2g7IHRoYXQncyBhIGdvb2QgcG9pbnQuCj4gPiBJJ20gbm90IHN1
+cmUsIGJ1dCBpdCBzaG91bGQgYmUgcHJldHR5IGVhc3kgdG8gaW1wbGVtZW50LCBtYXkgYWxzbwo+
+ID4gd2FudCB0byB1c2UgcGF0aGxpYiB0eXBlcyBoZXJlLgo+Cj4gSSB3YW50ZWQgdG8ga2VlcCB0
+aGUgc2NyaXB0IGFzIHNpbXBsZS1zdHVwaWQgYXMgcG9zc2libGUuIFJlcXVpcmluZyB0aGF0Cj4g
+aXQgYmUgcnVuIGZyb20gQnVpbGRyb290J3MgdG9wIGRpciBpcyBub3QgdG9vIHN0cm9uZyBhIGxp
+bWl0YXRpb24sIGFuZAo+IGFkZGluZyBzdXBwb3J0IGZvciBydW5uaW5nIGZyb20gYW55d2hlcmUg
+d291bGQganVzdCBhZGQgbW9yZSBjb21wbGV4aXR5Cj4gKGV2ZW5tIGlmIG5vdCB0b28gbXVjaCku
+IFNvLCBJIGVycmVkIG9uIHRoZSBzaW1wbGljaXR5IHNpZGUsIGFuZCBqdXN0Cj4gY2F0Y2hlcyB0
+aGUgY2FzZSB3aGVyZSBhIGZpbGUgaXMgbm90IGZvdW5kLCBhc3N1bWluZyB0aGVuIHRoYXQgd2Un
+cmUgbm90Cj4gcnVubmluZyBmcm9tIHRoZSB0b3AgZGlyLgoKSXQncyBwb3NzaWJsZSB0byByZW1v
+dmUgdGhhdCBsaW1pdGF0aW9uIHdoaWxlIHNpbXBsaWZ5aW5nIGl0IGZ1cnRoZXIgdXNpbmcKcGF0
+aGxpYiwgaXQncyBsZXNzIG92ZXJhbGwgbGluZXMgb2YgY29kZSBldmVuLCBzZWU6Cmh0dHBzOi8v
+cGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyNDA2MjMyMDU4
+MjEuMzgzMzMyMS0xLWphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20vCgo+Cj4gVGhhbmsgeW91IGZv
+ciB0aGUgcmV2aWV3IGluIGFueSBjYXNlLCBpdCBpcyBhbHdheXMgaW50ZXJlc3RpbmcgdG8gYmUK
+PiBjaGFsbGVuZ2VkIGFuZCB0byBleHBsYWluIHRoZSBjaG9pY2VzLiBUaGFua3MhCj4KPiBSZWdh
+cmRzLAo+IFlhbm4gRS4gTU9SSU4uCj4KPiAtLQo+IC4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0t
+LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCj4g
+fCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9O
+IHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKPiB8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBE
+ZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAo+IHwgKzMz
+IDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBc
+ZS8gIFRoZXJlIGlzIG5vICB8Cj4gfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8q
+XF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKPiAnLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0t
+LS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
