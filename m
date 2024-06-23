@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0E07C27C4F
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 20:46:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68B86C27C4F
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jun 2024 20:46:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 213E14059B;
-	Sun, 23 Jun 2024 20:46:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ADC03405CB;
+	Sun, 23 Jun 2024 20:46:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wpOGYFwwXOo5; Sun, 23 Jun 2024 20:46:34 +0000 (UTC)
+ id CnowyU6UtNhs; Sun, 23 Jun 2024 20:46:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 963BE405AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE7CA405D3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 963BE405AD;
-	Sun, 23 Jun 2024 20:46:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 587CD1BF86C
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE7CA405D3;
+	Sun, 23 Jun 2024 20:46:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CB061BF947
  for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 20:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 536AB60852
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56ABE405EE
  for <buildroot@lists.busybox.net>; Sun, 23 Jun 2024 20:46:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2PehAPqjqSE6 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YIUuDbybFUC5 for <buildroot@lists.busybox.net>;
  Sun, 23 Jun 2024 20:46:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8744B60851
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60898405D9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8744B60851
+ by smtp4.osuosl.org (Postfix) with ESMTP id 60898405D9
  for <buildroot@buildroot.org>; Sun, 23 Jun 2024 20:46:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73794828F7; Sun, 23 Jun 2024 20:46:29 +0000 (UTC)
+ id 49B4D828E0; Sun, 23 Jun 2024 20:46:29 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jun 2024 22:24:57 +0200
+Date: Sun, 23 Jun 2024 22:05:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e0bdc5ddb8a64e89709db72ad550334618cc0c0c
-X-Git-Newrev: 623d3bbe43e9193aa8e3395367d01af59071b859
+X-Git-Oldrev: 74b0e7ebabc3cbe33b28d899cba169657762ad52
+X-Git-Newrev: b39286acfc134d66d56b78720c4a6a7547e16b16
 X-Patchwork-Hint: ignore
-Message-Id: <20240623204629.73794828F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenssl: no-engine
+Message-Id: <20240623204629.49B4D828E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libopenssl: use $(RM) instead of rm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,33 +64,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=623d3bbe43e9193aa8e3395367d01af59071b859
+commit: https://git.buildroot.net/buildroot/commit/?id=b39286acfc134d66d56b78720c4a6a7547e16b16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Even though the "no-engine" option effectively disables the compilation
-of the engine, it still creates the installation directory, which ends up
-being empty. For this reason, the patch does not remove the hook for
-removing the directory if the BR2_PACKAGE_LIBOPENSSL_ENGINES option is
-not enabled.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libopenssl/libopenssl.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libopenssl/libopenssl.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index fe472e2c7a..89a9189bb8 100644
+index d209bb8e96..88debf114a 100644
 --- a/package/libopenssl/libopenssl.mk
 +++ b/package/libopenssl/libopenssl.mk
-@@ -85,6 +85,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			no-fuzz-afl \
- 			no-afalgeng \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_BIN),,no-apps) \
-+			$(if $(BR2_PACKAGE_LIBOPENSSL_ENGINES),,no-engine) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA),,no-chacha) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2),,no-rc2) \
- 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
+@@ -135,8 +135,8 @@ endef
+ 
+ define LIBOPENSSL_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+-	rm -rf $(TARGET_DIR)/usr/lib/ssl
+-	rm -f $(TARGET_DIR)/usr/bin/c_rehash
++	$(RM) -rf $(TARGET_DIR)/usr/lib/ssl
++	$(RM) -f $(TARGET_DIR)/usr/bin/c_rehash
+ endef
+ 
+ # libdl has no business in a static build
+@@ -166,7 +166,7 @@ endif
+ 
+ ifneq ($(BR2_PACKAGE_LIBOPENSSL_ENGINES),y)
+ define LIBOPENSSL_REMOVE_LIBOPENSSL_ENGINES
+-	rm -rf $(TARGET_DIR)/usr/lib/engines-1.1
++	$(RM) -rf $(TARGET_DIR)/usr/lib/engines-1.1
+ endef
+ LIBOPENSSL_POST_INSTALL_TARGET_HOOKS += LIBOPENSSL_REMOVE_LIBOPENSSL_ENGINES
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
