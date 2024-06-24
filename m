@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF55FC2BD05
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 06:59:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAE16C2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 07:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94EB780FB4;
-	Mon, 24 Jun 2024 06:59:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A279F80F92;
+	Mon, 24 Jun 2024 07:02:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nyb87aubKQvc; Mon, 24 Jun 2024 06:59:10 +0000 (UTC)
+ id pn9ekYXizGaE; Mon, 24 Jun 2024 07:02:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DB7580F6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A15BA81359
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DB7580F6C;
-	Mon, 24 Jun 2024 06:59:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A15BA81359;
+	Mon, 24 Jun 2024 07:02:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DF7231BF20F
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 06:59:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B87791BF4DB
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 07:02:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D92EC80F6C
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 06:59:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A428081359
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 07:02:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r9JRExqaTgPc for <buildroot@lists.busybox.net>;
- Mon, 24 Jun 2024 06:59:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ id NpejlA_RBDsD for <buildroot@lists.busybox.net>;
+ Mon, 24 Jun 2024 07:02:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
  helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C5E5380F62
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5E5380F62
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C5E5380F62
- for <buildroot@busybox.net>; Mon, 24 Jun 2024 06:59:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 352FE80F92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 352FE80F92
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 352FE80F92
+ for <buildroot@busybox.net>; Mon, 24 Jun 2024 07:02:24 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([82.135.81.90]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MiJV6-1ssDFs3pBu-00dj1N
- for <buildroot@busybox.net>; Mon, 24 Jun 2024 08:54:02 +0200
+Received: from localhost.fritz.box ([82.135.81.90]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MAOJV-1sAwXZ3xox-004gFF
+ for <buildroot@busybox.net>; Mon, 24 Jun 2024 08:57:22 +0200
 To: buildroot@busybox.net
-Date: Mon, 24 Jun 2024 08:54:02 +0200
-Message-ID: <20240624065402.3501-1-ps.report@gmx.net>
+Date: Mon, 24 Jun 2024 08:57:22 +0200
+Message-ID: <20240624065722.11000-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:UbCtMzU1cxSk9gWDiNayF05z02LpbbzFS+B7cIFgJzFRe6Embb1
- 2spyjd9XUaTtaltehEPFKCK2D2RyGXlFoQJ8GstuLmqQfn8ICuE2owqk/4/O1bEY9lSGAbR
- d4hoy8Y97yOmV4O2WBR1fDr7n5nq+hp65D/ikjpJqCA8ev91E2qtswBp3pwezFJ57Hbj/gG
- ZJ5tvXJ2qcAuHXT8kws0w==
-UI-OutboundReport: notjunk:1;M01:P0:7GVnDSBsP3E=;TnnGvsCbNy7Rd/iGJDYyqs62lJI
- 79Ynb0AsZz6znPuZP/731npE2hpgH37vcTDctPn9VZesdXGOoXaUKj8ZoFRbnikOEDT+zfZG/
- ZqktUhrSRT76drdcBVyvztOVch1R5OIOxf6HVBmexce7LI/GHwKan8oHfBLmLSWaJU/WjdGnO
- ZkAEoXCMONgP5zABrSnhDsT5+HJm6ka6cWQRMWSpdrmiMcd2RjYlwLBpfekBzrfIcnjdRX4PH
- +EZUswE+zbFjamUXJO0ONZPAumaVHjG77POgsFsRY81GSOdBIDn3LSHNU9i6u7hj4KgXCyoX0
- PViQoryL2IstrAop3FGjZ65BSlMXF8jOX/KpTNJqJkvnDvZqGIucWGXvjbYRPULS7EGAjacpF
- FLDbuWyAr1VAxuXe6tyulfmZTP8pPzho2ljciEEybg1Iug3fQCsZcenIfBOb0Pak0s8JuyS9d
- qZXoPPi3dqWxPWSTmDSm4kwl1ftcS7YBwIceaQwb2b9hBLz8C0KmJPLj+xAU/WDSbaqd7kn6y
- ZyNlqG+A0nvmlXP2+Dp7xdknau743B5m7Dr3OlffgNJ6IXeqvKGfgPPM0Vl4ZCeXS1IhTBhg6
- z6IZEeKe5ioriPaTZwIZoM0f6lCUA1U74fesLrR5CVGrM+BxpEtKnJadP43GX0W5v4Qym4Qjt
- Uare/3sBI2WThd/5NWOXWsY3F9SGOb2dR4EB0aI0KEtDEj0oOlZ3UWkmy75wKzhSEufRiA87N
- lAFLOIJxbxv+b6PwKi7fJfDP5Cj6wG31WhTbaVZZVcbZVniJ31ddrXzgHS7l3qwf65BZMvXQs
- S8c1VG4+dM15wtplWWj1DEPCLf4dKI7OZCQC7+j2O+sYY=
+X-Provags-ID: V03:K1:uUFD6B6X9ccMPWMy6vj2SgQxN11JDR8hOJRRC1C6k2iClwYvo6x
+ aWGR+jYh7sKWRPCh6xVfV2W2qCPMcKz7/5DptqpclGJF0clRLD7Pqc4Vj8OUk6Ax0la8t8g
+ em7Vmo5QehGiHCKMBZug7+orNBtbEsYRrGIP4JVUxdyvq+Zv2QeVTpJD10XjsCRwuPgP+pM
+ +MZ0qmHeZi9zmbBw9CBiA==
+UI-OutboundReport: notjunk:1;M01:P0:Zjb2KyxaqVU=;+IovHSKWPy67cgulnNprKgES2Ld
+ zW07groOfMr6Zzf6aHu7/hZPlQr3kxCukMWc1d4lrOJHtj2FM8gu92I58wyu3NiYaxXEVKV2J
+ 6BtL/jgTzFvEG9N4J/hylr7Fc8bOehYhgAjA32uw9UP/Lb/8Dj64YtOo5V0acMTKfdUw2tCI1
+ Z9miT5BPJ43eRMjEySXm+emdjgGVZVN1h50ZQOY8q9w1TlIYfZdmLPxUZPX3ejpCuZfgNm3MA
+ zmRSnpvttOnf5P85G1CBLsFqtV2VVLwmsHpdkWud8nww48Qe7PHAyllbGCrWzLKhcljjb4013
+ 6ReeQMFtQQ0ZukUXmgRN65O3jl8CgwwoNfuSvQwdFjITW4qh+AcvD+xeReFkIBjIhVTYUu/v9
+ HV2HIvVnYgW45O6h8pTtR+t0BZI3PoJmbQm2CAZsD/51Bpuyl73y1sD+3CpywbFyPWO444Siz
+ oRHevXol01Tdzw29swTQW7Ly581+Jxz8UQ34Qr8Zx+F2Us/bg2hHYqu2HXqUaD9Rw4eFxqCrV
+ MsfaNLm4QwTwxSe5cOhWmstAUG3gsdkwWWHC8VuaeDOZU7Rhkydn5b54SEcQ2PbCyzWB7YJX4
+ /n/Y5QussYl67vfVgX+nrorm1yWUFv5mxfd/IZeZK/3FC0X5NW79MYvqYaZgxhCCSbSBjY5xq
+ 8utz0GUAmxyPJYpYJ1Rxpf6YY6cJvOTeV0NVv0jV5o60BQzlM3/N1c9WrhsVcLOXnDi+Lp/+O
+ 1dxAHAEP55yhVlMtoY3S1fSsITYWfa4qn/o/HVgVEF1PVlslQJhEwZPEUNIn7kq1ZWmeWy9sx
+ 4xMs6cMvq4VoF6RWtQVSdaUpha8pqBdia7JL/hicmrR+A=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.net; 
- s=s31663417; t=1719212346; x=1719817146; i=ps.report@gmx.net;
- bh=MOSt2PkUpg5Z/oY0eqaKU/gujHv/fR2GTafuIuAxi2U=;
+ s=s31663417; t=1719212543; x=1719817343; i=ps.report@gmx.net;
+ bh=bGRf1eBiRdH/xUWph71FGxt18EwS0T4Qw/K3XwY9poM=;
  h=X-UI-Sender-Class:From:To:Subject:Date:Message-ID:MIME-Version:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=akC0gntcoybFURy2meQvFyXh7CBcUe6eL/fooUF+W1gq2EOU+ApHEXf52oD7LNYJ
- NQK06ZyUf0vVsAEHcoyMuPqNwJaj84K9FD3B0OS7oLNSnqYDYRnAc1opqWal0Byrs
- KNWnWaHwXlfU88rgzLs4yZ5mXBF2k7Y+VUKu0+FGkrMDIB+tB/cb7aj21q1GGdiva
- 66MSJDQ44anjIVEMCe9iWAKSl16iTjc3E54FXLkc9UeggUFXCQoIYqqV2Oa5haoAs
- XniI7VvRa1WZNuVKT99437sNfyKCQTgopzLj3SEs6ZrAnyYM4Q0TClMey62WLFBKw
- NH458UI8hAsp10SWLA==
+ b=Dvpb8FEEAdKGs+XMnTAnk78M2SVMr+yCpDfhD2fUnUTYB15Zl1akUnT6QdurllM8
+ xKSIMZeYQ7C87C9Lopg8mKcAjdGpcv72NWrW6lFMe2z9Rywg3S6o3C+JxT+jNRiDS
+ 78bOysQ/cx2ok3b6+HWG4rImyQ9EpRjSNPlm7Q/ja0fsKKen97yUNBnw5KK/0cUo5
+ uESSOVuQQys0jNPCtcaRpx7b0sPCdYr9R/zjr+Rxk0JPLbY9OVXqZ5NbYKdOdkuJC
+ yM6Uf/e13wIsimXWsr48LPNNh3PdHx63jRG7ZUuKziE64ebwoHRtoBiULPjwGGMjm
+ cBQbhbR2Z4n/vxaXYw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=akC0gntc
-Subject: [Buildroot] [PATCH v1] package/hwdata: bump version to 0.383
+ header.a=rsa-sha256 header.s=s31663417 header.b=Dvpb8FEE
+Subject: [Buildroot] [PATCH v1] package/mpfr: bump version to 4.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,35 +101,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+For details see [1].
+
+[1] https://gitlab.inria.fr/mpfr/mpfr/-/blob/4.2.1/ChangeLog
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
+ package/mpfr/mpfr.hash | 2 +-
+ package/mpfr/mpfr.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index 92b7eaab6d..9ada55450b 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/mpfr/mpfr.hash b/package/mpfr/mpfr.hash
+index 4b0d14c9c2..464aea5321 100644
+--- a/package/mpfr/mpfr.hash
++++ b/package/mpfr/mpfr.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256  b98ef646d530d5fd3afa3180efbf7c8e22d3da0088f5836f41ee25380d87b092  hwdata-0.379.tar.gz
-+sha256  97f328f85e51ea78ad14620705dba269cbbb47911e56bdd8b35360e6cdccc00c  hwdata-0.383.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index 555fb58f14..8f9b4dbbb2 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
+-sha256  ffd195bd567dbaffc3b98b23fd00aad0537680c9896171e44fe3ff79e28ac33d  mpfr-4.1.1.tar.xz
++sha256  277807353a6726978996945af13e52829e3abd7a9a5b7fb2793894e18f1fcbb2  mpfr-4.2.1.tar.xz
+ 
+ # Hash for license file
+ sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  COPYING.LESSER
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+index c0c8c04646..339383f59a 100644
+--- a/package/mpfr/mpfr.mk
++++ b/package/mpfr/mpfr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HWDATA_VERSION = 0.379
-+HWDATA_VERSION = 0.383
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+-MPFR_VERSION = 4.1.1
++MPFR_VERSION = 4.2.1
+ MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
+ MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.xz
+ MPFR_LICENSE = LGPL-3.0+
 -- 
 2.45.2
 
