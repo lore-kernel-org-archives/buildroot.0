@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 009F0C2BD09
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:02:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7E0AC30653
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:02:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B15F760B44;
-	Mon, 24 Jun 2024 20:02:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FB0260B1E;
+	Mon, 24 Jun 2024 20:02:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fm3Phzp4C9z1; Mon, 24 Jun 2024 20:02:44 +0000 (UTC)
+ id 3jJ5nxmrjTQb; Mon, 24 Jun 2024 20:02:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFB4D60B4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B26C60B6F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFB4D60B4E;
-	Mon, 24 Jun 2024 20:02:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E9B61BF95D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B26C60B6F;
+	Mon, 24 Jun 2024 20:02:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 369CD1BF473
  for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6073240AD9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B058608F4
  for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vy_0e6eky6hL for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WTvHortgmRw7 for <buildroot@lists.busybox.net>;
  Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 338CD40025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 083216072F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 338CD40025
+ by smtp3.osuosl.org (Postfix) with ESMTP id 083216072F
  for <buildroot@buildroot.org>; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1EE5282B60; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
+ id 0137382B64; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 24 Jun 2024 21:30:49 +0200
+Date: Mon, 24 Jun 2024 21:28:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e04faea50f5554ab24f8b756860b9a7922094a6f
-X-Git-Newrev: 47e497eaeec01733ba8edbb5a7c01d1b53281cce
+X-Git-Oldrev: 462fe09bd19f5b085bf9b06268fe4b763addb4a7
+X-Git-Newrev: 0be7dc36881457ffb44b418c49587ac34a3fab03
 X-Patchwork-Hint: ignore
-Message-Id: <20240624200226.1EE5282B60@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bzip2: update the patches to be
- applied with fuzz 0
+Message-Id: <20240624200226.0137382B64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/pine64/rock64: make the patches to
+ be applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,106 +61,82 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7361176046415129708=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47e497eaeec01733ba8edbb5a7c01d1b53281cce
+--===============7361176046415129708==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0be7dc36881457ffb44b418c49587ac34a3fab03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit allows the package patches to be applied with fuzz factor 0.
+This commit allows the U-Boot patch to be applied with fuzz factor 0.
 The fuzz factor specifies how many lines of the patch can be inexactly
 matched, so the value 0 requires all lines to be exactly matched.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/bzip2/0001-build-objects-twice.patch  | 14 ++++++++------
- package/bzip2/0002-improve-build-system.patch | 12 +++++++-----
- 2 files changed, 15 insertions(+), 11 deletions(-)
+ ...efile-rk3328-needs-itb-image-to-boot-properly.patch | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/package/bzip2/0001-build-objects-twice.patch b/package/bzip2/0001-build-objects-twice.patch
-index 9bde0f6488..52b234f65a 100644
---- a/package/bzip2/0001-build-objects-twice.patch
-+++ b/package/bzip2/0001-build-objects-twice.patch
-@@ -8,14 +8,16 @@ and build the shared objects as *.sho instead of *.o.
- Then, we use these objects to create the shared library.
+diff --git a/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch b/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
+index 2d35b78daa..7c84736034 100644
+--- a/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
++++ b/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
+@@ -1,4 +1,4 @@
+-From 211bf049084e6e374dac253138fa813682910146 Mon Sep 17 00:00:00 2001
++From d312c4e40bf816823bdcfd066dd2511b23e83c9c Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
+ Date: Tue, 5 Feb 2019 22:08:54 +0100
+ Subject: [PATCH] Makefile: rk3328 needs itb image to boot properly
+@@ -7,16 +7,18 @@ Content-Type: text/plain; charset=UTF-8
+ Content-Transfer-Encoding: 8bit
  
- Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+ Signed-off-by: Michał Łyszczek <michal.lyszczek@bofc.pl>
 +[Dario: make the patch to be applied with fuzz factor 0]
 +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  Makefile | 5 +++++
+  1 file changed, 5 insertions(+)
  
- Index: bzip2-1.0.6/Makefile-libbz2_so
- ===================================================================
- --- bzip2-1.0.6.orig/Makefile-libbz2_so
- +++ bzip2-1.0.6/Makefile-libbz2_so
--@@ -25,13 +25,13 @@ SHELL=/bin/sh
-- CC=gcc
-- override CFLAGS += -fpic -fPIC -Wall
-+@@ -26,13 +26,13 @@ CC=gcc
-+ BIGFILES=-D_FILE_OFFSET_BITS=64
-+ CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES)
-  
- -OBJS= blocksort.o  \
- -      huffman.o    \
-@@ -33,10 +35,10 @@ Index: bzip2-1.0.6/Makefile-libbz2_so
- +      bzlib.sho
-  
-  all: $(OBJS)
-- 	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.6 $(OBJS)
--@@ -45,17 +45,5 @@ install:
-+ 	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.8 $(OBJS)
-+@@ -43,17 +43,5 @@ all: $(OBJS)
-  clean: 
-- 	rm -f $(OBJS) bzip2.o libbz2.so.1.0.6 libbz2.so.1.0 bzip2-shared
-+ 	rm -f $(OBJS) bzip2.o libbz2.so.1.0.8 libbz2.so.1.0 bzip2-shared
-  
- -blocksort.o: blocksort.c
- -	$(CC) $(CFLAGS) -c blocksort.c
-diff --git a/package/bzip2/0002-improve-build-system.patch b/package/bzip2/0002-improve-build-system.patch
-index 2d6e2cf900..11a856e49c 100644
---- a/package/bzip2/0002-improve-build-system.patch
-+++ b/package/bzip2/0002-improve-build-system.patch
-@@ -20,12 +20,14 @@ This patch makes a number of improvements to the bzip2 build system:
-    appropriate symbolic links.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- 
- Index: b/Makefile
- ===================================================================
+ diff --git a/Makefile b/Makefile
+-index 8086f3c93e..a6425b5b03 100644
++index 149f83994814..ebbdf2596b9b 100644
  --- a/Makefile
  +++ b/Makefile
--@@ -20,8 +20,7 @@
-+@@ -20,8 +20,7 @@ AR=ar
-  RANLIB=ranlib
-  LDFLAGS=
+-@@ -799,6 +799,11 @@ ifneq ($(BUILD_ROM),)
+- ALL-$(CONFIG_X86_RESET_VECTOR) += u-boot.rom
++@@ -923,6 +923,11 @@ ifeq ($(CONFIG_SYS_COREBOOT)$(CONFIG_SPL),yy)
++ ALL-$(CONFIG_BINMAN) += u-boot-x86-with-spl.bin
+  endif
   
-@@ -35,7 +37,7 @@ Index: b/Makefile
-  
-  # Where you want it installed when you do 'make install'
-  PREFIX=/usr/local
--@@ -90,14 +89,14 @@
-+@@ -90,14 +89,14 @@ install: bzip2 bzip2recover
-  	cp -f libbz2.a $(PREFIX)/lib
-  	chmod a+r $(PREFIX)/lib/libbz2.a
-  	cp -f bzgrep $(PREFIX)/bin/bzgrep
-@@ -66,9 +68,9 @@ Index: b/Makefile-libbz2_so
- -CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES)
- +override CFLAGS += -fpic -fPIC -Wall
-  
-- OBJS= blocksort.o  \
--       huffman.o    \
--@@ -37,8 +36,11 @@
-+ OBJS= blocksort.sho  \
-+       huffman.sho    \
-+@@ -37,8 +36,11 @@ OBJS= blocksort.sho  \
-  all: $(OBJS)
-  	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.8 $(OBJS)
-  	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c libbz2.so.1.0.8
+ +# rk3328 needs itb image to boot properly
+@@ -24,9 +26,9 @@ index 8086f3c93e..a6425b5b03 100644
+ +ALL-y += u-boot.itb
+ +endif
+ +
+- # enable combined SPL/u-boot/dtb rules for tegra
+- ifeq ($(CONFIG_TEGRA)$(CONFIG_SPL),yy)
+- ALL-y += u-boot-tegra.bin u-boot-nodtb-tegra.bin
++ # Build a combined spl + u-boot image for sunxi
++ ifeq ($(CONFIG_ARCH_SUNXI)$(CONFIG_SPL),yy)
++ ALL-y += u-boot-sunxi-with-spl.bin
+ -- 
+-2.18.1
++2.43.0
+ 
+
+--===============7361176046415129708==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7361176046415129708==--
