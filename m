@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D6DEC2BD09
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:03:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ED9FC2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69D9760B4E;
-	Mon, 24 Jun 2024 20:03:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FE3560A90;
+	Mon, 24 Jun 2024 20:03:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id psNb3obxoB4R; Mon, 24 Jun 2024 20:03:08 +0000 (UTC)
+ id dC8t9So2Xm6f; Mon, 24 Jun 2024 20:03:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E9CE60EE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E257960EF2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E9CE60EE1;
-	Mon, 24 Jun 2024 20:03:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 05E361BF473
+	by smtp3.osuosl.org (Postfix) with ESMTP id E257960EF2;
+	Mon, 24 Jun 2024 20:03:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 186FC1BF95D
  for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 617DD408E8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CCB440025
  for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p4Yjahda0nRd for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HjD_ItYott5o for <buildroot@lists.busybox.net>;
  Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05FC7408E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7136A40146
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05FC7408E0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7136A40146
  for <buildroot@buildroot.org>; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E3A5E82B60; Mon, 24 Jun 2024 20:02:25 +0000 (UTC)
+ id 6DC0782B60; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 24 Jun 2024 21:26:53 +0200
+Date: Mon, 24 Jun 2024 21:39:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4f21835ff05f1707b45edf90cca2ac2501b3033f
-X-Git-Newrev: 8beda6f2210e19e2fd10ff16c1ffa49b4760df11
+X-Git-Oldrev: 1b6144a9adba4f46d6a64ac7d698bfb64359eb74
+X-Git-Newrev: dc3f703913fb726a782079f7570b573272492dbf
 X-Patchwork-Hint: ignore
-Message-Id: <20240624200225.E3A5E82B60@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fluent-bit: bump to v3.0.4
+Message-Id: <20240624200226.6DC0782B60@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openocd: update the patch to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +66,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8beda6f2210e19e2fd10ff16c1ffa49b4760df11
+commit: https://git.buildroot.net/buildroot/commit/?id=dc3f703913fb726a782079f7570b573272492dbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release Notes:
-- https://fluentbit.io/announcements/v3.0.4
+This commit allows the package patch to be applied with fuzz factor 0.
+The fuzz factor specifies how many lines of the patch can be inexactly
+matched, so the value 0 requires all lines to be exactly matched.
 
-Fixes:
-- CVE-2024-4323 (https://www.tenable.com/security/research/tra-2024-17)
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/fluent-bit/fluent-bit.hash | 2 +-
- package/fluent-bit/fluent-bit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openocd/0001-configure-enable-build-on-uclinux.patch | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
-index a53f6dba51..6fcf4fac3e 100644
---- a/package/fluent-bit/fluent-bit.hash
-+++ b/package/fluent-bit/fluent-bit.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2f3b82e8b7802fe92625009531592f12d500ff61a02ecf4cd27e0f138a6dc566  fluent-bit-3.0.3.tar.gz
-+sha256  b439f89e879e538849e9106fe450bcf58da5034dfc316af4d2a837423786ed11  fluent-bit-3.0.4.tar.gz
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index b235c3abf4..13bd4ddecb 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openocd/0001-configure-enable-build-on-uclinux.patch b/package/openocd/0001-configure-enable-build-on-uclinux.patch
+index 2f2d320840..d5f1e32958 100644
+--- a/package/openocd/0001-configure-enable-build-on-uclinux.patch
++++ b/package/openocd/0001-configure-enable-build-on-uclinux.patch
+@@ -1,19 +1,21 @@
+-From 11ea78c4d253bb90296e2dd8c3f7fbf59ba397b6 Mon Sep 17 00:00:00 2001
++From 86dd032d77166b7ed59d08c99fbe47b8b7667406 Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Thu, 17 Aug 2017 06:30:31 +0200
+ Subject: [PATCH] configure: enable build on uclinux
  
--FLUENT_BIT_VERSION = 3.0.3
-+FLUENT_BIT_VERSION = 3.0.4
- FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
- FLUENT_BIT_LICENSE = Apache-2.0
- FLUENT_BIT_LICENSE_FILES = LICENSE
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Dario: make the patch to be applied with fuzz factor 0]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  configure.ac | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index c680bda7..1a7980a0 100644
++index eee42d4240f8..b0445f92e0b5 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -327,7 +327,7 @@ AC_ARG_ENABLE([sysfsgpio],
+-   [build_sysfsgpio=$enableval], [build_sysfsgpio=no])
++@@ -342,7 +342,7 @@ AC_ARG_ENABLE([xlnx_pcie_xvc],
++   [build_xlnx_pcie_xvc=$enableval], [build_xlnx_pcie_xvc=no])
+  
+  AS_CASE([$host_os],
+ -  [linux*], [],
+@@ -22,5 +24,5 @@ index c680bda7..1a7980a0 100644
+      AS_IF([test "x$build_sysfsgpio" = "xyes"], [
+        AC_MSG_ERROR([sysfsgpio is only available on linux])
+ -- 
+-2.11.0
++2.43.0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
