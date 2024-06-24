@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 253DEC2D0D1
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:03:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B18CBC2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:03:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4CD960A9A;
-	Mon, 24 Jun 2024 20:03:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A10E60B56;
+	Mon, 24 Jun 2024 20:03:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id drxW7VjWAP-n; Mon, 24 Jun 2024 20:03:24 +0000 (UTC)
+ id H7PlvRRZ2qTc; Mon, 24 Jun 2024 20:03:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1984B6100A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A42836100A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1984B6100A;
-	Mon, 24 Jun 2024 20:03:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 116C01BF473
+	by smtp3.osuosl.org (Postfix) with ESMTP id A42836100A;
+	Mon, 24 Jun 2024 20:03:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 174521BF95D
  for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6880860A77
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79838408E0
  for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j3CEeNPES9gI for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dhD96Y-ebQgk for <buildroot@lists.busybox.net>;
  Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DA9660A80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CB13408E6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8DA9660A80
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4CB13408E6
  for <buildroot@buildroot.org>; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 891F882B80; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
+ id 3395482B64; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 24 Jun 2024 21:55:16 +0200
+Date: Mon, 24 Jun 2024 21:32:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db589f9df5587e37f1ba2c2654e8e693f88f4d74
-X-Git-Newrev: eb8606348fe338cd8cef7538b1440e8a67887845
+X-Git-Oldrev: f5226cd6b72a7b47edbc3220b3e1279526c75b31
+X-Git-Newrev: 06b5ce9f04123a985e7543d5aadae60e14399401
 X-Patchwork-Hint: ignore
-Message-Id: <20240624200226.891F882B80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5base: update the patches to
- be applied with fuzz 0
+Message-Id: <20240624200226.3395482B64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ffmpeg: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,7 +66,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb8606348fe338cd8cef7538b1440e8a67887845
+commit: https://git.buildroot.net/buildroot/commit/?id=06b5ce9f04123a985e7543d5aadae60e14399401
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit allows the package patches to be applied with fuzz factor 0.
@@ -76,56 +76,66 @@ matched, so the value 0 requires all lines to be exactly matched.
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/qt5/qt5base/0006-Fix-build-on-riscv32.patch | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ package/ffmpeg/0003-libavutil-Fix-mips-build.patch | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/qt5/qt5base/0006-Fix-build-on-riscv32.patch b/package/qt5/qt5base/0006-Fix-build-on-riscv32.patch
-index 5561acb9ae..ff24fbff83 100644
---- a/package/qt5/qt5base/0006-Fix-build-on-riscv32.patch
-+++ b/package/qt5/qt5base/0006-Fix-build-on-riscv32.patch
-@@ -1,7 +1,7 @@
--From 035dc537bee26e3b63a211b2835d8560439e161f Mon Sep 17 00:00:00 2001
-+From 25a0057e8d7afaab3492e03efb3f85581f1cf9b2 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Fri, 27 Aug 2021 16:28:32 +0200
--Subject: Fix build on riscv32
-+Subject: [PATCH] Fix build on riscv32
+diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+index ee2d1db8bd..a52d7fc347 100644
+--- a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
++++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+@@ -1,4 +1,4 @@
+-From 6e8daf0d502a2a822f1f08f42368d7d676dc1a9e Mon Sep 17 00:00:00 2001
++From e9d97f9d29ce57d7a5a62607c2a08e091a06de6e Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Sun, 6 Jun 2021 08:54:53 +0200
+ Subject: [PATCH] libavutil: Fix mips build
+@@ -11,16 +11,18 @@ Patch sent upstream:
+ http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281272.html
  
- riscv32 fails to build because __NR_futex is not defined on this
- architecture:
-@@ -21,15 +21,17 @@ Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
- [Retrieved from:
- https://code.qt.io/cgit/qt/qtbase.git/commit/?id=035dc537bee26e3b63a211b2835d8560439e161f]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +[Dario: make the patch to be applied with fuzz factor 0]
 +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
  ---
-  src/corelib/thread/qfutex_p.h | 5 +++++
-  1 file changed, 5 insertions(+)
+  configure            | 2 ++
+  libavutil/mips/cpu.c | 6 +++---
+  2 files changed, 5 insertions(+), 3 deletions(-)
  
- diff --git a/src/corelib/thread/qfutex_p.h b/src/corelib/thread/qfutex_p.h
--index 40482b6fc1..037207a5c0 100644
-+index f287b752d75f..fd7d09ac8572 100644
- --- a/src/corelib/thread/qfutex_p.h
- +++ b/src/corelib/thread/qfutex_p.h
--@@ -103,6 +103,11 @@ QT_END_NAMESPACE
-+@@ -81,6 +81,11 @@ QT_END_NAMESPACE
-  // if not defined in linux/futex.h
-  #  define FUTEX_PRIVATE_FLAG        128         // added in v2.6.22
-  
-@@ -38,9 +40,9 @@ index 40482b6fc1..037207a5c0 100644
- +#    define __NR_futex __NR_futex_time64
- +#  endif
- +
-- QT_BEGIN_NAMESPACE
-- namespace QtLinuxFutex {
--     constexpr inline bool futexAvailable() { return true; }
-+ #  if __has_feature(thread_sanitizer) || defined(__SANITIZE_THREAD__)
-+ #    include <sanitizer/tsan_interface.h>
-+ inline void _q_tsan_acquire(void *addr, void *addr2)
+ diff --git a/configure b/configure
+-index 6bfd98b384..773a7d516c 100755
++index a89cfa6d959d..6ec00df75312 100755
+ --- a/configure
+ +++ b/configure
+-@@ -2191,6 +2191,7 @@ HEADERS_LIST="
++@@ -2227,6 +2227,7 @@ HEADERS_LIST="
+      opencv2_core_core_c_h
+      OpenGL_gl3_h
+      poll_h
+@@ -28,8 +30,8 @@ index 6bfd98b384..773a7d516c 100755
+      sys_param_h
+      sys_resource_h
+      sys_select_h
+-@@ -6361,6 +6361,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
+- check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepareToEncodeFrames -framework VideoToolbox
++@@ -6472,6 +6473,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
++ check_func_headers VideoToolbox/VideoToolbox.h VTPixelRotationSessionCreate -framework VideoToolbox
+  check_headers windows.h
+  check_headers asm/types.h
+ +check_headers sys/auxv.h
+@@ -37,7 +39,7 @@ index 6bfd98b384..773a7d516c 100755
+  # it seems there are versions of clang in some distros that try to use the
+  # gcc headers, which explodes for stdatomic
+ diff --git a/libavutil/mips/cpu.c b/libavutil/mips/cpu.c
+-index 59619d54de..19196de50b 100644
++index 59619d54dee3..19196de50b59 100644
+ --- a/libavutil/mips/cpu.c
+ +++ b/libavutil/mips/cpu.c
+ @@ -19,7 +19,7 @@
+@@ -68,5 +70,5 @@ index 59619d54de..19196de50b 100644
+          return cpu_flags_cpucfg();
+      else
  -- 
--cgit v1.2.1
-+2.43.0
+-2.29.2
++2.34.1
  
 _______________________________________________
 buildroot mailing list
