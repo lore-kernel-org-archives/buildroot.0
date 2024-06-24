@@ -1,71 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87A1CC2BD09
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 18:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52399C2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 19:26:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39B3C81EB6;
-	Mon, 24 Jun 2024 18:05:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC5246076C;
+	Mon, 24 Jun 2024 19:26:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qHm3OiVpzylN; Mon, 24 Jun 2024 18:05:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KMgsO7iK31Tz; Mon, 24 Jun 2024 19:26:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E71E81EBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E08F36082B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E71E81EBC;
-	Mon, 24 Jun 2024 18:05:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 070471BF356
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 18:05:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E08F36082B;
+	Mon, 24 Jun 2024 19:26:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B2E601BF473
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:26:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8BB481EBC
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 18:05:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A0DC56082B
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:26:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0GKVtwKPNyIB for <buildroot@lists.busybox.net>;
- Mon, 24 Jun 2024 18:05:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 82CCC81EB6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82CCC81EB6
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 82CCC81EB6
- for <buildroot@buildroot.org>; Mon, 24 Jun 2024 18:05:33 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0F13BB00583;
- Mon, 24 Jun 2024 20:05:28 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yfmtqvcKvnZj for <buildroot@lists.busybox.net>;
+ Mon, 24 Jun 2024 19:26:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62e; helo=mail-pl1-x62e.google.com;
+ envelope-from=ckhardin@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B96E26076C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B96E26076C
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
+ [IPv6:2607:f8b0:4864:20::62e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B96E26076C
+ for <buildroot@buildroot.org>; Mon, 24 Jun 2024 19:26:17 +0000 (UTC)
+Received: by mail-pl1-x62e.google.com with SMTP id
+ d9443c01a7336-1f480624d0fso36747245ad.1
+ for <buildroot@buildroot.org>; Mon, 24 Jun 2024 12:26:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1719257176; x=1719861976;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mGFt4t3Y8ToMXM1PcPGJtaDPMsBbswzk87J373iXIt0=;
+ b=bqYhIjxWyIP9jOmwKCVLPGtCi2Q9UerIU+nZ45Y1moEFLAOHnI3DyucdzmCiSyGTWe
+ KGiyesoi9u3UhptWlzt1K5nSVQ0jHdhU9MEyZ4HHyqiR1MX9WSJf+zWrOvMZkUtf786K
+ hTIIENNYf9vpNxfwIFHoV3NNuDemaEc8DEeZNJTG7uN+4l2JwZ18ZeKI9KFk2BPVj6IK
+ blO5lhoYbN8vnP2iVXG1dcjOQupvH7pwAEThofVKsRIlvU4O6PMZR/ZfQQArWHRrusdx
+ QR+dHQ9YU3CdhHxuGNlHs91aRKhLtLlefn7ngrg1WiwK86w7dkpVoNIKiuJ7/1oMULr/
+ FJNQ==
+X-Gm-Message-State: AOJu0Yw02vHpAQSZ4pmU17M7VRkXeMcXPfv8ur8eauY4IhVSkLivXm16
+ ctadIJKOJseJ00luBVEX6v1sMXyfPtQQ61JaJ+LX65xGMUva6bXLF1xOhw==
+X-Google-Smtp-Source: AGHT+IGLG7tdVMJwmsfIyBcfQAx/OOLJzKfnc/bGgmmrIiYNcRfTj6j0pFL8bPrVPaWy+YG5/AO0rA==
+X-Received: by 2002:a17:902:c40e:b0:1f9:f3c6:ed37 with SMTP id
+ d9443c01a7336-1fa23f22771mr68072585ad.14.1719257176161; 
+ Mon, 24 Jun 2024 12:26:16 -0700 (PDT)
+Received: from localhost.localdomain ([12.125.190.90])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-1f9eb7cf962sm66202515ad.231.2024.06.24.12.26.15
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Mon, 24 Jun 2024 12:26:15 -0700 (PDT)
+From: Charles Hardin <ckhardin@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jun 2024 20:05:19 +0200
-Message-ID: <20240624180519.434061-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+Date: Mon, 24 Jun 2024 12:26:10 -0700
+Message-Id: <20240624192610.78164-1-ckhardin@gmail.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1719252330;
- bh=O2syquvRXJ0XcPvaF6czYkrAfdW2p+100TnYkgbpB8s=;
- h=From:To:Cc:Subject:Date:From;
- b=a53LW1M875/88Gy7l3lN8d6S4MFgT+6JGAJTOGH/TnghtoPzRjO0efudVIyRwierl
- fcnMFNW181PXYNtTVY8z19GXZv8YhHYibElfxUpHE4qF+fxeSQFlGrfXoe1LMMW9sk
- rx8NomNyF9ZTNDOlln9bDtSXNbJjmwkWwG5/ctT+JkNveQV8OongYzrPVN058LgJlb
- 1D7hJ6e0BsnCNc4ldZDPmWbvqsuy7EmYycxki/fM79M5tEoxa8h+YU/DR/Jc52lV7G
- yAFs5vYAfhyKhNY96zQ5bVEZ+HPStktOjvnBxvOpJlOLZIqTn83UG4J9PESYOvHDnx
- s59MzAbQtLGyw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1719257176; x=1719861976; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mGFt4t3Y8ToMXM1PcPGJtaDPMsBbswzk87J373iXIt0=;
+ b=GkdLAEQY4pS3q9WydtHykt0s4rMV63J46iQVmpv8/gCxjTFZyHsCxWraKXN+m4I+Ur
+ d2l3S/z0qTuqkK6pTuE9r6DI2yqwF0mfV1Zhxsf3ctD07Eee/wkmTzh4OjT0OrndD7x4
+ vvO0iALZKxEwoK0w055QJGNUA3x61oHYMCBA5DPYwGIWipziHbagqK197sag5NxLmIyW
+ frS6FF/5nVWPPMRb+UI3K2CJi+4HPK/5UsNjZjHFdfK8/qy2SD0ExsvrU8oW2iCPdEvo
+ eD8NzVdbpmD9USudXoipk+karppGexuG0XGbpySh9YXsKcY3U0G/fTiDINdojr2HN9NJ
+ wzxA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=a53LW1M8
-Subject: [Buildroot] [PATCH 1/1] configs/spike_riscv64: remove the no longer
- needed kernel fragment
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=GkdLAEQY
+Subject: [Buildroot] [PATCH 1/1] package/alsa-plugins: bump version to 1.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,68 +100,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Charles Hardin <ckhardin@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit [1] updated riscv-isa-sim (Spike), which now includes
-a NS16550 uart emulation. The Kernel config fragment was introduced to
-work with older HTIF interface from Spike.
+Changelog:
+https://www.alsa-project.org/wiki/Changes_v1.2.11_v1.2.12#alsa-plugins
 
-For more information about the HTIF/NS16550 in Spike, see the commit
-log [2].
-
-This commit removes this Kernel config fragment, since it is no longer
-needed.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/853b7661bf5ddca5d4b81964ef1a19a133beac85
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/38c581b05cd8e7967783410b36c14b9b561acd12
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Charles Hardin <ckhardin@gmail.com>
 ---
-Patch tested on branch master at commit 3f464c2 with commands:
+ package/alsa-plugins/alsa-plugins.hash | 2 +-
+ package/alsa-plugins/alsa-plugins.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    utils/docker-run make check-package
-    ...
-    OK
-
-    make spike_riscv64_defconfig
-    make
-    board/spike/riscv64/start.sh
-    ...
-    Welcome to Buildroot
-    buildroot login:
----
- board/spike/riscv64/linux.fragment | 3 ---
- configs/spike_riscv64_defconfig    | 1 -
- 2 files changed, 4 deletions(-)
- delete mode 100644 board/spike/riscv64/linux.fragment
-
-diff --git a/board/spike/riscv64/linux.fragment b/board/spike/riscv64/linux.fragment
-deleted file mode 100644
-index b443b0ab364..00000000000
---- a/board/spike/riscv64/linux.fragment
-+++ /dev/null
-@@ -1,3 +0,0 @@
--CONFIG_RISCV_SBI_V01=y
--CONFIG_HVC_RISCV_SBI=y
--CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
-diff --git a/configs/spike_riscv64_defconfig b/configs/spike_riscv64_defconfig
-index b4b3d6e3d5a..fa8cba42755 100644
---- a/configs/spike_riscv64_defconfig
-+++ b/configs/spike_riscv64_defconfig
-@@ -4,7 +4,6 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.26"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/spike/riscv64/linux.fragment"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TARGET_ROOTFS_CPIO=y
- # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/package/alsa-plugins/alsa-plugins.hash b/package/alsa-plugins/alsa-plugins.hash
+index 5d190e4d7b..6943be6253 100644
+--- a/package/alsa-plugins/alsa-plugins.hash
++++ b/package/alsa-plugins/alsa-plugins.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  8c337814954bb7c167456733a6046142a2931f12eccba3ec2a4ae618a3432511  alsa-plugins-1.2.7.1.tar.bz2
++sha256  7bd8a83d304e8e2d86a25895d8dcb0ef0245a8df32e271959cdbdc6af39b66f2  alsa-plugins-1.2.12.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING.GPL
+diff --git a/package/alsa-plugins/alsa-plugins.mk b/package/alsa-plugins/alsa-plugins.mk
+index d23a81c5ee..25ecc589fc 100644
+--- a/package/alsa-plugins/alsa-plugins.mk
++++ b/package/alsa-plugins/alsa-plugins.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ALSA_PLUGINS_VERSION = 1.2.7.1
++ALSA_PLUGINS_VERSION = 1.2.12
+ ALSA_PLUGINS_SOURCE = alsa-plugins-$(ALSA_PLUGINS_VERSION).tar.bz2
+ ALSA_PLUGINS_SITE = https://www.alsa-project.org/files/pub/plugins
+ ALSA_PLUGINS_LICENSE = LGPL-2.1+
 -- 
-2.45.2
+2.39.3 (Apple Git-146)
 
 _______________________________________________
 buildroot mailing list
