@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B18CBC2BD09
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:03:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB2EEC2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A10E60B56;
-	Mon, 24 Jun 2024 20:03:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89F8E60FCF;
+	Mon, 24 Jun 2024 20:03:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H7PlvRRZ2qTc; Mon, 24 Jun 2024 20:03:28 +0000 (UTC)
+ id Zvgn0Vj744mH; Mon, 24 Jun 2024 20:03:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A42836100A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DBF560BB5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A42836100A;
-	Mon, 24 Jun 2024 20:03:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 174521BF95D
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DBF560BB5;
+	Mon, 24 Jun 2024 20:03:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 05D251BF473
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79838408E0
+ by smtp3.osuosl.org (Postfix) with ESMTP id B5C3360A80
  for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dhD96Y-ebQgk for <buildroot@lists.busybox.net>;
- Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kwx2YHU8Iij2 for <buildroot@lists.busybox.net>;
+ Mon, 24 Jun 2024 20:02:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CB13408E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1D2A60A82
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CB13408E6
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1D2A60A82
  for <buildroot@buildroot.org>; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3395482B64; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
+ id 995BC82B84; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 24 Jun 2024 21:32:12 +0200
+Date: Mon, 24 Jun 2024 21:57:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f5226cd6b72a7b47edbc3220b3e1279526c75b31
-X-Git-Newrev: 06b5ce9f04123a985e7543d5aadae60e14399401
+X-Git-Oldrev: 93a75717dcee3b095de57d12dff83789298c255e
+X-Git-Newrev: 8f88a644ed7d6c9ea55fd4fbe9d7f37055920016
 X-Patchwork-Hint: ignore
-Message-Id: <20240624200226.3395482B64@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ffmpeg: update the patches to be
- applied with fuzz 0
+Message-Id: <20240624200226.995BC82B84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/apply-patches.sh: set the
+ maximum fuzz factor to 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,77 +66,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06b5ce9f04123a985e7543d5aadae60e14399401
+commit: https://git.buildroot.net/buildroot/commit/?id=8f88a644ed7d6c9ea55fd4fbe9d7f37055920016
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit allows the package patches to be applied with fuzz factor 0.
-The fuzz factor specifies how many lines of the patch can be inexactly
-matched, so the value 0 requires all lines to be exactly matched.
+This patch was created as a fix to a problem that occurred during the
+compilation of QEMU:
+
+>>> qemu 8.1.1 Patching
+
+Applying 0001-tests-fp-disable-fp-bench-build-by-default.patch using patch:
+patching file tests/fp/meson.build
+Hunk #1 succeeded at 138 with fuzz 2 (offset -502 lines).
+
+Applying 0002-softmmu-qemu-seccomp.c-add-missing-header-for-CLONE_.patch using patch:
+patching file softmmu/qemu-seccomp.c
+
+Applying 0004-tracing-install-trace-events-file-only-if-necessary.patch using patch:
+patching file trace/meson.build
+
+With the bump to version 8.1.1, the patch that disabled the compilation
+of the fp-bench test does not report any errors, even though the patch
+itself is no longer applicable. The only noticeable message is:
+
+"Hunk #1 succeeded at 138 with fuzz 2 (offset -502 lines)."
+
+As reported by the patch man page:
+
+"With context diffs, and to a lesser extent with normal diffs, patch can
+detect when the line numbers mentioned in the patch are incorrect, and
+attempts to find the correct place to apply each hunk of the patch.
+As a first guess, it takes the line number mentioned for the hunk, plus
+or minus any offset used in applying the previous hunk. If that is not
+the correct place, patch scans both forwards and backwards for a set of
+lines matching the context given in the hunk. First patch looks for a
+place where all lines of the context match. If no such place is found,
+and it's a context diff, and the maximum fuzz factor is set to 1 or more,
+then another scan takes place ignoring the first and last line of
+context. If that fails, and the maximum fuzz factor is set to 2 or more,
+the first two and last two lines of context are ignored, and another
+scan is made. The default maximum fuzz factor is 2.
+
+If the hunk is installed at a different line from the line number
+specified in the diff, you are told the offset. A single large offset
+may indicate that a hunk was installed in the wrong place. You are also
+told if a fuzz factor was used to make the match, in which case you
+should also be slightly suspicious."
+
+By setting the maximum fuzz factor to 0, we avoid that patches which
+cannot be applied are incorrectly reported as valid, with positive
+side-effects on version bumps.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/ffmpeg/0003-libavutil-Fix-mips-build.patch | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ support/scripts/apply-patches.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-index ee2d1db8bd..a52d7fc347 100644
---- a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-+++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-@@ -1,4 +1,4 @@
--From 6e8daf0d502a2a822f1f08f42368d7d676dc1a9e Mon Sep 17 00:00:00 2001
-+From e9d97f9d29ce57d7a5a62607c2a08e091a06de6e Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd.kuhls@t-online.de>
- Date: Sun, 6 Jun 2021 08:54:53 +0200
- Subject: [PATCH] libavutil: Fix mips build
-@@ -11,16 +11,18 @@ Patch sent upstream:
- http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281272.html
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-  configure            | 2 ++
-  libavutil/mips/cpu.c | 6 +++---
-  2 files changed, 5 insertions(+), 3 deletions(-)
- 
- diff --git a/configure b/configure
--index 6bfd98b384..773a7d516c 100755
-+index a89cfa6d959d..6ec00df75312 100755
- --- a/configure
- +++ b/configure
--@@ -2191,6 +2191,7 @@ HEADERS_LIST="
-+@@ -2227,6 +2227,7 @@ HEADERS_LIST="
-      opencv2_core_core_c_h
-      OpenGL_gl3_h
-      poll_h
-@@ -28,8 +30,8 @@ index 6bfd98b384..773a7d516c 100755
-      sys_param_h
-      sys_resource_h
-      sys_select_h
--@@ -6361,6 +6361,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
-- check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepareToEncodeFrames -framework VideoToolbox
-+@@ -6472,6 +6473,7 @@ check_func_headers VideoToolbox/VTCompressionSession.h VTCompressionSessionPrepa
-+ check_func_headers VideoToolbox/VideoToolbox.h VTPixelRotationSessionCreate -framework VideoToolbox
-  check_headers windows.h
-  check_headers asm/types.h
- +check_headers sys/auxv.h
-@@ -37,7 +39,7 @@ index 6bfd98b384..773a7d516c 100755
-  # it seems there are versions of clang in some distros that try to use the
-  # gcc headers, which explodes for stdatomic
- diff --git a/libavutil/mips/cpu.c b/libavutil/mips/cpu.c
--index 59619d54de..19196de50b 100644
-+index 59619d54dee3..19196de50b59 100644
- --- a/libavutil/mips/cpu.c
- +++ b/libavutil/mips/cpu.c
- @@ -19,7 +19,7 @@
-@@ -68,5 +70,5 @@ index 59619d54de..19196de50b 100644
-          return cpu_flags_cpucfg();
-      else
- -- 
--2.29.2
-+2.34.1
- 
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 73aa6c8e5f..2acaa63e9f 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -116,7 +116,7 @@ function apply_patch {
+         exit 1
+     fi
+     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+-    ${uncomp} "${path}/$patch" | patch -g0 -p1 --no-backup-if-mismatch -d "${builddir}" -t -N $silent
++    ${uncomp} "${path}/$patch" | patch -F0 -g0 -p1 --no-backup-if-mismatch -d "${builddir}" -t -N $silent
+     if [ $? != 0 ] ; then
+         echo "Patch failed!  Please fix ${patch}!"
+         exit 1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
