@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8EB3C2BD09
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 009F0C2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 20:02:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8239F60B49;
-	Mon, 24 Jun 2024 20:02:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B15F760B44;
+	Mon, 24 Jun 2024 20:02:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wzkn_CbIqE8w; Mon, 24 Jun 2024 20:02:40 +0000 (UTC)
+ id Fm3Phzp4C9z1; Mon, 24 Jun 2024 20:02:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CF5A60B4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFB4D60B4E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CF5A60B4E;
-	Mon, 24 Jun 2024 20:02:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 04D701BF473
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFB4D60B4E;
+	Mon, 24 Jun 2024 20:02:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E9B61BF95D
  for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D66E81D72
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6073240AD9
  for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 20:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PPqHjnAOqMyF for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vy_0e6eky6hL for <buildroot@lists.busybox.net>;
  Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66B4F81EA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 338CD40025
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 66B4F81EA0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 338CD40025
  for <buildroot@buildroot.org>; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 637F282B63; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
+ id 1EE5282B60; Mon, 24 Jun 2024 20:02:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 24 Jun 2024 21:38:14 +0200
+Date: Mon, 24 Jun 2024 21:30:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e1800c7e477548117a39717c42d06c884046419
-X-Git-Newrev: 1b6144a9adba4f46d6a64ac7d698bfb64359eb74
+X-Git-Oldrev: e04faea50f5554ab24f8b756860b9a7922094a6f
+X-Git-Newrev: 47e497eaeec01733ba8edbb5a7c01d1b53281cce
 X-Patchwork-Hint: ignore
-Message-Id: <20240624200226.637F282B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenssl: update the patches to
- be applied with fuzz 0
+Message-Id: <20240624200226.1EE5282B60@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bzip2: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,7 +66,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b6144a9adba4f46d6a64ac7d698bfb64359eb74
+commit: https://git.buildroot.net/buildroot/commit/?id=47e497eaeec01733ba8edbb5a7c01d1b53281cce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit allows the package patches to be applied with fuzz factor 0.
@@ -76,59 +76,90 @@ matched, so the value 0 requires all lines to be exactly matched.
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/libopenssl/0003-Revert-Fix-static-builds.patch | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ package/bzip2/0001-build-objects-twice.patch  | 14 ++++++++------
+ package/bzip2/0002-improve-build-system.patch | 12 +++++++-----
+ 2 files changed, 15 insertions(+), 11 deletions(-)
 
-diff --git a/package/libopenssl/0003-Revert-Fix-static-builds.patch b/package/libopenssl/0003-Revert-Fix-static-builds.patch
-index 149ad54fc5..b4b78c97fc 100644
---- a/package/libopenssl/0003-Revert-Fix-static-builds.patch
-+++ b/package/libopenssl/0003-Revert-Fix-static-builds.patch
-@@ -1,4 +1,4 @@
--From 847a7b744e31b9f57d2a3de495187db1dc0ee6d7 Mon Sep 17 00:00:00 2001
-+From a048522f64dbbe90cf77aea0c3f47cccdad50742 Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd@kuhls.net>
- Date: Fri, 21 Jul 2023 19:30:40 +0200
- Subject: [PATCH] Revert "Fix -static builds"
-@@ -8,17 +8,19 @@ This reverts commit cfd7225fbb9507b2e443a494459bdaab5236d29d.
- Upstream: https://github.com/openssl/openssl/issues/14574#issuecomment-817209126
+diff --git a/package/bzip2/0001-build-objects-twice.patch b/package/bzip2/0001-build-objects-twice.patch
+index 9bde0f6488..52b234f65a 100644
+--- a/package/bzip2/0001-build-objects-twice.patch
++++ b/package/bzip2/0001-build-objects-twice.patch
+@@ -8,14 +8,16 @@ and build the shared objects as *.sho instead of *.o.
+ Then, we use these objects to create the shared library.
  
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 +[Dario: make the patch to be applied with fuzz factor 0]
 +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-  Configure | 8 ++++----
-  1 file changed, 4 insertions(+), 4 deletions(-)
  
- diff --git a/Configure b/Configure
--index 2c17f4186b..94cab4c3c4 100755
-+index 2a5e58805c3b..0e8c1ce5cc74 100755
- --- a/Configure
- +++ b/Configure
--@@ -1377,10 +1377,6 @@ foreach (keys %useradd) {
-- # At this point, we can forget everything about %user and %useradd,
-- # because it's now all been merged into the corresponding $config entry
-+@@ -1466,10 +1466,6 @@ if ($config{prefix} && !$config{CROSS_COMPILE}) {
-+         unless file_name_is_absolute($config{prefix});
-+ }
+ Index: bzip2-1.0.6/Makefile-libbz2_so
+ ===================================================================
+ --- bzip2-1.0.6.orig/Makefile-libbz2_so
+ +++ bzip2-1.0.6/Makefile-libbz2_so
+-@@ -25,13 +25,13 @@ SHELL=/bin/sh
+- CC=gcc
+- override CFLAGS += -fpic -fPIC -Wall
++@@ -26,13 +26,13 @@ CC=gcc
++ BIGFILES=-D_FILE_OFFSET_BITS=64
++ CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES)
   
- -if (grep { $_ =~ /(?:^|\s)-static(?:\s|$)/ } @{$config{LDFLAGS}}) {
- -    disable('static', 'pic', 'threads');
-@@ -27,7 +29,7 @@ index 2c17f4186b..94cab4c3c4 100755
-  # Allow overriding the build file name
-  $config{build_file} = env('BUILDFILE') || $target{build_file} || "Makefile";
+ -OBJS= blocksort.o  \
+ -      huffman.o    \
+@@ -33,10 +35,10 @@ Index: bzip2-1.0.6/Makefile-libbz2_so
+ +      bzlib.sho
   
--@@ -1671,6 +1667,10 @@ if ($strict_warnings)
-+@@ -1764,6 +1760,10 @@ if ($strict_warnings)
-                  }
-          }
+  all: $(OBJS)
+- 	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.6 $(OBJS)
+-@@ -45,17 +45,5 @@ install:
++ 	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.8 $(OBJS)
++@@ -43,17 +43,5 @@ all: $(OBJS)
+  clean: 
+- 	rm -f $(OBJS) bzip2.o libbz2.so.1.0.6 libbz2.so.1.0 bzip2-shared
++ 	rm -f $(OBJS) bzip2.o libbz2.so.1.0.8 libbz2.so.1.0 bzip2-shared
   
-@@ -39,5 +41,5 @@ index 2c17f4186b..94cab4c3c4 100755
-                                ? @strict_warnings_collection
-                                : ( $_ ) }
- -- 
--2.39.2
-+2.43.0
+ -blocksort.o: blocksort.c
+ -	$(CC) $(CFLAGS) -c blocksort.c
+diff --git a/package/bzip2/0002-improve-build-system.patch b/package/bzip2/0002-improve-build-system.patch
+index 2d6e2cf900..11a856e49c 100644
+--- a/package/bzip2/0002-improve-build-system.patch
++++ b/package/bzip2/0002-improve-build-system.patch
+@@ -20,12 +20,14 @@ This patch makes a number of improvements to the bzip2 build system:
+    appropriate symbolic links.
  
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Dario: make the patch to be applied with fuzz factor 0]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ 
+ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -20,8 +20,7 @@
++@@ -20,8 +20,7 @@ AR=ar
+  RANLIB=ranlib
+  LDFLAGS=
+  
+@@ -35,7 +37,7 @@ Index: b/Makefile
+  
+  # Where you want it installed when you do 'make install'
+  PREFIX=/usr/local
+-@@ -90,14 +89,14 @@
++@@ -90,14 +89,14 @@ install: bzip2 bzip2recover
+  	cp -f libbz2.a $(PREFIX)/lib
+  	chmod a+r $(PREFIX)/lib/libbz2.a
+  	cp -f bzgrep $(PREFIX)/bin/bzgrep
+@@ -66,9 +68,9 @@ Index: b/Makefile-libbz2_so
+ -CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES)
+ +override CFLAGS += -fpic -fPIC -Wall
+  
+- OBJS= blocksort.o  \
+-       huffman.o    \
+-@@ -37,8 +36,11 @@
++ OBJS= blocksort.sho  \
++       huffman.sho    \
++@@ -37,8 +36,11 @@ OBJS= blocksort.sho  \
+  all: $(OBJS)
+  	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.8 $(OBJS)
+  	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c libbz2.so.1.0.8
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
