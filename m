@@ -4,49 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F459C30653
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 19:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD618C2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 19:27:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB31960A83;
-	Mon, 24 Jun 2024 19:27:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A8E36076C;
+	Mon, 24 Jun 2024 19:27:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4UDuOntbBIZQ; Mon, 24 Jun 2024 19:26:59 +0000 (UTC)
+ id XcOcnek_OXIw; Mon, 24 Jun 2024 19:27:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5314060AD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EEBE60A6D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5314060AD9;
-	Mon, 24 Jun 2024 19:26:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EEBE60A6D;
+	Mon, 24 Jun 2024 19:27:34 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CE9981BF95F
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:26:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7BAD01BF473
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA907408D5
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:26:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 754A9408D5
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:27:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iGbnunHB0daW for <buildroot@lists.busybox.net>;
- Mon, 24 Jun 2024 19:26:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 949B1408A2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 949B1408A2
- for <buildroot@buildroot.org>; Mon, 24 Jun 2024 19:26:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8ADDD82B63; Mon, 24 Jun 2024 19:26:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 24 Jun 2024 21:25:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c452e5ac11a83cc130edfbe6ffccc8101142d378
-X-Git-Newrev: 4f21835ff05f1707b45edf90cca2ac2501b3033f
-X-Patchwork-Hint: ignore
-Message-Id: <20240624192654.8ADDD82B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8189fs: bump to version
- 2024-05-19
+ id q-zHS7bvGF-g for <buildroot@lists.busybox.net>;
+ Mon, 24 Jun 2024 19:27:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1C79F408A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C79F408A2
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1C79F408A2
+ for <buildroot@buildroot.org>; Mon, 24 Jun 2024 19:27:30 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-42108856c33so33971895e9.1
+ for <buildroot@buildroot.org>; Mon, 24 Jun 2024 12:27:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1719257248; x=1719862048;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=UtDyqUtaQBgHcVsI1yCM8wYOPXFfRQuoR3XvDcoDs48=;
+ b=qBizOoCqoRXRFbBhmGCL1aCg9y5vAxzrCVmwnAPL6XBWeVqJjM1MU0mKoEYZ+3zvpW
+ iOpmEy6J04Fze1eWHA0BPV24swakRZembBs8h6Ke8o0tyIRtPoIKCIu6JMtXA02tjxbs
+ o0juv2vLvmrKLYG7hO10qUPkaP5+m0L7T/Q7We5d+N0/9r/C6i+phWAkig/JN85e0HIi
+ yB8YS3Z0LQEoM9fEORp6f2gyoc+zqMLTWZgUWzrz/OAapu9lG/MF+OlMf2yN/i4cpWVA
+ sXmXl7Kpq9hlIBFtQWGkCSHMxvQ2E2xsTnCiL86+hXj2VYpIYRMfG7TlQ0KPPSZm7dj8
+ QNAw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWHOPQMIeh1dq4FVvXgMeplZLIH4Lq/zn6CAWsJxahqJ4VrFp/ZuVQ16j5VeaNsLSeVC+a0vLvW+yekC0kZRfA5ruHzKdlPXA==
+X-Gm-Message-State: AOJu0YxN4pkEqepYaFx2SYOvkdBjAq/U7C8LutAOA16/SuYgZ4s6IWYd
+ qdd8BxA6tmh9bVdSYUWcgCFVj7768G9FeZ7+NJCRuOxl/Zff/9Ttmt/5KYzPv79lEalMwMfOWRH
+ s
+X-Google-Smtp-Source: AGHT+IFBDd3O7uboYe5MhnNhw36aUKC+fwn4vMSUTyeJmQOj4KfF4WLEN0lJKMqyheWCVxlen+p40Q==
+X-Received: by 2002:a05:600c:4746:b0:421:392b:7e13 with SMTP id
+ 5b1f17b1804b1-424893e036dmr60784745e9.4.1719257248228; 
+ Mon, 24 Jun 2024 12:27:28 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4248e63a897sm66783865e9.44.2024.06.24.12.27.27
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 24 Jun 2024 12:27:27 -0700 (PDT)
+Message-ID: <e903faf0-f289-476b-9ba2-3342cde9e9af@mind.be>
+Date: Mon, 24 Jun 2024 21:27:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+References: <20240521143615.5157-1-thomas@devoogdt.com>
+Content-Language: en-GB
+In-Reply-To: <20240521143615.5157-1-thomas@devoogdt.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1719257248; x=1719862048; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=UtDyqUtaQBgHcVsI1yCM8wYOPXFfRQuoR3XvDcoDs48=;
+ b=NHmaKZk3Z0wTdDjjqeRF016O+pu3yNrSlFU0ChuDbRy9AkK61ssYpu4c9NXyGsHzJd
+ gRHHmAwKEp3O41SLCAaCiLOj04kvN7fKY/af8MhA4bPjW5nASbqySO3UnPO2bfMH4rXq
+ JI6f8FhBkjbhFjWEwwzuDHyI8jV9iHvpXBq176D5aupIGDR9NrD9KsM/cqiyHXwGDbLI
+ Qz7uRZviqCR8r/hrgZXlel9oD0ae5SaYY9lwSIc1E0h0Ap6C/rBetQ7LYMAG7e1pBtr4
+ vfAfoeTO8sI3QTXKeN1eMGuHdWC8d4aYEgyTx3LnR1c/+F7zz6jinw1FdE32OY97pant
+ a8Vg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=NHmaKZk3
+Subject: Re: [Buildroot] [PATCH v1] package/fluent-bit: bump to v3.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,45 +109,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f21835ff05f1707b45edf90cca2ac2501b3033f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this version we can build with Linux 6.9.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/rtl8189fs/rtl8189fs.hash | 2 +-
- package/rtl8189fs/rtl8189fs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 21/05/2024 16:36, Thomas Devoogdt wrote:
+> Release Notes:
+> - https://fluentbit.io/announcements/v3.0.4
+> 
+> Fixes:
+> - CVE-2024-4323 (https://www.tenable.com/security/research/tra-2024-17)
+> 
+> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index 2746194f43..5ed0bbd376 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b28c15f4631f4151ea6fca96d59aec931766af49ccb7a0d5e1080fc41a323713  rtl8189fs-eb51e021b0e1b6f94a4b49da3f4ee5c5fb20b715.tar.gz
-+sha256  a5063b1554acd08bcc084926d1ff80148fe8521a6aefb7061cae68b7c4a7cdb1  rtl8189fs-9a82349c2c40515f9d20b9f6721670f76b4e1c7a.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index 174bb346ca..afb8685bac 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8189FS_VERSION = eb51e021b0e1b6f94a4b49da3f4ee5c5fb20b715
-+RTL8189FS_VERSION = 9a82349c2c40515f9d20b9f6721670f76b4e1c7a
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
- 
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/fluent-bit/fluent-bit.hash | 2 +-
+>   package/fluent-bit/fluent-bit.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+> index a53f6dba51..6fcf4fac3e 100644
+> --- a/package/fluent-bit/fluent-bit.hash
+> +++ b/package/fluent-bit/fluent-bit.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  2f3b82e8b7802fe92625009531592f12d500ff61a02ecf4cd27e0f138a6dc566  fluent-bit-3.0.3.tar.gz
+> +sha256  b439f89e879e538849e9106fe450bcf58da5034dfc316af4d2a837423786ed11  fluent-bit-3.0.4.tar.gz
+>   sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+> diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+> index b235c3abf4..13bd4ddecb 100644
+> --- a/package/fluent-bit/fluent-bit.mk
+> +++ b/package/fluent-bit/fluent-bit.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -FLUENT_BIT_VERSION = 3.0.3
+> +FLUENT_BIT_VERSION = 3.0.4
+>   FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+>   FLUENT_BIT_LICENSE = Apache-2.0
+>   FLUENT_BIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
