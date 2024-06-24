@@ -4,50 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5058EC2BD09
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 07:43:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADB1BC41513
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 07:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2309880CB4;
-	Mon, 24 Jun 2024 07:43:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6847F80D8C;
+	Mon, 24 Jun 2024 07:44:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qk1CZKAQItTE; Mon, 24 Jun 2024 07:43:57 +0000 (UTC)
+ id tL9dtaRjPBVU; Mon, 24 Jun 2024 07:44:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2097680C9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 791AF80DB1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2097680C9A;
-	Mon, 24 Jun 2024 07:43:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C1F201BF4D5
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 07:43:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 791AF80DB1;
+	Mon, 24 Jun 2024 07:44:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 50D011BF4D5
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 07:44:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB70540363
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 07:43:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EF9B6085E
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 07:44:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4qnI5PEOqGoV for <buildroot@lists.busybox.net>;
- Mon, 24 Jun 2024 07:43:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA6474032E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA6474032E
- for <buildroot@buildroot.org>; Mon, 24 Jun 2024 07:43:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A80D782A8A; Mon, 24 Jun 2024 07:43:36 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 23 Jun 2024 17:50:14 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 1f4c382e1faeb8c24609634276a14add8b605cd7
-X-Git-Newrev: dda4387b2c742562d0418a55b6411322a1929d0b
-X-Patchwork-Hint: ignore
-Message-Id: <20240624074336.A80D782A8A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] {linux,
- linux-headers}: bump 6.{1, 6}.x series
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OpiFG92y0jwJ for <buildroot@lists.busybox.net>;
+ Mon, 24 Jun 2024 07:44:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
+ helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 66E026082B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66E026082B
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66E026082B
+ for <buildroot@buildroot.org>; Mon, 24 Jun 2024 07:44:38 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11E92DA7;
+ Mon, 24 Jun 2024 00:45:03 -0700 (PDT)
+Received: from debian (X72Y076X74.nice.arm.com [10.34.129.16])
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E0FA3F766;
+ Mon, 24 Jun 2024 00:44:37 -0700 (PDT)
+Date: Mon, 24 Jun 2024 09:44:34 +0200
+From: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@arm.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <Znkj4szwHVXBhDH2@debian>
+Mail-Followup-To: Arnout Vandecappelle <arnout@mind.be>,
+ buildroot@buildroot.org,
+ Masahiro Yamada <yamada.masahiro@socionext.com>
+References: <20240522144211.464748-1-vincent.stehle@arm.com>
+ <e72e7d50-c1a1-41a6-aa10-36bddaaac66b@mind.be>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <e72e7d50-c1a1-41a6-aa10-36bddaaac66b@mind.be>
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=arm.com
+Subject: Re: [Buildroot] [PATCH] configs/arm_foundationv8_defconfig: bump to
+ Linux 6.8.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,67 +70,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dda4387b2c742562d0418a55b6411322a1929d0b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7dd7a6820551278d6c002d2bda394364f9932946)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/linux/Config.in b/linux/Config.in
-index 47a3292fe8..2facb65db8 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.6.32" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.6.33" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 0e1d3c92da..60de2ac34f 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  aaa824eaf07f61911d22b75ff090a403c3dd0bd73e23933e0bba8b5971436ce1  linux-6.6.32.tar.xz
--sha256  9019f427bfdc9ced5bc954d760d37ac08c0cdffb45ad28087fc45a73e64336c9  linux-6.1.92.tar.xz
-+sha256  a13ebc20dc2a75722699949af74aa86a4ce5d544d6daaa6a7de4e8c81b40de97  linux-6.6.33.tar.xz
-+sha256  df31af2ef5923d61fadd68bfd991f50f2e42a913895eb4b03214ee78f8720bcf  linux-6.1.93.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  f41e718e33b88f269a6b6a7653e5e9824c4ba541f6ffe5bf26ecc37c540a1b05  linux-5.15.160.tar.xz
- sha256  9c36b243e8c3ec1d5963366618f336710b84340bf95be2037b26c452392cb2d6  linux-5.10.218.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 33f2f00918..45b172693a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -407,8 +407,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.277"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.218"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.160"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.92"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.32"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.1.93"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.33"	if BR2_KERNEL_HEADERS_6_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gRnJpLCBKdW4gMjEsIDIwMjQgYXQgMTE6MDk6NDRQTSArMDIwMCwgQXJub3V0IFZhbmRlY2Fw
+cGVsbGUgd3JvdGU6Cj4gCj4gCj4gT24gMjIvMDUvMjAyNCAxNjo0MiwgVmluY2VudCBTdGVobMOp
+IHdyb3RlOgo+ID4gLSBCdW1wIExpbnV4IGtlcm5lbCB0byB2Ni44LjEwLgo+ID4gLSBCdW1wIHRo
+ZSBGVlAgaW4gdGhlIHJlYWRtZSB0byB2ZXJzaW9uIDExLjI1IGJ1aWxkIDE1Lgo+IAo+ICBDb3Vs
+ZCB5b3UgcGxlYXNlIGFsc28gYWRkIGEgaGFzaCBmaWxlIGZvciB0aGUgY3VzdG9tIGtlcm5lbCB2
+ZXJzaW9uPyBZb3UKPiBjYW4gdXNlIHV0aWxzL2FkZC1jdXN0b20taGFzaGVzLgoKSGkgQXJub3V0
+LAoKVGhhbmtzIGZvciBoYXZpbmcgYSBsb29rIGFuZCBmb3IgdGhlIHRpcHM7IEkgd2lsbCBhZGQg
+YSBoYXNoIGFuZCByZS1zZW5kLgoKQmVzdCByZWdhcmRzLApWaW5jZW50LgoKPiAKPiAgUmVnYXJk
+cywKPiAgQXJub3V0Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
