@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DAF1C2BD05
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 06:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87573C2BD05
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 06:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F187681225;
-	Mon, 24 Jun 2024 06:53:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CEE4813ED;
+	Mon, 24 Jun 2024 06:55:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ia2YNODzRc_m; Mon, 24 Jun 2024 06:53:13 +0000 (UTC)
+ id 4PJbJ3cpSYKv; Mon, 24 Jun 2024 06:55:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 009A38177A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D1E081314
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 009A38177A;
-	Mon, 24 Jun 2024 06:53:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D1E081314;
+	Mon, 24 Jun 2024 06:55:18 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CC2901BF4DB
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 06:53:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 408951BF4DB
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 06:55:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C4AF28177A
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 06:53:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C758812DD
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 06:55:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ENcLGknRBhkH for <buildroot@lists.busybox.net>;
- Mon, 24 Jun 2024 06:53:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ id cdUPrRJLn4ev for <buildroot@lists.busybox.net>;
+ Mon, 24 Jun 2024 06:55:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
  helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 857D681225
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 857D681225
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 857D681225
- for <buildroot@busybox.net>; Mon, 24 Jun 2024 06:53:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DB33C812D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB33C812D3
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DB33C812D3
+ for <buildroot@busybox.net>; Mon, 24 Jun 2024 06:55:15 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([82.135.81.90]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MN5eR-1s4vVB2eRh-00Z2Xm
- for <buildroot@busybox.net>; Mon, 24 Jun 2024 08:53:08 +0200
+Received: from localhost.fritz.box ([82.135.81.90]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N6sn7-1sPR3G26jH-016VPk; Mon, 24
+ Jun 2024 08:55:13 +0200
 To: buildroot@busybox.net
-Date: Mon, 24 Jun 2024 08:53:08 +0200
-Message-ID: <20240624065308.12957-1-ps.report@gmx.net>
+Date: Mon, 24 Jun 2024 08:55:13 +0200
+Message-ID: <20240624065513.16503-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:dfuj7AlT0gf/z2pg638gykTHRotwzVdxBH2A0qXPjmRS4Q60StD
- PMpfB4Kj9lF/F00G9ew2AIhpRtUC02Cw1X+jcN50o6vmrKY3ZakGTanz9GKYSwVGs3rXwlf
- Db6ZyqhLxXAoidW13v5HtUyi3y+Ds/POy3dUFzUjnti6XUSU5bDSF2O4DmLj8iDos4C2M/k
- eJ1cEoiqlzBLCtSXjGkSw==
-UI-OutboundReport: notjunk:1;M01:P0:algjVLX8o4I=;RcHd2EDMnUl3r07nnwEx5LG2COA
- OYe2AjF7BcDZYpBtiZ1zdTOTtqB6asMC7UuuCH00yip26WC4dZOjziCLmnTJAyuATR/uBVKBz
- +k4OnbrW4OOOEMrY27mlX711GJ/lCAfl2FN3JKAEaU85WDit5D9y00MshlhlsMVRqJVLgxhSq
- wtyDG/fmOZCicyKlZnCwT/fffJXIOQ6hd66MRu1oxsA+obvUNwBSQXyq5d/Lp+KUtGA0gcWyV
- EwhKLjPGyqPGq0ZT2HGzXFcdkfT3GXN/PS+T30bwBtxmnmUwax+dHvfYXPZs4vs8aaL7JFgor
- IrVbEd1jBcV65TU9bmx5jwwwkf/aXjNA9O6LZrZgFH7tZijyVrmhv70s/DLxLc1VJyiJtevrU
- oGClFv4SGWJLu1HdEyWG9pdudi7n6mqZ3ocmriJw0Ggx5lDBqW7rOAJHyoJiQuRlkghjbi3rc
- R/AHIKqkZghR+Oyt1R9ajY/6OMNx4sjCxYLDM2z1t2RSNIHGfDt2sAvRSfhP45UmSPMfE7oPa
- 8XJuV9K0B5dYogEj+Y9wDAk1z+aU+itcIZt77bE4nYI2zgWdNMuZHHiTeRuozH9NpPFMtSsc1
- f2Yq8406+66mt/ku0CASuWwRBjr2NZp7Q/pSH8DuQHrVWbBvvnyiB9PxHydapTU5CMVIXeHN+
- e5JwZLkTh9uwfy5Gu+O1MsWR+Qas3+Py3qjG7f+tUjSo3hY+fYdSecEMlXDn8tVEHeEM5o0NQ
- F1RkRVNmRUbiw51kqjsMbD0CD73tFKlgIJ2OS78zJ2gzrnZTY82/vmLg35B28L7mn2YuS3UZW
- mSO7Fo/X+kDur9UyNdERQ5/rTwXNF7WD0rEmupGfofmxo=
+X-Provags-ID: V03:K1:PNl+/3zUTzLtMGOY65gfKRNeEB1Ir7RUHLlV5qdyaPYJ8vikNyU
+ hqN0u/S43dJ+4ajfFOLXx9pc4Lra/cKNiz9aDDcD3lylAugZxpvdQilNj2D8sJV24qv2/l5
+ 8TKev5HkKXbUjX7Mxhgtca4CXork8HJNQ5LQNkBJ3wonhApISpKy3Xlr2NjWnr9ZKZDOu2W
+ Jb7D9peEXNxSTXvLXlJRw==
+UI-OutboundReport: notjunk:1;M01:P0:fJtISp0mNgw=;F/9cWb4iDQ4/6P0dggpJqpnN8a5
+ 63WMpS5RfSfhBuyKDi2eC5xnhdIiqa8jyGjAtRseFAgrNe3TwxmKI7XlHf/HQ94zeipHzxB5D
+ K7TD4q7B4awuhw0Hq85Mtu/XLivMaMBqq8u5ZZk3njjdvwyp7hne3w/npNEe1b40K/p7UCxeu
+ QQbQFliVRjAyZLC7JMSxZ98qfiBI08G0EY/5J6HgtFoVofJ0VxkJ+YA+dr8/O6Rn41Kofmgbn
+ /ae3je+NF7D7mqm7l7Kk8tlAlKjEWxcv0t1miJkVpO8PDP0EOEnThifV2FCE9Sl1fYn0M9Itq
+ 83l4aGl4H8nbhZd+Nz+B7Noy2G4qs4rv+Y0urioQC7zMobqS5AWqcLsJOeajC73ti5aDFgYyW
+ yszq1BnciMYUgypZ/V3qvaVsAT2DYDUtJBgSdvTvSFCeJw8yhReM7f/GglvmhjJ5D0IGHGDO0
+ b8VkKrq2mjeJ5LhsbIuUrLACFh28nzgg/cOpfStx5AEHXji074fRN7kPXozTSQVjSlvBkYNhD
+ KwQTiAa7rNsch9FduVAh3i/EF2lSPBkIS8K+CUTogl0QLMX6Ey+m/SvSo7EnrQ/2WE05N10Fi
+ YEp7WIqo1iBY57+DgkMtrUc15VpgNSw6Kz9yBTpKqvZR5eIkxITz6Occd7TYMZq5msUh0HV5h
+ jMoeSLXjra0lrXRfIPdNE5uxLbCvwcn06y0gLZcw+lqibM4AtKHpyey+uHF9Ny7GS3eWAuzoO
+ zsI4EVo78A0Fyw8B03ENlKRDX7cPcVXfbfyO3ma2yUSEvVX8jks/2yQRE+NqmkwiZwtK3zmI6
+ NulYr4Q6g+FnwVRpEkcmdL9xJEheRnl+PePZDCsAs4tqY=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.net; 
- s=s31663417; t=1719211988; x=1719816788; i=ps.report@gmx.net;
- bh=gfO460sz5OUVaEbN/9SDLhDg1++eYCvH0N6GWgH7Ocw=;
- h=X-UI-Sender-Class:From:To:Subject:Date:Message-ID:MIME-Version:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=nrHCWlg152AfMejIoyc/bU1MhdVzcAfLGS3FQydOtA5AhofWUSQJZxuOiNOe2br2
- 3ZGqj+aSn4+6FEa/C1ENzrp0s4CbKBdg/zVWqFKM/gKQxZ3WOAhzQ16Hlj+iX3bTK
- q2VxDKviEPEottSB8mmALjsbV98OXyqkkDF3BscO75J+jzdayJjZMPyVBgD9lO09+
- hpcekaj8QChHpEbgQEFIrzbGkaBAyOIMAWvr+CejP0TnUA7+40cm0NJq1T6qPQArw
- W6sAMcY4JltEd+tGeGfYtsvvD6rwPqpaUE8LTLndh0kFPi6F0c/Np4hnkQUrL+Ny1
- 6/03+/eSyr350Z8jrg==
+ s=s31663417; t=1719212113; x=1719816913; i=ps.report@gmx.net;
+ bh=tMVjE0PiNkO/fmv0cpZWaR3XmA6HASLTWRw9p0CgrnA=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=Tv0ENdpZt9q408UZDYT97ynX9gmW+TAUunlyxSoMWcNPWtlapgqF68Ra0K9s0Dqt
+ WrSslONhYU90st28zJXnySQvuUHtkcW2BentvGwmCUUKQulDtxzF1ezy5njSA0SpY
+ Jj4rfPPXVMi9b1m/JdzYCSGUSRujmlXIQ1hxNPP1tnAMGIOblwDalnm0PpWrYgRcP
+ AHva/vtoahsynRX2jjhDZxNblcC/nsJYVu+SUDhpN1CA7qlmvZUVn1l1wUD1srC8Z
+ srjqGg56/Gz9SWbTAGfD0N3OtwlKv5dQxBFOKhjzIM3vDTXXUMgpxcUfxodRX2w2P
+ BFWOrafj/bobE+rd0w==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=nrHCWlg1
-Subject: [Buildroot] [PATCH v1] package/elfutils: bump version to 0.191
+ header.a=rsa-sha256 header.s=s31663417 header.b=Tv0ENdpZ
+Subject: [Buildroot] [PATCH v1] package/kmod: bump version to 32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,41 +101,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For details see [1]
+For details see [1].
 
-[1] https://sourceware.org/git/?p=elfutils.git;a=blob;f=NEWS
+[1] https://github.com/kmod-project/kmod/blob/master/NEWS
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/elfutils/elfutils.hash | 4 ++--
- package/elfutils/elfutils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kmod/kmod.hash | 2 +-
+ package/kmod/kmod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
-index e3cc67dc0e..94906427cf 100644
---- a/package/elfutils/elfutils.hash
-+++ b/package/elfutils/elfutils.hash
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index f4b01b20a2..5943562a49 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
 @@ -1,5 +1,5 @@
--# From https://sourceware.org/elfutils/ftp/0.189/sha512.sum
--sha512  93a877e34db93e5498581d0ab2d702b08c0d87e4cafd9cec9d6636dfa85a168095c305c11583a5b0fb79374dd93bc8d0e9ce6016e6c172764bcea12861605b71  elfutils-0.189.tar.bz2
-+# From https://sourceware.org/elfutils/ftp/0.191/sha512.sum
-+sha512  e22d85f25317a79b36d370347e50284c9120c86f9830f08791b7b6a7b4ad89b9bf4c7c71129133b8d193a0edffb2a2c17987b7e48428b9670aff5ce918777e04  elfutils-0.191.tar.bz2
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256  f5a6949043cc72c001b728d8c218609c5a15f3c33d75614b78c79418fcf00d80  kmod-31.tar.xz
++sha256  630ed0d92275a88cb9a7bf68f5700e911fdadaf02e051cf2e4680ff8480bd492  kmod-32.tar.xz
+ 
  # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 4d8cc43342..ed5c459e46 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index d83fb85a3e..68472b2e9d 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ELFUTILS_VERSION = 0.189
-+ELFUTILS_VERSION = 0.191
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
- ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
+-KMOD_VERSION = 31
++KMOD_VERSION = 32
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
 -- 
 2.45.2
 
