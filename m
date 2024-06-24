@@ -4,99 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 311C4C2BD09
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 19:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DCF7C2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jun 2024 19:26:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E60336076C;
-	Mon, 24 Jun 2024 19:26:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D80886082B;
+	Mon, 24 Jun 2024 19:26:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D_vvomB8AGvg; Mon, 24 Jun 2024 19:26:34 +0000 (UTC)
+ id wXBhoiu64qNy; Mon, 24 Jun 2024 19:26:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8F5A6082B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09D4D60AD9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8F5A6082B;
-	Mon, 24 Jun 2024 19:26:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3D2BC1BF473
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:26:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09D4D60AD9;
+	Mon, 24 Jun 2024 19:26:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 09DEA1BF95D
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:26:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 299154011F
- for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:26:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC36860AD9
+ for <buildroot@lists.busybox.net>; Mon, 24 Jun 2024 19:26:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bOswsndfohl6 for <buildroot@lists.busybox.net>;
- Mon, 24 Jun 2024 19:26:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iwg3n2vors5I for <buildroot@lists.busybox.net>;
+ Mon, 24 Jun 2024 19:26:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 06ADA400F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06ADA400F8
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 06ADA400F8
- for <buildroot@buildroot.org>; Mon, 24 Jun 2024 19:26:30 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-5295eb47b48so5526320e87.1
- for <buildroot@buildroot.org>; Mon, 24 Jun 2024 12:26:30 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D184860A9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D184860A9D
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D184860A9D
+ for <buildroot@buildroot.org>; Mon, 24 Jun 2024 19:26:36 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-42499b98d4cso1626395e9.2
+ for <buildroot@buildroot.org>; Mon, 24 Jun 2024 12:26:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719257188; x=1719861988;
+ d=1e100.net; s=20230601; t=1719257194; x=1719861994;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=tT/D0dg/jd9XbrRvqiI8+CWCna2S6fAF19u0hP+Zmko=;
- b=RFF0D4B2AaPBzPl9g1oZNFRz0SWpAgIa3PlyRyqXPOczIIR1qX91+c01/RTx3wwgJn
- RrExo+Z5hTfEIs730glElyipOoKBRfP+H8iyDAmPtweSfA9ETy/mGLjfq89TrZ3O6JhD
- PqZ2AJQIqpvEpz8d737rWrZGdfD+RDwF247X51fjMRWUNZDpLqZT7gp14LmxhzLY7ZCu
- OXMPX8+BF64TTgyIWO9nk2fg7AHHmSJZZEXRtJWifPKR0U3/4ufuCIx4KwzO59vDhj4n
- 47ueTDkauSpvvKxWPf3Rekfq5XoJnsrthRkHo7CyJxgoPoaf/kvCzwtwNOA1n0pLFOZz
- zyow==
+ bh=H5odTzp5aeyZ7ObFs6amRFsv3Jw9p5wuKhYgcREHKMM=;
+ b=IagnThcE65RqY0IaknMVvDOCt0Lji+aKNmHY2cr2zJC96DqYRM8YtQ5QXdTqSB5oXe
+ o07U8uLdNRawIFxk80jqCaYDusFez1NebldsBXGmZR9GJ3WK9fvMU8Hsvd+stEFxlFOC
+ Z5jHiNNR21FiojexiORG1FPqAdjBWmyYcnLuGIHu0Q5UwrQ9s6OhBlNnD2zLjD6kNglr
+ N+7uzKUltEYIzbGnPzH8Us1DvTUQrcF8oRL8v8tM8B7YFaeXSAAopl3pAbIzis3Hb0wU
+ LXO+qFSFUU1T0dgNTQ0ykBHVniARgwWyIWCUnwtbOZUpgIcTks7UrrfCNHbsGWvdlcX/
+ 87Uw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXhL9kKtYrl1RUq+70HZMxK4yWpoMOtLl5tvGqitEx5dPolZjbc0P4RFaXnoL6soZbzgrUoSNMPfJ0jjWx6s7aDOXEY4mnKHg==
-X-Gm-Message-State: AOJu0YzrmyttyvZeC54EtFQXTnwu2tXLPnq94pCy+u1h1OiCRghtnOu1
- yX45shMk/w1eNIJOhJZtusrN1hfJq7GdxcmEUYT2/cNPzUPfPNYc9mQkyh4SqHE=
-X-Google-Smtp-Source: AGHT+IFhlT55C3JCvGZnCxkPY08IEgl3eQ6qeI9j9+6AQmls457E0criqb8uLFkQj6quFh57f0iTUg==
-X-Received: by 2002:a05:6512:224b:b0:52c:e670:7a12 with SMTP id
- 2adb3069b0e04-52ce6707b1bmr3446845e87.60.1719257187965; 
- Mon, 24 Jun 2024 12:26:27 -0700 (PDT)
+ AJvYcCXBb8IaSq4wFu2H4VxPOrzYreH9NsvjbbPj0crhvUAtWLDQPFaL2fnap5G1NQg9wNEKuvQpd8pmuC5w7SHDAc3NTpFcrnkUuw==
+X-Gm-Message-State: AOJu0YyF2Yt9vpOubq8wdfly/9piCa7Z9D0McKYdCCyt9TUA9Ye8BMds
+ 0KsKHHp9bax7Oap5apcNKaPHkaloSyoQGsHn+oO7T+udPOU9Iezs+OHf895rnVs=
+X-Google-Smtp-Source: AGHT+IFzWvS1y0sNF+fISMMFhXVn5bSjgY8+4EnG9QHGztemtlOkmd3xxG7Vx09yIli9t+ShKT6vTw==
+X-Received: by 2002:a05:600c:3b9c:b0:424:8d36:4a37 with SMTP id
+ 5b1f17b1804b1-4248d364b42mr35337485e9.28.1719257194042; 
+ Mon, 24 Jun 2024 12:26:34 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4247d0be841sm183549285e9.20.2024.06.24.12.26.27
+ 5b1f17b1804b1-4247d0be841sm183549285e9.20.2024.06.24.12.26.33
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 24 Jun 2024 12:26:27 -0700 (PDT)
-Message-ID: <824590b3-d21c-47da-955f-83803545198a@mind.be>
-Date: Mon, 24 Jun 2024 21:26:25 +0200
+ Mon, 24 Jun 2024 12:26:33 -0700 (PDT)
+Message-ID: <556b4a68-914a-4025-9cac-d1bfb13f10d7@mind.be>
+Date: Mon, 24 Jun 2024 21:26:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  buildroot@buildroot.org
 References: <20240520194136.2470200-1-giulio.benetti@benettiengineering.com>
+ <20240520194136.2470200-2-giulio.benetti@benettiengineering.com>
 Content-Language: en-GB
-In-Reply-To: <20240520194136.2470200-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20240520194136.2470200-2-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719257188; x=1719861988; darn=buildroot.org;
+ d=mind.be; s=google; t=1719257194; x=1719861994; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=tT/D0dg/jd9XbrRvqiI8+CWCna2S6fAF19u0hP+Zmko=;
- b=CnYTK39slLUrwB0jsbLnwK+S26nIDgKO87yt6UeuuAI6G82Gf4bdt5WJnF9hNyQBts
- ITEQNNtRy+5fQZFALRnAxj6hwHkeD3fD3U2c66djoxWo2CFd4YZ1IoY4c/40iJXRxrFW
- uaNoWASjZQ7UQo9BhxNmxw/pvvPkW+oTA3mO2Gdj2omJWdJM1pqxiMz9SL3e5BrDVXfI
- fQnGEZLZ52eJisWuNTAiDc8k0jXzpvtC/g9ppDDc+MQtfuQAQkoEq6r9n5r+ZfDLVUym
- tUR5BRT8aCPpS2LQyPRktRrAe6xy5CI/CiLE86JqzrHQNV+rQz6ks9IIpcOsEaqbHnUd
- Ugrw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=H5odTzp5aeyZ7ObFs6amRFsv3Jw9p5wuKhYgcREHKMM=;
+ b=N3UUdIE71BA5Q8vkk77dtGsLdku0AOAgwb8UnDh6dddjJPAXeSb4nCLVv+6SUnL/Ka
+ F/aBJcY1t2BaxuuKxK0Qi07NzIkOu6PEnqyeWuLKN0eEkVJ9KlfP+Zh6/yWriarg0rRT
+ Gooeb1BB0rafrq6NRXEMTcfs01G59YBhPpug+102XZI7rFByECbkdXkzdQ2X7ruIQrYU
+ MJ+ZimY76FRNB4+5OGUGnA1Q9lDQpCyUOew/qskqUrzBDRQH5VkRHjozpYwXENjXA6JU
+ rWyrAEJ7/fe6dbRuhTPwzdxh+B/jHOC4BLopcEja3GxuCg+v8ZJQzNvA5PUeudb+n95r
+ bk0A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=CnYTK39s
-Subject: Re: [Buildroot] [PATCH] package/rtl8189es: bump to version
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=N3UUdIE7
+Subject: Re: [Buildroot] [PATCH] package/rtl8189fs: bump to version
  2024-05-19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -131,30 +131,30 @@ On 20/05/2024 21:41, Giulio Benetti wrote:
   Arnout
 
 > ---
->   package/rtl8189es/rtl8189es.hash | 2 +-
->   package/rtl8189es/rtl8189es.mk   | 2 +-
+>   package/rtl8189fs/rtl8189fs.hash | 2 +-
+>   package/rtl8189fs/rtl8189fs.mk   | 2 +-
 >   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
-> index 1ef46436fb..1b1aefdd5c 100644
-> --- a/package/rtl8189es/rtl8189es.hash
-> +++ b/package/rtl8189es/rtl8189es.hash
+> diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
+> index 2746194f43..5ed0bbd376 100644
+> --- a/package/rtl8189fs/rtl8189fs.hash
+> +++ b/package/rtl8189fs/rtl8189fs.hash
 > @@ -1,2 +1,2 @@
 >   # Locally calculated
-> -sha256  b28c15f4631f4151ea6fca96d59aec931766af49ccb7a0d5e1080fc41a323713  rtl8189es-eb51e021b0e1b6f94a4b49da3f4ee5c5fb20b715.tar.gz
-> +sha256  5ab565057ac81527ac579edfdd2a1e42b9ceb2f2924b2ade88a11849443789e4  rtl8189es-30a52f789a0b933c4a7eb06cbf4a4d21c8e581aa.tar.gz
-> diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
-> index 8bac0a125f..11735ba112 100644
-> --- a/package/rtl8189es/rtl8189es.mk
-> +++ b/package/rtl8189es/rtl8189es.mk
+> -sha256  b28c15f4631f4151ea6fca96d59aec931766af49ccb7a0d5e1080fc41a323713  rtl8189fs-eb51e021b0e1b6f94a4b49da3f4ee5c5fb20b715.tar.gz
+> +sha256  a5063b1554acd08bcc084926d1ff80148fe8521a6aefb7061cae68b7c4a7cdb1  rtl8189fs-9a82349c2c40515f9d20b9f6721670f76b4e1c7a.tar.gz
+> diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
+> index 174bb346ca..afb8685bac 100644
+> --- a/package/rtl8189fs/rtl8189fs.mk
+> +++ b/package/rtl8189fs/rtl8189fs.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -RTL8189ES_VERSION = eb51e021b0e1b6f94a4b49da3f4ee5c5fb20b715
-> +RTL8189ES_VERSION = 30a52f789a0b933c4a7eb06cbf4a4d21c8e581aa
->   RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
->   RTL8189ES_LICENSE = GPL-2.0
+> -RTL8189FS_VERSION = eb51e021b0e1b6f94a4b49da3f4ee5c5fb20b715
+> +RTL8189FS_VERSION = 9a82349c2c40515f9d20b9f6721670f76b4e1c7a
+>   RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
+>   RTL8189FS_LICENSE = GPL-2.0
 >   
 _______________________________________________
 buildroot mailing list
