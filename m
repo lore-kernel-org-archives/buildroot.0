@@ -4,68 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39C55C30653
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jun 2024 07:38:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EEF2C30653
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jun 2024 09:04:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E63226061D;
-	Tue, 25 Jun 2024 07:38:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D182960F02;
+	Tue, 25 Jun 2024 09:04:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fE-KdaMzK6Zg; Tue, 25 Jun 2024 07:38:56 +0000 (UTC)
+ id RskcX5F8_Aih; Tue, 25 Jun 2024 09:04:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06BD8605E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D956860FCF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06BD8605E8;
-	Tue, 25 Jun 2024 07:38:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D956860FCF;
+	Tue, 25 Jun 2024 09:04:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 58EC21BF215
- for <buildroot@lists.busybox.net>; Tue, 25 Jun 2024 07:38:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 46E031BF424
+ for <buildroot@lists.busybox.net>; Tue, 25 Jun 2024 09:04:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4603C605E4
- for <buildroot@lists.busybox.net>; Tue, 25 Jun 2024 07:38:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 33FC860FCF
+ for <buildroot@lists.busybox.net>; Tue, 25 Jun 2024 09:04:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R0QT6A4IlwS7 for <buildroot@lists.busybox.net>;
- Tue, 25 Jun 2024 07:38:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:1600:4:17::8faa;
- helo=smtp-8faa.mail.infomaniak.ch;
- envelope-from=slaveze@smartandconnective.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EA73F605D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA73F605D9
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch
- [IPv6:2001:1600:4:17::8faa])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EA73F605D9
- for <buildroot@buildroot.org>; Tue, 25 Jun 2024 07:38:52 +0000 (UTC)
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch
- [10.7.10.107])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4W7cCB21J4zK9M;
- Tue, 25 Jun 2024 09:38:46 +0200 (CEST)
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4W7cC969T4zfb9; Tue, 25 Jun 2024 09:38:45 +0200 (CEST)
-Message-ID: <00b56f4cad554a6c6e13be1346df41673580fb95.camel@smartandconnective.com>
-From: Sebastien Laveze <slaveze@smartandconnective.com>
-To: buildroot@buildroot.org
-Date: Tue, 25 Jun 2024 09:38:45 +0200
-User-Agent: Evolution 3.44.4-0ubuntu2 
+ id XPoNrkwTdHpO for <buildroot@lists.busybox.net>;
+ Tue, 25 Jun 2024 09:04:11 +0000 (UTC)
+X-Greylist: delayed 903 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 25 Jun 2024 09:04:09 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4080860F02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4080860F02
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.181.117.226;
+ helo=mail.actia.se; envelope-from=john.ernberg@actia.se; receiver=<UNKNOWN> 
+Received: from mail.actia.se (mail.actia.se [212.181.117.226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4080860F02
+ for <buildroot@buildroot.org>; Tue, 25 Jun 2024 09:04:09 +0000 (UTC)
+Received: from S036ANL.actianordic.se (10.12.31.117) by S036ANL.actianordic.se
+ (10.12.31.117) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 25 Jun
+ 2024 10:49:01 +0200
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%4]) with mapi id
+ 15.01.2507.039; Tue, 25 Jun 2024 10:49:01 +0200
+From: John Ernberg <john.ernberg@actia.se>
+To: Arnout Vandecappelle <arnout@mind.be>, "jacob-chen@iotwrt.com"
+ <jacob-chen@iotwrt.com>, "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] [PATCH 1/1] package/pkg-utils.mk: fix incorrect
+ handling of per-package rebuilds
+Thread-Index: AQHalHNYnL8mQZ4nZ0mh5Dufo79garHYRWaAgAApOIA=
+Date: Tue, 25 Jun 2024 08:49:01 +0000
+Message-ID: <89d003bf-cd19-4b55-85d3-7d232bd8f06a@actia.se>
+References: <tencent_7A5A407C574E45921E432385B01446CC4506@qq.com>
+ <852e6bae-dce6-422d-98f2-947c4a71e6c2@mind.be>
+In-Reply-To: <852e6bae-dce6-422d-98f2-947c4a71e6c2@mind.be>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.12.12.11]
+x-esetresult: clean, is OK
+x-esetid: 37303A2955B144576C7167
+Content-ID: <2219E0B8BCE54246A4E6AF12171A79A3@actia.se>
 MIME-Version: 1.0
-X-Infomaniak-Routing: alpha
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smartandconnective.com; s=20191114; t=1719301126;
- bh=i4BXrt/Qhud2SlVw4cZkodC7ypvToUnO+Xg1hg2pfeI=;
- h=Subject:From:To:Cc:Date:From;
- b=nkK2QaRHK7Od2QSP1xd4upgC4qaB0oViFrBcFXMhBGvpa2la3mhYjRVTiYEuLbyKJ
- p/94Yr4/1LVuA5E64EpLpJIZDW6NPT35iBLdk68dpDVuRK5tdydUqNpHzx1azjumG+
- yCPfX5LIQ04cRhJ7MQyJ/kcanw9CDrx02h/ExUQo=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=smartandconnective.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smartandconnective.com header.i=@smartandconnective.com
- header.a=rsa-sha256 header.s=20191114 header.b=nkK2QaRH
-Subject: [Buildroot] Rust general questions
+ header.from=actia.se
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-utils.mk: fix incorrect
+ handling of per-package rebuilds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,23 +81,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fares Chati <fchati@smartandconnective.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: chenhao <chenhao37@lixiang.com>,
+ "zhouxiufeng@lixiang.com" <zhouxiufeng@lixiang.com>,
+ "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
-
-I was wondering what is the rust strategy in term of version support ?
-Is there a will to be conservative in term of rust version or are you
-open to regular updates to latest stable in master ?
-
-Finally, are there some scripts to generate the rust-bin.hash ?
-
-Thanks,
-Sebastien
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSmFjb2IsIEFybm91dCwNCg0KT24gNi8yNS8yNCA4OjIxIEFNLCBBcm5vdXQgVmFuZGVjYXBw
+ZWxsZSB2aWEgYnVpbGRyb290IHdyb3RlOg0KPiANCj4gDQo+IE9uIDIyLzA0LzIwMjQgMDc6MDks
+IGphY29iLWNoZW5AaW90d3J0LmNvbSB3cm90ZToNCj4+IEZyb206IGNoZW5oYW8gPGNoZW5oYW8z
+N0BsaXhpYW5nLmNvbT4NCj4+DQo+PiBUaGUgY3VycmVudCBwZXItcGFja2FnZSBlbmFibGVkIGJ1
+aWxkIHByb2Nlc3MgaW5jb3JyZWN0bHkgaGFuZGxlcyANCj4+IHJlYnVpbGQgdGFyZ2V0cywNCj4+
+IHdoaWNoIGJyZWFrIGxvY2FsIGRldmVsb3BtZW50IHdvcmtmbG93cygibWFrZSBwYWNrYWdlLXJl
+YnVpbGQgJiYgbWFrZSANCj4+IGFsbC4iKS4NCj4+IFRoZXJlIGlzIGFuIGVhcmxpZXIgcmVwb3J0
+IHJlZ2FyZGluZyB0aGUgYnVnKCANCj4+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2J1aWxkcm9v
+dC8yMDE5MTIxMjEzMDI1My4yY2I1NDNiYUB3aW5kc3VyZi8gKQ0KPj4NCj4+IFRvIGFkZHJlc3Mg
+dGhpcyBpc3N1ZSwgd2UgY2hhbmdlIHJzeW5jIGNvbW1hbmQgdXNlZCBkdXJpbmcgdGhlIA0KPj4g
+ZmluYWxpemUgc3RlcCB0byB1c2UgdGhlICd1cGRhdGUnIHBhcmFtZXRlci4NCj4+IFRoaXMgZW5z
+dXJlcyB0aGF0IHRoZSBtb3N0IHJlY2VudCBmaWxlcyBhcmUgaW5zdGFsbGVkIGludG8gdGhlIHJv
+b3Rmcy4NCj4gDQo+ICDCoFRoaXMgd2lsbCBmaXggdGhlIGlzc3VlLCBidXQgbWF5IGJyZWFrIG90
+aGVyIHNpdHVhdGlvbnMuIElmIGEgZmlsZSBpcw0KPiBpbnN0YWxsZWQgYnkgYm90aCBwYWNrYWdl
+IEEgYW5kIHBhY2thZ2UgQiwgYW5kIHBhY2thZ2UgQiBoYXMgYSANCj4gZGVwZW5kZW5jeSBvbg0K
+PiBwYWNrYWdlIEEsIGJ1dCBpdCBkb2Vzbid0IHNldCBhIG5ld2VyIHRpbWVzdGFtcCAoZS5nLiBi
+ZWNhdXNlIGl0J3MgYSANCj4gc2NyaXB0IHRoYXQNCj4gaXMgY29waWVkIGRpcmVjdGx5IGZyb20g
+c291cmNlLCBub3QgYSBjb21waWxlZCBmaWxlKSwgdGhlbiB0aGUgLS11cGRhdGUgDQo+IGFyZ3Vt
+ZW50DQo+IHdpbGwgY2F1c2UgdXMgdG8gdXNlIHRoZSB2ZXJzaW9uIGZyb20gcGFja2FnZSBBIGlu
+c3RlYWQgb2YgdGhlIG9uZSBmcm9tIA0KPiBwYWNrYWdlIEIuDQo+IA0KPiAgwqBJIGRvbid0IGtu
+b3cgaG93IGhpZ2ggdGhlIHJpc2sgaXMgb2YgdGhpcyBoYXBwZW5pbmcsIGJ1dCBJTUhPIGl0cyAN
+Cj4gaW1wYWN0IGlzDQo+IGZhciB3b3JzZSB0aGFuIGZvby1yZWJ1aWxkIG5vdCB3b3JraW5nLg0K
+DQpUaGlzIGFscmVhZHkgZG9lc24ndCB3b3JrIHRvZGF5LCB0aGUgdGFyZ2V0LyBwb3B1bGF0aW9u
+IGlzIHRyYXZlcnNpbmcgDQp0aGUgcGFja2FnZXMgYWxwaGFiZXRpY2FsbHkuIElmIHlvdSByZXZl
+cnNlIHRoZSBwYWNrYWdlIG5hbWVzIGluIHlvdXIgDQpleGFtcGxlLCBzbyB5b3UgZ2V0OiBQYWNr
+YWdlIEEgaGFzIGEgZGVwZW5kZW5jeSBvbiBCLCBhbmQgQSBhbmQgQiBib3RoIA0KcHJvdmlkZSB0
+aGUgc2FtZSBmaWxlLCBhbmQgdGhlIGZpbGUgZnJvbSBwYWNrYWdlIEEgaXMgbWVhbnQgdG8gYmUg
+cGlja2VkLg0KLT4gSXQgd2lsbCBub3QgaGFwcGVuIGJlY2F1c2UgQiB3aWxsIGJlIGNvcGllZCB0
+byB0YXJnZXQvIGFmdGVyIEEuDQoNCg0KV2UgaGF2ZSB0aGlzIHBhY2thZ2UgcmVidWlsZCBpc3N1
+ZSBhcyB3ZWxsIFswXSBhbmQgSSBoYXZlIHNvIGZhciBub3QgDQpmb3VuZCBhbnkgZ29vZCBzb2x1
+dGlvbiB0byB0aGUgcHJvYmxlbSBlaXRoZXIuIE91ciB3b3JrLWFyb3VuZCBmb3Igbm93IA0KaXMg
+dG8gcmVjb25maWd1cmUgYWxsIHRoZSBkZXBlbmRlbnRzIHRoYXQgY29tZSBhZnRlciB0aGUgcGFj
+a2FnZSANCmFscGhhYmV0aWNhbGx5LCBhbmQgdGhlbiB0aGVpciBkZXBlbmRlbnRzLCBhbmQgc28g
+b24uDQoNCkkgd2FzIGV4cGVjdGluZyAyM2VkZjk4MzdjOTMgKCJwYWNrYWdlL3BrZy11dGlsczog
+dGVhY2ggDQpwZXItcGFja2FnZS1yc3luYyB0byBjb3B5IG9yIGhhcmRsaW5rIGRlc3QiKSB0byBm
+aXggdGhlIGlzc3VlIHNpbmNlIHRoZSANCnByZXBhcmVkIHBlci1wYWNrYWdlIGRpcmVjdG9yaWVz
+IGFyZSBoYXJkbGlua3MgdG8gZWFjaCBwcm92aWRpbmcgDQpwYWNrYWdlcyBmaWxlcy4NCg0KQnV0
+IHNpbmNlIHdlIHVwZ3JhZGVkIHRvIDIwMjQuMDIueCBsYXN0IG1vbnRoIHdlIHN0aWxsIHNlZSB0
+aGUgaXNzdWUuIChJIA0KbWFkZSBhIGNsZWFuIGJ1aWxkIHRvIGJlIHN1cmUgSSBkaWRuJ3QgaGF2
+ZSBvbGQgc3R1ZmYgbGF5aW5nIGFyb3VuZCANCmludGVyZmVyaW5nKQ0KDQpDb3VsZCBzb21ldGhp
+bmcgYmUgcHJldmVudGluZyB0aGUgaGFyZGxpbmtzIGZyb20gYmVpbmcgYWN0dWFsIGhhcmRsaW5r
+cz8NCg0KUmVnYXJkcyAvLyBKb2huIEVybmJlcmcNCg0KWzBdOiANCmh0dHBzOi8vbG9yZS5rZXJu
+ZWwub3JnL2J1aWxkcm9vdC8yMDIzMTExMDE0MTI0Mi4zNzk2MTYxLTEtam9obi5lcm5iZXJnQGFj
+dGlhLnNlLwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
