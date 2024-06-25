@@ -4,180 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F304CC2BBCA
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jun 2024 21:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAF95C2BBCA
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jun 2024 21:19:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 726B0400FF;
-	Tue, 25 Jun 2024 21:02:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3BDA740A84;
+	Tue, 25 Jun 2024 21:19:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ItOpSJG4OCqh; Tue, 25 Jun 2024 21:02:48 +0000 (UTC)
+ id W5q4BcAPsNXi; Tue, 25 Jun 2024 21:19:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31FC040103
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04FE4416D2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31FC040103;
-	Tue, 25 Jun 2024 21:02:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1BB131BF863
- for <buildroot@lists.busybox.net>; Tue, 25 Jun 2024 21:02:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 04FE4416D2;
+	Tue, 25 Jun 2024 21:19:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 34A851BF417
+ for <buildroot@lists.busybox.net>; Tue, 25 Jun 2024 21:19:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12BC781D3D
- for <buildroot@lists.busybox.net>; Tue, 25 Jun 2024 21:02:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2DBB540592
+ for <buildroot@lists.busybox.net>; Tue, 25 Jun 2024 21:19:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gT1QRV0tB7Hd for <buildroot@lists.busybox.net>;
- Tue, 25 Jun 2024 21:02:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rQ66WsZ5l0AI for <buildroot@lists.busybox.net>;
+ Tue, 25 Jun 2024 21:19:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:200a::62b;
- helo=nam12-mw2-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0977380A61
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0977380A61
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam12on2062b.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:200a::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0977380A61
- for <buildroot@buildroot.org>; Tue, 25 Jun 2024 21:02:45 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ej9JHybCEqnuvTdzGU1lNHqvq8M/Ot2VRpNgZsNkalvuHDooSjI/yaAJvi+po7GOmBadtvLwRB9hni8IZt0127mQqi2LEzA0MvQzBopHFIVerfHclnGviELloRwzVPlxsudg42U+vg2KKeVFl1XeuObqo6UR+8NYnlz6oqO9PRhDcUjogB8L5eBA5CmIWdPLsMcU9mHLg4+WBNJ/ZOMXPy4MTa07cE5sTIe+pWTU9cXyaawfMBSJo2CTfyjIcX0fEOT1hJIOxCH0e53v1t6di32kzbANvrt1g02ZXGPFFd7UOJssYgGhMBPF2qJ49Lw8ZpZDUpzUxpO2NgL0qvRODw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gApkrWrr3kZpaCgh7wONGR+OstnCiATe/3NRyx4QIX0=;
- b=eQiMKlhbaEVuj/GZMCg24BPhZJG0KFtwwCpiUa5MZegsLX5xk/0I1mtaRCtVAQy+EpcDLVMN5KY39yNu9nCwrHoSWnkQ9T6PxkDDzgnmCYgPIZWptYfk6N6ak2u9/XQNJKCfo/eNPh03NzvnYXXFCiaKc/ztZJqS6Ar+L6m3tkO0yT4pj4yg7oUbyz5cLlkAolgdCfcKYflm1c/Z6QnCALWUuW/6zPOPNIGRI8XBlzmE1AQ8meUsoO9h+oWYdUDygTVTAtF9Vg6OZys8B5nwnextXebFOT2AK5OuDERD2w63XHhPu3CGRhovZhbulL4n11+/XwBgB+XEjryhwaRgyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by MW5PR12MB5623.namprd12.prod.outlook.com (2603:10b6:303:199::9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.28; Tue, 25 Jun
- 2024 21:02:41 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b%7]) with mapi id 15.20.7698.025; Tue, 25 Jun 2024
- 21:02:41 +0000
-To: Brandon Maier <brandon.maier@collins.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-Thread-Topic: [PATCH] boot/xilinx-prebuilt: support custom boards using XSA
-Thread-Index: AQHaxzKATUBe08FaRUaTdjPNfFUJp7HY9mLg
-Date: Tue, 25 Jun 2024 21:02:41 +0000
-Message-ID: <CH2PR12MB5004D83C6AFFB37223A0F732F0D52@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20240625-versal-xsa-support-prebuilt-v1-1-f64a7a396a34@collins.com>
-In-Reply-To: <20240625-versal-xsa-support-prebuilt-v1-1-f64a7a396a34@collins.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|MW5PR12MB5623:EE_
-x-ms-office365-filtering-correlation-id: e6778adf-0355-41c6-ebb8-08dc955a2733
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230038|1800799022|366014|376012|38070700016|41080700001; 
-x-microsoft-antispam-message-info: =?utf-8?B?bDVTM1AzU2JYekQrTkNXbDVIZDlIVzdzSWZOWHNCL2I5T0F3V3pRMzVCdjQ4?=
- =?utf-8?B?Y3RwT2dvSXVNUDdYbDBuMGNYenpPWWVZNVNkeUY4NWxCUXVBREl2eTJncWIv?=
- =?utf-8?B?Z2hXNkVsK0VHQzdWSWlvN1pySWk2M3NPZ0FFVCtsTkhZQTh5V3B0V1dnQTE0?=
- =?utf-8?B?VDlxeE1Odk5QRXVGVDJDaVg1TS9nT1JJT3Z6WHpnSjhDMU9IVGpPeXRpWVE0?=
- =?utf-8?B?YWw0R3Z1dEJFSDNFUWRjZDRGWjM2UHZva1ZiblJUVDJFWjc4aHVzSCtYcXpu?=
- =?utf-8?B?cm5MSUpZYnBCSmlhcnVHaEt4amFkd1g2RFpIYTd5WUt2Mmg3OFA4VHVDcWhS?=
- =?utf-8?B?bnRmT205RlJ2M3NJTlRsTGMyWVltUDdGclVxTGViRFQwdHF0eG00WmVETXJV?=
- =?utf-8?B?aldjNklzd0wrdC84TlBRRlFaQmdDM01IZC9DTnliNmVHMXhEZGFkSEgxLzZw?=
- =?utf-8?B?YldBSXk0UWlCQnlhRTdoZmFXYmVRVlZXR3BwR0NReFA1NTY1MjBoanUvTjJE?=
- =?utf-8?B?WHBYT3Iya3dIVkhlZ3FBaHh5bmpvSHJJNlV1TFgvVVFYNHZKTy91WFFrWWNp?=
- =?utf-8?B?cXovNTd1WDFFQ1ZCVjdpakVJTE0rVUs3ZTh2bkszVnNJRndudGxFREVHNjg5?=
- =?utf-8?B?MW10WUw5RUFxRlNSY2taMnBjRlNPS2dTNEp1U01IM2lYZVJHZjNxYUl3SVZi?=
- =?utf-8?B?M21ZdWRVSHllMDFPQkNiQU5SWTNkNnFqNnJLYW1EZCtKWXB1ZEZLL0wzbDhG?=
- =?utf-8?B?V0JTM1RVOUVLb2lSMXRHMVkyc0JJb0VETVZhdU9DeExodzVIM0puc0JSclc4?=
- =?utf-8?B?RjhjeXdwQW9QeXI5NGhvNldJbndvbkxCTElKcTMvY3loRnRPOFAzcmpjUmlH?=
- =?utf-8?B?SU94OVE4bHI5d09FNmowZEJpN0dIS0t6aFhpa1M0b2crVGRFcXVndkY3ZE5Q?=
- =?utf-8?B?ZHNVVFFyYnIrbUNRN04wSE5nQzF2dVIyc2ZCMkpCbDF5WHpiUXJaYXQzWlNv?=
- =?utf-8?B?T056OEozdlFKb3ZzRlBxeVlpazljZm04N0R6UzdTSUtmVktYMFlGZUVISnZ3?=
- =?utf-8?B?UzRqK2c4Y0t1WWRGdVRWbWxKNGJjVVJQOGQ0OHFnNFpOc215UDBxaW8xNmZq?=
- =?utf-8?B?NVFvQzBrVFd1OE51ZGNxZnFvTFoyb0pZWVdZNnIzanJ6S1VKVlB2UVBieE9t?=
- =?utf-8?B?OFZTSGNsakp6dXhZdmJCTzlCRlRqQjhTK1lEWUdaa254UWlhNXRkaUVXYlE5?=
- =?utf-8?B?VGkzU0hOaEpROG56VERuQy9KT1QyWVVMVWVZQmw3Vk0yZEl6VW1XeVRjbmtv?=
- =?utf-8?B?Q0MwTW5TZXdsb1pTazYwMi9FR1hUMThnaWY0djJNNlNHSWdDZjlQTFZqa05l?=
- =?utf-8?B?RFVseTR5VGtiS0g0UWptYVlIbzZIbFhsNEplNmRNTHhhZlBaQTNvR3VQTVZT?=
- =?utf-8?B?V0VPUVNqWmxCNmV2VytnK2t6emRSc2dFd2hHKzB2eWt5NkVIL2hCc0JxNUY2?=
- =?utf-8?B?NjM0WWgyenExcFQxOWlnNjN4S0JwZy9tMVFRVmh0TjdJNzM3eHZTZC9qUG9t?=
- =?utf-8?B?cjB1YTMxWVlUUEdoSi95NE96TFhnQ3o5VkpWS2NRQnc5TVBFdUMyTFg4Yld5?=
- =?utf-8?B?dzlzaERtNFVwbHpxajE1dlFOckV3dnhmTnhuQ05OalZoc3hEcUJmaTJPVXVj?=
- =?utf-8?B?Tnl1TEtiUE1KbDY4aW5NZ0FWdjJoOGVwNWxmVmlUMHN4T3RmYU4vN1ZUcjZa?=
- =?utf-8?B?UlkrcWpacmx0R0cxTEl4MHBsckRCbnh4TXpJNEM5eDNKUjQyc1FTMlBlQUZj?=
- =?utf-8?B?MStleU9vU2pTTXNZenllY3N6azdMN0RMNTRBYStrcktWWEk3N3RIa1FNeFVC?=
- =?utf-8?B?S0p0ekthbXFCN1pwdE02eUVuVGk2NnU3cTVLWGVsb3Qvd1E9PQ==?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230038)(1800799022)(366014)(376012)(38070700016)(41080700001); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VngvRHVieW93VVpPQTFWc3QreFNXNThuaEJScVVaaWR5L1dGT21ENWdkQWlx?=
- =?utf-8?B?cTF1bWdPVTFlVWp1UVF1bk1oUXlKNDVhY3c4a0dxRk9aUGc4MGNIbmVZTUxj?=
- =?utf-8?B?OEdnZXdmaHpRamdhVmZaK25ZaUwrT3Q4NG9uUXlEbzErTEhGSUJqMDE5R1ZM?=
- =?utf-8?B?b0xVR0JSUURiMlZrcXk3UElVL2R3WnpnazFzelB3TDNQZC9TWEZyb0txNDBN?=
- =?utf-8?B?RE9tODh6U2dGR0JhUmRzZlExbU1XV25sdWw5M3dDYk9sdmJsaHgwcUZRZWZP?=
- =?utf-8?B?R1o3eXNxL0g2R3FYeGxSSlV1L0tnaXBiZWRGeCt4alk2RDBpZFlJcHdCNys2?=
- =?utf-8?B?TVdrWXRHVExyd0FRajZ2YTdvdFZKTEdMRDlhVmtlWHl6OE5SNkRlNTBFQVF2?=
- =?utf-8?B?RTJVeDUxazhWVDEwbHhqNDFqVmZhL3VVQTZrUU9OclUrQUdvT1kxVy8yczFJ?=
- =?utf-8?B?OE0wNUt0cFo5UUUya090dlByQ2FhVXI1ajcyZ2dNZE5aYi9vOTZ3eGZlbTlE?=
- =?utf-8?B?elJRbk1oT3NNejRsZnUvLzFBNkRVWFdsNi9yeFlBMksyL1VVM3o5VGpWdlBp?=
- =?utf-8?B?UmNKdFhQSE53M1pNTU5pNkg1WVViczhaMlhtMEFMaHpQM2YzT2dDN3l4ZjFs?=
- =?utf-8?B?NWNySXFVVTFZRWJ1eU00NmMycGtPR1lQN2xKaU1ETVMxbTY1Ykp4eGRSemlL?=
- =?utf-8?B?VFhSQXlXaXUwaUN5Si9hMmc0VC9zN2hKMmxXYUM4OUVqcVJRZ2FyNDJYVHk2?=
- =?utf-8?B?Rll1cW4xRXdYTkVHU2NOdlRNZVdFWE9hNTRBUmtnM3VvajRYQUxRSmZ4L2Ja?=
- =?utf-8?B?aEorK20ydlRDbysyZGd3SThTVXRnL2xOMkFTdWZUZnlycG9jdS95OTF3Wm1N?=
- =?utf-8?B?RXZqdXg4TDVReWJLUWVySmIxL3p6WVhQWUV0blE4TVIwUTNKVnlaVVk5VGlx?=
- =?utf-8?B?R1dyZDg0eDhuTXRHRjYrWXpKUm1TcGJOWjByOFdNcXVaazB5SXk1S2hBZGhn?=
- =?utf-8?B?REk5dG1JRk91bjZGcE1kVy9PVUo2aENDdlZxUU5yV1RiSDJ2VFRmUWdCcFVT?=
- =?utf-8?B?OEpXVmlZMzIxallKZUJMcERrVEJNY0dGMGdTdkZwcU1SYTl4U21BWGpnUngr?=
- =?utf-8?B?ZmQxR29jOTNyekozUlFkTFloRG1mOStaVDdhMVhNb0xUeEJtTnhoN0JidUo5?=
- =?utf-8?B?Q0lxc09rOFBobERDSElNbzl3ZGx5NXl4Mlp0bUtwMW80M2l1dzAvb0RpZmxk?=
- =?utf-8?B?bE1XZVVseVVKU21SUGdYYTF6QWRIaXJhK3djbnhjWGFhWHpwM0U1V3dFTkdV?=
- =?utf-8?B?QTMwbXY4U1UySWlYMEd1VEtSZFhIVVp1UHZpNWNGWGZBZHRVSFMzdWVSMDNL?=
- =?utf-8?B?aU1YWFR5UTVmK1NUWjRMaEloWHdDdCtpbjJEeHZVTFlHZDl5Q2lqSTdDdWth?=
- =?utf-8?B?bzZyOHdteDZoK2VXRTZobkVKOUpJKzl4T25TZSt1ai8yZ284UXl4dVMzOFI3?=
- =?utf-8?B?ZG05S1gra2ZSaVl6bEFvelBCWElMSUVQaWtjK2x4MVhTbEc3am04N093QXpZ?=
- =?utf-8?B?YWtIem9CNHBBZTc2OVNnUzZIT3ZTa0VxTmRZK0JKVjNZNGJvWmhDa2F6cVNR?=
- =?utf-8?B?b0Y4eWNLMHVMTkU0R1UvY3FORnA3ZHd1YWhTekxxaDJqTDlNUlJ6MC9Wc1hj?=
- =?utf-8?B?blMrOFZmNzkzZ2dxL0Jkd0ZGc3pDTDR0aHFoY01SeFFqU1EwRzFzVnAxVG9Y?=
- =?utf-8?B?dTlJZGt5RVFySm5PUU9wQ1dCNXBlamZ6akJaMlJNWTl1QXhrMllBdEhwaytL?=
- =?utf-8?B?eUU1a29sVHN6RE0wS2ZNRDRubi9veGRHbTZvTDlQTXV6d2JWSHdvNWpwWXhr?=
- =?utf-8?B?czUveDU0M01SQ0ZQTDFvL2VERW05eVlIM05SWE9iZXhGd2xLSC9lN1krZWdJ?=
- =?utf-8?B?NDJaQ2MxbkUvSkxXbE1KOW1LRTgrTG1rVnI0a3grYUV5VHFtcCtWaWZIWlla?=
- =?utf-8?B?blhqU2dIVDU3K2t4V3dvODZwR25QVjdrTkM1VEFDbEI3d2tZMWpiUytWcUF1?=
- =?utf-8?B?TVRuOTBtVlVtUzZGTmYrNmFCTURmVG5iL3Q2c214bVUwa3NhSFhDREU5ckN0?=
- =?utf-8?Q?UZ6A=3D?=
+ client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4C4C640103
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C4C640103
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4C4C640103
+ for <buildroot@buildroot.org>; Tue, 25 Jun 2024 21:19:03 +0000 (UTC)
+Received: by mail-lj1-x22e.google.com with SMTP id
+ 38308e7fff4ca-2ec1620a956so72969561fa.1
+ for <buildroot@buildroot.org>; Tue, 25 Jun 2024 14:19:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1719350341; x=1719955141;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=MRKFeZNUQxJMIK2IprSQrVpQvktuukoNTSY+7LHi3V4=;
+ b=BmKV/JY0BEjSh5xaU1UTmXujDzqEhYLMrrSSqFvGQljvUN90bWLDscAuQfKaV3NoPA
+ ToHu4KuNeGHN3WFnwg991lwq3jMPzIm7hm9SSN3EOYqvTrMZvsrHhtTCDdrKKf9RZUEw
+ U+jbh99Bh6mzOsP2KuclO2NiPDK3Dx4yJicNbh3sPkj8Dy9+cHqK1IDF7Sicg9Si2AT7
+ n0wE87ejur0SqDUaTs0vvL7xRZDfUJizC0HIHpIy9PO8Pt4V4eCiulPXlETIDdWWJu94
+ zq3xxccGlsPtYSr/B8nFzQI5VZaNi+ehaHf5CNUGhyHFSIWhThpYll5VGVEG+ZU5eyhi
+ npAQ==
+X-Gm-Message-State: AOJu0Yyde1dflfx3cU9ogIUwt02UacOXMlWTlxP4dPgaWxZQDu55hvA8
+ B0Uld+HKEhnaY/uJ9zir8dkaOzbWBdA/u97HyVCm6SbnXPRwLH5O1+6aqQ==
+X-Google-Smtp-Source: AGHT+IEG5NevtOSAktHtvcjpukFvNVgcY3NI/qYcQpQrTco3BScZfFtg2zuHbATxaAdIch8s84CQhw==
+X-Received: by 2002:a2e:3218:0:b0:2ec:55f3:40d with SMTP id
+ 38308e7fff4ca-2ec5b346102mr50109741fa.30.1719350341129; 
+ Tue, 25 Jun 2024 14:19:01 -0700 (PDT)
+Received: from precision7530-arch-roy.lan
+ ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
+ by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-2ec592b6158sm8908971fa.3.2024.06.25.14.19.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 25 Jun 2024 14:19:00 -0700 (PDT)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 25 Jun 2024 23:18:25 +0200
+Message-ID: <20240625211847.1419944-1-roykollensvendsen@gmail.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240618212646.4154474-1-roykollensvendsen@gmail.com>
+References: <20240618212646.4154474-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6778adf-0355-41c6-ebb8-08dc955a2733
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jun 2024 21:02:41.6975 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 12ULr9lQG/KzfdgYxqafZlfMnz00bXIeaEse9fADSiQKEUuWhQ6NcPWZoJlptWRi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5623
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gApkrWrr3kZpaCgh7wONGR+OstnCiATe/3NRyx4QIX0=;
- b=U5RASgefvYEnrxLYikR/f3GUH/XkTULTgr/errHfXGk7MakFauF2JO3W7oAP5l0MwYerrtoYVG12qXKNkG1aEXiVAP3JzwKl5plBM2+Ok9Y59sHh7N9GTuOHkmfkzfHiX8/w64gbvEmQGpiSCySMu+5q90gGjDTWqnVmB1nHIbE=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=U5RASgef
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH] boot/xilinx-prebuilt: support custom boards
- using XSA
+ d=gmail.com; s=20230601; t=1719350341; x=1719955141; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=MRKFeZNUQxJMIK2IprSQrVpQvktuukoNTSY+7LHi3V4=;
+ b=mntDz4IXHSRUjqur2m1K9XpZGqnre/T+cJDkGOzmhE35Ukj+U3+BZ+z4uYzOkiBBDx
+ 2RWFfse8H78+G4flJAKMrI8L5KPBZcWvJCj4gGhj4td+JwleA9JCMPVbpnBWeWeuo13g
+ pH7LhwaxwQQtPwsYtdyDz8CAQfpb6LV92K9IELVh9Ce+bvn/vTgo+dyInEuVeOfN225A
+ paaAgUmbyO+XqVsFrri9vWg+ffAJIu6pdGwFaWP8c6cm2j8kDsC6yZtvrIMcZrYmP46b
+ 0oTp56qxXGmYUmz3wGlP1QcXQokqfhMK6PI9lEm9ZFBhhNZXc438ODeh5yv9gAe9AWnn
+ EcIw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=mntDz4IX
+Subject: [Buildroot] [PATCH v9 01/14] package/qt6: bump version to 6.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -189,52 +103,137 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-> The xilinx-prebuilt package only supports development boards that Xilinx
-> has published firmware for. Custom designs based on the Xilinx platform
-> must generate their own firmware using the Vitis software suite.
+For details see [1], [2], [3], [4], [5], [6], [7], [8], [9], [10] and [11].
 
-> Vitis produces an XSA file, which is a Zip file containing all the
-> firmware needed by xilinx-prebuilt. We extend xilinx-prebuilt to
-> download custom XSA files and extract their contents.
+[1] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.0/release-note.md
+[2] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.1/release-note.md
+[3] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.2/release-note.md
+[4] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.3/release-note.md
 
-Thank you for adding this support.
+[5] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.0/release-note.md
+[6] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.1/release-note.md
+[7] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.2/release-note.md
+[8] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.3/release-note.md
 
-I apologize for not catching this earlier, but isn't it Vivado and not Vitis
-which generates the XSA file?  Just like the xilinx-prebuilt package will now
-do, Vitis only consumes an XSA file that is generated by Vivado.
+[9] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.0/release-note.md
+[10] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.1/release-note.md
+[11] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.2/release-note.md
 
-Would you mind correcting this in your comments?
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+---
+Changes v8 -> v9:
+  - add release note link for 6.7.2 to commit message
+  - bump version from 6.7.1 to 6.7.2
+  - update hashes for existing qt6 packages
 
-Other than this, I like adding this support to the package.
+ package/qt6/qt6.mk                             | 4 ++--
+ package/qt6/qt6base/qt6base.hash               | 4 ++--
+ package/qt6/qt6base/qt6base.mk                 | 1 -
+ package/qt6/qt6core5compat/qt6core5compat.hash | 4 ++--
+ package/qt6/qt6serialbus/qt6serialbus.hash     | 4 ++--
+ package/qt6/qt6serialport/qt6serialport.hash   | 4 ++--
+ package/qt6/qt6svg/qt6svg.hash                 | 4 ++--
+ 7 files changed, 12 insertions(+), 13 deletions(-)
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Reviewed-by: Neal Frager <neal.frager@amd.com>
+diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
+index 1edb252c96..372a92f413 100644
+--- a/package/qt6/qt6.mk
++++ b/package/qt6/qt6.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-QT6_VERSION_MAJOR = 6.4
+-QT6_VERSION = $(QT6_VERSION_MAJOR).3
++QT6_VERSION_MAJOR = 6.7
++QT6_VERSION = $(QT6_VERSION_MAJOR).2
+ QT6_SOURCE_TARBALL_PREFIX = everywhere-src
+ QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
+ 
+diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
+index cb111bd405..b1b81b4992 100644
+--- a/package/qt6/qt6base/qt6base.hash
++++ b/package/qt6/qt6base/qt6base.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtbase-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  5087c9e5b0165e7bc3c1a4ab176b35d0cd8f52636aea903fa377bdba00891a60  qtbase-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qtbase-everywhere-src-6.7.2.tar.xz.sha256
++sha256  c5f22a5e10fb162895ded7de0963328e7307611c688487b5d152c9ee64767599  qtbase-everywhere-src-6.7.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 211808d2af..13999bbd44 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -9,7 +9,6 @@ QT6BASE_SITE = $(QT6_SITE)
+ QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
+ QT6BASE_CPE_ID_VENDOR = qt
+ QT6BASE_CPE_ID_PRODUCT = qt
+-
+ QT6BASE_CMAKE_BACKEND = ninja
+ 
+ QT6BASE_LICENSE = \
+diff --git a/package/qt6/qt6core5compat/qt6core5compat.hash b/package/qt6/qt6core5compat/qt6core5compat.hash
+index 0735df3af2..36421b53ca 100644
+--- a/package/qt6/qt6core5compat/qt6core5compat.hash
++++ b/package/qt6/qt6core5compat/qt6core5compat.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  d4b249abb823d575eee9045c24d924ba8d1276e6be7735b287689991d998aa7a  qt5compat-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qt5compat-everywhere-src-6.7.2.tar.xz.sha256
++sha256  8826b5189efc4d9bdb64fdb1aa89d0fdf4e53c60948ed7995621ed046e38c003  qt5compat-everywhere-src-6.7.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialbus/qt6serialbus.hash b/package/qt6/qt6serialbus/qt6serialbus.hash
+index 98c8931962..1b854284a3 100644
+--- a/package/qt6/qt6serialbus/qt6serialbus.hash
++++ b/package/qt6/qt6serialbus/qt6serialbus.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialbus-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  b6446a7516d1f04e561c00f9c50ce4d39dad72150f067722ba759f00b4b34366  qtserialbus-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qtserialbus-everywhere-src-6.7.2.tar.xz.sha256
++sha256  67641ca99b455746d7d956c516dfaa5f2c48696834c71d5720d63e736d374b2b  qtserialbus-everywhere-src-6.7.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialport/qt6serialport.hash b/package/qt6/qt6serialport/qt6serialport.hash
+index 9341978d86..c8708c2231 100644
+--- a/package/qt6/qt6serialport/qt6serialport.hash
++++ b/package/qt6/qt6serialport/qt6serialport.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  5f97ad9067efa39a8a2a39fbbc1e03d2191f305733d9c2f3060f8017ecfc95de  qtserialport-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qtserialport-everywhere-src-6.7.2.tar.xz.sha256
++sha256  21c34cd1161cb5197bcec662d26a17647b59b6fdff5c364576883c42dbd3b4fc  qtserialport-everywhere-src-6.7.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6svg/qt6svg.hash b/package/qt6/qt6svg/qt6svg.hash
+index bb239cb012..7adfd7f2fb 100644
+--- a/package/qt6/qt6svg/qt6svg.hash
++++ b/package/qt6/qt6svg/qt6svg.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtsvg-everywhere-src-6.4.3.tar.xz.sha256
+-sha256  88315f886cf81898705e487cedba6e6160724359d23c518c92c333c098879a4a  qtsvg-everywhere-src-6.4.3.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qtsvg-everywhere-src-6.7.2.tar.xz.sha256
++sha256  fb0d1286a35be3583fee34aeb5843c94719e07193bdf1d4d8b0dc14009caef01  qtsvg-everywhere-src-6.7.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+-- 
+2.45.2
 
-[--- SNIP ---]
-
-> +config BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
-> +	bool "download a prebuilt Versal XSA"
-> +	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL
-> +	help
-> +	  The Xilinx Support Archive (XSA) provides custom Xilinx
-> +	  firmware files generated by the Xilinx Vitis software
-> +	  platform.
-
-generated by the Xilinx Vivado software platform.
-
-[--- SNIP ---]
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
