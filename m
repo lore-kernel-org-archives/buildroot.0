@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B40C5C30653
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jun 2024 08:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E92BEC30653
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jun 2024 08:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 726BD60011;
-	Wed, 26 Jun 2024 08:49:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93B5D60017;
+	Wed, 26 Jun 2024 08:51:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7GPHlwjYfvmy; Wed, 26 Jun 2024 08:49:47 +0000 (UTC)
+ id 3HTo1qXBID6W; Wed, 26 Jun 2024 08:51:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81DD260017
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97B3D600B9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81DD260017;
-	Wed, 26 Jun 2024 08:49:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97B3D600B9;
+	Wed, 26 Jun 2024 08:51:06 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 12E311BF41B
- for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 08:49:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D33FE1BF41B
+ for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 08:51:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F1CED80582
- for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 08:49:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE53781397
+ for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 08:51:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vy9wyUsp7vLO for <buildroot@lists.busybox.net>;
- Wed, 26 Jun 2024 08:49:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
+ id esLdAnu5WraV for <buildroot@lists.busybox.net>;
+ Wed, 26 Jun 2024 08:51:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
  helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B49480581
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B49480581
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8B49480581
- for <buildroot@busybox.net>; Wed, 26 Jun 2024 08:49:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 336E58138E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 336E58138E
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 336E58138E
+ for <buildroot@busybox.net>; Wed, 26 Jun 2024 08:51:03 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([82.135.81.75]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MxUnp-1sWu3Y2Z1V-011c7g; Wed, 26
- Jun 2024 10:49:41 +0200
+Received: from localhost.fritz.box ([82.135.81.75]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mgeo8-1spwM42F5w-00fcKL; Wed, 26
+ Jun 2024 10:51:00 +0200
 To: buildroot@busybox.net
-Date: Wed, 26 Jun 2024 10:49:41 +0200
-Message-ID: <20240626084941.20913-1-ps.report@gmx.net>
+Date: Wed, 26 Jun 2024 10:50:59 +0200
+Message-ID: <20240626085059.21075-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Jc0mCxE7mhU5x8auKYe/LzpJs8beWDeQ7B/WjLuXD7lvLYgOZrF
- z1oDc2PfkCzvT7lgPTVZUcwwSMTMLVsdVW68AlfuTSwEaak8l5hvN3oZe5WSl2VM0vpc7rA
- bPwZrXE7chBX7JrkZ9anme8mY3/5NoCA55w/n8U8ewhNSeePje4/c3eMzGO3tgM3Y/7Yd5c
- 8W1XyX1WQ7K648uUC7ovw==
-UI-OutboundReport: notjunk:1;M01:P0:gQnrhOb5pV8=;wKIPxzNhjqc208eGFImBO9dQX/V
- SZcqOkicAiEsJBqqgIHEXzg9kAvOhac2+KENdcRelrTBkTkJLAp4XtLmblCdADjttLU+5CTa/
- 9pHdCK42/MJyYZxJIeJrSPW/D1d+Pl6N6N3yxiue9nQ1zHiKFn4TRVUNySo8w4yBNp4/mMpsk
- Vg1+U8whSgrETR/xBSSyny9BF1uzXKaOyIsjaytRZs+PgIcS2L1wBgXYn5WmP3Q5wVir+MDSO
- cRvQ9TZDkI16fk1ZtkyXyJ5ou9FjNN1H5EYiqnLiOS9H9sgngz9yX+y1WFaTQGGcWKEvXgz3l
- V/cCPNTht+tOd32SjOqgcyFnwIlWZyBmxFzHnUXP3Iw+AScP+4ANBwRhWsXLlYtssjeswJRCg
- 8Vi4C/JsPM1pcuFaFoJ1FwVTC6j7BQG8LO1fMVpIE8Sy0Q0zIEQyVZB/LBLQc+Z2fBIso3+Zk
- uOZyUxvVK4dYnBfBEvv8lF8jem1cggPoNwJuUBC8DAFDFwKQrCrYsEzYWRCGxoymOon8o7N9M
- f+e/wXFSEgJDWjhubUnpLAc70zsKvhucFoN9vnZi6MAHN0xp9OV2fgcFLpi1cyRbvOxztGtF+
- oElg5ELHYoXJ8eO+xD/utbF7KVG/j1bhzZq/n909HKpBPlAu6P8l3OJySDqH8k1RuYrh9zZyT
- dbRqN+9O+82/vyP+8iDEleshfxKXzbKw3TFPjxbMbQk+CQYJfmkKMiJTo9xFOPvSYzVNbPK62
- +8ZnQGyGvJxnzlEYiBIN4BVku36KLZZQuazk1jDMEPx+QAL80068CAXDHFuWH8KwDn2WDDn9d
- nYIX8JIa4Jop8mhgjp79nfz+ep7tUGLOrT0q3wkDjW1k4=
+X-Provags-ID: V03:K1:8ZxdHQfkAuZWidT9ov2XSFEuuzirvyx7jQFRf82C8KCCfo/1Khw
+ LXcFBYEL+kh79aOQXqHrLstq9FOifJWQkvLIq+LjlE1tqwKx3pAj4uCAqLE9cBTkqQaQJfV
+ 4N/hl+n5syQ+YpMNyW7oMDiClvyauvaARXQ/e0A9H7FiGiMfccSUVDVFTJukVgf6B4pY3y9
+ qNhyOOba7acQElN0w0vXQ==
+UI-OutboundReport: notjunk:1;M01:P0:4RAh7o01FvE=;gR+F8ln7KYyDCY6cZs8trAcLzH5
+ YkSwPYEGSGUbF6sSUGIZJe+PyMdbG5YbWKH2/cMYth9QFj9S6NAy9zY3EjToFgwuKRJ8WzwME
+ iUxhsVeOr2PGSVrsQ7C75WSyuU/4vBcovA+9odbAUCj+lBbrwAtyc54S480EiykBm0S5sO/Ia
+ 6tu5QWNKjfZZx2GFhLDeQDmnaf+f34mFBkbGAlaYQOzK5xJyAGf9sMn1Sfw2nHMTSJCEwkQry
+ oIAyriAQuJokS9IJy1vsCSkiTgOcN74tWabzZfZ9zJ0MtulzB19+NDOhP3xUuF5PIrTAFx7Ds
+ sW9abLB8zT9UbxzIX0CvWYwC7luK5TyolKkY9sQu3IefQ41CglWPaabn/Bpq3NcGTxj5l8rvy
+ 8LIvoh9NvD7c8bQ5Irff18+ImOfFP7KMRd+uGytyfQuwsMxqAi732YJbpYY+cBCSUg27WZZhD
+ fHMeFhZhVpBetnBxeGMONCoH/KNrDcZfE2nZzz4bi4B8Dhyj9u7AFL1rE7tQwTYQdO7hVGQ2B
+ rk5B4xTPXzphaAY4dQUDhOvwnOUC3GP+MLqSHOrdJXQsSfNZo82lRlB6vSz6YTUYcLBcyc6F+
+ eHgy1WlzwLxX5n51ILcCffjwVdLrRhB+pHRpG9Pz2YDdfaTkeHPkIWeupNhb3ECMthg16FZ+b
+ minzU13w6SgUOdvyl1HWyJBhzH55Om43MuzY5hacJT3YxRtm4m2GPq7PQd6h3Ktkh7TYgLZ3T
+ 2mq7qo/903K/8Ne7wICB0CxU1LbiXIymN7v+VR64m7kuFjRDD+2URHTtbw0XtzZb38D/gX0qm
+ 1LUgRo9Buo4ZJ9HFaUtaOxr7T8sVoLo2cndDRjg7zsrJ8=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.net; 
- s=s31663417; t=1719391781; x=1719996581; i=ps.report@gmx.net;
- bh=Jn2k8UM86lhV5m1yKWslXPQLm2SMFQEdrCfUMuICVxA=;
+ s=s31663417; t=1719391860; x=1719996660; i=ps.report@gmx.net;
+ bh=TSELeH/6MIvPOd2lHLdhLIzbzJioG5xY8mIsQXkTg+w=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
  MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=c/Sje60FwvHnR/CxDWreUOg52sJRQuJ4sJlXuGWSIw3qeMGR1clqR6j94lteFWiI
- ElQ4Kpcfl8bBgi66TEX2BAEUs8gVpx2WyE1Bs+FHcFNd70/eCWqMfe+jF8RzLavAl
- CFNy8uqtsnmxO8zKKqxB4XtdiToXWrMnjJlBwdYJPnoxlHyD8WV/QbhAtqmbuAOIW
- foIa9hrY7IPT1dRbSY31CvVHqKjUsRajrFyser0C2FZ/IKylBc0SUBjF3d1t/tJVm
- zh3/4LvzjIJswatgddJJMwkIZtg1jCIMTlIaygPtVGxWpA7RvyZnbFLXHXhIyO5/Y
- riyzlxkn+7dm0qw7fg==
+ b=pBWEEdwLQQdUKFviaHXSsmaByBmxVPN24QVUn7phExrkkdmojNiYJ87vPP0fiwbH
+ 6B4gy+x6W9hhxzjiFyiP5Wmw4zewEdKBRvGbZSVRXAISq0nDguDWghq2Pe+mF4FqS
+ E8ERGY5829AYF9C4LPv8bvZXKWflSh8hHau/XtwmkZICPjMoWrZvKFpSTZbFCd/Il
+ Nvrmpo3mwYzrm3jcjZpIjLOvKseKIclVvB1I9VtQh/ysrc6izDXOnM+f5kLKNH0+f
+ EaiO4Doab7RVbnm4x3as0jH+91ixQF0B2SOyFcE9zEkNGy3c6CNkFELZ4X94xLFn3
+ McF1iOvHTTD1werURQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=c/Sje60F
-Subject: [Buildroot] [PATCH v1] package/pciutils: bump version to 3.13.0
+ header.a=rsa-sha256 header.s=s31663417 header.b=pBWEEdwL
+Subject: [Buildroot] [PATCH v1] package/strace: bump version to 6.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +96,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Peter Seiderer via buildroot <buildroot@buildroot.org>
 Reply-To: Peter Seiderer <ps.report@gmx.net>
-Cc: Bernd Kuhls <bernd@kuhls.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,36 +103,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 For details see [1].
 
-[1] https://github.com/pciutils/pciutils/blob/master/ChangeLog
+[1] https://github.com/strace/strace/releases/tag/v6.9
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/pciutils/pciutils.hash | 2 +-
- package/pciutils/pciutils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
-index 2ac28d327b..f6a3f9eef6 100644
---- a/package/pciutils/pciutils.hash
-+++ b/package/pciutils/pciutils.hash
-@@ -1,3 +1,3 @@
- # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
--sha256  238a2e27166730e53a17fe07bfad229e07fa39b618117e5944b6d7eda9fbb0e9  pciutils-3.10.0.tar.xz
-+sha256  77f11f78298502634d1af50308f15a5788629f6cf45cba376f5009aea4cb4926  pciutils-3.13.0.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index a6708ce94b..ea3c21db6a 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 68b9cc5f93..cdb085def7 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/6.8/strace-6.8.tar.xz.asc
+-sha256  ba6950a96824cdf93a584fa04f0a733896d2a6bc5f0ad9ffe505d9b41e970149  strace-6.8.tar.xz
++# https://strace.io/files/6.9/strace-6.9.tar.xz.asc
++sha256  da189e990a82e3ca3a5a4631012f7ecfd489dab459854d82d8caf6a865c1356a  strace-6.9.tar.xz
+ sha256  1988d0e1aa101d68855e8c4f940aacf2531051b82f6b608eb026c5fad1f33df1  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 908aed6653..c92f85917b 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PCIUTILS_VERSION = 3.10.0
-+PCIUTILS_VERSION = 3.13.0
- PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
- PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
- PCIUTILS_INSTALL_STAGING = YES
+-STRACE_VERSION = 6.8
++STRACE_VERSION = 6.9
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 -- 
 2.45.2
 
