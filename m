@@ -4,116 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90F9AC27C4F
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jun 2024 14:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B49CC27C4F
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jun 2024 15:00:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4295280F15;
-	Wed, 26 Jun 2024 14:39:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CDB681233;
+	Wed, 26 Jun 2024 15:00:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v1hN9HQVmWZG; Wed, 26 Jun 2024 14:39:10 +0000 (UTC)
+ id Habb7lLMtAjj; Wed, 26 Jun 2024 15:00:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4293680F28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24B4F81259
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4293680F28;
-	Wed, 26 Jun 2024 14:39:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24B4F81259;
+	Wed, 26 Jun 2024 15:00:06 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 03B011BF3F3
- for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 14:39:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DB2F61BF271
+ for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 15:00:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F26F960BAE
- for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 14:39:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C91E1606D4
+ for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 15:00:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MHPCtrTiTNvb for <buildroot@lists.busybox.net>;
- Wed, 26 Jun 2024 14:39:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
- helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EA8CC60B95
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA8CC60B95
-Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
- [67.231.144.184])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EA8CC60B95
- for <buildroot@buildroot.org>; Wed, 26 Jun 2024 14:39:06 +0000 (UTC)
-Received: from pps.filterd (m0346908.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 45QCvZoA004671; Wed, 26 Jun 2024 14:39:06 GMT
-Received: from xusxph008rp050.rtx.com (xusxph008rp050.rtx.com [128.13.124.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 400kexsanh-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Wed, 26 Jun 2024 14:39:06 +0000
-Received: from xusxph004rp020.corp.ray.com ([128.13.120.224])
- by xusxph008rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 45QEd5PS006763
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Wed, 26 Jun 2024 14:39:05 GMT
-Received: from dtulimr02.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph004rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 45QEd4UD028792
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Wed, 26 Jun 2024 14:39:04 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by dtulimr02.rockwellcollins.com (Postfix) with ESMTP id 7ED6F3027DDA;
- Wed, 26 Jun 2024 09:39:04 -0500 (CDT)
-Date: Wed, 26 Jun 2024 14:39:04 +0000
-To: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Message-ID: <ZnwoCJCEFcLON1qg@bspbox.kirk>
-Mail-Followup-To: "Frager, Neal via buildroot" <buildroot@buildroot.org>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240625-versal-xsa-support-prebuilt-v1-1-f64a7a396a34@collins.com>
- <CH2PR12MB5004D83C6AFFB37223A0F732F0D52@CH2PR12MB5004.namprd12.prod.outlook.com>
+ id Nxsv9TzlMG13 for <buildroot@lists.busybox.net>;
+ Wed, 26 Jun 2024 15:00:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 78EE4606AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78EE4606AA
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 78EE4606AA
+ for <buildroot@buildroot.org>; Wed, 26 Jun 2024 15:00:02 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.117.148]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MybGX-1sWs0P0B2r-010VZ7; Wed, 26
+ Jun 2024 16:59:56 +0200
+To: buildroot@buildroot.org
+Date: Wed, 26 Jun 2024 16:59:42 +0200
+Message-ID: <20240626145942.3154406-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CH2PR12MB5004D83C6AFFB37223A0F732F0D52@CH2PR12MB5004.namprd12.prod.outlook.com>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-26_07,2024-06-25_01,2024-05-17_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-26_07,2024-06-25_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- mlxscore=0 suspectscore=0
- phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
- definitions=main-2406260107
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- phishscore=0 suspectscore=0
- malwarescore=0 adultscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
- definitions=main-2406260107
-X-Proofpoint-ORIG-GUID: pMPpSDxx_WCzOMN0iw5PTHmbSFXJh5rU
-X-Proofpoint-GUID: pMPpSDxx_WCzOMN0iw5PTHmbSFXJh5rU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-26_07,2024-06-25_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0 mlxscore=0
- mlxlogscore=999 priorityscore=1501 bulkscore=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 suspectscore=0 phishscore=0 adultscore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2406180000 definitions=main-2406260107
+X-Provags-ID: V03:K1:N6ZBtcy7+STdNZ9vMjIafYD4h7faCh+LIgL0EKl7Hu63Ma+rebe
+ Ji34Urvmclf4PECnsNpGCzNKOwRAu8HZbM4E3KKhR98vVLFq9phfegeGAqS6rpayUPRCeKl
+ YFWId1srijaKpvMlAShaAJkQhNZQOs54vHwgG944q5gw7wBnQLoQGof3NtSZJGyWGHMno6r
+ 3pQNWRtMdcYXok2wwH5jA==
+UI-OutboundReport: notjunk:1;M01:P0:k+GFbenrgak=;ZRHafnLCTJwWjInNYV7i8IwUR0e
+ vzyQgo8MNFtD5gODjcYs7CMPsEPcmU8W/urJFPSz+mYYtPp5PPnVrw/hda3mJBQwpuLDo1Cuq
+ XXCdGa54TXS6JRHNrLPfjlf5V1uDG2396gvxugJYOJjzv0WEEImA2OHPmOvbbgeCQQ5uBcTw6
+ O9kRcAMYb7n6os8E+IdUDoF0wZmmkMjp+ggnmGp/roqoD5S1XO/1wBGEL7I4rV3oSxyJ3CCCD
+ 2MVXWjE+PS8XdziMO0efuWh8mHjVJqFS+/rVQVOp5jiUNt2G3d7xdYSczKLOr2uNik61wnWrC
+ lDj//xfLRypjSR3Zs7hVwsNCfdhi/3+VIRZXklnRGRw3JmhD6q81mzwHMKf5i2xj8mYH8g/d9
+ sScc1TMpAtQoBRqizpIREKCMcI/utMZrZls1FuSsbnGnxWd30/bd87vwVjAVs9BVQgIZpkJNg
+ tZx8P9UyZHS2mHh63mxyrmjHnwzlxyHVW4vgbehpBvbUJK4e1MtD65HQqhPaj2X5wF/NPle//
+ +AdYXy5gYvq3kaSJtN4nsc0Wz36OFI3kENsUjHoDXSU9ZlmGNbs40bNpllE+PMvaits0jTRpY
+ ZVTL9eDHx62wH0wFxNvFh0e6/ZOpb3P0x2o48MGG2RlV1x3cjqUmiY6LicQdCGR7181J07jnS
+ dHzVmlfFzuEjINoOnWPYN8uPPhYxmRCKv2/7UeD02x8VC6hoFQBN+RAJRHz3p/LeGvHDaCHp3
+ kU8N2KtWr1quQGKwDTBcIUKMRk6yWVfqTZHZa5mTFws1nhb3Zf+QEs8vjXtCL4LJ+MZNVPYlv
+ vsWx2IqlMib9xl/8eyDlv/i2Tz3q+ia8gUqd3Tq2F4oF8=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc : content-type :
- date : from : in-reply-to : message-id : mime-version : references :
- subject : to; s=POD051818;
- bh=Z3YX4Q9/XMrFA9aA9jtOBfjWLVNneiJTN1IwQqUrnAg=;
- b=iblNWXoFjg8ojn9Wz5JHSAHSpVlPR/yfL5qMXhE3MouU1dQXGI5Dv2xn5RuPQ6UilErz
- kZ16RWgTNVneTr0Vu2cfvks3zhwa6djlFCw/xHUJxWdVuz9X/sx32IJVQW07HW2KsV8d
- WQ0LHSr/MhmGz3cK8fv0auzU7H1HbtJkFXJx3apgChRKUDQp250WITSGyJt2FMGFOT7O
- AdqW4FIjxleTvVu6x4bY18Vzh1DnseYk1X0VTDOTM1nNhkrs9SVo338JrOWs6gLp4P45
- uteNCjyRu0cKSrFUQQ71ayh8eE4CcqypS35DwLVpm5puwY2j32BPnzOYpLyjpSGHXp5U 5w== 
+ d=gmx.de; 
+ s=s31663417; t=1719413996; x=1720018796; i=fiona.klute@gmx.de;
+ bh=di9ReBA+hduw5yLnFzbuMdNeK0MtsCN3jQMt4VUklic=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=o6/fbt6E8Z08E414Ra7ujvzwuWBid94lnCHiqb0vUjPHtQZmeaH+3VwejVqb6Ise
+ mCLLiuDorlQKGB4b1X5xYd98EyVi90jSKtY+7tCojXlDAsLP0hNHnr7y6TeMs3Szy
+ 90O98+uVN6wSbAF+JAMoBzQ1rwu20LJOeucSJ2BS/b6Y57PPnfuQc7JBXSwzvx5GO
+ hQ1lQcF6hSW+snKgX5+KX0+eXJkeOkjhaxEv+u8igY0abthlyZZIFccqZ572B6MPj
+ SyZmbbnyB6KLjysocnsc0a1K7fD7ciZRUx1R5W2Xtm93xXjvbrjD5FPDwBohqyfJ+
+ pHy/z5+FnmtWCV66pA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
- header.s=POD051818 header.b=iblNWXoF
-Subject: Re: [Buildroot] [PATCH] boot/xilinx-prebuilt: support custom boards
- using XSA
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=o6/fbt6E
+Subject: [Buildroot] [PATCH 1/1] package/rauc: select
+ BR2_PACKAGE_LIBOPENSSL_ENGINES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -125,71 +96,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Fiona Klute <fiona.klute@gmx.de>, Andrey Yurovsky <yurovsky@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal,
+This fixes link time errors, undefined references to various ENGINE_*
+functions (paths shortened to the output directory):
 
-On 2024.06.25 21:02, Frager, Neal via buildroot wrote:
-> > The xilinx-prebuilt package only supports development boards that Xilinx
-> > has published firmware for. Custom designs based on the Xilinx platform
-> > must generate their own firmware using the Vitis software suite.
-> 
-> > Vitis produces an XSA file, which is a Zip file containing all the
-> > firmware needed by xilinx-prebuilt. We extend xilinx-prebuilt to
-> > download custom XSA files and extract their contents.
-> 
-> Thank you for adding this support.
-> 
-> I apologize for not catching this earlier, but isn't it Vivado and not Vitis
-> which generates the XSA file?  Just like the xilinx-prebuilt package will now
-> do, Vitis only consumes an XSA file that is generated by Vivado.
+host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: librauc.a.p/src_signature.c.o: in function `get_pkcs11_engine.constprop.0':
+signature.c:(.text.get_pkcs11_engine.constprop.0+0x14): undefined reference to `ENGINE_load_builtin_engines'
+host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x20): undefined reference to `ENGINE_by_id'
+host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x54): undefined reference to `ENGINE_ctrl_cmd_string'
+host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x60): undefined reference to `ENGINE_init'
+host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0xe0): undefined reference to `ENGINE_ctrl_cmd_string'
+host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x128): undefined reference to `ENGINE_free'
+host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x1a4): undefined reference to `ENGINE_finish'
+host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: librauc.a.p/src_signature.c.o: in function `load_cert':
+signature.c:(.text.load_cert+0x114): undefined reference to `ENGINE_ctrl_cmd'
+host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: librauc.a.p/src_signature.c.o: in function `load_key':
+signature.c:(.text.load_key+0x124): undefined reference to `ENGINE_load_private_key'
 
-You are correct, I was mixing up the new terms for the Versal platform
-and thought Vitis had replaced Vivado. My FPGA engineer confirmed it's
-still Vivado that generates the FPGA design.
+Before linking there were matching implicit declaration warnings
+during compile.
 
-> 
-> Would you mind correcting this in your comments?
+Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+---
+I assume this is a consequence of
+623d3bbe43e9193aa8e3395367d01af59071b859, previously RAUC built fine
+without the option enabled.
 
-I can send a v2
+ package/rauc/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Other than this, I like adding this support to the package.
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-> Reviewed-by: Neal Frager <neal.frager@amd.com>
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+index 7451b29a55..69a65d165b 100644
+--- a/package/rauc/Config.in
++++ b/package/rauc/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_RAUC
+ 	depends on BR2_USE_WCHAR # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENGINES
+ 	select BR2_PACKAGE_SQUASHFS # run-time dependency
+ 	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # run-time dependency
+ 	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT
+--
+2.45.2
 
-Thanks!
-Brandon Maier
-
-> 
-> [--- SNIP ---]
-> 
-> > +config BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
-> > +	bool "download a prebuilt Versal XSA"
-> > +	depends on BR2_TARGET_XILINX_PREBUILT_VERSAL
-> > +	help
-> > +	  The Xilinx Support Archive (XSA) provides custom Xilinx
-> > +	  firmware files generated by the Xilinx Vitis software
-> > +	  platform.
-> 
-> generated by the Xilinx Vivado software platform.
-> 
-> [--- SNIP ---]
-> 
-> Best regards,
-> Neal Frager
-> AMD
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
