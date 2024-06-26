@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BDA3C30653
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jun 2024 08:48:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B40C5C30653
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jun 2024 08:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4A71606C4;
-	Wed, 26 Jun 2024 08:48:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 726BD60011;
+	Wed, 26 Jun 2024 08:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ZAqLEnJ8R7D; Wed, 26 Jun 2024 08:48:37 +0000 (UTC)
+ id 7GPHlwjYfvmy; Wed, 26 Jun 2024 08:49:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08F1F606E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81DD260017
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08F1F606E0;
-	Wed, 26 Jun 2024 08:48:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81DD260017;
+	Wed, 26 Jun 2024 08:49:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7AFB01BF976
- for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 08:48:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 12E311BF41B
+ for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 08:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 74C3581397
- for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 08:48:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1CED80582
+ for <buildroot@lists.busybox.net>; Wed, 26 Jun 2024 08:49:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Okv9xE445e2r for <buildroot@lists.busybox.net>;
- Wed, 26 Jun 2024 08:48:35 +0000 (UTC)
+ id Vy9wyUsp7vLO for <buildroot@lists.busybox.net>;
+ Wed, 26 Jun 2024 08:49:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2D4808138E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D4808138E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B49480581
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B49480581
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2D4808138E
- for <buildroot@busybox.net>; Wed, 26 Jun 2024 08:48:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B49480581
+ for <buildroot@busybox.net>; Wed, 26 Jun 2024 08:49:44 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([82.135.81.75]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYvY8-1rrXdl2FPs-00Y0sS; Wed, 26
- Jun 2024 10:48:29 +0200
+Received: from localhost.fritz.box ([82.135.81.75]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MxUnp-1sWu3Y2Z1V-011c7g; Wed, 26
+ Jun 2024 10:49:41 +0200
 To: buildroot@busybox.net
-Date: Wed, 26 Jun 2024 10:48:28 +0200
-Message-ID: <20240626084828.20267-1-ps.report@gmx.net>
+Date: Wed, 26 Jun 2024 10:49:41 +0200
+Message-ID: <20240626084941.20913-1-ps.report@gmx.net>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:PPX7qjva5uHgUyF0dVgdFlCncNgpmP6YNSU5mPoOBajd+deUFgc
- 9hjnbIcINKDb6Rgxs/ApHIUJZY1KgRlRjs7Gx9Wd7cH/jW+sSbafR/gMqZBwrmEJ/+JZlUU
- J1cXGz1QLSuGnZYxzRtHNlHnf+e/G1E8+PD2VIaaeU000f9X/frOXak+0qmB2OI5YmNZEFx
- 2Nf2p9UQDFXlrdHP707Kg==
-UI-OutboundReport: notjunk:1;M01:P0:U4blEnTA8kU=;Ej3WD3UtFWauUej5tMXJHxTQMz9
- 9szVAX4CmSI6+Oypu2R6+tZoNY9UIu8Q/cXHt4s+j4g3BAyZCmbhm6hdYLahDf7qpupiH/mUK
- bl5W2WexCFPRlk5AnctIqg+dPCvLSWjqrDSVj4rL8JUsJopUlK/DD0nJ95fnpspdYEhUJxJba
- r3ktgrzYy5J0oYpapg9STrUUPLlR/lbN3uo1UNGSgLOw8xhgpmaS678eodEe/GZ3XwJWviEew
- +mNrhJSTD+NR/PYPzWuRHbSoixyV1qDmiYWcozMzyIm7rEva9+F6M0CpPPeD7MiOcQeGEpFuj
- u7kLmrjN6vvCeoMbhCfifPeKf9DJyKh2OIoOZi/FXN6rSzkJxxQAf3y3Z4ngCt1QjTNiQC0Ko
- 3scEGME5tYiGGQ2XMAPTK/GllaPwrqdTFkUXwb4ptl8WTwmanUY5L4OUf9Y1P60/cgU/d00Wq
- LT1DqGD6VEQH3aguvxm9HamW96eHqcDrrQqmscsrj9x2tYZDE6x/ZBDw67aWh2uX9nJxNZThB
- d/z98/SwoakPVzxHHE88yUZnJoUSHdXEyKEFt71VitAL4/ylZiAckBrwbJmZwmrp5THb038+u
- nK+Dx8oXx7m6LqI9+xp3osy3WDLXab9ENn1vg8JKzJ+cZqmWyuatNg4bAm38NR+DyW4EVUxRP
- gu34R8IXhkgGIfPVXHEgI/lXWP3KvjE2+91MBpplZYgpmAdthniqmV1Dpwb832rhxDLVOdDV7
- 7qCeDIfNKlPv9PeELubDZixTVFeqXXRl/BWYhuaxiRD/YvOA+PS0x4Kd9OC89V7+PjLpVwikq
- eeEoE1k15HZ2/KzkXZOxRcOMPEnmqexIN7HiqNQEpi4/4=
+X-Provags-ID: V03:K1:Jc0mCxE7mhU5x8auKYe/LzpJs8beWDeQ7B/WjLuXD7lvLYgOZrF
+ z1oDc2PfkCzvT7lgPTVZUcwwSMTMLVsdVW68AlfuTSwEaak8l5hvN3oZe5WSl2VM0vpc7rA
+ bPwZrXE7chBX7JrkZ9anme8mY3/5NoCA55w/n8U8ewhNSeePje4/c3eMzGO3tgM3Y/7Yd5c
+ 8W1XyX1WQ7K648uUC7ovw==
+UI-OutboundReport: notjunk:1;M01:P0:gQnrhOb5pV8=;wKIPxzNhjqc208eGFImBO9dQX/V
+ SZcqOkicAiEsJBqqgIHEXzg9kAvOhac2+KENdcRelrTBkTkJLAp4XtLmblCdADjttLU+5CTa/
+ 9pHdCK42/MJyYZxJIeJrSPW/D1d+Pl6N6N3yxiue9nQ1zHiKFn4TRVUNySo8w4yBNp4/mMpsk
+ Vg1+U8whSgrETR/xBSSyny9BF1uzXKaOyIsjaytRZs+PgIcS2L1wBgXYn5WmP3Q5wVir+MDSO
+ cRvQ9TZDkI16fk1ZtkyXyJ5ou9FjNN1H5EYiqnLiOS9H9sgngz9yX+y1WFaTQGGcWKEvXgz3l
+ V/cCPNTht+tOd32SjOqgcyFnwIlWZyBmxFzHnUXP3Iw+AScP+4ANBwRhWsXLlYtssjeswJRCg
+ 8Vi4C/JsPM1pcuFaFoJ1FwVTC6j7BQG8LO1fMVpIE8Sy0Q0zIEQyVZB/LBLQc+Z2fBIso3+Zk
+ uOZyUxvVK4dYnBfBEvv8lF8jem1cggPoNwJuUBC8DAFDFwKQrCrYsEzYWRCGxoymOon8o7N9M
+ f+e/wXFSEgJDWjhubUnpLAc70zsKvhucFoN9vnZi6MAHN0xp9OV2fgcFLpi1cyRbvOxztGtF+
+ oElg5ELHYoXJ8eO+xD/utbF7KVG/j1bhzZq/n909HKpBPlAu6P8l3OJySDqH8k1RuYrh9zZyT
+ dbRqN+9O+82/vyP+8iDEleshfxKXzbKw3TFPjxbMbQk+CQYJfmkKMiJTo9xFOPvSYzVNbPK62
+ +8ZnQGyGvJxnzlEYiBIN4BVku36KLZZQuazk1jDMEPx+QAL80068CAXDHFuWH8KwDn2WDDn9d
+ nYIX8JIa4Jop8mhgjp79nfz+ep7tUGLOrT0q3wkDjW1k4=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.net; 
- s=s31663417; t=1719391709; x=1719996509; i=ps.report@gmx.net;
- bh=4jXMBkh8wcm+b3kchWiOqg5S+1ZwQW+gqOm72LOMj7c=;
+ s=s31663417; t=1719391781; x=1719996581; i=ps.report@gmx.net;
+ bh=Jn2k8UM86lhV5m1yKWslXPQLm2SMFQEdrCfUMuICVxA=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
  MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=l2a1AakdAS9HKUXtrnKZ50S/x4nJG/qaLMQ+8bT7EmkU1RW1xQI6jPx8dnX7Wes9
- 7BWZ5MQwliNUyKOpFvtNqJ7JzqjL6sEWocTGfgs+ud51e/bYKBeAMotkZ7rM7qfW6
- 3PvKLk/5OGVrQAZuENnpNuyC9bS7ZRz+s/0XNMJjxpZIcHEv9VJIQe0Y2CxPpdBhp
- xZrhekLPKtggm+usYUfNuh2BZuCkq+//kykWSv+CF2GFTARVm3vSM6W+kamEVXJmN
- zqzc44qXK+YnfK9wj0Au+iXNl2JKLKJkH126atBTOXk0fE3Tw/WAUdNrmU3zH2WlJ
- Ga71eUhLlTiyWyt0+w==
+ b=c/Sje60FwvHnR/CxDWreUOg52sJRQuJ4sJlXuGWSIw3qeMGR1clqR6j94lteFWiI
+ ElQ4Kpcfl8bBgi66TEX2BAEUs8gVpx2WyE1Bs+FHcFNd70/eCWqMfe+jF8RzLavAl
+ CFNy8uqtsnmxO8zKKqxB4XtdiToXWrMnjJlBwdYJPnoxlHyD8WV/QbhAtqmbuAOIW
+ foIa9hrY7IPT1dRbSY31CvVHqKjUsRajrFyser0C2FZ/IKylBc0SUBjF3d1t/tJVm
+ zh3/4LvzjIJswatgddJJMwkIZtg1jCIMTlIaygPtVGxWpA7RvyZnbFLXHXhIyO5/Y
+ riyzlxkn+7dm0qw7fg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=l2a1Aakd
-Subject: [Buildroot] [PATCH v1] package/nghttp2: bump version to 1.62.1
+ header.a=rsa-sha256 header.s=s31663417 header.b=c/Sje60F
+Subject: [Buildroot] [PATCH v1] package/pciutils: bump version to 3.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,7 +96,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Peter Seiderer via buildroot <buildroot@buildroot.org>
 Reply-To: Peter Seiderer <ps.report@gmx.net>
-Cc: Anisse Astier <anisse@astier.eu>
+Cc: Bernd Kuhls <bernd@kuhls.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -104,36 +104,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 For details see [1].
 
-[1] https://github.com/nghttp2/nghttp2/releases
+[1] https://github.com/pciutils/pciutils/blob/master/ChangeLog
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/nghttp2/nghttp2.hash | 2 +-
- package/nghttp2/nghttp2.mk   | 2 +-
+ package/pciutils/pciutils.hash | 2 +-
+ package/pciutils/pciutils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nghttp2/nghttp2.hash b/package/nghttp2/nghttp2.hash
-index dddf6fe1bd..336b0b7dfc 100644
---- a/package/nghttp2/nghttp2.hash
-+++ b/package/nghttp2/nghttp2.hash
+diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
+index 2ac28d327b..f6a3f9eef6 100644
+--- a/package/pciutils/pciutils.hash
++++ b/package/pciutils/pciutils.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4a68a3040da92fd9872c056d0f6b0cd60de8410de10b578f8ade9ecc14d297e0  nghttp2-1.58.0.tar.xz
-+sha256  2345d4dc136fda28ce243e0bb21f2e7e8ef6293d62c799abbf6f633a6887af72  nghttp2-1.62.1.tar.xz
- sha256  6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a  COPYING
-diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
-index 7a05e38fa9..d9985c7ac6 100644
---- a/package/nghttp2/nghttp2.mk
-+++ b/package/nghttp2/nghttp2.mk
+ # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
+-sha256  238a2e27166730e53a17fe07bfad229e07fa39b618117e5944b6d7eda9fbb0e9  pciutils-3.10.0.tar.xz
++sha256  77f11f78298502634d1af50308f15a5788629f6cf45cba376f5009aea4cb4926  pciutils-3.13.0.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index a6708ce94b..ea3c21db6a 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGHTTP2_VERSION = 1.58.0
-+NGHTTP2_VERSION = 1.62.1
- NGHTTP2_SOURCE =  nghttp2-$(NGHTTP2_VERSION).tar.xz
- NGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(NGHTTP2_VERSION)
- NGHTTP2_LICENSE = MIT
+-PCIUTILS_VERSION = 3.10.0
++PCIUTILS_VERSION = 3.13.0
+ PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
+ PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
+ PCIUTILS_INSTALL_STAGING = YES
 -- 
 2.45.2
 
