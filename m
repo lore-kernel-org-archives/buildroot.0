@@ -4,74 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A715EC2BD09
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 19:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05FB5C2BD09
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 20:01:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BCBF60E8D;
-	Thu, 27 Jun 2024 19:33:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2523560E69;
+	Thu, 27 Jun 2024 20:01:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id REOIjg_C8ibC; Thu, 27 Jun 2024 19:33:57 +0000 (UTC)
+ id B_cjyIoVbm4I; Thu, 27 Jun 2024 20:01:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD30160E6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A20DE60708
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD30160E6A;
-	Thu, 27 Jun 2024 19:33:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A137D1BF3D9
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 19:33:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A20DE60708;
+	Thu, 27 Jun 2024 20:01:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AE9311BF3D9
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 20:01:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C88180F40
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 19:33:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5C0B4160A
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 20:01:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g2u49TA-SoJW for <buildroot@lists.busybox.net>;
- Thu, 27 Jun 2024 19:33:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 70FE783F36
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70FE783F36
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 70FE783F36
- for <buildroot@buildroot.org>; Thu, 27 Jun 2024 19:33:42 +0000 (UTC)
-Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1sMusD-008G4x-QM; Thu, 27 Jun 2024 21:33:37 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id cc748b0f;
- Thu, 27 Jun 2024 19:33:35 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Thu, 27 Jun 2024 22:33:30 +0300
-Message-ID: <20240627193335.4069574-3-aperez@igalia.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240208095531.99049-1-aperez@igalia.com>
-References: <20240208095531.99049-1-aperez@igalia.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 35uvWLY0WBNg for <buildroot@lists.busybox.net>;
+ Thu, 27 Jun 2024 20:01:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CD41C415F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD41C415F0
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CD41C415F0
+ for <buildroot@buildroot.org>; Thu, 27 Jun 2024 20:01:39 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 506A713F880;
+ Thu, 27 Jun 2024 22:01:33 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 27 Jun 2024 22:01:33 +0200
+Date: Thu, 27 Jun 2024 22:01:33 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <Zn3FHQXZ6atQbeeZ@landeda>
+References: <e2b3835bcee63a27b24a757a2db3e9103faebc63.1719316003.git.yann.morin@orange.com>
+ <CABGWkvobc38thMwekt0fsHefa6QSADKdemyZ9Mj84EgYB6UbXQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
- Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=G+C0RUYbPWdT/x7W3KsI1os98XBP2FlIbEzo76PSqa4=; b=EDmfns6E38hJwPXbE1kx4wnFpe
- yVOUaN45JUOwYV4h55j6YxJK/UibkBi2WgmRG/4uMLwgtbRteU8/lghamtIN7ONcRxflWg47GhwvJ
- feu2VCManlXIpGtVQlc5x1mbw18hXnL7NI6vQvphBAAgvtEIMr9ssv7pt4IF1F5CkCEodDctDYsJu
- ae65QLlW5bZjZmT1fUTuEY4iWp/y80KB3jcFwUsDIMWA33XOYHqw9R2q6ojIdOlqE5+7b/akcG7EK
- Dt43lu2GGeMtTN+ZpBp+R524tBHu8dNbwKKA6221QKGCucJ3AnsQiV7bixciJcH6CQV3wahoxvlMX
- 5OQEj2eg==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=EDmfns6E
-Subject: [Buildroot] [PATCH v2 2/4] package/cog: depend on wpebackend-fdo
- only if needed
+Content-Disposition: inline
+In-Reply-To: <CABGWkvobc38thMwekt0fsHefa6QSADKdemyZ9Mj84EgYB6UbXQ@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1719518496;
+ bh=5thYKvmohe0LLoohwc0bR2HsjhgcHANe2DM6wDhohCs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=qDWl56U4pjHyyz3WO4nZxXKXR4PSBW/oZLCAWTHq6NApENvi1sgHluwLzay55y9vm
+ gxcvUpAyHgRXv0s2owo59rtaZlvpa4xZHnsy+s9ekxUY+YaGBFO9OR0JAQnZbf2+Gd
+ al+DiuDO/iGU8HTssOIGc5NdUgPWSrbYYsJrW1gcZrANewm/h3QsIOpgD5We6nHCL1
+ hj5KMXtcmROO0TE6qTsG2xkPun5gTThBqBuLEzLuaNuujuckJa+ELxKZQFsZdMosmm
+ sLcZkC0d1nLOe+TcPBnUT4jQ8rNjmevQq0omN93nxgvk3h05wOOrsM0k0M34vtYJ09
+ 27F5SZCw8T6zg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=qDWl56U4
+Subject: Re: [Buildroot] [PATCH] package/slang: fix patch fuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,143 +82,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Samuel Martin <s.martin49@gmail.com>
+Cc: yann.morin@orange.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Make the Cog headless platform plug-in selectable, allowing to configure
-the build without any plug-in at all. When all plug-ins are disabled,
-Cog does not require wpebackend-fdo at build time, and it is still
-able to use its built-in "fallback" support to load other WPE backends
-like wpebackend-rdk.
+Dario, All,
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/cog/Config.in | 28 ++++++++++++++++++++++++++--
- package/cog/cog.mk    | 13 ++++++++++---
- 2 files changed, 36 insertions(+), 5 deletions(-)
+On 2024-06-25 13:56 +0200, Dario Binacchi spake thusly:
+> From: "Yann E. MORIN" <[5]yann.morin@orange.com>
+> > Since commit 8f88a644ed7d (support/scripts/apply-patches.sh: set the
+> > maximum fuzz factor to 0), we no longer accept fuzz in patches. Before
+> > 8f88a644ed7d was applied, alot of patches were fixed in preparatory
+> > commits, but slang was missed (although the patch has been present since
+> > 2017.
+> what configuration does contain this package?
 
----
-v1 -> v2:
-- Unchanged.
+I've devised a little script that finds almost all packages that have
+patches, and test they can be downloaded and patched:
 
-diff --git a/package/cog/Config.in b/package/cog/Config.in
-index d2a910f9b89..d706b045b15 100644
---- a/package/cog/Config.in
-+++ b/package/cog/Config.in
-@@ -19,6 +19,10 @@ config BR2_PACKAGE_COG
- 
- if BR2_PACKAGE_COG
- 
-+config BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
-+	bool
-+	default n
-+
- config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
- 	string "home uri"
- 	default "https://wpewebkit.org"
-@@ -30,6 +34,8 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
- config BR2_PACKAGE_COG_PLATFORM_FDO
- 	bool "Wayland backend"
- 	default y
-+	depends on BR2_PACKAGE_WPEBACKEND_FDO
-+	select BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	help
-@@ -43,6 +49,8 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
- 	depends on BR2_PACKAGE_HAS_LIBGBM
- 	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
- 	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
-+	depends on BR2_PACKAGE_WPEBACKEND_FDO
-+	select BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBINPUT
- 	help
-@@ -50,16 +58,32 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
- 	  with video drivers that support kernel mode-setting (KMS)
- 	  via the DRM user-space API.
- 
-+config BR2_PACKAGE_COG_PLATFORM_HEADLESS
-+	bool "Headless backend"
-+	depends on BR2_PACKAGE_WPEBACKEND_FDO
-+	select BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
-+	help
-+	  Enable the headless platform backend.
-+
- config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
- 	bool "expose system D-Bus control interface"
- 	help
- 	  Expose remote control interface on system bus
- 
--comment "DRM platform needs EGL and GBM"
-+comment "Headless platform needs wpebackend-fdo"
-+	depends on \
-+		!BR2_PACKAGE_WPEBACKEND_FDO
-+
-+comment "DRM platform needs EGL, GBM, wpebackend-fdo"
- 	depends on \
- 		!BR2_PACKAGE_HAS_LIBEGL || \
- 		!BR2_PACKAGE_HAS_LIBGBM || \
- 		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF || \
--		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
-+		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT || \
-+		!BR2_PACKAGE_WPEBACKEND_FDO
-+
-+comment "Wayland platform needs wpebackend-fdo"
-+	depends on \
-+		!BR2_PACKAGE_WPEBACKEND_FDO
- 
- endif
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 7f680bb7005..166f095118b 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -8,7 +8,7 @@ COG_VERSION = 0.18.4
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
--COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland
-+COG_DEPENDENCIES = dbus wpewebkit wayland
- COG_LICENSE = MIT
- COG_LICENSE_FILES = COPYING
- COG_CONF_OPTS = \
-@@ -19,8 +19,6 @@ COG_CONF_OPTS = \
- 	-Dcog_home_uri='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
- 	-Dplatforms='$(subst $(space),$(comma),$(strip $(COG_PLATFORMS_LIST)))'
- 
--COG_PLATFORMS_LIST = headless
--
- ifeq ($(BR2_PACKAGE_WESTON),y)
- COG_CONF_OPTS += -Dwayland_weston_direct_display=true
- COG_DEPENDENCIES += weston
-@@ -28,6 +26,11 @@ else
- COG_CONF_OPTS += -Dwayland_weston_direct_display=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_COG_PLATFORM_HEADLESS),y)
-+COG_PLATFORMS_LIST += headless
-+COG_DEPENDENCIES += wpebackend-fdo
-+endif
-+
- ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
- COG_PLATFORMS_LIST += wayland
- COG_DEPENDENCIES += libxkbcommon wayland-protocols
-@@ -48,4 +51,8 @@ ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
- COG_DEPENDENCIES += libmanette
- endif
- 
-+ifeq ($(BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO),y)
-+COG_DEPENDENCIES += wpebackend-fdo
-+endif
-+
- $(eval $(meson-package))
+    #!/usr/bin/env bash
+    export BR2_DL_DIR=$(pwd)/meh-dl
+    make defconfig
+    ./utils/config --set-str BR2_BACKUP_SITE ""
+    # Ignore boot/ and linux/ as they are too special...
+    find package/ -type f -name '*.mk' -printf '%h\n' \
+    |sort -u \
+    |while read dir; do
+        [ -e "${dir}/Config.in" ] || continue
+        ( find "${dir}" -type f -name '*.patch' -print -quit |grep -q . ) || continue
+        pkg="$( basename "${dir}" )"
+        [ -e "${dir}/${pkg}.mk" ] || continue
+        sed -r -e '/^\$\(eval \$\((host-)?[^-]+-package\)\)$/!d; s//\1'"${pkg}"'/' "${dir}/${pkg}.mk"
+    done \
+    |while read pkg; do
+        if ! make "${pkg}-patch"; then
+            echo "${pkg}" >> fuzz.lst
+        fi
+    done
+
+Them we've a bit of hand-guessing and the build log, here's what I could
+conclude:
+
+Fuzz errors:
+  - cpulimit                    - crda                        - dahdi-tools
+  - eigen                       - empty                       - exim
+  - ficl                        - flite                       - freeradius-server
+  - freerdp                     - imx-kobs                    - imx-vpu-hantro
+  - gpm                         - grpc                        - haserl
+  - janus-gateway               - leveldb                     - libblockdev
+  - libfcgi                     - libcrypt                    - libgdiplus
+  - libglfw                     - libhid                      - liblinear
+  - libmad                      - libnfs                      - libsoup
+  - libssh2                     - libsvg                      - libsvgtiny
+  - libtheora                   - libtorrent                  - libyuv
+  - clang                       - lxc                         - mediastreamer
+  - memstat                     - mongrel                     - monit
+  - ncmpc                       - nmap                        - nushell
+  - nvidia-driver               - oatpp                       - openvmtools
+  - paxtest                     - poke                        - pulseview
+  - python-pybind               - qt5webkit                   - rdesktop
+  - redis                       - rrdtool                     - rt-tests
+  - rygel                       - sane-backends               - sdl_mixer
+  - shairport-sync              - snort                       - sox
+  - sunxi-mali-utgard-driver    - sylpheed                    - udpcast
+  - vtun                        - wlroots                     - xdriver_xf86-video-mach64
+  - xdriver_xf86-video-tdfx     - xfsprogs                    - yajl
+  - ympd
+
+Hash errors:
+  - am335x-pru-package          - cgic                        - daq
+  - dvb-apps                    - latencytop                  - linknx
+  - linux-fusion                - lite                        - mimic
+  - resiprocate                 - w_scan
+
+Download errors:
+  - aumix: 403 forbidden        - bsdiff: 403 forbidden       - dillo: 404
+  - fbset: 410 Gone             - gamin: 404                  - giblib: 404
+  - httping: 404                - libtorrent: 404             - live5: 404
+  - lugaru: 404                 - matchbox-lib: 400 ???       - mpir: upstream DNS gone
+  - qt5enginio: 404             - quagga: 404                 - racehound: 404
+  - rp-pppoe: 404               - rtorrent: 404               - sysprof: 404
+  - taskd: 404                  - trinity: TCP timeout        - zabbix: 404
+  - xenomai: 404
+
+Config issues:
+  - aufs-util: needs a kernel
+
+Of course, the hash, download, and config issues are not caused by the
+fuzz restriction, which I still believe was a very good thing to do! :-)
+Still, they may hide a few fuzz issues.
+
+Anyway, the list is up for all to pick a package and help fix that as a
+collective effort.
+
+Bonus points for anyone that confirms the corner cases: binutils, gcc,
+gdb, and a few others, which have a version choice... Or linux, which
+has a conditional patch (Aha!) and a version with a patch... Of any of
+the bootloaders, some of whioch have a version coice as well...
+
+I think I'll be having a look at all the hash errors, but anyone is free
+to look at them and post a patch that fixes the hash and explains the
+issue...
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.45.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
