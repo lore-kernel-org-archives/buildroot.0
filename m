@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E0BFC3064D
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 13:04:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D728CC2BD09
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 14:59:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B961D41AD1;
-	Thu, 27 Jun 2024 13:04:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E09A60E30;
+	Thu, 27 Jun 2024 14:59:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LI-1qas9cDwi; Thu, 27 Jun 2024 13:04:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PvmVsxbSBwuz; Thu, 27 Jun 2024 14:59:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 294DE41AC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CA9960E3A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 294DE41AC0;
-	Thu, 27 Jun 2024 13:04:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 924C81BF3D4
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 13:04:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CA9960E3A;
+	Thu, 27 Jun 2024 14:59:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A1E431BF20D
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 14:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E3B541AC0
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 13:04:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FDA460E3A
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 14:59:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zaTOkStX5I0s for <buildroot@lists.busybox.net>;
- Thu, 27 Jun 2024 13:04:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pHQZOH_MNt2m for <buildroot@lists.busybox.net>;
+ Thu, 27 Jun 2024 14:59:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A448140108
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A448140108
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A448140108
- for <buildroot@buildroot.org>; Thu, 27 Jun 2024 13:04:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 41BC360E30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41BC360E30
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 41BC360E30
+ for <buildroot@buildroot.org>; Thu, 27 Jun 2024 14:59:30 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 18EF2B00539;
- Thu, 27 Jun 2024 15:04:10 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6A946B004FF;
+ Thu, 27 Jun 2024 16:59:25 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jun 2024 15:04:05 +0200
-Message-ID: <20240627130405.75227-1-ju.o@free.fr>
+Date: Thu, 27 Jun 2024 16:59:17 +0200
+Message-ID: <20240627145917.190784-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1719493453;
- bh=rQ3kHgVyTN/gVTm19/sUvwbGBV5IF2CYbf4GtJy4GPQ=;
+ d=free.fr; s=smtp-20201208; t=1719500367;
+ bh=TTCpA4aUg/6Y+4+2TAbpGlTpu0TAkV5RMU9ixPv/KDM=;
  h=From:To:Cc:Subject:Date:From;
- b=A0MfYEp+NgpYEmGKtwi26jJVYHsZ6DYRsjZ+tTgBIkSrEB9jQhzuK2zcW4m/8Lh1o
- gQ1Y4pjEX3ShyLyfHLInGK7GbWHWsnMVL/29q01FTej0IKXfyclmu1h/Rbs8dR+L9G
- D2MzD/EGnKpUEOTtTEsobdrtYsfuYPDMowy5xxrSmn6WVGUJYTNcbgHjraElwxlBsx
- kIKQVven1ZrtMs7g7vRuKoM9U/NES3EM4hN+YHDlDCu1Qjlm+84SOcJ8VxMVXN92Ia
- kzMiIv0tibwIUQNizav01R/pCWUdv08+30sGR+nC02gy1TCsXshHhCrq3PKH3As/KY
- XRybFQD4UoCag==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=SqFOL5svzlORV7WpKod1Hhw+lu7n+BcdvbczeTkFTU/ugPQM1F2hSSZ0ZSJxDcrBr
+ 2oWoKUz1h5GimIlXlDy6oN1xRSJZFLUWmucRHMYcHQ9qWMsTpzXbhP2XJ2XdsZM3e9
+ M5atqrz+0AzwUstLR+//WB7LKFj22deK5/lcXWvonsF5FpvHefRqYw08wAqXROTBfV
+ VUf7of9oxOnEIUr15ToeUG/IgOvedagZp8Hgq2H09EjkAULdBGPowFPL0rvrihmdui
+ UnZz8Gts3/uaRYGdeb5OQM5UUlqtDInrWZQ3Ih6G065DU0cEBBW1fWES2S+Rk5rP39
+ aI1MuEP922kEg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=A0MfYEp+
-Subject: [Buildroot] [PATCH 1/1] package/asterisk: update patches to be
+ header.s=smtp-20201208 header.b=SqFOL5sv
+Subject: [Buildroot] [PATCH 1/1] package/libgsm: update patches to be
  applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -86,183 +86,91 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
 fuzz factor to 0" reduced the fuzz factor.
 
-Due to this change, asterisk fails to build with output:
+Due to this change, libgsm fails to build with output:
 
-    Applying 0004-install-samples-need-the-data-files.patch using patch:
+    Applying 0001-misc-fixes-from-archlinux.patch using patch:
     patching file Makefile
-    Hunk #1 FAILED at 779.
-    1 out of 1 hunk FAILED -- saving rejects to file Makefile.rej
+    Hunk #2 FAILED at 96.
+    Hunk #7 FAILED at 424.
+    2 out of 8 hunks FAILED -- saving rejects to file Makefile.rej
 
-This commit rebase the package patches on the current package version.
-Note: the patch 0005 is unchanged, as it is correct in its current
-state.
+This commit refreshes the package patch on the current package version.
 
 Fixes:
-- http://autobuild.buildroot.org/results/92d/92d58ecb67f11a6eb74695bc1efcc672f69a57a9
+- http://autobuild.buildroot.org/results/b27/b271ade6069fd25c1877e1e74648d92e88c459c4
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...001-sounds-do-not-download-and-check-sha1s.patch | 10 ++++++----
- .../0002-configure-fix-detection-of-libcrypt.patch  | 13 +++++++------
- ...ensure-target-directory-for-modules-exists.patch | 10 ++++++----
- .../0004-install-samples-need-the-data-files.patch  | 12 +++++++-----
- 4 files changed, 26 insertions(+), 19 deletions(-)
+ ...h => 0001-Misc-fixes-from-Archlinux.patch} | 21 +++++++++++--------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
+ rename package/libgsm/{0001-misc-fixes-from-archlinux.patch => 0001-Misc-fixes-from-Archlinux.patch} (88%)
 
-diff --git a/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch b/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
-index 8412843d13b..ce0bf2d3307 100644
---- a/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
-+++ b/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
+diff --git a/package/libgsm/0001-misc-fixes-from-archlinux.patch b/package/libgsm/0001-Misc-fixes-from-Archlinux.patch
+similarity index 88%
+rename from package/libgsm/0001-misc-fixes-from-archlinux.patch
+rename to package/libgsm/0001-Misc-fixes-from-Archlinux.patch
+index 11c529b5097..6702a920aff 100644
+--- a/package/libgsm/0001-misc-fixes-from-archlinux.patch
++++ b/package/libgsm/0001-Misc-fixes-from-Archlinux.patch
 @@ -1,4 +1,4 @@
--From 3e8a9e9a1c7eae515eb628778c3c8a04338b3bb3 Mon Sep 17 00:00:00 2001
-+From 63f685e468bef94d8938b7a9c1a18c6c00840219 Mon Sep 17 00:00:00 2001
- From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Date: Tue, 27 Dec 2016 11:21:09 +0100
- Subject: [PATCH] sounds: do not download and check sha1s
-@@ -20,16 +20,18 @@ However, that poses at least two problems:
- 
- So we just do without the sha1 download and checks.
- 
+-From e8f43832d401ad1e071e6860b2bf4a1e796d4356 Mon Sep 17 00:00:00 2001
++From ef88ee98855008cd8c8de807a12917a556e2ce7d Mon Sep 17 00:00:00 2001
+ From: Adam Duskett <aduskett@gmail.com>
+ Date: Fri, 28 Jul 2017 08:18:22 -0400
+ Subject: [PATCH] Misc fixes from Archlinux
+@@ -11,12 +11,15 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ Refresh for 1.0.17
+ [Fabrice: refresh for 1.0.22]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebase patch on tag 20.7.0]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++[Julien: regenerate with git format-patch for 1.0.22,
++as Fabrice refresh is incomplete for applying with fuzz 0]
  ---
-  sounds/Makefile | 10 ----------
-  1 file changed, 10 deletions(-)
- 
- diff --git a/sounds/Makefile b/sounds/Makefile
--index 84d0f45..7a80d56 100644
-+index 288b8139a9..260434e504 100644
- --- a/sounds/Makefile
- +++ b/sounds/Makefile
--@@ -100,17 +100,7 @@ ifneq ($(SOUNDS_CACHE_DIR),)
-+@@ -101,17 +101,7 @@ ifneq ($(SOUNDS_CACHE_DIR),)
-  	  if test ! -f "$$(SOUNDS_CACHE_DIR)/$$@"; then \
-  	    (cd "$$(SOUNDS_CACHE_DIR)"; $$(DOWNLOAD) $$(SOUNDS_URL)/$$@); \
-  	  fi; \
-@@ -48,5 +50,5 @@ index 84d0f45..7a80d56 100644
-  else
-  	$(CMD_PREFIX) \
- -- 
--2.7.4
-+2.45.2
- 
-diff --git a/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch b/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
-index d82f5084ef1..7a0de603e48 100644
---- a/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
-+++ b/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
-@@ -1,4 +1,4 @@
--From 8996503f6c55e55f326ab11c18278954ad7abaf3 Mon Sep 17 00:00:00 2001
-+From e959097b00357a2fd5f140daf3114c2245cd6b95 Mon Sep 17 00:00:00 2001
- From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Date: Tue, 27 Dec 2016 11:21:57 +0100
- Subject: [PATCH] configure: fix detection of libcrypt
-@@ -15,17 +15,18 @@ and thus concludes that crypt is missing when it was successfully found.
- Fix that by also storing the result of either check in the 'CRYPT'
- scheme.
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebase patch on tag 20.7.0]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- ---
-- configure    | 2 ++
-  configure.ac | 2 ++
-- 2 files changed, 4 insertions(+)
-+ 1 file changed, 2 insertions(+)
- 
- diff --git a/configure.ac b/configure.ac
--index 121dd93..d459ff5 100644
-+index 639bcd9df3..16f4297634 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -2406,10 +2406,12 @@ AC_CHECK_FUNC([crypt], [SYSCRYPT=true], [SYSCRYPT=""])
-+@@ -2694,10 +2694,12 @@ AC_CHECK_FUNC([crypt], [SYSCRYPT=true], [SYSCRYPT=""])
-  if test "x$LIBCRYPT_LIB" != "x" ; then
-      CRYPT_LIB="$LIBCRYPT_LIB"
-      CRYPT_INCLUDE="$LIBCRYPT_INCLUDE"
-@@ -39,5 +40,5 @@ index 121dd93..d459ff5 100644
-  fi
-  
- -- 
--2.7.4
-+2.45.2
- 
-diff --git a/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch b/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
-index 20cfc93892b..3080ef991be 100644
---- a/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
-+++ b/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
-@@ -1,4 +1,4 @@
--From 933b2554a40f932571bdbdbb5217cda3e35fd61f Mon Sep 17 00:00:00 2001
-+From 93edc41d3ae60e6ee9b9bbb7cdcc592133521fa3 Mon Sep 17 00:00:00 2001
- From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Date: Mon, 27 Nov 2017 12:52:52 +0100
- Subject: [PATCH] build: ensure target directory for modules exists
-@@ -9,16 +9,18 @@ modules fails because the target directory does not exist yet.
- We fix that by instructing $(INSTALL) to create the destination directory
- first.
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebase patch on tag 20.7.0]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- ---
-  Makefile.moddir_rules | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/Makefile.moddir_rules b/Makefile.moddir_rules
--index 59190bece9..b73153a9a5 100644
-+index 795b32c716..7d5e5d241a 100644
- --- a/Makefile.moddir_rules
- +++ b/Makefile.moddir_rules
--@@ -110,7 +110,7 @@ clean::
-+@@ -106,7 +106,7 @@ clean::
-  
-  install:: all
-  	@echo "Installing modules from `basename $(CURDIR)`..."
-@@ -28,5 +30,5 @@ index 59190bece9..b73153a9a5 100644
-  	@if [ -f .moduleinfo ] ; then \
-  		declare -A DISABLED_MODS ;\
- -- 
--2.11.0
-+2.45.2
- 
-diff --git a/package/asterisk/0004-install-samples-need-the-data-files.patch b/package/asterisk/0004-install-samples-need-the-data-files.patch
-index a9560e82e08..d863f637091 100644
---- a/package/asterisk/0004-install-samples-need-the-data-files.patch
-+++ b/package/asterisk/0004-install-samples-need-the-data-files.patch
-@@ -1,4 +1,4 @@
--From 05680ea9899c2246c23d11860c2c8e10aa8f80c7 Mon Sep 17 00:00:00 2001
-+From d347deb0376a3254d7cd8bbfe46dd645d1bf1061 Mon Sep 17 00:00:00 2001
- From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Date: Fri, 1 Dec 2017 11:08:16 +0100
- Subject: [PATCH] install: samples need the data files
-@@ -12,24 +12,26 @@ installed at the time we try to generate the voicemail data.
- 
- Ensure the needed dependency.
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebase patch on tag 20.7.0]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- ---
-  Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+- Makefile | 84 ++++++++++++++++++++++++++++++++--------------------------------
+- 1 file changed, 42 insertions(+), 42 deletions(-)
++ Makefile | 49 ++++++++++++++++++++++++-------------------------
++ 1 file changed, 24 insertions(+), 25 deletions(-)
  
  diff --git a/Makefile b/Makefile
--index f29c07f680..b58f707b61 100644
-+index 7ef73342cc..bb60f5e380 100644
+-index d5c0c90..ef61bd5 100644
++index 2ad5e5d..2cb0b06 100644
  --- a/Makefile
  +++ b/Makefile
--@@ -779,7 +779,7 @@ adsi:
-+@@ -819,7 +819,7 @@ adsi:
-  		$(INSTALL) -m 644 "$$x" "$(DESTDIR)$(ASTETCDIR)/`$(BASENAME) $$x`" ; \
-  	done
+ @@ -44,7 +44,7 @@ WAV49	= -DWAV49
+@@ -36,7 +39,7 @@ index d5c0c90..ef61bd5 100644
+ +LN		= ln -s -f
+  BASENAME 	= basename
+  AR		= ar
+- ARFLAGS	= cr
++ ARFLAGS		= cr
+ @@ -139,7 +139,7 @@ LFLAGS	= $(LDFLAGS) $(LDINC)
   
- -samples: adsi
- +samples: adsi datafiles
-  	@echo Installing other config files...
-- 	$(call INSTALL_CONFIGS,samples,.sample)
-+ 	$(call INSTALL_CONFIGS,configs/samples,.sample)
-  	$(INSTALL) -d "$(DESTDIR)$(ASTSPOOLDIR)/voicemail/default/1234/INBOX"
+  # Targets
+@@ -97,16 +100,16 @@ index d5c0c90..ef61bd5 100644
+  
+  
+  # The local bin and lib directories
+-@@ -425,7 +425,7 @@ semi-clean:
++@@ -425,7 +424,7 @@ semi-clean:
+  			-print | xargs rm $(RMFLAGS)
+  
+  clean:	semi-clean
+ -		-rm $(RMFLAGS) $(LIBGSM) $(ADDTST)/add		\
+ +		-rm $(RMFLAGS) $(LIBGSMSO)* $(ADDTST)/add		\
+  			$(TOAST) $(TCAT) $(UNTOAST)	\
+- 			$(ROOT)/gsm-1.0.tar.Z
++ 			$(ROOT)/gsm-1.0.tar.gz
+  
+-@@ -473,22 +473,22 @@ $(ADDTST)/add:	$(ADDTST)/add_test.o
++@@ -473,22 +472,22 @@ $(ADDTST)/add:	$(ADDTST)/add_test.o
+  $(TST)/test-result:	$(TST)/lin2cod $(TST)/cod2lin $(TOAST) $(TST)/run
+  			( cd $(TST); ./run ) 
+  
+@@ -140,5 +143,5 @@ index d5c0c90..ef61bd5 100644
+ -				$(TST)/cod2lin.o $(LIBGSM) $(LDLIB)
+ +				$(TST)/cod2lin.o $(LIBGSMSO) $(LDLIB)
  -- 
--2.11.0
+-2.13.3
 +2.45.2
  
 -- 
