@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64980C2BD09
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 21:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE66BC3064D
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 21:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08FB360E82;
-	Thu, 27 Jun 2024 21:00:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 675D560E7C;
+	Thu, 27 Jun 2024 21:03:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fwCa6G4HF1U2; Thu, 27 Jun 2024 21:00:25 +0000 (UTC)
+ id wJviHGmsXzMW; Thu, 27 Jun 2024 21:03:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A5CA60E7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 726EC60E7F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A5CA60E7C;
-	Thu, 27 Jun 2024 21:00:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4D2611BF2B9
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 21:00:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 726EC60E7F;
+	Thu, 27 Jun 2024 21:03:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A0721BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 21:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3835F40465
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 21:00:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6690F401F6
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 21:03:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LCjlRIEkUnqj for <buildroot@lists.busybox.net>;
- Thu, 27 Jun 2024 21:00:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DJ03-zSPm271 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jun 2024 21:03:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B6625400B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6625400B9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 16FFE401B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16FFE401B3
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B6625400B9
- for <buildroot@buildroot.org>; Thu, 27 Jun 2024 21:00:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 16FFE401B3
+ for <buildroot@buildroot.org>; Thu, 27 Jun 2024 21:03:30 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1bb6a.dip0.t-ipconnect.de [84.161.187.106])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D1A51A4C0618
- for <buildroot@buildroot.org>; Thu, 27 Jun 2024 23:00:15 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58820)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3896AA4C0CA1
+ for <buildroot@buildroot.org>; Thu, 27 Jun 2024 23:03:29 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43114)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1sMwE3-000000008N3-0bNn
- for buildroot@buildroot.org; Thu, 27 Jun 2024 21:00:15 +0000
+ (envelope-from <bernd@kuhls.net>) id 1sMwHB-000000000PR-08iq
+ for buildroot@buildroot.org; Thu, 27 Jun 2024 21:03:28 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jun 2024 23:00:14 +0200
-Message-Id: <20240627210014.1458512-1-bernd@kuhls.net>
+Date: Thu, 27 Jun 2024 23:03:21 +0200
+Message-Id: <20240627210328.1560834-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: ++++++
-X-Spam: Yes
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1719522015;
- bh=RNIkssNUQ2Ki2qzbb14WXkoYpnwEhUF/QLY+mg96fRM=;
+ s=kas202406071026; t=1719522209;
+ bh=nZQVs5H2VU6OLeAK2ytciWBBMMNuLCy1kFsmOG2QZGI=;
  h=From:To:Subject:Date:From;
- b=WMf6vDROT+508XQJQECDagzNCNXaIxKGqx3cmLCdtGrJLNWcYRQqo2WrwUaNDFUHv
- v/gXc3Yq9ZLwKVVGMWRMw4oP9kUvdrA3eLYGpjKlXqpKeIcvK1pc5VVfF5DTj4+JXo
- WZJnLNoOYizOxB0WcZKFxEzlfIhexVzBPbSye3qaYsc9zitTnT2X0xDkO8IeTiABnG
- nRq/chrLXeF1NQY2dkg8pOMEjHLzzCkbz9aVJ/jGOEBzi5yxpw2SchpyiIaW2/9rED
- IIbvhIOZxfQt7rWLdledYoMXwEQeX0wOESa+Z3Rl/GlGfliXQmJntBuYng26zM18yK
- rikHvcqe10ziQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=dhrzNk0bajCoRcO9olQUiO6EyNWyFCi/+BrXN5qz3+mEGrYhUNNTM5IUQfveciCf2
+ 0JduAQWXagR3ajLVYtmEC1CT6+uSwEn2D3QBfmHWK+t6G4l1f601Ro6GMw6pt/hhSx
+ R4NfeI8TGP/8h71iftxPHPaOKlBBOb6lBy/BtpqOA92wKxu8U78s75QslxHmT0Y4+o
+ YdLuo5BlSn0mOp7uxG+5iOKEF7TQhvUP0kBFKM/fiKZoMBA41exRRghNdvEIf7V7oK
+ p0cO7QN5HXDkiolw+bR3ebBMddBikHkBFhyXIvnUmAjpiq2kSoIe3AdBiybSn5mhQ5
+ hOvS+Og9T/vYg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=WMf6vDRO
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.122
+ header.s=kas202406071026 header.b=dhrzNk0b
+Subject: [Buildroot] [PATCH 1/8] package/kodi-inputstream-adaptive: bump
+ version to 21.4.10-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,42 +86,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2024-June/003518.html
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/libdrm/libdrm.hash | 6 +++---
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 8b0f7c0d74..9d78d5e437 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2024-June/003516.html
--sha256  909084a505d7638887f590b70791b3bbd9069c710c948f5d1f1ce6d080cdfcab  libdrm-2.4.121.tar.xz
--sha512  cc8816d61884caa0e404348d1caeb0b2952fb50e1dc401716adfe08121096e2a67826db0bda0d8b163d67c5ee048870177670d5eac28a5abe5792d09ba77ab2e  libdrm-2.4.121.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-June/003518.html
-+sha256  d9f5079b777dffca9300ccc56b10a93588cdfbc9dde2fae111940dfb6292f251  libdrm-2.4.122.tar.xz
-+sha512  ea6bac94416d4ba0e9805e142ae62904236bc49f803d4fc10c92968a4df64c818dd42524ad7a4e988062836783a148e27094050bb2754f751a368627f794ad13  libdrm-2.4.122.tar.xz
- 
- # Hash for license file
- sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index c87a225515..ea956de15b 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 85945c9a54..82325ab014 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  0b3a78763ffebef64ac05bcf55951f26e334f7ee8bbe042f885dff288eed466e  kodi-inputstream-adaptive-21.4.7-Omega.tar.gz
++sha256  caf71b67cf242c600878718dab8227947062a28485078b8bf68ac72aef51e12c  kodi-inputstream-adaptive-21.4.10-Omega.tar.gz
+ sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
+ sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
+ sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 5cc02e45c0..b6825c1ff0 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.121
-+LIBDRM_VERSION = 2.4.122
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.4.7-Omega
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.4.10-Omega
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
+ 	BSD-2-Clause-Views \
 -- 
 2.39.2
 
