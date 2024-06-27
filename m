@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CAEEC2BD09
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 15:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24233C2BD09
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 15:45:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12340416BE;
-	Thu, 27 Jun 2024 15:45:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51E00416C2;
+	Thu, 27 Jun 2024 15:45:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UEMX-Fxvuwd2; Thu, 27 Jun 2024 15:45:37 +0000 (UTC)
+ id IIocPPNkbljd; Thu, 27 Jun 2024 15:45:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7C77416D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84E3A416B6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7C77416D4;
-	Thu, 27 Jun 2024 15:45:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84E3A416B6;
+	Thu, 27 Jun 2024 15:45:49 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D17381BF3CE
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 15:45:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 109F41BF3CE
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 15:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CC1FA60E43
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 15:45:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95A0D60E47
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 15:45:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BmhPFxAsCQs4 for <buildroot@lists.busybox.net>;
- Thu, 27 Jun 2024 15:45:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id XVsZUmA9Ce2y for <buildroot@lists.busybox.net>;
+ Thu, 27 Jun 2024 15:45:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C30346075A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C30346075A
- for <buildroot@buildroot.org>; Thu, 27 Jun 2024 15:45:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA69A83538; Thu, 27 Jun 2024 15:45:30 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 27 Jun 2024 17:34:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: de278d626b63f69557d13a5fb330b6bdc5b71f6b
-X-Git-Newrev: a6fabd961058a77622a725e7d58ac3ffb05ce5b6
-X-Patchwork-Hint: ignore
-Message-Id: <20240627154530.AA69A83538@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/asterisk: update patches to be
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4E33D60E43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E33D60E43
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4E33D60E43
+ for <buildroot@buildroot.org>; Thu, 27 Jun 2024 15:45:45 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id D363613F8A2;
+ Thu, 27 Jun 2024 17:45:38 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 27 Jun 2024 17:45:38 +0200
+Date: Thu, 27 Jun 2024 17:45:38 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <Zn2JIvKlnQjFGJhd@landeda>
+References: <20240627130405.75227-1-ju.o@free.fr>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240627130405.75227-1-ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1719503142;
+ bh=GnX6I6Lt8AcnglbOMtjeXANC5WaPr35v52n4vCryW68=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Ow0Y8U6UA/+kzlDGmmcrOJrdm1zy4zqzres4AFzUP1GauuwWj+6JN7LmozWVMZTS6
+ 2qW9Pm8EPL62FZvZtu6V8x25Q0/nCfYBZqpwduFgZxp6yXGWI96NmXV1glwNdNdSR1
+ P1y0OBGbSl37tzUtMIWsH1czYqiRXQCV7H2XB9MaaAC95VL79yya7flUDzn2kfgHs0
+ ryf/yt+skcrottCCgOVUiCDB+Bz2MQguPcppWfP9dV5weCOJp+Ugy2Td/S8vZic0Vy
+ kYFtC+mgM0pRAftCHHQiUPuTTmmB5Tvm19j+3fNXLqrGwhm6vgYPJpZv/1pNb7VILE
+ LqFQEB0hk4IZg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ow0Y8U6U
+Subject: Re: [Buildroot] [PATCH 1/1] package/asterisk: update patches to be
  applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -59,198 +81,214 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6fabd961058a77622a725e7d58ac3ffb05ce5b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Julien, All,
 
-Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0" reduced the fuzz factor.
+On 2024-06-27 15:04 +0200, Julien Olivain spake thusly:
+> Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
+> fuzz factor to 0" reduced the fuzz factor.
+> 
+> Due to this change, asterisk fails to build with output:
+> 
+>     Applying 0004-install-samples-need-the-data-files.patch using patch:
+>     patching file Makefile
+>     Hunk #1 FAILED at 779.
+>     1 out of 1 hunk FAILED -- saving rejects to file Makefile.rej
+> 
+> This commit rebase the package patches on the current package version.
+> Note: the patch 0005 is unchanged, as it is correct in its current
+> state.
+> 
+> Fixes:
+> - http://autobuild.buildroot.org/results/92d/92d58ecb67f11a6eb74695bc1efcc672f69a57a9
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Due to this change, asterisk fails to build with output:
+Applied to master, thanks.
 
-    Applying 0004-install-samples-need-the-data-files.patch using patch:
-    patching file Makefile
-    Hunk #1 FAILED at 779.
-    1 out of 1 hunk FAILED -- saving rejects to file Makefile.rej
+Regards,
+Yann E. MORIN.
 
-This commit rebase the package patches on the current package version.
-Note: the patch 0005 is unchanged, as it is correct in its current
-state.
+> ---
+>  ...001-sounds-do-not-download-and-check-sha1s.patch | 10 ++++++----
+>  .../0002-configure-fix-detection-of-libcrypt.patch  | 13 +++++++------
+>  ...ensure-target-directory-for-modules-exists.patch | 10 ++++++----
+>  .../0004-install-samples-need-the-data-files.patch  | 12 +++++++-----
+>  4 files changed, 26 insertions(+), 19 deletions(-)
+> 
+> diff --git a/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch b/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
+> index 8412843d13b..ce0bf2d3307 100644
+> --- a/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
+> +++ b/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
+> @@ -1,4 +1,4 @@
+> -From 3e8a9e9a1c7eae515eb628778c3c8a04338b3bb3 Mon Sep 17 00:00:00 2001
+> +From 63f685e468bef94d8938b7a9c1a18c6c00840219 Mon Sep 17 00:00:00 2001
+>  From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Date: Tue, 27 Dec 2016 11:21:09 +0100
+>  Subject: [PATCH] sounds: do not download and check sha1s
+> @@ -20,16 +20,18 @@ However, that poses at least two problems:
+>  
+>  So we just do without the sha1 download and checks.
+>  
+> +Signed-off-by: Julien Olivain <ju.o@free.fr>
+> +[Julien: rebase patch on tag 20.7.0]
+>  Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  ---
+>   sounds/Makefile | 10 ----------
+>   1 file changed, 10 deletions(-)
+>  
+>  diff --git a/sounds/Makefile b/sounds/Makefile
+> -index 84d0f45..7a80d56 100644
+> +index 288b8139a9..260434e504 100644
+>  --- a/sounds/Makefile
+>  +++ b/sounds/Makefile
+> -@@ -100,17 +100,7 @@ ifneq ($(SOUNDS_CACHE_DIR),)
+> +@@ -101,17 +101,7 @@ ifneq ($(SOUNDS_CACHE_DIR),)
+>   	  if test ! -f "$$(SOUNDS_CACHE_DIR)/$$@"; then \
+>   	    (cd "$$(SOUNDS_CACHE_DIR)"; $$(DOWNLOAD) $$(SOUNDS_URL)/$$@); \
+>   	  fi; \
+> @@ -48,5 +50,5 @@ index 84d0f45..7a80d56 100644
+>   else
+>   	$(CMD_PREFIX) \
+>  -- 
+> -2.7.4
+> +2.45.2
+>  
+> diff --git a/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch b/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
+> index d82f5084ef1..7a0de603e48 100644
+> --- a/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
+> +++ b/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
+> @@ -1,4 +1,4 @@
+> -From 8996503f6c55e55f326ab11c18278954ad7abaf3 Mon Sep 17 00:00:00 2001
+> +From e959097b00357a2fd5f140daf3114c2245cd6b95 Mon Sep 17 00:00:00 2001
+>  From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Date: Tue, 27 Dec 2016 11:21:57 +0100
+>  Subject: [PATCH] configure: fix detection of libcrypt
+> @@ -15,17 +15,18 @@ and thus concludes that crypt is missing when it was successfully found.
+>  Fix that by also storing the result of either check in the 'CRYPT'
+>  scheme.
+>  
+> +Signed-off-by: Julien Olivain <ju.o@free.fr>
+> +[Julien: rebase patch on tag 20.7.0]
+>  Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  ---
+> - configure    | 2 ++
+>   configure.ac | 2 ++
+> - 2 files changed, 4 insertions(+)
+> + 1 file changed, 2 insertions(+)
+>  
+>  diff --git a/configure.ac b/configure.ac
+> -index 121dd93..d459ff5 100644
+> +index 639bcd9df3..16f4297634 100644
+>  --- a/configure.ac
+>  +++ b/configure.ac
+> -@@ -2406,10 +2406,12 @@ AC_CHECK_FUNC([crypt], [SYSCRYPT=true], [SYSCRYPT=""])
+> +@@ -2694,10 +2694,12 @@ AC_CHECK_FUNC([crypt], [SYSCRYPT=true], [SYSCRYPT=""])
+>   if test "x$LIBCRYPT_LIB" != "x" ; then
+>       CRYPT_LIB="$LIBCRYPT_LIB"
+>       CRYPT_INCLUDE="$LIBCRYPT_INCLUDE"
+> @@ -39,5 +40,5 @@ index 121dd93..d459ff5 100644
+>   fi
+>   
+>  -- 
+> -2.7.4
+> +2.45.2
+>  
+> diff --git a/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch b/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
+> index 20cfc93892b..3080ef991be 100644
+> --- a/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
+> +++ b/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
+> @@ -1,4 +1,4 @@
+> -From 933b2554a40f932571bdbdbb5217cda3e35fd61f Mon Sep 17 00:00:00 2001
+> +From 93edc41d3ae60e6ee9b9bbb7cdcc592133521fa3 Mon Sep 17 00:00:00 2001
+>  From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Date: Mon, 27 Nov 2017 12:52:52 +0100
+>  Subject: [PATCH] build: ensure target directory for modules exists
+> @@ -9,16 +9,18 @@ modules fails because the target directory does not exist yet.
+>  We fix that by instructing $(INSTALL) to create the destination directory
+>  first.
+>  
+> +Signed-off-by: Julien Olivain <ju.o@free.fr>
+> +[Julien: rebase patch on tag 20.7.0]
+>  Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  ---
+>   Makefile.moddir_rules | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>  
+>  diff --git a/Makefile.moddir_rules b/Makefile.moddir_rules
+> -index 59190bece9..b73153a9a5 100644
+> +index 795b32c716..7d5e5d241a 100644
+>  --- a/Makefile.moddir_rules
+>  +++ b/Makefile.moddir_rules
+> -@@ -110,7 +110,7 @@ clean::
+> +@@ -106,7 +106,7 @@ clean::
+>   
+>   install:: all
+>   	@echo "Installing modules from `basename $(CURDIR)`..."
+> @@ -28,5 +30,5 @@ index 59190bece9..b73153a9a5 100644
+>   	@if [ -f .moduleinfo ] ; then \
+>   		declare -A DISABLED_MODS ;\
+>  -- 
+> -2.11.0
+> +2.45.2
+>  
+> diff --git a/package/asterisk/0004-install-samples-need-the-data-files.patch b/package/asterisk/0004-install-samples-need-the-data-files.patch
+> index a9560e82e08..d863f637091 100644
+> --- a/package/asterisk/0004-install-samples-need-the-data-files.patch
+> +++ b/package/asterisk/0004-install-samples-need-the-data-files.patch
+> @@ -1,4 +1,4 @@
+> -From 05680ea9899c2246c23d11860c2c8e10aa8f80c7 Mon Sep 17 00:00:00 2001
+> +From d347deb0376a3254d7cd8bbfe46dd645d1bf1061 Mon Sep 17 00:00:00 2001
+>  From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  Date: Fri, 1 Dec 2017 11:08:16 +0100
+>  Subject: [PATCH] install: samples need the data files
+> @@ -12,24 +12,26 @@ installed at the time we try to generate the voicemail data.
+>  
+>  Ensure the needed dependency.
+>  
+> +Signed-off-by: Julien Olivain <ju.o@free.fr>
+> +[Julien: rebase patch on tag 20.7.0]
+>  Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  ---
+>   Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>  
+>  diff --git a/Makefile b/Makefile
+> -index f29c07f680..b58f707b61 100644
+> +index 7ef73342cc..bb60f5e380 100644
+>  --- a/Makefile
+>  +++ b/Makefile
+> -@@ -779,7 +779,7 @@ adsi:
+> +@@ -819,7 +819,7 @@ adsi:
+>   		$(INSTALL) -m 644 "$$x" "$(DESTDIR)$(ASTETCDIR)/`$(BASENAME) $$x`" ; \
+>   	done
+>   
+>  -samples: adsi
+>  +samples: adsi datafiles
+>   	@echo Installing other config files...
+> - 	$(call INSTALL_CONFIGS,samples,.sample)
+> + 	$(call INSTALL_CONFIGS,configs/samples,.sample)
+>   	$(INSTALL) -d "$(DESTDIR)$(ASTSPOOLDIR)/voicemail/default/1234/INBOX"
+>  -- 
+> -2.11.0
+> +2.45.2
+>  
+> -- 
+> 2.45.2
+> 
 
-Fixes:
-- http://autobuild.buildroot.org/results/92d/92d58ecb67f11a6eb74695bc1efcc672f69a57a9
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../0001-sounds-do-not-download-and-check-sha1s.patch       | 10 ++++++----
- .../asterisk/0002-configure-fix-detection-of-libcrypt.patch | 13 +++++++------
- ...3-build-ensure-target-directory-for-modules-exists.patch | 10 ++++++----
- .../asterisk/0004-install-samples-need-the-data-files.patch | 12 +++++++-----
- 4 files changed, 26 insertions(+), 19 deletions(-)
-
-diff --git a/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch b/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
-index 8412843d13..ce0bf2d330 100644
---- a/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
-+++ b/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
-@@ -1,4 +1,4 @@
--From 3e8a9e9a1c7eae515eb628778c3c8a04338b3bb3 Mon Sep 17 00:00:00 2001
-+From 63f685e468bef94d8938b7a9c1a18c6c00840219 Mon Sep 17 00:00:00 2001
- From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Date: Tue, 27 Dec 2016 11:21:09 +0100
- Subject: [PATCH] sounds: do not download and check sha1s
-@@ -20,16 +20,18 @@ However, that poses at least two problems:
- 
- So we just do without the sha1 download and checks.
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebase patch on tag 20.7.0]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- ---
-  sounds/Makefile | 10 ----------
-  1 file changed, 10 deletions(-)
- 
- diff --git a/sounds/Makefile b/sounds/Makefile
--index 84d0f45..7a80d56 100644
-+index 288b8139a9..260434e504 100644
- --- a/sounds/Makefile
- +++ b/sounds/Makefile
--@@ -100,17 +100,7 @@ ifneq ($(SOUNDS_CACHE_DIR),)
-+@@ -101,17 +101,7 @@ ifneq ($(SOUNDS_CACHE_DIR),)
-  	  if test ! -f "$$(SOUNDS_CACHE_DIR)/$$@"; then \
-  	    (cd "$$(SOUNDS_CACHE_DIR)"; $$(DOWNLOAD) $$(SOUNDS_URL)/$$@); \
-  	  fi; \
-@@ -48,5 +50,5 @@ index 84d0f45..7a80d56 100644
-  else
-  	$(CMD_PREFIX) \
- -- 
--2.7.4
-+2.45.2
- 
-diff --git a/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch b/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
-index d82f5084ef..7a0de603e4 100644
---- a/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
-+++ b/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
-@@ -1,4 +1,4 @@
--From 8996503f6c55e55f326ab11c18278954ad7abaf3 Mon Sep 17 00:00:00 2001
-+From e959097b00357a2fd5f140daf3114c2245cd6b95 Mon Sep 17 00:00:00 2001
- From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Date: Tue, 27 Dec 2016 11:21:57 +0100
- Subject: [PATCH] configure: fix detection of libcrypt
-@@ -15,17 +15,18 @@ and thus concludes that crypt is missing when it was successfully found.
- Fix that by also storing the result of either check in the 'CRYPT'
- scheme.
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebase patch on tag 20.7.0]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- ---
-- configure    | 2 ++
-  configure.ac | 2 ++
-- 2 files changed, 4 insertions(+)
-+ 1 file changed, 2 insertions(+)
- 
- diff --git a/configure.ac b/configure.ac
--index 121dd93..d459ff5 100644
-+index 639bcd9df3..16f4297634 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -2406,10 +2406,12 @@ AC_CHECK_FUNC([crypt], [SYSCRYPT=true], [SYSCRYPT=""])
-+@@ -2694,10 +2694,12 @@ AC_CHECK_FUNC([crypt], [SYSCRYPT=true], [SYSCRYPT=""])
-  if test "x$LIBCRYPT_LIB" != "x" ; then
-      CRYPT_LIB="$LIBCRYPT_LIB"
-      CRYPT_INCLUDE="$LIBCRYPT_INCLUDE"
-@@ -39,5 +40,5 @@ index 121dd93..d459ff5 100644
-  fi
-  
- -- 
--2.7.4
-+2.45.2
- 
-diff --git a/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch b/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
-index 20cfc93892..3080ef991b 100644
---- a/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
-+++ b/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
-@@ -1,4 +1,4 @@
--From 933b2554a40f932571bdbdbb5217cda3e35fd61f Mon Sep 17 00:00:00 2001
-+From 93edc41d3ae60e6ee9b9bbb7cdcc592133521fa3 Mon Sep 17 00:00:00 2001
- From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Date: Mon, 27 Nov 2017 12:52:52 +0100
- Subject: [PATCH] build: ensure target directory for modules exists
-@@ -9,16 +9,18 @@ modules fails because the target directory does not exist yet.
- We fix that by instructing $(INSTALL) to create the destination directory
- first.
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebase patch on tag 20.7.0]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- ---
-  Makefile.moddir_rules | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/Makefile.moddir_rules b/Makefile.moddir_rules
--index 59190bece9..b73153a9a5 100644
-+index 795b32c716..7d5e5d241a 100644
- --- a/Makefile.moddir_rules
- +++ b/Makefile.moddir_rules
--@@ -110,7 +110,7 @@ clean::
-+@@ -106,7 +106,7 @@ clean::
-  
-  install:: all
-  	@echo "Installing modules from `basename $(CURDIR)`..."
-@@ -28,5 +30,5 @@ index 59190bece9..b73153a9a5 100644
-  	@if [ -f .moduleinfo ] ; then \
-  		declare -A DISABLED_MODS ;\
- -- 
--2.11.0
-+2.45.2
- 
-diff --git a/package/asterisk/0004-install-samples-need-the-data-files.patch b/package/asterisk/0004-install-samples-need-the-data-files.patch
-index a9560e82e0..d863f63709 100644
---- a/package/asterisk/0004-install-samples-need-the-data-files.patch
-+++ b/package/asterisk/0004-install-samples-need-the-data-files.patch
-@@ -1,4 +1,4 @@
--From 05680ea9899c2246c23d11860c2c8e10aa8f80c7 Mon Sep 17 00:00:00 2001
-+From d347deb0376a3254d7cd8bbfe46dd645d1bf1061 Mon Sep 17 00:00:00 2001
- From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Date: Fri, 1 Dec 2017 11:08:16 +0100
- Subject: [PATCH] install: samples need the data files
-@@ -12,24 +12,26 @@ installed at the time we try to generate the voicemail data.
- 
- Ensure the needed dependency.
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebase patch on tag 20.7.0]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- ---
-  Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/Makefile b/Makefile
--index f29c07f680..b58f707b61 100644
-+index 7ef73342cc..bb60f5e380 100644
- --- a/Makefile
- +++ b/Makefile
--@@ -779,7 +779,7 @@ adsi:
-+@@ -819,7 +819,7 @@ adsi:
-  		$(INSTALL) -m 644 "$$x" "$(DESTDIR)$(ASTETCDIR)/`$(BASENAME) $$x`" ; \
-  	done
-  
- -samples: adsi
- +samples: adsi datafiles
-  	@echo Installing other config files...
-- 	$(call INSTALL_CONFIGS,samples,.sample)
-+ 	$(call INSTALL_CONFIGS,configs/samples,.sample)
-  	$(INSTALL) -d "$(DESTDIR)$(ASTSPOOLDIR)/voicemail/default/1234/INBOX"
- -- 
--2.11.0
-+2.45.2
- 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
