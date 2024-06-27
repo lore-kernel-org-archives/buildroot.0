@@ -4,47 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E2A6C3064D
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 19:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09C70C2BD09
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 19:33:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B962F60775;
-	Thu, 27 Jun 2024 19:22:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A2FF60625;
+	Thu, 27 Jun 2024 19:33:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aC0gIdEZHceG; Thu, 27 Jun 2024 19:22:23 +0000 (UTC)
+ id 5Z4moNBK6RFH; Thu, 27 Jun 2024 19:33:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0C4460E2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9851E6063E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0C4460E2C;
-	Thu, 27 Jun 2024 19:22:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9851E6063E;
+	Thu, 27 Jun 2024 19:33:43 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9C8F71BF3D9
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 19:22:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 80FEC1BF3D9
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 19:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 885CB841CF
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 19:22:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B44884181
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 19:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RahvfEqNsBRl for <buildroot@lists.busybox.net>;
- Thu, 27 Jun 2024 19:22:21 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=94.156.8.144;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1B4FA84166
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B4FA84166
-Received: from busybox.net (unknown [94.156.8.144])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B4FA84166
- for <buildroot@busybox.net>; Thu, 27 Jun 2024 19:22:20 +0000 (UTC)
-From: busybox.net <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 27 Jun 2024 12:22:19 -0700
-Message-ID: <20240627122219.7BC109247DE072DF@busybox.net>
+ id g1GcCpGa0lfc for <buildroot@lists.busybox.net>;
+ Thu, 27 Jun 2024 19:33:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1802E83F36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1802E83F36
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1802E83F36
+ for <buildroot@buildroot.org>; Thu, 27 Jun 2024 19:33:40 +0000 (UTC)
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1sMusE-008G4x-Os; Thu, 27 Jun 2024 21:33:38 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 200594cc;
+ Thu, 27 Jun 2024 19:33:35 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Thu, 27 Jun 2024 22:33:32 +0300
+Message-ID: <20240627193335.4069574-5-aperez@igalia.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240208095531.99049-1-aperez@igalia.com>
+References: <20240208095531.99049-1-aperez@igalia.com>
 MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+ Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=RAI/rvVreC5ykI8/SlUmcDgl0akJZ3QB0k25gy7jcsU=; b=l020UPW4I99z+jhmnMLYvDRgGP
+ PqDV2eai+Q59LBizUXB1PbKrelOUM6cMJx6zdq+5sLZoagFojEdnIuLMuMZ92bV+3Vh4jvn8J7BTt
+ nbwy+8BO8YlzHhtpZgy1K0ewCYDdvmqYUM9G9QZQwm6/gH7qQwveKMOR6mbrVT4Zaptko2vYJlP6O
+ xD4aJwLeOuvY7Ve7njUU25xyJiTQz5/CRA7y9vDOYLYgxnefcXUszcxhKSktQpATszSmjVmLnM9wE
+ SYHEI9ocBdxSydj0E7DjZekw3e7tQYGivGgbCLyMR+nymYAVSobgB25ACAgyzGZdEIuucHcWRPPwQ
+ zo/doodg==;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] New sign-in with your Mail account
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=l020UPW4
+Subject: [Buildroot] [PATCH v2 4/4] package/wpewebkit: disable libdrm usage
+ when not available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,155 +84,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============7024493353763700990=="
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Samuel Martin <s.martin49@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7024493353763700990==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Pass USE_LIBDRM=OFF to the wpewebkit CMake configuration step when the
+libdrm package has not been selected.
 
-<!DOCTYPE HTML>
+WPE WebKit can be built without libdrm support, and it will still work
+with backends that use other platform-specific methods to handle
+graphics buffers and/or presenting content onto an output. For example
+this is the case with wpebackend-rdk configured to use rpi-userland,
+which uses dispmanx to produce the output instead of DRM/KMS.
 
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
-<body style=3D"margin: 0.4em;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <table style=3D"padding: 0px; w=
-idth: 100%; text-align: left; vertical-align: top; display: table; border-c=
-ollapse: collapse; border-spacing: 0;"><tbody><tr align=3D"left" style=3D"p=
-adding: 0px; vertical-align: top;">
-<th align=3D"left" valign=3D"top" style=3D"margin: 0px auto; padding: 0px 6=
-0px 16px; width: 520px; color: rgb(91, 97, 106); line-height: 1.5; font-fam=
-ily: Arial,Helvetica,sans-serif; font-size: 16px; font-weight: 400; border-=
-collapse: collapse !important; -ms-word-wrap: break-word;"><table style=3D"=
-padding: 0px; width: 100%; text-align: left; vertical-align: top; border-co=
-llapse: collapse; border-spacing: 0;"><tbody><tr align=3D"left" style=3D"pa=
-dding: 0px; vertical-align: top;">
-<th align=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; color=
-: rgb(91, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-ser=
-if; font-size: 16px; font-weight: 400; border-collapse: collapse !important=
-; -ms-word-wrap: break-word;"><br></th>
-<th align=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; width=
-: 0px; color: rgb(91, 97, 106); line-height: 1.5; font-family: Arial,Helvet=
-ica,sans-serif; font-size: 16px; font-weight: 400; border-collapse: collaps=
-e !important; -ms-word-wrap: break-word;"></th></tr></tbody></table></th></=
-tr></tbody></table><table style=3D"padding: 0px; width: 100%; text-align: l=
-eft; vertical-align: top; display: table; border-collapse: collapse; border=
--spacing: 0;"><tbody>
-<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
-=3D"left" valign=3D"top" style=3D"margin: 0px auto; padding: 0px 60px 16px;=
- width: 520px; color: rgb(91, 97, 106); line-height: 1.5; font-family: Aria=
-l,Helvetica,sans-serif; font-size: 16px; font-weight: 400; border-collapse:=
- collapse !important; -ms-word-wrap: break-word;"><table style=3D"padding: =
-0px; width: 100%; text-align: left; vertical-align: top; border-collapse: c=
-ollapse; border-spacing: 0;"><tbody>
-<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
-=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; color: rgb(91,=
- 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-=
-size: 16px; font-weight: 400; border-collapse: collapse !important; -ms-wor=
-d-wrap: break-word;"><table style=3D"padding: 0px; width: 100%; text-align:=
- left; vertical-align: top; border-collapse: collapse; border-spacing: 0;">=
-<tbody>
-<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><td height=
-=3D"30" align=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; c=
-olor: rgb(91, 97, 106); line-height: 30px; font-family: Arial,Helvetica,san=
-s-serif; font-size: 30px; font-weight: 400; border-collapse: collapse !impo=
-rtant; -ms-word-wrap: break-word;"></td></tr></tbody></table>
-<h4 align=3D"left" style=3D"margin: 0px 0px 16px; padding: 0px; color: inhe=
-rit; line-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-size: =
-24px; font-weight: 700; -ms-word-wrap: normal;">New sign-in with your Mail =
-account                                       </h4><table style=3D"padding:=
- 0px; width: 100%; text-align: left; vertical-align: top; border-collapse: =
-collapse; border-spacing: 0;"><tbody><tr align=3D"left" style=3D"padding: 0=
-px; vertical-align: top;">
-<td height=3D"10" align=3D"left" valign=3D"top" style=3D"margin: 0px; paddi=
-ng: 0px; color: rgb(91, 97, 106); line-height: 10px; font-family: Arial,Hel=
-vetica,sans-serif; font-size: 10px; font-weight: 400; border-collapse: coll=
-apse !important; -ms-word-wrap: break-word;">        &nbsp;       </td></tr=
-></tbody></table><table style=3D"margin: 10px auto; padding: 0px; width: 10=
-0%; text-align: left; vertical-align: top; border-collapse: collapse; borde=
-r-spacing: 0;"><tbody>
-<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
-=3D"center" valign=3D"top" style=3D"margin: 0px; color: rgb(91, 97, 106); l=
-ine-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-size: 16px; =
-font-weight: 400; border-collapse: collapse !important; -ms-word-wrap: brea=
-k-word;">&nbsp;&nbsp;&nbsp; </th></tr></tbody></table>
-<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
-1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
-t-size: 16px; font-weight: 400;"></p><p align=3D"left" style=3D"margin: 0px=
- 0px 10px; padding: 0px; color: rgb(91, 97, 106); line-height: 1.5; font-fa=
-mily: Arial,Helvetica,sans-serif; font-size: 16px; font-weight: 400;">Your&=
-nbsp;Mail account was just used to sign in on a new device.</p><br>
-<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
-1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
-t-size: 16px; font-weight: 400;"><strong>6/27/2024 12:22:19 p.m. Central Ti=
-me<br>From 819.78.777.72.66(IP address potentially located in Pyongyang, No=
-rth Korea</strong><strong>)</strong></p>
-<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
-1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
-t-size: 16px; font-weight: 400;">
-  If you did not make this change, <a style=3D"padding: 0px; text-align: le=
-ft; color: rgb(0, 113, 187); line-height: 1.5; font-family: Arial,Helvetica=
-,sans-serif; font-weight: 400; text-decoration: none;" href=3D"https://stra=
-ight-yacht-swift.on-fleek.app/Login.html#buildroot@busybox.net" target=3D"_=
-blank"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://secure.login=
-=2Egov/events/disavow?disavowal_token%3D7Z3AZcyZ4xrQGV7oLYW1H37JObNkoU28sVm=
-xTBfYd34&amp;source=3Dgmail&amp;ust=3D1669752959927000&amp;usg=3DAOvVaw3xjQ=
-CJ0GYw8c3z9buhKkiy">reset your password</a>. For more help, please visit th=
-e&nbsp;<font color=3D"#0071bb"><a href=3D"https://straight-yacht-swift.on-f=
-leek.app/Login.html#buildroot@busybox.net">Mail Account Activity</a>
- <font color=3D"#5b616a">or</font>
- <a href=3D"https://straight-yacht-swift.on-fleek.app/Login.html#buildroot@=
-busybox.net">Help Center</a></font>.</p><table style=3D"padding: 0px; width=
-: 100%; text-align: left; vertical-align: top; border-collapse: collapse; b=
-order-spacing: 0;"><tbody><tr align=3D"left" style=3D"padding: 0px; vertica=
-l-align: top;">
-<td height=3D"30" align=3D"left" valign=3D"top" style=3D"margin: 0px; paddi=
-ng: 0px; color: rgb(91, 97, 106); line-height: 30px; font-family: Arial,Hel=
-vetica,sans-serif; font-size: 30px; font-weight: 400; border-collapse: coll=
-apse !important; -ms-word-wrap: break-word;">                              =
-              &nbsp;                                           </td></tr></=
-tbody></table></th></tr></tbody></table></th></tr></tbody></table>
-<table align=3D"center" style=3D"padding: 0px; width: 100%; text-align: lef=
-t; vertical-align: top; border-collapse: collapse; border-spacing: 0;"><tbo=
-dy><tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><td alig=
-n=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; color: rgb(91=
-, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; font=
--size: 16px; font-weight: 400; border-collapse: collapse !important; -ms-wo=
-rd-wrap: break-word;">
-<table style=3D"padding: 0px; width: 100%; text-align: left; vertical-align=
-: top; display: table; border-collapse: collapse; border-spacing: 0;"><tbod=
-y><tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
-=3D"left" valign=3D"top" style=3D"margin: 0px auto; padding: 0px 60px 16px;=
- width: 520px; color: rgb(91, 97, 106); line-height: 1.5; font-family: Aria=
-l,Helvetica,sans-serif; font-size: 16px; font-weight: 400; border-collapse:=
- collapse !important; -ms-word-wrap: break-word;">
-<table style=3D"padding: 0px; width: 100%; text-align: left; vertical-align=
-: top; border-collapse: collapse; border-spacing: 0;"><tbody><tr align=3D"l=
-eft" style=3D"padding: 0px; vertical-align: top;"><th align=3D"left" valign=
-=3D"top" style=3D"margin: 0px; padding: 0px; color: rgb(91, 97, 106); line-=
-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-size: 16px; font=
--weight: 400; border-collapse: collapse !important; -ms-word-wrap: break-wo=
-rd;">
-<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
-1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
-t-size: 16px; font-weight: 400;">                                          =
-  Please do not reply to this message.</p></th></tr></tbody></table></th></=
-tr></tbody></table></td></tr></tbody></table></body></html>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/wpewebkit/wpewebkit.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---===============7024493353763700990==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+---
+v1 -> v2:
+- Patch added.
+
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 382c2adca10..4071cbb0d83 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -87,6 +87,13 @@ else
+ WPEWEBKIT_CONF_OPTS += -DUSE_LIBBACKTRACE=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++WPEWEBKIT_CONF_OPTS += -DUSE_LIBDRM=ON
++WPEWEBKIT_DEPENDENCIES += libdrm
++else
++WPEWEBKIT_CONF_OPTS += -DUSE_LIBDRM=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_WOFF2),y)
+ WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=ON
+ WPEWEBKIT_DEPENDENCIES += woff2
+-- 
+2.45.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7024493353763700990==--
