@@ -4,71 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28C4AC3064D
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 16:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C780FC2BD09
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 16:09:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B41E9415E4;
-	Thu, 27 Jun 2024 16:09:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D047F415E3;
+	Thu, 27 Jun 2024 16:09:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JmaGbnouxCga; Thu, 27 Jun 2024 16:09:23 +0000 (UTC)
+ id ZYlziVt5Fp11; Thu, 27 Jun 2024 16:09:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B0FC415E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 913CC416D1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B0FC415E3;
-	Thu, 27 Jun 2024 16:09:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3AAD01BF3E8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 913CC416D1;
+	Thu, 27 Jun 2024 16:09:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EE441BF3E8
  for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 16:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33EC4416B9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5904C41B15
  for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 16:09:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LgFa07v79DfB for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 46dCrrYXSARv for <buildroot@lists.busybox.net>;
  Thu, 27 Jun 2024 16:09:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
  helo=relay1-d.mail.gandi.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EC45B415E3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC45B415E3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EBE1941B12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBE1941B12
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EC45B415E3
- for <buildroot@buildroot.org>; Thu, 27 Jun 2024 16:09:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C67EA240007;
- Thu, 27 Jun 2024 16:09:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EBE1941B12
+ for <buildroot@buildroot.org>; Thu, 27 Jun 2024 16:09:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8D771240008;
+ Thu, 27 Jun 2024 16:09:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 27 Jun 2024 18:09:06 +0200
-Message-Id: <20240627160910.3545859-2-kory.maincent@bootlin.com>
+Date: Thu, 27 Jun 2024 18:09:05 +0200
+Message-Id: <20240627160910.3545859-1-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240627160910.3545859-1-kory.maincent@bootlin.com>
-References: <20240627160910.3545859-1-kory.maincent@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: kory.maincent@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1719504559;
+ d=bootlin.com; s=gm1; t=1719504557;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2HoIhn13OR/sFqoYWsbe8Xj84GdEStwQENaLEFpWAr4=;
- b=Hoi/umW+cL2UVtTN3SbSkABa/WgDtk6pfJLwpET9S9V6EIEyzkQwksHlTKHjILLSMNqsws
- 96gjFUx7LyhQMjSj1IVm2ctiizulbiXPuXmCyQcPjWwsRsVZGMjsvJQYaELVA71sWPPKfO
- OP8sOqt0ZXelYlBbJsOsjlqoXRiS1O3+WVJoE/7bLWk7ffLTpwUfv7xMlGvnkGVbaeKPoo
- +3Vy/GIUeMDjio2krHnFw5hEwVMBDAYNTGWCDULULyOsjW9mv4WERzbtXDfvG4/G0UeKye
- muMmE43G05+ilFBMph+0oeutUnKB731M8GBKokrQi80q3yI3dPmzC6/EbHh3Og==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding;
+ bh=AwIXGvaPxzZT9ajOqfi5z8ZusgC9Ty+qfExF4O6GVzA=;
+ b=mNURAzxqsOaFHyVQEXLU0stOkc7TJUmOwuYSe1I02cpz3KvWGUh2/nG0gQhvVrcHFZaCDz
+ Z9g8VRpJzr1kG9fxNuiBXZ2EmX8Blo3Qwfa5pfm5tXGgMChGG8yb4HR6yvNtQQO9kqbIRy
+ oT9IVjUJz9H7PPe0TV26qWhywMD1Mz8Kobopt0g7LJpOrmBrFXRd8VDvBvggRFBaWNjtuD
+ vPk58zJqx15x0CC/IHfdl1G5mNdfJuB8m0R1hGukEbbb8Hq1CQ3tTzsn2odOY4c7ilX1Bn
+ lXd58OXdV2NrlbEc49SgNleWSRkotBhejgnn5gNI9MMmYFJFmqhygMqVQgbeZg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Hoi/umW+
-Subject: [Buildroot] [PATCH v2 1/4] package/python-intelhex: Add support for
- host package
+ header.s=gm1 header.b=mNURAzxq
+Subject: [Buildroot] [PATCH v2 0/4] Adds support for TrustedFirmware-M
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,23 +87,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add support for the host package to enable future support for
-TrustedFirmware-M, which depends on it.
+This series adds support for TrustedFirmware-M (TF-M).
+https://trustedfirmware-m.readthedocs.io
+https://git.trustedfirmware.org/TF-M/trusted-firmware-m.git
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
----
- package/python-intelhex/python-intelhex.mk | 1 +
- 1 file changed, 1 insertion(+)
+Trusted Firmware-M implements the Secure Processing Environment (SPE)
+for Armv8-M, Armv8.1-M architectures (e.g. the Cortex-M33, Cortex-M23,
+Cortex-M55, Cortex-M85 processors) or dual-core platforms.
 
-diff --git a/package/python-intelhex/python-intelhex.mk b/package/python-intelhex/python-intelhex.mk
-index cc8b973f0f..56f758e643 100644
---- a/package/python-intelhex/python-intelhex.mk
-+++ b/package/python-intelhex/python-intelhex.mk
-@@ -12,3 +12,4 @@ PYTHON_INTELHEX_LICENSE = BSD-3-Clause
- PYTHON_INTELHEX_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
+Patches 1-3: Address host Python package dependencies.
+Patch 4: Add support for TF-M.
+
+Changes in v2:
+- Add TF-M to DEVELOPERS file
+- Fix few nit.
+
+Kory Maincent (4):
+  package/python-intelhex: Add support for host package
+  package/python-click: Add support for host package
+  package/python-cbor2: Add support for host package
+  boot: Add support for TrustedFirmware-M package
+
+ DEVELOPERS                                    |   1 +
+ boot/Config.in                                |   1 +
+ boot/trusted-firmware-m/Config.in             | 101 +++++++++++++++++
+ boot/trusted-firmware-m/tfm-3rdparty.mk       |   7 ++
+ boot/trusted-firmware-m/tfm-cmsis/Config.in   |  10 ++
+ .../tfm-cmsis/tfm-cmsis.hash                  |   3 +
+ .../trusted-firmware-m/tfm-cmsis/tfm-cmsis.mk |  31 +++++
+ boot/trusted-firmware-m/tfm-mbedtls/Config.in |  10 ++
+ .../tfm-mbedtls/tfm-mbedtls.hash              |   3 +
+ .../tfm-mbedtls/tfm-mbedtls.mk                |  30 +++++
+ boot/trusted-firmware-m/tfm-mcuboot/Config.in |  10 ++
+ .../tfm-mcuboot/tfm-mcuboot.hash              |   3 +
+ .../tfm-mcuboot/tfm-mcuboot.mk                |  29 +++++
+ boot/trusted-firmware-m/tfm-qcbor/Config.in   |  10 ++
+ .../tfm-qcbor/tfm-qcbor.hash                  |   3 +
+ .../trusted-firmware-m/tfm-qcbor/tfm-qcbor.mk |  29 +++++
+ boot/trusted-firmware-m/tfm-tests/Config.in   |  10 ++
+ .../tfm-tests/tfm-tests.hash                  |   3 +
+ .../trusted-firmware-m/tfm-tests/tfm-tests.mk |  30 +++++
+ .../trusted-firmware-m.hash                   |   3 +
+ boot/trusted-firmware-m/trusted-firmware-m.mk | 107 ++++++++++++++++++
+ package/python-cbor2/python-cbor2.mk          |   3 +
+ package/python-click/python-click.mk          |   1 +
+ package/python-intelhex/python-intelhex.mk    |   1 +
+ support/testing/tests/boot/test_tfm.py        |  12 ++
+ 25 files changed, 451 insertions(+)
+ create mode 100644 boot/trusted-firmware-m/Config.in
+ create mode 100644 boot/trusted-firmware-m/tfm-3rdparty.mk
+ create mode 100644 boot/trusted-firmware-m/tfm-cmsis/Config.in
+ create mode 100644 boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.hash
+ create mode 100644 boot/trusted-firmware-m/tfm-cmsis/tfm-cmsis.mk
+ create mode 100644 boot/trusted-firmware-m/tfm-mbedtls/Config.in
+ create mode 100644 boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.hash
+ create mode 100644 boot/trusted-firmware-m/tfm-mbedtls/tfm-mbedtls.mk
+ create mode 100644 boot/trusted-firmware-m/tfm-mcuboot/Config.in
+ create mode 100644 boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.hash
+ create mode 100644 boot/trusted-firmware-m/tfm-mcuboot/tfm-mcuboot.mk
+ create mode 100644 boot/trusted-firmware-m/tfm-qcbor/Config.in
+ create mode 100644 boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.hash
+ create mode 100644 boot/trusted-firmware-m/tfm-qcbor/tfm-qcbor.mk
+ create mode 100644 boot/trusted-firmware-m/tfm-tests/Config.in
+ create mode 100644 boot/trusted-firmware-m/tfm-tests/tfm-tests.hash
+ create mode 100644 boot/trusted-firmware-m/tfm-tests/tfm-tests.mk
+ create mode 100644 boot/trusted-firmware-m/trusted-firmware-m.hash
+ create mode 100644 boot/trusted-firmware-m/trusted-firmware-m.mk
+ create mode 100644 support/testing/tests/boot/test_tfm.py
+
 -- 
 2.25.1
 
