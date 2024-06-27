@@ -4,89 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E88B6C2BD09
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 12:49:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E0BFC3064D
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jun 2024 13:04:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E33C840108;
-	Thu, 27 Jun 2024 12:49:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B961D41AD1;
+	Thu, 27 Jun 2024 13:04:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O5farWyOPFnX; Thu, 27 Jun 2024 12:49:16 +0000 (UTC)
+ id LI-1qas9cDwi; Thu, 27 Jun 2024 13:04:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 702A94025C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 294DE41AC0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 702A94025C;
-	Thu, 27 Jun 2024 12:49:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B3F1D1BF3D4
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 12:49:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 294DE41AC0;
+	Thu, 27 Jun 2024 13:04:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 924C81BF3D4
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 13:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD79E40C27
- for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 12:49:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E3B541AC0
+ for <buildroot@lists.busybox.net>; Thu, 27 Jun 2024 13:04:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ir0lXrcRpGXP for <buildroot@lists.busybox.net>;
- Thu, 27 Jun 2024 12:49:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D227340BE3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D227340BE3
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D227340BE3
- for <buildroot@buildroot.org>; Thu, 27 Jun 2024 12:49:13 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4217c7eb6b4so63835755e9.2
- for <buildroot@buildroot.org>; Thu, 27 Jun 2024 05:49:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719492552; x=1720097352;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Uevz3FLz0UXErbNC+9doZ4poTT/Oumqs95L7Prc04k4=;
- b=Mcieh4MZHEhfx0xGe2jFPYP8GGBe6Sj4mq+v2OrLMpHuVfOVVO7guTw8v3wl49QTyo
- bRRTI1rmEM/DPxDbRQzMgZvMDDewLVAdd4T5hsr9LmmALNB0OUJfEopBLGiEjOiLG/+Y
- 0riyDi7++XIegEMIXSErR5W+F63q77ljEA2zaq2sOn9GVhZA4awq4YK7uIyIly5VaEMO
- 6RjzAT5Lj+gmz4aU+11FGzuKh8hbJRgH8UFabOApbNKZZJxRncdXQuJop90q9dZnm15f
- phXs9sd1OVwLogUf1Pg5KyU77smrxZ51AeIhefn3jKWu930zkhSR5zrT4EHyx03e4nhT
- 634g==
-X-Gm-Message-State: AOJu0Ywg8U9Iz1Eim6Sig2LtTTgNjL5jWJTnz2bUETNmaIu1rjz91K13
- K10qfyRCCI65rn5lrsyGsCtyIQTiddF6lOt8AZpEKZA6P46h96tDDVrN1mMwlwodTAWFl+upxJu
- XcG4e+dwqVbtZgVrQgcCdZO3htOE=
-X-Google-Smtp-Source: AGHT+IGGnAyHmXkIJGx2Jn5DL3G7BJ41aO9qZ4BFVGfhwOTrN28RyAz23aCGj7K5Hkpv4hHEBfNi6mmXcUuc6w8Tffw=
-X-Received: by 2002:a5d:5f8e:0:b0:366:ebd1:3bbf with SMTP id
- ffacd0b85a97d-366ebd13c07mr11111472f8f.2.1719492551470; Thu, 27 Jun 2024
- 05:49:11 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zaTOkStX5I0s for <buildroot@lists.busybox.net>;
+ Thu, 27 Jun 2024 13:04:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A448140108
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A448140108
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A448140108
+ for <buildroot@buildroot.org>; Thu, 27 Jun 2024 13:04:17 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 18EF2B00539;
+ Thu, 27 Jun 2024 15:04:10 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 27 Jun 2024 15:04:05 +0200
+Message-ID: <20240627130405.75227-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-References: <20240626171922.718270-1-fiona.klute@gmx.de>
-In-Reply-To: <20240626171922.718270-1-fiona.klute@gmx.de>
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 27 Jun 2024 14:48:34 +0200
-Message-ID: <CA+TH9VntDn0Z3-ey0xb5fqvaEYmhyaowwjGnsswq37J-86-rGQ@mail.gmail.com>
-To: Fiona Klute <fiona.klute@gmx.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1719492552; x=1720097352; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=Uevz3FLz0UXErbNC+9doZ4poTT/Oumqs95L7Prc04k4=;
- b=nBUwqwJfvCFViy/yky7TXtQNhEJMrMsz1b2h1S1nMm2WU4NSgNpyNMBPv/BqqQPf5k
- v4YuhczUL/Fjd3bg1A+cHL6OYWr5piMmliAje05sIqdxcgCvNPXcrai9/grqFjdc7ZrR
- wUnxh2UOn6vsR46WUrjBsxBsJGsNNWmwhK0CSMVdunc+jKZ/kf78XE2h1vJ1gtO5ff0x
- NfwSMf/TU5m4VqnNnqVzbM5+TTxniDf0p6GH4FSejP8m8JprSoem/0sGCYMBEjACcVec
- 2ms4nbA13YMutvHLysbROtjQLNEnUvj+toIrK+cBhL27fc8YSYr10MN87QdRlfoMHBw/
- +VdQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1719493453;
+ bh=rQ3kHgVyTN/gVTm19/sUvwbGBV5IF2CYbf4GtJy4GPQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=A0MfYEp+NgpYEmGKtwi26jJVYHsZ6DYRsjZ+tTgBIkSrEB9jQhzuK2zcW4m/8Lh1o
+ gQ1Y4pjEX3ShyLyfHLInGK7GbWHWsnMVL/29q01FTej0IKXfyclmu1h/Rbs8dR+L9G
+ D2MzD/EGnKpUEOTtTEsobdrtYsfuYPDMowy5xxrSmn6WVGUJYTNcbgHjraElwxlBsx
+ kIKQVven1ZrtMs7g7vRuKoM9U/NES3EM4hN+YHDlDCu1Qjlm+84SOcJ8VxMVXN92Ia
+ kzMiIv0tibwIUQNizav01R/pCWUdv08+30sGR+nC02gy1TCsXshHhCrq3PKH3As/KY
+ XRybFQD4UoCag==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=nBUwqwJf
-Subject: Re: [Buildroot] [PATCH 0/3] Update fail2ban to 1.1.0,
- add dependencies
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=A0MfYEp+
+Subject: [Buildroot] [PATCH 1/1] package/asterisk: update patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,149 +77,198 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0211766447336051020=="
+Cc: Julien Olivain <ju.o@free.fr>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0211766447336051020==
-Content-Type: multipart/alternative; boundary="000000000000b97583061bde8e99"
+Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0" reduced the fuzz factor.
 
---000000000000b97583061bde8e99
-Content-Type: text/plain; charset="UTF-8"
+Due to this change, asterisk fails to build with output:
 
-Il giorno mer 26 giu 2024 alle ore 19:19 Fiona Klute <fiona.klute@gmx.de>
-ha scritto:
+    Applying 0004-install-samples-need-the-data-files.patch using patch:
+    patching file Makefile
+    Hunk #1 FAILED at 779.
+    1 out of 1 hunk FAILED -- saving rejects to file Makefile.rej
 
-> This patch series (unfortunately still not merged) by Angelo
-> Compagnucci fixed the fail2ban 1.0.2 build:
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=403756
->
-> However it broke again with Python 3.12 due to incompatibilities in
-> upstream code. The 1.1.0 release fixes those, unfortunately it still
-> requires ported asyncore and asynchat modules. This series builds on
-> Angelo's (must be merged after) and updates fail2ban to 1.1.0 after
-> adding the required compatibility packages.
->
+This commit rebase the package patches on the current package version.
+Note: the patch 0005 is unchanged, as it is correct in its current
+state.
 
-Thanks for the job! Very good indeed!
+Fixes:
+- http://autobuild.buildroot.org/results/92d/92d58ecb67f11a6eb74695bc1efcc672f69a57a9
 
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...001-sounds-do-not-download-and-check-sha1s.patch | 10 ++++++----
+ .../0002-configure-fix-detection-of-libcrypt.patch  | 13 +++++++------
+ ...ensure-target-directory-for-modules-exists.patch | 10 ++++++----
+ .../0004-install-samples-need-the-data-files.patch  | 12 +++++++-----
+ 4 files changed, 26 insertions(+), 19 deletions(-)
 
-> Fiona Klute (3):
->   package/python-pyasyncore: new package
->   package/python-pyasynchat: new package
->   package/fail2ban: bump version to 1.1.0
->
->  package/Config.in                                |  2 ++
->  package/fail2ban/Config.in                       |  1 +
->  package/fail2ban/fail2ban.hash                   |  2 +-
->  package/fail2ban/fail2ban.mk                     | 15 ++++++++-------
->  package/python-pyasynchat/Config.in              | 11 +++++++++++
->  package/python-pyasynchat/python-pyasynchat.hash |  5 +++++
->  package/python-pyasynchat/python-pyasynchat.mk   | 15 +++++++++++++++
->  package/python-pyasyncore/Config.in              | 10 ++++++++++
->  package/python-pyasyncore/python-pyasyncore.hash |  5 +++++
->  package/python-pyasyncore/python-pyasyncore.mk   | 14 ++++++++++++++
->  10 files changed, 72 insertions(+), 8 deletions(-)
->  create mode 100644 package/python-pyasynchat/Config.in
->  create mode 100644 package/python-pyasynchat/python-pyasynchat.hash
->  create mode 100644 package/python-pyasynchat/python-pyasynchat.mk
->  create mode 100644 package/python-pyasyncore/Config.in
->  create mode 100644 package/python-pyasyncore/python-pyasyncore.hash
->  create mode 100644 package/python-pyasyncore/python-pyasyncore.mk
->
-> --
-> 2.45.2
->
->
-
+diff --git a/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch b/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
+index 8412843d13b..ce0bf2d3307 100644
+--- a/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
++++ b/package/asterisk/0001-sounds-do-not-download-and-check-sha1s.patch
+@@ -1,4 +1,4 @@
+-From 3e8a9e9a1c7eae515eb628778c3c8a04338b3bb3 Mon Sep 17 00:00:00 2001
++From 63f685e468bef94d8938b7a9c1a18c6c00840219 Mon Sep 17 00:00:00 2001
+ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Date: Tue, 27 Dec 2016 11:21:09 +0100
+ Subject: [PATCH] sounds: do not download and check sha1s
+@@ -20,16 +20,18 @@ However, that poses at least two problems:
+ 
+ So we just do without the sha1 download and checks.
+ 
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++[Julien: rebase patch on tag 20.7.0]
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+  sounds/Makefile | 10 ----------
+  1 file changed, 10 deletions(-)
+ 
+ diff --git a/sounds/Makefile b/sounds/Makefile
+-index 84d0f45..7a80d56 100644
++index 288b8139a9..260434e504 100644
+ --- a/sounds/Makefile
+ +++ b/sounds/Makefile
+-@@ -100,17 +100,7 @@ ifneq ($(SOUNDS_CACHE_DIR),)
++@@ -101,17 +101,7 @@ ifneq ($(SOUNDS_CACHE_DIR),)
+  	  if test ! -f "$$(SOUNDS_CACHE_DIR)/$$@"; then \
+  	    (cd "$$(SOUNDS_CACHE_DIR)"; $$(DOWNLOAD) $$(SOUNDS_URL)/$$@); \
+  	  fi; \
+@@ -48,5 +50,5 @@ index 84d0f45..7a80d56 100644
+  else
+  	$(CMD_PREFIX) \
+ -- 
+-2.7.4
++2.45.2
+ 
+diff --git a/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch b/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
+index d82f5084ef1..7a0de603e48 100644
+--- a/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
++++ b/package/asterisk/0002-configure-fix-detection-of-libcrypt.patch
+@@ -1,4 +1,4 @@
+-From 8996503f6c55e55f326ab11c18278954ad7abaf3 Mon Sep 17 00:00:00 2001
++From e959097b00357a2fd5f140daf3114c2245cd6b95 Mon Sep 17 00:00:00 2001
+ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Date: Tue, 27 Dec 2016 11:21:57 +0100
+ Subject: [PATCH] configure: fix detection of libcrypt
+@@ -15,17 +15,18 @@ and thus concludes that crypt is missing when it was successfully found.
+ Fix that by also storing the result of either check in the 'CRYPT'
+ scheme.
+ 
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++[Julien: rebase patch on tag 20.7.0]
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+- configure    | 2 ++
+  configure.ac | 2 ++
+- 2 files changed, 4 insertions(+)
++ 1 file changed, 2 insertions(+)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 121dd93..d459ff5 100644
++index 639bcd9df3..16f4297634 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2406,10 +2406,12 @@ AC_CHECK_FUNC([crypt], [SYSCRYPT=true], [SYSCRYPT=""])
++@@ -2694,10 +2694,12 @@ AC_CHECK_FUNC([crypt], [SYSCRYPT=true], [SYSCRYPT=""])
+  if test "x$LIBCRYPT_LIB" != "x" ; then
+      CRYPT_LIB="$LIBCRYPT_LIB"
+      CRYPT_INCLUDE="$LIBCRYPT_INCLUDE"
+@@ -39,5 +40,5 @@ index 121dd93..d459ff5 100644
+  fi
+  
+ -- 
+-2.7.4
++2.45.2
+ 
+diff --git a/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch b/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
+index 20cfc93892b..3080ef991be 100644
+--- a/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
++++ b/package/asterisk/0003-build-ensure-target-directory-for-modules-exists.patch
+@@ -1,4 +1,4 @@
+-From 933b2554a40f932571bdbdbb5217cda3e35fd61f Mon Sep 17 00:00:00 2001
++From 93edc41d3ae60e6ee9b9bbb7cdcc592133521fa3 Mon Sep 17 00:00:00 2001
+ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Date: Mon, 27 Nov 2017 12:52:52 +0100
+ Subject: [PATCH] build: ensure target directory for modules exists
+@@ -9,16 +9,18 @@ modules fails because the target directory does not exist yet.
+ We fix that by instructing $(INSTALL) to create the destination directory
+ first.
+ 
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++[Julien: rebase patch on tag 20.7.0]
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+  Makefile.moddir_rules | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/Makefile.moddir_rules b/Makefile.moddir_rules
+-index 59190bece9..b73153a9a5 100644
++index 795b32c716..7d5e5d241a 100644
+ --- a/Makefile.moddir_rules
+ +++ b/Makefile.moddir_rules
+-@@ -110,7 +110,7 @@ clean::
++@@ -106,7 +106,7 @@ clean::
+  
+  install:: all
+  	@echo "Installing modules from `basename $(CURDIR)`..."
+@@ -28,5 +30,5 @@ index 59190bece9..b73153a9a5 100644
+  	@if [ -f .moduleinfo ] ; then \
+  		declare -A DISABLED_MODS ;\
+ -- 
+-2.11.0
++2.45.2
+ 
+diff --git a/package/asterisk/0004-install-samples-need-the-data-files.patch b/package/asterisk/0004-install-samples-need-the-data-files.patch
+index a9560e82e08..d863f637091 100644
+--- a/package/asterisk/0004-install-samples-need-the-data-files.patch
++++ b/package/asterisk/0004-install-samples-need-the-data-files.patch
+@@ -1,4 +1,4 @@
+-From 05680ea9899c2246c23d11860c2c8e10aa8f80c7 Mon Sep 17 00:00:00 2001
++From d347deb0376a3254d7cd8bbfe46dd645d1bf1061 Mon Sep 17 00:00:00 2001
+ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Date: Fri, 1 Dec 2017 11:08:16 +0100
+ Subject: [PATCH] install: samples need the data files
+@@ -12,24 +12,26 @@ installed at the time we try to generate the voicemail data.
+ 
+ Ensure the needed dependency.
+ 
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++[Julien: rebase patch on tag 20.7.0]
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+  Makefile | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/Makefile b/Makefile
+-index f29c07f680..b58f707b61 100644
++index 7ef73342cc..bb60f5e380 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -779,7 +779,7 @@ adsi:
++@@ -819,7 +819,7 @@ adsi:
+  		$(INSTALL) -m 644 "$$x" "$(DESTDIR)$(ASTETCDIR)/`$(BASENAME) $$x`" ; \
+  	done
+  
+ -samples: adsi
+ +samples: adsi datafiles
+  	@echo Installing other config files...
+- 	$(call INSTALL_CONFIGS,samples,.sample)
++ 	$(call INSTALL_CONFIGS,configs/samples,.sample)
+  	$(INSTALL) -d "$(DESTDIR)$(ASTSPOOLDIR)/voicemail/default/1234/INBOX"
+ -- 
+-2.11.0
++2.45.2
+ 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
-
---000000000000b97583061bde8e99
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">Il giorno mer 26 giu 2024 alle ore 19=
-:19 Fiona Klute &lt;<a href=3D"mailto:fiona.klute@gmx.de">fiona.klute@gmx.d=
-e</a>&gt; ha scritto:<br></div><blockquote class=3D"gmail_quote" style=3D"m=
-argin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left=
-:1ex">This patch series (unfortunately still not merged) by Angelo<br>
-Compagnucci fixed the fail2ban 1.0.2 build:<br>
-<a href=3D"https://patchwork.ozlabs.org/project/buildroot/list/?series=3D40=
-3756" rel=3D"noreferrer" target=3D"_blank">https://patchwork.ozlabs.org/pro=
-ject/buildroot/list/?series=3D403756</a><br>
-<br>
-However it broke again with Python 3.12 due to incompatibilities in<br>
-upstream code. The 1.1.0 release fixes those, unfortunately it still<br>
-requires ported asyncore and asynchat modules. This series builds on<br>
-Angelo&#39;s (must be merged after) and updates fail2ban to 1.1.0 after<br>
-adding the required compatibility packages.<br></blockquote><div><br></div>=
-<div>Thanks for the job! Very good indeed!</div><div>=C2=A0<br></div><block=
-quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
-px solid rgb(204,204,204);padding-left:1ex">
-Fiona Klute (3):<br>
-=C2=A0 package/python-pyasyncore: new package<br>
-=C2=A0 package/python-pyasynchat: new package<br>
-=C2=A0 package/fail2ban: bump version to 1.1.0<br>
-<br>
-=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 2 ++<br=
->
-=C2=A0package/fail2ban/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
-=C2=A0package/fail2ban/fail2ban.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 2 +-<br>
-=C2=A0package/fail2ban/<a href=3D"http://fail2ban.mk" rel=3D"noreferrer" ta=
-rget=3D"_blank">fail2ban.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 15 ++++++++-------<br>
-=C2=A0package/python-pyasynchat/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 | 11 +++++++++++<br>
-=C2=A0package/python-pyasynchat/python-pyasynchat.hash |=C2=A0 5 +++++<br>
-=C2=A0package/python-pyasynchat/<a href=3D"http://python-pyasynchat.mk" rel=
-=3D"noreferrer" target=3D"_blank">python-pyasynchat.mk</a>=C2=A0 =C2=A0| 15=
- +++++++++++++++<br>
-=C2=A0package/python-pyasyncore/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 | 10 ++++++++++<br>
-=C2=A0package/python-pyasyncore/python-pyasyncore.hash |=C2=A0 5 +++++<br>
-=C2=A0package/python-pyasyncore/<a href=3D"http://python-pyasyncore.mk" rel=
-=3D"noreferrer" target=3D"_blank">python-pyasyncore.mk</a>=C2=A0 =C2=A0| 14=
- ++++++++++++++<br>
-=C2=A010 files changed, 72 insertions(+), 8 deletions(-)<br>
-=C2=A0create mode 100644 package/python-pyasynchat/Config.in<br>
-=C2=A0create mode 100644 package/python-pyasynchat/python-pyasynchat.hash<b=
-r>
-=C2=A0create mode 100644 package/python-pyasynchat/<a href=3D"http://python=
--pyasynchat.mk" rel=3D"noreferrer" target=3D"_blank">python-pyasynchat.mk</=
-a><br>
-=C2=A0create mode 100644 package/python-pyasyncore/Config.in<br>
-=C2=A0create mode 100644 package/python-pyasyncore/python-pyasyncore.hash<b=
-r>
-=C2=A0create mode 100644 package/python-pyasyncore/<a href=3D"http://python=
--pyasyncore.mk" rel=3D"noreferrer" target=3D"_blank">python-pyasyncore.mk</=
-a><br>
-<br>
---<br>
-2.45.2<br>
-<br>
-</blockquote></div><br clear=3D"all"><br><span class=3D"gmail_signature_pre=
-fix">-- </span><br><div dir=3D"ltr" class=3D"gmail_signature">Profile: <a h=
-ref=3D"http://it.linkedin.com/in/compagnucciangelo" target=3D"_blank">http:=
-//it.linkedin.com/in/compagnucciangelo</a></div></div>
-
---000000000000b97583061bde8e99--
-
---===============0211766447336051020==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+2.45.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0211766447336051020==--
