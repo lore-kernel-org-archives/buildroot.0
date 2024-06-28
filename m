@@ -4,162 +4,165 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63E85C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 12:40:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 661E8C3064D
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 12:50:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFD4F41A10;
-	Fri, 28 Jun 2024 12:40:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B867D4074E;
+	Fri, 28 Jun 2024 12:50:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kO09LrsCHeCl; Fri, 28 Jun 2024 12:40:53 +0000 (UTC)
+ id h3sMZlCVtdZd; Fri, 28 Jun 2024 12:50:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29D63417CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1FF840744
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29D63417CA;
-	Fri, 28 Jun 2024 12:40:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1FF840744;
+	Fri, 28 Jun 2024 12:50:13 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 937EC1BF41C
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 12:40:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DB6941BF41C
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 12:50:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 818266077F
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 12:40:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D64166079A
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 12:50:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bCJC_edr9aWz for <buildroot@lists.busybox.net>;
- Fri, 28 Jun 2024 12:40:50 +0000 (UTC)
+ id 1uACuKWNIT7Z for <buildroot@lists.busybox.net>;
+ Fri, 28 Jun 2024 12:50:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2416::600;
- helo=nam11-co1-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2409::600;
+ helo=nam04-dm6-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2D4B860820
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D4B860820
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam11on20600.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2416::600])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D4B860820
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 12:40:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5D7FD60829
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D7FD60829
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam04on20600.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2409::600])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5D7FD60829
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 12:50:08 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GoCKHDLOspPVQtAVuywjPZdwXOI7dpuZZZAnAtFW9BISla+zm3E2Hv1UcgFNElpe7vPtHxSL/cNUv2axk1m6L32pEQ1tkcbEyUbSGDi4rYIbu0CoB+3NfoAiN2SkRKcz9cNC2MbOBO0U5KSdf1CVeAmEYgyEiYvNUnCWK1FTHOlOCayMBT/Tkz787e0+I1Xa9572nazYI49sbyHAvLlFCVBQS1XPRfLalYOF7pJn/B9y5+fkMJlIY5LEOBavdvELWBDeOoCMR2J+dUJvfh75K/jPm0YM4YHS5SQ5ZZEHUguaPiPCOUmZ/68qsq0oxjK+utupys8hVrIV05zzgxxmPQ==
+ b=Qxgax+uQ+XEjlGwjTxSXGWwAK5hVQi68j2TYprXdZK+x9r7m9t6d4joyxTtaJtOK3dv036U3+jvJUOOwAdbKpgwoPBtSo6PBq3+bkQnDQC40/v9ZdBFmIqaWCYcZA8XLc3o0a7zURHDfMWnSWw/crfqqQH10+SOicx7REmYBN256lCjOnGuWzFlYfPmPtHddXKaiVCWlez7ikbP+ySPUAyWN/ux6ZUdFubMmS9H0m55WonvozO14yX50WBn6Fxdx5/0T6+0mMqnmn0cRQg7iIrqa35nj6FBGyRq3BUIhLjSqrKTTRsNPO+Il/yZlQ9aDggLdNWakHk232jfjaAYsAg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5b+bUtFrXkj66SHNdkSkn85sJVXILxDjZl1m438rCJM=;
- b=S6ASS9yj4WQzHrCbGPjBzJL467SYiiD+MYIG6wTdXVkv8chr6HmC4xC6WaltXujbJ3JXqO0ZuRzybNRBNYAlj5+ZQAyB2v/orKZiio69gB6apobmFyJB1n2Esp5WiNDAj7QhfP26bhU6fcky0UcXVFtyNUnD2K1PJ0G2y5ExZm1sWrEe5fe+n8y00/OZScTTxxbuFU7tU+Czvc1aB9Fb56mTFvqaAINqfuIqd1kMgfvdS2S4xm/pVBOdKly/xFQkHNan5xm/LgDbFMVTpRrIqr4RsjnpY9qdqDfgdl7g7XKq/kD79gFFKk43BvMRO5YiJtUrJ/gBqSTY+f+wK2FjmA==
+ bh=NWJwZqI2Z65xFQbkrhyy0qD1ivbFvYCf93HBhfgfyXI=;
+ b=NKPK/16bSPV9xj7U/xVC+PasLqlyBvP2cKiT2sCBatRh2MS4f5MmQ72HoTxMzssJL2Hk+kKCCLiO1Iouwu/JMfjoa1EgO0nES5yz3auxmgqZc6qAYOxGLvQZ+GnNEGqn79Jm6EnGIZtWcJH5oQnWrYZjiBk7lARrTDZ4uXHgc6BUL6ChfbeslROE1fwDQcqr5iqO0zwixN1opdcpIrgsqBs+oB4FpM6LjezW0sNFK8AcUsY34xnWFOE4qD4qkju23XG1jBisHGkgznbDOPhEdj267JP3KjhgTGXa0v8pc7h2T/PbXz5p4bHhg2GXWwGlvq5To1Klzi0iQPgPfeyAxA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by DM4PR12MB6183.namprd12.prod.outlook.com (2603:10b6:8:a7::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.32; Fri, 28 Jun
- 2024 12:40:46 +0000
+ by DS7PR12MB8289.namprd12.prod.outlook.com (2603:10b6:8:d8::7) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7698.32; Fri, 28 Jun 2024 12:50:05 +0000
 Received: from CH2PR12MB5004.namprd12.prod.outlook.com
  ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
  ([fe80::e6c1:191b:641d:4d1b%7]) with mapi id 15.20.7698.033; Fri, 28 Jun 2024
- 12:40:46 +0000
+ 12:50:05 +0000
 To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Thread-Topic: [PATCH v3 1/4] boot/xilinx-source: new boot package
-Thread-Index: AQHawVQND7IxWwheBkGuMUgo1SQRYLHc+YyAgAAzHqA=
-Date: Fri, 28 Jun 2024 12:40:45 +0000
-Message-ID: <CH2PR12MB5004046100C29EC4360CF3A4F0D02@CH2PR12MB5004.namprd12.prod.outlook.com>
+Thread-Topic: [PATCH v3 2/4] boot/xilinx-prebuilt: wire up xilinx-source
+Thread-Index: AQHawVQOdCpGIchNR0WnrmJjJXRHpbHc+ZAAgAA1IHA=
+Date: Fri, 28 Jun 2024 12:50:04 +0000
+Message-ID: <CH2PR12MB5004CCC69767D34B22960706F0D02@CH2PR12MB5004.namprd12.prod.outlook.com>
 References: <20240618074922.3555070-1-neal.frager@amd.com>
- <20240628113233.2d8f765f@booty>
-In-Reply-To: <20240628113233.2d8f765f@booty>
+ <20240618074922.3555070-2-neal.frager@amd.com>
+ <20240628113236.6a9d2448@booty>
+In-Reply-To: <20240628113236.6a9d2448@booty>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|DM4PR12MB6183:EE_
-x-ms-office365-filtering-correlation-id: 7cedbcea-1da9-4cdd-9113-08dc976f880f
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|DS7PR12MB8289:EE_
+x-ms-office365-filtering-correlation-id: 3096907d-1086-46c7-c0ac-08dc9770d53c
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
- ARA:13230040|366016|376014|1800799024|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?qkOVTq+gMM5/kbYC05EGv+UY7U1cHRkzEojTGgkVN0B3GUwNSx0pO+yoSBLK?=
- =?us-ascii?Q?bLa6pBL2KgdqPEMAasWAIvExsKsnOZl3yx4RzX3JGbPTixACJvj29BFvIaQg?=
- =?us-ascii?Q?a5Re+IYFkxAMah224NdBGx7y+O0YECnRb7PfMcxnRFlG1GvbTaNM5Y/ck44E?=
- =?us-ascii?Q?YLygqOFkbamgz7vbDrqhNJbeRQm0Tvt8D8Vt5yy08N7hQI5is1ryLfhrqSu0?=
- =?us-ascii?Q?0OPseqhQXKG718RlHeidAmDWzaCG7Xp1mO04IIEdaz+ZnFvgmCLJmKnm+Zhd?=
- =?us-ascii?Q?l1zUEfIV7UkCPoGp6IxhnYBrpxhF9xFrJg5KNnJPnBR+Ry5M5kxZh3amvUd5?=
- =?us-ascii?Q?b5FJACy1SHAUUfxdEospp9qEsryso95oaOIuYCL6GkaZ45g6Eqj6/mxcI4zp?=
- =?us-ascii?Q?qa8xvGc6ui9zyrtMKQTUjsseh8H/65yleIAEoi7yK7Z1BavgvKIlJx+52v6K?=
- =?us-ascii?Q?/tR9hV5oHxgVWJEBVi6LwQSgGGPt0CyM7a79X7PxLod4dkpmASY4/uqIGHvU?=
- =?us-ascii?Q?esUV6DBgbL/YKZs6yzomShiW15JpFOwLpV9K+qCzEJeYmS8+1M2blG8UqPTL?=
- =?us-ascii?Q?wWaSaM0/UcTDuZvJ6fw31oAJCCCGIWFnJgsz4HLGf9eEioWmR1lMhhrQb/ll?=
- =?us-ascii?Q?SYk0abBuZAdL1RZzYUBqimGvV4zzamCkH/US4/5W+BpLbWdQ2P+XOSuujS+5?=
- =?us-ascii?Q?GKBCavU6RrqCKWFBMN38pg9ef1BVTZOzDorjtePA8tob6/MO21JXbf58zdZa?=
- =?us-ascii?Q?sBf4nIIXHgNQWHXiLSlVVzkjY02Qh4THujBoMiixOb7c4TsAzpEN2y7h2dkp?=
- =?us-ascii?Q?0fofpOZSNCWTWf6LlEjdPbHNO5JEQk4PRQV5zL93kdfVNwTb5EvowcUitAvT?=
- =?us-ascii?Q?3MOUXKdf3zAEQADZeueE2sWnNI9UIHWBlMRZxcJTWHUsH/LN/LdTVmgUW4jc?=
- =?us-ascii?Q?u0fdNQ2FuglecjjKO34IJKiMXd3fisYP9V8a40FjV5KnDis2/91GHDaMh6/9?=
- =?us-ascii?Q?zcai6z+Cy0Zg/Z9F6zEyMy91vjp8ZEcfyWCQYgnjnckUd3dQ+I8F6YcYNnk2?=
- =?us-ascii?Q?fff0AvjrLFO0X9LOEUWUR67PFSwKr3G1FrYzhdp2cNkeClX2W8QUpQuwGPJu?=
- =?us-ascii?Q?+eUDib+ImZ8iiXLn0DsYTcRHcHM0UGhtqCWkqsaXgmvBaRSZYzIOL7p6jgeh?=
- =?us-ascii?Q?aF8D2qYNGaqlvPTfxwm18ANwfsckbfyVuxWYsWjsUv6sMfV1QR2ZeXHbn7oM?=
- =?us-ascii?Q?q/nmd57+HXTyDivMxmHHQMjVr7c4sPO1IBorU8Z5aEB2LLkndcB+8Mi0zF13?=
- =?us-ascii?Q?7rriwunscJd/D0kF3f+SS2l0hxETd4SvekxFy+5VQjnY8976vyvf67vaqIk3?=
- =?us-ascii?Q?2HVDlbOjWXKhNlMKyFHIC4REUmr3?=
+ ARA:13230040|376014|1800799024|366016|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?oTmP2tuVo3AnVxmF6PVpwE9xBiK9fIiWsIB45D212TG2mQslIvi6dgqtIh9Z?=
+ =?us-ascii?Q?VXGgh+7jOs30sAVzl1/z0zQ90nfJY5zwctMmmNScjCRRpQQHwR2u+pjhHbi/?=
+ =?us-ascii?Q?qnCpbV8lUcA/LjOk45D586l/emvMl6vk2zsKj9ct6eUHwMdowXRaITBTryWq?=
+ =?us-ascii?Q?B5prrmG3AzGhmdIjA+XtpPcSMjY+9ui+w2oJA9mDkFtlhSS16ISuVC6z3aXc?=
+ =?us-ascii?Q?5R4gPR76w+28eRxlMs0d3GyT9rLil9OZ8Os8rEEILmXdzEnYXEyAXjIcdXBT?=
+ =?us-ascii?Q?a+gW4BhG1dvJdkOSxo/IoaxvEHUDMm47mcuHf1pOrEMcp2CJd9lwWlUTzMBS?=
+ =?us-ascii?Q?7YOIXa8mMG/CB+I4dCPA2JwbM+9bzg5aJl9AGg8b4pEq26/zfuhnPak44EBI?=
+ =?us-ascii?Q?tWoo3W8B6o2YBnc5ptQ3+E4zN201ek95C+igKp1TIRC3lxQANMbboww5m9hg?=
+ =?us-ascii?Q?PewAx4avKxXTYPMqIUQpfrpFBJC6dzbohAojebHsAks46xMim4hG070OBtGV?=
+ =?us-ascii?Q?6A0a56UK79jAT+yeWMDLfYUvGq2poW5wabSAhOE2zAtBQP+1xNt+RxiSHWUZ?=
+ =?us-ascii?Q?aiNaA4v6943bHIHwwGICJOG+QxsdoFBNUiIpYEMvQ2aO1FL5yG3mdGWmYvo/?=
+ =?us-ascii?Q?zjFrm+BQrtHIIvFPP0SFV+2voFzDHM8xPCAL/MkautyNNdiSm/nMK6fBsJIa?=
+ =?us-ascii?Q?x7LctwAPNCnHECuTBfXIxvwn+eJJJDm3DWySJRjK3KVsxlYUmvUXMkUbZtZE?=
+ =?us-ascii?Q?HUsYAKtSdCr7C+zZtu7jlN4WUJwDsIVE6bnBMffKhsUZWnvCVyNw7vmYk+vS?=
+ =?us-ascii?Q?74Ahtf9QwD8jvbHiNT+tgYx7JvUHfRypGNLSjT9VEEik0bXyoNC7pszKftI+?=
+ =?us-ascii?Q?DghZnA9SugV1FamqsSjtTfFMQgZSQmrrq2W0UxguETqbUqZ9TpfU0xOoOW4e?=
+ =?us-ascii?Q?VF067JTRzifTkGFF3DgFnmK+IABPkH73DkcyPg023I+jDRkKgNVFf1QWiVd+?=
+ =?us-ascii?Q?eHrNJ55cJTkfONzxl1WqeuX+7YZN0Ao7BCk1IelZa0fimgHEzi3P+UZGNVPg?=
+ =?us-ascii?Q?1MfHbqJ/OiJJ+4zEdRlQPTc5SPAu3UyOzhKOKXzIDp4Q5bICUj/xM7hM5hNN?=
+ =?us-ascii?Q?w4n5gtGWLW1HrV+vfMPmo9PHSZhX42Izn0tXnPWUwBmtau6Mf+qZYhYGmd3D?=
+ =?us-ascii?Q?gIZAxbKLn2HcWMq8TIBEwytBA2/t49O2ii2N5gNkVT3APZTCvv1EtfopjLga?=
+ =?us-ascii?Q?PAIqA88MWXAvv+yFKDHHAOcz96tVnGq3MHfX+qlHFckz0KdaO4GlbWWmnzXA?=
+ =?us-ascii?Q?3HSs4GYgeUZEw/gEDU8I/4Aw8wgTaWmjghros169Mhulcg0gngkrm0eizV6P?=
+ =?us-ascii?Q?MMdlEREOmnOR1NCIzrgja0jtFVcktDuXkl6e1+hrwFvVDt1bFuxjU7YOP+g0?=
+ =?us-ascii?Q?KqxdE+tqd1s=3D?=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(376014)(1800799024)(38070700018)(41080700001); DIR:OUT;
+ SFS:(13230040)(376014)(1800799024)(366016)(38070700018)(41080700001); DIR:OUT;
  SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?UhphTeFPqSfBvX/OQiMRGYcvl+GKKKzQZ27vIifDPlBnUpi759OQUja+PUtA?=
- =?us-ascii?Q?mlCZ9MC5eZqN1d1YsNDhiiT+tc/Wc3LgCojuSokzqy0md4yGNBMurKhUBct+?=
- =?us-ascii?Q?z+bn3o/jrgQxLJTi2UPq8P/UEYCHj2Z/qYwe6902p0c74pJH9Ay9HxxtIM7m?=
- =?us-ascii?Q?SPtzvHtBnEaZfqQnj5k8WxG++pBAEprgvXQ0eLJz9DnX9vPb/mkQ9nM+XsG6?=
- =?us-ascii?Q?I16CAcV2wK0S/r2SOluxDSFV2thpPMEz7KojWyTBytIpjtYEL4QCiFlH6RB6?=
- =?us-ascii?Q?WB6r34/OzvvjE3q73ipOtnLJPNRqYS9MVOpepudnecMTQcQOeT+kQHCdI4zM?=
- =?us-ascii?Q?l4URNhZAM6pElmSHaYEBekhyxgXK6jFpZGj4TWVS6/yLWq65LhLuKkun9cGw?=
- =?us-ascii?Q?Q9NzEOfEb+91u35Q6yBs11oDGrTPqLiuXYFE131os5+A6c+PM4fpvTYS328C?=
- =?us-ascii?Q?6igylPIE8M9LCyYHBV1c3P55Xg1zxwLCaZZYpaSzfmJtCjYJyOXFz5AvEff6?=
- =?us-ascii?Q?4/nWMB/CbW1CHdrVUGxEckWEftZ0FOAFgn6IFULptRa5CKb/XD9TFfwAVvQN?=
- =?us-ascii?Q?J5bw6WA6SCjMTng5L8PUuFkP+Yonqn43QQQUObOcx0L4sgwW9vixGiVFUN2G?=
- =?us-ascii?Q?pXsCQTT41r5lvma3olOr84bRA/uE2RghxCUczrxOSygGR/AFYiHC8p05k/py?=
- =?us-ascii?Q?fhWCPk4DJZJS3YVkcn4ui3YtftKth0vlI7TztY7jmcZG3PA9uWBiIetKmGxj?=
- =?us-ascii?Q?W4WwdavspS+uyXl42QJqnEw3NpC5N8eKi6SZLPeoeMzzd4ohLvP5WAngv0TD?=
- =?us-ascii?Q?RfIEfDV3n0kWBSiYqbML3LdZ0LiWPdz6SuLB2LoApjKlSHvybPQywutFiLr7?=
- =?us-ascii?Q?nih99eh/totJnoDluLgn6l3a/CaeopwyGn4uK+/t3DgUjmGtI2+feOytfVGt?=
- =?us-ascii?Q?Bz6F3NotPz8Ctmlaj/lLLpINNCSAlEF6aJ7i84e+v0LL4PuBXfPFZoVW/iVd?=
- =?us-ascii?Q?ZEns8l39ct7D8rRYP5az6zAaTDOyKC7Hp9Wj9tvhluixQF51Hyae0v3NJK89?=
- =?us-ascii?Q?RK9wrDd01whQ9Gxw76/X2e/0FK4Go1W2vjtP6qtR8rjADZU+P1HisKhpEQoG?=
- =?us-ascii?Q?CISMfk6IIq00EYYdwTnsSRjytu8RJXbiLIeL0o6fvpdwiPWdbW/E/CekVm78?=
- =?us-ascii?Q?A9oQGKd/dR1JXaVYLSZ0kR5g+5LgCgBhTSkeEnakC9zcFopf6TDWM6x9ksJY?=
- =?us-ascii?Q?ar93bvdUE1faIF0dhMOtoaH+UB2fRXu4nB5S9w04C8vZNSKABI0Y2VP7r6wx?=
- =?us-ascii?Q?AyWlltBOMtqi6lXax9MdWR3PrrhTOHIpntkUkgvx3BgZcao3ZShSBOEB4PVx?=
- =?us-ascii?Q?zekTE4DsMtnNzKRckt0xEkXHnxHd/qrfCZehyOq+6acilu7lBv05udupV95P?=
- =?us-ascii?Q?vJMXiYKOoAbd9gRaiLgFQlpXgOHfcFURATCKlwYNe3sNk7DjmTIoJOd0hpHM?=
- =?us-ascii?Q?8L+QNLth7mR27cGmug688xvClAr582hUkdM5iW5jfwUePWFuFex22/qFu87w?=
- =?us-ascii?Q?hTFqa6RTlPa+UNhQ3Cw=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gemGj4E5mexSGxXWK+z9Q2Eh2sCd9YnNJiI5T7ww4S20YZhU1LQKx8+aMUcW?=
+ =?us-ascii?Q?oRzGP485NPzor6q17VuuM5mMt4zbrPBJA5qMNiQO/Kkcr5KKXuAaTVjG93x9?=
+ =?us-ascii?Q?fl94xcDm9/6ucYb5NH5VbKIPqmYCzJkvjbtg7Q0VeVFmrKFaHTHlyBSXeQIA?=
+ =?us-ascii?Q?sUf2/kpcilonGyQBwm9aTuhk+C+pasnQqMGDItce2cYGDo0qrIqi6Ke9ui++?=
+ =?us-ascii?Q?bYUjEOMKLOvvIxMBoaRvqWLF0Mey5em1CtheGHlprq60JkT6Z49JnIhKGrUq?=
+ =?us-ascii?Q?bYolXMO1XFWqAHzB/RDrzv+CcH95K8UQX5i9vUQCLV6LqIJqrFwI+L6C9lw8?=
+ =?us-ascii?Q?MNMLsFmgvTdoLCXqgl8itZfEjvnsbrxNKfuSPl5Y8PACN9Pk89/OiknjKBMI?=
+ =?us-ascii?Q?a6Pp8/dkcq9k8ORqzT0tnTsaCNvo3L2MAYCeEPw7DUlny+y9HusYBFldqh/J?=
+ =?us-ascii?Q?vL32OQ0a+rQ8tYyJuqT5c8wBYop90oPrMfzoG952vMasVy03ZTAU3qCf9RQ0?=
+ =?us-ascii?Q?hIkfPJ0NT9Am17BYzwt1wu0n79AJEfThsVpyoSSkXg2PdgCGhoTRkPx/5/S1?=
+ =?us-ascii?Q?TKzfWefufZBiynRIdn9pPalMCID2ErEhifACxH5qVlYdTGsZPfqZ1EFcthrL?=
+ =?us-ascii?Q?TBChSdr+TqYFwmXila6EAfLVfUuTlrvxwHoIjPyJJWunyuHJ/4XwBDhtBeiN?=
+ =?us-ascii?Q?TgoAxH4lpSmPhNB7NYUyRVntGmYLcqIQDurCYo5g/6rEtqiyTKwd/VZvTRdw?=
+ =?us-ascii?Q?zY2regqRyYOT7GkpCfB9dE6AknFrlZV0iKDWA9ljOqpItoN3VuZjeZbKcMqN?=
+ =?us-ascii?Q?VwOxnX/htJhpP0fI7UtubeugMDWBervgF5xqyyxLynKRnTLzgWgB8rplacL3?=
+ =?us-ascii?Q?pb2zshkgA9WD68v7NK3ww3SdWFeps2zG/TIMS+wPoPrt/+c3b1pUFJMqYWJj?=
+ =?us-ascii?Q?y7VR8dySZ74n5/RuN3s4YFA9BkJQanMb6H5q18YnUGqlWlRlgnhWws62EY2b?=
+ =?us-ascii?Q?Xl8D6e0uX7ipLeDgn2cehq/vyj7vbrXMwqWTzBncUCkUhj9nFilS0jaHR0Zk?=
+ =?us-ascii?Q?9V5qNbefe6N6eziGr1y0svLADNwHmvhCNQa2nds+ePw8ZJUfiMglSeeV6/zo?=
+ =?us-ascii?Q?zRwJLfUKDJ49Zivcee2NaKr10LpZ2ve/4kS2gyWWuYOXECQCsP4zUbDHtTVu?=
+ =?us-ascii?Q?5/suzG+QHaW29YKJRMH0BZIRuSmCehvMc7M3c7dRD04ACoG5G6XDJWhKbkAw?=
+ =?us-ascii?Q?4CrnCTLt9v8Cj9M5e5N2vZBBKMazVQPx0w6lQSR1NcY7eAftThdoXS9eDzQS?=
+ =?us-ascii?Q?jtep8JgJOfdjf0kgi09SNm+SDTJD/OKTB4Ydo5ulVzi3wCF+jK+ww6Qz2kLg?=
+ =?us-ascii?Q?prImNS8m0WKVMh1FCrT5R6ZRuzOxpbfygdB/us4M/dfeFEJJYI4OHbINr0mf?=
+ =?us-ascii?Q?QohuEoQlw4NiJbRsrQ7R5nVhApKbXZZoSAObs2Q458ZSn8CyL+ah0Utbckr2?=
+ =?us-ascii?Q?MM+nTM0kmjDqzEcEEiu8dB3stF3VUVb2WOeiBisEi0ejepw4VAYHsyDpZIgk?=
+ =?us-ascii?Q?gGeAAgYyujXFDc9jawE=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cedbcea-1da9-4cdd-9113-08dc976f880f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2024 12:40:45.9079 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3096907d-1086-46c7-c0ac-08dc9770d53c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2024 12:50:04.9025 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: n5/KusBuF+IH1fO1aEs1Ih6LhM47piyyKSLhOpe6OcIMmVGuR3T9MNrz99598X61
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6183
+X-MS-Exchange-CrossTenant-userprincipalname: qynuJE8JPQ5mpRyArr1cRycFp1F79kISAA70kFYteJQUDCvgBQqh6SZn3pJBrDre
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8289
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5b+bUtFrXkj66SHNdkSkn85sJVXILxDjZl1m438rCJM=;
- b=Njl+eoiVrz01quWO16yunOsNDtNn9Mv+ntXPmunxdSoZa3jBFSRc9uf2FBJxYQ838RP7+faiiSas5CYizBikGknzahalYi+onuyrizuBTRJ44I7XOJuPp92pTk7MzQL1cw7w0VVWjSf116BTjgugSyFz8tw4SYsOCekTGgKTI5k=
+ bh=NWJwZqI2Z65xFQbkrhyy0qD1ivbFvYCf93HBhfgfyXI=;
+ b=ot5b+A/RZzbZDn3J82ljhNe5O5P0ldDQEQTCeED6nQn4+z4k8ak8YasT6Clv2+VS/vXWJYHUnKj5wwDrD+j2fzb6gaszz85uUfRQz4ljQ/qOwx8oERMVbGDZt23qPwUpJ2CweLAH/qX4/m7eKVdM5K6I74yODaelU61sda3reUU=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=Njl+eoiV
+ header.s=selector1 header.b=ot5b+A/R
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v3 1/4] boot/xilinx-source: new boot package
+Subject: Re: [Buildroot] [PATCH v3 2/4] boot/xilinx-prebuilt: wire up
+ xilinx-source
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -186,208 +189,123 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Luca,
 
-Thank you for your thorough review.
-
-> This patch adds a new boot package for building boot firmware for Xilinx
-> versal, zynqmp and kria targets.
+> This patch wires up the xilinx-prebuilt with xilinx-source.
 > 
 > Signed-off-by: Neal Frager <neal.frager@amd.com>
 > ---
-> V1->V2:
-> - add make dependency to be sure bare-metal toolchain is built before trying
->   to use the toolchain for building the xilinx-source firmware
-> V2->V3:
-> - fix copy paste error that causes build failure
+> V1->V3:
+> - no changes
 > ---
->  DEVELOPERS                            |  1 +
->  boot/Config.in                        |  1 +
->  boot/xilinx-source/Config.in          | 45 +++++++++++++++++
->  boot/xilinx-source/xilinx-source.hash |  2 +
->  boot/xilinx-source/xilinx-source.mk   | 70 +++++++++++++++++++++++++++
->  5 files changed, 119 insertions(+)
->  create mode 100644 boot/xilinx-source/Config.in
->  create mode 100644 boot/xilinx-source/xilinx-source.hash
->  create mode 100644 boot/xilinx-source/xilinx-source.mk
+>  boot/xilinx-prebuilt/Config.in          |  3 +++
+>  boot/xilinx-prebuilt/xilinx-prebuilt.mk | 13 ++++++++++++-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 8bfd36f1d8..adfd9520ea 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2340,6 +2340,7 @@ F:	board/xilinx/
->  F:	board/zynq/
->  F:	board/zynqmp/
->  F:	boot/xilinx-prebuilt/
-> +F:	boot/xilinx-source/
->  F:	configs/versal_vck190_defconfig
->  F:	configs/zynq_zc702_defconfig
->  F:	configs/zynq_zc706_defconfig
-> diff --git a/boot/Config.in b/boot/Config.in
-> index 25a50265d2..da22f15e8a 100644
-> --- a/boot/Config.in
-> +++ b/boot/Config.in
-> @@ -22,5 +22,6 @@ source "boot/ti-k3-r5-loader/Config.in"
->  source "boot/uboot/Config.in"
->  source "boot/vexpress-firmware/Config.in"
->  source "boot/xilinx-prebuilt/Config.in"
-> +source "boot/xilinx-source/Config.in"
+> diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
+> index d3df1c06e7..34b89337fa 100644
+> --- a/boot/xilinx-prebuilt/Config.in
+> +++ b/boot/xilinx-prebuilt/Config.in
+> @@ -22,12 +22,15 @@ choice
 >  
->  endmenu
-> diff --git a/boot/xilinx-source/Config.in b/boot/xilinx-source/Config.in
-> new file mode 100644
-> index 0000000000..bf87ff4178
-> --- /dev/null
-> +++ b/boot/xilinx-source/Config.in
-> @@ -0,0 +1,45 @@
-> +config BR2_TARGET_XILINX_SOURCE
-> +	bool "xilinx-source"
-> +	depends on BR2_aarch64
-> +	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH = "microblazeel-xilinx-elf"
-> +	help
-> +	  Build boot firmware from source for Xilinx boards.
-> +
-> +	  https://github.com/Xilinx/embeddedsw
+>  config BR2_TARGET_XILINX_PREBUILT_ZYNQMP
+>  	bool "zynqmp"
+> +	depends on !BR2_TARGET_XILINX_SOURCE
+>  
+>  config BR2_TARGET_XILINX_PREBUILT_KRIA
+>  	bool "kria"
+> +	depends on !BR2_TARGET_XILINX_SOURCE
+>  
+>  config BR2_TARGET_XILINX_PREBUILT_VERSAL
+>  	bool "versal"
+> +	depends on BR2_PACKAGE_HOST_BOOTGEN
 
-> It would be useful to add here a few words about what gets built and why
-> versal requires BR2_TARGET_XILINX_PREBUILT while zynqmp and kria require
-> !BR2_TARGET_XILINX_PREBUILT.
+> Is this bootgen line unrelated to this series? It appears as something
+> that was needed before and it is being fixed now. If it is the case,
+> then it should be a separate patch.
 
-Yes, no problem.  I see your point.
+Yes, you are right about bootgen.  I have just submitted a patch for this
+in order to separate it from everything else.
 
-> +comment "xilinx-source needs a bare metal toolchain for tuple microblazeel-xilinx-elf"
-> +	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-xilinx-elf"
-> +
-> +if BR2_TARGET_XILINX_SOURCE
-> +
-> +config BR2_TARGET_XILINX_SOURCE_VERSION
-> +	string "source version"
-> +	default "xilinx_v2024.1"
-> +	help
-> +	  Release version of Xilinx firmware.
-> +	  Must be xilinx_v2023.1 or newer.
-> +
-> +choice
-> +	bool "family variant"
-> +	default BR2_TARGET_XILINX_SOURCE_ZYNQMP
-> +
-> +config BR2_TARGET_XILINX_SOURCE_ZYNQMP
-> +	bool "zynqmp"
-> +	depends on !BR2_TARGET_XILINX_PREBUILT
-> +
-> +config BR2_TARGET_XILINX_SOURCE_KRIA
-> +	bool "kria"
-> +	depends on !BR2_TARGET_XILINX_PREBUILT
-> +
-> +config BR2_TARGET_XILINX_SOURCE_VERSAL
-> +	bool "versal"
-> +	depends on BR2_TARGET_XILINX_PREBUILT
-> +
-> +endchoice
-> +
-> +config BR2_TARGET_XILINX_SOURCE_USER_CFLAGS
-> +	string "optional user cflags"
-> +	help
-> +	  Add optional config flags when building xilinx boot firmware.
-> +
-> +endif # BR2_TARGET_XILINX_SOURCE
-> diff --git a/boot/xilinx-source/xilinx-source.hash b/boot/xilinx-source/xilinx-source.hash
-> new file mode 100644
-> index 0000000000..ed6a165574
-> --- /dev/null
-> +++ b/boot/xilinx-source/xilinx-source.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256  733fdb09b2525c1fa322242b97f015122aaf9e32530a824dec71d6328be83850  xilinx-source-xilinx_v2024.1.tar.gz
-> diff --git a/boot/xilinx-source/xilinx-source.mk b/boot/xilinx-source/xilinx-source.mk
-> new file mode 100644
-> index 0000000000..4352b07eed
-> --- /dev/null
-> +++ b/boot/xilinx-source/xilinx-source.mk
-> @@ -0,0 +1,70 @@
-> +################################################################################
-> +#
-> +# xilinx-source
-> +#
-> +################################################################################
-> +
-> +XILINX_SOURCE_VERSION = $(call qstrip,$(BR2_TARGET_XILINX_SOURCE_VERSION))
-> +XILINX_SOURCE_SITE = $(call github,Xilinx,embeddedsw,$(XILINX_SOURCE_VERSION))
-> +XILINX_SOURCE_LICENSE = MIT
-> +XILINX_SOURCE_LICENSE_FILES = LICENSE
-> +XILINX_SOURCE_INSTALL_TARGET = NO
-> +XILINX_SOURCE_INSTALL_IMAGES = YES
-> +XILINX_SOURCE_DEPENDENCIES = toolchain-bare-metal-buildroot
-> +
-> +XILINX_SOURCE_USER_CFLAGS = $(call qstrip,$(BR2_TARGET_XILINX_SOURCE_USER_CFLAGS))
-> +ifeq ($(BR2_TARGET_XILINX_SOURCE_KRIA),y)
-> +XILINX_SOURCE_CFLAGS = "-Os -flto -ffat-lto-objects -DK26_SOM $(XILINX_SOURCE_USER_CFLAGS)"
-> +else
-> +XILINX_SOURCE_CFLAGS = "-Os -flto -ffat-lto-objects $(XILINX_SOURCE_USER_CFLAGS)"
-> +endif
+> Also, I don't like very much how the "family variant" will look like if
+> we apply this patch. Now if enabling both xilinx-prebuilt and
+> xilinx-source we will have one "family variant" choice for each. And if
+> host-bootgen is enabled, the one for xilinx-prebuilt has no selectable
+> options, which looks very weird.
+
+> I'm not sure what is the best thing to do here, but it seems wrong to
+> have two selectable variants where having different values does not
+> make sense. What about moving the "family variant" choice before the
+> two packages and use it for both?
+
+I agree.  Perhaps the cleanest solution is to create a versal-pdi
+package.  Then xilinx-source and xilinx-prebuilt would be mutually
+exclusive all the time, and if xilinx-source is for versal, it
+would depend on a versal-pdi package that downloads just the pdi
+file.
+
+While this adds a third package, I think it will probably make
+everything easier to understand, so I think it is worth it.
+
+> diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> index eb78ed10cd..4cb3e2a33e 100644
+> --- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> +++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> @@ -18,8 +18,17 @@ XILINX_PREBUILT_BOARD_DIR = $(@D)/$(XILINX_PREBUILT_BOARD)-$(XILINX_PREBUILT_FAM
+>  
+>  ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
+>  # We need the *.pdi glob, because the file has different names for the
+> -# different boards, but htere is only one, and it has to be named
+> +# different boards, but there is only one, and it has to be named
+>  # vpl_gen_fixed.pdi when installed.
 > +
 > +ifeq ($(BR2_TARGET_XILINX_SOURCE_VERSAL),y)
-> +define XILINX_SOURCE_BUILD_VERSAL
-> +	$(MAKE) -C $(@D)/lib/sw_apps/versal_plm/src/versal \
-> +		COMPILER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
-> +		ARCHIVER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc-ar \
-> +		CC=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
-> +		CFLAGS=$(XILINX_SOURCE_CFLAGS)
-> +		
-> +	$(MAKE) -C $(@D)/lib/sw_apps/versal_psmfw/src/versal \
-> +		COMPILER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
-> +		ARCHIVER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc-ar \
-> +		CC=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
-> +		CFLAGS=$(XILINX_SOURCE_CFLAGS)
+> +# The plm.elf and psmfw.elf images will come from xilinx-source, so only
+> +# the *.pdi needs to be installed.
+> +define XILINX_PREBUILT_INSTALL_VERSAL
+> +	$(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/*.pdi \
+> +		$(BINARIES_DIR)/vpl_gen_fixed.pdi
+
+> These two lines are a duplicate of...
+
 > +endef
 > +else # BR2_TARGET_XILINX_SOURCE_VERSAL
-> +define XILINX_SOURCE_BUILD_OTHERS
-> +	$(MAKE) -C $(@D)/lib/sw_apps/zynqmp_pmufw/src \
-> +		COMPILER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
-> +		ARCHIVER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc-ar \
-> +		CC=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
-> +		CFLAGS=$(XILINX_SOURCE_CFLAGS)
-> +endef
-> +endif # BR2_TARGET_XILINX_SOURCE_VERSAL
-> +
-> +define XILINX_SOURCE_BUILD_CMDS
-> +	$(XILINX_SOURCE_BUILD_VERSAL)
-> +	$(XILINX_SOURCE_BUILD_OTHERS)
+>  define XILINX_PREBUILT_INSTALL_VERSAL
+>  	$(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/plm.elf \
+>  		$(BINARIES_DIR)/plm.elf
+> @@ -28,6 +37,8 @@ define XILINX_PREBUILT_INSTALL_VERSAL
+>  	$(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/*.pdi \
+>  		$(BINARIES_DIR)/vpl_gen_fixed.pdi
 
-> We are always building either for versal or for "others", so only one
-> of these two variables is ever defined. So you could use only one
-> variable name (XILINX_SOURCE_BUILD?), or even define directly
-> XILINX_SOURCE_BUILD_CMDS inside the ifeq/else/endif clause above.
+> ...these two lines. It's not a big deal, but I'd consider defining once
+> the lines for the pdi and conditionally the other two lines:
 
-Good simplification.  I took this solution from Yann's xilinx-prebuilt
-solution, so that they would look the same.  If we reduce to a single
-XILINX_SOURCE_BUILD define, I would like to also reduce to a single
-XILINX_PREBUILT_INSTALL define.
+> # if BR2_TARGET_XILINX_SOURCE_VERSAL=y the plm.elf and psmfw.elf images
+> # will come from xilinx-source, so only the *.pdi needs to be installed.
+> ifeq ($(BR2_TARGET_XILINX_SOURCE_VERSAL),)
+> define XILINX_PREBUILT_INSTALL_VERSAL_PLM_PSMFW
+>        $(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/plm.elf \
+>                $(BINARIES_DIR)/plm.elf
+>        $(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf \
+>                $(BINARIES_DIR)/psmfw.elf
+> endef
+> endif # !BR2_TARGET_XILINX_SOURCE_VERSAL
 
-I will submit a patch for changing the xilinx-prebuilt package
-accordingly.
+> define XILINX_PREBUILT_INSTALL_VERSAL_PDI
+>        $(INSTALL) -D -m 0755 $(XILINX_PREBUILT_BOARD_DIR)/*.pdi \
+>                $(BINARIES_DIR)/vpl_gen_fixed.pdi
+> #endef
 
-> +endef
-> +
-> +ifeq ($(BR2_TARGET_XILINX_SOURCE_VERSAL),y)
-> +define XILINX_SOURCE_INSTALL_VERSAL
-> +	$(INSTALL) -D -m 0755 $(@D)/lib/sw_apps/versal_plm/src/versal/plm.elf \
-> +		$(BINARIES_DIR)/plm.elf
-> +	$(INSTALL) -D -m 0755 $(@D)/lib/sw_apps/versal_psmfw/src/versal/psmfw.elf \
-> +		$(BINARIES_DIR)/psmfw.elf
-> +endef
-> +else # BR2_TARGET_XILINX_SOURCE_VERSAL
-> +define XILINX_SOURCE_INSTALL_OTHERS
-> +	$(INSTALL) -D -m 0755 $(@D)/lib/sw_apps/zynqmp_pmufw/src/executable.elf \
-> +		$(BINARIES_DIR)/pmufw.elf
-> +endef
-> +endif # BR2_TARGET_XILINX_SOURCE_VERSAL
-> +
-> +define XILINX_SOURCE_INSTALL_IMAGES_CMDS
-> +	$(XILINX_SOURCE_INSTALL_VERSAL)
-> +	$(XILINX_SOURCE_INSTALL_OTHERS)
+> ...
 
-> As above.
+> define XILINX_PREBUILT_INSTALL_IMAGES_CMDS
+>        $(XILINX_PREBUILT_INSTALL_VERSAL_PLM_PSMFW)
+>        $(XILINX_PREBUILT_INSTALL_VERSAL_PDI)
+>        $(XILINX_PREBUILT_INSTALL_OTHERS)
+> endef
 
-Agreed.
+> Luca
+
+This problem goes away if we separate the pdi install to a versal-pdi
+package.
 
 Best regards,
 Neal Frager
