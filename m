@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26890C3065C
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 20:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00152C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 20:24:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8F71610E1;
-	Fri, 28 Jun 2024 20:24:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B7C7A60628;
+	Fri, 28 Jun 2024 20:24:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CRHhTivAy0kZ; Fri, 28 Jun 2024 20:24:01 +0000 (UTC)
+ id qkUPjtDd_lfc; Fri, 28 Jun 2024 20:24:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A7EE610ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4A3260699
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A7EE610ED;
-	Fri, 28 Jun 2024 20:24:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3EC301BF3BA
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 20:23:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4A3260699;
+	Fri, 28 Jun 2024 20:24:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AEE5E1BF3BA
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 20:24:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA9F740585
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 20:23:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98F3B40EBE
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 20:24:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 74UYZWjAhHwB for <buildroot@lists.busybox.net>;
- Fri, 28 Jun 2024 20:23:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pkC32QzsuDhR for <buildroot@lists.busybox.net>;
+ Fri, 28 Jun 2024 20:24:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7009841ACA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7009841ACA
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 20:23:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B3BE835DD; Fri, 28 Jun 2024 20:23:52 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 28 Jun 2024 22:21:59 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 20973140c14d528d91ecea12ebac6428d78d3340
-X-Git-Newrev: 4928032d6c58ff64b0aa4af1874aed7c3aa43842
-X-Patchwork-Hint: ignore
-Message-Id: <20240628202352.5B3BE835DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rrdtool: fix patch fuzz
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E922C40D8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E922C40D8F
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E922C40D8F
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 20:24:28 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id A263213F88F;
+ Fri, 28 Jun 2024 22:24:19 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 28 Jun 2024 22:24:19 +0200
+Date: Fri, 28 Jun 2024 22:24:19 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <Zn8b8wJPOTPyJGSe@landeda>
+References: <20240628085359.1660363-1-f.fainelli@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240628085359.1660363-1-f.fainelli@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1719606264;
+ bh=JJgBDBY7WM3xcSgvVDMu7TfdZHGIA7SUXBaNoLOyQXU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=brt3lOEAOs/1XPP0bIP/FjX3drU1ri6tR20L2wfph72bGMx2tjLaBEA3nyCTcYDY/
+ v6Yll1OOdP4dpvX7XkBZURQ26oOanmek1Ue9YdyCFkUPUjcjtRGUUwLbdGYBka4o89
+ OfWWdlJhROSLx2G+ozyviUAvJQ6jM3surIaYQDwwPo2Ln1w9tTT7BYk3KICrzdmct8
+ ADTucgaGYcpT8B77AKziSECJOW7fVw3MD0ejcuqQhUj1MvDPAWt+ZnoBRuWflaZKGH
+ imS/aLbct/mLB3vILNqxqTg034IG/x8Z8iEyedFgw5PsVwPGcbNzg5e7ztgdupslC0
+ PFOuH3CBe99TA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=brt3lOEA
+Subject: Re: [Buildroot] [PATCH] package/cpulimit: Refresh patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,134 +81,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4928032d6c58ff64b0aa4af1874aed7c3aa43842
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Florian, All,
 
-Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0" reduced the fuzz factor.
+On 2024-06-28 01:53 -0700, Florian Fainelli spake thusly:
+> Make sure that
+> /0002-Remove-sys-sysctl.h-and-add-missing-libgen.h-include.patch applies
+> cleanly without any fuzz by refreshing it.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Due to this change, rrdtool fails to build with output:
+Applied to master, thanks.
 
-    patching file src/rrd_tool.c
-    Hunk #2 FAILED at 42.
-    Hunk #3 succeeded at 435 (offset -8 lines).
-    Hunk #4 succeeded at 518 (offset -8 lines).
-    Hunk #5 succeeded at 564 (offset -8 lines).
-    Hunk #6 succeeded at 879 (offset -8 lines).
-    1 out of 6 hunks FAILED -- saving rejects to file src/rrd_tool.c.rej
+Regards,
+Yann E. MORIN.
 
-Because this was caused by an upstream patch we do not change it but add
-another upstream patch to be applied before our current patch to avoid
-the problem.
+> ---
+>  ...Remove-sys-sysctl.h-and-add-missing-libgen.h-include.patch | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/cpulimit/0002-Remove-sys-sysctl.h-and-add-missing-libgen.h-include.patch b/package/cpulimit/0002-Remove-sys-sysctl.h-and-add-missing-libgen.h-include.patch
+> index fa32e3ede22f..c0a457cdfd28 100644
+> --- a/package/cpulimit/0002-Remove-sys-sysctl.h-and-add-missing-libgen.h-include.patch
+> +++ b/package/cpulimit/0002-Remove-sys-sysctl.h-and-add-missing-libgen.h-include.patch
+> @@ -35,8 +35,8 @@ index 06d73a6f3541..d4f6fab3385c 100644
+>   #include <signal.h>
+>  +#include <libgen.h>
+>   
+> - #include <assert.h>
+> - 
+> + #if defined(__APPLE__) || defined(__FREEBSD__)
+> + #include <libgen.h>
+>  -- 
+>  2.25.1
+>  
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Fixes:
-http://autobuild.buildroot.net/results/6996dbd764b0066da49dd009f1385196342c89dc/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
-Tested-by: Yann E. MORIN <yann.morin@orange.com>
-[yann.morin.1998@free.fr:
-  - add comment as suggested by yann.morin@orange.com
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...001-Fix-BUILD_DATE-in-rrdtool-help-output.patch | 57 ++++++++++++++++++++++
- ...patch => 0002-Constify-argv-fix-warnings.patch} |  0
- package/rrdtool/rrdtool.mk                         |  5 +-
- 3 files changed, 61 insertions(+), 1 deletion(-)
-
-diff --git a/package/rrdtool/0001-Fix-BUILD_DATE-in-rrdtool-help-output.patch b/package/rrdtool/0001-Fix-BUILD_DATE-in-rrdtool-help-output.patch
-new file mode 100644
-index 0000000000..9e5af9c148
---- /dev/null
-+++ b/package/rrdtool/0001-Fix-BUILD_DATE-in-rrdtool-help-output.patch
-@@ -0,0 +1,57 @@
-+From e59f703bbcc0af949ee365206426b6394c340c6f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Wolfgang=20St=C3=B6ggl?= <c72578@yahoo.de>
-+Date: Wed, 23 Mar 2022 17:58:45 +0100
-+Subject: [PATCH] Fix BUILD_DATE in rrdtool help output
-+
-+- This is a followup to #1102
-+- Fixes segfault when running "rrdtool --help"
-+- Change DATE_FMT to the same date format as the __DATE__ macro [1]:
-+  mmm dd yyyy
-+
-+[1] https://gcc.gnu.org/onlinedocs/cpp/Standard-Predefined-Macros.html
-+
-+Upstream: https://github.com/oetiker/rrdtool-1.x/commit/e59f703bbcc0af949ee365206426b6394c340c6f
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ configure.ac   | 2 +-
-+ src/rrd_tool.c | 8 ++++++++
-+ 2 files changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4d2345855..5169b0d49 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -695,7 +695,7 @@ AC_MSG_RESULT(${COMP_PERL:-No Perl Modules will be built})
-+ 
-+ # Use reproducible build date and time
-+ if test "$SOURCE_DATE_EPOCH"; then
-+-	DATE_FMT="%d %b %Y %H:%M:%S"
-++	DATE_FMT="%b %d %Y %H:%M:%S"
-+ 	BUILD_DATE=$(LC_ALL=C date -u -d "@$SOURCE_DATE_EPOCH" "+$DATE_FMT")
-+ 	AC_DEFINE_UNQUOTED([BUILD_DATE], ["$BUILD_DATE"], [Use reproducible build date])
-+ fi
-+diff --git a/src/rrd_tool.c b/src/rrd_tool.c
-+index 930d08272..cc6119d9a 100644
-+--- a/src/rrd_tool.c
-++++ b/src/rrd_tool.c
-+@@ -45,11 +45,19 @@ static void PrintUsage(
-+     char *cmd)
-+ {
-+ 
-++#ifdef BUILD_DATE
-++    const char *help_main =
-++        N_("RRDtool %s"
-++           "  Copyright by Tobias Oetiker <tobi@oetiker.ch>\n"
-++           "               Compiled %s\n\n"
-++           "Usage: rrdtool [options] command command_options\n");
-++#else
-+     const char *help_main =
-+         N_("RRDtool %s"
-+            "  Copyright by Tobias Oetiker <tobi@oetiker.ch>\n"
-+            "               Compiled %s %s\n\n"
-+            "Usage: rrdtool [options] command command_options\n");
-++#endif
-+ 
-+     const char *help_list =
-+         N_
-diff --git a/package/rrdtool/0001-Constify-argv-fix-warnings.patch b/package/rrdtool/0002-Constify-argv-fix-warnings.patch
-similarity index 100%
-rename from package/rrdtool/0001-Constify-argv-fix-warnings.patch
-rename to package/rrdtool/0002-Constify-argv-fix-warnings.patch
-diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
-index 24d84c79c3..f0cffd0162 100644
---- a/package/rrdtool/rrdtool.mk
-+++ b/package/rrdtool/rrdtool.mk
-@@ -9,10 +9,13 @@ RRDTOOL_SITE = https://github.com/oetiker/rrdtool-1.x/releases/download/v$(RRDTO
- RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
- RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
- RRDTOOL_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
--# autoreconf needed to avoid link failure due to missing -lintl,
-+
-+# 0001-Fix-BUILD_DATE-in-rrdtool-help-output.patch
-+# autoreconf also needed to avoid link failure due to missing -lintl,
- # autopoint needed as a consequence of autoreconf
- RRDTOOL_AUTORECONF = YES
- RRDTOOL_AUTOPOINT = YES
-+
- RRDTOOL_INSTALL_STAGING = YES
- RRDTOOL_CONF_OPTS = \
- 	--disable-examples \
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
