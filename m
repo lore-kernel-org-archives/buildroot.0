@@ -4,74 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4A3BC30658
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 14:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2D1C3064D
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 14:24:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D47841C32;
-	Fri, 28 Jun 2024 14:13:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EBF5A40119;
+	Fri, 28 Jun 2024 14:24:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t0M9dMX5vJCw; Fri, 28 Jun 2024 14:13:57 +0000 (UTC)
+ id Nr29447cKULA; Fri, 28 Jun 2024 14:24:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D89341C3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6D3340296
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D89341C3B;
-	Fri, 28 Jun 2024 14:13:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B45A81BF57B
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 14:13:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6D3340296;
+	Fri, 28 Jun 2024 14:24:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C67B1BF57B
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 14:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC3D780C05
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 14:13:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45F57415CD
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 14:24:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ph8vV6HXgixV for <buildroot@lists.busybox.net>;
- Fri, 28 Jun 2024 14:13:55 +0000 (UTC)
-X-Greylist: delayed 16877 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 28 Jun 2024 14:13:55 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8031A80BED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8031A80BED
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8031A80BED
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 14:13:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1BC851C0008;
- Fri, 28 Jun 2024 14:13:51 +0000 (UTC)
-Date: Fri, 28 Jun 2024 16:13:49 +0200
-To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20240628161349.4dd003a1@booty>
-In-Reply-To: <20240628122436.1630911-1-neal.frager@amd.com>
-References: <20240628122436.1630911-1-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KQWQwYmSnpMP for <buildroot@lists.busybox.net>;
+ Fri, 28 Jun 2024 14:24:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3AB76415CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AB76415CA
+Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3AB76415CA
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 14:24:35 +0000 (UTC)
+Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 23CB644046D;
+ Fri, 28 Jun 2024 17:23:56 +0300 (IDT)
+To: buildroot@buildroot.org
+Date: Fri, 28 Jun 2024 17:24:17 +0300
+Message-ID: <89efe20c38632a2416a2fb25dbe8c2605fcdf680.1719584657.git.baruch@tkos.co.il>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1719584032;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=iz80LUf5G8PXZO3lc+mNHrWW39wlN3g0v1Luv7rJH+I=;
- b=jbyY77YCJB3HOQUfzAFuSQ2Ykl52AwQhCzoIE2QRKlQteZAPf2jwvgK8lYFjlUHZShbaeB
- BXtKAfVSR1yjzWK1vpL0dOY8pV0JdU/ZKDTcHOIIBKNmRYr/3t8oB63VYag3sjdC+Q7j0b
- OHKGYms7d+ZVJ2HGSS7sdLxZUZAeD/3PEF3wTUxylGDmBlnz5dxTEBE7NaCoDfKxpyGi3Q
- 5sj4RppU03B/5tWOksD7d7mUyeLMay+v1NvxSSoL+jzw+g7RMd4LbF9mFxqHSW8mW4od6t
- JWosRf9ESFZ8LpotRsCB+LODT2RA15l0YH7aR5g/8WgBrC7Lp/EnBSV9bgmk+Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1719584636;
+ bh=K6cb+8x+b375Foz5hlYr6Xo+LscwF5CvI1xbYXJj+DQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=xifqyquUiaCRxhEzXsB6X0GJ/cngV6rr99lHJrKhoyFORDkxD9VWdAWNZFuqCvyPI
+ HukMKzEWRJWITvdHGiBZ5KiKnSd768zeuxxa8j3opU2Ba0vT4FeDfYvaLB0x6G8P7C
+ vCg+CLk33V4Y1gWCoDmTb6maIaM98aaw9ayfPxcSoLB/LhAi7HrPWO3SGyNBYEVIx4
+ wDAeR3gCNrMgI2NMc9iob8VAEVMr0vwLfzPKZUQduu4uSzNmNHk/HHXZGzsQKH74ex
+ BPsi8r/+zzge/0yyqC+fdP57Lw/2ka370gzGOPb3FniZeuBr4/cxI3+Xqw5QrLuR0D
+ VFvDYcDfZxdAw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=tkos.co.il
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jbyY77YC
-Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-prebuilt/Config.in:
- versal needs bootgen
+ unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=xifqyquU
+Subject: [Buildroot] [PATCH v2] package/libcurl: fix build with mbedtls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,65 +75,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: andy.a.kennedy@collins.com, ibai.erkiaga-elorza@amd.com,
- brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
- buildroot@buildroot.org, michal.simek@amd.com, yann.morin.1998@free.fr
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal,
+Add upstream patch to fix compatibility with mbedtls version 2.28.x.
 
-On Fri, 28 Jun 2024 13:24:36 +0100
-Neal Frager <neal.frager@amd.com> wrote:
+Fixes:
+http://autobuild.buildroot.net/results/66ba878386e4e478645edb6a282e82820b8dad7f
+http://autobuild.buildroot.net/results/7a4d9595197cf23080a23dfe9bc0e60b8145af6e
+http://autobuild.buildroot.net/results/9add7283813388daa95b16ef76acb3c4e9ea7c2f
 
-> When building for versal targets, bootgen is required for packaging the
-> boot.bin.  This patch adds the dependency.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
->  boot/xilinx-prebuilt/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-> index d3df1c06e7..a1c2075d7c 100644
-> --- a/boot/xilinx-prebuilt/Config.in
-> +++ b/boot/xilinx-prebuilt/Config.in
-> @@ -28,6 +28,7 @@ config BR2_TARGET_XILINX_PREBUILT_KRIA
->  
->  config BR2_TARGET_XILINX_PREBUILT_VERSAL
->  	bool "versal"
-> +	depends on BR2_PACKAGE_HOST_BOOTGEN
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: Correct authorship and sign-off email
+---
+ ...-mbedtls-check-version-for-cipher-id.patch | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
 
-Looking at this better, I'm not sure it's the right thing to do.
-
-xilinx-prebuilt can "build" perfectly without bootgen.
-
-This is similar to genimage, which is not needed to build any Buildroot
-package, but is used by several defconfigs to generate a bootable SD
-card image afterwards. Thus each of these defconfigs also sets
-BR2_PACKAGE_HOST_GENIMAGE=y.
-
-Sure bootgen differs in that (as far as I understand) the *typical*
-usage of xilinx-prebuilt requires host-bootgen in a post-build script.
-However in principle another tool could be used in its place.
-
-So as I said I'm not sure. Adding the 'depends on', possibly with a
-line of comment to clarify this, could still be seen as a convenience,
-but it would break existing defconfigs if the 'depends on' were removed
-later on to accommodate other use cases that do not involve bootgen.
-
-If there are no stronger opinions I'd vote to not add this.
-
-Luca
-
+diff --git a/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch b/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
+new file mode 100644
+index 000000000000..b7d674acfe33
+--- /dev/null
++++ b/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
+@@ -0,0 +1,56 @@
++From 0c4b4c1e93c8e869af230090f32346fdfd548f21 Mon Sep 17 00:00:00 2001
++From: Stefan Eissing <stefan@eissing.org>
++Date: Wed, 22 May 2024 14:44:56 +0200
++Subject: [PATCH] mbedtls: check version for cipher id
++
++mbedtls_ssl_get_ciphersuite_id_from_ssl() seems to have been added in
++mbedtls 3.2.0. Check for that version.
++
++Closes #13749
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Upstream: https://github.com/curl/curl/commit/0c4b4c1e93c8e869af230090f32346fdfd548f21
++---
++ lib/vtls/mbedtls.c | 19 ++++++++++++-------
++ 1 file changed, 12 insertions(+), 7 deletions(-)
++
++diff --git a/lib/vtls/mbedtls.c b/lib/vtls/mbedtls.c
++index ec0b10dd9a9f..98a4ea01b183 100644
++--- a/lib/vtls/mbedtls.c
+++++ b/lib/vtls/mbedtls.c
++@@ -902,8 +902,6 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
++     (struct mbed_ssl_backend_data *)connssl->backend;
++   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
++   const mbedtls_x509_crt *peercert;
++-  char cipher_str[64];
++-  uint16_t cipher_id;
++ #ifndef CURL_DISABLE_PROXY
++   const char * const pinnedpubkey = Curl_ssl_cf_is_proxy(cf)?
++     data->set.str[STRING_SSL_PINNEDPUBLICKEY_PROXY]:
++@@ -932,11 +930,18 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
++     return CURLE_SSL_CONNECT_ERROR;
++   }
++ 
++-  cipher_id = (uint16_t)
++-              mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
++-  mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
++-  infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
++-
+++#if MBEDTLS_VERSION_NUMBER >= 0x03020000
+++  {
+++    char cipher_str[64];
+++    uint16_t cipher_id;
+++    cipher_id = (uint16_t)
+++                mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
+++    mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
+++    infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
+++  }
+++#else
+++  infof(data, "mbedTLS: Handshake complete");
+++#endif
++   ret = mbedtls_ssl_get_verify_result(&backend->ssl);
++ 
++   if(!conn_config->verifyhost)
++-- 
++2.43.0
++
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
