@@ -1,88 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3941CC2BBCA
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 05:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55069C2BBCA
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 06:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 868DE41737;
-	Fri, 28 Jun 2024 05:50:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EEDB784457;
+	Fri, 28 Jun 2024 06:41:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3MyM-_cYfDeO; Fri, 28 Jun 2024 05:50:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 53G7fcCInQFw; Fri, 28 Jun 2024 06:41:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AD4341762
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 112BB84471
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AD4341762;
-	Fri, 28 Jun 2024 05:50:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E6BF1BF3AE
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 05:50:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 112BB84471;
+	Fri, 28 Jun 2024 06:41:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A34301BF315
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 06:41:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F02F060811
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 05:50:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C5194053F
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 06:41:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rlzzhbL02C0k for <buildroot@lists.busybox.net>;
- Fri, 28 Jun 2024 05:50:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.237;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pb_Bh9hYisto for <buildroot@lists.busybox.net>;
+ Fri, 28 Jun 2024 06:41:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
+ helo=mslow1.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E3FB860699
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3FB860699
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.237])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E3FB860699
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 05:50:15 +0000 (UTC)
-Received: from unknown (HELO opfedv1rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 28 Jun 2024 07:50:13 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0h.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2024 07:50:13 +0200
-Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 28 Jun 2024 07:50:11 +0200
-Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Fri, 28 Jun 2024 07:50:11 +0200
-From: yann.morin@orange.com
-X-IronPort-AV: E=Sophos;i="6.09,168,1716242400"; d="scan'208";a="160105189"
-Date: Fri, 28 Jun 2024 07:50:11 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D686140230
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D686140230
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D686140230
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 06:41:42 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 1AA80C4EAD
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 06:37:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B07A1C0003;
+ Fri, 28 Jun 2024 06:36:55 +0000 (UTC)
+Date: Fri, 28 Jun 2024 08:36:54 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <Zn5PE3lhpd3rYBKs@tl-lnx-nyma7486-2>
-References: <20240627220653.3626619-1-bernd@kuhls.net>
+Message-ID: <20240628083654.6377fe91@booty>
+In-Reply-To: <20240627212547.2194843-1-bernd@kuhls.net>
+References: <20240627212547.2194843-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240627220653.3626619-1-bernd@kuhls.net>
-X-Originating-IP: [10.115.26.53]
-X-ClientProxiedBy: OPE16NORMBX402.corporate.adroot.infra.ftgroup
- (10.115.26.15) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1719553817; x=1751089817;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=XFXjRRpaTfl1oXlIzZrwJ44kBLm9UcnjAjPgRsSMNJQ=;
- b=BJ+PphB03EfivymLy0ATK9czNR8Y19gw889kHY80Z9AnSowQp/dRVINk
- ORcDCAUeVAjWZd3QZlW/qFEE6FasXkcnHpg7kFQ2aM35g3Z2qps+lJsfy
- j3koOZy7TpwMhQegV37JX+nFBADBYP2G23m31TLo92fSKeAzjZqVwd6Rj
- 0OOEGqCQp1t9Vsv1GYkkR5JiktNqfW/P6rj/reVWwpY2ypy9YMpfdKGW3
- JoU3acvqZVFQixZhAd2emPJL0qlrMHYjvgHlF96T4ahGh7VgoSVOfyaLv
- GniKLmgKb7B/8noENRhsv7+UqGeERwwxHMGFk+iU6x/w1O7BDw6JWMxi2
- A==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=bootlin.com; s=gm1; t=1719556615;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=vaOVYB1XkpuJP5hxmWSiRprrgBtigqWL+lHJktlNFwc=;
+ b=Hs4MU3jFV8AkY5jjC7aRCosuryzS8C7iIwD5x8q6fWp03c8IXM9xsTSessJpH6DqNLgbww
+ LO12UER/SNLPXOqgL58qlvD2NrQ+tqwgjVTnmZ5UohD6q4bghQ/TxxbGNNvrH5Bpf3wQMv
+ jpjXq/BYRWq/Z8EM0i59nRWBaPqeW8xXinnBQKtIEQbjzpEww40YGp4IUoFeX6GKHX6i3s
+ wEmSaXqDPX7Bdp4M9P2UybRLcXU9UDNtUVVYylUupCqMPxwPeEG1P66OWbYlQoRhycA21B
+ wRzrJDnIJ5qFb9A/kmpBeB/pLLsxdSGi10VD7WcYvHSIIVOlqhnmsIev9C5Uzg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=BJ+PphB0
-Subject: Re: [Buildroot] [PATCH 1/1] package/rrdtool: fix patch fuzz
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Hs4MU3jF
+Subject: Re: [Buildroot] [PATCH 1/1] package/exim: update patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,67 +83,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+Hello Bernd,
 
-On 2024-06-28 00:06 +0200, Bernd Kuhls spake thusly:
+On Thu, 27 Jun 2024 23:25:47 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
+
 > Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
 > fuzz factor to 0" reduced the fuzz factor.
 > 
-> Due to this change, rrdtool fails to build with output:
+> Due to this change, exim fails to build with output:
 > 
->     patching file src/rrd_tool.c
->     Hunk #2 FAILED at 42.
->     Hunk #3 succeeded at 435 (offset -8 lines).
->     Hunk #4 succeeded at 518 (offset -8 lines).
->     Hunk #5 succeeded at 564 (offset -8 lines).
->     Hunk #6 succeeded at 879 (offset -8 lines).
->     1 out of 6 hunks FAILED -- saving rejects to file src/rrd_tool.c.rej
+>     Applying 0004-exim_lock-fix-lstat-related-build-errors.patch using patch:
+>     patching file src/exim_lock.c
+>     Hunk #1 FAILED at 13.
+>     Hunk #2 succeeded at 27 (offset 1 line).
+>     1 out of 2 hunks FAILED -- saving rejects to file src/exim_lock.c.rej
 > 
-> Because this was caused by an upstream patch we do not change it but add
-> another upstream patch to be applied before our current patch to avoid
-> the problem.
+> This commit rebases the package patches on the current package version
+> when needed.
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/6996dbd764b0066da49dd009f1385196342c89dc/
+> http://autobuild.buildroot.net/results/ff27d5ebd7f24ac8cb236b83c67c2c75255e51c6/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-To be noted: the new patch touches configure.ac, but that's OK as we
-already autoreconf. So, maybe it would be worth a comment in rrdtool.mk,
-in addition to the existing one?
-
-Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
-Tested-by: Yann E. MORIN <yann.morin@orange.com>
-
-Regards,
-Yann E. MORIN.
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
