@@ -1,76 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12A59C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 13:55:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4A3BC30658
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 14:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7FAB84503;
-	Fri, 28 Jun 2024 13:55:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D47841C32;
+	Fri, 28 Jun 2024 14:13:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WjyyTY5WSG17; Fri, 28 Jun 2024 13:55:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t0M9dMX5vJCw; Fri, 28 Jun 2024 14:13:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D45AC84505
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D89341C3B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D45AC84505;
-	Fri, 28 Jun 2024 13:55:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D89341C3B;
+	Fri, 28 Jun 2024 14:13:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9BE841BF2F9
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 13:55:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B45A81BF57B
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 14:13:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9448B84505
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 13:55:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC3D780C05
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 14:13:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LCiaJrU3VUn6 for <buildroot@lists.busybox.net>;
- Fri, 28 Jun 2024 13:55:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=kory.maincent@bootlin.com;
+ id Ph8vV6HXgixV for <buildroot@lists.busybox.net>;
+ Fri, 28 Jun 2024 14:13:55 +0000 (UTC)
+X-Greylist: delayed 16877 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 28 Jun 2024 14:13:55 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8031A80BED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8031A80BED
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 92D9984503
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92D9984503
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 92D9984503
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 13:55:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EB182240006;
- Fri, 28 Jun 2024 13:55:48 +0000 (UTC)
-Date: Fri, 28 Jun 2024 15:55:48 +0200
-To: Etienne CARRIERE - foss <etienne.carriere@foss.st.com>
-Message-ID: <20240628155548.78869c72@kmaincent-XPS-13-7390>
-In-Reply-To: <8ceaf29cebab41cbb6056da65d3c1c67@foss.st.com>
-References: <20240620143853.1259543-1-kory.maincent@bootlin.com>
- <8ceaf29cebab41cbb6056da65d3c1c67@foss.st.com>
-Organization: bootlin
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8031A80BED
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 14:13:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1BC851C0008;
+ Fri, 28 Jun 2024 14:13:51 +0000 (UTC)
+Date: Fri, 28 Jun 2024 16:13:49 +0200
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20240628161349.4dd003a1@booty>
+In-Reply-To: <20240628122436.1630911-1-neal.frager@amd.com>
+References: <20240628122436.1630911-1-neal.frager@amd.com>
+Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1719582949;
+ d=bootlin.com; s=gm1; t=1719584032;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=s4W8XJWSd+nrmIubYNNcW9Tm2UePSN0oel4R+KxEOjw=;
- b=Wi5B9UUCsixEnxfWkPw7jQ2S1bEy0bMqMaG7fx+nmN1JG8HjZbOBcGT+74OdgBLNzSVLjy
- tgEtRp8dhqBMKIPnlujx63+5ipOb45GTcn5bHzi7C2h8l6IE/LScwXoZ5haB2buFcoZi1B
- ZQcd5ePNGuUtk4hB9Jg7d0lJsAARriWhfwSkzTssJ33GgvkDqvLOKztqebrXRLzjeqIJvO
- BHC6QNpt5SMrh6ZSI7ynEY4foDsUOjjnwRpWNQYgu4/ISxWolqpMZV0pi4Qaq8KVgz2Rld
- BbYDTdiHhrNAaIj+ZY0OSMhgO+2mAWJHiCbTVe7r+dp/poQjabooJAXRjA29mQ==
+ bh=iz80LUf5G8PXZO3lc+mNHrWW39wlN3g0v1Luv7rJH+I=;
+ b=jbyY77YCJB3HOQUfzAFuSQ2Ykl52AwQhCzoIE2QRKlQteZAPf2jwvgK8lYFjlUHZShbaeB
+ BXtKAfVSR1yjzWK1vpL0dOY8pV0JdU/ZKDTcHOIIBKNmRYr/3t8oB63VYag3sjdC+Q7j0b
+ OHKGYms7d+ZVJ2HGSS7sdLxZUZAeD/3PEF3wTUxylGDmBlnz5dxTEBE7NaCoDfKxpyGi3Q
+ 5sj4RppU03B/5tWOksD7d7mUyeLMay+v1NvxSSoL+jzw+g7RMd4LbF9mFxqHSW8mW4od6t
+ JWosRf9ESFZ8LpotRsCB+LODT2RA15l0YH7aR5g/8WgBrC7Lp/EnBSV9bgmk+Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Wi5B9UUC
-Subject: Re: [Buildroot] [PATCH 0/3] Support custom tarball for OP-TEE
- related projects
+ header.s=gm1 header.b=jbyY77YC
+Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-prebuilt/Config.in:
+ versal needs bootgen
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,25 +83,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kory Maincent via buildroot <buildroot@buildroot.org>
-Reply-To: Kory Maincent <kory.maincent@bootlin.com>
-Cc: "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: andy.a.kennedy@collins.com, ibai.erkiaga-elorza@amd.com,
+ brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
+ buildroot@buildroot.org, michal.simek@amd.com, yann.morin.1998@free.fr
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRXRpZW5uZSwKCk9uIE1vbiwgMjQgSnVuIDIwMjQgMDc6MDA6MDIgKzAwMDAKRXRpZW5u
-ZSBDQVJSSUVSRSAtIGZvc3MgPGV0aWVubmUuY2FycmllcmVAZm9zcy5zdC5jb20+IHdyb3RlOgoK
-PiBIZWxsbyBLb3J5LAo+IAo+IE9uIE1vbiwgVGh1LCAyMCBKdW4gMjAyNCAxNjozODo1MyArMDIw
-MCwgS29yeSBNYWluY2VudCB3cm90ZToKPiAgWy4uLl0gIAo+IAo+IEFja2VkLWJ5IEV0aWVubmUg
-Q2FycmllcmUgPGV0aWVubmUuY2FycmllcmVAZm9zcy5zdC5jb20+IAo+IGZvciB0aGUgc2VyaWVz
-LgoKSSBkb24ndCB0aGluayBwYXRjaHdvcmsgbWFuYWdlcyB0aGUgdGFncyBpbiB0aGUgY292ZXIg
-bGV0dGVyLgpDb3VsZCB5b3Ugc2VuZCB5b3VyIEFja2VkLWJ5IG9uIGFsbCBwYXRjaGVzLCBwbGVh
-c2U/Ck9yIG1heWJlIEkgY2FuIHNlbmQgYSB2MiB3aXRoIHlvdXIgQWNrZWQtYnkuCgpSZWdhcmRz
-LAotLSAKS8O2cnkgTWFpbmNlbnQsIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIGtlcm5lbCBl
-bmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+Hi Neal,
+
+On Fri, 28 Jun 2024 13:24:36 +0100
+Neal Frager <neal.frager@amd.com> wrote:
+
+> When building for versal targets, bootgen is required for packaging the
+> boot.bin.  This patch adds the dependency.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  boot/xilinx-prebuilt/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
+> index d3df1c06e7..a1c2075d7c 100644
+> --- a/boot/xilinx-prebuilt/Config.in
+> +++ b/boot/xilinx-prebuilt/Config.in
+> @@ -28,6 +28,7 @@ config BR2_TARGET_XILINX_PREBUILT_KRIA
+>  
+>  config BR2_TARGET_XILINX_PREBUILT_VERSAL
+>  	bool "versal"
+> +	depends on BR2_PACKAGE_HOST_BOOTGEN
+
+Looking at this better, I'm not sure it's the right thing to do.
+
+xilinx-prebuilt can "build" perfectly without bootgen.
+
+This is similar to genimage, which is not needed to build any Buildroot
+package, but is used by several defconfigs to generate a bootable SD
+card image afterwards. Thus each of these defconfigs also sets
+BR2_PACKAGE_HOST_GENIMAGE=y.
+
+Sure bootgen differs in that (as far as I understand) the *typical*
+usage of xilinx-prebuilt requires host-bootgen in a post-build script.
+However in principle another tool could be used in its place.
+
+So as I said I'm not sure. Adding the 'depends on', possibly with a
+line of comment to clarify this, could still be seen as a convenience,
+but it would break existing defconfigs if the 'depends on' were removed
+later on to accommodate other use cases that do not involve bootgen.
+
+If there are no stronger opinions I'd vote to not add this.
+
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
