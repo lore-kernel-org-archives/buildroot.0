@@ -4,72 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55069C2BBCA
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 06:41:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D78CC2BBCA
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 06:45:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EEDB784457;
-	Fri, 28 Jun 2024 06:41:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3B1A81F1B;
+	Fri, 28 Jun 2024 06:45:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 53G7fcCInQFw; Fri, 28 Jun 2024 06:41:46 +0000 (UTC)
+ id k57fNbSjwJ8L; Fri, 28 Jun 2024 06:45:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 112BB84471
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 478E481F2B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 112BB84471;
-	Fri, 28 Jun 2024 06:41:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A34301BF315
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 06:41:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 478E481F2B;
+	Fri, 28 Jun 2024 06:45:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C0751BF315
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 06:45:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C5194053F
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 06:41:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45390415DA
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 06:45:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pb_Bh9hYisto for <buildroot@lists.busybox.net>;
- Fri, 28 Jun 2024 06:41:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gydRJEIyyGRw for <buildroot@lists.busybox.net>;
+ Fri, 28 Jun 2024 06:45:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.122;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D686140230
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D686140230
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D686140230
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 06:41:42 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 1AA80C4EAD
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 06:37:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B07A1C0003;
- Fri, 28 Jun 2024 06:36:55 +0000 (UTC)
-Date: Fri, 28 Jun 2024 08:36:54 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B152F4151E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B152F4151E
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.122])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B152F4151E
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 06:45:02 +0000 (UTC)
+Received: from unknown (HELO opfedv3rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 28 Jun 2024 08:45:00 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv3rlp0c.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2024 08:45:00 +0200
+Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Fri, 28 Jun 2024 08:44:58 +0200
+Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
+ Fri, 28 Jun 2024 08:44:58 +0200
+From: yann.morin@orange.com
+X-IronPort-AV: E=Sophos;i="6.09,168,1716242400"; d="scan'208";a="166556388"
+Date: Fri, 28 Jun 2024 08:44:58 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240628083654.6377fe91@booty>
-In-Reply-To: <20240627212547.2194843-1-bernd@kuhls.net>
+Message-ID: <Zn5b6lWUzCuz3pV5@tl-lnx-nyma7486-2>
 References: <20240627212547.2194843-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Content-Disposition: inline
+In-Reply-To: <20240627212547.2194843-1-bernd@kuhls.net>
+X-Originating-IP: [10.115.26.51]
+X-ClientProxiedBy: OPE16NORMBX304.corporate.adroot.infra.ftgroup
+ (10.115.26.13) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1719556615;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vaOVYB1XkpuJP5hxmWSiRprrgBtigqWL+lHJktlNFwc=;
- b=Hs4MU3jFV8AkY5jjC7aRCosuryzS8C7iIwD5x8q6fWp03c8IXM9xsTSessJpH6DqNLgbww
- LO12UER/SNLPXOqgL58qlvD2NrQ+tqwgjVTnmZ5UohD6q4bghQ/TxxbGNNvrH5Bpf3wQMv
- jpjXq/BYRWq/Z8EM0i59nRWBaPqeW8xXinnBQKtIEQbjzpEww40YGp4IUoFeX6GKHX6i3s
- wEmSaXqDPX7Bdp4M9P2UybRLcXU9UDNtUVVYylUupCqMPxwPeEG1P66OWbYlQoRhycA21B
- wRzrJDnIJ5qFb9A/kmpBeB/pLLsxdSGi10VD7WcYvHSIIVOlqhnmsIev9C5Uzg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1719557103; x=1751093103;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=gkKQ6l+tsPlHETnqbsaGwt1HYgh4Q8Jy61h9vTjIAng=;
+ b=EvxwdZVJpgsaemhhYHc71AgvEeADXxoR4ekwTk2DGywNzCti+jzudphk
+ cLmO/l8xDavwCsSCa7GfSBzn43GzFoIk8N8OBWvxBtFLwXJ/8YrE80yed
+ 22wIWb2s4sQOjkrfuNTql1kRyPEfVPNlMXoqECoICMqVX833VDhbqBwBo
+ d4FX4ql1MQwkLTGa0mLyfULsWye1tvQdUMK9769faNbHZfR0sk7Uiobyb
+ F3pNhKCjllbJ7d/kD5y1oH21XH3JbYrnqp74ghBW7Fu5u/kRYVtWaQPnA
+ dKDYoRk4PoqEmYbyxcJnYWAJfoFhh9M+CEuOGLRE4togxQHPxgbTjB4IE
+ g==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Hs4MU3jF
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=EvxwdZVJ
 Subject: Re: [Buildroot] [PATCH 1/1] package/exim: update patches to be
  applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
@@ -83,19 +95,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+Bernd, All,
 
-On Thu, 27 Jun 2024 23:25:47 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
-
+On 2024-06-27 23:25 +0200, Bernd Kuhls spake thusly:
 > Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
 > fuzz factor to 0" reduced the fuzz factor.
 > 
@@ -115,12 +123,180 @@ Bernd Kuhls <bernd@kuhls.net> wrote:
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
+Tested-by: Yann E. MORIN <yann.morin@orange.com>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/exim/0001-Build-buildconfig-for-the-host.patch    | 4 +++-
+>  ...0002-Don-t-make-backup-copies-of-installed-files.patch | 4 +++-
+>  ...0003-Skip-version-check-and-symlink-installation.patch | 8 ++++----
+>  .../0004-exim_lock-fix-lstat-related-build-errors.patch   | 8 +++++---
+>  package/exim/0005-sieve-fix-build-errors.patch            | 4 +++-
+>  5 files changed, 18 insertions(+), 10 deletions(-)
+> 
+> diff --git a/package/exim/0001-Build-buildconfig-for-the-host.patch b/package/exim/0001-Build-buildconfig-for-the-host.patch
+> index 87eb527974..e9da80765a 100644
+> --- a/package/exim/0001-Build-buildconfig-for-the-host.patch
+> +++ b/package/exim/0001-Build-buildconfig-for-the-host.patch
+> @@ -2,6 +2,8 @@ buildconfig is meant to be executed on the host, so it has to be compiled
+>  using $(HOSTCC), not $(CC).
+>  
+>  Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> +[Bernd: rebased for version 4.97.1]
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>  ---
+>   OS/Makefile-Base |    4 ++--
+>   1 files changed, 2 insertions(+), 2 deletions(-)
+> @@ -10,7 +12,7 @@ diff --git a/OS/Makefile-Base b/OS/Makefile-Base
+>  index 29a6ad3..420ba60 100644
+>  --- a/OS/Makefile-Base
+>  +++ b/OS/Makefile-Base
+> -@@ -114,8 +114,8 @@ allexim: config.h $(EXIM_MONITOR) exicyclog exinext exiwhat \
+> +@@ -258,8 +258,8 @@ allexim: config.h $(EXIM_MONITOR) exicyclog exinext exiwhat \
+>   
+>   # Targets for special-purpose configuration header builders
+>   buildconfig: buildconfig.c
+> diff --git a/package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch b/package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch
+> index 0cdaa744bc..3c115f8d02 100644
+> --- a/package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch
+> +++ b/package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch
+> @@ -5,6 +5,8 @@ This leads to useless duplicated files on the target, so disable this
+>  piece of code.
+>  
+>  Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> +[Bernd: rebased for version 4.97.1]
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>  ---
+>   scripts/exim_install |   18 +++++++++---------
+>   1 files changed, 9 insertions(+), 9 deletions(-)
+> @@ -13,7 +15,7 @@ diff --git a/scripts/exim_install b/scripts/exim_install
+>  index 616ab3c..e68e7d5 100755
+>  --- a/scripts/exim_install
+>  +++ b/scripts/exim_install
+> -@@ -344,15 +344,15 @@ while [ $# -gt 0 ]; do
+> +@@ -348,15 +348,15 @@ while [ $# -gt 0 ]; do
+>   
+>     else
+>       if ../scripts/newer ${name} ${BIN_DIRECTORY}/${name}; then
+> diff --git a/package/exim/0003-Skip-version-check-and-symlink-installation.patch b/package/exim/0003-Skip-version-check-and-symlink-installation.patch
+> index a342d6ed34..55166f108b 100644
+> --- a/package/exim/0003-Skip-version-check-and-symlink-installation.patch
+> +++ b/package/exim/0003-Skip-version-check-and-symlink-installation.patch
+> @@ -9,8 +9,8 @@ Inspired by:
+>  http://patch-tracker.debian.org/patch/series/view/exim4/4.76-2/35_install.dpatch
+>  
+>  Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> -(rebased against exim 4.89)
+> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +[Bernd: rebased for version 4.89 & 4.97.1]
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>  ---
+>   scripts/exim_install |    7 +++++--
+>   1 files changed, 5 insertions(+), 2 deletions(-)
+> @@ -19,7 +19,7 @@ diff --git a/scripts/exim_install b/scripts/exim_install
+>  index e68e7d5..487a4e1 100755
+>  --- a/scripts/exim_install
+>  +++ b/scripts/exim_install
+> -@@ -58,6 +58,8 @@
+> +@@ -61,6 +61,8 @@
+>     shift
+>   done
+>   
+> @@ -28,7 +28,7 @@ index e68e7d5..487a4e1 100755
+>   # Get the values of BIN_DIRECTORY, CONFIGURE_FILE, INFO_DIRECTORY, NO_SYMLINK,
+>   # SYSTEM_ALIASES_FILE, and EXE from the global Makefile (in the build
+>   # directory). EXE is empty except in the Cygwin environment. In each case, keep
+> -@@ -217,9 +219,7 @@
+> +@@ -220,9 +223,7 @@
+>     # The exim binary is handled specially
+>   
+>     if [ $name = exim${EXE} ]; then
+> diff --git a/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch b/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
+> index a0a279fc43..616ada5026 100644
+> --- a/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
+> +++ b/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
+> @@ -22,6 +22,8 @@ Fixes:
+>  
+>  Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>  Upstream-status: https://bugs.exim.org/show_bug.cgi?id=2523
+> +[Bernd: rebased for version 4.97.1]
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>  ---
+>   src/exim_lock.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> @@ -30,8 +32,8 @@ diff --git a/src/exim_lock.c b/src/exim_lock.c
+>  index 068216816054..cb140aff6436 100644
+>  --- a/src/exim_lock.c
+>  +++ b/src/exim_lock.c
+> -@@ -13,6 +13,8 @@ Argument: the name of the lock file
+> - Copyright (c) The Exim Maintainers 2016
+> +@@ -14,6 +14,8 @@ Copyright (c) The Exim Maintainers 2016 - 2021
+> + SPDX-License-Identifier: GPL-2.0-or-later
+>   */
+>  
+>  +#define _XOPEN_SOURCE
+> @@ -39,7 +41,7 @@ index 068216816054..cb140aff6436 100644
+>   #include "os.h"
+>  
+>   #include <stdio.h>
+> -@@ -26,6 +28,7 @@ Copyright (c) The Exim Maintainers 2016
+> +@@ -27,6 +29,7 @@ Copyright (c) The Exim Maintainers 2016
+>   #include <unistd.h>
+>   #include <utime.h>
+>   #include <sys/utsname.h>
+> diff --git a/package/exim/0005-sieve-fix-build-errors.patch b/package/exim/0005-sieve-fix-build-errors.patch
+> index f4b95d50bc..20323c17cd 100644
+> --- a/package/exim/0005-sieve-fix-build-errors.patch
+> +++ b/package/exim/0005-sieve-fix-build-errors.patch
+> @@ -21,6 +21,8 @@ buildsystem.
+>  
+>  Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>  Upstream-status: https://bugs.exim.org/show_bug.cgi?id=2523
+> +[Bernd: rebased for version 4.97.1]
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>  ---
+>   src/sieve.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> @@ -29,7 +31,7 @@ diff --git a/src/sieve.c b/src/sieve.c
+>  index 5e8d1e6f4776..9632f2d43810 100644
+>  --- a/src/sieve.c
+>  +++ b/src/sieve.c
+> -@@ -12,6 +12,8 @@
+> +@@ -14,6 +14,8 @@
+>  
+>   /* Sieve mail filter. */
+>  
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
