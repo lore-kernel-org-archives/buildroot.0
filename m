@@ -4,71 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60647C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 16:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AFE2C30658
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 16:48:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B7F941D7E;
-	Fri, 28 Jun 2024 16:47:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F112D40BB7;
+	Fri, 28 Jun 2024 16:48:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zcBA25wXHCmm; Fri, 28 Jun 2024 16:47:46 +0000 (UTC)
+ id fn0ONrjd7Y6u; Fri, 28 Jun 2024 16:48:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E565E41E1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1CC241E1E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E565E41E1C;
-	Fri, 28 Jun 2024 16:47:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF8E81BF39D
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 16:47:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1CC241E1E;
+	Fri, 28 Jun 2024 16:48:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DD1C1BF39D
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 16:48:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C2BA41E1C
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 16:47:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1AF7D41A86
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 16:48:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yCLEkLTM57B2 for <buildroot@lists.busybox.net>;
- Fri, 28 Jun 2024 16:47:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oKkJNQPdnReH for <buildroot@lists.busybox.net>;
+ Fri, 28 Jun 2024 16:48:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 56BE941D7E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56BE941D7E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E6A02401D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6A02401D8
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 56BE941D7E
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 16:47:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E6A02401D8
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 16:48:07 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cda5.dip0.t-ipconnect.de [79.214.205.165])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7BD62A4C07EB
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 18:47:41 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44218)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4F1E2A4C0CE6
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 18:48:04 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51390)
  by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
- (envelope-from <bernd@kuhls.net>) id 1sNElA-000000000AT-3PPm
- for buildroot@buildroot.org; Fri, 28 Jun 2024 16:47:41 +0000
+ (envelope-from <bernd@kuhls.net>) id 1sNElX-000000000EJ-2luW
+ for buildroot@buildroot.org; Fri, 28 Jun 2024 16:48:04 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jun 2024 18:47:40 +0200
-Message-Id: <20240628164740.11188-1-bernd@kuhls.net>
+Date: Fri, 28 Jun 2024 18:48:02 +0200
+Message-Id: <20240628164803.11217-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1719593261;
- bh=Hm6Ox/aWgnhri2sfPfpuL5jUNlKP+Kw+8M6OoWjqD20=;
+ s=kas202406071026; t=1719593284;
+ bh=W+IsjuLtPZQNs7/8dSbYjId8/oAq5HEpjVTQzCZfUOM=;
  h=From:To:Subject:Date:From;
- b=v4G+59EOiu9tTqK9bhDPpIgZ7Kgyu8Qyo4oC40krJ6krfaib2ki7ut6DgSCt1CGca
- iO77QaOS0v8itxQOiFQQAh1m4omyfcn+Jf61b1JLRmK8ZoqcoYUJLjz9ecAzrVthRf
- 8NWuG2h9fdFc0hF8i17KO8jYmxcEPbzhqTv/z3lq3nVdtR3fEsbT+NSpSJWbHNEZHK
- rWQCm63CszT5Aj98NHmeuuSzuAvNblHoQ0xHLz+F0tTbs8l1sCxW7SrIZ5kcmnJXy5
- JXgVNoPsQd+8jS7MDSBAEdGeJ1k+73F9QPs1jCRTd1aBqz38noLLlX7d3B6Q2xO0VD
- lxtsUrDOpGapA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=P4KgcahlNMsQ2AsqxYcCEUywJr00OR9/ze3oQ6kEc+A6kMBGb54t2WYnxkWL16hIi
+ lI36mqCBKkvGRtPb8CgSJjUFOb59j2JJMwy6a7HlK/3Ckm5AkaQG1McW2V9fKoCQ8v
+ 16iV6tpBFcj7jd6gj7bzLV6BmjREejDAGy56tcAl8z1WfMiKcxJnmRAkEiYwGU3LH2
+ b7QmbYBNUdndRJmoJX8jwxkUQtbcU+70KndfDGdSLuCtv8cFSl8jlnwjbQPZyL1XAl
+ V88O2+gb4PY9wTMsCQHU5p0NJmBcXrpZz39JTYUNhfqb2VxhMQhI3GE9sZv6OR0nQS
+ iGKzwI42ToIqA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=v4G+59EO
-Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump version to 1.4.3
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=P4Kgcahl
+Subject: [Buildroot] [PATCH 1/2] package/alsa-lib: bump version to 1.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,39 +84,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
+Changelog:
+https://www.alsa-project.org/wiki/Changes_v1.2.11_v1.2.12#alsa-lib
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/dav1d/dav1d.hash | 4 ++--
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/alsa-lib/alsa-lib.hash | 2 +-
+ package/alsa-lib/alsa-lib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index a62193810e..e0ca8f1e88 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 830643dea8..9c993c05ae 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
 @@ -1,4 +1,4 @@
--# From https://download.videolan.org/pub/videolan/dav1d/1.4.1/dav1d-1.4.1.tar.xz.sha256
--sha256  8d407dd5fe7986413c937b14e67f36aebd06e1fa5cfec679d10e548476f2d5f8  dav1d-1.4.1.tar.xz
-+# From https://download.videolan.org/pub/videolan/dav1d/1.4.3/dav1d-1.4.3.tar.xz.sha256
-+sha256  42fe524bcc82ea3a830057178faace22923a79bad3d819a4962d8cfc54c36f19  dav1d-1.4.3.tar.xz
- # Locally computed
- sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 18cb81868a..4e3e8fe1cf 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
+ # Locally calculated
+-sha256  9f3f2f69b995f9ad37359072fbc69a3a88bfba081fc83e9be30e14662795bb4d  alsa-lib-1.2.11.tar.bz2
++sha256  4868cd908627279da5a634f468701625be8cc251d84262c7e5b6a218391ad0d2  alsa-lib-1.2.12.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 246761d4e6..1dc25ea4a8 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DAV1D_VERSION = 1.4.1
-+DAV1D_VERSION = 1.4.3
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.xz
- DAV1D_SITE = https://download.videolan.org/pub/videolan/dav1d/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+-ALSA_LIB_VERSION = 1.2.11
++ALSA_LIB_VERSION = 1.2.12
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
 -- 
 2.39.2
 
