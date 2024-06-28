@@ -4,165 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8CDEC3064D
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 15:47:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8D74C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jun 2024 16:09:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49227401AD;
-	Fri, 28 Jun 2024 15:47:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6908F41C98;
+	Fri, 28 Jun 2024 16:09:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id plThR8SKbOLj; Fri, 28 Jun 2024 15:47:42 +0000 (UTC)
+ id DkuA-p-Q-I4S; Fri, 28 Jun 2024 16:09:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0976541C4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CFC441CA3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0976541C4E;
-	Fri, 28 Jun 2024 15:47:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C8FD01BF398
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 15:47:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CFC441CA3;
+	Fri, 28 Jun 2024 16:09:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D082C1BF39D
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 16:09:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B4FD041DCC
- for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 15:47:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BDCB2812DE
+ for <buildroot@lists.busybox.net>; Fri, 28 Jun 2024 16:09:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pheB1viABzJH for <buildroot@lists.busybox.net>;
- Fri, 28 Jun 2024 15:47:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jw1UBWTef5Ec for <buildroot@lists.busybox.net>;
+ Fri, 28 Jun 2024 16:09:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f400:7e88::60b;
- helo=nam10-dm6-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B69241D7E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B69241D7E
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on2060b.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e88::60b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9B69241D7E
- for <buildroot@buildroot.org>; Fri, 28 Jun 2024 15:47:39 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VeA8HykOzOeWA4e9La9oDtLeVNK+RLBqC9+8Fq3ApGww/dFJ3APjdfYCT9GeGDKHG5EN3F445nh5U9cDUSW+8tjb+Bn/IjaZY3kjjlLnJSGz5dQ0mv2tYR5B8RYt9cZZr/qK03yOaj60OVgtjxEU4wZzuQYrueFgXlJK1wuhU7Dr6d91nxIDpVhK0OO3yH+P/ezDW7I04SWGb7RQaC/Zv+RPwfJdsgELqTeWxUcqNOngnRFiuxKS/NsWgZHYlBeEeHocBdBjYe7nj04e35lXz8bVMPpZb6ASHLvR9QNmK3xyIejeLVbNEszLWCjIHGea4D4wYmLx6KJ0MtkjWCiJ8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4SkZco2cE0cMW7KEhJIf8i2OUfkEMAPHSINChB0jgzo=;
- b=oKA2R59ZKzJ975GvlDebYrtbTbLTwRFwUMGrYKfxcbir0mhfJiA/ee9pTVxLJq2ckQOMCs6pSLXTQMuPLK+y1qOIiCxG14sNrCvV660iW7j5BxUcBoGOX6kfEtmMDDwjJqQ44+kkEIl0CF0rAq/IlkbSnfCFekP4B/te7ynYjrDs2oR+5HSTIW10FrdLUgviWj6l0jowPKziW8A9ULAi6wviFoE/+k0WLO1GlXmzWonQYME+UFBLmZGI9bYAae3EUNMLN1FvWofuY+9UKlbDw0ejMzYa2Q0AclkmYPfZUumzfDwYxH3aURGFQk9Y2rveJS827BFJN6eH7Yvlu68l5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by DS0PR12MB6559.namprd12.prod.outlook.com (2603:10b6:8:d1::6) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7698.33; Fri, 28 Jun 2024 15:47:35 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b%7]) with mapi id 15.20.7698.033; Fri, 28 Jun 2024
- 15:47:35 +0000
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Thread-Topic: [PATCH v1 1/1] boot/xilinx-prebuilt/Config.in: versal needs
- bootgen
-Thread-Index: AQHayVYt3O92eXAFf0q7nbSY5kXl8bHdOB6AgAAZk2A=
-Date: Fri, 28 Jun 2024 15:47:35 +0000
-Message-ID: <CH2PR12MB5004C374FD0330CBEA26D104F0D02@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20240628122436.1630911-1-neal.frager@amd.com>
- <20240628161349.4dd003a1@booty>
-In-Reply-To: <20240628161349.4dd003a1@booty>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|DS0PR12MB6559:EE_
-x-ms-office365-filtering-correlation-id: 2b71818f-53e2-4c7f-9c82-08dc9789a164
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|376014|366016|1800799024|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?oF9rbyOcCK5wj2b+df+b7UrBxuwga7dLMHtlpSeRokiVU973yswYQ8Nph4Y4?=
- =?us-ascii?Q?gpOYphjCa5yFitAAjC7m+H5/+issSnxRT+kJHDSGKqLJbkwbxsYWhIPyowi4?=
- =?us-ascii?Q?Do+x0CnsEIkw30Fs/Wqp61r129kvzJpurh/t2cJcpYmuWJS3jR4ogKNdHcc5?=
- =?us-ascii?Q?32co99qHKJggFQMNhzUMs4utt+XCettlVOe82nrtCYnpjqjtY7OEWzLWnjYS?=
- =?us-ascii?Q?oGoNX29AmNjcMxKMD77+9uYN3tvMW0bh4FzBs9sWL5KSTd20vgAgy3S21Aly?=
- =?us-ascii?Q?6VuNU3YPilkoeAI7362Pi1vv7/P5GG0vcHTMchZP22aSl2X88pUHcJPcC/IK?=
- =?us-ascii?Q?yig8vNm3QA27dLQwVWTkG7u5F0OwJWwpB62xBB6V/g7K51+r2FMjpl07LHHi?=
- =?us-ascii?Q?Fbo68emkniYlxdzUv2jcMrUA5yNLUs7Nl7GQ7/Toys53hiR6M/xpvgJ20NY8?=
- =?us-ascii?Q?jFrx33ZouKwCNjx8GTlLhXI01l2Z0SGy5ANIjqsWjTIiYiOMcFiDhcvUoRy6?=
- =?us-ascii?Q?ffWWq87ZtqBL1HQvbMPJTc2YtD4OTu5+GvVoz5NGKzdUjKqfeXjjA5DW6sHo?=
- =?us-ascii?Q?tOyNvOrB5PQd9mok6kjRFaBWd04onjKQlPSjM5FbTVhdLbMffHVFcXi6Fm+v?=
- =?us-ascii?Q?/yav5nDiCOmLSN9kPzSDkoFqNMybC7EALookYYrCNfH+kQ0nBtosBLLrAzdf?=
- =?us-ascii?Q?fwzqxoggoR57B2ULoPPoyiQeARiaG1c83JnBDC0MiTzBoJKk52uYfZ9I+WBg?=
- =?us-ascii?Q?pW3dWF6zhP9IvzPCs6Lr0Vz33RMIGn9WsH4SlW6piJEglqmBI1RkYgNZ0mRX?=
- =?us-ascii?Q?xsUaf+vfoAwnLaUnUvUVykK0zVRj0gGjPS/FnmuJN4Wkhs+j4FoxAXLUHF3E?=
- =?us-ascii?Q?85X3VY1Y9MFWFLPgQgNPbyAD/3yi8eUWE4P0cAQqtvWeTTbzo2FaDem8giKv?=
- =?us-ascii?Q?UX+4enNu7CC8dDJwN93iNORHBexIzOyAi0n+8YdNZhuozqjO0JHqYNFs6Pgc?=
- =?us-ascii?Q?NGJREjfTZ3xtOD0eNDJj+GSPwP4iIBYaho4pAfPqhFgWgdAuw0JQKG4IaXXy?=
- =?us-ascii?Q?J1sgvqeS3TFxiU6CwBdbAwf0S7/1zThwp9v2J8LXTDO/gauEaSxOrWYg+ADy?=
- =?us-ascii?Q?M3ZsX57USgYy0fcsJMJ7JAb9PZgl/zcKyzWUfMnE0E5CgokhSMa5r8DktjhG?=
- =?us-ascii?Q?8ORSkkoLQyzTkhpBxKLXvKwBBly502uXqAxolRsAvCGEv6IolUiq+zUtppjp?=
- =?us-ascii?Q?ZFh5ym/gx7+F1HDf+omnUc0rMCUfBkWSDF2GueNGhKZfgUyy/B5nhatwzl7t?=
- =?us-ascii?Q?WGratewZOSUWRXRVQlhc20V4cqMijP2ic67Z+416P+dNxtr9I/bIYsJszVWT?=
- =?us-ascii?Q?OBLlitTY/W3x5QO7cjs/XG4fqvGYoYxuC74TwZoz+uUhM8g+IPLke6ZWDIMj?=
- =?us-ascii?Q?30wfYCMeLNI=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(366016)(1800799024)(38070700018)(41080700001); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZlaNygXTxw6QrrniYDX7F8lY+sWrOiCkPtaalwRzsxOvhxITNmnDFKdjrDEv?=
- =?us-ascii?Q?INi/JTjMyFuQJ0XOCktUrXPW0YdBl5ZR2k8IC1576+sS5bnO3qSdrvjdakrC?=
- =?us-ascii?Q?+aMEKkN7Nc3MgsGhetIx7+U5st3OlJIiO4Tkf0sTNWmZ+ZPGi1VZ5VCj8Lk4?=
- =?us-ascii?Q?kz1A8qCwujCldKFnvb9b88oC2sDVhTrx8+aHpxnMjb0tQsRN0695TV86V9+8?=
- =?us-ascii?Q?gHj7pEMJzcT8EHzBpmmFRxJVByykj3DxML8rCCtf0wJqLQHhvuNyIbC81IIW?=
- =?us-ascii?Q?UqbGLc98TMPVATP2lRhdA4afYsjkh1y9kkViaThuLmm2IK01krmiWQg7a/LU?=
- =?us-ascii?Q?4+KiUy3QDxAt/nSBtCA+nboEoyIu1Iiw/DvFW4VCAnfzSTtLXhR9YbUdunDj?=
- =?us-ascii?Q?GOosOKgxjk7XMkS1KFQRkMr+MnG4WKjgrxgPvJvhuTgCU4kjptbG00KSMmIZ?=
- =?us-ascii?Q?eXd5pQ1fEGWhlnjuvFJYqVQ4qy/c/JFh3zYgUh7BsyBBit5DAJU6SRT6ubAU?=
- =?us-ascii?Q?n1TifsagfsmVslRah/znrJFn0wHniUYqKSRc7adeylZbTWd11cL51aixEHrp?=
- =?us-ascii?Q?R25okwlMUatKygWiFeVnfTTd+2fks2JqTtdPKCHpqsE7aNEpMSoSBMfWVza2?=
- =?us-ascii?Q?yZym1ThcMdTwA7agSexjTCba1LzIJgcLJuN+EIVwFtbovaV8LHWm9OQBhxlt?=
- =?us-ascii?Q?DYW6Gtzer4KULtrQyriA1BI0/2th7qswhbDYZjrvi0V3amR+laodPIVnfCWs?=
- =?us-ascii?Q?k4CqXBH/+LtJ2mgATzFejH4E2YD5bJKE3tH5885XHicgJVueX0tMttxZ/fOX?=
- =?us-ascii?Q?xv2K/Syl85LrsOP+hyWMrWuSshFin91oby4dFaq3qSNgfmj0qtIbKK5TCLaP?=
- =?us-ascii?Q?nHEdWf/YabEQWGOGMADmUZJlhwrgA6S03nEeAhRigM5KOOZ2Qgr+UcFALhOl?=
- =?us-ascii?Q?zNTf3Lelo7Xk7jq033ewW1OKYdcVaTqYO/6K+CgPYelAFNEXSc5a4h4+MWc4?=
- =?us-ascii?Q?7jGiw41YCn2yv4Oq76UcnyKlXU/zDn69DJBfBTr6WIV/h+E88T7tgcYZdP2Z?=
- =?us-ascii?Q?PVZ7YTfYOLYJoTXD8mgAKk1dhAelcPM34eUPxoCcrkwkKYYOlgfk56rCCF4X?=
- =?us-ascii?Q?BLoaxiXDqUfx9nut86GAF2b4597Pe4K4EPgZlhH7SlZ9temMCrziVeAXQlTn?=
- =?us-ascii?Q?IxGtLV0qbwN86ZF4QngsCGgrY866THP/ujtIFMpTlYIY+G6KX5jDpKRj0nvw?=
- =?us-ascii?Q?YwZvx/+7djQ1Rtol2sybc9eB1l0DBr8NboBToBsMJzBmf3aG8++QDt0dC/Nn?=
- =?us-ascii?Q?wQaF5nK+44t5KrPqpQhOKJALwO+chPqiL/9/ocjupkp6CjV47DW34rDgRtDL?=
- =?us-ascii?Q?SoS/WXpgBA/rfu465OG/YAR+riv/Pht1uxaMIO9OPVztp9olTvQqI9BpP55t?=
- =?us-ascii?Q?cRb0x9kYJDySQq2Zcr8dE+HrxldwbbqRRNHx+JC+JiJXZfwsKWWdee4DXPUB?=
- =?us-ascii?Q?Rty0MiNe+ps+vtLMLr4Z+oJkippcpbm7sAQv39pi23NF6GJ1icp/vC+J9K3Q?=
- =?us-ascii?Q?TAuNuBleTvq5qEKW/CQ=3D?=
+ client-ip=2607:f8b0:4864:20::632; helo=mail-pl1-x632.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D3EDC812CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3EDC812CC
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
+ [IPv6:2607:f8b0:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D3EDC812CC
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 16:09:38 +0000 (UTC)
+Received: by mail-pl1-x632.google.com with SMTP id
+ d9443c01a7336-1f480624d0dso5674115ad.1
+ for <buildroot@buildroot.org>; Fri, 28 Jun 2024 09:09:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1719590978; x=1720195778;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Kc99TO2XAPi0tH1y56RQ8ZTeRFaxnclO22fKp3MaA/c=;
+ b=QSG7vp9fjFh+U52MkIPFHXShbEfDMxadEIeH/u5vJTnpEtpx3YFSbe2XAF0TtbJfC9
+ WSEUkSSwCibqS7LkZrQKC+YfUTQcK6PP22a49Yv14cYXePwQ3dAsRlQ0XyLKsQ3DMMaC
+ wIvFPZTz6epL0a26dVbpoSeYhDM1RkKKo/RJup8oOwBAKMDrfx0N3Hf9LYj/Wtf1WxVT
+ XlxDv/xTM6eraFb+BzN6eg4yPZre0ZovlmRusCr/mS7UcOe2Qgs6dHexgGRNie0wmOSd
+ lWjmRN4zCYw631jkdmjOBVG9ikeRg3+Jjfn1/2boaaUKqRiUmqeL256wwWUXWLukplAC
+ RrdQ==
+X-Gm-Message-State: AOJu0YzcVUP440nw8wPqXSeeLVCH3koEvAg5HJIUEOFGvnW0wiiFBIPu
+ liXfrzbPGSGqmb5tGaFN0PWk06ytxeq3SIsDAhXPvw3h6QNzwbLYhtn8tE9aUGwdwbXl1zT4Nrx
+ 7wwguoHlq
+X-Google-Smtp-Source: AGHT+IFS6jvuQFEd/g5JqryVCAsiJ3h+uCWgs0UWyw/JQ3r9DSuEaz8Je2cPWBDapg/XvwixqvFrIA==
+X-Received: by 2002:a17:902:d4ce:b0:1fa:acf0:72ab with SMTP id
+ d9443c01a7336-1faacf0753emr43207135ad.16.1719590977619; 
+ Fri, 28 Jun 2024 09:09:37 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-1face441a1dsm10220435ad.39.2024.06.28.09.09.36
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Fri, 28 Jun 2024 09:09:37 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Fri, 28 Jun 2024 09:09:33 -0700
+Message-ID: <20240628160933.50208-2-christian@aperture.us>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240628160933.50208-1-christian@aperture.us>
+References: <20240628160933.50208-1-christian@aperture.us>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b71818f-53e2-4c7f-9c82-08dc9789a164
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2024 15:47:35.3697 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: A9fireb22OO2HapqYd0qlm3b9z29YJc3qsDzB7eEV8jqFp4rumgxe4nYAFg+lj21
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6559
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4SkZco2cE0cMW7KEhJIf8i2OUfkEMAPHSINChB0jgzo=;
- b=hPNzAxRbp6EiXk8hCs6vuZaSnWoXgzxjibdU+tmdYfEKjN6OKVX052PLjOB2UQCgrlkaC7/PYzw/qKvseeeA6M+BMF7Rc0xWe3NgjWmO1n7BG6XKm1h0HmXZ7jsfEzV+8vovuoPS9x6yXj/0byN3sKZHGFVJjl+P0QtmU/XGYbQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=hPNzAxRb
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-prebuilt/Config.in:
- versal needs bootgen
+ d=aperture.us; s=google; t=1719590978; x=1720195778; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Kc99TO2XAPi0tH1y56RQ8ZTeRFaxnclO22fKp3MaA/c=;
+ b=yGutBmw1z01TNk1vXMYbz3TCf9MeNKHIJodbJaKcNs33s/loikC25yXdlVSCtHHC3S
+ a3XHIE2niZd9/9iVDwvPJ4Vnv2lMlyxZqlophJg3qNaj0V6QJoaoqb8XNBPP+BacL85M
+ h5fkWqU+5dTceBkZpFZVVslj1SNW8Ol+T1un11TaOOb7lJX4y0aINA0G3auC5zlThwzi
+ wiOhublzAEXNf17+8PZYNBx3ZJFe1qAAkIXVoI8AUTZq35/mwwAoul1mGRyWe7wGrZMm
+ BHNTfEQFL4V2VAVP1OFd0WSty3BHShhEYaPhSfOpYZRXpdKMMlsBOb0uF9PrjzD7lJvk
+ GdoA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=yGutBmw1
+Subject: [Buildroot] [PATCH v1 2/2] package/docker-cli: bump version to
+ v27.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -174,67 +104,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "andy.a.kennedy@collins.com" <andy.a.kennedy@collins.com>, "Erkiaga Elorza,
- Ibai" <ibai.erkiaga-elorza@amd.com>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>, "Simek,
- Michal" <michal.simek@amd.com>,
- "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Luca,
+https://github.com/docker/cli/releases/tag/v27.0.2
 
-> When building for versal targets, bootgen is required for packaging the
-> boot.bin.  This patch adds the dependency.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
->  boot/xilinx-prebuilt/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-> index d3df1c06e7..a1c2075d7c 100644
-> --- a/boot/xilinx-prebuilt/Config.in
-> +++ b/boot/xilinx-prebuilt/Config.in
-> @@ -28,6 +28,7 @@ config BR2_TARGET_XILINX_PREBUILT_KRIA
->  
->  config BR2_TARGET_XILINX_PREBUILT_VERSAL
->  	bool "versal"
-> +	depends on BR2_PACKAGE_HOST_BOOTGEN
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Looking at this better, I'm not sure it's the right thing to do.
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index a2bed4aaed..af26294378 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b047e180c94452b4375f7e43997286e5a5712e66b1280574974b2e117b4e43bd  docker-cli-26.0.2-go2.tar.gz
++sha256  a2b31d4c8143c8b126e98a359639f51727fc83fc1e61670efbdeaa7dea92fd5a  docker-cli-27.0.2-go2.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 69c6f12f3c..1e29f008b6 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CLI_VERSION = 26.0.2
++DOCKER_CLI_VERSION = 27.0.2
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
+-- 
+2.45.2
 
-> xilinx-prebuilt can "build" perfectly without bootgen.
-
-> This is similar to genimage, which is not needed to build any Buildroot
-> package, but is used by several defconfigs to generate a bootable SD
-> card image afterwards. Thus each of these defconfigs also sets
-> BR2_PACKAGE_HOST_GENIMAGE=y.
-
-> Sure bootgen differs in that (as far as I understand) the *typical*
-> usage of xilinx-prebuilt requires host-bootgen in a post-build script.
-> However in principle another tool could be used in its place.
-
-> So as I said I'm not sure. Adding the 'depends on', possibly with a
-> line of comment to clarify this, could still be seen as a convenience,
-> but it would break existing defconfigs if the 'depends on' were removed
-> later on to accommodate other use cases that do not involve bootgen.
-
-> If there are no stronger opinions I'd vote to not add this.
-
-I see your point, and I do not have a strong opinion on this.
-
-I am fine with leaving it out.
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
