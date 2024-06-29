@@ -4,66 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14301C27C4F
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jun 2024 12:19:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EB2DC27C4F
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jun 2024 12:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C316D60774;
-	Sat, 29 Jun 2024 12:19:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA1D060628;
+	Sat, 29 Jun 2024 12:55:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v8InvDgrosxr; Sat, 29 Jun 2024 12:19:15 +0000 (UTC)
+ id 9pR5QQoCJz2O; Sat, 29 Jun 2024 12:55:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52CE160821
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFDE760657
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52CE160821;
-	Sat, 29 Jun 2024 12:19:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 99ED71BF39F
- for <buildroot@lists.busybox.net>; Sat, 29 Jun 2024 12:19:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFDE760657;
+	Sat, 29 Jun 2024 12:55:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1275C1BF487
+ for <buildroot@lists.busybox.net>; Sat, 29 Jun 2024 12:55:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 93DE540888
- for <buildroot@lists.busybox.net>; Sat, 29 Jun 2024 12:19:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F3CE8401B2
+ for <buildroot@lists.busybox.net>; Sat, 29 Jun 2024 12:55:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mkEHrHGbli8c for <buildroot@lists.busybox.net>;
- Sat, 29 Jun 2024 12:19:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 95F494083E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95F494083E
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 95F494083E
- for <buildroot@buildroot.org>; Sat, 29 Jun 2024 12:19:10 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2F734B0053D;
- Sat, 29 Jun 2024 14:19:07 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EmBzsXCDvdLZ for <buildroot@lists.busybox.net>;
+ Sat, 29 Jun 2024 12:55:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0EFBB40018
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EFBB40018
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0EFBB40018
+ for <buildroot@buildroot.org>; Sat, 29 Jun 2024 12:55:27 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.124.183]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1McY8d-1rs3sH16hJ-00oUdl; Sat, 29
+ Jun 2024 14:55:24 +0200
 To: buildroot@buildroot.org
-Date: Sat, 29 Jun 2024 14:18:28 +0200
-Message-ID: <20240629121828.12178-1-ju.o@free.fr>
+Date: Sat, 29 Jun 2024 14:55:21 +0200
+Message-ID: <20240629125521.976475-1-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1719663548;
- bh=MRoAD4+EZvozDbyCs8v5zDzcBTOU/PKuVyF4iFxwPjo=;
- h=From:To:Cc:Subject:Date:From;
- b=jvEhR90fpjtmbtY+tiy/nwJaF54XBqN24UjhizsVgrrDebSpKS1Z4YMNsgcki3HQU
- 5KDK7EqalFutcc1ppsgdjZgJ3gtG5lIlqeJhzNjVvhPzIbM9ONA4vY15Ay8jNCp9X9
- koX2I8DuGh8sVMDowW06Fy6M/k/oesC0Ijvu79Rc2ZsmOP/Qjf6qhNNEdpZSIZKCtW
- uIuqJWdVd0REWQ8avncVNDasTKlh9plkh3aSqX45mBr9Cc7ZEMnIIVCEtwYBF9zRck
- QVEao4ZRNJvXxWAosO0v5IOgP3lk9PrGm1AL/Ycbxe3uFOtAwklNrh19CNZTeKsmoS
- Q+jLmEMXV6OKw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jvEhR90f
-Subject: [Buildroot] [PATCH v2 1/1] package/sox: fix patch fuzz
+X-Provags-ID: V03:K1:NWn6NwVyxpv5Mzfo1eB5aB7bXyZSneT+oOKJ9Ql286Nk1LvZnZk
+ XSRKnq0ysqSpuuzHNS+eZB6fgZUQgJtJPq7wxGETC9nWFIBBL+TCUtONZQtMnljSgNUssrr
+ WmWnXCKElfjBX3E5/7KbhJigCF+/ruzenoG7jDEMHqK2h1+UgwGjaQzf0KWy37WbV5skTYS
+ xuqZUn9Cs3RsTqb09FNzg==
+UI-OutboundReport: notjunk:1;M01:P0:ULTb/WreM9s=;6JtQm832AWFkdmPBs9bPRBveHrP
+ /EheaZKecOcqtwsVRsfyKI/ebcn2acLSS1kQ2vArBIkR5HrUShaYyzlg1CMRqI2WpGxoFv9Uo
+ 5+nl1LoTdM9QUbIPBRXxvsF5Wc5KYGrTnQvfK1um+q4PS9y1vBNdUYu0BRpM5g7/Ole4Xhqz7
+ w9gReFvJ/+Cmqjip1MjYcKYGGWzexj8ud9RpXJzN2o0kdnzimHZ/h0Qbv3FFcqm7dQl1GGa4V
+ Rz2cEousmq50CJQ4cqBF2pixAlsvrt/U2/YM5ghA+nmA6f9u1bQ8uWnQl2XsnG6R/2VIqN+5N
+ 4MeZjcrczAlASs8DisfKWuTY/bSmtNT4hIoTgS1XJ+jSNmw77ZPRMglAzcb0/GF9vIDWmJ6s1
+ Jj7nENnErNldON6sBe7oH3Mwl3TZZGHXyYGYTeUL0ZpZae31iDOCcnNE0SY+jLAw6hj9y8fpT
+ 8BA4nU7mXUdSni0+LucT5iliAAdTCfjyIeBtzbncK3q3YsI8A/NJDsW/kyKRfZ+977VoHWJuT
+ Jnhb/pb0ZBpfGLPugBeR/mcbMuefa63a+EqD3FI/2PCMkuwXWVhT+pSnFhYI2zseVhxLK/qaS
+ z4rTJTdBsVtLPQB2RCFhy7yYFnbZqvISGNAL176x9Ss6KA6EXetdNpOX0PbzMfzulwlv4wmn6
+ lYAsapZTczZ0NM8i7e4o0ZpJ3VEOvYXBSxsE6dxviM5paOIZSVlwjNHWDsyxNvLyGfqATpzMy
+ u+SgdWH70EOG5ZrOhUolr0N4WabpLE7+BEPXxf7oaRDWFJrlV5h0EHKs1lxvHWKUs09usPGx/
+ 8Tc79AkZBTNwV+hN2xty4r03w8HNkamzyIIgJnrMKoGYs=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1719665724; x=1720270524; i=fiona.klute@gmx.de;
+ bh=xZKGGaPeoqi+Q+5IH6YGVtKT+AGABg+OTjS6ZXVeY4w=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=AIG7fAQ4++tYqj7z+ydsl1/HxC0r4Ruaa2i/Hnt9P9ik50oncMsMsNYvfGzhWX2C
+ JBGJaKOHXdTD8vS4t4yLLSIw+IQxm9OKquAk5fzDePriSdOlrhq99uamDdm25miut
+ O/URSZjoH2LIWBJuFZaBWEy6IEw2r6LK7aKj3dKipM7wxTHG3K5lWBkTuSACcZNyB
+ fbg3vviWZwp4NxybyDFugCFsz40TSxq3/ZJ4EWm/UOfGnZwOmoROxh39PU8jWlU+a
+ wfXqvJBW+3L4tYyMQCEO8VeJ1xuzJOeCQVfYbYck3YYMYwNSqyJr4PVIBHJ2cGcoz
+ Rp1Epa7Fmf+ospEZ1g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=AIG7fAQ4
+Subject: [Buildroot] [PATCH 1/1] package/python-docker: bump version to 7.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,256 +95,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Fiona Klute <fiona.klute@gmx.de>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0" reduced the fuzz factor.
+Important upstream changes:
 
-Due to this change, sox fails to build with output:
+* Support for Python 3.12 has been added (in 7.0.0).
 
-    Applying 0001-uclibc.patch using patch:
-    patching file src/formats.c
-    Hunk #1 FAILED at 409.
-    Hunk #2 succeeded at 477 (offset 60 lines).
-    1 out of 2 hunks FAILED -- saving rejects to file src/formats.c.rej
+* Websocket support is no longer included by default, and thus the
+  dependency on "websocket-client" (since 7.0.0).
 
-This commit refreshes the package patch on the current package version.
-Note 1: the failing patch 0001 was regenerated with "git format-patch".
-Since the patch file 0001 name changed in the regeneration, the
-".checkpackageignore" entry is also updated accordingly.
-Note 2: patch 0002 did not require any update.
+* Build has been switched to hatchling and hatch-vcs (in 7.1.0), so
+  Buildroot needs to use pep517 build.
 
-Fixes:
-http://autobuild.buildroot.org/results/1bc396386aa3321fe48101caf9635ae41feb057b
+* Dependency on "packaging" has been removed (in 7.1.0).
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Upstream changelogs:
+https://github.com/docker/docker-py/releases/tag/7.0.0
+https://github.com/docker/docker-py/releases/tag/7.1.0
+
+Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
 ---
-Change v1 -> v2:
-- update .checkpackageignore entry
----
- .checkpackageignore                           |  2 +-
- ...-SoX-support-uclibc-based-toolchains.patch | 40 +++++++++++++++++++
- package/sox/0001-uclibc.patch                 | 26 ------------
- ...re.ac-fix-static-linking-with-id3tag.patch | 10 +++--
- ...ure.ac-fix-static-linking-with-magic.patch | 10 +++--
- ...e.ac-fix-static-linking-with-sndfile.patch | 10 +++--
- 6 files changed, 59 insertions(+), 39 deletions(-)
- create mode 100644 package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch
- delete mode 100644 package/sox/0001-uclibc.patch
+I've gone along with upstream here on removing the websocket
+support. If it's desirable to keep in Buildroot please let me know how
+to enable an optional Python package feature in the build system and
+I'll update the patch.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 313201b0e68..1689b96e628 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1401,7 +1401,7 @@ package/softether/0008-librt.patch lib_patch.Upstream
- package/softether/0009-uclibc-ai-addrconfig.patch lib_patch.Upstream
- package/solarus/0001-cmake-remove-Werror.patch lib_patch.Upstream
- package/solarus/0002-Add-a-basic-FindOpenGLES2.cmake.patch lib_patch.Sob lib_patch.Upstream
--package/sox/0001-uclibc.patch lib_patch.Upstream
-+package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch lib_patch.Upstream
- package/sox/0002-configure.ac-put-back-disable-stack-protector.patch lib_patch.Upstream
- package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch lib_patch.Upstream
- package/sox/0004-configure.ac-fix-static-linking-with-magic.patch lib_patch.Upstream
-diff --git a/package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch b/package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch
-new file mode 100644
-index 00000000000..3d21b570f18
---- /dev/null
-+++ b/package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch
-@@ -0,0 +1,40 @@
-+From 5d51acafe9c38fb05939b4d2d6a9dcde12476458 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Sat, 29 Jun 2024 12:28:54 +0200
-+Subject: [PATCH] Make SoX support uclibc-based toolchains
-+
-+From:
-+http://sourceforge.net/p/sox/bugs/179/
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[Julien: rebased patch on package git version 7524160,
-+and regenerated with git format-patch]
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ src/formats.c | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/src/formats.c b/src/formats.c
-+index 3fcf4382..9fc001bd 100644
-+--- a/src/formats.c
-++++ b/src/formats.c
-+@@ -466,7 +466,7 @@ static void UNUSED rewind_pipe(FILE * fp)
-+ #if defined _FSTDIO || defined _NEWLIB_VERSION || defined __APPLE__
-+   fp->_p -= PIPE_AUTO_DETECT_SIZE;
-+   fp->_r += PIPE_AUTO_DETECT_SIZE;
-+-#elif defined __GLIBC__
-++#elif defined __GLIBC__ && ! defined __UCLIBC__
-+   fp->_IO_read_ptr = fp->_IO_read_base;
-+ #elif defined _MSC_VER && _MSC_VER >= 1900
-+   #define NO_REWIND_PIPE
-+@@ -477,7 +477,6 @@ static void UNUSED rewind_pipe(FILE * fp)
-+   /* To fix this #error, either simply remove the #error line and live without
-+    * file-type detection with pipes, or add support for your compiler in the
-+    * lines above.  Test with cat monkey.wav | ./sox --info - */
-+-  #error FIX NEEDED HERE
-+   #define NO_REWIND_PIPE
-+   (void)fp;
-+ #endif
-+-- 
-+2.45.2
-+
-diff --git a/package/sox/0001-uclibc.patch b/package/sox/0001-uclibc.patch
-deleted file mode 100644
-index 5c118fa4dca..00000000000
---- a/package/sox/0001-uclibc.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Make SoX support uclibc-based toolchains, from:
--http://sourceforge.net/p/sox/bugs/179/
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--Index: sox-14.4.1/src/formats.c
--===================================================================
----- sox-14.4.1.orig/src/formats.c
--+++ sox-14.4.1/src/formats.c
--@@ -409,7 +409,7 @@ static void UNUSED rewind_pipe(FILE * fp
-- #if defined _FSTDIO || defined _NEWLIB_VERSION || defined __APPLE__
--   fp->_p -= PIPE_AUTO_DETECT_SIZE;
--   fp->_r += PIPE_AUTO_DETECT_SIZE;
---#elif defined __GLIBC__
--+#elif defined __GLIBC__ && ! defined __UCLIBC__
--   fp->_IO_read_ptr = fp->_IO_read_base;
-- #elif defined _MSC_VER || defined _WIN32 || defined _WIN64 || defined _ISO_STDIO_ISO_H
--   fp->_ptr = fp->_base;
--@@ -417,7 +417,6 @@ static void UNUSED rewind_pipe(FILE * fp
--   /* To fix this #error, either simply remove the #error line and live without
--    * file-type detection with pipes, or add support for your compiler in the
--    * lines above.  Test with cat monkey.wav | ./sox --info - */
---  #error FIX NEEDED HERE
--   #define NO_REWIND_PIPE
--   (void)fp;
-- #endif
-diff --git a/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch b/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
-index 32d6f83b0cd..2bb574b319f 100644
---- a/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
-+++ b/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
-@@ -1,4 +1,4 @@
--From 8df3a56cfb104c84d4701562ae2e3c9dc4686798 Mon Sep 17 00:00:00 2001
-+From 06e5cc069dbdfa060c3d9e75a798ec121ecc9349 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Sat, 6 Feb 2021 11:08:45 +0100
- Subject: [PATCH] configure.ac: fix static linking with id3tag
-@@ -23,6 +23,8 @@ util.c:(.text+0x240): undefined reference to `uncompress'
- Fixes:
-  - http://autobuild.buildroot.org/results/73efdacf237e3d567fa66f3b3f68e624f5e35bc7
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebased patch on package git version 7524160]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Upstream status: https://sourceforge.net/p/sox/patches/123]
- ---
-@@ -30,10 +32,10 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/configure.ac b/configure.ac
--index 39306398..896714f5 100644
-+index a1665467..8f47a978 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -83,7 +83,7 @@ dnl Various libraries
-+@@ -88,7 +88,7 @@ dnl Various libraries
-  SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
-  SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
-  SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
-@@ -43,5 +45,5 @@ index 39306398..896714f5 100644
-  
-  dnl Optional formats
- -- 
--2.29.2
-+2.45.2
- 
-diff --git a/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
-index 7d2e390df11..ad36ecad57c 100644
---- a/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
-+++ b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
-@@ -1,4 +1,4 @@
--From 4630e574e6c0269b94fd910e7c72b8ad1ee62ce7 Mon Sep 17 00:00:00 2001
-+From 76b78cb89cf8fc36b4ced568f3b34f778df53411 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Wed, 3 Mar 2021 16:48:57 +0100
- Subject: [PATCH] configure.ac: fix static linking with magic
-@@ -24,6 +24,8 @@ compress.c:(.text+0x1d0): undefined reference to `inflateInit_'
- Fixes:
-  - http://autobuild.buildroot.org/results/d96f27cd96926060046e2e1115777f5bceda3741
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebased patch on package git version 7524160]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Upstream status: not sent yet (waiting for feedback on third patch)]
- ---
-@@ -31,10 +33,10 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/configure.ac b/configure.ac
--index 896714f5..8ae3202c 100644
-+index 8f47a978..20454ed5 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -80,7 +80,7 @@ SOX_REPORT([other], [LADSPA effect plugins], [$HAVE_LADSPA])
-+@@ -85,7 +85,7 @@ SOX_REPORT([other], [LADSPA effect plugins], [$HAVE_LADSPA])
-  
-  dnl Various libraries
-  
-@@ -44,5 +46,5 @@ index 896714f5..8ae3202c 100644
-  SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
-  SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open], [], [], [], [$ZLIB_LIBS])
- -- 
--2.30.1
-+2.45.2
- 
-diff --git a/package/sox/0005-configure.ac-fix-static-linking-with-sndfile.patch b/package/sox/0005-configure.ac-fix-static-linking-with-sndfile.patch
-index 22334593317..46e5ca0ea13 100644
---- a/package/sox/0005-configure.ac-fix-static-linking-with-sndfile.patch
-+++ b/package/sox/0005-configure.ac-fix-static-linking-with-sndfile.patch
-@@ -1,4 +1,4 @@
--From 06109c84ab6930265287049c4bf9405e7ebc4986 Mon Sep 17 00:00:00 2001
-+From 7a2e270989037663e740487a8248db1227697c92 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Wed, 4 Aug 2021 10:27:16 +0200
- Subject: [PATCH] configure.ac: fix static linking with sndfile
-@@ -20,6 +20,8 @@ flac.c:(.text+0xfc): undefined reference to `FLAC__StreamDecoderErrorStatusStrin
- Fixes:
-  - http://autobuild.buildroot.org/results/4bc58ed68b29642876bb02710d0cd4f31540de86
- 
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+[Julien: rebased patch on package git version 7524160]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Upstream status: not sent yet (waiting for feedback on third patch)]
- ---
-@@ -27,10 +29,10 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/configure.ac b/configure.ac
--index 8ae3202c..26510769 100644
-+index 20454ed5..4330360b 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -117,7 +117,7 @@ SOX_FMT_REQ([mp3], [MAD LAME TWOLAME])
-+@@ -122,7 +122,7 @@ SOX_FMT_REQ([mp3], [MAD LAME TWOLAME])
-  SOX_FMT_PKG([oggvorbis], [ogg vorbis vorbisenc vorbisfile])
-  SOX_FMT_PKG([opus], [opusfile])
-  
-@@ -40,5 +42,5 @@ index 8ae3202c..26510769 100644
-  
-  SOX_FMT_LIB([wavpack], [wavpack/wavpack.h], [wavpack], [WavpackGetSampleRate])
- -- 
--2.30.2
-+2.45.2
- 
--- 
+ package/python-docker/Config.in          | 2 --
+ package/python-docker/python-docker.hash | 4 ++--
+ package/python-docker/python-docker.mk   | 8 ++++----
+ 3 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/package/python-docker/Config.in b/package/python-docker/Config.in
+index 944992f251..669b9e3433 100644
+--- a/package/python-docker/Config.in
++++ b/package/python-docker/Config.in
+@@ -2,10 +2,8 @@ config BR2_PACKAGE_PYTHON_DOCKER
+ 	bool "python-docker"
+ 	# docker-engine may be running on another host, so no other dependency
+ 	select BR2_PACKAGE_PYTHON3_SSL # runtime
+-	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
+ 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+ 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
+-	select BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT # runtime
+ 	help
+ 	  A Python library for the Docker Engine API.
+
+diff --git a/package/python-docker/python-docker.hash b/package/python-docker/python-docker.hash
+index 8e561e93a7..c8f8e7501a 100644
+--- a/package/python-docker/python-docker.hash
++++ b/package/python-docker/python-docker.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/docker/json
+-md5  c319e75054a226776f32797e56ec82da  docker-6.1.3.tar.gz
+-sha256  aa6d17830045ba5ef0168d5eaa34d37beeb113948c413affe1d5991fc11f9a20  docker-6.1.3.tar.gz
++md5  04e92a7b6dc8b88dde3c7cca6850b277  docker-7.1.0.tar.gz
++sha256  ad8c70e6e3f8926cb8a92619b832b4ea5299e2831c14284663184e200546fa6c  docker-7.1.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  f2f0b07fa5e492c11d27aa0d2f3f1a0e64b9d17f32d8aa489ae2af9609af33b2  LICENSE
+diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
+index ab03ac6af0..55ba405f7c 100644
+--- a/package/python-docker/python-docker.mk
++++ b/package/python-docker/python-docker.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+
+-PYTHON_DOCKER_VERSION = 6.1.3
++PYTHON_DOCKER_VERSION = 7.1.0
+ PYTHON_DOCKER_SOURCE = docker-$(PYTHON_DOCKER_VERSION).tar.gz
+-PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/f0/73/f7c9a14e88e769f38cb7fb45aa88dfd795faa8e18aea11bababf6e068d5e
+-PYTHON_DOCKER_SETUP_TYPE = setuptools
++PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/91/9b/4a2ea29aeba62471211598dac5d96825bb49348fa07e906ea930394a83ce
++PYTHON_DOCKER_SETUP_TYPE = pep517
+ PYTHON_DOCKER_LICENSE = Apache-2.0
+ PYTHON_DOCKER_LICENSE_FILES = LICENSE
+ PYTHON_DOCKER_CPE_ID_VENDOR = docker
+ PYTHON_DOCKER_CPE_ID_PRODUCT = docker-py
+-PYTHON_DOCKER_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_DOCKER_DEPENDENCIES = host-python-hatchling host-python-hatch-vcs
+
+ $(eval $(python-package))
+--
 2.45.2
 
 _______________________________________________
