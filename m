@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D5DFC27C4F
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jun 2024 09:30:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23B43C27C4F
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jun 2024 09:31:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 55C994038E;
-	Sun, 30 Jun 2024 09:30:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E134B4038E;
+	Sun, 30 Jun 2024 09:31:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MSIcwh01JtAE; Sun, 30 Jun 2024 09:30:54 +0000 (UTC)
+ id UN18dEO-uMtf; Sun, 30 Jun 2024 09:31:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D436405AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AE00408BD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D436405AE;
-	Sun, 30 Jun 2024 09:30:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9AE00408BD;
+	Sun, 30 Jun 2024 09:31:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3A7321BF364
- for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 09:30:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C35691BF364
+ for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 09:31:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2650A405DE
- for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 09:30:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B01814038E
+ for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 09:31:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3PorGjyuO0zp for <buildroot@lists.busybox.net>;
- Sun, 30 Jun 2024 09:30:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ id P_MIErdmp6-q for <buildroot@lists.busybox.net>;
+ Sun, 30 Jun 2024 09:31:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BA0E14038E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA0E14038E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BA0E14038E
- for <buildroot@buildroot.org>; Sun, 30 Jun 2024 09:30:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 65CD2408BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65CD2408BD
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 65CD2408BD
+ for <buildroot@buildroot.org>; Sun, 30 Jun 2024 09:31:02 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 172D513F88F;
- Sun, 30 Jun 2024 11:30:46 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 69C8C13F89A;
+ Sun, 30 Jun 2024 11:30:58 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 30 Jun 2024 11:30:46 +0200
-Date: Sun, 30 Jun 2024 11:30:46 +0200
+ Sun, 30 Jun 2024 11:30:58 +0200
+Date: Sun, 30 Jun 2024 11:30:58 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <ZoElxng_7sJTJLTW@landeda>
-References: <20240629082745.3489228-1-bernd@kuhls.net>
+Message-ID: <ZoEl0jaExXsymmzD@landeda>
+References: <20240629073102.772416-1-bernd@kuhls.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240629082745.3489228-1-bernd@kuhls.net>
+In-Reply-To: <20240629073102.772416-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1719739849;
- bh=gS9ft+b0RfjOoGipIoi5UHIyajFxwmxQa/R6fMwvFc0=;
+ d=free.fr; s=smtp-20201208; t=1719739860;
+ bh=dOKHotN7f9XaWubUIKpHBpt5Zx2RO8sX+IF5i25+FCU=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=dvlM9BgjKnPOk3EVwYgKy6qbwe3UKPzRlz2m+CZ8am9xkCpbXigTLVepT79C6Gzgx
- TImmp1nLaqEjj/kiG6/F4vbCXWWXGdFtPMLqJruhVLb77TdsaRBfh/n5m7POne1IQW
- mli6LoIB3FwAlLMrHAhxgcVhEnka1ib3pM/kZ6R2jhEX8VEgvfX9fnjvBsMBtf01TK
- 1Juy+l/JxBQOPqFWgRXcOsmBt2EX1hfIc01xEhg44BXqkTJH6UkcgLw3DS93Xm3NwI
- ZlMYrpdq352LMywjSjhX2p51cnha07bmujdLOhK1z/Z8GZQpjU0PdKgxaMbDCoxEl7
- bhB2O25+kE1Ag==
+ b=jP4d4qd/lCk3FcoIshQ+I0XCqyZE6gHDeNi7/t0/Om4RbngFxSycdNbpLnUSD3QUP
+ OqWgy9C/SPjAxBpsZKZ14C0gTSSSSgY7fPuz93qxeEmgW8WmLy008U5ecA1UKwX7wU
+ Qbt8UQ7nB93zvtxEdq5NcKDSg274Zz81ESoT3EbivVfJsQFaXgG88lnE/p9r6lKh+e
+ +18kYW7EOoxtkgjZ3XkWRCW1i7awjzTb3kbZVhZ7iZ3h9QHvNCnfFnst34MSF1Ft4D
+ pQy1Pf7ZKdFzhtrQOqx6JHIU5e2iyfwmxOhCNGYa7ur1P4d4CxQ/81OfVftX3bqLTH
+ ujv20qtUdApzA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dvlM9Bgj
-Subject: Re: [Buildroot] [PATCH 1/1] package/crda: update patches to be
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jP4d4qd/
+Subject: Re: [Buildroot] [PATCH 1/1] package/libyuv: update patches to be
  applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -89,53 +89,49 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Bernd, All,
 
-On 2024-06-29 10:27 +0200, Bernd Kuhls spake thusly:
+On 2024-06-29 09:31 +0200, Bernd Kuhls spake thusly:
 > Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
 > fuzz factor to 0" reduced the fuzz factor.
 > 
-> Due to this change, crda fails to build with output:
+> Due to this change, libyuv fails to build with output:
 > 
->     Applying 0001-crda-support-python-3-in-utils-key2pub.py.patch using patch:
->     patching file Makefile
->     Hunk #1 FAILED at 112.
->     1 out of 1 hunk FAILED -- saving rejects to file Makefile.rej
+>     Applying 0001-i386-sse2.patch using patch:
+>     patching file include/libyuv/scale_row.h
+>     Hunk #1 FAILED at 33.
+>     1 out of 1 hunk FAILED -- saving rejects to file include/libyuv/scale_row.h.rej
 > 
-> Rebase patch to fix the problem, problem was not yet caught by
-> autobuilders.
+> Rebase the patch to fix the problem.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/8ca446ee4bd657a661894dec66f45aa02b6a7325/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to master, thanks.
 
-Regards,
-Yann E. MORIN.
-
 > ---
->  .../crda/0001-crda-support-python-3-in-utils-key2pub.py.patch | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  package/libyuv/0001-i386-sse2.patch | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-> index f2b9cca2d6..00b5a52ea7 100644
-> --- a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-> +++ b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-> @@ -33,6 +33,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->  Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->  [Romain: Use pycryptodomex]
->  Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> +[Bernd: rebased for version 4.15]
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
->  ---
->   Makefile         |   2 +-
->   utils/key2pub.py | 146 ++++++++++++++++++++++++-----------------------
-> @@ -49,7 +51,7 @@ index a3ead30..8da38d0 100644
->  -	$(Q)./utils/key2pub.py --$* $(wildcard $(PUBKEY_DIR)/*.pem) $@
->  +	$(Q) python utils/key2pub.py --$* $(wildcard $(PUBKEY_DIR)/*.pem) $@
+> diff --git a/package/libyuv/0001-i386-sse2.patch b/package/libyuv/0001-i386-sse2.patch
+> index b8ecb34d0f..2380bbc973 100644
+> --- a/package/libyuv/0001-i386-sse2.patch
+> +++ b/package/libyuv/0001-i386-sse2.patch
+> @@ -5,7 +5,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  diff -uNr libyuv-1411.org/include/libyuv/scale_row.h libyuv-1411/include/libyuv/scale_row.h
+>  --- libyuv-1411.org/include/libyuv/scale_row.h	2015-05-22 23:39:21.000000000 +0200
+>  +++ libyuv-1411/include/libyuv/scale_row.h	2015-05-25 12:35:17.000000000 +0200
+> -@@ -33,7 +33,7 @@
+> +@@ -55,7 +55,7 @@
 >   
-> - $(LIBREG): regdb.h reglib.h reglib.c
-> + $(LIBREG): reglib.c regdb.h reglib.h
->   	$(NQ) '  CC  ' $@
->  diff --git a/utils/key2pub.py b/utils/key2pub.py
->  index 9bb04cd..8a0ba2a 100755
+>   // The following are available on all x86 platforms:
+>   #if !defined(LIBYUV_DISABLE_X86) && \
+> @@ -13,4 +13,4 @@ diff -uNr libyuv-1411.org/include/libyuv/scale_row.h libyuv-1411/include/libyuv/
+>  +    (defined(_M_IX86) || defined(__x86_64__) || (defined(__i386__) && defined(__SSE2__)))
+>   #define HAS_FIXEDDIV1_X86
+>   #define HAS_FIXEDDIV_X86
+> - #define HAS_SCALEADDROWS_SSE2
+> + #define HAS_SCALEADDROW_SSE2
 > -- 
 > 2.39.2
 > 
