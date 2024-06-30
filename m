@@ -1,93 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE8BC27C4F
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jun 2024 13:51:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41C4AC27C4F
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jun 2024 14:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0887406A1;
-	Sun, 30 Jun 2024 13:51:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G7zcu4OJMmRi; Sun, 30 Jun 2024 13:51:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65DD4406AB
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 65DD4406AB;
-	Sun, 30 Jun 2024 13:51:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 219A51BF3A1
- for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 13:51:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D42381992
- for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 13:51:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5E398116C;
+	Sun, 30 Jun 2024 14:25:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zOO7i4G2sodp for <buildroot@lists.busybox.net>;
- Sun, 30 Jun 2024 13:51:13 +0000 (UTC)
+ id SG3DH4dv7Hep; Sun, 30 Jun 2024 14:25:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD7AA8113A
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD7AA8113A;
+	Sun, 30 Jun 2024 14:25:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B341F1BF35A
+ for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 14:25:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E0EF605A9
+ for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 14:25:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AeBxWHh38ul7 for <buildroot@lists.busybox.net>;
+ Sun, 30 Jun 2024 14:25:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ABC9B8198A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABC9B8198A
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ABC9B8198A
- for <buildroot@busybox.net>; Sun, 30 Jun 2024 13:51:12 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-425680b1d3aso14685775e9.2
- for <buildroot@busybox.net>; Sun, 30 Jun 2024 06:51:12 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DEF80605A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEF80605A6
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DEF80605A6
+ for <buildroot@buildroot.org>; Sun, 30 Jun 2024 14:25:03 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4255fa23f7bso15700985e9.2
+ for <buildroot@buildroot.org>; Sun, 30 Jun 2024 07:25:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719755471; x=1720360271;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=0W+sF7HW3EMjl3qqyM/1F+rVeN/R4e95Rf+G7IE09FM=;
- b=QKXTw8FbkkTxd3ITm9RVspMBEf6Yey6j6oi6z1OuibOxs++EHjZnSOQvMpiVuZkLrg
- 6Eb67NuG4a+JHDxg48qUR/x815MLSmS20Mv50xGdRZzOkhNoGt20V1LNrvgfvo6jbLn3
- mnp/A5r534WKQMDsDVZZo0SV5jqjGnrn78TJa5u3jvJaBu/EOX4GvEp7PdgSWjY9dsWX
- 28mhEI3LpET6IV5aRbGSH+bSiF2sLscvaPFIY93/TaPIwnVFfkd+1JijNbYq8Bg9y4Ie
- QUiFr+Cx5pvFhkjTFCPG9fJnySUfsG+Q7FACD3JjGM9KyV7a4kd0FTGNvG8LAxNKpjgf
- oTlw==
-X-Gm-Message-State: AOJu0Yzj4W3qSIvy1+OfswYPMZaZYsIPnjx5NLi79u/QiUQFbnc7XRwD
- 4YpzVMaU4vbcICjI0oCpw2wDM3RUn4YB+J0c7OarXwOn/ult8AwBCsv6DLmsUqhhC5MS/RFWkWy
- zQw==
-X-Google-Smtp-Source: AGHT+IFUL5+BhbSNt412EVDE+S9q0hBjc319kBti5L0SPTYtBebSc8ZS6paM+/Vy+2mSWYeYT4qoJg==
-X-Received: by 2002:a05:600c:480f:b0:425:7bbf:fd07 with SMTP id
- 5b1f17b1804b1-4257bbffdecmr17625685e9.5.1719755470645; 
- Sun, 30 Jun 2024 06:51:10 -0700 (PDT)
-Received: from vm-2404.. ([37.166.9.170]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4257dee5f2asm23333375e9.22.2024.06.30.06.51.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 30 Jun 2024 06:51:10 -0700 (PDT)
-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sun, 30 Jun 2024 15:51:28 +0200
-Message-ID: <20240630135128.2222416-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.43.0
+ d=1e100.net; s=20230601; t=1719757501; x=1720362301;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=RwpmXZ9kzjLMpuSfeyyxpBja/a7BGazD8yEoiaAoJfg=;
+ b=VYomeoeGuOaEPwlb2YZe4g4lkHmN6rFi0cv9HT1ZARV3vl6hqEX3ErXhCNxwLpWjsE
+ h72BLMA5XHNZzzIOWXljW8tTHCL9P5Iursx8KfubCjELFbkoE/pGnulGkZJ1B+uZS5B2
+ zjxPp3fw9XrmuPNmCgpRT3TpfHa537Uk+VIvDseqQXT7GS/b+j6ehePDm/YewpqwlyRr
+ ehVVOkMc/RHLGdG5rygP318Vy1qgeS0GJC2RgQmlJ2SYEWgjQGrQznsT7s2lFgRKKJF5
+ j5nBW3izeXkXWwr4nl/oMj1WSvOYydqWAlK+RN4RiYF3RhH3R1yLHLGA4JhAci/dMpY4
+ EzNg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUwuP3hd0kUqaACOdPfCQL0Iqa2Olx04OJgLE7aR8W7L4+LtUohy//Kxy0c/Vcu91IG5IlwAogacE6GuL3fv/0QbfduUZY7Dw==
+X-Gm-Message-State: AOJu0YzQP8QcKB8rTZpN+olFwyiU6gx+NS+e+H/7RWmAjAWln853XMPh
+ ELylKTYKr1z3Nv56im6IzYoNSiaNibMgF7ybhEJignjyZ4FaxWmz06iM8whmNfE=
+X-Google-Smtp-Source: AGHT+IHkgR4j4CSq5gJzeIYLFuABmMsmAnG+4eF3kFGxbpFBOW2yCUNq+x7VpJJ80KhH1ZKNCX/pCA==
+X-Received: by 2002:a05:600c:1907:b0:425:80d5:b8b2 with SMTP id
+ 5b1f17b1804b1-42580d5b949mr6334545e9.16.1719757501128; 
+ Sun, 30 Jun 2024 07:25:01 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4256b0642acsm117262665e9.25.2024.06.30.07.25.00
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 30 Jun 2024 07:25:00 -0700 (PDT)
+Message-ID: <708a7766-b35c-4b94-ab28-21e53020f1f6@mind.be>
+Date: Sun, 30 Jun 2024 16:24:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: "Kennedy, Andy A Collins" <Andy.A.Kennedy@collins.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <BN2P110MB1060371DE485BB6BB29E11DAC8D6A@BN2P110MB1060.NAMP110.PROD.OUTLOOK.COM>
+Content-Language: en-GB
+In-Reply-To: <BN2P110MB1060371DE485BB6BB29E11DAC8D6A@BN2P110MB1060.NAMP110.PROD.OUTLOOK.COM>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1719755471; x=1720360271; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0W+sF7HW3EMjl3qqyM/1F+rVeN/R4e95Rf+G7IE09FM=;
- b=PXTe26sAXXidGszpz+8Yjb7yygno22enRuzxNIEsYiBEQPEK4R16jvJTruWj7Sfqmw
- iKbHqo9++afvBpZ3WcbXJ7sNA27sZ+AA4hTz/MIbBMqdQj4PhGOkXaP7OA60zzsn/Hou
- Rxy0yxGF66+p+kP0kR56dDIZggwRRdVMDWB0D3htAtCnUUnqD/naSvFQVOIFtBzqvyuu
- H+8VhaJ0v89+1vbCVmYRQIo2HXoZm7OgbrWTVaZvV2Oixql+cCcaTA4hKbEdCALClHJt
- D18EIuVuF5SpC9NQW6hoUH7PJpm72mn9GOdNcUQpYyqpEY8KaWpX/H15QkuESqGv/gEo
- b30g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=PXTe26sA
-Subject: [Buildroot] [PATCH] package/lua: bump to version 5.4.7
+ d=mind.be; s=google; t=1719757501; x=1720362301; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=RwpmXZ9kzjLMpuSfeyyxpBja/a7BGazD8yEoiaAoJfg=;
+ b=KVHKP1SZUplGDwZl2HiytIyLQFh1aC3a7UB6fLEcI8xweQhn+TwY0AAmsafviKvpUw
+ +uSi8cD5GlhJQGt7M1jfGUTf0KzMInlykh5JS7LZHCQ/nEnuy5IORtO6BSq//3+3J4fU
+ uDdGB94HyHD7shUZM+QX8j8UBKCtBMUJGAzE1yMuup8XTYh+y+la8Uu8/Cx6yv6iMiQl
+ ODTIOeZiZRxyzi6OuyiNmEKFOHtEiZI4eaaTWwlsELB36vUMK8Haspafr9kdLjGG71iy
+ /5w1AsZWmeCYY2n9a0RtVL8Sj15Qc3pPtc7KGqCany0a5IAgl/D9MF12sG0jvkR+MbQc
+ gHnA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=KVHKP1SZ
+Subject: Re: [Buildroot] host gcc?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,88 +108,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/5.4.6/lua.hash                                  | 5 -----
- package/lua/{5.4.6 => 5.4.7}/0001-root-path.patch           | 0
- package/lua/{5.4.6 => 5.4.7}/0002-shared-libs-for-lua.patch | 0
- package/lua/{5.4.6 => 5.4.7}/0011-linenoise.patch           | 2 +-
- package/lua/5.4.7/lua.hash                                  | 5 +++++
- package/lua/lua.mk                                          | 2 +-
- 6 files changed, 7 insertions(+), 7 deletions(-)
- delete mode 100644 package/lua/5.4.6/lua.hash
- rename package/lua/{5.4.6 => 5.4.7}/0001-root-path.patch (100%)
- rename package/lua/{5.4.6 => 5.4.7}/0002-shared-libs-for-lua.patch (100%)
- rename package/lua/{5.4.6 => 5.4.7}/0011-linenoise.patch (97%)
- create mode 100644 package/lua/5.4.7/lua.hash
+  Hi Andy,
 
-diff --git a/package/lua/5.4.6/lua.hash b/package/lua/5.4.6/lua.hash
-deleted file mode 100644
-index 0b03fd563..000000000
---- a/package/lua/5.4.6/lua.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# Hashes from: https://www.lua.org/ftp/
--sha256  7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88  lua-5.4.6.tar.gz
--
--# Locally computed
--sha256  8f1bff27c5b0585ab679dbe4e37e75a1014af0f79732f42a79f86728321a0c6d  doc/readme.html
-diff --git a/package/lua/5.4.6/0001-root-path.patch b/package/lua/5.4.7/0001-root-path.patch
-similarity index 100%
-rename from package/lua/5.4.6/0001-root-path.patch
-rename to package/lua/5.4.7/0001-root-path.patch
-diff --git a/package/lua/5.4.6/0002-shared-libs-for-lua.patch b/package/lua/5.4.7/0002-shared-libs-for-lua.patch
-similarity index 100%
-rename from package/lua/5.4.6/0002-shared-libs-for-lua.patch
-rename to package/lua/5.4.7/0002-shared-libs-for-lua.patch
-diff --git a/package/lua/5.4.6/0011-linenoise.patch b/package/lua/5.4.7/0011-linenoise.patch
-similarity index 97%
-rename from package/lua/5.4.6/0011-linenoise.patch
-rename to package/lua/5.4.7/0011-linenoise.patch
-index 5054ae19e..2fcbc49f6 100644
---- a/package/lua/5.4.6/0011-linenoise.patch
-+++ b/package/lua/5.4.7/0011-linenoise.patch
-@@ -8,7 +8,7 @@ Index: b/src/lua.c
- ===================================================================
- --- a/src/lua.c
- +++ b/src/lua.c
--@@ -438,6 +438,14 @@
-+@@ -447,6 +447,14 @@
-  #define lua_saveline(L,line)	((void)L, add_history(line))
-  #define lua_freeline(L,b)	((void)L, free(b))
-  
-diff --git a/package/lua/5.4.7/lua.hash b/package/lua/5.4.7/lua.hash
-new file mode 100644
-index 000000000..d67fdcf6c
---- /dev/null
-+++ b/package/lua/5.4.7/lua.hash
-@@ -0,0 +1,5 @@
-+# Hashes from: https://www.lua.org/ftp/
-+sha256  9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30  lua-5.4.7.tar.gz
-+
-+# Locally computed
-+sha256  33a975a766520bc54de2d71e45442e504effa0519e331e31ee3fc46eca4f98bd  doc/readme.html
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 93d480381..15772dbdf 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- ifeq ($(BR2_PACKAGE_LUA_5_4),y)
--LUA_VERSION = 5.4.6
-+LUA_VERSION = 5.4.7
- else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_VERSION = 5.3.6
- else
--- 
-2.43.0
+On 26/06/2024 23:02, Kennedy, Andy A Collins via buildroot wrote:
+> Many years ago, I recall (perhaps erroneously) that the toolchain build
+> also required building an intermediate gcc to get to the latest version
+> of the selected toolchain.
 
+  We still have that: package/gcc/gcc-initial.
+
+  It's not a host gcc though, it's for the target. We need to build it to be 
+able to build the standard library, and we then need to build the final gcc 
+using that standard library.
+
+>  I now require selecting options that need a
+> toolchain that is older than the version of gcc I'm stuck using (for
+> reasons I won't address here).  Specifically, I'm attempting to select
+> BR2_PACKAGE_PYTHON_SCIPY which has a dependency of
+> BR2_HOST_GCC_AT_LEAST_9 and BR2_TOOLCHAIN_HAS_FORTRAN, the latter of
+> which is easy to overcome by configuration.  The former, however, is
+> what stumps me.  I need to provide a gcc that is greater than the much
+> older version than gcc-9.
+> 
+> Do I have an easy path to this goal?
+
+  The relatively easy path is to build GCC 9 outside of buildroot, and specify 
+it by passing HOSTCC and HOSTCXX in the environment. Or making sure that GCC 9's 
+installation dir is earlier in PATH.
+
+>  Assuming the answer is no, would
+> there be support in providing a way to select the current toolchain
+> gcc build as a host to host compiler at the same time?
+
+  Sounds like a valid idea, but it's not so simple to implement, because it 
+means that HOSTCC has to change somewhere in the middle of the build...
+
+  Also, it's probably better to stick to a single GCC version, and make sure it 
+can be used regardless of whether an internal or external toolchain is used.
+
+  Regards,
+  Arnout
+
+> 
+> It is good to be back!  I've been missing from BuildRoot for many years.
+> 
+> Andy
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
