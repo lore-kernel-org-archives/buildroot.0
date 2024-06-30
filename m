@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B93A4C27C4F
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jun 2024 14:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01B59C27C4F
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jun 2024 14:44:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81184813C3;
-	Sun, 30 Jun 2024 14:43:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8A59813DA;
+	Sun, 30 Jun 2024 14:44:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id caNavSxdvWvO; Sun, 30 Jun 2024 14:43:57 +0000 (UTC)
+ id TC8W1XdMH9re; Sun, 30 Jun 2024 14:44:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3163C812D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CD8C81412
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3163C812D1;
-	Sun, 30 Jun 2024 14:43:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CD8C81412;
+	Sun, 30 Jun 2024 14:44:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ED8851BF35A
- for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 14:43:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 400241BF35A
+ for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 14:43:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86D5340180
+ by smtp4.osuosl.org (Postfix) with ESMTP id A022D4012F
  for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 14:43:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BH7W46En2vZj for <buildroot@lists.busybox.net>;
+ id uu0fT6p98pxz for <buildroot@lists.busybox.net>;
  Sun, 30 Jun 2024 14:43:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 977A940130
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B441740135
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 977A940130
+ by smtp4.osuosl.org (Postfix) with ESMTP id B441740135
  for <buildroot@buildroot.org>; Sun, 30 Jun 2024 14:43:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CF40836CA; Sun, 30 Jun 2024 14:43:37 +0000 (UTC)
+ id A02EF836CF; Sun, 30 Jun 2024 14:43:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Jun 2024 16:39:52 +0200
+Date: Sun, 30 Jun 2024 16:40:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4e01942d83c57ce4973e549afa4735a52394de35
-X-Git-Newrev: b752d0e4cc78a921ba08cd891f68ef80fc251128
+X-Git-Oldrev: cd83b50bdca87c74dfd4a4860de52eb645b76394
+X-Git-Newrev: a3233807d202f2b055373f82f6e0254cb8dee878
 X-Patchwork-Hint: ignore
-Message-Id: <20240630144337.7CF40836CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vlc: security bump to version
- 3.0.21
+Message-Id: <20240630144337.A02EF836CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dav1d: bump version to 1.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,50 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b752d0e4cc78a921ba08cd891f68ef80fc251128
+commit: https://git.buildroot.net/buildroot/commit/?id=a3233807d202f2b055373f82f6e0254cb8dee878
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://www.videolan.org/security/sb-vlc3021.html
-
 Release notes:
-https://code.videolan.org/videolan/vlc/-/blob/3.0.21/NEWS
+https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/vlc/vlc.hash | 8 ++++----
- package/vlc/vlc.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/dav1d/dav1d.hash | 4 ++--
+ package/dav1d/dav1d.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 40529bd664..b3d9a083b9 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,7 +1,7 @@
--# From https://get.videolan.org/vlc/3.0.20/vlc-3.0.20.tar.xz.sha256
--sha256  adc7285b4d2721cddf40eb5270cada2aaa10a334cb546fd55a06353447ba29b5  vlc-3.0.20.tar.xz
--# From https://get.videolan.org/vlc/3.0.20/vlc-3.0.20.tar.xz.sha1
--sha1  b834516ab701bf6311980ed5d67b77c834fdebe7  vlc-3.0.20.tar.xz
-+# From https://get.videolan.org/vlc/3.0.21/vlc-3.0.21.tar.xz.sha256
-+sha256  24dbbe1d7dfaeea0994d5def0bbde200177347136dbfe573f5b6a4cee25afbb0  vlc-3.0.21.tar.xz
-+# From https://get.videolan.org/vlc/3.0.21/vlc-3.0.21.tar.xz.sha1
-+sha1  be8557fc2f4be58caebe4a8b1d70f03dc6b95792  vlc-3.0.21.tar.xz
+diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
+index a62193810e..e0ca8f1e88 100644
+--- a/package/dav1d/dav1d.hash
++++ b/package/dav1d/dav1d.hash
+@@ -1,4 +1,4 @@
+-# From https://download.videolan.org/pub/videolan/dav1d/1.4.1/dav1d-1.4.1.tar.xz.sha256
+-sha256  8d407dd5fe7986413c937b14e67f36aebd06e1fa5cfec679d10e548476f2d5f8  dav1d-1.4.1.tar.xz
++# From https://download.videolan.org/pub/videolan/dav1d/1.4.3/dav1d-1.4.3.tar.xz.sha256
++sha256  42fe524bcc82ea3a830057178faace22923a79bad3d819a4962d8cfc54c36f19  dav1d-1.4.3.tar.xz
  # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index d0fc1744c0..a597616470 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
+ sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 18cb81868a..4e3e8fe1cf 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VLC_VERSION = 3.0.20
-+VLC_VERSION = 3.0.21
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+-DAV1D_VERSION = 1.4.1
++DAV1D_VERSION = 1.4.3
+ DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.xz
+ DAV1D_SITE = https://download.videolan.org/pub/videolan/dav1d/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
