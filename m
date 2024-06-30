@@ -4,99 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9D68C27C4F
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jun 2024 14:48:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 549ADC27C4F
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jun 2024 14:49:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A96AF80AD0;
-	Sun, 30 Jun 2024 14:48:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C37E81126;
+	Sun, 30 Jun 2024 14:49:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N2qizooSrGgY; Sun, 30 Jun 2024 14:48:55 +0000 (UTC)
+ id stdnaVAvp3PE; Sun, 30 Jun 2024 14:49:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92CE680AF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7696780F14
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92CE680AF9;
-	Sun, 30 Jun 2024 14:48:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 78F581BF35A
- for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 14:48:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7696780F14;
+	Sun, 30 Jun 2024 14:49:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A0B861BF35A
+ for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 14:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65E77408A5
- for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 14:48:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E51A80F14
+ for <buildroot@lists.busybox.net>; Sun, 30 Jun 2024 14:49:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KtJWt28OYX2n for <buildroot@lists.busybox.net>;
- Sun, 30 Jun 2024 14:48:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A25BB405DE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A25BB405DE
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A25BB405DE
- for <buildroot@buildroot.org>; Sun, 30 Jun 2024 14:48:51 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4256aee6e4dso16097355e9.1
- for <buildroot@buildroot.org>; Sun, 30 Jun 2024 07:48:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719758929; x=1720363729;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Hax9E3GeNavI/sr2d70bCq2tYfMqUKIv6vQnz53w5KA=;
- b=kdJlR9sH2PUbkLGOFRIor2lG0smdmqKpd3gtz8gx50VphbenKO5M1zQa+dYnrNyeUY
- 8XzsKkTOTztofIRQ+KjdoEfmVsXXC/jAQynEw1Gd+LRsKMGbw33+BZeK+w63wtdC/hQ3
- dz4KdBeGnecCYEf/Lr5EJnwC1MhmszDZ6nqcniXvdpx7MfTamQjE2MPPgEUXEiyNdl1f
- difitqSufouKpo8VgoprdopWXbeDUHGJZ0Qk7JnCch/KuR/ssc1MlU6xhGnYgEf5ZKLt
- ewLzrqZJhct2Ah+5QoQbM4ev412+q/MWXZchzgIrox2VdOewgXqKnC3k1i+jgrAcuFDy
- WbRA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXlOZdDQJGJhERnNojCQFrfB0x0QyDsjhBcfA/t14Qiqz9YXK2JwdaAHmp4SxcaBO0moWccKF3CY8KfOp0uDwVCsK4lkU9vZQ==
-X-Gm-Message-State: AOJu0Ywf232z/mXIJS9PfeOLPvN68yzNJszyo+iny6blc7vl15i664xG
- zdjmwevZEdkPpQ1RIqtB2JtxhJtFWuUyW82hvEi7wMOgO2x9rKagRvXOW8ZuFpa1bKSEGWkW4WJ
- y
-X-Google-Smtp-Source: AGHT+IHbbFonPx2S3RAeGMC43LLieVyh7GgKKWOmw4agqm5qcosubMrkTyG0BxGZIVaajl1fCZoR3A==
-X-Received: by 2002:adf:f80d:0:b0:366:e838:f5d4 with SMTP id
- ffacd0b85a97d-36775699f64mr2046263f8f.3.1719758929470; 
- Sun, 30 Jun 2024 07:48:49 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3675a0cd5f1sm7668308f8f.6.2024.06.30.07.48.48
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 30 Jun 2024 07:48:49 -0700 (PDT)
-Message-ID: <0c924bf0-e51f-4ab0-80a6-b44237851f9b@mind.be>
-Date: Sun, 30 Jun 2024 16:48:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20240629082152.3438355-1-bernd@kuhls.net>
-Content-Language: en-GB
-In-Reply-To: <20240629082152.3438355-1-bernd@kuhls.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719758929; x=1720363729; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=Hax9E3GeNavI/sr2d70bCq2tYfMqUKIv6vQnz53w5KA=;
- b=aASNlWTi0xazBsBTRX1k8fzy8qNp9AY9AEUEG7oq9as2zbYH2EI8v10DKwS2l3NXvL
- y51e9vYUsoNuOKOG24u4RkV9zmmQLMJNVGm7ZJrAZkOmQKgIqyU/cAjuEoeB0FVqwCyl
- phCp1KR3i7Og50jVs4KkJ8YAxLuoALBWNSa0TevHert4iPUO77nfMHs70AaIcpCKAmbS
- GMl41X+dZBxGvDLStCDwE5UIDfdMYZ8ABMJ71JeBxPcfZD9SXsOf7oR4Nxg86sIh56QD
- ckJqtIwflXAclk9vc3qd1KQQwjGa3ku2E0ymj8B69EkqIVW39dBLGeEhPjGKnV3Ao0lw
- jdww==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=aASNlWTi
-Subject: Re: [Buildroot] [PATCH 1/1] package/libgcrypt: bump version to
- 1.11.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aZsO3uaj0omH for <buildroot@lists.busybox.net>;
+ Sun, 30 Jun 2024 14:49:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 776CF80F41
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 776CF80F41
+ for <buildroot@buildroot.org>; Sun, 30 Jun 2024 14:49:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 33CFA836DF; Sun, 30 Jun 2024 14:49:11 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jun 2024 16:43:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e0ea4c280c62245525500cc76f53d57b04b8d0a7
+X-Git-Newrev: 93868c35e9829c13083fd7e954ac7e4909925758
+X-Patchwork-Hint: ignore
+Message-Id: <20240630144911.33CFA836DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cgic: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,95 +59,307 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=93868c35e9829c13083fd7e954ac7e4909925758
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 29/06/2024 10:21, Bernd Kuhls wrote:
-> Release notes:
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=NEWS
-> https://dev.gnupg.org/T7166
-> 
-> Rebased patch.
-> 
-> Updated license hash due to upstream commit:
+The upstream site for cgic is now a parking/phishing site, so we can't
+download cgic anymore.
 
-  It's not sufficient to point to the commit, you should also explain what 
-changed (in particular, make it clear that the license hasn't changed).
+The last version was 2.07, released 7 years ago, and nothing uses cgic
+in Buildroot.
 
-  I did that and applied to master, thanks.
+Drop the package.
 
-  Regards,
-  Arnout
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: David Bender <codehero@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ .checkpackageignore                                |  3 --
+ Config.in.legacy                                   |  6 +++
+ DEVELOPERS                                         |  1 -
+ package/Config.in                                  |  1 -
+ package/cgic/0001-prepare_makefile.patch           | 44 -----------------
+ package/cgic/0002-file_enhancements.patch          | 56 ----------------------
+ .../0003-restore-cgiFormFileGetTempfileName.patch  | 43 -----------------
+ package/cgic/Config.in                             |  6 ---
+ package/cgic/cgic.hash                             |  3 --
+ package/cgic/cgic.mk                               | 25 ----------
+ 10 files changed, 6 insertions(+), 182 deletions(-)
 
-> https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=commitdiff;h=2538430a35b02b9ac002a84930650bf4767fc473
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->   ...0001-configure.ac-add-an-option-to-disable-tests.patch | 8 +++++---
->   package/libgcrypt/libgcrypt.hash                          | 6 +++---
->   package/libgcrypt/libgcrypt.mk                            | 2 +-
->   3 files changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-> index 5ddde9df1b..bc0f9ebe7f 100644
-> --- a/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-> +++ b/package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch
-> @@ -15,6 +15,8 @@ Fixes:
->    - http://autobuild.buildroot.org/results/50a8ba572e3fafd3c6a39bd54bcfcaf78b5ad325
->   
->   Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Bernd: rebased for version 1.11.0]
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
->   ---
->    Makefile.am  |  7 ++++++-
->    configure.ac | 10 ++++++++++
-> @@ -38,13 +40,13 @@ index 7fa4fa4d..f0bd90e4 100644
->   -SUBDIRS =         compat mpi cipher random src $(doc) tests
->   +SUBDIRS =         compat mpi cipher random src $(doc) $(tests)
->    
-> - EXTRA_DIST = autogen.sh autogen.rc README.GIT LICENSES      	           \
-> -              ChangeLog-2011 build-aux/ChangeLog-2011 doc/ChangeLog-2011    \
-> + EXTRA_DIST = autogen.sh autogen.rc README.GIT LICENSES			   \
-> + 	     ChangeLog-2011 build-aux/ChangeLog-2011 doc/ChangeLog-2011	   \
->   diff --git a/configure.ac b/configure.ac
->   index e8c8cd39..1a6b61e5 100644
->   --- a/configure.ac
->   +++ b/configure.ac
-> -@@ -3231,6 +3231,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-> +@@ -3777,6 +3777,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
->    AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
->    
->    
-> diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-> index ffe30e1455..ced8087ca9 100644
-> --- a/package/libgcrypt/libgcrypt.hash
-> +++ b/package/libgcrypt/libgcrypt.hash
-> @@ -1,5 +1,5 @@
->   # From https://www.gnupg.org/download/integrity_check.html
-> -sha1  359e1d01ad2eb9cd2db964ea96ef3712d0c2c649  libgcrypt-1.10.3.tar.bz2
-> -sha256  8b0870897ac5ac67ded568dcfadf45969cfa8a6beb0fd60af2a9eadc2a3272aa  libgcrypt-1.10.3.tar.bz2
-> +sha1  dd2c68e0685bb99249efeeb06046fae15b5214ba  libgcrypt-1.11.0.tar.bz2
-> +sha256  09120c9867ce7f2081d6aaa1775386b98c2f2f246135761aae47d81f58685b9c  libgcrypt-1.11.0.tar.bz2
->   # Locally calculated
-> -sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-> +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-> index 2e4bf7448e..7a68a95c98 100644
-> --- a/package/libgcrypt/libgcrypt.mk
-> +++ b/package/libgcrypt/libgcrypt.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -LIBGCRYPT_VERSION = 1.10.3
-> +LIBGCRYPT_VERSION = 1.11.0
->   LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
->   LIBGCRYPT_LICENSE = LGPL-2.1+
->   LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ec95652000..b296451778 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -455,9 +455,6 @@ package/cdrkit/0001-no-rcmd.patch lib_patch.Upstream
+ package/cdrkit/0002-define-__THROW-to-avoid-build-issue-with-musl.patch lib_patch.Upstream
+ package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch lib_patch.Upstream
+ package/cfm/S65cfm lib_sysv.Indent lib_sysv.Variables
+-package/cgic/0001-prepare_makefile.patch lib_patch.Upstream
+-package/cgic/0002-file_enhancements.patch lib_patch.Upstream
+-package/cgic/0003-restore-cgiFormFileGetTempfileName.patch lib_patch.Upstream
+ package/cgroupfs-mount/S30cgroupfs Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/chipmunk/0001-Fix-build-failure-on-musl.patch lib_patch.Upstream
+ package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 29c386bec4..9dd5bdd2eb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2024.08"
+ 
++config BR2_PACKAGE_CGIC
++	bool "cgic has been removed"
++	select BR2_LEGACY
++	help
++	  the cgic upstream no longer exists.
++
+ config BR2_PACKAGE_VERSAL_FIRMWARE
+ 	bool "versal-firmware has been replaced by xilinx-prebuilt"
+ 	select BR2_TARGET_XILINX_PREBUILT
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8a5cceba78..6d9fcd97df 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -788,7 +788,6 @@ F:	package/libmnl/
+ 
+ N:	David Bender <codehero@gmail.com>
+ F:	package/benejson/
+-F:	package/cgic/
+ F:	package/freeradius-client/
+ F:	package/openldap/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 550fdc1f41..48ef1a6fdc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1948,7 +1948,6 @@ menu "Networking"
+ 	source "package/belle-sip/Config.in"
+ 	source "package/bluez5_utils-headers/Config.in"
+ 	source "package/c-ares/Config.in"
+-	source "package/cgic/Config.in"
+ 	source "package/cni-plugins/Config.in"
+ 	source "package/cppzmq/Config.in"
+ 	source "package/curlpp/Config.in"
+diff --git a/package/cgic/0001-prepare_makefile.patch b/package/cgic/0001-prepare_makefile.patch
+deleted file mode 100644
+index 15adc4cda2..0000000000
+--- a/package/cgic/0001-prepare_makefile.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-Makefile: fix for cross-compilation
+-
+-Probably-Signed-off-by: Dave Bender <bender@benegon.com>
+-[yann.morin.1998@free.fr: patch was made by Dave, but he
+- forgot his SoB line, so I added it]
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-diff -rupN cgic206/Makefile cgic206-br/Makefile
+---- cgic206/Makefile	2014-03-16 18:17:11.000000000 -0400
+-+++ cgic206-br/Makefile	2015-01-16 11:18:03.714874000 -0500
+-@@ -1,15 +1,14 @@
+--CFLAGS=-g -Wall
+--CC=gcc
+--AR=ar
+--RANLIB=ranlib
+- LIBS=-L./ -lcgic
+- 
+- all: libcgic.a cgictest.cgi capture
+- 
+- install: libcgic.a
+--	cp libcgic.a /usr/local/lib
+--	cp cgic.h /usr/local/include
+--	@echo libcgic.a is in /usr/local/lib. cgic.h is in /usr/local/include.
+-+	cp libcgic.a $(PREFIX)/usr/lib
+-+	cp cgic.h $(PREFIX)/usr/include
+-+	@echo libcgic.a is in $(PREFIX)/usr/lib. cgic.h is in $(PREFIX)/usr/include.
+-+
+-+cgi.o: cgic.c cgic.h
+-+	$(CC) $(CFLAGS) cgic.c -o cgic.o
+- 
+- libcgic.a: cgic.o cgic.h
+- 	rm -f libcgic.a
+-@@ -19,10 +18,10 @@ libcgic.a: cgic.o cgic.h
+- #mingw32 and cygwin users: replace .cgi with .exe
+- 
+- cgictest.cgi: cgictest.o libcgic.a
+--	gcc cgictest.o -o cgictest.cgi ${LIBS}
+-+	$(CC) cgictest.o -o cgictest.cgi ${LIBS}
+- 
+- capture: capture.o libcgic.a
+--	gcc capture.o -o capture ${LIBS}
+-+	$(CC) capture.o -o capture ${LIBS}
+- 
+- clean:
+- 	rm -f *.o *.a cgictest.cgi capture
+diff --git a/package/cgic/0002-file_enhancements.patch b/package/cgic/0002-file_enhancements.patch
+deleted file mode 100644
+index a6f82fce33..0000000000
+--- a/package/cgic/0002-file_enhancements.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-Create better temporary files.
+-
+-Probably-Signed-off-by: Dave Bender <bender@benegon.com>
+-[yann.morin.1998@free.fr: patch was made by Dave, but he
+- forgot his SoB line, so I added it; split the patch in two
+-  independent fixes]
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff -rupN cgic206/cgic.c cgic206_tempfile/cgic.c
+---- cgic206/cgic.c	2014-03-16 18:17:11.000000000 -0400
+-+++ cgic206_tempfile/cgic.c	2015-01-21 11:58:45.436384908 -0500
+-@@ -22,6 +22,8 @@
+- #define CGICDEBUGEND
+- #endif /* CGICDEBUG */
+- 
+-+#define _GNU_SOURCE
+-+
+- #include <stdio.h>
+- #include <string.h>
+- #include <ctype.h>
+-@@ -34,11 +36,11 @@
+- #include <io.h>
+- 
+- /* cgic 2.01 */
+--#include <fcntl.h>
+- 
+- #else
+- #include <unistd.h>
+- #endif /* WIN32 */
+-+#include <fcntl.h>
+- #include "cgic.h"
+- 
+- #define cgiStrEq(a, b) (!strcmp((a), (b)))
+-@@ -636,16 +638,17 @@ static cgiParseResultType getTempFileNam
+- 		window between the file's creation and the
+- 		chmod call (glibc 2.0.6 and lower might
+- 		otherwise have allowed this). */
+-+	mode_t umode;
+- 	int outfd; 
+-+	umode = umask(0600);
+- 	strcpy(tfileName, cgicTempDir "/cgicXXXXXX");
+--	outfd = mkstemp(tfileName);
+-+	outfd = mkostemp(tfileName, O_CLOEXEC | O_NOATIME);
+-+	umask(umode);
+- 	if (outfd == -1) {
+- 		return cgiParseIO;
+- 	}
+--	close(outfd);
+--	/* Fix the permissions */
+--	if (chmod(tfileName, 0600) != 0) {
+--		unlink(tfileName);
+-+
+-+	if (close(outfd)) {
+- 		return cgiParseIO;
+- 	}
+- #else
+diff --git a/package/cgic/0003-restore-cgiFormFileGetTempfileName.patch b/package/cgic/0003-restore-cgiFormFileGetTempfileName.patch
+deleted file mode 100644
+index f66227b6a6..0000000000
+--- a/package/cgic/0003-restore-cgiFormFileGetTempfileName.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-Restore lost functionality
+-
+-Probably-Signed-off-by: Dave Bender <bender@benegon.com>
+-[yann.morin.1998@free.fr: patch was made by Dave, but he
+- forgot his SoB line, so I added it]
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff -rupN cgic206/cgic.c cgic206_tempfile/cgic.c
+---- cgic206/cgic.c	2014-03-16 18:17:11.000000000 -0400
+-+++ cgic206_tempfile/cgic.c	2015-01-21 11:58:45.436384908 -0500
+-@@ -1278,6 +1278,20 @@ cgiFormResultType cgiFormFileContentType
+- 	}
+- }
+- 
+-+const char* cgiFormFileGetTempfileName(
+-+	char* name)
+-+{
+-+	cgiFormEntry *e;
+-+	e = cgiFormEntryFindFirst(name);
+-+	if (!e) {
+-+		return NULL;
+-+	} else if (!strlen(e->tfileName)) {
+-+		return NULL;
+-+	} else {
+-+		return e->tfileName;
+-+	}
+-+}
+-+
+- cgiFormResultType cgiFormFileSize(
+- 	char *name, int *sizeP)
+- {
+-diff -rupN cgic206/cgic.h cgic206_tempfile/cgic.h
+---- cgic206/cgic.h	2014-03-16 18:17:11.000000000 -0400
+-+++ cgic206_tempfile/cgic.h	2015-01-21 11:53:02.915148026 -0500
+-@@ -141,6 +141,8 @@ extern cgiFormResultType cgiFormRadio(
+- 	char *name, char **valuesText, int valuesTotal, 
+- 	int *result, int defaultV);	
+- 
+-+extern const char* cgiFormFileGetTempfileName(char* name);
+-+
+- /* The paths returned by this function are the original names of files
+- 	as reported by the uploading web browser and shoult NOT be
+- 	blindly assumed to be "safe" names for server-side use! */
+diff --git a/package/cgic/Config.in b/package/cgic/Config.in
+deleted file mode 100644
+index 402460d039..0000000000
+--- a/package/cgic/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_CGIC
+-	bool "cgic"
+-	help
+-	  C CGI library
+-
+-	  http://www.boutell.com/cgic/
+diff --git a/package/cgic/cgic.hash b/package/cgic/cgic.hash
+deleted file mode 100644
+index 2c68067128..0000000000
+--- a/package/cgic/cgic.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  1e8834642a4b89528bb7bde2f287e133c6b07e210e68681a34137c436d59d320  cgic207.tar.gz
+-sha256  6a7de92593d64dbf7630d8f66f97e04a899769bef1e055f2434bc06b87b9de62  license.txt
+diff --git a/package/cgic/cgic.mk b/package/cgic/cgic.mk
+deleted file mode 100644
+index cd0841302d..0000000000
+--- a/package/cgic/cgic.mk
++++ /dev/null
+@@ -1,25 +0,0 @@
+-################################################################################
+-#
+-# cgic
+-#
+-################################################################################
+-
+-CGIC_VERSION = 2.07
+-CGIC_SOURCE = cgic207.tar.gz
+-CGIC_SITE = http://boutell.com/cgic
+-CGIC_LICENSE = Custom
+-CGIC_LICENSE_FILES = license.txt
+-
+-# Installs only a static library and a header file
+-CGIC_INSTALL_STAGING = YES
+-CGIC_INSTALL_TARGET = NO
+-
+-define CGIC_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) libcgic.a
+-endef
+-
+-define CGIC_INSTALL_STAGING_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) PREFIX=$(STAGING_DIR) -C $(@D) install
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
