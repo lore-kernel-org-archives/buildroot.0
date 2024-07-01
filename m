@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CDA1C2BD09
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 18:47:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F916C3065B
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 18:51:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6384180EEE;
-	Mon,  1 Jul 2024 18:47:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50D5B81EB3;
+	Mon,  1 Jul 2024 18:51:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g93UpU3-_WIZ; Mon,  1 Jul 2024 18:47:19 +0000 (UTC)
+ id nGd-GpSecWxJ; Mon,  1 Jul 2024 18:51:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DDBE81EA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 503E581EB7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DDBE81EA4;
-	Mon,  1 Jul 2024 18:47:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 503E581EB7;
+	Mon,  1 Jul 2024 18:51:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 36B891BF33C
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:47:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A50261BF33C
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D12181EA4
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:47:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9088F81EB7
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:51:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JhCQBqYTJo_s for <buildroot@lists.busybox.net>;
- Mon,  1 Jul 2024 18:47:17 +0000 (UTC)
+ id nDSN3-l3K7u3 for <buildroot@lists.busybox.net>;
+ Mon,  1 Jul 2024 18:51:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2b; helo=mail-io1-xd2b.google.com;
+ client-ip=2607:f8b0:4864:20::d31; helo=mail-io1-xd31.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4336680EEE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4336680EEE
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4336680EEE
- for <buildroot@buildroot.org>; Mon,  1 Jul 2024 18:47:17 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-7e21dfbc310so124565539f.1
- for <buildroot@buildroot.org>; Mon, 01 Jul 2024 11:47:17 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 965E081EB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 965E081EB3
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
+ [IPv6:2607:f8b0:4864:20::d31])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 965E081EB3
+ for <buildroot@buildroot.org>; Mon,  1 Jul 2024 18:51:53 +0000 (UTC)
+Received: by mail-io1-xd31.google.com with SMTP id
+ ca18e2360f4ac-7f3ca6869d1so135664439f.0
+ for <buildroot@buildroot.org>; Mon, 01 Jul 2024 11:51:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719859636; x=1720464436;
+ d=1e100.net; s=20230601; t=1719859912; x=1720464712;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=YUH2KDs95ns5KYLBahFKDc+OvhzxtP9kqfPOqqN27ls=;
- b=Uq26164D8iKjgaW5td3/SNKWyiAj4c7I4Blp1RZbAlsHScqSmcknlOupKTVR8G2zMc
- 5pggSuOfq5R/BwxWPqf1Y9NYlsBDSKdkZpvT7T59yFwr99pqlimUANE8ZAIR3gc0U2gu
- Zd92UpTiRPZ0gFH6OMKTsxbC2PjBM1/V0tmCNcLCw39+eNsxtU/1Gj4RY2cAk3UnNnrh
- tZlNabXUo3+YxqCAEZJKVvBl/lqYryD8zkdp8E1EPYQGK0UwOyTxnrvwDknD8nUh9ez0
- E8s0Gsv5WEnNSTzvjW1IiaxtNgzlzXtorWLFPCueztSVFxf7uNacg+/PsHv0D6Mb0+OY
- xxbA==
-X-Gm-Message-State: AOJu0YzHWtaCpg8TE3hxclxd+KDcSq9HQrfeY8CURu6yGGV1Or/usFBR
- GJUHIxIlog1cAHxfDxgNrB5clo/eFRhiQwg8rbEyG2yMAwPX5TmVcVGf/w==
-X-Google-Smtp-Source: AGHT+IFyU6t5slj5sexja47voLEs61kxWbabUo6sIMEB0Q26psptZTItYKPCDRjSrITU6H9G2tQ9iQ==
-X-Received: by 2002:a05:6602:4f:b0:7f6:2c61:a419 with SMTP id
- ca18e2360f4ac-7f62ee74934mr699567839f.13.1719859635914; 
- Mon, 01 Jul 2024 11:47:15 -0700 (PDT)
+ bh=6jwvUrO8OxnYZTZcJW7NPFqm4/wXxcwRjayxdCnWb9U=;
+ b=wSdK8ubaLdDkxzloLQ/2uhqXFUclH93Pmjm09Lsy3Sdvm5o7wPFdSWYj31/CoTmY5q
+ Vzb063dsUE6kRCDxZRD+1+WSvAwkIEaengSNkqwNX60wjCD6p5V8YUToMHFKK9L/hptv
+ h4Ws4wS3RtTAQau9OLlyRjMDsNosRURbAi9B33dUZfVL6OrLeMczWNtUUlEH3Ox9GbM/
+ 8fIratN3sD03EbOWDoVWHPLVBFDm5NX4Kia4SF/SCeA4aRDJxWjIOdLmspGmE+rLaMOZ
+ FWhZYBomvllNOmBMYZ1AJ0aaekJdHff+lUU2b0wZoEcT1QVcMPJcv9+Im6lZeHtKfExR
+ VWEg==
+X-Gm-Message-State: AOJu0YxAICYG3hCrdEphZPZIWPV1OxaQfaRKqwS9TgiRevq5RhcnpMlS
+ iPVaSzcpvUOpCRQV0j+pfZWcxYG2UagTR0/DoJOE5pACjKcxMIsA6s4bEw==
+X-Google-Smtp-Source: AGHT+IHT1xp+kplvcZGc+ztRlpl7Vxh2QYslM62AbWqm/8PFA4moVWoQ4tBBjCZUQMKL80WriiZZmQ==
+X-Received: by 2002:a6b:d317:0:b0:7f6:2f96:b3f6 with SMTP id
+ ca18e2360f4ac-7f62f96b4e6mr809646539f.3.1719859912249; 
+ Mon, 01 Jul 2024 11:51:52 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
  [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4bb73f96e89sm2287346173.117.2024.07.01.11.47.15
+ 8926c6da1cb9f-4bb742b00dbsm2351781173.121.2024.07.01.11.51.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jul 2024 11:47:15 -0700 (PDT)
+ Mon, 01 Jul 2024 11:51:52 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jul 2024 12:47:14 -0600
-Message-Id: <20240701184714.1751575-1-james.hilliard1@gmail.com>
+Date: Mon,  1 Jul 2024 12:51:50 -0600
+Message-Id: <20240701185150.1754085-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1719859636; x=1720464436; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1719859912; x=1720464712; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=YUH2KDs95ns5KYLBahFKDc+OvhzxtP9kqfPOqqN27ls=;
- b=VIIdlo2oKcPhVnBi1w1Fb5eob4tanFuavX1p47Fif74IegmdmabS5TrpBdzIEfnm6J
- SsykiUdO14l3YmbV6DoYoDC4vB4kvlGzjPZRlzpTp4blM5eXocYucSIhZvVbj+ksB1Hc
- s8CJ3iUaC9zX7YMx7ForFvAF176Y++BJfTN8b+NpyNmAxmwsHqSCWB3XADoa/Gvm1O/x
- UnKnGsgzKm9+hKo7Srq2dzzEQCStIE8VjGme2lRT+7gX+bOMCrba4vYxXYhWlYuwgd5d
- rBdm01HnFhevSyE5CnlnwHT1NopOPlNZVXK3s88cSlegEU578tM3RYshoYHje31Huy37
- nxLA==
+ bh=6jwvUrO8OxnYZTZcJW7NPFqm4/wXxcwRjayxdCnWb9U=;
+ b=He4JpsuxPOwF9iT7vIBoLPzTaFbmhEX4nO47D7cluzWZzQgZiUr3Xsc+xfZ9FlMBAw
+ nA0ENhaoZUdt56fepeBwXXV3oXcRtP83F5jsxsjbW6BIajwaiiLN052ZMvZTyIDdlbIh
+ Q81rQdEv4HYQxnGN374QUoRPE6L1F8xjuiL93JNoa3oqv29oNAEQAZ8iLmDh6z6FnVIj
+ WQLC1hEgxHC8ulQtNyxsp/MR29K4qAcVMCEJEHb0omeRekASFQsSWF48qN31IR+r8Blr
+ TzTKqc3PhX7ZlOQBJnURS7JLyz/pW/beIrx+yyQ87+eJmv+akbXEZn9qrCBL8inb0Yoe
+ hKPw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=VIIdlo2o
-Subject: [Buildroot] [PATCH 1/1] package/python-itsdangerous: bump to
- version 2.2.0
+ header.a=rsa-sha256 header.s=20230601 header.b=He4Jpsux
+Subject: [Buildroot] [PATCH 1/1] package/python-jinja2: bump to version 3.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,50 +105,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to include format change:
-https://github.com/pallets/itsdangerous/commit/9a25d989cd65c4991c2c8ac46ef55e0e8dfe49ab
+Migrate from setuptools to flit build backend.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-itsdangerous/python-itsdangerous.hash | 8 ++++----
- package/python-itsdangerous/python-itsdangerous.mk   | 8 ++++----
+ package/python-jinja2/python-jinja2.hash |  6 +++---
+ package/python-jinja2/python-jinja2.mk   | 10 +++++-----
  2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-itsdangerous/python-itsdangerous.hash b/package/python-itsdangerous/python-itsdangerous.hash
-index 071544e5bd..1cac9a5607 100644
---- a/package/python-itsdangerous/python-itsdangerous.hash
-+++ b/package/python-itsdangerous/python-itsdangerous.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/itsdangerous/json
--md5  c1bc730ddf53b8374eaa823f24eb6438  itsdangerous-2.1.2.tar.gz
--sha256  5dbbc68b317e5e42f327f9021763545dc3fc3bfe22e6deb96aaf1fc38874156a  itsdangerous-2.1.2.tar.gz
-+md5  a901babde35694c3577f7655010cd380  itsdangerous-2.2.0.tar.gz
-+sha256  e0050c0b7da1eea53ffaf149c0cfbb5c6e2e2b69c4bef22c81fa6eb73e5f6173  itsdangerous-2.2.0.tar.gz
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index 2ab343cce6..2b32f5cce4 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jinja2/json
+-md5  d31148abd89c1df1cdb077a55db27d02  Jinja2-3.1.2.tar.gz
+-sha256  31351a702a408a9e7595a8fc6150fc3f43bb6bf7e319770cbc0db9df9437e852  Jinja2-3.1.2.tar.gz
++md5  02ca9a6364c92e83d14b037bef4732bc  jinja2-3.1.4.tar.gz
++sha256  4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369  jinja2-3.1.4.tar.gz
  # Locally computed sha256 checksums
--sha256  63af09891b6be8ad1a4252ed43af0f4efba7fc948e228367bed7f3c5ae0b09d7  LICENSE.rst
--sha256  c9362a7258a11c84a8f7e825ccbbb5c425c6fc02368d3aee6494533fb99ba1f4  docs/license.rst
-+sha256  63af09891b6be8ad1a4252ed43af0f4efba7fc948e228367bed7f3c5ae0b09d7  LICENSE.txt
-+sha256  1e07e9c25f2618a040560b70e63f42259eab24e558d0f3532e6163d751cb4eea  docs/license.rst
-diff --git a/package/python-itsdangerous/python-itsdangerous.mk b/package/python-itsdangerous/python-itsdangerous.mk
-index d7a1344e0a..5fb2919c97 100644
---- a/package/python-itsdangerous/python-itsdangerous.mk
-+++ b/package/python-itsdangerous/python-itsdangerous.mk
-@@ -4,11 +4,11 @@
+-sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
++sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.txt
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 209ca2e25a..780b693281 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--PYTHON_ITSDANGEROUS_VERSION = 2.1.2
-+PYTHON_ITSDANGEROUS_VERSION = 2.2.0
- PYTHON_ITSDANGEROUS_SOURCE = itsdangerous-$(PYTHON_ITSDANGEROUS_VERSION).tar.gz
--PYTHON_ITSDANGEROUS_SITE = https://files.pythonhosted.org/packages/7f/a1/d3fb83e7a61fa0c0d3d08ad0a94ddbeff3731c05212617dff3a94e097f08
--PYTHON_ITSDANGEROUS_SETUP_TYPE = setuptools
-+PYTHON_ITSDANGEROUS_SITE = https://files.pythonhosted.org/packages/9c/cb/8ac0172223afbccb63986cc25049b154ecfb5e85932587206f42317be31d
-+PYTHON_ITSDANGEROUS_SETUP_TYPE = flit
- PYTHON_ITSDANGEROUS_LICENSE = BSD-3-Clause
--PYTHON_ITSDANGEROUS_LICENSE_FILES = LICENSE.rst docs/license.rst
-+PYTHON_ITSDANGEROUS_LICENSE_FILES = LICENSE.txt docs/license.rst
+-PYTHON_JINJA2_VERSION = 3.1.2
+-PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+-PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/7a/ff/75c28576a1d900e87eb6335b063fab47a8ef3c8b4d88524c4bf78f670cce
+-PYTHON_JINJA2_SETUP_TYPE = setuptools
++PYTHON_JINJA2_VERSION = 3.1.4
++PYTHON_JINJA2_SOURCE = jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
++PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/ed/55/39036716d19cab0747a5020fc7e907f362fbf48c984b14e62127f7e68e5d
++PYTHON_JINJA2_SETUP_TYPE = flit
+ PYTHON_JINJA2_LICENSE = BSD-3-Clause
+-PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
++PYTHON_JINJA2_LICENSE_FILES = LICENSE.txt
+ PYTHON_JINJA2_CPE_ID_VENDOR = pocoo
+ PYTHON_JINJA2_CPE_ID_PRODUCT = jinja2
  
- $(eval $(python-package))
 -- 
 2.34.1
 
