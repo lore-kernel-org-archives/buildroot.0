@@ -4,91 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D457C2BD09
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 17:38:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD630C2BD09
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 17:38:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26C4C6077E;
-	Mon,  1 Jul 2024 17:38:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0880C60AB0;
+	Mon,  1 Jul 2024 17:38:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J2w7qXvE0tqO; Mon,  1 Jul 2024 17:38:20 +0000 (UTC)
+ id DVlhhI4Z-rPh; Mon,  1 Jul 2024 17:38:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A20260AA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F3AB60AB2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A20260AA4;
-	Mon,  1 Jul 2024 17:38:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8D1301BF342
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 17:38:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F3AB60AB2;
+	Mon,  1 Jul 2024 17:38:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C5C41BF342
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 17:38:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B0B260AA4
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED4AD404F5
  for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 17:38:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E5xpNzJi3CVh for <buildroot@lists.busybox.net>;
- Mon,  1 Jul 2024 17:38:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B3iFity8YFel for <buildroot@lists.busybox.net>;
+ Mon,  1 Jul 2024 17:38:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
+ client-ip=2607:f8b0:4864:20::d33; helo=mail-io1-xd33.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5802D607E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5802D607E4
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5802D607E4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A7CFD404DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7CFD404DF
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A7CFD404DF
  for <buildroot@buildroot.org>; Mon,  1 Jul 2024 17:38:18 +0000 (UTC)
-Received: by mail-io1-xd29.google.com with SMTP id
- ca18e2360f4ac-7f3c878d6d4so135616139f.0
+Received: by mail-io1-xd33.google.com with SMTP id
+ ca18e2360f4ac-7f3c5af0a04so171561839f.0
  for <buildroot@buildroot.org>; Mon, 01 Jul 2024 10:38:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1719855497; x=1720460297;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=pVakg8lsrrv4iHCPG8r99j/YnDGO2IUBAOcxdzM9WB8=;
- b=XlokcTXTeD+5cYAcuG0KMMXlYyPUqK5ZCnk8gN9556gbNwPOCili2o5zk5HMkAwQtd
- 4f/Nw1gQR0hzdNEu5HkZfUhXLyjZv/NVo3xCgCIPLSO+RYUekhnz5uhzsfY0kAzfm5Bo
- BBNrfq+nb2/twfMIWT041bDVEuwgi+RZHbN5zcAY/p9vI8nhMWb9VX5UndseZaoiN92f
- SFPOZ+s+mKE51QaaqRWbWI2VUSO6bp/4XITm+hWmEl41gTHSjoGZBSNCNRIKhrnor/UG
- g9cxUNaUUZASuuGwF1jvTdQMgq9EKODMju9PIlS1LfT+JIi27WPzEsKyOL/5ljJ/ho61
- veOQ==
-X-Gm-Message-State: AOJu0YzB2p27YtV5DSBtxWnl2oJ8V/zk2xvrVJ72Ja4FPeFUj3ey5HHX
- HyBoJLJhtSVzj65uGOKMXe0c1wbGxRXriYO4tBFWXkWPuFowUvLm/Qn+Tw==
-X-Google-Smtp-Source: AGHT+IFKsJqp216WFk8FyS6P1rKsMsgkgvnFVYYgNpsCIcOO6+KomdQaXBZYRXeJDuJbwmNhcKWRqg==
-X-Received: by 2002:a6b:4f12:0:b0:7f3:d924:8612 with SMTP id
- ca18e2360f4ac-7f62ee86a33mr777215039f.15.1719855496962; 
- Mon, 01 Jul 2024 10:38:16 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=rZifEd5XT/uRemsmfngi5cyPxDw/h5mee7RxlJzyKd4=;
+ b=MTwpFNIj1MdznTB5N62InWyIibXJima6xyMswqO5TaFYvaF4Qf5PGOylr7byvRGtvf
+ XG1gG4fc4+7IKlhSsaZWVIIZpzxToKH1mSo66ZkS3CeL5e2GMZ7KSnYGQODJR1dxpB7s
+ iQ5EwUTJcM4bkGK2sw6DbGiOFwM8ao+mN3rkj0T41ME99q/1et4pg4zB1jtXzWqfWmiX
+ HzvWRbqc+9+yYVhA3diaM6A89sFmRp6L8w+R4Yf+rfn9CfBEyYm5gKPJrZDCTj5R1N6D
+ N9N3Nv3nH+fM/E0Xr9uPSPQApUnNMnkEOdE+wnZ3Z5J9e/gm2PJ14Z9JUND9+ukxR6dR
+ KP2Q==
+X-Gm-Message-State: AOJu0YwvZ8GBCto9L4ePF1Lzlso2sxr8RhivDapYrYVEjpV24q65N29a
+ 75+y7lfvX20xcc+kP3aBSLg5bWcP15QJBATafSRxXLmcjb+52JRrZDZ66A==
+X-Google-Smtp-Source: AGHT+IFMdFXaev6M3pUadqmgBH5SgysNrPqPK84RaneuJiWjpv49BOEuUsso2hZymIGGK9xC613FNA==
+X-Received: by 2002:a5e:d606:0:b0:7f6:1fcc:25c9 with SMTP id
+ ca18e2360f4ac-7f62ee19639mr668018839f.9.1719855497445; 
+ Mon, 01 Jul 2024 10:38:17 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
  [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4bb73f96e89sm2251451173.117.2024.07.01.10.38.16
+ 8926c6da1cb9f-4bb73f96e89sm2251451173.117.2024.07.01.10.38.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jul 2024 10:38:16 -0700 (PDT)
+ Mon, 01 Jul 2024 10:38:17 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jul 2024 11:38:13 -0600
-Message-Id: <20240701173815.1725948-1-james.hilliard1@gmail.com>
+Date: Mon,  1 Jul 2024 11:38:14 -0600
+Message-Id: <20240701173815.1725948-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240701173815.1725948-1-james.hilliard1@gmail.com>
+References: <20240701173815.1725948-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20230601; t=1719855497; x=1720460297; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pVakg8lsrrv4iHCPG8r99j/YnDGO2IUBAOcxdzM9WB8=;
- b=KsiDniHfslchFj04d/rJBUOpv+3V05ngEUZe7wtASK3MjAY8HIGDCavCRC8JFvZupp
- wZABqL/Sa3rEQUS1fV4dijKoL1pM3FoImgkzzULbvrUyvhf88mmQDDjNm0HdvhqyUxIb
- IhiYIK9oGp/muYRSlJo4z4oKsxl1auTKvKCoelVN7GWCH3pZuWjbz9nzNP3WP70KeNLx
- s8cST63opBWB5dcDZtjYbZyz3wscnJb6iX+CDgzAzJtOiv/ni+yDG3BnxC+YtFFrWS+s
- r/SfpBtpyTcLGCknruS9VRkxyp/eyabC7FK9jzCZ1rVzZxB9XeAX88XoJEi7qAC9C7vg
- I78w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=rZifEd5XT/uRemsmfngi5cyPxDw/h5mee7RxlJzyKd4=;
+ b=mMDH5noKRpaFJJcIj214UILKOGRi9VWxPT3L2dTbMq4f9SvT2QcKCLdOl0EWrXLk08
+ O3sNhF4awsNUd+aW0mF/xhBbVP7XT7GnW12X315Ok2ETfO058yHay/sLRFzWw+hiyaM8
+ ACCKBrslTKzxVpbDmHzPmYNecFILCnK1n1158B+aorEq3CQ6bs1MdYA+sS4UiysXFo+t
+ IVCFgD1iEXZW05kp2HHDsNQg+9FttOleiMion7YVGclhpWGOGe5PWum8dwDeWgchJxH+
+ fpah8T870Ng8ueUmp7zBu0KiBLsATK/yGdk+CgouoHu9+U/k65rX/saH1zwVB4dChclr
+ +3Vw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=KsiDniHf
-Subject: [Buildroot] [PATCH 1/3] package/python-starlette: bump to version
- 0.37.2
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=mMDH5noK
+Subject: [Buildroot] [PATCH 2/3] package/python-pdm-backend: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,38 +112,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-starlette/python-starlette.hash | 4 ++--
- package/python-starlette/python-starlette.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pdm-backend/python-pdm-backend.hash |  5 +++++
+ package/python-pdm-backend/python-pdm-backend.mk   | 14 ++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 package/python-pdm-backend/python-pdm-backend.hash
+ create mode 100644 package/python-pdm-backend/python-pdm-backend.mk
 
-diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
-index 03d77cf5be..f04aaea7c0 100644
---- a/package/python-starlette/python-starlette.hash
-+++ b/package/python-starlette/python-starlette.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/starlette/json
--md5  0a1e026d653dc448ae07f47eefe1dc8b  starlette-0.36.3.tar.gz
--sha256  90a671733cfb35771d8cc605e0b679d23b992f8dcfad48cc60b38cb29aeb7080  starlette-0.36.3.tar.gz
-+md5  b0ba8178dd4bf2cdff53c8702212be52  starlette-0.37.2.tar.gz
-+sha256  9af890290133b79fc3db55474ade20f6220a364a0402e0b556e7cd5e1e093823  starlette-0.37.2.tar.gz
- # Locally computed sha256 checksums
- sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
-diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
-index 9d137f5f5a..af2c2d4ac7 100644
---- a/package/python-starlette/python-starlette.mk
-+++ b/package/python-starlette/python-starlette.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_STARLETTE_VERSION = 0.36.3
-+PYTHON_STARLETTE_VERSION = 0.37.2
- PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
--PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/be/47/1bba49d42d63f4453f0a64a20acbf2d0bd2f5a8cde6a166ee66c074a08f8
-+PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/61/b5/6bceb93ff20bd7ca36e6f7c540581abb18f53130fabb30ba526e26fd819b
- PYTHON_STARLETTE_SETUP_TYPE = pep517
- PYTHON_STARLETTE_LICENSE = BSD-3-Clause
- PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
+diff --git a/package/python-pdm-backend/python-pdm-backend.hash b/package/python-pdm-backend/python-pdm-backend.hash
+new file mode 100644
+index 0000000000..cc26e58462
+--- /dev/null
++++ b/package/python-pdm-backend/python-pdm-backend.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pdm-backend/json
++md5  b2805090bbe41c86eb051b1311c7ba34  pdm_backend-2.3.1.tar.gz
++sha256  c03cfb3a803325c049b57ba2502b409479ebb22b6a4ee3746c1f688b939764e8  pdm_backend-2.3.1.tar.gz
++# Locally computed sha256 checksums
++sha256  1da058ed0440fea5df1765b19a1418800439b18fd6f1c13c7d429cb81e9c6d47  LICENSE
+diff --git a/package/python-pdm-backend/python-pdm-backend.mk b/package/python-pdm-backend/python-pdm-backend.mk
+new file mode 100644
+index 0000000000..a95024ec9b
+--- /dev/null
++++ b/package/python-pdm-backend/python-pdm-backend.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pdm-backend
++#
++################################################################################
++
++PYTHON_PDM_BACKEND_VERSION = 2.3.1
++PYTHON_PDM_BACKEND_SOURCE = pdm_backend-$(PYTHON_PDM_BACKEND_VERSION).tar.gz
++PYTHON_PDM_BACKEND_SITE = https://files.pythonhosted.org/packages/70/f4/eaa4da6e3eaa32d902177e0b81563bb5526b2c387aa312d0dfbecf3c7109
++PYTHON_PDM_BACKEND_SETUP_TYPE = pep517
++PYTHON_PDM_BACKEND_LICENSE = MIT
++PYTHON_PDM_BACKEND_LICENSE_FILES = LICENSE
++
++$(eval $(host-python-package))
 -- 
 2.34.1
 
