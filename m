@@ -1,93 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1A50C2BD09
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 18:17:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8E79C3065A
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 18:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A5C460AC6;
-	Mon,  1 Jul 2024 18:17:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gf1UvxcHMuYl; Mon,  1 Jul 2024 18:17:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F369D60AD1
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F369D60AD1;
-	Mon,  1 Jul 2024 18:17:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BACF81BF33C
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:17:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A7BE180EFC
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:17:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B21B081E79;
+	Mon,  1 Jul 2024 18:21:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DMEw0W3Z21tK for <buildroot@lists.busybox.net>;
- Mon,  1 Jul 2024 18:17:19 +0000 (UTC)
+ id 27IRucs7xrWq; Mon,  1 Jul 2024 18:21:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AADC81299
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2AADC81299;
+	Mon,  1 Jul 2024 18:21:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B9E751BF33C
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:21:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A7A1360A9D
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:21:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bN-Y59BaIpbD for <buildroot@lists.busybox.net>;
+ Mon,  1 Jul 2024 18:21:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
+ client-ip=2607:f8b0:4864:20::d33; helo=mail-io1-xd33.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9C5D180EDE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C5D180EDE
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9C5D180EDE
- for <buildroot@buildroot.org>; Mon,  1 Jul 2024 18:17:19 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-7f3cd2c0a79so117071839f.1
- for <buildroot@buildroot.org>; Mon, 01 Jul 2024 11:17:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A8BE860A8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8BE860A8C
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A8BE860A8C
+ for <buildroot@buildroot.org>; Mon,  1 Jul 2024 18:21:31 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id
+ ca18e2360f4ac-7f3c5af0a04so174198539f.0
+ for <buildroot@buildroot.org>; Mon, 01 Jul 2024 11:21:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719857838; x=1720462638;
+ d=1e100.net; s=20230601; t=1719858090; x=1720462890;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=1uUfNPxThLXHnedJuc+NowIFlq3aW9wkzrvnaSrWeVg=;
- b=Gg0qkFHwInZ2kmn3gh81zMkKYf/PLh96YZeTaKaepe660wiyk55n8352RX1B4/TwJY
- YCu4UmHj5hZArtzY9ul0P6Y07iVkaVvtIF7Rwz8YDYD0gyb/0v2NFv+CERzq7Re18rvQ
- Zyt6WwBXPuzBXHdZWUCEO0WQGqbW/BteiugHn7ceDPxnSk7A4GccoJXApy1ZNyH+z8qz
- 3ek5qP3qZYMzJUP0nhtnkIRP1Tz48k7/GJliBMVnAq7rI9oj1UlbqkaF2kbPg6GpZvuq
- 4q1xdWsZ9HKFGfIUmWcGKrEATpWzwckO3wZVa1jf/HM3G2TbVPmbmJZNGN4E3UrRE/Z3
- lfCQ==
-X-Gm-Message-State: AOJu0YzYTJqhu51dvMU+adBqhywc1z2GmJH6JE/V1HkYMISOUFO/C3Ih
- cyXifkdsCkeZF/QsjVadN82sB8iGr/q+mSmza27K9uA4sijcFLti4DPy/Q==
-X-Google-Smtp-Source: AGHT+IFzkCYNYILmd/Zm0l3OKwb/BJ2DEtdfyKlRg07P1vvfjH/+gdM9CsM/oNpFTRM+wh2Jh1+6Fw==
-X-Received: by 2002:a6b:e513:0:b0:7f6:16ed:695f with SMTP id
- ca18e2360f4ac-7f62ee1c5a5mr744500939f.11.1719857838259; 
- Mon, 01 Jul 2024 11:17:18 -0700 (PDT)
+ bh=JXJMLnyxaJX4giPDaVP5hFDe9j4IrgQl15heDKgie9o=;
+ b=oyhv80YHrB/Vbs8JnIZNA+SQOA6HuXBHR/9Og2UlJrcwMkUio9nwfpB8SHKBGf6s2Z
+ GeTu7JI9iR7U0xrYZpc9zpEf5PJQ5ALwFxcmdd0M7ZTWT0f8JMi6gNvQRrX06nUhD5mp
+ waNsO9Zd3Baa5W8cMNAX3Mx0yGNyOOuB7pb/rxdWKF3Mx/XO1DI5JrXTNNPk6SzbHx/Y
+ VzEZ7VKM+/IcwZuGwCqF5mwvtCpb00lw8wTKph1ICxti/N6brnnAqOjRCzgDq7M6K+ol
+ BLKwiRGxqJSiJMpjNaqTaGEdmBcHibqgooiIYDbiYXFOycm0U9ckoWDGuk0TA1ldz8bP
+ Ig3g==
+X-Gm-Message-State: AOJu0Yws1tPoWaO/N4E0KCAZdjl93ZwvkhkXAEyD4bvKq+Hgi4uWjzNu
+ MMv9TCI9zeOGG3QgLTgpexdTqESEg7M6xWHTsFiKEPlA0JWsDG6nBczw+Q==
+X-Google-Smtp-Source: AGHT+IFaCJvmntFpDhOn3+CcCbKbVGrVCRri2pBG9SlwbKWJkiYsY5MhgXQa9Vq/cLbhkYt8J++XWg==
+X-Received: by 2002:a6b:ec16:0:b0:7f3:cd10:40b3 with SMTP id
+ ca18e2360f4ac-7f62edffb02mr644739939f.1.1719858090303; 
+ Mon, 01 Jul 2024 11:21:30 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
  [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-7f61ce9d654sm210031739f.13.2024.07.01.11.17.17
+ ca18e2360f4ac-7f61d0feaa1sm211678239f.41.2024.07.01.11.21.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jul 2024 11:17:17 -0700 (PDT)
+ Mon, 01 Jul 2024 11:21:30 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jul 2024 12:17:16 -0600
-Message-Id: <20240701181716.1738978-1-james.hilliard1@gmail.com>
+Date: Mon,  1 Jul 2024 12:21:28 -0600
+Message-Id: <20240701182128.1740656-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1719857838; x=1720462638; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1719858090; x=1720462890; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=1uUfNPxThLXHnedJuc+NowIFlq3aW9wkzrvnaSrWeVg=;
- b=WnJvkUO8E+Hr08JMgYirDUfEOK/9ACX4ZTgwaoqdMOYyjE8QkweoDzxN0J9fE8uvSR
- BBQXh2uq3FlYTxIHqQWaP27vlSA6+p8vfVErH/dJVoQOfhIcEkO13lkX0NCe1qfXavWA
- hP2NbTdpGb3VclZvRxXQXoOjgHkAzaQhWQCJnKsKeR2epfSmt4KSB1c2t04c+vJLykxZ
- fP1vKKQ5PqqXRgDyUgwBCLxfwMKvr2s0MpMJD14CV7JbfZYJF940vbJEBne+C1aVrfC/
- 46H6JjOHM6nWgThpDr7AN0uzLG5gVjCtyXs4SCxO1adnBR7DvcXbR3uD4d3yvK3aFMLQ
- A9UA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=JXJMLnyxaJX4giPDaVP5hFDe9j4IrgQl15heDKgie9o=;
+ b=b2YPi9eTQYRWh55+CdpQKXVLpjvlp/PY/W3p+e+lqJ03+Ch8YISH7aBhYqa94yy/wi
+ Dqkkiu71y5gnGQQUpfMF1Lrp+8BjENvIz8Go0dxZGw5vuEigU+JKFo4zOzSJEH4c4TAg
+ dNHwt7dYpFuJ+22NiKhWybHEtSwO/5D86rmiyaWK8+Hd+zvpiwD9LHNeuweTWM89H7jM
+ GO9Hri/V/YfR6T0vvIL13HjsYzn0CxNt3HkSUihPY96PlxLnvNmFSGlxEZ9khRBGUG7n
+ G2BwJk6bhqHHI2CHtLQrHuiPcgFwp10BYZNlp2R/TVw7u3rj4UypUvFTDZ/3uZjMe7U7
+ 1VYw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=WnJvkUO8
-Subject: [Buildroot] [PATCH 1/1] package/python-anyio: bump to version 4.4.0
+ header.a=rsa-sha256 header.s=20230601 header.b=b2YPi9eT
+Subject: [Buildroot] [PATCH 1/1] package/python-beautifulsoup4: bump to
+ version 4.12.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,38 +108,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
+ package/python-beautifulsoup4/python-beautifulsoup4.hash | 4 ++--
+ package/python-beautifulsoup4/python-beautifulsoup4.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index e77d30249c..c1edeca10c 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
+diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.hash b/package/python-beautifulsoup4/python-beautifulsoup4.hash
+index 0387af8a65..149eeff67d 100644
+--- a/package/python-beautifulsoup4/python-beautifulsoup4.hash
++++ b/package/python-beautifulsoup4/python-beautifulsoup4.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  22e660fff1a584e72281f0d6a083e4e0  anyio-4.2.0.tar.gz
--sha256  e1875bb4b4e2de1669f4bc7869b6d3f54231cdced71605e6e64c9be77e3be50f  anyio-4.2.0.tar.gz
-+md5  04346dd3631f405d0786ca0f441dace1  anyio-4.4.0.tar.gz
-+sha256  5aadc6a1bbb7cdb0bede386cac5e2940f5e2ff3aa20277e991cf028e0585ce94  anyio-4.4.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/beautifulsoup4/json
+-md5  b49a6696a762e946c2be97c36a5adaa8  beautifulsoup4-4.12.2.tar.gz
+-sha256  492bbc69dca35d12daac71c4db1bfff0c876c00ef4a2ffacce226d4638eb72da  beautifulsoup4-4.12.2.tar.gz
++md5  4ecf1fb561e84adfb3146650e3d51394  beautifulsoup4-4.12.3.tar.gz
++sha256  74e3d1928edc070d21748185c46e3fb33490f22f52a3addee9aee0f4f7781051  beautifulsoup4-4.12.3.tar.gz
  # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 32c2286157..4f9cbb78f7 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
+ sha256  55b4d8d4b1e5bc86d10efac91b74c87bcb77526b0f5b9edaf8b9cd2adc7397b2  LICENSE
+diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.mk b/package/python-beautifulsoup4/python-beautifulsoup4.mk
+index 4c8b996d07..bb02807cdb 100644
+--- a/package/python-beautifulsoup4/python-beautifulsoup4.mk
++++ b/package/python-beautifulsoup4/python-beautifulsoup4.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ANYIO_VERSION = 4.2.0
-+PYTHON_ANYIO_VERSION = 4.4.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/2d/b8/7333d87d5f03247215d86a86362fd3e324111788c6cdd8d2e6196a6ba833
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/e6/e3/c4c8d473d6780ef1853d630d581f70d655b4f8d7553c6997958c283039a2
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+-PYTHON_BEAUTIFULSOUP4_VERSION = 4.12.2
++PYTHON_BEAUTIFULSOUP4_VERSION = 4.12.3
+ PYTHON_BEAUTIFULSOUP4_SOURCE = beautifulsoup4-$(PYTHON_BEAUTIFULSOUP4_VERSION).tar.gz
+-PYTHON_BEAUTIFULSOUP4_SITE = https://files.pythonhosted.org/packages/af/0b/44c39cf3b18a9280950ad63a579ce395dda4c32193ee9da7ff0aed547094
++PYTHON_BEAUTIFULSOUP4_SITE = https://files.pythonhosted.org/packages/b3/ca/824b1195773ce6166d388573fc106ce56d4a805bd7427b624e063596ec58
+ PYTHON_BEAUTIFULSOUP4_SETUP_TYPE = pep517
+ PYTHON_BEAUTIFULSOUP4_LICENSE = MIT
+ PYTHON_BEAUTIFULSOUP4_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
