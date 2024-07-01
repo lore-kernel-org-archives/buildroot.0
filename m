@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 645B5C2BD09
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 07:11:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EA9EC3065B
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 07:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15E2981431;
-	Mon,  1 Jul 2024 07:11:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBE08819D5;
+	Mon,  1 Jul 2024 07:11:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PjUDBzG5pQeh; Mon,  1 Jul 2024 07:11:54 +0000 (UTC)
+ id ooSiFnODmmet; Mon,  1 Jul 2024 07:11:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F35581770
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A5DD817AA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F35581770;
-	Mon,  1 Jul 2024 07:11:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6887D1BF340
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2A5DD817AA;
+	Mon,  1 Jul 2024 07:11:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B41E61BF340
  for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 07:11:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 54EAF81778
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1AFD4029F
  for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 07:11:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ORkd1oTCCun6 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NjvTVfWfOIiC for <buildroot@lists.busybox.net>;
  Mon,  1 Jul 2024 07:11:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E12581431
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 875F640438
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E12581431
+ by smtp2.osuosl.org (Postfix) with ESMTP id 875F640438
  for <buildroot@buildroot.org>; Mon,  1 Jul 2024 07:11:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6516A8371C; Mon,  1 Jul 2024 07:11:51 +0000 (UTC)
+ id 7247983774; Mon,  1 Jul 2024 07:11:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Jul 2024 09:07:25 +0200
+Date: Mon, 1 Jul 2024 09:09:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4253979a35c1ebccce3f1d0b2bc7c30fc12156e1
-X-Git-Newrev: 7794356576d49a614a0de789f3d7413696409c4b
+X-Git-Oldrev: 7794356576d49a614a0de789f3d7413696409c4b
+X-Git-Newrev: 224067105db10ad00ad1e7b2eb6444732323eb65
 X-Patchwork-Hint: ignore
-Message-Id: <20240701071151.6516A8371C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libinput: bump to 1.26.0
+Message-Id: <20240701071151.7247983774@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/weston: bump to 13.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7794356576d49a614a0de789f3d7413696409c4b
+commit: https://git.buildroot.net/buildroot/commit/?id=224067105db10ad00ad1e7b2eb6444732323eb65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Announce:
-  https://lists.freedesktop.org/archives/wayland-devel/2024-June/043657.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-June/043655.html
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/libinput/libinput.hash | 2 +-
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/weston/weston.hash | 6 +++---
+ package/weston/weston.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 643cb16213..2ab56e4827 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  193bd592298bd9e369c0ef3e5d83a6a9d68ddc4cd3dfc84bbe77920a8d0d57df  libinput-1.25.0.tar.bz2
-+sha256  8c582b86c6865aaee2516ee96b299cef60c98e113d1391bbd2683eac08221a07  libinput-1.26.0.tar.bz2
- 
- # License files
- sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 499ed5ff4b..3b5070c85e 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index 5fa0c9d2be..62322ac639 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2024-April/043575.html
+-sha256  ea1566ab4f5ffce7e9fd4f7a1fca5b30caae4d50023bf459213994094e02b29a  weston-13.0.1.tar.xz
+-sha512  4a0fd0b1aec823219421d701030bc534576be64b71ede70c7d33f131e9e64c0e0dc209e62f75cecb9368df7604c1d5b2321932eccc818b529d246ec2e3114122  weston-13.0.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2024-June/043655.html
++sha256  27f68d96e3b97d98daadef13a202356524924fa381418fa6716b9136ef099093  weston-13.0.3.tar.xz
++sha512  60e655b57cf418902ec6e4371883354165241d9a99a712aabe2165e11ac190dec22836fd885f5178def5416dc5f00e70042b022c96a8e0aa74827bbd4563f9cb  weston-13.0.3.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index b708d03743..bd5a0550b1 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.25.0
-+LIBINPUT_VERSION = 1.26.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
- LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-WESTON_VERSION = 13.0.1
++WESTON_VERSION = 13.0.3
+ WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
