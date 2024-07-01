@@ -4,92 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BABCFC2BD09
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 19:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E5FAC3065A
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 19:48:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7878E60AD0;
-	Mon,  1 Jul 2024 19:40:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E41960AC3;
+	Mon,  1 Jul 2024 19:48:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TyL79RMxlMwO; Mon,  1 Jul 2024 19:40:39 +0000 (UTC)
+ id xoK0zzZ7mohB; Mon,  1 Jul 2024 19:48:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B1AA60AD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6987F60AD0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B1AA60AD1;
-	Mon,  1 Jul 2024 19:40:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6987F60AD0;
+	Mon,  1 Jul 2024 19:48:55 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 153E21BF346
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 19:40:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 073D91BF346
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 19:48:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0328B60AD1
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 19:40:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E895360AD0
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 19:48:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jQqfZioJ4BU6 for <buildroot@lists.busybox.net>;
- Mon,  1 Jul 2024 19:40:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d35; helo=mail-io1-xd35.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F248A60AD0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F248A60AD0
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F248A60AD0
- for <buildroot@buildroot.org>; Mon,  1 Jul 2024 19:40:36 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-7f3d37d6bfdso100310039f.1
- for <buildroot@buildroot.org>; Mon, 01 Jul 2024 12:40:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719862836; x=1720467636;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=uO4eVyRsgFgz8DscAufqNv6kadkDiuniZmu9rbKEfeE=;
- b=vFH1LusIpuU926S62SEBFy/hyurHENUVwnlzZJCN76379471aX/0bNI6xlpX1t60HU
- yudKlSUz5fXRnnUOO/F4fmU40oH4rWGmt3PUJWvn4nVVeGr2PlWbJTTQSDiu0xT7grks
- sS2x1eT77BAF7CRjCoXZD5bffUnSAlFnlQxEWPed9lZxz2eDimZWs0I6xmcWvmGSw35m
- k8pQNrRZWCDSRc71r23KQtwX7801d1KhUWECYH35IYVHScLKuKjBrJjfoddrtbawSq+9
- SKgLVPQThG2feQWYOe7C3yXP/f3QrWwdDeRd1Kbk+BmT/gImLPCjLUc7xFRneNlbU3MI
- vOiw==
-X-Gm-Message-State: AOJu0Yx/GqFIm4Il9TH6V5lipLmD8hNZKfqiQ0KNYGMh+dycnctt15Ip
- 2H/bSppq45mrHr8DxLhyVK0NIOML6nrtjBqy1GOmcFjOoP/gEkUylxGAMQ==
-X-Google-Smtp-Source: AGHT+IF09508oM2v2+6eQStG2uFmV4cNXz9o8DCUCr+U8xGAs9s8IiWoldMo5rau4gdHRif11iZz7A==
-X-Received: by 2002:a05:6602:178e:b0:7eb:eeba:5e83 with SMTP id
- ca18e2360f4ac-7f62eeab155mr276164639f.9.1719862835607; 
- Mon, 01 Jul 2024 12:40:35 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
- [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-7f61ce88113sm217336139f.7.2024.07.01.12.40.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jul 2024 12:40:35 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ id 7XEFYBJ-75s1 for <buildroot@lists.busybox.net>;
+ Mon,  1 Jul 2024 19:48:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.72;
+ helo=smtpcmd0872.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 75BAC60AC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75BAC60AC3
+Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 75BAC60AC3
+ for <buildroot@buildroot.org>; Mon,  1 Jul 2024 19:48:50 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id ON15smTI6qLIyON15sbqSf; Mon, 01 Jul 2024 21:48:47 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jul 2024 13:40:29 -0600
-Message-Id: <20240701194029.1789343-1-james.hilliard1@gmail.com>
+Date: Mon,  1 Jul 2024 21:48:46 +0200
+Message-Id: <20240701194846.3032793-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1719862836; x=1720467636; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=uO4eVyRsgFgz8DscAufqNv6kadkDiuniZmu9rbKEfeE=;
- b=auwADiFAfwcU1aOrisU4u3chO6fmDzZ+K0Eu/MhllnPtLt/QyPTQ3YmDCcW5eLpcdZ
- TQbw9pU2GiY0vfn5pkNuQkgpm1X41jNpMcTlcAOJWjudrZ0a/4BRH/35qz3/B6XW4U6U
- 30g8K0Kb9cmqYuaFsQvJ6VQtVSj9p0O3sk01O73b2kGV59Xv/VXNm66J6CeOqpUqU1re
- FYZkrNoX9g1AGdBx/Drq7n9SgSHP9Hq6hAoayjbbpkiIhmqwtK2nAB9iAZYTZPEH8s9+
- Kiw3xZiOSCkarsk1mWDSQJZpUdAXQsTXob0m/d4PAySj2GejdyvE7R6EjmvJyom3OV5V
- LuGQ==
+X-CMAE-Envelope: MS4xfEMS5eOsiUDdDbQbwhbOxBq+/qgOXhssrX1fMD6wu0W4nQrpyhqq77e46wCA5UMFe6QYtReCYjom83GlYyIUC/foSwmJSwANqFhdnieasMlsxIUeHJX6
+ ApXetpM7+VmTDbCRiXY0B6FBkIyoZONAvaJm4UFLp+7oVduhJNTZT844itKWppgb/tmFxX0DMN5ENWsdBp8MMZln6J8+2u3uXJlQuFRieHk3nmKGOAIOTaRz
+ rf8Svk2eRqhTYPNS/BHCu8od3g3WOFmtNEPw/c3kW7k=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1719863327; bh=nT0o80NpnTkY1ew4F6LwALUUlbiBb957HAtNujBsiNU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=iZ4YGQNeD5QdMhVnIEbPd3IXEWXfo/zBf5dmc5BpCdLdtAEgShTLOpwiBON0lgZ6T
+ PCGenlyUhjgJVVnFlzMflu76g9X9xAcYm9nNEYHesh7qgsffwf4NBqrvwn/B4Dgqc8
+ wmItQKE8RmJSYhondpw7f6u85zrsmHcBcLUi2ZkmjieqaGbCfIKcYCooT9jEMB5w/O
+ +4P30vor5/YWkUL2Okl0YguY9WGFcnceN3kcwhOuPkSYVJDGpquClitOyHcqnKokij
+ wLp+kTterqRKdRPGCvMxOxSjPls2Sg4RLsDaRFkHLr8rCL1XrD7znBA1utouJ3RChf
+ Ia/f0ArJteaUg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=auwADiFA
-Subject: [Buildroot] [PATCH 1/1] package/python-pydantic: bump to version
- 2.8.0
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=iZ4YGQNe
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 9.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,46 +78,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-pydantic/python-pydantic.hash | 4 ++--
- package/python-pydantic/python-pydantic.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Since the major release changed all the packages that have direct
+dependency to harfbuzz have been succesfully built:
+- efl
+- libass
+- mupdf
+- pango
+- qt5base
+- qt5webengine
+- qt6base
+- sdl2_ttf
+- supertuxkart
+- vlc
+- webkitgtk
+- wpewebkit
 
-diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
-index 75ecb23053..caac7f8957 100644
---- a/package/python-pydantic/python-pydantic.hash
-+++ b/package/python-pydantic/python-pydantic.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydantic/json
--md5  4651fb3374d2a0d74442c2cc780770d0  pydantic-2.5.3.tar.gz
--sha256  b3ef57c62535b0941697cce638c08900d87fcb67e29cfa99e8a68f747f393f7a  pydantic-2.5.3.tar.gz
-+md5  38edaad5e8687f1b238577ee05a4c968  pydantic-2.8.0.tar.gz
-+sha256  d970ffb9d030b710795878940bd0489842c638e7252fc4a19c3ae2f7da4d6141  pydantic-2.8.0.tar.gz
- # Locally computed sha256 checksums
- sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
-diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
-index 0cce5a153f..4c2becc9c9 100644
---- a/package/python-pydantic/python-pydantic.mk
-+++ b/package/python-pydantic/python-pydantic.mk
-@@ -4,9 +4,9 @@
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index d5fc1ae096..fa4ee16a9f 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  77e4f7f98f3d86bf8788b53e6832fb96279956e1c3961988ea3d4b7ca41ddc27  harfbuzz-8.5.0.tar.xz
++sha256  a41b272ceeb920c57263ec851604542d9ec85ee3030506d94662067c7b6ab89e  harfbuzz-9.0.0.tar.xz
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 3beac5e836..946b2b0f70 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYDANTIC_VERSION = 2.5.3
-+PYTHON_PYDANTIC_VERSION = 2.8.0
- PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
--PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/aa/3f/56142232152145ecbee663d70a19a45d078180633321efb3847d2562b490
-+PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/8b/7b/23dc30fba5793d7be3307f33bebb36e08f78f8af9c03fce608833f01bebd
- PYTHON_PYDANTIC_SETUP_TYPE = pep517
- PYTHON_PYDANTIC_LICENSE = MIT
- PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
+-HARFBUZZ_VERSION = 8.5.0
++HARFBUZZ_VERSION = 9.0.0
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
 2.34.1
 
