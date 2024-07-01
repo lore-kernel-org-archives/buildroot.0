@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EA9EC3065B
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 07:11:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3F24C2BD09
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 07:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBE08819D5;
-	Mon,  1 Jul 2024 07:11:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD3DE81AF4;
+	Mon,  1 Jul 2024 07:12:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ooSiFnODmmet; Mon,  1 Jul 2024 07:11:56 +0000 (UTC)
+ id ApsezCUSKfa4; Mon,  1 Jul 2024 07:11:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A5DD817AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 352FF817AC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A5DD817AA;
-	Mon,  1 Jul 2024 07:11:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 352FF817AC;
+	Mon,  1 Jul 2024 07:11:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B41E61BF340
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 07:11:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1ADDA1BF340
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 07:11:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1AFD4029F
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 07:11:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14E044029F
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 07:11:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NjvTVfWfOIiC for <buildroot@lists.busybox.net>;
- Mon,  1 Jul 2024 07:11:51 +0000 (UTC)
+ id cfiNvq51ufcJ for <buildroot@lists.busybox.net>;
+ Mon,  1 Jul 2024 07:11:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 875F640438
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25E0E40543
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 875F640438
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25E0E40543
  for <buildroot@buildroot.org>; Mon,  1 Jul 2024 07:11:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7247983774; Mon,  1 Jul 2024 07:11:51 +0000 (UTC)
+ id 7F71C8376C; Mon,  1 Jul 2024 07:11:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Jul 2024 09:09:41 +0200
+Date: Mon, 1 Jul 2024 09:10:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7794356576d49a614a0de789f3d7413696409c4b
-X-Git-Newrev: 224067105db10ad00ad1e7b2eb6444732323eb65
+X-Git-Oldrev: 224067105db10ad00ad1e7b2eb6444732323eb65
+X-Git-Newrev: 020c7bd205fcbb4a8eb27b52f24c0c9f030fe6de
 X-Patchwork-Hint: ignore
-Message-Id: <20240701071151.7247983774@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/weston: bump to 13.0.3
+Message-Id: <20240701071151.7F71C8376C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wayland: bump to 1.23.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=224067105db10ad00ad1e7b2eb6444732323eb65
+commit: https://git.buildroot.net/buildroot/commit/?id=020c7bd205fcbb4a8eb27b52f24c0c9f030fe6de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Announce:
-  https://lists.freedesktop.org/archives/wayland-devel/2024-June/043655.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-May/043636.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-May/043625.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-May/043614.html
+  https://lists.freedesktop.org/archives/wayland-devel/2024-April/043580.html
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/weston/weston.hash | 6 +++---
- package/weston/weston.mk   | 2 +-
+ package/wayland/wayland.hash | 6 +++---
+ package/wayland/wayland.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index 5fa0c9d2be..62322ac639 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,4 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2024-April/043575.html
--sha256  ea1566ab4f5ffce7e9fd4f7a1fca5b30caae4d50023bf459213994094e02b29a  weston-13.0.1.tar.xz
--sha512  4a0fd0b1aec823219421d701030bc534576be64b71ede70c7d33f131e9e64c0e0dc209e62f75cecb9368df7604c1d5b2321932eccc818b529d246ec2e3114122  weston-13.0.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2024-June/043655.html
-+sha256  27f68d96e3b97d98daadef13a202356524924fa381418fa6716b9136ef099093  weston-13.0.3.tar.xz
-+sha512  60e655b57cf418902ec6e4371883354165241d9a99a712aabe2165e11ac190dec22836fd885f5178def5416dc5f00e70042b022c96a8e0aa74827bbd4563f9cb  weston-13.0.3.tar.xz
- sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index b708d03743..bd5a0550b1 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 5da527e318..627cb5a1b0 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2023-April/042647.html
+-sha256  1540af1ea698a471c2d8e9d288332c7e0fd360c8f1d12936ebb7e7cbc2425842  wayland-1.22.0.tar.xz
+-sha512  fb1974efc8433e97254eb83fe28974198f2b4d8246418eb3d34ce657055461e0c97bc06dd52e5066ae91bbe05bac611dc49a0937ba226ac6388d5a47241efb12  wayland-1.22.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2024-May/043636.html
++sha256  05b3e1574d3e67626b5974f862f36b5b427c7ceeb965cb36a4e6c2d342e45ab2  wayland-1.23.0.tar.xz
++sha512  9c525231a7ea3e68d3178230d476285a960d23e38571ac96d885f86c0588c52ef01460bff6833db5adb9456ce8db7b996613611187aac972736748ba91b8fd81  wayland-1.23.0.tar.xz
+ 
+ # Locally calculated
+ sha256  6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  COPYING
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 1a764d5580..06adafc3e1 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WESTON_VERSION = 13.0.1
-+WESTON_VERSION = 13.0.3
- WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
+-WAYLAND_VERSION = 1.22.0
++WAYLAND_VERSION = 1.23.0
+ WAYLAND_SITE = https://gitlab.freedesktop.org/wayland/wayland/-/releases/$(WAYLAND_VERSION)/downloads
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
