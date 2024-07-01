@@ -4,91 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8E79C3065A
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 18:21:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 418F3C3065B
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 18:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B21B081E79;
-	Mon,  1 Jul 2024 18:21:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC0AC81E92;
+	Mon,  1 Jul 2024 18:27:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 27IRucs7xrWq; Mon,  1 Jul 2024 18:21:34 +0000 (UTC)
+ id b6sJ6FZYxNeZ; Mon,  1 Jul 2024 18:27:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2AADC81299
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1427F81E81
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2AADC81299;
-	Mon,  1 Jul 2024 18:21:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B9E751BF33C
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:21:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1427F81E81;
+	Mon,  1 Jul 2024 18:27:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 51AEF1BF33C
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A7A1360A9D
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:21:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E1F340584
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 18:27:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bN-Y59BaIpbD for <buildroot@lists.busybox.net>;
- Mon,  1 Jul 2024 18:21:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d33; helo=mail-io1-xd33.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A8BE860A8C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8BE860A8C
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A8BE860A8C
- for <buildroot@buildroot.org>; Mon,  1 Jul 2024 18:21:31 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id
- ca18e2360f4ac-7f3c5af0a04so174198539f.0
- for <buildroot@buildroot.org>; Mon, 01 Jul 2024 11:21:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719858090; x=1720462890;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=JXJMLnyxaJX4giPDaVP5hFDe9j4IrgQl15heDKgie9o=;
- b=oyhv80YHrB/Vbs8JnIZNA+SQOA6HuXBHR/9Og2UlJrcwMkUio9nwfpB8SHKBGf6s2Z
- GeTu7JI9iR7U0xrYZpc9zpEf5PJQ5ALwFxcmdd0M7ZTWT0f8JMi6gNvQRrX06nUhD5mp
- waNsO9Zd3Baa5W8cMNAX3Mx0yGNyOOuB7pb/rxdWKF3Mx/XO1DI5JrXTNNPk6SzbHx/Y
- VzEZ7VKM+/IcwZuGwCqF5mwvtCpb00lw8wTKph1ICxti/N6brnnAqOjRCzgDq7M6K+ol
- BLKwiRGxqJSiJMpjNaqTaGEdmBcHibqgooiIYDbiYXFOycm0U9ckoWDGuk0TA1ldz8bP
- Ig3g==
-X-Gm-Message-State: AOJu0Yws1tPoWaO/N4E0KCAZdjl93ZwvkhkXAEyD4bvKq+Hgi4uWjzNu
- MMv9TCI9zeOGG3QgLTgpexdTqESEg7M6xWHTsFiKEPlA0JWsDG6nBczw+Q==
-X-Google-Smtp-Source: AGHT+IFaCJvmntFpDhOn3+CcCbKbVGrVCRri2pBG9SlwbKWJkiYsY5MhgXQa9Vq/cLbhkYt8J++XWg==
-X-Received: by 2002:a6b:ec16:0:b0:7f3:cd10:40b3 with SMTP id
- ca18e2360f4ac-7f62edffb02mr644739939f.1.1719858090303; 
- Mon, 01 Jul 2024 11:21:30 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
- [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-7f61d0feaa1sm211678239f.41.2024.07.01.11.21.29
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jul 2024 11:21:30 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GE-CeoDIjp_N for <buildroot@lists.busybox.net>;
+ Mon,  1 Jul 2024 18:27:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7F8F0400DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F8F0400DA
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7F8F0400DA
+ for <buildroot@buildroot.org>; Mon,  1 Jul 2024 18:27:39 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0da4.dip0.t-ipconnect.de [91.58.13.164])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4D8D6A4C107D
+ for <buildroot@buildroot.org>; Mon,  1 Jul 2024 20:27:36 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46444)
+ by fli4l.lan.fli4l with esmtp (Exim 4.97.1)
+ (envelope-from <bernd@kuhls.net>) id 1sOLkV-000000000EJ-0atS
+ for buildroot@buildroot.org; Mon, 01 Jul 2024 18:27:35 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jul 2024 12:21:28 -0600
-Message-Id: <20240701182128.1740656-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Mon,  1 Jul 2024 20:27:34 +0200
+Message-Id: <20240701182734.3297884-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1719858090; x=1720462890; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=JXJMLnyxaJX4giPDaVP5hFDe9j4IrgQl15heDKgie9o=;
- b=b2YPi9eTQYRWh55+CdpQKXVLpjvlp/PY/W3p+e+lqJ03+Ch8YISH7aBhYqa94yy/wi
- Dqkkiu71y5gnGQQUpfMF1Lrp+8BjENvIz8Go0dxZGw5vuEigU+JKFo4zOzSJEH4c4TAg
- dNHwt7dYpFuJ+22NiKhWybHEtSwO/5D86rmiyaWK8+Hd+zvpiwD9LHNeuweTWM89H7jM
- GO9Hri/V/YfR6T0vvIL13HjsYzn0CxNt3HkSUihPY96PlxLnvNmFSGlxEZ9khRBGUG7n
- G2BwJk6bhqHHI2CHtLQrHuiPcgFwp10BYZNlp2R/TVw7u3rj4UypUvFTDZ/3uZjMe7U7
- 1VYw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=kuhls.net; 
+ s=kas202406071026; t=1719858456;
+ bh=y7Hgo8iQEwJBGlEIc+LQPe8DiC/Ph703xQ+9hBNsg4c=;
+ h=From:To:Subject:Date:From;
+ b=GNjy5rpzwv0+8mwoiKZjCuWi6RKhYISqPWLjiZKcvAOpdCJhWEJED53Av7UnpuABa
+ I1NUDrO9BAjgPwsa589xSxhACiLSCo2Tq4Qtu3qP6Ouwbvh71fXTbSSrnQR73E+7Ta
+ AozaxmhEHbjFgF3/s8csGA5vdL9lv1XkcrPfPIghDiLjK/r+zOU3lqKKF5WlUSO8Ov
+ B3K0QsKG9FcmwPlyDa8q27Z/9pI+x9JSDYNgtPbUsd2FSEHySO+Tia/udIqrlgaZZO
+ PXSSO8ZmXbsn9v7NrLzgjSw42ihQbvSmiEFAK9GsVBPJ+mZG7mf2GIjwRwAuJew5a3
+ pFCqIgUBwSI1g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=b2YPi9eT
-Subject: [Buildroot] [PATCH 1/1] package/python-beautifulsoup4: bump to
- version 4.12.3
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=GNjy5rpz
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump version to
+ 2.4.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,48 +81,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-beautifulsoup4/python-beautifulsoup4.hash | 4 ++--
- package/python-beautifulsoup4/python-beautifulsoup4.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Changelog: https://downloads.apache.org/httpd/CHANGES_2.4.60
 
-diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.hash b/package/python-beautifulsoup4/python-beautifulsoup4.hash
-index 0387af8a65..149eeff67d 100644
---- a/package/python-beautifulsoup4/python-beautifulsoup4.hash
-+++ b/package/python-beautifulsoup4/python-beautifulsoup4.hash
+Fixes CVE-2024-36387, CVE-2024-38472 (Windows-only), CVE-2024-38473,
+CVE-2024-38474, CVE-2024-38475, CVE-2024-38476, CVE-2024-38477 &
+CVE-2024-39573.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 84248761b9..bd503d84f9 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/beautifulsoup4/json
--md5  b49a6696a762e946c2be97c36a5adaa8  beautifulsoup4-4.12.2.tar.gz
--sha256  492bbc69dca35d12daac71c4db1bfff0c876c00ef4a2ffacce226d4638eb72da  beautifulsoup4-4.12.2.tar.gz
-+md5  4ecf1fb561e84adfb3146650e3d51394  beautifulsoup4-4.12.3.tar.gz
-+sha256  74e3d1928edc070d21748185c46e3fb33490f22f52a3addee9aee0f4f7781051  beautifulsoup4-4.12.3.tar.gz
- # Locally computed sha256 checksums
- sha256  55b4d8d4b1e5bc86d10efac91b74c87bcb77526b0f5b9edaf8b9cd2adc7397b2  LICENSE
-diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.mk b/package/python-beautifulsoup4/python-beautifulsoup4.mk
-index 4c8b996d07..bb02807cdb 100644
---- a/package/python-beautifulsoup4/python-beautifulsoup4.mk
-+++ b/package/python-beautifulsoup4/python-beautifulsoup4.mk
-@@ -4,9 +4,9 @@
+ # From https://downloads.apache.org/httpd/httpd-2.4.59.tar.bz2.{sha256,sha512}
+-sha256  ec51501ec480284ff52f637258135d333230a7d229c3afa6f6c2f9040e321323  httpd-2.4.59.tar.bz2
+-sha512  209da0bbac5e2564d4590302515b35495be6402273ff4024aa93e85e44554c95e053201d606383936425a41e1b5b97e6b40055dcbb385eb691a5029a6f3158c2  httpd-2.4.59.tar.bz2
++sha256  7b1ec7ec5635da7cb01550513215a90f8b2f52bb7c90cf3e97ede936d3e55b0f  httpd-2.4.60.tar.bz2
++sha512  c1591389f76699beaa5d32b019729e25f1ed5b828311c82b52f1a4edd5d28b73e697958df384d7628b314521a831dbb0af418bc37cdf031cfe133e53c195d8ad  httpd-2.4.60.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 1b095c5eb1..39ccc3cf96 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_BEAUTIFULSOUP4_VERSION = 4.12.2
-+PYTHON_BEAUTIFULSOUP4_VERSION = 4.12.3
- PYTHON_BEAUTIFULSOUP4_SOURCE = beautifulsoup4-$(PYTHON_BEAUTIFULSOUP4_VERSION).tar.gz
--PYTHON_BEAUTIFULSOUP4_SITE = https://files.pythonhosted.org/packages/af/0b/44c39cf3b18a9280950ad63a579ce395dda4c32193ee9da7ff0aed547094
-+PYTHON_BEAUTIFULSOUP4_SITE = https://files.pythonhosted.org/packages/b3/ca/824b1195773ce6166d388573fc106ce56d4a805bd7427b624e063596ec58
- PYTHON_BEAUTIFULSOUP4_SETUP_TYPE = pep517
- PYTHON_BEAUTIFULSOUP4_LICENSE = MIT
- PYTHON_BEAUTIFULSOUP4_LICENSE_FILES = LICENSE
+-APACHE_VERSION = 2.4.59
++APACHE_VERSION = 2.4.60
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = https://dlcdn.apache.org/httpd
+ APACHE_LICENSE = Apache-2.0
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
