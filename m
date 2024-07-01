@@ -1,97 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8103AC2BD09
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 14:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4506AC2BD09
+	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 16:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63FF141171;
-	Mon,  1 Jul 2024 14:57:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B47C5402F4;
+	Mon,  1 Jul 2024 16:37:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XXilif0jvaQr; Mon,  1 Jul 2024 14:57:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o4PFGeg2qKq2; Mon,  1 Jul 2024 16:37:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3633A41173
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88512403B6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3633A41173;
-	Mon,  1 Jul 2024 14:57:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88512403B6;
+	Mon,  1 Jul 2024 16:37:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 18FCB1BF2F9
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 14:57:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 252EC1BF34F
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 16:37:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06FDA605FA
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 14:57:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F1BE60A8C
+ for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 16:37:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jnDchd0ht2fL for <buildroot@lists.busybox.net>;
- Mon,  1 Jul 2024 14:57:28 +0000 (UTC)
+ id Gqik0FQSb8oC for <buildroot@lists.busybox.net>;
+ Mon,  1 Jul 2024 16:37:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 37039605E6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37039605E6
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 37039605E6
- for <buildroot@buildroot.org>; Mon,  1 Jul 2024 14:57:28 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-366e70d0330so1978876f8f.1
- for <buildroot@buildroot.org>; Mon, 01 Jul 2024 07:57:28 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::130; helo=mail-il1-x130.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 26D8660A8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26D8660A8A
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
+ [IPv6:2607:f8b0:4864:20::130])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 26D8660A8A
+ for <buildroot@buildroot.org>; Mon,  1 Jul 2024 16:37:30 +0000 (UTC)
+Received: by mail-il1-x130.google.com with SMTP id
+ e9e14a558f8ab-36da84df7adso9174905ab.1
+ for <buildroot@buildroot.org>; Mon, 01 Jul 2024 09:37:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719845846; x=1720450646;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=PaTuLSzNz9oUy7qTrx9wmn+/zyGHjMqiuVbQM2B2Njk=;
- b=F7FcjIzoN40O1gAK55OpP0aEVngR9xk3j+DhfPRmHTBOOlqygJS3lmVTa3BTygCbBW
- nu1+lLwJIn02gY8SiOzTkjIWPF7daCk0zlrl91fpUmFquaC9HX076MxKhcxzhzqKtftC
- cZybPQvQwo6htNWmGgOG1ZIhouTAJX77F/a42JBssurrhezRvwjXXygrSIDzy1vPcuL3
- iNV9R83pUdsqV/vuRfPPIh7Sl2JJl1GyrH+KNkAsKj00GXhEu51ar9pp7Xrnjsh+d8S+
- BX2AWCyykfFnbQos5lNfqlKpcEubu67y9CoGYV89lflh5hTPQ8eygXA2qJe+a7fQ99Gu
- J/nw==
-X-Gm-Message-State: AOJu0Yw1rJNrpQUYDE5+h0vFHAvSKoL6qjDb2625eAsI2TVsUiuH6Cma
- N16ZkjrUwCYxmA5cDv0kIWo5dauqOav6JD/gQkdFTnvnJ7oUj8OXFeggi0I59utECzhAETuo7kt
- NNMI=
-X-Google-Smtp-Source: AGHT+IG1WvTUPkqdB1RHjL/v+S/Kj98tbUg6nFHyDJCRGnncUfD8zCpVdJxaosND8aC0mlwzDn+wVA==
-X-Received: by 2002:a5d:61cd:0:b0:367:40a8:4a70 with SMTP id
- ffacd0b85a97d-367756ad8ebmr4081544f8f.22.1719845845885; 
- Mon, 01 Jul 2024 07:57:25 -0700 (PDT)
-Received: from junian.fritz.box (94.105.103.7.dyn.edpnet.net. [94.105.103.7])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3675a0e141esm10153286f8f.58.2024.07.01.07.57.25
+ d=1e100.net; s=20230601; t=1719851849; x=1720456649;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=uf2CamVkYoPegpyNRWOp58REO9rqJTDvZfu1BVUAvJ4=;
+ b=QL/FHlAVt6hcSiKViw9CNChbrRhuRyMK4D1s4nE0P0pYFbkFRKxLF9/ZiIPo3jKiaW
+ vE1MUq2VqJ0HUGhmR1nM1+qqHyGKZkqmfoKvmhSUIRfZoxz8vicRWhTUgS8wz3AkmYqN
+ 1CirhgqdSmfjGIDmhqOe4ge1AyPYsiyw6cSg3fYRFJ1OnSP1IJzN5Wmo6MoDm1qDYa4M
+ M+C8I2ZH3lu2fvo8qXU0RkcBP0Iz4CF/EQ0D/6c0AXkpCKs0ISaY1JWpTVdwexXO1bWE
+ pS6O4uWLEuQRJTtoJNeiPcDMqZj3zWjCGhN1iHXTb4q1t3BTLIBSnBJMBDnwof6D8y8u
+ W9cQ==
+X-Gm-Message-State: AOJu0YzV0M6ipWXcWG14+Epx0Rx3Ea4BBswMdUsYc1nTXks+ak5npeh3
+ cAcHq5cJme/QpuXJU37b8AaM0VXfN8B08rz/cqU4vvJ0A0r2qk7DPV/wSQ==
+X-Google-Smtp-Source: AGHT+IEyQcQKc3/WJys82eA8ybPlQk4h9UP2uZ+Q27LsO2Apr0lajvQTRgIKCEPYLE8wJzNC+kJing==
+X-Received: by 2002:a05:6e02:18c7:b0:375:eb20:d10 with SMTP id
+ e9e14a558f8ab-37cbb2df1d7mr31625565ab.4.1719851848744; 
+ Mon, 01 Jul 2024 09:37:28 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
+ [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4bb742eabf7sm2233060173.159.2024.07.01.09.37.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jul 2024 07:57:25 -0700 (PDT)
+ Mon, 01 Jul 2024 09:37:28 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  1 Jul 2024 16:57:06 +0200
-Message-Id: <20240701145708.2886402-4-raphael.melotte@mind.be>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20240701145708.2886402-1-raphael.melotte@mind.be>
-References: <20240701145708.2886402-1-raphael.melotte@mind.be>
+Date: Mon,  1 Jul 2024 10:37:26 -0600
+Message-Id: <20240701163726.1626123-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719845846; x=1720450646; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=PaTuLSzNz9oUy7qTrx9wmn+/zyGHjMqiuVbQM2B2Njk=;
- b=O0UAWL4fu/b+MKG7B3T4WsBppC/jUZlIsvrxvCK4vR1TEN3l06E2fFbPVcGXWtd9Hq
- 2Tb52+7Ao8SpzVLZXLYBGdXds9/ptvsIBPKi4xYf6MyczvnPapPbmAYsVvGIcnp2Q/LY
- cBAQhr89zpdzIzjCAcsiG/UIo7QuF/NLrOyyeOpmmPh8cv/0n6Ylbl3Uz/eW4KYoERjz
- EHW+NXrXqC2vVr/HHrw6a4MQxNw8QwFnVg3ENS7Yxpxxldnsk1bBVWTfvcbJn4FeA6fL
- 2TTbuwzuCJjtVa9nzUQz4zUyx5lWMEUVZciPEuyt+nNjEWC//9sQj7ExfsCuAskAw9sv
- h/2A==
+ d=gmail.com; s=20230601; t=1719851849; x=1720456649; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=uf2CamVkYoPegpyNRWOp58REO9rqJTDvZfu1BVUAvJ4=;
+ b=m84sumZflxi/hZMYVr40nLTJIsGzxgoOjQOunnekqyhZ3wtPQ6i7Ef42xHRyIKJmiK
+ R8j6oPWlKoc66rb1KTZBnXVje+8hQSQ/SrcNzOifhx0rNLOADb7QwAcMupo0UJmUujQt
+ ROrUlDAb/LUmv0TufUvDKOFp6HBu10SCVdavue0DotdyJV7s6AJbSill6rmMnaIoQd/l
+ AFDI9KIa+D+qAilfHZLM5uqhlM+oyI6ii2Rj1geBeq0PqQ65yeDwhIgHV3VKFo/faAyb
+ hzuI0frPnXpwiqMSfVxszEy0UFLpRppKbgCnp2BMgCw9g50siukOwA7g3BT9IL+FfZeA
+ U4Qg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=O0UAWL4f
-Subject: [Buildroot] [PATCH 4/4] support/testing: add new test for
- python-sdbus-networkmanager
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=m84sumZf
+Subject: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to version
+ 2.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,65 +100,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgTcOpbG90dGUgPHJhcGhhZWwubWVsb3R0ZUBtaW5kLmJl
-PgotLS0KIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAy
-ICsrCiAuLi4vc2FtcGxlX3B5dGhvbl9zZGJ1c19uZXR3b3JrbWFuYWdlci5weSAgICAgfCAyMCAr
-KysrKysrKysrKysrKysrKysrCiAuLi4vdGVzdF9weXRob25fc2RidXNfbmV0d29ya21hbmFnZXIu
-cHkgICAgICAgfCAxNSArKysrKysrKysrKysrKwogMyBmaWxlcyBjaGFuZ2VkLCAzNyBpbnNlcnRp
-b25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uv
-c2FtcGxlX3B5dGhvbl9zZGJ1c19uZXR3b3JrbWFuYWdlci5weQogY3JlYXRlIG1vZGUgMTAwNjQ0
-IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcHl0aG9uX3NkYnVzX25ldHdvcmtt
-YW5hZ2VyLnB5CgpkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5kZXggOWFi
-ZjJkNDkwYi4uMGIxN2U0NmRjYSAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUworKysgYi9ERVZFTE9Q
-RVJTCkBAIC0yNjc0LDEwICsyNjc0LDEyIEBAIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNr
-YWdlL3NhbXBsZV9weXRob25fam1lc3BhdGgucHkKIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9w
-YWNrYWdlL3NhbXBsZV9weXRob25fcnNhLnB5CiBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFj
-a2FnZS9zYW1wbGVfcHl0aG9uX3MzdHJhbnNmZXIucHkKIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0
-cy9wYWNrYWdlL3NhbXBsZV9weXRob25fc2RidXMucHkKK0Y6CXN1cHBvcnQvdGVzdGluZy90ZXN0
-cy9wYWNrYWdlL3NhbXBsZV9weXRob25fc2RidXNfbmV0d29ya21hbmFnZXIucHkKIEY6CXN1cHBv
-cnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcHl0aG9uX2ptZXNwYXRoLnB5CiBGOglzdXBw
-b3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3B5dGhvbl9yc2EucHkKIEY6CXN1cHBvcnQv
-dGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcHl0aG9uX3MzdHJhbnNmZXIucHkKIEY6CXN1cHBv
-cnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcHl0aG9uX3NkYnVzLnB5CitGOglzdXBwb3J0
-L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3B5dGhvbl9zZGJ1c19uZXR3b3JrbWFuYWdlci5w
-eQogCiBOOglSYXBoYWVsIFBhdmxpZGlzIDxyYXBoYWVsLnBhdmxpZGlzQGdtYWlsLmNvbT4KIEY6
-CXBhY2thZ2UvbnZpZGlhLXBlcnNpc3RlbmNlZC8KZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGlu
-Zy90ZXN0cy9wYWNrYWdlL3NhbXBsZV9weXRob25fc2RidXNfbmV0d29ya21hbmFnZXIucHkgYi9z
-dXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3NkYnVzX25ldHdvcmtt
-YW5hZ2VyLnB5Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmUxNWI2M2Nl
-NzAKLS0tIC9kZXYvbnVsbAorKysgYi9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1w
-bGVfcHl0aG9uX3NkYnVzX25ldHdvcmttYW5hZ2VyLnB5CkBAIC0wLDAgKzEsMjAgQEAKKyMhL3Vz
-ci9iaW4vZW52IHB5dGhvbjMKKworaW1wb3J0IHNkYnVzCisKK2Zyb20gc2RidXNfYmxvY2submV0
-d29ya21hbmFnZXIgaW1wb3J0ICgKKyAgICBEZXZpY2VUeXBlLAorICAgIE5ldHdvcmtNYW5hZ2Vy
-LAorICAgIE5ldHdvcmtEZXZpY2VHZW5lcmljCispCisKK3NkYnVzLnNldF9kZWZhdWx0X2J1cyhz
-ZGJ1cy5zZF9idXNfb3Blbl9zeXN0ZW0oKSkKKworbm0gPSBOZXR3b3JrTWFuYWdlcigpCitkZXZp
-Y2VzID0gW05ldHdvcmtEZXZpY2VHZW5lcmljKGQpIGZvciBkIGluIG5tLmdldF9kZXZpY2VzKCld
-CisKK3ByaW50KFtkLmludGVyZmFjZSBmb3IgZCBpbiBkZXZpY2VzXSkKKworYXNzZXJ0IGRldmlj
-ZXMKKyMgQ2hlY2sgdGhhdCB3ZSBmb3VuZCBhdCBsZWFzdCB0aGUgbG9vcGJhY2sgaW50ZXJmYWNl
-OgorYXNzZXJ0IFtkZXYgZm9yIGRldiBpbiBkZXZpY2VzIGlmIGRldi5kZXZpY2VfdHlwZSA9PSBE
-ZXZpY2VUeXBlLkxPT1BCQUNLXQpkaWZmIC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3Bh
-Y2thZ2UvdGVzdF9weXRob25fc2RidXNfbmV0d29ya21hbmFnZXIucHkgYi9zdXBwb3J0L3Rlc3Rp
-bmcvdGVzdHMvcGFja2FnZS90ZXN0X3B5dGhvbl9zZGJ1c19uZXR3b3JrbWFuYWdlci5weQpuZXcg
-ZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi5hMzk2MWVjNTRmCi0tLSAvZGV2L251
-bGwKKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9weXRob25fc2RidXNf
-bmV0d29ya21hbmFnZXIucHkKQEAgLTAsMCArMSwxNSBAQAorZnJvbSB0ZXN0cy5wYWNrYWdlLnRl
-c3RfcHl0aG9uIGltcG9ydCBUZXN0UHl0aG9uUGFja2FnZUJhc2UKKworCitjbGFzcyBUZXN0UHl0
-aG9uUHkzU2RidXNOZXR3b3JrbWFuYWdlcihUZXN0UHl0aG9uUGFja2FnZUJhc2UpOgorICAgIF9f
-dGVzdF9fID0gVHJ1ZQorICAgIGNvbmZpZyA9IFRlc3RQeXRob25QYWNrYWdlQmFzZS5jb25maWcg
-KyBcCisgICAgICAgICIiIgorICAgICAgICBCUjJfUEFDS0FHRV9QWVRIT04zPXkKKyAgICAgICAg
-QlIyX0lOSVRfU1lTVEVNRD15CisgICAgICAgIEJSMl9QQUNLQUdFX05FVFdPUktfTUFOQUdFUj15
-CisgICAgICAgIEJSMl9QQUNLQUdFX1BZVEhPTl9TREJVU19ORVRXT1JLTUFOQUdFUj15CisgICAg
-ICAgICIiIgorICAgIHNhbXBsZV9zY3JpcHRzID0gWyJ0ZXN0cy9wYWNrYWdlL3NhbXBsZV9weXRo
-b25fc2RidXNfbmV0d29ya21hbmFnZXIucHkiXQorCisgICAgdGltZW91dCA9IDMwCi0tIAoyLjM3
-LjMKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+License hash changed due to year update:
+https://github.com/getsentry/sentry-python/commit/f98f77f0a4078cc4f87e82d3a899b8a54d55a535
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-sentry-sdk/python-sentry-sdk.hash | 6 +++---
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 2534a48221..6060b6cab7 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  94ba9002bbfaf8c443c496b05bbc32eb  sentry-sdk-1.39.2.tar.gz
+-sha256  24c83b0b41c887d33328a9166f5950dc37ad58f01c9f2fbff6b87a6f1094170c  sentry-sdk-1.39.2.tar.gz
++md5  98621433d1f8565f1f00576d47be30ce  sentry_sdk-2.7.1.tar.gz
++sha256  25006c7e68b75aaa5e6b9c6a420ece22e8d7daec4b7a906ffd3a8607b67c037b  sentry_sdk-2.7.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256  2a140d660f462812fa290bc740d04633126c5ec45d84b79b569e127b0eeddd0b  LICENSE
++sha256  6d7ec62dc20e8b92cb88b89fb3b55ee8576505f3e1afa57952548f6eea5d008e  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index f1c5648f07..50ca854330 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SENTRY_SDK_VERSION = 1.39.2
+-PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/66/90/9deac5c137e9f0ede908757d886af77938ef28f94b24decedbdf98f1ca4d
++PYTHON_SENTRY_SDK_VERSION = 2.7.1
++PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/b8/63/310d89868a0dab17f6d7c1f35eba9c304dd06c2a17d0d26905738763b614
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = MIT
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
