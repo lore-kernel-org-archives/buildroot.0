@@ -4,99 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7AF7C30658
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 07:43:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 050ACC3064D
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 07:44:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7881F81F83;
-	Tue,  2 Jul 2024 07:43:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBA8E811DA;
+	Tue,  2 Jul 2024 07:44:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yaZW4aKiNgpG; Tue,  2 Jul 2024 07:43:31 +0000 (UTC)
+ id JnXtVIJmM_rg; Tue,  2 Jul 2024 07:44:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C6C581F97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2F18811F5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C6C581F97;
-	Tue,  2 Jul 2024 07:43:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2F18811F5;
+	Tue,  2 Jul 2024 07:44:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 69E451BF365
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:43:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BC0971BF365
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:44:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F9B3404D7
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:43:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A48A9404D7
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:44:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5S0jUc7S7jps for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 07:43:28 +0000 (UTC)
+ id bCa_jTTsnGXI for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 07:44:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::732; helo=mail-qk1-x732.google.com;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 156E740460
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 156E740460
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com
- [IPv6:2607:f8b0:4864:20::732])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 156E740460
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 07:43:27 +0000 (UTC)
-Received: by mail-qk1-x732.google.com with SMTP id
- af79cd13be357-79d879dc431so150368985a.0
- for <buildroot@buildroot.org>; Tue, 02 Jul 2024 00:43:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4DFC340460
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DFC340460
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4DFC340460
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 07:44:31 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-5854ac817afso1463929a12.2
+ for <buildroot@buildroot.org>; Tue, 02 Jul 2024 00:44:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719906207; x=1720511007;
+ d=1e100.net; s=20230601; t=1719906269; x=1720511069;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=telBQxKvaw3SB077wYaS8hrdbF4nxcNsBIUyFgDjmBA=;
- b=reJpb3RGbeniVUKMOSZ2w1G4cCFmxrbfQ7YQJEkMetwquXPzIhMV/3HOi4IWhLnnYc
- wMrzFKQYQC4ck9wNDEczxnjgbNL9C5o575lihed+WGmbZoqZUsN5pFEaTtyRcDfyF9k+
- 7Ns2uJugaz+4lQz8Asmzrz3jpw3T2JTd3utYMrR+V8riWuToJvuFvMxxM+8ddISKmJLC
- mAuaMP+OABPSw4pltXvRot2fjiJxrJKbypG6fkW7bsYutgKvL+ITVQMgy0BmotOGsQEt
- 9XgwJ4KTVV+T4Utrj59MXCxjT+7HFTs75hcjT7GNu2EYhtEqaxCiSPCpYGxWgs3aREuw
- cDwA==
+ bh=I/ko83L8bgIiKvqR1alGexkXoxmo7bLdpBlBDetAvS0=;
+ b=VYza9e0h3epUIpIkenT3xCfXS1D8huBwYs8FOzzVApVCedESrL7EpxEz5svAMYHdIW
+ dvEVR1+OigSkq9lwQeuxYPCeD4XVOa6evCHZPswcdcii3wYbx+U6rrIypnXkVRbhBPrw
+ 3TQ3ow1PfAd5Yf7IK74IRiBQmbVDRXFQXlSTIF05QSHA/iTVvbmslGph7HonXcCQl3nB
+ 34lTEMNg+2Rec6nzyqHGU1I7zAOFf3I+AqFojsKpLzoDEuF05K9/fVg4RU662vwNPHm5
+ byUSlvSEL4oNQrAAtVuRwQahTIdcR6kh9jwGQa6Y/tk8XFTw6fLcExFJ3WzzIEnEm7UC
+ ssAg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVv3jqSn0I+ifLXRuOkXdVaZVSNLa2dYtOHELYcpcWzW43yT92t+Dl1u3DMwqnW8MSBAb2tNW23nKdUaxNbP387gu9TEwaqlA==
-X-Gm-Message-State: AOJu0Yywb56RKKcbo55ulQDm55DVwcP1+DjHxsnDvHQk1WwTij9LGk49
- TMwsIwr+nnZK78sxDhKx7mq1khaEykZIGdVMrAqkOISLD/kH9/pGXiC+6S4Yho5/l/y65GpyrY8
- Z
-X-Google-Smtp-Source: AGHT+IGpkeOCt8HMfG5Pt/yTy8+jFzgSDTh2/xW40i68qYwlemiW/Es4gm++1Q73flm+l5CdKZ8ozg==
-X-Received: by 2002:a05:620a:2402:b0:79c:3d5:9c9a with SMTP id
- af79cd13be357-79d6bacd95amr1736277185a.37.1719906206791; 
- Tue, 02 Jul 2024 00:43:26 -0700 (PDT)
+ AJvYcCXM2DpjssauJ9QfxDtoIqg/8J/K5kjskIWdNmov6ucbuCMkGdu60OuVqbtutCaFx3KCu+86A/K4YdQylnssstMDzYZ/FWaBnA==
+X-Gm-Message-State: AOJu0Yw7Fc/gdsu96Gd4wwboMjIJ7QvIleb1TyVDsyo1FAh9t6jqkcEX
+ y7x8gVeR5l0kbY1OwmxaNzCcuPohThJCKb4jTTkX/U80pX64a0fB0y5Q+MO8UtQ=
+X-Google-Smtp-Source: AGHT+IEAp2nsY1VE2zXTiC6D1kycUxMNI6NgkNXdOLb8j28uG7RqOqW8NJ9E5Ff9N8JTH8adtSisBw==
+X-Received: by 2002:a05:6402:2113:b0:57c:fda3:b669 with SMTP id
+ 4fb4d7f45d1cf-5879f59a5c9mr5548314a12.17.1719906269235; 
+ Tue, 02 Jul 2024 00:44:29 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- af79cd13be357-79d692edd54sm429804485a.97.2024.07.02.00.43.25
+ 4fb4d7f45d1cf-58612c8371dsm5333453a12.9.2024.07.02.00.44.28
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 02 Jul 2024 00:43:26 -0700 (PDT)
-Message-ID: <aecacbb6-053f-443e-be88-f4c57747992c@mind.be>
-Date: Tue, 2 Jul 2024 09:43:24 +0200
+ Tue, 02 Jul 2024 00:44:28 -0700 (PDT)
+Message-ID: <d2c00cd7-9212-4e00-9b46-76b95cdca437@mind.be>
+Date: Tue, 2 Jul 2024 09:44:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20240701185150.1754085-1-james.hilliard1@gmail.com>
+References: <20240701185449.1755932-1-james.hilliard1@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <20240701185150.1754085-1-james.hilliard1@gmail.com>
+In-Reply-To: <20240701185449.1755932-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719906207; x=1720511007; darn=buildroot.org;
+ d=mind.be; s=google; t=1719906269; x=1720511069; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=telBQxKvaw3SB077wYaS8hrdbF4nxcNsBIUyFgDjmBA=;
- b=hpbhqEfLpXCQgD2f7zHoehHzwE5PBWNnQtX+SyxgdwjsUB45si+pUGZ7uyJKe9Y0/Y
- 7NLSmVuvhMqCmOwwAHoSWPr17Z11Y6jJkPnsI+WhD2Tt2VP4a5S5L4w7rqyzFON49bjI
- Z4vH831BfrbMHym1WZyxxUjRXKC8ix18t2MJ+lvMVvMLqonIyp47otcfgQdItOCOjDua
- tvz26qU/8Vxn4iBC5/GdBiMw+gzyLgN2kpRdokwNrxRjmDnJsCFTPIyST/wjKVk2gdy7
- UyxaImmzds13hIW18g8FHaGqajsCpalLvApqTwHMQQHDSQVUFnLqP3HE33bWR4lm/r9Y
- WV+A==
+ bh=I/ko83L8bgIiKvqR1alGexkXoxmo7bLdpBlBDetAvS0=;
+ b=iB88KbX2RmMLQrX5IceIOzjwcvnBari15pJyY9NC7yqrGONrqXl34XJxJS/fC1hgq2
+ /NNj2YAO7qLAh5t/eeD6eTZs9JrahJeGBlf41E5Sy70dW2gifzl4Kl/vy6MiW21lmbZw
+ EYyBidhzRxJlm8/YEcOCf09qvqV9RCoDU6hKEWPqRp5VkkvyXGdIuNgrfs40eru/QxgC
+ Sbk5U5NGe2aLkeuNn0TdgEShFuAwRp7zPqQrBflHDwt2hshhkw8g4D8mwmWkiBcJzmsS
+ /ROF7hBqAoy8q26a7pefc2nDc5gFOT2XYAx6AgVrhwPjc+oPst5Fa318Q69MUYaa80g5
+ FshQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hpbhqEfL
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-jinja2: bump to version
- 3.1.4
+ header.a=rsa-sha256 header.s=google header.b=iB88KbX2
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-markupsafe: bump to
+ version 2.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -118,9 +117,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 01/07/2024 20:51, James Hilliard wrote:
-> Migrate from setuptools to flit build backend.
-> 
+On 01/07/2024 20:54, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
@@ -129,45 +126,38 @@ On 01/07/2024 20:51, James Hilliard wrote:
   Arnout
 
 > ---
->   package/python-jinja2/python-jinja2.hash |  6 +++---
->   package/python-jinja2/python-jinja2.mk   | 10 +++++-----
->   2 files changed, 8 insertions(+), 8 deletions(-)
+>   package/python-markupsafe/python-markupsafe.hash | 4 ++--
+>   package/python-markupsafe/python-markupsafe.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
-> index 2ab343cce6..2b32f5cce4 100644
-> --- a/package/python-jinja2/python-jinja2.hash
-> +++ b/package/python-jinja2/python-jinja2.hash
+> diff --git a/package/python-markupsafe/python-markupsafe.hash b/package/python-markupsafe/python-markupsafe.hash
+> index ec357a83ce..c6f9cd4702 100644
+> --- a/package/python-markupsafe/python-markupsafe.hash
+> +++ b/package/python-markupsafe/python-markupsafe.hash
 > @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/jinja2/json
-> -md5  d31148abd89c1df1cdb077a55db27d02  Jinja2-3.1.2.tar.gz
-> -sha256  31351a702a408a9e7595a8fc6150fc3f43bb6bf7e319770cbc0db9df9437e852  Jinja2-3.1.2.tar.gz
-> +md5  02ca9a6364c92e83d14b037bef4732bc  jinja2-3.1.4.tar.gz
-> +sha256  4a3aee7acbbe7303aede8e9648d13b8bf88a429282aa6122a993f0ac800cb369  jinja2-3.1.4.tar.gz
+>   # md5, sha256 from https://pypi.org/pypi/markupsafe/json
+> -md5  ca33f119bd0551ce15837f58bb180214  MarkupSafe-2.1.3.tar.gz
+> -sha256  af598ed32d6ae86f1b747b82783958b1a4ab8f617b06fe68795c7f026abbdcad  MarkupSafe-2.1.3.tar.gz
+> +md5  8fe7227653f2fb9b1ffe7f9f2058998a  MarkupSafe-2.1.5.tar.gz
+> +sha256  d283d37a890ba4c1ae73ffadf8046435c76e7bc2247bbb63c00bd1a709c6544b  MarkupSafe-2.1.5.tar.gz
 >   # Locally computed sha256 checksums
-> -sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-> +sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.txt
-> diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-> index 209ca2e25a..780b693281 100644
-> --- a/package/python-jinja2/python-jinja2.mk
-> +++ b/package/python-jinja2/python-jinja2.mk
-> @@ -4,12 +4,12 @@
+>   sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
+> diff --git a/package/python-markupsafe/python-markupsafe.mk b/package/python-markupsafe/python-markupsafe.mk
+> index 0dca997f87..b54a77365f 100644
+> --- a/package/python-markupsafe/python-markupsafe.mk
+> +++ b/package/python-markupsafe/python-markupsafe.mk
+> @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_JINJA2_VERSION = 3.1.2
-> -PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
-> -PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/7a/ff/75c28576a1d900e87eb6335b063fab47a8ef3c8b4d88524c4bf78f670cce
-> -PYTHON_JINJA2_SETUP_TYPE = setuptools
-> +PYTHON_JINJA2_VERSION = 3.1.4
-> +PYTHON_JINJA2_SOURCE = jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
-> +PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/ed/55/39036716d19cab0747a5020fc7e907f362fbf48c984b14e62127f7e68e5d
-> +PYTHON_JINJA2_SETUP_TYPE = flit
->   PYTHON_JINJA2_LICENSE = BSD-3-Clause
-> -PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
-> +PYTHON_JINJA2_LICENSE_FILES = LICENSE.txt
->   PYTHON_JINJA2_CPE_ID_VENDOR = pocoo
->   PYTHON_JINJA2_CPE_ID_PRODUCT = jinja2
->   
+> -PYTHON_MARKUPSAFE_VERSION = 2.1.3
+> +PYTHON_MARKUPSAFE_VERSION = 2.1.5
+>   PYTHON_MARKUPSAFE_SOURCE = MarkupSafe-$(PYTHON_MARKUPSAFE_VERSION).tar.gz
+> -PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/6d/7c/59a3248f411813f8ccba92a55feaac4bf360d29e2ff05ee7d8e1ef2d7dbf
+> +PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/87/5b/aae44c6655f3801e81aa3eef09dbbf012431987ba564d7231722f68df02d
+>   PYTHON_MARKUPSAFE_SETUP_TYPE = setuptools
+>   PYTHON_MARKUPSAFE_LICENSE = BSD-3-Clause
+>   PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
