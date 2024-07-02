@@ -4,100 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE993C3065C
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 19:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95CF3C30658
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 19:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7584E810E7;
-	Tue,  2 Jul 2024 19:40:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D815F810E7;
+	Tue,  2 Jul 2024 19:40:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MnmLAnXskmlB; Tue,  2 Jul 2024 19:40:17 +0000 (UTC)
+ id Nnh72RHiivYG; Tue,  2 Jul 2024 19:40:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08913810FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D71C81132
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08913810FB;
-	Tue,  2 Jul 2024 19:40:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 496201BF303
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:40:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D71C81132;
+	Tue,  2 Jul 2024 19:40:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D5D2E1BF303
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:40:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41947810FB
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:40:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0331405CC
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:40:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hUgnaa3kzN5I for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 19:40:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tJcnz2NlawAG for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 19:40:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12a; helo=mail-lf1-x12a.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D2B4C810E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2B4C810E7
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D2B4C810E7
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 19:40:13 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id
- 2adb3069b0e04-52cdcd26d61so5117476e87.2
- for <buildroot@buildroot.org>; Tue, 02 Jul 2024 12:40:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2A24F404FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A24F404FE
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2A24F404FE
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 19:40:41 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-36742cc9c12so3036817f8f.2
+ for <buildroot@buildroot.org>; Tue, 02 Jul 2024 12:40:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719949211; x=1720554011;
+ d=1e100.net; s=20230601; t=1719949239; x=1720554039;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Ur99/8Xqh63Rh/8qRcmETWnT2n8tBbp+Gm0lfaiIVUc=;
- b=UMZk949F0L4Npx81JFB3b3/NuvXb1vDVlWKChn8xADckECoGn56WiGpNxky5WwYrlg
- QXRYs1VIOAEtQJe0sfJyIF3CN0A2J6mtLcBGiO0h+WVjKEzNneHoDmsBDFZEt8JEMcX9
- XQoiLskDkocIfuqQUD2NmCaliEf/5h54uxYqZqu+Zydr9Q5NV6zfqbZgSpjihyoYD3mJ
- rpEAJpN/c/2HqOXScwYWbaMXfDOoJrGcTkBlqbo0buRf67/68vHD8U6+T820Tsr4dhKU
- r57rWGhDOVFh8lKttLyVOsqWSOIhAMRv3sHdYaYSBj+n19xX4Lk09wMUOcMJD+Ltd+Vd
- FMYg==
+ bh=gdeNdLjuVeHBR7Hv9gBGnNVgKy9MojJN/MoSStx3gXc=;
+ b=KPHLTyPTBUY/vDcnZ5HcT9xWQ6Ap4OTYNCrFNSRfZr/Nq7dHUq4wAxxR3a/kBf3wNJ
+ kYAXcK7YJq+czMSt5pp3kqKFA8FySHVWdS+8Mclz6Z+uwP09Jdjih3gy21pjhGjeX8O2
+ pU3ExMFjreYw/aqN7aWC0T6bzSiY0QAiprl205/z6OFp8fWt9Q7sfGoFBSEZzq53+Skm
+ vQmUTuH+oZMgTVCMZT434+OyB44M0tayxq3ZT2htjn25u8vlfEa452SCqdYNjCZEJBhe
+ Q1dEaNPzG8nvIavz6mSSopMqzJsRBZUC/5jd2JyfdYa+2j45F0xltZWoYhWU27fFX75I
+ Tjnw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUkYLLAI9NslmQEI/QIri+EFAMrqwxGDyiRaRKREvmLT1T4+viO66VyChtxTy99MayEn0JQoBds18qtzp5czHnyfSHZdNl1ig==
-X-Gm-Message-State: AOJu0Yyv0jAuiw8vhyjL7RediqbmxWbuR48V0hV0DjELpQSKNEsJFrzN
- TFsJMQLiLgd/0bBwYzO420Sb0qNyMY6nESu4xJxqeZhWB4dPZWb/22RDPr9AKyxI7K0IbJ1iKQd
- t
-X-Google-Smtp-Source: AGHT+IGAVjYzTJB+rZXJCiX+PDjy+UA5vaeAT6TlSSbmnv+n8V5Wg9w1upe5BN2wX9fS/Q5g/rLZOQ==
-X-Received: by 2002:a05:6512:2312:b0:52c:7fe8:6489 with SMTP id
- 2adb3069b0e04-52e8273e4a5mr6566834e87.63.1719949211409; 
- Tue, 02 Jul 2024 12:40:11 -0700 (PDT)
+ AJvYcCUTl/WlTY8Jm1/bKbJJx52mTPh+YRjsy/TYy9NwtMbaVN2ynMLqF7Kmz+Syk3v9dSadrFkTv9flGkR9yJR5uusFft/iQ8tJhg==
+X-Gm-Message-State: AOJu0YzeAeI10IFrWT+mtJjSueEm7i8wvMawjkKn6xENuJ8Fnse8PyUe
+ DC7cRf5j+aw9X3kicbkgAJMQ28oqUONe7lMPBjseZ09qGhbcSgD5C96wrrYgKotNbgNAEe5jp0X
+ /
+X-Google-Smtp-Source: AGHT+IGFGFnxhmaeIbolTdqkPj7FxLcP0KYNMXREB94YGZNoLgC5PBNIMQvM6QEKnEYaJF/DxqzsTA==
+X-Received: by 2002:a5d:4946:0:b0:367:8fb5:ef87 with SMTP id
+ ffacd0b85a97d-3678fb5f0c7mr878634f8f.37.1719949239051; 
+ Tue, 02 Jul 2024 12:40:39 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4256af3c25esm209665455e9.9.2024.07.02.12.40.10
+ ffacd0b85a97d-3675a0fc4c9sm14050651f8f.86.2024.07.02.12.40.38
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 02 Jul 2024 12:40:10 -0700 (PDT)
-Message-ID: <f619cdf5-395c-4e37-87fe-49c7863b72bf@mind.be>
-Date: Tue, 2 Jul 2024 21:40:08 +0200
+ Tue, 02 Jul 2024 12:40:38 -0700 (PDT)
+Message-ID: <1a92093f-3469-4a24-8ba8-65b4417fadce@mind.be>
+Date: Tue, 2 Jul 2024 21:40:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-References: <20240702092945.2394743-1-dario.binacchi@amarulasolutions.com>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20240702113219.122631-1-ju.o@free.fr>
 Content-Language: en-GB
-In-Reply-To: <20240702092945.2394743-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20240702113219.122631-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719949211; x=1720554011; darn=buildroot.org;
+ d=mind.be; s=google; t=1719949239; x=1720554039; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Ur99/8Xqh63Rh/8qRcmETWnT2n8tBbp+Gm0lfaiIVUc=;
- b=EltMyii3fUH1IjheT8TXAheIIwEhio3IOVsjNFqyq5lQ9WGJphc383K11QB+eUu8rS
- ylH/rdnBdcNoLC7DOo+XuXoiZlI2793w6NJwvyNaaJUbuRJimY+Jo/mXwsuOVB4vki0D
- tYR1QurK/OJ/TIqrXn1HBx8ohWokMdEgux30gFbypD9AyNL4C9cn7PiyKS1+b1zXESZI
- STcHIYdwSbg80kwypNooehsPMGYDSNYw7bOMn8/AtIIabp86DN+DNlmlshUJ6bnoF5t0
- b0INsHI3an00yf9fbxe6MiCOhU3leAz+G9N42vf/d4qXQCK+xNM7MzyxaeOWxw+D3RX2
- Mqdg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=gdeNdLjuVeHBR7Hv9gBGnNVgKy9MojJN/MoSStx3gXc=;
+ b=Twkb2fW+C4D1W/s4ldaQl2EXrlnpWmWq5uqt7MuRdac46d9G9OSYQ5gAk7UwfEh7/u
+ xbff1bfoBkg2x9xzKSGmmMesYdN6QsQKrYnZe+ZRfIm+RL5wcG5Nzl1Rpgr/hlK9Ov4s
+ B4pVERrRXVSOtkzi8GiTf12q7mF3RrfqCXcf3oN2cM96bt0H7uEXt31mNBriq/cmQGEw
+ RrV2M/SCNEC8LiHS4MihQGH2cdu/v0FBDh90n9LwC+AcjYjDzymvfYweF6b1fB/BQ1nk
+ kfO2gjlpf6LdT8SOLSsflbp1klJiez2jwRT21R4N47po2IfzOL0lFFIsohJ+dHHo91OM
+ +ulA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=EltMyii3
-Subject: Re: [Buildroot] [PATCH 1/1] package/grpc: update the patches to be
- applied with fuzz 0
+ header.a=rsa-sha256 header.s=google header.b=Twkb2fW+
+Subject: Re: [Buildroot] [PATCH 1/1] package/xfsprogs: fix patch fuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,7 +109,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: linux-amarula@amarulasolutions.com, Robert Rose <robertroyrose@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -119,38 +116,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 02/07/2024 11:29, Dario Binacchi wrote:
-> Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-> fuzz factor to 0") reduced the fuzz factor.
+On 02/07/2024 13:32, Julien Olivain wrote:
+> Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
+> fuzz factor to 0" reduced the fuzz factor.
 > 
-> Due to this change, grpc fails to build with output:
+> Due to this change, xfsprogs fails to build with output:
 > 
->      Applying 0003-host-grpc-only-cpp-plugin.patch using patch:
->      patching file CMakeLists.txt
->      Hunk #2 succeeded at 567 (offset 8 lines).
->      Hunk #3 succeeded at 580 (offset 7 lines).
->      Hunk #4 succeeded at 1315 (offset 79 lines).
->      Hunk #5 succeeded at 1368 (offset 79 lines).
->      Hunk #6 FAILED at 1462.
->      Hunk #7 succeeded at 2515 (offset 131 lines).
->      Hunk #8 succeeded at 2631 (offset 107 lines).
->      Hunk #9 succeeded at 3117 (offset 186 lines).
->      Hunk #10 succeeded at 3202 (offset 198 lines).
->      Hunk #11 succeeded at 3654 (offset 172 lines).
->      Hunk #12 succeeded at 3909 (offset 184 lines).
->      Hunk #13 succeeded at 4203 (offset 158 lines).
->      Hunk #14 succeeded at 4263 (offset 158 lines).
->      Hunk #15 succeeded at 4347 (offset 158 lines).
->      Hunk #16 FAILED at 4281.
->      Hunk #17 succeeded at 11110 (offset -143 lines).
->      Hunk #18 succeeded at 11140 (offset -143 lines).
->      Hunk #19 succeeded at 23153 (offset 3325 lines).
->      Hunk #20 succeeded at 23250 (offset 3325 lines).
->      2 out of 20 hunks FAILED -- saving rejects to file CMakeLists.txt.rej
+>      Applying 0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch using patch:
+>      patching file mdrestore/Makefile
+>      Hunk #1 FAILED at 10.
+>      1 out of 1 hunk FAILED -- saving rejects to file mdrestore/Makefile.rej
+>      patching file scrub/Makefile
+>      Hunk #1 FAILED at 70.
+>      1 out of 1 hunk FAILED -- saving rejects to file scrub/Makefile.rej
 > 
-> This commit refreshes the package patch on the current package version.
+> This commit refreshes the package patches on the current package
+> version. Note: the patch 0001 file name is changed because it was
+> regenerated with the "git format-patch" command.
 > 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> The patch 0001 had an "Upstream:" tag in brackets. The tag was not
+> detected as such by check-package. This commit updates this tag. The
+> patch 0002 is also marked with an alternative upstream commit, so it
+> can be easily dropped at the next bump.
+> 
+> With those changes, the ".checkpackageignore" entries are no longer
+> needed, so this commit removes those.
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
   Applied to master, thanks.
 
@@ -158,238 +150,144 @@ On 02/07/2024 11:29, Dario Binacchi wrote:
   Arnout
 
 > ---
->   .checkpackageignore                           |  1 -
->   .../grpc/0003-host-grpc-only-cpp-plugin.patch | 59 ++++++++++---------
->   2 files changed, 31 insertions(+), 29 deletions(-)
+> Note: this patch only fixes patches to fix the current v6.4.0 version.
+> At the time of this patch, there is an upstream v6.8.0 available, but
+> is not compiling in all situations, and need extra work. This is the
+> reason why this patch is not proposing a bump.
+> ---
+>   .checkpackageignore                           |  2 --
+>   ...o-not-do-dynamic-linking-of-libtool.patch} | 20 ++++++++++--------
+>   ...-do-not-try-to-run-the-crc32selftest.patch | 21 +++++++++++--------
+>   3 files changed, 23 insertions(+), 20 deletions(-)
+>   rename package/xfsprogs/{0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch => 0001-mdrestore-scrub-do-not-do-dynamic-linking-of-libtool.patch} (74%)
 > 
 > diff --git a/.checkpackageignore b/.checkpackageignore
-> index 76b1c3c49ba1..532a308891f1 100644
+> index 76b1c3c49ba..b7725077d3f 100644
 > --- a/.checkpackageignore
 > +++ b/.checkpackageignore
-> @@ -700,7 +700,6 @@ package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
->   package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
->   package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
->   package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch lib_patch.Upstream
-> -package/grpc/0003-host-grpc-only-cpp-plugin.patch lib_patch.Upstream
->   package/grpc/0004-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
->   package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch lib_patch.Upstream
->   package/guile/0001-calculate-csqrt_manually.patch lib_patch.Upstream
-> diff --git a/package/grpc/0003-host-grpc-only-cpp-plugin.patch b/package/grpc/0003-host-grpc-only-cpp-plugin.patch
-> index c68b096df65c..bfb871305349 100644
-> --- a/package/grpc/0003-host-grpc-only-cpp-plugin.patch
-> +++ b/package/grpc/0003-host-grpc-only-cpp-plugin.patch
+> @@ -1576,8 +1576,6 @@ package/xen/0004-libs-light-fix-tv_sec-fprintf-format.patch lib_patch.Upstream
+>   package/xenomai/3.0.10/0001-lib-boilerplate-iniparser-Allow-building-with-GCC-10-2-2020101.patch lib_patch.Upstream
+>   package/xenomai/3.0.10/0002-Add-disable-demo-testsuite-options.patch lib_patch.Upstream
+>   package/xenomai/3.0.10/0003-lib-cobalt-copperplate-Use-valid-addresses-for-pthread_setspecific.patch lib_patch.Upstream
+> -package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch lib_patch.Upstream
+> -package/xfsprogs/0002-libxfs-do-not-try-to-run-the-crc32selftest.patch lib_patch.Upstream
+>   package/xinetd/0001-ar.patch lib_patch.Upstream
+>   package/xinetd/0002-destdir.patch lib_patch.Upstream
+>   package/xinetd/0003-rpc-fix.patch lib_patch.Upstream
+> diff --git a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch b/package/xfsprogs/0001-mdrestore-scrub-do-not-do-dynamic-linking-of-libtool.patch
+> similarity index 74%
+> rename from package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
+> rename to package/xfsprogs/0001-mdrestore-scrub-do-not-do-dynamic-linking-of-libtool.patch
+> index 9030a2aac32..cb30e68db48 100644
+> --- a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
+> +++ b/package/xfsprogs/0001-mdrestore-scrub-do-not-do-dynamic-linking-of-libtool.patch
 > @@ -1,4 +1,4 @@
-> -From a1922eadfc87da3dd221ff631f94ddd4a8ee7049 Mon Sep 17 00:00:00 2001
-> +From 0f2c73b62bdc612f9d5cdd8e0c765995470d4f8b Mon Sep 17 00:00:00 2001
->   From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->   Date: Tue, 25 May 2021 14:55:23 +0200
->   Subject: [PATCH] Add option to restrict building of (host-)grpc to
-> @@ -7,7 +7,7 @@ Subject: [PATCH] Add option to restrict building of (host-)grpc to
->   This avoids unnecessary dependencies on big packages like libabseil-cpp and
->   others.
+> -From d5cbb4f43cc9c30100fbf18a3e0d1fb95e1c1b0a Mon Sep 17 00:00:00 2001
+> +From fa3a4e036c8c78325216ed21eff6145aeb186686 Mon Sep 17 00:00:00 2001
+>   From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>   Date: Wed, 25 Nov 2015 10:50:00 +0000
+>   Subject: [PATCH] mdrestore, scrub: do not do dynamic linking of libtool
+> @@ -11,23 +11,25 @@ linking for libuuid only. Otherwise the build will fail like this:
+>   ld: attempted static link of dynamic object `/usr/lib/libuuid.so'
 >   
-> -Upstream-status: not accepted (see https://github.com/grpc/grpc/issues/25322)
-> +Upstream: not accepted (see https://github.com/grpc/grpc/issues/25322)
->   
->   Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->   Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> @@ -15,11 +15,11 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->   Updated for 1.48.0:
->   Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+>   Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> -[Sent upstream: https://www.spinics.net/lists/xfs/msg36149.html]
+> +Upstream: Proposed: https://www.spinics.net/lists/xfs/msg36149.html
+>   [baruch: update for v4.15.1; extend to include scrub]
+>   Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>   [matt: update for v4.16.1; adjusted libunistring -> libicu]
+>   Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> +[Julien: rebased on v6.4.0]
+> +Signed-off-by: Julien Olivain <ju.o@free.fr>
 >   ---
-> - CMakeLists.txt | 43 +++++++++++++++++++++++++++++++++++--------
-> - 1 file changed, 35 insertions(+), 8 deletions(-)
-> + CMakeLists.txt | 39 +++++++++++++++++++++++++++++++++++----
-> + 1 file changed, 35 insertions(+), 4 deletions(-)
+>    mdrestore/Makefile | 2 +-
+>    scrub/Makefile     | 2 +-
+>    2 files changed, 2 insertions(+), 2 deletions(-)
 >   
->   diff --git a/CMakeLists.txt b/CMakeLists.txt
-> -index d3963b074b..51cef83141 100644
-> +index 0dcae6b1aee5..57b3963a43b0 100644
->   --- a/CMakeLists.txt
->   +++ b/CMakeLists.txt
->   @@ -49,12 +49,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
-> @@ -39,7 +39,7 @@ index d3963b074b..51cef83141 100644
->    set(gRPC_INSTALL ${gRPC_INSTALL_default} CACHE BOOL
->        "Generate installation target")
+>   diff --git a/mdrestore/Makefile b/mdrestore/Makefile
+> -index 136ae716d691..75ff1bad78e9 100644
+> +index 4a932efb..7ea1fd45 100644
+>   --- a/mdrestore/Makefile
+>   +++ b/mdrestore/Makefile
+>   @@ -10,7 +10,7 @@ CFILES = xfs_mdrestore.c
 >    
-> -@@ -555,6 +559,8 @@ add_custom_target(plugins
-> +@@ -563,6 +567,8 @@ add_custom_target(plugins
->      DEPENDS ${_gRPC_PLUGIN_LIST}
->    )
+> - LLDLIBS = $(LIBXFS) $(LIBFROG) $(LIBRT) $(LIBPTHREAD) $(LIBUUID)
+> + LLDLIBS = $(LIBXFS) $(LIBFROG) $(LIBRT) $(LIBUUID) $(LIBURCU) $(LIBPTHREAD)
+>    LTDEPENDENCIES = $(LIBXFS) $(LIBFROG)
+>   -LLDFLAGS = -static
+>   +LLDFLAGS = -static-libtool-libs
+> @@ -35,12 +37,12 @@ index 136ae716d691..75ff1bad78e9 100644
+>    default: depend $(LTCOMMAND)
 >    
-> @@ -48,7 +48,7 @@ index d3963b074b..51cef83141 100644
->    add_custom_target(tools_c
->      DEPENDS
->    )
-> -@@ -567,6 +573,8 @@ add_custom_target(tools_cxx
-> +@@ -574,6 +580,8 @@ add_custom_target(tools_cxx
->    add_custom_target(tools
->      DEPENDS tools_c tools_cxx)
+>   diff --git a/scrub/Makefile b/scrub/Makefile
+> -index 063279400262..949f6fd8ba94 100644
+> +index aba14ed2..f0ef492f 100644
+>   --- a/scrub/Makefile
+>   +++ b/scrub/Makefile
+> -@@ -70,7 +70,7 @@ xfs_scrub.c
+> -
+> - LLDLIBS += $(LIBHANDLE) $(LIBFROG) $(LIBPTHREAD) $(LIBICU_LIBS) $(LIBRT)
+> +@@ -71,7 +71,7 @@ xfs_scrub.c
+> + LLDLIBS += $(LIBHANDLE) $(LIBFROG) $(LIBICU_LIBS) $(LIBRT) $(LIBURCU) \
+> + 	$(LIBPTHREAD)
+>    LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG)
+>   -LLDFLAGS = -static
+>   +LLDFLAGS = -static-libtool-libs
+> @@ -48,5 +50,5 @@ index 063279400262..949f6fd8ba94 100644
+>    ifeq ($(HAVE_MALLINFO),yes)
+>    LCFLAGS += -DHAVE_MALLINFO
+>   --
+> -2.16.2
+> +2.45.2
+>   
+> diff --git a/package/xfsprogs/0002-libxfs-do-not-try-to-run-the-crc32selftest.patch b/package/xfsprogs/0002-libxfs-do-not-try-to-run-the-crc32selftest.patch
+> index 6778d069a1d..77bdc191270 100644
+> --- a/package/xfsprogs/0002-libxfs-do-not-try-to-run-the-crc32selftest.patch
+> +++ b/package/xfsprogs/0002-libxfs-do-not-try-to-run-the-crc32selftest.patch
+> @@ -1,4 +1,4 @@
+> -From 3a77dfc54271059dcac305384bf6ace34fe1f3d3 Mon Sep 17 00:00:00 2001
+> +From 94ae5db7d017480e103aa6f07cc86648b613d114 Mon Sep 17 00:00:00 2001
+>   From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>   Date: Sun, 18 Dec 2016 15:37:27 +0100
+>   Subject: [PATCH] libxfs: do not try to run the crc32selftest
+> @@ -19,17 +19,20 @@ generator is natively built, but with the target CFLAGS.
+>   Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>   Signed-off-by: "Fabrice Fontaine" <fontaine.fabrice@gmail.com>
+>   [Update for 4.18.0: crc32 has been moved from libxfs to libfrog]
+> +[Julien: rebased on v6.4.0]
+> +Signed-off-by: Julien Olivain <ju.o@free.fr>
+> +Upstream: patch to be superseded by https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=e51b89e657af7843d8c7aea3df49fe1f0f1d4ac2
+>   ---
+> - libxfs/Makefile | 4 ++--
+> + libfrog/Makefile | 4 ++--
+>    1 file changed, 2 insertions(+), 2 deletions(-)
+>   
+> -diff --git a/libfrog/Makefile b/libxfs/Makefile
+> -index 62608bd..e021625 100644
+> +diff --git a/libfrog/Makefile b/libfrog/Makefile
+> +index f292afe3..1d0d2083 100644
+>   --- a/libfrog/Makefile
+>   +++ b/libfrog/Makefile
+> -@@ -112,9 +112,9 @@ LTLIBS = $(LIBPTHREAD) $(LIBRT)
+> - # don't try linking xfs_repair with a debug libxfs.
+> - DEBUG = -DNDEBUG
+> +@@ -57,9 +57,9 @@ ifeq ($(HAVE_GETMNTENT),yes)
+> + LCFLAGS += -DHAVE_GETMNTENT
+> + endif
 >    
-> @@ -57,7 +57,7 @@ index d3963b074b..51cef83141 100644
->    protobuf_generate_grpc_cpp_with_import_path_correction(
->      src/proto/grpc/channelz/channelz.proto src/proto/grpc/channelz/channelz.proto
->    )
-> -@@ -1228,6 +1236,7 @@ if(gRPC_BUILD_TESTS)
-> +@@ -1307,6 +1315,7 @@ if(gRPC_BUILD_TESTS)
->        DEPENDS buildtests_c buildtests_cxx)
->    endif()
+>   -LDIRT = gen_crc32table crc32table.h crc32selftest
+>   +LDIRT = gen_crc32table crc32table.h
+> @@ -37,8 +40,8 @@ index 62608bd..e021625 100644
+>   -default: crc32selftest ltdepend $(LTLIBRARY)
+>   +default: ltdepend $(LTLIBRARY)
 >    
-> @@ -65,7 +65,7 @@ index d3963b074b..51cef83141 100644
->    
->    add_library(address_sorting
->      third_party/address_sorting/address_sorting.c
-> -@@ -1280,6 +1289,8 @@ if(gRPC_INSTALL)
-> +@@ -1359,6 +1368,8 @@ if(gRPC_INSTALL)
->      )
->    endif()
->    
-> @@ -74,16 +74,16 @@ index d3963b074b..51cef83141 100644
->    if(gRPC_BUILD_TESTS)
->    
->    add_library(end2end_tests
-> -@@ -1451,6 +1462,8 @@ endforeach()
-> +@@ -1512,6 +1523,8 @@ target_link_libraries(end2end_tests
->    
->    endif()
->    
->   +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
->   +
->    add_library(gpr
-> -   src/core/ext/upb-generated/google/protobuf/any.upb.c
-> -   src/core/ext/upb-generated/google/rpc/status.upb.c
-> -@@ -2373,6 +2386,8 @@ if(gRPC_INSTALL)
-> +   src/core/lib/gpr/alloc.cc
-> +   src/core/lib/gpr/atm.cc
-> +@@ -2504,6 +2517,8 @@ if(gRPC_INSTALL)
->      )
->    endif()
->    
-> @@ -92,7 +92,7 @@ index d3963b074b..51cef83141 100644
->    if(gRPC_BUILD_TESTS)
->    
->    add_library(grpc_test_util
-> -@@ -2511,6 +2526,8 @@ endif()
-> +@@ -2618,6 +2633,8 @@ endif()
->    
->    endif()
->    
-> @@ -101,7 +101,7 @@ index d3963b074b..51cef83141 100644
->    add_library(grpc_unsecure
->      src/core/ext/filters/census/grpc_context.cc
->      src/core/ext/filters/channel_idle/channel_idle_filter.cc
-> -@@ -2916,6 +2933,8 @@ if(gRPC_INSTALL)
-> +@@ -3102,6 +3119,8 @@ if(gRPC_INSTALL)
->      )
->    endif()
->    
-> @@ -110,7 +110,7 @@ index d3963b074b..51cef83141 100644
->    if(gRPC_BUILD_TESTS)
->    
->    if(gRPC_BUILD_CODEGEN)
-> -@@ -2987,6 +3006,8 @@ endif()
-> +@@ -3185,6 +3204,8 @@ endif()
->    
->    endif()
->    
-> @@ -119,7 +119,7 @@ index d3963b074b..51cef83141 100644
->    add_library(grpc++
->      src/core/ext/transport/binder/client/binder_connector.cc
->      src/core/ext/transport/binder/client/channel_create.cc
-> -@@ -3463,6 +3484,7 @@ if(gRPC_INSTALL)
-> +@@ -3635,6 +3656,7 @@ if(gRPC_INSTALL)
->      )
->    endif()
->    
-> @@ -127,7 +127,7 @@ index d3963b074b..51cef83141 100644
->    
->    if(gRPC_BUILD_CODEGEN)
->    add_library(grpc++_reflection
-> -@@ -3705,6 +3727,8 @@ target_link_libraries(grpc++_test_util
-> +@@ -3889,6 +3911,8 @@ target_link_libraries(grpc++_test_util
->    
->    endif()
->    
-> @@ -136,7 +136,7 @@ index d3963b074b..51cef83141 100644
->    add_library(grpc++_unsecure
->      src/cpp/client/channel_cc.cc
->      src/cpp/client/client_callback.cc
-> -@@ -4023,6 +4047,7 @@ if(gRPC_INSTALL)
-> +@@ -4181,6 +4205,7 @@ if(gRPC_INSTALL)
->      )
->    endif()
->    
-> @@ -144,7 +144,7 @@ index d3963b074b..51cef83141 100644
->    
->    add_library(grpc_plugin_support
->      src/compiler/cpp_generator.cc
-> -@@ -4082,7 +4107,7 @@ foreach(_hdr
-> +@@ -4240,7 +4265,7 @@ foreach(_hdr
->    endforeach()
->    
->    
-> @@ -153,7 +153,7 @@ index d3963b074b..51cef83141 100644
->      install(TARGETS grpc_plugin_support EXPORT gRPCTargets
->        RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
->        BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
-> -@@ -4166,6 +4191,8 @@ endif()
-> +@@ -4324,6 +4349,8 @@ endif()
->    
->    endif()
->    
-> @@ -162,16 +162,16 @@ index d3963b074b..51cef83141 100644
->    add_library(upb
->      third_party/upb/third_party/utf8_range/naive.c
->      third_party/upb/third_party/utf8_range/range2-neon.c
-> -@@ -4256,6 +4283,8 @@ target_link_libraries(gen_hpack_tables
-> -   gpr
-> - )
-> +@@ -4393,6 +4420,8 @@ if(gRPC_INSTALL)
-> +   )
-> + endif()
->    
->   +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
->   +
->    
->    if(gRPC_BUILD_TESTS)
->    
-> -@@ -11228,7 +11257,7 @@ target_link_libraries(grpc_cli
-> +@@ -11085,7 +11114,7 @@ target_link_libraries(grpc_completion_queue_test
->    
->    
->    endif()
-> @@ -180,7 +180,7 @@ index d3963b074b..51cef83141 100644
->    
->    add_executable(grpc_cpp_plugin
->      src/compiler/cpp_plugin.cc
-> -@@ -11258,7 +11287,7 @@ target_link_libraries(grpc_cpp_plugin
-> +@@ -11115,7 +11144,7 @@ target_link_libraries(grpc_cpp_plugin
->    
->    
->    
-> @@ -189,7 +189,7 @@ index d3963b074b..51cef83141 100644
->      install(TARGETS grpc_cpp_plugin EXPORT gRPCTargets
->        RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
->        BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
-> -@@ -19803,7 +19832,7 @@ endif()
-> +@@ -23128,7 +23157,7 @@ endif()
->    
->    
->    
-> @@ -198,9 +198,12 @@ index d3963b074b..51cef83141 100644
->    
->    if(gRPC_INSTALL)
->      install(EXPORT gRPCTargets
-> -@@ -19900,3 +19929,5 @@ generate_pkgconfig(
-> +@@ -23225,3 +23254,5 @@ generate_pkgconfig(
->      "-lgrpc++_unsecure"
->      ""
->      "grpc++_unsecure.pc")
->   +
->   +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
-> +--
-> +2.43.0
-> +
+> - crc32table.h: gen_crc32table.c
+> + crc32table.h: gen_crc32table.c crc32defs.h
+>    	@echo "    [CC]     gen_crc32table"
+>   --
+> -2.7.4
+> +2.45.2
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
