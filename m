@@ -4,99 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC014C3064D
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 07:03:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFC82C30658
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 07:04:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B40E88100F;
-	Tue,  2 Jul 2024 07:03:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BEB9281152;
+	Tue,  2 Jul 2024 07:04:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xb9qSu4xZnpS; Tue,  2 Jul 2024 07:03:58 +0000 (UTC)
+ id 0i3G9qf5shBN; Tue,  2 Jul 2024 07:04:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C77D80F1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B962C8100F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C77D80F1D;
-	Tue,  2 Jul 2024 07:03:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B08D81BF32A
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:03:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B962C8100F;
+	Tue,  2 Jul 2024 07:04:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 890221BF97C
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:04:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9EFE8607D2
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:03:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8034C40752
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:04:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VJt6glGvJKQY for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 07:03:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H0bpgMosoBoy for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 07:04:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::132; helo=mail-lf1-x132.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9777C60789
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9777C60789
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9777C60789
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 07:03:56 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-42574064b16so23523935e9.2
- for <buildroot@buildroot.org>; Tue, 02 Jul 2024 00:03:56 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 322A640749
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 322A640749
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
+ [IPv6:2a00:1450:4864:20::132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 322A640749
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 07:04:13 +0000 (UTC)
+Received: by mail-lf1-x132.google.com with SMTP id
+ 2adb3069b0e04-52cdcd26d61so4299740e87.2
+ for <buildroot@buildroot.org>; Tue, 02 Jul 2024 00:04:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719903835; x=1720508635;
+ d=1e100.net; s=20230601; t=1719903851; x=1720508651;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=NNFzbZ2sB1zIIzzsymzxoX5MxRbYnsJnBYN3bLkYTj8=;
- b=aK/kxIA8qyppLSyzk0Vf0FLFwvOBSwGyu6Xtt4zNx/G7WXl/c6x+aUSN3OkZtj6FNc
- 2epGdOfFiJrL30NcvCFs2SAJpO2sjb5u6rfM+7qB0yDST1Mk7uSLZQMyLhCmb4H3Kflj
- buuKd7cCtlK/5lwHSnOC12vKnQl1PmKr8o3CnlBEvXFeV+9Q/25FhXW2d8qFCsJzOwQr
- dEqWltjcaE1aZwXm7lkcDS9dvVif54r4PK2D3tH9ioW7AXO1TjdSbXOckk13y+RLGPWj
- C79pTDlioJ1vhPPi+egt/sypu02Tix5gnAP/hC/vcDf+eIEEvQbFR3ycfF0ZYrW9dES5
- ne3g==
+ bh=cnVBaWATah3d2ljRnNx8o65Y4OMB3Bv1rch3iCXB8lw=;
+ b=pXQR+gwEKaHgkBQLPZZE2HusDgWd4m5vXo7Nyo57YveA5/wcJJEPaeNHvFW90qCGl1
+ v7cvSpJ2KO+fNKi/Eiet6OBy1uY4FJJhMCaotNaKoqgvXFfyO45JQu+LdW9zd4NUY2Le
+ JPio+jQeeu6As38WOR+GjXlk1xVEC6smy/Jsz/sfMmsZOK6B6KxE5i8mcoYUVwQPqD/h
+ kHavI7Z6rU8+3eVckkiC7pembhbmm9mwpa+IHxlphtXSx+UR6rV8QSol+y8WL4VW2YZO
+ rTHMn13c2a9tzY1vB4hLYDw8ywCveBnuTGdi9K0KPBmXhJVq2RezzoOqfhi+Yq2VJ5mm
+ YQxg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXKjRgW+0+tFZYiYXggASlZfDkRNZVWhVE+Kq9bZwsdDBVqLdMSoACFAZhjS8AP1hdbDoz3jP++GS/N1RLvWhracfXuakgnow==
-X-Gm-Message-State: AOJu0YzlmzCCO8VyaxOyVvLhhn/5tiHK67hsvIxB9h0ghYkJ5hmOjqbS
- 8keGlHv6RIzAww4cJkW4bSQPorljzCHlCljt6DU/etk3a0F4+fZh+n23jyRloiI0HxJy3MQWzDm
- p
-X-Google-Smtp-Source: AGHT+IGQpP4SWlXEVLPrbZclhrEb74lYU5WuxuNQ4ktCX+8M11D4gHcXrFZmfJy9IVMkbYQnQsd5mQ==
-X-Received: by 2002:a05:600c:4fc5:b0:425:672a:766e with SMTP id
- 5b1f17b1804b1-42579ff2758mr63839275e9.0.1719903834729; 
- Tue, 02 Jul 2024 00:03:54 -0700 (PDT)
+ AJvYcCWxBaUo9m4sLqA0Pm+o7x4PNo9mLusZShACuHYbKnz8TY4uDDGO3NXcMLI+SrO3kcaKL7TkUXTSu62GgjBlGMvw5pwatF4ILA==
+X-Gm-Message-State: AOJu0YxYE1+KdoSSfKf5fZm9IBxjYJwjCyrVq6B923plvDJK5dk8zAfh
+ Yv1NLRVL6B6oS7x05V0xh+Xlr/b/cSkY6TLkxvSxb1Efygnb29BgHI8IYHPoUWc=
+X-Google-Smtp-Source: AGHT+IGRnwjF0FSpgAVRAA/znrPX7Cl+VTX3He6S0TorT4OIpm1MFf98fMUnediCMOt8ShR+ZinY3g==
+X-Received: by 2002:ac2:4e0b:0:b0:52e:767a:ad9c with SMTP id
+ 2adb3069b0e04-52e826fc0dcmr4750589e87.53.1719903850925; 
+ Tue, 02 Jul 2024 00:04:10 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4256af5b8e2sm183990325e9.16.2024.07.02.00.03.53
+ 5b1f17b1804b1-4256af5b626sm182398505e9.15.2024.07.02.00.04.10
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 02 Jul 2024 00:03:54 -0700 (PDT)
-Message-ID: <827d8fab-a68f-430d-be69-5a17baad2466@mind.be>
-Date: Tue, 2 Jul 2024 09:03:52 +0200
+ Tue, 02 Jul 2024 00:04:10 -0700 (PDT)
+Message-ID: <6bf4be51-9b2e-4d5a-8766-2799c165b2a8@mind.be>
+Date: Tue, 2 Jul 2024 09:04:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20240701172340.1715937-1-james.hilliard1@gmail.com>
+References: <20240701173815.1725948-1-james.hilliard1@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <20240701172340.1715937-1-james.hilliard1@gmail.com>
+In-Reply-To: <20240701173815.1725948-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719903835; x=1720508635; darn=buildroot.org;
+ d=mind.be; s=google; t=1719903851; x=1720508651; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=NNFzbZ2sB1zIIzzsymzxoX5MxRbYnsJnBYN3bLkYTj8=;
- b=XjPOKZULiCsBfXy9qAEGLD8gXkPar1N4xBpF9vXh+1y3rYcfYtqZBJ0890txT3zW1q
- 3XkRtfToSLRfNmqIBml/l227sLwxBu/qJQmIllz7K570/3NAIFC/lWVP2rfR5NxShDQh
- 7Ny1POOJKI9NVLlu2mcAI2ZvR1yoS2A0zV/y3Xk0l9Mm1dy3Vdy7NDljeVOV1iyVJ7lS
- fG1AstpIejY60h2AbfZZvps9WMrHxwPdc47i76tTlvIjPCVEDJU99r2O0RB6HipRG3tr
- lyI1T+8fdrKbcf+ZcWqERpk35/YlyVDu6yhstJpt/Rnaw4Zvh0lL6PDbWXARIEeMQPb1
- xncg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=cnVBaWATah3d2ljRnNx8o65Y4OMB3Bv1rch3iCXB8lw=;
+ b=H8OtPEgVuvU6LkJ8twBPenlo4nMV7FKsGAWR8KANsuI2XEJhqY4QYVfvG4HC8cBFkn
+ RMPW8Egyfxes/9Oh4wy/v2hmwnv4/p816iNYoXgUPCyyz5fKpeTSp2I3K8cRxzWYK3Bn
+ yUUBVCFKDs2/1/1+IlkuG/p8klUXOwzFcmMarjg026v0cacFTJJ0uexjQiAJv+BKLvzM
+ tFHMu+OGkRpB2nAEmwRPUPe8vcv3m21D/0yKjEOEIKlsO81HddjQoplJwbtavscVH3Jw
+ WsFDNw486sj/GZCV1//AAAoVm+eNQwrFNgbUvqoF+y/jNiPkTgRNIdkO/m/KBpkcBWhf
+ Z4Ug==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=XjPOKZUL
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-cython: bump to version
- 0.29.37
+ header.a=rsa-sha256 header.s=google header.b=H8OtPEgV
+Subject: Re: [Buildroot] [PATCH 1/3] package/python-starlette: bump to
+ version 0.37.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,7 +109,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -118,48 +118,47 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 01/07/2024 19:23, James Hilliard wrote:
+On 01/07/2024 19:38, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-  Applied to master, thanks.
+  Applied all three to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/python-cython/python-cython.hash | 4 ++--
->   package/python-cython/python-cython.mk   | 4 ++--
+>   package/python-starlette/python-starlette.hash | 4 ++--
+>   package/python-starlette/python-starlette.mk   | 4 ++--
 >   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-> index 08ad8f6d84..42c063014e 100644
-> --- a/package/python-cython/python-cython.hash
-> +++ b/package/python-cython/python-cython.hash
-> @@ -1,6 +1,6 @@
->   # md5, sha256 from https://pypi.org/pypi/cython/json
-> -md5  a4d0f9fbc9c137f1a88937cd40e8c5ee  Cython-0.29.36.tar.gz
-> -sha256  41c0cfd2d754e383c9eeb95effc9aa4ab847d0c9747077ddd7c0dcb68c3bc01f  Cython-0.29.36.tar.gz
-> +md5  d9a1e8416f2278857a189347858ed9d0  Cython-0.29.37.tar.gz
-> +sha256  f813d4a6dd94adee5d4ff266191d1d95bf6d4164a4facc535422c021b2504cfb  Cython-0.29.37.tar.gz
+> diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+> index 03d77cf5be..f04aaea7c0 100644
+> --- a/package/python-starlette/python-starlette.hash
+> +++ b/package/python-starlette/python-starlette.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/starlette/json
+> -md5  0a1e026d653dc448ae07f47eefe1dc8b  starlette-0.36.3.tar.gz
+> -sha256  90a671733cfb35771d8cc605e0b679d23b992f8dcfad48cc60b38cb29aeb7080  starlette-0.36.3.tar.gz
+> +md5  b0ba8178dd4bf2cdff53c8702212be52  starlette-0.37.2.tar.gz
+> +sha256  9af890290133b79fc3db55474ade20f6220a364a0402e0b556e7cd5e1e093823  starlette-0.37.2.tar.gz
 >   # Locally computed sha256 checksums
->   sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
->   sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-> diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-> index 47e105c065..024c8c1e50 100644
-> --- a/package/python-cython/python-cython.mk
-> +++ b/package/python-cython/python-cython.mk
+>   sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+> diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+> index 9d137f5f5a..af2c2d4ac7 100644
+> --- a/package/python-starlette/python-starlette.mk
+> +++ b/package/python-starlette/python-starlette.mk
 > @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_CYTHON_VERSION = 0.29.36
-> +PYTHON_CYTHON_VERSION = 0.29.37
->   PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
-> -PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/38/db/df0e99d6c5fe19ee5c981d22aad557be4bdeed3ecfae25d47b84b07f0f98
-> +PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/2a/97/8cc3fe7c6de4796921236a64d00ca8a95565772e57f0d3caae68d880b592
->   PYTHON_CYTHON_SETUP_TYPE = setuptools
->   PYTHON_CYTHON_LICENSE = Apache-2.0
->   PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+> -PYTHON_STARLETTE_VERSION = 0.36.3
+> +PYTHON_STARLETTE_VERSION = 0.37.2
+>   PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+> -PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/be/47/1bba49d42d63f4453f0a64a20acbf2d0bd2f5a8cde6a166ee66c074a08f8
+> +PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/61/b5/6bceb93ff20bd7ca36e6f7c540581abb18f53130fabb30ba526e26fd819b
+>   PYTHON_STARLETTE_SETUP_TYPE = pep517
+>   PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+>   PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
