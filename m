@@ -1,76 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08BBEC3065C
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 20:15:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43BFAC30658
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 22:04:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 904664155D;
-	Tue,  2 Jul 2024 20:15:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0B5B6076A;
+	Tue,  2 Jul 2024 22:04:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id phCdXbFGSdXx; Tue,  2 Jul 2024 20:15:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2INHKgBXMWTC; Tue,  2 Jul 2024 22:04:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27C284156E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 039E060BF3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27C284156E;
-	Tue,  2 Jul 2024 20:15:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 40EF31BF976
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 20:15:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 039E060BF3;
+	Tue,  2 Jul 2024 22:04:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 03DB81BF300
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 22:04:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2DC854156E
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 20:15:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9B6980F2D
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 22:04:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iLJCLVK1pU0W for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 20:15:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D9D524155D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9D524155D
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D9D524155D
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 20:15:47 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1087F13F838;
- Tue,  2 Jul 2024 22:15:43 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 02 Jul 2024 22:15:42 +0200
-Date: Tue, 2 Jul 2024 22:15:42 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fiona Klute <fiona.klute@gmx.de>
-Message-ID: <ZoRf7pXimhw4wh-s@landeda>
-References: <20240702165708.3796162-1-fiona.klute@gmx.de>
- <20240702165708.3796162-2-fiona.klute@gmx.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R0RTDrsxeHRB for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 22:04:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7AFAA80DC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AFAA80DC1
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7AFAA80DC1
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 22:04:19 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id BBE03B0051E;
+ Wed,  3 Jul 2024 00:04:15 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Wed,  3 Jul 2024 00:04:11 +0200
+Message-ID: <20240702220411.2518456-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240702165708.3796162-2-fiona.klute@gmx.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1719951345;
- bh=mfGWfDfumtcKKxzOXxIJEfHUnPFEBPCH+SYjRlgIK3Q=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nyw5rnKWspw3Wk6L1Ld8VVXUeHQs9S3VYIeXlkXJNvi/mmhCWf5eApJPqXzYYMCBW
- xpFFKaMQGgf6JE1ifYK+u4qcvBUv0T14WewZ3PYoQScqPcdV7h3Dm7tVbEJ+MlmReu
- JOMve60crqTI9Dz9p4ODh2lGQ251XzDUszZzIppHyrQY9ITrjUl1nTokN7QqsQxn42
- reP1skHK97UnFuLRIgCFmg0qxMHwLLpuJQ4QqXcAxmTUgLKi/NJ1SybB1ZKRh6V1jp
- 7aJ+QRfNNiPwrHKhfLkJsdy6+vDC9t1MUKOQmVFiQirKPyrMFrFtRxX552j2jvnsZg
- KkD7YwDiOOLwg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1719957856;
+ bh=9jPRigGCOMs12VCYoi1qexmFgKE6MUssLnKdy4yhpkg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=HqgKEr11TyIG+FkTn53WVbJIM9j5Vlj7sXQR8S3nLNIMEtdWT3i1SVoqJvPxi2pDG
+ VXTCzVWkcA8T1wGpBJ23EkiqmdI1tZrSoSMxUqaBALcfYiyQTnWn9SpY4zNIONUeI3
+ QQ6j0JE9PKiTN8PdRwcXvZTZp1HWBWBEhJtyjkW6WzQUIFw965J8VRiDrORdGkilcV
+ h5h6S3gXFm+lo49UyRoIaeQfvY5+FI6zXIXi9eseSGgByqHjTMMbYxPoLdXxTB0s51
+ zm6+NS2MwInJhXWQ+XrpE+TBnhamT2n9jBbUYL3hen0AHA+rNA7jUk1IFj3eOwBmuq
+ sr4kEQi49cvCw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nyw5rnKW
-Subject: Re: [Buildroot] [PATCH v2 1/4] package/openssh: don't kill open
- sessions on restart
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=HqgKEr11
+Subject: [Buildroot] [PATCH 1/1] package/poke: fix patch fuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,103 +76,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fiona, All,
+Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0" reduced the fuzz factor.
 
-On 2024-07-02 18:57 +0200, Fiona Klute via buildroot spake thusly:
-> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-> 
-> The previously used "killall sshd" stopped all instances of sshd. With
-> OpenSSH before 9.8 that meant not only the listening server, but also
-> instances serving currently open sessions, possibly including the one
-> used to send the restart command, preventing it from completing the
-> "start" part of "restart" and leaving the system unreachable over SSH.
-> 
-> Instead, use the PID file that sshd creates by default to target only
-> the listening server. This leaves any open SSH sessions unaffected.
+Due to this change, poke fails to build with output:
 
-Rather than play with the PID ourselves, can we use start-stop-daemon
-instead? Currently, we run sshd and it daemonises all by itself, but if
-we pass -D, then start-stop-daemon will be able to do that, and handle
-the PID file automatically for us.
+    Applying 0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch using patch:
+    patching file configure.ac
+    Hunk #1 FAILED at 90.
+    1 out of 1 hunk FAILED -- saving rejects to file configure.ac.rej
 
-Regards,
-Yann E. MORIN.
+This commit refreshes the package patches on the current package
+version.
 
-> With OpenSSH 9.8 open sessions are handled by the separate
-> sshd-session binary so killall does not hit them any more, but
-> a targeted "kill" command is still desirable.
-> 
-> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-> ---
-[--SNIP--]
-> diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-> index 22da41d1ca..f1ff9dfec1 100644
-> --- a/package/openssh/S50sshd
-> +++ b/package/openssh/S50sshd
-> @@ -3,6 +3,8 @@
->  # sshd        Starts sshd.
->  #
-> 
-> +PIDFILE="/var/run/sshd.pid"
-> +
->  # Make sure the ssh-keygen progam exists
->  [ -f /usr/bin/ssh-keygen ] || exit 0
-> 
-> @@ -14,15 +16,25 @@ start() {
-> 
->  	printf "Starting sshd: "
->  	/usr/sbin/sshd
-> -	touch /var/lock/sshd
->  	echo "OK"
->  }
-> +
->  stop() {
->  	printf "Stopping sshd: "
-> -	killall sshd
-> -	rm -f /var/lock/sshd
-> +	pid="$( cat "${PIDFILE}" 2>/dev/null || true )"
-> +	if [ -z "${pid}" ]; then
-> +		echo "ERROR: not running"
-> +		return 1
-> +	fi
-> +	kill "${pid}"
-> +	# SSHD deletes its PID file when exiting, wait for it to
-> +	# disappear.
-> +	while [ -f "${PIDFILE}" ]; do
-> +		sleep 0.1
-> +	done
->  	echo "OK"
->  }
-> +
->  restart() {
->  	stop
->  	start
-> @@ -44,4 +56,3 @@ case "$1" in
->  esac
-> 
->  exit $?
-> -
-> --
-> 2.45.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+The patch 0002 was described as specific to Buildroot. This commit
+adds the "Upstream:" tag and removes the corresponding
+".checkpackageignore" entry.
 
+Fixes:
+http://autobuild.buildroot.org/results/ace4a0efffb66dcebf873a2baa33b5edfe670093
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .checkpackageignore                                 |  1 -
+ ...ac-HELP2MAN-replace-by-true-when-cross-com.patch | 12 +++++++-----
+ ...b-getrandom.c-fix-build-with-uclibc-1.0.35.patch | 13 ++++++++-----
+ 3 files changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index dca72534535..9e8988056d7 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1207,7 +1207,6 @@ package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch li
+ package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch lib_patch.Upstream
+ package/pkgconf/pkg-config.in Shellcheck
+ package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch lib_patch.Upstream
+-package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
+ package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch lib_patch.Upstream
+ package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch lib_patch.Upstream
+ package/postgresql/S50postgresql lib_sysv.Variables
+diff --git a/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch b/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
+index 85a76e068e6..fb5604d80ef 100644
+--- a/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
++++ b/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
+@@ -1,4 +1,4 @@
+-From 51fb81264323f01a86dd0bdeaf1c7a044a9cb6dc Mon Sep 17 00:00:00 2001
++From a7e29f73dab5f9bd4fc7a2407f1ed2022c4ff109 Mon Sep 17 00:00:00 2001
+ From: Romain Naour <romain.naour@gmail.com>
+ Date: Fri, 30 Apr 2021 15:43:59 +0200
+ Subject: [PATCH] configure.ac: HELP2MAN replace ':' by 'true' when
+@@ -12,15 +12,17 @@ Avoid:
+ ../run: line 51: exec: :: not found
+ 
+ Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Julien: refreshed the patch to be applied with fuzz factor 0]
++Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
+  configure.ac | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index a1943b57..c633f719 100644
++index 71b4d86..6487b57 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -90,7 +90,7 @@ gl_LIBTEXTSTYLE_OPTIONAL([0.20.5])
++@@ -88,7 +88,7 @@ gl_LIBTEXTSTYLE_OPTIONAL([0.20.5])
+  if test $cross_compiling = no; then
+    AM_MISSING_PROG(HELP2MAN, help2man)
+  else
+@@ -28,7 +30,7 @@ index a1943b57..c633f719 100644
+ +  HELP2MAN=true
+  fi
+  
+- dnl recfix is part of the GNU recutils suite, and is used in cfg.mk to
++ dnl The following Automake conditional is used in some Makefile.am files
+ -- 
+-2.31.1
++2.45.2
+ 
+diff --git a/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch b/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
+index bd20b5d2c6f..db1250810d2 100644
+--- a/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
++++ b/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
+@@ -1,4 +1,4 @@
+-From 236b019b83228d2e37fa07635fb6864ed7dc5fad Mon Sep 17 00:00:00 2001
++From 09758ebb191da659563b4c33334295ce21ecae71 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Thu, 1 Apr 2021 07:49:46 +0200
+ Subject: [PATCH] lib/getrandom.c: fix build with uclibc < 1.0.35
+@@ -25,6 +25,9 @@ Fixes:
+  - http://autobuild.buildroot.org/results/30105094e39374ec6d4e47e2fb5e99696f7f7981
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: Not applicable (Buildroot specific)
++[Julien: refreshed the patch to be applied with fuzz factor 0]
++Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
+  gl-libpoke/getrandom.c          | 1 +
+  gl/getrandom.c                  | 1 +
+@@ -32,7 +35,7 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  3 files changed, 3 insertions(+)
+ 
+ diff --git a/gl-libpoke/getrandom.c b/gl-libpoke/getrandom.c
+-index e146873..3948d8d 100644
++index 19bb342..0251e0f 100644
+ --- a/gl-libpoke/getrandom.c
+ +++ b/gl-libpoke/getrandom.c
+ @@ -19,6 +19,7 @@
+@@ -44,7 +47,7 @@ index e146873..3948d8d 100644
+  
+  #include <errno.h>
+ diff --git a/gl/getrandom.c b/gl/getrandom.c
+-index e146873..3948d8d 100644
++index 19bb342..0251e0f 100644
+ --- a/gl/getrandom.c
+ +++ b/gl/getrandom.c
+ @@ -19,6 +19,7 @@
+@@ -56,7 +59,7 @@ index e146873..3948d8d 100644
+  
+  #include <errno.h>
+ diff --git a/jitter/gnulib-local/getrandom.c b/jitter/gnulib-local/getrandom.c
+-index e146873..3948d8d 100644
++index 19bb342..0251e0f 100644
+ --- a/jitter/gnulib-local/getrandom.c
+ +++ b/jitter/gnulib-local/getrandom.c
+ @@ -19,6 +19,7 @@
+@@ -68,5 +71,5 @@ index e146873..3948d8d 100644
+  
+  #include <errno.h>
+ -- 
+-2.31.1
++2.45.2
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.45.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
