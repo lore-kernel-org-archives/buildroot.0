@@ -4,103 +4,132 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7EE1C30658
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 16:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A593C30658
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 16:25:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70E8240C97;
-	Tue,  2 Jul 2024 16:22:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4034404D7;
+	Tue,  2 Jul 2024 16:25:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yu_iDrwccPJN; Tue,  2 Jul 2024 16:22:42 +0000 (UTC)
+ id uufgdV4e9PGK; Tue,  2 Jul 2024 16:25:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33E19410BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A880340656
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33E19410BA;
-	Tue,  2 Jul 2024 16:22:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A880340656;
+	Tue,  2 Jul 2024 16:25:20 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1A3591BF366
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 16:22:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4F2151BF366
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 16:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1369980EDD
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 16:22:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C22780F80
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 16:25:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 92mZguvX49sZ for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 16:22:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AFFDD80E8E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFFDD80E8E
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFFDD80E8E
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 16:22:37 +0000 (UTC)
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-2eabd22d3f4so43915141fa.1
- for <buildroot@buildroot.org>; Tue, 02 Jul 2024 09:22:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719937355; x=1720542155;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=m/WpFzjxefgTKtlvznLTt89rEvfgpGpoRdTEJlaaXz4=;
- b=RHecT9uXnS+YIgsD8t+zbffsSDF0S6bXG5JuMfaZlfdQJyB2RfHYJL2DYE+s88pIMD
- Vo4LOgW6jwKC2YZMn+tCNT0ekdMrLquj5UKoZ9TI04cVwS28kGrTtI0EqZ3u2rFm0+BK
- H6o14nguFWk3kCNrtqf8BrV9PrrQDFsJec+uQnTJSR4AqPMKxv3ADwcEx1QQZjUhIboB
- MbvawQE26CXHBFZTUmVLVxTwrRbp1EYn+amKfdfhvBeGag7ijAkwaEJfJYj/VHBYN13w
- Pl54kT24Ly25xIJ1XKw+i9JQ0YQmggxLxkh4lSNXFr0lJ5e7NnCjMf07bGTjE4+qgHUl
- aEfA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXepnlWMnAcL8EbxfJst8golzatlXkWTC7Hj/FxEh/T3SnR+EFVR/8bWkiFsfGQkgazwBIW30chqlC1571ucx6cFifKsX+c4Q==
-X-Gm-Message-State: AOJu0Yzskbj7bkatazsZyQNhFYBLB4FFW7y7cxmou1KfwNaLSNeq9bWS
- Dllho2gw5YgMskRV3BUyGymLrbs5x2O/FIgt5Pi3ZsBifQaExZp5siBuJckzvXE=
-X-Google-Smtp-Source: AGHT+IFViqgIwwS1zH8dP2hBhWw+qTNV8KEauhyul8mTk/1KhYsm2P14/tv4TWXLeQEVd/cYlPt/wg==
-X-Received: by 2002:a2e:9217:0:b0:2ec:5b17:29a2 with SMTP id
- 38308e7fff4ca-2ee5e6e0288mr51909671fa.32.1719937355322; 
- Tue, 02 Jul 2024 09:22:35 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4257d9c7f18sm117856335e9.40.2024.07.02.09.22.34
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 02 Jul 2024 09:22:34 -0700 (PDT)
-Message-ID: <1c772538-f516-4bb6-a3b8-dffc095cb35c@mind.be>
-Date: Tue, 2 Jul 2024 18:22:32 +0200
+ id SxO2_V6VEOsE for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 16:25:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ED51380F5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED51380F5F
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ED51380F5F
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 16:25:17 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.121.108]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1ML9yc-1sgtvF2KjS-00YJwh for
+ <buildroot@buildroot.org>; Tue, 02 Jul 2024 18:25:15 +0200
+Message-ID: <cd185816-1219-4415-8370-6100385ec279@gmx.de>
+Date: Tue, 2 Jul 2024 18:25:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
-References: <20240629125521.976475-1-fiona.klute@gmx.de>
- <e710e75e-ddca-4d8f-8b62-2cbb2bdb78ed@mind.be>
- <63d7b817-713a-40ad-b6b7-40f5b9830d97@gmx.de>
- <0fda533c-e808-47cc-97ee-5d1b66046f93@mind.be>
- <1097e54c-e85e-439d-a9d4-461876184294@gmx.de>
-Content-Language: en-GB
-In-Reply-To: <1097e54c-e85e-439d-a9d4-461876184294@gmx.de>
+To: buildroot@buildroot.org
+References: <20240702123615.1028278-2-niyawe@niyawe.de>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <20240702123615.1028278-2-niyawe@niyawe.de>
+X-Provags-ID: V03:K1:t1Ug43Dl072liCCfO/LgZWn62KA9otGcE+30zA/CvptCBUgvVkE
+ a0EYVVjVbQGt1F9ysHjXr5V6E0y7ufWKE7UWWRt6tKGDXlUXO1k5jnAJUpaOSOWtUH/I+u0
+ /jD55fpIvem1tqAx80Xzkdf+fUxwhK/LLi3JM3N9VQMLzSyhtaEDdVee0UvmyKLf+5P2IY4
+ ZzlQej9eYzS8ODRqOZsrg==
+UI-OutboundReport: notjunk:1;M01:P0:nq62SLun4PU=;vZO4fKWCHuW5SgO6pngJjWotKKu
+ Nx918oonOvrWF602pb2WpF/HA+6J4QTXMoLcBIUb/ic/TnGSnLGEKjqI5BQ0fvPWzbrjcvJxE
+ zyodvySIVe9nQiNpnGLWmzjChAqtAnuS6g+wTCRU/Wm0sFLbc79zA4T6YLcngrrguZ/AZIO2f
+ G5LTgRzjuAbV/leI4tdRDbjls9/OVP9NV02//oP1rk2ZgA7nSeL8ZVU0Joq5SX8SFWO0irTNQ
+ jw0YiuB16lu+jc6BzGJ3QcXRgLV1cJHKKn1MfmhETikJS8+fmTCL1qItjN6pQ4a1NRFgUDClv
+ +dM+y2ZjKyvuPzOnmdOr9/Xym2chFSZdF+CkCaFRXbjSIzi1ZQgknXy3FptB30BoNao0MZhVT
+ CXHsC4pRTEhslhC4Lb8I8OqxLL2e/K8s5a+W6gCb79rhSOaJwxaMEy0xkTUo+lzsLFh7toXZm
+ a7ld4rCZV00eCtxv+6SBsD6jXE2AVeOAlypA6jPSRETCiqzy2Cn04eKFVX7UfsKwf9F65xZ8Q
+ d7TGXyiXxVt/mmjDHvwcmwg/sbz1GZxAfUgUDqOtwgHs1gVrM75xrctP2WfWZhKbhWBogPsDN
+ Xw4QZ2cjCKl6V8Xbf1vUN1meF3Co06tr3UwOVeL49pENUGKzKqhKRYBBTtG0XQCJpb+Et3ntr
+ l9tU6EpExkwuhKyepteHPX+WQOTknBXJcDpNsUjGZMQ8PxszhzV/Kd/eDYBXDsFg1gTZgsKh+
+ qHO9x3JURcNQT8f/I1K/LqNUjeZscZPUZYEP3OxUo7O/l9PGfw/YiKAjD8zBTM5ktAlboe2mc
+ 9w4EHv3cMl+XPim2GP4dvP4iaTRm7pA+PxNK2YPbuXSEA=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719937355; x=1720542155; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=m/WpFzjxefgTKtlvznLTt89rEvfgpGpoRdTEJlaaXz4=;
- b=Y46ef8GZM4pVm6obqu7KG+AP8ePixSxyfchKbU7UXND4bbNxgeZEhY1Ms8CnTn/wmG
- F1Eha7VkJTX55NrR2ZY9+3m8OJVk3kCdxrMJYKSDUJR5VFrFqhFuD/xIUv0G35pepQUG
- y5fdHBL8kv/XMdW4L26Ys1vocTieVXrQah46+4J0ewvog0QWxkY0c4ewSlD/fFGVOjTB
- 59YjoXzZQPDGoCk2yJeMb3qhJCChpDxvPV+2xEEe78M2IiFYFMm82GiKEakO6He7NGzw
- giTCocfal78EeWoAeWQ9Cipr2VyBU9xjy9oWw6BDMju/SgBERfiVOzFssL8wkcAAii3w
- ObYA==
+ d=gmx.de; 
+ s=s31663417; t=1719937515; x=1720542315; i=fiona.klute@gmx.de;
+ bh=lXbnrRs3mq5EldqHVZLxklnuqMQSntxLZ/WNXE7bRrk=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=ATjcvkfg5rc2digk0yUuW0F44J+Ww+2VG4zn2mRa+EB1zAVGvGhKfFZoFI1EWCE9
+ WWVCIavPbPKVa9Zepa7a0KC5SdX3Gr7+Qm6t6mOdAyuVooG4YhLHcOmoAIG0PNsUf
+ MDgOhE4LOhQz4eZulbJvkRs1HV5PajA0LY8pETEsWnasHY26tP/9CaUHg/kbOw3qh
+ UTZfiwRPxwywOUQAijro8HQSEl2xjYjFKhoi5U+iroiEOIQ45tAoFxOHkaSQ1+XQI
+ lzzxGmYxuj5fAuZsy7TaU3N1kSKXMKbJlzMLV4WAmS35/c25GGyYRSoO4vIl5ZNBG
+ XNiT/UBCeFCZrxzTtg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=Y46ef8GZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-docker: bump version to
- 7.1.0
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=ATjcvkfg
+Subject: Re: [Buildroot] [PATCH 1/1] packages/openssh: install sshd-session
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,38 +141,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAwMi8wNy8yMDI0IDEzOjE3LCBGaW9uYSBLbHV0ZSB3cm90ZToKPiBBbSAwMS4wNy4yNCB1
-bSAyMzozNSBzY2hyaWViIEFybm91dCBWYW5kZWNhcHBlbGxlOgo+PiBPbiAwMS8wNy8yMDI0IDIw
-OjA3LCBGaW9uYSBLbHV0ZSB3cm90ZToKPj4+IEFtIDMwLjA2LjI0IHVtIDE2OjUyIHNjaHJpZWIg
-QXJub3V0IFZhbmRlY2FwcGVsbGU6Cj4+Pj4KPj4+Pgo+Pj4+IE9uIDI5LzA2LzIwMjQgMTQ6NTUs
-IEZpb25hIEtsdXRlIHZpYSBidWlsZHJvb3Qgd3JvdGU6CltzbmlwXQo+Pj4+PiBTaWduZWQtb2Zm
-LWJ5OiBGaW9uYSBLbHV0ZSA8ZmlvbmEua2x1dGUrd2l3YUBnbXguZGU+Cj4+Pj4KPj4+PiDCoMKg
-QXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4gU29tZXdoZXJlIGFsb25nIHRoZSBtYWlsIHBhdGgs
-IHRoZSArd2l3YQo+Pj4+IHBhcnQgZ290IHN0cmlwcGVkIGZyb20gdGhlIEF1dGhvciB0YWcsIHNv
-IEkgZml4ZWQgdGhhdC4KPj4+Cj4+PiBUaGFua3MgZm9yIG1lcmdpbmchIFRoZSBkaWZmZXJlbmNl
-IHdhcyBhY3R1YWxseSBpbnRlbnRpb25hbDogTXkgbWFpbAo+Pj4gcHJvdmlkZXIgdW5mb3J0dW5h
-dGVseSBkb2Vzbid0IGRlbGl2ZXIgbWFpbHMgd2l0aCBzdWJhZGRyZXNzaW5nLCBzbyBJCj4+PiB1
-c2VkIGFuIGF1dGhvciBhZGRyZXNzIHdoZXJlIHBlb3BsZSBjYW4gYWN0dWFsbHkgcmVhY2ggbWUs
-IGFuZCBhZGRlZCB0aGUKPj4+IHN1YmFkZHJlc3Mgc3BvbnNvciBhY2tub3dsZWRnbWVudCAoYXMg
-c3VnZ2VzdGVkIGluIHRoZSBtYW51YWwpIG9ubHkgdG8KPj4+IHRoZSBzLW8tYiBsaW5lLgo+Pgo+
-PiDCoMKgT2gsIGRhcm4sIHNvIHRoYXQgbWVhbnMgdGhhdCB0aGUgYXV0aG9yIGluZm9ybWF0aW9u
-IHRoYXQgZ290IGNvbW1pdHRlZAo+PiBpcyB3cm9uZyBub3cuLi4gU29ycnkhIEknbGwgdHJ5IHRv
-IGRvIGJldHRlciBpbiB0aGUgZnV0dXJlIHdoZW4gbWVyZ2luZwo+PiB5b3VyIHBhdGNoZXMuCj4+
-Cj4+IMKgwqBJZiB0aGUgZ29hbCB3YXMgc3BvbnNvciBhY2tub3dsZWRnZW1lbnQsIHlvdSBjb3Vs
-ZCBoYXZlIGRvbmUgaXQgbGlrZQo+PiB0aGlzOgo+Pgo+PiDCoMKgwqAgRmlvbmEgS2x1dGUgKFdp
-d2EpIDxmaW9uYS5rbHV0ZUBnbXguZGU+Cj4gCj4gVGhhbmtzIGZvciB0aGUgaGludCEgV291bGQg
-aXQgbWFrZSBzZW5zZSB0byBhZGQgdGhhdCB0byB0aGUgbWFudWFsCj4gKGRvY3MvbWFudWFsL2Nv
-bnRyaWJ1dGUuYWRvYyk/IFRoZSAiU3VibWl0dGluZyBwYXRjaGVzIiBzZWN0aW9uCj4gY3VycmVu
-dGx5IG1lbnRpb25zIG9ubHkgc3ViYWRkcmVzc2luZyBmb3Igc3BvbnNvciBhY2tub3dsZWRnZW1l
-bnQuCgogIFRoYXQncyBhIGdyZWF0IGlkZWEsIHRoYW5rcyEKCiAgUmVnYXJkcywKICBBcm5vdXQK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Am 02.07.24 um 14:36 schrieb Niklas Yann Wettengel:
+> In OpenSSH 9.8 the server is split into two processes: sshd and
+> sshd-session which results in the following error, when trying
+> to start sshd:
+>
+> Starting sshd: /usr/libexec/sshd-session does not exist or is not executable
+>
+> This patch installs the sshd-session binary
+>
+> Signed-off-by: Niklas Yann Wettengel <niyawe@niyawe.de>
+
+Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+
+Thanks for the patch!
+Fiona
+
+> ---
+>   package/openssh/openssh.mk | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index 6d846f64df..7065c3ae4f 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
+> @@ -117,6 +117,7 @@ endif
+>   ifeq ($(BR2_PACKAGE_OPENSSH_SERVER),y)
+>   define OPENSSH_INSTALL_SERVER_PROGRAMS
+>   	$(INSTALL) -D -m 0755 $(@D)/sshd $(TARGET_DIR)/usr/sbin/sshd
+> +	$(INSTALL) -D -m 0755 $(@D)/sshd-session $(TARGET_DIR)/usr/libexec/sshd-session
+>   	$(INSTALL) -D -m 0755 $(@D)/sftp-server $(TARGET_DIR)/usr/libexec/sftp-server
+>   endef
+>   OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
