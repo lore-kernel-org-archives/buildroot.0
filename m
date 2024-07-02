@@ -1,92 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFACFC3065C
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 16:57:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A25C3065C
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 18:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F756410E4;
-	Tue,  2 Jul 2024 16:57:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FEC560BE7;
+	Tue,  2 Jul 2024 18:57:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2RlMw05vrJOG; Tue,  2 Jul 2024 16:57:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5YBNGtQU9vm5; Tue,  2 Jul 2024 18:57:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4D9F41548
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D28460BD1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4D9F41548;
-	Tue,  2 Jul 2024 16:57:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E2E5F1BF366
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 16:57:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D28460BD1;
+	Tue,  2 Jul 2024 18:57:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 009521BF304
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 18:57:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB6E8414DE
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 16:57:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFADB83EF1
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 18:57:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NKxflIDuNBWH for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 16:57:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D870E4147E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D870E4147E
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D870E4147E
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 16:57:23 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.121.108]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MZktj-1stEcI0Rjb-00YI9M; Tue, 02
- Jul 2024 18:57:21 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ktxAFo0sYErR for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 18:57:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8829383EEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8829383EEF
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8829383EEF
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 18:57:46 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-36785e72a48so660156f8f.3
+ for <buildroot@buildroot.org>; Tue, 02 Jul 2024 11:57:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1719946664; x=1720551464;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=8+tzGR1FctZmtDYLKSuTT5/gK56xnTgjcpWLfRFInC8=;
+ b=QYp7HzFi/RpFss0i/Y562qpzVSZjWGq93+bH3B+y/V12BSZumjkZbKZ5TNppujb9Yc
+ WMp17kaQ7cs070noYfXoAwf0qJNYxNwb4MzZxCTe89x9CIMqLhYeIWsnjgaIQ2k9MjQw
+ u6GfRvNN9Nq4MTSvSMhkaUJdTN7HeqD3M1BcGAYi6JkeVHbZWSE9NgjMT393XSNHwDUV
+ 92o1TjHN6cJoD65JoigPceBrymyYGBWpaUu7BTRzgmpmXY/EpIIC1D4aireBUd9eO/b2
+ UxcknZYrbmJsZkr/7lSwFInkabMp1ca5+pKDRWrL5N/0DlOhKqEy7XSy6zGDrYLeXio7
+ 33Uw==
+X-Gm-Message-State: AOJu0YwB3jGtGLVbUJc0WsdOTA6z4SqsEG2krX+C1oWBhK2ZvjUKDyxz
+ C4kZsYUpGrRxr0aoxm5+bildvOmXNfambW6J8HhCTiUa+o+IrPX4lB59mQ==
+X-Google-Smtp-Source: AGHT+IEg1ZAlYwaKFzd3+53SDXS8AqUefBIgtOCrD4ZzbHLl+YTNONG1kpKo1MsLOiXd/MfylMuAUQ==
+X-Received: by 2002:a05:6000:c0c:b0:35e:6472:4390 with SMTP id
+ ffacd0b85a97d-367756ab133mr6930280f8f.27.1719946664192; 
+ Tue, 02 Jul 2024 11:57:44 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-36790a40391sm431260f8f.54.2024.07.02.11.57.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 02 Jul 2024 11:57:43 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue,  2 Jul 2024 18:57:08 +0200
-Message-ID: <20240702165708.3796162-5-fiona.klute@gmx.de>
+Date: Tue,  2 Jul 2024 20:57:43 +0200
+Message-ID: <20240702185743.2034330-1-yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240702165708.3796162-1-fiona.klute@gmx.de>
-References: <20240702165708.3796162-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Bmjo7e0vkaiXmD3Cbvc2RF8LxZb96cH2Xmf9mR/aNpN11/nn4qr
- 1iumgo3Jp/FYezYxnjfjX75jP125bkw78dh/AEjJTC8YlHG6FaIfgersVt4UYDlLzLYkGcg
- h15I3MX/WajN/WA0DXWEh5OwlaTbMNvA11Hdbm5SMC49bs6FltD8f6s6GP6tX6fV/uO1vLc
- r7m2bxzaDCEnE01njVMOg==
-UI-OutboundReport: notjunk:1;M01:P0:rSYx9g+D2tQ=;Y/LICorR+WAYEjjmjYtIwALah3k
- Mn9MwJg7MkppiL6KGaSDXVUm9xNRZoN1EB56Zqc9pPHGfVUj4r/BaBkiOn/JTxjIXFFkIkqNT
- XzLN1FM2Ln313RDM20tucIf3JdnMRu5/mqy/bLqrHeSz0o4/LNJnRdrZQ6Pz+mXn1u7+oDyS8
- 9EOEQzDB9AVgDJMzcxkkYuGCLwGPaGcLOb7fGW0agwt2sjqR9rzRDVaKPcJ7+LSx80v8pSwSD
- mHineGH98lAk8A+i3kqyzt3Av0hasLyMbVl7U9F6VrmPj1RUDEbd3ZcrxqaK3OGaAYDuhe9gF
- DGjrIZxfMAZKy7TAz1j6pqhh8yaClFh0pEb4Hx+Ip3lWt6+X0FPvj8zYYyEtdRgedhNuKzsWc
- ANpfUrgXGHG/7nq/qvPHB7w/bYB/upsp7+qQz+/FZtUnPnb45z7XhNQ4DTJhlXJNPdU+oByeW
- 2PQfILcHhc62HORuRh4lHeqUSvdhp0pMZbnSCV5uGo63NOWtWdLmzWvXNihAP65aehcM4eWyq
- lmDyBka87yYJsBndtLP4uwvPN4pdl8cOZ3xS4HsCx3dpqBuoci7HtdD9kdK2qXY0CW4TRd/zv
- aXLRc9Ctu5z9l42UJk2eUygK+PhE4litFyy1xM62hCe6gcBbFE7IsU7dgyEAh6yIt3CtjG3DP
- haXWlBtMH6qRkg3ydffKB7vLfMG7Q55cMSfj0GezLzRWx/8B5eAQiDBe7W0hw05YsCkDHtvyF
- 6631ILvlCcCqQsc8sF9a/IMExEYy8pEjWCRo5CklGGh58fQckpPZ1LOBEur2BcM/LAaMbcgd8
- umIBLKpqrQm7h9rVsUnXIgUjfQlQXFDXXEIzhoFwt4M/8=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1719939441; x=1720544241; i=fiona.klute@gmx.de;
- bh=P0tVKq83+h9DRMmTDmsrjZa8hfBnJbi4VbPW4k1MCvY=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=h+9KtaKnppRnVMzervjqkZy6jre5zNU4LGYO9PGwTcX9pBeUDLdY7qCovseosvgc
- NT7ZxgB7MY/zJU+j/sq8xwCy510co6r9ZAQqpZCaog8GwizAHcgDDXkmduySk0k+s
- tX41s7IzevfVgLu17xRBQ8NarYu6w2CrxN+bRW6C4MSfesCzaVMmYdXUYIyN03acQ
- i3HnziEOkZ+PVUi73xK+INALWKpaqSJN6ttGmOZx/q2UdaZABk1DwOXVxcoGGj5Me
- k8ZHGOo1PyYViZQBeHfKIsJH1uEkA5/rz4CwqGZUnQNZI3lK9VgkxANBjfJpNsSyv
- q6jQ7RSdq1W46jCjzw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=h+9KtaKn
-Subject: [Buildroot] [PATCH v2 4/4] package/openssh: check error conditions
- on "start"
+ d=gmail.com; s=20230601; t=1719946664; x=1720551464; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=8+tzGR1FctZmtDYLKSuTT5/gK56xnTgjcpWLfRFInC8=;
+ b=Oa2U1yw1lq3Y9X+6ZLcxXoZBDmp66v8HobHaKNrJ2hCjqCsl7ZM1/MtwKXQzt1LPDa
+ ZFzmdAgakcnmQuawurhK99ev+8GCl4aKNvwRZGe/uq5gPbCsLeJsSJwAkgCemRGroKfh
+ RtOzoJYIaXehG14srM1755X1JXfySgInfQNdEhFcbzb+NSmwnYgAqP6DRt2VUIIUoD19
+ HdJADYUcLHh8fjqr4GzH2km1jXFBVKvlKAswmi8nnCwbQivE3FFHrKq4Z/mUcVtGXWsN
+ tWCBJbrDEdHQ9YOt/YZVL/aTxCRUf1Y8zbB6ylIzv5Z03W8QYTVK46GP5aM98ekux2zn
+ fYJg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Oa2U1yw1
+Subject: [Buildroot] [PATCH] package/daq: workaround for upstream changing
+ the archive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,56 +100,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Upstream has changed the archive for hte 2.0.7 release since we bumped
+in c1f820bd88a5 (package/daq: bump version to 2.0.7). Comparing the old
+archive as it is on s.b.o. with the one currently available on upstream,
+gives a few deltas, mostly;
+  - (C) years changed in comments
+  - version string changed from 2.0.6 to 2.0.7
+  - changes (that look legit) to autostuff
+  - a file dropped (Visual Studio related)
 
-If there already is a running instance a new sshd fails to start,
-leaving the old one in place. The init script silently ignored
-that. Show an error message and return a non-zero exit code instead.
+Of course, that means the hashes changed, and no longer match what we
+have.
 
-Also check the return code from sshd, without the check "OK" still
-appeared if sshd failed to start. Now the init script returns a
-non-zero exit code if start fails.
+Downloading the file manually and letting wget set the timestamp on it,
+revealsthe arcive is dated 2022-06-08T13:51:59. So, for mor ethan two
+years now, we've been relying on the archive we cached on s.b.o.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+So, we can't just change the hashes to the new ones, nor can we replace
+the archive on s.b.o.
+
+Instead, we use the same trick as was used in c617ebbc977d
+(package/python-*: fix hashes for cargo-vendored python packages): se
+use the acutal, real URL with a query parameter as the _SITE, and we set
+_SOURCE to a different name so as not to conflict with the previous
+archive.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v1 -> v2:
-* Check sshd exit code on service start
+ package/daq/daq.hash | 4 ++--
+ package/daq/daq.mk   | 6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
- package/openssh/S50sshd | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-index 87430bbec8..a677327378 100644
---- a/package/openssh/S50sshd
-+++ b/package/openssh/S50sshd
-@@ -15,8 +15,16 @@ start() {
- 	/usr/bin/ssh-keygen -A
-
- 	printf "Starting sshd: "
--	/usr/sbin/sshd
--	echo "OK"
-+	if [ -f "${PIDFILE}" ]; then
-+		echo "ERROR: already running"
-+		return 1
-+	fi
-+	if /usr/sbin/sshd; then
-+		echo "OK"
-+	else
-+		echo "ERROR"
-+		return 1
-+	fi
- }
-
- stop() {
---
+diff --git a/package/daq/daq.hash b/package/daq/daq.hash
+index 0fa1edecc2..82323ed404 100644
+--- a/package/daq/daq.hash
++++ b/package/daq/daq.hash
+@@ -1,7 +1,7 @@
+ # From https://www.snort.org/downloads/snort/md5s
+-md5  ea796f001d1b00302e4e69e337ab2460  daq-2.0.7.tar.gz
++md5  60e5ddcafb985fac7374884d28f299d1  daq-2.0.7-modified.tar.gz
+ # Locally computed:
+-sha256  bdc4e5a24d1ea492c39ee213a63c55466a2e8114b6a9abed609927ae13a7705e  daq-2.0.7.tar.gz
++sha256  d1f6709bc5dbddee3fdf170cdc1e49fb926e2031d4869ecf367a8c47efc87279  daq-2.0.7-modified.tar.gz
+ 
+ # Hash for license files:
+ sha256  07f28289c09fd9eb5a6ff7bc710ff40363601b1bbc6f3637d8ed412150e90819  COPYING
+diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+index 8a5394a63c..27abd4d2f5 100644
+--- a/package/daq/daq.mk
++++ b/package/daq/daq.mk
+@@ -5,7 +5,11 @@
+ ################################################################################
+ 
+ DAQ_VERSION = 2.0.7
+-DAQ_SITE = https://www.snort.org/downloads/snort
++# Upstream re-published a modified archive for the same 2.0.7 version, so change
++# its name locally, to avoid conflict with older BR versions which had a hash
++# for the previous archive.
++DAQ_SOURCE = daq-2.0.7-modified.tar.gz
++DAQ_SITE = https://www.snort.org/downloads/snort/daq-$(DAQ_VERSION).tar.gz?buildroot-path=filename
+ DAQ_LICENSE = GPL-2.0
+ DAQ_LICENSE_FILES = COPYING
+ DAQ_INSTALL_STAGING = YES
+-- 
 2.45.2
 
 _______________________________________________
