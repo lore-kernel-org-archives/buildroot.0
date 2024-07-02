@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EDADC3064D
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 06:58:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 844B4C3065C
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 06:58:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6FC2B81EF6;
-	Tue,  2 Jul 2024 06:58:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4539B81F65;
+	Tue,  2 Jul 2024 06:58:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P0mI48519M8X; Tue,  2 Jul 2024 06:58:00 +0000 (UTC)
+ id NuKg8zYKDfFC; Tue,  2 Jul 2024 06:58:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72DDC81F54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B61D81F7F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72DDC81F54;
-	Tue,  2 Jul 2024 06:58:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1AA8F1BF97C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B61D81F7F;
+	Tue,  2 Jul 2024 06:58:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1923D1BF32A
  for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 06:57:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1470C6081B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 13CD481F7C
  for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 06:57:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RbccVg_MX9-m for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IleNM_zVvkDw for <buildroot@lists.busybox.net>;
  Tue,  2 Jul 2024 06:57:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C22F607D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4382C81EF6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C22F607D2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4382C81EF6
  for <buildroot@buildroot.org>; Tue,  2 Jul 2024 06:57:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 48668838DF; Tue,  2 Jul 2024 06:57:57 +0000 (UTC)
+ id 3C129838EB; Tue,  2 Jul 2024 06:57:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Jul 2024 08:53:38 +0200
+Date: Tue, 2 Jul 2024 08:53:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 478a329c3b34027fcb58faba42779abc03e04927
-X-Git-Newrev: e8a4b2e638f0e27248eb63093a4b2b97cc973c09
+X-Git-Oldrev: 69e302892c71c1e48480be228d291d7c942c7b49
+X-Git-Newrev: 478a329c3b34027fcb58faba42779abc03e04927
 X-Patchwork-Hint: ignore
-Message-Id: <20240702065757.48668838DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-hatchling: bump to version
- 1.25.0
+Message-Id: <20240702065757.3C129838EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-certifi: bump to version
+ 2024.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8a4b2e638f0e27248eb63093a4b2b97cc973c09
+commit: https://git.buildroot.net/buildroot/commit/?id=478a329c3b34027fcb58faba42779abc03e04927
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/python-hatchling/python-hatchling.hash | 4 ++--
- package/python-hatchling/python-hatchling.mk   | 4 ++--
+ package/python-certifi/python-certifi.hash | 4 ++--
+ package/python-certifi/python-certifi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-hatchling/python-hatchling.hash b/package/python-hatchling/python-hatchling.hash
-index d49bee8bfc..b01d3df254 100644
---- a/package/python-hatchling/python-hatchling.hash
-+++ b/package/python-hatchling/python-hatchling.hash
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index 48e25119e5..0bb4a4fbc4 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/hatchling/json
--md5  63a3c6480c0805c55ce396e1ad246e78  hatchling-1.22.4.tar.gz
--sha256  8a2dcec96d7fb848382ef5848e5ac43fdae641f35a08a3fab5116bd495f3416e  hatchling-1.22.4.tar.gz
-+md5  ac265366ccd17365db319dc95a9e5bc5  hatchling-1.25.0.tar.gz
-+sha256  7064631a512610b52250a4d3ff1bd81551d6d1431c4eb7b72e734df6c74f4262  hatchling-1.25.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/certifi/json
+-md5  5a41f94d681748e76675f3cb4a7d517e  certifi-2023.11.17.tar.gz
+-sha256  9b469f3a900bf28dc19b8cfbf8019bf47f7fdd1a65a1d4ffb98fc14166beb4d1  certifi-2023.11.17.tar.gz
++md5  d138c6217784e19cda28770b003ab23b  certifi-2024.6.2.tar.gz
++sha256  3cd43f1c6fa7dedc5899d69d3ad0398fd018ad1a17fba83ddaf78aa46c747516  certifi-2024.6.2.tar.gz
  # Locally computed sha256 checksums
- sha256  7f143a8127ad4873862d70854b5bd2abd0085aa73e64fd2b08704a3b9f5c07fc  LICENSE.txt
-diff --git a/package/python-hatchling/python-hatchling.mk b/package/python-hatchling/python-hatchling.mk
-index 91f6597dfc..2ca2caf67c 100644
---- a/package/python-hatchling/python-hatchling.mk
-+++ b/package/python-hatchling/python-hatchling.mk
+ sha256  e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7  LICENSE
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index 90aabaa1ac..1c5d4d262d 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HATCHLING_VERSION = 1.22.4
-+PYTHON_HATCHLING_VERSION = 1.25.0
- PYTHON_HATCHLING_SOURCE = hatchling-$(PYTHON_HATCHLING_VERSION).tar.gz
--PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/4f/2a/c34d71531d1e1c9a5029bb73eb3816285befd0fffd7c63ffa0544253dca8
-+PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/a3/51/8a4a67a8174ce59cf49e816e38e9502900aea9b4af672d0127df8e10d3b0
- PYTHON_HATCHLING_LICENSE = MIT
- PYTHON_HATCHLING_LICENSE_FILES = LICENSE.txt
- PYTHON_HATCHLING_SETUP_TYPE = pep517
+-PYTHON_CERTIFI_VERSION = 2023.11.17
++PYTHON_CERTIFI_VERSION = 2024.6.2
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/d4/91/c89518dd4fe1f3a4e3f6ab7ff23cb00ef2e8c9adf99dacc618ad5e068e28
++PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/07/b3/e02f4f397c81077ffc52a538e0aec464016f1860c472ed33bd2a1d220cc5
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
