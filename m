@@ -4,91 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11643C30658
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 18:59:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE1B9C3065C
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 19:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC3C3606C0;
-	Tue,  2 Jul 2024 18:59:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FDE760BF0;
+	Tue,  2 Jul 2024 19:07:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wdkKk8IRENrR; Tue,  2 Jul 2024 18:59:49 +0000 (UTC)
+ id y3HYDtygOwBv; Tue,  2 Jul 2024 19:07:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B530C60BD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 333EC60BE7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B530C60BD1;
-	Tue,  2 Jul 2024 18:59:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 333EC60BE7;
+	Tue,  2 Jul 2024 19:07:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ACCC81BF304
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 18:59:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 831AE1BF303
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:07:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97657810F8
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 18:59:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 70F1483F0F
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:07:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zwgG_n7joafd for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 18:59:46 +0000 (UTC)
+ id cOArbM8b7o2V for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 19:07:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 979A7810DF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 979A7810DF
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 979A7810DF
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 18:59:46 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-3678fbf4a91so283799f8f.1
- for <buildroot@buildroot.org>; Tue, 02 Jul 2024 11:59:46 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::112d; helo=mail-yw1-x112d.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ABD0F83F0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABD0F83F0E
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com
+ [IPv6:2607:f8b0:4864:20::112d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ABD0F83F0E
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 19:07:47 +0000 (UTC)
+Received: by mail-yw1-x112d.google.com with SMTP id
+ 00721157ae682-64b417e1511so41573887b3.3
+ for <buildroot@buildroot.org>; Tue, 02 Jul 2024 12:07:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719946785; x=1720551585;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=o8OzTToN74kmVhdiZ5r8t1MmEOI5HIPw6C5QUkAvKPk=;
- b=uV9/MPsBcYnQQnkCeR4IO1OdtcJuihtxoAlh++6ntnxczT10lCWtmMB2lnrQJUXz+6
- xzPo5I58wGvj4KCF0dg0NjwxbjxKFALkBReiitUywmIQew0Xh7JVK3s8K7C7mqemqOrK
- atk3rXHhLWrdd+K4sXO2O2H6Qo59TZEuXlQ/xuXljg2VzY5TvqmnEvG1Xl/H7vYbT29t
- 4sB0hRWMy6MMAVSYEY0dYf3hdvOw/2KLPFJwmb68CyFFkXbsvcg848Tn4Sb4p2P7S6T8
- Tc5zN/r4Befm5tGKINf0ORMyitICyllJvf5xQq34CndWLDpei43r3nrxgyXBDvWCpyk/
- bZ5g==
-X-Gm-Message-State: AOJu0YxMvhSW9dDzzdQJ30Zkz1daPza61n/LQMtYGcY67t78cGojPzk+
- lKrzBE6/igFPnuZKqUMYfVKEQ4k+9N8Dgssp02gy1S6H0+4RoSuvXql7aA==
-X-Google-Smtp-Source: AGHT+IFoWOwZrREuT0cr/MXBVgV9wV7QncAjNYw95uoopjVY4efUfPoHkisglUYGHIFDBI7Zh0JCuw==
-X-Received: by 2002:a05:6000:1fae:b0:360:7c4b:58c3 with SMTP id
- ffacd0b85a97d-3677572154amr7393454f8f.54.1719946784373; 
- Tue, 02 Jul 2024 11:59:44 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3675a0cd784sm14085377f8f.7.2024.07.02.11.59.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jul 2024 11:59:44 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue,  2 Jul 2024 20:59:43 +0200
-Message-ID: <20240702185943.2035638-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.45.2
+ d=1e100.net; s=20230601; t=1719947266; x=1720552066;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=yOln+aQwC4ZWr/dLUZtneHF3y//nLCrmX44cQvODm58=;
+ b=GTDen61FR5xhV+lIY9PFbCspHuvF5p8t1ASN/DJIXb4OgKmQNAYWAVLkUYQ7xghmeC
+ KcEPiDwaGH6R0PBOY7usN2Y0p8aXRsmywCprwdZDZbO7ivQgUB2/wUzMiN+AEvafk63N
+ yMVpQ1jHV0pPR8XGrTZB5UK/DdKjOPQQvM4unmqAf92byY1PzF81hEAw91TLr5EgayZw
+ aFyHBgujKuD5sTqcx8XFkatflhcX/UpJvARz24FtkunHC7xkkf5/a8C/x/IsmLL4DMcA
+ 5UVibEzZW5EcjtGcdjdcqT0/GDGisZx+z+YFIsfGN4dg7OasdLOHgwpbufnGJ95iCzqu
+ c1+A==
+X-Gm-Message-State: AOJu0Yx6VL6349prcOjMbQ9r4E5hfHdEcbSTdWb71zxtwkQB8Ts1ouJW
+ Ag6Y81ecLoHs52dbxsZhK5+DvsnT7dtFFeY3iv125ajbMrZdz+5DSL6yH8SxHqcWYtClnHfWTv/
+ Dzi1ljN0AvgWGQgUi/seVWHcOh4GhjhEPAXzSrg==
+X-Google-Smtp-Source: AGHT+IEFIvpy9IEmQv92s1tGyWU+H4rqAzkb5YDTdiXo/Ql2aoRL/ynpTuIOY6BO9Sny6R0uxWVY1vCRHKYQMPtdSRA=
+X-Received: by 2002:a05:690c:ec6:b0:64a:5132:c90a with SMTP id
+ 00721157ae682-64c73bdce0cmr114927387b3.46.1719947266066; Tue, 02 Jul 2024
+ 12:07:46 -0700 (PDT)
 MIME-Version: 1.0
+References: <80bb1c09-3932-4e4b-b6b3-3a8bc54bcaed@mind.be>
+In-Reply-To: <80bb1c09-3932-4e4b-b6b3-3a8bc54bcaed@mind.be>
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Tue, 2 Jul 2024 21:07:34 +0200
+Message-ID: <CABGWkvoesNPu1TJ+eRfQdL7U9NET_PQoJSw52SOboFsyhm_UCA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1719946785; x=1720551585; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=o8OzTToN74kmVhdiZ5r8t1MmEOI5HIPw6C5QUkAvKPk=;
- b=XZHE2mA/4uMDT1/UE0EmAaWIo0v75ZPNNMcWM5H23aIiWzstRVSgW8Jwr37DdAPPPR
- xDUeG9kbfmIobUgC2lazfPXNxmG725LOmU5Aaum9SmNkwEHzSc9ks5xEnoLXqXyv+kxQ
- UWN9EJGgI6hy8LDBVbV3rCZWSqbuq2quT/9vfZqHwPl7wRU7VK1NEh9d1d/FnbH6pXj4
- 7ofYfTt+RMOQUFZat5zprOEjteyz42M9Qf9r6LDQiF5TaW/MGhmzr9oZBkCtV4fcZMgF
- FgXLriww1crp86ph0oG6Gr1CbTyXGyosXqjYd9830tcaugBN2z4ejsjV7LeJJjVwaA/9
- ZTBQ==
+ d=amarulasolutions.com; s=google; t=1719947266; x=1720552066;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=yOln+aQwC4ZWr/dLUZtneHF3y//nLCrmX44cQvODm58=;
+ b=mdYGfzHqhXyLDzhvM/G/AvO0UCc78jvI/ghFXIA1G23XfV+JA9U2ulnOK4VVAHgjJc
+ EGS2FZM8fWTZvW2c9pudXCLeR30bTdvrs+B1PHnUeED961rfhk74k5rjIw35zhrVqQQG
+ ZIQfDMvOPsP5hxvWfU4Ehy6lvD+15LSbUO26E=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=XZHE2mA/
-Subject: [Buildroot] [PATCH v2] package/daq: workaround for upstream
- changing the archive
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=mdYGfzHq
+Subject: Re: [Buildroot] Thank you for fixing the fuzz-0 fallout
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,85 +96,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Yoann Congal <yoann.congal@smile.fr>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Upstream has changed the archive for hte 2.0.7 release since we bumped
-in c1f820bd88a5 (package/daq: bump version to 2.0.7). Comparing the old
-archive as it is on s.b.o. with the one currently available on upstream,
-gives a few deltas, mostly;
-  - (C) years changed in comments
-  - version string changed from 2.0.6 to 2.0.7
-  - changes (that look legit) to autostuff
-  - a file dropped (Visual Studio related)
-
-Of course, that means the hashes changed, and no longer match what we
-have.
-
-Downloading the file manually and letting wget set the timestamp on it,
-reveals the archive is dated 2022-06-08T13:51:59. So, for more than two
-years now, we've been relying on the archive we cached on s.b.o.
-
-So, we can't just change the hashes to the new ones, nor can we replace
-the archive on s.b.o.
-
-Instead, we use the same trick as was used in c617ebbc977d
-(package/python-*: fix hashes for cargo-vendored python packages): we
-use the actual, real URL with a query parameter as the _SITE, and we set
-_SOURCE to a different name so as not to conflict with the previous
-archive.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Yoann Congal <yoann.congal@smile.fr>
-
----
-Changes v1 -> v2;
-  - fix typoes
-  - add Yoann in Cc
----
- package/daq/daq.hash | 4 ++--
- package/daq/daq.mk   | 6 +++++-
- 2 files changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/package/daq/daq.hash b/package/daq/daq.hash
-index 0fa1edecc2..82323ed404 100644
---- a/package/daq/daq.hash
-+++ b/package/daq/daq.hash
-@@ -1,7 +1,7 @@
- # From https://www.snort.org/downloads/snort/md5s
--md5  ea796f001d1b00302e4e69e337ab2460  daq-2.0.7.tar.gz
-+md5  60e5ddcafb985fac7374884d28f299d1  daq-2.0.7-modified.tar.gz
- # Locally computed:
--sha256  bdc4e5a24d1ea492c39ee213a63c55466a2e8114b6a9abed609927ae13a7705e  daq-2.0.7.tar.gz
-+sha256  d1f6709bc5dbddee3fdf170cdc1e49fb926e2031d4869ecf367a8c47efc87279  daq-2.0.7-modified.tar.gz
- 
- # Hash for license files:
- sha256  07f28289c09fd9eb5a6ff7bc710ff40363601b1bbc6f3637d8ed412150e90819  COPYING
-diff --git a/package/daq/daq.mk b/package/daq/daq.mk
-index 8a5394a63c..27abd4d2f5 100644
---- a/package/daq/daq.mk
-+++ b/package/daq/daq.mk
-@@ -5,7 +5,11 @@
- ################################################################################
- 
- DAQ_VERSION = 2.0.7
--DAQ_SITE = https://www.snort.org/downloads/snort
-+# Upstream re-published a modified archive for the same 2.0.7 version, so change
-+# its name locally, to avoid conflict with older BR versions which had a hash
-+# for the previous archive.
-+DAQ_SOURCE = daq-2.0.7-modified.tar.gz
-+DAQ_SITE = https://www.snort.org/downloads/snort/daq-$(DAQ_VERSION).tar.gz?buildroot-path=filename
- DAQ_LICENSE = GPL-2.0
- DAQ_LICENSE_FILES = COPYING
- DAQ_INSTALL_STAGING = YES
--- 
-2.45.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQXJub3V0LAoKT24gVHVlLCBKdWwgMiwgMjAyNCBhdCAzOjUz4oCvUE0gQXJub3V0IFZhbmRl
+Y2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPiB3cm90ZToKPgo+ICAgSGkgRGFyaW8sCj4KPiAgIEkn
+ZCBsaWtlIHRvIHRoYW5rIHlvdSBleHBsaWNpdGx5IGZvciBmaXhpbmcgdGhlIGZhbGxvdXQgb2Yg
+dGhlIGZ1enotMCBjaGFuZ2UuCj4gVGhhdCB3YXMgYSBiaWcgY2hhbmdlIHRoYXQgdG91Y2hlcyBh
+IGxvdCBvZiBwYWNrYWdlcyB0aGF0IHlvdSdyZSBwcm9iYWJseSBub3QKPiByZWFsbHkgaW50ZXJl
+c3RlZCBpbiwgYW5kIGl0J3MgZ3JlYXQgdG8gc2VlIHlvdSB0YWtlIHNvIG11Y2ggcmVzcG9uc2li
+aWxpdHkgZm9yIGl0LgoKQXMgSSBhbHNvIG1lbnRpb25lZCB0byBZYW5uIGluIGEgcHJldmlvdXMg
+ZW1haWwsIEkgZGlkIG5vdCBleHBlY3QgdGhhdAp0aGUgdGVzdCBydW4KZm9yIHRoZSBzZXJpZXMg
+eW91IG1lcmdlZCB3b3VsZCBkZXRlY3Qgb25seSBhIHNtYWxsIHBvcnRpb24gb2YgdGhlIHBhdGNo
+ZXMgdGhhdApuZWVkZWQgdG8gYmUgY29ycmVjdGVkLiBTbyBJIHRoaW5rIGl0IGlzIG5lY2Vzc2Fy
+eSB0byB0cnkgdG8gZml4IHRoaXMKcHJvYmxlbSBhcyBtdWNoCmFzIEkgY2FuLgoKSSBhbSB2ZXJ5
+IHBsZWFzZWQgdGhhdCB5b3UgYXBwcmVjaWF0ZSB3aGF0IEkgYW0gZG9pbmcgZGVzcGl0ZSB0aGUg
+ZmFjdAp0aGF0IHRoaW5ncwpoYXZlbid0IGdvbmUgc21vb3RobHkuCgpUaGFua3MgQXJub3V0IQoK
+UmVnYXJkcywKRGFyaW8KCj4KPiAgIFRoYW5rIHlvdSB2ZXJ5IG11Y2ghCj4KPgo+ICAgUmVnYXJk
+cywKPiAgIEFybm91dAo+CgoKLS0gCgpEYXJpbyBCaW5hY2NoaQoKU2VuaW9yIEVtYmVkZGVkIExp
+bnV4IERldmVsb3BlcgoKZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20KCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KCgpBbWFydWxhIFNvbHV0aW9ucyBTUkwKClZp
+YSBMZSBDYW5ldmFyZSAzMCwgMzExMDAgVHJldmlzbywgVmVuZXRvLCBJVAoKVC4gKzM5IDA0MiAy
+NDMgNTMxMAppbmZvQGFtYXJ1bGFzb2x1dGlvbnMuY29tCgp3d3cuYW1hcnVsYXNvbHV0aW9ucy5j
+b20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
