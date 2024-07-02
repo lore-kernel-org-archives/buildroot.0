@@ -1,97 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94D2FC3064D
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 13:53:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9EB6C3064D
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 15:18:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 239B782125;
-	Tue,  2 Jul 2024 13:53:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 717386059D;
+	Tue,  2 Jul 2024 15:18:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YABhzS71FLML; Tue,  2 Jul 2024 13:53:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Coiizs1MqMPQ; Tue,  2 Jul 2024 15:18:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9595282115
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73F67606FF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9595282115;
-	Tue,  2 Jul 2024 13:53:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73F67606FF;
+	Tue,  2 Jul 2024 15:18:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2C0BE1BF313
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 13:53:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8F7341BF30A
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 15:18:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25D648210E
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 13:53:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 888C78057A
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 15:18:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5DU08QGBvxvN for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 13:53:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12e; helo=mail-lf1-x12e.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2431F8210C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2431F8210C
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
- [IPv6:2a00:1450:4864:20::12e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2431F8210C
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 13:53:22 +0000 (UTC)
-Received: by mail-lf1-x12e.google.com with SMTP id
- 2adb3069b0e04-52cdf9f934fso4397558e87.1
- for <buildroot@buildroot.org>; Tue, 02 Jul 2024 06:53:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719928401; x=1720533201;
- h=content-transfer-encoding:subject:cc:content-language:from:to
- :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=nyDHIrFxrG3v3mE9/UpNq/D7bJcV5hTZcw2NZlsfH9A=;
- b=SStYWdryOtKsZgrRYUyQZhx49GhEgoDE3PssCddgf8wl1btaVj2uHpYDRBx8zYM0v6
- RCmFILukK8i2xdLYrWJX7r37AB9J/6hE75eNFYOUloSWBuxBcXqMUhOEBAWOxX8NDtoD
- uKylJCoylk5yxM9YFSO1zoC75XauH/cLfdCKsi8I26YjTp4Omelk5LGUpQmHRwiORQPy
- VJQ+mRenUXdnTeeCy+TlN+OBHzk+VaHJ6SbRhmVBOBhD9VGGpvVzLxRW+gxCxhs8eU0n
- 8SEqV2QjapI8TxayfX1lJGDFUsae+ktkLnZkFdetqL/UzqGXn/5mkozMYlGV9P22GW2m
- d0AQ==
-X-Gm-Message-State: AOJu0YzMmQs7n8XAC2IQvYAb0P2Zfwm8qo2JtnYGJf1gp+KmzeH5u8Eg
- G6ex0vrVqViOAPbEkOOGw/3MeIMt8w08lEAvtVR7PZj4EcQuu42hGV2gezRte3kN4I5AapHsZTG
- b
-X-Google-Smtp-Source: AGHT+IGsMust8bY8i+yLX+ql35HbG3hXMw8wKwM0zs4GVvPSZRkfrF8diN1TqjImwYkT1pZYby9DMg==
-X-Received: by 2002:a05:6512:2312:b0:52b:bd90:29c8 with SMTP id
- 2adb3069b0e04-52e82745124mr5644868e87.60.1719928400613; 
- Tue, 02 Jul 2024 06:53:20 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4256af55d0fsm197445845e9.19.2024.07.02.06.53.19
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 02 Jul 2024 06:53:20 -0700 (PDT)
-Message-ID: <80bb1c09-3932-4e4b-b6b3-3a8bc54bcaed@mind.be>
-Date: Tue, 2 Jul 2024 09:58:33 +0200
+ id rRTFNmesmReI for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 15:18:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DCB2980A4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCB2980A4D
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DCB2980A4D
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 15:18:53 +0000 (UTC)
+Received: from pps.filterd (m0346910.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 462F57aY029650
+ for <buildroot@buildroot.org>; Tue, 2 Jul 2024 15:18:53 GMT
+Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 4041ev08q6-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Tue, 02 Jul 2024 15:18:53 +0000
+Received: from xusxph004rp020.corp.ray.com ([128.13.120.224])
+ by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 462FIp6d016383
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Tue, 2 Jul 2024 15:18:52 GMT
+Received: from ciulimr02.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph004rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 462FIpSk010057
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+ for <buildroot@buildroot.org>; Tue, 2 Jul 2024 15:18:51 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by ciulimr02.rockwellcollins.com (Postfix) with ESMTP id 8DD681002685;
+ Tue,  2 Jul 2024 10:18:51 -0500 (CDT)
+Date: Tue, 02 Jul 2024 15:18:43 +0000
+Message-Id: <20240702-atftp-sysvinit-v1-0-f26694337129@collins.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Content-Language: en-GB
+X-B4-Tracking: v=1; b=H4sIAFMahGYC/x3MQQqAIBBA0avErBNUtKKrRAursWZj4YgU0t2Tl
+ m/xfwHGSMgwNgUiZmI6Q4VqG1gPF3YUtFWDltrIXirhkk+X4IczBUrC+sEMnZMKFws1uiJ6uv/
+ hNL/vB62oRTlgAAAA
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-02_10,2024-07-02_02,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-02_10,2024-07-02_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
+ bulkscore=0 mlxlogscore=530
+ phishscore=0 adultscore=0 suspectscore=0 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407020113
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ suspectscore=0 mlxscore=0
+ bulkscore=0 malwarescore=0 spamscore=0 adultscore=0 mlxlogscore=480
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407020114
+X-Proofpoint-GUID: 8Y3skVJBEBAn_qwrGpduHWyzhJA69e3e
+X-Proofpoint-ORIG-GUID: 8Y3skVJBEBAn_qwrGpduHWyzhJA69e3e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-02_10,2024-07-02_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ impostorscore=0 malwarescore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 phishscore=0 mlxlogscore=613 priorityscore=1501
+ suspectscore=0 mlxscore=0 bulkscore=0 adultscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407020114
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719928401; x=1720533201; darn=buildroot.org;
- h=content-transfer-encoding:subject:cc:content-language:from:to
- :user-agent:mime-version:date:message-id:from:to:cc:subject:date
- :message-id:reply-to;
- bh=nyDHIrFxrG3v3mE9/UpNq/D7bJcV5hTZcw2NZlsfH9A=;
- b=NYd/fF1NVwRiwiB/wVHciy9sUH4OsnWFqyVB5kaZE7Qe/eHs7VySE1w/TDbYfj2wCx
- pCAREJrOyEQwQlZWCn7YNWus77uIREn61+yRdwx4DPiz3YYS6GbAY9n12GBu40A1YbpV
- vkfAmqZchpcX1AlmU1p+ZPrNSJhHJdgpYgjMjtqMCwV9zX23Ptjgz/YvF7NY4kk2pyIp
- hxp1myxax680ZORYCA6IC/cm6mDq6C6rmwk9OXsYxu+4j6ui+7D2wBagP0duEB7mesME
- 4RRgboKh7jDfrioxfo1v06cBTR+4BuLJZt4n7MHLSyjxZmHoxrJQx+XSemtgdRfLLJoA
- xC1A==
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : message-id :
+ mime-version : subject : to; s=POD051818;
+ bh=MFaSlI+zBgTfGN+KurKJgLx2VGUpLidRTswBOpkidOk=;
+ b=iBXWyjm5wyca1XLKSuy4Fwlc+yHVah7ZoFxxKddxwDhoW8+h/QsO9tLPVwj94srWyXha
+ EAs3iXyupFY7I1izoVEa0Tb7YN4XXg3+/GGL+iQr9wOP0IBgmj/ejsyLVzdkb9TmRkVF
+ ChAT3gTF3t6O4DLNjYcFrAWpG5c/FoeoL4Xu05nc9P4+JLif/JClXc/xlaa6/hQ01b1Z
+ So4Q5fEhC6AegEexjr1vkUIxkrWnV0V2TnrE2YZwuyRNT2Ee48Ob+4TXLfx3bznCPns2
+ vvW9aPacreoeqNoLrxV+QOJW+KfrYSrKiO9+mm3wGPm8UY9QpHVgwO02AlZAMvhZIHjQ PA== 
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=NYd/fF1N
-Subject: [Buildroot] Thank you for fixing the fuzz-0 fallout
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=iBXWyjm5
+Subject: [Buildroot] [PATCH 0/3] package/atftp: add init script and
+ support/testing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,20 +125,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Buildroot Mailing List <buildroot@buildroot.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Brandon Maier <brandon.maier@collins.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-IMKgSGkgRGFyaW8sCgogwqBJJ2QgbGlrZSB0byB0aGFuayB5b3UgZXhwbGljaXRseSBmb3IgZml4
-aW5nIHRoZSBmYWxsb3V0IG9mIHRoZSBmdXp6LTAgY2hhbmdlLiAKVGhhdCB3YXMgYSBiaWcgY2hh
-bmdlIHRoYXQgdG91Y2hlcyBhIGxvdCBvZiBwYWNrYWdlcyB0aGF0IHlvdSdyZSBwcm9iYWJseSBu
-b3QgCnJlYWxseSBpbnRlcmVzdGVkIGluLCBhbmQgaXQncyBncmVhdCB0byBzZWUgeW91IHRha2Ug
-c28gbXVjaCByZXNwb25zaWJpbGl0eSBmb3IgaXQuCgogwqBUaGFuayB5b3UgdmVyeSBtdWNoIQoK
-CiDCoFJlZ2FyZHMsCiDCoEFybm91dAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+---
+Brandon Maier (3):
+      package/atftp: add sysvinit script
+      support/testing: add atftp test
+      DEVELOPERS: add myself for package/atftp
+
+ DEVELOPERS                                  |  1 +
+ package/atftp/S80atftpd                     | 44 +++++++++++++++++++++++++++++
+ package/atftp/atftp.mk                      |  5 ++++
+ support/testing/tests/package/test_atftp.py | 28 ++++++++++++++++++
+ 4 files changed, 78 insertions(+)
+---
+base-commit: 55c8c2328e73725e9ab41c8dc566b09f49f2aad5
+change-id: 20240701-atftp-sysvinit-5f8486a01eb5
+
+Best regards,
+-- 
+Brandon Maier <brandon.maier@collins.com>
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
