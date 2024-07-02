@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6F4DC30658
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 19:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 336ADC30658
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 19:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A61A58127C;
-	Tue,  2 Jul 2024 19:44:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0458581404;
+	Tue,  2 Jul 2024 19:44:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AegNTyloOn4b; Tue,  2 Jul 2024 19:44:52 +0000 (UTC)
+ id KW3Z_or0-Tzw; Tue,  2 Jul 2024 19:44:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 007C7811C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C71B6812D3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 007C7811C4;
-	Tue,  2 Jul 2024 19:44:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D258B1BF303
+	by smtp1.osuosl.org (Postfix) with ESMTP id C71B6812D3;
+	Tue,  2 Jul 2024 19:44:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EF6DE1BF303
  for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C002B4155B
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC470412DE
  for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:44:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X4bXdRlCC7lR for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ONNscYknGfiq for <buildroot@lists.busybox.net>;
  Tue,  2 Jul 2024 19:44:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C513941518
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4FC0405CC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C513941518
+ by smtp2.osuosl.org (Postfix) with ESMTP id C4FC0405CC
  for <buildroot@buildroot.org>; Tue,  2 Jul 2024 19:44:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF90283B28; Tue,  2 Jul 2024 19:44:47 +0000 (UTC)
+ id BCB4883B2D; Tue,  2 Jul 2024 19:44:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Jul 2024 21:33:03 +0200
+Date: Tue, 2 Jul 2024 21:33:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 328721a6e053043043309ddc8eb23f9aae36bb72
-X-Git-Newrev: d285e9efae37219dec7e5a4dfd013d611439c6a9
+X-Git-Oldrev: d285e9efae37219dec7e5a4dfd013d611439c6a9
+X-Git-Newrev: b21184a87733f2f2ccee69cade6875c507e439dc
 X-Patchwork-Hint: ignore
-Message-Id: <20240702194447.AF90283B28@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl_mixer: update the patches to
- be applied with fuzz 0
+Message-Id: <20240702194447.BCB4883B2D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmad: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,50 +66,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d285e9efae37219dec7e5a4dfd013d611439c6a9
+commit: https://git.buildroot.net/buildroot/commit/?id=b21184a87733f2f2ccee69cade6875c507e439dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
 fuzz factor to 0") reduced the fuzz factor.
 
-Due to this change, sdl_mixer fails to build with output:
+Due to this change, libmad fails to build with output:
 
-    Applying 0002-configure__set_macro_directory.patch using patch:
-    patching file configure.ac
-    Hunk #1 FAILED at 2.
-    1 out of 1 hunk FAILED -- saving rejects to file configure.ac.rej
+    Applying mips-gcc4.4.diff using series:
+    patching file fixed.h
+    Hunk #1 FAILED at 297.
+    1 out of 1 hunk FAILED -- saving rejects to file fixed.h.rej
 
-This commit refreshes the package patch on the current package version.
+The package applied the patches in two steps, first the local ones and
+then the official ones downloaded from the repository. The commit fixes
+the issue by reversing the order of patch application steps.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/sdl_mixer/0002-configure__set_macro_directory.patch | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/libmad/libmad.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sdl_mixer/0002-configure__set_macro_directory.patch b/package/sdl_mixer/0002-configure__set_macro_directory.patch
-index 9802333a1d..cad9baa9c3 100644
---- a/package/sdl_mixer/0002-configure__set_macro_directory.patch
-+++ b/package/sdl_mixer/0002-configure__set_macro_directory.patch
-@@ -20,13 +20,15 @@ Fixes:
-     libtool: and run autoconf again.
+diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
+index 084a533cc0..9f3396b1a4 100644
+--- a/package/libmad/libmad.mk
++++ b/package/libmad/libmad.mk
+@@ -19,7 +19,7 @@ define LIBMAD_APPLY_DEBIAN_PATCHES
+ 	fi
+ endef
  
- Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-LIBMAD_POST_PATCH_HOOKS += LIBMAD_APPLY_DEBIAN_PATCHES
++LIBMAD_PRE_PATCH_HOOKS += LIBMAD_APPLY_DEBIAN_PATCHES
  
- diff --git a/configure.ac b/configure.ac
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1,6 +1,7 @@
-- dnl Process this file with autoconf to produce a configure script.
-- AC_INIT(README)
-+@@ -2,6 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
-+ AC_INIT
-+ AC_CONFIG_SRCDIR([mixer.c])
-  AC_CONFIG_AUX_DIR(build-scripts)
- +AC_CONFIG_MACRO_DIR([acinclude])
-  
+ # debian/patches/md_size.diff
+ LIBMAD_IGNORE_CVES += CVE-2017-8372 CVE-2017-8373
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
