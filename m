@@ -1,95 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7BFDC30658
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 19:56:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08BBEC3065C
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 20:15:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8609683EE2;
-	Tue,  2 Jul 2024 19:56:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 904664155D;
+	Tue,  2 Jul 2024 20:15:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LaEK1tfMgjBa; Tue,  2 Jul 2024 19:56:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id phCdXbFGSdXx; Tue,  2 Jul 2024 20:15:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 146BE83F71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27C284156E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 146BE83F71;
-	Tue,  2 Jul 2024 19:56:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AAB5B1BF303
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:56:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27C284156E;
+	Tue,  2 Jul 2024 20:15:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 40EF31BF976
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 20:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A5CF160C11
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 19:56:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DC854156E
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 20:15:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZzNUTR9AP4Tp for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 19:56:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::534; helo=mail-ed1-x534.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2780A606C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2780A606C9
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2780A606C9
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 19:56:02 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id
- 4fb4d7f45d1cf-585e774fd3dso2697661a12.0
- for <buildroot@buildroot.org>; Tue, 02 Jul 2024 12:56:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719950160; x=1720554960;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=0r8GW6NPMjkaasjgrnpI3hgignnsnjj+w5LWSisMBAA=;
- b=YHPkV/27323LvAUAdDouOsbhKR2OxLvnH7kCgNE062hZJcNqYyS6BY7qv4OcvR44dJ
- pNVlx6qSXEcY6ePVqRXZE0FNNLSEZKEZXG6dEziP9yltNq1x2qwjFwKO/5/8zShpkiB5
- DaXK6srX78amHiYTbQlXaMyt1xS5IVOk5fgvwyIlkBDi8QG9L+iyhcmAVd1uFvDoAHIk
- PsRyKjZFfxpKcTkG6VlB6l/H1kqNCDKgzIOUexWj9VSV44MwC6gQERqZO+2Gz64VKfWD
- PSIDb3B/y/YneSjtvX2S8s6DpVyr7hiYEQ6uLmkH9oSMUB4DE1tsWBmF0jlo87s89pPd
- 2RoQ==
-X-Gm-Message-State: AOJu0YyQyP5RyyYFNli8WK909cXMRBbHI639Ebq6Wc76mcU0e0Iu7Ete
- zP8gBIVRERD9Ax7s/9Bkc0XJkrUmJchdmw27ayELnvQGsidETmE3e5JIXjbfBRg5jZWYU+sz26Q
- UC2I=
-X-Google-Smtp-Source: AGHT+IEHMI0pWeAeDKMtO9X7Bx/cEv55dCr3wjoenVNXtkx54138knvdk/WfWr4/nbfz4KOn9QFPxg==
-X-Received: by 2002:a05:6402:5cd:b0:583:a39e:f469 with SMTP id
- 4fb4d7f45d1cf-5879f1c2589mr6241759a12.17.1719950160043; 
- Tue, 02 Jul 2024 12:56:00 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-30-97-245.retail.telecomitalia.it. [79.30.97.245])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5861324fe5dsm6098192a12.36.2024.07.02.12.55.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jul 2024 12:55:59 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Tue,  2 Jul 2024 21:55:55 +0200
-Message-ID: <20240702195555.2498129-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iLJCLVK1pU0W for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 20:15:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D9D524155D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9D524155D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D9D524155D
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 20:15:47 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1087F13F838;
+ Tue,  2 Jul 2024 22:15:43 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 02 Jul 2024 22:15:42 +0200
+Date: Tue, 2 Jul 2024 22:15:42 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fiona Klute <fiona.klute@gmx.de>
+Message-ID: <ZoRf7pXimhw4wh-s@landeda>
+References: <20240702165708.3796162-1-fiona.klute@gmx.de>
+ <20240702165708.3796162-2-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1719950160; x=1720554960;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0r8GW6NPMjkaasjgrnpI3hgignnsnjj+w5LWSisMBAA=;
- b=ol94SKBvPssabnBrvuZ3+Gb3uMd3O5NqU87NjKDtaK6hd1+GJWB5iXODhQqh4ylrZ9
- cfAO9EYm2h/f2c+DyRWtsEY6lqLwaCDV6l6aTn8PZxnhv+5tJytFiVtTuICF2hXrsm/z
- AWqvLrX+gH27aBd+v2BO6QXR2fC1uBHAy+7+0=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240702165708.3796162-2-fiona.klute@gmx.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1719951345;
+ bh=mfGWfDfumtcKKxzOXxIJEfHUnPFEBPCH+SYjRlgIK3Q=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=nyw5rnKWspw3Wk6L1Ld8VVXUeHQs9S3VYIeXlkXJNvi/mmhCWf5eApJPqXzYYMCBW
+ xpFFKaMQGgf6JE1ifYK+u4qcvBUv0T14WewZ3PYoQScqPcdV7h3Dm7tVbEJ+MlmReu
+ JOMve60crqTI9Dz9p4ODh2lGQ251XzDUszZzIppHyrQY9ITrjUl1nTokN7QqsQxn42
+ reP1skHK97UnFuLRIgCFmg0qxMHwLLpuJQ4QqXcAxmTUgLKi/NJ1SybB1ZKRh6V1jp
+ 7aJ+QRfNNiPwrHKhfLkJsdy6+vDC9t1MUKOQmVFiQirKPyrMFrFtRxX552j2jvnsZg
+ KkD7YwDiOOLwg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=ol94SKBv
-Subject: [Buildroot] [PATCH 1/1] package/libsvg: update the patches to be
- applied with fuzz 0
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=nyw5rnKW
+Subject: Re: [Buildroot] [PATCH v2 1/4] package/openssh: don't kill open
+ sessions on restart
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,52 +82,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Carsten Schoenert <c.schoenert@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0") reduced the fuzz factor.
+Fiona, All,
 
-Due to this change, libsvg fails to build with output:
+On 2024-07-02 18:57 +0200, Fiona Klute via buildroot spake thusly:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> The previously used "killall sshd" stopped all instances of sshd. With
+> OpenSSH before 9.8 that meant not only the listening server, but also
+> instances serving currently open sessions, possibly including the one
+> used to send the restart command, preventing it from completing the
+> "start" part of "restart" and leaving the system unreachable over SSH.
+> 
+> Instead, use the PID file that sshd creates by default to target only
+> the listening server. This leaves any open SSH sessions unaffected.
 
-    Applying 0001-fix-expat-static-declaration.patch using patch:
-    patching file src/svg_parser_expat.c
-    Hunk #2 FAILED at 44.
-    1 out of 2 hunks FAILED -- saving rejects to file src/svg_parser_expat.c.rej
+Rather than play with the PID ourselves, can we use start-stop-daemon
+instead? Currently, we run sshd and it daemonises all by itself, but if
+we pass -D, then start-stop-daemon will be able to do that, and handle
+the PID file automatically for us.
 
-This commit refreshes the package patch on the current package version.
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/libsvg/0001-fix-expat-static-declaration.patch | 3 +++
- 1 file changed, 3 insertions(+)
+> With OpenSSH 9.8 open sessions are handled by the separate
+> sshd-session binary so killall does not hit them any more, but
+> a targeted "kill" command is still desirable.
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> ---
+[--SNIP--]
+> diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
+> index 22da41d1ca..f1ff9dfec1 100644
+> --- a/package/openssh/S50sshd
+> +++ b/package/openssh/S50sshd
+> @@ -3,6 +3,8 @@
+>  # sshd        Starts sshd.
+>  #
+> 
+> +PIDFILE="/var/run/sshd.pid"
+> +
+>  # Make sure the ssh-keygen progam exists
+>  [ -f /usr/bin/ssh-keygen ] || exit 0
+> 
+> @@ -14,15 +16,25 @@ start() {
+> 
+>  	printf "Starting sshd: "
+>  	/usr/sbin/sshd
+> -	touch /var/lock/sshd
+>  	echo "OK"
+>  }
+> +
+>  stop() {
+>  	printf "Stopping sshd: "
+> -	killall sshd
+> -	rm -f /var/lock/sshd
+> +	pid="$( cat "${PIDFILE}" 2>/dev/null || true )"
+> +	if [ -z "${pid}" ]; then
+> +		echo "ERROR: not running"
+> +		return 1
+> +	fi
+> +	kill "${pid}"
+> +	# SSHD deletes its PID file when exiting, wait for it to
+> +	# disappear.
+> +	while [ -f "${PIDFILE}" ]; do
+> +		sleep 0.1
+> +	done
+>  	echo "OK"
+>  }
+> +
+>  restart() {
+>  	stop
+>  	start
+> @@ -44,4 +56,3 @@ case "$1" in
+>  esac
+> 
+>  exit $?
+> -
+> --
+> 2.45.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/libsvg/0001-fix-expat-static-declaration.patch b/package/libsvg/0001-fix-expat-static-declaration.patch
-index 58ef286729f1..1086785d0f0b 100644
---- a/package/libsvg/0001-fix-expat-static-declaration.patch
-+++ b/package/libsvg/0001-fix-expat-static-declaration.patch
-@@ -12,6 +12,8 @@ Patch based on
- http://oe-lite.org/redmine/projects/xorg/repository/revisions/c4df7951e846e1be718f37f2455696a1d0861f3d/entry/recipes/cairo/libsvg-0.1.4/gcc4_and_expat.patch
- 
- Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- 
- diff -bur libsvg-0.1.4~orig/src/svg_parser_expat.c libsvg-0.1.4/src/svg_parser_expat.c
- --- libsvg-0.1.4~orig/src/svg_parser_expat.c	2005-02-14 11:26:26.000000000 -0600
-@@ -31,3 +33,4 @@ diff -bur libsvg-0.1.4~orig/src/svg_parser_expat.c libsvg-0.1.4/src/svg_parser_e
- +#endif
-  
-  static void
-+ _svg_parser_sax_warning (void		*closure,
 -- 
-2.43.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
