@@ -4,49 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB15AC3064D
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 06:58:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DDD1C30658
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 07:02:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43DE081FAE;
-	Tue,  2 Jul 2024 06:58:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 465C48127D;
+	Tue,  2 Jul 2024 07:02:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QPETpTqiVAun; Tue,  2 Jul 2024 06:58:21 +0000 (UTC)
+ id s3Zbcdy7JAeF; Tue,  2 Jul 2024 07:02:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7BA681F3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E90381F40
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7BA681F3E;
-	Tue,  2 Jul 2024 06:58:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F41B1BF32A
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 06:58:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E90381F40;
+	Tue,  2 Jul 2024 07:02:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C41021BF32A
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:02:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 262A581F7C
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 06:57:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0FAD413E0
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:02:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rUmSZqiHw247 for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 06:57:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B48C81F54
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B48C81F54
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 06:57:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53F4B838F2; Tue,  2 Jul 2024 06:57:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qlEefBIky-z9 for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 07:02:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3C0B3400C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C0B3400C6
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3C0B3400C6
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 07:02:46 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id
+ a640c23a62f3a-a732cb4ea31so488355266b.0
+ for <buildroot@buildroot.org>; Tue, 02 Jul 2024 00:02:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1719903764; x=1720508564;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=CHwxL5YxO6W+DUY+O5qe5gEM1w1oj7tyfwdght8WNhE=;
+ b=OqYg9YYKInUkxgmxstKu/kRmUPpYXoqbe5y94k8UTJXtA9Q84q3oANrWrG2uxzIriR
+ s+FHCHst9OtCu2ymnFOuwpCiV7u8ZIJO+l6s5tlht8P2RTf5uCdWI1HEHTgX12p1DvSW
+ HMxXVma7JETeUYI2BLDyXURAIgWxaGlzhy32kE0JMsTseAClqmLVvCe/LCzffQ9qu/2d
+ oL89w2SJvXRP6O0C3KjjSiAO6t1bKh7gZE4qwiaLedwLKa4pRzCBocYnIkvbLD8felTb
+ iHrhG2VI2ASN/iEPte9LfuisFyyKls+8uMmUU/TjZmXYHhHrLTyX5RhYB7nROzYaAXND
+ 23oQ==
+X-Gm-Message-State: AOJu0YwDOVwQq9zi+8w7QhEqdYyASgL91zmLxIJ56N4adyk1prc2jIN9
+ vXONHnOgL3ro3SF4odpR2Tzq8O1LfhY9IGDw42g2XYmP6wgdrKrD3PGzqClhrMmXPBmAw/s7AEU
+ XiCg=
+X-Google-Smtp-Source: AGHT+IEnQBevF8PnoWvEWFiGjPxjTfWymjF041d+zal4rWgNW7AZtpLwVTHzCqDGUOFbkj0H9VN/lg==
+X-Received: by 2002:a17:906:4e81:b0:a72:9ebe:29da with SMTP id
+ a640c23a62f3a-a7513953df2mr508240566b.35.1719903763667; 
+ Tue, 02 Jul 2024 00:02:43 -0700 (PDT)
+Received: from localhost.localdomain ([2001:b07:6474:ebbf:c733:f73f:670d:ca47])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a750fb362d4sm282567466b.49.2024.07.02.00.02.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 02 Jul 2024 00:02:43 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 2 Jul 2024 08:53:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e8a4b2e638f0e27248eb63093a4b2b97cc973c09
-X-Git-Newrev: a397edda4222e382c4899c09cb4945c17dcd1c72
-X-Patchwork-Hint: ignore
-Message-Id: <20240702065757.53F4B838F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-httpx: bump to version
- 0.27.0
+Date: Tue,  2 Jul 2024 09:02:32 +0200
+Message-ID: <20240702070232.2373630-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1719903764; x=1720508564;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=CHwxL5YxO6W+DUY+O5qe5gEM1w1oj7tyfwdght8WNhE=;
+ b=cRuMFNebAuhF9ArXku//EaZ3lZooGyhRHW1RoyGxdd0CdAF86Jv1VKxxvF6OX8cJlb
+ pYyUD9dn9dYMOpB0uxGZZl2kVjsEkm6050ry/NOjC45EqLND7PCWXXmWHAvDkg3htfm+
+ 4pkh+Acm8f6x0h0n3zgwmHgbfNL2SyXY8/t4I=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=cRuMFNeb
+Subject: [Buildroot] [PATCH 1/1] package/gpm: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,52 +100,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com,
+ Julien Boibessot <julien.boibessot@armadeus.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a397edda4222e382c4899c09cb4945c17dcd1c72
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0") reduced the fuzz factor.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Due to this change, gpm fails to build with output:
+
+    Applying 0003-src-Makefile.in-Really-install-unversioned-solibrary.patch using patch:
+    patching file src/Makefile.in
+    Hunk #1 FAILED at 115.
+    1 out of 1 hunk FAILED -- saving rejects to file src/Makefile.in.rej
+
+This commit refreshes the package patch on the current package version.
+
+Fixes: 8f88a644ed7d6c9ea55fd4fbe9d7f37055920016
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/python-httpx/python-httpx.hash | 4 ++--
- package/python-httpx/python-httpx.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...efile.in-Really-install-unversioned-solibrary.patch | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-httpx/python-httpx.hash b/package/python-httpx/python-httpx.hash
-index 26e39fcc6d..381439f464 100644
---- a/package/python-httpx/python-httpx.hash
-+++ b/package/python-httpx/python-httpx.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/httpx/json
--md5  3785c8a8930a7c7280206f79c170658f  httpx-0.26.0.tar.gz
--sha256  451b55c30d5185ea6b23c2c793abf9bb237d2a7dfb901ced6ff69ad37ec1dfaf  httpx-0.26.0.tar.gz
-+md5  d6035d561136590900678ec6c78698cb  httpx-0.27.0.tar.gz
-+sha256  a0cb88a46f32dc874e04ee956e4c2764aba2aa228f650b06788ba6bda2962ab5  httpx-0.27.0.tar.gz
- # Locally computed sha256 checksums
- sha256  4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d  LICENSE.md
-diff --git a/package/python-httpx/python-httpx.mk b/package/python-httpx/python-httpx.mk
-index cbc9c9298b..edba2dbb04 100644
---- a/package/python-httpx/python-httpx.mk
-+++ b/package/python-httpx/python-httpx.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/gpm/0003-src-Makefile.in-Really-install-unversioned-solibrary.patch b/package/gpm/0003-src-Makefile.in-Really-install-unversioned-solibrary.patch
+index 259180197696..2105bbbf6a0c 100644
+--- a/package/gpm/0003-src-Makefile.in-Really-install-unversioned-solibrary.patch
++++ b/package/gpm/0003-src-Makefile.in-Really-install-unversioned-solibrary.patch
+@@ -1,4 +1,4 @@
+-From 445be05fba32c512fd87a0c98b4e9936629ef95e Mon Sep 17 00:00:00 2001
++From 5b83edaa20f6ecf97d16e323be1ed555d8fa2c01 Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Sat, 20 Feb 2016 17:59:52 +0100
+ Subject: [PATCH] src/Makefile.in: Really install unversioned solibrary
+@@ -10,22 +10,24 @@ which created libgpm.so but failed to include it in the install target.
+ Patch sent upstream: https://github.com/telmich/gpm/pull/11
  
--PYTHON_HTTPX_VERSION = 0.26.0
-+PYTHON_HTTPX_VERSION = 0.27.0
- PYTHON_HTTPX_SOURCE = httpx-$(PYTHON_HTTPX_VERSION).tar.gz
--PYTHON_HTTPX_SITE = https://files.pythonhosted.org/packages/bd/26/2dc654950920f499bd062a211071925533f821ccdca04fa0c2fd914d5d06
-+PYTHON_HTTPX_SITE = https://files.pythonhosted.org/packages/5c/2d/3da5bdf4408b8b2800061c339f240c1802f2e82d55e50bd39c5a881f47f0
- PYTHON_HTTPX_SETUP_TYPE = pep517
- PYTHON_HTTPX_LICENSE = BSD-3-Clause
- PYTHON_HTTPX_LICENSE_FILES = LICENSE.md
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Dario: make the patch to be applied with fuzz factor 0]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  src/Makefile.in | 1 +
+  1 file changed, 1 insertion(+)
+ 
+ diff --git a/src/Makefile.in b/src/Makefile.in
+-index 7e9e2ef..bca226f 100644
++index b63e4f4489bd..a1838c300312 100644
+ --- a/src/Makefile.in
+ +++ b/src/Makefile.in
+ @@ -115,6 +115,7 @@ install:	check
+  	if test "x@SHLIB@" != "x" ; then \
+- 		$(INSTALL_DATA) -m 755 lib/libgpm.so.@abi_full@ $(libdir)/libgpm.so.@abi_full@	;	\
++ 		$(INSTALL_DATA) -m 644 lib/libgpm.so.@abi_full@ $(libdir)/libgpm.so.@abi_full@	;	\
+  		cd $(libdir) && $(LN_S) -f libgpm.so.@abi_full@ libgpm.so.@abi_lev@ 					;	\
+ +		cd $(libdir) && $(LN_S) -f libgpm.so.@abi_full@ libgpm.so 					;	\
+        echo "WARNING: We installed a lib, you should now call ldconfig" 						; 	\
+        echo "f.i.: ldconfig -n -l $(libdir)/libgpm.so.@abi_full@" 								;	\
+        echo "Or to update everything just type ldconfig"											;	\
+ -- 
+-2.7.0
++2.43.0
+ 
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
