@@ -4,91 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19083C3064D
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 07:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC059C3064D
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 07:43:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C526D810B0;
-	Tue,  2 Jul 2024 07:39:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81CAC811C4;
+	Tue,  2 Jul 2024 07:43:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NLI_F_Qv0gVa; Tue,  2 Jul 2024 07:39:35 +0000 (UTC)
+ id 9fqY9OUeSeki; Tue,  2 Jul 2024 07:43:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8B54810BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90B67812A0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8B54810BE;
-	Tue,  2 Jul 2024 07:39:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2AAA91BF365
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:39:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 90B67812A0;
+	Tue,  2 Jul 2024 07:43:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 995EA1BF365
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:43:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1784540D23
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:39:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 834F5404D7
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 07:43:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vkT1TzbkTQ82 for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 07:39:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e0RJBZfigpnM for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 07:43:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 344DA40D17
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 344DA40D17
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 344DA40D17
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 07:39:32 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-57d106e69a2so1699084a12.0
- for <buildroot@buildroot.org>; Tue, 02 Jul 2024 00:39:31 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1B46A40460
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B46A40460
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1B46A40460
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 07:43:05 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-42564316479so23790445e9.2
+ for <buildroot@buildroot.org>; Tue, 02 Jul 2024 00:43:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719905970; x=1720510770;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=l+ScL1iIqE8b07sgrmsqyr2vFXRPChTp+izF0lpnx3s=;
- b=GyHDQFUOL9XpPZ/QZOpJuOrcwrHJmnGdR1SooZP1wzjopOTullVPrKd8P9VsPfQMoN
- qojjZzeeeQDS6B4mCTtSqEdzxoQWsJviFyjAxbjR8jAOMh0e3vHHHFWVqgBLfe/1G9Cv
- gCrAuVYfKEQmIR0CelF4bFCv1zVKLuPxqnTtjj7rtI19NnB1bUsyQId6xI069sSDLFwV
- RKunMA5rY5HY17JG6VxjNDjd0ZYlauAX1khCKVgGZ7Tb+Zc9siYFE2jVD72ptWh/zQuG
- VgTe6GPmyK0fImupwn3rnyWfivKclds9waUbkXsGiAYoLFIuWgqnHRTbCeocNAdGC7RP
- Unww==
-X-Gm-Message-State: AOJu0YxKAekEQVkM25Z8y7bgHROHVnkiJJInAgaGtPzD3RnlOI+dNJrf
- NV5+HjFfw9CZXzBVFL35f42Pyq/+OEXDB3II6EtdPPuRI512j2E49SPI1syWXNyuMmUcmQ9BZQb
- 4/0k=
-X-Google-Smtp-Source: AGHT+IEO4Yrl5+iLpMWse4GUshshrjnPCN08nMR7D527s3QxqduhIpDlghRhAP1XgkDJefJOF4TKDg==
-X-Received: by 2002:a05:6402:2353:b0:57c:a8e5:35f0 with SMTP id
- 4fb4d7f45d1cf-587800699ecmr6637939a12.2.1719905969551; 
- Tue, 02 Jul 2024 00:39:29 -0700 (PDT)
-Received: from localhost.localdomain ([2001:b07:6474:ebbf:c733:f73f:670d:ca47])
+ d=1e100.net; s=20230601; t=1719906184; x=1720510984;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=ad0gNeISAu77nyjvQbALldsnIJW2zniMlqydqmPPPd0=;
+ b=njP2dF3cYzeYdLFe650aPwfQSbxY81IrAuyeW8Rc3r3APOheVmfyQnq1XCeDlYq2iT
+ uRbEEW1x1AeNDjnm3jH1JoQC0mSFpfcaKxe1IsjDQ1cUcJyKw57/L4owqCcupoBkKNfA
+ 5LI+0QmBPMGODqZhMC8jMqXZTX4jw0wrWCjaGd9Xw8goyEa70BmataUQ8BviTTIE/zAk
+ UaFSGcZYJ2UrDApwqckK1g5o20pnKQGKZPrjLIqaPPGXeIR4ytrmQPu6+cu81QCEUdov
+ nPD/vd1XiXGBqT6CZEJH/3MRzo/APKUHP/PnBEAK4GfBwGHTxQKxHhV0HCZ4R6xWZwpZ
+ /IWw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCV/1zvFykFPPDROTtnk8J4DRX4G8YD3iwawh8F7KvS8xGyqhiZppqEm34j5oAgxFVMy3Oucf+T2R3PxeAMZLUXHUF7oz1RG/w==
+X-Gm-Message-State: AOJu0YxmDk4Wrfjp6IRrx2rMz2sPFadzkvnAH0nE3H6me3Md3ZTPYkRE
+ 1aL5TlXjoF8GjxF9xww2fkgmcq5pMUdYAAdfZHNJM8ZJetr6JQxqwmpp/MX+iiR4Px/ZI3E0DUq
+ w
+X-Google-Smtp-Source: AGHT+IGDWajTUgmxSAHyC2DhGLzVFsB60CLpaxXeJB/Vgas01McATZxj14/Q4tPXhCRlkF0/hHiymg==
+X-Received: by 2002:a05:600c:54c4:b0:424:b3cf:d704 with SMTP id
+ 5b1f17b1804b1-4257a05edbdmr54243445e9.37.1719906183746; 
+ Tue, 02 Jul 2024 00:43:03 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-58612c83583sm5342086a12.5.2024.07.02.00.39.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Jul 2024 00:39:29 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Tue,  2 Jul 2024 09:39:26 +0200
-Message-ID: <20240702073926.2379089-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ ffacd0b85a97d-3675a0fb92fsm12480064f8f.88.2024.07.02.00.43.01
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 02 Jul 2024 00:43:01 -0700 (PDT)
+Message-ID: <75d5e8e5-2ce5-4aac-bf2d-50d48043bb3e@mind.be>
+Date: Tue, 2 Jul 2024 09:42:59 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20240701183003.1746036-1-james.hilliard1@gmail.com>
+Content-Language: en-GB
+In-Reply-To: <20240701183003.1746036-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1719905970; x=1720510770;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=l+ScL1iIqE8b07sgrmsqyr2vFXRPChTp+izF0lpnx3s=;
- b=OBTpg0eyB7ICvFLh37nv3RrW7CmqB5VosfTgsfKhwXNmNivyhXhvKJd+7ejFLBDa/w
- /FTNCdAB1F+lbpJcMiCEchGpmC68xe0RwFIcGy0z82jpI2RUNE5BUU1cHRR1kOPpNu2L
- Qo1fpsmhf8i2TuHBICUg5LNMJqVYvJJ/2r+yw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=OBTpg0ey
-Subject: [Buildroot] [PATCH 1/1] package/freerdp: update the patches to be
- applied with fuzz 0
+ d=mind.be; s=google; t=1719906184; x=1720510984; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=ad0gNeISAu77nyjvQbALldsnIJW2zniMlqydqmPPPd0=;
+ b=VqxnYK+cpiFU8gTBeqMGuqVPuTZxV1RvoYrLGu8cjk8enyLY9j+dUZbajFY+RNmSTQ
+ cw6Dm47LyEnly5l82owp5T5zEt/Z7TR3G4UqrhoXsT5pGaiTDKh+WB5vv73rNCKzD43W
+ QCqmoXy2Y13vFJ3dH6ErWLFb6hn3DDgt2ASvlREQ4JeUszPT4VwoOX0uVLNaQxZxUEmc
+ WZn93/QTfUXFDjKBsSyjgpA6Sq/VmNfAruwvpJjKDwr/Rb5fhGzQs50wq2orlVw8UZxV
+ xVTtGYu3RPGxVqZMwR5bsPylC25GYQNDS1IAFBim/Hc8yjd8ryqI/2PNKWZXYNWw8pUr
+ s/pw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=VqxnYK+c
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-dateutil: bump to
+ version 2.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,136 +108,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0") reduced the fuzz factor.
 
-Due to this change, freerdp fails to build with output:
 
-    Applying 0001-Fix-variable-declaration-in-loop.patch using patch:
-    patching file client/X11/xf_graphics.c
-    Hunk #1 FAILED at 386.
-    Hunk #2 succeeded at 456 (offset 61 lines).
-    1 out of 2 hunks FAILED -- saving rejects to file client/X11/xf_graphics.c.rej
+On 01/07/2024 20:30, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-    Applying 0002-Fixed-variable-declaration-in-loop.patch using patch:
-    patching file client/X11/xf_graphics.c
-    Hunk #1 succeeded at 246 (offset 6 lines).
-    Hunk #2 FAILED at 255.
-    1 out of 2 hunks FAILED -- saving rejects to file client/X11/xf_graphics.c.rej
+  Applied to master, thanks.
 
-This commit refreshes the package patches on the current package version.
+  Regards,
+  Arnout
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- .../0001-Fix-variable-declaration-in-loop.patch | 17 +++++++++++------
- ...002-Fixed-variable-declaration-in-loop.patch | 17 +++++++++++------
- 2 files changed, 22 insertions(+), 12 deletions(-)
-
-diff --git a/package/freerdp/0001-Fix-variable-declaration-in-loop.patch b/package/freerdp/0001-Fix-variable-declaration-in-loop.patch
-index 799a92734be7..ec1795364afe 100644
---- a/package/freerdp/0001-Fix-variable-declaration-in-loop.patch
-+++ b/package/freerdp/0001-Fix-variable-declaration-in-loop.patch
-@@ -1,27 +1,29 @@
--From ddde652460350b962d32036981ff8ed77ed2f1ed Mon Sep 17 00:00:00 2001
-+From 48f25939f4a48b01072f3cd2ece1e36a41c0ad44 Mon Sep 17 00:00:00 2001
- From: Armin Novak <armin.novak@thincast.com>
- Date: Wed, 16 Sep 2020 09:30:37 +0200
- Subject: [PATCH] Fix variable declaration in loop
- 
- Upstream: https://github.com/FreeRDP/FreeRDP/commit/ddde652460350b962d32036981ff8ed77ed2f1ed
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-  client/X11/xf_graphics.c | 3 ++-
-  1 file changed, 2 insertions(+), 1 deletion(-)
- 
- diff --git a/client/X11/xf_graphics.c b/client/X11/xf_graphics.c
--index 76fbef5bd6..bf71b563c3 100644
-+index 5aa1fd48b5a3..c8f24362aec7 100644
- --- a/client/X11/xf_graphics.c
- +++ b/client/X11/xf_graphics.c
--@@ -386,6 +386,7 @@ static BOOL xf_Pointer_New(rdpContext* context, rdpPointer* pointer)
-- static void xf_Pointer_Free(rdpContext* context, rdpPointer* pointer)
-- {
-+@@ -447,6 +447,7 @@ static void xf_Pointer_Free(rdpContext* context, rdpPointer* pointer)
-+ 	WLog_DBG(TAG, "%s: %p", __func__, pointer);
-+ 
-  #ifdef WITH_XCURSOR
- +	UINT32 i;
-  	xfContext* xfc = (xfContext*)context;
-  	xfPointer* xpointer = (xfPointer*)pointer;
-  
--@@ -395,7 +396,7 @@ static void xf_Pointer_Free(rdpContext* context, rdpPointer* pointer)
-+@@ -456,7 +457,7 @@ static void xf_Pointer_Free(rdpContext* context, rdpPointer* pointer)
-  	free(xpointer->cursorWidths);
-  	free(xpointer->cursorHeights);
-  
-@@ -30,3 +32,6 @@ index 76fbef5bd6..bf71b563c3 100644
-  	{
-  		XFreeCursor(xfc->display, xpointer->cursors[i]);
-  	}
-+-- 
-+2.43.0
-+
-diff --git a/package/freerdp/0002-Fixed-variable-declaration-in-loop.patch b/package/freerdp/0002-Fixed-variable-declaration-in-loop.patch
-index 1a4e89943073..838844d63523 100644
---- a/package/freerdp/0002-Fixed-variable-declaration-in-loop.patch
-+++ b/package/freerdp/0002-Fixed-variable-declaration-in-loop.patch
-@@ -1,19 +1,21 @@
--From 4f8a48d96e472e43a5f856c449f61669792ce9fa Mon Sep 17 00:00:00 2001
-+From b0b856590b523869358875594841f3e6c2919569 Mon Sep 17 00:00:00 2001
- From: akallabeth <akallabeth@posteo.net>
- Date: Tue, 22 Sep 2020 07:43:56 +0200
- Subject: [PATCH] Fixed variable declaration in loop
- 
- Upstream: https://github.com/FreeRDP/FreeRDP/commit/4f8a48d96e472e43a5f856c449f61669792ce9fa
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-  client/X11/xf_graphics.c | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/client/X11/xf_graphics.c b/client/X11/xf_graphics.c
--index bf71b563c3..c50726c8e4 100644
-+index c8f24362aec7..c8b604cc6ad4 100644
- --- a/client/X11/xf_graphics.c
- +++ b/client/X11/xf_graphics.c
--@@ -240,7 +240,7 @@ static BOOL _xf_Pointer_GetCursorForCurrentScale(rdpContext* context, const rdpP
-+@@ -246,7 +246,7 @@ static BOOL xf_Pointer_GetCursorForCurrentScale(rdpContext* context, const rdpPo
-  	double xscale;
-  	double yscale;
-  	size_t size;
-@@ -22,12 +24,15 @@ index bf71b563c3..c50726c8e4 100644
-  
-  	if (!context || !pointer || !context->gdi)
-  		return FALSE;
--@@ -255,7 +255,7 @@ static BOOL _xf_Pointer_GetCursorForCurrentScale(rdpContext* context, const rdpP
-- 	xTargetSize = pointer->width * xscale;
-- 	yTargetSize = pointer->height * yscale;
-+@@ -264,7 +264,7 @@ static BOOL xf_Pointer_GetCursorForCurrentScale(rdpContext* context, const rdpPo
-+ 	WLog_DBG(TAG, "%s: scaled: %" PRIu32 "x%" PRIu32 ", desktop: %" PRIu32 "x%" PRIu32, __func__,
-+ 	         xfc->scaledWidth, xfc->savedHeight, settings->DesktopWidth, settings->DesktopHeight);
-  
- -	for (int i = 0; i < xpointer->nCursors; i++)
- +	for (i = 0; i < xpointer->nCursors; i++)
-  	{
-  		if (xpointer->cursorWidths[i] == xTargetSize && xpointer->cursorHeights[i] == yTargetSize)
-  		{
-+-- 
-+2.43.0
-+
--- 
-2.43.0
-
+> ---
+>   package/python-dateutil/python-dateutil.hash | 4 ++--
+>   package/python-dateutil/python-dateutil.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
+> index a52fb30a0f..c127582376 100644
+> --- a/package/python-dateutil/python-dateutil.hash
+> +++ b/package/python-dateutil/python-dateutil.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/python-dateutil/json
+> -md5  5970010bb72452344df3d76a10281b65  python-dateutil-2.8.2.tar.gz
+> -sha256  0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86  python-dateutil-2.8.2.tar.gz
+> +md5  f4888298c0f2d5239c85c6457455a975  python-dateutil-2.9.0.tar.gz
+> +sha256  78e73e19c63f5b20ffa567001531680d939dc042bf7850431877645523c66709  python-dateutil-2.9.0.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  ba00f51a0d92823b5a1cde27d8b5b9d2321e67ed8da9bc163eff96d5e17e577e  LICENSE
+> diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
+> index b75f510bce..a2f1620b9f 100644
+> --- a/package/python-dateutil/python-dateutil.mk
+> +++ b/package/python-dateutil/python-dateutil.mk
+> @@ -4,8 +4,8 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_DATEUTIL_VERSION = 2.8.2
+> -PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/4c/c4/13b4776ea2d76c115c1d1b84579f3764ee6d57204f6be27119f13a61d0a9
+> +PYTHON_DATEUTIL_VERSION = 2.9.0
+> +PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/d9/77/bd458a2e387e98f71de86dcc2ca2cab64489736004c80bc12b70da8b5488
+>   PYTHON_DATEUTIL_SETUP_TYPE = setuptools
+>   PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
+>   PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
