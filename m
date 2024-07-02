@@ -4,90 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB246C30653
-	for <buildroot@archiver.kernel.org>; Mon,  1 Jul 2024 22:49:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7736CC3064D
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 03:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6358E60ABF;
-	Mon,  1 Jul 2024 22:49:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6887607D2;
+	Tue,  2 Jul 2024 03:44:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DV9ConkJ3Eha; Mon,  1 Jul 2024 22:49:07 +0000 (UTC)
+ id ZEG30RqfHPtp; Tue,  2 Jul 2024 03:44:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 608B660AC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD435607B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 608B660AC1;
-	Mon,  1 Jul 2024 22:49:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CC9AA1BF333
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 22:49:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD435607B3;
+	Tue,  2 Jul 2024 03:44:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 17AA11BF362
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 03:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B95D7404F7
- for <buildroot@lists.busybox.net>; Mon,  1 Jul 2024 22:49:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04790404D4
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 03:44:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6FEzQA9D60yN for <buildroot@lists.busybox.net>;
- Mon,  1 Jul 2024 22:49:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::131; helo=mail-il1-x131.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2C1A1404D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C1A1404D7
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2C1A1404D7
- for <buildroot@buildroot.org>; Mon,  1 Jul 2024 22:49:04 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id
- e9e14a558f8ab-376243a112cso12946645ab.3
- for <buildroot@buildroot.org>; Mon, 01 Jul 2024 15:49:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719874144; x=1720478944;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3cYvZO64RXlflb2rBO9R3qY/TmjW/JHPI+I8cH2yr3Q=;
- b=PZ35A6dWTahoHTs4XZbK2uOYI4VzfiPqNkmAkrkio8v8DE5z8HhE28TccMagR7ScNm
- JOOg9AiLAQ0UXi/9QXoCrdoQDpEKXKX6ReBcUnYBljClhBhJTNbEILiolLlJXvzEvnVC
- yhhCzwk30tp5umQAOQLt5C0/RK1xVFucf4evyVmYx22rOOmRdTW1Sd/wsgdgNd6UkAYM
- cAwCGDM9NFdqmf6XC13UdL+Yym/ltO3ecpgHOfvcE5/FAKghrIAnq/FkSuAncgOSVIxW
- 8WmiMIFxjy9AVcPZTiWlNTKD9goXok9cM74vBiV1Uui7JIYip8j0BxMwvRWJmiIerS3Q
- P5tg==
-X-Gm-Message-State: AOJu0Yy51rq+BjjxYWICJVnc1RZC6y5PuWQN6Rm+8Gl8j+L0iH7ONKF3
- 04HTy//295C+sAViJkHI0LZ7OAG5r1QU86rCfvZKVWFNXTfuvwElE1iW8g==
-X-Google-Smtp-Source: AGHT+IGYDtnRo6KTkFuGl9OIzY2uVrFt2/NUH9jWVmkoSsBmnf8wtWv02uVOlcQRBoDXGiL3/0LNXg==
-X-Received: by 2002:a05:6e02:b4a:b0:379:361e:5067 with SMTP id
- e9e14a558f8ab-37cd2af74c9mr88700655ab.25.1719874143624; 
- Mon, 01 Jul 2024 15:49:03 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
- [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-37ad483bf35sm20929115ab.81.2024.07.01.15.49.03
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Jul 2024 15:49:03 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O3dVk3Ok9xq1 for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 03:44:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 01AE5400D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01AE5400D2
+Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 01AE5400D2
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 03:44:42 +0000 (UTC)
+Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 667314403F1;
+ Tue,  2 Jul 2024 06:43:57 +0300 (IDT)
 To: buildroot@buildroot.org
-Date: Mon,  1 Jul 2024 16:49:02 -0600
-Message-Id: <20240701224902.3117726-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue,  2 Jul 2024 06:44:01 +0300
+Message-ID: <61f3addeba60f9b5b15aa135c95787ad2f29f81e.1719891841.git.baruch@tkos.co.il>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1719874144; x=1720478944; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3cYvZO64RXlflb2rBO9R3qY/TmjW/JHPI+I8cH2yr3Q=;
- b=JBDnaQl9d+ghMOl41ZRsfVtoAzo+J2viq5TH/DRHK0ZE3m5w/8crzCvf+IKDN7SxXA
- uemWcMbtzDm1mozC1uy7W8acY1hRDKy5x5kb16dY4BYwPUDN4DTdaNvIWwon8H6pXruo
- w1EjRzFBRqQb7Q2Xktf4i6KFOD9gDetH5h8K0QAL4Qi6xkqKKSncCcXdIA1xkn/XV0lJ
- +Y2yH9gDZ8u3Q1qjvfnZTdcx73GhRnRz116oyJmuDUCCSnr/DqTFCoRvUV3mQkZQ6CBD
- u2+2+1Q3mTVA3FGFyQN+XWesF1/7A8E8b/uMMHJvxjQrjHJFFGrSMdrX4944Bv3PHV7d
- U0Xg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JBDnaQl9
-Subject: [Buildroot] [PATCH v5 1/1] package/cloudflared: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1719891837;
+ bh=9vwy3PLH+9/gB6FU/Q6CR1Hy5x7cI1AZkAyMhOfwYY4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Ey3BVoQlQesN+N/CT1yNCMUkzbtEZbRx4RSRkSJElewCJOl5fnd5BdWXv7jIfcX21
+ jQ06smWpL9E7Yq57Rl1X6NyonIGurk1DS8ExzuTuEDyeF+XN/UfQMi1+v0ClzKFgJf
+ TOWj7bx8b77RpPYDIqGFrZiUMC1WosinRiJbgn3ygLt6LbRy8PkQwaocUxpWZ/2ezR
+ 02VNxfWgIopjXDXq6dd1KItTJPZyKi5ew6MUj2UlM78b+tAFjGdYhKCH9Yq3umwViI
+ /ixxXQKkHFyqOLjfv9q5Cxu0ZyieX2GXouNzXQjTQad4wsleE13YWf6mqQaRIyfCNS
+ ODeoU5cw+4QCw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=tkos.co.il
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=Ey3BVoQl
+Subject: [Buildroot] [PATCH] package/openssh: security bump to version 9.8p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,91 +75,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@aperture.us>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v4 -> v5:
-  - update to version 2024.6.1
-  - add select BR2_PACKAGE_HOST_GO
-Changes v3 -> v4:
-  - update to version 2024.4.1
-Changes v2 -> v3:
-  - fix version
-Changes v1 -> v2:
-  - fix Config.in syntax/section
----
- package/Config.in                    |  1 +
- package/cloudflared/Config.in        |  8 ++++++++
- package/cloudflared/cloudflared.hash |  3 +++
- package/cloudflared/cloudflared.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/cloudflared/Config.in
- create mode 100644 package/cloudflared/cloudflared.hash
- create mode 100644 package/cloudflared/cloudflared.mk
+Fixes CVE-2024-6387: Unauthenticated root login because of signal
+handler race condition.
 
-diff --git a/package/Config.in b/package/Config.in
-index 48ef1a6fdc..805f21a3f2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2382,6 +2382,7 @@ endif
- 	source "package/cfm/Config.in"
- 	source "package/chrony/Config.in"
- 	source "package/civetweb/Config.in"
-+	source "package/cloudflared/Config.in"
- 	source "package/connman/Config.in"
- 	source "package/connman-gtk/Config.in"
- 	source "package/conntrack-tools/Config.in"
-diff --git a/package/cloudflared/Config.in b/package/cloudflared/Config.in
-new file mode 100644
-index 0000000000..31319c01fd
---- /dev/null
-+++ b/package/cloudflared/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_CLOUDFLARED
-+	bool "cloudflared"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_GO
-+	help
-+	  Cloudflare Tunnel client (formerly Argo Tunnel).
-+
-+	  https://github.com/cloudflare/cloudflared
-diff --git a/package/cloudflared/cloudflared.hash b/package/cloudflared/cloudflared.hash
-new file mode 100644
-index 0000000000..1aa959f8b0
---- /dev/null
-+++ b/package/cloudflared/cloudflared.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  c61ef286962c3bb9c5edb580b89dbf8293083fa09a8f0f59379fe8ec2d04cada  cloudflared-2024.6.1-go2.tar.gz
-+sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
-diff --git a/package/cloudflared/cloudflared.mk b/package/cloudflared/cloudflared.mk
-new file mode 100644
-index 0000000000..1796972be6
---- /dev/null
-+++ b/package/cloudflared/cloudflared.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# cloudflared
-+#
-+################################################################################
-+
-+CLOUDFLARED_VERSION = 2024.6.1
-+CLOUDFLARED_SITE = $(call github,cloudflare,cloudflared,$(CLOUDFLARED_VERSION))
-+CLOUDFLARED_LICENSE = Apache-2.0
-+CLOUDFLARED_LICENSE_FILES = LICENSE
-+CLOUDFLARED_BUILD_TARGETS = cmd/cloudflared
-+CLOUDFLARED_LDFLAGS = -X main.Version=$(CLOUDFLARED_VERSION)
-+
-+$(eval $(golang-package))
+Drop upstream patch and autoreconf.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...tection-of-fzero-call-used-regs-used.patch | 32 -------------------
+ package/openssh/openssh.hash                  |  4 +--
+ package/openssh/openssh.mk                    |  5 +--
+ 3 files changed, 3 insertions(+), 38 deletions(-)
+ delete mode 100644 package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
+
+diff --git a/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch b/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
+deleted file mode 100644
+index 1b91b15a7983..000000000000
+--- a/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From f9193f03db0029fc9c31fbdb5c66a2737446bd8f Mon Sep 17 00:00:00 2001
+-From: Darren Tucker <dtucker@dtucker.net>
+-Date: Mon, 25 Mar 2024 09:28:02 +1100
+-Subject: [PATCH] Improve detection of -fzero-call-used-regs=used.
+-
+-Should better detect problems with gcc 13 on m68k.  bz#3673 from Colin
+-Watson via bz#3673 and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110934
+-
+-Signed-off-by: Darren Tucker <dtucker@dtucker.net>
+-Upstream: https://github.com/openssh/openssh-portable/commit/f9193f03db0029fc9c31fbdb5c66a2737446bd8f
+----
+- m4/openssh.m4 | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/m4/openssh.m4 b/m4/openssh.m4
+-index 033df501c3d8..176a8d1c9282 100644
+---- a/m4/openssh.m4
+-+++ b/m4/openssh.m4
+-@@ -20,7 +20,10 @@ char *f2(char *s, ...) {
+- 	va_end(args);
+- 	return strdup(ret);
+- }
+-+int i;
+-+double d;
+- const char *f3(int s) {
+-+	i = (int)d;
+- 	return s ? "good" : "gooder";
+- }
+- int main(int argc, char **argv) {
+--- 
+-2.43.0
+-
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 58297aa69494..44f9645035c3 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssh.com/txt/release-9.7
+-sha256  490426f766d82a2763fcacd8d83ea3d70798750c7bd2aff2e57dc5660f773ffd  openssh-9.7p1.tar.gz
++# From https://www.openssh.com/txt/release-9.8
++sha256  dd8bd002a379b5d499dfb050dd1fa9af8029e80461f4bb6c523c49973f5a39f3  openssh-9.8p1.tar.gz
+ # Locally calculated
+ sha256  05c30446ba738934b3f1efa965b454c122ca26cc4b268e5ae6843f58ccd1b16d  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 5a568d5fd174..6d846f64df54 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION_MAJOR = 9.7
++OPENSSH_VERSION_MAJOR = 9.8
+ OPENSSH_VERSION_MINOR = p1
+ OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
+ OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
+@@ -13,9 +13,6 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ 
+-# 0001-Improve-detection-of-fzero-call-used-regs-used.patch
+-OPENSSH_AUTORECONF = YES
+-
+ OPENSSH_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
+ 	LDFLAGS="$(TARGET_CFLAGS)" \
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
