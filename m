@@ -4,100 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6931FC3064D
-	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 06:51:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17510C30658
+	for <buildroot@archiver.kernel.org>; Tue,  2 Jul 2024 06:51:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0268081F29;
-	Tue,  2 Jul 2024 06:51:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D599881EF8;
+	Tue,  2 Jul 2024 06:51:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GRX-cCY2vLvl; Tue,  2 Jul 2024 06:51:02 +0000 (UTC)
+ id OsgpFGl8nI7S; Tue,  2 Jul 2024 06:51:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E35381EF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF37881F41
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E35381EF8;
-	Tue,  2 Jul 2024 06:51:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C8F011BF32A
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 06:51:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF37881F41;
+	Tue,  2 Jul 2024 06:51:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 799401BF32A
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 06:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B600740104
- for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 06:51:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 726B081272
+ for <buildroot@lists.busybox.net>; Tue,  2 Jul 2024 06:51:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4nQ5coJ2WPeX for <buildroot@lists.busybox.net>;
- Tue,  2 Jul 2024 06:51:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IMRjl5XHfaZL for <buildroot@lists.busybox.net>;
+ Tue,  2 Jul 2024 06:51:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::235; helo=mail-lj1-x235.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 391D5400C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 391D5400C6
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 391D5400C6
- for <buildroot@buildroot.org>; Tue,  2 Jul 2024 06:50:59 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-42564a0d3ceso23676115e9.0
- for <buildroot@buildroot.org>; Mon, 01 Jul 2024 23:50:59 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1AC3381F49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AC3381F49
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
+ [IPv6:2a00:1450:4864:20::235])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1AC3381F49
+ for <buildroot@buildroot.org>; Tue,  2 Jul 2024 06:51:05 +0000 (UTC)
+Received: by mail-lj1-x235.google.com with SMTP id
+ 38308e7fff4ca-2ebe785b234so38630801fa.1
+ for <buildroot@buildroot.org>; Mon, 01 Jul 2024 23:51:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719903058; x=1720507858;
+ d=1e100.net; s=20230601; t=1719903063; x=1720507863;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=v9obI84IcwT3qi6sN2MWhuv8vWjYI4YX4itCkf+ZDdM=;
- b=LBxY3CD4LEyGGbm2Dod1yeFfzi2xjuWBcmqsjo8BwrhJ5LeMhOMurN+LQnzg0Abiqo
- 9Ei8fDEFN5lC+/u8b+743Gjhgf48Lv0ltgq1tAh8stzFvNN5Q0MyIs7yHrJqSS2Ogx3W
- qgL9KW17OU/6brd1DSl4oGVOHE6OKeB4/ATtb274ZD6eNaujaZUyfQ1HBXRGhVkNZgGK
- 4kVf2tqLIzVlZQ/RyL+l+wTYRdju71NDhG7ap3pIKurIzB4Mbtex3zMSlw4rtyKeLeIs
- 6g/KGIEn3SyRgjOlO1VmZnXijU/C0Crj8gIUKpKY0GV60yhGyH/5vTg/mAHbIF7S5KbG
- xvnA==
+ bh=hK20UpiUoOuqkwu9sx1wlv9NsbsnoIdUrUU1znjBTJE=;
+ b=gX7ND5Crzwy/5Udf62K7sF6Kxf4XxXfXHj2nGV2Mo+1WglRWedZ6MLetkpR8qZpun7
+ Ah2y7G9Mpn/8TxqJ6sBhvYCcVTpLgPM+rBoUT3zhV8UR49kI+INaHR3kqvfbaGkPh/Uh
+ vKYM4j5XZipXlq3rseHU7NPHgW7t6/8yIc0NMcCyjNqtBCDpkN0K16r55Vtv9KJq0SFD
+ T9+ZYzkYn60WIbDS6cpMcG3ovag7mrRPyYK0kPw/aZjEP+yaqurDhbtsYZIB8NYTc5WO
+ el+Nkk+rPZqk/b5hycryFpk5UYCxtVUtgphHfz5olxN4SKkcFOGSY+1GPBaeum8BmRbV
+ 5Sqw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXNOj8NSMv6k1oI2PLXM6s/qgiFSAMJ6zjnZPf0cMWRAMP+CKfL5imdF/apaVzYsiJqhJMKj42OfL9iwrM8SBTrbTlF0422RA==
-X-Gm-Message-State: AOJu0YxDGxGDrniwQQf8K6r3zMcDxfI7BUVgqxL8lBmeiE1a/6TKt5ZB
- fFELmcJd/T9oaU0OHLCJe/f9XqQXO2f2u+2LBv8cvbNo2AhZOWk/dL//HfFy2+3IcLAcx2o/nCO
- 6
-X-Google-Smtp-Source: AGHT+IFPLqpt2g6MMElIvTbjz/qBFqU27LBfiTtAYiPULDWx4MAwlQn/FxNQTSur4/h39/EsgEShjQ==
-X-Received: by 2002:a7b:ce15:0:b0:425:5fa2:60a8 with SMTP id
- 5b1f17b1804b1-4257a02fc72mr54942215e9.24.1719903057696; 
- Mon, 01 Jul 2024 23:50:57 -0700 (PDT)
+ AJvYcCU9IfzPhAfqNiMcqxI817gvDqhfKm7wTGmXprxcuEdgSQB2GquRb1XCuEggo14ob+JX5B1M/xfCUkHcYzdJabHsVIxl7Gn5+A==
+X-Gm-Message-State: AOJu0YzBLOjxKJaft+GR0zYx/gJzwtU6f9TUOEMJMz1kQmnuDJQmaQfT
+ 7ncsT5bHqo3c+CIZLZYbBcT3Nx0n2RGNkVfZACv2s8pLF5HEgZd58c/zvsnxOByCtCuOcdNynCh
+ x
+X-Google-Smtp-Source: AGHT+IGJNSKFeS7J84k3nZHhjIt9rqoF3HJqtEijID4UOC50q6JsA3xuP+pRvj+9uQt9igo3mF7E7g==
+X-Received: by 2002:a05:651c:b0a:b0:2ec:140c:8985 with SMTP id
+ 38308e7fff4ca-2ee5e6f2889mr66571791fa.36.1719903063048; 
+ Mon, 01 Jul 2024 23:51:03 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4256af55e61sm182138765e9.20.2024.07.01.23.50.56
+ 5b1f17b1804b1-4256af55e61sm182138765e9.20.2024.07.01.23.51.02
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 01 Jul 2024 23:50:56 -0700 (PDT)
-Message-ID: <7f8d7312-6528-4ff8-8641-6ea953b1183f@mind.be>
-Date: Tue, 2 Jul 2024 08:50:54 +0200
+ Mon, 01 Jul 2024 23:51:02 -0700 (PDT)
+Message-ID: <0375507d-b3b6-4b14-82bf-af7be6a75258@mind.be>
+Date: Tue, 2 Jul 2024 08:51:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Baruch Siach <baruch@tkos.co.il>, buildroot@buildroot.org
-References: <61f3addeba60f9b5b15aa135c95787ad2f29f81e.1719891841.git.baruch@tkos.co.il>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20240702051805.830216-1-james.hilliard1@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <61f3addeba60f9b5b15aa135c95787ad2f29f81e.1719891841.git.baruch@tkos.co.il>
+In-Reply-To: <20240702051805.830216-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719903058; x=1720507858; darn=buildroot.org;
+ d=mind.be; s=google; t=1719903063; x=1720507863; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=v9obI84IcwT3qi6sN2MWhuv8vWjYI4YX4itCkf+ZDdM=;
- b=CJAfPxSFPrV4fO9AYcNJN7Rl81/WvQ4MkEg5etCUlef1JnkPRTyqjzM3qvBZqlu+AU
- 4NQUksLSuCL10UKBHXexEd6AdhCX/PF6zJsVNue5uQeJIZ4oGXSMdiIq7KmoNORggDis
- d5abPXrX4HPrbJaKm5BY8o/vheOOYzQGt6KSwOkkXrJz3GgDqDzO8XPNWq9H7pkLO+3o
- avSVgIJxCExwB1WJfVqPew3Dgxqo5trD/+ArBonAwFYRVdg3b6Tzi0tQiIQ7XYip61FF
- xnP3o5GL4ipbWhIVxFgC4stNVwaGtTC1khAc2yfYAJzLPBXtUUN3ywUHWxTdpGTbWjEo
- tzCQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=hK20UpiUoOuqkwu9sx1wlv9NsbsnoIdUrUU1znjBTJE=;
+ b=P7KEKOLBmICvOKqmDPY21kCqfoA1FS8PJ0EuP8s9IXxa8h94T+IjCFtXA8Njy1zNDn
+ Jc8ftL5oG+cQ4mL9FfHtKLY96FCkyVizCkZLnKdOPDZ/k/qk2YkqT+5Rgo43azocbmYX
+ h39myWWqR/HWijuufy5aG28Wdp0TuJxrrDFiEOXsO8TeL4ygUVunPR5PAlJJVZ9dLXx/
+ AzVzyYEY29Jbsjc6uUCttwiU5sJqHlfvbJ6V7QdC9yiUjtarcMlxvD1j2ecMrcVm59kx
+ 9Go/b6z5hJMF8Ph6mqkAXBSGhDQbXextWsdIhCOSKB0ZaVEDacZ9lpznbyFhlnjg6WzP
+ pZBQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=CJAfPxSF
-Subject: Re: [Buildroot] [PATCH] package/openssh: security bump to version
- 9.8p1
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=P7KEKOLB
+Subject: Re: [Buildroot] [PATCH 1/1] package/libsoup: fix set c_std to gnu99
+ patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,6 +110,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -118,13 +118,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 02/07/2024 05:44, Baruch Siach via buildroot wrote:
-> Fixes CVE-2024-6387: Unauthenticated root login because of signal
-> handler race condition.
+On 02/07/2024 07:18, James Hilliard wrote:
+> Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
+> fuzz factor to 0" reduced the fuzz factor.
 > 
-> Drop upstream patch and autoreconf.
+> Due to this change, libsoup fails to build with output:
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>      Applying 0001-meson.build-set-c_std-to-gnu99.patch using patch:
+>      patching file meson.build
+>      Hunk #1 FAILED at 2.
+> 
+> This commit fixes the set c_std to gnu99 patch so that it applies.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/4ee/4ee68145143df02c46034b4ca291fea469a6f58a
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
 
@@ -132,84 +141,26 @@ On 02/07/2024 05:44, Baruch Siach via buildroot wrote:
   Arnout
 
 > ---
->   ...tection-of-fzero-call-used-regs-used.patch | 32 -------------------
->   package/openssh/openssh.hash                  |  4 +--
->   package/openssh/openssh.mk                    |  5 +--
->   3 files changed, 3 insertions(+), 38 deletions(-)
->   delete mode 100644 package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
+>   package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch b/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
-> deleted file mode 100644
-> index 1b91b15a7983..000000000000
-> --- a/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -From f9193f03db0029fc9c31fbdb5c66a2737446bd8f Mon Sep 17 00:00:00 2001
-> -From: Darren Tucker <dtucker@dtucker.net>
-> -Date: Mon, 25 Mar 2024 09:28:02 +1100
-> -Subject: [PATCH] Improve detection of -fzero-call-used-regs=used.
-> -
-> -Should better detect problems with gcc 13 on m68k.  bz#3673 from Colin
-> -Watson via bz#3673 and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110934
-> -
-> -Signed-off-by: Darren Tucker <dtucker@dtucker.net>
-> -Upstream: https://github.com/openssh/openssh-portable/commit/f9193f03db0029fc9c31fbdb5c66a2737446bd8f
-> ----
-> - m4/openssh.m4 | 3 +++
-> - 1 file changed, 3 insertions(+)
-> -
-> -diff --git a/m4/openssh.m4 b/m4/openssh.m4
-> -index 033df501c3d8..176a8d1c9282 100644
-> ---- a/m4/openssh.m4
-> -+++ b/m4/openssh.m4
-> -@@ -20,7 +20,10 @@ char *f2(char *s, ...) {
-> - 	va_end(args);
-> - 	return strdup(ret);
-> - }
-> -+int i;
-> -+double d;
-> - const char *f3(int s) {
-> -+	i = (int)d;
-> - 	return s ? "good" : "gooder";
-> - }
-> - int main(int argc, char **argv) {
-> ---
-> -2.43.0
-> -
-> diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-> index 58297aa69494..44f9645035c3 100644
-> --- a/package/openssh/openssh.hash
-> +++ b/package/openssh/openssh.hash
-> @@ -1,4 +1,4 @@
-> -# From https://www.openssh.com/txt/release-9.7
-> -sha256  490426f766d82a2763fcacd8d83ea3d70798750c7bd2aff2e57dc5660f773ffd  openssh-9.7p1.tar.gz
-> +# From https://www.openssh.com/txt/release-9.8
-> +sha256  dd8bd002a379b5d499dfb050dd1fa9af8029e80461f4bb6c523c49973f5a39f3  openssh-9.8p1.tar.gz
->   # Locally calculated
->   sha256  05c30446ba738934b3f1efa965b454c122ca26cc4b268e5ae6843f58ccd1b16d  LICENCE
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 5a568d5fd174..6d846f64df54 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -OPENSSH_VERSION_MAJOR = 9.7
-> +OPENSSH_VERSION_MAJOR = 9.8
->   OPENSSH_VERSION_MINOR = p1
->   OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
->   OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
-> @@ -13,9 +13,6 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
->   OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
->   OPENSSH_LICENSE_FILES = LICENCE
->   
-> -# 0001-Improve-detection-of-fzero-call-used-regs-used.patch
-> -OPENSSH_AUTORECONF = YES
-> -
->   OPENSSH_CONF_ENV = \
->   	LD="$(TARGET_CC)" \
->   	LDFLAGS="$(TARGET_CFLAGS)" \
+> diff --git a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+> index f2e8f7701d..a999f5964e 100644
+> --- a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+> +++ b/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+> @@ -26,9 +26,9 @@ diff --git a/meson.build b/meson.build
+>   index 4dfd8c15..a5ebc63a 100644
+>   --- a/meson.build
+>   +++ b/meson.build
+> -@@ -2,6 +2,6 @@ project('libsoup', 'c',
+> -         version: '2.74.0',
+> -         meson_version : '>= 0.50',
+> +@@ -2,7 +2,7 @@ project('libsoup', 'c',
+> +         version: '2.74.3',
+> +         meson_version : '>=0.50',
+>            license : 'LGPL2',
+>   -        default_options : 'c_std=c99')
+>   +        default_options : 'c_std=gnu99')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
