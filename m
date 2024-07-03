@@ -4,97 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 742AFC2BD09
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 07:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C1E4C2BD09
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 07:07:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03004404AB;
-	Wed,  3 Jul 2024 07:01:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C110404AB;
+	Wed,  3 Jul 2024 07:07:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JLeK1yT_fGog; Wed,  3 Jul 2024 07:01:43 +0000 (UTC)
+ id C7MoKudfutrl; Wed,  3 Jul 2024 07:07:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E40641A41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E707641A1C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E40641A41;
-	Wed,  3 Jul 2024 07:01:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6A5D61BF363
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 07:01:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E707641A1C;
+	Wed,  3 Jul 2024 07:07:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EFDA1BF2F0
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 07:07:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6291141A41
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 07:01:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5849340761
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 07:07:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o_lgi87KlIah for <buildroot@lists.busybox.net>;
- Wed,  3 Jul 2024 07:01:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 24Nyu7NJEQqW for <buildroot@lists.busybox.net>;
+ Wed,  3 Jul 2024 07:07:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BFE07404AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFE07404AB
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BFE07404AB
- for <buildroot@buildroot.org>; Wed,  3 Jul 2024 07:01:39 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-425809eef0eso22121995e9.3
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 00:01:39 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D81E940759
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D81E940759
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D81E940759
+ for <buildroot@buildroot.org>; Wed,  3 Jul 2024 07:07:54 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4257d5fc9b7so28498205e9.2
+ for <buildroot@buildroot.org>; Wed, 03 Jul 2024 00:07:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719990098; x=1720594898;
+ d=1e100.net; s=20230601; t=1719990473; x=1720595273;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=I8t50CBObo2yxc69DABdC/WCnXLKcXL+/uiiedkaOjY=;
- b=G3/SD1eP8Dz6wiY1848rAFNxoifDI3QcxerBwQZRlwhQStHuFmzXJBMYyskvE/dtGE
- fHUR7rifE/KtY7YlobSQdWznX+9bOASWO/UpsLLAEW3kmHzm1y72ilEX7TCdJE812sOp
- JfZGusaLgyh1T5+bhYFJrB2zGrM82wiie69WW5Coar6VKmQzMwtBoBOemzkSorXGAfsy
- 8Lj8Epn9uddu8DEXwhd+PrFs0/EopB5d41YY89cNiBjvFsUI8Dq6qYUpXzeJQIecCjj/
- AaZ7IGkO3r5DahtLpsZsAj3cJAsAZYqp1C4NbL//9JAbAB+eGfooZQ9XWDwdRwTBJxax
- nngw==
-X-Gm-Message-State: AOJu0YxGS+ecT2ZiVQQ5adE2FTgZzxFi+W99ragG5x6pPzkUfR9girfc
- oRySy5G4rOMh08vPpUzv8xQnXddSmSSYcT07pF9DiRrJiWwzqyv6+GrvHBIqq3E=
-X-Google-Smtp-Source: AGHT+IFdgLhWR+doD1dNiuW4BopHJdlLWUmh815VLAFVVCp2q/L4pklzu0QodVI6Ctmr6GCImMNsLA==
-X-Received: by 2002:a05:600c:1508:b0:425:5a26:a12c with SMTP id
- 5b1f17b1804b1-4257a02f915mr73962855e9.13.1719990097966; 
- Wed, 03 Jul 2024 00:01:37 -0700 (PDT)
+ bh=ZI3QpHuQOYYKl7MPRK/h3S/N0Gjj3JflfLRV5E6ZJ+4=;
+ b=dAuq7cUOGSUNl7vhm93iWrJ/vGvvPMiVfzlmsph6bewS4Smsx2x0NrmRKYcaYkyawn
+ +CfWzxbYoJwwy3+IKUYnamuwq7jiLkqY5IRVUNpQBQ8aZPHYHr6CzijbCgSybBAkUYw7
+ S2UjULvMmhrJ1eTYCDuxMXx0TTdiz/GuiGwbD67G/0BIWSCQqlP+xlqx62iNVffbplbZ
+ 0yqk63QuCoceXe90AOjkNau6d3zgKlZVP7OUASdypp/7mjqVvJIO+fDKvrbqnkUGMrhz
+ xKmr6jhVt8qoTp5v3AC5pmrhuY1zOPantwz7QtlTqu3Osdv0fs5NH2VaVXgNcKTtYns9
+ Kp+w==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUDZK42Q/5YOJwU0Z+VJvEo36GUyvTRoTG74FFkt9RtaWpb5G5q7IZvLqAQDJLBXLJcSAqwauLUX3mZGcIzDV+00SO+38xuyg==
+X-Gm-Message-State: AOJu0Ywb4Nn+gawfAPjYyNyIzSj5P3Zpc1tOAWRuVuXkvJ4VDVZ/FcWQ
+ reox/4GR18YYDG3PcjcKmp/GLU5Tqho1uVEpQmGi/3PiWmleZ5jBr8PbsafQy2Q=
+X-Google-Smtp-Source: AGHT+IFhPLsYrfv5GF4qgeoqIjQxIAi78kCuo3yWgzfkJh3XIQFG5cXeNgEWw4ABOqr86LO+hB8JAA==
+X-Received: by 2002:a05:600c:3509:b0:421:dd8c:35a3 with SMTP id
+ 5b1f17b1804b1-4257a020459mr99813195e9.26.1719990472747; 
+ Wed, 03 Jul 2024 00:07:52 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4256aed237dsm228412825e9.0.2024.07.03.00.01.36
+ 5b1f17b1804b1-4256af5b626sm223847275e9.15.2024.07.03.00.07.51
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 03 Jul 2024 00:01:37 -0700 (PDT)
-Message-ID: <8fe270a0-708f-49f8-972e-221e99f23f08@mind.be>
-Date: Wed, 3 Jul 2024 09:01:35 +0200
+ Wed, 03 Jul 2024 00:07:52 -0700 (PDT)
+Message-ID: <b71d6073-be4d-4d57-8472-cff1e74adbf3@mind.be>
+Date: Wed, 3 Jul 2024 09:07:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, Fiona Klute <fiona.klute@gmx.de>
-References: <20240702165708.3796162-1-fiona.klute@gmx.de>
- <20240702165708.3796162-2-fiona.klute@gmx.de> <ZoRf7pXimhw4wh-s@landeda>
+To: Al Walker <al@inline.audio>, buildroot@buildroot.org
+References: <92110F02-FA7C-4C28-BADE-CF912167AA1B@contoso.com>
 Content-Language: en-GB
-In-Reply-To: <ZoRf7pXimhw4wh-s@landeda>
+In-Reply-To: <92110F02-FA7C-4C28-BADE-CF912167AA1B@contoso.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1719990098; x=1720594898; darn=buildroot.org;
+ d=mind.be; s=google; t=1719990473; x=1720595273; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=I8t50CBObo2yxc69DABdC/WCnXLKcXL+/uiiedkaOjY=;
- b=dP5VUu0r/4uw9vQWaJid71ObTs9Iqin8vTiemhpqc8ObTn9x3PtmRwEqZT7WWc9Z6C
- t6kwDWoyrm/5ipfKFlOJqPWz6HQEsTdwU5e40W+a6aX4OcSFMXH1PeprqljpxSb7mNTM
- KOtC0cXUwIJzppHaJOURqy50lB/6K35v4Eesrnl3trQv7/R8u04iOIYFE8L6Ld4QS3gj
- 4OolX52jxtJOloqKJ5dCbDpG18zYomRHCtYuxaDlQQGU0eMiyjq57F78uWC693LPh87O
- g04Pf3X9CbwSo00cziVf44XlMnv/Pdzwu1X5NgDkSbcl/KLgU80ZDg5qWIjwSfb1oX2z
- VPXQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=ZI3QpHuQOYYKl7MPRK/h3S/N0Gjj3JflfLRV5E6ZJ+4=;
+ b=hp4iCK3icRHjC4i1aULmFLWRGiOSUKQh3vI71QlKyFqaBof3K4gIwLqWKE0g2CyfT7
+ A5EbqcCsM4ReHJy34cZQL1u5oxVycIwhjzDLPdzHChM26ePncREE+HrbUCKN9AM9FCxk
+ 5Pd2zZCCSRi5kS05Bn24pfmy1G8OeR4Ljw4jnLqc49JCZIoh1ACrU3tqrTqPJBgdpIC6
+ I4lwC+1DdMlcD6PRHzTbNk5H8j4tRUoQ0O79rZQTP2yBHGNRfLYcn8fe+LMVhIWP248N
+ QBtTGE+S+sNpSvXNokE2xp9dE2Sf+BhhkQqEVHWWmy8vWvVxcM007DdhsWEXP9rhQx5y
+ 6EXg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=dP5VUu0r
-Subject: Re: [Buildroot] [PATCH v2 1/4] package/openssh: don't kill open
- sessions on restart
+ header.a=rsa-sha256 header.s=google header.b=hp4iCK3i
+Subject: Re: [Buildroot] Buildroot Newbie
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,112 +108,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 02/07/2024 22:15, Yann E. MORIN wrote:
-> Fiona, All,
-> 
-> On 2024-07-02 18:57 +0200, Fiona Klute via buildroot spake thusly:
->> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
->>
->> The previously used "killall sshd" stopped all instances of sshd. With
->> OpenSSH before 9.8 that meant not only the listening server, but also
->> instances serving currently open sessions, possibly including the one
->> used to send the restart command, preventing it from completing the
->> "start" part of "restart" and leaving the system unreachable over SSH.
->>
->> Instead, use the PID file that sshd creates by default to target only
->> the listening server. This leaves any open SSH sessions unaffected.
-> 
-> Rather than play with the PID ourselves, can we use start-stop-daemon
-> instead? Currently, we run sshd and it daemonises all by itself, but if
-> we pass -D, then start-stop-daemon will be able to do that, and handle
-> the PID file automatically for us.
-
-  Note that there's a little disadvantage of that: when sshd daemonizes by 
-itself, it will only return after the real daemon has started listening. If 
-start-stop-daemon does the daemonisation, it will return immediately.
-
-  I don't think this is important enough to not daemonise with start-stop-daemon 
-- if you need fine-grain control by the init system you should use a proper init 
-system. But it's important to be aware of the implied limitations.
-
-  Regards,
-  Arnout
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> With OpenSSH 9.8 open sessions are handled by the separate
->> sshd-session binary so killall does not hit them any more, but
->> a targeted "kill" command is still desirable.
->>
->> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
->> ---
-> [--SNIP--]
->> diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
->> index 22da41d1ca..f1ff9dfec1 100644
->> --- a/package/openssh/S50sshd
->> +++ b/package/openssh/S50sshd
->> @@ -3,6 +3,8 @@
->>   # sshd        Starts sshd.
->>   #
->>
->> +PIDFILE="/var/run/sshd.pid"
->> +
->>   # Make sure the ssh-keygen progam exists
->>   [ -f /usr/bin/ssh-keygen ] || exit 0
->>
->> @@ -14,15 +16,25 @@ start() {
->>
->>   	printf "Starting sshd: "
->>   	/usr/sbin/sshd
->> -	touch /var/lock/sshd
->>   	echo "OK"
->>   }
->> +
->>   stop() {
->>   	printf "Stopping sshd: "
->> -	killall sshd
->> -	rm -f /var/lock/sshd
->> +	pid="$( cat "${PIDFILE}" 2>/dev/null || true )"
->> +	if [ -z "${pid}" ]; then
->> +		echo "ERROR: not running"
->> +		return 1
->> +	fi
->> +	kill "${pid}"
->> +	# SSHD deletes its PID file when exiting, wait for it to
->> +	# disappear.
->> +	while [ -f "${PIDFILE}" ]; do
->> +		sleep 0.1
->> +	done
->>   	echo "OK"
->>   }
->> +
->>   restart() {
->>   	stop
->>   	start
->> @@ -44,4 +56,3 @@ case "$1" in
->>   esac
->>
->>   exit $?
->> -
->> --
->> 2.45.2
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICBIaSBBbCwKCk9uIDAzLzA3LzIwMjQgMDc6MjYsIEFsIFdhbGtlciB3cm90ZToKPiBIZWxsbywK
+PiAKPiBJ4oCZbSBuZXcgdG8gQnVpbGRyb290IGFuZCB0aGlzIGNvbW11bml0eSBhbmQga2VlbiB0
+byBjb250cmlidXRlIHdoZXJlIEkgY2FuLCAKPiBhbHRob3VnaCBvYnZpb3VzbHkgSSBoYXZlIGEg
+Yml0IG9mIGEgbGVhcm5pbmcgY3VydmUgZmlyc3QuCj4gCj4gSXMgdGhpcyB0aGUgYmVzdCBwbGFj
+ZSB0byBwb3N0IHRlY2huaWNhbCBxdWVzdGlvbnMsIGVzcGVjaWFsbHkgZm9yIG15IGluaXRpYWwg
+Cj4gc3RlcHMsIHBsZWFzZT8gQW55IGhlbHAgYW5kIGd1aWRhbmNlIGlzIHZlcnkgbXVjaCBhcHBy
+ZWNpYXRlZC4KCiAgWWVzIHRoaXMgaXMgdGhlIGNvcnJlY3QgcGxhY2UhIFRoYXQgc2FpZCwgcXVl
+c3Rpb25zIHBvc3RlZCBvbiB0aGlzIGxpc3Qgb2Z0ZW4gCmdvIHVuYW5zd2VyZWQgKGJlY2F1c2Ug
+bm9ib2R5IGtub3cgdGhlIGFuc3dlciBvZmYgdGhlIHRvcCBvZiB0aGVpciBoZWFkLCBhbmQgCnRo
+ZXkncmUgbm90IGludGVyZXN0ZWQgaW4gZG9pbmcgdGhlIG5lY2Vzc2FyeSByZXNlYXJjaCkuCgoK
+PiBJbiB0aGUgZmlyc3QgaW5zdGFuY2UgSeKAmXZlIHNldCBteXNlbGYgdGhlIGNoYWxsZW5nZSBv
+ZiBjcmVhdGluZyBhIEJ1aWxkcm9vdCAKPiBidWlsZCBmb3IgdGhlIFNUTTMyTVAxNTdELURLMSBi
+b2FyZC4gVGhlcmUgaXNu4oCZdCBhIHByZS1leGlzdGluZyBzcGVjaWZpYyAKPiBkZWZjb25maWcg
+ZmlsZSBmb3IgdGhpcyB2YXJpYW50LCBzbyBpdCBzZWVtcyBsaWtlIGEgZ29vZCBzdGFydGluZyBw
+b2ludC4KCiAgVGhlcmUgaXMgc3RtMzJtcDE1N2FfZGsxX2RlZmNvbmZpZywgSSBkb24ndCB0aGlu
+ayB0aGVyZSBhcmUgc3Vic3RhbnRpYWwgCmRpZmZlcmVuY2VzIGJldHdlZW4gdGhlIHR3by4gWW91
+IGNhbiBidWlsZCB0d28gZGV2aWNlIHRyZWVzIHdpdGggYSBzaW5nbGUgZGVmY29uZmlnLgoKCj4g
+U28gZmFyIEnigJl2ZSBzdWNjZXNzZnVsbHkgYnVpbHQgdGhlIHByb2plY3QgdXNpbmcgdGhlIGRl
+ZmF1bHQgcGluIGFzc2lnbm1lbnRzIGluIAo+IFNUTTMyQ3ViZUlERSBhbmQgY3JlYXRlZCB0aGUg
+LmR0cy8uZHRzaSBmaWxlcyBmb3IgdGhlIENvcnRleC1BNyBjb3JlcywgYnV0IGR0YyAKPiBkaWRu
+4oCZdCB3b3JrIGZvciBjb21waWxpbmcgdGhlIC5kdGIgZmlsZXMuCgogIFdoYXQgZG8geW91IG1l
+YW4gd2l0aCAiZGlkbid0IHdvcmsiPyBJZiB0aGVyZSBhcmUgc3ludGF4IGVycm9ycywgZHRjIHdp
+bGwgCnJlcG9ydCB0aGVtLi4uIFlvdSdsbCBnZXQgYmV0dGVyIGZlZWRiYWNrIGlmIHlvdSBpbmNs
+dWRlIHRoZSBlcnJvciBtZXNzYWdlcyAKKHdpdGggc3VmZmljaWVudCBjb250ZXh0KSBpbiB5b3Vy
+IG1haWwuCgogIFlvdSBub3JtYWxseSBwYXNzIGluIHRoZSBjdXN0b20gLmR0cyBhbmQgLmR0c2kg
+ZmlsZXMgYnkgc3BlY2lmeWluZyAKQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fRFRTX1BBVEggKGFu
+ZCB0aGUgZXF1aXZhbGVudCBmb3IgVS1Cb290IGFuZCBURi1BKS4gSXMgCnRoYXQgaG93IHlvdSBk
+aWQgaXQ/CgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+IAo+IEtpbmQgUmVnYXJkcywKPiAKPiBBbAo+
+IAo+IEFsIFdhbGtlcgo+IEZvdW5kZXIgJiBDRU8KPiBJbmxpbmUgQXVkaW8gKEhLKSBMaW1pdGVk
+Cj4gYWxAaW5saW5lLmF1ZGlvIDxtYWlsdG86YWxAaW5saW5lLmF1ZGlvPgo+IAo+IG0uICs4NiAx
+MzAgNjgxMSA1MjY0Cj4gbS4gKzQ0IDc4MTAgNTQwMTIwCj4gCj4gCj4gCj4gSWNvbiBEZXNjcmlw
+dGlvbiBhdXRvbWF0aWNhbGx5IGdlbmVyYXRlZAo+IAo+IAo+IENPTkZJREVOVElBTElUWcKgTk9U
+SUNFOiBUaGlzIG1lc3NhZ2XCoChpbmNsdWRpbmcgYW55wqBhdHRhY2htZW50cykgCj4gY29udGFp
+bnPCoGluZm9ybWF0aW9uIHRoYXQgbWF5IGJlwqBjb25maWRlbnRpYWwuIFVubGVzcyB5b3XCoGFy
+ZSB0aGUgaW50ZW5kZWQgCj4gcmVjaXBpZW50wqAob3LCoGF1dGhvcmlzZWQgdG8gcmVjZWl2ZcKg
+Zm9yIHRoZSBpbnRlbmRlZMKgcmVjaXBpZW50KSwgeW91IG1heSAKPiBub3TCoHJlYWQsIHByaW50
+LMKgcmV0YWluLCB1c2UswqBjb3B5LCBkaXN0cmlidXRlIG9ywqBkaXNjbG9zZSB0byBhbnlvbmUg
+dGhlwqBtZXNzYWdlIAo+IG9yIGFuecKgaW5mb3JtYXRpb24gY29udGFpbmVkIGluwqB0aGUgbWVz
+c2FnZS4gSWYgeW91IGhhdmXCoHJlY2VpdmVkIHRoZSBtZXNzYWdlIAo+IGluwqBlcnJvciwgcGxl
+YXNlIGFkdmlzZSB0aGXCoHNlbmRlciBieSByZXBseSBlLW1haWwswqBhbmQgZGVzdHJveSBhbGwg
+Y29waWVzIAo+IG9mwqB0aGXCoG9yaWdpbmFsIG1lc3NhZ2XCoChpbmNsdWRpbmcgYW55wqBhdHRh
+Y2htZW50cykuCj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
