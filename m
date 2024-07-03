@@ -4,87 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02C8BC30653
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 10:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F999C2BD09
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 10:25:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 883BF41A62;
-	Wed,  3 Jul 2024 10:13:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 751E241A64;
+	Wed,  3 Jul 2024 10:25:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z7CXM4lH-plB; Wed,  3 Jul 2024 10:13:29 +0000 (UTC)
+ id CYsvDq9PGCW8; Wed,  3 Jul 2024 10:25:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DC5141A64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBEF840105
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DC5141A64;
-	Wed,  3 Jul 2024 10:13:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CBEF840105;
+	Wed,  3 Jul 2024 10:25:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D51941BF308
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 10:13:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F15231BF308
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 10:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CECEB6069E
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 10:13:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DEB8B60E87
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 10:25:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h2bCQq7ocXLt for <buildroot@lists.busybox.net>;
- Wed,  3 Jul 2024 10:13:26 +0000 (UTC)
+ id ZTYJmwTeh-O7 for <buildroot@lists.busybox.net>;
+ Wed,  3 Jul 2024 10:25:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::72b; helo=mail-qk1-x72b.google.com;
- envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8EA05605A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EA05605A2
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com
- [IPv6:2607:f8b0:4864:20::72b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8EA05605A2
- for <buildroot@buildroot.org>; Wed,  3 Jul 2024 10:13:26 +0000 (UTC)
-Received: by mail-qk1-x72b.google.com with SMTP id
- af79cd13be357-79d5d14fa8bso42611685a.0
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 03:13:26 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6718D60E86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6718D60E86
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6718D60E86
+ for <buildroot@buildroot.org>; Wed,  3 Jul 2024 10:25:09 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-a7523f0870cso409148466b.3
+ for <buildroot@buildroot.org>; Wed, 03 Jul 2024 03:25:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720001605; x=1720606405;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1720002307; x=1720607107;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=4heKaZEuHvyzVIJt6ndzVX48wdCu+ozAMXZK9r5ayP4=;
- b=s+IFnGOXCDn1gw4x2KA/8xTUMGP1+eLaYXBNVpcfYHIGzB9Cl0hds9fBv8iJfoJv27
- G/okZ5ca18791YY8g6ncFOYXJufeAEzuVlhVaZqASyqIIfL/HwTrAz5x2yTbGkKCJmu3
- g77fD84X2+oEdnBAYDN99QKpLPrLgzGrA2aLzvkjKROem/pg83DjMYfAUN2tjFn6GFWR
- MFxn6u0AwcotU78wJYc7BwOUK4JHyTOoS2as6bcTNfDj1vMYl99779c+aOvjF7zpviNr
- Y8oakmnjZ2cLRtYSdxx94b/cT/Qd6YsKJblSiszpr4UjWIUT85qDzvCbnbEn/XFYjbgB
- Aflg==
-X-Gm-Message-State: AOJu0YwPs3MLhH+zhAEiQ4hYHUMwSTCITT2XFPoEHhfRIKwd7CX2N0xk
- gALYbZ+TFTh5tP4Zx2RPL0k9SCAEYESfYEyN00gRPphkypOKyQDIPAb7bb+NdgVnU3aOZ+1mKZg
- TPC7yFH/v35FEdDZpo4xLZ8igP0I=
-X-Google-Smtp-Source: AGHT+IGt0cqfP2y+4Z4PX3KcyEFtXIBIgOMQbAMwGHDbKrmO5pnV3gZ5ygdRbdkVm/gXbt0GE+UyaqTv1/yAZ0AvUVA=
-X-Received: by 2002:a05:620a:4c4:b0:794:fd5f:3b8c with SMTP id
- af79cd13be357-79ee31b1488mr166244285a.39.1720001605252; Wed, 03 Jul 2024
- 03:13:25 -0700 (PDT)
+ bh=QY6dUH+huwHh+BMDNXTkU4EpkohuTI/SwUqxVLtZIMs=;
+ b=bDuBw3PbWdefjSph8bflVQyuRbdRPIwWgRZ6uLn960t3X9DmqI8wtJSmMqYVzBJpcG
+ jnCpg/W1eYn4N+is1Gicnhd7FeBtihES6JhhY2JUIaG49/12q29Pq2g/Bm4LuVTDXpUU
+ a2X61HUis9bNjl76smKVomJt8ogwS7HVV1D0yt5xf/SEhQGvret/KZRJKfnLr7o3ColI
+ h7iNVeI7WxgbJk5csaTLEerzhhL9qVrcj7HK5TF87fr7yFoWsuFC+bPhIDtXLDq3UHoe
+ +FUVGj0n5JEoWCa5V/cUag90XVqaF55PkP3f1FCvMG01o+kusG8UZu+JqBqJpzPDrn13
+ L04A==
+X-Gm-Message-State: AOJu0YzYWZvfmPH7y1c7pgp4luwmF9UNa/I+QiYhZoyFm2MCMTjaL6GZ
+ L/8/ywkrEZ1pcysm6p9NLK/QAnWTcLbexcd0aIheH6E/kAatvDWtFqYAeAhIeR9pep3UJsvqVYf
+ hdAE=
+X-Google-Smtp-Source: AGHT+IHTc09O+v8HRnpF60PelzGtp/L2z/IZ6rod63OtSS5UcAXszAhIP47fOnXWa1LSEldeYcBAWA==
+X-Received: by 2002:a17:906:4908:b0:a6f:adf7:b077 with SMTP id
+ a640c23a62f3a-a751440e8e9mr631659566b.28.1720002307168; 
+ Wed, 03 Jul 2024 03:25:07 -0700 (PDT)
+Received: from localhost.localdomain ([2001:b07:6474:ebbf:1a37:2bf3:7cf8:1941])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-58614d507d2sm6788970a12.64.2024.07.03.03.25.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 03 Jul 2024 03:25:06 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Wed,  3 Jul 2024 12:25:03 +0200
+Message-ID: <20240703102503.2693749-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-References: <5e6129b8-9672-efd0-32c7-18d0defcad21@gmail.com>
-In-Reply-To: <5e6129b8-9672-efd0-32c7-18d0defcad21@gmail.com>
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 3 Jul 2024 12:12:48 +0200
-Message-ID: <CAEyMn7bdo1UPCxy5pRi-SXsTgjy_o9wYkPZ+CgYrh7CPDgUd0w@mail.gmail.com>
-To: Lance Fredrickson <lancethepants@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720001605; x=1720606405; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=4heKaZEuHvyzVIJt6ndzVX48wdCu+ozAMXZK9r5ayP4=;
- b=GM6fj7Ie2sCi3kTgcKfSCbTAw6z9jHHUnqTNSefsmpDWstst7uSRGIMgH/cRD0UXnf
- PICVSoLjxdDKFOBTnP8gnett7pIA7k62mHx5b1ZiDG79daNGpDtuef928D9EtCpL+4Lx
- 0bc/LWPBzyf2ooSsIns36S0WXUad/0rVJB7shkm4gjXEHLSbk4tvPhM+bz8s1XmOqFfb
- a316BBvnd4PgHa3yrv3dfFGZ9mDlSNfQP2pmisCMvmY6AsppMkP9cDgFlvU5VSuZuEW/
- 8jeBI69XDgnAhXKE8s3ozTxayobfaqjkb1yYsADEULipNs4V9drL6/pEUJoWckA7T8sC
- 8ynA==
+ d=amarulasolutions.com; s=google; t=1720002307; x=1720607107;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=QY6dUH+huwHh+BMDNXTkU4EpkohuTI/SwUqxVLtZIMs=;
+ b=YluiXPYdmmYGpg2sHHXDeYZMCwouKFMhzs5AaViASyOOiOdDWiDmCIg2bIPSkEAKCD
+ iyfIkMQTng6sfz9LK08fV60Cgespel4H9DHxdEwjJrnLI9hoDLlDZcpyM3ZcX6uwvV7q
+ PTMIhRLs38391a8epXfTav85qFDeorYYKKaZw=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=GM6fj7Ie
-Subject: Re: [Buildroot] 2023.05 host ccache detects avx512 and fails to buld
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=YluiXPYd
+Subject: [Buildroot] [PATCH 1/1] package/lxc: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,139 +100,217 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, yann.morin.1998@free.fr,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Lance,
+Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0") reduced the fuzz factor.
 
+Due to this change, lxc fails to build with output:
 
-Am Fr., 9. Juni 2023 um 20:11 Uhr schrieb Lance Fredrickson
-<lancethepants@gmail.com>:
->
-> Migrating my project to 2023.05 I'm encountering an issue when enabling
-> ccache compiler support.
->
-> In the cmake build invocation I see
-> -- Performing Test HAVE_C_AVX512 - Success
-> and then blake3 fails to build
->
-> [  9%] Building C object
-> src/third_party/blake3/CMakeFiles/blake3.dir/blake3_avx512.c.o
-> /tmp/ccyNm1NA.s:3844: Error: unsupported instruction `vmovdqu'
->
-> I've tried both in VM (12900k using virtualbox) and on ancient corei5
-> bare metal.
->
-> The funny thing is I can manually compile it fine with.
-> cmake \
-> -Wno-dev \
-> -DCMAKE_BUILD_TYPE=Release \
-> -DZSTD_FROM_INTERNET=ON \
-> -DREDIS_STORAGE_BACKEND=OFF \
-> ./
->
-> Then I try adding -DHAVE_C_AVX512=no to ccache.mk and it then succeeds.
->
-> So seems like some option or combination of options is making cmake
-> think avx512 is supported when it is not.
+    Applying 0001-src-lxc-syscall_numbers.h-drop-define-1.patch using patch:
+    patching file src/lxc/syscall_numbers.h
+    Hunk #1 FAILED at 53.
+    Hunk #2 FAILED at 92.
+    Hunk #3 FAILED at 129.
+    Hunk #4 FAILED at 166.
+    Hunk #5 FAILED at 203.
+    Hunk #6 FAILED at 272.
+    Hunk #7 FAILED at 309.
+    Hunk #8 FAILED at 346.
+    Hunk #9 FAILED at 383.
+    Hunk #10 FAILED at 440.
+    Hunk #11 FAILED at 477.
+    Hunk #12 FAILED at 518.
+    Hunk #13 FAILED at 759.
+    13 out of 13 hunks FAILED -- saving rejects to file src/lxc/syscall_numbers.h.rej
 
+This commit refreshes the package patch on the current package version.
 
-Since the problem is still present in master I suspect you did not
-find a solution for this?
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ ...-lxc-syscall_numbers.h-drop-define-1.patch | 87 ++++++++++---------
+ 1 file changed, 46 insertions(+), 41 deletions(-)
 
-This is what I currently see on my machine.
-
- [7m>>> host-ccache 4.8.2 Configuring [27m
-:
-:
--- Performing Test HAVE_ASM_SSE2
--- Performing Test HAVE_ASM_SSE2 - Failed
--- Performing Test HAVE_C_SSE2
--- Performing Test HAVE_C_SSE2 - Success
--- Performing Test HAVE_ASM_SSE41
--- Performing Test HAVE_ASM_SSE41 - Failed
--- Performing Test HAVE_C_SSE41
--- Performing Test HAVE_C_SSE41 - Success
--- Performing Test HAVE_ASM_AVX2
--- Performing Test HAVE_ASM_AVX2 - Failed
--- Performing Test HAVE_C_AVX2
--- Performing Test HAVE_C_AVX2 - Success
--- Performing Test HAVE_ASM_AVX512
--- Performing Test HAVE_ASM_AVX512 - Failed
--- Performing Test HAVE_C_AVX512
--- Performing Test HAVE_C_AVX512 - Success
--- Performing Test HAVE_NEON
--- Performing Test HAVE_NEON - Failed
--- Configuring done (16.0s)
--- Generating done (0.1s)
-CMake Warning:
-  Manually-specified variables were not used by the project:
-:
-:
-
- [7m>>> host-ccache 4.8.2 Building [27m
-:
-:
-[  1%] Building C object src/third_party/blake3/CMakeFiles/blake3.dir/blake3.c.o
-[  2%] Generating AUTHORS.html
-[  3%] Building C object
-src/third_party/blake3/CMakeFiles/blake3.dir/blake3_dispatch_ccache.c.o
-[  4%] Building C object
-src/third_party/CMakeFiles/third_party.dir/base32hex.c.o
-[  6%] Building C object
-src/third_party/blake3/CMakeFiles/blake3.dir/blake3_portable.c.o
-[  7%] Generating LICENSE.html
-[  8%] Generating MANUAL.html
-[  9%] Building CXX object
-src/third_party/CMakeFiles/third_party.dir/httplib.cpp.o
-[ 13%] Building C object
-src/third_party/blake3/CMakeFiles/blake3.dir/blake3_sse2.c.o
-[ 13%] Generating ccache.1.tmp
-[ 13%] Building CXX object
-src/third_party/CMakeFiles/third_party.dir/format.cpp.o
-[ 14%] Building C object
-src/third_party/blake3/CMakeFiles/blake3.dir/blake3_sse41.c.o
-[ 16%] Generating NEWS.html
-[ 17%] Building C object
-src/third_party/blake3/CMakeFiles/blake3.dir/blake3_avx2.c.o
-[ 18%] Building CXX object src/third_party/CMakeFiles/third_party.dir/url.cpp.o
-[ 19%] Building C object src/third_party/CMakeFiles/third_party.dir/xxhash.c.o
-[ 22%] Building C object
-src/third_party/CMakeFiles/third_party.dir/getopt_long.c.o
-[ 22%] Building C object
-src/third_party/blake3/CMakeFiles/blake3.dir/blake3_avx512.c.o
-[ 23%] Building C object
-src/third_party/CMakeFiles/third_party.dir/xxh_x86dispatch.c.o
-[ 23%] Built target doc-html
-[ 24%] Generating ccache.1
-[ 24%] Built target doc-man-page
-[ 24%] Built target doc
-/tmp/ccmQFw5y.s: Assembler messages:
-/tmp/ccmQFw5y.s:89386: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:89400: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:89464: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:89518: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:89525: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:123938: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:123953: Error: unsupported instruction `vmovdqu'
-
-I did a bisect and found that commit
-7087e5286d8419f4625f5f6e52aa84567c6b7ed0 introduced the problem. It
-was a bump from 3.7.12 to 4.7.4 and it uses the cmake infrastructure
-instead of
-
+diff --git a/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
+index 4a944e35b12a..d6eb7476dc72 100644
+--- a/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
++++ b/package/lxc/0001-src-lxc-syscall_numbers.h-drop-define-1.patch
+@@ -1,4 +1,4 @@
+-From 82fe01821cd5cb8548598d7d93b07d6ef3f6b604 Mon Sep 17 00:00:00 2001
++From 964740d28c9a0da52a75d579d7fdfa53df67e925 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Sat, 30 Mar 2024 16:50:46 +0100
+ Subject: [PATCH] src/lxc/syscall_numbers.h: drop define -1
+@@ -19,115 +19,120 @@ Fixes:
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Upstream: https://github.com/lxc/lxc/commit/82fe01821cd5cb8548598d7d93b07d6ef3f6b604
++[Dario: make the patch to be applied with fuzz factor 0]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  src/lxc/syscall_numbers.h | 13 -------------
+  1 file changed, 13 deletions(-)
+ 
+ diff --git a/src/lxc/syscall_numbers.h b/src/lxc/syscall_numbers.h
+-index 58840a5981..5e659d1b81 100644
++index ae5fdd0641c6..5dc1259fef1c 100644
+ --- a/src/lxc/syscall_numbers.h
+ +++ b/src/lxc/syscall_numbers.h
+-@@ -53,7 +53,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_keyctl 219
++@@ -51,7 +51,6 @@
++ 			#define __NR_keyctl 5241
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_keyctl not defined for your architecture"
+  	#endif
+  #endif
+-@@ -92,7 +91,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_memfd_create 279
++@@ -88,7 +87,6 @@
++ 			#define __NR_memfd_create 5314
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_memfd_create not defined for your architecture"
+  	#endif
+  #endif
+-@@ -129,7 +127,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_pivot_root 41
++@@ -123,7 +121,6 @@
++ 			#define __NR_pivot_root 5151
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_pivot_root not defined for your architecture"
+  	#endif
+  #endif
+-@@ -166,7 +163,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_setns 268
++@@ -158,7 +155,6 @@
++ 			#define __NR_setns 5303
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_setns not defined for your architecture"
+  	#endif
+  #endif
+-@@ -203,7 +199,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_sethostname 161
++@@ -193,7 +189,6 @@
++ 			#define __NR_sethostname 5165
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_sethostname not defined for your architecture"
+  	#endif
+  #endif
+-@@ -272,7 +267,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_signalfd4 74
++@@ -260,7 +255,6 @@
++ 			#define __NR_signalfd4 5283
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_signalfd4 not defined for your architecture"
+  	#endif
+  #endif
+-@@ -309,7 +303,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_unshare 97
++@@ -295,7 +289,6 @@
++ 			#define __NR_unshare 5262
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_unshare not defined for your architecture"
+  	#endif
+  #endif
+-@@ -346,7 +339,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_bpf 280
++@@ -330,7 +323,6 @@
++ 			#define __NR_bpf 5315
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_bpf not defined for your architecture"
+  	#endif
+  #endif
+-@@ -383,7 +375,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_faccessat 48
++@@ -365,7 +357,6 @@
++ 			#define __NR_faccessat 5259
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_faccessat not defined for your architecture"
+  	#endif
+  #endif
+-@@ -440,7 +431,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_seccomp 277
++@@ -420,7 +411,6 @@
++ 			#define __NR_seccomp 5312
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_seccomp not defined for your architecture"
+  	#endif
+  #endif
+-@@ -477,7 +467,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_gettid 178
++@@ -455,7 +445,6 @@
++ 			#define __NR_gettid 5178
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_gettid not defined for your architecture"
+  	#endif
+  #endif
+-@@ -518,7 +507,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_execveat 281
++@@ -494,7 +483,6 @@
++ 			#define __NR_execveat 5316
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_execveat not defined for your architecture"
+  	#endif
+  #endif
+-@@ -759,7 +747,6 @@
+- 	#elif defined __loongarch64
+- 		#define __NR_personality 92
++@@ -733,7 +721,6 @@
++ 			#define __NR_personality (132 + 5000)
++ 		#endif
+  	#else
+ -		#define -1
+  		#warning "__NR_personality not defined for your architecture"
+  	#endif
+  #endif
++-- 
++2.43.0
++
 -- 
-Heiko
+2.43.0
 
-> Lance
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
