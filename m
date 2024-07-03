@@ -4,92 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53119C2BD09
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 19:33:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30D19C30653
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 19:58:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 359B760586;
-	Wed,  3 Jul 2024 19:33:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70A1861026;
+	Wed,  3 Jul 2024 19:58:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UJGnadfUBJOW; Wed,  3 Jul 2024 19:33:38 +0000 (UTC)
+ id suilVRxlx4F6; Wed,  3 Jul 2024 19:58:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DC3761016
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B1436066D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DC3761016;
-	Wed,  3 Jul 2024 19:33:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3FD7C1BF2E3
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:33:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B1436066D;
+	Wed,  3 Jul 2024 19:58:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 783301BF2F6
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:58:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39883401C9
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:33:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71FEF40531
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:58:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zc1zSNoTOQKu for <buildroot@lists.busybox.net>;
- Wed,  3 Jul 2024 19:33:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0DPDIVAo5Y5e for <buildroot@lists.busybox.net>;
+ Wed,  3 Jul 2024 19:58:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::135; helo=mail-il1-x135.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 03ABB4019E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03ABB4019E
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
- [IPv6:2607:f8b0:4864:20::135])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 03ABB4019E
- for <buildroot@buildroot.org>; Wed,  3 Jul 2024 19:33:34 +0000 (UTC)
-Received: by mail-il1-x135.google.com with SMTP id
- e9e14a558f8ab-376069031c7so23278755ab.0
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 12:33:34 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C7C06400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7C06400FE
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C7C06400FE
+ for <buildroot@buildroot.org>; Wed,  3 Jul 2024 19:58:37 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-a6fe61793e2so333864166b.0
+ for <buildroot@buildroot.org>; Wed, 03 Jul 2024 12:58:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720035214; x=1720640014;
+ d=1e100.net; s=20230601; t=1720036715; x=1720641515;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=JtIzfZKHSJkV+yEOmMDQ5wnbpw6VcxkYGJPGQIbhsmk=;
- b=Qt8DnebI1f9ddURTeHGaS4FPsUD6iNaabWpllDjbtN4xwo+Wx9cxP4oKMiCxKdkrZ6
- oMU8AG5nBrU7jURJI2FZTjZV5xd2IGgTAFCGK1GVHoAZq1DB3ESWej3555x6ew569oIq
- XKttrpjTL8BhnteIh/CCpGqoX/d45/ahMU7J+fiIIhE0/DSUl1UZCE7JGuYLT0H+kpkL
- rlTp2dVOdtjKWdxuhjjPC6ZyRp82DuZPz32l2uh1kFoVZAEckzYfB4i+nrMHEddl10Uu
- qh7pxnfNqQwtCZhuAz3sIkpsIkJkACBwUByXrGDGEOoxu5qu1sBsI4MENAyL2aY8dZ0v
- l6nw==
-X-Gm-Message-State: AOJu0Yz3XsxSB6AV8vtM2Ej2k1iq6m2EkQV6Y8uqHy5IlIJ8V7s8JGW3
- nXSZyZPUu72bIpI7yvZvct8a6fbROMfQhvuGuaK8yUSH1pGAsMs8Y2uWL2xExjYV++YZRpy79Kh
- fOgmD5aiO
-X-Google-Smtp-Source: AGHT+IFMIf3y5WzF0T9QJ1CG1d/g8/al5vjIthU5LwZ0jSGGJ0uH4d8EJmSg4iIGtkNYOIq7jvUWwg==
-X-Received: by 2002:a92:ca07:0:b0:37a:9165:52c7 with SMTP id
- e9e14a558f8ab-37cd358d3f9mr130905735ab.31.1720035213624; 
- Wed, 03 Jul 2024 12:33:33 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- 41be03b00d2f7-75dd9622a24sm192494a12.71.2024.07.03.12.33.32
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Wed, 03 Jul 2024 12:33:33 -0700 (PDT)
+ bh=D/PULVwvvkF2drspSjDnVbvIR/Lh5367/5t1wl8HynY=;
+ b=ULqnxzFjww89ZG+FhQRuAC+Rg1EiV16obHzrCAMkVkHblbWYxUS3nwK9JJP694czxJ
+ HPeNjE7DWpSwsg+ltSux+6Em6zUArhISWJ1fHyeuhBg2JPOnExUcoOsV1dP52wL8SZRg
+ Q6tptYmIAZ/wlteO+0BEwxcit4B72w/EeI6Dygma0ghMXHA9bJSEeTeV65S/Y+jN1VQo
+ FlMfzl1G5HVL4dL0i77jmj5grc617eP5Hstv+chAv1Ry1a8UJg856zY8+jXPhniDi/vd
+ +pOcrNkMAhiQPguGIUTMJt3GdpoQEq2XO4xX7L2igiDw4vtj4ie6q/VxMFTmAf7Bs7yc
+ fQDg==
+X-Gm-Message-State: AOJu0YzuX/NRDQamypQwxB+loUp0fYHXo1pN3AVGwt2WwyB3bdur0DGP
+ Qw77YF99uEtFkOfGM0r8+mmtP4A8T8Sr99YKhAj4J1lhicTE1BEsgKQbrScSTwQ+xX8d8cmuL8q
+ 1e4s=
+X-Google-Smtp-Source: AGHT+IF7OSimiFY+iqijng4+PLJ8XIDtJ9K4a0ITighQsoODj7tO/YagYeBPjxtjkUHIvapexlmC6w==
+X-Received: by 2002:a05:6402:2549:b0:57d:42f6:63fe with SMTP id
+ 4fb4d7f45d1cf-5879f69b504mr11690148a12.22.1720036715618; 
+ Wed, 03 Jul 2024 12:58:35 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-79-30-97-245.retail.telecomitalia.it. [79.30.97.245])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-58d4b19b6eesm929705a12.76.2024.07.03.12.58.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 03 Jul 2024 12:58:35 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed,  3 Jul 2024 12:33:29 -0700
-Message-ID: <20240703193329.6627-1-christian@aperture.us>
-X-Mailer: git-send-email 2.45.2
+Date: Wed,  3 Jul 2024 21:58:32 +0200
+Message-ID: <20240703195832.2891159-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1720035214; x=1720640014; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1720036715; x=1720641515;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=JtIzfZKHSJkV+yEOmMDQ5wnbpw6VcxkYGJPGQIbhsmk=;
- b=PrsRFhIam+Oyf7e0T5s6dCMRPmbWg4TWEgXK1OfGCu8+7xjtjQVEWm7K0WHZ4af+KJ
- fRH1eaBkUntj1MdsUVclze4v2n7zMLYz43UWDWkam8M06Y2FipVgY5ErnlhjSEY9uQT6
- 2gDQ6dOPxE+p1t7NvDXTxKkw+T0MUJT+GLgFPFYjdBnNgN7caMo/w4NNbuC3N47uWd0m
- /OEQ9Ulq3Dql/N8gXbMdLjMIcOS0hhfRcU+b6CluZVcT+EHnkAZcSfECoEXOUHDkbmZ/
- XwRcQ/qEpuXU2MUaULmXXWsyCpSaJC9bB7meT0hq7VlXt7/ZQV8/y4RiXgt85mP+fmnL
- 21HQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=PrsRFhIa
-Subject: [Buildroot] [PATCH v1 1/1] package/go: security bump version to
- go1.22.5
+ bh=D/PULVwvvkF2drspSjDnVbvIR/Lh5367/5t1wl8HynY=;
+ b=p9mr0H0irBbWvPlElds4aXkJjqPqNDaMVOU1Y/dC1jnLxxtKzR6qFZWS5jbn2l1KoQ
+ 6XNrQyp7MV3N8CUmk1xIFwiG9VxTQHWLT0wYCddmtA6p8VP+y+LvkITckZ2LmuIuCLpY
+ Y4AjFPEK7ZEMXdXCr6eQKNU+tGaCyv0ZHRiiQ=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=p9mr0H0i
+Subject: [Buildroot] [PATCH 1/1] package/ncmpc: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,52 +101,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Christian Stewart <christian@aperture.us>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE:
+Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0") reduced the fuzz factor.
 
-CVE-2024-24791: net/http: denial of service due to improper 100-continue handling
+Due to this change, ncmpc fails to build with output:
 
-https://go.dev/doc/devel/release#go1.22.5
+    Applying 0001-meson.build-add-atomic-dependency-for-sparc.patch using patch:
+    patching file meson.build
+    Hunk #1 succeeded at 232 (offset 58 lines).
+    Hunk #2 FAILED at 355.
+    1 out of 2 hunks FAILED -- saving rejects to file meson.build.rej
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
+This commit refreshes the package patch on the current package version.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/go/go-src/go-src.hash | 2 +-
- package/go/go.mk              | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                              |  1 -
+ ...n.build-add-atomic-dependency-for-sparc.patch | 16 +++++++++-------
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/go/go-src/go-src.hash b/package/go/go-src/go-src.hash
-index 7952461f2d..d300f6e2c9 100644
---- a/package/go/go-src/go-src.hash
-+++ b/package/go/go-src/go-src.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  fed720678e728a7ca30ba8d1ded1caafe27d16028fab0232b8ba8e22008fb784  go1.22.4.src.tar.gz
-+sha256  ac9c723f224969aee624bc34fd34c9e13f2a212d75c71c807de644bb46e112f6  go1.22.5.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 91a8fb828f..bfbe997911 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 9a7a3af757d3..0a1d2627455e 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1053,7 +1053,6 @@ package/musl/0001-avoid-kernel-if_ether.h.patch lib_patch.Upstream
+ package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch lib_patch.Upstream
+ package/nano/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
+ package/nanocom/0001-fix-build-with-gcc-10.patch lib_patch.Upstream
+-package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch lib_patch.Upstream
+ package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch lib_patch.Upstream
+ package/ne10/0002-fix-build-without-C.patch lib_patch.Upstream
+ package/neard/S53neard Shellcheck lib_sysv.Indent lib_sysv.Variables
+diff --git a/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch b/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
+index fd2458976053..2b726b743753 100644
+--- a/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
++++ b/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
+@@ -1,4 +1,4 @@
+-From d2bd33ec18c146b27fb5aff7dd0089faa195ef9b Mon Sep 17 00:00:00 2001
++From 72ef4c1c3c11fc05c057f2b40b87de92a573f2eb Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Mon, 11 Feb 2019 21:42:01 +0100
+ Subject: [PATCH] meson.build: add atomic dependency for sparc
+@@ -11,16 +11,18 @@ Fixes:
+  - http://autobuild.buildroot.org/results/7ac1a07e4f72633d3ec92b79dc5d8c062490abdc
  
--GO_VERSION = 1.22.4
-+GO_VERSION = 1.22.5
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/MusicPlayerDaemon/ncmpc/pull/45]
++Upstream: https://github.com/MusicPlayerDaemon/ncmpc/pull/45
++[Dario: make the patch to be applied with fuzz factor 0]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  meson.build | 4 ++++
+  1 file changed, 4 insertions(+)
  
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+ diff --git a/meson.build b/meson.build
+-index 2e6defc..b393e39 100644
++index fa0eff9408b6..819674cbede4 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -174,6 +174,9 @@ else
++@@ -232,6 +232,9 @@ else
+    pcre_dep = declare_dependency()
+  endif
+  
+@@ -30,14 +32,14 @@ index 2e6defc..b393e39 100644
+  inc = include_directories(
+    'src',
+  
+-@@ -352,6 +355,7 @@ ncmpc = executable('ncmpc',
++@@ -445,6 +448,7 @@ ncmpc = executable('ncmpc',
+    sources,
+    include_directories: inc,
+    dependencies: [
+ +    atomic_dep,
+      thread_dep,
+-     boost_dep,
++     event_dep,
+      pcre_dep,
+ -- 
+-2.14.1
++2.43.0
+ 
 -- 
-2.45.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
