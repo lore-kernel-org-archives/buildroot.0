@@ -4,92 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33934C2BD09
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 19:25:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53119C2BD09
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 19:33:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4E266100D;
-	Wed,  3 Jul 2024 19:25:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 359B760586;
+	Wed,  3 Jul 2024 19:33:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wFn-l6x6c2B5; Wed,  3 Jul 2024 19:25:03 +0000 (UTC)
+ id UJGnadfUBJOW; Wed,  3 Jul 2024 19:33:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE00F61010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DC3761016
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE00F61010;
-	Wed,  3 Jul 2024 19:25:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D371A1BF2E3
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:25:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DC3761016;
+	Wed,  3 Jul 2024 19:33:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3FD7C1BF2E3
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF0F54057C
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:25:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 39883401C9
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:33:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BwGMxZM9zLsM for <buildroot@lists.busybox.net>;
- Wed,  3 Jul 2024 19:25:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Zc1zSNoTOQKu for <buildroot@lists.busybox.net>;
+ Wed,  3 Jul 2024 19:33:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0911940544
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0911940544
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0911940544
- for <buildroot@buildroot.org>; Wed,  3 Jul 2024 19:24:59 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id
- 4fb4d7f45d1cf-58b447c51bfso3406404a12.2
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 12:24:59 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::135; helo=mail-il1-x135.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 03ABB4019E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03ABB4019E
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 03ABB4019E
+ for <buildroot@buildroot.org>; Wed,  3 Jul 2024 19:33:34 +0000 (UTC)
+Received: by mail-il1-x135.google.com with SMTP id
+ e9e14a558f8ab-376069031c7so23278755ab.0
+ for <buildroot@buildroot.org>; Wed, 03 Jul 2024 12:33:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720034698; x=1720639498;
+ d=1e100.net; s=20230601; t=1720035214; x=1720640014;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pgjZd6GBS99+f4USksqIy4QB0lSULBUPQ238hkhp7uM=;
- b=WXKR3H2XV712gdlaf4eh6pIaSZKEUSlxyNqYRqysqrD1OHfRRAYj2DWkuC0KPFBpiW
- V89zQ4MMTX/FFdxLBX/IrlioYR+oqgbuaia9rF2siWLUduObpm6oxXWVjB0LAGznPfSD
- mSzzkyYhN8gxAeoImk7PtW/RuE4VOxgIhlGUL/s3JQhfpOajrFF6EdpbJAct7/OZ+z0d
- VQu55/NZF5hOwoLzIcLMnyvUeWOiZqZ0aPI/BmIW9K30x4dDaHdZ+5/Ly++DxrdPtzcb
- HNenthg75g/yDbmVvCk0Z4e1P39oqZF1YaSiZxCFaqnotyUgoKwqd7yoCJuPVPaVxgrg
- cnIQ==
-X-Gm-Message-State: AOJu0YyRBlvj0cw9zeH8TScyQmDQ0TKmXDbqKS8UnXrwy02OrpJdp3mu
- IZXLPq2YPSrbzBcoyMr4DOj3NBVLSkWOsh9dKy64soNM84UTeyh/jQhBu6qk6Lv3JS3E/HyRXdM
- 4Vjc=
-X-Google-Smtp-Source: AGHT+IHThOaLL/loTEW4DHFBJrMKTulhgBNQUsZm3kNwxf9FMq/zQ4d9Ztggi0etx8kHezEFWdHBWQ==
-X-Received: by 2002:a05:6402:31f1:b0:58d:e2b4:f0db with SMTP id
- 4fb4d7f45d1cf-58de2b4f3eamr282054a12.41.1720034697880; 
- Wed, 03 Jul 2024 12:24:57 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-30-97-245.retail.telecomitalia.it. [79.30.97.245])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-58612c835dfsm7428537a12.20.2024.07.03.12.24.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Jul 2024 12:24:57 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ bh=JtIzfZKHSJkV+yEOmMDQ5wnbpw6VcxkYGJPGQIbhsmk=;
+ b=Qt8DnebI1f9ddURTeHGaS4FPsUD6iNaabWpllDjbtN4xwo+Wx9cxP4oKMiCxKdkrZ6
+ oMU8AG5nBrU7jURJI2FZTjZV5xd2IGgTAFCGK1GVHoAZq1DB3ESWej3555x6ew569oIq
+ XKttrpjTL8BhnteIh/CCpGqoX/d45/ahMU7J+fiIIhE0/DSUl1UZCE7JGuYLT0H+kpkL
+ rlTp2dVOdtjKWdxuhjjPC6ZyRp82DuZPz32l2uh1kFoVZAEckzYfB4i+nrMHEddl10Uu
+ qh7pxnfNqQwtCZhuAz3sIkpsIkJkACBwUByXrGDGEOoxu5qu1sBsI4MENAyL2aY8dZ0v
+ l6nw==
+X-Gm-Message-State: AOJu0Yz3XsxSB6AV8vtM2Ej2k1iq6m2EkQV6Y8uqHy5IlIJ8V7s8JGW3
+ nXSZyZPUu72bIpI7yvZvct8a6fbROMfQhvuGuaK8yUSH1pGAsMs8Y2uWL2xExjYV++YZRpy79Kh
+ fOgmD5aiO
+X-Google-Smtp-Source: AGHT+IFMIf3y5WzF0T9QJ1CG1d/g8/al5vjIthU5LwZ0jSGGJ0uH4d8EJmSg4iIGtkNYOIq7jvUWwg==
+X-Received: by 2002:a92:ca07:0:b0:37a:9165:52c7 with SMTP id
+ e9e14a558f8ab-37cd358d3f9mr130905735ab.31.1720035213624; 
+ Wed, 03 Jul 2024 12:33:33 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ 41be03b00d2f7-75dd9622a24sm192494a12.71.2024.07.03.12.33.32
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Wed, 03 Jul 2024 12:33:33 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed,  3 Jul 2024 21:24:52 +0200
-Message-ID: <20240703192452.2804130-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Date: Wed,  3 Jul 2024 12:33:29 -0700
+Message-ID: <20240703193329.6627-1-christian@aperture.us>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1720034698; x=1720639498;
- darn=buildroot.org; 
+ d=aperture.us; s=google; t=1720035214; x=1720640014; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pgjZd6GBS99+f4USksqIy4QB0lSULBUPQ238hkhp7uM=;
- b=LX33qjE7zHPnau82BAtVhtEmOPlAXKbwjvVnFGqEO/pICqVJEatziMP7yWEbQ3FMnD
- 6QD2AEhBP2yDMl8tRPZYPjfZahdZem60EhybSc2FJagegnpOD131268PJ4Zu3DCqaaN+
- 3sJjuLiI3F+w80nqM8LJAvx2dgI/YlKuzZgPQ=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=LX33qjE7
-Subject: [Buildroot] [PATCH 1/1] package/memstat: update the patches to be
- applied with fuzz 0
+ bh=JtIzfZKHSJkV+yEOmMDQ5wnbpw6VcxkYGJPGQIbhsmk=;
+ b=PrsRFhIam+Oyf7e0T5s6dCMRPmbWg4TWEgXK1OfGCu8+7xjtjQVEWm7K0WHZ4af+KJ
+ fRH1eaBkUntj1MdsUVclze4v2n7zMLYz43UWDWkam8M06Y2FipVgY5ErnlhjSEY9uQT6
+ 2gDQ6dOPxE+p1t7NvDXTxKkw+T0MUJT+GLgFPFYjdBnNgN7caMo/w4NNbuC3N47uWd0m
+ /OEQ9Ulq3Dql/N8gXbMdLjMIcOS0hhfRcU+b6CluZVcT+EHnkAZcSfECoEXOUHDkbmZ/
+ XwRcQ/qEpuXU2MUaULmXXWsyCpSaJC9bB7meT0hq7VlXt7/ZQV8/y4RiXgt85mP+fmnL
+ 21HQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=PrsRFhIa
+Subject: [Buildroot] [PATCH v1 1/1] package/go: security bump version to
+ go1.22.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,51 +101,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0") reduced the fuzz factor.
+Fixes CVE:
 
-Due to this change, memstat fails to build with output:
+CVE-2024-24791: net/http: denial of service due to improper 100-continue handling
 
-    Applying 0001-PATH_MAX.patch using patch:
-    patching file memstat.c
-    Hunk #1 FAILED at 19.
-    1 out of 1 hunk FAILED -- saving rejects to file memstat.c.rej
+https://go.dev/doc/devel/release#go1.22.5
 
-This commit refreshes the package patch on the current package version.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- package/memstat/0001-PATH_MAX.patch | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/go/go-src/go-src.hash | 2 +-
+ package/go/go.mk              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/memstat/0001-PATH_MAX.patch b/package/memstat/0001-PATH_MAX.patch
-index 0c3617a61b52..14ca6a0078e2 100644
---- a/package/memstat/0001-PATH_MAX.patch
-+++ b/package/memstat/0001-PATH_MAX.patch
-@@ -1,6 +1,8 @@
- Add missing #include for PATH_MAX
+diff --git a/package/go/go-src/go-src.hash b/package/go/go-src/go-src.hash
+index 7952461f2d..d300f6e2c9 100644
+--- a/package/go/go-src/go-src.hash
++++ b/package/go/go-src/go-src.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  fed720678e728a7ca30ba8d1ded1caafe27d16028fab0232b8ba8e22008fb784  go1.22.4.src.tar.gz
++sha256  ac9c723f224969aee624bc34fd34c9e13f2a212d75c71c807de644bb46e112f6  go1.22.5.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 91a8fb828f..bfbe997911 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-GO_VERSION = 1.22.4
++GO_VERSION = 1.22.5
  
- --- memstat-0.8.org/memstat.c	2009-06-08 14:38:05.000000000 +0200
- +++ memstat-0.8/memstat.c	2014-09-12 03:55:43.096035374 +0200
-@@ -11,4 +13,4 @@ Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
- +#include <limits.h>
-  
-  /* blacklist devices that just map physical memory */
-- char *blacklist[] = { "/dev/mem",
-+ char *blacklist[] = {
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 -- 
-2.43.0
+2.45.2
 
 _______________________________________________
 buildroot mailing list
