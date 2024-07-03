@@ -4,92 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30D19C30653
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 19:58:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABC3CC2BD09
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 20:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70A1861026;
-	Wed,  3 Jul 2024 19:58:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6949060733;
+	Wed,  3 Jul 2024 20:10:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id suilVRxlx4F6; Wed,  3 Jul 2024 19:58:40 +0000 (UTC)
+ id fsLDsB7ABodB; Wed,  3 Jul 2024 20:10:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B1436066D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8733660841
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B1436066D;
-	Wed,  3 Jul 2024 19:58:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 783301BF2F6
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:58:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8733660841;
+	Wed,  3 Jul 2024 20:10:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0473C1BF36E
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 20:10:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71FEF40531
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 19:58:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E6DCE844DA
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 20:10:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0DPDIVAo5Y5e for <buildroot@lists.busybox.net>;
- Wed,  3 Jul 2024 19:58:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O1fuoU2Az1dZ for <buildroot@lists.busybox.net>;
+ Wed,  3 Jul 2024 20:10:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C7C06400FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7C06400FE
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C7C06400FE
- for <buildroot@buildroot.org>; Wed,  3 Jul 2024 19:58:37 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-a6fe61793e2so333864166b.0
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 12:58:37 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::229; helo=mail-lj1-x229.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 38C9C83F28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38C9C83F28
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
+ [IPv6:2a00:1450:4864:20::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 38C9C83F28
+ for <buildroot@buildroot.org>; Wed,  3 Jul 2024 20:10:38 +0000 (UTC)
+Received: by mail-lj1-x229.google.com with SMTP id
+ 38308e7fff4ca-2ed5ac077f5so69996691fa.1
+ for <buildroot@buildroot.org>; Wed, 03 Jul 2024 13:10:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720036715; x=1720641515;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=D/PULVwvvkF2drspSjDnVbvIR/Lh5367/5t1wl8HynY=;
- b=ULqnxzFjww89ZG+FhQRuAC+Rg1EiV16obHzrCAMkVkHblbWYxUS3nwK9JJP694czxJ
- HPeNjE7DWpSwsg+ltSux+6Em6zUArhISWJ1fHyeuhBg2JPOnExUcoOsV1dP52wL8SZRg
- Q6tptYmIAZ/wlteO+0BEwxcit4B72w/EeI6Dygma0ghMXHA9bJSEeTeV65S/Y+jN1VQo
- FlMfzl1G5HVL4dL0i77jmj5grc617eP5Hstv+chAv1Ry1a8UJg856zY8+jXPhniDi/vd
- +pOcrNkMAhiQPguGIUTMJt3GdpoQEq2XO4xX7L2igiDw4vtj4ie6q/VxMFTmAf7Bs7yc
- fQDg==
-X-Gm-Message-State: AOJu0YzuX/NRDQamypQwxB+loUp0fYHXo1pN3AVGwt2WwyB3bdur0DGP
- Qw77YF99uEtFkOfGM0r8+mmtP4A8T8Sr99YKhAj4J1lhicTE1BEsgKQbrScSTwQ+xX8d8cmuL8q
- 1e4s=
-X-Google-Smtp-Source: AGHT+IF7OSimiFY+iqijng4+PLJ8XIDtJ9K4a0ITighQsoODj7tO/YagYeBPjxtjkUHIvapexlmC6w==
-X-Received: by 2002:a05:6402:2549:b0:57d:42f6:63fe with SMTP id
- 4fb4d7f45d1cf-5879f69b504mr11690148a12.22.1720036715618; 
- Wed, 03 Jul 2024 12:58:35 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-30-97-245.retail.telecomitalia.it. [79.30.97.245])
+ d=1e100.net; s=20230601; t=1720037437; x=1720642237;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=seMFwVdfADwT2hLG7gyBzyJGdI7DwjdTJasF1pJDrCU=;
+ b=L2K9eoIOJsSQLSYUj4Qa7tT3sJNRJBsbKWrhOej7VimCaexV3xCKdB7/yCbgzM7SG+
+ ab3oqyTI5Ka99jmyw+Lm7DpfbheRomh5PMyjpTBr2HF7U/9MCi3lF9L384OWWzvbZ6Zn
+ 6iI55B1GNPzgyRUyrahDqKlzO0FFcVfqOxKTX5v38gfYOUUYx5bdI96yvOFcBcY98/kL
+ oZ0g7+UfkmVvoq/qk6rmzuPVxPHZfijimxsKT564SLMsSLITRWHIlDIcsDC1SK5KXe1S
+ 07TaPyqHsXqDkkeF1ekvYJjBR93eDnARO6FNlxdo9XIH4iHtCCDQSALZq0EGHJtaK/gK
+ dIGg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVlhUt3fFmi1MgiPLmBdsZs4GBdKkJf1rymudcoaD60SRCApGUxifCc8QQaDZXP1wykJnwSW6dhDN9h7TJK5+xYNqLwiLPPgQ==
+X-Gm-Message-State: AOJu0YxQG4yfzeV7/Jw3ZuVdlJoSn87JeQ/zYq0Rh6Pi87LoibWpjRPM
+ 53N9DdTyTotIaiuR/lE8UwxMJbwRKV4KlHz/1PQ6cR+TAF0ckLvKP3ICej8kGqyDcCO4r5A3cyM
+ F
+X-Google-Smtp-Source: AGHT+IFBookkI+EmSP4UQKZfktcwEYO0d+hxKf2iB5rXIJ89BoFWPmHKEhPKGJ4oEmvHWbXAaBMxWg==
+X-Received: by 2002:a2e:bcc1:0:b0:2ee:6b86:b098 with SMTP id
+ 38308e7fff4ca-2ee6b86b263mr79326411fa.8.1720037436443; 
+ Wed, 03 Jul 2024 13:10:36 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:e3ef:2d7a:4131:71f?
+ (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-58d4b19b6eesm929705a12.76.2024.07.03.12.58.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Jul 2024 12:58:35 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Wed,  3 Jul 2024 21:58:32 +0200
-Message-ID: <20240703195832.2891159-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ 5b1f17b1804b1-4257a2f7451sm194876965e9.0.2024.07.03.13.10.36
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 03 Jul 2024 13:10:36 -0700 (PDT)
+Message-ID: <00811c59-efb8-4a4d-9db8-16f4b2cc7c08@smile.fr>
+Date: Wed, 3 Jul 2024 22:10:35 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
+References: <20240703151407.1827264-1-arnout@mind.be>
+Content-Language: fr, en-US
+In-Reply-To: <20240703151407.1827264-1-arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1720036715; x=1720641515;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=D/PULVwvvkF2drspSjDnVbvIR/Lh5367/5t1wl8HynY=;
- b=p9mr0H0irBbWvPlElds4aXkJjqPqNDaMVOU1Y/dC1jnLxxtKzR6qFZWS5jbn2l1KoQ
- 6XNrQyp7MV3N8CUmk1xIFwiG9VxTQHWLT0wYCddmtA6p8VP+y+LvkITckZ2LmuIuCLpY
- Y4AjFPEK7ZEMXdXCr6eQKNU+tGaCyv0ZHRiiQ=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=smile.fr; s=google; t=1720037437; x=1720642237; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=seMFwVdfADwT2hLG7gyBzyJGdI7DwjdTJasF1pJDrCU=;
+ b=XH0FYypt7EPtlQDoo979ghpohRSxVJtCx1Cq3W+sNq1xIYLUDeJ7CLhua8M2WFiQU7
+ PQXl24SM4h+tAMY9klaOcnlzV9fiv5KjM4uh/+lZV3+nx+PI0IJVHK3RMXr65Z5zYHtm
+ PxIfciWugs/13fKXXM6lE3jNVcwgYlVpKOqhI=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=p9mr0H0i
-Subject: [Buildroot] [PATCH 1/1] package/ncmpc: update the patches to be
- applied with fuzz 0
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=XH0FYypt
+Subject: Re: [Buildroot] [PATCH 1/5] docs/website/news.html: announce LTS
+ Sponsoring
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,99 +106,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0") reduced the fuzz factor.
-
-Due to this change, ncmpc fails to build with output:
-
-    Applying 0001-meson.build-add-atomic-dependency-for-sparc.patch using patch:
-    patching file meson.build
-    Hunk #1 succeeded at 232 (offset 58 lines).
-    Hunk #2 FAILED at 355.
-    1 out of 2 hunks FAILED -- saving rejects to file meson.build.rej
-
-This commit refreshes the package patch on the current package version.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- .checkpackageignore                              |  1 -
- ...n.build-add-atomic-dependency-for-sparc.patch | 16 +++++++++-------
- 2 files changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 9a7a3af757d3..0a1d2627455e 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1053,7 +1053,6 @@ package/musl/0001-avoid-kernel-if_ether.h.patch lib_patch.Upstream
- package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch lib_patch.Upstream
- package/nano/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
- package/nanocom/0001-fix-build-with-gcc-10.patch lib_patch.Upstream
--package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch lib_patch.Upstream
- package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch lib_patch.Upstream
- package/ne10/0002-fix-build-without-C.patch lib_patch.Upstream
- package/neard/S53neard Shellcheck lib_sysv.Indent lib_sysv.Variables
-diff --git a/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch b/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
-index fd2458976053..2b726b743753 100644
---- a/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
-+++ b/package/ncmpc/0001-meson.build-add-atomic-dependency-for-sparc.patch
-@@ -1,4 +1,4 @@
--From d2bd33ec18c146b27fb5aff7dd0089faa195ef9b Mon Sep 17 00:00:00 2001
-+From 72ef4c1c3c11fc05c057f2b40b87de92a573f2eb Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Mon, 11 Feb 2019 21:42:01 +0100
- Subject: [PATCH] meson.build: add atomic dependency for sparc
-@@ -11,16 +11,18 @@ Fixes:
-  - http://autobuild.buildroot.org/results/7ac1a07e4f72633d3ec92b79dc5d8c062490abdc
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/MusicPlayerDaemon/ncmpc/pull/45]
-+Upstream: https://github.com/MusicPlayerDaemon/ncmpc/pull/45
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-  meson.build | 4 ++++
-  1 file changed, 4 insertions(+)
- 
- diff --git a/meson.build b/meson.build
--index 2e6defc..b393e39 100644
-+index fa0eff9408b6..819674cbede4 100644
- --- a/meson.build
- +++ b/meson.build
--@@ -174,6 +174,9 @@ else
-+@@ -232,6 +232,9 @@ else
-    pcre_dep = declare_dependency()
-  endif
-  
-@@ -30,14 +32,14 @@ index 2e6defc..b393e39 100644
-  inc = include_directories(
-    'src',
-  
--@@ -352,6 +355,7 @@ ncmpc = executable('ncmpc',
-+@@ -445,6 +448,7 @@ ncmpc = executable('ncmpc',
-    sources,
-    include_directories: inc,
-    dependencies: [
- +    atomic_dep,
-      thread_dep,
--     boost_dep,
-+     event_dep,
-      pcre_dep,
- -- 
--2.14.1
-+2.43.0
- 
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQXJub3V0LCBBbGwsCgpMZSAwMy8wNy8yMDI0IMOgIDE3OjE0LCBBcm5vdXQgVmFuZGVj
+YXBwZWxsZSB2aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gQWx0aG91Z2ggdGhlIG5leHQgY29t
+bWl0cyB3aWxsIGFsc28gYWRkIG1vcmUgaW5mb3JtYXRpb24gYWJvdXQgdGhlIExUUwo+IHNwb25z
+b3JpbmcgaW4gb3RoZXIgcGxhY2VzIG9uIHRoZSB3ZWJzaXRlLCBsaW5rIGRpcmVjdGx5IHRvIHRo
+ZSBsYW5kaW5nCj4gcGFnZSBvbiB0aGUgTWluZCB3ZWJzaXRlLgo+IAo+IFNpZ25lZC1vZmYtYnk6
+IEFybm91dCBWYW5kZWNhcHBlbGxlIDxhcm5vdXRAbWluZC5iZT4KClNlcmllcyBhcHBsaWVkIHRv
+IG1hc3RlciwgdGhhbmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IC0tLQo+ICBkb2NzL3dl
+YnNpdGUvbmV3cy5odG1sIHwgMjEgKysrKysrKysrKysrKysrKysrKysrCj4gIDEgZmlsZSBjaGFu
+Z2VkLCAyMSBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL2RvY3Mvd2Vic2l0ZS9uZXdz
+Lmh0bWwgYi9kb2NzL3dlYnNpdGUvbmV3cy5odG1sCj4gaW5kZXggOWFiZGY4ZjcyMC4uN2U2NmQw
+MjMzMSAxMDA2NDQKPiAtLS0gYS9kb2NzL3dlYnNpdGUvbmV3cy5odG1sCj4gKysrIGIvZG9jcy93
+ZWJzaXRlL25ld3MuaHRtbAo+IEBAIC05LDYgKzksMjcgQEAKPiAgPGgyPk5ld3M8L2gyPgo+ICA8
+dWwgY2xhc3M9InRpbWVsaW5lIj4KPiAgCj4gKyAgPGxpIGNsYXNzPSJ0aW1lbGluZS1pbnZlcnRl
+ZCI+Cj4gKyAgICA8ZGl2IGNsYXNzPSJ0aW1lbGluZS1iYWRnZSI+PGkgY2xhc3M9ImdseXBoaWNv
+biBnbHlwaGljb24tZXVybyI+PC9pPjwvZGl2Pgo+ICsgICAgPGRpdiBjbGFzcz0idGltZWxpbmUt
+cGFuZWwiPgo+ICsgICAgICA8ZGl2IGNsYXNzPSJ0aW1lbGluZS1oZWFkaW5nIj4KPiArCTxoNCBj
+bGFzcz0idGltZWxpbmUtdGl0bGUiPkxUUyBTcG9uc29yaW5nIGFubm91bmNlZDwvaDQ+Cj4gKyAg
+ICAgIDwvZGl2Pgo+ICsgICAgICA8ZGl2IGNsYXNzPSJ0aW1lbGluZS1ib2R5Ij4KPiArCTxwPldl
+IGFyZSBleGNpdGVkIHRvIHNoYXJlIHRoYXQgd2UgaGF2ZSBsYXVuY2hlZCB0aGUgQnVpbGRyb290
+IExvbmcKPiArCSAgVGVybSBTdXBwb3J0IChMVFMpIFNwb25zb3JpbmcgUHJvamVjdCE8L3A+Cj4g
+Kwk8cD5UaGlzIGluaXRpYXRpdmUgY29tZXMgZnJvbSBhIHBsYWNlIHdoZXJlIHdlIHVuZGVyc3Rh
+bmQgdGhlIGNyaXRpY2FsCj4gKwkgIG5lZWQgZm9yIGV4dGVuZGVkIHN1cHBvcnQgd2hpY2ggaXMg
+YmV5b25kIHZvbHVudGVlcmluZy4gVGhhdCdzIHdoeQo+ICsJICB3ZSBhcmUgY2FsbGluZyBhbGwg
+QnVpbGRyb290IHVzZXJzIGFuZCBlbnRodXNpYXN0cyB0byBjb21lIHRvZ2V0aGVyCj4gKwkgIGFu
+ZCBqb2luIHRoaXMgaW5pdGlhdGl2ZSB0aGF0J3Mgc2hhcGluZyB0aGUgZnV0dXJlIG9mIEJ1aWxk
+cm9vdC48L3A+Cj4gKwk8cD4KPiArCTxwPkZpbmQgbW9yZSBpbmZvcm1hdGlvbiBvbiB0aGUKPiAr
+CSAgPGEgaHJlZj0iaHR0cHM6Ly9taW5kLmJlL2J1aWxkcm9vdC1sdHMiPkJ1aWxkcm9vdCBMVFMg
+U3BvbnNvcmluZwo+ICsJICBwYWdlPC9hPi48L3A+Cj4gKyAgICAgIDwvZGl2Pgo+ICsgICAgPC9k
+aXY+Cj4gKyAgPC9saT4KPiArCj4gICAgPGxpPgo+ICAgICAgPGRpdiBjbGFzcz0idGltZWxpbmUt
+YmFkZ2UiPjxpIGNsYXNzPSJnbHlwaGljb24gZ2x5cGhpY29uLXRodW1icy11cCI+PC9pPjwvZGl2
+Pgo+ICAgICAgPGRpdiBjbGFzcz0idGltZWxpbmUtcGFuZWwiPgoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
