@@ -4,96 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 524FCC41513
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 13:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7185DC2BD09
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 13:57:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2906417D8;
-	Wed,  3 Jul 2024 13:54:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC612414BF;
+	Wed,  3 Jul 2024 13:57:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hnYUan_gYaQo; Wed,  3 Jul 2024 13:54:44 +0000 (UTC)
+ id tURamrs6E3QR; Wed,  3 Jul 2024 13:57:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E565414C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A423414C0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E565414C7;
-	Wed,  3 Jul 2024 13:54:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CEEFC1BF302
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 13:54:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A423414C0;
+	Wed,  3 Jul 2024 13:57:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F0D11BF302
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 13:57:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BACC641545
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 13:54:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CE9D6084E
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 13:57:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tYP1KfdZ9twU for <buildroot@lists.busybox.net>;
- Wed,  3 Jul 2024 13:54:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 250D7414C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 250D7414C7
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 250D7414C7
- for <buildroot@buildroot.org>; Wed,  3 Jul 2024 13:54:40 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-36703b0f914so494779f8f.0
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 06:54:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720014879; x=1720619679;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=0+lNp5oIY/j6ZOw3HXUgeTDnPlvmFc3LmfbqMpesAWc=;
- b=QgPTfhln45Sqlrpy7+imG85Il5BdEhoTfbZfTuJ5RZWzHix+qQVDlmuow1o465oWKj
- j02WHJRc515E2k7UwKa7Ufe8Osi2O6kfjZ6zuByDkDapWWp5kb/cgnRaS3zzzz2YyHAW
- /bJg5yWo7/ZK45mij8PGKAe3dbcVX/mQj7XxNSgtWPBidOTHUmr8wkpP2jIyua0H70ru
- 1MmyhZRbe85quu+xS1/6eyCxQ/El4a1ZoCKHtdxTAoFBBT0AvS0VhzLw8Yl8zHHhulnX
- seBlhLVodB5YpcKOEcVNrJRWPzqm5TPOmgZL9KX4NKoB0i1ARZchmA4+o3PSxnibAJNJ
- ajlA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWWbngExCx65BnyUGkC+Qn8ZHlJnCwX/69zNPDfqn2LT4hlMO8e9WNDLQqPMSoUao9Y0HFZIn0q9XsD9f/9/7POgheyn49+hA==
-X-Gm-Message-State: AOJu0YzGV1tPKsHXRKZd2dQc+ufeUd8zL/Ugas5nxUBm1YjmzfJRhsT6
- 2j9Bi/1LTcsU23CllLI5/9MU5l8oJrEG7/2/j2l/Fd2ubFifdNSy0Mt4HTJkdrEyxbLAr+rsQOo
- v
-X-Google-Smtp-Source: AGHT+IE3OQD38Jvk+qdOTtAQ8EcQk9/ysen0o85BXHjFwfPdImlb8lO9i7CfDk24HRA7lc63t9Ce/A==
-X-Received: by 2002:adf:a11d:0:b0:366:dfc4:3790 with SMTP id
- ffacd0b85a97d-36794709c70mr1131224f8f.0.1720014879081; 
- Wed, 03 Jul 2024 06:54:39 -0700 (PDT)
-Received: from [10.5.0.35]
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3675a0d91fesm16128360f8f.40.2024.07.03.06.54.38
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 03 Jul 2024 06:54:38 -0700 (PDT)
-Message-ID: <4dd37e7b-d578-4ea3-8bfa-fbc57339fa1f@smile.fr>
-Date: Wed, 3 Jul 2024 15:54:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-References: <20240703090630.2657626-1-dario.binacchi@amarulasolutions.com>
-Content-Language: fr
-In-Reply-To: <20240703090630.2657626-1-dario.binacchi@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1720014879; x=1720619679; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=0+lNp5oIY/j6ZOw3HXUgeTDnPlvmFc3LmfbqMpesAWc=;
- b=Fpr0Qeou3EZOxtCfd7a81qEOpaeYOPgLkxR/36Z0NVOHb1+WuseaWQovQ5dVpHBcLC
- cZMLTnJ1gQc9dx+JdqmISdOAznKnduEvbGggPtIV59MI8OYx2JAbLpVHpP0UHn0nuCZb
- fXW8tKDtr+Ek1/s0aEnWvALGIeGNmsarZJbE8=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=Fpr0Qeou
-Subject: Re: [Buildroot] [PATCH 1/1] package/leveldb: update the patches to
- be applied with fuzz 0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l39hsCxDWQkg for <buildroot@lists.busybox.net>;
+ Wed,  3 Jul 2024 13:57:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 719046077D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 719046077D
+ for <buildroot@buildroot.org>; Wed,  3 Jul 2024 13:57:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 592E083ACB; Wed,  3 Jul 2024 13:57:49 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 3 Jul 2024 15:55:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3b3cb4e5a71aac0e1133a0f2d51984671ee958ae
+X-Git-Newrev: b751a7b90f313188bd1b8d425a8a8082d60be712
+X-Patchwork-Hint: ignore
+Message-Id: <20240703135749.592E083ACB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/poke: fix patch fuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,128 +59,150 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Cc: linux-amarula@amarulasolutions.com, Steve James <ste@junkomatic.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRGFyaW8sCgpMZSAwMy8wNy8yMDI0IMOgIDExOjA2LCBEYXJpbyBCaW5hY2NoaSBhIMOp
-Y3JpdMKgOgo+IENvbW1pdCA4Zjg4YTY0NGVkN2Q2ICgic3VwcG9ydC9zY3JpcHRzL2FwcGx5LXBh
-dGNoZXMuc2g6IHNldCB0aGUgbWF4aW11bQo+IGZ1enogZmFjdG9yIHRvIDAiKSByZWR1Y2VkIHRo
-ZSBmdXp6IGZhY3Rvci4KPiAKPiBEdWUgdG8gdGhpcyBjaGFuZ2UsIGxldmVsZGIgZmFpbHMgdG8g
-YnVpbGQgd2l0aCBvdXRwdXQ6Cj4gCj4gICAgIEFwcGx5aW5nIDAwMDItQ01ha2UtaW5zdGFsbC1s
-aWJtZW1lbnYuYS5wYXRjaCB1c2luZyBwYXRjaDoKPiAgICAgcGF0Y2hpbmcgZmlsZSBDTWFrZUxp
-c3RzLnR4dAo+ICAgICBIdW5rICMxIHN1Y2NlZWRlZCBhdCAyMDkgKG9mZnNldCAyMiBsaW5lcyku
-Cj4gICAgIEh1bmsgIzIgc3VjY2VlZGVkIGF0IDQ2OSAob2Zmc2V0IDI3IGxpbmVzKS4KPiAgICAg
-SHVuayAjMyBGQUlMRUQgYXQgNDk1Lgo+ICAgICAxIG91dCBvZiAzIGh1bmtzIEZBSUxFRCAtLSBz
-YXZpbmcgcmVqZWN0cyB0byBmaWxlIENNYWtlTGlzdHMudHh0LnJlago+IAo+ICAgICBBcHBseWlu
-ZyAwMDA0LWNtYWtlLVVzZS1maW5kX3BhY2thZ2UtdG8tZmluZC1TbmFwcHkucGF0Y2ggdXNpbmcg
-cGF0Y2g6Cj4gICAgIHBhdGNoaW5nIGZpbGUgQ01ha2VMaXN0cy50eHQKPiAgICAgSHVuayAjMiBG
-QUlMRUQgYXQgMzQuCj4gICAgIEh1bmsgIzMgc3VjY2VlZGVkIGF0IDMwMSAob2Zmc2V0IDIyIGxp
-bmVzKS4KPiAgICAgMSBvdXQgb2YgMyBodW5rcyBGQUlMRUQgLS0gc2F2aW5nIHJlamVjdHMgdG8g
-ZmlsZSBDTWFrZUxpc3RzLnR4dC5yZWoKPiAKPiBUaGlzIGNvbW1pdCByZWZyZXNoZXMgdGhlIHBh
-Y2thZ2UgcGF0Y2hlcyBvbiB0aGUgY3VycmVudCBwYWNrYWdlIHZlcnNpb24uCgpBcHBsaWVkIHRv
-IG1hc3RlciwgdGhhbmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCj4gCj4gU2lnbmVkLW9mZi1i
-eTogRGFyaW8gQmluYWNjaGkgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+
-IC0tLQo+ICAuLi4vMDAwMi1DTWFrZS1pbnN0YWxsLWxpYm1lbWVudi5hLnBhdGNoICAgICAgfCAy
-NCArKysrKysrKysrLS0tLS0tLS0tCj4gIC4uLm1ha2UtVXNlLWZpbmRfcGFja2FnZS10by1maW5k
-LVNuYXBweS5wYXRjaCB8IDE4ICsrKysrKystLS0tLS0tCj4gIDIgZmlsZXMgY2hhbmdlZCwgMjMg
-aW5zZXJ0aW9ucygrKSwgMTkgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
-bGV2ZWxkYi8wMDAyLUNNYWtlLWluc3RhbGwtbGlibWVtZW52LmEucGF0Y2ggYi9wYWNrYWdlL2xl
-dmVsZGIvMDAwMi1DTWFrZS1pbnN0YWxsLWxpYm1lbWVudi5hLnBhdGNoCj4gaW5kZXggZWE3NDJi
-MGM0OTc3Li4yNWUwNTBlYWZmOGQgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9sZXZlbGRiLzAwMDIt
-Q01ha2UtaW5zdGFsbC1saWJtZW1lbnYuYS5wYXRjaAo+ICsrKyBiL3BhY2thZ2UvbGV2ZWxkYi8w
-MDAyLUNNYWtlLWluc3RhbGwtbGlibWVtZW52LmEucGF0Y2gKPiBAQCAtMSw0ICsxLDQgQEAKPiAt
-RnJvbSAyZmE5NjAwOThlNWI2ZjlkYWE5ZjdkNmNhYjI3MTg4NTY2ODU5YmU4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQo+ICtGcm9tIGVmMDNiZWI2NGY1ZTgwMjhmNmI1ZDY1Zjc1ZWU2MGU4YjJl
-ZWM1OTQgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gIEZyb206IEJlcm5kIEt1aGxzIDxiZXJu
-ZC5rdWhsc0B0LW9ubGluZS5kZT4KPiAgRGF0ZTogU2F0LCAxMiBPY3QgMjAxOSAxNDo0Mzo0NiAr
-MDIwMAo+ICBTdWJqZWN0OiBbUEFUQ0hdIENNYWtlOiBpbnN0YWxsIGxpYm1lbWVudi5hCj4gQEAg
-LTEwLDE1ICsxMCwxNyBAQCBodHRwczovL2dpdC5idXN5Ym94Lm5ldC9idWlsZHJvb3QvY29tbWl0
-Lz9pZD0xNmY4NDczNDBkMDdkY2U2MjBlNGMzZmMwYTA5OWFhNzk4OQo+ICBTaWduZWQtb2ZmLWJ5
-OiBCZXJuZCBLdWhscyA8YmVybmQua3VobHNAdC1vbmxpbmUuZGU+Cj4gIFtGYWJyaWNlIDogdXBk
-YXRlZCBmb3IgMS4yM10KPiAgU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFp
-bmUuZmFicmljZUBnbWFpbC5jb20+Cj4gK1tEYXJpbzogbWFrZSB0aGUgcGF0Y2ggdG8gYmUgYXBw
-bGllZCB3aXRoIGZ1enogZmFjdG9yIDBdCj4gK1NpZ25lZC1vZmYtYnk6IERhcmlvIEJpbmFjY2hp
-IDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4KPiAgLS0tCj4gLSBDTWFrZUxp
-c3RzLnR4dCB8IDI2ICsrKysrKysrKysrKysrKysrKysrKysrKystCj4gLSAxIGZpbGUgY2hhbmdl
-ZCwgMjUgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+ICsgQ01ha2VMaXN0cy50eHQgfCAz
-MiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQo+ICsgMSBmaWxlIGNoYW5nZWQsIDMx
-IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAgCj4gIGRpZmYgLS1naXQgYS9DTWFrZUxp
-c3RzLnR4dCBiL0NNYWtlTGlzdHMudHh0Cj4gLWluZGV4IGE2NWFmYmYuLjgzYjI0MjUgMTAwNjQ0
-Cj4gK2luZGV4IGY4Mjg1YjgyYzZhNC4uZmZjZTkzYjAxZWQ2IDEwMDY0NAo+ICAtLS0gYS9DTWFr
-ZUxpc3RzLnR4dAo+ICArKysgYi9DTWFrZUxpc3RzLnR4dAo+IC1AQCAtMTg3LDYgKzE4NywzMCBA
-QCB0YXJnZXRfc291cmNlcyhsZXZlbGRiCj4gK0BAIC0yMDksNiArMjA5LDMwIEBAIHRhcmdldF9z
-b3VyY2VzKGxldmVsZGIKPiAgICAgICAiJHtMRVZFTERCX1BVQkxJQ19JTkNMVURFX0RJUn0vd3Jp
-dGVfYmF0Y2guaCIKPiAgICkKPiAgIAo+IEBAIC00OSw3ICs1MSw3IEBAIGluZGV4IGE2NWFmYmYu
-LjgzYjI0MjUgMTAwNjQ0Cj4gICBpZiAoV0lOMzIpCj4gICAgIHRhcmdldF9zb3VyY2VzKGxldmVs
-ZGIKPiAgICAgICBQUklWQVRFCj4gLUBAIC00MTgsNyArNDM2LDcgQEAgZW5kaWYoTEVWRUxEQl9C
-VUlMRF9CRU5DSE1BUktTKQo+ICtAQCAtNDQ1LDcgKzQ2OSw3IEBAIGludCBtYWluKCkgewo+ICAg
-ZW5kaWYoTEVWRUxEQl9CVUlMRF9CRU5DSE1BUktTKQo+ICAgCj4gICBpZihMRVZFTERCX0lOU1RB
-TEwpCj4gQEAgLTU4LDggKzYwLDggQEAgaW5kZXggYTY1YWZiZi4uODNiMjQyNSAxMDA2NDQKPiAg
-ICAgICBFWFBPUlQgbGV2ZWxkYlRhcmdldHMKPiAgICAgICBSVU5USU1FIERFU1RJTkFUSU9OICR7
-Q01BS0VfSU5TVEFMTF9CSU5ESVJ9Cj4gICAgICAgTElCUkFSWSBERVNUSU5BVElPTiAke0NNQUtF
-X0lOU1RBTExfTElCRElSfQo+IC1AQCAtNDQ0LDYgKzQ2MiwxMiBAQCBpZihMRVZFTERCX0lOU1RB
-TEwpCj4gLSAgICAgREVTVElOQVRJT04gJHtDTUFLRV9JTlNUQUxMX0lOQ0xVREVESVJ9L2xldmVs
-ZGIKPiArQEAgLTQ3MSw2ICs0OTUsMTIgQEAgaWYoTEVWRUxEQl9JTlNUQUxMKQo+ICsgICAgIERF
-U1RJTkFUSU9OICIke0NNQUtFX0lOU1RBTExfSU5DTFVERURJUn0vbGV2ZWxkYiIKPiAgICAgKQo+
-ICAgCj4gICsgIGluc3RhbGwoCj4gQEAgLTY5LDggKzcxLDggQEAgaW5kZXggYTY1YWZiZi4uODNi
-MjQyNSAxMDA2NDQKPiAgKyAgKQo+ICArCj4gICAgIGluY2x1ZGUoQ01ha2VQYWNrYWdlQ29uZmln
-SGVscGVycykKPiAtICAgd3JpdGVfYmFzaWNfcGFja2FnZV92ZXJzaW9uX2ZpbGUoCj4gLSAgICAg
-ICAiJHtQUk9KRUNUX0JJTkFSWV9ESVJ9L2xldmVsZGJDb25maWdWZXJzaW9uLmNtYWtlIgo+ICsg
-ICBjb25maWd1cmVfcGFja2FnZV9jb25maWdfZmlsZSgKPiArICAgICAiY21ha2UvJHtQUk9KRUNU
-X05BTUV9Q29uZmlnLmNtYWtlLmluIgo+ICAtLSAKPiAtMi4yMC4xCj4gKzIuNDMuMAo+ICAKPiBk
-aWZmIC0tZ2l0IGEvcGFja2FnZS9sZXZlbGRiLzAwMDQtY21ha2UtVXNlLWZpbmRfcGFja2FnZS10
-by1maW5kLVNuYXBweS5wYXRjaCBiL3BhY2thZ2UvbGV2ZWxkYi8wMDA0LWNtYWtlLVVzZS1maW5k
-X3BhY2thZ2UtdG8tZmluZC1TbmFwcHkucGF0Y2gKPiBpbmRleCA3MTRlMWIwODI3NDAuLmUyNTRh
-MjZiOWFmYiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2xldmVsZGIvMDAwNC1jbWFrZS1Vc2UtZmlu
-ZF9wYWNrYWdlLXRvLWZpbmQtU25hcHB5LnBhdGNoCj4gKysrIGIvcGFja2FnZS9sZXZlbGRiLzAw
-MDQtY21ha2UtVXNlLWZpbmRfcGFja2FnZS10by1maW5kLVNuYXBweS5wYXRjaAo+IEBAIC0xLDQg
-KzEsNCBAQAo+IC1Gcm9tIDQ1MGMxZDg4YjNlMWFmMzQ2MTQyOTQ4MzBiNGRjMDYxMmQxOThkMjYg
-TW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb20gYWE2NThkOTZmNTlkMGUyOWYwZDkyMDhi
-OGZiYjNjY2U0MmU1N2VkYyBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAgRnJvbTogPT9VVEYt
-OD9xP1Bhd2U9QzU9ODI9MjBCeWxpY2E/PSA8Y2hmYXN0QGdtYWlsLmNvbT4KPiAgRGF0ZTogV2Vk
-LCA4IE1heSAyMDE5IDEwOjQyOjAzICswMjAwCj4gIFN1YmplY3Q6IFtQQVRDSF0gY21ha2U6IFVz
-ZSBmaW5kX3BhY2thZ2UoKSB0byBmaW5kIFNuYXBweQo+IEBAIC05LDYgKzksOCBAQCBpbiBzdGF0
-aWMgbGluayBjb25maWd1cmF0aW9uc10KPiAgU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9u
-aSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KPiAgW0ZhYnJpY2UgOiB1cGRhdGVkIGZv
-ciAxLjIzXQo+ICBTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJy
-aWNlQGdtYWlsLmNvbT4KPiArW0RhcmlvOiBtYWtlIHRoZSBwYXRjaCB0byBiZSBhcHBsaWVkIHdp
-dGggZnV6eiBmYWN0b3IgMF0KPiArU2lnbmVkLW9mZi1ieTogRGFyaW8gQmluYWNjaGkgPGRhcmlv
-LmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+ICAtLS0KPiAgIENNYWtlTGlzdHMudHh0
-ICAgICAgICAgfCAxMiArKysrKysrKy0tLS0KPiAgIGNtYWtlL0ZpbmRTbmFwcHkuY21ha2UgfCAz
-MSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4gQEAgLTE2LDcgKzE4LDcgQEAgU2ln
-bmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBnbWFpbC5jb20+
-Cj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgY21ha2UvRmluZFNuYXBweS5jbWFrZQo+ICAKPiAgZGlm
-ZiAtLWdpdCBhL0NNYWtlTGlzdHMudHh0IGIvQ01ha2VMaXN0cy50eHQKPiAtaW5kZXggNzhmZWFk
-Ni4uMmVmY2NkYSAxMDA2NDQKPiAraW5kZXggNDM2YTlmZTU1MTNmLi5iYmQxNzlkM2JlNTkgMTAw
-NjQ0Cj4gIC0tLSBhL0NNYWtlTGlzdHMudHh0Cj4gICsrKyBiL0NNYWtlTGlzdHMudHh0Cj4gIEBA
-IC02LDYgKzYsOSBAQCBjbWFrZV9taW5pbXVtX3JlcXVpcmVkKFZFUlNJT04gMy45KQo+IEBAIC0y
-OSw5ICszMSw5IEBAIGluZGV4IDc4ZmVhZDYuLjJlZmNjZGEgMTAwNjQ0Cj4gICAjIEMgc3RhbmRh
-cmQgY2FuIGJlIG92ZXJyaWRkZW4gd2hlbiB0aGlzIGlzIHVzZWQgYXMgYSBzdWItcHJvamVjdC4K
-PiAgIGlmKE5PVCBDTUFLRV9DX1NUQU5EQVJEKQo+ICAgICAjIFRoaXMgcHJvamVjdCBjYW4gdXNl
-IEMxMSwgYnV0IHdpbGwgZ3JhY2VmdWxseSBkZWNheSBkb3duIHRvIEM4OS4KPiAtQEAgLTMxLDEz
-ICszNCwxNCBAQCBvcHRpb24oTEVWRUxEQl9JTlNUQUxMICJJbnN0YWxsIExldmVsREIncyBoZWFk
-ZXIgYW5kIGxpYnJhcnkiIE9OKQo+IC0gaW5jbHVkZShUZXN0QmlnRW5kaWFuKQo+IC0gdGVzdF9i
-aWdfZW5kaWFuKExFVkVMREJfSVNfQklHX0VORElBTikKPiArQEAgLTM0LDEzICszNywxNCBAQCBv
-cHRpb24oTEVWRUxEQl9CVUlMRF9URVNUUyAiQnVpbGQgTGV2ZWxEQidzIHVuaXQgdGVzdHMiIE9O
-KQo+ICsgb3B0aW9uKExFVkVMREJfQlVJTERfQkVOQ0hNQVJLUyAiQnVpbGQgTGV2ZWxEQidzIGJl
-bmNobWFya3MiIE9OKQo+ICsgb3B0aW9uKExFVkVMREJfSU5TVEFMTCAiSW5zdGFsbCBMZXZlbERC
-J3MgaGVhZGVyIGFuZCBsaWJyYXJ5IiBPTikKPiAgIAo+ICArZmluZF9wYWNrYWdlKFNuYXBweSkK
-PiAgKwo+IEBAIC00NSw3ICs0Nyw3IEBAIGluZGV4IDc4ZmVhZDYuLjJlZmNjZGEgMTAwNjQ0Cj4g
-ICBjaGVja19saWJyYXJ5X2V4aXN0cyh0Y21hbGxvYyBtYWxsb2MgIiIgSEFWRV9UQ01BTExPQykK
-PiAgIAo+ICAgaW5jbHVkZShDaGVja0NYWFN5bWJvbEV4aXN0cykKPiAtQEAgLTI3Niw5ICsyODAs
-OSBAQCBlbmRpZihIQVZFX0FUT01JQykKPiArQEAgLTI5OCw5ICszMDIsOSBAQCBlbmRpZihIQVZF
-X0FUT01JQykKPiAgIGlmKEhBVkVfQ1JDMzJDKQo+ICAgICB0YXJnZXRfbGlua19saWJyYXJpZXMo
-bGV2ZWxkYiBjcmMzMmMpCj4gICBlbmRpZihIQVZFX0NSQzMyQykKPiBAQCAtNjAsNyArNjIsNyBA
-QCBpbmRleCA3OGZlYWQ2Li4yZWZjY2RhIDEwMDY0NAo+ICAgZW5kaWYoSEFWRV9UQ01BTExPQykK
-PiAgZGlmZiAtLWdpdCBhL2NtYWtlL0ZpbmRTbmFwcHkuY21ha2UgYi9jbWFrZS9GaW5kU25hcHB5
-LmNtYWtlCj4gIG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gLWluZGV4IDAwMDAwMDAuLjg4YzFkZTkK
-PiAraW5kZXggMDAwMDAwMDAwMDAwLi44OGMxZGU5OGYyMjgKPiAgLS0tIC9kZXYvbnVsbAo+ICAr
-KysgYi9jbWFrZS9GaW5kU25hcHB5LmNtYWtlCj4gIEBAIC0wLDAgKzEsMzEgQEAKPiBAQCAtOTYs
-NSArOTgsNSBAQCBpbmRleCAwMDAwMDAwLi44OGMxZGU5Cj4gICsgICkKPiAgK2VuZGlmKCkKPiAg
-LS0gCj4gLTIuMjYuMgo+ICsyLjQzLjAKPiAgCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=b751a7b90f313188bd1b8d425a8a8082d60be712
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0" reduced the fuzz factor.
+
+Due to this change, poke fails to build with output:
+
+    Applying 0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch using patch:
+    patching file configure.ac
+    Hunk #1 FAILED at 90.
+    1 out of 1 hunk FAILED -- saving rejects to file configure.ac.rej
+
+This commit refreshes the package patches on the current package
+version.
+
+The patch 0002 was described as specific to Buildroot. This commit
+adds the "Upstream:" tag and removes the corresponding
+".checkpackageignore" entry.
+
+Fixes:
+http://autobuild.buildroot.org/results/ace4a0efffb66dcebf873a2baa33b5edfe670093
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ .checkpackageignore                                         |  1 -
+ ...nfigure.ac-HELP2MAN-replace-by-true-when-cross-com.patch | 12 +++++++-----
+ .../0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch | 13 ++++++++-----
+ 3 files changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ca94fb56b0..9a7a3af757 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1207,7 +1207,6 @@ package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch li
+ package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch lib_patch.Upstream
+ package/pkgconf/pkg-config.in Shellcheck
+ package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch lib_patch.Upstream
+-package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
+ package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch lib_patch.Upstream
+ package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch lib_patch.Upstream
+ package/postgresql/S50postgresql lib_sysv.Variables
+diff --git a/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch b/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
+index 85a76e068e..fb5604d80e 100644
+--- a/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
++++ b/package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch
+@@ -1,4 +1,4 @@
+-From 51fb81264323f01a86dd0bdeaf1c7a044a9cb6dc Mon Sep 17 00:00:00 2001
++From a7e29f73dab5f9bd4fc7a2407f1ed2022c4ff109 Mon Sep 17 00:00:00 2001
+ From: Romain Naour <romain.naour@gmail.com>
+ Date: Fri, 30 Apr 2021 15:43:59 +0200
+ Subject: [PATCH] configure.ac: HELP2MAN replace ':' by 'true' when
+@@ -12,15 +12,17 @@ Avoid:
+ ../run: line 51: exec: :: not found
+ 
+ Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Julien: refreshed the patch to be applied with fuzz factor 0]
++Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
+  configure.ac | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index a1943b57..c633f719 100644
++index 71b4d86..6487b57 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -90,7 +90,7 @@ gl_LIBTEXTSTYLE_OPTIONAL([0.20.5])
++@@ -88,7 +88,7 @@ gl_LIBTEXTSTYLE_OPTIONAL([0.20.5])
+  if test $cross_compiling = no; then
+    AM_MISSING_PROG(HELP2MAN, help2man)
+  else
+@@ -28,7 +30,7 @@ index a1943b57..c633f719 100644
+ +  HELP2MAN=true
+  fi
+  
+- dnl recfix is part of the GNU recutils suite, and is used in cfg.mk to
++ dnl The following Automake conditional is used in some Makefile.am files
+ -- 
+-2.31.1
++2.45.2
+ 
+diff --git a/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch b/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
+index bd20b5d2c6..db1250810d 100644
+--- a/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
++++ b/package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
+@@ -1,4 +1,4 @@
+-From 236b019b83228d2e37fa07635fb6864ed7dc5fad Mon Sep 17 00:00:00 2001
++From 09758ebb191da659563b4c33334295ce21ecae71 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Thu, 1 Apr 2021 07:49:46 +0200
+ Subject: [PATCH] lib/getrandom.c: fix build with uclibc < 1.0.35
+@@ -25,6 +25,9 @@ Fixes:
+  - http://autobuild.buildroot.org/results/30105094e39374ec6d4e47e2fb5e99696f7f7981
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: Not applicable (Buildroot specific)
++[Julien: refreshed the patch to be applied with fuzz factor 0]
++Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
+  gl-libpoke/getrandom.c          | 1 +
+  gl/getrandom.c                  | 1 +
+@@ -32,7 +35,7 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  3 files changed, 3 insertions(+)
+ 
+ diff --git a/gl-libpoke/getrandom.c b/gl-libpoke/getrandom.c
+-index e146873..3948d8d 100644
++index 19bb342..0251e0f 100644
+ --- a/gl-libpoke/getrandom.c
+ +++ b/gl-libpoke/getrandom.c
+ @@ -19,6 +19,7 @@
+@@ -44,7 +47,7 @@ index e146873..3948d8d 100644
+  
+  #include <errno.h>
+ diff --git a/gl/getrandom.c b/gl/getrandom.c
+-index e146873..3948d8d 100644
++index 19bb342..0251e0f 100644
+ --- a/gl/getrandom.c
+ +++ b/gl/getrandom.c
+ @@ -19,6 +19,7 @@
+@@ -56,7 +59,7 @@ index e146873..3948d8d 100644
+  
+  #include <errno.h>
+ diff --git a/jitter/gnulib-local/getrandom.c b/jitter/gnulib-local/getrandom.c
+-index e146873..3948d8d 100644
++index 19bb342..0251e0f 100644
+ --- a/jitter/gnulib-local/getrandom.c
+ +++ b/jitter/gnulib-local/getrandom.c
+ @@ -19,6 +19,7 @@
+@@ -68,5 +71,5 @@ index e146873..3948d8d 100644
+  
+  #include <errno.h>
+ -- 
+-2.31.1
++2.45.2
+ 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
