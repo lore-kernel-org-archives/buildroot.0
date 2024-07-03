@@ -4,96 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCC7FC30653
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 13:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7225AC2BD09
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 13:53:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 550A84032A;
-	Wed,  3 Jul 2024 13:47:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14518414BF;
+	Wed,  3 Jul 2024 13:53:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FyY26rFk-Deu; Wed,  3 Jul 2024 13:47:09 +0000 (UTC)
+ id JzlQAGZrp-9W; Wed,  3 Jul 2024 13:53:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC4DC4038C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 891FE410C3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC4DC4038C;
-	Wed,  3 Jul 2024 13:47:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 891FE410C3;
+	Wed,  3 Jul 2024 13:53:54 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 07B171BF302
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 13:47:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D4FE31BF302
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 13:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7ADF84630
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 13:47:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BFC8080C85
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 13:53:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N7UCaV4OT-57 for <buildroot@lists.busybox.net>;
- Wed,  3 Jul 2024 13:47:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 830948461E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 830948461E
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 830948461E
- for <buildroot@buildroot.org>; Wed,  3 Jul 2024 13:47:05 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-36742cc9c12so3544828f8f.2
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 06:47:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720014423; x=1720619223;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=q49USiBM7RPisK4wSVZYCs4ynYEaTtzkCC2ztS6t/ZQ=;
- b=gx4e5Silf0Zs9g+/Vvx66ESEoUCeqFiJB/18Z5VuNvf+DrzbrLnR7wMlUTK12aF/hS
- bwaRyKOeXYfTn2npFjCGWdf7E97pQ5jyFzP8QH+fj7lwOMAWygnwF4wB+/BUfI1/cvEg
- 4sD43Z/eJoyOXkoAaOOThf4x3o9O+LdHTWgPKccl8UNlqowa9lpJQx9kRZILNEs9Roza
- Pkh388wfBC1JDIy5S8D1YuvaQfNxgSNQRNb+HQnRc2wcbTcQpibQXBpjdjRh0C8uMnlb
- jRN0zOVt/5NTm+ICz8SFxRgv+tlsOXRoyBfAnrOfMWWwMcD1Okiuq/PhAmpNm9AcJ1vt
- QNzA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVMZUwDuk8zT+ewEbZSaCq5Mih9GvmXkQ6HyMzcn81iVViNiUatY2N8yrsA4/g69s9q6k+9R2zhr2v5/rDWm7G8p92GQCkcZA==
-X-Gm-Message-State: AOJu0YyF8flVxZo9NOgCGcpE6nBq3iaKAMvPE1+CISypWds/e9LwRYjN
- frTcVvl7uUCRNSje4izCeksq1VOrnG6wfTv417Tkyu0xeRLy5Np5m2amTRQriNJMSMVsrx16GZk
- 7
-X-Google-Smtp-Source: AGHT+IF/NoZRBaYuR8mLY2KGJv5QSU2dbZpBHxc8Ih0TVBnsUqLq5qW+bAD32Fwqm28gOG2GWGwN2Q==
-X-Received: by 2002:a05:6000:4d1:b0:362:3cb8:cba with SMTP id
- ffacd0b85a97d-367757300demr7012558f8f.67.1720014423559; 
- Wed, 03 Jul 2024 06:47:03 -0700 (PDT)
-Received: from [10.5.0.35]
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3675a0d8ed0sm15997352f8f.28.2024.07.03.06.47.03
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 03 Jul 2024 06:47:03 -0700 (PDT)
-Message-ID: <84e7e0b1-ce45-4bc0-8505-16115d12f6c5@smile.fr>
-Date: Wed, 3 Jul 2024 15:47:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-References: <20240703102503.2693749-1-dario.binacchi@amarulasolutions.com>
-Content-Language: fr
-In-Reply-To: <20240703102503.2693749-1-dario.binacchi@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1720014423; x=1720619223; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=q49USiBM7RPisK4wSVZYCs4ynYEaTtzkCC2ztS6t/ZQ=;
- b=AtC1uDQY4P9gFXD5DCyWuibE98GEF7P2CX86f1oSjh01bpJlUA6aITOUeNfIB0jSxm
- 5ApCwtayjlUUz2zikH19E5CJl2S8H1u6jzKpNnd1SesgHijg51q3fwoQ9z0XUSjQYDJ2
- ePvVDgYGsfMeHl407r0hpy0bWz7qC7cH1ewLY=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=AtC1uDQY
-Subject: Re: [Buildroot] [PATCH 1/1] package/lxc: update the patches to be
+ id NBnS8_MWemNr for <buildroot@lists.busybox.net>;
+ Wed,  3 Jul 2024 13:53:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A086A80C21
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A086A80C21
+ for <buildroot@buildroot.org>; Wed,  3 Jul 2024 13:53:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8996483BD3; Wed,  3 Jul 2024 13:53:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 3 Jul 2024 15:48:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0ca30887794c0e9d333df7bcbb162f926bce3ca0
+X-Git-Newrev: 3b3cb4e5a71aac0e1133a0f2d51984671ee958ae
+X-Patchwork-Hint: ignore
+Message-Id: <20240703135352.8996483BD3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/leveldb: update the patches to be
  applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -108,125 +60,173 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Cc: linux-amarula@amarulasolutions.com,
- =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jezz@sysmic.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRGFyaW8sCgpMZSAwMy8wNy8yMDI0IMOgIDEyOjI1LCBEYXJpbyBCaW5hY2NoaSBhIMOp
-Y3JpdMKgOgo+IENvbW1pdCA4Zjg4YTY0NGVkN2Q2ICgic3VwcG9ydC9zY3JpcHRzL2FwcGx5LXBh
-dGNoZXMuc2g6IHNldCB0aGUgbWF4aW11bQo+IGZ1enogZmFjdG9yIHRvIDAiKSByZWR1Y2VkIHRo
-ZSBmdXp6IGZhY3Rvci4KPiAKPiBEdWUgdG8gdGhpcyBjaGFuZ2UsIGx4YyBmYWlscyB0byBidWls
-ZCB3aXRoIG91dHB1dDoKPiAKPiAgICAgQXBwbHlpbmcgMDAwMS1zcmMtbHhjLXN5c2NhbGxfbnVt
-YmVycy5oLWRyb3AtZGVmaW5lLTEucGF0Y2ggdXNpbmcgcGF0Y2g6Cj4gICAgIHBhdGNoaW5nIGZp
-bGUgc3JjL2x4Yy9zeXNjYWxsX251bWJlcnMuaAo+ICAgICBIdW5rICMxIEZBSUxFRCBhdCA1My4K
-PiAgICAgSHVuayAjMiBGQUlMRUQgYXQgOTIuCj4gICAgIEh1bmsgIzMgRkFJTEVEIGF0IDEyOS4K
-PiAgICAgSHVuayAjNCBGQUlMRUQgYXQgMTY2Lgo+ICAgICBIdW5rICM1IEZBSUxFRCBhdCAyMDMu
-Cj4gICAgIEh1bmsgIzYgRkFJTEVEIGF0IDI3Mi4KPiAgICAgSHVuayAjNyBGQUlMRUQgYXQgMzA5
-Lgo+ICAgICBIdW5rICM4IEZBSUxFRCBhdCAzNDYuCj4gICAgIEh1bmsgIzkgRkFJTEVEIGF0IDM4
-My4KPiAgICAgSHVuayAjMTAgRkFJTEVEIGF0IDQ0MC4KPiAgICAgSHVuayAjMTEgRkFJTEVEIGF0
-IDQ3Ny4KPiAgICAgSHVuayAjMTIgRkFJTEVEIGF0IDUxOC4KPiAgICAgSHVuayAjMTMgRkFJTEVE
-IGF0IDc1OS4KPiAgICAgMTMgb3V0IG9mIDEzIGh1bmtzIEZBSUxFRCAtLSBzYXZpbmcgcmVqZWN0
-cyB0byBmaWxlIHNyYy9seGMvc3lzY2FsbF9udW1iZXJzLmgucmVqCj4gCj4gVGhpcyBjb21taXQg
-cmVmcmVzaGVzIHRoZSBwYWNrYWdlIHBhdGNoIG9uIHRoZSBjdXJyZW50IHBhY2thZ2UgdmVyc2lv
-bi4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1h
-cnVsYXNvbHV0aW9ucy5jb20+Cj4gLS0tCj4gIC4uLi1seGMtc3lzY2FsbF9udW1iZXJzLmgtZHJv
-cC1kZWZpbmUtMS5wYXRjaCB8IDg3ICsrKysrKysrKystLS0tLS0tLS0KPiAgMSBmaWxlIGNoYW5n
-ZWQsIDQ2IGluc2VydGlvbnMoKyksIDQxIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9w
-YWNrYWdlL2x4Yy8wMDAxLXNyYy1seGMtc3lzY2FsbF9udW1iZXJzLmgtZHJvcC1kZWZpbmUtMS5w
-YXRjaCBiL3BhY2thZ2UvbHhjLzAwMDEtc3JjLWx4Yy1zeXNjYWxsX251bWJlcnMuaC1kcm9wLWRl
-ZmluZS0xLnBhdGNoCj4gaW5kZXggNGE5NDRlMzViMTJhLi5kNmViNzQ3NmRjNzIgMTAwNjQ0Cj4g
-LS0tIGEvcGFja2FnZS9seGMvMDAwMS1zcmMtbHhjLXN5c2NhbGxfbnVtYmVycy5oLWRyb3AtZGVm
-aW5lLTEucGF0Y2gKPiArKysgYi9wYWNrYWdlL2x4Yy8wMDAxLXNyYy1seGMtc3lzY2FsbF9udW1i
-ZXJzLmgtZHJvcC1kZWZpbmUtMS5wYXRjaAo+IEBAIC0xLDQgKzEsNCBAQAo+IC1Gcm9tIDgyZmUw
-MTgyMWNkNWNiODU0ODU5OGQ3ZDkzYjA3ZDZlZjNmNmI2MDQgTW9uIFNlcCAxNyAwMDowMDowMCAy
-MDAxCj4gK0Zyb20gOTY0NzQwZDI4YzlhMGRhNTJhNzVkNTc5ZDdmZGZhNTNkZjY3ZTkyNSBNb24g
-U2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAgRnJvbTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUu
-ZmFicmljZUBnbWFpbC5jb20+Cj4gIERhdGU6IFNhdCwgMzAgTWFyIDIwMjQgMTY6NTA6NDYgKzAx
-MDAKPiAgU3ViamVjdDogW1BBVENIXSBzcmMvbHhjL3N5c2NhbGxfbnVtYmVycy5oOiBkcm9wIGRl
-ZmluZSAtMQo+IEBAIC0xOSwxMTUgKzE5LDEyMCBAQCBGaXhlczoKPiAgCj4gIFNpZ25lZC1vZmYt
-Ynk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+ICBVcHN0
-cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2x4Yy9seGMvY29tbWl0LzgyZmUwMTgyMWNkNWNiODU0
-ODU5OGQ3ZDkzYjA3ZDZlZjNmNmI2MDQKPiArW0RhcmlvOiBtYWtlIHRoZSBwYXRjaCB0byBiZSBh
-cHBsaWVkIHdpdGggZnV6eiBmYWN0b3IgMF0KPiArU2lnbmVkLW9mZi1ieTogRGFyaW8gQmluYWNj
-aGkgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+ICAtLS0KPiAgIHNyYy9s
-eGMvc3lzY2FsbF9udW1iZXJzLmggfCAxMyAtLS0tLS0tLS0tLS0tCj4gICAxIGZpbGUgY2hhbmdl
-ZCwgMTMgZGVsZXRpb25zKC0pCj4gIAo+ICBkaWZmIC0tZ2l0IGEvc3JjL2x4Yy9zeXNjYWxsX251
-bWJlcnMuaCBiL3NyYy9seGMvc3lzY2FsbF9udW1iZXJzLmgKPiAtaW5kZXggNTg4NDBhNTk4MS4u
-NWU2NTlkMWI4MSAxMDA2NDQKPiAraW5kZXggYWU1ZmRkMDY0MWM2Li41ZGMxMjU5ZmVmMWMgMTAw
-NjQ0Cj4gIC0tLSBhL3NyYy9seGMvc3lzY2FsbF9udW1iZXJzLmgKPiAgKysrIGIvc3JjL2x4Yy9z
-eXNjYWxsX251bWJlcnMuaAo+IC1AQCAtNTMsNyArNTMsNiBAQAo+IC0gCSNlbGlmIGRlZmluZWQg
-X19sb29uZ2FyY2g2NAo+IC0gCQkjZGVmaW5lIF9fTlJfa2V5Y3RsIDIxOQo+ICtAQCAtNTEsNyAr
-NTEsNiBAQAo+ICsgCQkJI2RlZmluZSBfX05SX2tleWN0bCA1MjQxCj4gKyAJCSNlbmRpZgoKVGhp
-cyBodW5rIHVwZGF0ZSBsb29rcyBzdHJhbmdlIGR1ZSB0byBfX05SX2tleWN0bCB2YWx1ZSBjaGFu
-Z2VzLgpJdCBzZWVtcyB0aGUgcGF0Y2ggaGFzIGJlZW4gYmFja3BvcnRlZCBkaXJlY3RseSBmcm9t
-IGx4YyB2Ni4wLjAgd2l0aG91dCBiZWluZwpyZWJhc2VkIG9uIGx4YyB2NS4wLjAgd2hlcmUgbG9v
-bmdhcmNoNjQgc3VwcG9ydCB3YXMgbm90IHlldCBtZXJnZWQuCgpJIGd1ZXNzLCBpdCdzIHRoZSBt
-YWluIHJlYXNvbiBvZiBwYXRjaCBpc3N1ZS4KCkNhbiB5b3UgZXhwbGFpbiB0aGlzIGluIHRoZSBj
-b21taXQgbG9nPwoKVGhhbmtzIGZvciBhbGwgdGhlIHdvcmsgYXJvdW5kIGZ1enotMCBjaGFuZ2Vz
-IQoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+ICAgCSNlbHNlCj4gIC0JCSNkZWZpbmUgLTEKPiAg
-IAkJI3dhcm5pbmcgIl9fTlJfa2V5Y3RsIG5vdCBkZWZpbmVkIGZvciB5b3VyIGFyY2hpdGVjdHVy
-ZSIKPiAgIAkjZW5kaWYKPiAgICNlbmRpZgo+IC1AQCAtOTIsNyArOTEsNiBAQAo+IC0gCSNlbGlm
-IGRlZmluZWQgX19sb29uZ2FyY2g2NAo+IC0gCQkjZGVmaW5lIF9fTlJfbWVtZmRfY3JlYXRlIDI3
-OQo+ICtAQCAtODgsNyArODcsNiBAQAo+ICsgCQkJI2RlZmluZSBfX05SX21lbWZkX2NyZWF0ZSA1
-MzE0Cj4gKyAJCSNlbmRpZgo+ICAgCSNlbHNlCj4gIC0JCSNkZWZpbmUgLTEKPiAgIAkJI3dhcm5p
-bmcgIl9fTlJfbWVtZmRfY3JlYXRlIG5vdCBkZWZpbmVkIGZvciB5b3VyIGFyY2hpdGVjdHVyZSIK
-PiAgIAkjZW5kaWYKPiAgICNlbmRpZgo+IC1AQCAtMTI5LDcgKzEyNyw2IEBACj4gLSAJI2VsaWYg
-ZGVmaW5lZCBfX2xvb25nYXJjaDY0Cj4gLSAJCSNkZWZpbmUgX19OUl9waXZvdF9yb290IDQxCj4g
-K0BAIC0xMjMsNyArMTIxLDYgQEAKPiArIAkJCSNkZWZpbmUgX19OUl9waXZvdF9yb290IDUxNTEK
-PiArIAkJI2VuZGlmCj4gICAJI2Vsc2UKPiAgLQkJI2RlZmluZSAtMQo+ICAgCQkjd2FybmluZyAi
-X19OUl9waXZvdF9yb290IG5vdCBkZWZpbmVkIGZvciB5b3VyIGFyY2hpdGVjdHVyZSIKPiAgIAkj
-ZW5kaWYKPiAgICNlbmRpZgo+IC1AQCAtMTY2LDcgKzE2Myw2IEBACj4gLSAJI2VsaWYgZGVmaW5l
-ZCBfX2xvb25nYXJjaDY0Cj4gLSAJCSNkZWZpbmUgX19OUl9zZXRucyAyNjgKPiArQEAgLTE1OCw3
-ICsxNTUsNiBAQAo+ICsgCQkJI2RlZmluZSBfX05SX3NldG5zIDUzMDMKPiArIAkJI2VuZGlmCj4g
-ICAJI2Vsc2UKPiAgLQkJI2RlZmluZSAtMQo+ICAgCQkjd2FybmluZyAiX19OUl9zZXRucyBub3Qg
-ZGVmaW5lZCBmb3IgeW91ciBhcmNoaXRlY3R1cmUiCj4gICAJI2VuZGlmCj4gICAjZW5kaWYKPiAt
-QEAgLTIwMyw3ICsxOTksNiBAQAo+IC0gCSNlbGlmIGRlZmluZWQgX19sb29uZ2FyY2g2NAo+IC0g
-CQkjZGVmaW5lIF9fTlJfc2V0aG9zdG5hbWUgMTYxCj4gK0BAIC0xOTMsNyArMTg5LDYgQEAKPiAr
-IAkJCSNkZWZpbmUgX19OUl9zZXRob3N0bmFtZSA1MTY1Cj4gKyAJCSNlbmRpZgo+ICAgCSNlbHNl
-Cj4gIC0JCSNkZWZpbmUgLTEKPiAgIAkJI3dhcm5pbmcgIl9fTlJfc2V0aG9zdG5hbWUgbm90IGRl
-ZmluZWQgZm9yIHlvdXIgYXJjaGl0ZWN0dXJlIgo+ICAgCSNlbmRpZgo+ICAgI2VuZGlmCj4gLUBA
-IC0yNzIsNyArMjY3LDYgQEAKPiAtIAkjZWxpZiBkZWZpbmVkIF9fbG9vbmdhcmNoNjQKPiAtIAkJ
-I2RlZmluZSBfX05SX3NpZ25hbGZkNCA3NAo+ICtAQCAtMjYwLDcgKzI1NSw2IEBACj4gKyAJCQkj
-ZGVmaW5lIF9fTlJfc2lnbmFsZmQ0IDUyODMKPiArIAkJI2VuZGlmCj4gICAJI2Vsc2UKPiAgLQkJ
-I2RlZmluZSAtMQo+ICAgCQkjd2FybmluZyAiX19OUl9zaWduYWxmZDQgbm90IGRlZmluZWQgZm9y
-IHlvdXIgYXJjaGl0ZWN0dXJlIgo+ICAgCSNlbmRpZgo+ICAgI2VuZGlmCj4gLUBAIC0zMDksNyAr
-MzAzLDYgQEAKPiAtIAkjZWxpZiBkZWZpbmVkIF9fbG9vbmdhcmNoNjQKPiAtIAkJI2RlZmluZSBf
-X05SX3Vuc2hhcmUgOTcKPiArQEAgLTI5NSw3ICsyODksNiBAQAo+ICsgCQkJI2RlZmluZSBfX05S
-X3Vuc2hhcmUgNTI2Mgo+ICsgCQkjZW5kaWYKPiAgIAkjZWxzZQo+ICAtCQkjZGVmaW5lIC0xCj4g
-ICAJCSN3YXJuaW5nICJfX05SX3Vuc2hhcmUgbm90IGRlZmluZWQgZm9yIHlvdXIgYXJjaGl0ZWN0
-dXJlIgo+ICAgCSNlbmRpZgo+ICAgI2VuZGlmCj4gLUBAIC0zNDYsNyArMzM5LDYgQEAKPiAtIAkj
-ZWxpZiBkZWZpbmVkIF9fbG9vbmdhcmNoNjQKPiAtIAkJI2RlZmluZSBfX05SX2JwZiAyODAKPiAr
-QEAgLTMzMCw3ICszMjMsNiBAQAo+ICsgCQkJI2RlZmluZSBfX05SX2JwZiA1MzE1Cj4gKyAJCSNl
-bmRpZgo+ICAgCSNlbHNlCj4gIC0JCSNkZWZpbmUgLTEKPiAgIAkJI3dhcm5pbmcgIl9fTlJfYnBm
-IG5vdCBkZWZpbmVkIGZvciB5b3VyIGFyY2hpdGVjdHVyZSIKPiAgIAkjZW5kaWYKPiAgICNlbmRp
-Zgo+IC1AQCAtMzgzLDcgKzM3NSw2IEBACj4gLSAJI2VsaWYgZGVmaW5lZCBfX2xvb25nYXJjaDY0
-Cj4gLSAJCSNkZWZpbmUgX19OUl9mYWNjZXNzYXQgNDgKPiArQEAgLTM2NSw3ICszNTcsNiBAQAo+
-ICsgCQkJI2RlZmluZSBfX05SX2ZhY2Nlc3NhdCA1MjU5Cj4gKyAJCSNlbmRpZgo+ICAgCSNlbHNl
-Cj4gIC0JCSNkZWZpbmUgLTEKPiAgIAkJI3dhcm5pbmcgIl9fTlJfZmFjY2Vzc2F0IG5vdCBkZWZp
-bmVkIGZvciB5b3VyIGFyY2hpdGVjdHVyZSIKPiAgIAkjZW5kaWYKPiAgICNlbmRpZgo+IC1AQCAt
-NDQwLDcgKzQzMSw2IEBACj4gLSAJI2VsaWYgZGVmaW5lZCBfX2xvb25nYXJjaDY0Cj4gLSAJCSNk
-ZWZpbmUgX19OUl9zZWNjb21wIDI3Nwo+ICtAQCAtNDIwLDcgKzQxMSw2IEBACj4gKyAJCQkjZGVm
-aW5lIF9fTlJfc2VjY29tcCA1MzEyCj4gKyAJCSNlbmRpZgo+ICAgCSNlbHNlCj4gIC0JCSNkZWZp
-bmUgLTEKPiAgIAkJI3dhcm5pbmcgIl9fTlJfc2VjY29tcCBub3QgZGVmaW5lZCBmb3IgeW91ciBh
-cmNoaXRlY3R1cmUiCj4gICAJI2VuZGlmCj4gICAjZW5kaWYKPiAtQEAgLTQ3Nyw3ICs0NjcsNiBA
-QAo+IC0gCSNlbGlmIGRlZmluZWQgX19sb29uZ2FyY2g2NAo+IC0gCQkjZGVmaW5lIF9fTlJfZ2V0
-dGlkIDE3OAo+ICtAQCAtNDU1LDcgKzQ0NSw2IEBACj4gKyAJCQkjZGVmaW5lIF9fTlJfZ2V0dGlk
-IDUxNzgKPiArIAkJI2VuZGlmCj4gICAJI2Vsc2UKPiAgLQkJI2RlZmluZSAtMQo+ICAgCQkjd2Fy
-bmluZyAiX19OUl9nZXR0aWQgbm90IGRlZmluZWQgZm9yIHlvdXIgYXJjaGl0ZWN0dXJlIgo+ICAg
-CSNlbmRpZgo+ICAgI2VuZGlmCj4gLUBAIC01MTgsNyArNTA3LDYgQEAKPiAtIAkjZWxpZiBkZWZp
-bmVkIF9fbG9vbmdhcmNoNjQKPiAtIAkJI2RlZmluZSBfX05SX2V4ZWN2ZWF0IDI4MQo+ICtAQCAt
-NDk0LDcgKzQ4Myw2IEBACj4gKyAJCQkjZGVmaW5lIF9fTlJfZXhlY3ZlYXQgNTMxNgo+ICsgCQkj
-ZW5kaWYKPiAgIAkjZWxzZQo+ICAtCQkjZGVmaW5lIC0xCj4gICAJCSN3YXJuaW5nICJfX05SX2V4
-ZWN2ZWF0IG5vdCBkZWZpbmVkIGZvciB5b3VyIGFyY2hpdGVjdHVyZSIKPiAgIAkjZW5kaWYKPiAg
-ICNlbmRpZgo+IC1AQCAtNzU5LDcgKzc0Nyw2IEBACj4gLSAJI2VsaWYgZGVmaW5lZCBfX2xvb25n
-YXJjaDY0Cj4gLSAJCSNkZWZpbmUgX19OUl9wZXJzb25hbGl0eSA5Mgo+ICtAQCAtNzMzLDcgKzcy
-MSw2IEBACj4gKyAJCQkjZGVmaW5lIF9fTlJfcGVyc29uYWxpdHkgKDEzMiArIDUwMDApCj4gKyAJ
-CSNlbmRpZgo+ICAgCSNlbHNlCj4gIC0JCSNkZWZpbmUgLTEKPiAgIAkJI3dhcm5pbmcgIl9fTlJf
-cGVyc29uYWxpdHkgbm90IGRlZmluZWQgZm9yIHlvdXIgYXJjaGl0ZWN0dXJlIgo+ICAgCSNlbmRp
-Zgo+ICAgI2VuZGlmCj4gKy0tIAo+ICsyLjQzLjAKPiArCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=3b3cb4e5a71aac0e1133a0f2d51984671ee958ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0") reduced the fuzz factor.
+
+Due to this change, leveldb fails to build with output:
+
+    Applying 0002-CMake-install-libmemenv.a.patch using patch:
+    patching file CMakeLists.txt
+    Hunk #1 succeeded at 209 (offset 22 lines).
+    Hunk #2 succeeded at 469 (offset 27 lines).
+    Hunk #3 FAILED at 495.
+    1 out of 3 hunks FAILED -- saving rejects to file CMakeLists.txt.rej
+
+    Applying 0004-cmake-Use-find_package-to-find-Snappy.patch using patch:
+    patching file CMakeLists.txt
+    Hunk #2 FAILED at 34.
+    Hunk #3 succeeded at 301 (offset 22 lines).
+    1 out of 3 hunks FAILED -- saving rejects to file CMakeLists.txt.rej
+
+This commit refreshes the package patches on the current package version.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ .../leveldb/0002-CMake-install-libmemenv.a.patch   | 24 ++++++++++++----------
+ ...004-cmake-Use-find_package-to-find-Snappy.patch | 18 ++++++++--------
+ 2 files changed, 23 insertions(+), 19 deletions(-)
+
+diff --git a/package/leveldb/0002-CMake-install-libmemenv.a.patch b/package/leveldb/0002-CMake-install-libmemenv.a.patch
+index ea742b0c49..25e050eaff 100644
+--- a/package/leveldb/0002-CMake-install-libmemenv.a.patch
++++ b/package/leveldb/0002-CMake-install-libmemenv.a.patch
+@@ -1,4 +1,4 @@
+-From 2fa960098e5b6f9daa9f7d6cab27188566859be8 Mon Sep 17 00:00:00 2001
++From ef03beb64f5e8028f6b5d65f75ee60e8b2eec594 Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Sat, 12 Oct 2019 14:43:46 +0200
+ Subject: [PATCH] CMake: install libmemenv.a
+@@ -10,15 +10,17 @@ https://git.busybox.net/buildroot/commit/?id=16f847340d07dce620e4c3fc0a099aa7989
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ [Fabrice : updated for 1.23]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Dario: make the patch to be applied with fuzz factor 0]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+- CMakeLists.txt | 26 +++++++++++++++++++++++++-
+- 1 file changed, 25 insertions(+), 1 deletion(-)
++ CMakeLists.txt | 32 +++++++++++++++++++++++++++++++-
++ 1 file changed, 31 insertions(+), 1 deletion(-)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index a65afbf..83b2425 100644
++index f8285b82c6a4..ffce93b01ed6 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -187,6 +187,30 @@ target_sources(leveldb
++@@ -209,6 +209,30 @@ target_sources(leveldb
+      "${LEVELDB_PUBLIC_INCLUDE_DIR}/write_batch.h"
+  )
+  
+@@ -49,7 +51,7 @@ index a65afbf..83b2425 100644
+  if (WIN32)
+    target_sources(leveldb
+      PRIVATE
+-@@ -418,7 +436,7 @@ endif(LEVELDB_BUILD_BENCHMARKS)
++@@ -445,7 +469,7 @@ int main() {
+  endif(LEVELDB_BUILD_BENCHMARKS)
+  
+  if(LEVELDB_INSTALL)
+@@ -58,8 +60,8 @@ index a65afbf..83b2425 100644
+      EXPORT leveldbTargets
+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-@@ -444,6 +462,12 @@ if(LEVELDB_INSTALL)
+-     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/leveldb
++@@ -471,6 +495,12 @@ if(LEVELDB_INSTALL)
++     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/leveldb"
+    )
+  
+ +  install(
+@@ -69,8 +71,8 @@ index a65afbf..83b2425 100644
+ +  )
+ +
+    include(CMakePackageConfigHelpers)
+-   write_basic_package_version_file(
+-       "${PROJECT_BINARY_DIR}/leveldbConfigVersion.cmake"
++   configure_package_config_file(
++     "cmake/${PROJECT_NAME}Config.cmake.in"
+ -- 
+-2.20.1
++2.43.0
+ 
+diff --git a/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
+index 714e1b0827..e254a26b9a 100644
+--- a/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
++++ b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
+@@ -1,4 +1,4 @@
+-From 450c1d88b3e1af34614294830b4dc0612d198d26 Mon Sep 17 00:00:00 2001
++From aa658d96f59d0e29f0d9208b8fbb3cce42e57edc Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?Pawe=C5=82=20Bylica?= <chfast@gmail.com>
+ Date: Wed, 8 May 2019 10:42:03 +0200
+ Subject: [PATCH] cmake: Use find_package() to find Snappy
+@@ -9,6 +9,8 @@ in static link configurations]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ [Fabrice : updated for 1.23]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Dario: make the patch to be applied with fuzz factor 0]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  CMakeLists.txt         | 12 ++++++++----
+  cmake/FindSnappy.cmake | 31 +++++++++++++++++++++++++++++++
+@@ -16,7 +18,7 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  create mode 100644 cmake/FindSnappy.cmake
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 78fead6..2efccda 100644
++index 436a9fe5513f..bbd179d3be59 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+ @@ -6,6 +6,9 @@ cmake_minimum_required(VERSION 3.9)
+@@ -29,9 +31,9 @@ index 78fead6..2efccda 100644
+  # C standard can be overridden when this is used as a sub-project.
+  if(NOT CMAKE_C_STANDARD)
+    # This project can use C11, but will gracefully decay down to C89.
+-@@ -31,13 +34,14 @@ option(LEVELDB_INSTALL "Install LevelDB's header and library" ON)
+- include(TestBigEndian)
+- test_big_endian(LEVELDB_IS_BIG_ENDIAN)
++@@ -34,13 +37,14 @@ option(LEVELDB_BUILD_TESTS "Build LevelDB's unit tests" ON)
++ option(LEVELDB_BUILD_BENCHMARKS "Build LevelDB's benchmarks" ON)
++ option(LEVELDB_INSTALL "Install LevelDB's header and library" ON)
+  
+ +find_package(Snappy)
+ +
+@@ -45,7 +47,7 @@ index 78fead6..2efccda 100644
+  check_library_exists(tcmalloc malloc "" HAVE_TCMALLOC)
+  
+  include(CheckCXXSymbolExists)
+-@@ -276,9 +280,9 @@ endif(HAVE_ATOMIC)
++@@ -298,9 +302,9 @@ endif(HAVE_ATOMIC)
+  if(HAVE_CRC32C)
+    target_link_libraries(leveldb crc32c)
+  endif(HAVE_CRC32C)
+@@ -60,7 +62,7 @@ index 78fead6..2efccda 100644
+  endif(HAVE_TCMALLOC)
+ diff --git a/cmake/FindSnappy.cmake b/cmake/FindSnappy.cmake
+ new file mode 100644
+-index 0000000..88c1de9
++index 000000000000..88c1de98f228
+ --- /dev/null
+ +++ b/cmake/FindSnappy.cmake
+ @@ -0,0 +1,31 @@
+@@ -96,5 +98,5 @@ index 0000000..88c1de9
+ +  )
+ +endif()
+ -- 
+-2.26.2
++2.43.0
+ 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
