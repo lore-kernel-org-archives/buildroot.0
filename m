@@ -1,98 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F23B9C2BD09
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 08:29:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A50B2C2BD09
+	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 08:50:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA25641798;
-	Wed,  3 Jul 2024 08:29:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A20F844A1;
+	Wed,  3 Jul 2024 08:50:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gysXHVfATQIP; Wed,  3 Jul 2024 08:29:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JdDDn4zM9-Zz; Wed,  3 Jul 2024 08:50:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 544BC41793
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50A26844A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 544BC41793;
-	Wed,  3 Jul 2024 08:29:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8CE161BF2EC
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 08:29:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50A26844A5;
+	Wed,  3 Jul 2024 08:50:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C31F61BF2EC
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 08:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A69E60A54
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 08:29:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF9CF41A5F
+ for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 08:50:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DJMj61tYSOub for <buildroot@lists.busybox.net>;
- Wed,  3 Jul 2024 08:29:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
- envelope-from=sairon@sairon.cz; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2A79C607E1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A79C607E1
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2A79C607E1
- for <buildroot@buildroot.org>; Wed,  3 Jul 2024 08:29:22 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-58d24201934so348511a12.0
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 01:29:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1719995360; x=1720600160;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=K2tLX9g82nIuwUMIm/AUnUOCh9ot5EJ0oVz7x0PaBAI=;
- b=lwphAWv0+67EybbqSFeJf/BWEb3fIlPSSOTVJKsdCgUYdRTgIelGjZS7UI4DbaInw4
- tO/uFnlcAq0X+KJ71AgBRlF8ieJZncLx0i4LLrmsc9GxJ7SVzmqQelttjYdREffy5Vk3
- aFyvEYkgkbeEvRt5qRt6Wb8kV7OJwwMHeEhS4hIxOlLO6ivNYXFis1hr285VDfS3OTYt
- U1cJtNvOaL2pmpsmuKk+jtiMIbwKVGii5Cts6ImbnQ0/JZGmjOjr023Zycm0w9kf5O7p
- sFHicBixOrqIJrWxB+QaKYfZSG/rw8DwDWSvyS/K63xXojbQb/OxrepIuWt8MnzZZhR/
- LhIA==
-X-Gm-Message-State: AOJu0YxeirddZH4++Tiiz3+ZPmLZ3yK9l++vnOIg8Aa8ecbHcwttRbfA
- JLwV+y6NNomsPw8gSo//Vu/XFKDZXLsT277QYuCa+brRDsjUKqv6RkTtOPCiqlz+bosmvxh55rz
- g
-X-Google-Smtp-Source: AGHT+IEkOfk4XukmlukF5qjP0mg+2UnAv5k4jqSsrBQ3xo/VTn0xuQptKtBYaMvwr/C/SvrdB62ziw==
-X-Received: by 2002:a05:6402:1603:b0:578:6360:aa11 with SMTP id
- 4fb4d7f45d1cf-58ce4ab0382mr765414a12.5.1719995360307; 
- Wed, 03 Jul 2024 01:29:20 -0700 (PDT)
-Received: from krabice.lan (ip-89-103-66-201.bb.vodafone.cz. [89.103.66.201])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5861324f0a3sm6725115a12.35.2024.07.03.01.29.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Jul 2024 01:29:20 -0700 (PDT)
-From: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iXfifoxYi7iy for <buildroot@lists.busybox.net>;
+ Wed,  3 Jul 2024 08:50:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 13BCB4020B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13BCB4020B
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 13BCB4020B
+ for <buildroot@buildroot.org>; Wed,  3 Jul 2024 08:50:16 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([82.135.81.241]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3lY1-1sPCwH0O2d-00Fhwh for
+ <buildroot@buildroot.org>; Wed, 03 Jul 2024 10:50:14 +0200
+Date: Wed, 3 Jul 2024 10:50:13 +0200
 To: buildroot@buildroot.org
-Date: Wed,  3 Jul 2024 10:28:50 +0200
-Message-Id: <20240703082850.750420-5-sairon@sairon.cz>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240703082850.750420-1-sairon@sairon.cz>
-References: <20240703082850.750420-1-sairon@sairon.cz>
+Message-ID: <20240703105013.1bd207f1@gmx.net>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:t+8WlmNphwJ8aC9FSV7VkC7Mmtoo30mWux1gx7sw019UoWDYN8L
+ Iyetl6fQ1+g74S53RaWDvuHq3JGctwWg6UR+MZwa0Ihtbog6SECDj4p5b/s2zAqGMsyevjY
+ zNeBB/aeQRzHoxWZTYidPO2sgQtWp3y++OIK84LfhN9R7gbYAxFRI8oFrRfaZkA1lGN0a6Z
+ Ky6icBneyEpESuupynSBA==
+UI-OutboundReport: notjunk:1;M01:P0:XbffS4r6PGU=;81e7v046zr5ZwMIE5qrLMp5JfC3
+ xMu9WMvE/CfsGUyooZke8SR/0D8kCNrDG3+RMWCzYgh/lqzwBYapYtn816OT63Vz5KP1DrvUE
+ pHFwzgnJrUdEs3R9o2Q1PkJBe1bVnHQXZv0rsGvNy3hRPGynsrbmuk7OZTOz7Da7tLRHAn7I9
+ 219FN9sLpndwHUIbs5XH5RQCsd1iZau4/T62NZ78bJkYSfZR/Tif89i23d1wm49+8c4MZwKks
+ m9v83UvXU35wMj7Qg8uPTbkGy/6yJnmgEJdF1XPkUD7jGabqVpDp5p/rOkGQvBBW5M+QdUsw8
+ EyU00tIzclnzc5/xlUDqVaxlr6uY1kSN1SNG0bIwsXYhVhX+MDLS5/lXrK1+gSBxSANE2A8x8
+ 15usqVX2GKisH6Y9nskKqdhZtHM0LG+Um96VlByFF1npbOaAEwlEf+rB778QS/zOElNER6DXa
+ Lhj0DA69lZZ2kWyTp+yjWfX491UAUyq2+Z2QbwU87CcwiuMo1C1mmVuXaCqHH0Uj1rSTZyh0L
+ 3KzT9B+y2YvBKTex481gHmwQWR2fh8l30KmsOk49C+0dcBVn/aO0a8f8nXTwODtXMP3GDvJ0D
+ hjsPdaqYjbuFx3OjtNy7yCLaoAfPUdxu+rOzKVCmJ4135CCR2txVsIv53sTQsGZlAMgVe665d
+ 2fMmUoaOCAgD7Dy6/mtfrwafE5EH+ElsIA3E8BHwTgK8Mr8vlHOqa5eJWw1Ogy+URuMYLrVjn
+ 2g3ns7hEq5nS9o05wJpIXv7+5/VQMLwjFa2BMEyDwjSruFirqG5FBqVG0NE3KxmGjOR/gbKeE
+ HR2IR0P2pevQxE3UjO9a+eGhAVXgYE6np8G3ZFM4o0WPE=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sairon.cz; s=google; t=1719995360; x=1720600160; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=K2tLX9g82nIuwUMIm/AUnUOCh9ot5EJ0oVz7x0PaBAI=;
- b=dXO25ISOZKSbR3JRZQEPWYFRbenjndeG/iXE5jjZ8pkdsLxgcaqxwXisAV3ihOhuVQ
- tT0tdC5MWuIKnx6QGzb09HRXscBjClseHOBdB0bzTeFhBnVJaRF+qoHhWQpdCcocAdUj
- cT8rxuYCy36NtMn9dPWGEbj6rLKxLPzd6DCE0xUerPmpI4FjwoDV6rJnP8O/OsNj1xDX
- kLSLE/XqC0QvxluzsphaOCJMuasoc3sDZzawXnoBmMerz5vy5f+1kdyhTCTFBd3nVwVv
- 8KqlpfHP0Y7VKmKf5QJoK5ufng0PY/cCxcbFt+RrGCBcZ8b3VZr4Cp2XhfSmzh9u50JS
- u4Mw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=sairon.cz
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz
- header.a=rsa-sha256 header.s=google header.b=dXO25ISO
-Subject: [Buildroot] [PATCH 4/4] fs/erofs: add config options for dedupe,
- fragments and ztailpacking
+ d=gmx.net; 
+ s=s31663417; t=1719996614; x=1720601414; i=ps.report@gmx.net;
+ bh=KU26ArFP6j82f3vqqIxQdHo4AKg9pueo73XPsfJuyCY=;
+ h=X-UI-Sender-Class:Date:From:To:Subject:Message-ID:MIME-Version:
+ Content-Type:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=iUbuRcfINTxKu/P7EPA5TQcGM36n5iyriQmKSE4Wnyh5+WjaGc2/OTx+jA88xJWh
+ fYkSygP9ppJrGsfgqw9G5HQ7dgS8Fpk3CIQ+pEnHz8rFTWHuaxaI5U0HFArp3j89c
+ 8s8y7aeptYY2ZWdiSYh3F63gMprAq/JdqmFQ7szUJZiWlDxfYOkqgGPjx9HEPWb0b
+ N6+2asoIJHXswWaugOkQmXLZwTsP90XRBJhqvEEPEGAAAJLQpCcacAn/0lr2e0Qo6
+ nyN3NnnasC9Yz5YQYqhMjcXHhn1lGVHAzDPtBPty3I5tBM5nACkGOkJwswybZ0psV
+ WvPGB3Og52WtZGCGBg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.net header.i=ps.report@gmx.net header.a=rsa-sha256
+ header.s=s31663417 header.b=iUbuRcfI
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2024-07-02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,55 +96,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>,
- Gao Xiang <hsiangkao@aol.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Peter Seiderer via buildroot <buildroot@buildroot.org>
+Reply-To: Peter Seiderer <ps.report@gmx.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIEtjb25maWcgdG9nZ2xlcyBmb3IgYSBmZXcgbW9yZSBleHRlbmRlZCBvcHRpb25zIHRoYXQg
-YXJlIHVzZWZ1bCBmb3IKcmVkdWNpbmcgc2l6ZSBhbmQgaW1wcm92aW5nIHBlcmZvcm1hbmNlIG9m
-IEVST0ZTIGltYWdlcy4gRGVzY3JpcHRpb25zIG9mIHRoZQpjb25maWcgb3B0aW9ucyB3ZXJlIHRh
-a2VuIGZyb20gdGhlIGVyb2ZzLXV0aWxzIG1hbnBhZ2UuCgpTaWduZWQtb2ZmLWJ5OiBKYW4gxIxl
-cm3DoWsgPHNhaXJvbkBzYWlyb24uY3o+Ci0tLQogZnMvZXJvZnMvQ29uZmlnLmluIHwgMjggKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKwogZnMvZXJvZnMvZXJvZnMubWsgIHwgMTYgKysrKysr
-KysrKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCA0NCBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0
-IGEvZnMvZXJvZnMvQ29uZmlnLmluIGIvZnMvZXJvZnMvQ29uZmlnLmluCmluZGV4IGQ1OTdkZTA5
-NDAuLjM2MzQxNTBhNTcgMTAwNjQ0Ci0tLSBhL2ZzL2Vyb2ZzL0NvbmZpZy5pbgorKysgYi9mcy9l
-cm9mcy9Db25maWcuaW4KQEAgLTUwLDYgKzUwLDM0IEBAIGNvbmZpZyBCUjJfVEFSR0VUX1JPT1RG
-U19FUk9GU19MWk1BX0xFVkVMCiAKIGVuZGlmICMgQlIyX1RBUkdFVF9ST09URlNfRVJPRlNfTFpN
-QQogCitjb25maWcgQlIyX1RBUkdFVF9ST09URlNfRVJPRlNfREVEVVBFCisJYm9vbCAiZW5hYmxl
-IGRhdGEgZGVkdXBsaWNhdGlvbiIKKwlkZXBlbmRzIG9uICFCUjJfVEFSR0VUX1JPT1RGU19FUk9G
-U19OT05FCisJaGVscAorCSBFbmFibGUgZ2xvYmFsIGNvbXByZXNzZWQgZGF0YSBkZWR1cGxpY2F0
-aW9uIHRvIHJlZHVjZSBGUyBpbWFnZQorCSBzaXplLiBJbnRyb2R1Y2VkIGluIExpbnV4IDYuMS4K
-KworY29uZmlnIEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0ZSQUdNRU5UUworCWJvb2wgImVuYWJs
-ZSBmcmFnbWVudHMgcGFja2luZyIKKwloZWxwCisJICBQYWNrIHRoZSB0YWlsIHBhcnQgKHBjbHVz
-dGVyKSBvZiBjb21wcmVzc2VkIGZpbGVzLCBvciBlbnRpcmUKKwkgIGZpbGVzLCBpbnRvIGEgc3Bl
-Y2lhbCBpbm9kZSBmb3Igc21hbGxlciBpbWFnZSBzaXplLgorCSAgSW50cm9kdWNlZCBpbiBMaW51
-eCA2LjEuCisKK2NvbmZpZyBCUjJfVEFSR0VUX1JPT1RGU19FUk9GU19BTExfRlJBR01FTlRTCisJ
-Ym9vbCAiZW5hYmxlIGZyYWdtZW50cyBwYWNraW5nIgorCWhlbHAKKwkgIEZvcmNlbHkgcmVjb3Jk
-IHRoZSB3aG9sZSBmaWxlcyBpbnRvIGEgc3BlY2lhbCBpbm9kZSBmb3IKKwkgIGJldHRlciBjb21w
-cmVzc2lvbi4gZmlsZXMsIGludG8gYSBzcGVjaWFsIGlub2RlIGZvciBzbWFsbGVyCisJICBpbWFn
-ZSBzaXplLiBJbnRyb2R1Y2VkIGluIExpbnV4IDYuMS4KKworY29uZmlnIEJSMl9UQVJHRVRfUk9P
-VEZTX0VST0ZTX1pUQUlMUEFDS0lORworCWJvb2wgImVuYWJsZSB6dGFpbHBhY2tpbmciCisJaGVs
-cAorCSAgUGFjayB0aGUgdGFpbCBwYXJ0IChwY2x1c3Rlcikgb2YgY29tcHJlc3NlZCBmaWxlcyBp
-bnRvIGl0cworCSAgbWV0YWRhdGEgdG8gc2F2ZSBtb3JlIHNwYWNlIGFuZCB0aGUgdGFpbCBwYXJ0
-IEkvTy4gSW50cm9kdWNlZAorCSAgaW4gTGludXggNS4xNy4KKwogY29uZmlnIEJSMl9UQVJHRVRf
-Uk9PVEZTX0VST0ZTX1BDTFVTVEVSU0laRQogCWludCAicGNsdXN0ZXIgc2l6ZSIKIAlkZWZhdWx0
-IDAKZGlmZiAtLWdpdCBhL2ZzL2Vyb2ZzL2Vyb2ZzLm1rIGIvZnMvZXJvZnMvZXJvZnMubWsKaW5k
-ZXggZjAwZmI3MmM5NS4uZTRlMGRhNDMxZSAxMDA2NDQKLS0tIGEvZnMvZXJvZnMvZXJvZnMubWsK
-KysrIGIvZnMvZXJvZnMvZXJvZnMubWsKQEAgLTI0LDYgKzI0LDIyIEBAIGlmbmVxICgkKEJSMl9U
-QVJHRVRfUk9PVEZTX0VST0ZTX1BDTFVTVEVSU0laRSksMCkKIFJPT1RGU19FUk9GU19BUkdTICs9
-IC1DJChzdHJpcCAkKEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX1BDTFVTVEVSU0laRSkpCiBlbmRp
-ZgogCitpZmVxICgkKEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0RFRFVQRSkseSkKK1JPT1RGU19F
-Uk9GU19BUkdTICs9IC1FZGVkdXBlCitlbmRpZgorCitpZmVxICgkKEJSMl9UQVJHRVRfUk9PVEZT
-X0VST0ZTX0ZSQUdNRU5UUykseSkKK1JPT1RGU19FUk9GU19BUkdTICs9IC1FZnJhZ21lbnRzCitl
-bmRpZgorCitpZmVxICgkKEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0FMTF9GUkFHTUVOVFMpLHkp
-CitST09URlNfRVJPRlNfQVJHUyArPSAtRWFsbC1mcmFnbWVudHMKK2VuZGlmCisKK2lmZXEgKCQo
-QlIyX1RBUkdFVF9ST09URlNfRVJPRlNfWlRBSUxQQUNLSU5HKSx5KQorUk9PVEZTX0VST0ZTX0FS
-R1MgKz0gLUV6dGFpbHBhY2tpbmcKK2VuZGlmCisKIGRlZmluZSBST09URlNfRVJPRlNfQ01ECiAJ
-JChIT1NUX0RJUikvYmluL21rZnMuZXJvZnMgJChST09URlNfRVJPRlNfQVJHUykgJEAgJChUQVJH
-RVRfRElSKQogZW5kZWYKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+
+> Autobuild statistics for 2024-07-02
+> ===================================
+[...]
+>    mipsel    |            xz-5.6.2            | NOK | http://autobuild.buildroot.net/results/7325995c580b83a949017da2fae03808ba8a6362 | ORPH
+
+This one could be fixed by adding 'XZ_AUTORECONF = YES' (or by updating to CMake build)...
+
+Regards,
+Peter
+
+>    mipsel    |            xz-5.6.2            | NOK | http://autobuild.buildroot.net/results/9e09006eb982f5f90fad75f4faf4203541a8a7e7 | ORPH
+>    arceb     |            xz-5.6.2            | NOK | http://autobuild.buildroot.net/results/e9e4bc825cf86b01a2ee8014eae91a2abd953160 | ORPH
+>    sh4eb     |            xz-5.6.2            | NOK | http://autobuild.buildroot.net/results/12ad86f0a5dced0876f2007b50485f0159f9392c | ORPH
+>    arceb     |            xz-5.6.2            | NOK | http://autobuild.buildroot.net/results/6907708ccaed8d806d9b84dd19beed0ec456ba58 | ORPH
+[...]
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
