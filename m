@@ -4,88 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32AB2C30653
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 12:14:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECC44C31D97
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 12:35:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC3A3405CC;
-	Thu,  4 Jul 2024 12:14:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A724F408EF;
+	Thu,  4 Jul 2024 12:35:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lA6Qat91EqQM; Thu,  4 Jul 2024 12:14:27 +0000 (UTC)
+ id W01m5w94Et5d; Thu,  4 Jul 2024 12:35:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0BE2410A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59B45408F3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0BE2410A7;
-	Thu,  4 Jul 2024 12:14:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EFCAA1BF2C5
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 12:14:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59B45408F3;
+	Thu,  4 Jul 2024 12:35:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A6EFC1BF321
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 12:35:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E90B5404CD
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 12:14:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0DE684715
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 12:35:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vcYP52PPcHR4 for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 12:14:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3094C40242
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3094C40242
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3094C40242
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 12:14:19 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.120.251]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1McH5a-1rr7au0RTQ-00c44A; Thu, 04
- Jul 2024 14:14:16 +0200
-To: buildroot@buildroot.org
-Date: Thu,  4 Jul 2024 14:13:52 +0200
-Message-ID: <20240704121352.1915154-5-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240704121352.1915154-1-fiona.klute@gmx.de>
-References: <20240704121352.1915154-1-fiona.klute@gmx.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ehiOrmvQ_OZN for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 12:35:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 69DED84717
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69DED84717
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 69DED84717
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 12:35:15 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-a725282b926so68607166b.0
+ for <buildroot@buildroot.org>; Thu, 04 Jul 2024 05:35:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720096512; x=1720701312;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=DpgECeOZ+uFXPxQSv5RK2hVolZ5cvjbSGL0mTGuKYZU=;
+ b=p43Naf/QWbmUids1+8VsB17/w+KY6cBh8WTiT7xmx2IDklQv0wYDqMxkQpWpPR2xVY
+ IEVUVNNYPhpkksTz3gXG3uhrru0srLHR5gmlNGJgqWD/QgTzJ2gGWt+jtCnMICJb/ftO
+ pLkuXYetKhMi9rWUi42jLd7tB64e5HISk3P/HOgshawzPePjXzYk/R7RSBOOER6BzULz
+ ZzX5A8TbPx4yPTy3rMuXsPg/uPQdjSRl05f1ImhLJbwvqAgL9RoTQgYRbmRgTFHXobok
+ iPVZabdxpugwcv5OjGnmR8nD+lBoMuHLmj4NBfFtLHgsX3LrvlxA5ZVbaA0j0NPAoVQ/
+ zDmw==
+X-Gm-Message-State: AOJu0YyRZWNitSwyXJDCSXsjl9UTDTkcMnCnJh4Rso87wvUM/Udq8WA0
+ AHV59JqUnpLc6RzhwiK+bnTq+I1wzHWkopGKzMyboL3gyR9YmP4dE6+FeA==
+X-Google-Smtp-Source: AGHT+IEXuvYw3CnAEExEsyKW1Q6WntQ1ChIkKvRPTSOOWhAOaJ9XsLszWWhPJzCCoQlL8pRiEVF9uA==
+X-Received: by 2002:a17:906:4089:b0:a72:b2a4:e1fd with SMTP id
+ a640c23a62f3a-a77ba4d0498mr89473366b.45.1720096512033; 
+ Thu, 04 Jul 2024 05:35:12 -0700 (PDT)
+Received: from hthiery.kontron.local
+ ([2a02:810b:5a40:2a43:7200:ad55:a3ad:7bab])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a77bd30d04asm40845366b.143.2024.07.04.05.35.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 04 Jul 2024 05:35:11 -0700 (PDT)
+From: Heiko Thiery <heiko.thiery@gmail.com>
+To: buildroot@buildroot.org, "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Arnout Vandecappelle <arnout@mind.be>, Peter Seiderer <ps.report@gmx.net>,
+ Lance Fredrickson <lancethepants@gmail.com>
+Date: Thu,  4 Jul 2024 14:34:50 +0200
+Message-Id: <20240704123452.3535612-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:ybiq84vkVBWi5QH/j2fikPcmArUAM8qqqDdDfVtf8DwEIXGKNeR
- nNFuX5v2Iq8NUZDrr+qWiDnVKM1HzRnekwlPYJcsJyL8A52g5B94qHi6uhIOrqytwLgEoUs
- mt9XuJr7XgamTaJobqdi8ntgUTeWbpgcNZJ1O/vjmsTtgk/HKWFf+QVRKlkSsLikcO5kWAF
- rh4BeCKoleoTcLQl+6e+w==
-UI-OutboundReport: notjunk:1;M01:P0:BuJIqMXAmPs=;2qEEXnoynTHQdhOgh0RLFuBbZCO
- ajSWYcgdT7TEz2ujlVi/56mL+hJcXcl7SirIlh0oqtC4ILoLi3JOI3ipiO0EkyOLj0szZ/tNc
- 5625zipUuzN/q5dMY0NbAkla58P9HBzzmXoaQu08a3rvgLrhNakqeoJcoDLbw7EymZa3Km4x5
- D0Mm4scsR3/5pPOqg9EMzTLQpX8uY0j29vhNcUiy+ObESNfcmUZxSn//97SXL2ZrMobRxEZXj
- kprjQpNZNNuxqaLqGwAlGA4DFVmIb7LZL+KYbwA6Od061Vc+uDCuuYEBCX2h1F339NzJTFDR9
- BUDOuxC6cRpPpdY4TAVuj5OGE0vlpNMLjrn4rBJvKrOBYNwMC0KKw0BMx+udJeyqSTydw1YuY
- iy7RdMBntszon+DcHdm5oXRRQSxbQW+QpIXm2IYY763G52HyWOs9jKr7FqINJOHK5dAmaVkbx
- 96SPrSwQWpcRn8aFx8y8KXvriezsoA9ckinlJVzVTsDxsF6imyDZQ6J70fIksz/zP2V1fU5uT
- fS7Zp6vDJkqV7AWfVNt+zMFeZngmXOV/bPH1ncCyxDXe7+Q7Rqav73ESSOYEvze6yMOaJ9E50
- H6DUka08eQIpb0Mt5f8Al2SOa+7CaD0YdKNunuc9ytgO0B7gNNXf932Ljh7bvk7O666vJVDHT
- Okkhp/bRWOnx1IoxxAHElr/z9RoknI75AyjcqmjaTNz7iB3BX4fuJ5A36OgAkOTGgk9mjfPsI
- GhyNehafEJsuSboR1sTyB5yOrnVEEYu+BQGbXrNzGWgOA6y1DGYI7bSki5W8HdEq9hIzkFI3C
- tRywWLfTFTW0YQYRKV1MJVkbn+Jyy/0Q0hzdv1DdRKf2A=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1720095256; x=1720700056; i=fiona.klute@gmx.de;
- bh=SW5zk/sKVwtvqiJl40HWOAympo0Yc77suVm3v2VrIjA=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=J23EGdEcLy4BWEiT0UqZOFIJkknbZLAEHt5oWg/swM2YGyR97uZgWa4eesirg27K
- E+RVB87GeBqvGc/dTbbNm6MhVwGu2MFjz97dyio1MkJIKpgZ2C9jYgqe4E/yOwbar
- NBBuih3a5mtjZSTkdnjs+RKVMj86TULzyX9cUkiO6bYDixfVaTAuwjivd0aXR5wwM
- bYEJa2zncZDgGR504KA/jnfYX+G+Q/POdd0IhwrnhMhJtfGEaPOYYGX+iS5QQpDpY
- v5T/O5nIlvy8sEiKIUbLfcM5z3rN6ukB2Z0kyDy9gtDczNOsbYcDYFnyKfB5MurK7
- m6HzisaamwmnZ2e9zQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=J23EGdEc
-Subject: [Buildroot] [PATCH v2 4/4] package/fail2ban: fix sshd filter with
- OpenSSH 9.8
+ d=gmail.com; s=20230601; t=1720096512; x=1720701312; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=DpgECeOZ+uFXPxQSv5RK2hVolZ5cvjbSGL0mTGuKYZU=;
+ b=cltc4oFyGoNsfncXRRU6iePqiqmX7t1CXdw20n1GG2QxRzcphoqcHyEin8zb/EusEi
+ HtxhJr+tc5mbFz/F/rH4jQYZtQpEk4f7uc3svX5+ke4mba4L6tzZ6wu24bJ/75Lhp/SM
+ aG72P9fPSPV9ehhN3qjWfJlfVJ7OQliSzpnx8ZUxyRFbVYBXWyiVAAf4xrgO0ha/3/fj
+ +iS9Js/jGRhgAzqVYeF0Gz0U+qvgpWMRVNBZ9xoSjVWBtZt2/NsLE0p+14GJ4prOv8fO
+ sdQf9dL2xM8jzcifHv1SOS27pgn6dn5yKVFzuNDfq7AA4RMsUWAlUfkRO6jO9cjJB0sy
+ T3DQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=cltc4oFy
+Subject: [Buildroot] [PATCH 0/3] package/ccache: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,95 +102,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+---- 8< ----
+/tmp/ccmQFw5y.s: Assembler messages:
+/tmp/ccmQFw5y.s:89386: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:89400: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:89464: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:89518: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:89525: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:123938: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:123953: Error: unsupported instruction `vmovdqu'
+make[4]: *** [src/third_party/blake3/CMakeFiles/blake3.dir/build.make:160: src/third_party/blake3/CMakeFiles/blake3.dir/blake3_avx512.c.o] Error 1
+make[3]: *** [CMakeFiles/Makefile2:406: src/third_party/blake3/CMakeFiles/blake3.dir/all] Error 2
+---- 8< ----
 
-The filter needs to consider the new sshd-session binary, patches
-already merged upstream.
+To solve the problem above I started bumping the ccache package to
+4.10.1. While doing this I observed the problem that ccache tries to
+download xxhash by its own and fails.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
-Changes v1 -> v2:
-* Add this patch to fix the sshd filter with OpenSSH 9.8
+---- 8< ----
+-- Downloading...
+   dst='/srv/storage/hthiery/buildroot-2/output/build/host-ccache-4.10.1/_deps/xxhash-subbuild/xxhash-populate-prefix/src/v0.8.2.tar.gz'
+   timeout='none'
+   inactivity timeout='none'
+-- Using src='https://github.com/Cyan4973/xxhash/archive/refs/tags/v0.8.2.tar.gz'
+CMake Error at xxhash-subbuild/xxhash-populate-prefix/src/xxhash-populate-stamp/download-xxhash-populate.cmake:170 (message):
+  Each download failed!
 
- ...lter-for-openssh-9.8-new-daemon-name.patch | 24 +++++++++++++++++++
- ...shd.conf-ungroup-unneeded-for-daemon.patch | 24 +++++++++++++++++++
- 2 files changed, 48 insertions(+)
- create mode 100644 package/fail2ban/0002-adjust-sshd-filter-for-openssh-9.8-new-daemon-name.patch
- create mode 100644 package/fail2ban/0003-filter.d-sshd.conf-ungroup-unneeded-for-daemon.patch
+    error: downloading 'https://github.com/Cyan4973/xxhash/archive/refs/tags/v0.8.2.tar.gz' failed
+          status_code: 1
+          status_string: "Unsupported protocol"
+          log:
+          --- LOG BEGIN ---
+          Protocol "https" not supported or disabled in libcurl
+  Closing connection
+          --- LOG END ---
+---- 8< ----
 
-diff --git a/package/fail2ban/0002-adjust-sshd-filter-for-openssh-9.8-new-daemon-name.patch b/package/fail2ban/0002-adjust-sshd-filter-for-openssh-9.8-new-daemon-name.patch
-new file mode 100644
-index 0000000000..026cef9693
---- /dev/null
-+++ b/package/fail2ban/0002-adjust-sshd-filter-for-openssh-9.8-new-daemon-name.patch
-@@ -0,0 +1,24 @@
-+From 2fed408c05ac5206b490368d94599869bd6a056d Mon Sep 17 00:00:00 2001
-+From: Fabian Dellwing <fabian.dellwing@mbconnectline.de>
-+Date: Tue, 2 Jul 2024 07:54:15 +0200
-+Subject: [PATCH] Adjust sshd filter for OpenSSH 9.8 new daemon name
-+
-+Upstream: https://github.com/fail2ban/fail2ban/commit/2fed408c05ac5206b490368d94599869bd6a056d
-+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-+---
-+ config/filter.d/sshd.conf | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/config/filter.d/sshd.conf b/config/filter.d/sshd.conf
-+index 1c8a02deb5..a1fd749aed 100644
-+--- a/config/filter.d/sshd.conf
-++++ b/config/filter.d/sshd.conf
-+@@ -16,7 +16,7 @@ before = common.conf
-+
-+ [DEFAULT]
-+
-+-_daemon = sshd
-++_daemon = (?:sshd(?:-session)?)
-+
-+ # optional prefix (logged from several ssh versions) like "error: ", "error: PAM: " or "fatal: "
-+ __pref = (?:(?:error|fatal): (?:PAM: )?)?
-diff --git a/package/fail2ban/0003-filter.d-sshd.conf-ungroup-unneeded-for-daemon.patch b/package/fail2ban/0003-filter.d-sshd.conf-ungroup-unneeded-for-daemon.patch
-new file mode 100644
-index 0000000000..597df667f0
---- /dev/null
-+++ b/package/fail2ban/0003-filter.d-sshd.conf-ungroup-unneeded-for-daemon.patch
-@@ -0,0 +1,24 @@
-+From 50ff131a0fd8f54fdeb14b48353f842ee8ae8c1a Mon Sep 17 00:00:00 2001
-+From: "Sergey G. Brester" <serg.brester@sebres.de>
-+Date: Wed, 3 Jul 2024 19:35:28 +0200
-+Subject: [PATCH] filter.d/sshd.conf: ungroup (unneeded for _daemon)
-+
-+Upstream: https://github.com/fail2ban/fail2ban/commit/50ff131a0fd8f54fdeb14b48353f842ee8ae8c1a
-+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-+---
-+ config/filter.d/sshd.conf | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/config/filter.d/sshd.conf b/config/filter.d/sshd.conf
-+index a1fd749aed..3a84b1ba52 100644
-+--- a/config/filter.d/sshd.conf
-++++ b/config/filter.d/sshd.conf
-+@@ -16,7 +16,7 @@ before = common.conf
-+
-+ [DEFAULT]
-+
-+-_daemon = (?:sshd(?:-session)?)
-++_daemon = sshd(?:-session)?
-+
-+ # optional prefix (logged from several ssh versions) like "error: ", "error: PAM: " or "fatal: "
-+ __pref = (?:(?:error|fatal): (?:PAM: )?)?
---
-2.45.2
+So I added support for the host package of xxhash and added this to
+the ccache dependencies.
+
+In addition the bundled blake3 version seems not to build correctly on
+all machines. See the first error about 'unsupported instruction'.
+Therefore the new host package for blake3 is introduced.
+
+
+v2:
+    - change subject (fixed naming from ccmake to ccache)
+
+v3:
+    - fix legal-info for ccache and blake3
+
+Heiko Thiery (3):
+  package/blake3: add new host package
+  package/xxhash: add host support
+  package/ccache: bump version to 4.10.1
+
+ package/blake3/blake3.hash |  6 ++++++
+ package/blake3/blake3.mk   | 22 ++++++++++++++++++++++
+ package/ccache/ccache.hash |  2 +-
+ package/ccache/ccache.mk   | 16 ++++++++--------
+ package/pkg-generic.mk     |  2 +-
+ package/xxhash/xxhash.mk   | 18 ++++++++++++++++++
+ 6 files changed, 56 insertions(+), 10 deletions(-)
+ create mode 100644 package/blake3/blake3.hash
+ create mode 100644 package/blake3/blake3.mk
+
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
