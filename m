@@ -4,88 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91AA6C30653
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 10:17:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 310E5C30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 10:18:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 46B0340B91;
-	Thu,  4 Jul 2024 10:17:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D0CF0401FB;
+	Thu,  4 Jul 2024 10:18:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xBWidFqva5mT; Thu,  4 Jul 2024 10:17:16 +0000 (UTC)
+ id hkQD6pLOFgpy; Thu,  4 Jul 2024 10:18:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 191DD40BEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 768F740965
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 191DD40BEA;
-	Thu,  4 Jul 2024 10:17:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4BECB1BF982
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 10:17:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 768F740965;
+	Thu,  4 Jul 2024 10:18:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 50E4C1BF32E
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 10:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37DD68478F
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 10:17:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E3CE6085B
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 10:18:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 10gvz5m4RUDm for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 10:17:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DB87E8478D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB87E8478D
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DB87E8478D
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 10:17:06 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.120.251]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MIwz4-1siV641mR8-00I1Rb; Thu, 04
- Jul 2024 12:17:02 +0200
-To: buildroot@buildroot.org
-Date: Thu,  4 Jul 2024 12:16:29 +0200
-Message-ID: <20240704101631.1860647-2-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240704101631.1860647-1-fiona.klute@gmx.de>
-References: <20240704101631.1860647-1-fiona.klute@gmx.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ARxOU57z9nvh for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 10:18:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::22a; helo=mail-lj1-x22a.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0956F60008
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0956F60008
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com
+ [IPv6:2a00:1450:4864:20::22a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0956F60008
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 10:18:29 +0000 (UTC)
+Received: by mail-lj1-x22a.google.com with SMTP id
+ 38308e7fff4ca-2ee7a1ad286so4782971fa.2
+ for <buildroot@buildroot.org>; Thu, 04 Jul 2024 03:18:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720088308; x=1720693108;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ZWTXTm6JB158D5RmkFTcOIonSBgXuHyzOrp2fmAsS74=;
+ b=O3kx0q3xTTjvDE1pDXuHv01bMcluHHbHoOr/CmAQ9LMf3yYDT3k/tp6Xk6btcN9j6Z
+ 0Y3wiEuksEnV/a6F9clBRdCmA7IngHy9fSFOX+Y5RsErRHHhJNLMf6SwSM4NVfZW2KfJ
+ Qs1xDknFLSS7EHU2oRoK5pmXuWp9Etg0Fe5TaSNsb1p/rJ8p8NbVSSwk6U99QuE3SYOl
+ Iw1FBGb8YMe3lqJDvHLD0xW9OKhIFP25qsWFViLeINbtWaSi99wu4XXQnIFkAV0cE81g
+ SYRtZ6ZH7x/yELDsJhyxdgt5TyNQ0UU4EWc1YalpdfSwS/JdR/Ahi1x6akCNohQQZuWP
+ GVng==
+X-Gm-Message-State: AOJu0YzTc/kL/Vc8LTfpvNjNUai34mz5ubYHYQBjHFYYx2S9kzFj/N16
+ nmfCJjk6xWbyTCbxFSdLPbq9LJFwwOcFhQLbmA/Z5YozBpBoheAIpmRpylsCKMlmuSaD/kEANaB
+ E6X3te55InUrcRz8G4m7iVjPboMA=
+X-Google-Smtp-Source: AGHT+IE6crZJEWcaSVvvPMJiQoRAkwGPUdRL2dogRQtNEz/9zta39iVC1hV8zI6kePGEw5IK11S9opk3nSeBKL7dYm0=
+X-Received: by 2002:a2e:9851:0:b0:2ee:64cf:f8f3 with SMTP id
+ 38308e7fff4ca-2ee8edff039mr8865871fa.33.1720088307451; Thu, 04 Jul 2024
+ 03:18:27 -0700 (PDT)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:F2+N/XLAkxAH433axLA+0KhtRLLfHRh7KGbqWBCE0662pQAqVb1
- LPvMEn+IY9tk1wIvsuZy1K0pSSocqtoeSXT2Qma+LoRp2Q/ERPIgCzU6kyKWCtLLfFYUz0H
- 0gUv50Hym0Bi9R20tOQ3OR9KzdGgkH0BlKM7ETf8uUz1CO3p6u+2v2NIFIulfDe59OEZaHr
- rFK1bDFYEtpV1ZMru/GRQ==
-UI-OutboundReport: notjunk:1;M01:P0:WjxQV1vigJQ=;SRgDozDlo8V/TOHDhDKCKwDL8YU
- K7CdOy7ksx839vSCEUlV6/QfTQ2i4l7w3eY6qd7bTuxTJNP6DHfvRJxMB90tyy2gGnZmnJXhw
- ZkTSwS0m5tkZdKLQQbIG130veW1bgoJak8ZE+kW1KXY/s77tG8vljBruFQZYvm2fvmE2GG2zX
- hFyK1IROF9DK3LG7VfOiSXrNx8hGHMqguq25XNguqbe1W8py2Wv3r7P4Z/cbtO8rtppx1xQWp
- Hgtz7Vh5Voe79OOWJczrS3aZBy4eByRnLrj2euSoixsZqHMGgIknru0jPOzFhnOGqAkW5uFzh
- VZgMEYVMVv49E5zXkefWiLVG/ieIqg8Hd7OjczT2qT83lRNgajKA5uGgt5UnvRVCJbE/CUMI/
- 4pL3IkFmOcpFrRm4E3eRG3oyh+ZEHWYFevOMtDcFCzyrtwgRk3CHUJ+olwK87YUdG8U5mvtQi
- ixI+paZgKU0Pa93l4aDbttS0DnfidqppoNIejK3XlSQjHkteTapShB0n7V5UZijv/2ASMBUT3
- WjbGw1icX3b/Aw//ZYsUsMkYX44tlrX0YOAXcVN1rkPmMKr/acxxnedZmvNqcDT+0E7Ex37yU
- 5ODiWZRmPWqLq8W7OaiQPPoxCAPoaCwHCC4qAHs3SuOJW5VXitqEMGwvVfr3XUDUqwjk3xwfT
- bBDC/TIjvBuagyCrG3VqiySORA6OoMPTHjy0uX2kuY0eKdHtBrvkS7INLHrmwDlSqaoqIdVV6
- II+jj4h0oP0oYBoVkFwnLygOJ+SmQnIVkqu8vHq4Oh6BsVxG+vPmAcoDSpWm2EhRkX/olDCRj
- vSYwPRJmYOg6zakKDjqPODfbzN3mAp7OJ5j2WABSmMj2k=
+References: <20240626145942.3154406-1-fiona.klute@gmx.de>
+In-Reply-To: <20240626145942.3154406-1-fiona.klute@gmx.de>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 4 Jul 2024 12:18:15 +0200
+Message-ID: <CAEyMn7YBjQ7gZu3gA9_mZFE=GK77b7bQMifChoRx_i8sh78uMg@mail.gmail.com>
+To: Fiona Klute <fiona.klute@gmx.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1720088222; x=1720693022; i=fiona.klute@gmx.de;
- bh=FRYhwVtSfUS6uwwhHJlL0Eqc/AXap8jGT3MXaw334Lw=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=qzgdBNToquHOLcu35zi4kMfbVZ2ONY/Fq6pJHvkiUWfku4GxnG8GPIXBdayBZOBy
- HGWqnwLZFf90hA8ClUtGyEb4Dcrt48wCcejavkagjnXGKnPeaY1yCqXLNOtRqmwMT
- u2ILHyT+E4yg2NFjKIHPbHYJuUtW5kaidPynq0o/TfQ8Gnqwwqi86I4w17Forsi5j
- Zqo7hTO64xRJtjjr6VjyXw9+66GW7w7Nau4JEr92uUZSPneBilM7UMRyfoRjpSbB0
- iRaPavykIvX0L0tDp6mjFUOG0Q3XJoFdUTg44quq2wphFVujEqF4Qn5+OGmhQiG7l
- CO59FMk2s3MpM/6bLw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=qzgdBNTo
-Subject: [Buildroot] [PATCH v4 1/3] package/openssh: manage sshd using
- start-stop-daemon
+ d=gmail.com; s=20230601; t=1720088308; x=1720693108; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=ZWTXTm6JB158D5RmkFTcOIonSBgXuHyzOrp2fmAsS74=;
+ b=UcS9wb8eZcIvf82mcz9Z6atsBRjauREimB0Gx/iTmVoT/NdoSj+0kBW6MYDHsFW2fG
+ i8S7Z489IzYcnPBF1KgQQM+rvKfji5sPin4mHmYj1UQyzvBIVYkuLPSqNkEZZr9QySo6
+ cIHfDDtG+VHB5QDALTl/DiuUdKo5E301RpQ3E56MsJ3kM1DNZFYPYHyYSbjDXx6QZ3JZ
+ 1K7VBWVxhWz4I6O/gOczSguP+Q9zHF0BXI9Kd32EblL2cI7WQFHR7dMt3J3sNYDROyTU
+ YTj50qfpPXjuVkVPM9+tuLo5Eo0Cj0SxFaYb/ljIDPeWWZ1Esgdxc0mkYXykWCoYfrLc
+ NXcw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=UcS9wb8e
+Subject: Re: [Buildroot] [PATCH 1/1] package/rauc: select
+ BR2_PACKAGE_LIBOPENSSL_ENGINES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,117 +98,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>
+Cc: Andrey Yurovsky <yurovsky@gmail.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Hi Fona,
 
-The previously used "killall sshd" stopped all instances of sshd. With
-OpenSSH before 9.8 that meant not only the listening server, but also
-instances serving currently open sessions, possibly including the one
-used to send the restart command, preventing it from completing the
-"start" part of "restart" and leaving the system unreachable over SSH.
+Am Mi., 26. Juni 2024 um 16:59 Uhr schrieb Fiona Klute <fiona.klute@gmx.de>:
+>
+> This fixes link time errors, undefined references to various ENGINE_*
+> functions (paths shortened to the output directory):
+>
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: librauc.a.p/src_signature.c.o: in function `get_pkcs11_engine.constprop.0':
+> signature.c:(.text.get_pkcs11_engine.constprop.0+0x14): undefined reference to `ENGINE_load_builtin_engines'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x20): undefined reference to `ENGINE_by_id'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x54): undefined reference to `ENGINE_ctrl_cmd_string'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x60): undefined reference to `ENGINE_init'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0xe0): undefined reference to `ENGINE_ctrl_cmd_string'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x128): undefined reference to `ENGINE_free'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x1a4): undefined reference to `ENGINE_finish'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: librauc.a.p/src_signature.c.o: in function `load_cert':
+> signature.c:(.text.load_cert+0x114): undefined reference to `ENGINE_ctrl_cmd'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: librauc.a.p/src_signature.c.o: in function `load_key':
+> signature.c:(.text.load_key+0x124): undefined reference to `ENGINE_load_private_key'
+>
+> Before linking there were matching implicit declaration warnings
+> during compile.
+>
+> Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
 
-start-stop-daemon uses the PID file to target only the intended
-process, and has built-in capability to check if it is running. This
-ensures any open SSH sessions are unaffected, as well as unrelated
-processes (in case a daemon crashed and the PID got reused).
+Tested-by: Heiko Thiery <heiko.thiery@mail.com>
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
-Changes v3 -> v4:
-* Avoid start-stop-daemon --retry option, the Busybox implementation
-  silently ignores it.
+Fixes: http://autobuild.buildroot.net/results/682a4fb0781591650620acfc59dab3dc507db4f7
 
-Changes v2 -> v3:
-* Manage sshd using start-stop-daemon.
-* Set DAEMON variable, removing a checkpatch warning.
-
-Changes v1 -> v2:
-* Acknowledge changed session binary with OpenSSH 9.8 in commit
-  message (patch 1)
-* Check sshd exit code on service start (patch 4)
-
- .checkpackageignore     |  2 +-
- package/openssh/S50sshd | 27 +++++++++++++++++++++------
- 2 files changed, 22 insertions(+), 7 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1e1fc9018e..2edbae93d8 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1149,7 +1149,7 @@ package/openrc/0003-init.d-agetty-replace-sbin-agetty-by-sbin-getty.patch lib_pa
- package/openrc/0004-init.d-agetty-start-agetty-after-all-sevices.patch lib_patch.Upstream
- package/openrc/0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch lib_patch.Upstream
- package/openrc/0006-Also-create-run-lock-subsys-directory.patch lib_patch.Upstream
--package/openssh/S50sshd lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
-+package/openssh/S50sshd lib_sysv.Indent
- package/openswan/0001-lib-libopenswan-constants.c-workaround-missing-ns_t_.patch lib_patch.Upstream
- package/opentyrian/0001-Move-definitions-that-don-t-need-to-be-exposed-from-opl-h-to-opl-c.patch lib_patch.Upstream
- package/openvmtools/0001-no_cflags_werror.patch lib_patch.Upstream
-diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-index 22da41d1ca..5ad156bf17 100644
---- a/package/openssh/S50sshd
-+++ b/package/openssh/S50sshd
-@@ -3,6 +3,9 @@
- # sshd        Starts sshd.
- #
-
-+DAEMON="sshd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
- # Make sure the ssh-keygen progam exists
- [ -f /usr/bin/ssh-keygen ] || exit 0
-
-@@ -13,16 +16,29 @@ start() {
- 	/usr/bin/ssh-keygen -A
-
- 	printf "Starting sshd: "
--	/usr/sbin/sshd
--	touch /var/lock/sshd
--	echo "OK"
-+	if start-stop-daemon --start -p "$PIDFILE" \
-+			--exec "/usr/sbin/$DAEMON"; then
-+		echo "OK"
-+	else
-+		echo "ERROR"
-+		return 1
-+	fi
- }
-+
- stop() {
- 	printf "Stopping sshd: "
--	killall sshd
--	rm -f /var/lock/sshd
-+	if ! start-stop-daemon --stop -p "$PIDFILE" \
-+			--exec "/usr/sbin/$DAEMON"; then
-+		echo "ERROR"
-+		return 1
-+	fi
-+	# sshd deletes its PID file on exit, wait for it to be gone
-+	while [ -f "$PIDFILE" ]; do
-+		sleep 0.1
-+	done
- 	echo "OK"
- }
-+
- restart() {
- 	stop
- 	start
-@@ -44,4 +60,3 @@ case "$1" in
- esac
-
- exit $?
--
---
-2.45.2
-
+> ---
+> I assume this is a consequence of
+> 623d3bbe43e9193aa8e3395367d01af59071b859, previously RAUC built fine
+> without the option enabled.
+>
+>  package/rauc/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+> index 7451b29a55..69a65d165b 100644
+> --- a/package/rauc/Config.in
+> +++ b/package/rauc/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_RAUC
+>         depends on BR2_USE_WCHAR # glib2
+>         select BR2_PACKAGE_LIBGLIB2
+>         select BR2_PACKAGE_OPENSSL
+> +       select BR2_PACKAGE_LIBOPENSSL_ENGINES
+>         select BR2_PACKAGE_SQUASHFS # run-time dependency
+>         select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # run-time dependency
+>         select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT
+> --
+> 2.45.2
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
