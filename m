@@ -4,95 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B51AC30653
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 19:41:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1B70C30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 19:41:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3BD684725;
-	Thu,  4 Jul 2024 19:40:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 777848483D;
+	Thu,  4 Jul 2024 19:41:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3HJhMxmUHIz7; Thu,  4 Jul 2024 19:40:58 +0000 (UTC)
+ id BKmcFXqrgGb9; Thu,  4 Jul 2024 19:41:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B96E584802
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 555AB84811
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B96E584802;
-	Thu,  4 Jul 2024 19:40:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 996D41BF2C1
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 19:40:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 555AB84811;
+	Thu,  4 Jul 2024 19:41:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F4D01BF2C1
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 19:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8439384725
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 19:40:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A5416086D
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 19:40:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J3JlucWkcQMQ for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 19:40:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kX-3VdOhb5GI for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 19:40:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2703A8471B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2703A8471B
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2703A8471B
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 19:40:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B7A4060742
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7A4060742
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B7A4060742
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 19:40:42 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from probook ([89.0.46.161]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2V0B-1sHEcq3yGt-00vaFW; Thu, 04
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MjS9C-1s0WYM2uaY-00ejcV; Thu, 04
  Jul 2024 21:40:40 +0200
-Date: Thu, 04 Jul 2024 21:40:32 +0200
+Date: Thu, 04 Jul 2024 21:40:33 +0200
 MIME-Version: 1.0
-Message-Id: <20240704-tipidee-v1-6-5ef0942b2025@gmx.net>
+Message-Id: <20240704-tipidee-v1-7-5ef0942b2025@gmx.net>
 References: <20240704-tipidee-v1-0-5ef0942b2025@gmx.net>
 In-Reply-To: <20240704-tipidee-v1-0-5ef0942b2025@gmx.net>
 To: buildroot@buildroot.org
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1720122036; l=1047;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720122036; l=1075;
  i=j.neuschaefer@gmx.net; s=20240329; h=from:subject:message-id;
- bh=upGceXk0bvcrgHflrdvOUFKW2DsYfaecjxTCdP/ewm8=;
- b=Ul9l57fw3sDSs2d/ZOLSys3fcHeIiAkO/Sry3qAn8JVcn1OV8MDqLHZvyeLMspDmORtuHTHWf
- +pOf6Qb6tFfAySq3GbT/ai350AW7jHbfUGrk8QH1FJhQXVewVEHTOzZ
+ bh=y2b/Br4h4MkfGKmKrQEketokwAfKjps1GmZBeNeEIZY=;
+ b=7N59YfekFrIOpwo0EzRQP8GJyi3i5a5ErFhr1/KOkAhgiDZZO8Flp9rX+gIPRmSA7vXDO+XbD
+ PD43W/JcD4WCRQzklLjfF6YBVTaq1jHP9CL8ejoPIB96qLJDK5I+5G5
 X-Developer-Key: i=j.neuschaefer@gmx.net; a=ed25519;
  pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
-X-Provags-ID: V03:K1:5dHzlXM9jj2Vwv3ukTCoivprS9xL6m1hzSQMOzApH1CNtwHgS2H
- KA3FkilcFDRNSDFeaDx1Q6L0DUP0ZXMw2ccAiE88mWgUT0quLqCgZoFXuOiZ7GKEgJJ1E5l
- FSgWLcE9iNbu8sRoQ3/NpfVFVYH1uegjEj3kA+w8EVvg1KZs/rxFOKI9whjyBaU5dh+CcoO
- Txj7Io8lc8OnyBVNU9/kw==
-UI-OutboundReport: notjunk:1;M01:P0:aTlesuW20PE=;p0Hv7MNR2mkvGw1vL8bW5kZnePs
- Hyd6ukx2pzvOCsBpYiTcT3S6KWPYzCEvUCAE4jqShCaE2kLeUBm7D/YYIqIkQsixdiMBM+NSn
- kXmkUo2uvveqO9v7mxmdv3BaQMV+neyWC+US551cbXmmpX6LNPEYRtF7g/cMra48atL5PYbHm
- jZOs4niDyYBkBMxcbUwb7fiLaSIjs86yt4G75EofJA19z+lODewo7oNIWlSUqr0aaub+CTexP
- GnM59D1oK4VmPMxENMq0M/yhLklyuffanYussmb6YHLg9Bf66RPaAlwHUy1k8RGh2YZt2JG2t
- X1MGrKiobfpR55lhd/MKwx1w5pJOLG2/Es6Y+mHRV0Wlao3XmwdCD669Am51FhlqzTybqMRgw
- 2Yks7dBu3rgmVDn4ETb2ROROm429qJJtOZjRURtHYxwvZxsv0+erzwNvfC1eytyV0fkxBTPG8
- WHYX52HTFIFdiMxbStzFzoW2C4W1+DvfGgpaIGb9Iu4qFGWQI3Y+9ANtBVImMX2bCi7ffZuUD
- Y1wCVqZyq/+d7aniFfFHXPE58HqDlylavdk40RX2d0Le4v8t+At2jelRyY/9W6gjeZ5qAngu5
- LngtE1kpMwCalrK5ve9Kn5hfgyxz5BOfDiyXr0HDMktQSSd2S0Uul6JPmcQDf4fOeeh7x4eqL
- BTFVmQfXtWNoor3sB4hgewawhfOID7mpF1y7PrXUWbvZpWKlD6jwHYm2yyy55C05pWbsUu7XX
- QyrD5UFKIdykubZ0cvyJ6WEyYVtQIwyA4KwvIVMOv7OGoRdTT7otS8GXz2+hAMdVgkJ9/UeXY
- AoDhitGyGD8SIP7IpBHxvbzEqHTejaYR19Gw1c/TCYXeQ=
+X-Provags-ID: V03:K1:Yb4k1YmzHb0DUmoQVyD6aZ95EnELvRXqaRSQzAG+lUajmoHW2U3
+ KoDpsNcGM3r0u1RVF6+Cn+IhDKMNyhhGR/1MpK8eqf6FKeYPXSzAn83Vf+6aoTYMJyZzmq0
+ O2QWBygkLxzwWufQljQhAJr0l4VOcTO8ZthwjuDY1mulQ+kUdmKJlJzMWOpCv50CTmIzfLo
+ 32tqW85X6qg7nlPOUcVuA==
+UI-OutboundReport: notjunk:1;M01:P0:u3yJne1dJxM=;WH1/9sxkdhdaR+RZ8HWYsobV80a
+ efYlERy0PhORm2i5M1JQt8xQTL7eVzvdAe1BUXTEnTWAPeCKZaPKJEmJdl3gEagcZsp4QyB8i
+ l7WLXBY3umYYjNYVKyT35n1uJTgguDFBQbWs/gJpFLKwW07O8hXgi7a1LSWZTfpR+GpTKGZeZ
+ nWXThOMwI5fmFWVKixjYXvulrhO99ws6bFRtvJRYzgCdCJl7thOLwBEfNKSYcUzjCMBQY6LX7
+ eowse5HXoMKPl45SqKSAg4Bm7f5k4GT7FWHoVYT0SvxxNJmx8jygxdccB3qYO1eT44NqI5qU3
+ A5285vmcVw6ok4xJagT1kHdi3qYjiBeBLfBgORYctdNXfOJdmTVjnZFEQl4BbfVtL16AAat6q
+ poTN7gCOAuRsM5bFW6yuLmxPyOS29SpZnOX/ySRAyush2P2SeBLme2A/AqPTtW56ZSaBmn7qB
+ Uxpg0aMxEaL+Il+tkCqQnWBttQ+51h/NAt4xSHZv4aJ95htl8bIBWVaHZvL5bvUnIpYPvBVSe
+ QwYxGBKE3Oo75ZBpqKJiRMbK4HxQUNSSbcNuko0Sort4/0mqJqMy/XpEZvYSQ0gVHQJoA+CjE
+ otNo7SPNYU/P+Dc+euCSDm3H1vETb3OiIAWkcsOtDe/z/lP+JCScz3H6uLDBtOVHCE41TtV6Z
+ hZaGDcdkXyj/8pq+8nCQDZHYCcMQ/R6ID1ljMrNyXRpTbD3Bx2KAlxo1pnYhatqDtZUnvPTLg
+ 4Wx/LViMJLBIbhd8juaA7b5iFgOQv7urjLJyBaVSjiC8w6Ka9kA5+Y1SEwhXnMBSdAlTHjyDO
+ AyLU7IOi8xQ+KWeWRTit8Bx7veQzBam84+skIaacu2lik=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.net; 
  s=s31663417; t=1720122040; x=1720726840; i=j.neuschaefer@gmx.net;
- bh=QTQeIiRaAAKXJtpv+8qmaiesbYUGEkyF4rb82W6/Wpc=;
+ bh=N2QiugsnCF/b99zpZjQkzbrroglNvJxjx5bi5AG85yc=;
  h=X-UI-Sender-Class:From:Date:Subject:MIME-Version:Content-Type:
  Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
  cc:content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=YFRbCPBLDAFtIr6M0Sparg3SFsH72gaMfBY81uJAOFTmymZxTex/vLa6wYGYdzhS
- PP0XO1ihR4Ql0NADm8v1wILpWyUYGA+BRANa5/2RmmfQTLLtKpGq2npMAAVSmAa2J
- ScK5vMkdw40noeVfMwrq2enNl2Sh2rl8wrlUKtbNmom8TgJyBk+grGdGW7KF6x4U7
- QXqXYMbg7RCRQqKoSHQdVHMpukffdsiDP5IaHHaSuUIFRUUGv1Y/iRgn2+GQS0xl5
- 9Vhxoryh6l7pfIgmKpjAE+ZYz98NhxGR65+9ploNHgeLw0v+gbQYpe17rP3TWxt2L
- y2NLAZaUHqJU01okFA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=fB2praYAv63sbcXXnF1393SJhXdI/nlXf8obvACUwHRvRCke/BxqkufAWpF/uIrB
+ VKfvcMM0maoBnIpwTBXkbFi9Tx0jjwcqhRsSmY6WdvrvI1LC8Pi9R06GqMkwu0VUB
+ KzLA/4tANmypi8gIdAx2bF0ngiSbs0MRKc6JycBIwlI/LJJe/UbH7bmmmLZChaVWB
+ gQlOg1CzmvJoXH0vsl2Il17dPQoYYBiO5Cs2gPvFyzUFstsZVuUtTSW+z1UVJ6fnP
+ 3YHjTTeBKmNbJmnnqby+TPx0K2wjVjU3MXAhB5j9Y+LURK+67kpCDxkSCR0nqsiyt
+ pM3iBA3t/p2Ar2/F0g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.net header.i=j.neuschaefer@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=YFRbCPBL
-Subject: [Buildroot] [PATCH 6/8] mdevd: bump to version 0.1.6.4
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=fB2praYA
+Subject: [Buildroot] [PATCH 7/8] s6-dns: bump to version 2.3.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,32 +112,32 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 ---
- package/mdevd/mdevd.hash | 2 +-
- package/mdevd/mdevd.mk   | 2 +-
+ package/s6-dns/s6-dns.hash | 2 +-
+ package/s6-dns/s6-dns.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mdevd/mdevd.hash b/package/mdevd/mdevd.hash
-index 9436ed8b01..daf2f48c04 100644
---- a/package/mdevd/mdevd.hash
-+++ b/package/mdevd/mdevd.hash
+diff --git a/package/s6-dns/s6-dns.hash b/package/s6-dns/s6-dns.hash
+index 334ea1667c..2c9023ec28 100644
+--- a/package/s6-dns/s6-dns.hash
++++ b/package/s6-dns/s6-dns.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256  f6ecf0ef7cd48d04efc75acb2dad967d850bc8815bdb0098f1c9ef043394d430  mdevd-0.1.6.3.tar.gz
-+sha256  7358ce530b6b9befb715e48190981e9b69a12cca858519e6d2e4b46eab7e2470  mdevd-0.1.6.4.tar.gz
- sha256  b2edd59a202a710440522f05dcbf418b0493540120efcb407876772ee42d2c7c  COPYING
-diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
-index c92659d961..a1d9e17cef 100644
---- a/package/mdevd/mdevd.mk
-+++ b/package/mdevd/mdevd.mk
+-sha256  cf0258574ec7d62b654e0c2ad78af4c7d67ac4c9cb37f781480f597e54b30f6d  s6-dns-2.3.7.1.tar.gz
++sha256  6aee32bb68d01f5109f71e31a283213c668cd3c0e79fb9e469e6cabb58079f2b  s6-dns-2.3.7.2.tar.gz
+ sha256  aafa4f6a12b5b24ab2ae8ead5174e1ec03aecb5eb0e82012d74fd47ccfc57607  COPYING
+diff --git a/package/s6-dns/s6-dns.mk b/package/s6-dns/s6-dns.mk
+index a848f2e6c0..8e175431a4 100644
+--- a/package/s6-dns/s6-dns.mk
++++ b/package/s6-dns/s6-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
 
--MDEVD_VERSION = 0.1.6.3
-+MDEVD_VERSION = 0.1.6.4
- MDEVD_SITE = https://skarnet.org/software/mdevd
- MDEVD_LICENSE = ISC
- MDEVD_LICENSE_FILES = COPYING
+-S6_DNS_VERSION = 2.3.7.1
++S6_DNS_VERSION = 2.3.7.2
+ S6_DNS_SITE = https://skarnet.org/software/s6-dns
+ S6_DNS_LICENSE = ISC
+ S6_DNS_LICENSE_FILES = COPYING
 
 --
 2.43.0
