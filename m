@@ -4,94 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BCB3C30653
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 06:43:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5CD4C30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 06:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D945640364;
-	Thu,  4 Jul 2024 06:43:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C979419FA;
+	Thu,  4 Jul 2024 06:43:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hZV0nxR_MQOx; Thu,  4 Jul 2024 06:43:39 +0000 (UTC)
+ id P8-M-Uoyr_RN; Thu,  4 Jul 2024 06:43:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8057340412
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3F93405DD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8057340412;
-	Thu,  4 Jul 2024 06:43:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A719F1BF391
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:43:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3F93405DD;
+	Thu,  4 Jul 2024 06:43:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B79D01BF391
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:43:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 940D940412
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:43:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A3B5F8448B
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:43:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2vAWw1IQjfYi for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 06:43:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RgrdmKnDNp4f for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 06:43:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
  envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0E6E040364
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E6E040364
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0E6E040364
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 06:43:36 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-57d06101d76so311211a12.3
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 23:43:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AF8CC84467
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF8CC84467
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AF8CC84467
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 06:43:40 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-58d24201934so545071a12.0
+ for <buildroot@buildroot.org>; Wed, 03 Jul 2024 23:43:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720075414; x=1720680214;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VHbyNZ27QTnxboi9F3SyCgYC7AlRZFyw+1sVwv0OQfQ=;
- b=IVY1umc6SlfGoNJ9UTGIaQ1Ohj3fGwKPFej/6/PTVee0l7Udk8mYMRsfy+hHd6Nbcl
- BG886PkIOSDAtY2oCQPPPvLV/BQHbS17Tw0W7ZDkb7X4zRb3HSEFm1li1buJtcfH7cd4
- mStJZqScG3Gj4kEZRk1u4ntnMxhByktYqaVQmLA6SctbuLIcxofKgmlBFZPiXd3XdJrH
- eIu0AitQhG+2BFY0/0pFfh9NSAz6mrg9SQncJRe05LOLtVLLF2XwNinTFXSy1/PezEjq
- W5mm1/Qurp/+w7soXziPWPR4r4/6QPaVAHX64IqSB8qqMHceR9ikyShlVaG18vez0fNt
- GKpw==
-X-Gm-Message-State: AOJu0YzOE/185iKEo3JMe9n0DDM1dP6Nv8wsM7TlBvhpF/o0hJtUrLM0
- QEyPosoMZJ/hn0RwxJsm1T2QIB3BSNE4+ypHigtif4TlwbNWvz+hJMD12A==
-X-Google-Smtp-Source: AGHT+IHk6enB4bO2aU9Uha9NNexrOrzFv1H/w1IZUJIj9UPIQWXuBIQdpTv4ZkKA2mNUvGqgiwjKCg==
-X-Received: by 2002:a05:6402:2353:b0:58d:c542:2500 with SMTP id
- 4fb4d7f45d1cf-58e5955663dmr575086a12.10.1720075413647; 
- Wed, 03 Jul 2024 23:43:33 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1720075418; x=1720680218;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=bcuS6PQiiJgQlJcBIKccj8o9HWt9vCy4h4o718A3UQs=;
+ b=ot2iCOMP8TvHJwXn2nRQP/pCJyOPJ7NNQfk9aVEgHWekRJJdmShNEKVRF7klMHFYiy
+ lMNNQErhYst/9NgWykWqFbjY0jG7FVfVb+hxSXsGnQDOChYly7vSLTG5pSuV0qfc1rhS
+ nnVPBHQqBtFjrbMlgjFJ4/AeJLyrcG/4VN7nzzpQzrk79ZlXa1fI4yOjIV+kplXdF/Jq
+ IJTfL5w4+Z9Q9upImGhD9MXy7r4Bt4FKTeME9WjWZu7rJQnutO2lRhwBwSzQo4gIVN0O
+ 0F6OppheUJnPRaejgfduxUyNfGI7MpSSb6lzJanzpQhhFsoFmOrxG+SswHzP35klS801
+ rENg==
+X-Gm-Message-State: AOJu0YxqUMgwGB37OBn5S7w14RmE2yRMfdI0cwrFlSEo0dh/BaoxwYeS
+ Jlj0MXWaiSsYFm4o0sK/Py6VAGmOkhkZKQYLFmKFjaQaPkXsGuwiLKlquw==
+X-Google-Smtp-Source: AGHT+IFRGphcU4QPtIswr2yzeddd0oUTww5vIJm8r3H6wK//U6r1ppPBj3VhOfSqTCmskVv6AOqlOA==
+X-Received: by 2002:a05:6402:518e:b0:57d:d59:461b with SMTP id
+ 4fb4d7f45d1cf-58e7c29be71mr425785a12.13.1720075418139; 
+ Wed, 03 Jul 2024 23:43:38 -0700 (PDT)
 Received: from hthiery.kontron.local
  ([2a02:810b:5a40:2a43:7200:ad55:a3ad:7bab])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5861324dfaasm8252620a12.32.2024.07.03.23.43.32
+ 4fb4d7f45d1cf-5861324dfaasm8252620a12.32.2024.07.03.23.43.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Jul 2024 23:43:33 -0700 (PDT)
+ Wed, 03 Jul 2024 23:43:37 -0700 (PDT)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org, "Yann E . MORIN" <yann.morin.1998@free.fr>,
  Arnout Vandecappelle <arnout@mind.be>, Peter Seiderer <ps.report@gmx.net>,
  Lance Fredrickson <lancethepants@gmail.com>
-Date: Thu,  4 Jul 2024 08:43:20 +0200
-Message-Id: <20240704064322.3242095-1-heiko.thiery@gmail.com>
+Date: Thu,  4 Jul 2024 08:43:22 +0200
+Message-Id: <20240704064322.3242095-2-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240704064322.3242095-1-heiko.thiery@gmail.com>
+References: <20240704064322.3242095-1-heiko.thiery@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720075414; x=1720680214; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VHbyNZ27QTnxboi9F3SyCgYC7AlRZFyw+1sVwv0OQfQ=;
- b=CgMn0YrzK0AnNd6M4Rd4aZ3YXkeE788wyqPprTzbvrs6dYZItHQ7znIwdrBYZeLOlP
- e2esiZssOgGjqI4hxNUPh7D0BYCkefC03eKikCntTAfofXhUYqumNFa5dSdIXmfBYc+P
- IpwRQWss26H4hO5TefWIrf2Ehdf64b67P3SRUvRikLFwkMpV6BkSUiZjMu2CXBAcSCLG
- BlMNQKGDb7Yuw/iL6YD9AVUMinx27xhdbp0/uuP0q0JJg8fWVw0JiClPwd8okTJ9y00i
- PuYt9mifKIfVTLQwDUySFtFIm07OZQQ4/Pj4BAm7PMW7KPR58LtH4PnnFSlyL2RP6LLR
- boZw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1720075418; x=1720680218; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=bcuS6PQiiJgQlJcBIKccj8o9HWt9vCy4h4o718A3UQs=;
+ b=I8mkn1k5+Obs6vrb75HbXSMboGWrlrnCaDxpd+Tk7prVDUgeOcFE5XdJG6eQvyy6Ur
+ eOZkW0hhbk1wjEfWH4z927uaKXzBIE3ZkB5pBwzZw/vHMZbACh3L3b2J9FptE7qHO5Vi
+ qhoL1JAECQOvi8V5ulqLH7FBY4hhZzEKmp9J1y/q19Mj9QaqJgdFza9ZX6QJfEn/LuNk
+ beYK5AuWklEa1EiHEyOQEzzFo3J+qtyPZira6TsLthcaiIWLchGsBlaCmjUMk80/mkpf
+ dwHIurnaC7acVfkLZgn83W7FGyzKOeAmIe4iBRWNhCUM9LS5Ky6tWNA4IVfdD7ElNmPZ
+ tSOg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=CgMn0Yrz
-Subject: [Buildroot] [PATCH 0/3] package/ccache: bump version
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=I8mkn1k5
+Subject: [Buildroot] [PATCH v2 1/3] package/blake3: add new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,68 +112,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
----- 8< ----
-/tmp/ccmQFw5y.s: Assembler messages:
-/tmp/ccmQFw5y.s:89386: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:89400: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:89464: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:89518: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:89525: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:123938: Error: unsupported instruction `vmovdqu'
-/tmp/ccmQFw5y.s:123953: Error: unsupported instruction `vmovdqu'
-make[4]: *** [src/third_party/blake3/CMakeFiles/blake3.dir/build.make:160: src/third_party/blake3/CMakeFiles/blake3.dir/blake3_avx512.c.o] Error 1
-make[3]: *** [CMakeFiles/Makefile2:406: src/third_party/blake3/CMakeFiles/blake3.dir/all] Error 2
----- 8< ----
+This package is used and required for ccache update.
 
-To solve the problem above I started bumping the ccache package to
-4.10.1. While doing this I observed the problem that ccache tries to
-download xxhash by its own and fails.
-
----- 8< ----
--- Downloading...
-   dst='/srv/storage/hthiery/buildroot-2/output/build/host-ccache-4.10.1/_deps/xxhash-subbuild/xxhash-populate-prefix/src/v0.8.2.tar.gz'
-   timeout='none'
-   inactivity timeout='none'
--- Using src='https://github.com/Cyan4973/xxhash/archive/refs/tags/v0.8.2.tar.gz'
-CMake Error at xxhash-subbuild/xxhash-populate-prefix/src/xxhash-populate-stamp/download-xxhash-populate.cmake:170 (message):
-  Each download failed!
-
-    error: downloading 'https://github.com/Cyan4973/xxhash/archive/refs/tags/v0.8.2.tar.gz' failed
-          status_code: 1
-          status_string: "Unsupported protocol"
-          log:
-          --- LOG BEGIN ---
-          Protocol "https" not supported or disabled in libcurl
-  Closing connection
-          --- LOG END ---
----- 8< ----
-
-So I added support for the host package of xxhash and added this to
-the ccache dependencies.
-
-In addition the bundled blake3 version seems not to build correctly on
-all machines. See the first error about 'unsupported instruction'.
-Therefore the new host package for blake3 is introduced.
-
-
-v2:
-    - change subject (fixed naming from ccmake to ccache)
-
-Heiko Thiery (3):
-  package/blake3: add new host package
-  package/xxhash: add host support
-  package/ccache: bump version to 4.10.1
-
- package/blake3/blake3.hash |  6 ++++++
- package/blake3/blake3.mk   | 22 ++++++++++++++++++++++
- package/ccache/ccache.hash |  2 +-
- package/ccache/ccache.mk   | 16 ++++++++--------
- package/pkg-generic.mk     |  2 +-
- package/xxhash/xxhash.mk   | 18 ++++++++++++++++++
- 6 files changed, 56 insertions(+), 10 deletions(-)
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ DEVELOPERS                 |  1 +
+ package/blake3/blake3.hash |  5 +++++
+ package/blake3/blake3.mk   | 20 ++++++++++++++++++++
+ 3 files changed, 26 insertions(+)
  create mode 100644 package/blake3/blake3.hash
  create mode 100644 package/blake3/blake3.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6d9fcd97df..0a6a4b9de6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1359,6 +1359,7 @@ F:	configs/kontron_bl_imx8mm_defconfig
+ F:	configs/kontron_smarc_sal28_defconfig
+ F:	configs/kontron_pitx_imx8m_defconfig
+ F:	package/altera-stapl/
++F:	package/blake3/
+ F:	package/ipmitool/
+ F:	package/libnetconf2/
+ F:	package/libyang/
+diff --git a/package/blake3/blake3.hash b/package/blake3/blake3.hash
+new file mode 100644
+index 0000000000..a3ec44a804
+--- /dev/null
++++ b/package/blake3/blake3.hash
+@@ -0,0 +1,5 @@
++# sha256 computed locally
++sha256  822cd37f70152e5985433d2c50c8f6b2ec83aaf11aa31be9fe71486a91744f37  blake3-1.5.1.tar.gz
++sha256  a6aea7358a30ded3f8abbff979219bdbe7b7a9aa489a8c70030afd96a83caf84  LICENSE_A2
++sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  LICENSE_A2LLVM
++sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  LICENSE_CC0
+diff --git a/package/blake3/blake3.mk b/package/blake3/blake3.mk
+new file mode 100644
+index 0000000000..e94397a0a7
+--- /dev/null
++++ b/package/blake3/blake3.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# blake3
++#
++################################################################################
++
++BLAKE3_VERSION = 1.5.1
++BLAKE3_SITE = $(call github,BLAKE3-team,BLAKE3,refs/tags/$(BLAKE3_VERSION))
++BLAKE3_SUBDIR = c
++BLAKE3_LICENSE = Apache-2.0, CC0-1.0
++BLAKE3_LICENSE_FILES = LICENSE_A2 LICENSE_A2LLVM LICENSE_CC0
++
++# We may be a ccache dependency, so we can't use ccache; reset the
++# options set by the cmake infra.
++HOST_BLAKE3_CONF_OPTS += \
++	-DCMAKE_ASM_COMPILER="$(CMAKE_HOST_C_COMPILER)" \
++	-UCMAKE_C_COMPILER_LAUNCHER \
++	-UCMAKE_CXX_COMPILER_LAUNCHER
++
++$(eval $(host-cmake-package))
 -- 
 2.39.2
 
