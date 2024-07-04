@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 692DAC30653
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 10:17:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F489C31D97
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 10:17:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96DCA40BB3;
-	Thu,  4 Jul 2024 10:17:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B89A40BD5;
+	Thu,  4 Jul 2024 10:17:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l2qRT2zoPnEi; Thu,  4 Jul 2024 10:17:10 +0000 (UTC)
+ id 6ydOWz66OvGy; Thu,  4 Jul 2024 10:17:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9593F40BB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F13840BD2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9593F40BB6;
-	Thu,  4 Jul 2024 10:17:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F13840BD2;
+	Thu,  4 Jul 2024 10:17:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C3F6E1BF32E
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 10:17:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3CCAB1BF32E
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 10:17:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC46240B9C
+ by smtp2.osuosl.org (Postfix) with ESMTP id D31C3405F5
  for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 10:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VsprNOCY1mwj for <buildroot@lists.busybox.net>;
+ id pYkNPYr1Xpgy for <buildroot@lists.busybox.net>;
  Thu,  4 Jul 2024 10:17:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3ABB5405F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3ABB5405F5
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3ABB5405F5
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 10:17:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 548FA40920
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 548FA40920
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 548FA40920
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 10:17:06 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.120.251]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MC34X-1sZSXT3QK5-00Aham; Thu, 04
- Jul 2024 12:17:02 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MlNtF-1s0Olm0n7t-00jlMS; Thu, 04
+ Jul 2024 12:17:03 +0200
 To: buildroot@buildroot.org
-Date: Thu,  4 Jul 2024 12:16:30 +0200
-Message-ID: <20240704101631.1860647-3-fiona.klute@gmx.de>
+Date: Thu,  4 Jul 2024 12:16:31 +0200
+Message-ID: <20240704101631.1860647-4-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240704101631.1860647-1-fiona.klute@gmx.de>
 References: <20240704101631.1860647-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:yZmyeBy79HErLWgwKc/k+06G1CEh43IBn4Wp5D0qrlKxzqAQROP
- foFpGauRFIG+wrDR0FbnXowNYH7kA6X2UMC5MRaNFH5+wGp6NQP4mMrmK7SQQm4bStaxWDE
- Z3Ph+ArkbtAQRKvOSvD9L/k5EYcE8CLXKuUDJD4nq+VjVRvkFLbaw37uGmlXU/93EAktF+1
- 6zzrRGWOEZvrkFuEMN/5Q==
-UI-OutboundReport: notjunk:1;M01:P0:E+rMMkffAcc=;2ox/QubIDdT46MNLU0Kw4d056H8
- fQZI0FcqI+rE97eb8ljX5G9vfkbRThbuC4FnwvJ/8gklR0WPuuAGspPTeOWVGhmvmkIBWXCQT
- 97hgCO7+chVPcKd2iG6A8ZFxqt9xFHyiJ7vdULO81PY7YEGoD9CcNHzL8078b4X+jOyE3CV7T
- W8GIVlk5BhrVFnUacgHUYX2NKlDIvWPzRXzO+qofuIlivxdgE7E9klthYv009kCn2IrFX0eSd
- VYtcTQi+eZAsRVmIDhcqdQB5pk+liVrn+bbkxN+Bt71HRYsi30w9OAS44bFf94hM6qztlB8Km
- 9bWgfAEd3b6fEDUGsUIN1NlK77EQESTyFYPoHoHNxsDppUJAUk/9M2IbWligPgV6H0BCoktZP
- tVbBw+9uW8q3Rz5wEHDa9SkHYzMnfNXpvZHah0AfDLrCMCxbooF8/eJj8TKpCQRRLmyPe5iWw
- Jgt48MeOVxvfduKw7fWyNVdiHwPZ3zPEfbgBoOps3wevymwnj6UWyyqXczQG3wqQAFUh9O7Ip
- ffZ6mJuofGRzu+H4ucuqAWzCHsVqMSWZD5uxWSoaDseyR6XsmimUkIXgVuHer0C+3KP4xbQYy
- V6fpAZS+yHMdV9MKu50mMDE8jNvPZ6WYAaxUkTG/w0wiYpetYMzqHZukHZCw9u5jn8TaURBIz
- wE5AunPYXdb5U7sMcl5sbJblz1pgQ55maf3c4q0g1yPpHdgY49o3urYVwbNPD+MsptbdcdELk
- H7gYd73e7094ZP+YcMZMA2MFCj2E2kjuJif5betITzwe4ua4SKS3+pgEkeLm3FATk4JG+3yFR
- kmA2q9cmXzqTcR0j+TBaFXo5KM1wQhL6rHj/9AWn28y/0=
+X-Provags-ID: V03:K1:rQ6L+MrXWvomB2oF4gy2EZ3yy8ZqhkbptILbciShd0urW+a2D8H
+ nFGTZL9NlI3BHwrxy/ugC5i+cIrsrmS+sKixyMJBCRvtbxS9nlhQZJID3yqB2KqW0HsJlEM
+ A67sYHhReh+ouuyaCCodzSuOI1tGyehNh6Ql/sN/JxxS85laRy/XFnBijx5jyRt4adKdEjm
+ QCUsoMg2WnjQQaIJc9rsQ==
+UI-OutboundReport: notjunk:1;M01:P0:0UHu++2/LEo=;4hkLoDQu4f4vcJ0ULCEnV6hDLBF
+ yvsztG4Ly7iCyazumbHVv+6PBOQgDQIMrXlV9RbA5dL521VjSRCK6jv52MmMKGcha/HPcpBgB
+ AtTWaGYqybbaIsjExThOxm51OUuvzYO3ldmSe0s5Lh5EqgxpwA0LXk0FZvhsxVbULlJmfTL3c
+ AcKy7ZIFwyT1SXyi4V0qWQanppcVZoK/T2RIroRmZwFPG2h6zeKKcF/mQhpqM3R90NH32Q1R6
+ J/ICVrYi8+syfIKtdwpaWpn1/eVquYSMTVYtNvRQwOZnm+MSr7sg+2KI3EcT++yvn1Pvd73Lo
+ yAIB1gZ2zfBPAummjYJOk0USmVAB97iavkTApyXvqJfVfDRpj1LGH8u8Fi+gV4+ZgOY893kpi
+ CXR71sjAeK9Y7fvLqfuzfQaCO5porCEe/emIbNB/RZBbsVo6hfhccSXDCW6ePuwa1Ha82ktMY
+ oe+4QWZkSImu73ZiRsDlmwcwbM+3Y076Z4nBxQ1aiHRjHWRucgfK1RbvHdGlhv2bCPUUzy7uk
+ hwxCKPE9i/lkEMJCRgVV7LBTEVgOA4T5Aj8lj3fqTmEQHozsUjCJgkDwJNCw1xLVGxiv/spdU
+ +xy93EsMVZdweKxhlA0rlDUSypTYGaUfDK4QZ9DFyYywpR4jh2f3Vcj1ACmHmeDdPCPXiUJBT
+ Vnc9MLhUKktNEFNz1v/QujkhZUJffWcfY62O2FBrjNxNyHPVCImfap4Abo1ad18lzfFlRGVve
+ ztqO4VYez4J/B+mbGjDZ0IJKaKMCCpbzLtTzCKwRVrrwweR3vECcm4RdxFXfZcGopoh5Mvpw1
+ xRqzlSKOfrMKjOF7CijczlVh3M6mzPZn3riiEjHbq5Xpw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
  s=s31663417; t=1720088223; x=1720693023; i=fiona.klute@gmx.de;
- bh=G9nEt1d/019itp240zIczE964bZU7CdYwYEorsTPT4k=;
+ bh=Ljh9Jt0wqduvPR8yK8AQ1OBOsOP4Z+qbEWcSu6jKUFE=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=KxTWtWv8E4FdjITfa3nzXyrDVOO3ramCy2wpLTCku1LOc39k7lElGbU5vZIzjdhK
- yymWL9a/fVra+B2KQU2UyIuIT//qaXzmo4cXRM0W2y9U1H19nYudS/IrBGgGL9lsy
- 2nnBGDhKoEN0qce35mKAlXGW2qCo5yKrpgvW6KGoZ2yvuVhNlRdBXxkUTaos/uCGS
- u8aBeA0VF5fGmMCgVMOsc6aFr3AhZt4IgqkOfubDMTiAJ2ThxesJNuVRtHbrcUSrA
- nZ0gHkkgB1HLeKH6ZLGjbMGe2xH+S31etlvMUzo8OyPbUrHU/R8RNmpHf3lkUe7mj
- Hn1LeTSn53/MNdCthg==
+ b=CixsTtakkJbiscRxJF46sotTPFx5861fOYcKsKCNF2/FysM2czJOWdxw+bfglcOW
+ f1QZ9CDFzY/oU3WKnW0kAdd3MhSxPtj2N1F/qXIUTtJ4Qy7J70AcK2WGRjds0VshF
+ uIWlhK66VMwEAFAiN5K9n1A5gIRSJMyer/IXd1LHrlllD+3ZrEQKS9iPt0EA16Qk9
+ R0GuIUfLKfYEBy9NsmIPUXtgoniBsE1UPVHQxDwmol0jAUfxf3c5CLP3dDD/1Kajc
+ OoSaTaZKGUzpdtwBSymmgX8ewXd2o4YHDUL7rgUfMvchZoo0CQLmijKcuSM7aWpPH
+ qkhrELgoAmTxpe6KPA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=KxTWtWv8
-Subject: [Buildroot] [PATCH v4 2/3] package/openssh: fix init script
- indentation
+ header.a=rsa-sha256 header.s=s31663417 header.b=CixsTtak
+Subject: [Buildroot] [PATCH v4 3/3] package/openssh: implement "reload"
+ using SIGHUP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,62 +108,60 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-This brings the script in line with .editorconfig settings and other
-newer init scripts.
+This is the documented "reload configuration" method for OpenSSH.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- .checkpackageignore     |  1 -
- package/openssh/S50sshd | 24 ++++++++++++------------
- 2 files changed, 12 insertions(+), 13 deletions(-)
+Changes v2 -> v3:
+* Manage sshd using start-stop-daemon (instead of kill -HUP).
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2edbae93d8..b9edefd50a 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1149,7 +1149,6 @@ package/openrc/0003-init.d-agetty-replace-sbin-agetty-by-sbin-getty.patch lib_pa
- package/openrc/0004-init.d-agetty-start-agetty-after-all-sevices.patch lib_patch.Upstream
- package/openrc/0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch lib_patch.Upstream
- package/openrc/0006-Also-create-run-lock-subsys-directory.patch lib_patch.Upstream
--package/openssh/S50sshd lib_sysv.Indent
- package/openswan/0001-lib-libopenswan-constants.c-workaround-missing-ns_t_.patch lib_patch.Upstream
- package/opentyrian/0001-Move-definitions-that-don-t-need-to-be-exposed-from-opl-h-to-opl-c.patch lib_patch.Upstream
- package/openvmtools/0001-no_cflags_werror.patch lib_patch.Upstream
+Changes v1 -> v2:
+* Acknowledge changed session binary with OpenSSH 9.8 in commit
+  message (patch 1)
+* Check sshd exit code on service start (patch 4)
+
+ package/openssh/S50sshd | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
 diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-index 5ad156bf17..a26a1cc6a9 100644
+index a26a1cc6a9..4a6abb15e5 100644
 --- a/package/openssh/S50sshd
 +++ b/package/openssh/S50sshd
-@@ -45,18 +45,18 @@ restart() {
+@@ -44,6 +44,17 @@ restart() {
+ 	start
  }
 
++reload() {
++	printf "Reloading sshd config: "
++	if start-stop-daemon --stop --signal HUP -q -p "$PIDFILE" \
++			--exec "/usr/sbin/$DAEMON"; then
++		echo "OK"
++	else
++		echo "ERROR"
++		return 1
++	fi
++}
++
  case "$1" in
--  start)
--	start
--	;;
--  stop)
--	stop
--	;;
--  restart|reload)
--	restart
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart}"
--	exit 1
-+	start)
-+		start
+ 	start)
+ 		start
+@@ -51,11 +62,14 @@ case "$1" in
+ 	stop)
+ 		stop
+ 		;;
+-	restart|reload)
++	restart)
+ 		restart
+ 		;;
++	reload)
++		reload
 +		;;
-+	stop)
-+		stop
-+		;;
-+	restart|reload)
-+		restart
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
+ 	*)
+-		echo "Usage: $0 {start|stop|restart}"
++		echo "Usage: $0 {start|stop|restart|reload}"
+ 		exit 1
  esac
 
- exit $?
 --
 2.45.2
 
