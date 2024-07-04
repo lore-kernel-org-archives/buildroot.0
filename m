@@ -4,86 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0D42C30653
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 12:14:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19A77C30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 12:14:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15F66405AD;
-	Thu,  4 Jul 2024 12:14:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D14BD4050D;
+	Thu,  4 Jul 2024 12:14:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lBBaK8Vx4XHl; Thu,  4 Jul 2024 12:14:11 +0000 (UTC)
+ id xf3_b2BPXi6Q; Thu,  4 Jul 2024 12:14:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E6E640510
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D498405F7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E6E640510;
-	Thu,  4 Jul 2024 12:14:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E9CF21BF2C5
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 12:14:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D498405F7;
+	Thu,  4 Jul 2024 12:14:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ADF651BF2C5
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 12:14:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D53E780EA7
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 12:14:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9AFD2404CD
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 12:14:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q9FwMbTkM33e for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 12:14:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L0XuT8BCfQrM for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 12:14:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 33C4E80EDA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33C4E80EDA
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 33C4E80EDA
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 12:14:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D6DD040242
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6DD040242
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D6DD040242
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 12:14:12 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.120.251]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MacOW-1rrfHt2gKQ-00cc20; Thu, 04
- Jul 2024 14:14:03 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mz9Yv-1sBmba1K6N-00wcnN; Thu, 04
+ Jul 2024 14:14:09 +0200
 To: buildroot@buildroot.org
-Date: Thu,  4 Jul 2024 14:13:48 +0200
-Message-ID: <20240704121352.1915154-1-fiona.klute@gmx.de>
+Date: Thu,  4 Jul 2024 14:13:49 +0200
+Message-ID: <20240704121352.1915154-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240704121352.1915154-1-fiona.klute@gmx.de>
+References: <20240704121352.1915154-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:gOgZ3V3/XxC96GaKWW27Uz/L8Nna/BGvbvJM9sgMEo8DKgL9lNE
- +QB8RA9A8J0XLPpWP0e1X1idNWzefKsUqIdd3gwzyIbo4diU7+rU4oOybztYEqtwaBevhuy
- akDvlAvubkyX6TNwaajszVuGbSUU+wqnirOgZniO4lPlUBOLXmfmxFre8Xu9OcEiGrtmP/j
- MVAB0V0nvN2qRGJgr2Mjg==
-UI-OutboundReport: notjunk:1;M01:P0:y7c4B8ufjFw=;WAX27WEQILQcUJgz5vubTEuqvIS
- av99/MLCqexYlKzXeGfELqre2XDhao33X2mMKQQNJZC36gOUbbbt0RJ/1URSs5kS02T4Yg64D
- 0rplIKNZdsZEj4wdK/Jr8NIAdL01CNMWN6Go7nbrkWZByuCtgVcj4HLJ5sJTN1CU6em5GOBLN
- nzS9kLcXwgqo4CZXfve1RVEfVsVyKxf6I8OW628ldSbJ7Ai5iS/IwYusVRZrVaU1Kff4b+HwT
- YIGtg5edSa3jUHzwhdlbAYOmXD3TRznALQwVzKz4DHkiTKpTen1hVafaSChuloe50rDMA8YjI
- 5a3vSi+ibcvkVCD/7pYThWi4clvs/IAEbJjn/zWcCEHCGNjnGRvm1qVkTODB64scsMEG8oIBU
- BDpLyyjZf73ySszhHrXa051vvV6lgIbhUg9WRC0i7CK4ZznKPHgbR7fjY8yGuo2rKvkWYH1HH
- XPy4BU6iY2QZr1xXT0LpdfLXBgjw4mCzcwL6Hdy5LOp2nj6UTUJfYir638aFgvgQCZ9HsRm9E
- 4Jj/gfGOtEvlsD4f/TkD0dGJe44xcokxr1aayRq+H0I34RPVolR/oDsdPhQ0lwznbr3U5a0GL
- HfpJVVydrUNZUXpU5ftG+mIRa83BrJKPqygSvcnAWcBph11v6zi3OA0UpVoRsOlBIMdl2Cgjb
- 2k1PvHPZsoh0a+oHJPb8CefP9ptD2cQZbyU43Q8CVgLu4yC1rG1rjnTBj2sAGu7XncD8cJExv
- 3Ny7xcxunf1PHDCK9HGfp5pWZCSNmWwDn+Zgg+zUeI14ss4XH5+wrNkVe6Akn777P3wZFnfKz
- wsEVGxc+AmnKnNiRYAFzriLsD+fZpb6Rl7Nl73dXQRpeg=
+X-Provags-ID: V03:K1:oYpA0fgh1uET00B1WIT+f1cqRN1/L32YxA+bCXMFwyPSD/qa153
+ Jl03qAnEMIqmnXff2l1YYq8dmZkq+c/F/tUlMs3S7FANeQe2RbiU9zFLEKt8kdCxmD74apl
+ 4SSWGQVvXpHNA/xTNtTDFk0SylSsSd6w6zgIonOeagKw5ksZ7fScQ0kGSznoXGkOhIKVf6y
+ TheGHlqFb/3v2hByUHPAQ==
+UI-OutboundReport: notjunk:1;M01:P0:lruGTwnHxNQ=;qfU/USGj57DaFbxLl8lIGSSp9pm
+ eLKbUtyf8pkq/8YQmhI8IxSeZkpJ/1Nj+8ltQtrPbVNi3NHdS5SXb5loBt/+R6j3qVNkCAub+
+ 2V43YgbckgEUQfyN8uZRM3nibknsRm6g0ljwGnaCU5tc1JRWkbuDcWlSRhKvhw2A+4nsTdJq2
+ MvmDqvZ6n3yBGELPCngkt9YGVjrFDv9NXdeTf8lSeK4OQxOKNmPdn+t/zaUeGyL4vRep04oKh
+ Lqtq+5/31CEi8bWwfCZdWEWQSJqsiR0FoInv7EE8ncwRxM2/oP+/NU7drL7zvZFZ+rBAhAq0Z
+ grANBlNoX+WNZBAwTT3zm3+59DbddRYxXJArTCY79/8lc9/+E0/5qdMO6ezxK+GpVCoXtblwA
+ 0g7H6Pi7LufONMcvx80pa/HmACF7RwigkT3DzeBWVPZByO4yxR99rr4NDumys8/h5s+7ELxqQ
+ 7yZ9h93ZXzqZeDUJ4Rn4KA5QDcvfrj1KHiedz3rsajyJ5Z7pRpLwkvS29kFs2gVwWzCIhhgWd
+ hfmW4xfjTSlbktnSgmO3EA3VmFoPLcuK+U74gP57uVe0cz+gq446aEavX0fmibKlp/6wlGNBv
+ FEFHuWi2mERwZs0mG/iBIB6wVEDXmQQYajH4FZoVQVf57tNrgAFqu8UuNg7ykXC/RlW+Mi3FL
+ hdm+UYNAhpKICkjlGV1xcpCQXu4TUTFdMqrLwBfD+Ix2CUbTmP1hC4WJB3A+SjPvFSGHjxUS8
+ r4Mr9sLbJ4qEVFtlVeWFN5dh7e64022ysDpQzKJgGWj/sS6ftIBDGuCac1WDJtWDj8cnqpxV2
+ z8JFIhzYbdyqDEgobSrJ84ebUhPfEyblWWRXi7vHz58ZA=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1720095243; x=1720700043; i=fiona.klute@gmx.de;
- bh=YVkEEH3uJCGiehWCKvrXCLZVx77z6StbZFgtvR9tpvM=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1720095249; x=1720700049; i=fiona.klute@gmx.de;
+ bh=qDY5kQeqR+oRatjYod35LWHjI4pdV7QnsXPRT6WWTMs=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=rMLmmc7OlGVjuJ//VVbJXm4lj7h46N3M9+GI+2oDuUfFlyq2Bw1V1rhkzHrzR7Ct
- kbCt8AiCUYPOESZb77e62NpJatftglzUGOv2sQP1sL8QJFkqWTDw7Tc/SJlmjDXfW
- BAV4L/4QAT9kWwl5amdJk7zXhg3W17vqBbpicI1iw1kl2U8YUlRKoOetvhfOjghuJ
- 32jXSRDmRm5+bGNylDkp9L3rtGVaY7P/QWpwKXgT4kanAY9D+yMhEMWyG943oIS67
- JJj8n0t/nmkXwpaseyysRT6SNzKXTzWsjznULQr0d3Ld1+eWkQ2PUbcbSJjNsUxZx
- MxsTOW/PEgSV5LsKQg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=kPb+1lchhp2aCFJWQQThw9XAKdgQuNipKJTCe+oAT6geKp7ds/t0wtd1Dd0jkp+n
+ 6+EUJma/xY6jw7HVVHThhDg9xrUvGPOzJH07EfJGDegUKHuhfG0hcZEwDdcJIGl+F
+ BYneG8JAPkHwgCBQzXIvjNA38/X8kRj1EyeDLwjHWq3klJzsC8U4mkq3Xbu/em9+X
+ cOe2PdGVEeCVqcSVqZqakvSBWRwNR/wisz+dzMwbbyVI1NPsbI2myIge4iYT+ndIn
+ HGxNCoe5qim5H8Ic47jbE8gToK1qYJpVnuh+ja/JUZneHJMUZ7DKzU/RMBNRGOXZk
+ 1Px1LBqdidNRMBJGzg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=rMLmmc7O
-Subject: [Buildroot] [PATCH v2 0/4] Update fail2ban to 1.1.0,
- add dependencies
+ header.a=rsa-sha256 header.s=s31663417 header.b=kPb+1lch
+Subject: [Buildroot] [PATCH v2 1/4] package/python-pyasyncore: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,54 +109,81 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-This patch series (unfortunately still not merged) by Angelo
-Compagnucci fixed the fail2ban 1.0.2 build:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=403756
+pyasyncore is a compatibility package that provides the asyncore
+module removed from the standard library in Python 3.12. It is needed
+to support fail2ban without a bundled copy and should be removed as
+soon as nothing in Buildroot depends on it.
 
-However it broke again with Python 3.12 due to incompatibilities in
-upstream code. The 1.1.0 release fixes those, unfortunately it still
-requires ported asyncore and asynchat modules. This series builds on
-Angelo's (must be merged after) and updates fail2ban to 1.1.0 after
-adding the required compatibility packages.
-
-I hope the combined fixes (Angelo's and mine) can be merged soon. The
-fail2ban build has been broken at least since April,
-http://autobuild.buildroot.net/results/470/4709367a39a8ceb41b58454fc9638441a40624e0//
-is the oldest example I can find in the autobuild output. I could add
-a Fixes tag, but I'm not sure if that'd be appropriate here because
-it's only correct when combined with Angelo's patches.
-
-Changes v1 -> v2:
-* Add patch 4 to fix the sshd filter with OpenSSH 9.8
-
-Fiona Klute (WIWA) (4):
-  package/python-pyasyncore: new package
-  package/python-pyasynchat: new package
-  package/fail2ban: bump version to 1.1.0
-  package/fail2ban: fix sshd filter with OpenSSH 9.8
-
- package/Config.in                             |  2 ++
- ...lter-for-openssh-9.8-new-daemon-name.patch | 24 +++++++++++++++++++
- ...shd.conf-ungroup-unneeded-for-daemon.patch | 24 +++++++++++++++++++
- package/fail2ban/Config.in                    |  1 +
- package/fail2ban/fail2ban.hash                |  2 +-
- package/fail2ban/fail2ban.mk                  | 15 ++++++------
- package/python-pyasynchat/Config.in           | 11 +++++++++
- .../python-pyasynchat/python-pyasynchat.hash  |  5 ++++
- .../python-pyasynchat/python-pyasynchat.mk    | 15 ++++++++++++
- package/python-pyasyncore/Config.in           | 10 ++++++++
- .../python-pyasyncore/python-pyasyncore.hash  |  5 ++++
- .../python-pyasyncore/python-pyasyncore.mk    | 14 +++++++++++
- 12 files changed, 120 insertions(+), 8 deletions(-)
- create mode 100644 package/fail2ban/0002-adjust-sshd-filter-for-openssh-9.8-new-daemon-name.patch
- create mode 100644 package/fail2ban/0003-filter.d-sshd.conf-ungroup-unneeded-for-daemon.patch
- create mode 100644 package/python-pyasynchat/Config.in
- create mode 100644 package/python-pyasynchat/python-pyasynchat.hash
- create mode 100644 package/python-pyasynchat/python-pyasynchat.mk
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
+ package/Config.in                                |  1 +
+ package/python-pyasyncore/Config.in              | 10 ++++++++++
+ package/python-pyasyncore/python-pyasyncore.hash |  5 +++++
+ package/python-pyasyncore/python-pyasyncore.mk   | 14 ++++++++++++++
+ 4 files changed, 30 insertions(+)
  create mode 100644 package/python-pyasyncore/Config.in
  create mode 100644 package/python-pyasyncore/python-pyasyncore.hash
  create mode 100644 package/python-pyasyncore/python-pyasyncore.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 48ef1a6fdc..38ebf13dbf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1253,6 +1253,7 @@ menu "External python modules"
+ 	source "package/python-pyalsa/Config.in"
+ 	source "package/python-pyasn1/Config.in"
+ 	source "package/python-pyasn1-modules/Config.in"
++	source "package/python-pyasyncore/Config.in"
+ 	source "package/python-pybind/Config.in"
+ 	source "package/python-pycairo/Config.in"
+ 	source "package/python-pycares/Config.in"
+diff --git a/package/python-pyasyncore/Config.in b/package/python-pyasyncore/Config.in
+new file mode 100644
+index 0000000000..ad1376a243
+--- /dev/null
++++ b/package/python-pyasyncore/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_PYASYNCORE
++	bool "python-pyasyncore"
++	help
++	  Make asyncore available for Python 3.12 onwards.
++
++	  This is a compatibility package using the code removed from
++	  the standard libary, upstream does not intend any
++	  maintenance.
++
++	  https://github.com/simonrob/pyasyncore
+diff --git a/package/python-pyasyncore/python-pyasyncore.hash b/package/python-pyasyncore/python-pyasyncore.hash
+new file mode 100644
+index 0000000000..ee4665fe5e
+--- /dev/null
++++ b/package/python-pyasyncore/python-pyasyncore.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pyasyncore/json
++md5  f97e2b69f1fa11470867b395c2fabf84  pyasyncore-1.0.4.tar.gz
++sha256  2c7a8b9b750ba6260f1e5a061456d61320a80579c6a43d42183417da89c7d5d6  pyasyncore-1.0.4.tar.gz
++# Locally computed sha256 checksums
++sha256  f4f80c98161f5632004d44713b5cb95e400145b40cbc0297f1f50c27b54befdb  LICENSE
+diff --git a/package/python-pyasyncore/python-pyasyncore.mk b/package/python-pyasyncore/python-pyasyncore.mk
+new file mode 100644
+index 0000000000..9d08d493c4
+--- /dev/null
++++ b/package/python-pyasyncore/python-pyasyncore.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pyasyncore
++#
++################################################################################
++
++PYTHON_PYASYNCORE_VERSION = 1.0.4
++PYTHON_PYASYNCORE_SOURCE = pyasyncore-$(PYTHON_PYASYNCORE_VERSION).tar.gz
++PYTHON_PYASYNCORE_SITE = https://github.com/simonrob/pyasyncore/releases/download/v$(PYTHON_PYASYNCORE_VERSION)
++PYTHON_PYASYNCORE_SETUP_TYPE = setuptools
++PYTHON_PYASYNCORE_LICENSE = Python Software Foundation License
++PYTHON_PYASYNCORE_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 --
 2.45.2
 
