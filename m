@@ -1,71 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC84BC3271E
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 13:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A28DC30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 13:23:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 263714088F;
-	Thu,  4 Jul 2024 13:05:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vnsvdh-TiHS1; Thu,  4 Jul 2024 13:05:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53F51407BC
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53F51407BC;
-	Thu,  4 Jul 2024 13:05:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2BCD51BF2AB
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 13:05:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20B3784596
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 13:05:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA9B98088A;
+	Thu,  4 Jul 2024 13:23:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bSiRxxNImx9q for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 13:05:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 84D8484592
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84D8484592
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 84D8484592
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 13:05:36 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 053DFB0051E;
- Thu,  4 Jul 2024 15:05:30 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu,  4 Jul 2024 15:05:22 +0200
-Message-ID: <20240704130522.145701-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+ id XqpGggLG_kZY; Thu,  4 Jul 2024 13:23:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5710811E0
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5710811E0;
+	Thu,  4 Jul 2024 13:23:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B4D131BF2AB
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 13:23:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACEAC403F9
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 13:23:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8QpOjAZe2Szj for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 13:23:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::a33; helo=mail-vk1-xa33.google.com;
+ envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5C53A403F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C53A403F8
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com
+ [IPv6:2607:f8b0:4864:20::a33])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5C53A403F8
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 13:23:48 +0000 (UTC)
+Received: by mail-vk1-xa33.google.com with SMTP id
+ 71dfb90a1353d-4f2ee3be4a1so243201e0c.2
+ for <buildroot@buildroot.org>; Thu, 04 Jul 2024 06:23:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720099427; x=1720704227;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=T4W/MjS0Apm2gmAZayq8C+UnIMSsPCkPU8IvERWyciY=;
+ b=f33OfEV7dCHeddw+VQ+ct23sCz+fKoLYS5vk4AyP9B2x7gCRSaq6d29S40Y0MA6xji
+ 8LfqS5FI8h507cnF6LOxBekSqIK5/qQy1uWJ143lfC9lTdcOp3RHXSbSEa6pRKAVrCMc
+ BklWUIY9PndIXOv4umPh+3Zwf0C96/qyXq5h97dYdXLE+KdbBm6IXbQTBdVkXojuh0mP
+ OZiBZIbcwAtJqICy5WnuALTmQ3dh1Kkt4QERJMwIkfZ6JgzVydUXywWaZ9VlkeCJUGuk
+ jNEsv76EkhPP5ddlNb7AT4hgGOaDYlnpFgfVVB95Obmhwn/hPpKCSilrw4ZxsMdnZW4f
+ 6zhw==
+X-Gm-Message-State: AOJu0YwHMIrOaZYpzjpTJv7iGOIStSnWbwH9EWkfOZ0d+CYWoYbSza/C
+ TQB+CeKz4M0tcOoiyiPL+UGzrB/Xq4d5xFjcebaUv/+cNvpgqgJ9fxlVwpZQMODGnvgBtwwtAiP
+ J2D+YBzg5VHDvp7Ru+LQHLrHF4uo=
+X-Google-Smtp-Source: AGHT+IGd0Nc2pQxlgsGnM9BUiIQKtpSvAHkMOXxtLgmuLZAcZoohWqKGvI8yaGCXuu/kNB9xU4MIX5O/QZm6dexLiJE=
+X-Received: by 2002:a05:6122:280e:b0:4ec:efaf:a020 with SMTP id
+ 71dfb90a1353d-4f2f404783fmr1876420e0c.15.1720099425525; Thu, 04 Jul 2024
+ 06:23:45 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1720098333;
- bh=gRMbPxrB73QmNpeLV3YSkGWsb1/UCTt0t7Mh6DzKNJI=;
- h=From:To:Cc:Subject:Date:From;
- b=ik6aNObQHJEatFsfOeBPNP22bFCHeLY+KY6mIzc2H9eqtZfFWmLLfr5lYeOCNXhAh
- Yc884yEjsdBsXU5m5XZRErxIARU4cflwLV7y1I5A49dplsQUbT+H+eDZbhtA+S9zjz
- tCOyeL+ptrFgoSZGqqz84aghmzr8hrkblOjQpo/01VOVs40Qx62/RTgSD04GGShPOa
- qn9JnQXb8jQsGmkKfXww3fxeK3//TbA/s12zqdEi5ewGbPaKsz1jkmP/V7GGVNhzDx
- hrjfdd5NHBMjUinyrtKBH/sIHzlH+Jhmd5LhvXj5qM2VstWJCacwK/BEfm63ECTrDa
- d6b7gjFHnU5PA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+References: <5e6129b8-9672-efd0-32c7-18d0defcad21@gmail.com>
+ <CAEyMn7bdo1UPCxy5pRi-SXsTgjy_o9wYkPZ+CgYrh7CPDgUd0w@mail.gmail.com>
+ <179f54c1-ed3c-4cdb-8110-71116525a6ac@gmail.com>
+ <CAEyMn7apYeyK=YuAUUSA9ANTh2nwER3x01Q89x8Op9aRxLuNQQ@mail.gmail.com>
+In-Reply-To: <CAEyMn7apYeyK=YuAUUSA9ANTh2nwER3x01Q89x8Op9aRxLuNQQ@mail.gmail.com>
+From: Lance Fredrickson <lancethepants@gmail.com>
+Date: Thu, 4 Jul 2024 07:23:35 -0600
+Message-ID: <CABwKrPD7uN+CDd_yYmtn58zzfCccaPz_oTCwd=8jM4n+erVRfQ@mail.gmail.com>
+To: heiko.thiery@gmail.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1720099427; x=1720704227; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=T4W/MjS0Apm2gmAZayq8C+UnIMSsPCkPU8IvERWyciY=;
+ b=IAMVwkaanOL7caoZ3yvbVEkvWdd3z2hf/bSflMQ2uDZiuqP/bOsZlEqRpkFE3MInXn
+ 16yeUMmnjeFERi1bO7tXO1guZno0OuA2hOq9hfSiEaLEPFGDzhUW7r5AXdH1v3ObQW96
+ Mic1l4zxy9WGxgoHdHIPzPdfq45K7oqNGb9aDeYWsW5CeTxGK84pWPKIZB/soWbWjuYm
+ ZGR2AVhqauCuTGM/8qxaLkTHZv1xG3Up1WnccrPbU2k0eQk2CgnDkcsignipYN00vakD
+ P/IEbbOYsvhu7LUN627sS4zreOtQigsf++8mDihsDRm23Sfa9rqLP84keyXHfrM9ngSn
+ lqEw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ik6aNObQ
-Subject: [Buildroot] [PATCH 1/1] package/wlroots: update the patches to be
- applied with fuzz 0
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=IAMVwkaa
+Subject: Re: [Buildroot] 2023.05 host ccache detects avx512 and fails to buld
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,232 +100,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>, Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: james.hilliard1@gmail.com, yann.morin.1998@free.fr,
+ thomas.petazzoni@bootlin.com, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1829980879574445124=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0") reduced the fuzz factor.
+--===============1829980879574445124==
+Content-Type: multipart/alternative; boundary="0000000000003ca80e061c6bdb2b"
 
-Due to this change, wlroots fails to build with output:
+--0000000000003ca80e061c6bdb2b
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-    Applying 0001-Add-feature-macros-to-more-C-files-.patch using patch:
-    patching file backend/wayland/output.c
-    patching file types/data_device/wlr_data_device.c
-    patching file types/data_device/wlr_drag.c
-    patching file types/wlr_export_dmabuf_v1.c
-    patching file types/wlr_idle.c
-    patching file types/wlr_keyboard_shortcuts_inhibit_v1.c
-    Hunk #1 FAILED at 1.
-    1 out of 1 hunk FAILED -- saving rejects to file types/wlr_keyboard_shortcuts_inhibit_v1.c.rej
-    patching file types/wlr_pointer_constraints_v1.c
-    patching file types/wlr_primary_selection.c
-    patching file types/wlr_relative_pointer_v1.c
-    patching file types/wlr_screencopy_v1.c
-    patching file types/wlr_virtual_pointer_v1.c
-    Hunk #1 FAILED at 1.
-    1 out of 1 hunk FAILED -- saving rejects to file types/wlr_virtual_pointer_v1.c.rej
-    patching file types/wlr_xdg_decoration_v1.c
-    patching file types/xdg_shell/wlr_xdg_popup.c
-    patching file types/xdg_shell/wlr_xdg_positioner.c
-    Hunk #1 FAILED at 1.
-    1 out of 1 hunk FAILED -- saving rejects to file types/xdg_shell/wlr_xdg_positioner.c.rej
-    patching file types/xdg_shell/wlr_xdg_shell.c
-    patching file types/xdg_shell/wlr_xdg_surface.c
+Great! Looking forward to it in the next release.
 
-This commit refreshes the package patch on the current package version.
+Lance
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...-Add-feature-macros-to-more-C-files.patch} | 45 ++++++++++---------
- 1 file changed, 25 insertions(+), 20 deletions(-)
- rename package/wlroots/{0001-Add-feature-macros-to-more-C-files-.patch => 0001-Add-feature-macros-to-more-C-files.patch} (87%)
+On Thu, Jul 4, 2024, 12:52=E2=80=AFAM Heiko Thiery <heiko.thiery@gmail.com>=
+ wrote:
 
-diff --git a/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch b/package/wlroots/0001-Add-feature-macros-to-more-C-files.patch
-similarity index 87%
-rename from package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
-rename to package/wlroots/0001-Add-feature-macros-to-more-C-files.patch
-index 0e1ae9d87aa..9467318b314 100644
---- a/package/wlroots/0001-Add-feature-macros-to-more-C-files-.patch
-+++ b/package/wlroots/0001-Add-feature-macros-to-more-C-files.patch
-@@ -1,4 +1,4 @@
--From cf37ba4c0bf31316b698ba23015f91903766871d Mon Sep 17 00:00:00 2001
-+From 7854cd141f6f4c896afdc86229671d443ca7ba10 Mon Sep 17 00:00:00 2001
- From: Paul Cercueil <paul@crapouillou.net>
- Date: Thu, 18 Feb 2021 22:31:39 +0000
- Subject: [PATCH] Add feature macros to more C files
-@@ -11,6 +11,8 @@ see: https://gitlab.freedesktop.org/wlroots/wlroots/-/merge_requests/2493
- Signed-off-by: Paul Cercueil <paul@crapouillou.net>
- [Retrieved from: https://github.com/swaywm/wlroots/pull/2493]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Julien: refreshed the patch to be applied with fuzz factor 0]
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
- ---
-  backend/wayland/output.c                  | 1 +
-  types/data_device/wlr_data_device.c       | 1 +
-@@ -31,7 +33,7 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  16 files changed, 16 insertions(+)
- 
- diff --git a/backend/wayland/output.c b/backend/wayland/output.c
--index d5410e0d32..8ff8fa2a00 100644
-+index c4b95e1..d5699d3 100644
- --- a/backend/wayland/output.c
- +++ b/backend/wayland/output.c
- @@ -1,3 +1,4 @@
-@@ -40,7 +42,7 @@ index d5410e0d32..8ff8fa2a00 100644
-  #include <stdint.h>
-  #include <stdio.h>
- diff --git a/types/data_device/wlr_data_device.c b/types/data_device/wlr_data_device.c
--index 6cd84ec0ab..beac496124 100644
-+index 7e67479..2db13a6 100644
- --- a/types/data_device/wlr_data_device.c
- +++ b/types/data_device/wlr_data_device.c
- @@ -1,3 +1,4 @@
-@@ -49,7 +51,7 @@ index 6cd84ec0ab..beac496124 100644
-  #include <stdlib.h>
-  #include <string.h>
- diff --git a/types/data_device/wlr_drag.c b/types/data_device/wlr_drag.c
--index 53bf4066a1..e3c1e249b4 100644
-+index c1fa801..8981ea0 100644
- --- a/types/data_device/wlr_drag.c
- +++ b/types/data_device/wlr_drag.c
- @@ -1,3 +1,4 @@
-@@ -58,7 +60,7 @@ index 53bf4066a1..e3c1e249b4 100644
-  #include <stdlib.h>
-  #include <string.h>
- diff --git a/types/wlr_export_dmabuf_v1.c b/types/wlr_export_dmabuf_v1.c
--index a8e2a4bde3..98ceae68f1 100644
-+index c1d26e6..cd06615 100644
- --- a/types/wlr_export_dmabuf_v1.c
- +++ b/types/wlr_export_dmabuf_v1.c
- @@ -1,3 +1,4 @@
-@@ -67,7 +69,7 @@ index a8e2a4bde3..98ceae68f1 100644
-  #include <stdlib.h>
-  #include <unistd.h>
- diff --git a/types/wlr_idle.c b/types/wlr_idle.c
--index 4c338931cc..80fd871fab 100644
-+index cb3a1cc..5f1fa95 100644
- --- a/types/wlr_idle.c
- +++ b/types/wlr_idle.c
- @@ -1,3 +1,4 @@
-@@ -76,16 +78,16 @@ index 4c338931cc..80fd871fab 100644
-  #include <stdlib.h>
-  #include <string.h>
- diff --git a/types/wlr_keyboard_shortcuts_inhibit_v1.c b/types/wlr_keyboard_shortcuts_inhibit_v1.c
--index fe4e64b04e..8360a9c21c 100644
-+index cc9bac1..3924893 100644
- --- a/types/wlr_keyboard_shortcuts_inhibit_v1.c
- +++ b/types/wlr_keyboard_shortcuts_inhibit_v1.c
- @@ -1,3 +1,4 @@
- +#define _POSIX_C_SOURCE 199309L
-  #include <assert.h>
-  #include <stdlib.h>
-- #include <util/signal.h>
-+ #include <wlr/types/wlr_compositor.h>
- diff --git a/types/wlr_pointer_constraints_v1.c b/types/wlr_pointer_constraints_v1.c
--index eca45984c4..f1db8e3415 100644
-+index 7a8d209..70b0984 100644
- --- a/types/wlr_pointer_constraints_v1.c
- +++ b/types/wlr_pointer_constraints_v1.c
- @@ -1,3 +1,4 @@
-@@ -94,7 +96,7 @@ index eca45984c4..f1db8e3415 100644
-  #include <limits.h>
-  #include <pixman.h>
- diff --git a/types/wlr_primary_selection.c b/types/wlr_primary_selection.c
--index 0875462c8c..7e0e11ddaa 100644
-+index d576bf0..bac4daa 100644
- --- a/types/wlr_primary_selection.c
- +++ b/types/wlr_primary_selection.c
- @@ -1,3 +1,4 @@
-@@ -103,7 +105,7 @@ index 0875462c8c..7e0e11ddaa 100644
-  #include <stdlib.h>
-  #include <wlr/types/wlr_primary_selection.h>
- diff --git a/types/wlr_relative_pointer_v1.c b/types/wlr_relative_pointer_v1.c
--index 8613f2b91c..3f8dd8b72a 100644
-+index 44da791..f6925b8 100644
- --- a/types/wlr_relative_pointer_v1.c
- +++ b/types/wlr_relative_pointer_v1.c
- @@ -1,3 +1,4 @@
-@@ -112,7 +114,7 @@ index 8613f2b91c..3f8dd8b72a 100644
-  #include <inttypes.h>
-  #include <stdlib.h>
- diff --git a/types/wlr_screencopy_v1.c b/types/wlr_screencopy_v1.c
--index 6feb074274..29864c2364 100644
-+index 4ca659a..76c582e 100644
- --- a/types/wlr_screencopy_v1.c
- +++ b/types/wlr_screencopy_v1.c
- @@ -1,3 +1,4 @@
-@@ -121,16 +123,16 @@ index 6feb074274..29864c2364 100644
-  #include <stdlib.h>
-  #include <drm_fourcc.h>
- diff --git a/types/wlr_virtual_pointer_v1.c b/types/wlr_virtual_pointer_v1.c
--index a9d1fd7bc4..5566e9e013 100644
-+index b452ff5..661e613 100644
- --- a/types/wlr_virtual_pointer_v1.c
- +++ b/types/wlr_virtual_pointer_v1.c
- @@ -1,3 +1,4 @@
- +#define _POSIX_C_SOURCE 199309L
-  #include <assert.h>
-  #include <stdlib.h>
-- #include <wlr/types/wlr_seat.h>
-+ #include <wlr/interfaces/wlr_pointer.h>
- diff --git a/types/wlr_xdg_decoration_v1.c b/types/wlr_xdg_decoration_v1.c
--index 544035b7b8..904474c088 100644
-+index fcd97a5..1850665 100644
- --- a/types/wlr_xdg_decoration_v1.c
- +++ b/types/wlr_xdg_decoration_v1.c
- @@ -1,3 +1,4 @@
-@@ -139,7 +141,7 @@ index 544035b7b8..904474c088 100644
-  #include <stdbool.h>
-  #include <stdlib.h>
- diff --git a/types/xdg_shell/wlr_xdg_popup.c b/types/xdg_shell/wlr_xdg_popup.c
--index 69b4cfe19f..05d6551fc8 100644
-+index fa99acd..8361eef 100644
- --- a/types/xdg_shell/wlr_xdg_popup.c
- +++ b/types/xdg_shell/wlr_xdg_popup.c
- @@ -1,3 +1,4 @@
-@@ -148,16 +150,16 @@ index 69b4cfe19f..05d6551fc8 100644
-  #include <stdlib.h>
-  #include <string.h>
- diff --git a/types/xdg_shell/wlr_xdg_positioner.c b/types/xdg_shell/wlr_xdg_positioner.c
--index f88bf323b8..8881c49916 100644
-+index 6a991bb..dae879b 100644
- --- a/types/xdg_shell/wlr_xdg_positioner.c
- +++ b/types/xdg_shell/wlr_xdg_positioner.c
- @@ -1,3 +1,4 @@
- +#define _POSIX_C_SOURCE 199309L
-  #include <assert.h>
-  #include <stdlib.h>
-- #include "types/wlr_xdg_shell.h"
-+ #include <wlr/util/edges.h>
- diff --git a/types/xdg_shell/wlr_xdg_shell.c b/types/xdg_shell/wlr_xdg_shell.c
--index 0480d5f354..c93fe7c3fb 100644
-+index 70b777d..16d275a 100644
- --- a/types/xdg_shell/wlr_xdg_shell.c
- +++ b/types/xdg_shell/wlr_xdg_shell.c
- @@ -1,3 +1,4 @@
-@@ -166,7 +168,7 @@ index 0480d5f354..c93fe7c3fb 100644
-  #include <stdlib.h>
-  #include "types/wlr_xdg_shell.h"
- diff --git a/types/xdg_shell/wlr_xdg_surface.c b/types/xdg_shell/wlr_xdg_surface.c
--index edf562abcd..c1dfbfba7e 100644
-+index a03b90a..a6267cf 100644
- --- a/types/xdg_shell/wlr_xdg_surface.c
- +++ b/types/xdg_shell/wlr_xdg_surface.c
- @@ -1,3 +1,4 @@
-@@ -174,3 +176,6 @@ index edf562abcd..c1dfbfba7e 100644
-  #include <assert.h>
-  #include <stdlib.h>
-  #include <string.h>
-+-- 
-+2.45.2
-+
--- 
-2.45.2
+> Hi Lance,
+>
+> Am Mi., 3. Juli 2024 um 17:03 Uhr schrieb Lance Fredrickson
+> <lancethepants@gmail.com>:
+> >
+> > I've just been carrying this patch that disabled AVX512.  Seemed like
+> > not a lot of people were using ccache.
+> >
+> >
+> https://github.com/tomato64/tomato64/blob/master/src/patches/0001-disable=
+-ccache-av512.patch
+>
+> Good to know that this is also possible. But as you can see I bumped
+> ccache and added new  system dependencies to fix this issue.
+>
+> --
+> Heiko
+>
+> [snip]
+>
+
+--0000000000003ca80e061c6bdb2b
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<p dir=3D"ltr">Great! Looking forward to it in the next release.</p>
+<p dir=3D"ltr">Lance</p>
+<br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu=
+, Jul 4, 2024, 12:52=E2=80=AFAM Heiko Thiery &lt;<a href=3D"mailto:heiko.th=
+iery@gmail.com">heiko.thiery@gmail.com</a>&gt; wrote:<br></div><blockquote =
+class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid=
+;padding-left:1ex">Hi Lance,<br>
+<br>
+Am Mi., 3. Juli 2024 um 17:03 Uhr schrieb Lance Fredrickson<br>
+&lt;<a href=3D"mailto:lancethepants@gmail.com" target=3D"_blank" rel=3D"nor=
+eferrer">lancethepants@gmail.com</a>&gt;:<br>
+&gt;<br>
+&gt; I&#39;ve just been carrying this patch that disabled AVX512.=C2=A0 See=
+med like<br>
+&gt; not a lot of people were using ccache.<br>
+&gt;<br>
+&gt; <a href=3D"https://github.com/tomato64/tomato64/blob/master/src/patche=
+s/0001-disable-ccache-av512.patch" rel=3D"noreferrer noreferrer" target=3D"=
+_blank">https://github.com/tomato64/tomato64/blob/master/src/patches/0001-d=
+isable-ccache-av512.patch</a><br>
+<br>
+Good to know that this is also possible. But as you can see I bumped<br>
+ccache and added new=C2=A0 system dependencies to fix this issue.<br>
+<br>
+-- <br>
+Heiko<br>
+<br>
+[snip]<br>
+</blockquote></div>
+
+--0000000000003ca80e061c6bdb2b--
+
+--===============1829980879574445124==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1829980879574445124==--
