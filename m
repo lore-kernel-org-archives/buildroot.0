@@ -4,91 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBDE8C30653
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 06:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BCB3C30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 06:43:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC1F24048E;
-	Thu,  4 Jul 2024 06:37:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D945640364;
+	Thu,  4 Jul 2024 06:43:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xk4HO2AwXuuG; Thu,  4 Jul 2024 06:37:32 +0000 (UTC)
+ id hZV0nxR_MQOx; Thu,  4 Jul 2024 06:43:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D82F340481
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8057340412
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D82F340481;
-	Thu,  4 Jul 2024 06:37:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 214C21BF391
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:37:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8057340412;
+	Thu,  4 Jul 2024 06:43:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A719F1BF391
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:43:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1BB7C607B2
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:37:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 940D940412
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:43:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r8qSY2V_8OWg for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 06:37:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2vAWw1IQjfYi for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 06:43:37 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 61D5B60715
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61D5B60715
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 61D5B60715
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 06:37:28 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-a728f74c23dso27663866b.1
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 23:37:28 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0E6E040364
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E6E040364
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0E6E040364
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 06:43:36 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id
+ 4fb4d7f45d1cf-57d06101d76so311211a12.3
+ for <buildroot@buildroot.org>; Wed, 03 Jul 2024 23:43:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720075046; x=1720679846;
+ d=1e100.net; s=20230601; t=1720075414; x=1720680214;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=0hTsGcgKsNq8ORZiYuuqTf6twvNl1sd8w2ywRFaNF20=;
- b=ZeraSD9kib9LQndF0wwGGLor61Lu9+xm2OwWryPoSl5vVFf0HwKgKsQhZCD8BP47+3
- b+JlOsByE6YljrEP/PVWHmErwrkQxWbR+Cg2DeDsESI769AkzzGyrwHaXnrNqytSu/VU
- NHCxccvXMVIF7F0qxiaz4PrkdKQbSRPupUYJUCW7CL0QyAlyAbP5y6AywvtQQwPesg/f
- sf4sGPsdHMAQgSdUBHd5RAje58WAqorrCaBQ44/VrRETV12o3L+bZ7nVmHsApXkId/oS
- smCwS39d09wELm9G8GSx8+DqU4CpAAY4UoxYNVxIS/2XgRLeaeIJLhgYcdW0sW6XkD7v
- OOvQ==
-X-Gm-Message-State: AOJu0YwzCgc90DgEAmv0h1ZK6U9f47BosBQ8D3Y57U675rnyzd9DfFng
- TaHTrkBaozgJ8OMAfm3+tmfHo3B+Syr+sEi0llQdOs29RsgZV9+tGVXGK7pOGrUEH86k+72UYsK
- U4MU=
-X-Google-Smtp-Source: AGHT+IHlSIlnNYBSw5O9IDVsukNhBGRVfOjG3G3A5CWK4NJgCC4P8gBPKjwhRMdDlF7fMmvlYQaoHA==
-X-Received: by 2002:a17:907:7e8b:b0:a72:46f3:ffc5 with SMTP id
- a640c23a62f3a-a77ba6fbb8cmr47898966b.28.1720075046079; 
- Wed, 03 Jul 2024 23:37:26 -0700 (PDT)
-Received: from localhost.localdomain ([2001:b07:6474:ebbf:ea87:116:a8d5:fa85])
+ bh=VHbyNZ27QTnxboi9F3SyCgYC7AlRZFyw+1sVwv0OQfQ=;
+ b=IVY1umc6SlfGoNJ9UTGIaQ1Ohj3fGwKPFej/6/PTVee0l7Udk8mYMRsfy+hHd6Nbcl
+ BG886PkIOSDAtY2oCQPPPvLV/BQHbS17Tw0W7ZDkb7X4zRb3HSEFm1li1buJtcfH7cd4
+ mStJZqScG3Gj4kEZRk1u4ntnMxhByktYqaVQmLA6SctbuLIcxofKgmlBFZPiXd3XdJrH
+ eIu0AitQhG+2BFY0/0pFfh9NSAz6mrg9SQncJRe05LOLtVLLF2XwNinTFXSy1/PezEjq
+ W5mm1/Qurp/+w7soXziPWPR4r4/6QPaVAHX64IqSB8qqMHceR9ikyShlVaG18vez0fNt
+ GKpw==
+X-Gm-Message-State: AOJu0YzOE/185iKEo3JMe9n0DDM1dP6Nv8wsM7TlBvhpF/o0hJtUrLM0
+ QEyPosoMZJ/hn0RwxJsm1T2QIB3BSNE4+ypHigtif4TlwbNWvz+hJMD12A==
+X-Google-Smtp-Source: AGHT+IHk6enB4bO2aU9Uha9NNexrOrzFv1H/w1IZUJIj9UPIQWXuBIQdpTv4ZkKA2mNUvGqgiwjKCg==
+X-Received: by 2002:a05:6402:2353:b0:58d:c542:2500 with SMTP id
+ 4fb4d7f45d1cf-58e5955663dmr575086a12.10.1720075413647; 
+ Wed, 03 Jul 2024 23:43:33 -0700 (PDT)
+Received: from hthiery.kontron.local
+ ([2a02:810b:5a40:2a43:7200:ad55:a3ad:7bab])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a77b8eb56c1sm21713066b.176.2024.07.03.23.37.25
+ 4fb4d7f45d1cf-5861324dfaasm8252620a12.32.2024.07.03.23.43.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Jul 2024 23:37:25 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu,  4 Jul 2024 08:37:22 +0200
-Message-ID: <20240704063722.2902990-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ Wed, 03 Jul 2024 23:43:33 -0700 (PDT)
+From: Heiko Thiery <heiko.thiery@gmail.com>
+To: buildroot@buildroot.org, "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Arnout Vandecappelle <arnout@mind.be>, Peter Seiderer <ps.report@gmx.net>,
+ Lance Fredrickson <lancethepants@gmail.com>
+Date: Thu,  4 Jul 2024 08:43:20 +0200
+Message-Id: <20240704064322.3242095-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1720075046; x=1720679846;
- darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1720075414; x=1720680214; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0hTsGcgKsNq8ORZiYuuqTf6twvNl1sd8w2ywRFaNF20=;
- b=HbSpCUEzfInECpErf6Z1ji7SowMuqHugv0AxSldRSi1RRSl4wDfEjEYSR+B363LdvD
- cYLPs3mDtOGLONJP0JdgHVasy+9IVwZzMbdqAvNCVIqewd91LsIST2fmaBUOXIIZBwCU
- cZ80FCnripvo/lxDZqy904uVgDnrYXY7aFdps=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=VHbyNZ27QTnxboi9F3SyCgYC7AlRZFyw+1sVwv0OQfQ=;
+ b=CgMn0YrzK0AnNd6M4Rd4aZ3YXkeE788wyqPprTzbvrs6dYZItHQ7znIwdrBYZeLOlP
+ e2esiZssOgGjqI4hxNUPh7D0BYCkefC03eKikCntTAfofXhUYqumNFa5dSdIXmfBYc+P
+ IpwRQWss26H4hO5TefWIrf2Ehdf64b67P3SRUvRikLFwkMpV6BkSUiZjMu2CXBAcSCLG
+ BlMNQKGDb7Yuw/iL6YD9AVUMinx27xhdbp0/uuP0q0JJg8fWVw0JiClPwd8okTJ9y00i
+ PuYt9mifKIfVTLQwDUySFtFIm07OZQQ4/Pj4BAm7PMW7KPR58LtH4PnnFSlyL2RP6LLR
+ boZw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=HbSpCUEz
-Subject: [Buildroot] [PATCH v2] package/libglfw: update the patches to be
- applied with fuzz 0
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=CgMn0Yrz
+Subject: [Buildroot] [PATCH 0/3] package/ccache: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,150 +103,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+Cc: Heiko Thiery <heiko.thiery@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0") reduced the fuzz factor.
+---- 8< ----
+/tmp/ccmQFw5y.s: Assembler messages:
+/tmp/ccmQFw5y.s:89386: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:89400: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:89464: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:89518: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:89525: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:123938: Error: unsupported instruction `vmovdqu'
+/tmp/ccmQFw5y.s:123953: Error: unsupported instruction `vmovdqu'
+make[4]: *** [src/third_party/blake3/CMakeFiles/blake3.dir/build.make:160: src/third_party/blake3/CMakeFiles/blake3.dir/blake3_avx512.c.o] Error 1
+make[3]: *** [CMakeFiles/Makefile2:406: src/third_party/blake3/CMakeFiles/blake3.dir/all] Error 2
+---- 8< ----
 
-Due to this change, libglfw fails to build with output:
+To solve the problem above I started bumping the ccache package to
+4.10.1. While doing this I observed the problem that ccache tries to
+download xxhash by its own and fails.
 
-    Applying 0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch using patch:
-    patching file src/CMakeLists.txt
-    Hunk #1 FAILED at 75.
-    1 out of 1 hunk FAILED -- saving rejects to file src/CMakeLists.txt.rej
+---- 8< ----
+-- Downloading...
+   dst='/srv/storage/hthiery/buildroot-2/output/build/host-ccache-4.10.1/_deps/xxhash-subbuild/xxhash-populate-prefix/src/v0.8.2.tar.gz'
+   timeout='none'
+   inactivity timeout='none'
+-- Using src='https://github.com/Cyan4973/xxhash/archive/refs/tags/v0.8.2.tar.gz'
+CMake Error at xxhash-subbuild/xxhash-populate-prefix/src/xxhash-populate-stamp/download-xxhash-populate.cmake:170 (message):
+  Each download failed!
 
-This commit refreshes the package patch on the current package version.
+    error: downloading 'https://github.com/Cyan4973/xxhash/archive/refs/tags/v0.8.2.tar.gz' failed
+          status_code: 1
+          status_string: "Unsupported protocol"
+          log:
+          --- LOG BEGIN ---
+          Protocol "https" not supported or disabled in libcurl
+  Closing connection
+          --- LOG END ---
+---- 8< ----
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
-Changes v1 -> v2:
- - Drop hunks also for patch 1 even if it doesn't report any error applying it
-   with fuzz 0.
-   
- .checkpackageignore                           |  1 -
- ...emove-extra-cmake-modules-dependency.patch | 18 ++++++++++-------
- ...xt-allow-override-of-wayland-pkgdata.patch | 20 ++++++++++---------
- 3 files changed, 22 insertions(+), 17 deletions(-)
+So I added support for the host package of xxhash and added this to
+the ccache dependencies.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0a1d2627455e..9f4331d206d1 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -825,7 +825,6 @@ package/libfuse/0001-fix-aarch64-build.patch lib_patch.Upstream
- package/libfuse/0002-util-ulockmgr_server-c-conditionally-define-closefrom-fix-glibc-2-34.patch lib_patch.Upstream
- package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch lib_patch.Upstream
- package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch lib_patch.Upstream
--package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch lib_patch.Upstream
- package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch lib_patch.Upstream
- package/libgsm/0001-Misc-fixes-from-Archlinux.patch lib_patch.Upstream
- package/libgtk2/0001-reduce-dependencies.patch lib_patch.Upstream
-diff --git a/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch b/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
-index d5ee7c829a45..ffa1d13f5134 100644
---- a/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
-+++ b/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
-@@ -1,4 +1,4 @@
--From 2747e47393cbca2d09db56223e735bd94b21e2eb Mon Sep 17 00:00:00 2001
-+From 8ebf1067390948d03330a5a0c814e5f7f860e678 Mon Sep 17 00:00:00 2001
- From: Joel Winarske <joel.winarske@gmail.com>
- Date: Mon, 28 Sep 2020 22:23:02 -0700
- Subject: [PATCH] Wayland: Remove extra-cmake-modules dependency
-@@ -8,17 +8,18 @@ Fixes #1774.
- [Retrieved (and backported) from:
- https://github.com/glfw/glfw/commit/2747e47393cbca2d09db56223e735bd94b21e2eb]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Dario: make the patch to be applied with fuzz factor 0 dropping all Hunks]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-- .gitignore         |  4 ---
-  CMakeLists.txt     | 16 ++++++------
-  src/CMakeLists.txt | 62 ++++++++++++++++++++++++++++------------------
-- 3 files changed, 45 insertions(+), 37 deletions(-)
-+ 2 files changed, 45 insertions(+), 33 deletions(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 42bfa1806d..394827520b 100644
-+index 75069161fc36..b315eaa15305 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -191,20 +191,18 @@ endif()
-+@@ -249,20 +249,18 @@ endif()
-  # Use Wayland for window creation
-  #--------------------------------------------------------------------
-  if (_GLFW_WAYLAND)
-@@ -47,10 +48,10 @@ index 42bfa1806d..394827520b 100644
-      include(CheckIncludeFiles)
-      include(CheckFunctionExists)
- diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 2f2bdd883d..e834506c6c 100644
-+index b6dd86c54512..29be6515ae58 100644
- --- a/src/CMakeLists.txt
- +++ b/src/CMakeLists.txt
--@@ -45,30 +45,44 @@ if (_GLFW_X11 OR _GLFW_WAYLAND)
-+@@ -40,30 +40,44 @@ elseif (_GLFW_WAYLAND)
-                       posix_time.c posix_thread.c xkb_unicode.c
-                       egl_context.c osmesa_context.c)
-  
-@@ -119,3 +120,6 @@ index 2f2bdd883d..e834506c6c 100644
-  elseif (_GLFW_OSMESA)
-      set(glfw_HEADERS ${common_HEADERS} null_platform.h null_joystick.h
-                       posix_time.h posix_thread.h osmesa_context.h)
-+-- 
-+2.43.0
-+
-diff --git a/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch b/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
-index 4bcb5e4eb705..268b1248518b 100644
---- a/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
-+++ b/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
-@@ -1,4 +1,4 @@
--From 46aaf2b2b4d3ec240b9aad175bb3eddb6ae11ead Mon Sep 17 00:00:00 2001
-+From a2c88988b6cfe4023fe78f13519b56a8ac9f568b Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Fri, 4 Mar 2022 17:59:19 +0100
- Subject: [PATCH] src/CMakeLists.txt: allow override of wayland pkgdatadir
-@@ -7,17 +7,19 @@ Allow the user to override WAYLAND_{PROTOCOLS_BASE,CLIENT_PKGDATADIR}
- (needed when cross-compiling)
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/glfw/glfw/pull/2053]
-+Upstream: https://github.com/glfw/glfw/pull/2053
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-- src/CMakeLists.txt | 8 ++++++--
-- 1 file changed, 6 insertions(+), 2 deletions(-)
-+ src/CMakeLists.txt | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
- 
- diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 01f191c9..475ce882 100644
-+index 29be6515ae58..1767b3c8ad8f 100644
- --- a/src/CMakeLists.txt
- +++ b/src/CMakeLists.txt
--@@ -75,7 +75,9 @@ if (GLFW_BUILD_WAYLAND)
--     include(FindPkgConfig)
-+@@ -42,7 +42,9 @@ elseif (_GLFW_WAYLAND)
-+ 
-      find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner)
-      pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
- -    pkg_get_variable(WAYLAND_PROTOCOLS_BASE wayland-protocols pkgdatadir)
-@@ -26,7 +28,7 @@ index 01f191c9..475ce882 100644
- +    endif()
-  
-      macro(wayland_generate protocol_file output_file)
--         add_custom_command(OUTPUT "${output_file}.h"
-+           add_custom_command(OUTPUT ${output_file}.h
- -- 
--2.34.1
-+2.43.0
- 
+In addition the bundled blake3 version seems not to build correctly on
+all machines. See the first error about 'unsupported instruction'.
+Therefore the new host package for blake3 is introduced.
+
+
+v2:
+    - change subject (fixed naming from ccmake to ccache)
+
+Heiko Thiery (3):
+  package/blake3: add new host package
+  package/xxhash: add host support
+  package/ccache: bump version to 4.10.1
+
+ package/blake3/blake3.hash |  6 ++++++
+ package/blake3/blake3.mk   | 22 ++++++++++++++++++++++
+ package/ccache/ccache.hash |  2 +-
+ package/ccache/ccache.mk   | 16 ++++++++--------
+ package/pkg-generic.mk     |  2 +-
+ package/xxhash/xxhash.mk   | 18 ++++++++++++++++++
+ 6 files changed, 56 insertions(+), 10 deletions(-)
+ create mode 100644 package/blake3/blake3.hash
+ create mode 100644 package/blake3/blake3.mk
+
 -- 
-2.43.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
