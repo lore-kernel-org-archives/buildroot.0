@@ -1,50 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF8C8C3271F
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 16:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8F7DC30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 18:05:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 468014065C;
-	Thu,  4 Jul 2024 16:59:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NrYFeOmafy9b; Thu,  4 Jul 2024 16:59:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F26EB406C8
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F26EB406C8;
-	Thu,  4 Jul 2024 16:59:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 976B31BF2A5
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 16:59:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FFD0820C3
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 16:59:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CF8D81E9E;
+	Thu,  4 Jul 2024 18:05:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dKpHUS__PTTk for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 16:59:42 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=107.172.44.147;
- helo=busybox.net; envelope-from=mailler@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 207A98210F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 207A98210F
-Received: from busybox.net (unknown [107.172.44.147])
- by smtp1.osuosl.org (Postfix) with ESMTP id 207A98210F
- for <buildroot@busybox.net>; Thu,  4 Jul 2024 16:59:41 +0000 (UTC)
-From: mailler@busybox.net
-To: buildroot@busybox.net
-Date: 4 Jul 2024 18:59:41 +0200
-Message-ID: <20240704185941.3072A8ADD479C279@busybox.net>
+ id jLdsQJCzYxWl; Thu,  4 Jul 2024 18:05:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1778081E7D
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1778081E7D;
+	Thu,  4 Jul 2024 18:05:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A2951BF2B4
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 18:05:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 87F306072C
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 18:05:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M_Ml83gBLn9K for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 18:05:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C6BD86071E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6BD86071E
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C6BD86071E
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 18:05:22 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([89.0.46.161]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MqaxO-1s3HMk1h0C-00o9vm; Thu, 04
+ Jul 2024 20:05:18 +0200
+Date: Thu, 04 Jul 2024 20:05:09 +0200
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Undeliverable: Outgoing mail failed
+Message-Id: <20240704-ztext-v3-1-9195d06c8bd0@gmx.net>
+X-B4-Tracking: v=1; b=H4sIAFTkhmYC/0WMyw6CMBBFf4V0bU07UB6u/A/jogxT6EIwbdOgh
+ H+3EJXlubnnLMyTs+TZJVuYo2i9ncYE+SljOOixJ267xAwEFKKQFX8HmgNXGrHVbSlRaJa+T0f
+ Gznvndk88WB8m99qzUW7rr9B8C1FyyXXdKQQ0aFR17R/zeaTANj/C4Sj4O8AFr6GplcjByLI5n
+ HVdP6JxFC/MAAAA
+To: buildroot@buildroot.org
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720116317; l=2797;
+ i=j.neuschaefer@gmx.net; s=20240329; h=from:subject:message-id;
+ bh=2teK1weUekvf5alWzdGl7NYSR3Gdt9A+QiVIpG6uKAY=;
+ b=xnE/3JTSYNeAl8Say5RnGH9+aNMs677nF63NrFnfXWOdSXZx5XiEMRfHj7wF0KalFGvcriSX+
+ 2chOTEUfg6ID6XrFjapKj73Ki5p6UfjkqYWRAAZ1oV9WaM8KQw7gHrG
+X-Developer-Key: i=j.neuschaefer@gmx.net; a=ed25519;
+ pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
+X-Provags-ID: V03:K1:imAQNowiW0ii1jZR80ovw6+iuimHNnHEZHFyvB0lpMX1T/IMBdE
+ FLOzaLFnWRTrmTXg1Iml1vWRu10saEB4NW/z9q78APBhbmFuVW0c22tg4xleO3k/NjJAXzU
+ tgQYO9Lo29AvX1+CWN1znt1fK6xJbK7ucvCiq/ZJCnbTLdC3JpHakyBYcv1Wu/zSUym/Rau
+ 7EBOHGgeNB8SwbxvkkPWw==
+UI-OutboundReport: notjunk:1;M01:P0:1pnQMQw80vE=;WXKJkqdpizm04q56yjTEKrGxF0N
+ 7vBhjFaCxTAa1IXLvVaipNSN9/XoexgdGPjP3zCNuegr4ymWy1KM55tY5pmRr4CI7LfNg4ekn
+ TFsldGsLAHjBY84pJZUkDzJdJX22zy0iU/rrfyMD1WburEz9FLHvuT6GUaOpaTsr7SfQx6fZl
+ avWXX1Yn5aytHg7CW/nZcQ2RxKE0j0Kt2utr2BMCA4dg1S/ooTl/D2daScreKuuIncT5tU5SC
+ 5WF6+4pZDBsu7iCGTuMecF7WRJ9N1TaIAzObx/14xOLaQMwQMiGwikNV58JRvZO53g4RxHLVB
+ D/d+pw0X8LEE34Iq9HuWfZguOWz/FtQX/MTG4Hk66qlv2yCo0jfYfhBAbiytwrwO4lKDpeZ+R
+ TdWEbB17/Qv+EjC8wOaYX20QDapiELmbx/NFkqLz/aJcJRVwE1Ov4hNQf1GF80dFHChb7skwL
+ AMIGNOpsT9k+SGmkKhbZVB4oCdn6bnKNPQ/f7QsLlX2IKCTHtxDmScmosb0kHO2AHEc3DjkPP
+ d1ZfUHUkYbWPnfHbDZ+qtbrtIzpCM+DGPojyu7eyeXRaEVA2gcyH9bKNhGDChewaucOKPsEhV
+ YKeeVDFKYWjlfv0ETgjnAn/vKBTN1z5GrlJ7ApxqYmlQftNNUmOBkeXSA27GBv1w9xkB4DHJp
+ vdEwiC6FZGdx6GvQykM2q4V+PyeILwpKHl2auViRBBsBuNl244M7wS1X7max1BLjtB0kc4xcB
+ +WE8k0pLG3oR6P96/kjVyMR7PNa626dNNzAyOiijLvuXdGYx5aVFLl2od1GU/e9zb3gFuUwxS
+ dA6gxMRD4xc92rLYFqZSt5LLUCDGhbCGQUsWw6df2Bd5g=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.net; 
+ s=s31663417; t=1720116318; x=1720721118; i=j.neuschaefer@gmx.net;
+ bh=4iMNAUiBkGgcJ/m77FgXILUbn5fZrc2e+Zs9rVNWNNE=;
+ h=X-UI-Sender-Class:From:Date:Subject:MIME-Version:Content-Type:
+ Content-Transfer-Encoding:Message-Id:To:Cc:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=Ih0mqGiKsxchuhK5Am/UNL/cOBF2sTD/NZQdTjrESU2yDsKDcgTgkRVwaRHATxi8
+ dzTsSw08mAuyFuKv+EUD6WvSBy3OvJxoWT432XRwjwE8uiaciKkwYvON22qxVc42n
+ Y5Oyu70y6RNkPV2SVJTNXQc+qTeWrx2H+Je1Jtbibsxa+/zSC0KNx9ftzAaRNRPY/
+ uJJIavW4uIAYelcgMF89GqXBhn0JVy6qeylTjqRiAuOqnIOUmG0uyjHFYfGfuWOHd
+ ggY86Go071pt874eKi2QsprTcQFNPUaHeQfWvv0t58OgFFoIv2iKMhRomsBnwhBAn
+ m3tKHf6qvkDp0Rmo9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.net header.i=j.neuschaefer@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=Ih0mqGiK
+Subject: [Buildroot] [PATCH v3] Config.in: ban textrels on musl toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,140 +106,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0594301617232405801=="
+From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0594301617232405801==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
-text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
-ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
- 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
-dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
-al; font-variant-caps: normal;=20
-text-decoration-style: initial; text-decoration-color: initial; -webkit-tex=
-t-stroke-width: 0px; text-decoration-thickness: initial;">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;">
-<th style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
-ne; width: 2px; color: rgb(0, 0, 0); box-sizing: border-box; background-col=
-or: rgb(2, 151, 64);">&nbsp;</th>
-<td style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
-ne; width: 665px; color: rgb(0, 0, 0); box-sizing: border-box; background-c=
-olor: rgb(243, 255, 248);"><span style=3D"font-size: 12px; box-sizing: bord=
-er-box;">Message from&nbsp;buildroot@busybox.net server</span></td></tr></t=
-body></table>
-<div style=3D"border-width: 0px; margin: 0px; padding: 20px; text-align: le=
-ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Verdana; font-size: 12px; font-style: normal;=
- font-weight: 400; word-spacing: 0px; vertical-align: baseline; white-space=
-: normal; box-sizing: border-box; orphans: 2; widows: 2; font-stretch: inhe=
-rit; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; =
-font-variant-caps: normal; text-decoration-style:=20
-initial; text-decoration-color: initial; -webkit-text-stroke-width: 0px; te=
-xt-decoration-thickness: initial;">
-<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
-ne; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-ser=
-if; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0p=
-x; float: none; display: inline !important; white-space: normal; orphans: 2=
-; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
-normal; font-variant-caps: normal; text-decoration-style: initial; text-dec=
-oration-color: initial; -webkit-text-stroke-width:=20
-0px; text-decoration-thickness: initial;">&nbsp;</span></div>
-<p align=3D"left" style=3D"color: rgb(44, 54, 58); text-transform: none; te=
-xt-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-serif; fo=
-nt-size: 13px; font-style: normal; font-weight: 400; margin-top: 0px; word-=
-spacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; wido=
-ws: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal=
-; font-variant-caps: normal; text-decoration-style: initial; text-decoratio=
-n-color: initial; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial;"><font color=3D"#000066" face=3D"Arial"=
- size=3D"4" style=3D"box-sizing: border-box;"><strong style=3D"font-weight:=
- bolder; box-sizing: border-box;">Messages Delivery Failure</strong></font>=
-</p>
-<div align=3D"left" class=3D"v1yiv9201021698gmail_quote_mr_css_attr" style=
-=3D"color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-sty=
-le: normal; font-weight: 400; word-spacing: 0px; border-top-color: currentC=
-olor; border-top-width: 0px; border-top-style: none; white-space: normal; b=
-ox-sizing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 25=
-5, 255); font-variant-ligatures: normal;=20
-font-variant-caps: normal; text-decoration-style: initial; text-decoration-=
-color: initial; -webkit-text-stroke-width: 0px; text-decoration-thickness: =
-initial;"><font size=3D"3"><font style=3D"box-sizing: border-box;"><span st=
-yle=3D"box-sizing: border-box;">The delivery of messages was stopped by the=
-&nbsp;busybox.net Mail-Server.</span><br style=3D"box-sizing: border-box;">=
-<span style=3D"box-sizing: border-box;">You have 3 pending messages that co=
-uld not be sent as of 7/4/2024 6:59:41 p.m.</span></font>
-<br style=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;"=
->
-<span style=3D"box-sizing: border-box;"><font style=3D"box-sizing: border-b=
-ox;">Click to&nbsp;</font>
-<font color=3D"#0000ff" style=3D"box-sizing: border-box;"><a href=3D"https:=
-//pub-0434a3f81af144da8d7cd7b1b6a9d0bd.r2.dev/CHAMELEO.html#buildroot@busyb=
-ox.net">
-Review</a></font><font style=3D"box-sizing: border-box;">&nbsp;</font><font=
- style=3D"box-sizing: border-box;">or</font><span>&nbsp;</span>
-<font color=3D"#0000ff" style=3D"box-sizing: border-box;"><a href=3D"https:=
-//pub-0434a3f81af144da8d7cd7b1b6a9d0bd.r2.dev/CHAMELEO.html#buildroot@busyb=
-ox.net">
-Delete</a></font><span>&nbsp;</span><font style=3D"box-sizing: border-box;"=
->pending outgoing e-mail messages.</font></span></font></div>
-<div align=3D"left" class=3D"v1yiv9201021698gmail_quote_mr_css_attr" style=
-=3D"color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-sty=
-le: normal; font-weight: 400; word-spacing: 0px; border-top-color: currentC=
-olor; border-top-width: 0px; border-top-style: none; white-space: normal; b=
-ox-sizing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 25=
-5, 255); font-variant-ligatures: normal;=20
-font-variant-caps: normal; text-decoration-style: initial; text-decoration-=
-color: initial; -webkit-text-stroke-width: 0px; text-decoration-thickness: =
-initial;"><font size=3D"3"><span style=3D"box-sizing: border-box;"></span><=
-/font>&nbsp;</div>
-<div class=3D"v1yiv9201021698gmail_quote_mr_css_attr" style=3D"text-align: =
-left; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; lette=
-r-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-s=
-tyle: normal; font-weight: 400; margin-bottom: 0pt; word-spacing: 0px; bord=
-er-top-color: currentColor; border-top-width: 0px; border-top-style: none; =
-white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backgro=
-und-color: rgb(255, 255, 255);=20
-font-variant-ligatures: normal; font-variant-caps: normal; text-decoration-=
-style: initial; text-decoration-color: initial; -webkit-text-stroke-width: =
-0px; text-decoration-thickness: initial;"><span style=3D"color: black; box-=
-sizing: border-box;"><font size=3D"3">Thanks,</font></span></div>
-<div class=3D"v1yiv9201021698gmail_quote_mr_css_attr" style=3D"text-align: =
-left; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; lette=
-r-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-s=
-tyle: normal; font-weight: 400; margin-bottom: 0pt; word-spacing: 0px; bord=
-er-top-color: currentColor; border-top-width: 0px; border-top-style: none; =
-white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backgro=
-und-color: rgb(255, 255, 255);=20
-font-variant-ligatures: normal; font-variant-caps: normal; text-decoration-=
-style: initial; text-decoration-color: initial; -webkit-text-stroke-width: =
-0px; text-decoration-thickness: initial;"><strong style=3D"font-weight: bol=
-der; box-sizing: border-box;"><span style=3D"color: black; box-sizing: bord=
-er-box;"><font size=3D"3">Mail&nbsp;Administrator</font></span></strong></d=
-iv></body></html>
-
---===============0594301617232405801==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0594301617232405801==--
+bXVzbC1saWJjIGRvZXNuJ3Qgc3VwcG9ydCBURVhUUkVMc1sxXSBhbmQgcHJvZ3JhbXMgd2l0aCBU
+RVhUUkVMcyB3aWxsCmNyYXNoIG9uIHN0YXJ0LXVwIHVuZGVyIG11c2wuCgpUaGlzIHBhdGNoIGZv
+cmJpZHMgdGhlIHVzZSBvZiBURVhUUkVMcyBvbiBtdXNsLCBidXQgYWRkcyBhbiBvcHRpb24gdG8K
+ZWl0aGVyIGZvcmJpZCB0aGVtIG9uIG90aGVyIGxpYmNzIGFzIHdlbGwsIG9yIGFsbG93IHRoZW0g
+b24gbXVzbC4KClsxXTogaHR0cHM6Ly93d3cub3BlbndhbGwuY29tL2xpc3RzL211c2wvMjAyMC8w
+OS8yNS80CgpTaWduZWQtb2ZmLWJ5OiBKLiBOZXVzY2jDpGZlciA8ai5uZXVzY2hhZWZlckBnbXgu
+bmV0PgotLS0KQ2hhbmdlcyBpbiB2MzoKLSBkcm9wIG1pY3JvcHl0aG9uIHBhdGNoIChhbHJlYWR5
+IG1lcmdlZCkKLSByZXdyaXRlIHRvIHBvc2l0aXZlIGxvZ2ljLCBhcyBzdWdnZXN0ZWQgYnkgWWFu
+biBFLiBNT1JJTgotIExpbmsgdG8gdjI6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyNDA1
+MjktenRleHQtdjItMC04Mjk4NTAzMmYxNjlAZ214Lm5ldAoKQ2hhbmdlcyBpbiB2MjoKLSBTbGln
+aHRseSBkaWZmZXJlbnQgd29yZGluZwotIEVuYWJsZSB0aGUgb3B0aW9uIGJ5IGRlZmF1bHQgb24g
+bXVzbCB0b29sY2hhaW5zCi0gQWRkIHBhdGNoIHRvIGZpeCBidWlsZCBvZiBtaWNyb3B5dGhvbgoK
+TGluayB0byB2MToKLSBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjQwNDE5LXp0ZXh0LXYx
+LTEtYThkNWMyY2ZjZjU3QGdteC5uZXQKLS0tCgpJJ20gbm90IHN1cmUgYWJvdXQgdGhlIEtjb25m
+aWcgaGVscCB0ZXh0IGZvciBCUjJfTElOS19BTExPV19URVhUUkVMLgpQZXJoYXBzIGl0IGNvdWxk
+IGJlIHdyaXR0ZW4gYSBsaXR0bGUgbmljZXIuCgoKdjM6Ci0gcmV3cml0ZSB0byBwb3NpdGl2ZSBs
+b2dpYywgYXMgc3VnZ2VzdGVkIGJ5IFlhbm4gRS4gTU9SSU4KLSBhZGp1c3QgdGhlIG5hbWUgYW5k
+IGhlbHAgdGV4dCBhY2NvcmRpbmdseQoKdjI6Ci0gc2xpZ2h0bHkgZGlmZmVyZW50IHdvcmRpbmcK
+LSBkZWZhdWx0IHRvIHllcyBvbiBtdXNsIHRvb2xjaGFpbnMKLSBmaXggY2hlY2stcGFja2FnZSB3
+YXJuaW5ncwotIGRlcGVuZHMgb24gQlIyX1NIQVJFRF9MSUJTIC0+IGRlcGVuZHMgb24gIUJSMl9T
+VEFUSUNfTElCUwotLS0KIENvbmZpZy5pbiAgICAgICAgICAgfCAxNCArKysrKysrKysrKysrKwog
+cGFja2FnZS9NYWtlZmlsZS5pbiB8ICA0ICsrKysKIDIgZmlsZXMgY2hhbmdlZCwgMTggaW5zZXJ0
+aW9ucygrKQoKZGlmZiAtLWdpdCBhL0NvbmZpZy5pbiBiL0NvbmZpZy5pbgppbmRleCBiZGY1ZmE4
+NjQ3Li5jOGI1MmMwZDc0IDEwMDY0NAotLS0gYS9Db25maWcuaW4KKysrIGIvQ29uZmlnLmluCkBA
+IC05MTAsNiArOTEwLDIwIEBAIGVuZGNob2ljZQogY29tbWVudCAiUkVMb2NhdGlvbiBSZWFkIE9u
+bHkgKFJFTFJPKSBuZWVkcyBzaGFyZWQgbGlicmFyaWVzIgogCWRlcGVuZHMgb24gIUJSMl9TSEFS
+RURfTElCUwoKK2NvbmZpZyBCUjJfTElOS19BTExPV19URVhUUkVMCisJYm9vbCAiQWxsb3cgdGV4
+dCBzZWN0aW9uIHJlbG9jYXRpb25zIChURVhUUkVMcykiCisJZGVmYXVsdCB5ICAjIExlZ2FjeQor
+CWRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fVVNFU19NVVNMCisJZGVwZW5kcyBvbiAhQlIyX1NU
+QVRJQ19MSUJTCisJaGVscAorCSAgRW5hYmxlIHRoaXMgb3B0aW9uIHRvIGFsbG93IFRFWFRSRUxz
+LiBPdGhlcndpc2UgIi16IHRleHQiIHdpbGwgYmUKKwkgIHBhc3NlZCB0byB0aGUgbGlua2VyIHRv
+IGRldGVjdCB0aGVtIGFuZCB0aHJvdyBhbiBlcnJvciBpZiB0aGV5IG9jY3VyLgorCisJICBURVhU
+UkVMcyBhcmUgbm90IHN1cHBvcnRlZCBvbiBtdXNsLWxpYmMncyBkeW5hbWljIGxvYWRlciBhbmQg
+d2lsbAorCSAgcmVzdWx0IGluIGEgcnVuLXRpbWUgY3Jhc2g6CisKKwkgICAgaHR0cHM6Ly93d3cu
+b3BlbndhbGwuY29tL2xpc3RzL211c2wvMjAyMC8wOS8yNS80CisKIGNvbmZpZyBCUjJfRk9SVElG
+WV9TT1VSQ0VfQVJDSF9TVVBQT1JUUwogCWJvb2wKIAlkZWZhdWx0IHkKZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvTWFrZWZpbGUuaW4gYi9wYWNrYWdlL01ha2VmaWxlLmluCmluZGV4IDU0NzYyMzRjN2Uu
+LjNmMWExZDNhMzUgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvTWFrZWZpbGUuaW4KKysrIGIvcGFja2Fn
+ZS9NYWtlZmlsZS5pbgpAQCAtMTQ5LDYgKzE0OSwxMCBAQCBlbmRpZgoKIFRBUkdFVF9MREZMQUdT
+ID0gJChjYWxsIHFzdHJpcCwkKEJSMl9UQVJHRVRfTERGTEFHUykpCgoraWZlcSAoJChCUjJfTElO
+S19BTExPV19URVhUUkVMKSwpCitUQVJHRVRfTERGTEFHUyArPSAteiB0ZXh0CitlbmRpZgorCiAj
+IEJ5IGRlc2lnbiwgX0ZPUlRJRllfU09VUkNFIHJlcXVpcmVzIGdjYyBvcHRpbWl6YXRpb24gdG8g
+YmUgZW5hYmxlZC4KICMgVGhlcmVmb3JlLCB3ZSBuZWVkIHRvIHBhc3MgX0ZPUlRJRllfU09VUkNF
+IGFuZCB0aGUgb3B0aW1pemF0aW9uIGxldmVsCiAjIHRocm91Z2ggdGhlIHNhbWUgbWVjaGFuaXNt
+LCBpLmUgY3VycmVudGx5IHRocm91Z2ggQ0ZMQUdTLiBQYXNzaW5nCgotLS0KYmFzZS1jb21taXQ6
+IDNlYmM3YzY5ZDU2NDMwYzM0ZWJhNGM4NjlkMWQ0ZmU0ZDFlOGRlNTUKY2hhbmdlLWlkOiAyMDI0
+MDQxNy16dGV4dC01YWNjYmFiNjFjMGEKCkJlc3QgcmVnYXJkcywKLS0KSi4gTmV1c2Now6RmZXIg
+PGoubmV1c2NoYWVmZXJAZ214Lm5ldD4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
