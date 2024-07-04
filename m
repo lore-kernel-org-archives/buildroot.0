@@ -1,71 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97EE7C30653
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 09:46:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6A86C30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 10:17:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15BCC413DC;
-	Thu,  4 Jul 2024 09:46:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id esQ2WGLM9pER; Thu,  4 Jul 2024 09:46:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F103B413DA
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F103B413DA;
-	Thu,  4 Jul 2024 09:46:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DC4E01BF319
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 09:46:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4D0840B94
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 09:46:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56800405F5;
+	Thu,  4 Jul 2024 10:17:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D9b7xF8D3EVX for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 09:46:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3CA2F40151
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CA2F40151
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3CA2F40151
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 09:46:03 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 648BDB00579;
- Thu,  4 Jul 2024 11:45:58 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+ id RwyJ9L6NZUl7; Thu,  4 Jul 2024 10:17:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B107403D6
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B107403D6;
+	Thu,  4 Jul 2024 10:17:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B8B151BF32E
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 10:17:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4F92405F5
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 10:17:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NMVedgeCMT3O for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 10:17:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F41D540965
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F41D540965
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F41D540965
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 10:17:03 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.120.251]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MGQnF-1sdqFj2KjN-00F7Rc; Thu, 04
+ Jul 2024 12:16:58 +0200
 To: buildroot@buildroot.org
-Date: Thu,  4 Jul 2024 11:45:49 +0200
-Message-ID: <20240704094549.378433-1-ju.o@free.fr>
+Date: Thu,  4 Jul 2024 12:16:28 +0200
+Message-ID: <20240704101631.1860647-1-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1720086361;
- bh=pACa6sAjbtnxNJzgILYEuj9yYgRr9RonSRHq0jjuYKc=;
- h=From:To:Cc:Subject:Date:From;
- b=Hl2GTOBjIzFrHZPcfXjAiQY+fINDt70V2emhayWzesFmv4Z6TCrlPbU/jGDhbJk7J
- LYQ4P56gNq3k3aPbu2297xrnPuaChRGylB11hd+Day8q11rChew6I4YG2lXBox1xtB
- gWAZ8ywYCHHnNkMMzYcaH10WdLkB5yZnO1GMCrvfJ1TOgoOlPgka4Oxz/fUjzr5FnU
- I/aUi5Gjs2zjQBmPsQVBXf4yjquRRbao2xggO4asGHeNL8y8+GGXDanhBHwkoTezEo
- nhl5uYqjeLo1+pbjrfklVYRuy33L4u0HJpATdtZi7oSMpnXplQZEzBG1MTthGfJd2q
- GI3KkeYv4UbCQ==
+X-Provags-ID: V03:K1:5aqHFvIHSaFlSRujcubQQqdmv2QEcFjYo9a34ROq2jUMkaMx6ws
+ OXqh8og/9SkXFidQBN8usRLHKX04thWWw6nx90TCSJFTy79O3gfzsQOHXHpK73Sp4Ux+jGW
+ r5B0H8Al+inVYoDXQrkanpsCnYLjoSfGKAxOec+5Glns64S2J9euLZ8FlZh/2DHlRUCCsS7
+ j+AEJX+j15oeZXeV2HMww==
+UI-OutboundReport: notjunk:1;M01:P0:/yooh9AFGkA=;YnKI9fwL13OYy0SFnm3UdtJQypP
+ srgn7zsSmaPZ76czzuoTGGIUSz5On+hs3j/SgFjthS5sZiihXpZTFrhcZdzMxPJ6FhYLVc7uK
+ T34z+Qa3IN1b60Jrz07rb4F3lLgxdfWyoa4eETQ5SBodKhbcj2FTGlqsdKoHUkxC6Re/BjC3s
+ mrE3+P5YRSc3FXsNbQFrE/dUrIcrFDU3PAt/w+FoocS0ccsu40SktPJAsnPwVKPH++t7zC3G5
+ u3Kfve9JfjIJ6nC3i27OEYnSyVq9Y6D0Uwc70O9UJDUzqzfqDgbWcfNeTeY+r8kaML0MJqN2k
+ ljVACcWkDJNFhvn13C+j/+8xO9d10i4sR+pBntJ21WpjjvvOtEiK+7EYz1Ics/HNLAO9M76k4
+ CGbMEobS6/KNw/8oq59EV99J/KcOnt8sbXGi+7XAHwSJs9Mp4nx4SsOqKCL5bKYLJzIzRA75W
+ U8Q/kOraHs89UsjMebsJPycvgzrnzmD8B29adbPULddHnrAOVqaaEZL9OF6nwfU6/Vm21JOo0
+ 35Uk+xNI0uLe/KpMYNjDHTjMly0ztZp7vVTWnUDx247nIgvEZp/QLYrd/ovnQi9rOhhw2zNeX
+ AlUx6L1aRVk9y4DPeqv2rhI7dQucAidl+3qcsP7H84/DVMFQKdbEMAfyL2m0NzZWg6WWhmYVX
+ XuAfRBxR2rMAwUUYbr09aYSNNzPfVI6evZP3lapJbigWhKeAR+nx8+H+T3RpIIHK9z9cK5ZZG
+ NPpGz7Sj2g9U2vgwnMZ2duVso1NYN74zc1ybjserv3/Tvo+ChWXhSfc0TqilSkD76ha0zsiq/
+ P0mDh3jqyst49YvX5RTR/RMjv53ioEpS4/yGpsSbHIgQc=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1720088218; x=1720693018; i=fiona.klute@gmx.de;
+ bh=7ne7kNc2aXwYajP2LV6nlDXba0HyqinfaadNLrOahzw=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=b4iSvOmPVezrVhz9f0WqPOHZdfzo/o1uWn954UU3xpY0995lzBBbVG+hP56Vgdo7
+ tvj09IAMOjeOw1DSxwkVZd3/DeoF4/CERt8+SPIGaHSit6/GZUzTqtn6qmNvJJxWB
+ 8aEUDS1BzaegniEZLZOavIlq03NksFELd5i6nY3/JiVJeuFqlAlVpDWJIBXK+ZGSy
+ pJiUZL6kxBXB19WV0Rbj9uVhD1ziALAySgpykCuTm1HQYsYRGoQ4XwsMT3LDXhJV9
+ /3tXF3wRwFD36yLZal/JvlvZeZUATXUdDw7qIWykwb4RIVaB1tq+CgFFjEl1XS9Ke
+ VqMnl2Il/JEDDD+9AA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Hl2GTOBj
-Subject: [Buildroot] [PATCH 1/1] package/rdesktop: update the patches to be
- applied with fuzz 0
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=b4iSvOmP
+Subject: [Buildroot] [PATCH v4 0/3] Refactor OpenSSH init.d script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,127 +94,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0" reduced the fuzz factor.
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Due to this change, rdesktop fails to build with output:
+This series is the result of running "/etc/init.d/S50sshd restart"
+over an SSH connection and finding that not only it destroyed my SSH
+session (this is no longer issue with OpenSSH 9.8), the SSH server
+also did not come back up. The main issue there was the use of
+"killall sshd" instead of stopping only the listening server (patch
+1). I assume restarting the SSH server on a Buildroot-created system
+is not a common use case, I need a reload to reset its state during
+automated tests.
 
-    Applying 0001-8bit-colors.patch using patch:
-    patching file xwin.c
-    Hunk #1 succeeded at 1801 (offset 340 lines).
-    Hunk #2 FAILED at 1568.
-    1 out of 2 hunks FAILED -- saving rejects to file xwin.c.rej
+I took the opportunity to make some more improvements: manage sshd
+using start-stop-daemon, including error checks (patch 1), style
+cleanup (patch 2), and implementing "reload" using SIGHUP (patch 3).
 
-This commit refreshes the package patches on the current package
-version. The original patch was not generated with "git format-patch",
-and had no information (no commit log, no author, no date, ...). Since
-it was introduced in commit [1], the author and date is set to this
-commit. The "Upstream:" tag is also added to the patch, mentioning
-the upstream project is reported as unmaintained on its homepage (at
-the time of this commit). Finally, the ".checkpackageignore" entry is
-removed, since it is no longer needed.
+The added checks for a currently running service before
+start/stop/reload bring a slight change in behavior, there will be a
+non-zero exit code when trying to start when sshd is already running,
+or stop/reload when it's not. I consider this useful to find errors in
+scripts instead of masking them, but I don't mind removing that if
+it's considered a problem.
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/e2dde9c7cdc2f9ed851acfb7daa858ffa1744246
+Changes v3 -> v4:
+* Avoid start-stop-daemon --retry option, the Busybox implementation
+  silently ignores it.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore                           |  1 -
- package/rdesktop/0001-8bit-colors.patch       | 21 ----------
- .../rdesktop/0001-Allow-8-bit-colors.patch    | 38 +++++++++++++++++++
- 3 files changed, 38 insertions(+), 22 deletions(-)
- delete mode 100644 package/rdesktop/0001-8bit-colors.patch
- create mode 100644 package/rdesktop/0001-Allow-8-bit-colors.patch
+Changes v2 -> v3:
+* Manage sshd using start-stop-daemon (patches 1, 3), making patch 4
+  obsolete (dropped from the series).
+* Set DAEMON variable, the complete series now removes all checkpatch
+  warnings for the init script (patch 1).
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0a1d2627455..9f4f7e299a7 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1293,7 +1293,6 @@ package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch lib_pat
- package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch lib_patch.Upstream
- package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch lib_patch.Upstream
- package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch lib_patch.Upstream
--package/rdesktop/0001-8bit-colors.patch lib_patch.Sob lib_patch.Upstream
- package/read-edid/0001-Fix-install-file-list.patch lib_patch.Upstream
- package/read-edid/0002-Fix-compiler-check.patch lib_patch.Upstream
- package/read-edid/0003-fix-build-with-gcc-10.patch lib_patch.Upstream
-diff --git a/package/rdesktop/0001-8bit-colors.patch b/package/rdesktop/0001-8bit-colors.patch
-deleted file mode 100644
-index 710f8debef2..00000000000
---- a/package/rdesktop/0001-8bit-colors.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--diff -urpN rdesktop-1.5.0-orig/xwin.c rdesktop-1.5.0/xwin.c
----- rdesktop-1.5.0-orig/xwin.c	2007-01-17 12:01:18.000000000 +0100
--+++ rdesktop-1.5.0/xwin.c	2007-01-17 12:05:02.000000000 +0100
--@@ -1461,7 +1461,7 @@ select_visual(int screen_num)
-- 		}
-- 
-- 		/* we use a colourmap, so the default visual should do */
---		g_owncolmap = True;
--+//		g_owncolmap = True;
-- 		g_visual = vmatches[0].visual;
-- 		g_depth = vmatches[0].depth;
-- 	}
--@@ -1568,7 +1568,7 @@ ui_init(void)
-- 	{
-- 		g_xcolmap =
-- 			XCreateColormap(g_display, RootWindowOfScreen(g_screen), g_visual,
---					AllocNone);
--+					(g_depth <= 8) ? AllocAll : AllocNone);
-- 		if (g_depth <= 8)
-- 			warning("Display colour depth is %d bit: you may want to use -C for a private colourmap.\n", g_depth);
-- 	}
-diff --git a/package/rdesktop/0001-Allow-8-bit-colors.patch b/package/rdesktop/0001-Allow-8-bit-colors.patch
-new file mode 100644
-index 00000000000..0c2b820a453
---- /dev/null
-+++ b/package/rdesktop/0001-Allow-8-bit-colors.patch
-@@ -0,0 +1,38 @@
-+From 2159684f1287b6bca2bd74c129b752a636ee807f Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Wed, 17 Jan 2007 13:58:01 +0000
-+Subject: [PATCH] Allow 8-bit colors
-+
-+Upstream: Reported as unmaintained on homepage http://www.rdesktop.org/
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+[Julien: refreshed the patch to be applied with fuzz factor 0]
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ xwin.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/xwin.c b/xwin.c
-+index d96d0f4..d11f4a6 100644
-+--- a/xwin.c
-++++ b/xwin.c
-+@@ -1801,7 +1801,7 @@ select_visual(int screen_num)
-+ 		}
-+ 
-+ 		/* we use a colourmap, so the default visual should do */
-+-		g_owncolmap = True;
-++//		g_owncolmap = True;
-+ 		g_visual = vmatches[0].visual;
-+ 		g_depth = vmatches[0].depth;
-+ 	}
-+@@ -2010,7 +2010,7 @@ ui_init(void)
-+ 	{
-+ 		g_xcolmap =
-+ 			XCreateColormap(g_display, RootWindowOfScreen(g_screen), g_visual,
-+-					AllocNone);
-++					(g_depth <= 8) ? AllocAll : AllocNone);
-+ 		if (g_depth <= 8)
-+ 			logger(GUI, Warning,
-+ 			       "Display colour depth is %d bit: you may want to use -C for a private colourmap",
-+-- 
-+2.45.2
-+
--- 
+Changes v1 -> v2:
+* Acknowledge changed session binary with OpenSSH 9.8 in commit
+  message (patch 1)
+* Check sshd exit code on service start (patch 4)
+
+Fiona Klute (WIWA) (3):
+  package/openssh: manage sshd using start-stop-daemon
+  package/openssh: fix init script indentation
+  package/openssh: implement "reload" using SIGHUP
+
+ .checkpackageignore     |  1 -
+ package/openssh/S50sshd | 65 +++++++++++++++++++++++++++++------------
+ 2 files changed, 47 insertions(+), 19 deletions(-)
+
+--
 2.45.2
 
 _______________________________________________
