@@ -1,98 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94CDAC2BD09
-	for <buildroot@archiver.kernel.org>; Wed,  3 Jul 2024 22:02:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBDE8C30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 06:37:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3279884134;
-	Wed,  3 Jul 2024 22:02:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC1F24048E;
+	Thu,  4 Jul 2024 06:37:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4miF7UG0jsLo; Wed,  3 Jul 2024 22:02:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xk4HO2AwXuuG; Thu,  4 Jul 2024 06:37:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31BF1844FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D82F340481
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31BF1844FA;
-	Wed,  3 Jul 2024 22:02:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E91311BF2F6
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 22:02:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D82F340481;
+	Thu,  4 Jul 2024 06:37:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 214C21BF391
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5B14417D1
- for <buildroot@lists.busybox.net>; Wed,  3 Jul 2024 22:02:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1BB7C607B2
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 06:37:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xNet6RTh8bo5 for <buildroot@lists.busybox.net>;
- Wed,  3 Jul 2024 22:02:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r8qSY2V_8OWg for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 06:37:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 378AB40CF7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 378AB40CF7
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 378AB40CF7
- for <buildroot@buildroot.org>; Wed,  3 Jul 2024 22:02:18 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-42562a984d3so41790135e9.3
- for <buildroot@buildroot.org>; Wed, 03 Jul 2024 15:02:17 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 61D5B60715
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61D5B60715
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 61D5B60715
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 06:37:28 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-a728f74c23dso27663866b.1
+ for <buildroot@buildroot.org>; Wed, 03 Jul 2024 23:37:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720044136; x=1720648936;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=tHImOh6ytGdpdTj/Kn0FO9h04z7mge7cPgL2YsRiyHE=;
- b=XTbTxOSPYpGfD4ZzqsTLyyUALUVrJct/LE23SG/FSnm14rf1ErmR6zGyGJUUv9Twvx
- aSiJDYGCoOl6lQtB4vrs5gf3mzvrYVjBqckL2Chv1NhxT9W93oWxef5EcmT0EI4MJBXG
- lMOfNjSPDJ5xaOJOC7GisZPLwuTQ1Vejau/hKP4whX/RNq4Vl37joLBQ+MCgJQZmZoIX
- m38k10M7iKQwZE1IF+MvVzY4wgyjdZx0ibY7irTTfMFoFZGuhYPbk014ZjoLAHieW71x
- zZVsLr/+iRViIMwj0ckN/zzhQk1To+jmXeOJeKwBeJU09mY/1Le8BCvh+vSSYb8kf7KP
- 9W2w==
-X-Forwarded-Encrypted: i=1;
- AJvYcCV7gHwOgpz4Z8BvXp93ZCF82SOhJ1n6G8VAvXo0MqWQ/bJcaxkLatNvV8n8Gvduslk6g/VYwBmGWI5wUGpM0C7LSlDsuGVJ5Q==
-X-Gm-Message-State: AOJu0YzEi9ssWm4/W1djFOtXjemFUVmYAEmeo9F5uN1DI2LBwYhQWkU5
- dp4ZEW4CjxgAR7cPpUxF/17M8ODBUhQg819aFOMwxnkWRrCbHGuh1Jf3HYa8Yvc=
-X-Google-Smtp-Source: AGHT+IFtixKuCSv+Q73d1UwA5tilCz+I4OIuXcciHLbCEGinRIUQGlEwnhQ5qUYFp+papKok6zUqqw==
-X-Received: by 2002:a7b:c458:0:b0:424:a655:c8b with SMTP id
- 5b1f17b1804b1-4257a010ab5mr85916115e9.19.1720044136205; 
- Wed, 03 Jul 2024 15:02:16 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:e3ef:2d7a:4131:71f?
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
+ d=1e100.net; s=20230601; t=1720075046; x=1720679846;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0hTsGcgKsNq8ORZiYuuqTf6twvNl1sd8w2ywRFaNF20=;
+ b=ZeraSD9kib9LQndF0wwGGLor61Lu9+xm2OwWryPoSl5vVFf0HwKgKsQhZCD8BP47+3
+ b+JlOsByE6YljrEP/PVWHmErwrkQxWbR+Cg2DeDsESI769AkzzGyrwHaXnrNqytSu/VU
+ NHCxccvXMVIF7F0qxiaz4PrkdKQbSRPupUYJUCW7CL0QyAlyAbP5y6AywvtQQwPesg/f
+ sf4sGPsdHMAQgSdUBHd5RAje58WAqorrCaBQ44/VrRETV12o3L+bZ7nVmHsApXkId/oS
+ smCwS39d09wELm9G8GSx8+DqU4CpAAY4UoxYNVxIS/2XgRLeaeIJLhgYcdW0sW6XkD7v
+ OOvQ==
+X-Gm-Message-State: AOJu0YwzCgc90DgEAmv0h1ZK6U9f47BosBQ8D3Y57U675rnyzd9DfFng
+ TaHTrkBaozgJ8OMAfm3+tmfHo3B+Syr+sEi0llQdOs29RsgZV9+tGVXGK7pOGrUEH86k+72UYsK
+ U4MU=
+X-Google-Smtp-Source: AGHT+IHlSIlnNYBSw5O9IDVsukNhBGRVfOjG3G3A5CWK4NJgCC4P8gBPKjwhRMdDlF7fMmvlYQaoHA==
+X-Received: by 2002:a17:907:7e8b:b0:a72:46f3:ffc5 with SMTP id
+ a640c23a62f3a-a77ba6fbb8cmr47898966b.28.1720075046079; 
+ Wed, 03 Jul 2024 23:37:26 -0700 (PDT)
+Received: from localhost.localdomain ([2001:b07:6474:ebbf:ea87:116:a8d5:fa85])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4264a283551sm179655e9.42.2024.07.03.15.02.15
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 03 Jul 2024 15:02:15 -0700 (PDT)
-Message-ID: <aa5d66c7-625f-49c0-a5ae-dd4be92a11cd@smile.fr>
-Date: Thu, 4 Jul 2024 00:02:15 +0200
+ a640c23a62f3a-a77b8eb56c1sm21713066b.176.2024.07.03.23.37.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 03 Jul 2024 23:37:25 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Thu,  4 Jul 2024 08:37:22 +0200
+Message-ID: <20240704063722.2902990-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-References: <20240702131925.248165-1-ju.o@free.fr>
-Content-Language: fr, en-US
-In-Reply-To: <20240702131925.248165-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1720044136; x=1720648936; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=tHImOh6ytGdpdTj/Kn0FO9h04z7mge7cPgL2YsRiyHE=;
- b=S5pMSE58HdHLxGIHlV3DNm4P5IrxIdfzlmvXM94KNm0kpK6cMo/omYXZR+BrqPYKei
- g/GLaK+hrK6V6gZ2JdroJCPugn+MIliVMbed3CT6/7iKf0Zw2lLqZMzBlB1EvD2KmOJo
- chy1CDs7qpucl9vJK+tbqlwZuiDmRaPKWLxeQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=S5pMSE58
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: new rt-tests runtime
- test
+ d=amarulasolutions.com; s=google; t=1720075046; x=1720679846;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0hTsGcgKsNq8ORZiYuuqTf6twvNl1sd8w2ywRFaNF20=;
+ b=HbSpCUEzfInECpErf6Z1ji7SowMuqHugv0AxSldRSi1RRSl4wDfEjEYSR+B363LdvD
+ cYLPs3mDtOGLONJP0JdgHVasy+9IVwZzMbdqAvNCVIqewd91LsIST2fmaBUOXIIZBwCU
+ cZ80FCnripvo/lxDZqy904uVgDnrYXY7aFdps=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=HbSpCUEz
+Subject: [Buildroot] [PATCH v2] package/libglfw: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,70 +100,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSnVsaWVuLAoKTGUgMDIvMDcvMjAyNCDDoCAxNToxOSwgSnVsaWVuIE9saXZhaW4gYSDD
-qWNyaXTCoDoKPiBTaWduZWQtb2ZmLWJ5OiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgo+
-IC0tLQo+IFBhdGNoIHRlc3RlZCBvbiBicmFuY2ggbWFzdGVyIGF0IGNvbW1pdCBiMmMyYzQ4IHdp
-dGggY29tbWFuZHM6Cj4gCj4gICAgIHV0aWxzL2RvY2tlci1ydW4gbWFrZSBjaGVjay1wYWNrYWdl
-Cj4gICAgIC4uLgo+ICAgICAwIHdhcm5pbmdzIGdlbmVyYXRlZAo+IAo+ICAgICBweXRob24zIC1t
-IGZsYWtlOCBcCj4gICAgICAgICBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3J0
-X3Rlc3RzLnB5Cj4gICAgIFtuby1vdXRwdXRdCj4gCj4gICAgIHN1cHBvcnQvdGVzdGluZy9ydW4t
-dGVzdHMgXAo+ICAgICAgICAgLWQgZGwgLW8gb3V0cHV0X2ZvbGRlciBcCj4gICAgICAgICB0ZXN0
-cy5wYWNrYWdlLnRlc3RfcnRfdGVzdHMKPiAgICAgLi4uCj4gICAgIE9LCj4gLS0tCj4gIERFVkVM
-T1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKPiAgLi4uL3Rl
-c3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3J0X3Rlc3RzLnB5ICAgIHwgMzkgKysrKysrKysrKysr
-KysrKysrKwo+ICAyIGZpbGVzIGNoYW5nZWQsIDQwIGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1v
-ZGUgMTAwNjQ0IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcnRfdGVzdHMucHkK
-PiAKPiBkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKPiBpbmRleCA2ZDlmY2Q5
-N2RmZS4uOTBkMWExMTFhYjQgMTAwNjQ0Cj4gLS0tIGEvREVWRUxPUEVSUwo+ICsrKyBiL0RFVkVM
-T1BFUlMKPiBAQCAtMTg5Myw2ICsxODkzLDcgQEAgRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3Bh
-Y2thZ2UvdGVzdF9weXRob25fc3Bha2UyLnB5Cj4gIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9w
-YWNrYWdlL3Rlc3RfcHl0aG9uX3N5bXB5LnB5Cj4gIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9w
-YWNrYWdlL3Rlc3RfcmRtYV9jb3JlLnB5Cj4gIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNr
-YWdlL3Rlc3RfcmRtYV9jb3JlLwo+ICtGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90
-ZXN0X3J0X3Rlc3RzLnB5Cj4gIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3Rf
-c2NyZWVuLnB5Cj4gIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3Rfc2VkLnB5
-Cj4gIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3Rfc29jYXQucHkKPiBkaWZm
-IC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9ydF90ZXN0cy5weSBi
-L3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcnRfdGVzdHMucHkKPiBuZXcgZmls
-ZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwLi4wNzk1ZDdhZmQyZgo+IC0tLSAvZGV2
-L251bGwKPiArKysgYi9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3J0X3Rlc3Rz
-LnB5Cj4gQEAgLTAsMCArMSwzOSBAQAo+ICtpbXBvcnQgb3MKPiArCj4gK2ltcG9ydCBpbmZyYS5i
-YXNldGVzdAo+ICsKPiArCj4gK2NsYXNzIFRlc3RSdFRlc3RzKGluZnJhLmJhc2V0ZXN0LkJSVGVz
-dCk6Cj4gKyAgICBjb25maWcgPSBpbmZyYS5iYXNldGVzdC5CQVNJQ19UT09MQ0hBSU5fQ09ORklH
-ICsgXAo+ICsgICAgICAgICIiIgo+ICsgICAgICAgIEJSMl9QQUNLQUdFX1JUX1RFU1RTPXkKPiAr
-ICAgICAgICBCUjJfVEFSR0VUX1JPT1RGU19DUElPPXkKPiArICAgICAgICAjIEJSMl9UQVJHRVRf
-Uk9PVEZTX1RBUiBpcyBub3Qgc2V0Cj4gKyAgICAgICAgIiIiCj4gKwo+ICsgICAgZGVmIHRlc3Rf
-cnVuKHNlbGYpOgo+ICsgICAgICAgIGNwaW9fZmlsZSA9IG9zLnBhdGguam9pbihzZWxmLmJ1aWxk
-ZGlyLCAiaW1hZ2VzIiwgInJvb3Rmcy5jcGlvIikKPiArICAgICAgICBzZWxmLmVtdWxhdG9yLmJv
-b3QoYXJjaD0iYXJtdjUiLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICBrZXJuZWw9ImJ1
-aWx0aW4iLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICBvcHRpb25zPVsiLWluaXRyZCIs
-IGNwaW9fZmlsZV0pCj4gKyAgICAgICAgc2VsZi5lbXVsYXRvci5sb2dpbigpCj4gKwo+ICsgICAg
-ICAgICMgV2UgY2Fubm90IGVhc2lseSB0ZXN0IHJlYWx0aW1lIHByb3BlcnRpZXMgaW4gYSBDSS9l
-bXVsYXRvcgo+ICsgICAgICAgICMgZW52aXJvbm1lbnQuIEluc3RlYWQsIHRoaXMgdGVzdCBydW5z
-IGZldyBydC10ZXN0cyBwcm9ncmFtcwo+ICsgICAgICAgICMgaW4gc21hbGwgc2NlbmFyaW8gY29u
-ZmlndXJhdGlvbnMgKHRvIG1ha2Ugc3VyZSB0aGUgZXhlY3V0aW9uCj4gKyAgICAgICAgIyB3aWxs
-IHJlbWFpbiBzaG9ydCkuIEl0IGp1c3QgbWFrZXMgc3VyZSB0aGUgZXhlY3V0aW9uIHJldHVybnMK
-PiArICAgICAgICAjIGEgc3VjY2VzcyBjb2RlLiBBbHNvLCB0byBhdm9pZCBtYWtpbmcgdGhlIGxv
-Z3MgdG9vIGJpZywgd2UKPiArICAgICAgICAjIGdlbmVyYWxseSBwYXNzIHRoZSAiLS1xdWlldCIg
-b3B0aW9uIHRvIGhhdmUgYSBzdW1tYXJ5IGF0IHRoZQo+ICsgICAgICAgICMgZW5kIG9mIHRoZSBl
-eGVjdXRpb24uCgpSdW5uaW5nIHJ0LXRlc3RzIHRvb2xzIG9uIHNsb3cgR2l0bGFiLWNpIHJ1bm5l
-cnMsIHdoYXQgY2FuIGdvIHdyb25nPyA6KQoKVGVzdGVkIGxvY2FsbHkgKG9uIGEgbGFwdG9wKSBi
-ZWZvcmUgYXBwbHlpbmcuCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKQmVzdCByZWdhcmRz
-LApSb21haW4KCgo+ICsgICAgICAgIHRlc3RfY21kcyA9IFsKPiArICAgICAgICAgICAgImN5Y2xp
-Y3Rlc3QgLS1xdWlldCAtLWxvb3BzPTIwMCIsCj4gKyAgICAgICAgICAgICJoYWNrYmVuY2ggLS1m
-ZHM9MiAtLWdyb3Vwcz0zIC0tbG9vcHM9NSIsCj4gKyAgICAgICAgICAgICJwaV9zdHJlc3MgLS1p
-bnZlcnNpb25zPTEwMCIsCj4gKyAgICAgICAgICAgICJwdHNlbWF0ZXN0IC0tcXVpZXQgLS1sb29w
-cz0xMDAiLAo+ICsgICAgICAgICAgICAicnQtbWlncmF0ZS10ZXN0IC0tcXVpZXQgLS1sb29wcz01
-IiwKPiArICAgICAgICAgICAgInNpZ25hbHRlc3QgLS1xdWlldCAtLWxvb3BzPTIwMCIsCj4gKyAg
-ICAgICAgICAgICJzaWd3YWl0dGVzdCAtLXF1aWV0IC0tbG9vcHM9MTAwIgo+ICsgICAgICAgIF0K
-PiArCj4gKyAgICAgICAgZm9yIGNtZCBpbiB0ZXN0X2NtZHM6Cj4gKyAgICAgICAgICAgIHNlbGYu
-YXNzZXJ0UnVuT2soY21kKQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0") reduced the fuzz factor.
+
+Due to this change, libglfw fails to build with output:
+
+    Applying 0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch using patch:
+    patching file src/CMakeLists.txt
+    Hunk #1 FAILED at 75.
+    1 out of 1 hunk FAILED -- saving rejects to file src/CMakeLists.txt.rej
+
+This commit refreshes the package patch on the current package version.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+Changes v1 -> v2:
+ - Drop hunks also for patch 1 even if it doesn't report any error applying it
+   with fuzz 0.
+   
+ .checkpackageignore                           |  1 -
+ ...emove-extra-cmake-modules-dependency.patch | 18 ++++++++++-------
+ ...xt-allow-override-of-wayland-pkgdata.patch | 20 ++++++++++---------
+ 3 files changed, 22 insertions(+), 17 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0a1d2627455e..9f4331d206d1 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -825,7 +825,6 @@ package/libfuse/0001-fix-aarch64-build.patch lib_patch.Upstream
+ package/libfuse/0002-util-ulockmgr_server-c-conditionally-define-closefrom-fix-glibc-2-34.patch lib_patch.Upstream
+ package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch lib_patch.Upstream
+ package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch lib_patch.Upstream
+-package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch lib_patch.Upstream
+ package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch lib_patch.Upstream
+ package/libgsm/0001-Misc-fixes-from-Archlinux.patch lib_patch.Upstream
+ package/libgtk2/0001-reduce-dependencies.patch lib_patch.Upstream
+diff --git a/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch b/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
+index d5ee7c829a45..ffa1d13f5134 100644
+--- a/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
++++ b/package/libglfw/0001-Wayland-Remove-extra-cmake-modules-dependency.patch
+@@ -1,4 +1,4 @@
+-From 2747e47393cbca2d09db56223e735bd94b21e2eb Mon Sep 17 00:00:00 2001
++From 8ebf1067390948d03330a5a0c814e5f7f860e678 Mon Sep 17 00:00:00 2001
+ From: Joel Winarske <joel.winarske@gmail.com>
+ Date: Mon, 28 Sep 2020 22:23:02 -0700
+ Subject: [PATCH] Wayland: Remove extra-cmake-modules dependency
+@@ -8,17 +8,18 @@ Fixes #1774.
+ [Retrieved (and backported) from:
+ https://github.com/glfw/glfw/commit/2747e47393cbca2d09db56223e735bd94b21e2eb]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Dario: make the patch to be applied with fuzz factor 0 dropping all Hunks]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+- .gitignore         |  4 ---
+  CMakeLists.txt     | 16 ++++++------
+  src/CMakeLists.txt | 62 ++++++++++++++++++++++++++++------------------
+- 3 files changed, 45 insertions(+), 37 deletions(-)
++ 2 files changed, 45 insertions(+), 33 deletions(-)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 42bfa1806d..394827520b 100644
++index 75069161fc36..b315eaa15305 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -191,20 +191,18 @@ endif()
++@@ -249,20 +249,18 @@ endif()
+  # Use Wayland for window creation
+  #--------------------------------------------------------------------
+  if (_GLFW_WAYLAND)
+@@ -47,10 +48,10 @@ index 42bfa1806d..394827520b 100644
+      include(CheckIncludeFiles)
+      include(CheckFunctionExists)
+ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index 2f2bdd883d..e834506c6c 100644
++index b6dd86c54512..29be6515ae58 100644
+ --- a/src/CMakeLists.txt
+ +++ b/src/CMakeLists.txt
+-@@ -45,30 +45,44 @@ if (_GLFW_X11 OR _GLFW_WAYLAND)
++@@ -40,30 +40,44 @@ elseif (_GLFW_WAYLAND)
+                       posix_time.c posix_thread.c xkb_unicode.c
+                       egl_context.c osmesa_context.c)
+  
+@@ -119,3 +120,6 @@ index 2f2bdd883d..e834506c6c 100644
+  elseif (_GLFW_OSMESA)
+      set(glfw_HEADERS ${common_HEADERS} null_platform.h null_joystick.h
+                       posix_time.h posix_thread.h osmesa_context.h)
++-- 
++2.43.0
++
+diff --git a/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch b/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
+index 4bcb5e4eb705..268b1248518b 100644
+--- a/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
++++ b/package/libglfw/0002-src-CMakeLists.txt-allow-override-of-wayland-pkgdata.patch
+@@ -1,4 +1,4 @@
+-From 46aaf2b2b4d3ec240b9aad175bb3eddb6ae11ead Mon Sep 17 00:00:00 2001
++From a2c88988b6cfe4023fe78f13519b56a8ac9f568b Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Fri, 4 Mar 2022 17:59:19 +0100
+ Subject: [PATCH] src/CMakeLists.txt: allow override of wayland pkgdatadir
+@@ -7,17 +7,19 @@ Allow the user to override WAYLAND_{PROTOCOLS_BASE,CLIENT_PKGDATADIR}
+ (needed when cross-compiling)
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/glfw/glfw/pull/2053]
++Upstream: https://github.com/glfw/glfw/pull/2053
++[Dario: make the patch to be applied with fuzz factor 0]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+- src/CMakeLists.txt | 8 ++++++--
+- 1 file changed, 6 insertions(+), 2 deletions(-)
++ src/CMakeLists.txt | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
+ 
+ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index 01f191c9..475ce882 100644
++index 29be6515ae58..1767b3c8ad8f 100644
+ --- a/src/CMakeLists.txt
+ +++ b/src/CMakeLists.txt
+-@@ -75,7 +75,9 @@ if (GLFW_BUILD_WAYLAND)
+-     include(FindPkgConfig)
++@@ -42,7 +42,9 @@ elseif (_GLFW_WAYLAND)
++ 
+      find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner)
+      pkg_check_modules(WAYLAND_PROTOCOLS REQUIRED wayland-protocols>=1.15)
+ -    pkg_get_variable(WAYLAND_PROTOCOLS_BASE wayland-protocols pkgdatadir)
+@@ -26,7 +28,7 @@ index 01f191c9..475ce882 100644
+ +    endif()
+  
+      macro(wayland_generate protocol_file output_file)
+-         add_custom_command(OUTPUT "${output_file}.h"
++           add_custom_command(OUTPUT ${output_file}.h
+ -- 
+-2.34.1
++2.43.0
+ 
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
