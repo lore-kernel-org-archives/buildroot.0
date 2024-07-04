@@ -4,90 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A28DC30653
-	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 13:23:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38602C30653
+	for <buildroot@archiver.kernel.org>; Thu,  4 Jul 2024 13:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA9B98088A;
-	Thu,  4 Jul 2024 13:23:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1B69844F3;
+	Thu,  4 Jul 2024 13:30:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XqpGggLG_kZY; Thu,  4 Jul 2024 13:23:51 +0000 (UTC)
+ id n6u_msg50UCv; Thu,  4 Jul 2024 13:30:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5710811E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04E4F844FA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C5710811E0;
-	Thu,  4 Jul 2024 13:23:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B4D131BF2AB
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 13:23:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04E4F844FA;
+	Thu,  4 Jul 2024 13:30:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 572D31BF2AB
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 13:30:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACEAC403F9
- for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 13:23:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51F6F844EB
+ for <buildroot@lists.busybox.net>; Thu,  4 Jul 2024 13:30:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8QpOjAZe2Szj for <buildroot@lists.busybox.net>;
- Thu,  4 Jul 2024 13:23:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p1lQL7THuGt3 for <buildroot@lists.busybox.net>;
+ Thu,  4 Jul 2024 13:30:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::a33; helo=mail-vk1-xa33.google.com;
- envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5C53A403F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C53A403F8
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com
- [IPv6:2607:f8b0:4864:20::a33])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5C53A403F8
- for <buildroot@buildroot.org>; Thu,  4 Jul 2024 13:23:48 +0000 (UTC)
-Received: by mail-vk1-xa33.google.com with SMTP id
- 71dfb90a1353d-4f2ee3be4a1so243201e0c.2
- for <buildroot@buildroot.org>; Thu, 04 Jul 2024 06:23:48 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::236; helo=mail-lj1-x236.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2720C844E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2720C844E5
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
+ [IPv6:2a00:1450:4864:20::236])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2720C844E5
+ for <buildroot@buildroot.org>; Thu,  4 Jul 2024 13:30:19 +0000 (UTC)
+Received: by mail-lj1-x236.google.com with SMTP id
+ 38308e7fff4ca-2ec5fad1984so8303471fa.0
+ for <buildroot@buildroot.org>; Thu, 04 Jul 2024 06:30:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720099427; x=1720704227;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=T4W/MjS0Apm2gmAZayq8C+UnIMSsPCkPU8IvERWyciY=;
- b=f33OfEV7dCHeddw+VQ+ct23sCz+fKoLYS5vk4AyP9B2x7gCRSaq6d29S40Y0MA6xji
- 8LfqS5FI8h507cnF6LOxBekSqIK5/qQy1uWJ143lfC9lTdcOp3RHXSbSEa6pRKAVrCMc
- BklWUIY9PndIXOv4umPh+3Zwf0C96/qyXq5h97dYdXLE+KdbBm6IXbQTBdVkXojuh0mP
- OZiBZIbcwAtJqICy5WnuALTmQ3dh1Kkt4QERJMwIkfZ6JgzVydUXywWaZ9VlkeCJUGuk
- jNEsv76EkhPP5ddlNb7AT4hgGOaDYlnpFgfVVB95Obmhwn/hPpKCSilrw4ZxsMdnZW4f
- 6zhw==
-X-Gm-Message-State: AOJu0YwHMIrOaZYpzjpTJv7iGOIStSnWbwH9EWkfOZ0d+CYWoYbSza/C
- TQB+CeKz4M0tcOoiyiPL+UGzrB/Xq4d5xFjcebaUv/+cNvpgqgJ9fxlVwpZQMODGnvgBtwwtAiP
- J2D+YBzg5VHDvp7Ru+LQHLrHF4uo=
-X-Google-Smtp-Source: AGHT+IGd0Nc2pQxlgsGnM9BUiIQKtpSvAHkMOXxtLgmuLZAcZoohWqKGvI8yaGCXuu/kNB9xU4MIX5O/QZm6dexLiJE=
-X-Received: by 2002:a05:6122:280e:b0:4ec:efaf:a020 with SMTP id
- 71dfb90a1353d-4f2f404783fmr1876420e0c.15.1720099425525; Thu, 04 Jul 2024
- 06:23:45 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1720099818; x=1720704618;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=qmATh2zwXTLpv4gLlfwEfzH5Vu3Ka54GHC8RsHdBn6I=;
+ b=L3pnPERuEFjO9qS6AiblfoPxrzdPElWfLwiAXSas43BYejK4bz1qfN2jw6UlZUkwQo
+ wHD/xNHJ4lyllAt12CLxf68yw9y/Tz/hyq1Ne9d6Dly93ggOvoRaRdV4GNkfMkq2CRYb
+ 6mScehAMsC/8GKDcKm0eCszMye4+MqaQVXnTLwuB1x6yEOlr+wWmFGm6vnouyL+O7X54
+ zYpjOy27pUPQAbh7H1pNNQnpz568jBXEjGIypSWCit1JOaWl7s52OHlD0FCxkQc9uvz1
+ Mkwqs2txUUGK5P1R+51OPnLJstMELJV/VPOP6WVRoj7zYaIRkPzpeLwzHJhGg7pN4H3F
+ E89A==
+X-Gm-Message-State: AOJu0Yx/5np8nBDx+tU6djL5q1KQQpVWKmVrTmG5ogRs8r+IXtQqu7h5
+ /anWh4A/3sPiBKPIeh1FM/L6qymc5bgZn/yQgzo44PVNx6hgX77oy0iWTPtsAZZ4nkX4LssxQqS
+ bVS8jwF966n4yTJ9S/HYr9pILRgs=
+X-Google-Smtp-Source: AGHT+IFndt6loamNQYv0tYL98yGifrDNCluK7SObrrpgXgSySY7fUVSeoNvycyyhVeVImoD2B5Ozt1HdGLn7t2sRxjc=
+X-Received: by 2002:a2e:9006:0:b0:2e9:768a:12b0 with SMTP id
+ 38308e7fff4ca-2ee8ee13b14mr11450491fa.50.1720099817388; Thu, 04 Jul 2024
+ 06:30:17 -0700 (PDT)
 MIME-Version: 1.0
 References: <5e6129b8-9672-efd0-32c7-18d0defcad21@gmail.com>
  <CAEyMn7bdo1UPCxy5pRi-SXsTgjy_o9wYkPZ+CgYrh7CPDgUd0w@mail.gmail.com>
  <179f54c1-ed3c-4cdb-8110-71116525a6ac@gmail.com>
  <CAEyMn7apYeyK=YuAUUSA9ANTh2nwER3x01Q89x8Op9aRxLuNQQ@mail.gmail.com>
-In-Reply-To: <CAEyMn7apYeyK=YuAUUSA9ANTh2nwER3x01Q89x8Op9aRxLuNQQ@mail.gmail.com>
-From: Lance Fredrickson <lancethepants@gmail.com>
-Date: Thu, 4 Jul 2024 07:23:35 -0600
-Message-ID: <CABwKrPD7uN+CDd_yYmtn58zzfCccaPz_oTCwd=8jM4n+erVRfQ@mail.gmail.com>
-To: heiko.thiery@gmail.com
+ <CABwKrPD7uN+CDd_yYmtn58zzfCccaPz_oTCwd=8jM4n+erVRfQ@mail.gmail.com>
+In-Reply-To: <CABwKrPD7uN+CDd_yYmtn58zzfCccaPz_oTCwd=8jM4n+erVRfQ@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 4 Jul 2024 15:30:05 +0200
+Message-ID: <CAEyMn7ajOkPxm8pfPS5YP8jisYSfz43yfat_8asrwsgOKjsAmA@mail.gmail.com>
+To: Lance Fredrickson <lancethepants@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720099427; x=1720704227; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=T4W/MjS0Apm2gmAZayq8C+UnIMSsPCkPU8IvERWyciY=;
- b=IAMVwkaanOL7caoZ3yvbVEkvWdd3z2hf/bSflMQ2uDZiuqP/bOsZlEqRpkFE3MInXn
- 16yeUMmnjeFERi1bO7tXO1guZno0OuA2hOq9hfSiEaLEPFGDzhUW7r5AXdH1v3ObQW96
- Mic1l4zxy9WGxgoHdHIPzPdfq45K7oqNGb9aDeYWsW5CeTxGK84pWPKIZB/soWbWjuYm
- ZGR2AVhqauCuTGM/8qxaLkTHZv1xG3Up1WnccrPbU2k0eQk2CgnDkcsignipYN00vakD
- P/IEbbOYsvhu7LUN627sS4zreOtQigsf++8mDihsDRm23Sfa9rqLP84keyXHfrM9ngSn
- lqEw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1720099818; x=1720704618; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=qmATh2zwXTLpv4gLlfwEfzH5Vu3Ka54GHC8RsHdBn6I=;
+ b=Nw7tVKk2mnzQXcqUxPnVDIgmN7bJ+vCNTzE5tIXzw2o/PE/u5cPI0MZzoUUZMqflEl
+ m8e3tNFLL2RBHGXE7zu2kSueIbeoQPDJQXK5ZP+MmrI2CVfzuTOqP0GyhW08Akj0+Sle
+ RKZ3cDWeLN69bnxnfxngj8R8a+eui3enwwxyhvXRpbnytgjoJqipoHUEjHVkZIjfRl43
+ osv4HTmSKfossn6bdWiVCm5m3zhaJWwEbkvueVVj0oKx27n5M+PMRLBODrsWK99WQTHA
+ AGY0hIOWu+Z/3n1ij/LTIkxoI+aHEOdiWa2oqM4rL6ReXy0EKhFgjrz8gg6R4SCBhOHh
+ WhEA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=IAMVwkaa
+ header.s=20230601 header.b=Nw7tVKk2
 Subject: Re: [Buildroot] 2023.05 host ccache detects avx512 and fails to buld
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -102,90 +104,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: james.hilliard1@gmail.com, yann.morin.1998@free.fr,
  thomas.petazzoni@bootlin.com, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1829980879574445124=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1829980879574445124==
-Content-Type: multipart/alternative; boundary="0000000000003ca80e061c6bdb2b"
-
---0000000000003ca80e061c6bdb2b
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Great! Looking forward to it in the next release.
-
-Lance
-
-On Thu, Jul 4, 2024, 12:52=E2=80=AFAM Heiko Thiery <heiko.thiery@gmail.com>=
- wrote:
-
-> Hi Lance,
->
-> Am Mi., 3. Juli 2024 um 17:03 Uhr schrieb Lance Fredrickson
-> <lancethepants@gmail.com>:
-> >
-> > I've just been carrying this patch that disabled AVX512.  Seemed like
-> > not a lot of people were using ccache.
-> >
-> >
-> https://github.com/tomato64/tomato64/blob/master/src/patches/0001-disable=
--ccache-av512.patch
->
-> Good to know that this is also possible. But as you can see I bumped
-> ccache and added new  system dependencies to fix this issue.
->
-> --
-> Heiko
->
-> [snip]
->
-
---0000000000003ca80e061c6bdb2b
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<p dir=3D"ltr">Great! Looking forward to it in the next release.</p>
-<p dir=3D"ltr">Lance</p>
-<br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu=
-, Jul 4, 2024, 12:52=E2=80=AFAM Heiko Thiery &lt;<a href=3D"mailto:heiko.th=
-iery@gmail.com">heiko.thiery@gmail.com</a>&gt; wrote:<br></div><blockquote =
-class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid=
-;padding-left:1ex">Hi Lance,<br>
-<br>
-Am Mi., 3. Juli 2024 um 17:03 Uhr schrieb Lance Fredrickson<br>
-&lt;<a href=3D"mailto:lancethepants@gmail.com" target=3D"_blank" rel=3D"nor=
-eferrer">lancethepants@gmail.com</a>&gt;:<br>
-&gt;<br>
-&gt; I&#39;ve just been carrying this patch that disabled AVX512.=C2=A0 See=
-med like<br>
-&gt; not a lot of people were using ccache.<br>
-&gt;<br>
-&gt; <a href=3D"https://github.com/tomato64/tomato64/blob/master/src/patche=
-s/0001-disable-ccache-av512.patch" rel=3D"noreferrer noreferrer" target=3D"=
-_blank">https://github.com/tomato64/tomato64/blob/master/src/patches/0001-d=
-isable-ccache-av512.patch</a><br>
-<br>
-Good to know that this is also possible. But as you can see I bumped<br>
-ccache and added new=C2=A0 system dependencies to fix this issue.<br>
-<br>
--- <br>
-Heiko<br>
-<br>
-[snip]<br>
-</blockquote></div>
-
---0000000000003ca80e061c6bdb2b--
-
---===============1829980879574445124==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1829980879574445124==--
+SGksCgpBbSBEby4sIDQuIEp1bGkgMjAyNCB1bSAxNToyMyBVaHIgc2NocmllYiBMYW5jZSBGcmVk
+cmlja3Nvbgo8bGFuY2V0aGVwYW50c0BnbWFpbC5jb20+Ogo+Cj4gR3JlYXQhIExvb2tpbmcgZm9y
+d2FyZCB0byBpdCBpbiB0aGUgbmV4dCByZWxlYXNlLgoKeW91IGNvdWxkIHRlc3QgdGhlIHBhdGNo
+ZXMgYW5kIGluIGNhc2UgaXQgaXMgb2sgZm9yIHlvdSBjYW4gYWRkIHRoZQoiVGVzdGVkLWJ5IiB0
+YWcuCgo+Cj4gTGFuY2UKPgo+Cj4gT24gVGh1LCBKdWwgNCwgMjAyNCwgMTI6NTLigK9BTSBIZWlr
+byBUaGllcnkgPGhlaWtvLnRoaWVyeUBnbWFpbC5jb20+IHdyb3RlOgo+Pgo+PiBIaSBMYW5jZSwK
+Pj4KPj4gQW0gTWkuLCAzLiBKdWxpIDIwMjQgdW0gMTc6MDMgVWhyIHNjaHJpZWIgTGFuY2UgRnJl
+ZHJpY2tzb24KPj4gPGxhbmNldGhlcGFudHNAZ21haWwuY29tPjoKPj4gPgo+PiA+IEkndmUganVz
+dCBiZWVuIGNhcnJ5aW5nIHRoaXMgcGF0Y2ggdGhhdCBkaXNhYmxlZCBBVlg1MTIuICBTZWVtZWQg
+bGlrZQo+PiA+IG5vdCBhIGxvdCBvZiBwZW9wbGUgd2VyZSB1c2luZyBjY2FjaGUuCj4+ID4KPj4g
+PiBodHRwczovL2dpdGh1Yi5jb20vdG9tYXRvNjQvdG9tYXRvNjQvYmxvYi9tYXN0ZXIvc3JjL3Bh
+dGNoZXMvMDAwMS1kaXNhYmxlLWNjYWNoZS1hdjUxMi5wYXRjaAo+Pgo+PiBHb29kIHRvIGtub3cg
+dGhhdCB0aGlzIGlzIGFsc28gcG9zc2libGUuIEJ1dCBhcyB5b3UgY2FuIHNlZSBJIGJ1bXBlZAo+
+PiBjY2FjaGUgYW5kIGFkZGVkIG5ldyAgc3lzdGVtIGRlcGVuZGVuY2llcyB0byBmaXggdGhpcyBp
+c3N1ZS4KPj4KPj4gLS0KPj4gSGVpa28KPj4KPj4gW3NuaXBdCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
