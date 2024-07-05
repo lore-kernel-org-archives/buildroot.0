@@ -4,89 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4679C30658
-	for <buildroot@archiver.kernel.org>; Fri,  5 Jul 2024 09:45:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB357C30658
+	for <buildroot@archiver.kernel.org>; Fri,  5 Jul 2024 09:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F8A94078C;
-	Fri,  5 Jul 2024 09:45:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B47340F4B;
+	Fri,  5 Jul 2024 09:45:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oKq1XvBoW8DP; Fri,  5 Jul 2024 09:45:15 +0000 (UTC)
+ id myGId5KQmCKa; Fri,  5 Jul 2024 09:45:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 101D8408FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83FC240C97
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 101D8408FA;
-	Fri,  5 Jul 2024 09:45:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 14B781BF2A1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83FC240C97;
+	Fri,  5 Jul 2024 09:45:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2ABFB1BF990
  for <buildroot@lists.busybox.net>; Fri,  5 Jul 2024 09:45:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01FA9810BE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 17813408FA
  for <buildroot@lists.busybox.net>; Fri,  5 Jul 2024 09:45:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Kk-SjLOgxXs for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C6wLyJSqaLl1 for <buildroot@lists.busybox.net>;
  Fri,  5 Jul 2024 09:45:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BE5A280FB7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE5A280FB7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE8D84078C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE8D84078C
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BE5A280FB7
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BE8D84078C
  for <buildroot@buildroot.org>; Fri,  5 Jul 2024 09:45:10 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.112.231]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MacSe-1rrze21Xnm-00ma5C; Fri, 05
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MzQkE-1sCHQ40Iy0-012bpQ; Fri, 05
  Jul 2024 11:45:08 +0200
 To: buildroot@buildroot.org
-Date: Fri,  5 Jul 2024 11:44:48 +0200
-Message-ID: <20240705094449.8550-2-fiona.klute@gmx.de>
+Date: Fri,  5 Jul 2024 11:44:47 +0200
+Message-ID: <20240705094449.8550-1-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240705094449.8550-1-fiona.klute@gmx.de>
-References: <20240705094449.8550-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:KSEpTKdR04timnpMZsyOT0pC4YD8pwboWJUyvkTCsDGJtAMeDCR
- 7cec4zBCpNHRt8KF+DGJL4ZZxvl/tzSI3BDdch5KBzf8yEDRUiB/USBLmwc2uluw6wXtUtM
- ATRvH/CXrM+gKnVHbO3OYB70Ut/iA5uXIqNgReSdzcxfvRByTatc1ltoIQXTTJoeANWOWJG
- 1yV7jYGyJAHHTB0A1LRdA==
-UI-OutboundReport: notjunk:1;M01:P0:IpqwJAc7ojU=;t+PbmD5DhuoX6uheY38WuoCwiuT
- DOL4Hf6iE30jQKaUrBszAMoGjrfuO9fD9kkE/dTxLab7FQpaSXrF3WjYin3WULphVDRKf7UIi
- c017pX8icSknRl5YticsPiDI3QQWVqq51GN+K0QerfhvtOJLiqrKCYvzAiwbs/SOi/yj/wQZH
- Zu6IukTwU68Ye5OZcsWWa6KeZvMQFJUfAPDPSSB1YkJbt3OhIUh6MIHMhYKahre/dxtEG8Cmr
- 5BahPgxM3GksLRCRjWd89ga9+NrGuKSNaQlCw+f3Lsp1kCJ/ZQosdPS8CIoroUyawsj43CLgx
- j1Bt61CD1C49OOqElOJLzz9ClQXRKrrZOFPM46iFgI0zAkBaS/WPLTsoRV39nXRPXXJdBuGG2
- Oe7IF3NYzmE6vPpxbFhWLbKgGZX47ENWABu5bscvdmR+MrHuoh08s8sDLa28m7vOow7i0jU4W
- f+FAg5NvDWfZUq1QSvOoW95b6098kdwtuPnDIRZl6TX+x2+eKuOyTer5H+oWBzicgvcDwJ4F9
- ryk3Z6i260j3MCA5MhVjmnzWetu6w45aqsWkAetGHsSkKrRpdTDgi3+IQMMNiFV00D9sgBvsq
- 7I1wZgEKq0e2kL5C20kZdRb+89DKgI2zIw18GEze4UWAaycpZrwIasIlibTqHZGU9R+RdXVSj
- pE7e6KPkxZ7cgUyucvuomCJ5jXd9dAYkoLUW2wAgFfhAftFQY+7WvsPRq4m81T4HqUZLXlCLk
- /D0Xsno7ktTHaiMugV2JuHEL+wOtAC4jn1tZ5lHDefzZ9pllKSmS32YcZ979EEGQtB5Bn57kq
- 5EouYLfmG2LpnHPxv9RTaDdm/xRCvz4gavMfBSFmb0AKo=
+X-Provags-ID: V03:K1:HW4Etpw4OajoM6nYjbvXdkXJna4TDVuKMklzdHqhbPQ4rPQCVmL
+ ajCnJ7pO0s1ktpBKonOTfnKczcuodljzWIdRrfRajhlVMVhj/O6OVEl4Xm+9vevjvevAAML
+ htMC3RjffD+MZIzkMoaBjD5TjBVw4BEdP0AQ4FLTmWb95dMwyxfQ7nh69Y6fzOBFSXsCoxj
+ vnUijFlxh8ZBq1lJxUwyQ==
+UI-OutboundReport: notjunk:1;M01:P0:pJW3TWOAB8o=;hnsmnyjRiEo/ObqUUHjTQPJkjTm
+ qbSjlzKOKEbnyyo7/4/Z8rcM7klAS//Mre9Q3DRbJyfEYagEFji0ERu7t0zzoFR6HUvL8p0gY
+ 4v57k+lO74ld5noPgIdmkiMmpUc2g+BGyk3IauIYoEVLdQzNJn0QvLMjuzgSh4Xa5IshD6cxS
+ 1OEy8Ng1wUKMhFj0kFV1J6GZ5VZR/1W8lr2XY7oZaY+rbGeIHLE0nx+Y/Qg4KJ/E8IGoqJ1FD
+ dhIWrWY93/gadcKvfJqUCBJh7P+NKJzM9tD/49Q3ReGeO8/XE67zH83ddFaxumHxMW09TgjvH
+ +/fQo+VaiwNqioqO13zTg4rN3IW2UlyI6VX+nM+C7Va7To8K3LhFiQd8FxqJ+D22iiCTcQvp4
+ RjDtyiekO8sSdrmCam7eK+4AJNTTGroBE8CrR6OgQrZ8yuugIqxrhoJxVNpufWMXkryj6t5EH
+ pu+dRBijE8uRM7KXyiqr/ILsa/38fJB/t8LI6BqicpBmj0opc4fiN8zRkyMh5NtwdSa0dhFQn
+ 0iykn84ip0mWDVkN98763z1M+cH4bPjlLc9sJHBNjvbBNAL46uJlYj879hjYNZzBVayKGTt6b
+ gBvwWA8coz0PbEeBWgIWq4+VWP6fc85kR/8qMT6InKVB0Z2w+gdgfHS25xWF2VnAPNMlaoSf2
+ QVspcHotc/FAKU+diyLa3GGIcFEiBnfPm9Q3IszQhNMEVpEm2tlFRYIvFj0IotNaX1xZlKiVZ
+ vcHK2v/Zj99/lNnZsG9UaVzhAgqBfJ3oKKX9pO1eUU2KzPnjxGd7Jp7GxWUlQne9AnDq3aUue
+ dgHJ3iXzGmXHcPZC3cNVsHt8jcx24Md/uRsui7/RK2v8I=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
  s=s31663417; t=1720172708; x=1720777508; i=fiona.klute@gmx.de;
- bh=hVMdfYdk7phcEGM69OLesfezEJabc3IJEaBFBqeDq58=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
+ bh=d8dPN1V/K+mCyfPEZEvS5s9nA8vLS/8x8qm4xkuHZzY=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=keW9bY2zgsw7mxEvZsSUCP/O5BUB1J2ILg06lZu4dty4awD0QVORN8CfCuOSshXO
- 434kz+7A1W0rvug/lI1QEWHVV5FGc98RdUY2AI+gJr9VRz4e9HT7W2GpwzsDpXoEc
- ODFZFPeytk70rUTo/MoG6pnn7iwTE9LcXmU3Ltlwxd4Cer7u6bVitrGO1JR7xdM34
- OfIvND8ntx4Q7ZtffiQwKP+4w0gN9afzfkOICJfc8c47dHNC/B9KL+jtT9iQ86SIy
- lMVtFq3nbfUslY+LmVZTx+xH9eQmPRB3O3qPcPkMS2dPF4Jy3dZevmzcQi2wlFAqp
- /6dm25CZRBfqdeFaeg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=l7B7D6QRhK12LloZqE2GzdHS8qgcCLMdsmg4UL9o/e3Fz2rAUINsohIL3ZfODPCO
+ ShRjwPzeUKAl8JLQuaW2JMACp4FaAg7eRruZNZYW8ZZZ9uMjqTXEXGhfk1+vll8IH
+ YaScMgKJPEfGS3iEQMVVL20PaDPVSNaygfojQyMrVQr5nT/pObpY6Ry29M3pMj4Hq
+ PdEWqeC37lgjb1acnS4rc2a55CLgR0ooTdsqtNZtARQvib4mgECTP6+03Bx4kY3Sn
+ 1qm8SU0fHH2Bhm/TZjLKR2iBf0Q+SF4rtwxS11/x4GQKAm5BKG5/P/wCl+bUUv0wK
+ UpUktp7eL83I94hA2w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=keW9bY2z
-Subject: [Buildroot] [PATCH 1/2] docs/manual: describe relying on default
- options
+ header.s=s31663417 header.b=l7B7D6QR
+Subject: [Buildroot] [PATCH 0/2] Manual updates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,55 +105,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-People can assume that e.g. Busybox options enabled in the package are
-enabled when writing code for Buildroot. Anyone who uses custom
-configurations that disable default options needs to make sure
-relevant scripts etc. still work for themselves.
+These two patches integrate points that Arnout Vandecappelle clarified
+on the mailing list in replies to me into the manual. I hope I didn't
+add any errors in rephrasing them, please let me know if anything
+needs to be changed.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
+Best regards,
+Fiona
+
+Fiona Klute (WIWA) (2):
+  docs/manual: describe relying on default options
+  docs/manual: allow sponsor mention in author name
+
+ docs/manual/contribute.adoc             |  4 ++++
  docs/manual/integration-principles.adoc | 18 ++++++++++++++++++
  docs/manual/integration.adoc            |  2 ++
- 2 files changed, 20 insertions(+)
+ 3 files changed, 24 insertions(+)
  create mode 100644 docs/manual/integration-principles.adoc
 
-diff --git a/docs/manual/integration-principles.adoc b/docs/manual/integration-principles.adoc
-new file mode 100644
-index 0000000000..9e2f43a18a
---- /dev/null
-+++ b/docs/manual/integration-principles.adoc
-@@ -0,0 +1,18 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+[[integration-principles]]
-+=== Integration Principles
-+
-+Some foundational packages like Busybox can be configured with or
-+without certain features. When writing Buildroot code that uses such
-+packages, contributors may assume that the options enabled in the
-+Buildroot-provided configurations are enabled. For example,
-++package/busybox/busybox.config+ sets
-++CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y+, so init scripts
-+meant for use with Busybox init may use +start-stop-daemon+ with long
-+form options.
-+
-+People who use custom configurations that disable such default options
-+are responsible for making sure that all relevant scripts still work,
-+and if not, adapting them accordingly (in an overlay).
-diff --git a/docs/manual/integration.adoc b/docs/manual/integration.adoc
-index 1626dd75dd..5f408dca29 100644
---- a/docs/manual/integration.adoc
-+++ b/docs/manual/integration.adoc
-@@ -9,6 +9,8 @@ level. Buildroot is highly configurable, almost everything discussed
- here can be changed or overridden by xref:rootfs-custom[rootfs overlay
- or custom skeleton] configuration.
-
-+include::integration-principles.adoc[]
-+
- include::integration-systemd.adoc[]
-
- include::integration-selinux-support.adoc[]
 --
 2.45.2
 
