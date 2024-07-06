@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FB8DC2BD09
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jul 2024 20:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2A8EC2BD09
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jul 2024 20:48:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D59A4409D5;
-	Sat,  6 Jul 2024 20:48:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 82A9740A0C;
+	Sat,  6 Jul 2024 20:48:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0PI355rHmPHj; Sat,  6 Jul 2024 20:48:41 +0000 (UTC)
+ id e60r_xtFASuL; Sat,  6 Jul 2024 20:48:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9151040347
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11F3D409E4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9151040347;
-	Sat,  6 Jul 2024 20:48:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B8DA71BF27C
- for <buildroot@lists.busybox.net>; Sat,  6 Jul 2024 20:48:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 11F3D409E4;
+	Sat,  6 Jul 2024 20:48:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 105A91BF27C
+ for <buildroot@lists.busybox.net>; Sat,  6 Jul 2024 20:48:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 93338608B3
- for <buildroot@lists.busybox.net>; Sat,  6 Jul 2024 20:48:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 072B0404F8
+ for <buildroot@lists.busybox.net>; Sat,  6 Jul 2024 20:48:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id foEJZkrz8vfd for <buildroot@lists.busybox.net>;
- Sat,  6 Jul 2024 20:48:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4Cj5Ou1-q2rn for <buildroot@lists.busybox.net>;
+ Sat,  6 Jul 2024 20:48:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C554E6089B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6CCA402F4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C554E6089B
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6CCA402F4
  for <buildroot@buildroot.org>; Sat,  6 Jul 2024 20:48:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B1F4783C8F; Sat,  6 Jul 2024 20:48:39 +0000 (UTC)
+ id CB40383C92; Sat,  6 Jul 2024 20:48:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 6 Jul 2024 22:39:05 +0200
+Date: Sat, 6 Jul 2024 22:39:15 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 5bdb98d5373086f3a831d5b7a540ea4bafc25230
-X-Git-Newrev: 94808d630df4f6f3437a3e3bb3d490ee8375e48f
+X-Git-Oldrev: 94808d630df4f6f3437a3e3bb3d490ee8375e48f
+X-Git-Newrev: db309fb4faec1cffb491f87daf7ec7cece8d512a
 X-Patchwork-Hint: ignore
-Message-Id: <20240706204839.B1F4783C8F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/ntp: bump to
- version 4.2.8p18
+Message-Id: <20240706204839.CB40383C92@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] support/testing: add ntp
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +65,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94808d630df4f6f3437a3e3bb3d490ee8375e48f
+commit: https://git.buildroot.net/buildroot/commit/?id=db309fb4faec1cffb491f87daf7ec7cece8d512a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-diff COPYRIGHT:
-    -* Copyright (c) Network Time Foundation 2011-2023                     *
-    +* Copyright (c) Network Time Foundation 2011-2024                     *
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 49bd6bb638ff73eae3b486b207201382d46a6c05)
+(cherry picked from commit c986928affc59f5bbefae8c7af963eaf45fdc8c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntp/ntp.hash | 6 +++---
- package/ntp/ntp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                                         |  2 +
+ support/testing/tests/package/test_ntp.py          | 86 ++++++++++++++++++++++
+ .../package/test_ntp/rootfs-overlay/etc/ntp.conf   | 10 +++
+ 3 files changed, 98 insertions(+)
 
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index 96e21bf2df..44f3486d7a 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,4 +1,4 @@
--# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2.8p17.tar.gz.sha256
--sha256  103dd272e6a66c5b8df07dce5e9a02555fcd6f1397bdfb782237328e89d3a866  ntp-4.2.8p17.tar.gz
-+# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2.8p18.tar.gz.sha256
-+sha256  cf84c5f3fb1a295284942624d823fffa634144e096cfc4f9969ac98ef5f468e5  ntp-4.2.8p18.tar.gz
- # Locally computed
--sha256  06246b8c15ccc1a1873c78525c810f0802e68f383e79ee041e06d1ab9cbf80a4  COPYRIGHT
-+sha256  45b6e5a0a5f0ac4afdd9e23caa2241779e4da463e4dba32a41b4dbd61577b2a3  COPYRIGHT
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index e64f6308ec..1a7c7e7937 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -6,7 +6,7 @@
- 
- NTP_VERSION_MAJOR = 4.2
- NTP_VERSION_MINOR = 8
--NTP_VERSION_POINT = 17
-+NTP_VERSION_POINT = 18
- NTP_VERSION = $(NTP_VERSION_MAJOR).$(NTP_VERSION_MINOR)p$(NTP_VERSION_POINT)
- NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 805b8215ec..bb346b3619 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1870,6 +1870,8 @@ F:	support/testing/tests/package/test_netsnmp/
+ F:	support/testing/tests/package/test_nftables.py
+ F:	support/testing/tests/package/test_nftables/
+ F:	support/testing/tests/package/test_ngrep.py
++F:	support/testing/tests/package/test_ntp.py
++F:	support/testing/tests/package/test_ntp/
+ F:	support/testing/tests/package/test_numactl.py
+ F:	support/testing/tests/package/test_numactl/
+ F:	support/testing/tests/package/test_octave.py
+diff --git a/support/testing/tests/package/test_ntp.py b/support/testing/tests/package/test_ntp.py
+new file mode 100644
+index 0000000000..13fff6419b
+--- /dev/null
++++ b/support/testing/tests/package/test_ntp.py
+@@ -0,0 +1,86 @@
++import os
++import re
++import time
++
++import infra.basetest
++
++
++class TestNtp(infra.basetest.BRTest):
++    rootfs_overlay = \
++        infra.filepath("tests/package/test_ntp/rootfs-overlay")
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        f"""
++        BR2_PACKAGE_NTP=y
++        BR2_PACKAGE_NTP_NTPD=y
++        BR2_PACKAGE_NTP_NTPQ=y
++        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def dict_from_ntpq_output(self, output):
++        d = {}
++        for line in output:
++            if ':' not in line:
++                continue
++            fields = re.split(r":", line, maxsplit=2)
++            name = fields[0].strip()
++            value = fields[1].strip()
++            d[name] = value
++        return d
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check our binaries can execute.
++        self.assertRunOk("ntpd --version")
++        self.assertRunOk("ntpq --version")
++
++        # The ntp daemon is expected to be started from init startup
++        # scripts, for the Buildroot package recipe. We wait a bit
++        # here to let the daemon settle. The next test step checks for
++        # the local peer to be the system peer (by checking the
++        # '*'). If querying the peers too soon after startup the peer
++        # will not be marked as such.
++        time.sleep(3 * self.timeout_multiplier)
++
++        # We query the ntp daemon peers. From our test configuration
++        # file, we should have exactly one.
++        out, ret = self.emulator.run("ntpq --peers")
++        self.assertEqual(ret, 0)
++        # ntpq --peers produces two lines of headers. So we check we
++        # have at least 3 lines of output.
++        self.assertGreaterEqual(len(out), 3)
++        # We check we see our undisciplined local clock and it's the
++        # system peer.
++        self.assertTrue(out[2].startswith("*LOCAL(0)"))
++
++        # We query the refid variable. We expect to see our
++        # undisciplined local clock.
++        out, ret = self.emulator.run("ntpq -c 'readvar 0 refid'")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "refid=LOCAL(0)")
++
++        # We query the ntp system info. We check the reference ID is
++        # the same as in the test configuration file.
++        out, ret = self.emulator.run("ntpq -c sysinfo")
++        self.assertEqual(ret, 0)
++        sysinfo = self.dict_from_ntpq_output(out)
++        refid = "reference ID"
++        self.assertIn(refid, sysinfo)
++        self.assertEqual(sysinfo[refid], "127.127.1.0")
++
++        # Finally, we query the ntp system statistics. We check we can
++        # see some uptime. We waited a bit at the beginning of this
++        # test, plus the few queries we previously did should have
++        # accumulated some uptime.
++        out, ret = self.emulator.run("ntpq -c sysstats")
++        self.assertEqual(ret, 0)
++        sysstats = self.dict_from_ntpq_output(out)
++        up = "uptime"
++        self.assertIn(up, sysstats)
++        self.assertGreater(int(sysstats[up]), 0)
+diff --git a/support/testing/tests/package/test_ntp/rootfs-overlay/etc/ntp.conf b/support/testing/tests/package/test_ntp/rootfs-overlay/etc/ntp.conf
+new file mode 100644
+index 0000000000..2ead3deb6a
+--- /dev/null
++++ b/support/testing/tests/package/test_ntp/rootfs-overlay/etc/ntp.conf
+@@ -0,0 +1,10 @@
++# Set an undisciplined local clock for testing without the need of
++# network connectivity.
++server 127.127.1.0 iburst prefer
++fudge  127.127.1.0 stratum 10
++
++# Keep standard access control setup. The test is doing local queries
++# from 127.0.0.1.
++restrict default nomodify nopeer noquery limited kod
++restrict 127.0.0.1
++restrict [::1]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
