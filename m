@@ -4,69 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43FA1C2BD09
-	for <buildroot@archiver.kernel.org>; Sat,  6 Jul 2024 19:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 384F5C2BD09
+	for <buildroot@archiver.kernel.org>; Sat,  6 Jul 2024 20:16:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A83A54038E;
-	Sat,  6 Jul 2024 19:33:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F34E405E3;
+	Sat,  6 Jul 2024 20:16:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hr-lRI582037; Sat,  6 Jul 2024 19:33:48 +0000 (UTC)
+ id QQ8tolxRDLRY; Sat,  6 Jul 2024 20:15:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63604403D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3456A405EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63604403D7;
-	Sat,  6 Jul 2024 19:33:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 246361BF83B
- for <buildroot@lists.busybox.net>; Sat,  6 Jul 2024 19:33:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3456A405EF;
+	Sat,  6 Jul 2024 20:15:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 83CD21BF27C
+ for <buildroot@lists.busybox.net>; Sat,  6 Jul 2024 20:15:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11448403D7
- for <buildroot@lists.busybox.net>; Sat,  6 Jul 2024 19:33:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7117881E2F
+ for <buildroot@lists.busybox.net>; Sat,  6 Jul 2024 20:15:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nNYHyqW-11i6 for <buildroot@lists.busybox.net>;
- Sat,  6 Jul 2024 19:33:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.131;
- helo=smtpcmd12131.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 05F184038E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05F184038E
-Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 05F184038E
- for <buildroot@buildroot.org>; Sat,  6 Jul 2024 19:33:43 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id QBABsJjy3TSwmQBABs4bo6; Sat, 06 Jul 2024 21:33:39 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C60W1ONr--p2 for <buildroot@lists.busybox.net>;
+ Sat,  6 Jul 2024 20:15:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 63A5381E2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63A5381E2D
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 63A5381E2D
+ for <buildroot@buildroot.org>; Sat,  6 Jul 2024 20:15:56 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id BB49BB0053E;
+ Sat,  6 Jul 2024 22:15:52 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  6 Jul 2024 21:33:38 +0200
-Message-Id: <20240706193338.296510-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat,  6 Jul 2024 22:15:48 +0200
+Message-ID: <20240706201548.183638-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfNz8sRzQsDL7uLk9iZyxx/GYaGm/pEo7FVCwPf9bB60It8D4Uv/NU4X0an5ZKxDIUmj7vn2iP9TyDMYS9ZygK29NGFBiHnInu3fV5BhqTLA4moc3GTi1
- PiGerWpWo1ZMH1KCBMJD4yRwn4pfs20x4xgoBdskuGWCU1LvurkW3Pz8wQJaA857nWyTUQD3QSiPZx7DbhuiqxEp2Hrabo9ApDh93T6oiQEBoPOr0WILo0r8
- ebhwRhHVkEKZw6AVAUwjZdR5b9iskmUNoq+M8VzzSsS18KU95T8ajSKW4w4HcoVcHkQdPj3S7r1L4F+9JqiBcA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1720294419; bh=Evq0Es6M8E2r7WKSIV0/l14dGLph7a4DhW+jOwMkCgE=;
- h=From:To:Subject:Date:MIME-Version;
- b=gBFuIywFjrpVYwLOD+7dEiC+LwmAXd2Cz8/wZXVO7WsVU3eNRwMICRmPkklnd26rR
- dn38WF7cvR5StT/b++zCbFHCLXtffgZTMIrktlU3MVMeNRzxZTqK/zbZO8kbzQWYzb
- u/CH5RTWHbr7pj/Yf+RjjY59qtRTvxTxXDSAYUGDoVfvoBrXGEqU//uQW8BKax6mu/
- 1YFDg/3KOQKq4ETp5nF3jHDTybgCnWWSXygM1njqXC65hPeWWnX0zP35MTAZFGlAzK
- DxTyyi+0mbMs8upJrfCgfIhl2ziTrzy86CdysTcnzsCSrfgvjQpFKyxnRhpJxt8EaA
- r0JwOEsNaABKQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1720296954;
+ bh=bB+m2s9lSehlV45sCnIM3AKt6ddo1axiYTgMbTmC//M=;
+ h=From:To:Cc:Subject:Date:From;
+ b=YxobjkIspG2krESKdF5PN5Iaw3KZgvDr00OtUjumJu5ujUeFUHJ5h7FUs8Tk4W8yb
+ YA7E0D7D0+lRchvnfITOLfpyIuL/QjFIOcdnd0ZOWzLjix8wKV9q9tRjB7PSjyV4lD
+ DZtqqhyyxibQ0Yvd9mc+eHa8RuV3b9mEjFskEcTrj/qAJg1yONKkOWlUnn+6g6ta8h
+ 2vTzB70b4dVKp5l5v3ximRRrzyyFljGztsjPrf3cSxGjeUX9KtEf3cwU3Ca2BQMssv
+ JfUwJc1SVGfZFA8J0LI0Tu3qV+Sk5IfMG1AKflcmHdmqvJCczxOdGnS/wO77XPfdqs
+ +Rg+uqRfemzBQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=gBFuIywF
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.102
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=YxobjkIs
+Subject: [Buildroot] [PATCH 1/1] support/testing: new xfsprogs runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,45 +76,169 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Patch tested on branch master at commit 3ebc7c6 with commands:
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index ccc5951929..8c21316b7b 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_101_1_RTM/src/SHA256SUMS
--sha256  f20e8c5daafd89419d229ec8c54100a5c320dce1467377c9dfcd5e4d8446b468  nss-3.101.1.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_102_RTM/src/SHA256SUMS
-+sha256  c29b03f24856db18a34fbcde737fcca6407c27b5f3f60baba5111460e6cb307b  nss-3.102.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 60ffc92b1b..3916a78381 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.101.1
-+LIBNSS_VERSION = 3.102
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_xfsprogs
+    ...
+    OK
+---
+ DEVELOPERS                                    |   2 +
+ .../testing/tests/package/test_xfsprogs.py    | 112 ++++++++++++++++++
+ .../package/test_xfsprogs/linux-xfs.fragment  |   1 +
+ 3 files changed, 115 insertions(+)
+ create mode 100644 support/testing/tests/package/test_xfsprogs.py
+ create mode 100644 support/testing/tests/package/test_xfsprogs/linux-xfs.fragment
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 90d1a111ab4..d2c39d69e3b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1913,6 +1913,8 @@ F:	support/testing/tests/package/test_usbutils/
+ F:	support/testing/tests/package/test_weston.py
+ F:	support/testing/tests/package/test_weston/
+ F:	support/testing/tests/package/test_wine.py
++F:	support/testing/tests/package/test_xfsprogs.py
++F:	support/testing/tests/package/test_xfsprogs/
+ F:	support/testing/tests/package/test_xz.py
+ F:	support/testing/tests/package/test_z3.py
+ F:	support/testing/tests/package/test_z3/
+diff --git a/support/testing/tests/package/test_xfsprogs.py b/support/testing/tests/package/test_xfsprogs.py
+new file mode 100644
+index 00000000000..a3a4bd27d83
+--- /dev/null
++++ b/support/testing/tests/package/test_xfsprogs.py
+@@ -0,0 +1,112 @@
++import os
++import subprocess
++
++import infra.basetest
++
++
++class TestXfsProgs(infra.basetest.BRTest):
++    # This test needs a Kernel with XFS support.
++    kern_frag = \
++        infra.filepath("tests/package/test_xfsprogs/linux-xfs.fragment")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.37"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_XFSPROGS=y
++        BR2_PACKAGE_OPENSSL=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        # Prepare the disk image. XFS requires at least 300MB of
++        # storage to work.
++        disk_file = os.path.join(self.builddir, "images", "disk.img")
++        self.emulator.logfile.write(f"Creating disk image: {disk_file}")
++        self.emulator.logfile.flush()
++        subprocess.check_call(
++            ["dd", "if=/dev/zero", f"of={disk_file}", "bs=1M", "count=512"],
++            stdout=self.emulator.logfile,
++            stderr=self.emulator.logfile)
++
++        # Run the emulator with a blank drive.
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        bootargs = ["console=ttyAMA0"]
++        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
++                     "-initrd", img,
++                     "-drive", f"file={disk_file},if=virtio,format=raw"]
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=bootargs,
++                           options=qemu_opts)
++        self.emulator.login()
++
++        # Check a program can run and show its version.
++        self.assertRunOk("mkfs.xfs -V")
++
++        # Variables for this test.
++        dev = "/dev/vda"
++        label = "BR_TEST"
++        mnt_pt = "/tmp/xfs"
++        data_file = f"{mnt_pt}/data.bin"
++
++        # We create the XFS filesystem on our device.
++        self.assertRunOk(f"mkfs.xfs {dev}")
++
++        # We set a label on this filesystem.
++        self.assertRunOk(f"xfs_admin -L '{label}' {dev}")
++
++        # We create a mount point.
++        self.assertRunOk(f"mkdir -p {mnt_pt}")
++
++        # We mount the XFS filesystem.
++        self.assertRunOk(f"mount {dev} {mnt_pt}")
++
++        # We create a file with random data, to use this new
++        # filesystem a bit.
++        self.assertRunOk(f"dd if=/dev/urandom of={data_file} bs=1M count=10")
++
++        # We compute the sha256 hash and save it for later.
++        hash_cmd = f"sha256sum {data_file}"
++        out, ret = self.emulator.run(hash_cmd)
++        self.assertEqual(ret, 0)
++        data_sha256 = out[0]
++
++        # We unmount the filesystem.
++        self.assertRunOk(f"umount {mnt_pt}")
++
++        # We query the fragmentation level. Since it's a new
++        # filesystem, we don't expect any filesystem
++        # fragmentation. This invocation is just to test the "xfs_db"
++        # program can run and read the filesystem.
++        self.assertRunOk(f"xfs_db -c frag -r {dev}")
++
++        # We run a repair (this tool is the equivalent of
++        # "fsck"). Again, since we cleanly unmounted the filesystem,
++        # we are not expecting any repair. This is just to test the
++        # program works correctly.
++        self.assertRunOk(f"xfs_repair {dev}")
++
++        # We query the label and check it is the one we set at the
++        # beginning.
++        out, ret = self.emulator.run(f"xfs_admin -l {dev}")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], f"label = \"{label}\"")
++
++        # We remount our filesystem.
++        self.assertRunOk(f"mount {dev} {mnt_pt}")
++
++        # We should recompute the same sha256 hash as before.
++        out, ret = self.emulator.run(hash_cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], data_sha256)
+diff --git a/support/testing/tests/package/test_xfsprogs/linux-xfs.fragment b/support/testing/tests/package/test_xfsprogs/linux-xfs.fragment
+new file mode 100644
+index 00000000000..32f7f6d8720
+--- /dev/null
++++ b/support/testing/tests/package/test_xfsprogs/linux-xfs.fragment
+@@ -0,0 +1 @@
++CONFIG_XFS_FS=y
 -- 
-2.34.1
+2.45.2
 
 _______________________________________________
 buildroot mailing list
