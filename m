@@ -1,95 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43D03C30653
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jul 2024 12:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6566EC30653
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jul 2024 13:48:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 136D1814AB;
-	Sun,  7 Jul 2024 12:59:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 078176059A;
+	Sun,  7 Jul 2024 13:48:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ycJDg-8juner; Sun,  7 Jul 2024 12:59:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lnUHfq1ZiPbe; Sun,  7 Jul 2024 13:48:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83ED98145C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED8B16061B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83ED98145C;
-	Sun,  7 Jul 2024 12:59:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 174F01BF299
- for <buildroot@lists.busybox.net>; Sun,  7 Jul 2024 12:59:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED8B16061B;
+	Sun,  7 Jul 2024 13:48:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CF2101BF29C
+ for <buildroot@lists.busybox.net>; Sun,  7 Jul 2024 13:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F35440490
- for <buildroot@lists.busybox.net>; Sun,  7 Jul 2024 12:59:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA3656061B
+ for <buildroot@lists.busybox.net>; Sun,  7 Jul 2024 13:48:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l0fD0A5BBI7q for <buildroot@lists.busybox.net>;
- Sun,  7 Jul 2024 12:59:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wmp2ZOZc0Smx for <buildroot@lists.busybox.net>;
+ Sun,  7 Jul 2024 13:48:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
+ client-ip=2a00:1450:4864:20::135; helo=mail-lf1-x135.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 689F540275
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 689F540275
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 689F540275
- for <buildroot@buildroot.org>; Sun,  7 Jul 2024 12:59:31 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id
- 4fb4d7f45d1cf-58b447c513aso3395149a12.2
- for <buildroot@buildroot.org>; Sun, 07 Jul 2024 05:59:31 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3DB246059A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DB246059A
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
+ [IPv6:2a00:1450:4864:20::135])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3DB246059A
+ for <buildroot@buildroot.org>; Sun,  7 Jul 2024 13:48:47 +0000 (UTC)
+Received: by mail-lf1-x135.google.com with SMTP id
+ 2adb3069b0e04-52ea5dc3c66so3532872e87.3
+ for <buildroot@buildroot.org>; Sun, 07 Jul 2024 06:48:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720357169; x=1720961969;
+ d=1e100.net; s=20230601; t=1720360125; x=1720964925;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=+Ilvq2QC3WF03YG+vidwUGVNSZ6BC17vsWd2ZROOWlM=;
- b=sn512Jz3IO0gZCbhhWJMtuupd5VG153djlzDmya/UJA+snsf7CKfCEuWcLZuIDc782
- mhBysDI6JTKF/5rKS496K/2/qkMC7wqDSf7x1dUMhsVvo6Sj/Ko73Kd4kwlgeg5y6vbi
- S0mB0Ff2tuhB25ICJxQ8o2w6rgcTMaE7qTfK8wpX2BUc0pMx+qBnlJ3h+8CfPpNIEdtS
- b7DaAFppqTYD8b+RaaEEao6mwWl7WR6xhrSQWud1a0cZ4XOQH3SrHPHdFggHEsm/CFiF
- LiYUPVGkps/DsbQsefjkJgJp9hRstE5J69bjkVJWktyYpZTjFuLYJT5cTlT191bF6pue
- xMLw==
-X-Gm-Message-State: AOJu0YyXK0kNrzKT66yPK0kfNeIQFoqZn7GEECEHpvaqfW0LuwN4GI8Y
- +V/P619pMcLXwbim/puHv9+rQYVlynn2xpFkvgaVE1dXPAO2EPlGfRmEqDEnfIb76mPUwC4bX1H
- BrxU=
-X-Google-Smtp-Source: AGHT+IFCvasoZ19bLX2sJ47TdSAetuiAlPNHtdb3Z37bWLF2UJmF1v744Uz6IBtx2t+hvlj6p1xNIg==
-X-Received: by 2002:a17:907:969e:b0:a75:110d:fa53 with SMTP id
- a640c23a62f3a-a77ba70baf4mr749798066b.49.1720357169085; 
- Sun, 07 Jul 2024 05:59:29 -0700 (PDT)
+ bh=ixGO1ZyigsNM2LOQiHAax7lmtRiG3UcItzW/Mvjt/os=;
+ b=Dlt01n7hOBA7vE5WBf8asygBRt84WUp/3qFFZT2vOOmyh/jqILhYgNHlqcbMAa/WOB
+ K1aOcaQj8w/IDuTlI0SWBI4gdoBHE0Dr5j3RpkVnmaZCZIXu8VRSlhNk5fVWuLs9jICS
+ le9FJYoDzVzBQa35XwyLwJSEBKrOxGtS635702HsiBowW8o6rYNzcLu6V6TYS7TjE8T6
+ CL4W15q4EueDOud1/QqFRhCHd4iUiMyI4GweyERfkm3EqYWJfybf2E4PpDweejyxh/c0
+ kBhasgaQKeEJUlxMJosVXMKhrvpN0jhINwBXSZ2sHyuNYOLbMGQhldBAA3djVkAUDS2w
+ UlMw==
+X-Gm-Message-State: AOJu0YzOsDbHdPCkS10sknKA51kijSf+bh0+ddZhv7FG8Q5TLUcuPmjO
+ V5J7jb66mxJeCSOqQEQQY9dT6bI25rYjl0pLXSbKnnEj8TkisE2Vl+76kdBfocTudS1F0Cc58Rp
+ dbNU=
+X-Google-Smtp-Source: AGHT+IGp21Wrpea/e4zhVFpprDuGQrHVxkn3fjKjYDD3YpOUgWwKkpPqk9F6rgmr97tGN6QEhjIjxw==
+X-Received: by 2002:ac2:48b0:0:b0:52c:cd77:fe03 with SMTP id
+ 2adb3069b0e04-52ea060db7amr7696710e87.14.1720360124538; 
+ Sun, 07 Jul 2024 06:48:44 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-79-30-97-245.retail.telecomitalia.it. [79.30.97.245])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a77dade9b61sm181098866b.160.2024.07.07.05.59.28
+ a640c23a62f3a-a72b92985desm759132066b.78.2024.07.07.06.48.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Jul 2024 05:59:28 -0700 (PDT)
+ Sun, 07 Jul 2024 06:48:44 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 Jul 2024 14:59:21 +0200
-Message-ID: <20240707125921.4125163-1-dario.binacchi@amarulasolutions.com>
+Date: Sun,  7 Jul 2024 15:48:40 +0200
+Message-ID: <20240707134840.4130434-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1720357169; x=1720961969;
+ d=amarulasolutions.com; s=google; t=1720360125; x=1720964925;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+Ilvq2QC3WF03YG+vidwUGVNSZ6BC17vsWd2ZROOWlM=;
- b=iGwjTcZu64yYUk2gZcNI2AZuFI+steP4FeQxNVL3gjzyI/9d7kO+Td6P8E0JqDkkYh
- OxybnA5mwTSGBMzCtQ9ARXARQgu4N6N6F0EFgLjMJc2xl7jbtjM/CTW5uCaqy2tQFbc5
- MXuLClTG3NQPKODC0fFLteIKu/bZWV4Sg6hyw=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ixGO1ZyigsNM2LOQiHAax7lmtRiG3UcItzW/Mvjt/os=;
+ b=heItuxaRyJlP7ImSJ3+0Ao35t4akhDMfhH8gR45IgXTEfFpS9hh+IB8XEdbEOVeuaX
+ z0hon9uXXTp87rOHVGUPqCNLCSyvmxaBrF16Drgajok9etiQdD2fLQCEhF2CZOLOskVH
+ b4WpfaFzWc7OkLVkIWje8v8mWZMTQocZbvESw=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=iGwjTcZu
-Subject: [Buildroot] [PATCH 1/1] package/rygel: update the patches to be
- applied with fuzz 0
+ header.a=rsa-sha256 header.s=google header.b=heItuxaR
+Subject: [Buildroot] [PATCH 1/1] package/shairport-sync: fix patch fuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,7 +101,7 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -111,103 +110,60 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
 fuzz factor to 0") reduced the fuzz factor.
 
-Due to this change, rygel fails to build with output:
+Due to this change, shairport-sync fails to build with output:
 
-    Applying 0001-meson.build-fix-g_ir_compiler-calls.patch using patch:
-    patching file src/librygel-core/meson.build
-    Hunk #1 succeeded at 73 (offset 3 lines).
-    patching file src/librygel-renderer-gst/meson.build
-    Hunk #1 succeeded at 37 (offset 1 line).
-    patching file src/librygel-renderer/meson.build
-    Hunk #1 FAILED at 43.
-    1 out of 1 hunk FAILED -- saving rejects to file src/librygel-renderer/meson.build.rej
-    patching file src/librygel-server/meson.build
-    Hunk #1 FAILED at 122.
-    1 out of 1 hunk FAILED -- saving rejects to file src/librygel-server/meson.build.rej
+    Applying 0001-configure.ac-find-sndfile-through-pkg-config.patch using patch:
+    patching file configure.ac
+    Hunk #1 FAILED at 304.
+    1 out of 1 hunk FAILED -- saving rejects to file configure.ac.rej
 
 This commit refreshes the package patch on the current package version.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- .checkpackageignore                              |  1 -
- ...001-meson.build-fix-g_ir_compiler-calls.patch | 16 +++++++++-------
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ .checkpackageignore                                       | 1 -
+ ...001-configure.ac-find-sndfile-through-pkg-config.patch | 8 +++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 0a1d2627455e..b63173c3a665 100644
+index 0a1d2627455e..6b489fe12924 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -1323,7 +1323,6 @@ package/rtorrent/0001-Added--disable-execinfo-option-to-configure.patch lib_patc
- package/rtty/0001-CMakeLists.txt-prefer-pkg_check_modules.patch lib_patch.Upstream
- package/rubix/0001-dont-use-legacy-functions.patch lib_patch.Upstream
- package/rubix/0002-misc-fixes.patch lib_patch.Sob lib_patch.Upstream
--package/rygel/0001-meson.build-fix-g_ir_compiler-calls.patch lib_patch.Upstream
- package/rygel/S99rygel Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/s6-linux-init/0001-configure-add-D_GNU_SOURCE.patch lib_patch.Upstream
- package/safeclib/0001-fix-armv7-asm-inline-error-GH-115.patch lib_patch.Upstream
-diff --git a/package/rygel/0001-meson.build-fix-g_ir_compiler-calls.patch b/package/rygel/0001-meson.build-fix-g_ir_compiler-calls.patch
-index 1d8f4599f4ab..7b4d5a904c6a 100644
---- a/package/rygel/0001-meson.build-fix-g_ir_compiler-calls.patch
-+++ b/package/rygel/0001-meson.build-fix-g_ir_compiler-calls.patch
-@@ -20,7 +20,9 @@ Fixes:
-  - http://autobuild.buildroot.org/results/2b8956818f03f66a53480f7ed5fc0abb4f05288d
+@@ -1359,7 +1359,6 @@ package/setserial/0002-tiocghayesesp-build-fix.patch lib_patch.Upstream
+ package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch lib_patch.Upstream
+ package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.patch lib_patch.Upstream
+ package/shadowsocks-libev/0003-lib-Makefile.am-remove-static-from-LDFLAGS.patch lib_patch.Upstream
+-package/shairport-sync/0001-configure.ac-find-sndfile-through-pkg-config.patch lib_patch.Upstream
+ package/shairport-sync/S99shairport-sync Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/shared-mime-info/0001-Remove-incorrect-dependency-from-install-data-hook.patch lib_patch.Upstream
+ package/shellinabox/0001-Makefile-disable-always-building-statically.patch lib_patch.Upstream
+diff --git a/package/shairport-sync/0001-configure.ac-find-sndfile-through-pkg-config.patch b/package/shairport-sync/0001-configure.ac-find-sndfile-through-pkg-config.patch
+index bd97ec0c3d8f..b593703a2a69 100644
+--- a/package/shairport-sync/0001-configure.ac-find-sndfile-through-pkg-config.patch
++++ b/package/shairport-sync/0001-configure.ac-find-sndfile-through-pkg-config.patch
+@@ -13,7 +13,9 @@ Fixes:
+  - http://autobuild.buildroot.org/results/92ed30a6855ca11800b779718822bcba4a69c9a3
  
  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: probably not upstreamable]
-+Upstream: probably not upstreamable
+-[Upstream status: https://github.com/mikebrady/shairport-sync/pull/1263]
++Upstream: https://github.com/mikebrady/shairport-sync/pull/1263
 +[Dario: make the patch to be applied with fuzz factor 0]
 +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
  ---
-  src/librygel-core/meson.build         | 4 +++-
-  src/librygel-renderer-gst/meson.build | 1 +
-@@ -32,7 +34,7 @@ diff --git a/src/librygel-core/meson.build b/src/librygel-core/meson.build
- index fd43bebe..e6be2b5e 100644
- --- a/src/librygel-core/meson.build
- +++ b/src/librygel-core/meson.build
--@@ -70,7 +70,9 @@ core_gir = custom_target('RygelCore-2.6.gir',
-+@@ -73,7 +73,9 @@
-  # so we depend on the custom_target from that step and pass the input through
-  # commandline.
-  custom_target('RygelCore-2.8.typelib',
-@@ -47,7 +49,7 @@ diff --git a/src/librygel-renderer-gst/meson.build b/src/librygel-renderer-gst/m
- index ad98a3a7..e8baefe1 100644
- --- a/src/librygel-renderer-gst/meson.build
- +++ b/src/librygel-renderer-gst/meson.build
--@@ -36,6 +36,7 @@ custom_target('RygelRendererGst-2.6.typelib',
-+@@ -37,6 +37,7 @@
-                          '--output', '@OUTPUT@',
-                          '--includedir', core_girdir,
-                          '--includedir', renderer_girdir,
-@@ -59,25 +61,25 @@ diff --git a/src/librygel-renderer/meson.build b/src/librygel-renderer/meson.bui
- index 5f401527..821273ff 100644
- --- a/src/librygel-renderer/meson.build
- +++ b/src/librygel-renderer/meson.build
--@@ -43,6 +43,7 @@ custom_target('RygelRenderer-2.6.typelib',
-+@@ -44,6 +44,7 @@
-                 command: [g_ir_compiler,
-                          '--output', '@OUTPUT@',
-                          '--includedir', core_girdir,
- +                        '--includedir', meson.get_external_property('sys_root') + get_option('prefix') + '/' + gir_dir,
-                          join_paths(meson.current_build_dir(), 'RygelRenderer-2.8.gir')],
--                output: 'RygelRenderer-2.6.typelib',
-+                output: 'RygelRenderer-2.8.typelib',
-                 depends: [ renderer_lib, renderer_gir, core_gir ],
- diff --git a/src/librygel-server/meson.build b/src/librygel-server/meson.build
- index a3bd77d9..6b084eb6 100644
- --- a/src/librygel-server/meson.build
- +++ b/src/librygel-server/meson.build
--@@ -122,6 +122,7 @@ custom_target('RygelServer-2.6.typelib',
-+@@ -125,6 +125,7 @@
-                 command: [g_ir_compiler,
-                          '--output', '@OUTPUT@',
-                          '--includedir', core_girdir,
- +                        '--includedir', meson.get_external_property('sys_root') + get_option('prefix') + '/' + gir_dir,
-                          join_paths(meson.current_build_dir(), 'RygelServer-2.8.gir')],
--                output: 'RygelServer-2.6.typelib',
-+                output: 'RygelServer-2.8.typelib',
-                 depends: [ server_lib, server_gir, core_gir ],
- -- 
- 2.35.1
+  configure.ac | 9 ++++++++-
+  1 file changed, 8 insertions(+), 1 deletion(-)
+@@ -22,9 +24,9 @@ diff --git a/configure.ac b/configure.ac
+ index f77087c5..9b982c51 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -304,7 +304,14 @@ AC_ARG_WITH(convolution, [AS_HELP_STRING([--with-convolution],[choose audio DSP
++@@ -303,7 +303,14 @@
++ AC_ARG_WITH(convolution, [AS_HELP_STRING([--with-convolution],[choose audio DSP convolution support])])
+  if test "x$with_convolution" = "xyes" ; then
+-   AM_INIT_AUTOMAKE([subdir-objects])
+    AC_DEFINE([CONFIG_CONVOLUTION], 1, [Include audio DSP convolution support.])
+ -  AC_CHECK_LIB([sndfile], [sf_open], , AC_MSG_ERROR(Convolution support requires the sndfile library -- libsndfile1-dev suggested!))
+ +  if  test "x${with_pkg_config}" = xyes ; then
 -- 
 2.43.0
 
