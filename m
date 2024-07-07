@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1CECC3DA44
-	for <buildroot@archiver.kernel.org>; Sun,  7 Jul 2024 21:05:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 754A4C3DA41
+	for <buildroot@archiver.kernel.org>; Sun,  7 Jul 2024 21:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A7E2403F6;
-	Sun,  7 Jul 2024 21:05:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33AA040298;
+	Sun,  7 Jul 2024 21:08:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SBFZL_dfJexU; Sun,  7 Jul 2024 21:05:07 +0000 (UTC)
+ id yEINCjzXWfDu; Sun,  7 Jul 2024 21:08:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5E5140493
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB11340172
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5E5140493;
-	Sun,  7 Jul 2024 21:05:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB11340172;
+	Sun,  7 Jul 2024 21:08:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B96361BF3EA
- for <buildroot@lists.busybox.net>; Sun,  7 Jul 2024 21:05:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E42D51BF3EA
+ for <buildroot@lists.busybox.net>; Sun,  7 Jul 2024 21:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A63E2400AC
- for <buildroot@lists.busybox.net>; Sun,  7 Jul 2024 21:05:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0940400AC
+ for <buildroot@lists.busybox.net>; Sun,  7 Jul 2024 21:08:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fAblXOj8R0LH for <buildroot@lists.busybox.net>;
- Sun,  7 Jul 2024 21:05:04 +0000 (UTC)
+ id AtHWFz0zr7_n for <buildroot@lists.busybox.net>;
+ Sun,  7 Jul 2024 21:08:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::134; helo=mail-il1-x134.google.com;
+ client-ip=2607:f8b0:4864:20::d36; helo=mail-io1-xd36.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4DFE24004A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DFE24004A
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
- [IPv6:2607:f8b0:4864:20::134])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4DFE24004A
- for <buildroot@buildroot.org>; Sun,  7 Jul 2024 21:05:04 +0000 (UTC)
-Received: by mail-il1-x134.google.com with SMTP id
- e9e14a558f8ab-376266a65c8so14116785ab.3
- for <buildroot@buildroot.org>; Sun, 07 Jul 2024 14:05:04 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 79A9E4004A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79A9E4004A
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 79A9E4004A
+ for <buildroot@buildroot.org>; Sun,  7 Jul 2024 21:08:54 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id
+ ca18e2360f4ac-7f684af6af1so115945939f.2
+ for <buildroot@buildroot.org>; Sun, 07 Jul 2024 14:08:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720386303; x=1720991103;
+ d=1e100.net; s=20230601; t=1720386533; x=1720991333;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=NjofvZeUMEXh+taOpbeOsKSCOiJbHY1OIo/X97b/Lk4=;
- b=SF06Y4rOaC2tnCq0Tw5EjPaDAuSxq4OBIG3TMOZIb/dhMUka98ZMBrixmqmYfPBoAc
- SS8IGcjA+iFFXDHHmH3XsuonPzA+F8Vu5wIoz92bS9EqlgZ8RQQTv/sQ3Fb07VmhUTaq
- dEZYVbWky47Syg6kzFfwHbWEzaN+uYTBPTdZc+StsuReF0FGrQe7uACw5uZ14B0septy
- z/thNipfTmHN2tnmEu6vEWJ/lvYUpzjT+Of8/7/lV5wZBcOBF/AryTNjVSH6GosJsdZ5
- jHp7PnWMNFPReozovaLgTk4LmAiAPacaopAe0i7qcMKKZ3y+kTdWXlPv2RWEK8glVJ5D
- GVLg==
-X-Gm-Message-State: AOJu0Yx6pAAUBdg+MIkaW9/rAqpyBTTuZmshw9VCNyXbgjVmAesJIXs4
- YB06t+fmbsA7BVk6xDmApbbe93XWuUDDjGFpHt4Kbs4bubZKf2e0POWaU+H2
-X-Google-Smtp-Source: AGHT+IHZI5BbUK0Y3AqYgWHjsoT5yZ/V3Y2Ty55xDkRebyDLa2g4xCJGmn0OdZYL8Ly/NUscMxpnlw==
-X-Received: by 2002:a05:6e02:b2c:b0:375:d40d:80cb with SMTP id
- e9e14a558f8ab-38398fce898mr134132845ab.16.1720386303021; 
- Sun, 07 Jul 2024 14:05:03 -0700 (PDT)
+ bh=unDKOIx7i7d1diTdImGHjEVr0RmWjL3azG91swXOxHA=;
+ b=WcgswAvmd+mG/AxSZz960UKzHqux5nlYCZ9s8w3AG1k5AsoJL7IJ09jU64pE/caM5x
+ fyRuMUvYCkjOOmr0qnmfnh3Uta8rRhUtb8Ek9NwIauE94aHd8h+RaobOyfFvj6+7A/+V
+ lhpBpuwybXiaHOzbx3SHjHC7mgX4/eN72fxGyVTfoHnqjhOKg7CcVYv5q+bkBDZ9uTZ4
+ sh3JBfvpbQMOFQN2jnU8dDGp5wJdS7+qeR+ksz/7D2mdCwkmM4FyVSLL8TvK/AT841Pf
+ ftbtw7isqP+PC22M2kqKXcyOz/iXR3Hs6wtwbPZtJvYy5VAyjIbQxktTpaLOJ1COWiq7
+ t76A==
+X-Gm-Message-State: AOJu0YxRYdH6Wilqy8zEsD50qbfUx16AZWnYdorrUb0Ld0bIBtm4fkKB
+ dI+RsL6C3jHx3MXFfQ9+6K20AtsViabJ7g9FoRimxUJpmSr0J3nzQF+sBjjL
+X-Google-Smtp-Source: AGHT+IEIUCUyQPUgpsYZZHYNo2kFw8PXHtYfug3RcW+9P4G6lHmweBvx6+OuYLozVaeL4LFgZ5ek/w==
+X-Received: by 2002:a5e:8606:0:b0:7f6:83da:dd12 with SMTP id
+ ca18e2360f4ac-7f683dae12fmr756450039f.11.1720386533251; 
+ Sun, 07 Jul 2024 14:08:53 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-179-167.hlrn.qwest.net.
  [97.118.179.167]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-385339bb730sm14264435ab.15.2024.07.07.14.05.02
+ 8926c6da1cb9f-4c099a64d2asm629581173.27.2024.07.07.14.08.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Jul 2024 14:05:02 -0700 (PDT)
+ Sun, 07 Jul 2024 14:08:52 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 Jul 2024 15:05:00 -0600
-Message-Id: <20240707210500.2274543-1-james.hilliard1@gmail.com>
+Date: Sun,  7 Jul 2024 15:08:51 -0600
+Message-Id: <20240707210851.2276498-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720386303; x=1720991103; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1720386533; x=1720991333; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=NjofvZeUMEXh+taOpbeOsKSCOiJbHY1OIo/X97b/Lk4=;
- b=EpdyIiDoRYJt6lEmoI2cvix0M9qCU9SmfqHvQhzoDBehTbS8PSO+dGHU4oYBZu87mI
- q/zyg/TcxBz/bzP8kA8NSx+Sah3HB0clfhpxi8fY6e+tAG3Bb5agFM/yiATq4gourzZm
- wNxH83NdUIWI4/uknM40gOLzbIsgO3ZlUPYx/xx1q4sv3ZbEm9khBw+8kiwF6fNixXEF
- uA7+1zju2lqkqV1C8wLLI2Vvrmvu8RVx1DrYTlLhYLik4qc+ySGx9va/m6LNkAwkPXqy
- mZJpaSdPNe7VlVuM+9hXGsYAWzrwtGu1WzE4qbKaoSj4xBVSa95yXxd+dJ2v+o9iSWvM
- lirA==
+ bh=unDKOIx7i7d1diTdImGHjEVr0RmWjL3azG91swXOxHA=;
+ b=Fl4a8zGvLJE+w8orWt4MQmqvQViEgQQpbDpVzSn5OeoeHi5hNRqp88B4LnDC5uerIM
+ dVk+4KBoSKVCO/ChDAHzckZFEPb4qfGTwlk3zQO7LVQU//y5iUo3IAJb+8jjC4dz58NE
+ SLc1KeF7jTl0Tw6U7WLPz4AfPWnj6r5acxK2fQk8u8K4uGFFHYZ8HW1DliqYa3XgYO2M
+ 4kSWLlMbymEeJgUFc1TNErpsAaW83yk2gNM3oHAEu4baRoisY53MPelUvz4/oG+Q4y6i
+ u56ycZPCac3A1ENybGXEDtUVRNyA5QlpWrqWGsY02ZE3GepRALoxgbgRwEeDXpJoel/d
+ Uyog==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=EpdyIiDo
-Subject: [Buildroot] [PATCH 1/1] package/python-pyproject-hooks: bump to
- version 1.1.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Fl4a8zGv
+Subject: [Buildroot] [PATCH 1/1] package/python-pyparsing: bump to version
+ 3.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,54 +101,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Note LICENSE file is missing from this release but license has not
-changed.
-
-This will be fixed in the next release:
-https://github.com/pypa/pyproject-hooks/commit/dfb13356a4a4bb24ae7060a45362d3b4d52ef0bf
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyproject-hooks/python-pyproject-hooks.hash | 6 ++----
- package/python-pyproject-hooks/python-pyproject-hooks.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ package/python-pyparsing/python-pyparsing.hash | 4 ++--
+ package/python-pyparsing/python-pyparsing.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyproject-hooks/python-pyproject-hooks.hash b/package/python-pyproject-hooks/python-pyproject-hooks.hash
-index 9fdcd33596..7b7e86aabe 100644
---- a/package/python-pyproject-hooks/python-pyproject-hooks.hash
-+++ b/package/python-pyproject-hooks/python-pyproject-hooks.hash
-@@ -1,5 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/pyproject_hooks/json
--md5  69b0b6de189bc04c3f9e304281765741  pyproject_hooks-1.0.0.tar.gz
--sha256  f271b298b97f5955d53fb12b72c1fb1948c22c1a6b70b315c54cedaca0264ef5  pyproject_hooks-1.0.0.tar.gz
--# Locally computed sha256 checksums
--sha256  1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154  LICENSE
-+md5  1963f68105b77c6d4be0a769c6d43779  pyproject_hooks-1.1.0.tar.gz
-+sha256  4b37730834edbd6bd37f26ece6b44802fb1c1ee2ece0e54ddff8bfc06db86965  pyproject_hooks-1.1.0.tar.gz
-diff --git a/package/python-pyproject-hooks/python-pyproject-hooks.mk b/package/python-pyproject-hooks/python-pyproject-hooks.mk
-index a42dbb0ab1..ad14494da5 100644
---- a/package/python-pyproject-hooks/python-pyproject-hooks.mk
-+++ b/package/python-pyproject-hooks/python-pyproject-hooks.mk
-@@ -4,11 +4,10 @@
+diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
+index 4514e2d402..d029ebda2d 100644
+--- a/package/python-pyparsing/python-pyparsing.hash
++++ b/package/python-pyparsing/python-pyparsing.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyparsing/json
+-md5  bb8c8c6b8015ca5887ae2c37917ee82e  pyparsing-3.1.1.tar.gz
+-sha256  ede28a1a32462f5a9705e07aea48001a08f7cf81a021585011deba701581a0db  pyparsing-3.1.1.tar.gz
++md5  2bfafdb2d02d19ca4a3dfd02a9dbdfa7  pyparsing-3.1.2.tar.gz
++sha256  a1bac0ce561155ecc3ed78ca94d3c9378656ad4c94c1270de543f621420f94ad  pyparsing-3.1.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
+index 0538c8df0a..b7cbbd4262 100644
+--- a/package/python-pyparsing/python-pyparsing.mk
++++ b/package/python-pyparsing/python-pyparsing.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPROJECT_HOOKS_VERSION = 1.0.0
-+PYTHON_PYPROJECT_HOOKS_VERSION = 1.1.0
- PYTHON_PYPROJECT_HOOKS_SOURCE = pyproject_hooks-$(PYTHON_PYPROJECT_HOOKS_VERSION).tar.gz
--PYTHON_PYPROJECT_HOOKS_SITE = https://files.pythonhosted.org/packages/25/c1/374304b8407d3818f7025457b7366c8e07768377ce12edfe2aa58aa0f64c
-+PYTHON_PYPROJECT_HOOKS_SITE = https://files.pythonhosted.org/packages/c7/07/6f63dda440d4abb191b91dc383b472dae3dd9f37e4c1e4a5c3db150531c6
- PYTHON_PYPROJECT_HOOKS_SETUP_TYPE = flit-bootstrap
- PYTHON_PYPROJECT_HOOKS_LICENSE = MIT
--PYTHON_PYPROJECT_HOOKS_LICENSE_FILES = LICENSE
- 
- $(eval $(host-python-package))
+-PYTHON_PYPARSING_VERSION = 3.1.1
++PYTHON_PYPARSING_VERSION = 3.1.2
+ PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
+-PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/37/fe/65c989f70bd630b589adfbbcd6ed238af22319e90f059946c26b4835e44b
++PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/46/3a/31fd28064d016a2182584d579e033ec95b809d8e220e74c4af6f0f2e8842
+ PYTHON_PYPARSING_LICENSE = MIT
+ PYTHON_PYPARSING_LICENSE_FILES = LICENSE
+ PYTHON_PYPARSING_SETUP_TYPE = flit
 -- 
 2.34.1
 
