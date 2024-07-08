@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 018E2C3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 05:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54A29C3DA42
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 05:27:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 621AC6069C;
-	Mon,  8 Jul 2024 05:20:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0646D6069C;
+	Mon,  8 Jul 2024 05:27:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hUyfq7A3hyGN; Mon,  8 Jul 2024 05:20:30 +0000 (UTC)
+ id 7zSU5c28Th5Y; Mon,  8 Jul 2024 05:27:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EF17606B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E67A606E3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6EF17606B9;
-	Mon,  8 Jul 2024 05:20:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4CC941BF48D
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:20:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E67A606E3;
+	Mon,  8 Jul 2024 05:27:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C800A1BF48D
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4713080E84
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:20:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C2484606E3
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:27:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T-9-E0GWJ36O for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 05:20:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gcjD26QK-_Br for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 05:27:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8595380E83
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8595380E83
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8595380E83
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 05:20:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 06FE11BF206;
- Mon,  8 Jul 2024 05:20:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C273D606B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C273D606B9
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C273D606B9
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 05:27:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B265E0004;
+ Mon,  8 Jul 2024 05:27:09 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sQgnW-0014CN-00;
- Mon, 08 Jul 2024 07:20:22 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sQgu4-0014ds-1c;
+ Mon, 08 Jul 2024 07:27:08 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-References: <20240528082356.215363-1-dario.binacchi@amarulasolutions.com>
-Date: Mon, 08 Jul 2024 07:20:21 +0200
-In-Reply-To: <20240528082356.215363-1-dario.binacchi@amarulasolutions.com>
- (Dario Binacchi's message of "Tue, 28 May 2024 10:23:56 +0200")
-Message-ID: <87tth0sbmy.fsf@dell.be.48ers.dk>
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20240612192222.52284-1-bernd@kuhls.net>
+Date: Mon, 08 Jul 2024 07:27:08 +0200
+In-Reply-To: <20240612192222.52284-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Wed, 12 Jun 2024 21:22:22 +0200")
+Message-ID: <87plrosbbn.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/openssh: fix build failure with
- gcc 11.x
+Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 24.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,37 +69,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>, "Yann
+ E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkRhcmlvIiA9PSBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNv
-bHV0aW9ucy5jb20+IHdyaXRlczoKCiA+IFRoZSBwYXRjaCBmaXggdGhlIGZvbGxvd2luZyBidWls
-ZCBmYWlsdXJlOgogPiBvdXRwdXQvaG9zdC9iaW4vYXJtLWJ1aWxkcm9vdC1saW51eC11Y2xpYmNn
-bnVlYWJpaGYtZ2NjIC1EX0xBUkdFRklMRV9TT1VSQ0UgLURfTEFSR0VGSUxFNjRfU09VUkNFCiA+
-IC1EX0ZJTEVfT0ZGU0VUX0JJVFM9NjQgIC1PcyAtZzAgIC1waXBlIC1Xbm8tZXJyb3I9Zm9ybWF0
-LXRydW5jYXRpb24gLVdhbGwgLVdleHRyYSAtV3BvaW50ZXItYXJpdGgKID4gLVd1bmluaXRpYWxp
-emVkIC1Xc2lnbi1jb21wYXJlIC1XZm9ybWF0LXNlY3VyaXR5IC1Xc2l6ZW9mLXBvaW50ZXItbWVt
-YWNjZXNzIC1Xbm8tcG9pbnRlci1zaWduCiA+IC1Xbm8tdW51c2VkLXBhcmFtZXRlciAtV25vLXVu
-dXNlZC1yZXN1bHQgLVdpbXBsaWNpdC1mYWxsdGhyb3VnaCAtV21pc2xlYWRpbmctaW5kZW50YXRp
-b24KID4gLWZuby1zdHJpY3QtYWxpYXNpbmcgLURfRk9SVElGWV9TT1VSQ0U9MiAtZnRyYXB2IC1m
-emVyby1jYWxsLXVzZWQtcmVncz11c2VkIC1mbm8tYnVpbHRpbi1tZW1zZXQKID4gLWZzdGFjay1w
-cm90ZWN0b3Itc3Ryb25nICAgLWZQSUMgLUkuIC1JLi4gLUkuIC1JLi8uLiAtRF9MQVJHRUZJTEVf
-U09VUkNFIC1EX0xBUkdFRklMRTY0X1NPVVJDRQogPiAtRF9GSUxFX09GRlNFVF9CSVRTPTY0IC1E
-X1hPUEVOX1NPVVJDRT02MDAgLURfQlNEX1NPVVJDRSAtRF9ERUZBVUxUX1NPVVJDRSAtRF9HTlVf
-U09VUkNFCiA+IC1ESEFWRV9DT05GSUdfSCAtYyBwb3J0LWFpeC5jCiA+IHNoYTIuYzogSW4gZnVu
-Y3Rpb24g4oCYU0hBMjU2SW5pdOKAmToKID4gc2hhMi5jOjM2MDoxOiBzb3JyeSwgdW5pbXBsZW1l
-bnRlZDog4oCYLWZ6ZXJvLWNhbGwtdXNlZC1yZWdz4oCZIG5vdCBzdXBwb3J0ZWQgb24gdGhpcyB0
-YXJnZXQKID4gICAzNjAgfCB9CiA+ICAgICAgIHwgXgogPiBtYWtlWzNdOiAqKiogW01ha2VmaWxl
-OjEwNjogc2hhMi5vXSBFcnJvciAxCiA+IG1ha2VbM106ICoqKiBXYWl0aW5nIGZvciB1bmZpbmlz
-aGVkIGpvYnMuLi4uCiA+IG1ha2VbMl06ICoqKiBbTWFrZWZpbGU6MTk5OiBvcGVuYnNkLWNvbXBh
-dC9saWJvcGVuYnNkLWNvbXBhdC5hXSBFcnJvciAyCgogPiBUaGlzIGNvbW1pdCBhcHBsaWVzIGFu
-IHVwc3RyZWFtIHBhdGNoIHRoYXQgaW1wcm92ZXMgdGhlIGRldGVjdGlvbiBvZgogPiAtZnplcm8t
-Y2FsbC11c2VkLXJlZ3M9dXNlZC4KCiA+IFNpZ25lZC1vZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxk
-YXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4KCkNvbW1pdHRlZCB0byAyMDI0LjAy
-LnggYW5kIDIwMjQuMDUueCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+
+ > Release notes:
+ > https://lists.freedesktop.org/archives/mesa-announce/2024-May/000761.html
+ > https://lists.freedesktop.org/archives/mesa-announce/2024-June/000764.html
+
+ > Removed two patches which are included in this version 24.0.8.
+
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Committed to 2024.02.x and 2024.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
