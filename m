@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88EE8C3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D71C4C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:24:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 582D660A68;
-	Mon,  8 Jul 2024 20:24:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A969B60804;
+	Mon,  8 Jul 2024 20:24:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vWMuzLBPm53U; Mon,  8 Jul 2024 20:24:42 +0000 (UTC)
+ id HV9Xxy6u7STl; Mon,  8 Jul 2024 20:24:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 529E760A70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC3B760A8C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 529E760A70;
-	Mon,  8 Jul 2024 20:24:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC3B760A8C;
+	Mon,  8 Jul 2024 20:24:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0CAA41BF409
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F71E1BF390
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE90E40593
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8CEF340133
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gUzUf6Fs6Hta for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 20:24:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id MjRySN44_bs8 for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 20:24:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 164314033A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 164314033A
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:24:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0319983D98; Mon,  8 Jul 2024 20:24:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 8 Jul 2024 22:24:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dbf2ca9b5b4ebd26c2d14889ca04f0cd01bb2454
-X-Git-Newrev: 1da5466bab46b20a4ebbc28cfdbba9135775ae6d
-X-Patchwork-Hint: ignore
-Message-Id: <20240708202437.0319983D98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/visionfive2: fix build by adding
- kernel header version
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6C8314033A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C8314033A
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6C8314033A
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:24:54 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 26E1FFF805;
+ Mon,  8 Jul 2024 20:24:50 +0000 (UTC)
+Date: Mon, 8 Jul 2024 22:24:50 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20240708222450.0003b5ee@windsurf>
+In-Reply-To: <20240706154005.3823542-1-dario.binacchi@amarulasolutions.com>
+References: <20240706154005.3823542-1-dario.binacchi@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720470291;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=mD4PsNb4tb9+GL3azO9TUUSZam6r+maqfjMOiFWd6VY=;
+ b=YVRD+8ezTGubYQ+b5cbrROCEZQ92Fv7FSMxVg4nZuAmhpEQ4y1ZSjbgYqZSWkRkEDNsb5A
+ 4e3wRT5N6AsstzJo6hL4iA+K4Mj6gcTv4htC2drC2GfozB2hz8joJsyNMZ9NLWMnsQCMi8
+ nc1LrH8lr1IUFLKgNRdIXgwFXSiYvTN12VgAWqt6M6GckXTKWWnM2tP6eN4vBorLqY4c8y
+ /m3hQCgiHF8PYwVfIHJ3iYXvj63KUe+GFjkxAmnHR7qOWrOll6RRrnYlm9ua5Lye/B4K2c
+ MfSekeH/Cu2nc+5j8Sk5tdSRcdHHUwRAOUCmkCUSIRoSGI/5RiOY38ynnn/m+g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=YVRD+8ez
+Subject: Re: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-vpu-hantro:
+ fix patch fuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,53 +83,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Gary Bisson <bisson.gary@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1da5466bab46b20a4ebbc28cfdbba9135775ae6d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  6 Jul 2024 17:40:05 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-commit d9e6d2d081 "configs/visionfive2: update kernel to upstream
-6.8.2" removed the config directive:
+> Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
+> fuzz factor to 0") reduced the fuzz factor.
+> 
+> Due to this change, imx-vpu-hantro fails to build with output:
+> 
+>     Applying 0001-Fix-ion.h-header-inclusion-to-be-standard.patch using patch:
+>     patching file Makefile_G1G2
+>     patching file Makefile_H1
+>     patching file decoder_sw/software/linux/dwl/dwl_linux.c
+>     Hunk #1 FAILED at 50.
+>     1 out of 1 hunk FAILED -- saving rejects to file decoder_sw/software/linux/dwl/dwl_linux.c.rej
+>     patching file h1_encoder/software/linux_reference/ewl/ewl_x280_common.c
+>     Hunk #1 FAILED at 52.
+>     1 out of 1 hunk FAILED -- saving rejects to file h1_encoder/software/linux_reference/ewl/ewl_x280_common.c.rej
+> 
+> This commit refreshes the package patch on the current package version.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  ...001-Fix-ion.h-header-inclusion-to-be-standard.patch | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 
-    BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+Applied to master, thanks.
 
-but forgot to add:
-
-    BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
-
-It was most likely generated with a "make savedefconfig", while Linux
-kernel v6.8 was the default at that time. After commit aa70c331a2
-"linux: bump latest version to 6.9", the defconfig failed to build
-with error:
-
-    Incorrect selection of kernel headers: expected 6.9.x, got 6.8.x
-
-This commit fixes the defconfig by adding back the kernel custom header
-version.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/7271150175
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/visionfive2_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/configs/visionfive2_defconfig b/configs/visionfive2_defconfig
-index dae9608eeb..18e0997f19 100644
---- a/configs/visionfive2_defconfig
-+++ b/configs/visionfive2_defconfig
-@@ -1,4 +1,5 @@
- BR2_riscv=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
- BR2_GLOBAL_PATCH_DIR="board/visionfive2/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
