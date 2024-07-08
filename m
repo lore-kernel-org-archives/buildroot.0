@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6F60C3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:24:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 616E3C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:24:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A2C86084C;
-	Mon,  8 Jul 2024 20:24:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3468760804;
+	Mon,  8 Jul 2024 20:24:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DO__q9apHllM; Mon,  8 Jul 2024 20:24:20 +0000 (UTC)
+ id twc1d62_gjVc; Mon,  8 Jul 2024 20:24:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8530608E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 554016084C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A8530608E0;
-	Mon,  8 Jul 2024 20:24:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 417A51BF390
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 554016084C;
+	Mon,  8 Jul 2024 20:24:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 608B51BF390
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CD5B6084C
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58E8A405A1
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QZOO8DRZU2Zk for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 20:24:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9uhkEKVmm5EO for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 20:24:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1B3E9608E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B3E9608E0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B3E9608E0
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:24:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E83421C0005;
- Mon,  8 Jul 2024 20:24:14 +0000 (UTC)
-Date: Mon, 8 Jul 2024 22:24:14 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20240708222414.269bd1b9@windsurf>
-In-Reply-To: <20240706193338.296510-1-giulio.benetti@benettiengineering.com>
-References: <20240706193338.296510-1-giulio.benetti@benettiengineering.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 06D0340133
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06D0340133
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 06D0340133
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:24:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0945940005;
+ Mon,  8 Jul 2024 20:24:22 +0000 (UTC)
+Date: Mon, 8 Jul 2024 22:24:22 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240708222422.46a5ffa2@windsurf>
+In-Reply-To: <20240706110642.939667-1-ju.o@free.fr>
+References: <20240706110642.939667-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720470255;
+ d=bootlin.com; s=gm1; t=1720470263;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=sGaeJ7s4B1m6nWttFMrHrEloxBIeezUXK0M9ap07aog=;
- b=aTLOhbNib6eAWpEAk4hkYPTo8ADbrH8WyTmMwcN+suY+n+GYgLkaOSOWGHH2ayCh5W9J/g
- U8qTD5WG5EDQlTW8lA/8rGEVEqVDXOTus7ZxkJCx+twC7uJfZNYXNoHs83Irz/GbLsT/+C
- Tve6Sop6NPyvbKv2xHon6C8u86ixjcTort2xkXvk7gpr4g+bNJVwwEN5B2qArQWJi0WFya
- TQJvCg3uDsJtOITz9w54x0y+7bWPIvhp9NNfRvB1wqS90OPjwqDT99O02B8uGi+m6aerU7
- l7ziDR6ZdTbOWBxspv8b+o47AGRPdxbdSbsGzR5aGKrY8H1WmS7POxO7q6UYQA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=M7Bwby8/7ddUvZbnN/LECW7GR3Cvby3TjvpgqYDA7xk=;
+ b=mjsquGOopRl1gLAvdiuNIFEhCkOIg2faRg6qDEPvAxwmIS4ke1SMTOQFzsDkYLDfgHh68f
+ BLFkDW6AF+1imetZERvehnwA3FhOudff8i4Y0LZer84/jR9LmuiLwlnLnAhlq9G2dd5O2f
+ e+qHaRLozUMC/7d7m7k1GkDN/zBbe0C1WDIbBStUO4MqHCTZiTTVRBzSHtB2doie8kAPKl
+ ehyrcSMg++OGNPCFEpm5Bqxxdx1yybo3aDMPxPZXrtjHfplkpZUOrCfXz72N9aYFSzxHEw
+ vEj6/uIeAaQU1eaZPt09vPK+bk9D+/Z4w8tswb0N23hW8Q1Oz9PBOx3F/cqbIA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aTLOhbNi
-Subject: Re: [Buildroot] [PATCH] package/libnss: bump version to 3.102
+ header.s=gm1 header.b=mjsquGOo
+Subject: Re: [Buildroot] [PATCH 1/1] configs/visionfive2: fix build by
+ adding kernel header version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,20 +83,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
+Cc: Francois Dugast <francois.dugast.foss@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  6 Jul 2024 21:33:38 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Sat,  6 Jul 2024 13:06:42 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> commit d9e6d2d081 "configs/visionfive2: update kernel to upstream
+> 6.8.2" removed the config directive:
+> 
+>     BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+> 
+> but forgot to add:
+> 
+>     BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
+> 
+> It was most likely generated with a "make savedefconfig", while Linux
+> kernel v6.8 was the default at that time. After commit aa70c331a2
+> "linux: bump latest version to 6.9", the defconfig failed to build
+> with error:
+> 
+>     Incorrect selection of kernel headers: expected 6.9.x, got 6.8.x
+> 
+> This commit fixes the defconfig by adding back the kernel custom header
+> version.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/7271150175
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/libnss/libnss.hash | 4 ++--
->  package/libnss/libnss.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  configs/visionfive2_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
