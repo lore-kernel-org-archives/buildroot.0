@@ -4,68 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1E8BC38150
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 01:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 782C6C38150
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 01:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1700E80E3E;
-	Mon,  8 Jul 2024 01:37:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 224AF80E47;
+	Mon,  8 Jul 2024 01:38:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mdF_SbgAYF1F; Mon,  8 Jul 2024 01:37:47 +0000 (UTC)
+ id X6tBwl8tv2bx; Mon,  8 Jul 2024 01:38:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 106CF80E40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F2B480E48
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 106CF80E40;
-	Mon,  8 Jul 2024 01:37:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F2B480E48;
+	Mon,  8 Jul 2024 01:38:12 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BDEDF1BF82C
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 01:37:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5C7731BF82C
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 01:38:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA4AE401F3
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 01:37:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 474934023F
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 01:38:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1zE9yTShaFPk for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 01:37:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=159.65.134.6;
- helo=zg8tmtu5ljy1ljeznc42.icoremail.net;
+ id sisnTmMXWM5a for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 01:38:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.97.181.73;
+ helo=zg8tmja5ljk3lje4ms43mwaa.icoremail.net;
  envelope-from=zhangdongdong@eswincomputing.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1191840142
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1191840142
-Received: from zg8tmtu5ljy1ljeznc42.icoremail.net
- (zg8tmtu5ljy1ljeznc42.icoremail.net [159.65.134.6])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1191840142
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 01:37:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9416B40142
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9416B40142
+Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net
+ (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9416B40142
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 01:38:07 +0000 (UTC)
 Received: from ubuntu18.eswin.cn (unknown [10.12.192.173])
- by app1 (Coremail) with SMTP id TAJkCgDXauLdQotmaHIUAA--.34904S4;
- Mon, 08 Jul 2024 09:37:34 +0800 (CST)
+ by app1 (Coremail) with SMTP id TAJkCgDXauLdQotmaHIUAA--.34904S5;
+ Mon, 08 Jul 2024 09:37:44 +0800 (CST)
 From: zhangdongdong@eswincomputing.com
 To: buildroot@buildroot.org
-Date: Mon,  8 Jul 2024 09:37:17 +0800
-Message-Id: <20240708013718.19051-1-zhangdongdong@eswincomputing.com>
+Date: Mon,  8 Jul 2024 09:37:18 +0800
+Message-Id: <20240708013718.19051-2-zhangdongdong@eswincomputing.com>
 X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: TAJkCgDXauLdQotmaHIUAA--.34904S4
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
- VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY77AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
- 6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
- kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
- cVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2js
- IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
- 5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
- CFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l
- w4CEc2x0rVAKj4xxMxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
- WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
- 67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
- IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
- 0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2Kf
- nxnUUI43ZEXa7VUjRVbDUUUUU==
-X-CM-SenderInfo: x2kd0wpgrqwvxrqjqvxvzl0uprps33xlqjhudrp/1tbiAQEMCmaKYPEWvQAAsQ
+In-Reply-To: <20240708013718.19051-1-zhangdongdong@eswincomputing.com>
+References: <20240708013718.19051-1-zhangdongdong@eswincomputing.com>
+X-CM-TRANSID: TAJkCgDXauLdQotmaHIUAA--.34904S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1fAFy5GrWrCry8JrW7XFb_yoW8CrWDpr
+ W5GF1avw4SyF9Fka93Ga4xWw4rZ3ZYy3yDJFyIgF4ktFn3KanFyry5tFyYka47GF4fZrs5
+ XFWvqw4kKF48ZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDU0xBIdaVrnRJUUUBE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+ rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+ x26xkF7I0E14v26r1Y6r1xM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+ Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdM2
+ 8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
+ xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+ vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+ r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4kE6xkIj40Ew7xC0wCY02Avz4
+ vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
+ xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrx
+ kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
+ 6r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
+ CI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUPcTPUUUUU
+ =
+X-CM-SenderInfo: x2kd0wpgrqwvxrqjqvxvzl0uprps33xlqjhudrp/1tbiAgELCmaKYrgFWwACso
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=eswincomputing.com
-Subject: [Buildroot] [PATCH v2 0/1] .github: add github action to automate
+Subject: [Buildroot] [PATCH v2 1/1] .github: add github action to automate
  PR handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -87,20 +92,60 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Dongdong Zhang <zhangdongdong@eswincomputing.com>
 
-Changes in v2:
-    - Adopted Edgar Bonet's suggestion to retain the original 
-      pull request template.Restored .github/pull_request_template.md
-      to its original form. This way, developers will see the prompt 
-      when creating a pull request, without having to wait for the 
-      workflow to complete.
+This patch updates the Buildroot repository's GitHub configuration to better
+manage incoming pull requests.
 
-Dongdong Zhang (1):
-  .github: add github action to automate PR handling
+- Added a new GitHub Actions workflow (`repo-lockdown.yml`) to automatically
+  handle new pull requests.
 
+The new workflow:
+- Triggers on new pull requests.
+- Uses the `dessant/repo-lockdown` action to:
+  - Comment on the pull request, guiding contributors to use the mailing list
+    for patch submission.
+  - Lock the pull request to prevent further discussion.
+  - Close the pull request.
+
+This change ensures that contributors are properly directed to the preferred
+method of patch submission via the mailing list, maintaining consistency and
+streamlining the review process.
+
+Signed-off-by: Dongdong Zhang <zhangdongdong@eswincomputing.com>
+---
  .github/workflows/repo-lockdown.yml | 23 +++++++++++++++++++++++
  1 file changed, 23 insertions(+)
  create mode 100644 .github/workflows/repo-lockdown.yml
 
+diff --git a/.github/workflows/repo-lockdown.yml b/.github/workflows/repo-lockdown.yml
+new file mode 100644
+index 0000000000..a5f8bd6a93
+--- /dev/null
++++ b/.github/workflows/repo-lockdown.yml
+@@ -0,0 +1,23 @@
++name: 'Repo Lockdown'
++
++on:
++  pull_request_target:
++    types: opened
++
++permissions:
++  pull-requests: write
++
++jobs:
++  action:
++    runs-on: ubuntu-latest
++    steps:
++      - uses: dessant/repo-lockdown@v4
++        with:
++          pr-comment: |
++            Please do not submit a Pull Request via GitHub. Buildroot makes use of a
++            [mailing list](http://lists.buildroot.org/mailman/listinfo/buildroot) for patch submission and review.
++            See [submitting your own patches](http://buildroot.org/manual.html#submitting-patches) for more info.
++
++            Thanks for your help!
++          lock-pr: true
++          close-pr: true
+\ No newline at end of file
 -- 
 2.17.1
 
