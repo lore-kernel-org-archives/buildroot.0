@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5958BC3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 21:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23990C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 21:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB7F24067F;
-	Mon,  8 Jul 2024 21:51:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 266BA40649;
+	Mon,  8 Jul 2024 21:51:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MOD4j7zcxw_n; Mon,  8 Jul 2024 21:51:08 +0000 (UTC)
+ id sP0HEEiDyD1Q; Mon,  8 Jul 2024 21:51:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 489F64066B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DCDD40691
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 489F64066B;
-	Mon,  8 Jul 2024 21:51:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 666FC1BF969
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DCDD40691;
+	Mon,  8 Jul 2024 21:51:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F1B701BF3BD
  for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:51:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 536DB40549
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB667405ED
  for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:51:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id odarI_tpmV5d for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 21:51:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o7kwFrqzDxPq for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 21:51:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6520D40360
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08680405BE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6520D40360
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08680405BE
  for <buildroot@buildroot.org>; Mon,  8 Jul 2024 21:51:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F266841F5; Mon,  8 Jul 2024 21:51:03 +0000 (UTC)
+ id 69394841EF; Mon,  8 Jul 2024 21:51:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 8 Jul 2024 23:49:51 +0200
+Date: Mon, 8 Jul 2024 23:50:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8900311b7e5450082cace986533a093d37900efa
-X-Git-Newrev: df605de1349251687640519fcc2d2147cf146af9
+X-Git-Oldrev: df605de1349251687640519fcc2d2147cf146af9
+X-Git-Newrev: 2c14a55c6cf28ada9f1d3d17d3b11370829372ca
 X-Patchwork-Hint: ignore
-Message-Id: <20240708215103.4F266841F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openssh: fix init script
- indentation
+Message-Id: <20240708215103.69394841EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openssh: implement "reload" using
+ SIGHUP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,66 +66,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df605de1349251687640519fcc2d2147cf146af9
+commit: https://git.buildroot.net/buildroot/commit/?id=2c14a55c6cf28ada9f1d3d17d3b11370829372ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This brings the script in line with .editorconfig settings and other
-newer init scripts.
+This is the documented "reload configuration" method for OpenSSH.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore     |  1 -
- package/openssh/S50sshd | 24 ++++++++++++------------
- 2 files changed, 12 insertions(+), 13 deletions(-)
+ package/openssh/S50sshd | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0f33ed0705..505725695c 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1103,7 +1103,6 @@ package/openrc/0003-init.d-agetty-replace-sbin-agetty-by-sbin-getty.patch lib_pa
- package/openrc/0004-init.d-agetty-start-agetty-after-all-sevices.patch lib_patch.Upstream
- package/openrc/0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch lib_patch.Upstream
- package/openrc/0006-Also-create-run-lock-subsys-directory.patch lib_patch.Upstream
--package/openssh/S50sshd lib_sysv.Indent
- package/openswan/0001-lib-libopenswan-constants.c-workaround-missing-ns_t_.patch lib_patch.Upstream
- package/opentyrian/0001-Move-definitions-that-don-t-need-to-be-exposed-from-opl-h-to-opl-c.patch lib_patch.Upstream
- package/openvmtools/0001-no_cflags_werror.patch lib_patch.Upstream
 diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-index 8f4fe10153..781aad8715 100644
+index 781aad8715..d16a7ad8fc 100644
 --- a/package/openssh/S50sshd
 +++ b/package/openssh/S50sshd
-@@ -50,18 +50,18 @@ restart() {
+@@ -49,6 +49,19 @@ restart() {
+ 	start
  }
  
++reload() {
++	printf "Reloading sshd config: "
++	start-stop-daemon -K --signal HUP -q -p "$PIDFILE" \
++		-x "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
  case "$1" in
--  start)
--	start
--	;;
--  stop)
--	stop
--	;;
--  restart|reload)
--	restart
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart}"
--	exit 1
-+	start)
-+		start
+ 	start)
+ 		start
+@@ -56,11 +69,14 @@ case "$1" in
+ 	stop)
+ 		stop
+ 		;;
+-	restart|reload)
++	restart)
+ 		restart
+ 		;;
++	reload)
++		reload
 +		;;
-+	stop)
-+		stop
-+		;;
-+	restart|reload)
-+		restart
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
+ 	*)
+-		echo "Usage: $0 {start|stop|restart}"
++		echo "Usage: $0 {start|stop|restart|reload}"
+ 		exit 1
  esac
  
- exit $?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
