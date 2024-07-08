@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E3DEC3DA41
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:26:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C897C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:26:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DC3060A7D;
-	Mon,  8 Jul 2024 20:26:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC1B260B99;
+	Mon,  8 Jul 2024 20:26:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WPgda4qD6hOA; Mon,  8 Jul 2024 20:25:59 +0000 (UTC)
+ id DCEbgC55wghD; Mon,  8 Jul 2024 20:26:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1668460B75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E23EB60BA4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1668460B75;
-	Mon,  8 Jul 2024 20:25:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 345E21BF390
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:25:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E23EB60BA4;
+	Mon,  8 Jul 2024 20:26:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 88CD41BF390
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29B0D404F6
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:25:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75B924033A
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:25:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4sijV8GU2eBz for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 20:25:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WF3WPZ9eCrjt for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 20:25:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C9A7404E1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C9A7404E1
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:25:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 28C1884016; Mon,  8 Jul 2024 20:25:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 8 Jul 2024 22:25:10 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8974269c3253dab0a2c4db065701d43f7a2e5053
-X-Git-Newrev: 27d64eeaa5db66eaedcd9fb6a9bbfd4773cf5156
-X-Patchwork-Hint: ignore
-Message-Id: <20240708202547.28C1884016@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vuejs: bump to version 3.4.31
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1466D40133
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1466D40133
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1466D40133
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:25:54 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0F3A320005;
+ Mon,  8 Jul 2024 20:25:52 +0000 (UTC)
+Date: Mon, 8 Jul 2024 22:25:52 +0200
+To: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Message-ID: <20240708222552.7c5d9248@windsurf>
+In-Reply-To: <20240708123050.45780-1-thomas.claveirole@green-communications.fr>
+References: <20240708123050.45780-1-thomas.claveirole@green-communications.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720470353;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=AaPZVe6uN2ZsF4TtgGJCqOc35pvVhyiK0Xt9mT+I7kc=;
+ b=k+wilGxJnj3xPlKi5d6w2ZLCCMVrx26kaGXwZjG/es12PKcNtJAFUEooQkBDTXgQq0Ea3j
+ CfFyRbGMZ7wQrPmBvAAVebE2LEDyu+DZpRd2TXK0orCiAskyiBITccWS/5A0S+KvkGVdGw
+ /0ZHTsfhJVf3at+LyI1Krj/Hb6zqzTGoCwKy075KG0zMH4sjIS/DerTQtSE5+mm7cH3a+j
+ KPLD7Vsea2jj8X72HCI7WRYt+5MiS/g6JBAcMpYQSCjCnMT4+34dschEHVU6aIro0nlqJM
+ ngGmGw8E96sDcGxwL34p1wRAC346a8epLviFrAw2SOB2tAR440teHrJfNDVm9w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=k+wilGxJ
+Subject: Re: [Buildroot] [PATCH 1/1] package/openlayers: bump to version
+ 9.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +83,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27d64eeaa5db66eaedcd9fb6a9bbfd4773cf5156
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  8 Jul 2024 14:30:50 +0200
+Thomas Claveirole <thomas.claveirole@green-communications.fr> wrote:
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/vuejs/vuejs.hash | 2 +-
- package/vuejs/vuejs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+> ---
+>  package/openlayers/openlayers.hash | 2 +-
+>  package/openlayers/openlayers.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vuejs/vuejs.hash b/package/vuejs/vuejs.hash
-index 2785a24eca..a4011d8000 100644
---- a/package/vuejs/vuejs.hash
-+++ b/package/vuejs/vuejs.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5772054f07ee4d86b831b963a889b9b3e60764f4fe909c1ccddd00fd628bc6c7  vue-3.4.21.tgz
-+sha256  01cb6ef41fdf1e2c1944bce553c254e216f507ed20ec1bd993766bf9554caf0f  vue-3.4.31.tgz
- sha256  1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175  LICENSE
-diff --git a/package/vuejs/vuejs.mk b/package/vuejs/vuejs.mk
-index 3ab7182083..e8a21c8c2f 100644
---- a/package/vuejs/vuejs.mk
-+++ b/package/vuejs/vuejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VUEJS_VERSION = 3.4.21
-+VUEJS_VERSION = 3.4.31
- VUEJS_SOURCE = vue-$(VUEJS_VERSION).tgz
- VUEJS_SITE = https://registry.npmjs.org/vue/-
- VUEJS_LICENSE = MIT
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
