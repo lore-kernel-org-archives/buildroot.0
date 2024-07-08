@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 040AEC3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 05:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1573C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 05:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F2D96069A;
-	Mon,  8 Jul 2024 05:34:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11A7D6069A;
+	Mon,  8 Jul 2024 05:34:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SKUyz3vMwBv5; Mon,  8 Jul 2024 05:34:19 +0000 (UTC)
+ id LtjupuoRb1bM; Mon,  8 Jul 2024 05:34:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0AA06069C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D529B6069C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0AA06069C;
-	Mon,  8 Jul 2024 05:34:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D529B6069C;
+	Mon,  8 Jul 2024 05:34:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4501C1BF48D
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:34:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5F35E1BF48D
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:34:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3208D80E93
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:34:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58A5380F1D
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:34:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ulyhNpQeY_3r for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 05:34:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id LqKrtuZVtY9F for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 05:34:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 202D680E1E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 202D680E1E
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 202D680E1E
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 05:34:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A89711C0004;
- Mon,  8 Jul 2024 05:34:13 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sQh0u-0015AD-1N;
- Mon, 08 Jul 2024 07:34:12 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 746AE80F19
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 746AE80F19
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 05:34:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 574E583C52; Mon,  8 Jul 2024 05:34:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240617075538.938635-1-titouanchristophe@gmail.com>
- <20240622194222.234c5296@windsurf>
-Date: Mon, 08 Jul 2024 07:34:12 +0200
-In-Reply-To: <20240622194222.234c5296@windsurf> (Thomas Petazzoni via
- buildroot's message of "Sat, 22 Jun 2024 19:42:22 +0200")
-Message-ID: <87frsksazv.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/redis: bump to v7.2.5
+To: buildroot@buildroot.org
+Date: Mon, 8 Jul 2024 07:19:09 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 327a5c349da64b697bb1e94425741b50eefe8f50
+X-Git-Newrev: 07ead503de6da876182460176cd2ad439c064266
+X-Patchwork-Hint: ignore
+Message-Id: <20240708053455.574E583C52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/openssh: fix
+ build failure with gcc 11.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,54 +59,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7092866013827956624=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+--===============7092866013827956624==
+Content-Type: text/plain
 
- > On Mon, 17 Jun 2024 09:55:38 +0200
- > Titouan Christophe <titouanchristophe@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=07ead503de6da876182460176cd2ad439c064266
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
- >> From the release notes:
- >> ================================================================================
- >> Redis 7.2.5    Released Thu 16 May 2024 12:00:00 IST
- >> ================================================================================
- >> 
- >> Upgrade urgency MODERATE: Program an upgrade of the server, but it's not urgent.
- >> 
- >> Bug fixes
- >> =========
- >> 
- >> * A single shard cluster leaves failed replicas in CLUSTER SLOTS
- >> instead of removing them (#12824)
- >> * Crash in LSET command when replacing small items and exceeding 4GB (#12955)
- >> * Blocking commands timeout is reset due to re-processing command (#13004)
- >> * Conversion of numbers in Lua args to redis args can fail. Bug introduced in 7.2.0 (#13115)
- >> 
- >> Bug fixes in CLI tools
- >> ======================
- >> 
- >> * redis-cli: --count (for --scan, --bigkeys, etc) was ignored unless
- >> --pattern was also used (#13092)
- >> * redis-check-aof: incorrectly considering data in manifest format as MP-AOF (#12958)
- >> 
- >> Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
- >> ---
- >> package/redis/redis.hash | 2 +-
- >> package/redis/redis.mk   | 2 +-
- >> 2 files changed, 2 insertions(+), 2 deletions(-)
+The patch fix the following build failure:
 
- > Applied to master, thanks.
+output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os -g0  -pipe -Wno-error=format-truncation -Wall -Wextra -Wpointer-arith
+-Wuninitialized -Wsign-compare -Wformat-security -Wsizeof-pointer-memaccess -Wno-pointer-sign
+-Wno-unused-parameter -Wno-unused-result -Wimplicit-fallthrough -Wmisleading-indentation
+-fno-strict-aliasing -D_FORTIFY_SOURCE=2 -ftrapv -fzero-call-used-regs=used -fno-builtin-memset
+-fstack-protector-strong   -fPIC -I. -I.. -I. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -D_DEFAULT_SOURCE -D_GNU_SOURCE
+-DHAVE_CONFIG_H -c port-aix.c
+sha2.c: In function ‘SHA256Init’:
+sha2.c:360:1: sorry, unimplemented: ‘-fzero-call-used-regs’ not supported on this target
+  360 | }
+      | ^
+make[3]: *** [Makefile:106: sha2.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [Makefile:199: openbsd-compat/libopenbsd-compat.a] Error 2
 
-Committed to 2024.02.x and 2024.05.x, thanks.
+This commit applies an upstream patch that improves the detection of
+-fzero-call-used-regs=used.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 4aff617b9591dc46d965eaa00f9701943e0cd723)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ve-detection-of-fzero-call-used-regs-used.patch | 32 ++++++++++++++++++++++
+ package/openssh/openssh.mk                         |  3 ++
+ 2 files changed, 35 insertions(+)
+
+diff --git a/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch b/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
+new file mode 100644
+index 0000000000..1b91b15a79
+--- /dev/null
++++ b/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
+@@ -0,0 +1,32 @@
++From f9193f03db0029fc9c31fbdb5c66a2737446bd8f Mon Sep 17 00:00:00 2001
++From: Darren Tucker <dtucker@dtucker.net>
++Date: Mon, 25 Mar 2024 09:28:02 +1100
++Subject: [PATCH] Improve detection of -fzero-call-used-regs=used.
++
++Should better detect problems with gcc 13 on m68k.  bz#3673 from Colin
++Watson via bz#3673 and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110934
++
++Signed-off-by: Darren Tucker <dtucker@dtucker.net>
++Upstream: https://github.com/openssh/openssh-portable/commit/f9193f03db0029fc9c31fbdb5c66a2737446bd8f
++---
++ m4/openssh.m4 | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/m4/openssh.m4 b/m4/openssh.m4
++index 033df501c3d8..176a8d1c9282 100644
++--- a/m4/openssh.m4
+++++ b/m4/openssh.m4
++@@ -20,7 +20,10 @@ char *f2(char *s, ...) {
++ 	va_end(args);
++ 	return strdup(ret);
++ }
+++int i;
+++double d;
++ const char *f3(int s) {
+++	i = (int)d;
++ 	return s ? "good" : "gooder";
++ }
++ int main(int argc, char **argv) {
++-- 
++2.43.0
++
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index d7f4db59ca..5a568d5fd1 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -13,6 +13,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ 
++# 0001-Improve-detection-of-fzero-call-used-regs-used.patch
++OPENSSH_AUTORECONF = YES
++
+ OPENSSH_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
+ 	LDFLAGS="$(TARGET_CFLAGS)" \
+
+--===============7092866013827956624==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7092866013827956624==--
