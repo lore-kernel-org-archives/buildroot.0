@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A33C3DA41
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 21:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BA68C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 21:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53DBD40327;
-	Mon,  8 Jul 2024 21:05:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55AED402AC;
+	Mon,  8 Jul 2024 21:05:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id orIpqBlMhkYj; Mon,  8 Jul 2024 21:05:15 +0000 (UTC)
+ id zV2uVnOsEiSL; Mon,  8 Jul 2024 21:05:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA22140333
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4A6F404A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA22140333;
-	Mon,  8 Jul 2024 21:05:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4A6F404A8;
+	Mon,  8 Jul 2024 21:05:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 614591BF3BD
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:05:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2F2E11BF3BD
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B14880DFE
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:05:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A71C80E63
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:05:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BXKWLx428ucv for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 21:05:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id m8WK91uvlAkC for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 21:05:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20AEF80DA4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20AEF80DA4
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 20AEF80DA4
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 21:05:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7EAA920003;
- Mon,  8 Jul 2024 21:05:10 +0000 (UTC)
-Date: Mon, 8 Jul 2024 23:05:09 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240708230509.5e8a8538@windsurf>
-In-Reply-To: <ZoezviRQPTNSgdCL@waldemar-brodkorb.de>
-References: <ZoezviRQPTNSgdCL@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720472710;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ySo78tzXABD1PS9odDu0ycv8cmnY+UZGbbISTwGyeKM=;
- b=I0YEeOnkeuhARlfXppN9z4B7q0OEPo9gE1k1O7la1/6OGzGKdh5/nayhY+cXg8xocfIeqS
- sjYMDxAYzl1378SGI5zceEFUZbr1MpRewXasiDEYjsDWA5dxd2Lczk99kJGQJyAQkUqggu
- njZXscva2ZEmFZJ3txU7uUSqAm6BFKUQsnppOVLAUoiyNkhm2E7lpLD6NLETOIPXLLv53x
- XBLiaro/OsqD8uKaHKSsdiFieTKF7WUvitrAmLgkrRWzsNoGK6Kvunu7oYHbTYo0ceOkpC
- 3CY7G/MtC/t6n/LJO2sbb/5AwSbKkrxuKSoaktEAHRjGuySjSryunyE4zlrEzA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=I0YEeOnk
-Subject: Re: [Buildroot] [PATCH v3 1/2] configs/qemu_sh4*: switch to
- initramfs
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE35480DFE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE35480DFE
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 21:05:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A07FC8414D; Mon,  8 Jul 2024 21:05:47 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 8 Jul 2024 23:05:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e8f80c24026110390ac9d53829e50f0a95d3206a
+X-Git-Newrev: 44a6b7866c95ca5459a53a50eab5ab1d38b6b8e1
+X-Patchwork-Hint: ignore
+Message-Id: <20240708210547.A07FC8414D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_sh4*: switch to initramfs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,40 +59,81 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 5 Jul 2024 10:50:06 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=44a6b7866c95ca5459a53a50eab5ab1d38b6b8e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Qemu 9.0.0/9.0.1 has introduced a Bug in sh4/sh4eb emulation so
-> that the system doesn't boot anymore.
-> The issue is already reported by Guenter Roeck:
-> https://lists.nongnu.org/archive/html/qemu-devel/2024-05/msg00606.html
-> 
-> Switch to initramfs for sh4/sh4eb emulation.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v2->v3:
->  - separate sh4 switch to initramfs from kernel update
-> ---
->  board/qemu/sh4-r2d/readme.txt    | 2 +-
->  board/qemu/sh4eb-r2d/readme.txt  | 2 +-
->  configs/qemu_sh4_r2d_defconfig   | 2 +-
->  configs/qemu_sh4eb_r2d_defconfig | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
+Qemu 9.0.0/9.0.1 has introduced a Bug in sh4/sh4eb emulation so
+that the system doesn't boot anymore.
+The issue is already reported by Guenter Roeck:
+https://lists.nongnu.org/archive/html/qemu-devel/2024-05/msg00606.html
 
-Applied to master, thanks.
+Switch to initramfs for sh4/sh4eb emulation.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/qemu/sh4-r2d/readme.txt    | 2 +-
+ board/qemu/sh4eb-r2d/readme.txt  | 2 +-
+ configs/qemu_sh4_r2d_defconfig   | 2 +-
+ configs/qemu_sh4eb_r2d_defconfig | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
+index b0799e47a8..24c3676d8a 100644
+--- a/board/qemu/sh4-r2d/readme.txt
++++ b/board/qemu/sh4-r2d/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-sh4 -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "rootwait root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4_r2d_defconfig
++  qemu-system-sh4 -M r2d -kernel output/images/zImage -append "console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4_r2d_defconfig
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+diff --git a/board/qemu/sh4eb-r2d/readme.txt b/board/qemu/sh4eb-r2d/readme.txt
+index 9f3dd8b20b..577c54cd9d 100644
+--- a/board/qemu/sh4eb-r2d/readme.txt
++++ b/board/qemu/sh4eb-r2d/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-sh4eb -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "rootwait root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4eb_r2d_defconfig
++  qemu-system-sh4eb -M r2d -kernel output/images/zImage -append "console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4eb_r2d_defconfig
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index e5570dcbab..8d3e96c9c5 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -7,7 +7,7 @@ BR2_SYSTEM_DHCP="eth0"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
+ 
+ # Filesystem
+-BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_INITRAMFS=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+ # Image
+diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
+index 468d6567ae..10c547e0c4 100644
+--- a/configs/qemu_sh4eb_r2d_defconfig
++++ b/configs/qemu_sh4eb_r2d_defconfig
+@@ -6,7 +6,7 @@ BR2_sh4eb=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
+ 
+ # Filesystem
+-BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_INITRAMFS=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+ # Image
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
