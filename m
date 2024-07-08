@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 616E3C3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:24:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3A98C3DA41
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:24:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3468760804;
-	Mon,  8 Jul 2024 20:24:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 748D060804;
+	Mon,  8 Jul 2024 20:24:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id twc1d62_gjVc; Mon,  8 Jul 2024 20:24:28 +0000 (UTC)
+ id soHpD2cAKuub; Mon,  8 Jul 2024 20:24:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 554016084C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 789BA6084C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 554016084C;
-	Mon,  8 Jul 2024 20:24:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 608B51BF390
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 789BA6084C;
+	Mon,  8 Jul 2024 20:24:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E82EC1BF390
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58E8A405A1
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D611460A54
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:24:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9uhkEKVmm5EO for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 20:24:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mgzQ0uu_L6yu for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 20:24:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 06D0340133
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06D0340133
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 06D0340133
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:24:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0945940005;
- Mon,  8 Jul 2024 20:24:22 +0000 (UTC)
-Date: Mon, 8 Jul 2024 22:24:22 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240708222422.46a5ffa2@windsurf>
-In-Reply-To: <20240706110642.939667-1-ju.o@free.fr>
-References: <20240706110642.939667-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720470263;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=M7Bwby8/7ddUvZbnN/LECW7GR3Cvby3TjvpgqYDA7xk=;
- b=mjsquGOopRl1gLAvdiuNIFEhCkOIg2faRg6qDEPvAxwmIS4ke1SMTOQFzsDkYLDfgHh68f
- BLFkDW6AF+1imetZERvehnwA3FhOudff8i4Y0LZer84/jR9LmuiLwlnLnAhlq9G2dd5O2f
- e+qHaRLozUMC/7d7m7k1GkDN/zBbe0C1WDIbBStUO4MqHCTZiTTVRBzSHtB2doie8kAPKl
- ehyrcSMg++OGNPCFEpm5Bqxxdx1yybo3aDMPxPZXrtjHfplkpZUOrCfXz72N9aYFSzxHEw
- vEj6/uIeAaQU1eaZPt09vPK+bk9D+/Z4w8tswb0N23hW8Q1Oz9PBOx3F/cqbIA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mjsquGOo
-Subject: Re: [Buildroot] [PATCH 1/1] configs/visionfive2: fix build by
- adding kernel header version
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EB6D6084C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0EB6D6084C
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:24:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id ECBFA83D77; Mon,  8 Jul 2024 20:24:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 8 Jul 2024 22:23:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3907da674cb3ddefb30314745c9e276a4a3d7487
+X-Git-Newrev: dbf2ca9b5b4ebd26c2d14889ca04f0cd01bb2454
+X-Patchwork-Hint: ignore
+Message-Id: <20240708202436.ECBFA83D77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.102
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,49 +59,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Francois Dugast <francois.dugast.foss@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  6 Jul 2024 13:06:42 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dbf2ca9b5b4ebd26c2d14889ca04f0cd01bb2454
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> commit d9e6d2d081 "configs/visionfive2: update kernel to upstream
-> 6.8.2" removed the config directive:
-> 
->     BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-> 
-> but forgot to add:
-> 
->     BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
-> 
-> It was most likely generated with a "make savedefconfig", while Linux
-> kernel v6.8 was the default at that time. After commit aa70c331a2
-> "linux: bump latest version to 6.9", the defconfig failed to build
-> with error:
-> 
->     Incorrect selection of kernel headers: expected 6.9.x, got 6.8.x
-> 
-> This commit fixes the defconfig by adding back the kernel custom header
-> version.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/7271150175
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  configs/visionfive2_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index ccc5951929..8c21316b7b 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_101_1_RTM/src/SHA256SUMS
+-sha256  f20e8c5daafd89419d229ec8c54100a5c320dce1467377c9dfcd5e4d8446b468  nss-3.101.1.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_102_RTM/src/SHA256SUMS
++sha256  c29b03f24856db18a34fbcde737fcca6407c27b5f3f60baba5111460e6cb307b  nss-3.102.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index a7d8db0111..6cc6008038 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.101.1
++LIBNSS_VERSION = 3.102
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
