@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F550C3DA42
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:22:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AD26C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15B5F60A5C;
-	Mon,  8 Jul 2024 20:22:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B6DC60A54;
+	Mon,  8 Jul 2024 20:22:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fxKeZhArc7lX; Mon,  8 Jul 2024 20:22:32 +0000 (UTC)
+ id PZkEk7Ee0A0B; Mon,  8 Jul 2024 20:22:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 659EA60A81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1729560AB4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 659EA60A81;
-	Mon,  8 Jul 2024 20:22:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8E24A1BF390
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1729560AB4;
+	Mon,  8 Jul 2024 20:22:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DBEF31BF390
  for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:22:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 77267810DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id C860D404D4
  for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:22:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j9aKCChEu_98 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xQ_kWcQIkt2R for <buildroot@lists.busybox.net>;
  Mon,  8 Jul 2024 20:22:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
  helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 627DB8109E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 627DB8109E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5BA82404D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BA82404D1
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 627DB8109E
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:22:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9AA2B1BF208;
- Mon,  8 Jul 2024 20:22:14 +0000 (UTC)
-Date: Mon, 8 Jul 2024 22:21:09 +0200
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5BA82404D1
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:22:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3CAD41BF206;
+ Mon,  8 Jul 2024 20:22:13 +0000 (UTC)
+Date: Mon, 8 Jul 2024 22:21:50 +0200
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240708222109.56a0ea44@windsurf>
-In-Reply-To: <20240706135731.3598621-1-dario.binacchi@amarulasolutions.com>
-References: <20240706135731.3598621-1-dario.binacchi@amarulasolutions.com>
+Message-ID: <20240708222150.0f1ef53a@windsurf>
+In-Reply-To: <20240707123129.4045342-1-dario.binacchi@amarulasolutions.com>
+References: <20240707123129.4045342-1-dario.binacchi@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720470134;
+ d=bootlin.com; s=gm1; t=1720470133;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ZasXr5ZgNBfs5GWMunLZ6E1T/3ijuaGR7d6J8w8uolU=;
- b=QRpIqSf6GqSFd4Mo1nEwsNVHn5OYovrTajeb3a9WvBGxfLwJPqvx8ymhtW5FOp3Ao81TQT
- 6gXTVIMmK7TDMAxiJM1FbLijs3auJ5suj6/VY2Hq/0GMmW9rNqRhNxFggDO3BbZqU6lpca
- YpXsAZKxHr2iBYnR2u/1WF23jeDTHvHtxJXRNOin+Vrz76CIn0jm3HQLoldQviYLQt7/fL
- mz04712/QaNxrVIJWy57rLEM0REOPkBRWnpGdIXL2JaoujQIdynxsjk2vX27CJISlV+eaY
- UJZPpzkyLr4kYkXE20MhNou+3urvrWG6INdxLxMWkjQT7aGs+hhLGmdfvrKUeA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=yv55SjtOe5xj3hLsnRmdG71mj5GRJ+IwdHjny2OB1+E=;
+ b=MCIzB/xcykbFaUmMmBlJt/PfNVXqaup9+rC/ddV0J7tE6nmqTZLQCS0GPdVLHxXFCk6C2C
+ xoPE+nzPJeXzco5tvTC2tQGbVYVdSpGQObCKUVTAZzK4R+9myaoKFzgubLZH7nUG4SX2uw
+ 7e7loZz5inNS6YQCK15Wg17DlnlRoaTGxQXraAUuLi6IBMfLpsyhKTNkaL68ici5i4P0G6
+ ElmWDoRHg/ZbHoQiRS8STon1up08MuAPFVk7Q97mvuS+zuyZkoudH4CmTUZpsOVT3VsS2f
+ QkJsJFwMODxouEu6iTrMdUAw1rrelEplqmSQ3fpgdS49J5py62xMkhWj17GBtg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QRpIqSf6
-Subject: Re: [Buildroot] [PATCH 1/1] package/dahdi-tools: update the patches
- to be applied with fuzz 0
+ header.s=gm1 header.b=MCIzB/xc
+Subject: Re: [Buildroot] [PATCH 1/1] package/ympd: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,31 +83,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Eric Limpens <limpens@gmail.com>, linux-amarula@amarulasolutions.com,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  6 Jul 2024 15:57:31 +0200
+On Sun,  7 Jul 2024 14:31:29 +0200
 Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
 > Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
 > fuzz factor to 0") reduced the fuzz factor.
 > 
-> Due to this change, dahdi-tools fails to build with output:
+> Due to this change, ympd fails to build with output:
 > 
->     Applying 0002-no-perl-manpages.patch using patch:
->     patching file xpp/Makefile.am
->     Hunk #2 FAILED at 58.
->     Hunk #3 succeeded at 149 (offset 3 lines).
->     1 out of 3 hunks FAILED -- saving rejects to file xpp/Makefile.am.rej
+>     Applying 0002-added-forward-declarations.patch using patch:
+>     patching file src/mpd_client.c
+>     Hunk #1 succeeded at 29 (offset -1 lines).
+>     patching file src/mpd_client.h
+>     Hunk #1 FAILED at 96.
+>     1 out of 1 hunk FAILED -- saving rejects to file src/mpd_client.h.rej
 > 
 > This commit refreshes the package patch on the current package version.
 > 
 > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > ---
->  package/dahdi-tools/0002-no-perl-manpages.patch | 6 ++++--
+>  package/ympd/0002-added-forward-declarations.patch | 6 ++++--
 >  1 file changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
