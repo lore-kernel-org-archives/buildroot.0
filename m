@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91E70C3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 21:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D939C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 21:01:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6309F608F5;
-	Mon,  8 Jul 2024 21:00:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FB6B608D8;
+	Mon,  8 Jul 2024 21:01:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kFbT8E0z8067; Mon,  8 Jul 2024 21:00:43 +0000 (UTC)
+ id 6jLHcV9FkDnE; Mon,  8 Jul 2024 21:01:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C67060A5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85767608F5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C67060A5F;
-	Mon,  8 Jul 2024 21:00:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 600A21BF390
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:00:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85767608F5;
+	Mon,  8 Jul 2024 21:01:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F5511BF390
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59F43405B5
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:00:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D3FB608F5
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 21:01:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F2LTxdePXSoJ for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 21:00:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P6BdJL_qMFdd for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 21:01:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E034740544
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E034740544
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E034740544
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 21:00:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A5BD40003;
- Mon,  8 Jul 2024 21:00:38 +0000 (UTC)
-Date: Mon, 8 Jul 2024 23:00:38 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240708230038.454df6b6@windsurf>
-In-Reply-To: <20240706092724.36092-1-bernd@kuhls.net>
-References: <20240706092724.36092-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720472439;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CoG8izHYd0NMcIRldC8Cx8jHMSBOSnguAvPHr7zNc2I=;
- b=f9+xpjowhUxYntWKdSgh3nM9YJUs8P4yDM2ZgCqqf3DOgYyBqrBu60b2A18IfGkQupSK6A
- IHloLWTv8k46QQ38mMNjJskU0eIU4uW9ZM0RcCvTblo7OSCNxxjYKC7UFHEWR9eDj4cIE5
- J3WQM6kx/mHAkLm2YwRzzWDrapZHBW7H0nH7KXWEmdVc7vDFmWYcFMq6C/wyfjXxX896CM
- 71sP2tIsYFZu4ampml0DZNk+Pw6z+WUdSBoqgQZS6kiEk7DvIYZT8l1+7+3yBezWSBWTin
- j2tM90Pd+JqChKzXnK4Zd08x5+X7hUAwkfn2ENNah517aLCDniY4/mlYWPA4Rw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=f9+xpjow
-Subject: Re: [Buildroot] [PATCH 1/1] package/znc: security bump version to
- 1.9.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99D2A608D8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99D2A608D8
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 21:01:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8655A83FEE; Mon,  8 Jul 2024 21:01:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 8 Jul 2024 23:01:01 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4f5790116b42768bd1bd982245e00483440a6311
+X-Git-Newrev: caaf80dabe244dc8c7515b27a012942aceedcc70
+X-Patchwork-Hint: ignore
+Message-Id: <20240708210142.8655A83FEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hwdata: bump version to 0.384
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,33 +59,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: =?UTF-8?B?Q8OpZHJpYyBDaMOpcGllZA==?= <cedric.chepied@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  6 Jul 2024 11:27:24 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=caaf80dabe244dc8c7515b27a012942aceedcc70
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes CVE-2024-39844.
-> 
-> Changelog: https://wiki.znc.in/ChangeLog/1.9.1
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/znc/znc.hash | 2 +-
->  package/znc/znc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Release notes: https://github.com/vcrhonek/hwdata/releases
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 92b7eaab6d..7d8959990a 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  b98ef646d530d5fd3afa3180efbf7c8e22d3da0088f5836f41ee25380d87b092  hwdata-0.379.tar.gz
++sha256  caa496a6203084ee3404c688a75ea05b4b10eec93340c503199647216127f347  hwdata-0.384.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 555fb58f14..3394dbd015 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HWDATA_VERSION = 0.379
++HWDATA_VERSION = 0.384
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
