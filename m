@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1573C3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 05:34:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2D9BC3DA45
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 05:35:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11A7D6069A;
-	Mon,  8 Jul 2024 05:34:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A204460704;
+	Mon,  8 Jul 2024 05:35:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LtjupuoRb1bM; Mon,  8 Jul 2024 05:34:58 +0000 (UTC)
+ id b0171tTkkbf1; Mon,  8 Jul 2024 05:35:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D529B6069C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3060E60709
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D529B6069C;
-	Mon,  8 Jul 2024 05:34:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5F35E1BF48D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3060E60709;
+	Mon,  8 Jul 2024 05:35:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 789ED1BF97C
  for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:34:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58A5380F1D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 661F46069C
  for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:34:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LqKrtuZVtY9F for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3diInfgeFrna for <buildroot@lists.busybox.net>;
  Mon,  8 Jul 2024 05:34:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 746AE80F19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CA496069A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 746AE80F19
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8CA496069A
  for <buildroot@buildroot.org>; Mon,  8 Jul 2024 05:34:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 574E583C52; Mon,  8 Jul 2024 05:34:55 +0000 (UTC)
+ id 84D0383C63; Mon,  8 Jul 2024 05:34:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 8 Jul 2024 07:19:09 +0200
+Date: Mon, 8 Jul 2024 07:33:42 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 327a5c349da64b697bb1e94425741b50eefe8f50
-X-Git-Newrev: 07ead503de6da876182460176cd2ad439c064266
+X-Git-Oldrev: 9d22642eb1f5789f7df9652490733562f1e57330
+X-Git-Newrev: 99e58bdad0f5a1e3c82ee2b03c4f211d4033ae8f
 X-Patchwork-Hint: ignore
-Message-Id: <20240708053455.574E583C52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/openssh: fix
- build failure with gcc 11.x
+Message-Id: <20240708053455.84D0383C63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/redis: bump to
+ v7.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,108 +60,69 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7092866013827956624=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7092866013827956624==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=07ead503de6da876182460176cd2ad439c064266
+commit: https://git.buildroot.net/buildroot/commit/?id=99e58bdad0f5a1e3c82ee2b03c4f211d4033ae8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-The patch fix the following build failure:
+From the release notes:
+================================================================================
+Redis 7.2.5    Released Thu 16 May 2024 12:00:00 IST
+================================================================================
 
-output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os -g0  -pipe -Wno-error=format-truncation -Wall -Wextra -Wpointer-arith
--Wuninitialized -Wsign-compare -Wformat-security -Wsizeof-pointer-memaccess -Wno-pointer-sign
--Wno-unused-parameter -Wno-unused-result -Wimplicit-fallthrough -Wmisleading-indentation
--fno-strict-aliasing -D_FORTIFY_SOURCE=2 -ftrapv -fzero-call-used-regs=used -fno-builtin-memset
--fstack-protector-strong   -fPIC -I. -I.. -I. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -D_DEFAULT_SOURCE -D_GNU_SOURCE
--DHAVE_CONFIG_H -c port-aix.c
-sha2.c: In function ‘SHA256Init’:
-sha2.c:360:1: sorry, unimplemented: ‘-fzero-call-used-regs’ not supported on this target
-  360 | }
-      | ^
-make[3]: *** [Makefile:106: sha2.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [Makefile:199: openbsd-compat/libopenbsd-compat.a] Error 2
+Upgrade urgency MODERATE: Program an upgrade of the server, but it's not urgent.
 
-This commit applies an upstream patch that improves the detection of
--fzero-call-used-regs=used.
+Bug fixes
+=========
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 4aff617b9591dc46d965eaa00f9701943e0cd723)
+* A single shard cluster leaves failed replicas in CLUSTER SLOTS instead of removing them (#12824)
+* Crash in LSET command when replacing small items and exceeding 4GB (#12955)
+* Blocking commands timeout is reset due to re-processing command (#13004)
+* Conversion of numbers in Lua args to redis args can fail. Bug introduced in 7.2.0 (#13115)
+
+Bug fixes in CLI tools
+======================
+
+* redis-cli: --count (for --scan, --bigkeys, etc) was ignored unless --pattern was also used (#13092)
+* redis-check-aof: incorrectly considering data in manifest format as MP-AOF (#12958)
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 61a7edc0c89b336d63551469f5a2291418fdbc19)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ve-detection-of-fzero-call-used-regs-used.patch | 32 ++++++++++++++++++++++
- package/openssh/openssh.mk                         |  3 ++
- 2 files changed, 35 insertions(+)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch b/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
-new file mode 100644
-index 0000000000..1b91b15a79
---- /dev/null
-+++ b/package/openssh/0001-Improve-detection-of-fzero-call-used-regs-used.patch
-@@ -0,0 +1,32 @@
-+From f9193f03db0029fc9c31fbdb5c66a2737446bd8f Mon Sep 17 00:00:00 2001
-+From: Darren Tucker <dtucker@dtucker.net>
-+Date: Mon, 25 Mar 2024 09:28:02 +1100
-+Subject: [PATCH] Improve detection of -fzero-call-used-regs=used.
-+
-+Should better detect problems with gcc 13 on m68k.  bz#3673 from Colin
-+Watson via bz#3673 and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110934
-+
-+Signed-off-by: Darren Tucker <dtucker@dtucker.net>
-+Upstream: https://github.com/openssh/openssh-portable/commit/f9193f03db0029fc9c31fbdb5c66a2737446bd8f
-+---
-+ m4/openssh.m4 | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/m4/openssh.m4 b/m4/openssh.m4
-+index 033df501c3d8..176a8d1c9282 100644
-+--- a/m4/openssh.m4
-++++ b/m4/openssh.m4
-+@@ -20,7 +20,10 @@ char *f2(char *s, ...) {
-+ 	va_end(args);
-+ 	return strdup(ret);
-+ }
-++int i;
-++double d;
-+ const char *f3(int s) {
-++	i = (int)d;
-+ 	return s ? "good" : "gooder";
-+ }
-+ int main(int argc, char **argv) {
-+-- 
-+2.43.0
-+
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index d7f4db59ca..5a568d5fd1 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -13,6 +13,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 378b930374..5c3a5ea4d8 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  8d104c26a154b29fd67d6568b4f375212212ad41e0c2caa3d66480e78dbd3b59  redis-7.2.4.tar.gz
++sha256  5981179706f8391f03be91d951acafaeda91af7fac56beffb2701963103e423d  redis-7.2.5.tar.gz
  
-+# 0001-Improve-detection-of-fzero-call-used-regs-used.patch
-+OPENSSH_AUTORECONF = YES
-+
- OPENSSH_CONF_ENV = \
- 	LD="$(TARGET_CC)" \
- 	LDFLAGS="$(TARGET_CFLAGS)" \
-
---===============7092866013827956624==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 2680b11b74..852bf31ca0 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 7.2.4
++REDIS_VERSION = 7.2.5
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7092866013827956624==--
