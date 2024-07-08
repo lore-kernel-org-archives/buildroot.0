@@ -4,86 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EAE5C3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 12:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84207C3DA42
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 12:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B98780CC9;
-	Mon,  8 Jul 2024 12:49:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47D3F80C09;
+	Mon,  8 Jul 2024 12:54:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1TEJN9RmP0vm; Mon,  8 Jul 2024 12:49:31 +0000 (UTC)
+ id nJa-9T3N3fmi; Mon,  8 Jul 2024 12:54:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E8E580CFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 592F580C4D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E8E580CFE;
-	Mon,  8 Jul 2024 12:49:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9E6B51BF390
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 12:49:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 592F580C4D;
+	Mon,  8 Jul 2024 12:54:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A30291BF390
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 12:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C285606B9
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 12:49:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E8E380C4D
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 12:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EV6s25X_4H4J for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 12:49:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.167.47;
- helo=mail-lf1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 330CA60627
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 330CA60627
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com
- [209.85.167.47])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 330CA60627
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 12:49:28 +0000 (UTC)
-Received: by mail-lf1-f47.google.com with SMTP id
- 2adb3069b0e04-52ea7bdde68so3144020e87.0
- for <buildroot@buildroot.org>; Mon, 08 Jul 2024 05:49:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720442966; x=1721047766;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=oE1YRtS9mD+/9G35M91w/AUl7fw5WyBS7ZrN3rEFHec=;
- b=mE7PyaqjNvjwR57/m4Xo5EmZPDdeefM+BX5ev+CN0o/kpYqDacC+jJsC813dlI9QLJ
- Vs2i/IILWmT41h7/uRR8vVjc8EW71UCMIcBYMrBTex70RLzc7q3USDGBcxYPm5f20EJ3
- hvFhNLzXi8lAW9dmCIGjl/KKA+Q4SlUmcO0AcxvTD4o4BdJJ6ycKzuUK//a1mnaMa2wN
- NHVZJW6RT7jXzI8o/r0PpvkhPVlSCwUGM8pZwEBQrTV6WreBzqXmBH/x3Q3gXgquLQJ5
- iaoSRxYks5GwBXKAiqYjcqJOYQSW+8o+xqGNrnlVq47G6RnRLyaRrp/VnrLhY2nW9mXi
- ZI2g==
-X-Gm-Message-State: AOJu0YyO1cfIr1DUw8rsd4lnaEalDP234S9HR82DCQTP+kGGSgTwQhHR
- eplTbrw7eAYY8g8KyGNwhsvwow8sElLWtNJCbRxoEayfQkFkg7Bh4e3fnfrBGNw=
-X-Google-Smtp-Source: AGHT+IFU9Dw9ShfVGtud/1Q5acKO/sH2nhxkpTzWwKWaAsY/5cv8dgOVumVY2/bOJLpo+hph3tJT2w==
-X-Received: by 2002:a19:ca13:0:b0:52c:9421:2739 with SMTP id
- 2adb3069b0e04-52ea061b1bemr7349219e87.9.1720442965626; 
- Mon, 08 Jul 2024 05:49:25 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com.
- [209.85.167.49]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-52e7ab10253sm3460158e87.87.2024.07.08.05.49.25
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 08 Jul 2024 05:49:25 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id
- 2adb3069b0e04-52ea34ffcdaso3545996e87.1
- for <buildroot@buildroot.org>; Mon, 08 Jul 2024 05:49:25 -0700 (PDT)
-X-Received: by 2002:a19:ca13:0:b0:52c:9421:2739 with SMTP id
- 2adb3069b0e04-52ea061b1bemr7349208e87.9.1720442965154; Mon, 08 Jul 2024
- 05:49:25 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o7-J9WnkXXYo for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 12:54:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0962080C09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0962080C09
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0962080C09
+ for <buildroot@busybox.net>; Mon,  8 Jul 2024 12:54:40 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([82.135.81.108]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MhD2Y-1rvKxT2FE2-00g7dJ; Mon, 08
+ Jul 2024 14:54:37 +0200
+Date: Mon, 8 Jul 2024 14:54:36 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20240708145436.55ec576f@gmx.net>
+In-Reply-To: <87ikxgqjxj.fsf@dell.be.48ers.dk>
+References: <20240612135727.11811-1-ps.report@gmx.net>
+ <3c9f622a-18c8-4331-a594-4a8b39639d93@mind.be>
+ <87ikxgqjxj.fsf@dell.be.48ers.dk>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20240708115213.623818-1-peter@korsgaard.com>
-In-Reply-To: <20240708115213.623818-1-peter@korsgaard.com>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Mon, 8 Jul 2024 14:49:13 +0200
-X-Gmail-Original-Message-ID: <CACXRmJghBjES36aNFB=5iQA-t567Pn0VdXWzYTpX0kSpeb9BwA@mail.gmail.com>
-Message-ID: <CACXRmJghBjES36aNFB=5iQA-t567Pn0VdXWzYTpX0kSpeb9BwA@mail.gmail.com>
-To: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: Re: [Buildroot] [PATCH] package/fluent-bit: enable engines support
- in libopenssl
+X-Provags-ID: V03:K1:5xa9yCtWLeKoTcVOzobm+mpZUu+rQeAwHwPVNlJn4sIqd+tauNd
+ R3WfmFfH6qvQUc+WsT0Jkt7/iek1SRZWHn7z6EPkAOeclrCRrJh1ajRWfXYMA1I9UMHt2xT
+ 5sIb+n3olrjj/yo3GDml42+D/UukBIDQPJIdgZjO7rFs53iHZLCEt1WeTJ2gQ9wA9RL9Igy
+ 4Pu67n2mVzRpAiZ9sJ6VQ==
+UI-OutboundReport: notjunk:1;M01:P0:HIBP0DesIyI=;cTw6AClVEZxDBDyVM6QmBkN8ixr
+ JaG3Cpbq7DSTN9KSZ7l4wNsYBJvBwgza2L8U0GUUTZ+85kWU4IWoup180gtU0DxrI7KYS+uY/
+ jKDUU9THp5iO8XSZ/8Uztt5zNp1JK529YO246ycPrvYRAHPZ6rLgOdk20dXOhBGTkjp6sZE+Q
+ /IYXTn9xXO1g7ydg8HawxDXQ5bsGr0uP4piPqFeiES7I8e2KM/e0aJZZ1gMOUtNHQBFBneDfY
+ nxKaGrXvCImKVuyjMAadNfw4eKskjKyjgWk9UKTNA3iBwGiLKVncD9YUaYnWfOAgRN/RGjcHv
+ NuWQ1DY/oELKA4g+BRaJOY7a3f9T3pxGu126q/345rbppaEweop5tamh15K5Bon+APWmgRpjG
+ gxFCMr0BkZ1drixFHx6Zb8QO3e0/N0Th4M1ZGrBNxZ6TXAxY1xYrmDH+J+u73Ku5fuNa/91yi
+ tCKwRbYwNXRmFm7tZrU7QPXbxR1bnwg2bVcS9sWXYXhox8I5dCDkf+dSrwwpvW9ElEKjT+ITB
+ tDMtPtLf6FY3PES009W9Nh/zZ9Dlp9R7zbozF8lnLlvLN+GPhOz2avW5l5clveR41wKgg1C9b
+ y7Tq67eDTyv0nUEqQqTkj5/y3rkrrbqNHjcu/ucmTtuWzY6EsFYFUJx+F+0qhdZPwGNJKmWOH
+ qcZdqdXYD6OA5C0C/celxqCwMPeLi5bKzUDlcnVjneQBQnTXQT+wfkWflbFOxk9sdvdIg+6p0
+ tD18jfIDAa7eY9RTRrxkSfUBZCXxfQNHzaEyyvOwN75+5YoVdJlXkj1MBZBZoQHD/Ba5wBstn
+ Erp/itqYQa+GeJe1GCIyyZYIwiYUGcDDoudUqtMe0zCpM=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.net; 
+ s=s31663417; t=1720443277; x=1721048077; i=ps.report@gmx.net;
+ bh=cPyBTfKAv1vNKTQngpsWlU2pJDBXEWHk5Q9nl/67Ff0=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=o0lyBW1s0b8XIYTn5S6m/O5xCPpw8Ie5T/FAaWOJQ+ZRrMWLT8xVH1hCh9MYikkh
+ YEc2/MTxk4WPjx9Y3z3N826Drtv5Ku9/eVFvVZkHxgw696N1bTG6nmB3n6QuOI0Xc
+ taR66QOpx2PHof0H+NJ5hycThCU3WuUTxB5sKqKaM/RPi73kPj8hsshnjtpMzdAn1
+ LmdxcFoQ1xcE8GQ1npXNkcHu5CIt3LBwJrEEH4xjshta/B0F1QUGMx3gjq5v8JhbN
+ z6RrdEyrIti7qJM6hmB1tkU2jTUhb7tPfnfuz1qsjoW9ITnXf1NMK9MyBrdViIUiv
+ wF9i5mAJ8i91P7u11Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.net header.i=ps.report@gmx.net header.a=rsa-sha256
+ header.s=s31663417 header.b=o0lyBW1s
+Subject: Re: [Buildroot] [PATCH v2 1/5] package/xz: bump version to 5.4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,140 +99,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas@devoogdt.com, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8725673211988001060=="
+From: Peter Seiderer via buildroot <buildroot@buildroot.org>
+Reply-To: Peter Seiderer <ps.report@gmx.net>
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8725673211988001060==
-Content-Type: multipart/alternative; boundary="000000000000cb718e061cbbd729"
+Hello Peter, *,
 
---000000000000cb718e061cbbd729
-Content-Type: text/plain; charset="UTF-8"
+On Mon, 08 Jul 2024 12:04:08 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Hi,
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+>  > On 12/06/2024 15:57, Peter Seiderer via buildroot wrote:
+>  >> - add key hint for download signature check
+>  >> - update COPYING hash due to [1] (change of home page URL)
+>  >> For details see [2].
+>
+>  >  I've added a statement here to make clear this is not affected by the backdoor.
+>
+>  >  Peter, this is for 2024.02.x and 2024.05.x.
+>
+> OK. Looking at https://github.com/tukaani-project/xz/releases/tag/v5.4.7
+> I see a mention about a shared library regression on mips64, but I am
+> not sure where the mentioned patch can be found?
 
-I can confirm that this will fix the issue. I also  applied the same patch
-a few weeks ago, but was not yet able to upstream it since I'm on holiday.
+Do not see an upstream issue nor an suitable upstream patch..., the only
+linking issue I know of is from the buildroot autobuilders see
+https://lore.kernel.org/buildroot/20240703105013.1bd207f1@gmx.net/
+(affects 5.6.2/5.4.7 but not 5.4.6 - and could be fixed by
+'XZ_AUTORECONF = YES')...
 
-Kr,
-
-Thomas
-
-Op ma 8 jul. 2024 13:52 schreef Peter Korsgaard <peter@korsgaard.com>:
-
-> Fixes:
 >
-> http://autobuild.buildroot.net/results/c08/c08c00f52b8f42fd408a1e84e41606d75558c3ce/
->
-> The embedded librdkafka copy unconditionally enables calls the (deprecated)
-> ENGINE_* logic in openssl:
->
->
-> https://github.com/confluentinc/librdkafka/blob/v2.4.0/src/rdkafka_conf.h#L37
->
-> Which are now no longer available in !BR2_PACKAGE_LIBOPENSSL_ENGINES builds
-> since commit 623d3bbe43 (package/libopenssl: no-engine), so enable it to
-> fix
-> the build issue.
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/fluent-bit/Config.in | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-> index 53284ee17d..697cb1bf15 100644
-> --- a/package/fluent-bit/Config.in
-> +++ b/package/fluent-bit/Config.in
-> @@ -6,6 +6,7 @@ config BR2_PACKAGE_FLUENT_BIT
->         select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
->         select BR2_PACKAGE_OPENSSL
->         select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-> +       select BR2_PACKAGE_LIBOPENSSL_ENGINES # needed by bundled
-> librdkafka
->         select BR2_PACKAGE_LIBYAML
->         help
->           Fast and Lightweight Logs and Metrics processor.
-> --
-> 2.39.2
->
->
+> The 5.4.7 bugfixes do not look very critical, so we could alternatively
+> also just not bump the version on 2024.02.x / 2024.05.x.
 >
 
---000000000000cb718e061cbbd729
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Fine by me...
 
-<p dir=3D"ltr">Hi,</p>
-<p dir=3D"ltr">I can confirm that this will fix the issue. I also=C2=A0 app=
-lied the same patch a few weeks ago, but was not yet able to upstream it si=
-nce I&#39;m on holiday. </p>
-<p dir=3D"ltr">Kr,</p>
-<p dir=3D"ltr">Thomas </p>
-<br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Op ma =
-8 jul. 2024 13:52 schreef Peter Korsgaard &lt;<a href=3D"mailto:peter@korsg=
-aard.com">peter@korsgaard.com</a>&gt;:<br></div><blockquote class=3D"gmail_=
-quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
-ex">Fixes:<br>
-<a href=3D"http://autobuild.buildroot.net/results/c08/c08c00f52b8f42fd408a1=
-e84e41606d75558c3ce/" rel=3D"noreferrer noreferrer" target=3D"_blank">http:=
-//autobuild.buildroot.net/results/c08/c08c00f52b8f42fd408a1e84e41606d75558c=
-3ce/</a><br>
-<br>
-The embedded librdkafka copy unconditionally enables calls the (deprecated)=
-<br>
-ENGINE_* logic in openssl:<br>
-<br>
-<a href=3D"https://github.com/confluentinc/librdkafka/blob/v2.4.0/src/rdkaf=
-ka_conf.h#L37" rel=3D"noreferrer noreferrer" target=3D"_blank">https://gith=
-ub.com/confluentinc/librdkafka/blob/v2.4.0/src/rdkafka_conf.h#L37</a><br>
-<br>
-Which are now no longer available in !BR2_PACKAGE_LIBOPENSSL_ENGINES builds=
-<br>
-since commit 623d3bbe43 (package/libopenssl: no-engine), so enable it to fi=
-x<br>
-the build issue.<br>
-<br>
-Signed-off-by: Peter Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com" t=
-arget=3D"_blank" rel=3D"noreferrer">peter@korsgaard.com</a>&gt;<br>
----<br>
-=C2=A0package/fluent-bit/Config.in | 1 +<br>
-=C2=A01 file changed, 1 insertion(+)<br>
-<br>
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in<br=
->
-index 53284ee17d..697cb1bf15 100644<br>
---- a/package/fluent-bit/Config.in<br>
-+++ b/package/fluent-bit/Config.in<br>
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_FLUENT_BIT<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_U=
-SES_GLIBC<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_OPENSSL<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_LIBOPENSSL_ENGINES # needed =
-by bundled librdkafka<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 select BR2_PACKAGE_LIBYAML<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 help<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Fast and Lightweight Logs and Metrics pr=
-ocessor.<br>
--- <br>
-2.39.2<br>
-<br>
-<br>
-</blockquote></div>
-
---000000000000cb718e061cbbd729--
-
---===============8725673211988001060==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Regards,
+Peter
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8725673211988001060==--
