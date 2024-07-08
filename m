@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3245C3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 06:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1E28C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 06:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CD2D40190;
-	Mon,  8 Jul 2024 06:54:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A847D40190;
+	Mon,  8 Jul 2024 06:58:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a7Da3td7QH4u; Mon,  8 Jul 2024 06:54:01 +0000 (UTC)
+ id l27rUZysLFMM; Mon,  8 Jul 2024 06:58:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A1D040204
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F37240459
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A1D040204;
-	Mon,  8 Jul 2024 06:54:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F37240459;
+	Mon,  8 Jul 2024 06:58:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 268621BF2C2
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 06:54:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 825081BF2C2
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 06:58:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1284280B8C
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 06:54:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7017F81098
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 06:58:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6NQQUuUgITYs for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 06:53:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id WGud0EqEqmxO for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 06:58:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 22FFF80B51
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22FFF80B51
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 22FFF80B51
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 06:53:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B74FC0002;
- Mon,  8 Jul 2024 06:53:56 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sQiG4-0018U4-07;
- Mon, 08 Jul 2024 08:53:56 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6A9981095
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B6A9981095
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 06:58:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A17DC83D28; Mon,  8 Jul 2024 06:58:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-References: <20240621161049.4085310-1-dario.binacchi@amarulasolutions.com>
- <20240621161049.4085310-5-dario.binacchi@amarulasolutions.com>
-Date: Mon, 08 Jul 2024 08:53:55 +0200
-In-Reply-To: <20240621161049.4085310-5-dario.binacchi@amarulasolutions.com>
- (Dario Binacchi's message of "Fri, 21 Jun 2024 18:10:48 +0200")
-Message-ID: <87o778qsqk.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 5/6] package/libopenssl: no-engine
+To: buildroot@buildroot.org
+Date: Mon, 8 Jul 2024 08:39:59 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 99e58bdad0f5a1e3c82ee2b03c4f211d4033ae8f
+X-Git-Newrev: e1c896b10f56666c172e87a1aa18907862e6c178
+X-Patchwork-Hint: ignore
+Message-Id: <20240708065845.A17DC83D28@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x]
+ support/scripts/apply-patches: fallback $TAR to `tar`
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,26 +59,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e1c896b10f56666c172e87a1aa18907862e6c178
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
- > Even though the "no-engine" option effectively disables the compilation
- > of the engine, it still creates the installation directory, which ends up
- > being empty. For this reason, the patch does not remove the hook for
- > removing the directory if the BR2_PACKAGE_LIBOPENSSL_ENGINES option is
- > not enabled.
+Commit f77d698f83b230f7efcb7d28af3aacfa9589cc89 changed apply-patches to
+use $TAR instead of `tar`, but did not define a fallback if $TAR is not
+defined. This results in an error when calling apply-patches.sh from
+outside Buildroot's Makefile. Our team uses this script to setup local
+checkouts of Buildroot package's with patches for development.
 
- > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 118c824b565442bfe1d4ae1c0a39d330e624b854)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/apply-patches.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed to 2024.02.x and 2024.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 4e633b23be..73aa6c8e5f 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -46,6 +46,8 @@ patchdir=${2-../kernel-patches}
+ shift 2
+ patchpattern=${@-*}
+ 
++export TAR=${TAR:-tar}
++
+ # use a well defined sorting order
+ export LC_COLLATE=C
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
