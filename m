@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54A29C3DA42
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 05:27:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B74B6C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 05:28:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0646D6069C;
-	Mon,  8 Jul 2024 05:27:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84E986069A;
+	Mon,  8 Jul 2024 05:28:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7zSU5c28Th5Y; Mon,  8 Jul 2024 05:27:15 +0000 (UTC)
+ id opA3Jumxf_wN; Mon,  8 Jul 2024 05:28:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E67A606E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A60E06069C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E67A606E3;
-	Mon,  8 Jul 2024 05:27:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A60E06069C;
+	Mon,  8 Jul 2024 05:28:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C800A1BF48D
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:27:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3F4621BF48D
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C2484606E3
- for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:27:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D1736069C
+ for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 05:28:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gcjD26QK-_Br for <buildroot@lists.busybox.net>;
- Mon,  8 Jul 2024 05:27:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 5zzoCdcxPOed for <buildroot@lists.busybox.net>;
+ Mon,  8 Jul 2024 05:28:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C273D606B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C273D606B9
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C273D606B9
- for <buildroot@buildroot.org>; Mon,  8 Jul 2024 05:27:12 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B265E0004;
- Mon,  8 Jul 2024 05:27:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D63C16069A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D63C16069A
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D63C16069A
+ for <buildroot@buildroot.org>; Mon,  8 Jul 2024 05:28:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7B798240003;
+ Mon,  8 Jul 2024 05:28:25 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sQgu4-0014ds-1c;
- Mon, 08 Jul 2024 07:27:08 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sQgvI-0014sj-24;
+ Mon, 08 Jul 2024 07:28:24 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240612192222.52284-1-bernd@kuhls.net>
-Date: Mon, 08 Jul 2024 07:27:08 +0200
-In-Reply-To: <20240612192222.52284-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Wed, 12 Jun 2024 21:22:22 +0200")
-Message-ID: <87plrosbbn.fsf@dell.be.48ers.dk>
+References: <20240612192246.52305-1-bernd@kuhls.net>
+Date: Mon, 08 Jul 2024 07:28:24 +0200
+In-Reply-To: <20240612192246.52305-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Wed, 12 Jun 2024 21:22:46 +0200")
+Message-ID: <87le2csb9j.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 24.0.9
+Subject: Re: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.8.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,8 +68,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, "Yann
- E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -79,10 +77,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
  > Release notes:
- > https://lists.freedesktop.org/archives/mesa-announce/2024-May/000761.html
- > https://lists.freedesktop.org/archives/mesa-announce/2024-June/000764.html
-
- > Removed two patches which are included in this version 24.0.8.
+ > https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+ > https://forum.torproject.org/t/stable-release-0-4-8-12/13060
 
  > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
