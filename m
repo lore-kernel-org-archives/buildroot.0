@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84BBDC3271E
-	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE363C3271E
+	for <buildroot@archiver.kernel.org>; Mon,  8 Jul 2024 20:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5311060A6F;
-	Mon,  8 Jul 2024 20:20:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91C1C608FD;
+	Mon,  8 Jul 2024 20:20:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2dMZaoYpkFeD; Mon,  8 Jul 2024 20:20:34 +0000 (UTC)
+ id MBB0S_EfMIru; Mon,  8 Jul 2024 20:20:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A0460A5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD1AB60A6B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3A0460A5C;
-	Mon,  8 Jul 2024 20:20:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 011521BF275
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD1AB60A6B;
+	Mon,  8 Jul 2024 20:20:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AEDA1BF275
  for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:20:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E66DA40133
+ by smtp3.osuosl.org (Postfix) with ESMTP id D277B608D8
  for <buildroot@lists.busybox.net>; Mon,  8 Jul 2024 20:20:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3iOApfTPPhu4 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KBi1hWvW9nnQ for <buildroot@lists.busybox.net>;
  Mon,  8 Jul 2024 20:20:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC5F54033A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7F8A60804
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC5F54033A
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7F8A60804
  for <buildroot@buildroot.org>; Mon,  8 Jul 2024 20:20:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C693683FF6; Mon,  8 Jul 2024 20:20:12 +0000 (UTC)
+ id B124483FEE; Mon,  8 Jul 2024 20:20:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 8 Jul 2024 22:14:01 +0200
+Date: Mon, 8 Jul 2024 22:13:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1dc5fe6050f4b49a2b2b7b0593246bfc5f1eb408
-X-Git-Newrev: 18b1197e9165ac537b19d990091ff85bb22124ad
+X-Git-Oldrev: 9d8883971da90339d3b9825a9df02139ae0ae268
+X-Git-Newrev: 1dc5fe6050f4b49a2b2b7b0593246bfc5f1eb408
 X-Patchwork-Hint: ignore
-Message-Id: <20240708202012.C693683FF6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/monit: update the patches to be
- applied with fuzz 0
+Message-Id: <20240708202012.B124483FEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeradius-server: update the
+ patches to be applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,98 +61,98 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6383084528268474073=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6383084528268474073==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=18b1197e9165ac537b19d990091ff85bb22124ad
+commit: https://git.buildroot.net/buildroot/commit/?id=1dc5fe6050f4b49a2b2b7b0593246bfc5f1eb408
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
 fuzz factor to 0") reduced the fuzz factor.
 
-Due to this change, monit fails to build with output:
+Due to this change, freeradius-server fails to build with output:
 
-    Applying 0001-no-force-static.patch using patch:
-    patching file Makefile.am
-    Hunk #1 FAILED at 85.
-    1 out of 1 hunk FAILED -- saving rejects to file Makefile.am.rej
+    Applying 0001-jlibtool-cross-with-host-CC.patch using patch:
+    patching file scripts/libtool.mk
+    Hunk #1 FAILED at 43.
+    1 out of 1 hunk FAILED -- saving rejects to file scripts/libtool.mk.rej
 
-    Applying 0002-configure.ac-fixes-missing-config-macro-dir.patch using patch:
-    patching file configure.ac
-    Hunk #1 FAILED at 8.
-    1 out of 1 hunk FAILED -- saving rejects to file configure.ac.rej
+    Applying 0009-src-modules-rlm_python-fix-build-with-Ofast.patch using patch:
+    patching file src/modules/rlm_python3/configure.ac
+    Hunk #1 succeeded at 44 (offset -15 lines).
+    Hunk #2 FAILED at 73.
+    1 out of 2 hunks FAILED -- saving rejects to file src/modules/rlm_python3/configure.ac.rej
 
 This commit refreshes the package patches on the current package version.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/monit/0001-no-force-static.patch                          | 8 +++++---
- .../monit/0002-configure.ac-fixes-missing-config-macro-dir.patch  | 6 ++++--
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ .../freeradius-server/0001-jlibtool-cross-with-host-CC.patch   |  5 +++--
+ .../0009-src-modules-rlm_python-fix-build-with-Ofast.patch     | 10 ++++++----
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/monit/0001-no-force-static.patch b/package/monit/0001-no-force-static.patch
-index edb619b541..4634a951f3 100644
---- a/package/monit/0001-no-force-static.patch
-+++ b/package/monit/0001-no-force-static.patch
-@@ -5,13 +5,15 @@ still dlopen()s the NSS libraries.
- 
- Reported-by: Peter Kümmel <syntheticpp@gmx.net>
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- 
- diff -durN monit-5.7.orig/Makefile.am monit-5.7/Makefile.am
- --- monit-5.7.orig/Makefile.am	2014-02-20 09:00:42.000000000 +0100
- +++ monit-5.7/Makefile.am	2014-09-05 12:49:43.711104001 +0200
--@@ -85,7 +85,7 @@
-- 		  src/process/sysdep_@ARCH@.c
--  
-+@@ -97,7 +97,7 @@
-+                   src/statistics/Statistics.c
-+ 
-  monit_LDADD 	= libmonit/libmonit.la
- -monit_LDFLAGS 	= -static $(EXTLDFLAGS)
- +monit_LDFLAGS 	= $(EXTLDFLAGS)
-diff --git a/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch b/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
-index 325dcc17e1..31b20b3cbc 100644
---- a/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
-+++ b/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
-@@ -8,6 +8,8 @@ so that m4 macros are properly loaded upon autoreconf use.
- 
- Upstream: N/A (specific to buildroot)
- Signed-off-by: Jens Maus <mail@jens-maus.de>
+diff --git a/package/freeradius-server/0001-jlibtool-cross-with-host-CC.patch b/package/freeradius-server/0001-jlibtool-cross-with-host-CC.patch
+index 0cd55071c4..94205754c2 100644
+--- a/package/freeradius-server/0001-jlibtool-cross-with-host-CC.patch
++++ b/package/freeradius-server/0001-jlibtool-cross-with-host-CC.patch
+@@ -11,6 +11,8 @@ Signed-off-by: David Gouarin <david.gouarin@thalesgroup.com>
+ Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+ [Fabrice: update for 3.2.3]
+ SIgned-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +[Dario: make the patch to be applied with fuzz factor 0]
 +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
  ---
-  configure.ac          | 2 +-
-  libmonit/configure.ac | 2 +-
-@@ -17,9 +19,9 @@ diff --git a/configure.ac b/configure.ac
- index 3c3d30a2..f4c5ea07 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -8,7 +8,7 @@ AC_PREREQ([2.53])
-+@@ -8,7 +8,7 @@
-  # Example: 5.0_beta2
-- AC_INIT([monit], [5.34.0], [monit-general@nongnu.org])
-+ AC_INIT([monit], [5.33.0], [monit-general@nongnu.org])
-  AC_CONFIG_AUX_DIR(config)
- -AC_CONFIG_MACRO_DIR([m4])
- +AC_CONFIG_MACRO_DIRS([m4 config])
-
---===============6383084528268474073==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+  scripts/libtool.mk | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -19,8 +21,7 @@ diff --git a/scripts/libtool.mk b/scripts/libtool.mk
+ index 57915e1053..c28260dd7e 100644
+ --- a/scripts/libtool.mk
+ +++ b/scripts/libtool.mk
+-@@ -43,8 +43,8 @@ ifeq "${LIBTOOL}" "JLIBTOOL"
+-
++@@ -48,8 +48,8 @@ ifeq "${LIBTOOL}" "JLIBTOOL"
+      # binary!
+      ${JLIBTOOL}: ${top_makedir}/jlibtool.c
+  	$(Q)mkdir -p $(dir $@)
+diff --git a/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch b/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch
+index c92b4171d2..2c1f07cb66 100644
+--- a/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch
++++ b/package/freeradius-server/0009-src-modules-rlm_python-fix-build-with-Ofast.patch
+@@ -18,15 +18,17 @@ Fixes:
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Upstream: https://github.com/FreeRADIUS/freeradius-server/pull/5263
++[Dario: make the patch to be applied with fuzz factor 0]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+- src/modules/rlm_python/configure.ac | 4 ++--
++ src/modules/rlm_python3/configure.ac | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+ diff --git a/src/modules/rlm_python3/configure.ac b/src/modules/rlm_python3/configure.ac
+ index e2f74574fb..ee30b324d9 100644
+ --- a/src/modules/rlm_python3/configure.ac
+ +++ b/src/modules/rlm_python3/configure.ac
+-@@ -59,7 +59,7 @@ else
++@@ -44,7 +44,7 @@ else
+  
+  	dnl # Convert -I to -isystem to get rid of warnings about issues in Python headers
+  	dnl # Strip -systemroot
+@@ -35,8 +37,8 @@ index e2f74574fb..ee30b324d9 100644
+  	dnl # -D_FORTIFY_SOURCE needs -O.
+  	dnl # Strip debug symbol flags (-g[0-9]?). We decide on debugging symbols, not python
+  	dnl # Strip -W*, we decide what warnings are important
+-@@ -73,7 +73,7 @@ else
+- 	mod_cflags=`echo " $python_cflags" | sed -e '\
++@@ -56,7 +56,7 @@ else
++ 	mod_cflags=`echo " $python3_cflags" | sed -e '\
+  		s/ -I/ -isystem/g;\
+  		s/ -isysroot[[ =]]\{0,1\}[[^-]]*/ /g;\
+ -		s/ -O[[^[[:blank:]]]]*/ /g;\
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6383084528268474073==--
