@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0130EC3DA45
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 21:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FA54C2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 21:49:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C7B24135B;
-	Tue,  9 Jul 2024 21:49:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0FA341331;
+	Tue,  9 Jul 2024 21:49:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id quojdnKcI6HY; Tue,  9 Jul 2024 21:49:48 +0000 (UTC)
+ id YRAXsZV3j85p; Tue,  9 Jul 2024 21:49:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 071D841377
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AC1B41382
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 071D841377;
-	Tue,  9 Jul 2024 21:49:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 999451BF41D
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:49:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AC1B41382;
+	Tue,  9 Jul 2024 21:49:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 645281BF41D
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:49:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8774E60742
+ by smtp4.osuosl.org (Postfix) with ESMTP id B20BE40994
  for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:49:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KQ88MF0j52kG for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m-nd_pl1tdZ6 for <buildroot@lists.busybox.net>;
  Tue,  9 Jul 2024 21:49:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE41D606EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAB6040B43
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE41D606EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id AAB6040B43
  for <buildroot@buildroot.org>; Tue,  9 Jul 2024 21:49:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D85F844F5; Tue,  9 Jul 2024 21:49:40 +0000 (UTC)
+ id A72F28448E; Tue,  9 Jul 2024 21:49:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 9 Jul 2024 23:40:17 +0200
+Date: Tue, 9 Jul 2024 23:40:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e2073a6d2a3851752e54a8f4282cde9dd0481e31
-X-Git-Newrev: 13bd56d5d4f4c565ab52ed4625aa9e4ed6c94118
+X-Git-Oldrev: 0d84b3c7a03e64fbc864e83d6eda3976a7015d3d
+X-Git-Newrev: ed7165d9af1eb85106cbbad10eb37ebe71b8e407
 X-Patchwork-Hint: ignore
-Message-Id: <20240709214940.6D85F844F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 21.4.10-Omega
+Message-Id: <20240709214940.A72F28448E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
+ 21.0.2-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,40 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13bd56d5d4f4c565ab52ed4625aa9e4ed6c94118
+commit: https://git.buildroot.net/buildroot/commit/?id=ed7165d9af1eb85106cbbad10eb37ebe71b8e407
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 85945c9a54..82325ab014 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index acffc6a7ee..d97bfce5b3 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  0b3a78763ffebef64ac05bcf55951f26e334f7ee8bbe042f885dff288eed466e  kodi-inputstream-adaptive-21.4.7-Omega.tar.gz
-+sha256  caf71b67cf242c600878718dab8227947062a28485078b8bf68ac72aef51e12c  kodi-inputstream-adaptive-21.4.10-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 5cc02e45c0..b6825c1ff0 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+-sha256  5908de86c038b3565d8b3a8d4578d4cac0d37287fc039808542b874d9fb2bffa  kodi-pvr-zattoo-21.0.1-Omega.tar.gz
++sha256  859a64e152eca06a6210a80ad199e8b545c9fc9b85562eb12f980c1659ace72a  kodi-pvr-zattoo-21.0.2-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index d764524fbb..cba9d0b2ef 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.4.7-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.4.10-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+-KODI_PVR_ZATTOO_VERSION = 21.0.1-Omega
++KODI_PVR_ZATTOO_VERSION = 21.0.2-Omega
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
