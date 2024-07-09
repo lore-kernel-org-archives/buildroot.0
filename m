@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AAC3C2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 17:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB8AAC2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 17:09:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C3DB41334;
-	Tue,  9 Jul 2024 17:09:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B144940728;
+	Tue,  9 Jul 2024 17:09:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GeV82OzQpUYn; Tue,  9 Jul 2024 17:09:30 +0000 (UTC)
+ id JnrG82IlrJ4m; Tue,  9 Jul 2024 17:09:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D16BB4133D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9555241351
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D16BB4133D;
-	Tue,  9 Jul 2024 17:09:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6C39C1BF852
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9555241351;
+	Tue,  9 Jul 2024 17:09:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 756091BF97E
  for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 17:09:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6581E81367
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FCF740645
  for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 17:09:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PaEi6-jGfgan for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id srdIO4CyDeOA for <buildroot@lists.busybox.net>;
  Tue,  9 Jul 2024 17:09:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9086D80D70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 815974062A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9086D80D70
+ by smtp2.osuosl.org (Postfix) with ESMTP id 815974062A
  for <buildroot@buildroot.org>; Tue,  9 Jul 2024 17:09:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D0427F92A; Tue,  9 Jul 2024 17:09:27 +0000 (UTC)
+ id 6D47D84308; Tue,  9 Jul 2024 17:09:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 9 Jul 2024 19:03:38 +0200
+Date: Tue, 9 Jul 2024 19:03:35 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 47caba65a0245812e21de9c5a6de92920d3b3c1d
-X-Git-Newrev: 544d3116d512ddffe932fa85d813d93147e9e22c
+X-Git-Oldrev: 2ddb885f6bcbf5e774fe6cd172352cd5a868772a
+X-Git-Newrev: 47caba65a0245812e21de9c5a6de92920d3b3c1d
 X-Patchwork-Hint: ignore
-Message-Id: <20240709170927.7D0427F92A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libmad: drop
- GCC's "-fforce-mem" option
+Message-Id: <20240709170927.6D47D84308@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libmad: update
+ the patches to be applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,68 +60,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2776073931393419574=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2776073931393419574==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=544d3116d512ddffe932fa85d813d93147e9e22c
+commit: https://git.buildroot.net/buildroot/commit/?id=47caba65a0245812e21de9c5a6de92920d3b3c1d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The commit fixes the following compilation error:
+Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0") reduced the fuzz factor.
 
-    i686-buildroot-linux-gnu-gcc.br_real: error: unrecognized command-line option ‘-fforce-mem’
+Due to this change, libmad fails to build with output:
 
-From GCC 4.3 release notes [1]:
+    Applying mips-gcc4.4.diff using series:
+    patching file fixed.h
+    Hunk #1 FAILED at 297.
+    1 out of 1 hunk FAILED -- saving rejects to file fixed.h.rej
 
-    The -fforce-mem option has been removed because it has had no effect
-    in the last few GCC releases.
+The package applied the patches in two steps, first the local ones and
+then the official ones downloaded from the repository. The commit fixes
+the issue by reversing the order of patch application steps.
 
-[1] https://gcc.gnu.org/gcc-4.3/changes.html
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 89ba9c5a0b05f119d8f748f52244ebcb6a0dd008)
+(cherry picked from commit b21184a87733f2f2ccee69cade6875c507e439dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmad/0003-drop-GCC-fforce-mem-option.patch | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/libmad/libmad.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmad/0003-drop-GCC-fforce-mem-option.patch b/package/libmad/0003-drop-GCC-fforce-mem-option.patch
-new file mode 100644
-index 0000000000..25b685efd0
---- /dev/null
-+++ b/package/libmad/0003-drop-GCC-fforce-mem-option.patch
-@@ -0,0 +1,18 @@
-+configure.ac: drop GCC "-fforce-mem" option 
-+
-+As reported at [1], the option has been removed from version 4.3 of GCC.
-+
-+[1] https://ez.analog.com/dsp/software-and-development-tools/linux-blackfin/linux-bug-archive/w/documents/7460/5626-build-lib-mad-fail-at-option--fforce-mem-with-gcc-4-3
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: Dead
-+
-+--- libmad-0.15.1b-orig/configure.ac	2024-07-02 14:26:40.657984791 +0200
-++++ libmad-0.15.1b/configure.ac	2024-07-02 14:27:07.098198997 +0200
-+@@ -140,7 +140,6 @@
-+     case "$optimize" in
-+ 	-O|"-O "*)
-+ 	    optimize="-O"
-+-	    optimize="$optimize -fforce-mem"
-+ 	    optimize="$optimize -fforce-addr"
-+ 	    : #x optimize="$optimize -finline-functions"
-+ 	    : #- optimize="$optimize -fstrength-reduce"
-
---===============2776073931393419574==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
+index 084a533cc0..9f3396b1a4 100644
+--- a/package/libmad/libmad.mk
++++ b/package/libmad/libmad.mk
+@@ -19,7 +19,7 @@ define LIBMAD_APPLY_DEBIAN_PATCHES
+ 	fi
+ endef
+ 
+-LIBMAD_POST_PATCH_HOOKS += LIBMAD_APPLY_DEBIAN_PATCHES
++LIBMAD_PRE_PATCH_HOOKS += LIBMAD_APPLY_DEBIAN_PATCHES
+ 
+ # debian/patches/md_size.diff
+ LIBMAD_IGNORE_CVES += CVE-2017-8372 CVE-2017-8373
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2776073931393419574==--
