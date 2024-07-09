@@ -4,50 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16F71C2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 16:52:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E8F8C2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 16:56:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D068C412FD;
-	Tue,  9 Jul 2024 16:52:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D715409FE;
+	Tue,  9 Jul 2024 16:56:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G3vcJTMS3Klh; Tue,  9 Jul 2024 16:52:00 +0000 (UTC)
+ id zybNRO9KuU4N; Tue,  9 Jul 2024 16:56:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B55441301
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B45EB40B3B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B55441301;
-	Tue,  9 Jul 2024 16:52:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 402F41BF348
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 16:51:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B45EB40B3B;
+	Tue,  9 Jul 2024 16:56:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 86EFB1BF348
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 16:56:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 394DD41301
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 16:51:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DFF781E17
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 16:56:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w3rw-qZxuCty for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 16:51:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32F8B412FD
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 32F8B412FD
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 16:51:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 212148434C; Tue,  9 Jul 2024 16:51:57 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 9 Jul 2024 18:47:42 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: d9b97b2552ae895d4d9c15c5fa1eb93d1b2b481f
-X-Git-Newrev: ecc0c1fb1244971b2dad96ef2ef886daa80c72fd
-X-Patchwork-Hint: ignore
-Message-Id: <20240709165157.212148434C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/openssh: disable
- async-signal-unsafe code in sshsigdie()
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9c-HQr-eIfYE for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 16:56:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 85DEE813A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85DEE813A9
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 85DEE813A9
+ for <buildroot@busybox.net>; Tue,  9 Jul 2024 16:56:11 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-3678aa359b7so4043512f8f.1
+ for <buildroot@busybox.net>; Tue, 09 Jul 2024 09:56:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720544169; x=1721148969;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EESwq++TrcCgyt9H/N4aY9DVoo96BBVAkNNPmI8FvnE=;
+ b=g/iaevtZ2P7LZ8qwwgIVkpgKbpFHEvjzagrrlWlh1XKzB+sz7lSYgGCwwrBCDPGwm/
+ dKuZ/EFQJKtSg4wdOeJkCpkJQoQOTIk6EUOZWte9FwvbmhqjwUKl+4d3y3+V8UtzLJGJ
+ FE+ruJDpr05flwhc2EfLh6T4xE0HS6LETqCnpuuYanc/VpXchLZ39JvO56ZX3SoJ9I/4
+ raYwOk3ZdmoJCR85zUsZDaiTfK7pZx4QsO8nMUwHSbJZkOOupy06OtR4H+NWVz/tpK3h
+ 882PHPDiEQAVqmKeQLWAJP6CIq8qduul5xF5TWNR7RVx2f83baG5WAXpwAs1qha0/9C3
+ 5g+g==
+X-Gm-Message-State: AOJu0YwILROOVmrNEOrOEjv9XjUslCB7YzsS+eJEV3qQX79rS5J0OXRl
+ hgLZLnSYk6ent2kyEIT7LzBRD9O4fO73BkcsWbljNE1ezXMYdv3OzhKWFCpZJ7fKFt3GjmR8Ox+
+ QRQ==
+X-Google-Smtp-Source: AGHT+IFqzkqZK4BVv33lH9rQk3yOhxuyK8v3+xyPwfr8i9iDk58x02BPpcdhpvvKFK+E5zk+7dU0RA==
+X-Received: by 2002:a05:6000:1812:b0:360:9500:9bbb with SMTP id
+ ffacd0b85a97d-367d2b3fe53mr2675545f8f.12.1720544169508; 
+ Tue, 09 Jul 2024 09:56:09 -0700 (PDT)
+Received: from vm-2404.. ([37.66.35.199]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-367cde7e1b3sm3024214f8f.20.2024.07.09.09.56.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 09 Jul 2024 09:56:09 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Tue,  9 Jul 2024 18:54:19 +0200
+Message-ID: <20240709165421.2685663-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gadz.org; s=google; t=1720544169; x=1721148969; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=EESwq++TrcCgyt9H/N4aY9DVoo96BBVAkNNPmI8FvnE=;
+ b=EFSJG+aguunateiNeuCwZkJHqxqNe/B/wes3NBXxxK3gqOzov8yLt1nXKcj1IqyrDo
+ 9Hi6DTDOQDpfAemiwSKLsD3zqmfzxCiMD0un0yjVMOTYhMdZWjUBGOnH7eZ/dbIX3T0v
+ nje3pb7WRBXSP0LN/YqBbO2xB4jKb69XsB05hoI1LLO+kVT8U62o5vO9u/P67j8z3HZQ
+ m2KtgQt70PM3zBak+bfjHOBTFJS5wV7IxRIWBYDy0T94TJGdH+DsG5vq2viu6FRyNwvi
+ ZklIp3LeUdjOIygIdw3P/UYDVHggcgvDgWR7Nn5cdfnpgalftXPBDOGIB0auefsfGWi4
+ 4y8Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=EFSJG+ag
+Subject: [Buildroot] [PATCH 1/2] configs/olimex_a20_olinuxino_lime*: bump
+ Linux and U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,75 +101,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecc0c1fb1244971b2dad96ef2ef886daa80c72fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Import Debian patch[1] for CVE-2024-6387[2].  This disables the unsafe
-syslog code path triggered by SIGALARM.
-
-[1] https://salsa.debian.org/ssh-team/openssh/-/blob/master/debian/patches/sshsigdie-async-signal-unsafe.patch
-[2] https://marc.info/?l=oss-security&m=171982335024767
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-[Peter: rename, add Upstream tag]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0002-sshsigdie-async-signal-unsafe.patch       | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
+ configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openssh/0002-sshsigdie-async-signal-unsafe.patch b/package/openssh/0002-sshsigdie-async-signal-unsafe.patch
-new file mode 100644
-index 0000000000..70a890e469
---- /dev/null
-+++ b/package/openssh/0002-sshsigdie-async-signal-unsafe.patch
-@@ -0,0 +1,41 @@
-+From 7f4a743171f9e6b283207d448de6562219774fbf Mon Sep 17 00:00:00 2001
-+From: Salvatore Bonaccorso <carnil@debian.org>
-+Date: Tue, 25 Jun 2024 12:24:29 +0100
-+Subject: Disable async-signal-unsafe code from the sshsigdie() function
-+
-+Address signal handler race condition: if a client does not authenticate
-+within LoginGraceTime seconds (120 by default, 600 in old OpenSSH
-+versions), then sshd's SIGALRM handler is called asynchronously, but
-+this signal handler calls various functions that are not
-+async-signal-safe (for example, syslog()).
-+
-+This is a regression from CVE-2006-5051 ("Signal handler race condition
-+in OpenSSH before 4.4 allows remote attackers to cause a denial of
-+service (crash), and possibly execute arbitrary code")
-+
-+Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
-+Upstream: https://salsa.debian.org/ssh-team/openssh/-/blob/525bb16e45edac4c03b95e106380d70aecbaf27e/debian/patches/sshsigdie-async-signal-unsafe.patch
-+Patch-Name: sshsigdie-async-signal-unsafe.patch
-+---
-+ log.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/log.c b/log.c
-+index 6a8b1fc4a..57256660f 100644
-+--- a/log.c
-++++ b/log.c
-+@@ -452,12 +452,14 @@ void
-+ sshsigdie(const char *file, const char *func, int line, int showfunc,
-+     LogLevel level, const char *suffix, const char *fmt, ...)
-+ {
-++#if 0
-+ 	va_list args;
-+ 
-+ 	va_start(args, fmt);
-+ 	sshlogv(file, func, line, showfunc, SYSLOG_LEVEL_FATAL,
-+ 	    suffix, fmt, args);
-+ 	va_end(args);
-++#endif
-+ 	_exit(1);
-+ }
-+ 
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 04e191b44..f71d2d3a0 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.23"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.36"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -45,7 +45,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 05666fa98..6546cac0d 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -23,7 +23,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.23"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.36"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+@@ -45,7 +45,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
