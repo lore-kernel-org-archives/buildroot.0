@@ -4,48 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE68EC3DA41
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 09:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE929C2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 09:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05F9340DBF;
-	Tue,  9 Jul 2024 09:50:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B7F14021F;
+	Tue,  9 Jul 2024 09:50:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N0DS-ezdYDaD; Tue,  9 Jul 2024 09:50:06 +0000 (UTC)
+ id 01Q0MfsafKAk; Tue,  9 Jul 2024 09:50:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E953410B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5298D40B8B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E953410B0;
-	Tue,  9 Jul 2024 09:50:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 365CE1BF29A
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 09:50:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5298D40B8B;
+	Tue,  9 Jul 2024 09:50:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CAC211BF29A
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 09:50:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F4FE405C8
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 09:50:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B69F881770
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 09:50:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dQ3nHtyoX7Sa for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 09:50:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zIUbrsFgPUCY for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 09:50:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
+ helo=mslow1.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10D2B40BAB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10D2B40BAB
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 09:50:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A171842FA; Tue,  9 Jul 2024 09:50:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 9 Jul 2024 11:49:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 91952568b0b1b3477ae573f8e3277d625965b923
-X-Git-Newrev: f290f8de2265317daec80e6ae143dcdd74043f59
-X-Patchwork-Hint: ignore
-Message-Id: <20240709095000.0A171842FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl2: bump version to 2.30.4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9857E8176B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9857E8176B
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9857E8176B
+ for <buildroot@busybox.net>; Tue,  9 Jul 2024 09:50:14 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::223])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 2B10CC45B5
+ for <buildroot@busybox.net>; Tue,  9 Jul 2024 09:50:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5ADDE6000C;
+ Tue,  9 Jul 2024 09:50:06 +0000 (UTC)
+Date: Tue, 9 Jul 2024 11:50:05 +0200
+To: Michael Fischer <mf@go-sys.de>
+Message-ID: <20240709115005.1924cef4@windsurf>
+In-Reply-To: <20240701074600.16262-1-mf@go-sys.de>
+References: <20240701074600.16262-1-mf@go-sys.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720518606;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=/kh7ZUmucAdn5exPZLEPjiT3RhYtZ/f9adCvuhCGh2I=;
+ b=Z/7jRlzdVU2+ytsuzlr1/Vl5xA9YEZ+FSNhgkocJDmEvDys5uFxf/BkIyxwOKb6YFuBqVd
+ YWvVdnnGz0prYkQQsu60Xi/5xuVhhyCxgFxEcnhFn4/k9yjxwsZ0Wpnt/exslHAqJyd6l1
+ whaHRtLGe1XhYkYeBwbMs4+vM1GMV2F8qCJRiznmtpKGJDw3KeTb4+NJmcfomhYo3bqB7r
+ V6bhbgqjdS4jmnLv+F1hCS6zKUm5UKxWZViEKHaTamJM5amkdud/1n+oGU6+0sL4wEx9GW
+ RgGKzSpdtYBnJUqM/NoGy43Svqt0SmnwS/ZktEAY5HZchDg38GEyNnt+MTLDzg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Z/7jRlzd
+Subject: Re: [Buildroot] [PATCH] package/sdl2: bump version to 2.30.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +84,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f290f8de2265317daec80e6ae143dcdd74043f59
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 1 Jul 2024 09:46:00 +0200
+Michael Fischer <mf@go-sys.de> wrote:
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
+> ---
+>  package/sdl2/sdl2.hash | 4 ++--
+>  package/sdl2/sdl2.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 3c72d1d6d1..4f302aaec8 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.3.tar.gz.sig
--sha256  820440072f8f5b50188c1dae104f2ad25984de268785be40c41a099a510f0aec  SDL2-2.30.3.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.4.tar.gz.sig
-+sha256  59c89d0ed40d4efb23b7318aa29fe7039dbbc098334b14f17f1e7e561da31a26  SDL2-2.30.4.tar.gz
- # Locally calculated
- sha256  9b9e1764f06701bcf7ce21e942c682d5921ba0900c6fca760321b1c8837a9662  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index b5b0fb49e1..01dcf3551c 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDL2_VERSION = 2.30.3
-+SDL2_VERSION = 2.30.4
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
