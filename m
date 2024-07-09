@@ -1,54 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BA5CC3DA41
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 10:19:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9305C2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 11:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6B7140BE3;
-	Tue,  9 Jul 2024 10:19:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NpYUgMVt6CZL; Tue,  9 Jul 2024 10:19:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A45C406D5
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A45C406D5;
-	Tue,  9 Jul 2024 10:19:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ABFFD1BF298
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 10:19:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 99A0B813E9
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 10:19:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78F6181A24;
+	Tue,  9 Jul 2024 11:32:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vcjRIsA1420C for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 10:19:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ id Raj5lLxILCSw; Tue,  9 Jul 2024 11:32:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D3CE81A29
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D3CE81A29;
+	Tue,  9 Jul 2024 11:32:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DA161BF59A
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 11:32:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 38C2F40494
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 11:32:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PEp7-my_5iQw for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 11:32:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4F91A81149
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F91A81149
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4F91A81149
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 10:19:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9A5EB404A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A5EB404A8
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9A5EB404A8
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 11:32:04 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.127.252]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmlXK-1s0LNw0zVm-00fqxK; Tue, 09
- Jul 2024 12:19:50 +0200
-Message-ID: <1e0c66a5-b6d3-4117-aafb-68b4d00a5565@gmx.de>
-Date: Tue, 9 Jul 2024 12:19:49 +0200
+Received: from [192.168.7.2] ([85.22.127.252]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MsHnm-1s85l41eby-012Z93; Tue, 09
+ Jul 2024 13:32:00 +0200
+Message-ID: <f93e8075-a773-4d47-b6fe-04bb714b06db@gmx.de>
+Date: Tue, 9 Jul 2024 13:31:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fiona Klute via buildroot <buildroot@buildroot.org>
-References: <20240704121352.1915154-1-fiona.klute@gmx.de>
- <20240704121352.1915154-4-fiona.klute@gmx.de>
- <20240708235639.7a9cc07c@windsurf>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20240704101631.1860647-1-fiona.klute@gmx.de>
+ <20240708235339.5dbf3da4@windsurf>
+ <42d13dfb-0ac3-4939-b50b-a4187df30e89@gmx.de>
+ <20240709120659.60e32214@windsurf>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -93,47 +93,46 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  MCTaUC2HWAAsiG90beT7JkkKKgMLS9DxmX9BN5Cm18Azckexy+vMg79LCcfw/gocQ4+lQn4/
  3BjqSuHfj+dXG+qcQ9pgB5+4/812hHog78dKT2r8l3ax3mHZCDTAC9Ks3LQU9/pMBm6K6nnL
  a4ASpGZSg2zLGIT0gnzi5h8EcIu9J1BFq6zRPZIjxBlhswF6J0BXjlDVe/3JzmeTTts=
-In-Reply-To: <20240708235639.7a9cc07c@windsurf>
-X-Provags-ID: V03:K1:uEjqJ5ER+rJrWO9163nUpultW/dMH7JEC5z9DTBB2kKBy/EVmbe
- t4U47lqX2xseH1JhgUaAFUu62Wdq7QcK1Ewdolcg/zCaxeFiS+IN0Vf4h6RAqX1IEmgDibg
- zzmhIPAmhy0FT+QxR1gf0BAaPg95+YDChfX72tJm5tS2N4ITNlm7ipaF9wochxXmnAN3SjU
- wHRe9Z4a7F0MLNCxQJ7Hw==
-UI-OutboundReport: notjunk:1;M01:P0:wdPr7OMrpHc=;5VKdTa0FjY/t8s6xqdUmu1GSQye
- rQHJKHbD7Tg9LP84qjjXEAQ8kL71SuUgWBo3tXh/W3T1MXNZo+ssxdO9gpaHufeqvvLb0/Z+J
- /ShkbnRyfI+7Tjk1wRihs1tIkhrPSqR3vHjQSF3iBYbshB+tuSFE2ZA4DpzQxy1tE/HMKvbA8
- xS5/ADlxOVsb3AcaMOOoSxxibPFVwfiUSTYqvgQTITVNm4TMK88Hm2GjT9z1SpF4L/C9EW4Le
- FwcFMm3f/wShG575XB8DmG+FDb9Q7svP4ef7PK8psLfuquuKX7lVKOSY04jhlA04I53D8uy0W
- /ExNmlAH6y60Qct2qri7Aub0K3LjgNf3rpy7+dhb9LdrEtdItkmszB2p2XmldqhzDXLLks0Jg
- n1wsPD2KFhuuEwk1vqlyO5D6mf1ZbmlJ1Dr+9eOWeR4fz6twzCBVEjidzb+KDvPrXwRqi9dR/
- Ul7u2ANrT3EaexN15TR0Y4Gqx/AfMmAcTtE8/MVAsK+OLpEjMdm/tuMpXh6N82QUL3D7DZg5i
- Xg0jTfy85/IPmepJhnjSLTuc/rcSYYn89O0ASUz5zW0RaL/GdqV0Am9/H01dqaJU0exHHoos4
- 3+rvRc+KPPBkKoQfDd6LSz+fmnhN3nDYiVpZeao1JS54lzVZi1DzcWRnf1wh6sJY4C+mJT99F
- OzAhtcg8tqO185dHkK3CkiBpLPW0Hmsti4+4WWoWMxzNQbRPlbjZI7BdFr2eTsd8ypcwFBVTS
- vFzt8+oxAvj7nybScxnGcQT7n+LWKfTq+IgxkRTAIjNmqOzXZ9AuqE9Lh9p8uWrhRQpo5V5lZ
- OHuCBd9V41uU66gJmu9iQ/R+8TpZVJPpF+y2N2z0BAEmg=
+In-Reply-To: <20240709120659.60e32214@windsurf>
+X-Provags-ID: V03:K1:YLepnk1sO3UbqDNvdKZm/nqiCvEtSOTP52xepcmEABNUN1usJ8R
+ 6+kILKfMs/f9/kElaVQaK1rhkfBGJiQENHPMqB6zXuaRIWbSnE3gmlDECIHS06oUKlPBIwc
+ DufpPTLt0EpSGKaJECFL2yt5LDZZpmw2IH/RapRCev7efXmqlJw7RTIbMD5z04CqnyaZRYB
+ mYDt4NV1I2iPlxZakqdwg==
+UI-OutboundReport: notjunk:1;M01:P0:MICe66jwRk4=;SMvLjZ1fukq9m0skvI1w7G1p65K
+ 2FYxlYUW3B9eU8RCcAH7sA9f+V2WjNI9G53WdNw8F2KSlj48TlbOUwPC2W9t8rZzEJiijZbUa
+ +XZjoxqz7RThiVnAulzRpVpYu7NmCjZn8ZP6GcbVaoQaovhZkj51XqJsR+C+bXhl3Y5xUL0Dl
+ c2opaB2m9d0ZEXm+3edAV8+VCYjyOZA/nMPaFIsnKl8NMbNjZkoI5XMMRiHdumj6KsbjuK1Jd
+ rPLe3CZ/UMKFDpKbeIIIAxbQX/9rzsoKzOxltFvPo0j/VOFLCAdooEFFOjwMNUYJm22SrYWZF
+ /x4znq/ui5A6SQTD/gEuWyq7E8XPk7z8VvHGwTq0UBt+5gW3oupcn2QcLB1Z5iBNBF9ie6XeK
+ Bo36tVf+2pLl1BZvor/ao/+fj8kEoy9FZj5cdkrzQ33jzNaO6CtIxFjKm2h36VNKteRlmJS6L
+ 6hqv5yiH4dithnqIopd8AcYwJ9rvTmu0XviiEUPV5/VSSS+PhwuhDGm80PPtadtuf8BRHeSiR
+ eybpVvHwEezt1KR4lDTHLRj0WGg1U+PNS2MGpQKX8bIDT4hjxMSUMSp5MN1vBvut6bYNvFK71
+ 4N59nT0tpGcit5jBt4Jl1rEEOVzy1asvzloIhay2EeDxOXBBXW7KV6ElIAl4j/DGZLytAKEMm
+ 0OcnXjlfJInPWJW1Uddxk1CTCF1fH4syd2D9BCb8SNsnMP3REmtE0cadHoLMif2e5DcuOSdI7
+ MvlNKItdK9tCcdp56ZKuFtlPsrzlRmUmu0rfzFuhwP8zxPDfEBeU9pVDrxnv9AOLibSMIxA0k
+ u2GRUx93tav6uOOfoMM+SLtkdDppFWR1fDHTGwvbxTO8E=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1720520390; x=1721125190; i=fiona.klute@gmx.de;
- bh=jzH1sJbSlcVhiTzjvhZnHPe06bz+a0KKgYRRmFqs+fI=;
+ s=s31663417; t=1720524720; x=1721129520; i=fiona.klute@gmx.de;
+ bh=d2Du/rBfEFKCQvPscEXMCOiCPGaZg3e8QFspyoK+x2c=;
  h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=Td133aasl22/cQf3qsPILkRX1S3rSHmHVpEkDNBTQ4z4bZGnT72E2IkrdYnKL2LF
- oaWlLDK91LQJ9we7IQsQhRyTflfU6h9lnQvss7TNdoxHtUqUj+Pc2Tx8zBMaiBfYc
- EqzgZHMb89MV/t5eYqEZZOfZyDmF53h5tn2vuslelgwqmsFCa5gO3TRtVbYMqRfii
- Mg69bYKWQ4KmNIzW4KxfX4YnrBg2fcfaV6BD+qa7tjp6817vEbiAIaCP9K+M72nJr
- W26wmEVnEaRyiE0eTUYZTLihAoU/0WnskvXBlBUL3oAcyK+B+S9L5cLrnP9wQrwwz
- uqPBeiJ/LBvu/3u3vg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Fj80ecPRRTCEiuq296/ZBj1BGWMzw9ZLyd4x+vUWdjHLOZBZ6PkbtvJXMe/xxOkr
+ bZVGw55Jm01QIqTpH8lAHdMjydEPzMSwqAQWTAt+gX1M3JvvOHevyCHV7bPWqmFG3
+ CnHPX/I5BPspua8RCW97VtepaXgqNxm17D1RF7A10gmmABsWi0yKEJrN0p4PoefPM
+ QrYhsqBfsS5R3RO1Jpm3q3SsAHorQVFLLl0XtZcNcw2ZYFQ/2B+NqP38LlNrhwQZ9
+ z1PAib0HrXPxUfdVBUZoiTp3iYrM4qdlmtlvoGp+dgZiFhLvM+Wi0LKLCsH8VutpO
+ hVku7zsPn8akK+UAPA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=Td133aas
-Subject: Re: [Buildroot] [PATCH v2 3/4] package/fail2ban: bump version to
- 1.1.0
+ header.a=rsa-sha256 header.s=s31663417 header.b=Fj80ecPR
+Subject: Re: [Buildroot] [PATCH v4 0/3] Refactor OpenSSH init.d script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -147,67 +146,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Fiona Klute via buildroot <buildroot@buildroot.org>
 Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fiona Klute via buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 08.07.24 um 23:56 schrieb Thomas Petazzoni:
+Am 09.07.24 um 12:06 schrieb Thomas Petazzoni:
 > Hello Fiona,
 >
-> On Thu,  4 Jul 2024 14:13:51 +0200
-> Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
+> On Tue, 9 Jul 2024 11:55:56 +0200
+> Fiona Klute <fiona.klute@gmx.de> wrote:
 >
->> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+>> The script is functional, but the use of long options was intentional
+>> for readability and I'd rather have it preserved. Having existing
+>> scripts in a hard-to-read style doesn't seem like a good reason not to
+>> be more explicit in new/updated ones [1]. That was the reason for the
+>> question (and patch) about which Busybox options I can rely on when
+>> writing init scripts.
 >>
->> Fail2ban 1.1.0 brings Python 3.12 compatibility, and removes support
->> for 2.x. This means 2to3 handling can be dropped.
->>
->> Unfortunately fail2ban 1.1.0 still relies on asynchat and asyncore,
->> which have been removed from the Python standard library in
->> 3.12. Depend on the compatibility package python-pyasynchat (which
->> pulls in python-pyasyncore) and remove copies bundled in upstream
->> code.
+>> Regarding the added "-q", if a start (stop) command fails because an
+>> instance is already running (not running) with the current version you
+>> only get "Starting sshd: FAIL", while with my version you'd see the
+>> *reason* in start-stop-daemon output. That seems important to me. I only
+>> had "-q" in the reload function because the "stopping" output of
+>> start-stop-daemon (when it's actually just sending a SIGHUP) seemed like
+>> it might confuse someone.
 >
-> Thanks for the detailed commit log. One question below, though.
->
->> -FAIL2BAN_VERSION = 1.0.2
->> +FAIL2BAN_VERSION = 1.1.0
->>   FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
->>   FAIL2BAN_LICENSE = GPL-2.0+
->>   FAIL2BAN_LICENSE_FILES = COPYING
->>   FAIL2BAN_CPE_ID_VENDOR = fail2ban
->>   FAIL2BAN_SELINUX_MODULES = fail2ban
->>   FAIL2BAN_SETUP_TYPE = setuptools
->> +FAIL2BAN_DEPENDENCIES = host-python3 python-pyasynchat
->
-> Why are you adding host-python3 in the dependencies here?
+> I'm fine with both, but then I think the documentation and the
+> canonical example it refers to should be fixed first. This is how we
+> declare what is the "right" way of doing things. Otherwise, we'll keep
+> on using these as a reference for all future scripts, and we don't have
+> a reference point that tells us how things should be done when fixing
+> existing scripts or adding new ones.
 
-I saw a build failure because host Python hadn't been built before
-without it. I now suspect that was the result of adding a runtime-only
-dependency to build-time dependencies (see below), I guess it broke some
-implicit dependency handling? After completely removing that line the
-build passes, too.
+Makes sense, I'll try to update the reference.
 
-> Also, are you sure python-pyasynchat is a build time dependency, and
-> not just a runtime dependency? If that's the case, then you need to
-> kept the select in the Config.in file (with a comment # runtime), but
-> not have it as a build-time dependency in fail2ban.mk.
-
-That's indeed a runtime dependency.
-
-Thanks for the review! I've just sent an updated version of the series
-with the runtime comment added and the build time dependency removed. If
-it's good to merge now, please keep in mind that it's only going to fix
-the fail2ban build if merged after Angelo's fixes to the config file
-handling (linked in the cover letter).
+Is there some way to get an asciidoc
+"include::package/busybox/S01syslogd" to work instead of copying the
+code into docs/manual/adding-packages-directory.adoc (as it is now, and
+not exactly identical)? It seems like the path is resolved relative to
+$(OUTPUT)/docs/manual instead of the source, I didn't dig into the
+Makefiles enough to see why yet.
 
 Best regards,
 Fiona
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
