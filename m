@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CD4AC2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 05:48:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB73FC2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 05:48:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B0FC60ACD;
-	Tue,  9 Jul 2024 05:48:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BFAC6064B;
+	Tue,  9 Jul 2024 05:48:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LkYe5Rvl7IUt; Tue,  9 Jul 2024 05:48:40 +0000 (UTC)
+ id TUqWg7x3HQdK; Tue,  9 Jul 2024 05:48:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B69BD60A9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0C39606FF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B69BD60A9A;
-	Tue,  9 Jul 2024 05:48:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 65A391BF97E
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0C39606FF;
+	Tue,  9 Jul 2024 05:48:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C0FC71BF97C
  for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 05:48:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52CCA81348
+ by smtp2.osuosl.org (Postfix) with ESMTP id BAB044023E
  for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 05:48:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SZWeB2qnIwcz for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 05:48:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id deh-_wcD7C6t for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 05:48:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A7868133E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2F334015F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A7868133E
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2F334015F
  for <buildroot@buildroot.org>; Tue,  9 Jul 2024 05:48:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 656E084295; Tue,  9 Jul 2024 05:48:35 +0000 (UTC)
+ id 3FF0A84293; Tue,  9 Jul 2024 05:48:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 9 Jul 2024 07:47:50 +0200
+Date: Tue, 9 Jul 2024 07:47:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d46d9760b97f1782f0f1f617682c18864b5e2b2
-X-Git-Newrev: d611acf8e9f9d598f001fec65c974b0c3f20a1f6
+X-Git-Oldrev: 2ff544cb629e4f7df293a27318a3c0bde5b46838
+X-Git-Newrev: 17f607e341216d38b6d79a580cf61815313ff238
 X-Patchwork-Hint: ignore
-Message-Id: <20240709054835.656E084295@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: fix build with mbedtls
+Message-Id: <20240709054835.3FF0A84293@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dovecot: needs engine support when
+ built with libopenssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,86 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d611acf8e9f9d598f001fec65c974b0c3f20a1f6
+commit: https://git.buildroot.net/buildroot/commit/?id=17f607e341216d38b6d79a580cf61815313ff238
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream patch to fix compatibility with mbedtls version 2.28.x, which
-is broken since commit 50bdb2a3b7 (package/libcurl: bump version to 8.8.0).
+Buildroot commit 623d3bbe43e9193aa8e3395367d01af59071b859 disables
+engine support when BR2_PACKAGE_LIBOPENSSL_ENGINES is not set.
 
 Fixes:
-http://autobuild.buildroot.net/results/66ba878386e4e478645edb6a282e82820b8dad7f
-http://autobuild.buildroot.net/results/7a4d9595197cf23080a23dfe9bc0e60b8145af6e
-http://autobuild.buildroot.net/results/9add7283813388daa95b16ef76acb3c4e9ea7c2f
+http://autobuild.buildroot.net/results/7484edfa0b8c45bafb8da051ca839bf174c8f93f/
 
-[Peter: mention when this issue was introduced]
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-mbedtls-check-version-for-cipher-id.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ package/dovecot/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch b/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
-new file mode 100644
-index 0000000000..b7d674acfe
---- /dev/null
-+++ b/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
-@@ -0,0 +1,56 @@
-+From 0c4b4c1e93c8e869af230090f32346fdfd548f21 Mon Sep 17 00:00:00 2001
-+From: Stefan Eissing <stefan@eissing.org>
-+Date: Wed, 22 May 2024 14:44:56 +0200
-+Subject: [PATCH] mbedtls: check version for cipher id
-+
-+mbedtls_ssl_get_ciphersuite_id_from_ssl() seems to have been added in
-+mbedtls 3.2.0. Check for that version.
-+
-+Closes #13749
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+Upstream: https://github.com/curl/curl/commit/0c4b4c1e93c8e869af230090f32346fdfd548f21
-+---
-+ lib/vtls/mbedtls.c | 19 ++++++++++++-------
-+ 1 file changed, 12 insertions(+), 7 deletions(-)
-+
-+diff --git a/lib/vtls/mbedtls.c b/lib/vtls/mbedtls.c
-+index ec0b10dd9a9f..98a4ea01b183 100644
-+--- a/lib/vtls/mbedtls.c
-++++ b/lib/vtls/mbedtls.c
-+@@ -902,8 +902,6 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
-+     (struct mbed_ssl_backend_data *)connssl->backend;
-+   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
-+   const mbedtls_x509_crt *peercert;
-+-  char cipher_str[64];
-+-  uint16_t cipher_id;
-+ #ifndef CURL_DISABLE_PROXY
-+   const char * const pinnedpubkey = Curl_ssl_cf_is_proxy(cf)?
-+     data->set.str[STRING_SSL_PINNEDPUBLICKEY_PROXY]:
-+@@ -932,11 +930,18 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
-+     return CURLE_SSL_CONNECT_ERROR;
-+   }
-+ 
-+-  cipher_id = (uint16_t)
-+-              mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
-+-  mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
-+-  infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
-+-
-++#if MBEDTLS_VERSION_NUMBER >= 0x03020000
-++  {
-++    char cipher_str[64];
-++    uint16_t cipher_id;
-++    cipher_id = (uint16_t)
-++                mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
-++    mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
-++    infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
-++  }
-++#else
-++  infof(data, "mbedTLS: Handshake complete");
-++#endif
-+   ret = mbedtls_ssl_get_verify_result(&backend->ssl);
-+ 
-+   if(!conn_config->verifyhost)
-+-- 
-+2.43.0
-+
+diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
+index 034dcc175f..517040fad6 100644
+--- a/package/dovecot/Config.in
++++ b/package/dovecot/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_DOVECOT
+ 	bool "dovecot"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
