@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB309C2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 20:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B48F0C2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 20:51:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7ECCB817AB;
-	Tue,  9 Jul 2024 20:46:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35DAF81EB2;
+	Tue,  9 Jul 2024 20:51:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Tx8MxfZIYhh; Tue,  9 Jul 2024 20:46:52 +0000 (UTC)
+ id bxmAYjrLiCyl; Tue,  9 Jul 2024 20:51:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6854081EA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35FAF81EDB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6854081EA5;
-	Tue,  9 Jul 2024 20:46:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B819F1BF5DD
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 20:46:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35FAF81EDB;
+	Tue,  9 Jul 2024 20:51:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 493A41BF5DD
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 20:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0F2640445
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 20:46:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3580140BD3
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 20:51:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n7uEZw8RObwq for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 20:46:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SupVJCFKC69B for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 20:51:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7085340169
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7085340169
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 20:46:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CCEA182DE3; Tue,  9 Jul 2024 20:46:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 9 Jul 2024 22:39:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 54c82a237581dbed74aab2086381ae69b4626cc6
-X-Git-Newrev: fbd9a3f3114ef52d6ff9a14ec2648926909fd46e
-X-Patchwork-Hint: ignore
-Message-Id: <20240709204648.CCEA182DE3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/raspberrypi-usbboot: bump version
- to 20221215-105525
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 47B9F40BC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47B9F40BC3
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 47B9F40BC3
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 20:51:14 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F931FF802;
+ Tue,  9 Jul 2024 20:51:12 +0000 (UTC)
+Date: Tue, 9 Jul 2024 22:51:11 +0200
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Message-ID: <20240709225111.10f5f98b@windsurf>
+In-Reply-To: <20240426213551.1106068-1-fiona.klute@gmx.de>
+References: <20240426213551.1106068-1-fiona.klute@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720558272;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ebposi4TfPLOoGeaqtgJvIWiWT/kmD5GEnRTPnrJNg8=;
+ b=LBxIgOP5D8cz4rG0hQkbAgh/mjbfGt7exxX2cwB2YEtxDoZZKOXMigNhuCR49Jm8fhOYi7
+ /eqZ6Gydy0IB3Hq9T48PTWuLSptgq413TUqJ3/KVwTmJhCoEvje0tYKzN9rNAtj+zyGrxe
+ pvo03aEAefZ5SSy6jGvE9uXOgsfwGzCwWnQQRlrCqWb/6xNdn2nRhmyWaeXxITUhbJISV8
+ sg7i8kn4NIzTQj50qyx0dfkBQKIYaoVX9/1f3K/8MFy2TnKmnTbjRIhW+b6Vd7OC4W4BFG
+ CQnqFYkzCEAdYy62sUaYyhNEX1jri0rjQ//EKvVPVf+0G8mYwNW61rUaLKy/WQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LBxIgOP5
+Subject: Re: [Buildroot] [PATCH 1/1] package/raspberrypi-usbboot: bump
+ version to 20221215-105525
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,96 +83,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Fiona Klute <fiona.klute+wiwa@gmx.de>, fiona.klute@gmx.de
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbd9a3f3114ef52d6ff9a14ec2648926909fd46e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 26 Apr 2024 23:35:51 +0200
+Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
 
-The "msd" (mass storage device) firmware files in 2021.07.01 don't
-work with some newer CM4 based devices, the one I had issues with is a
-RevPi Connect 4. Updating fixes the issue. Mass storage device mode is
-required to flash the eMMC of CM4 devices.
+> From: Fiona Klute <fiona.klute+wiwa@gmx.de>
+> 
+> The "msd" (mass storage device) firmware files in 2021.07.01 don't
+> work with some newer CM4 based devices, the one I had issues with is a
+> RevPi Connect 4. Updating fixes the issue. Mass storage device mode is
+> required to flash the eMMC of CM4 devices.
+> 
+> Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+> ---
+>  ...001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch | 14 +++++++++-----
+>  .../raspberrypi-usbboot/raspberrypi-usbboot.hash   |  2 +-
+>  package/raspberrypi-usbboot/raspberrypi-usbboot.mk |  4 ++--
+>  3 files changed, 12 insertions(+), 8 deletions(-)
 
-Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch     | 16 ++++++++++------
- package/raspberrypi-usbboot/raspberrypi-usbboot.hash     |  2 +-
- package/raspberrypi-usbboot/raspberrypi-usbboot.mk       |  4 ++--
- 3 files changed, 13 insertions(+), 9 deletions(-)
+For some reason, your changes on the patch 0001 did not apply, so I
+fixed that up manually when applying. Patch is now applied. Thanks and
+sorry for the delay!
 
-diff --git a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-index d482b0b9d4..29a9311651 100644
---- a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-+++ b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-@@ -1,4 +1,4 @@
--From 38b730c00f45abf324caf687b5b00662ff4252c2 Mon Sep 17 00:00:00 2001
-+From acd175aa53af1f1b8422bf1f1fe57eafc710cdca Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Fri, 2 Dec 2016 23:09:44 +0100
- Subject: [PATCH] Makefile: allow passing CFLAGS/LDFLAGS
-@@ -10,21 +10,25 @@ Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [Rebased on 9324fd7]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+[Rebased on 20221215-105525-0-g1afa26c5]
-+Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
- ---
-  Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/Makefile b/Makefile
--index 822e714..875e717 100755
-+index dc78cfe..c9d4910 100755
- --- a/Makefile
- +++ b/Makefile
--@@ -1,5 +1,5 @@
-+@@ -1,7 +1,7 @@
-+ PKG_VER=$(shell grep rpiboot debian/changelog | head -n1 | sed 's/.*(\(.*\)).*/\1/g')
-+ GIT_VER=$(shell git rev-parse HEAD 2>/dev/null | cut -c1-8 || echo "")
-  rpiboot: main.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
---	$(CC) -Wall -Wextra -g -o $@ $< -lusb-1.0
--+	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ $< -lusb-1.0 $(LDFLAGS)
-+-	$(CC) -Wall -Wextra -g -o $@ $< `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\""
-++	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ $< `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" $(LDFLAGS)
-  
-  %.h: %.bin ./bin2c
-  	./bin2c $< $@
- -- 
--2.31.1
-+2.45.2
- 
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-index cedc5fb7e1..830ead8243 100644
---- a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  4565314b38e7c7505b7d32a3b51b49f79c7dd5767d45b86d38e5255ae7489a43  raspberrypi-usbboot-2021.07.01.tar.gz
-+sha256  2f02dbe9a88e9dfad5f05e513e1f30afd47b1575820f7c3b09665dfefc45bbaa  raspberrypi-usbboot-20221215-105525.tar.gz
- 
- # License files
- sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-index 2e4194da0b..24a1f6d906 100644
---- a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--RASPBERRYPI_USBBOOT_VERSION = 2021.07.01
-+RASPBERRYPI_USBBOOT_VERSION = 20221215-105525
- RASPBERRYPI_USBBOOT_SITE = \
--	$(call github,raspberrypi,usbboot,v$(RASPBERRYPI_USBBOOT_VERSION))
-+	$(call github,raspberrypi,usbboot,$(RASPBERRYPI_USBBOOT_VERSION))
- RASPBERRYPI_USBBOOT_LICENSE = Apache-2.0
- RASPBERRYPI_USBBOOT_LICENSE_FILES = LICENSE
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
