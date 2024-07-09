@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B014AC2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 05:47:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B23FFC2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 05:48:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C12860875;
-	Tue,  9 Jul 2024 05:47:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F07760ABA;
+	Tue,  9 Jul 2024 05:48:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rQ0Ci_BOlWd0; Tue,  9 Jul 2024 05:47:32 +0000 (UTC)
+ id 2AytBE55sBRu; Tue,  9 Jul 2024 05:48:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A4DF60A9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8473660A9A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A4DF60A9A;
-	Tue,  9 Jul 2024 05:47:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 046271BF97C
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 05:47:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8473660A9A;
+	Tue,  9 Jul 2024 05:48:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EBD51BF97C
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 05:48:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E43A281348
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 05:47:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5856160A9A
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 05:48:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rx1l313qvV8k for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 05:47:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ld-WFgKQzFgn for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 05:48:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BC63A8133E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC63A8133E
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BC63A8133E
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 05:47:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 18A77240002;
- Tue,  9 Jul 2024 05:47:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sR3hE-005EgF-35;
- Tue, 09 Jul 2024 07:47:24 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 690BD60875
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 690BD60875
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 05:48:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5417C84294; Tue,  9 Jul 2024 05:48:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-References: <89efe20c38632a2416a2fb25dbe8c2605fcdf680.1719584657.git.baruch@tkos.co.il>
-Date: Tue, 09 Jul 2024 07:47:24 +0200
-In-Reply-To: <89efe20c38632a2416a2fb25dbe8c2605fcdf680.1719584657.git.baruch@tkos.co.il>
- (Baruch Siach via buildroot's message of "Fri, 28 Jun 2024 17:24:17
- +0300")
-Message-ID: <87y16bktg3.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2] package/libcurl: fix build with mbedtls
+To: buildroot@buildroot.org
+Date: Tue, 9 Jul 2024 07:47:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 17f607e341216d38b6d79a580cf61815313ff238
+X-Git-Newrev: 3d46d9760b97f1782f0f1f617682c18864b5e2b2
+X-Patchwork-Hint: ignore
+Message-Id: <20240709054835.5417C84294@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/apr-util: needs engine support
+ when built with libopenssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,28 +59,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3d46d9760b97f1782f0f1f617682c18864b5e2b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add upstream patch to fix compatibility with mbedtls version 2.28.x.
- > Fixes:
- > http://autobuild.buildroot.net/results/66ba878386e4e478645edb6a282e82820b8dad7f
- > http://autobuild.buildroot.net/results/7a4d9595197cf23080a23dfe9bc0e60b8145af6e
- > http://autobuild.buildroot.net/results/9add7283813388daa95b16ef76acb3c4e9ea7c2f
+Buildroot commit 623d3bbe43e9193aa8e3395367d01af59071b859 disables
+engine support when BR2_PACKAGE_LIBOPENSSL_ENGINES is not set.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2: Correct authorship and sign-off email
+Fixes:
+http://autobuild.buildroot.net/results/e472618ca9ff4a3cf460f607a8dfa317832ca622/
 
-Committed after extending the commit message to make it clear that this
-is introduced by the curl 8.8.0 bump, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/apr-util/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
+index c1a967bdec..f7c119db48 100644
+--- a/package/apr-util/Config.in
++++ b/package/apr-util/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_APR_UTIL
+ 	depends on BR2_USE_MMU # apr
+ 	select BR2_PACKAGE_APR
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  The utility library for the apache runtime project
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
