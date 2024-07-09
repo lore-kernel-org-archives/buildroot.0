@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8B44C2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 21:50:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE12AC2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 21:50:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 768F8413AF;
-	Tue,  9 Jul 2024 21:50:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40A2940B43;
+	Tue,  9 Jul 2024 21:50:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id COwZiJV-9F8f; Tue,  9 Jul 2024 21:50:03 +0000 (UTC)
+ id 2Mys8nQGP2N7; Tue,  9 Jul 2024 21:50:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DFAB413BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B56ED41197
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DFAB413BD;
-	Tue,  9 Jul 2024 21:50:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B56ED41197;
+	Tue,  9 Jul 2024 21:50:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 17AF61BF41D
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:49:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1EBA71BF41D
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C8B49409E2
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE5E640B43
  for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:49:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HbSJY5J_CcKK for <buildroot@lists.busybox.net>;
+ id 0sav6EloE3NU for <buildroot@lists.busybox.net>;
  Tue,  9 Jul 2024 21:49:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B603A410D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C8D6409DD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B603A410D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C8D6409DD
  for <buildroot@buildroot.org>; Tue,  9 Jul 2024 21:49:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B22D9844F6; Tue,  9 Jul 2024 21:49:40 +0000 (UTC)
+ id 78DCE8448E; Tue,  9 Jul 2024 21:49:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 9 Jul 2024 23:40:29 +0200
+Date: Tue, 9 Jul 2024 23:40:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ed7165d9af1eb85106cbbad10eb37ebe71b8e407
-X-Git-Newrev: 4c0bdd73fdecdc84693231614a4b6251166f361c
+X-Git-Oldrev: 13bd56d5d4f4c565ab52ed4625aa9e4ed6c94118
+X-Git-Newrev: 85d92aeeedaf12666c0799dad34e69759b98ec25
 X-Patchwork-Hint: ignore
-Message-Id: <20240709214940.B22D9844F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-skin-confluence: bump version
+Message-Id: <20240709214940.78DCE8448E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: bump
+ version to 21.1.18-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,38 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c0bdd73fdecdc84693231614a4b6251166f361c
+commit: https://git.buildroot.net/buildroot/commit/?id=85d92aeeedaf12666c0799dad34e69759b98ec25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
- package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-index e8098abed4..482da25cf2 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index 9cea40965f..a9d27bd70d 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  99b243b7ccb9e0f3e1455e8967f99fd7d98d8924be0d9fe82de12448fe2ecc4e  kodi-skin-confluence-f8479bece875313049943fba834e551f6b7d2cf5.tar.gz
-+sha256  d66fe75a261c6c2b9ac2923dc51d469ccc1df45a2462188e6a024a87bbe27311  kodi-skin-confluence-7bd4a396c492adb2d424d7f51d415fb565cda358.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-index 68d25e184c..03aa4261cd 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+-sha256  b152c6f17291ede48850bf307e6d619ff803e1b26217ccec532d5c49a3ef7b84  kodi-peripheral-joystick-21.1.15-Omega.tar.gz
++sha256  226366b69536579d1adccb8548ba20c1b094876ce481bab81f744affa71bb305  kodi-peripheral-joystick-21.1.18-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index 34ea45855e..aceefba55a 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SKIN_CONFLUENCE_VERSION = f8479bece875313049943fba834e551f6b7d2cf5
-+KODI_SKIN_CONFLUENCE_VERSION = 7bd4a396c492adb2d424d7f51d415fb565cda358
- KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
- KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
- KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 21.1.15-Omega
++KODI_PERIPHERAL_JOYSTICK_VERSION = 21.1.18-Omega
+ KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
