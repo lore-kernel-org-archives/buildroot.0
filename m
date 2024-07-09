@@ -1,117 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5E8CC3DA41
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 14:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F9EEC2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 14:24:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F24F41328;
-	Tue,  9 Jul 2024 14:17:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C9D540EAE;
+	Tue,  9 Jul 2024 14:24:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TCIrMDQC6NTN; Tue,  9 Jul 2024 14:17:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tH9hOrxs10qW; Tue,  9 Jul 2024 14:24:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DF4F40270
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A763340EB7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DF4F40270;
-	Tue,  9 Jul 2024 14:17:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD5A11BF27A
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 14:17:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A763340EB7;
+	Tue,  9 Jul 2024 14:24:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CC5E1BF27A
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 14:24:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC36B41314
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 14:17:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5525440106
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 14:24:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PrAIwFz-XhQc for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 14:17:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
- helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rrlSbqNrXo7v for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 14:24:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.122;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7114E4132C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7114E4132C
-Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
- [67.231.144.184])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7114E4132C
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 14:17:03 +0000 (UTC)
-Received: from pps.filterd (m0346910.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 469BfYTi016341
- for <buildroot@buildroot.org>; Tue, 9 Jul 2024 14:17:02 GMT
-Received: from xusxph004rp050.rtx.com (xusxph004rp050.rtx.com [128.13.120.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 408pu0ekt9-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
- for <buildroot@buildroot.org>; Tue, 09 Jul 2024 14:17:02 +0000
-Received: from xusxph005rp020.corp.ray.com ([128.13.121.224])
- by xusxph004rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 469EH1vi020331
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
- for <buildroot@buildroot.org>; Tue, 9 Jul 2024 14:17:01 GMT
-Received: from dtulimr01.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph005rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 469EH0mT011457
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
- for <buildroot@buildroot.org>; Tue, 9 Jul 2024 14:17:00 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by dtulimr01.rockwellcollins.com (Postfix) with ESMTP id 4A8F120054B8;
- Tue,  9 Jul 2024 09:17:00 -0500 (CDT)
-Date: Tue, 09 Jul 2024 14:16:53 +0000
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9925640C1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9925640C1D
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.122])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9925640C1D
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 14:24:03 +0000 (UTC)
+Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 09 Jul 2024 16:24:00 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Jul 2024 16:24:00 +0200
+Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 9 Jul 2024 16:23:59 +0200
+Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
+ Tue, 09 Jul 2024 16:23:58 +0200
+X-IronPort-AV: E=Sophos;i="6.09,195,1716242400"; d="scan'208";a="167136811"
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+Date: Tue, 9 Jul 2024 16:23:58 +0200
+Message-ID: <cover.1720535037.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-Id: <20240709-support-b4-v1-1-ef971fe9a893@collins.com>
-X-B4-Tracking: v=1; b=H4sIAFRGjWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDMyMz3eLSgoL8ohLdJBNdE8MUM8Mki1STFDMDJaCGgqLUtMwKsGHRsbW
- 1AEhE4q1cAAAA
-To: buildroot@buildroot.org
-X-Mailer: b4 0.14.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-09_04,2024-07-09_01,2024-05-17_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-09_04,2024-07-09_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- bulkscore=0
- suspectscore=0 adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=911
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2406180000 definitions=main-2407090092
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=871
- adultscore=0
- bulkscore=0 mlxscore=0 spamscore=0 phishscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2406180000 definitions=main-2407090092
-X-Proofpoint-GUID: TURBewKI12K_BLd9dq8Uc1deWxtHU32Q
-X-Proofpoint-ORIG-GUID: TURBewKI12K_BLd9dq8Uc1deWxtHU32Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-09_04,2024-07-09_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0 phishscore=0
- bulkscore=0 mlxlogscore=972 mlxscore=0 clxscore=1015 priorityscore=1501
- impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2406180000 definitions=main-2407090092
+X-Patchwork-Hint: ignore
+X-Originating-IP: [10.115.27.53]
+X-ClientProxiedBy: OPE16NORMBX208.corporate.adroot.infra.ftgroup (10.115.27.9)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc :
- content-transfer-encoding : content-type : date : from : message-id :
- mime-version : subject : to; s=POD051818;
- bh=vo0Zw9NX9SEfQG+bwTlzxXhg7DL63ujBczQyNH/nQck=;
- b=UfLYQObHXu4RlfKD0NeGmGDOXA2uQMsHi8jQueeIpVT5Crekm+TVxu3DZ5BJWGrQ5xii
- 3as2PWO94OBmWvuTAZtOOdR+BpvFVcClQ8M+bnBwrSH1SRWdLBaW8BoepBv4ZSsnQrw2
- SPykBcP51Q6yNJb7e4Xce0351yPLJrpe8e/dheNLl1d2vzWHn9sfOY+2taLQXs+ttZDW
- PsJH5otIrHrocxytF1qp968yxcyYxpZ5CJcdEDbNM4klSA34/rCFPHGILyZyFqSQ4fmm
- yyriYxqZe5GNmSJU/I3JzqLjRKVx5aE+VTYfd5DzWejdoOS0oS543XaZagCC6Trnymuu 3g== 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1720535043; x=1752071043;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=AKTVvLSncI0UNQ9m6D2kZ98icSLeRoX1Cn/WCKwETNA=;
+ b=Our7+NiGLTWpYymhS9nXLtFHcsQNWmyz5jiEzxDbphl32AGU8163grd4
+ ESfN9jG0QaoB6LvwcQbl54FoTz3R2LFk58/mMQPJ5hs0Y1f3pIbUEt7zq
+ 83bOC4st7L8o/+p0oD+AOx8HZ8T4v6j2mDCHjh0DlPiNH0gEqMbkDVBU2
+ 1oH5aA8E2AB5WRK1YtHqDf8zezglxEJyvhukz6tasRj3NNzbAlbBh7KSs
+ q7DmoZVVJWRF4aMvnoMwo47HVaVOsDS1ru5UqElQw9pjbdgpKAaLBxAW1
+ pNOVOhDVMcChfDaYP1rOa8vZuUpSiyt3eeUrb0T9AGc//kyH4HiA5exks
+ g==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
- header.s=POD051818 header.b=UfLYQObH
-Subject: [Buildroot] [PATCH] .b4-config: configure `b4` for Buildroot
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=Our7+NiG
+Subject: [Buildroot] [PATCH 0/5] package/gpsd: make the package more modular
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -123,58 +93,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: Brandon Maier <brandon.maier@collins.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, "Yann E . MORIN" <yann.morin@orange.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-`b4` is a commandline tool to make patch-based development easier[1]. It
-is primarily used for Linux kernel development, but can be configured to
-support any project that has a public-inbox endpoint. Buildroot has a
-public-inbox mirror at "https://lore.kernel.org/buildroot/".
+From: "Yann E. MORIN" <yann.morin@orange.com>
 
-We configure some basic settings that tell `b4` where to send patches
-and how to use get-developers.
+Hello All!
 
-[1] https://b4.docs.kernel.org/en/latest/
+There are use-cases where a gpsd daemon is not needed, and just the
+"native" tools and the python helpers are used. There are also cases
+where tonly the python scripts are needed (e.g. one is useful to
+configure the u-blox devices).
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
----
-I am planning to send a future patch to hook `./utils/check-package`
-into `b4`. This reminds users to run check-package with `b4 prep
---check` before sending a patch series. But support for custom check
-commands is broken in the latest version of `b4` and I am waiting on a
-fix I submitted upstream[1].
+This series makes the package a little bit more modular to cover those
+cases.
 
-[1] https://lore.kernel.org/tools/20240626-b4-config-check-cmd-v1-1-83fc971196f9@collins.com/T/#u
----
- .b4-config | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/.b4-config b/.b4-config
-new file mode 100644
-index 0000000000..1943458f2f
---- /dev/null
-+++ b/.b4-config
-@@ -0,0 +1,7 @@
-+# Configuration for the `b4` tool
-+# See https://b4.docs.kernel.org/en/latest/config.html
-+[b4]
-+    send-series-to = buildroot@buildroot.org
-+    send-auto-cc-cmd = "./utils/get-developers -e -"
-+
-+# vim: set filetype=gitconfig:
+Regards,
+Yann E. MORIN.
 
----
-base-commit: 3ebc7c69d56430c34eba4c869d1d4fe4d1e8de55
-change-id: 20240626-support-b4-41d61b8e4d60
 
-Best regards,
+The following changes since commit 3ebc7c69d56430c34eba4c869d1d4fe4d1e8de55
+
+  support/testing: new rt-tests runtime test (2024-07-03 23:50:24 +0200)
+
+
+are available as patches in this mail series,
+
+for you to apply patches up to e6e9df5fad92d96444cebc9ebc8c137b83f929a6
+
+  package/gpsd: add option to enable/disable the daemon (2024-07-09 16:23:08 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/gpsd: condition python stuff to the proper kconfig option
+      package/gpsd: fix comment about wchar requirement
+      package/gpsd: move python option later
+      package/gpsd: add option to enable clients
+      package/gpsd: add option to enable/disable the daemon
+
+ package/gpsd/Config.in | 46 +++++++++++++++++++++++++--------
+ package/gpsd/gpsd.mk   | 70 +++++++++++++++++++++++++++++++-------------------
+ 2 files changed, 78 insertions(+), 38 deletions(-)
+
 -- 
-Brandon Maier <brandon.maier@collins.com>
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 
 _______________________________________________
 buildroot mailing list
