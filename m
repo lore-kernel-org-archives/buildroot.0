@@ -4,70 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 260EAC2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 12:51:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5E8CC3DA41
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 14:17:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C726D40D3F;
-	Tue,  9 Jul 2024 12:51:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F24F41328;
+	Tue,  9 Jul 2024 14:17:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6_Qzh5xvQ-gx; Tue,  9 Jul 2024 12:51:00 +0000 (UTC)
+ id TCIrMDQC6NTN; Tue,  9 Jul 2024 14:17:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7453F410AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DF4F40270
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7453F410AE;
-	Tue,  9 Jul 2024 12:51:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B9BEE1BF275
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 12:50:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DF4F40270;
+	Tue,  9 Jul 2024 14:17:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DD5A11BF27A
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 14:17:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4A1281CE7
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 12:50:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC36B41314
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 14:17:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GnW5gMdUuJch for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 12:50:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 731E381CC3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 731E381CC3
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 731E381CC3
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 12:50:57 +0000 (UTC)
-Received: from [192.168.178.36] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 6C7A72C800F1;
- Tue, 09 Jul 2024 14:50:54 +0200 (CEST)
-Message-ID: <d2f465a9-7954-4843-88a4-eedce65fffd1@bubu1.eu>
-Date: Tue, 9 Jul 2024 14:50:53 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PrAIwFz-XhQc for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 14:17:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7114E4132C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7114E4132C
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7114E4132C
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 14:17:03 +0000 (UTC)
+Received: from pps.filterd (m0346910.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 469BfYTi016341
+ for <buildroot@buildroot.org>; Tue, 9 Jul 2024 14:17:02 GMT
+Received: from xusxph004rp050.rtx.com (xusxph004rp050.rtx.com [128.13.120.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 408pu0ekt9-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Tue, 09 Jul 2024 14:17:02 +0000
+Received: from xusxph005rp020.corp.ray.com ([128.13.121.224])
+ by xusxph004rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 469EH1vi020331
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Tue, 9 Jul 2024 14:17:01 GMT
+Received: from dtulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph005rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 469EH0mT011457
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)
+ for <buildroot@buildroot.org>; Tue, 9 Jul 2024 14:17:00 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by dtulimr01.rockwellcollins.com (Postfix) with ESMTP id 4A8F120054B8;
+ Tue,  9 Jul 2024 09:17:00 -0500 (CDT)
+Date: Tue, 09 Jul 2024 14:16:53 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: yann.morin@orange.com, buildroot@buildroot.org
-References: <b80fa61d1f85e2e418afa9eb105a3aeddaa6d588.1720528385.git.yann.morin@orange.com>
-Content-Language: en-US
-In-Reply-To: <b80fa61d1f85e2e418afa9eb105a3aeddaa6d588.1720528385.git.yann.morin@orange.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1720529454; bh=wxsI/CaHR+x1fULx+ql544AgtMB5Ka9BEtEZEJm4hi8=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=qtVJ3HnAQMXFsTsvPQmXoDqlRAwPO1xI1EYJItc7em/7sgN1yDqU/nsQ7cs+SFVv8
- c0HCyUadN20tHV5AdrLEjb/9J9Wwr1gaamMz8sSMgxQHCg+TzNF1Ur2LHq6kOJ15kI
- O4j4y94pj7Q7GMDGNjDfkGV7AnFS5j2yexvx/U9hg9NaXwZ2SQRTc+VwukUl5Bxdkt
- kPKEKHln7El3XJU9PDjNlv9fJM69DlbXsKE/mYLVrG5sg5vwvgbAYaVUcUGcwiUQ6v
- l4yahw3Cxlm+xuuNp/G96MMg5Gn0q/sMbrz9OxGlrQgo3dW1tvPxKVub24jM3dWx2r
- cpYzZDpEs0JFg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Message-Id: <20240709-support-b4-v1-1-ef971fe9a893@collins.com>
+X-B4-Tracking: v=1; b=H4sIAFRGjWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDMyMz3eLSgoL8ohLdJBNdE8MUM8Mki1STFDMDJaCGgqLUtMwKsGHRsbW
+ 1AEhE4q1cAAAA
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-09_04,2024-07-09_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-09_04,2024-07-09_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ bulkscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=911
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2406180000 definitions=main-2407090092
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=871
+ adultscore=0
+ bulkscore=0 mlxscore=0 spamscore=0 phishscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2406180000 definitions=main-2407090092
+X-Proofpoint-GUID: TURBewKI12K_BLd9dq8Uc1deWxtHU32Q
+X-Proofpoint-ORIG-GUID: TURBewKI12K_BLd9dq8Uc1deWxtHU32Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-09_04,2024-07-09_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0 phishscore=0
+ bulkscore=0 mlxlogscore=972 mlxscore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2406180000 definitions=main-2407090092
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : message-id :
+ mime-version : subject : to; s=POD051818;
+ bh=vo0Zw9NX9SEfQG+bwTlzxXhg7DL63ujBczQyNH/nQck=;
+ b=UfLYQObHXu4RlfKD0NeGmGDOXA2uQMsHi8jQueeIpVT5Crekm+TVxu3DZ5BJWGrQ5xii
+ 3as2PWO94OBmWvuTAZtOOdR+BpvFVcClQ8M+bnBwrSH1SRWdLBaW8BoepBv4ZSsnQrw2
+ SPykBcP51Q6yNJb7e4Xce0351yPLJrpe8e/dheNLl1d2vzWHn9sfOY+2taLQXs+ttZDW
+ PsJH5otIrHrocxytF1qp968yxcyYxpZ5CJcdEDbNM4klSA34/rCFPHGILyZyFqSQ4fmm
+ yyriYxqZe5GNmSJU/I3JzqLjRKVx5aE+VTYfd5DzWejdoOS0oS543XaZagCC6Trnymuu 3g== 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=qtVJ3HnA
-Subject: Re: [Buildroot] [PATCH] package/python-paho-mqtt: bump version
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=UfLYQObH
+Subject: [Buildroot] [PATCH] .b4-config: configure `b4` for Buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,84 +123,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Davide Viti <zinosat@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Brandon Maier <brandon.maier@collins.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+`b4` is a commandline tool to make patch-based development easier[1]. It
+is primarily used for Linux kernel development, but can be configured to
+support any project that has a public-inbox endpoint. Buildroot has a
+public-inbox mirror at "https://lore.kernel.org/buildroot/".
 
-On 09.07.24 14:33, yann.morin@orange.com wrote:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> Version 2.1.0 is a major bump, with an API change that should be
-> backward compatible with version up to 1.6.1.
-> 
-> The runtime test failed in timeout because the crng init did not have
-> time to complete in the default 5-second timeout; tests showed that the
-> trip-off would be between 6s and 7s here, so increase it enough to leave
-> some margin on less-capable machines.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Asaf Kahlon <asafka7@gmail.com>
-> Cc: Davide Viti <zinosat@gmail.com>
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>	
+We configure some basic settings that tell `b4` where to send patches
+and how to use get-developers.
 
-Reviewed-by: Marcus Hoffmann <buildroot@bubu1.eu>
+[1] https://b4.docs.kernel.org/en/latest/
 
-> ---
->   package/python-paho-mqtt/python-paho-mqtt.hash         | 2 +-
->   package/python-paho-mqtt/python-paho-mqtt.mk           | 5 +++--
->   support/testing/tests/package/test_python_paho_mqtt.py | 3 ++-
->   3 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
-> index 81b9dda81d..5fe91c5c54 100644
-> --- a/package/python-paho-mqtt/python-paho-mqtt.hash
-> +++ b/package/python-paho-mqtt/python-paho-mqtt.hash
-> @@ -1,5 +1,5 @@
->   # locally computed
-> -sha256  6e35c1be242a901fc9c00bad7d37b5cc4a497f398dfceb4ed0d8018a959be650  python-paho-mqtt-1.6.1.tar.gz
-> +sha256  3602ce9d1ada58b063f2052ff013ff8cdd06d66cef918d5f6d048b6f68ccf049  python-paho-mqtt-2.1.0.tar.gz
->   sha256  66408b049249c3bdb0ba1ed285f5422ce67e371d40151bebd4d806af454ffe7c  LICENSE.txt
->   sha256  e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
->   sha256  8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c  epl-v20
-> diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
-> index f255a7847d..095d6e1f90 100644
-> --- a/package/python-paho-mqtt/python-paho-mqtt.mk
-> +++ b/package/python-paho-mqtt/python-paho-mqtt.mk
-> @@ -4,10 +4,11 @@
->   #
->   ################################################################################
->   
-> -PYTHON_PAHO_MQTT_VERSION = 1.6.1
-> +PYTHON_PAHO_MQTT_VERSION = 2.1.0
->   PYTHON_PAHO_MQTT_SITE = $(call github,eclipse,paho.mqtt.python,v$(PYTHON_PAHO_MQTT_VERSION))
->   PYTHON_PAHO_MQTT_LICENSE = EPL-2.0, EDLv1.0
->   PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
-> -PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
-> +PYTHON_PAHO_MQTT_SETUP_TYPE = pep517
-> +PYTHON_PAHO_MQTT_DEPENDENCIES = host-python-hatchling
->   
->   $(eval $(python-package))
-> diff --git a/support/testing/tests/package/test_python_paho_mqtt.py b/support/testing/tests/package/test_python_paho_mqtt.py
-> index 0fe7fa5904..217293e4ee 100644
-> --- a/support/testing/tests/package/test_python_paho_mqtt.py
-> +++ b/support/testing/tests/package/test_python_paho_mqtt.py
-> @@ -18,6 +18,7 @@ class TestPythonPahoMQTT(TestPythonPackageBase):
->           self.check_sample_scripts_exist()
->   
->           cmd = "%s %s" % (self.interpreter, os.path.basename(self.sample_scripts[0]))
-> -        output, exit_code = self.emulator.run(cmd)
-> +        # Increase timeout to let the crng init complete
-> +        output, exit_code = self.emulator.run(cmd, timeout=15)
->           self.assertEqual(exit_code, 0)
->           self.assertEqual(output[0], "Hello, World!")
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+---
+I am planning to send a future patch to hook `./utils/check-package`
+into `b4`. This reminds users to run check-package with `b4 prep
+--check` before sending a patch series. But support for custom check
+commands is broken in the latest version of `b4` and I am waiting on a
+fix I submitted upstream[1].
+
+[1] https://lore.kernel.org/tools/20240626-b4-config-check-cmd-v1-1-83fc971196f9@collins.com/T/#u
+---
+ .b4-config | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/.b4-config b/.b4-config
+new file mode 100644
+index 0000000000..1943458f2f
+--- /dev/null
++++ b/.b4-config
+@@ -0,0 +1,7 @@
++# Configuration for the `b4` tool
++# See https://b4.docs.kernel.org/en/latest/config.html
++[b4]
++    send-series-to = buildroot@buildroot.org
++    send-auto-cc-cmd = "./utils/get-developers -e -"
++
++# vim: set filetype=gitconfig:
+
+---
+base-commit: 3ebc7c69d56430c34eba4c869d1d4fe4d1e8de55
+change-id: 20240626-support-b4-41d61b8e4d60
+
+Best regards,
+-- 
+Brandon Maier <brandon.maier@collins.com>
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
