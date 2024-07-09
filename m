@@ -4,72 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B48F0C2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 20:51:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A16D8C2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 20:52:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35DAF81EB2;
-	Tue,  9 Jul 2024 20:51:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C7BF81EBD;
+	Tue,  9 Jul 2024 20:52:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bxmAYjrLiCyl; Tue,  9 Jul 2024 20:51:17 +0000 (UTC)
+ id 1pKrax1-JeLW; Tue,  9 Jul 2024 20:52:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35FAF81EDB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D18481EBE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35FAF81EDB;
-	Tue,  9 Jul 2024 20:51:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 493A41BF5DD
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 20:51:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D18481EBE;
+	Tue,  9 Jul 2024 20:52:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F081C1BF5DD
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 20:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3580140BD3
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 20:51:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DCB3181EBE
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 20:52:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SupVJCFKC69B for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 20:51:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JY_aBzFHC9AW for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 20:52:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
  helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 47B9F40BC3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47B9F40BC3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D0BC381EBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0BC381EBD
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 47B9F40BC3
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 20:51:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F931FF802;
- Tue,  9 Jul 2024 20:51:12 +0000 (UTC)
-Date: Tue, 9 Jul 2024 22:51:11 +0200
-To: Fiona Klute via buildroot <buildroot@buildroot.org>
-Message-ID: <20240709225111.10f5f98b@windsurf>
-In-Reply-To: <20240426213551.1106068-1-fiona.klute@gmx.de>
-References: <20240426213551.1106068-1-fiona.klute@gmx.de>
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D0BC381EBD
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 20:52:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 03838FF803;
+ Tue,  9 Jul 2024 20:52:34 +0000 (UTC)
+Date: Tue, 9 Jul 2024 22:52:33 +0200
+To: Athaariq Ardhiansyah <foss@athaariq.my.id>
+Message-ID: <20240709225233.7e44e407@windsurf>
+In-Reply-To: <20240603230940.51746-2-foss@athaariq.my.id>
+References: <ec99ecde-ff6e-40c6-9622-f4440462a026@gmx.de>
+ <20240603230940.51746-1-foss@athaariq.my.id>
+ <20240603230940.51746-2-foss@athaariq.my.id>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720558272;
+ d=bootlin.com; s=gm1; t=1720558355;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ebposi4TfPLOoGeaqtgJvIWiWT/kmD5GEnRTPnrJNg8=;
- b=LBxIgOP5D8cz4rG0hQkbAgh/mjbfGt7exxX2cwB2YEtxDoZZKOXMigNhuCR49Jm8fhOYi7
- /eqZ6Gydy0IB3Hq9T48PTWuLSptgq413TUqJ3/KVwTmJhCoEvje0tYKzN9rNAtj+zyGrxe
- pvo03aEAefZ5SSy6jGvE9uXOgsfwGzCwWnQQRlrCqWb/6xNdn2nRhmyWaeXxITUhbJISV8
- sg7i8kn4NIzTQj50qyx0dfkBQKIYaoVX9/1f3K/8MFy2TnKmnTbjRIhW+b6Vd7OC4W4BFG
- CQnqFYkzCEAdYy62sUaYyhNEX1jri0rjQ//EKvVPVf+0G8mYwNW61rUaLKy/WQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ivgiWrs2vQ8hptn70A/mYUm9ERsmclYeJqTdy+4qVGM=;
+ b=HJwVPj5/Yk4czbk2CsrQ/ax2cc/y0vmfFB/ceTw6fOL4EUZywU1pLgIwYBgPCWUVq39Ze3
+ FCglU/SKuDXc8vRnlwri1Ywlr+Ch9DgXIneR3+u8eg4ro6j70IzjWuT4++79v+fRfIFWcY
+ mS85hN7Uc+NoXF26jPYq43SNDEnZsv/6eqv4jz0fSsbEVQRMdNXPHziO8Djv98mrJxNHDo
+ sJLDcy8Kj8YoOlldbrkw5hQfhGlm/X6uRxF9j29rUTwyJVtWrVywdc7TtRtmgcwnm0IqcX
+ FioOiNzv2Q2BsADAqsymvgIOcQY7l4cqf3gAm3dClegvyRwBM8ykLoOhsGudhw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LBxIgOP5
-Subject: Re: [Buildroot] [PATCH 1/1] package/raspberrypi-usbboot: bump
- version to 20221215-105525
+ header.s=gm1 header.b=HJwVPj5/
+Subject: Re: [Buildroot] [PATCH v3 2/3] package/raspberrypi-usbboot: bump
+ version to master (commit 4a3d311)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,37 +85,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fiona Klute <fiona.klute+wiwa@gmx.de>, fiona.klute@gmx.de
+Cc: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 26 Apr 2024 23:35:51 +0200
-Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
+Hello Athaariq,
 
-> From: Fiona Klute <fiona.klute+wiwa@gmx.de>
-> 
-> The "msd" (mass storage device) firmware files in 2021.07.01 don't
-> work with some newer CM4 based devices, the one I had issues with is a
-> RevPi Connect 4. Updating fixes the issue. Mass storage device mode is
-> required to flash the eMMC of CM4 devices.
-> 
-> Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
-> ---
->  ...001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch | 14 +++++++++-----
->  .../raspberrypi-usbboot/raspberrypi-usbboot.hash   |  2 +-
->  package/raspberrypi-usbboot/raspberrypi-usbboot.mk |  4 ++--
->  3 files changed, 12 insertions(+), 8 deletions(-)
+On Tue,  4 Jun 2024 06:09:35 +0700
+Athaariq Ardhiansyah <foss@athaariq.my.id> wrote:
 
-For some reason, your changes on the patch 0001 did not apply, so I
-fixed that up manually when applying. Patch is now applied. Thanks and
-sorry for the delay!
+> Latest raspberrypi-usbboot package has Raspberry Pi 5 support. It is
+> considerably matured at commit 4a3d31171769f87d919340778e5aaeaba01e10b5.
+> 
+> Signed-off-by: Athaariq Ardhiansyah <foss@athaariq.my.id>
+
+I have for now applied the older patch from Fiona Klute. Please submit
+an updated patch if it still makes sense to update raspberry-usbboot
+even further.
+
+Thanks a lot!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
