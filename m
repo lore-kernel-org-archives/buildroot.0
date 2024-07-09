@@ -4,83 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BD35C3DA47
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 12:33:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85DE1C2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 12:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F892410CB;
-	Tue,  9 Jul 2024 12:33:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E43D9410E1;
+	Tue,  9 Jul 2024 12:36:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RZmVnFDTI6L1; Tue,  9 Jul 2024 12:33:14 +0000 (UTC)
+ id w0QPIHmQAKaQ; Tue,  9 Jul 2024 12:36:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF115411B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BBE3410E0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF115411B3;
-	Tue,  9 Jul 2024 12:33:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BBE3410E0;
+	Tue,  9 Jul 2024 12:36:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 99D071BF275
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 12:33:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D99C21BF275
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 12:36:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 93D7F81CA5
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 12:33:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D447581C93
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 12:36:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SgIxMae7eLhb for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 12:33:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
+ id 2-zKyOgkxd-b for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 12:36:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.122;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4DADC81CE1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DADC81CE1
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4DADC81CE1
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 12:33:09 +0000 (UTC)
-Received: from unknown (HELO opfedv3rlp0a.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4031D81C81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4031D81C81
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.122])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4031D81C81
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 12:36:32 +0000 (UTC)
+Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 09 Jul 2024 14:33:07 +0200
+ 09 Jul 2024 14:36:30 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0a.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Jul 2024 14:33:07 +0200
+ ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Jul 2024 14:36:30 +0200
 Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 9 Jul 2024 14:33:05 +0200
+ 15.1.2507.39; Tue, 9 Jul 2024 14:36:29 +0200
 Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Tue, 09 Jul 2024 14:33:05 +0200
-X-IronPort-AV: E=Sophos;i="6.09,194,1716242400"; d="scan'208";a="171183742"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Tue, 9 Jul 2024 14:33:05 +0200
-Message-ID: <b80fa61d1f85e2e418afa9eb105a3aeddaa6d588.1720528385.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+ Tue, 09 Jul 2024 14:36:28 +0200
+From: yann.morin@orange.com
+X-IronPort-AV: E=Sophos;i="6.09,195,1716242400"; d="scan'208";a="167073555"
+Date: Tue, 9 Jul 2024 14:36:28 +0200
+To: =?utf-8?Q?Fl=C3=A1vio_Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
+Message-ID: <Zo0uzK1YuSABRvVK@tl-lnx-nyma7486-2>
+References: <20240223201354.478070-1-flavio.tapajos@newtesc.com.br>
+ <20240223201354.478070-2-flavio.tapajos@newtesc.com.br>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240223201354.478070-2-flavio.tapajos@newtesc.com.br>
 X-Originating-IP: [10.115.26.53]
-X-ClientProxiedBy: OPE16NORMBX406.corporate.adroot.infra.ftgroup
- (10.115.27.15) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX208.corporate.adroot.infra.ftgroup (10.115.27.9)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1720528390; x=1752064390;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=4Ge/cnAAwdUbwqSyMUSmkWoXD1HOBHBb7roy43lzCXQ=;
- b=nBaWzwWc4xp7L+GmMz8kJ137aqedHccCf5IQ1Aaq8HSRZz9402QQbuIc
- 2rdnntFsA8I674+rKiWD9e7wKHD9qr+9/ylLze8lNdTHldVP0Bw9S+iQb
- Dt1ektMbDY/uBlKH5Tv1e/hxS9AErHsZM9QshiGxN39qOOOb2tcbRhegR
- xhsRp+/uCE10RjSHRHZ2cGxuEY98QSvwxIvztAwvpIFN8b3hUuiYJB2j2
- jEmxvz+cx32IPmECr2WlPx3uwYnzGtLWqZXEyNTil8WhuRCebYtN/b2Ok
- KNN72WnFmHLOO4ZRylmMfcru4Zntts/+HMF3umyqawTTA7z+TY/NhygwS
- Q==;
+ t=1720528593; x=1752064593;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=e+XVhW1Adrnt/fQpxHKg+noJb7EQaDESfe+XE8vrTAs=;
+ b=CPVntTDTlWATEA1JCKercBZWr0Kgxgd9jbq7j1uEQfuB6DkBURG9tj8z
+ vU2oTuxg5bHn7w9ad1WdtPMIHsQTgeKnJYqp7VS6v82qyzX2B5BnvBJEm
+ xHL0LemC8t4FRf6KtOPr11BD37F5k599+1lFFRqfRXE9oCqG/nPvOJcjC
+ HDjvW957s/c9HTHGU0csOywgJdvoW6OyUiq+hKb5+iEqJY7d/ZJccucvF
+ m/+Zhst4ALQ+WYBnCi9CusjmSB7Iglok+iIC+jGb/NFFyx02ADn73BgIq
+ EaZtwqzOvbA6iM0Q/pKn877O+OY2f/UAJq5uWpTEEy9RC4uKG3NdHrceF
+ A==;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=nBaWzwWc
-Subject: [Buildroot] [PATCH] package/python-paho-mqtt: bump version
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=CPVntTDT
+Subject: Re: [Buildroot] [PATCH 2/2] package/python-paho-mqtt: bump version
+ to 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,91 +96,62 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Davide Viti <zinosat@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- yann.morin@orange.com, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
-
-Version 2.1.0 is a major bump, with an API change that should be
-backward compatible with version up to 1.6.1.
-
-The runtime test failed in timeout because the crng init did not have
-time to complete in the default 5-second timeout; tests showed that the
-trip-off would be between 6s and 7s here, so increase it enough to leave
-some margin on less-capable machines.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Cc: Davide Viti <zinosat@gmail.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-paho-mqtt/python-paho-mqtt.hash         | 2 +-
- package/python-paho-mqtt/python-paho-mqtt.mk           | 5 +++--
- support/testing/tests/package/test_python_paho_mqtt.py | 3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
-index 81b9dda81d..5fe91c5c54 100644
---- a/package/python-paho-mqtt/python-paho-mqtt.hash
-+++ b/package/python-paho-mqtt/python-paho-mqtt.hash
-@@ -1,5 +1,5 @@
- # locally computed
--sha256  6e35c1be242a901fc9c00bad7d37b5cc4a497f398dfceb4ed0d8018a959be650  python-paho-mqtt-1.6.1.tar.gz
-+sha256  3602ce9d1ada58b063f2052ff013ff8cdd06d66cef918d5f6d048b6f68ccf049  python-paho-mqtt-2.1.0.tar.gz
- sha256  66408b049249c3bdb0ba1ed285f5422ce67e371d40151bebd4d806af454ffe7c  LICENSE.txt
- sha256  e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
- sha256  8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c  epl-v20
-diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
-index f255a7847d..095d6e1f90 100644
---- a/package/python-paho-mqtt/python-paho-mqtt.mk
-+++ b/package/python-paho-mqtt/python-paho-mqtt.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_PAHO_MQTT_VERSION = 1.6.1
-+PYTHON_PAHO_MQTT_VERSION = 2.1.0
- PYTHON_PAHO_MQTT_SITE = $(call github,eclipse,paho.mqtt.python,v$(PYTHON_PAHO_MQTT_VERSION))
- PYTHON_PAHO_MQTT_LICENSE = EPL-2.0, EDLv1.0
- PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
--PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
-+PYTHON_PAHO_MQTT_SETUP_TYPE = pep517
-+PYTHON_PAHO_MQTT_DEPENDENCIES = host-python-hatchling
- 
- $(eval $(python-package))
-diff --git a/support/testing/tests/package/test_python_paho_mqtt.py b/support/testing/tests/package/test_python_paho_mqtt.py
-index 0fe7fa5904..217293e4ee 100644
---- a/support/testing/tests/package/test_python_paho_mqtt.py
-+++ b/support/testing/tests/package/test_python_paho_mqtt.py
-@@ -18,6 +18,7 @@ class TestPythonPahoMQTT(TestPythonPackageBase):
-         self.check_sample_scripts_exist()
- 
-         cmd = "%s %s" % (self.interpreter, os.path.basename(self.sample_scripts[0]))
--        output, exit_code = self.emulator.run(cmd)
-+        # Increase timeout to let the crng init complete
-+        output, exit_code = self.emulator.run(cmd, timeout=15)
-         self.assertEqual(exit_code, 0)
-         self.assertEqual(output[0], "Hello, World!")
--- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RmzDoXZpbywgQWxsLAoKT24gMjAyNC0wMi0yMyAxNzoxMyAtMDMwMCwgRmzDoXZpbyBUYXBhasOz
+cyBzcGFrZSB0aHVzbHk6Cj4gU2lnbmVkLW9mZi1ieTogRmzDoXZpbyBUYXBhasOzcyA8Zmxhdmlv
+LnRhcGFqb3NAbmV3dGVzYy5jb20uYnI+Cj4gLS0tClstLVNOSVAtLV0KPiBkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9weXRob24tcGFoby1tcXR0L3B5dGhvbi1wYWhvLW1xdHQubWsgYi9wYWNrYWdlL3B5
+dGhvbi1wYWhvLW1xdHQvcHl0aG9uLXBhaG8tbXF0dC5tawo+IGluZGV4IGYyNTVhNzg0N2QuLmI5
+MTgwZTNiYTAgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9weXRob24tcGFoby1tcXR0L3B5dGhvbi1w
+YWhvLW1xdHQubWsKPiArKysgYi9wYWNrYWdlL3B5dGhvbi1wYWhvLW1xdHQvcHl0aG9uLXBhaG8t
+bXF0dC5tawo+IEBAIC00LDcgKzQsNyBAQAo+ICAjCj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+Cj4gIAo+IC1QWVRIT05fUEFIT19NUVRUX1ZFUlNJT04gPSAxLjYuMQo+ICtQWVRIT05fUEFIT19N
+UVRUX1ZFUlNJT04gPSAyLjAuMAoKVGhhbiBrIHlvdSBmb3IgdGhpcyBidW1wLiBZb3UgZm9yZ290
+IHRvIG1lbnRpb24gdGhhdCB2ZXJzaW9uIDIuMC4wIHdhcwphbiBBUEkgYnJlYWthZ2UsIHJlcXVp
+cmluZyBhbGwgdXNlcnMgdG8gZml4IHRoZWlyIGNvZGUuCgpVcHN0cmVhbSBoYXMgbm93IHJlbGVh
+c2VkIDIuMS4wLCB3aGljaCBtYWtlcyB0aGF0IGNoYW5nZSBiYWNrd2FyZApjb21wYXRpYmxlLgoK
+SSd2ZSBqc3V0IHNlbnQgYSBwYXRjaCB0byBidW1wIHRvIDIuMS4wIGluc3RlYWQ6CiAgICBodHRw
+czovL2xvcmUua2VybmVsLm9yZy9idWlsZHJvb3QvYjgwZmE2MWQxZjg1ZTJlNDE4YWZhOWViMTA1
+YTNhZWRkYWE2ZDU4OC4xNzIwNTI4Mzg1LmdpdC55YW5uLm1vcmluQG9yYW5nZS5jb20vVC8jdQoK
+UmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gIFBZVEhPTl9QQUhPX01RVFRfU0lURSA9ICQoY2Fs
+bCBnaXRodWIsZWNsaXBzZSxwYWhvLm1xdHQucHl0aG9uLHYkKFBZVEhPTl9QQUhPX01RVFRfVkVS
+U0lPTikpCj4gIFBZVEhPTl9QQUhPX01RVFRfTElDRU5TRSA9IEVQTC0yLjAsIEVETHYxLjAKPiAg
+UFlUSE9OX1BBSE9fTVFUVF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRS50eHQgZXBsLXYyMCBlZGwt
+djEwCj4gLS0gCj4gMi40My4yCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QKCi0tIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgX19f
+X19fX19fX19fCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLTogICAgICAg
+XyAgICA6LS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBF
+bWJlZGRlZCB8ICAgIF9fLyApICAgfCAvIlwgQVNDSUkgUklCQk9OIHwKfCAgICAgICAgICAgICAg
+ICAgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCAgXy8gLSAvJyAgIHwgXCAvIENBTVBBSUdOICAgICB8
+CnwgKzMzIDYzOC40MTEuMjQ1ICctLS0tLS0tLS0tLS0tLS0tLS0tLTogKF8gICAgYC0tLCB8ICBY
+ICBBR0FJTlNUICAgICAgfAp8IHlhbm4ubW9yaW4gKGF0KSBvcmFuZ2UuY29tICAgICAgICAgICB8
+Xz0iICAgICwtLScgfCAvIFwgSFRNTCBNQUlMICAgIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tOl9fX19fXy9fX19fXzotLS0tLS0tLS0tLS0tLS0tLS0nCgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCkNlIG1lc3NhZ2Ug
+ZXQgc2VzIHBpZWNlcyBqb2ludGVzIHBldXZlbnQgY29udGVuaXIgZGVzIGluZm9ybWF0aW9ucyBj
+b25maWRlbnRpZWxsZXMgb3UgcHJpdmlsZWdpZWVzIGV0IG5lIGRvaXZlbnQgZG9uYw0KcGFzIGV0
+cmUgZGlmZnVzZXMsIGV4cGxvaXRlcyBvdSBjb3BpZXMgc2FucyBhdXRvcmlzYXRpb24uIFNpIHZv
+dXMgYXZleiByZWN1IGNlIG1lc3NhZ2UgcGFyIGVycmV1ciwgdmV1aWxsZXogbGUgc2lnbmFsZXIN
+CmEgbCdleHBlZGl0ZXVyIGV0IGxlIGRldHJ1aXJlIGFpbnNpIHF1ZSBsZXMgcGllY2VzIGpvaW50
+ZXMuIExlcyBtZXNzYWdlcyBlbGVjdHJvbmlxdWVzIGV0YW50IHN1c2NlcHRpYmxlcyBkJ2FsdGVy
+YXRpb24sDQpPcmFuZ2UgZGVjbGluZSB0b3V0ZSByZXNwb25zYWJpbGl0ZSBzaSBjZSBtZXNzYWdl
+IGEgZXRlIGFsdGVyZSwgZGVmb3JtZSBvdSBmYWxzaWZpZS4gTWVyY2kuDQoNClRoaXMgbWVzc2Fn
+ZSBhbmQgaXRzIGF0dGFjaG1lbnRzIG1heSBjb250YWluIGNvbmZpZGVudGlhbCBvciBwcml2aWxl
+Z2VkIGluZm9ybWF0aW9uIHRoYXQgbWF5IGJlIHByb3RlY3RlZCBieSBsYXc7DQp0aGV5IHNob3Vs
+ZCBub3QgYmUgZGlzdHJpYnV0ZWQsIHVzZWQgb3IgY29waWVkIHdpdGhvdXQgYXV0aG9yaXNhdGlv
+bi4NCklmIHlvdSBoYXZlIHJlY2VpdmVkIHRoaXMgZW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3Rp
+ZnkgdGhlIHNlbmRlciBhbmQgZGVsZXRlIHRoaXMgbWVzc2FnZSBhbmQgaXRzIGF0dGFjaG1lbnRz
+Lg0KQXMgZW1haWxzIG1heSBiZSBhbHRlcmVkLCBPcmFuZ2UgaXMgbm90IGxpYWJsZSBmb3IgbWVz
+c2FnZXMgdGhhdCBoYXZlIGJlZW4gbW9kaWZpZWQsIGNoYW5nZWQgb3IgZmFsc2lmaWVkLg0KVGhh
+bmsgeW91LgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
