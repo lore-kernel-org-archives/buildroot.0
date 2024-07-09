@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C8EDC2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 21:32:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 353DEC2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 21:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2278F410D5;
-	Tue,  9 Jul 2024 21:32:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEC8E40253;
+	Tue,  9 Jul 2024 21:33:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3VGuGbagndBE; Tue,  9 Jul 2024 21:32:53 +0000 (UTC)
+ id f0wbDVuv0OKI; Tue,  9 Jul 2024 21:33:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D26A6410DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAD7240259
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D26A6410DB;
-	Tue,  9 Jul 2024 21:32:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAD7240259;
+	Tue,  9 Jul 2024 21:33:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5916C1BF41D
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:32:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2770E1BF41D
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 456A0404BC
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:32:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2166D404BC
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 21:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PN06OlIGSvRM for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 21:32:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id QKa6Hk-rf3ox for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 21:33:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B32104042E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B32104042E
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B32104042E
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 21:32:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C92C360006;
- Tue,  9 Jul 2024 21:32:47 +0000 (UTC)
-Date: Tue, 9 Jul 2024 23:32:46 +0200
-To: Yang Li <yang.li@amlogic.com>
-Message-ID: <20240709233246.4026b6f8@windsurf>
-In-Reply-To: <20240702121745.3445375-1-yang.li@amlogic.com>
-References: <20240702121745.3445375-1-yang.li@amlogic.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720560768;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=GwRhlsK25Yb+0nLQ8GT4KkAJyRXqa3mLQAMkX4oMsNo=;
- b=icyppau1XIHpNxw60jRxfmpMfa0s4+m5TO7W7NgcNpTSAPtV7HVTcKSwOqHofnU1Rol9uA
- kwul2wSjG6hPB18dXUx03rbB/f0DVdd+B69Ce+ktAeVzaxe9+kmopRx641mrfKsPktUCMA
- ov6IcDOdZlGeQ1XOm2QAuZNGLnLpEXV9XabDXG2nc6Bo26GMSqwJn/Qa3PRDrr7a+uajwx
- /LU7Ae0gPFnhp7l2vTYME3ztjFXVER2+eFucap++1AzDv0MVzJZSCTBxIXHlwZbwlH9hds
- BwnQOuDWLgc+uZMwy447iK7trtcw/10Uw93N51sS1168+Nj1ceynBTexMHzKyQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=icyppau1
-Subject: Re: [Buildroot] [PATCH] package/linux-firmware: change Amlogic
- Bluetooth binary path
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B8644042E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B8644042E
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 21:33:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1CAD88445C; Tue,  9 Jul 2024 21:33:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 9 Jul 2024 23:33:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 179dd69969a496eec11b31fa2b69398034ca5fc1
+X-Git-Newrev: daa5d775d729efd529ff7ff8c58c0380018f1e42
+X-Patchwork-Hint: ignore
+Message-Id: <20240709213341.1CAD88445C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xfsprogs: update Kconfig package
+ homepage URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,54 +60,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: bernd@kuhls.net, yann.morin.1998@free.fr, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yang,
+commit: https://git.buildroot.net/buildroot/commit/?id=daa5d775d729efd529ff7ff8c58c0380018f1e42
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your patch, which I have applied, after doing some changes,
-see below.
+The old xfs homepage URL [1] seems defunct at the time of this commit.
+The http URL redirects to https, the certificate expired on
+2024-01-26. If the certificate expiration date is ignored, the site
+shows a "502 Bad Gateway" error.
 
-On Tue, 2 Jul 2024 20:17:37 +0800
-Yang Li <yang.li@amlogic.com> wrote:
+The package README [2] advertise the homepage as [3].
 
-> remove bluetooth subdirectory, and use generic pattern aml_*
-> to install all bluetooth binary.
+This commit updates the URL to the new one.
 
-This commit log was not sufficient. It does not explain since when the
-bluetooth/ directory has been removed. This information is absolutely
-*critical* as it allows us to figure out whether this fix needs to be
-backported or not to previous version of Buildroot. Therefore, I have
-changed the commit log to:
+[1] http://xfs.org
+[2] https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/README?h=v6.4.0#n12
+[3] https://xfs.wiki.kernel.org
 
-    package/linux-firmware: change Amlogic Bluetooth binary path
-    
-    Since upstream commit 7d931f8afa51d83e9eaee3a3f449bc2f86a5edf3, which
-    first appeared in linux-firmware 20240709, the amlogic bluetooth
-    firmware files have been moved from amlogic/bluetooth/ to directly
-    amlogic/.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xfsprogs/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  # Amlogic SoC Bluetooth
->  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AMLOGIC),y)
-> -LINUX_FIRMWARE_FILES += amlogic/bluetooth/*.bin
-> +LINUX_FIRMWARE_FILES += amlogic/aml_*
-
-The change from *.bin to aml_* looked unnecessary. As far as I can see,
-all files still have a .bin extension, so this change looked
-gratuitous, and was not explained in the commit log. So I kept the
-*.bin for now. If needed a future commit can be made, with a proper
-explanation as to why aml_* is a better wildcard.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+index d14c3d4698..1a29579d8b 100644
+--- a/package/xfsprogs/Config.in
++++ b/package/xfsprogs/Config.in
+@@ -18,4 +18,4 @@ config BR2_PACKAGE_XFSPROGS
+ 	help
+ 	  The XFS file system utilities and libraries
+ 
+-	  http://xfs.org
++	  https://xfs.wiki.kernel.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
