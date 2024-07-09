@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C54FAC2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 16:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16F71C2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 16:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67CE040D67;
-	Tue,  9 Jul 2024 16:50:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D068C412FD;
+	Tue,  9 Jul 2024 16:52:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5WQr1TtCkk7i; Tue,  9 Jul 2024 16:50:57 +0000 (UTC)
+ id G3vcJTMS3Klh; Tue,  9 Jul 2024 16:52:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 016C6412F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B55441301
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 016C6412F0;
-	Tue,  9 Jul 2024 16:50:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 347621BF97E
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 16:50:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B55441301;
+	Tue,  9 Jul 2024 16:52:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 402F41BF348
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 16:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E63740238
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 16:50:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 394DD41301
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 16:51:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JXIQm-QTUQDw for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 16:50:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w3rw-qZxuCty for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 16:51:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC59640223
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32F8B412FD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC59640223
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 16:50:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 32F8B412FD
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 16:51:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E1DE4842A5; Tue,  9 Jul 2024 16:50:45 +0000 (UTC)
+ id 212148434C; Tue,  9 Jul 2024 16:51:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 9 Jul 2024 18:49:12 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 30252c3e0a00fae990624630e70591a5346bc3e9
-X-Git-Newrev: e7f124e9b632837c9f142831e881abd6795286a8
+Date: Tue, 9 Jul 2024 18:47:42 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: d9b97b2552ae895d4d9c15c5fa1eb93d1b2b481f
+X-Git-Newrev: ecc0c1fb1244971b2dad96ef2ef886daa80c72fd
 X-Patchwork-Hint: ignore
-Message-Id: <20240709165045.E1DE4842A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/openssh: disable
+Message-Id: <20240709165157.212148434C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/openssh: disable
  async-signal-unsafe code in sshsigdie()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7f124e9b632837c9f142831e881abd6795286a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ecc0c1fb1244971b2dad96ef2ef886daa80c72fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Import Debian patch[1] for CVE-2024-6387[2].  This disables the unsafe
 syslog code path triggered by SIGALARM.
