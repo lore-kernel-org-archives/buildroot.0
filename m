@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22CB0C2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 09:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C05BC2BD09
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 09:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D5F0640C3F;
-	Tue,  9 Jul 2024 09:49:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D883440BE7;
+	Tue,  9 Jul 2024 09:50:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z78UiRF-ocDf; Tue,  9 Jul 2024 09:49:21 +0000 (UTC)
+ id GPXIy2yXraqX; Tue,  9 Jul 2024 09:50:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E0BA4029E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D1C7402E1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E0BA4029E;
-	Tue,  9 Jul 2024 09:49:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8823E1BF29A
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 09:49:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D1C7402E1;
+	Tue,  9 Jul 2024 09:50:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A0631BF29A
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 09:50:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 813AF80D27
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 09:49:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 069CD40BE3
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 09:50:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aPGlb5pp2zn4 for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 09:49:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id owE0RR9p7ka0 for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 09:50:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5DE8F80BC8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DE8F80BC8
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5DE8F80BC8
- for <buildroot@busybox.net>; Tue,  9 Jul 2024 09:49:19 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::222])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 82E5DC1335
- for <buildroot@busybox.net>; Tue,  9 Jul 2024 09:49:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A2E840009;
- Tue,  9 Jul 2024 09:49:10 +0000 (UTC)
-Date: Tue, 9 Jul 2024 11:49:09 +0200
-To: Francois Perrad <francois.perrad@gadz.org>
-Message-ID: <20240709114909.29d15107@windsurf>
-In-Reply-To: <20240630135128.2222416-1-francois.perrad@gadz.org>
-References: <20240630135128.2222416-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720518550;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=w5i9RovbMvFTFxUkv84l7Sp6w+8boRhk1tDLzZcxEZ8=;
- b=a2E2M9pLomNxIwkM8JoPzqJc49IrGPU+6ok7BZ8CnSx9INGhzWlh4iK8mqiUNTpJ7dd+m4
- s0iTImb1dLG4sdYPcANbSnw5ShbUCLvvqzK0pdK6Y8tVvN7phhEvmf9ccXAgLmmxpg/eAM
- bifw2VczjFrRAv9SOTe+U4tj6q77qaajD7EpjypoTpXfeowZ36PN7UVl9Sf3mLZmd+NTR9
- NjGmbfeTeL8W+7A6onphFmBwtOl2tcsbIadcVY71bVxd9xSp3rtSiXVMBnGNraD1H6KRSc
- IUDGZs89h5MMxpsXVqTw0EICzOM73GFhqVzoOvVvKIYr/WgdEJ4XMPbuDgQBGw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=a2E2M9pL
-Subject: Re: [Buildroot] [PATCH] package/lua: bump to version 5.4.7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 088DA405C8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 088DA405C8
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 09:50:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F14B181882; Tue,  9 Jul 2024 09:49:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 9 Jul 2024 11:47:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6b86f076c3fb3683dd9ac0a75457176b1e7c9d5d
+X-Git-Newrev: 91952568b0b1b3477ae573f8e3277d625965b923
+X-Patchwork-Hint: ignore
+Message-Id: <20240709094959.F14B181882@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-dkjson: bump to 2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,48 +59,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRnJhbsOnb2lzLAoKT24gU3VuLCAzMCBKdW4gMjAyNCAxNTo1MToyOCArMDIwMApGcmFu
-Y29pcyBQZXJyYWQgPGZyYW5jb2lzLnBlcnJhZEBnYWR6Lm9yZz4gd3JvdGU6Cgo+IFNpZ25lZC1v
-ZmYtYnk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNvaXMucGVycmFkQGdhZHoub3JnPgo+IC0tLQo+
-ICBwYWNrYWdlL2x1YS81LjQuNi9sdWEuaGFzaCAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICB8IDUgLS0tLS0KPiAgcGFja2FnZS9sdWEvezUuNC42ID0+IDUuNC43fS8wMDAxLXJvb3Qt
-cGF0aC5wYXRjaCAgICAgICAgICAgfCAwCj4gIHBhY2thZ2UvbHVhL3s1LjQuNiA9PiA1LjQuN30v
-MDAwMi1zaGFyZWQtbGlicy1mb3ItbHVhLnBhdGNoIHwgMAo+ICBwYWNrYWdlL2x1YS97NS40LjYg
-PT4gNS40Ljd9LzAwMTEtbGluZW5vaXNlLnBhdGNoICAgICAgICAgICB8IDIgKy0KPiAgcGFja2Fn
-ZS9sdWEvNS40LjcvbHVhLmhhc2ggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCA1
-ICsrKysrCj4gIHBhY2thZ2UvbHVhL2x1YS5tayAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHwgMiArLQo+ICA2IGZpbGVzIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwg
-NyBkZWxldGlvbnMoLSkKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbHVhLzUuNC42L2x1
-YS5oYXNoCj4gIHJlbmFtZSBwYWNrYWdlL2x1YS97NS40LjYgPT4gNS40Ljd9LzAwMDEtcm9vdC1w
-YXRoLnBhdGNoICgxMDAlKQo+ICByZW5hbWUgcGFja2FnZS9sdWEvezUuNC42ID0+IDUuNC43fS8w
-MDAyLXNoYXJlZC1saWJzLWZvci1sdWEucGF0Y2ggKDEwMCUpCj4gIHJlbmFtZSBwYWNrYWdlL2x1
-YS97NS40LjYgPT4gNS40Ljd9LzAwMTEtbGluZW5vaXNlLnBhdGNoICg5NyUpCj4gIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBwYWNrYWdlL2x1YS81LjQuNy9sdWEuaGFzaAoKVGhpcyBwYXRjaCBjYXVzZXMg
-dGhlIGZvbGxvd2luZyBjaGVjay1wYWNrYWdlIHdhcm5pbmdzOgoKV0FSTklORzogcGFja2FnZS9s
-dWEvNS40LjcvMDAwMS1yb290LXBhdGgucGF0Y2g6MDogbWlzc2luZyBVcHN0cmVhbSBpbiB0aGUg
-aGVhZGVyIChodHRwczovL25pZ2h0bHkuYnVpbGRyb290Lm9yZy8jX2FkZGl0aW9uYWxfcGF0Y2hf
-ZG9jdW1lbnRhdGlvbikKV0FSTklORzogcGFja2FnZS9sdWEvNS40LjcvMDAwMi1zaGFyZWQtbGli
-cy1mb3ItbHVhLnBhdGNoOjA6IG1pc3NpbmcgVXBzdHJlYW0gaW4gdGhlIGhlYWRlciAoaHR0cHM6
-Ly9uaWdodGx5LmJ1aWxkcm9vdC5vcmcvI19hZGRpdGlvbmFsX3BhdGNoX2RvY3VtZW50YXRpb24p
-CldBUk5JTkc6IHBhY2thZ2UvbHVhLzUuNC43LzAwMTEtbGluZW5vaXNlLnBhdGNoOjA6IG1pc3Np
-bmcgVXBzdHJlYW0gaW4gdGhlIGhlYWRlciAoaHR0cHM6Ly9uaWdodGx5LmJ1aWxkcm9vdC5vcmcv
-I19hZGRpdGlvbmFsX3BhdGNoX2RvY3VtZW50YXRpb24pCldBUk5JTkc6IC5jaGVja3BhY2thZ2Vp
-Z25vcmU6OTMxOiBpZ25vcmVkIGZpbGUgcGFja2FnZS9sdWEvNS40LjYvMDAwMS1yb290LXBhdGgu
-cGF0Y2ggaXMgbWlzc2luZwpXQVJOSU5HOiAuY2hlY2twYWNrYWdlaWdub3JlOjkzMjogaWdub3Jl
-ZCBmaWxlIHBhY2thZ2UvbHVhLzUuNC42LzAwMDItc2hhcmVkLWxpYnMtZm9yLWx1YS5wYXRjaCBp
-cyBtaXNzaW5nCldBUk5JTkc6IC5jaGVja3BhY2thZ2VpZ25vcmU6OTMzOiBpZ25vcmVkIGZpbGUg
-cGFja2FnZS9sdWEvNS40LjYvMDAxMS1saW5lbm9pc2UucGF0Y2ggaXMgbWlzc2luZwoKUmF0aGVy
-IHRoYW4gY29udGludWluZyB0byBpZ25vcmUgdGhvc2UgbWlzc2luZyBVcHN0cmVhbTogdGFncyBp
-biB0aGUKcGF0Y2hlcywgY291bGQgd2UgdGFrZSB0aGUgb3Bwb3J0dW5pdHkgb2YgdGhpcyB2ZXJz
-aW9uIGJ1bXAgdG8gYWRkIHRoZQpyZWxldmFudCBVcHN0cmVhbTogdGFncz8KClRoYW5rcyBhIGxv
-dCEKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExp
-bnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=91952568b0b1b3477ae573f8e3277d625965b923
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lua-dkjson/Config.in       | 2 +-
+ package/lua-dkjson/lua-dkjson.hash | 4 ++--
+ package/lua-dkjson/lua-dkjson.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/lua-dkjson/Config.in b/package/lua-dkjson/Config.in
+index 9c5dff1928..e550fdfb85 100644
+--- a/package/lua-dkjson/Config.in
++++ b/package/lua-dkjson/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_LUA_DKJSON
+ 	  dkjson is written in Lua without any dependencies, but
+ 	  when LPeg is available dkjson can use it to speed up decoding.
+ 
+-	  http://dkolf.de/src/dkjson-lua.fsl/
++	  http://dkolf.de/dkjson-lua/
+diff --git a/package/lua-dkjson/lua-dkjson.hash b/package/lua-dkjson/lua-dkjson.hash
+index 2f210e497d..710879da0b 100644
+--- a/package/lua-dkjson/lua-dkjson.hash
++++ b/package/lua-dkjson/lua-dkjson.hash
+@@ -1,5 +1,5 @@
+ # computed by luarocks/buildroot
+-sha256  f6101a0e77ca857ec20799f6b998a600b04c8dd09b27c445ea09f29695bfffb0  dkjson-2.7-1.src.rock
++sha256  3d8de09cd43a60a005ac769ee1cedc515952c892d63cba9ac925ed02afc98091  dkjson-2.8-1.src.rock
+ 
+ # locally computed
+-sha256  9d46e06db7feb8fd68f73bd024c8a2c04807629e16f396880860d151b60a3ed1  dkjson-2.7/readme.txt
++sha256  9c60064047b0f41092ee714d205b4b915f1da147fdf9afc4b3ee7bcf028a2238  dkjson-2.8/readme.txt
+diff --git a/package/lua-dkjson/lua-dkjson.mk b/package/lua-dkjson/lua-dkjson.mk
+index 2b110f8f1e..a148fea86b 100644
+--- a/package/lua-dkjson/lua-dkjson.mk
++++ b/package/lua-dkjson/lua-dkjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_DKJSON_VERSION = 2.7-1
++LUA_DKJSON_VERSION = 2.8-1
+ LUA_DKJSON_NAME_UPSTREAM = dkjson
+ LUA_DKJSON_LICENSE = MIT
+ LUA_DKJSON_LICENSE_FILES = $(LUA_DKJSON_SUBDIR)/readme.txt
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
