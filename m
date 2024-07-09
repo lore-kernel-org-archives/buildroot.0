@@ -4,134 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9305C2BD09
-	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 11:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 744ABC3DA41
+	for <buildroot@archiver.kernel.org>; Tue,  9 Jul 2024 11:45:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78F6181A24;
-	Tue,  9 Jul 2024 11:32:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2949680EBB;
+	Tue,  9 Jul 2024 11:45:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Raj5lLxILCSw; Tue,  9 Jul 2024 11:32:08 +0000 (UTC)
+ id VHy7sk_rVkwW; Tue,  9 Jul 2024 11:44:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D3CE81A29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D36081A23
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D3CE81A29;
-	Tue,  9 Jul 2024 11:32:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D36081A23;
+	Tue,  9 Jul 2024 11:44:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4DA161BF59A
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 11:32:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 732A21BF59A
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 11:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38C2F40494
- for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 11:32:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B0DD4027C
+ for <buildroot@lists.busybox.net>; Tue,  9 Jul 2024 11:44:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PEp7-my_5iQw for <buildroot@lists.busybox.net>;
- Tue,  9 Jul 2024 11:32:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9A5EB404A8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A5EB404A8
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9A5EB404A8
- for <buildroot@buildroot.org>; Tue,  9 Jul 2024 11:32:04 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.127.252]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MsHnm-1s85l41eby-012Z93; Tue, 09
- Jul 2024 13:32:00 +0200
-Message-ID: <f93e8075-a773-4d47-b6fe-04bb714b06db@gmx.de>
-Date: Tue, 9 Jul 2024 13:31:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id rNqX1DU0Tlke for <buildroot@lists.busybox.net>;
+ Tue,  9 Jul 2024 11:44:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E8978401FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8978401FB
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E8978401FB
+ for <buildroot@buildroot.org>; Tue,  9 Jul 2024 11:44:56 +0000 (UTC)
+Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 09 Jul 2024 13:44:54 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Jul 2024 13:44:54 +0200
+Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 9 Jul 2024 13:44:52 +0200
+Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
+ Tue, 09 Jul 2024 13:44:51 +0200
+From: yann.morin@orange.com
+X-IronPort-AV: E=Sophos;i="6.09,194,1716242400"; d="scan'208";a="167284415"
+Date: Tue, 9 Jul 2024 13:44:51 +0200
+To: Fiona Klute <fiona.klute@gmx.de>
+Message-ID: <Zo0is1FyTmzcIPbi@tl-lnx-nyma7486-2>
 References: <20240704101631.1860647-1-fiona.klute@gmx.de>
  <20240708235339.5dbf3da4@windsurf>
  <42d13dfb-0ac3-4939-b50b-a4187df30e89@gmx.de>
  <20240709120659.60e32214@windsurf>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <20240709120659.60e32214@windsurf>
-X-Provags-ID: V03:K1:YLepnk1sO3UbqDNvdKZm/nqiCvEtSOTP52xepcmEABNUN1usJ8R
- 6+kILKfMs/f9/kElaVQaK1rhkfBGJiQENHPMqB6zXuaRIWbSnE3gmlDECIHS06oUKlPBIwc
- DufpPTLt0EpSGKaJECFL2yt5LDZZpmw2IH/RapRCev7efXmqlJw7RTIbMD5z04CqnyaZRYB
- mYDt4NV1I2iPlxZakqdwg==
-UI-OutboundReport: notjunk:1;M01:P0:MICe66jwRk4=;SMvLjZ1fukq9m0skvI1w7G1p65K
- 2FYxlYUW3B9eU8RCcAH7sA9f+V2WjNI9G53WdNw8F2KSlj48TlbOUwPC2W9t8rZzEJiijZbUa
- +XZjoxqz7RThiVnAulzRpVpYu7NmCjZn8ZP6GcbVaoQaovhZkj51XqJsR+C+bXhl3Y5xUL0Dl
- c2opaB2m9d0ZEXm+3edAV8+VCYjyOZA/nMPaFIsnKl8NMbNjZkoI5XMMRiHdumj6KsbjuK1Jd
- rPLe3CZ/UMKFDpKbeIIIAxbQX/9rzsoKzOxltFvPo0j/VOFLCAdooEFFOjwMNUYJm22SrYWZF
- /x4znq/ui5A6SQTD/gEuWyq7E8XPk7z8VvHGwTq0UBt+5gW3oupcn2QcLB1Z5iBNBF9ie6XeK
- Bo36tVf+2pLl1BZvor/ao/+fj8kEoy9FZj5cdkrzQ33jzNaO6CtIxFjKm2h36VNKteRlmJS6L
- 6hqv5yiH4dithnqIopd8AcYwJ9rvTmu0XviiEUPV5/VSSS+PhwuhDGm80PPtadtuf8BRHeSiR
- eybpVvHwEezt1KR4lDTHLRj0WGg1U+PNS2MGpQKX8bIDT4hjxMSUMSp5MN1vBvut6bYNvFK71
- 4N59nT0tpGcit5jBt4Jl1rEEOVzy1asvzloIhay2EeDxOXBBXW7KV6ElIAl4j/DGZLytAKEMm
- 0OcnXjlfJInPWJW1Uddxk1CTCF1fH4syd2D9BCb8SNsnMP3REmtE0cadHoLMif2e5DcuOSdI7
- MvlNKItdK9tCcdp56ZKuFtlPsrzlRmUmu0rfzFuhwP8zxPDfEBeU9pVDrxnv9AOLibSMIxA0k
- u2GRUx93tav6uOOfoMM+SLtkdDppFWR1fDHTGwvbxTO8E=
+ <f93e8075-a773-4d47-b6fe-04bb714b06db@gmx.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <f93e8075-a773-4d47-b6fe-04bb714b06db@gmx.de>
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX303.corporate.adroot.infra.ftgroup
+ (10.115.26.12) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1720524720; x=1721129520; i=fiona.klute@gmx.de;
- bh=d2Du/rBfEFKCQvPscEXMCOiCPGaZg3e8QFspyoK+x2c=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=Fj80ecPRRTCEiuq296/ZBj1BGWMzw9ZLyd4x+vUWdjHLOZBZ6PkbtvJXMe/xxOkr
- bZVGw55Jm01QIqTpH8lAHdMjydEPzMSwqAQWTAt+gX1M3JvvOHevyCHV7bPWqmFG3
- CnHPX/I5BPspua8RCW97VtepaXgqNxm17D1RF7A10gmmABsWi0yKEJrN0p4PoefPM
- QrYhsqBfsS5R3RO1Jpm3q3SsAHorQVFLLl0XtZcNcw2ZYFQ/2B+NqP38LlNrhwQZ9
- z1PAib0HrXPxUfdVBUZoiTp3iYrM4qdlmtlvoGp+dgZiFhLvM+Wi0LKLCsH8VutpO
- hVku7zsPn8akK+UAPA==
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1720525497; x=1752061497;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=+jdwuXxCxOdkepPX2buCRGjquh+DkLbs61Q0z6RyMPE=;
+ b=X9YQMomYcMbp6ympTVplwgahxnG/m3ACzy7C5pNlFWSGCmkYoa10t0Dw
+ atNgu+eRidW2PSgchFdX1QUI2a3ZVRB9ErfABWmhl2oiHV3NV02tMy4Bk
+ ime/wGozRxFECHIHceEfOJXpl7K/ywc3eFLRdgAJFm4cB3s/53vXzJ1RF
+ t17boGuuROljDnSlAgGqr7wdb3pVyIAFHgfHX8Gop1ovPsN2D65DKpsHi
+ FR8XDGXdB0mMvNqYvlP3D7vQP4HI3wU9FIincuc39dhtAzmUbQ0/Hw/Qu
+ dImZlfIrWGRgipGGPFjbu5PhSvMrWzLlKue8RnNLDz9Sy22ICYY4Qe+QY
+ Q==;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=Fj80ecPR
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=X9YQMomY
 Subject: Re: [Buildroot] [PATCH v4 0/3] Refactor OpenSSH init.d script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -144,54 +98,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Fiona Klute via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 09.07.24 um 12:06 schrieb Thomas Petazzoni:
-> Hello Fiona,
->
-> On Tue, 9 Jul 2024 11:55:56 +0200
-> Fiona Klute <fiona.klute@gmx.de> wrote:
->
->> The script is functional, but the use of long options was intentional
->> for readability and I'd rather have it preserved. Having existing
->> scripts in a hard-to-read style doesn't seem like a good reason not to
->> be more explicit in new/updated ones [1]. That was the reason for the
->> question (and patch) about which Busybox options I can rely on when
->> writing init scripts.
->>
->> Regarding the added "-q", if a start (stop) command fails because an
->> instance is already running (not running) with the current version you
->> only get "Starting sshd: FAIL", while with my version you'd see the
->> *reason* in start-stop-daemon output. That seems important to me. I only
->> had "-q" in the reload function because the "stopping" output of
->> start-stop-daemon (when it's actually just sending a SIGHUP) seemed like
->> it might confuse someone.
->
-> I'm fine with both, but then I think the documentation and the
-> canonical example it refers to should be fixed first. This is how we
-> declare what is the "right" way of doing things. Otherwise, we'll keep
-> on using these as a reference for all future scripts, and we don't have
-> a reference point that tells us how things should be done when fixing
-> existing scripts or adding new ones.
+Fiona, All,
 
-Makes sense, I'll try to update the reference.
+On 2024-07-09 13:31 +0200, Fiona Klute via buildroot spake thusly:
+> Am 09.07.24 um 12:06 schrieb Thomas Petazzoni:
+> > Hello Fiona,
+> > 
+> > On Tue, 9 Jul 2024 11:55:56 +0200
+> > Fiona Klute <fiona.klute@gmx.de> wrote:
+> > 
+> > > The script is functional, but the use of long options was intentional
+> > > for readability and I'd rather have it preserved. Having existing
+> > > scripts in a hard-to-read style doesn't seem like a good reason not to
+> > > be more explicit in new/updated ones [1]. That was the reason for the
+> > > question (and patch) about which Busybox options I can rely on when
+> > > writing init scripts.
+> > > 
+> > > Regarding the added "-q", if a start (stop) command fails because an
+> > > instance is already running (not running) with the current version you
+> > > only get "Starting sshd: FAIL", while with my version you'd see the
+> > > *reason* in start-stop-daemon output. That seems important to me. I only
+> > > had "-q" in the reload function because the "stopping" output of
+> > > start-stop-daemon (when it's actually just sending a SIGHUP) seemed like
+> > > it might confuse someone.
+> > 
+> > I'm fine with both, but then I think the documentation and the
+> > canonical example it refers to should be fixed first. This is how we
+> > declare what is the "right" way of doing things. Otherwise, we'll keep
+> > on using these as a reference for all future scripts, and we don't have
+> > a reference point that tells us how things should be done when fixing
+> > existing scripts or adding new ones.
+> 
+> Makes sense, I'll try to update the reference.
+> 
+> Is there some way to get an asciidoc
+> "include::package/busybox/S01syslogd" to work instead of copying the
+> code into docs/manual/adding-packages-directory.adoc (as it is now, and
+> not exactly identical)? It seems like the path is resolved relative to
+> $(OUTPUT)/docs/manual instead of the source, I didn't dig into the
+> Makefiles enough to see why yet.
 
-Is there some way to get an asciidoc
-"include::package/busybox/S01syslogd" to work instead of copying the
-code into docs/manual/adding-packages-directory.adoc (as it is now, and
-not exactly identical)? It seems like the path is resolved relative to
-$(OUTPUT)/docs/manual instead of the source, I didn't dig into the
-Makefiles enough to see why yet.
+This is so that "documents" can have generated parts. This can be
+achieved by defining [DOC]_POST_RSYNC_HOOKS, similar to what we can do
+for packages. For the Buildroot manual, you could add such a hook to
+copy what you need.
 
-Best regards,
-Fiona
+Note that you can't include a file from a code-block in asciidoc, so
+you'll probably have to generate proper asciidoc, something like.
+
+    define MANUAL_INIT_SCRIPT_REF
+        { \
+            printf '---\n'; \
+            cat package/busybox/S01syslogd; \
+            printf '---\n'; \
+        } >$(@D)/S01syslogd.adoc
+    endef
+    MANUAL_POST_RSYNC_HOOKS += MANUAL_INIT_SCRIPT_REF
+
+And then you may include::S01syslogd.adoc
+
+Regards,
+Yann E. MORIN.
+
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
