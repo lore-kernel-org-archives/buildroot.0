@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFC3FC3DA41
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 21:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0FC3C3DA41
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 21:29:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC16C60850;
-	Wed, 10 Jul 2024 21:23:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8703760F12;
+	Wed, 10 Jul 2024 21:29:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3rAI5FDJDzg0; Wed, 10 Jul 2024 21:23:35 +0000 (UTC)
+ id FwxS5WRY-YsE; Wed, 10 Jul 2024 21:29:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5DE3608A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A5D561026
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5DE3608A9;
-	Wed, 10 Jul 2024 21:23:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F02331BF292
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:23:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A5D561026;
+	Wed, 10 Jul 2024 21:29:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EE5FD1BF292
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EB10C608A9
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:23:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E874F40142
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:29:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q55q4DQat1WF for <buildroot@lists.busybox.net>;
- Wed, 10 Jul 2024 21:23:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q0Dwk38zwOdn for <buildroot@lists.busybox.net>;
+ Wed, 10 Jul 2024 21:29:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E2D3560850
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2D3560850
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E2D3560850
- for <buildroot@buildroot.org>; Wed, 10 Jul 2024 21:23:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DBE941BF203;
- Wed, 10 Jul 2024 21:23:30 +0000 (UTC)
-Date: Wed, 10 Jul 2024 23:23:29 +0200
-To: Michel Alex <Alex.Michel@wiedemann-group.com>
-Message-ID: <20240710232329.1c3895a1@windsurf>
-In-Reply-To: <AS1P250MB060825741529F073326AA014A9C82@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
-References: <AS1P250MB060825741529F073326AA014A9C82@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720646611;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=b+eFhdrxt8n2Rc9Vi/bUgF3fTUy2EbzCyI/AcXJj1GU=;
- b=MbYMa8ehfSvXI4tILlAw64BudPyNUi7utMIR7gqJQo5Cmy03nBd67aUytD1PCrPulrqMPR
- ajcFHAx2v+4vB/c8eqF6/IIojaZPmUPJ2U298C+qLzuln21o/obAHXiPSye1pY1zYi6kwI
- MS4HyA5+jcOyXiufAg1+iydsHc3HN1B+ntJ3S+PRAVJEF99wvx2CEGXizwlG3VdtjHP9Nc
- QjxoOwhhA+RSFBDJPv2lMlIIpWfqfA4HhvfjIe0KH1+ezKEU8x+XugH/1XqqalyFokwht+
- LClBwhXlU3S9wBWKh4rlpyeojckU2/GsmN0sO5Km9pX9zhVPUTbbtH+O1YlbQQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MbYMa8eh
-Subject: Re: [Buildroot] [PATCH 1/2] package/libzenoh-c: bump to version
- 0.11.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 094EB40126
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 094EB40126
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 21:29:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E4E7C846EC; Wed, 10 Jul 2024 21:29:11 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 10 Jul 2024 23:28:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3da51c91802d4ff5f071ae92c3bec8eae03802e2
+X-Git-Newrev: 5654eca137b19e904391cf6e2745c980f6260760
+X-Patchwork-Hint: ignore
+Message-Id: <20240710212911.E4E7C846EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/ti/am64x-sk: update custom hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,34 +59,69 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2939965538104593319=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 20 Jun 2024 09:25:35 +0000
-Michel Alex <Alex.Michel@wiedemann-group.com> wrote:
+--===============2939965538104593319==
+Content-Type: text/plain
 
-> https://github.com/eclipse-zenoh/zenoh-c/releases/tag/0.11.0
-> Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
-> ---
->  package/libzenoh-c/libzenoh-c.hash | 2 +-
->  package/libzenoh-c/libzenoh-c.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=5654eca137b19e904391cf6e2745c980f6260760
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Both applied, after adding a comment above the _VERSION variable to
-explain that 0.11.0 is indeed newer than 0.11.0.3, and avoid people
-"updating" back to 0.11.0.3.
+Commit
+7efd75867cd84926b7aa6524e0a41c50c32b20e1 ("configs/ti_am64x_sk_defconfig:
+update U-Boot to v2024.04") updated U-Boot and the ti-k3-r5-loader to
+2024.04, but did not update the hash files in board/ti/am62x-sk/. It
+ended up working for now, because the official versions of boot/uboot
+and boot/ti-k3-r5-loader/ also use 2024.04 and therefore have this
+hash, but it would have started failing as soon as boot/uboot and/or
+boot/ti-k3-r5-loader official version were updated.
 
-Thanks!
+Signed-off-by: Gero Schwäricke <gero.schwaericke@grandcentrix.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
+ board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash        | 3 ++-
+ board/ti/am64x-sk/patches/uboot/uboot.hash                            | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 8f60864fbf..7494e04ead 100644
+--- a/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+-# Locally computed:
++# Locally calculated
+ sha256  ba215404fe9db26e5f2cef3fdce17b7c8ed344a2a1d592dd01a5f1c5e72cfdbd  arm-trusted-firmware-lts-v2.10.4.tar.gz
+diff --git a/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+index dbb4428738..97a2b4eaf9 100644
+--- a/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
++++ b/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+@@ -1 +1,2 @@
+-sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
++# Locally calculated
++sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
+diff --git a/board/ti/am64x-sk/patches/uboot/uboot.hash b/board/ti/am64x-sk/patches/uboot/uboot.hash
+index 0e171c56f5..97a2b4eaf9 100644
+--- a/board/ti/am64x-sk/patches/uboot/uboot.hash
++++ b/board/ti/am64x-sk/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+-# Locally computed:
+-sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
++# Locally calculated
++sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
+
+--===============2939965538104593319==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2939965538104593319==--
