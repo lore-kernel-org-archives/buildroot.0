@@ -4,67 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E8C9C3DA42
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 22:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6171CC3DA41
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 22:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 206F340402;
-	Wed, 10 Jul 2024 22:06:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A13F40963;
+	Wed, 10 Jul 2024 22:08:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U4j00hz8tPHw; Wed, 10 Jul 2024 22:06:57 +0000 (UTC)
+ id 3lL_lIVfGL9W; Wed, 10 Jul 2024 22:08:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5B6340C3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD8F0409EE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5B6340C3F;
-	Wed, 10 Jul 2024 22:06:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 32B601BF593
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:06:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD8F0409EE;
+	Wed, 10 Jul 2024 22:08:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2949C1BF593
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:08:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F64240126
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:06:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1554340C3F
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:08:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6FtF3UA0X55w for <buildroot@lists.busybox.net>;
- Wed, 10 Jul 2024 22:06:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A6FCC400FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6FCC400FE
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A6FCC400FE
- for <buildroot@buildroot.org>; Wed, 10 Jul 2024 22:06:53 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 4F428B0055A;
- Thu, 11 Jul 2024 00:06:48 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ar_nuaJo7Vtt for <buildroot@lists.busybox.net>;
+ Wed, 10 Jul 2024 22:08:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C539440963
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C539440963
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 22:08:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B852684798; Wed, 10 Jul 2024 22:08:11 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 00:06:44 +0200
-Message-ID: <20240710220644.629642-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1720649209;
- bh=84uo/Q6juzG9niabsgQhew1EbXAXSQfmcj3hCgYUxpU=;
- h=From:To:Cc:Subject:Date:From;
- b=S+8ykqWczrllSmI27ZQHDTdu0LFCyF2aOpeBe9a5Li1suM54/PgeVGkGiRJjOo1N/
- srcwuj9SDnVzxHK1MrAvcbrKLfwzOM1ZM5IX6aeGoxXn5KqYq7bb43JiYy09Xl9pZ7
- YkWQqLWOAnt4NXUPvJadDe75rNAUgMWbexWvokxnfw3TT8Ub2CUOhg5UhHy8/l/B/3
- PRGv4zGxqEKoxLPQXVelrwcrdfORBLRyWnSjpS/fnUp8H9VKA9WBvusL4Qialb+Blv
- moXLjjkSQlpGQ0BW23pb8rJEhhY/AFojLAicPmaVqnz9J/W/R3N8T5NWcR3D5Hub7y
- r8KaykInlu24w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=S+8ykqWc
-Subject: [Buildroot] [PATCH 1/1] package/pinentry: bump to version 1.3.1
+Date: Wed, 10 Jul 2024 23:59:44 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 8ac7ef56845564715d379a4c0e82339ef9dd61b2
+X-Git-Newrev: 94daade68dda0a3617702903391f515d2ffdef3b
+X-Patchwork-Hint: ignore
+Message-Id: <20240710220811.B852684798@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/daq: workaround
+ for upstream changing the archive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,49 +59,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=blob;f=NEWS;h=a07d18953341a4eb65c9873e64c06bc7c642606d
+commit: https://git.buildroot.net/buildroot/commit/?id=94daade68dda0a3617702903391f515d2ffdef3b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Upstream has changed the archive for the 2.0.7 release since we bumped
+in c1f820bd88a5 (package/daq: bump version to 2.0.7). Comparing the old
+archive as it is on s.b.o. with the one currently available on upstream,
+gives a few deltas, mostly;
+  - (C) years changed in comments
+  - version string changed from 2.0.6 to 2.0.7
+  - changes (that look legit) to autostuff
+  - a file dropped (Visual Studio related)
+
+Of course, that means the hashes changed, and no longer match what we
+have.
+
+Downloading the file manually and letting wget set the timestamp on it,
+reveals the archive is dated 2022-06-08T13:51:59. So, for more than two
+years now, we've been relying on the archive we cached on s.b.o.
+
+So, we can't just change the hashes to the new ones, nor can we replace
+the archive on s.b.o.
+
+Instead, we use the same trick as was used in c617ebbc977d
+(package/python-*: fix hashes for cargo-vendored python packages): we
+use the actual, real URL with a query parameter as the _SITE, and we set
+_SOURCE to a different name so as not to conflict with the previous
+archive.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Yoann Congal <yoann.congal@smile.fr>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 9e00cceb60e9ac8ec36ec7eb43eb9ef5534b705d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pinentry/pinentry.hash | 4 ++--
- package/pinentry/pinentry.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/daq/daq.hash | 4 ++--
+ package/daq/daq.mk   | 6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/pinentry/pinentry.hash b/package/pinentry/pinentry.hash
-index 9c54520da6..3f02eec737 100644
---- a/package/pinentry/pinentry.hash
-+++ b/package/pinentry/pinentry.hash
-@@ -1,5 +1,5 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  28effa1722865786cb984f3099a32db40f96ea26  pinentry-1.3.0.tar.bz2
--sha256  9b3cd5226e7597f2fded399a3bc659923351536559e9db0826981bca316494de  pinentry-1.3.0.tar.bz2
-+sha1  fb0bbb88211558c8f7e652b4b6a675b1972fba04  pinentry-1.3.1.tar.bz2
-+sha256  bc72ee27c7239007ab1896c3c2fae53b076e2c9bd2483dc2769a16902bce8c04  pinentry-1.3.1.tar.bz2
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
-index b49037c91b..7482a93d02 100644
---- a/package/pinentry/pinentry.mk
-+++ b/package/pinentry/pinentry.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/daq/daq.hash b/package/daq/daq.hash
+index 0fa1edecc2..82323ed404 100644
+--- a/package/daq/daq.hash
++++ b/package/daq/daq.hash
+@@ -1,7 +1,7 @@
+ # From https://www.snort.org/downloads/snort/md5s
+-md5  ea796f001d1b00302e4e69e337ab2460  daq-2.0.7.tar.gz
++md5  60e5ddcafb985fac7374884d28f299d1  daq-2.0.7-modified.tar.gz
+ # Locally computed:
+-sha256  bdc4e5a24d1ea492c39ee213a63c55466a2e8114b6a9abed609927ae13a7705e  daq-2.0.7.tar.gz
++sha256  d1f6709bc5dbddee3fdf170cdc1e49fb926e2031d4869ecf367a8c47efc87279  daq-2.0.7-modified.tar.gz
+ 
+ # Hash for license files:
+ sha256  07f28289c09fd9eb5a6ff7bc710ff40363601b1bbc6f3637d8ed412150e90819  COPYING
+diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+index 8a5394a63c..27abd4d2f5 100644
+--- a/package/daq/daq.mk
++++ b/package/daq/daq.mk
+@@ -5,7 +5,11 @@
  ################################################################################
  
--PINENTRY_VERSION = 1.3.0
-+PINENTRY_VERSION = 1.3.1
- PINENTRY_SOURCE = pinentry-$(PINENTRY_VERSION).tar.bz2
- PINENTRY_SITE = https://www.gnupg.org/ftp/gcrypt/pinentry
- PINENTRY_LICENSE = GPL-2.0+
--- 
-2.45.2
-
+ DAQ_VERSION = 2.0.7
+-DAQ_SITE = https://www.snort.org/downloads/snort
++# Upstream re-published a modified archive for the same 2.0.7 version, so change
++# its name locally, to avoid conflict with older BR versions which had a hash
++# for the previous archive.
++DAQ_SOURCE = daq-2.0.7-modified.tar.gz
++DAQ_SITE = https://www.snort.org/downloads/snort/daq-$(DAQ_VERSION).tar.gz?buildroot-path=filename
+ DAQ_LICENSE = GPL-2.0
+ DAQ_LICENSE_FILES = COPYING
+ DAQ_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
