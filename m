@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA342C3DA42
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 22:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68807C3DA41
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 22:02:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E240403CF;
-	Wed, 10 Jul 2024 22:01:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26F84415CF;
+	Wed, 10 Jul 2024 22:02:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QP0rtge3Bnu7; Wed, 10 Jul 2024 22:01:56 +0000 (UTC)
+ id R0yoJS7syyVz; Wed, 10 Jul 2024 22:02:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49636415CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D69BE415FA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49636415CF;
-	Wed, 10 Jul 2024 22:01:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 371911BF292
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:01:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D69BE415FA;
+	Wed, 10 Jul 2024 22:02:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D43CD1BF292
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:02:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2368640126
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:01:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0E8F415CF
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:02:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d40rMXTyToSl for <buildroot@lists.busybox.net>;
- Wed, 10 Jul 2024 22:01:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id skSW-xy_Rg8S for <buildroot@lists.busybox.net>;
+ Wed, 10 Jul 2024 22:02:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35B32400FE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35B32400FE
- for <buildroot@buildroot.org>; Wed, 10 Jul 2024 22:01:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2189E848E6; Wed, 10 Jul 2024 22:01:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 00:01:36 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0ffff6106cd2686cb08cfe2a60d7900929270af5
-X-Git-Newrev: 623bd47c26caa72e772d9ccb073eb806fae950ea
-X-Patchwork-Hint: ignore
-Message-Id: <20240710220154.2189E848E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/spike_riscv64: remove no longer
- needed kernel fragment
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D569341607
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D569341607
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D569341607
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 22:01:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CFB9020004;
+ Wed, 10 Jul 2024 22:01:56 +0000 (UTC)
+Date: Thu, 11 Jul 2024 00:01:55 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240711000155.62e892f3@windsurf>
+In-Reply-To: <20240624180519.434061-1-ju.o@free.fr>
+References: <20240624180519.434061-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720648917;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=MGO6+Kk3Y5bQDku+Edl2vrXluoOQ/i3JmeEwlmtTT44=;
+ b=cYbqJdWP7pGKRSdPYzlsxLUH17zuXI2s4Di5NbFpTS+h4En8q7JSt4FPXvy9NDCK83FOCv
+ UQo9E0AzcjKVHr/n+WJFt1UpUWSyZ3ObfyKKF08uw8adARlsWhl+0NE/oRrNg2b6M3LDOx
+ fuAfq5YdE2CvupdsbgfFR9N8dJJMectbzrM0QCKcurTfcBu6H4RVMJtoy4YORfKWbMbe4v
+ I99V2m8z+1umfcvTr0Uz8xorAErKu2376aBBU+NboHiluUzdRn8pcNuut+nf63SkJI+OfT
+ 9Gshm3jP+Nv2zQ5CfrLAzRMBZE6hMKqEchICHl2pbCGFZMcTHcJSTqCBdiX+4g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cYbqJdWP
+Subject: Re: [Buildroot] [PATCH 1/1] configs/spike_riscv64: remove the no
+ longer needed kernel fragment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,56 +83,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=623bd47c26caa72e772d9ccb073eb806fae950ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 24 Jun 2024 20:05:19 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Buildroot commit [1] updated riscv-isa-sim (Spike), which now includes
-a NS16550 uart emulation. The Kernel config fragment was introduced to
-work with older HTIF interface from Spike.
+> Buildroot commit [1] updated riscv-isa-sim (Spike), which now includes
+> a NS16550 uart emulation. The Kernel config fragment was introduced to
+> work with older HTIF interface from Spike.
+> 
+> For more information about the HTIF/NS16550 in Spike, see the commit
+> log [2].
+> 
+> This commit removes this Kernel config fragment, since it is no longer
+> needed.
+> 
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/853b7661bf5ddca5d4b81964ef1a19a133beac85
+> [2] https://gitlab.com/buildroot.org/buildroot/-/commit/38c581b05cd8e7967783410b36c14b9b561acd12
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Patch tested on branch master at commit 3f464c2 with commands:
 
-For more information about the HTIF/NS16550 in Spike, see the commit
-log [2].
+Applied to master, thanks.
 
-This commit removes this Kernel config fragment, since it is no longer
-needed.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/853b7661bf5ddca5d4b81964ef1a19a133beac85
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/38c581b05cd8e7967783410b36c14b9b561acd12
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/spike/riscv64/linux.fragment | 3 ---
- configs/spike_riscv64_defconfig    | 1 -
- 2 files changed, 4 deletions(-)
-
-diff --git a/board/spike/riscv64/linux.fragment b/board/spike/riscv64/linux.fragment
-deleted file mode 100644
-index b443b0ab36..0000000000
---- a/board/spike/riscv64/linux.fragment
-+++ /dev/null
-@@ -1,3 +0,0 @@
--CONFIG_RISCV_SBI_V01=y
--CONFIG_HVC_RISCV_SBI=y
--CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
-diff --git a/configs/spike_riscv64_defconfig b/configs/spike_riscv64_defconfig
-index b4b3d6e3d5..fa8cba4275 100644
---- a/configs/spike_riscv64_defconfig
-+++ b/configs/spike_riscv64_defconfig
-@@ -4,7 +4,6 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.26"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/spike/riscv64/linux.fragment"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TARGET_ROOTFS_CPIO=y
- # BR2_TARGET_ROOTFS_TAR is not set
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
