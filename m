@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE56C3DA42
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 21:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7B20C3DA41
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 21:46:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EF9560766;
-	Wed, 10 Jul 2024 21:46:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8842160890;
+	Wed, 10 Jul 2024 21:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wxQR8stdcRGC; Wed, 10 Jul 2024 21:46:13 +0000 (UTC)
+ id y6xYKTZWXpzL; Wed, 10 Jul 2024 21:46:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66E6860890
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A05F60A5F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66E6860890;
-	Wed, 10 Jul 2024 21:46:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 965641BF292
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:46:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A05F60A5F;
+	Wed, 10 Jul 2024 21:46:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C3641BF292
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8C98B40249
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:46:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1921F4148D
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:46:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WcIg9037wBqX for <buildroot@lists.busybox.net>;
- Wed, 10 Jul 2024 21:46:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4N-43uOd56bF for <buildroot@lists.busybox.net>;
+ Wed, 10 Jul 2024 21:46:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4655C40126
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4655C40126
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4655C40126
- for <buildroot@buildroot.org>; Wed, 10 Jul 2024 21:46:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 726D21BF203;
- Wed, 10 Jul 2024 21:46:08 +0000 (UTC)
-Date: Wed, 10 Jul 2024 23:46:08 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D43E44148B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D43E44148B
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D43E44148B
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 21:46:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0DBCE40003;
+ Wed, 10 Jul 2024 21:46:38 +0000 (UTC)
+Date: Wed, 10 Jul 2024 23:46:37 +0200
 To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Message-ID: <20240710234608.4189d546@windsurf>
-In-Reply-To: <20240618130403.3387346-2-mika.westerberg@linux.intel.com>
+Message-ID: <20240710234637.73a60fd2@windsurf>
+In-Reply-To: <20240618130403.3387346-3-mika.westerberg@linux.intel.com>
 References: <20240618130403.3387346-1-mika.westerberg@linux.intel.com>
- <20240618130403.3387346-2-mika.westerberg@linux.intel.com>
+ <20240618130403.3387346-3-mika.westerberg@linux.intel.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720647969;
+ d=bootlin.com; s=gm1; t=1720647999;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ajstSiDGYbn0N+94sNo9j0IIQnM4jCyZjxB48bjTENQ=;
- b=gqRCP3mxn+ZLlAgjcR6Hp9wMu/7hrNYp3F2KVauJzKPVOjHB/hV6F77LeeCBXTL9piyry8
- RQKhhVNtWOEtAgEcZ4+TfCR4nPCKMYxGmA2uR9CFieaj8OXGvxwOrzQDhZORfAaus7HDL0
- 7q8SQUa49xdjmutdgZxi0bNt7JcsrHBqlZ4mEv1c911alIwKqh0PkPBYGWKFih6m8GbafO
- H7GX5/i8tOgxWglgH9gwZUFQIb9HohpehiZWDkbedjNUvHPcKgySMcQ11kQou26RSY9gZv
- S7MsNBGnwNtwZ+F90r8dg7X6e8ex89DtO9qMvo9MAQ6yEA2CV2covIj9AS2QpA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Mh1aGcHLktfVW82/Sev/umVQF04bZ8gu0SrsbBQuk4A=;
+ b=gj+ZxpeS+ZUyh096C571h7fV4QLom/xSR3tVpWD1nzrQIobUB2B6J+GU6h4pPEkgVsZVfc
+ mk9agg9LMUTo/2SjuCaQT/BRysr5GQo9EFtS8XPbxpN5by6m5j8XFsR9FEWDsyUB1yDIp5
+ WkEsk5/lVKDmDES1ip93ASAg3xUaTs1e0SS62ipu+Mk8LZEiV0M//hB8QsEaPCayimtkd0
+ WnEudrTlj3ncTwZNZAzJiAsTsKTKTWCtsev70QoV3FMlY6MgV3cMs8Q57tFMcUY+WQrBqk
+ Szn7tZvYJK561OPXWKye7PJO6Kaxw2JtprI9b0lNnk8LOMl0QREcZWDdKIFopw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gqRCP3mx
-Subject: Re: [Buildroot] [PATCH 2/3] package/tbtools: Install bash
- completion files and scripts
+ header.s=gm1 header.b=gj+ZxpeS
+Subject: Re: [Buildroot] [PATCH 3/3] package/tbtools: Allow 32-bit builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,16 +89,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 18 Jun 2024 16:04:02 +0300
+On Tue, 18 Jun 2024 16:04:03 +0300
 Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
 
-> +define TBTOOLS_INSTALL_SCRIPTS
-> +	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR)/usr install-scripts
-> +endef
-> +TBTOOLS_POST_INSTALL_TARGET_HOOKS += TBTOOLS_INSTALL_SCRIPTS
+> With the latest tbtools 32-bit builds should work too so drop this
+> limitation.
+> 
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+>  package/tbtools/Config.in | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/package/tbtools/Config.in b/package/tbtools/Config.in
+> index 9c27bf0e30..0a649a9555 100644
+> --- a/package/tbtools/Config.in
+> +++ b/package/tbtools/Config.in
+> @@ -3,8 +3,6 @@ config BR2_PACKAGE_TBTOOLS
+>  	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	depends on BR2_PACKAGE_HAS_UDEV
+> -	# Fails to build on 32-bit systems
+> -	depends on BR2_ARCH_IS_64
 
-PREFIX has a somewhat non-conventional semantic in tbtools Makefile,
-but fair enough it does the job, so patch applied, thanks!
+You had forgotten to drop the BR2_ARCH_IS_64 dependency in the
+Config.in comment in the same file, so I dropped it and applied. Thanks!
 
 Thomas
 -- 
