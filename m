@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34099C3DA45
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 12:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CB69C3DA42
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 12:31:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E14E181FEF;
-	Wed, 10 Jul 2024 12:30:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AAA018202B;
+	Wed, 10 Jul 2024 12:31:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yg7U5kTvTCQA; Wed, 10 Jul 2024 12:30:58 +0000 (UTC)
+ id VlyEdmryDdOs; Wed, 10 Jul 2024 12:31:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 019638201E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B70D82038
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 019638201E;
-	Wed, 10 Jul 2024 12:30:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98DCE1BF310
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 12:30:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B70D82038;
+	Wed, 10 Jul 2024 12:31:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B2401BF310
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 12:30:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86F2E60FC2
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 12:30:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1847640F4C
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 12:30:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XM2oud5De-Q5 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 60fbryfoykek for <buildroot@lists.busybox.net>;
  Wed, 10 Jul 2024 12:30:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD44960EBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D84764011F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD44960EBA
+ by smtp2.osuosl.org (Postfix) with ESMTP id D84764011F
  for <buildroot@buildroot.org>; Wed, 10 Jul 2024 12:30:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3F6D8463A; Wed, 10 Jul 2024 12:30:55 +0000 (UTC)
+ id C31B98463D; Wed, 10 Jul 2024 12:30:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Jul 2024 14:28:24 +0200
+Date: Wed, 10 Jul 2024 14:29:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4aa7a4ad8a6f729ad6ee6baf16f01d657559b3e6
-X-Git-Newrev: caff4179a4481233257f5f475ca57ce9061af900
+X-Git-Oldrev: caff4179a4481233257f5f475ca57ce9061af900
+X-Git-Newrev: 8502ac71aad426792aa51923ef0f14b83c4bf2c7
 X-Patchwork-Hint: ignore
-Message-Id: <20240710123055.B3F6D8463A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnutls: add tpm2-tss optional
- dependency
+Message-Id: <20240710123055.C31B98463D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpewebkit: add backported patch to
+ fix NEON build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,53 +66,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caff4179a4481233257f5f475ca57ce9061af900
+commit: https://git.buildroot.net/buildroot/commit/?id=8502ac71aad426792aa51923ef0f14b83c4bf2c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-tpm2-tss support is available since gnutls 3.7.3 using
---{with,without}-tpm2 configure option [1].
+Import a patch that has been backported by upstream to the 2.44 release
+branch that fixes the build when the target is an ARM processor that
+supports NEON instructions.
 
-Since the option is not handled by gnutls package, tpm2-tss support
-can be enabled if tpm2-tss package is build before gnutls package.
-
-Likewise, tpm2-tss support can be enabled for the gnutls host variant
-if tpm2-tss libraries are installed on the host.
-Make sure to disable tpm2-tss support for the host-gnutls.
-
-[1] https://lists.gnupg.org/pipermail/gnutls-help/2022-January/004736.html
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gnutls/gnutls.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ ...e-ARM-specific-declarations-in-FELighting.patch | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 8a4f3345aa..8302194812 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -57,6 +57,7 @@ HOST_GNUTLS_CONF_OPTS = \
- 	--without-librt-prefix \
- 	--without-libz-prefix \
- 	--without-tpm \
-+	--without-tpm2 \
- 	--disable-openssl-compatibility \
- 	--without-libbrotli \
- 	--without-idn \
-@@ -98,6 +99,13 @@ else
- GNUTLS_CONF_OPTS += --without-p11-kit
- endif
- 
-+ifeq ($(BR2_PACKAGE_TPM2_TSS),y)
-+GNUTLS_CONF_OPTS += --with-tpm2
-+GNUTLS_DEPENDENCIES += tpm2-tss
-+else
-+GNUTLS_CONF_OPTS += --without-tpm2
-+endif
+diff --git a/package/wpewebkit/0001-Remove-ARM-specific-declarations-in-FELighting.patch b/package/wpewebkit/0001-Remove-ARM-specific-declarations-in-FELighting.patch
+new file mode 100644
+index 0000000000..9e2bc86fef
+--- /dev/null
++++ b/package/wpewebkit/0001-Remove-ARM-specific-declarations-in-FELighting.patch
+@@ -0,0 +1,68 @@
++From 8863ceb3c8486f31e1ccfcd2c7c602fad9feac52 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Mon, 27 May 2024 02:09:58 +0300
++Subject: [PATCH] Cherry-pick 279334@main (36d1b5d7c0ef). <bug>
 +
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- GNUTLS_CONF_OPTS += --with-zlib
- GNUTLS_DEPENDENCIES += zlib
++    Remove ARM-specific declarations in FELighting.h unneeded after 272873@main
++
++    Unreviewed build fix.
++
++    * Source/WebCore/platform/graphics/filters/FELighting.h: Remove unneeded
++      declarations for the getPowerCoefficients() and platformApplyNeon()
++      functions, which are now defined elsewhere; and were causing a build
++      failure due to usage of the protected LightingData type.
++    * Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNeonParallelApplier.cpp:
++      (WebCore::FELightingNeonParallelApplier::applyPlatformParallel const):
++      Add missing LightType:: namespace to uses of LS_POINT and LS_SPOT.
++
++    Canonical link: https://commits.webkit.org/279334@main
++
++Canonical link: https://commits.webkit.org/274313.261@webkitglib/2.44
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream: https://github.com/WebKit/WebKit/commit/8863ceb3c8486f31e1ccfcd2c7c602fad9feac52
++---
++ .../cpu/arm/filters/FELightingNeonParallelApplier.cpp        | 4 ++--
++ Source/WebCore/platform/graphics/filters/FELighting.h        | 5 -----
++ 2 files changed, 2 insertions(+), 7 deletions(-)
++
++diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNeonParallelApplier.cpp b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNeonParallelApplier.cpp
++index 04d855fa6d71..5f4250d87b61 100644
++--- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNeonParallelApplier.cpp
+++++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNeonParallelApplier.cpp
++@@ -542,14 +542,14 @@ void FELightingNeonParallelApplier::applyPlatformParallel(const LightingData& da
++     floatArguments.colorBlue = color.blue;
++     floatArguments.padding4 = 0;
++ 
++-    if (data.lightSource->type() == LS_POINT) {
+++    if (data.lightSource->type() == LightType::LS_POINT) {
++         neonData.flags |= FLAG_POINT_LIGHT;
++         auto& pointLightSource = downcast<PointLightSource>(*data.lightSource);
++         floatArguments.lightX = pointLightSource.position().x();
++         floatArguments.lightY = pointLightSource.position().y();
++         floatArguments.lightZ = pointLightSource.position().z();
++         floatArguments.padding2 = 0;
++-    } else if (data.lightSource->type() == LS_SPOT) {
+++    } else if (data.lightSource->type() == LightType::LS_SPOT) {
++         neonData.flags |= FLAG_SPOT_LIGHT;
++         auto& spotLightSource = downcast<SpotLightSource>(*data.lightSource);
++         floatArguments.lightX = spotLightSource.position().x();
++diff --git a/Source/WebCore/platform/graphics/filters/FELighting.h b/Source/WebCore/platform/graphics/filters/FELighting.h
++index 4efab920b1c3..dcd80b6f42b7 100644
++--- a/Source/WebCore/platform/graphics/filters/FELighting.h
+++++ b/Source/WebCore/platform/graphics/filters/FELighting.h
++@@ -68,11 +68,6 @@ protected:
++ 
++     std::unique_ptr<FilterEffectApplier> createSoftwareApplier() const override;
++ 
++-#if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
++-    static int getPowerCoefficients(float exponent);
++-    inline void platformApplyNeon(const LightingData&, const LightSource::PaintingData&);
++-#endif
++-
++     Color m_lightingColor;
++     float m_surfaceScale;
++     float m_diffuseConstant;
++-- 
++2.45.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
