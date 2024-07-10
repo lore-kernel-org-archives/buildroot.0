@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C25B3C3DA41
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 21:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15DEC3DA41
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 21:13:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93D3C6066E;
-	Wed, 10 Jul 2024 21:13:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5AE360672;
+	Wed, 10 Jul 2024 21:13:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cWuZvM2AF4an; Wed, 10 Jul 2024 21:13:52 +0000 (UTC)
+ id tYsC3QlhcSHd; Wed, 10 Jul 2024 21:13:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3D5860672
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCB9861045
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3D5860672;
-	Wed, 10 Jul 2024 21:13:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCB9861045;
+	Wed, 10 Jul 2024 21:13:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F1CAA1BF292
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:13:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 474181BF292
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:13:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD34F81F7D
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:13:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 332F680ACD
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:13:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RDkURKyebCrk for <buildroot@lists.busybox.net>;
- Wed, 10 Jul 2024 21:13:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id xseBgjlHoA36 for <buildroot@lists.busybox.net>;
+ Wed, 10 Jul 2024 21:13:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A200180C65
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A200180C65
- for <buildroot@buildroot.org>; Wed, 10 Jul 2024 21:13:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A31584723; Wed, 10 Jul 2024 21:13:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 10 Jul 2024 23:13:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e9f949d4831e9b1568cbfc0ed31a76f5f1fb2372
-X-Git-Newrev: 62103be918e7a155749b1b3b680a9e4ecba6af87
-X-Patchwork-Hint: ignore
-Message-Id: <20240710211349.9A31584723@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libssh: select
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 16229808D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16229808D9
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 16229808D9
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 21:13:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F997FF802;
+ Wed, 10 Jul 2024 21:13:52 +0000 (UTC)
+Date: Wed, 10 Jul 2024 23:13:51 +0200
+To: Heiko Thiery <heiko.thiery@gmail.com>
+Message-ID: <20240710231351.32389974@windsurf>
+In-Reply-To: <20240709202438.27298-1-heiko.thiery@gmail.com>
+References: <20240709202438.27298-1-heiko.thiery@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720646032;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=7XJ2Mp+57w5WEmyN/lHxmisbtp8gDr2M7bcuIjL0tsA=;
+ b=CiyxtsSAdD2anTlyL7DUtq/i/v8hFDAD4o2WNLl8oetInf0+hJPp8p6arFlQgRgn6OeBUd
+ 3mpTYaVMBlxC1SNEMSHRhYTVwrwChyhLgwI+NAIPY1SnWm/tazv44PReHlHhE5UShi1Eb2
+ LygmWOMfrGawm0TLHJ4Ww1CXbfFXOPgsrR0GAl+VgiJQe5RFA/2ZgK1zaM/nba2JeMUyHh
+ 2RLpVRHPNwoMHgDLrDwHTgq4fzJu54ZWF81VHZQrdrAAmQvabRqIKn8Bp2iPyBno3KB7Gx
+ rymiliz8QSoDPGyuhwddcuKomzoAPVhp0kw2KwefkrkbYMHxMwnQMLK/BxAUjA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CiyxtsSA
+Subject: Re: [Buildroot] [PATCH] package/libssh: select
  BR2_PACKAGE_LIBOPENSSL_ENGINES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,40 +83,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62103be918e7a155749b1b3b680a9e4ecba6af87
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  9 Jul 2024 22:24:39 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-This fixes link time errors, undefined references to various ENGINE_*
-functions in case libopenssl backend is used.
+> This fixes link time errors, undefined references to various ENGINE_*
+> functions in case libopenssl backend is used.
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  package/libssh/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Fixes:
+Applied to master, after adding a reference to the autobuilder build
+failure. Thanks!
 
-  http://autobuild.buildroot.net/results/5bb845be7f861dc3540a8dc618ccd1a0a759f2d5/
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libssh/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-index 1f271a692e..eaec754414 100644
---- a/package/libssh/Config.in
-+++ b/package/libssh/Config.in
-@@ -36,6 +36,7 @@ config BR2_PACKAGE_LIBSSH_LIBGCRYPT
- config BR2_PACKAGE_LIBSSH_OPENSSL
- 	bool "openssl"
- 	depends on BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENGINES
- 
- endchoice
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
