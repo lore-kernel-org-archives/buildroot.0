@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CB21C3DA41
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 21:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AA7BC3DA42
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 22:00:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03B00415CF;
-	Wed, 10 Jul 2024 21:59:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEA1E403CF;
+	Wed, 10 Jul 2024 22:00:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w3w761geAtmM; Wed, 10 Jul 2024 21:59:56 +0000 (UTC)
+ id X0nVZu-bvobe; Wed, 10 Jul 2024 22:00:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C928B415DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67384415CF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C928B415DD;
-	Wed, 10 Jul 2024 21:59:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 48C921BF232
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:59:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67384415CF;
+	Wed, 10 Jul 2024 22:00:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 085AE1BF292
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:00:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 34C548209D
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:59:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA7FC61073
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:00:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fl-dOgiJG5lR for <buildroot@lists.busybox.net>;
- Wed, 10 Jul 2024 21:59:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YbIoiNvPPnMP for <buildroot@lists.busybox.net>;
+ Wed, 10 Jul 2024 22:00:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 387D081139
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 387D081139
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 387D081139
- for <buildroot@buildroot.org>; Wed, 10 Jul 2024 21:59:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 06597E0004;
- Wed, 10 Jul 2024 21:59:49 +0000 (UTC)
-Date: Wed, 10 Jul 2024 23:59:48 +0200
-To: Vincent =?UTF-8?B?U3RlaGzDqQ==?= <vincent.stehle@arm.com>
-Message-ID: <20240710235948.0f5e2a0c@windsurf>
-In-Reply-To: <20240624091939.2536588-1-vincent.stehle@arm.com>
-References: <20240624091939.2536588-1-vincent.stehle@arm.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720648790;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=WNmQB16XuD212KiJslRwGP9AUfvYdoeVrhYb+UL1ODc=;
- b=TBedu0tU+gjcxsXNIWysiKvKMMG7o3QamsZLGoA7kq/be4uKA8u4Hl/5TSnisdsi8gYSwa
- YAdVbtrPLjbUkpokZ9hnsu5YwAZHD2oIpTSvUm5mwz0gDhnNFwGUzvOpvibfNjPzV0a4re
- xPOo5NyLHe2rHv7Y4J1mXmwiWby28ydL+RZ9Zc6jkWVzFq2ByUqsPIJ3IUrk7Rf6WsTXKH
- B0erk09n6s/6GyImiD5wt3DCCLS/ywgSDxoUxIFwmaWdSgC5iPKbjTVjsZu+9akz4hDj5k
- B9rzqhp3urrGxSrpHQz8Zv6ZfFlM3us56AVckzDdad0FlUCsV1PEwRozblzrcA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TBedu0tU
-Subject: Re: [Buildroot] [PATCH v2] configs/arm_foundationv8_defconfig: bump
- to Linux 6.8.10
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F3E0607DE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F3E0607DE
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 22:00:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1BAAB848DF; Wed, 10 Jul 2024 22:00:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 10 Jul 2024 23:59:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 48790b43296f45aa7f9f8c6701e94fe86269c241
+X-Git-Newrev: 0ffff6106cd2686cb08cfe2a60d7900929270af5
+X-Patchwork-Hint: ignore
+Message-Id: <20240710220051.1BAAB848DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/arm_foundationv8: bump to Linux
+ 6.8.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,20 +60,89 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3184680065271639818=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCAyNCBKdW4gMjAyNCAxMToxOTozOSArMDIwMApWaW5jZW50IFN0ZWhsw6kgPHZpbmNl
-bnQuc3RlaGxlQGFybS5jb20+IHdyb3RlOgoKPiAtIEJ1bXAgTGludXgga2VybmVsIHRvIHY2Ljgu
-MTAuCj4gLSBCdW1wIHRoZSBGVlAgaW4gdGhlIHJlYWRtZSB0byB2ZXJzaW9uIDExLjI1IGJ1aWxk
-IDE1Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVA
-YXJtLmNvbT4KPiBDYzogTWFzYWhpcm8gWWFtYWRhIDx5YW1hZGEubWFzYWhpcm9Ac29jaW9uZXh0
-LmNvbT4KPiBDYzogQXJub3V0IFZhbmRlY2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPgo+IC0tLQoK
-QXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwg
-Q1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6
-Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============3184680065271639818==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0ffff6106cd2686cb08cfe2a60d7900929270af5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Bump Linux kernel to v6.8.10.
+- Bump the FVP in the readme to version 11.25 build 15.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/arm/foundation-v8/patches/linux-headers/linux-headers.hash | 1 +
+ board/arm/foundation-v8/patches/linux/linux.hash                 | 2 ++
+ board/arm/foundation-v8/readme.txt                               | 2 +-
+ configs/arm_foundationv8_defconfig                               | 7 ++++---
+ 4 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/board/arm/foundation-v8/patches/linux-headers/linux-headers.hash b/board/arm/foundation-v8/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/arm/foundation-v8/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/arm/foundation-v8/patches/linux/linux.hash b/board/arm/foundation-v8/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..559b53be2d
+--- /dev/null
++++ b/board/arm/foundation-v8/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b0bb92d982f88380e5b2059349c3a862e0afa712e0646eb0e082b9c2c5cb5176  linux-6.8.10.tar.xz
+diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
+index cb0fe08b87..701cf3ceb0 100644
+--- a/board/arm/foundation-v8/readme.txt
++++ b/board/arm/foundation-v8/readme.txt
+@@ -3,7 +3,7 @@ ARM software simulator of the AArch64 architecture.
+ 
+ First, one has to download the AArch64 software simulator from:
+ 
+-  https://armkeil.blob.core.windows.net/developer/Files/downloads/ecosystem-models/Foundation_Platform_11.20_15_Linux64.tgz
++  https://developer.arm.com/-/media/Files/downloads/ecosystem-models/FM_11_25/Foundation_Platform_11.25_15_Linux64.tgz
+ 
+ Then, use the arm_foundationv8_defconfig configuration to build your
+ Buildroot system.
+diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
+index 102fe8fd09..69266894e1 100644
+--- a/configs/arm_foundationv8_defconfig
++++ b/configs/arm_foundationv8_defconfig
+@@ -1,10 +1,11 @@
+ BR2_aarch64=y
+-# Linux headers same as kernel, a 6.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++# Linux headers same as kernel, a 6.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
++BR2_GLOBAL_PATCH_DIR="board/arm/foundation-v8/patches"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.10"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8-gicv3-psci"
+
+--===============3184680065271639818==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3184680065271639818==--
