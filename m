@@ -4,91 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12C85C3DA42
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 09:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38282C3DA42
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 09:09:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4F9D6059C;
-	Wed, 10 Jul 2024 09:09:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCF52606FD;
+	Wed, 10 Jul 2024 09:09:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ofOuXqPxAuLo; Wed, 10 Jul 2024 09:09:07 +0000 (UTC)
+ id i28lnwM4AwhF; Wed, 10 Jul 2024 09:09:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D41E1605CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF1E460FCD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D41E1605CF;
-	Wed, 10 Jul 2024 09:09:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF1E460FCD;
+	Wed, 10 Jul 2024 09:09:09 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9C1981BF573
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 09:09:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D65191BF573
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 09:09:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86E0880BEC
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 09:09:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFC4F80BEC
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 09:09:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KxR1Mm19kzH3 for <buildroot@lists.busybox.net>;
+ id nWT0slT6lw24 for <buildroot@lists.busybox.net>;
  Wed, 10 Jul 2024 09:09:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 10BDE80B9C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10BDE80B9C
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 10BDE80B9C
- for <buildroot@busybox.net>; Wed, 10 Jul 2024 09:09:00 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-3678fbf4a91so3077123f8f.1
- for <buildroot@busybox.net>; Wed, 10 Jul 2024 02:09:00 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 85FF080BBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85FF080BBA
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 85FF080BBA
+ for <buildroot@busybox.net>; Wed, 10 Jul 2024 09:09:01 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-36798779d75so5267992f8f.3
+ for <buildroot@busybox.net>; Wed, 10 Jul 2024 02:09:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1720602539; x=1721207339;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=XJJj1xRoIHyQJLfeTk14YFJ1AVpuDBr7jr343bkoXyA=;
- b=oXJyAtYt/iURSdJdQpS/BDSHB30ZuqO893osdGcpMcaObzWe1MCT968UBksMlIJkXI
- ZM/tZpsqqHEgm2zwcLBphMv8jZsWFeY9jgPAh7bGZHp1XYf9TSoTrHZe4zNWD1CaJboa
- kWnVdiwxkg1i8+5XzCKo19l5d+chBrg3NjpRxqI/Grthsrq43cQmYLFy+5TuUvCpx0/0
- XvzAFzYWz+gj2gp/4oaO/qJgn/wU05zJuIP0bIp3FFH7xClGEppv746E2CuIkHRrQY9K
- 6DISeInhSdLxb7Be1jDhYx8xHQtE19MgHI4SS2mOVojJ5vO22mfFD014iOySE/PX6ARD
- JTqA==
-X-Gm-Message-State: AOJu0Yzj3H2HX5sTVV7KAcRf2Mhh/GHVQHKwSSeRY1bJEAjRCpVmTgs4
- BLlVOArV9aJjhWAmkIifFPVGu6l1DEyCQVVfLziB3dkQAmy3y6Qpvlz0kWt2kqRkOrdsQ+ht7rT
- 6Rg==
-X-Google-Smtp-Source: AGHT+IHEVFm3yJukIfKyRhGhc8LRJJAr7VrMPczYRFZM2ijdoGED3jjnXDca5yxEy5F3SgKUBrh3GQ==
-X-Received: by 2002:adf:ea85:0:b0:367:96a0:c4b7 with SMTP id
- ffacd0b85a97d-367cead891cmr3587609f8f.62.1720602538701; 
- Wed, 10 Jul 2024 02:08:58 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=F2NQN1A5YaOwTn1Y++qxZyuxUF9cRscx7WJV1Ihkkbs=;
+ b=LQfBCgHsw+4upfZVi5SJ7widJnJlHwiW2jox7lvUAbc5KgtTXJXsktLICXBUNDC2Ju
+ DtpsLOR8DkaQTiYuvhwgr7gBieSv7WwlYTlcEqxRCo0R/CJrUp/aHt9P8wXGmOKS4TlD
+ l/TlQ7aW9DwK4gCgFirGQcI6samXE7j7X2lMACyplmg144JuW10OOOq38fxVXmtKYbfU
+ I/8As/0G6OgVQOZuju4qCTn4r/oLirE5yxzHFijrL1opArHMidULo8c2grrECMwQmwUd
+ bM7qJs16ekBhnpBPE2QXhzUdI/27zVDu3hABXJGRTSGBXmfS6+ZbnJPmpHeyn71SuwgE
+ Ld8Q==
+X-Gm-Message-State: AOJu0YwAMNLKGHVwJP6LiRvhBhEwDdceekpCl4aqw3xOYx9tSpT/KksE
+ BahTPKWqxSzApccTncJ21fsD8YvenAmKEJA7zj/UiWXkgGXZs+vVQ2rZ74GoO6Jf9a9LWeK8o9U
+ sNw==
+X-Google-Smtp-Source: AGHT+IEI5cRL2kEc3xS/Zqwu5LL6HZNujJ/zoZUkNIYB4VXm6IMflS0X4rIIIAJW1ynZz7NLWu4QbQ==
+X-Received: by 2002:a5d:6da6:0:b0:367:9881:7d5f with SMTP id
+ ffacd0b85a97d-367cea46465mr5108911f8f.3.1720602539540; 
+ Wed, 10 Jul 2024 02:08:59 -0700 (PDT)
 Received: from vm-2404.. ([37.66.35.199]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-367cde8425asm4749792f8f.26.2024.07.10.02.08.57
+ ffacd0b85a97d-367cde8425asm4749792f8f.26.2024.07.10.02.08.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Jul 2024 02:08:58 -0700 (PDT)
+ Wed, 10 Jul 2024 02:08:59 -0700 (PDT)
 From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Wed, 10 Jul 2024 11:08:47 +0200
-Message-ID: <20240710090848.2697402-1-francois.perrad@gadz.org>
+Date: Wed, 10 Jul 2024 11:08:48 +0200
+Message-ID: <20240710090848.2697402-2-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240710090848.2697402-1-francois.perrad@gadz.org>
+References: <20240710090848.2697402-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gadz.org; s=google; t=1720602539; x=1721207339; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=XJJj1xRoIHyQJLfeTk14YFJ1AVpuDBr7jr343bkoXyA=;
- b=kjpoio3zH8Yo30qDeRdU40/dCwCeiJPIyKCu668MreIof/VqBezk40B6RGJ5qwv6X7
- EISUC9mTJlpWzRT25cIq9hsgk8n5yRg/pAh7V1hJByKKQDWWks78hdYUsO2CC3vhGJad
- +G3e7XWPuAJMw2+iXbTexYe3SZUTPsUo7XbIP3yYbFjfhFNsgHOGBnOAhD/2d8SzzSsP
- kFqihPMg6zFobb6dl1/WhNAlxwBKsOdOe+siLa3VgMBan8LsEB+TiLwuTExrRit8Kw67
- I2heC17mVWNoPxoQXNO9ZM2CYKwkoFYlZdFg0G2Fr8jo1CudZ7fwfLQ0vf+RBb9ca0Ge
- D0XA==
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=F2NQN1A5YaOwTn1Y++qxZyuxUF9cRscx7WJV1Ihkkbs=;
+ b=NjhWbPH73adrmuzjJf1NgUm1wo2z4yitVan6Zh3yJpBsD7/76ZvAe2VDfnt+Ohqgdo
+ PpFKhrwyIBUyatKjI/TNBgXHJzz0yImFhuiM9at7fuDfgZcTiqNdz3fcagpm2DXeyKtN
+ +Ezv+7WL5exdtEffb0wQbELmYwP5oMq9XOuN8AfLARKwQ4pHQsJyOYTgsymWnq15z0Cw
+ zClLX329K+drFKSzxIKtxvcJcYuiQirdggF/+SwQwtWqe365ZZ624ypVNhWiBhpJLWmJ
+ U3LWefA2bNiznHgVDMjY6KEbHIuJC0UbXe+oUKBI67WedVSAN17kqFwUVj+UopE9jVQK
+ 5tag==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=kjpoio3z
-Subject: [Buildroot] [PATCH 1/2] package/lua-livr: bump to version 0.4.0
+ dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
+ header.a=rsa-sha256 header.s=google header.b=NjhWbPH7
+Subject: [Buildroot] [PATCH 2/2] package/lua-livr-extra: bump to version
+ 0.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,33 +114,33 @@ diff COPYRIGHT:
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua-livr/lua-livr.hash | 4 ++--
- package/lua-livr/lua-livr.mk   | 2 +-
+ package/lua-livr-extra/lua-livr-extra.hash | 4 ++--
+ package/lua-livr-extra/lua-livr-extra.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-livr/lua-livr.hash b/package/lua-livr/lua-livr.hash
-index 314f1d2bf..50e4d3c6a 100644
---- a/package/lua-livr/lua-livr.hash
-+++ b/package/lua-livr/lua-livr.hash
+diff --git a/package/lua-livr-extra/lua-livr-extra.hash b/package/lua-livr-extra/lua-livr-extra.hash
+index 7f8f66f05..28f71e4f0 100644
+--- a/package/lua-livr-extra/lua-livr-extra.hash
++++ b/package/lua-livr-extra/lua-livr-extra.hash
 @@ -1,3 +1,3 @@
  # computed by luarocks/buildroot
--sha256  531c4d56e2ef7906a6075e61fafee9ea265dc1a62698b966f5fc2f3abda23084  lua-livr-0.3.0-1.src.rock
--sha256  c6c2ca8e29b8e3b0558b046ffcbd4a5c31800bdca4520002ed4af76985f82d7d  lua-LIVR-0.3.0/COPYRIGHT
-+sha256  7f00fc561c5913bb53a21ec21f060118d9795c65a0d7a37903e311bdedcfff2a  lua-livr-0.4.0-1.src.rock
-+sha256  6840bae0e48c559cc6aa765d7744d920f8a05f608c4d1223fde8e6b8e7c48c5d  lua-LIVR-0.4.0/COPYRIGHT
-diff --git a/package/lua-livr/lua-livr.mk b/package/lua-livr/lua-livr.mk
-index fb835a1f9..56600c80b 100644
---- a/package/lua-livr/lua-livr.mk
-+++ b/package/lua-livr/lua-livr.mk
+-sha256  363e571d001b2e56eeafe2379c20aca65d67b5197199c957f9bb2a0c169aab5a  lua-livr-extra-0.2.0-1.src.rock
+-sha256  ded97ea3e541833b9c2c9bf9b266f037a83b57e2e2847fecdfbb9397818f5623  lua-LIVR-extra-0.2.0/COPYRIGHT
++sha256  3033526912977b3c618090c9f6e610d8dca596d423c9d09446c3507f2cc1f879  lua-livr-extra-0.3.0-1.src.rock
++sha256  94306dda50b3db0017b5d4fc31de4b82658153fed00a579f8b53abba43182c8c  lua-LIVR-extra-0.3.0/COPYRIGHT
+diff --git a/package/lua-livr-extra/lua-livr-extra.mk b/package/lua-livr-extra/lua-livr-extra.mk
+index ce783f519..c86da9372 100644
+--- a/package/lua-livr-extra/lua-livr-extra.mk
++++ b/package/lua-livr-extra/lua-livr-extra.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_LIVR_VERSION = 0.3.0-1
-+LUA_LIVR_VERSION = 0.4.0-1
- LUA_LIVR_NAME_UPSTREAM = lua-LIVR
- LUA_LIVR_LICENSE = MIT
- LUA_LIVR_LICENSE_FILES = $(LUA_LIVR_SUBDIR)/COPYRIGHT
+-LUA_LIVR_EXTRA_VERSION = 0.2.0-1
++LUA_LIVR_EXTRA_VERSION = 0.3.0-1
+ LUA_LIVR_EXTRA_NAME_UPSTREAM = lua-LIVR-extra
+ LUA_LIVR_EXTRA_LICENSE = MIT
+ LUA_LIVR_EXTRA_LICENSE_FILES = $(LUA_LIVR_EXTRA_SUBDIR)/COPYRIGHT
 -- 
 2.43.0
 
