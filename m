@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDCF1C3DA42
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 22:09:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2A1BC3DA41
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 22:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 829954139F;
-	Wed, 10 Jul 2024 22:09:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27683410B0;
+	Wed, 10 Jul 2024 22:09:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D-oAMwNga0zP; Wed, 10 Jul 2024 22:09:25 +0000 (UTC)
+ id b3bZkuDlRL1B; Wed, 10 Jul 2024 22:09:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3E6E40CFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A7F241599
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3E6E40CFF;
-	Wed, 10 Jul 2024 22:09:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CD8731BF593
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:09:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A7F241599;
+	Wed, 10 Jul 2024 22:09:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 060AC1BF593
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB2BC60784
+ by smtp2.osuosl.org (Postfix) with ESMTP id EEAFB405B3
  for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 22:09:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XER87dMYhMpR for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 69yvjUAX2vbk for <buildroot@lists.busybox.net>;
  Wed, 10 Jul 2024 22:09:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4936F60779
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 312E4404FC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4936F60779
+ by smtp2.osuosl.org (Postfix) with ESMTP id 312E4404FC
  for <buildroot@buildroot.org>; Wed, 10 Jul 2024 22:09:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37E9F84958; Wed, 10 Jul 2024 22:09:21 +0000 (UTC)
+ id 2B44E84928; Wed, 10 Jul 2024 22:09:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 00:01:44 +0200
+Date: Thu, 11 Jul 2024 00:01:12 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: a09d7b1d5f0874916ae4078b8037d7243aaa68be
-X-Git-Newrev: 657ee644b3f4d9d1e7e7bdc45d1f689890ac36a0
+X-Git-Oldrev: 544d3116d512ddffe932fa85d813d93147e9e22c
+X-Git-Newrev: a09d7b1d5f0874916ae4078b8037d7243aaa68be
 X-Patchwork-Hint: ignore
-Message-Id: <20240710220921.37E9F84958@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] gitlab: add default issue
- template
+Message-Id: <20240710220921.2B44E84928@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/daq: workaround
+ for upstream changing the archive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,111 +60,81 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7739277288875730897=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7739277288875730897==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=657ee644b3f4d9d1e7e7bdc45d1f689890ac36a0
+commit: https://git.buildroot.net/buildroot/commit/?id=a09d7b1d5f0874916ae4078b8037d7243aaa68be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-This introduces the default issue template, to help users provide issues
-that are meaningful, and that will help reproduce the issue.
+Upstream has changed the archive for the 2.0.7 release since we bumped
+in c1f820bd88a5 (package/daq: bump version to 2.0.7). Comparing the old
+archive as it is on s.b.o. with the one currently available on upstream,
+gives a few deltas, mostly;
+  - (C) years changed in comments
+  - version string changed from 2.0.6 to 2.0.7
+  - changes (that look legit) to autostuff
+  - a file dropped (Visual Studio related)
 
-If needed, we can add more templates in the future.
+Of course, that means the hashes changed, and no longer match what we
+have.
+
+Downloading the file manually and letting wget set the timestamp on it,
+reveals the archive is dated 2022-06-08T13:51:59. So, for more than two
+years now, we've been relying on the archive we cached on s.b.o.
+
+So, we can't just change the hashes to the new ones, nor can we replace
+the archive on s.b.o.
+
+Instead, we use the same trick as was used in c617ebbc977d
+(package/python-*: fix hashes for cargo-vendored python packages): we
+use the actual, real URL with a query parameter as the _SITE, and we set
+_SOURCE to a different name so as not to conflict with the previous
+archive.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-[Arnout:
- - add link to mailing list;
- - rephrase "pristine Buildroot";
- - add a checklist item for "I'm using latest commit";
- - add a checklist item for "make clean; make";
- - add formal items for Buildroot commit sha1 and distro.]
+Cc: Yoann Congal <yoann.congal@smile.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 32aacc4737e106a7ddb2f2129d4ab9f2279dcf92)
+(cherry picked from commit 9e00cceb60e9ac8ec36ec7eb43eb9ef5534b705d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .gitlab/issue_templates/default.md | 60 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ package/daq/daq.hash | 4 ++--
+ package/daq/daq.mk   | 6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/.gitlab/issue_templates/default.md b/.gitlab/issue_templates/default.md
-new file mode 100644
-index 0000000000..c3f23e54ba
---- /dev/null
-+++ b/.gitlab/issue_templates/default.md
-@@ -0,0 +1,60 @@
-+Thank you for opening a new issue. To help solve it faster and more easily,
-+please review this check-list, and fill in the sections below. Adapt as
-+needed.
-+
-+Do not open an issue to request a new feature; instead, post a message to
-+[the mailing list](https://lists.buildroot.org/mailman/listinfo/buildroot).
-+
-+_Note: issues missing any information may get closed without further ado._
-+
-+---
-+### Check-list
-+
-+- [ ] I did not find the issue in the existing issues
-+- [ ] I can reproduce the issue with unmodified Buildroot from [this
-+      repository](https://gitlab.com/buildroot.org/buildroot), not from a
-+      fork somewhere else
-+- [ ] I can reproduce the issue on the latest commit of the branch I'm using:
-+    - [ ] master
-+    - [ ] stable (i.e. 20NN.MM.x - please specify)
-+    - [ ] LTS (i.e. 20NN.02.x - please specify)
-+- [ ] I can reproduce the issue after running `make clean; make`
-+- [ ] I attached the full build log file (e.g. `make 2>&1 |tee build.log`)
-+- [ ] I attached a **minimal** defconfig file that can reproduce the
-+      issue (`make BR2_DEFCONFIG=$(pwd)/issue_defconfig savedefconfig`)
-+- [ ] I also attached the configuration for kconfig-based packages that
-+      are enabled (and necessary to reproduce the issue), most notably:
-+    - [ ] busybox
-+    - [ ] linux
-+    - [ ] uclibc
-+    - [ ] uboot
-+    - [ ] …
-+
-+---
-+### What I did
-+
-+**Buildroot commit sha1**: _get this with `git describe HEAD`_
-+**Distribution of the build machine**: _get this with `NAME` and `VERSION` from `/etc/os-release`_
-+
-+_Here, describe what you did:_
-+- _any special environment variables: CC, CXX, TARGET, CROSS_COMPILE, etc…_
-+- _the commands you ran:_
-+    ```sh
-+    $ make [...]
-+    ```
-+- _anything else that you might think is important…_
-+
-+---
-+### What happens
-+
-+_Here, describe what happens that you believe was incorrect._
-+
-+---
-+### What was expected
-+
-+_Here, describe the behaviour you expected._
-+
-+---
-+### Extra information
-+
-+_Here, you may write additional information that does not fit above_
-
---===============7739277288875730897==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/daq/daq.hash b/package/daq/daq.hash
+index 0fa1edecc2..82323ed404 100644
+--- a/package/daq/daq.hash
++++ b/package/daq/daq.hash
+@@ -1,7 +1,7 @@
+ # From https://www.snort.org/downloads/snort/md5s
+-md5  ea796f001d1b00302e4e69e337ab2460  daq-2.0.7.tar.gz
++md5  60e5ddcafb985fac7374884d28f299d1  daq-2.0.7-modified.tar.gz
+ # Locally computed:
+-sha256  bdc4e5a24d1ea492c39ee213a63c55466a2e8114b6a9abed609927ae13a7705e  daq-2.0.7.tar.gz
++sha256  d1f6709bc5dbddee3fdf170cdc1e49fb926e2031d4869ecf367a8c47efc87279  daq-2.0.7-modified.tar.gz
+ 
+ # Hash for license files:
+ sha256  07f28289c09fd9eb5a6ff7bc710ff40363601b1bbc6f3637d8ed412150e90819  COPYING
+diff --git a/package/daq/daq.mk b/package/daq/daq.mk
+index 8a5394a63c..27abd4d2f5 100644
+--- a/package/daq/daq.mk
++++ b/package/daq/daq.mk
+@@ -5,7 +5,11 @@
+ ################################################################################
+ 
+ DAQ_VERSION = 2.0.7
+-DAQ_SITE = https://www.snort.org/downloads/snort
++# Upstream re-published a modified archive for the same 2.0.7 version, so change
++# its name locally, to avoid conflict with older BR versions which had a hash
++# for the previous archive.
++DAQ_SOURCE = daq-2.0.7-modified.tar.gz
++DAQ_SITE = https://www.snort.org/downloads/snort/daq-$(DAQ_VERSION).tar.gz?buildroot-path=filename
+ DAQ_LICENSE = GPL-2.0
+ DAQ_LICENSE_FILES = COPYING
+ DAQ_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7739277288875730897==--
