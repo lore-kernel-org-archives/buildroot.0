@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15DEC3DA41
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 21:13:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0812CC3DA42
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 21:16:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5AE360672;
-	Wed, 10 Jul 2024 21:13:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC78A60885;
+	Wed, 10 Jul 2024 21:16:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tYsC3QlhcSHd; Wed, 10 Jul 2024 21:13:57 +0000 (UTC)
+ id FWKtKQI0-blA; Wed, 10 Jul 2024 21:16:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCB9861045
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9A4E60BC4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCB9861045;
-	Wed, 10 Jul 2024 21:13:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 474181BF292
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:13:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9A4E60BC4;
+	Wed, 10 Jul 2024 21:16:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 706B61BF292
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:16:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 332F680ACD
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:13:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E00360BC4
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 21:16:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xseBgjlHoA36 for <buildroot@lists.busybox.net>;
- Wed, 10 Jul 2024 21:13:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ts1P8cbKapSP for <buildroot@lists.busybox.net>;
+ Wed, 10 Jul 2024 21:16:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 16229808D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16229808D9
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 16229808D9
- for <buildroot@buildroot.org>; Wed, 10 Jul 2024 21:13:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F997FF802;
- Wed, 10 Jul 2024 21:13:52 +0000 (UTC)
-Date: Wed, 10 Jul 2024 23:13:51 +0200
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20240710231351.32389974@windsurf>
-In-Reply-To: <20240709202438.27298-1-heiko.thiery@gmail.com>
-References: <20240709202438.27298-1-heiko.thiery@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3E1DC60885
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E1DC60885
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3E1DC60885
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 21:16:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 38BAB40002;
+ Wed, 10 Jul 2024 21:16:47 +0000 (UTC)
+Date: Wed, 10 Jul 2024 23:16:46 +0200
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Message-ID: <20240710231646.3299b8f2@windsurf>
+In-Reply-To: <7e24df50-3710-4700-a644-901528a1a939@mind.be>
+References: <AS1P250MB060825741529F073326AA014A9C82@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
+ <7e24df50-3710-4700-a644-901528a1a939@mind.be>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720646032;
+ d=bootlin.com; s=gm1; t=1720646207;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=7XJ2Mp+57w5WEmyN/lHxmisbtp8gDr2M7bcuIjL0tsA=;
- b=CiyxtsSAdD2anTlyL7DUtq/i/v8hFDAD4o2WNLl8oetInf0+hJPp8p6arFlQgRgn6OeBUd
- 3mpTYaVMBlxC1SNEMSHRhYTVwrwChyhLgwI+NAIPY1SnWm/tazv44PReHlHhE5UShi1Eb2
- LygmWOMfrGawm0TLHJ4Ww1CXbfFXOPgsrR0GAl+VgiJQe5RFA/2ZgK1zaM/nba2JeMUyHh
- 2RLpVRHPNwoMHgDLrDwHTgq4fzJu54ZWF81VHZQrdrAAmQvabRqIKn8Bp2iPyBno3KB7Gx
- rymiliz8QSoDPGyuhwddcuKomzoAPVhp0kw2KwefkrkbYMHxMwnQMLK/BxAUjA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=1biIBoTnToVUwApWlI5oxG5xKSLrJul3mI1/Y/KjCHM=;
+ b=Xkm74a5RbP4gqrECrHwBQutaZ0uzb7kIDLhN15mZIbQ36uX/t59e+PXLmYrcPC6g7yKFLu
+ w/XjoMEhiBo8s+/aMS8/YP4FgCztf+Ay8DMQhIXS6GuqT7a7uRSTh+awhFwgGCt8bOyZGH
+ 8hRlu4jl1IFZBSZ8PMTIQVVWOcXuppjoa8xJhgWHGS9sfbNxmZiOaQY6i1znue2DV8IQ78
+ bMtKnILq30cEEQaGsai6RehDo3PTAdXHy8X2lcTkAWVQ58OChQLLdgHVjfF4IELFhhGH/6
+ 49fqvZQKGfDyEwuFy2BqnfQZmkSPfIjbtSun4kJwbD1dkoUZAemNCPGjDp062A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CiyxtsSA
-Subject: Re: [Buildroot] [PATCH] package/libssh: select
- BR2_PACKAGE_LIBOPENSSL_ENGINES
+ header.s=gm1 header.b=Xkm74a5R
+Subject: Re: [Buildroot] [PATCH 1/2] package/libzenoh-c: bump to version
+ 0.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,30 +84,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Michel Alex <Alex.Michel@wiedemann-group.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  9 Jul 2024 22:24:39 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+On Thu, 20 Jun 2024 18:03:57 +0200
+Arnout Vandecappelle via buildroot <buildroot@buildroot.org> wrote:
 
-> This fixes link time errors, undefined references to various ENGINE_*
-> functions in case libopenssl backend is used.
+> > -LIBZENOH_C_VERSION = 0.11.0.3
+> > +LIBZENOH_C_VERSION = 0.11.0  
 > 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  package/libssh/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>   Does 0.11.0 come _after_ 0.11.0.3? I.e. should the final .3 be interpreted as 
+> something like a -rc3? This is very counter-intuitive... And it breaks 
+> release-monitoring.org...
 
-Applied to master, after adding a reference to the autobuilder build
-failure. Thanks!
+Yes, 0.11.0 came *after* 0.11.0.3.
+See https://github.com/eclipse-zenoh/zenoh-c/releases, which clearly
+documents the following releases (in reverse chronological order):
+
+ 0.11.0
+ 0.11.0.3
+ 0.11.0.2
+ v0.10.1-rc
+ v0.10.0-rc
+
+No way one can write an algorithm that figures out which release is
+newer than the other :-)
+
+Best regards,
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
