@@ -4,61 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A15E1C3DA42
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 15:58:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC298C3DA42
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 16:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C39F1400EC;
-	Wed, 10 Jul 2024 15:58:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 420E6413C7;
+	Wed, 10 Jul 2024 16:19:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PGthNGtURHqd; Wed, 10 Jul 2024 15:58:30 +0000 (UTC)
+ id 1ltkqQGl9ovZ; Wed, 10 Jul 2024 16:19:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 708FA415C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62CA640D4F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 708FA415C3;
-	Wed, 10 Jul 2024 15:58:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D2D0E1BF5A7
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 15:58:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62CA640D4F;
+	Wed, 10 Jul 2024 16:19:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 110651BF59C
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 16:19:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CBF88415C1
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 15:58:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F244F402E4
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 16:19:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m_18EV_mfQtm for <buildroot@lists.busybox.net>;
- Wed, 10 Jul 2024 15:58:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
- envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B6EA415BB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B6EA415BB
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9B6EA415BB
- for <buildroot@buildroot.org>; Wed, 10 Jul 2024 15:58:27 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id ACFE01814B9; Wed, 10 Jul 2024 17:58:23 +0200 (CEST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2GKf8wFJhk5E for <buildroot@lists.busybox.net>;
+ Wed, 10 Jul 2024 16:19:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 63D5B40231
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63D5B40231
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 63D5B40231
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 16:19:30 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b57c.dip0.t-ipconnect.de [84.161.181.124])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8A512A4C113D;
+ Wed, 10 Jul 2024 18:19:27 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60634)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98-RC3)
+ (envelope-from <bernd@kuhls.net>) id 1sRa2Q-000000001di-3KQu;
+ Wed, 10 Jul 2024 16:19:27 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 10 Jul 2024 17:57:54 +0200
-Message-Id: <20240710155754.62512-1-buildroot@heine.tech>
-X-Mailer: git-send-email 2.34.1
+Date: Wed, 10 Jul 2024 18:19:27 +0200
+Message-Id: <20240710161927.61358-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1720627105; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=LonIq0sSQh3cLMKGRWI4YZ1Irkpk8iPqTc0a6RNX9pw=;
- b=Oemyjr4lSA3vJKczguFmC8w/XQ2LYnO8aBmv3wzlssjcda9BS/Xdb9Be4dAj3VlPh1w/dh
- TIHQgSPzGiNqqIp3BiDktIRnwt0cyu5/W89CV31cIoZR0zubR2IO9dheje90M0sQcpge6e
- yqMJAhYHosx5Tb9CZRO4rP3zm4YFBHA=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=Oemyjr4l
-Subject: [Buildroot] [PATCH] package/sqlitecpp: require C++11
+ d=kuhls.net; 
+ s=kas202406071026; t=1720628367;
+ bh=HZTyf52vcR2IlheTvorT69PjsJFt2+aNvMa3v8W3Epc=;
+ h=From:To:Cc:Subject:Date:From;
+ b=O+hgr3ai2CBYpFsqi6p/csLbp2vm3OhPoAf0N6P4sMOXiVD7j5V4Ge4uabzOYpwZS
+ /NB6/g8izcOg3vYulj2l1tAm50ImhWm4tJvgkjYEaUNN4AKp1G5yIZkUUpvZhRd/cM
+ Nt2qlfXdGagZ9zoR/WZaUXqk7yIpqkaEKvo93xhUtUGBhPBknBdyfqOboAm0e5KJrr
+ FKOE148IQhJhXqzz914fpSGKt2bV096erbNiPq8/FenhoDhLeVcYjW1HVdW+jRNq7n
+ fqUY9miLR+y0XKcho8ZMtkrzwStgJw0gNzizOhbVGYlZ6Hr7ELe79dBHXQZbIeK0Bs
+ 1LhOAEiIDwy3g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=O+hgr3ai
+Subject: [Buildroot] [PATCH 1/1] package/exim: security bump version to 4.98
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,45 +80,305 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-[0] lists gcc 4.8.4 as minimum version. Since we don't have
-a guard for patch versions depend on gcc 4.9
+Release notes:
+https://lists.exim.org/lurker/message/20240710.155945.8823670d.en.html
 
-[0] http://srombauts.github.io/SQLiteCpp/#supported-platforms
+Fixes CVE-2024-39929: https://bugs.exim.org/show_bug.cgi?id=3099#c4
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Removed patch 0004 due to removal of codesourcery arm/aarch64 toolchains
+with commit 53a8c5150e5eeeb6dbbead0275dbf9141f507511.
+
+Patch 0005 (renamed to 0004) is still necessary with gcc-13.x,
+reformatted Upstream trailer.
+
+Removed patches 0006, 0007 & 0008 which are included in this release.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/sqlitecpp/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ .checkpackageignore                           |  2 -
+ ..._lock-fix-lstat-related-build-errors.patch | 53 -----------------
+ ...atch => 0004-sieve-fix-build-errors.patch} |  2 +-
+ .../0006-OpenSSL-fix-non-DANE-build.patch     | 28 ---------
+ package/exim/0007-typoes.patch                | 58 -------------------
+ ...nssl.c-fix-build-with-libressl-3.5.0.patch | 43 --------------
+ package/exim/exim.hash                        |  4 +-
+ package/exim/exim.mk                          |  2 +-
+ 8 files changed, 4 insertions(+), 188 deletions(-)
+ delete mode 100644 package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
+ rename package/exim/{0005-sieve-fix-build-errors.patch => 0004-sieve-fix-build-errors.patch} (95%)
+ delete mode 100644 package/exim/0006-OpenSSL-fix-non-DANE-build.patch
+ delete mode 100644 package/exim/0007-typoes.patch
+ delete mode 100644 package/exim/0008-src-src-tls-openssl.c-fix-build-with-libressl-3.5.0.patch
 
-diff --git a/package/sqlitecpp/Config.in b/package/sqlitecpp/Config.in
-index 36ee4b73f9..31de9a3904 100644
---- a/package/sqlitecpp/Config.in
-+++ b/package/sqlitecpp/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SQLITECPP
- 	bool "sqlitecpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA
- 	help
-@@ -9,5 +10,5 @@ config BR2_PACKAGE_SQLITECPP
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 8517ede49e..9eaf5b996d 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -540,8 +540,6 @@ package/evemu/0004-src-evemu.c-fix-build-with-kernels-4.16.patch lib_patch.Upstr
+ package/exim/0001-Build-buildconfig-for-the-host.patch lib_patch.Upstream
+ package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch lib_patch.Upstream
+ package/exim/0003-Skip-version-check-and-symlink-installation.patch lib_patch.Upstream
+-package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch lib_patch.Upstream
+-package/exim/0005-sieve-fix-build-errors.patch lib_patch.Upstream
+ package/exim/S86exim lib_sysv.Indent lib_sysv.Variables
+ package/expect/0001-enable-cross-compilation.patch lib_patch.Upstream
+ package/expect/0002-allow-tcl-build-directory.patch lib_patch.Upstream
+diff --git a/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch b/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
+deleted file mode 100644
+index 616ada5026..0000000000
+--- a/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From bbcf4320134efd8a01ce5a02bb9af62019ca05f6 Mon Sep 17 00:00:00 2001
+-From: Luca Ceresoli <luca@lucaceresoli.net>
+-Date: Tue, 4 Feb 2020 15:57:48 +0100
+-Subject: [PATCH] exim_lock: fix lstat-related build errors
+-
+-exim_lock fails to cross-compile with the Sourcery CodeBench ARM 2014.05
+-toolchain due the a missing include of sys/types.h, needed for the
+-constants used by fstat() and lstat().
+-
+-Discovered when cross-compiling with the Buildroot embedded Linux
+-buildsystem.
+-
+-Fixes:
+-
+-  exim_lock.c:427:30: error: 'S_IFMT' undeclared (first use in this function)
+-         if ((statbuf.st_mode & S_IFMT) == S_IFLNK)
+-                                ^
+-  exim_lock.c:427:30: note: each undeclared identifier is reported only once for each function it appears in
+-  exim_lock.c:427:41: error: 'S_IFLNK' undeclared (first use in this function)
+-         if ((statbuf.st_mode & S_IFMT) == S_IFLNK)
+-                                           ^
+-
+-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+-Upstream-status: https://bugs.exim.org/show_bug.cgi?id=2523
+-[Bernd: rebased for version 4.97.1]
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/exim_lock.c | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/src/exim_lock.c b/src/exim_lock.c
+-index 068216816054..cb140aff6436 100644
+---- a/src/exim_lock.c
+-+++ b/src/exim_lock.c
+-@@ -14,6 +14,8 @@ Copyright (c) The Exim Maintainers 2016 - 2021
+- SPDX-License-Identifier: GPL-2.0-or-later
+- */
+-
+-+#define _XOPEN_SOURCE
+-+
+- #include "os.h"
+-
+- #include <stdio.h>
+-@@ -27,6 +29,7 @@ Copyright (c) The Exim Maintainers 2016
+- #include <unistd.h>
+- #include <utime.h>
+- #include <sys/utsname.h>
+-+#include <sys/types.h>
+- #include <sys/stat.h>
+- #include <sys/file.h>
+- #include <pwd.h>
+---
+-2.25.0
+diff --git a/package/exim/0005-sieve-fix-build-errors.patch b/package/exim/0004-sieve-fix-build-errors.patch
+similarity index 95%
+rename from package/exim/0005-sieve-fix-build-errors.patch
+rename to package/exim/0004-sieve-fix-build-errors.patch
+index 20323c17cd..c1a2c45b8d 100644
+--- a/package/exim/0005-sieve-fix-build-errors.patch
++++ b/package/exim/0004-sieve-fix-build-errors.patch
+@@ -20,7 +20,7 @@ Discovered when cross-compiling with the Buildroot embedded Linux
+ buildsystem.
  
- 	  https://github.com/SRombauts/SQLiteCpp
+ Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+-Upstream-status: https://bugs.exim.org/show_bug.cgi?id=2523
++Upstream: https://bugs.exim.org/show_bug.cgi?id=2523
+ [Bernd: rebased for version 4.97.1]
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+diff --git a/package/exim/0006-OpenSSL-fix-non-DANE-build.patch b/package/exim/0006-OpenSSL-fix-non-DANE-build.patch
+deleted file mode 100644
+index 8ae63d2226..0000000000
+--- a/package/exim/0006-OpenSSL-fix-non-DANE-build.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 37b849dca4dfd855212a763662825e967a4d77b1 Mon Sep 17 00:00:00 2001
+-From: Jeremy Harris <jgh146exb@wizmail.org>
+-Date: Tue, 7 Nov 2023 15:02:18 +0000
+-Subject: [PATCH] OpenSSL: fix non-DANE build
+-
+-Upstream: https://git.exim.org/exim.git/commitdiff/37b849dca4dfd855212a763662825e967a4d77b1
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/tls-openssl.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/src/tls-openssl.c b/src/src/tls-openssl.c
+-index ef11de593..851ac77c5 100644
+---- a/src/tls-openssl.c
+-+++ b/src/tls-openssl.c
+-@@ -2605,7 +2605,7 @@ if (!(bs = OCSP_response_get1_basic(rsp)))
+-     asking for certificate-status under DANE, so this callback won't run for
+-     that combination. It still will for non-DANE. */
+- 
+--#ifdef EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_SIGNER
+-+#if defined(EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_SIGNER) && defined(SUPPORT_DANE)
+-     X509 * signer;
+- 
+-     if (  tls_out.dane_verified
+--- 
+-2.30.2
+-
+diff --git a/package/exim/0007-typoes.patch b/package/exim/0007-typoes.patch
+deleted file mode 100644
+index 6bbfc9eecd..0000000000
+--- a/package/exim/0007-typoes.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From caf57fe7eb5018b8df196e6d9f99586232798eb3 Mon Sep 17 00:00:00 2001
+-From: Jeremy Harris <jgh146exb@wizmail.org>
+-Date: Wed, 8 Nov 2023 14:22:37 +0000
+-Subject: [PATCH] typoes
+-
+-Upstream: https://git.exim.org/exim.git/commit/caf57fe7eb5018b8df196e6d9f99586232798eb3
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/src/tls-openssl.c | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/src/tls-openssl.c b/src/tls-openssl.c
+-index 851ac77c5..237303ba9 100644
+---- a/src/tls-openssl.c
+-+++ b/src/tls-openssl.c
+-@@ -77,9 +77,9 @@ change this guard and punt the issue for a while longer. */
+- #  define EXIM_HAVE_OPENSSL_KEYLOG
+- #  define EXIM_HAVE_OPENSSL_CIPHER_GET_ID
+- #  define EXIM_HAVE_SESSION_TICKET
+--#  define EXIM_HAVE_OPESSL_TRACE
+--#  define EXIM_HAVE_OPESSL_GET0_SERIAL
+--#  define EXIM_HAVE_OPESSL_OCSP_RESP_GET0_CERTS
+-+#  define EXIM_HAVE_OPENSSL_TRACE
+-+#  define EXIM_HAVE_OPENSSL_GET0_SERIAL
+-+#  define EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_CERTS
+- #  define EXIM_HAVE_SSL_GET0_VERIFIED_CHAIN
+- #  ifndef DISABLE_OCSP
+- #   define EXIM_HAVE_OCSP
+-@@ -1756,7 +1756,7 @@ level. */
+- DEBUG(D_tls)
+-   {
+-   SSL_CTX_set_info_callback(ctx, info_callback);
+--#if defined(EXIM_HAVE_OPESSL_TRACE) && !defined(OPENSSL_NO_SSL_TRACE)
+-+#if defined(EXIM_HAVE_OPENSSL_TRACE) && !defined(OPENSSL_NO_SSL_TRACE)
+-   /* this needs a debug build of OpenSSL */
+-   SSL_CTX_set_msg_callback(ctx, SSL_trace);
+- #endif
+-@@ -2442,7 +2442,7 @@ tls_in.ocsp = OCSP_NOT_RESP;
+- if (!olist)
+-   return SSL_TLSEXT_ERR_NOACK;
+- 
+--#ifdef EXIM_HAVE_OPESSL_GET0_SERIAL
+-+#ifdef EXIM_HAVE_OPENSSL_GET0_SERIAL
+-  {
+-   const X509 * cert_sent = SSL_get_certificate(s);
+-   const ASN1_INTEGER * cert_serial = X509_get0_serialNumber(cert_sent);
+-@@ -2646,7 +2646,7 @@ if (!(bs = OCSP_response_get1_basic(rsp)))
+- 
+-       debug_printf("certs contained in basicresp:\n");
+-       x509_stack_dump_cert_s_names(
+--#ifdef EXIM_HAVE_OPESSL_OCSP_RESP_GET0_CERTS
+-+#ifdef EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_CERTS
+- 	OCSP_resp_get0_certs(bs)
+- #else
+- 	bs->certs
+--- 
+-2.30.2
+-
+diff --git a/package/exim/0008-src-src-tls-openssl.c-fix-build-with-libressl-3.5.0.patch b/package/exim/0008-src-src-tls-openssl.c-fix-build-with-libressl-3.5.0.patch
+deleted file mode 100644
+index 67d96fc1af..0000000000
+--- a/package/exim/0008-src-src-tls-openssl.c-fix-build-with-libressl-3.5.0.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 88f45502272a9a674948204e460ebe90202827d4 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 11 Feb 2024 21:45:42 +0100
+-Subject: [PATCH] src/src/tls-openssl.c: fix build with libressl >= 3.5.0
+-
+-OCSP_BASICRESP is an opaque structure since libressl 3.5.0 and
+-https://github.com/libressl/openbsd/commit/57442b0028fb09287793f279ee57ebb38e9ab954
+-resulting in the following build failure since version 4.97 and
+-https://git.exim.org/exim.git/commit/6bf0021993572586f031ac7d973ca33358c2dac8:
+-
+-In file included from tls.c:473:
+-tls-openssl.c: In function 'tls_client_stapling_cb':
+-tls-openssl.c:2652:11: error: invalid use of incomplete typedef 'OCSP_BASICRESP' {aka 'struct ocsp_basic_response_st'}
+- 2652 |         bs->certs
+-      |           ^~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/869fde62128d7b0c65e0ac596a3a3f69b332583d
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://bugs.exim.org/show_bug.cgi?id=3074
+----
+- src/src/tls-openssl.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/tls-openssl.c b/src/tls-openssl.c
+-index 237303ba9..c7f94c160 100644
+---- a/src/tls-openssl.c
+-+++ b/src/tls-openssl.c
+-@@ -98,6 +98,10 @@ change this guard and punt the issue for a while longer. */
+- # define EXIM_HAVE_OPENSSL_CIPHER_GET_ID
+- #endif
+- 
+-+#if LIBRESSL_VERSION_NUMBER >= 0x3050000fL
+-+# define EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_CERTS
+-+#endif
+-+
+- #if !defined(LIBRESSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x030000000L)
+- # define EXIM_HAVE_EXPORT_CHNL_BNGNG
+- # define EXIM_HAVE_OPENSSL_X509_STORE_GET1_ALL_CERTS
+--- 
+-2.43.0
+-
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index a3822302fb..de803bb27b 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  bd782057509a793593508528590626d185ea160ce32cb34beda262e99cefdfa9  exim-4.97.1.tar.xz
++sha256  0ebc108a779f9293ba4b423c20818f9a3db79b60286d96abc6ba6b85a15852f7  exim-4.98.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  eab7ca28b37f1635c48f5e963ab69fcbad539b2c35a84286ecaad7d7ff5210bbefce86452302e08099afdc0710f9cb7ca6d9b152b0ba88a19292f7c5541e0cfc  exim-4.97.1.tar.xz
++sha512  13dd963dd0899bb4d64bee44c20883e720e469a4d77456b877d6693cfc4419805a045cb561508cdf763dbb37cc84fbdc6177d68acc2183934c3224fbd03caf15  exim-4.98.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index d78b95ad15..45708d3941 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "sqlitecpp needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "sqlitecpp needs a toolchain w/ C++11, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-EXIM_VERSION = 4.97.1
++EXIM_VERSION = 4.98
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
