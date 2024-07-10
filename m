@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CE72C3DA42
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 20:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BC04C3DA41
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 20:15:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E78B80C8C;
-	Wed, 10 Jul 2024 20:12:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1541C82109;
+	Wed, 10 Jul 2024 20:15:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WdhOZs3OZBrC; Wed, 10 Jul 2024 20:12:38 +0000 (UTC)
+ id o_BdXgJc_XjJ; Wed, 10 Jul 2024 20:15:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A35481C81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76AE181E28
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A35481C81;
-	Wed, 10 Jul 2024 20:12:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 350561BF599
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 20:12:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76AE181E28;
+	Wed, 10 Jul 2024 20:15:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 534571BF599
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 20:15:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B34D40248
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 20:12:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3FD0341392
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 20:15:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nmqATJ3VpvA0 for <buildroot@lists.busybox.net>;
- Wed, 10 Jul 2024 20:12:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id himlUoKxnxb6 for <buildroot@lists.busybox.net>;
+ Wed, 10 Jul 2024 20:15:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 02B4F40160
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02B4F40160
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 02B4F40160
- for <buildroot@buildroot.org>; Wed, 10 Jul 2024 20:12:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1CE4620002;
- Wed, 10 Jul 2024 20:12:32 +0000 (UTC)
-Date: Wed, 10 Jul 2024 22:12:32 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240710221232.669df7c5@windsurf>
-In-Reply-To: <20240710200353.146248-1-ju.o@free.fr>
-References: <20240710200353.146248-1-ju.o@free.fr>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 369824135F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 369824135F
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 369824135F
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 20:15:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DE9A360006;
+ Wed, 10 Jul 2024 20:15:33 +0000 (UTC)
+Date: Wed, 10 Jul 2024 22:15:32 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20240710221532.384df548@windsurf>
+In-Reply-To: <20240630145712.13579-1-bernd@kuhls.net>
+References: <20240630145712.13579-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720642353;
+ d=bootlin.com; s=gm1; t=1720642534;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=73vPY7980sZKACiUGN2vQWyG6ZfWva8kErwUxgE6yHw=;
- b=HoG2gxGxlzWCVkZ2N4EoMo57Nq34fsO9dYJuIsKBY+YVZYHjJhqYJQ7kRssfXeKK/ie7fu
- NgbYVIM+Nkg8hm44UzdtnxlgWDuOyuE4NE4MoXihsdzXe6q6r+GABFK5ItltmBRaLEMCLH
- ZChFuXVTIocqeD2ymSeBSIMu6wh8QMsdIXBZJC36dcCI3Ex+0cAz5LvL9jYeBIFtaNu9an
- HJngQQwWuNJMlfo9/K4fTFAgksKnnH4fZuOQsZpO6sNXw9O8z5rgLvUuz3xUaLWsJg/4lu
- wWgyjopef6UXj5mtUno/iWFluuPDXLo89cV1SRWtF4bCuOiAd/3inHFNRAd8yw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=v3syL2HC8fqoUSalqc5EfwKIwXzSNAU6TZxHefCr3m0=;
+ b=hnZtJMppFAVH9sLXyi2G8rTmejzNO4S267iP6AL3lpJC3K6S8SG3QcxkMtKOJbE11VmjnO
+ pPKr1ouNvCRoytfhxQdb/A/3J8lguKArgT5ZXuteM7L+oGGEy7DGD5GSUwclrsiFwK+e3V
+ 2t4sydZbajI7/GE/8wSvXDOYbLYHHiRUzJUocoTalar4lFB2y/4tmmhrwJiEeP+tnSsqDU
+ uJwcay0mockmaCcVsyMMgtO7Fl+eSfflRQoGn960lXZc5+LZWxy/vrYJ6+00dijpFnD/CK
+ 3fnFxKG8buUcVDd5VMrgr8E9pD7X2AbG7SddRfhd2HmL+JrtImoJnabCxvX/Gw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HoG2gxGx
-Subject: Re: [Buildroot] [PATCH 1/1] package/libjxl: bump to version 0.10.3
+ header.s=gm1 header.b=hnZtJMpp
+Subject: Re: [Buildroot] [PATCH 1/4] package/onevpl-intel-gpu: rename
+ package to intel-vpl-gpu-rt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,25 +83,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Louis-Paul Cordier <lpdev@cordier.org>,
+ Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 10 Jul 2024 22:03:53 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+On Sun, 30 Jun 2024 16:57:09 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> For release notes since v0.10.2, see:
-> - https://github.com/libjxl/libjxl/releases/tag/v0.10.3
+> Upstream renamed the package and moved the github repo:
+> https://github.com/intel/vpl-gpu-rt/commit/74dbcc6240e8315ad927f642a5d733e6a515a1d4
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  package/libjxl/libjxl.hash | 2 +-
->  package/libjxl/libjxl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  Config.in.legacy                                  |  8 ++++++++
+>  DEVELOPERS                                        |  2 +-
+>  package/Config.in                                 |  2 +-
+>  .../Config.in                                     | 13 +++++++------
+>  .../intel-vpl-gpu-rt.hash}                        |  2 +-
+>  package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk      | 15 +++++++++++++++
+>  package/onevpl-intel-gpu/onevpl-intel-gpu.mk      | 15 ---------------
+>  7 files changed, 33 insertions(+), 24 deletions(-)
+>  rename package/{onevpl-intel-gpu => intel-vpl-gpu-rt}/Config.in (69%)
+>  rename package/{onevpl-intel-gpu/onevpl-intel-gpu.hash => intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash} (80%)
+>  create mode 100644 package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+>  delete mode 100644 package/onevpl-intel-gpu/onevpl-intel-gpu.mk
 
-Applied to master, thanks.
+"Gratuitous" package renames are always a bit annoying as they break
+existing configurations, but oh well, if upstream changed the name, I
+guess it makes sense to follow suit. Therefore, I've applied your
+series, thanks!
 
 Thomas
 -- 
