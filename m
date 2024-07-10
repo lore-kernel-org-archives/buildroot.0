@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6E5CC3DA41
-	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 20:17:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F2CFC3DA41
+	for <buildroot@archiver.kernel.org>; Wed, 10 Jul 2024 20:17:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3C9481F8E;
-	Wed, 10 Jul 2024 20:17:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FDF283ADB;
+	Wed, 10 Jul 2024 20:17:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p0HamyoLgNZQ; Wed, 10 Jul 2024 20:17:12 +0000 (UTC)
+ id zqhv4RvHR_IF; Wed, 10 Jul 2024 20:17:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8164827A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D2EA83B29
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8164827A1;
-	Wed, 10 Jul 2024 20:17:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C1E01BF599
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D2EA83B29;
+	Wed, 10 Jul 2024 20:17:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5873A1BF599
  for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 20:17:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EDEB7827A1
- for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 20:17:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45DA960EF1
+ for <buildroot@lists.busybox.net>; Wed, 10 Jul 2024 20:17:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1_Rvqo5eTcdV for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xTXzxZCnIly7 for <buildroot@lists.busybox.net>;
  Wed, 10 Jul 2024 20:17:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EB8B803D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5348960685
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2EB8B803D1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5348960685
  for <buildroot@buildroot.org>; Wed, 10 Jul 2024 20:17:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 231C1846CF; Wed, 10 Jul 2024 20:17:10 +0000 (UTC)
+ id 4E50E8455D; Wed, 10 Jul 2024 20:17:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Jul 2024 22:12:18 +0200
+Date: Wed, 10 Jul 2024 22:13:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a409fafb0ea24e8e8f07529623d55e8d3435598
-X-Git-Newrev: 0cde01e17bb03aee44b5ccb1549eaf6dec7f3ca5
+X-Git-Oldrev: 44447d7ac3838e70739ae889b3051c25c63979c8
+X-Git-Newrev: 27c723f0d47807c5e5652d9ec891451b1422219d
 X-Patchwork-Hint: ignore
-Message-Id: <20240710201710.231C1846CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libjxl: bump to version 0.10.3
+Message-Id: <20240710201710.4E50E8455D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
+ 24.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,42 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cde01e17bb03aee44b5ccb1549eaf6dec7f3ca5
+commit: https://git.buildroot.net/buildroot/commit/?id=27c723f0d47807c5e5652d9ec891451b1422219d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For release notes since v0.10.2, see:
-- https://github.com/libjxl/libjxl/releases/tag/v0.10.3
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libjxl/libjxl.hash | 2 +-
- package/libjxl/libjxl.mk   | 2 +-
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
-index ccd0d4e954..4eaadf957c 100644
---- a/package/libjxl/libjxl.hash
-+++ b/package/libjxl/libjxl.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  95e807f63143856dc4d161c071cca01115d2c6405b3d3209854ac6989dc6bb91  libjxl-0.10.2.tar.gz
-+sha256  e0191411cfcd927eebe5392d030fe4283fe27ba1685ab7265104936e0b4283a6  libjxl-0.10.3.tar.gz
- sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
- sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
-diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
-index 51b69109d9..b7fe3e1b52 100644
---- a/package/libjxl/libjxl.mk
-+++ b/package/libjxl/libjxl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index 8a23f9cd7e..89aaab8721 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7d0d43e201706ab2dc62741b7873d52dc3779a7b1187b5a321cd0a37223b2b8c  intel-media-24.2.2.tar.gz
++sha256  dec2210c1f824a721e4ea6f66f5899e300801b3e7fae232d3f8a94db38c2edd1  intel-media-24.2.5.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 2bbe4a7a08..943956ec50 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
--LIBJXL_VERSION = 0.10.2
-+LIBJXL_VERSION = 0.10.3
- LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
- LIBJXL_LICENSE = BSD-3-Clause
- LIBJXL_LICENSE_FILES = LICENSE PATENTS
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 24.2.2
++INTEL_MEDIADRIVER_VERSION = 24.2.5
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
