@@ -4,78 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34811C3271E
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 06:05:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C9DCC3271E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 06:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEB1A610F4;
-	Thu, 11 Jul 2024 06:05:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2621161124;
+	Thu, 11 Jul 2024 06:54:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dL64en-NIjHo; Thu, 11 Jul 2024 06:05:46 +0000 (UTC)
+ id iOPCH0-I8jZr; Thu, 11 Jul 2024 06:54:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3232610E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AD7B610F2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3232610E6;
-	Thu, 11 Jul 2024 06:05:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8AD7B610F2;
+	Thu, 11 Jul 2024 06:54:55 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 552461BF3E1
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 06:05:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A73BB1BF3E1
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 06:54:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42EF681F92
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 06:05:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9348982090
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 06:54:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SBMFSVt6cvM3 for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 06:05:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
- helo=fllv0016.ext.ti.com; envelope-from=p-bhagat@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F0B3E81F89
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0B3E81F89
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F0B3E81F89
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 06:05:42 +0000 (UTC)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
- by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 46B65fbm054048;
- Thu, 11 Jul 2024 01:05:41 -0500
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
- by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 46B65fP0000695
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Thu, 11 Jul 2024 01:05:41 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 11
- Jul 2024 01:05:41 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 11 Jul 2024 01:05:41 -0500
-Received: from localhost (ula0502350.dhcp.ti.com [172.24.227.38])
- by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 46B65eq9021316;
- Thu, 11 Jul 2024 01:05:41 -0500
-To: <buildroot@buildroot.org>
-Date: Thu, 11 Jul 2024 11:35:31 +0530
-Message-ID: <20240711060531.4067193-1-p-bhagat@ti.com>
-X-Mailer: git-send-email 2.34.1
+ id LKBZwO9gmYKL for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 06:54:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::22d; helo=mail-lj1-x22d.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3BBE98206D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BBE98206D
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3BBE98206D
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 06:54:52 +0000 (UTC)
+Received: by mail-lj1-x22d.google.com with SMTP id
+ 38308e7fff4ca-2ee98947f70so5194041fa.1
+ for <buildroot@buildroot.org>; Wed, 10 Jul 2024 23:54:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720680890; x=1721285690;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=pLcu1UUB3Qe1k+xlHu0SCiPzzF5poOOpqt3cGjR8sek=;
+ b=LAx0y7meTrf/c51X+hzogB5mEJXz0fwP7xw1CvR4ZfZXeQ9IDkSbz3y7XrHQ3VWtBh
+ vwlkUwEd381eBF/rJBzSAWDKlk/jhOtEHqdgm6LYm8gDwtYFwGMR5jIZ1tzLqVMuug4b
+ PLGTFwzJE9k/mIdDgmUYs29RqO6UanMKUGYURYA3001Q6b8hrKdTfR9iDVSjMmhSRsDV
+ yCztI1KZEakXNcKKm66YYUAmvWikrthjT/wR3ofw9Fp5qYfB/IajPDWXHIH9QKNwoQ4h
+ d2f4pgBZtSGMVo+XH0whyvXxcyU3zmgf1z17jFD2xdP1Ly0boWmsa6mggA7qaZctQlRX
+ qxfA==
+X-Gm-Message-State: AOJu0YzZ0bqHdKLLNa16qOALExQ8upuOa4Lz+s3tsl+xEX7s6gr/h86S
+ i4BP1lq43pzOzCIw766EBMby93/PYyqYM7B8B/6RdGFkTheExxgsgTQp7OfHQIhyZw291vHXBM6
+ AKY1GcgU22+Wir53CsKMnec7tfTBs+CK+
+X-Google-Smtp-Source: AGHT+IGef4rDLm5E/a8rCYz1TVIgLdmrhKUMsxHp6y5zjqZEHlWQ7D3sXRmKXuNHvZEaBVwzkPh2XdANfjBBbaKP6r0=
+X-Received: by 2002:a2e:90d0:0:b0:2ee:80b2:1e99 with SMTP id
+ 38308e7fff4ca-2eeb31977famr44910261fa.44.1720680889471; Wed, 10 Jul 2024
+ 23:54:49 -0700 (PDT)
 MIME-Version: 1.0
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20240708210353.7865483D7D@busybox.osuosl.org>
+In-Reply-To: <20240708210353.7865483D7D@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 11 Jul 2024 08:54:37 +0200
+Message-ID: <CAEyMn7YCPEKxChPE5z3d2VECaSqT08E9N2aONgiBdyV1a=Wu7Q@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1720677941;
- bh=O1Z1UDQjaYnDOXr3SNTsGAiGtZqJzK92pDtBQ9JwBxw=;
- h=From:To:CC:Subject:Date;
- b=IJ1P9OpYQ5d6+Mc2JCaTZkfpLRQ6AeBNz/T7DYyyIRHDf6Klv56Yi0aNNFZlIUvsC
- Mhb4PioQVPoAuG/ho36lRYj+vGXrNPjY6PoEWFBqMLBnxnxcm4u8FVX/53LojYRgoL
- DOgmqPts+JrybTlepslbUW2sx/u6rZkWIMhVOb8g=
+ d=gmail.com; s=20230601; t=1720680890; x=1721285690; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=pLcu1UUB3Qe1k+xlHu0SCiPzzF5poOOpqt3cGjR8sek=;
+ b=MHusWy1gifGxJOM9v09czVzYZbT3QTY52oqAV8FQAZizclytlOnt7bH60BmMOOk6dB
+ kN72N/tdAT+B6BmtV5fGuw6K4HWcBvrPT2ds1qtLZHV8PnW4/bK4ywF5Wqve+Ug8sof+
+ DB6Qj32uCMZN66GViQj3UJ8ZMnnc4n3lu/fqAqOnDuc/Maba27QIYeXHvuaLx0ZBzimQ
+ 2XT/AN9+QzeECHZM8MQu4IXcZT1wfzzm4SfYLW8H2CHJK6yTOXkL7GIcyRBVsUDI+55y
+ fZjH8BGp5WezZWLWrRt3+zujtw3dEU0+SVegKjPDU3sF042Zr0nwRDQJx/xOlVtzrX0Q
+ 2FVQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=IJ1P9OpY
-Subject: [Buildroot] [PATCH v4] boot/ti-k3-boot-firmware: Add config option
- to specify version
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=MHusWy1g
+Subject: Re: [Buildroot] [git commit] package/rauc: select
+ BR2_PACKAGE_LIBOPENSSL_ENGINES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,96 +97,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Paresh Bhagat via buildroot <buildroot@buildroot.org>
-Reply-To: Paresh Bhagat <p-bhagat@ti.com>
-Cc: Bryan Brattlof <bb@ti.com>, Chirag Shilwant <c-shilwant@ti.com>,
- Gyan Gupta <g-gupta@ti.com>, Xuanhao Shi <X15000177@gmail.com>,
- Syed Mohammed Khasim <khasim@ti.com>, Andreas Dannenberg <dannenberg@ti.com>,
- Sai Sree Kartheek Adivi <s-adivi@ti.com>, Anand Gadiyar <gadiyar@ti.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Previously the version of ti-k3-boot-firmware (TI_K3_BOOT_FIRMWARE_VERSION) was
-fixed in mk file. Introduce a new config option BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
-so that user can change the version for ti-k3-boot-firmware using menuconfig.
+Hi Peter,
 
-This provides greater flexibility for users to select different versions of
-ti-k3-boot-firmware without modifying the build script directly.
 
-Signed-off-by: Paresh Bhagat <p-bhagat@ti.com>
+Am Mo., 8. Juli 2024 um 23:04 Uhr schrieb Peter Korsgaard <peter@korsgaard.com>:
+>
+> commit: https://git.buildroot.net/buildroot/commit/?id=e8f80c24026110390ac9d53829e50f0a95d3206a
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> This fixes link time errors, undefined references to various ENGINE_*
+> functions (paths shortened to the output directory):
+>
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: librauc.a.p/src_signature.c.o: in function `get_pkcs11_engine.constprop.0':
+> signature.c:(.text.get_pkcs11_engine.constprop.0+0x14): undefined reference to `ENGINE_load_builtin_engines'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x20): undefined reference to `ENGINE_by_id'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x54): undefined reference to `ENGINE_ctrl_cmd_string'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x60): undefined reference to `ENGINE_init'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0xe0): undefined reference to `ENGINE_ctrl_cmd_string'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x128): undefined reference to `ENGINE_free'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: signature.c:(.text.get_pkcs11_engine.constprop.0+0x1a4): undefined reference to `ENGINE_finish'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: librauc.a.p/src_signature.c.o: in function `load_cert':
+> signature.c:(.text.load_cert+0x114): undefined reference to `ENGINE_ctrl_cmd'
+> host/lib/gcc/aarch64-buildroot-linux-musl/13.3.0/../../../../aarch64-buildroot-linux-musl/bin/ld: librauc.a.p/src_signature.c.o: in function `load_key':
+> signature.c:(.text.load_key+0x124): undefined reference to `ENGINE_load_private_key'
+>
+> Before linking there were matching implicit declaration warnings
+> during compile.
+>
+> [Peter: only select if libopenssl backend is used]
+> Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+> Tested-by: Heiko Thiery <heiko.thiery@mail.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/rauc/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+> index 7451b29a55..01a321e3dd 100644
+> --- a/package/rauc/Config.in
+> +++ b/package/rauc/Config.in
+> @@ -5,6 +5,8 @@ config BR2_PACKAGE_RAUC
+>         depends on BR2_USE_WCHAR # glib2
+>         select BR2_PACKAGE_LIBGLIB2
+>         select BR2_PACKAGE_OPENSSL
+> +       # uses ENGINE_* API
+> +       select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+>         select BR2_PACKAGE_SQUASHFS # run-time dependency
+>         select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # run-time dependency
+>         select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
----
-Changes v3 -> v4:
-  - Ti k3 -> TI K3 (Suggested by Andreas Dannenberg)
-  - git.ti.org -> git.ti.com (Suggested by Andreas Dannenberg)
 
-Changes v2 -> v3:
-  - flexibilty -> flexibility (Suggested by Chirag Shilwant)
+This patch fixes also 2024.02.x (see
+http://autobuild.buildroot.net/results/991681bbe0200c652c6d77e5abd9966ef6ca2739/)
 
-Changes v1 -> v2:
-  - Fix whitespaces/indentation in Config.in file (Suggested by Bryan Brattlof)
-
----
- boot/ti-k3-boot-firmware/Config.in            | 30 +++++++++++++++++++
- .../ti-k3-boot-firmware.mk                    |  2 +-
- 2 files changed, 31 insertions(+), 1 deletion(-)
-
-diff --git a/boot/ti-k3-boot-firmware/Config.in b/boot/ti-k3-boot-firmware/Config.in
-index d80bb4bdb3..581ec0c3b9 100644
---- a/boot/ti-k3-boot-firmware/Config.in
-+++ b/boot/ti-k3-boot-firmware/Config.in
-@@ -5,3 +5,33 @@ config BR2_TARGET_TI_K3_BOOT_FIRMWARE
- 	  This package downloads and installs the TI-specific ti-sysfw
- 	  and ti-dm firmware needed to boot TI K3 platforms (which
- 	  include AM62x, AM64x, AM65x and more).
-+
-+if BR2_TARGET_TI_K3_BOOT_FIRMWARE
-+choice
-+	prompt "ti-k3-boot-firmware version"
-+	default BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
-+	help
-+	  Select the version of TI K3 boot firmware you want to use.
-+
-+config BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
-+	bool "09.02.00.009"
-+
-+config BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
-+	bool "Custom version"
-+	help
-+	  This option allows to use a specific official version from
-+	  git.ti.com.
-+
-+endchoice
-+
-+config BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION_VALUE
-+	string "Custom ti-k3-boot-firmware version"
-+	depends on BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
-+
-+config BR2_TARGET_TI_K3_BOOT_FIRMWARE_VERSION
-+	string
-+	default "09.02.00.009"     if BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
-+	default BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION_VALUE \
-+				if BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
-+
-+endif
-diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-index 9332732ad4..350381ebbe 100644
---- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-+++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TI_K3_BOOT_FIRMWARE_VERSION = 09.02.00.009
-+TI_K3_BOOT_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_TI_K3_BOOT_FIRMWARE_VERSION))
- TI_K3_BOOT_FIRMWARE_SITE = https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/snapshot
- TI_K3_BOOT_FIRMWARE_SOURCE = ti-linux-firmware-$(TI_K3_BOOT_FIRMWARE_VERSION).tar.xz
- TI_K3_BOOT_FIRMWARE_INSTALL_IMAGES = YES
 -- 
-2.34.1
-
+Heiko
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
