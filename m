@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF0B4C3DA4B
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 19:00:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8503EC3DA45
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 19:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7EE3E409D7;
-	Thu, 11 Jul 2024 19:00:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DF1E4111D;
+	Thu, 11 Jul 2024 19:01:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9KHH2dSKc_mS; Thu, 11 Jul 2024 19:00:35 +0000 (UTC)
+ id GCxiWiCpwH7M; Thu, 11 Jul 2024 19:01:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42181410F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E494F41125
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42181410F3;
-	Thu, 11 Jul 2024 19:00:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 845711BF42E
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:00:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E494F41125;
+	Thu, 11 Jul 2024 19:01:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 16C001BF42E
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DA424161D
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:00:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 033DF4111F
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:01:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cwAttt7tnhWj for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 19:00:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mmMuZ7l-k08i for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 19:01:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 08584413A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08584413A0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 08584413A0
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 19:00:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E26981C0002;
- Thu, 11 Jul 2024 19:00:29 +0000 (UTC)
-Date: Thu, 11 Jul 2024 21:00:28 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240711210028.275966b6@windsurf>
-In-Reply-To: <Zo+rUe629arAZsdA@waldemar-brodkorb.de>
-References: <Zo+rUe629arAZsdA@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720724430;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vzFO9EbwPtPa1Pd6qUtO0wmstjR0tJCKZ+JJqYYktRg=;
- b=FzVicfJVOm77Ztz9k33ljt3CZQoJi40qUm21TB2IdHZTiGv4uoSpulbD536XpJWjB+8FsR
- GB1wXuwHTS+ARD2Y7EcxyuzfGHU7zHkki28A8kSnNqfFbNuLnBO8jtGI8LTMJ/adg5cLL5
- MBZgmj7eLF/ZwLKDrG37BuGCfes0+iXZEBFg86g8KT1I1LS7b0slJeyORCBS1OwXqPlhqq
- k5jyTW03fKTYzUlUtU1PtrS5KiNC2ELge13mU5GYcF7qdlFhV12sWub7o4eUpKagJEUnhx
- aaoLIq8xkZjChH+GjiLw1Xm2pPy84a7hmxpsD2XdZdaPQ0A8OZBpdkt7Rxa6PQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FzVicfJV
-Subject: Re: [Buildroot] [PATCH] package/asterisk: update to 20.8.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06CEF4111D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06CEF4111D
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 19:01:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E74B07F887; Thu, 11 Jul 2024 19:01:07 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 11 Jul 2024 21:00:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 622957a2adb224b8a666472c3a58bc1ade8a2040
+X-Git-Newrev: 460f716c446799d6de64568db514d759c73e3bb3
+X-Patchwork-Hint: ignore
+Message-Id: <20240711190107.E74B07F887@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32f769_disco_sd: bump Linux to
+ 5.15.162 and U-Boot to 2024.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,46 +60,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 11 Jul 2024 11:52:17 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=460f716c446799d6de64568db514d759c73e3bb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> See here for a ChangeLog:
-> https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-20-current.md
-> 
-> Patch 0005 is applied upstream.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  ...es-stasis-control.c-include-signal.h.patch | 43 -------------------
->  package/asterisk/asterisk.hash                |  2 +-
->  package/asterisk/asterisk.mk                  |  2 +-
->  3 files changed, 2 insertions(+), 45 deletions(-)
->  delete mode 100644 package/asterisk/0005-res-stasis-control.c-include-signal.h.patch
+The patch bumps the Linux kernel to version 5.15.162 and U-Boot to
+version 2024.04.
 
-Looking at the Changelog... this version update contains a security
-vulnerability fix. However, deeper investigation revealed that the
-vulnerability was introduced between 20.7.0 and 20.8.0... and we were
-still using the 20.7.0, which did not include the vulnerability. So I
-added the following text in the commit log:
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash | 2 +-
+ board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash | 2 +-
+ configs/stm32f769_disco_sd_defconfig                              | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-    20.8.1 contains a fix for CVE-2024-35190. However, the vulnerability
-    was introduced in commit 68a49128253f677f9e1b235c70d2316342372f7d
-    between 20.7.0 and 20.8.0, and Buildroot was using 20.7.0, so we were
-    not affected by this vulnerability.
-    
-Applied with this addition. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
+index 49a2ba85a7..d8e8263e9e 100644
+--- a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
++++ b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  8beb69ada46f1cbca2f4cf901ec078846035c1cd925d9471422f65aff74243ba  linux-5.15.108.tar.xz
++sha256  91bfc0ea152ce7b102a0b79d35a7c92843874ebf085c99d2ba8b4d85e62b1a7c  linux-5.15.162.tar.xz
+diff --git a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
+index 7cef5b688e..97a2b4eaf9 100644
+--- a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
++++ b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  e31cac91545ff41b71cec5d8c22afd695645cd6e2a442ccdacacd60534069341  u-boot-2023.04.tar.bz2
++sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
+diff --git a/configs/stm32f769_disco_sd_defconfig b/configs/stm32f769_disco_sd_defconfig
+index 952d22cc60..c9140d089a 100644
+--- a/configs/stm32f769_disco_sd_defconfig
++++ b/configs/stm32f769_disco_sd_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f769-disco/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.108"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.162"
+ BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xc0000000.config board/stmicroelectronics/stm32f769-disco/linux-sd.fragment"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+@@ -22,7 +22,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f769-disco"
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
