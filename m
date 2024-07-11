@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4002C3DA45
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 22:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D5C4C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 22:20:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C65E4043E;
-	Thu, 11 Jul 2024 22:11:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1338484017;
+	Thu, 11 Jul 2024 22:20:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DWVEquDKUgOZ; Thu, 11 Jul 2024 22:11:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UAAOev5i_vPf; Thu, 11 Jul 2024 22:20:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D911241115
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2062B84018
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D911241115;
-	Thu, 11 Jul 2024 22:11:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9622B1BF860
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 22:11:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2062B84018;
+	Thu, 11 Jul 2024 22:20:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 185071BF860
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 22:20:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F46F40964
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 22:11:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 12CD760766
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 22:20:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1h2e7AEt0iRH for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 22:11:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6sd8S5qIIr2d for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 22:20:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F38740929
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F38740929
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 22:11:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 484BA852D1; Thu, 11 Jul 2024 22:11:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 23:58:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0263c9be2cd811ffc29a6116502af966101849e4
-X-Git-Newrev: ee2b57e0c98acf1d02cf66a38c9ec82bd69bcbeb
-X-Patchwork-Hint: ignore
-Message-Id: <20240711221147.484BA852D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tftpd: bump to latest git commit
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 282CC60743
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 282CC60743
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 282CC60743
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 22:20:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id C1DE7C0008;
+ Thu, 11 Jul 2024 22:20:26 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Fri, 12 Jul 2024 00:20:16 +0200
+Message-ID: <20240711222021.1553363-2-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240711222021.1553363-1-thomas.petazzoni@bootlin.com>
+References: <20240711222021.1553363-1-thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720736427;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Q2EpY+gjjyom0vOhOIU+a1Y4RB4MC9gnPJGpQRCdoHk=;
+ b=koBgNvuJZ11U6SXVGqE0cHMllPNCLEmjbLQZI6o1fUyqGWl7NVvJGeYdJo2mJce+68Gc87
+ 8Hi58BGGXtCql//C605IqU2zmK43CmzORlerw4Qul+z3AMI3kRMGRA5e8emr0O5G3c4xKJ
+ Vt8gGZ2Iyy3ub4r8PRYMhDSRruDy7+5VCtVzvCUdS4SloIVOD9AL5X/g8oa8qZIY+09F6Q
+ Ad5J10zZVDw0pzaaspgZXSNr/aGZG7ood7ecX6g11P3MVzvMHhLwOE+zjQrDm85H10GwPs
+ RoUrg35c9P6El6EnSZdjtnaIdoHCskVP/Ef9Gr+jsLxifgsQyQQHRCp9uNe52g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=koBgNvuJ
+Subject: [Buildroot] [PATCH 2/4] package/gdb: switch to gdb 14.x as the
+ default
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,131 +80,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5494768000996669497=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5494768000996669497==
-Content-Type: text/plain
+Now that we have introduced support for gdb 15.x, switch to gdb 14.x
+as the default version.
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee2b57e0c98acf1d02cf66a38c9ec82bd69bcbeb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes the following error when compiled against GCC 14.x:
-
-tftp.c: In function ‘tftp_sendfile’:
-tftp.c:88:5: error: implicit declaration of function ‘bsd_signal’; did
-you mean ‘ssignal’? [-Wimplicit-function-declaration]
-   88 |     bsd_signal(SIGALRM, timer);
-      |     ^~~~~~~~~~
-      |     ssignal
-tftp.c:88:5: warning: nested extern declaration of ‘bsd_signal’ [-Wnested-externs]
-main.c: In function ‘main’:
-main.c:308:5: error: implicit declaration of function ‘bsd_signal’;
-did you mean ‘ssignal’? [-Wimplicit-function-declaration]
-  308 |     bsd_signal(SIGINT, intr);
-      |     ^~~~~~~~~~
-      |     ssignal
-main.c:308:5: warning: nested extern declaration of ‘bsd_signal’ [-Wnested-externs]
-
-Remove an upstreamed patch.
-
-tftpd/tftpd.c has changed, hence, change its checksum.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  1 -
- ...se-extern-qualifier-to-fix-gcc-10.x-build.patch | 29 ----------------------
- package/tftpd/tftpd.hash                           |  4 +--
- package/tftpd/tftpd.mk                             |  2 +-
- 4 files changed, 3 insertions(+), 33 deletions(-)
+ package/gdb/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 9a46840422..4d4fbd340f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1368,7 +1368,6 @@ package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch lib_p
- package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch lib_patch.Upstream
- package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch lib_patch.Upstream
- package/tcf-agent/S55tcf-agent Shellcheck lib_sysv.Variables
--package/tftpd/0001-Use-extern-qualifier-to-fix-gcc-10.x-build.patch lib_patch.Upstream
- package/tftpd/S80tftpd-hpa Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/ti-gfx/0001-newclkapi.patch lib_patch.Upstream
- package/ti-gfx/0002-fix-build-omaplfb-linux.patch lib_patch.Upstream
-diff --git a/package/tftpd/0001-Use-extern-qualifier-to-fix-gcc-10.x-build.patch b/package/tftpd/0001-Use-extern-qualifier-to-fix-gcc-10.x-build.patch
-deleted file mode 100644
-index c964555347..0000000000
---- a/package/tftpd/0001-Use-extern-qualifier-to-fix-gcc-10.x-build.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 6f994166d8571961a08479736ae86c5baa2bb47f Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Fri, 7 Aug 2020 12:07:45 +0200
--Subject: [PATCH] Use "extern" qualifier to fix gcc 10.x build
--
--Patch from
--https://src.fedoraproject.org/rpms/tftp/raw/master/f/tftp-hpa-5.2-gcc10.patch.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- tftp/tftp.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/tftp/tftp.c b/tftp/tftp.c
--index d15da22..d067f96 100644
----- a/tftp/tftp.c
--+++ b/tftp/tftp.c
--@@ -48,7 +48,7 @@ extern int maxtimeout;
-- #define PKTSIZE    SEGSIZE+4
-- char ackbuf[PKTSIZE];
-- int timeout;
---sigjmp_buf toplevel;
--+extern sigjmp_buf toplevel;
-- sigjmp_buf timeoutbuf;
-- 
-- static void nak(int, const char *);
---- 
--2.26.2
--
-diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
-index 66e6b0d26c..3fab9dba07 100644
---- a/package/tftpd/tftpd.hash
-+++ b/package/tftpd/tftpd.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  0eb23ceca54eac3648ca4254a4664241483ddc6bef36958e1cf23bc994d15863  tftpd-b2b34cecc8cbc18ff6f1fc00bda6ae6e9011e6c7-git4.tar.gz
-+sha256  9bdb3e2ab2b68e4d8cd057d102395c362baf07c7b052f1d5e40e5190afecc15e  tftpd-e52af4207a6e09a1ba21f61d6f85d8b2b1e6efc0-git4.tar.gz
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index cf2a1e4f1f..586001cd3b 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -41,7 +41,7 @@ config BR2_PACKAGE_HOST_GDB_SIM
  
- # Hash for license file
--sha256  67754ebd8f265571d3226ac97e521b1bd6fd8a61363ecd4ab7806a6f90efab92  tftpd/tftpd.c
-+sha256  5936d0764cb6e8f2f5ce8a11c249d81037b5f275f5983e8538ee4fbe57195369  tftpd/tftpd.c
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index ceac24119e..81b67f82ce 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TFTPD_VERSION = b2b34cecc8cbc18ff6f1fc00bda6ae6e9011e6c7
-+TFTPD_VERSION = e52af4207a6e09a1ba21f61d6f85d8b2b1e6efc0
- TFTPD_SITE = https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
- TFTPD_SITE_METHOD = git
- TFTPD_CONF_OPTS = --without-tcpwrappers
-
---===============5494768000996669497==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ choice
+ 	prompt "GDB debugger Version"
+-	default BR2_GDB_VERSION_13
++	default BR2_GDB_VERSION_14
+ 	depends on !BR2_arc
+ 	help
+ 	  Select the version of gdb you wish to use.
+@@ -72,9 +72,9 @@ config BR2_GDB_VERSION
+ 	string
+ 	default "arc-2023.09-release" if BR2_arc
+ 	default "12.1"     if BR2_GDB_VERSION_12
+-	default "13.2"     if BR2_GDB_VERSION_13 || !BR2_PACKAGE_HOST_GDB
++	default "13.2"     if BR2_GDB_VERSION_13
+ 	# When making 14.x the default, or 14.x becomes the oldest version,
+ 	# be sure to update the target variant to properly select mpfr.
+-	default "14.2"     if BR2_GDB_VERSION_14
++	default "14.2"     if BR2_GDB_VERSION_14 || !BR2_PACKAGE_HOST_GDB
+ 	default "15.1"	   if BR2_GDB_VERSION_15
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+-- 
+2.45.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5494768000996669497==--
