@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29B01C3DA4B
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 18:48:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35293C3DA4E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 18:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0AD941160;
-	Thu, 11 Jul 2024 18:48:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3DE44021C;
+	Thu, 11 Jul 2024 18:49:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z6qH-wA988ir; Thu, 11 Jul 2024 18:48:51 +0000 (UTC)
+ id bbhwbGdFiaH3; Thu, 11 Jul 2024 18:49:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C99E4116D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4DF7409D7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C99E4116D;
-	Thu, 11 Jul 2024 18:48:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9C37F1BF59E
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:48:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4DF7409D7;
+	Thu, 11 Jul 2024 18:49:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D17B1BF59E
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 92904406A4
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:48:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EEF7560899
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:49:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 70UX6ZNrRFfY for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 18:48:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CYi7_BycXN4p for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 18:49:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFD7E4065A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E966460615
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFD7E4065A
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 18:48:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E966460615
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 18:49:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CBBD584E3E; Thu, 11 Jul 2024 18:48:35 +0000 (UTC)
+ id D816884F30; Thu, 11 Jul 2024 18:49:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 20:30:56 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 55523f5d19d414a7fbc89fc2471b7ff90a242a23
-X-Git-Newrev: ce0af7534216b5e535e8a37c32a1d33ec5b68d6e
+Date: Thu, 11 Jul 2024 20:28:03 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 7b3d3e52ac51acd774bd9d7ae189a56cda131e5c
+X-Git-Newrev: 2598a0cffcc6c1c607720d436337bafc68a2dac0
 X-Patchwork-Hint: ignore
-Message-Id: <20240711184835.CBBD584E3E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/znc: bump version
- to 1.9.0
+Message-Id: <20240711184941.D816884F30@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] {linux,
+ linux-headers}: bump 4.19.x / 5.{4, 10, 15}.x / 6.{1, 6, 9}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,290 +65,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce0af7534216b5e535e8a37c32a1d33ec5b68d6e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Removed all patches, they are included in this release.
-
-Bumped gcc dependency to >= 8 according to changelog:
-https://wiki.znc.in/ChangeLog/1.9.0
+commit: https://git.buildroot.net/buildroot/commit/?id=2598a0cffcc6c1c607720d436337bafc68a2dac0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9246579f01d768c038fe5891f77937c977dbb76d)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2389fb5bbb1adfe37c4b21c4127006dee1dba25a)
+[Peter: drop 6.9.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  3 -
- .../znc/0001-LibreSSL-3.5-opaqued-structures.patch | 27 ---------
- package/znc/0002-Fix-build-with-libressl.patch     | 68 ----------------------
- ...-and-DH_get0_key-have-existed-since-Libre.patch | 30 ----------
- ...support-SWIG-4.1.0-drop-support-for-4.0.1.patch | 53 -----------------
- package/znc/Config.in                              |  6 +-
- package/znc/znc.hash                               |  2 +-
- package/znc/znc.mk                                 |  2 +-
- 8 files changed, 5 insertions(+), 186 deletions(-)
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 051287841e..a6ea530f8c 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1424,9 +1424,6 @@ package/zip/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch Upstrea
- package/zip/0007-timezone.c-needs-time.h-fixes-musl-compile.patch Upstream
- package/zip/0008-fix-musl-static-build.patch Upstream
- package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch Upstream
--package/znc/0001-LibreSSL-3.5-opaqued-structures.patch Upstream
--package/znc/0002-Fix-build-with-libressl.patch Upstream
--package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch Upstream
- package/zziplib/0001-implant-ZZIP_LIBLATEST-for-zzip_lib.patch Upstream
- support/dependencies/check-host-asciidoc.sh Shellcheck
- support/dependencies/check-host-cmake.sh Shellcheck
-diff --git a/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch b/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch
-deleted file mode 100644
-index d0019e21a4..0000000000
---- a/package/znc/0001-LibreSSL-3.5-opaqued-structures.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 87f3dac8ba8dea5628b05416bdef454b4ef2d236 Mon Sep 17 00:00:00 2001
--From: Charlie Li <git@vishwin.info>
--Date: Mon, 14 Mar 2022 17:36:36 -0400
--Subject: [PATCH] LibreSSL 3.5 opaqued structures
--
--Downloaded from upstream commit
--https://github.com/znc/Csocket/commit/87f3dac8ba8dea5628b05416bdef454b4ef2d236
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--(rebased for znc)
-----
-- Csocket.cc | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Csocket.cc b/Csocket.cc
--index 46a3bfd..a30da14 100644
----- a/third_party/Csocket/Csocket.cc
--+++ b/third_party/Csocket/Csocket.cc
--@@ -61,7 +61,7 @@
-- #  define OPENSSL_NO_TLS1_1            /* 1.0.1-pre~: openssl/openssl@637f374ad49d5f6d4f81d87d7cdd226428aa470c */
-- #  define OPENSSL_NO_TLS1_2            /* 1.0.1-pre~: openssl/openssl@7409d7ad517650db332ae528915a570e4e0ab88b */
-- # endif
---# ifndef LIBRESSL_VERSION_NUMBER /* forked from OpenSSL 1.0.1g, sets high version "with the idea of discouraging software from relying on magic numbers for detecting features"(!) */
--+# if !defined(LIBRESSL_VERSION_NUMBER) || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x03050000fL)
-- #  if OPENSSL_VERSION_NUMBER >= 0x10100000
-- #   undef HAVE_ERR_REMOVE_THREAD_STATE /* 1.1.0-pre4: openssl/openssl@8509dcc9f319190c565ab6baad7c88d37a951d1c */
-- #   undef OPENSSL_NO_SSL2              /* 1.1.0-pre4: openssl/openssl@e80381e1a3309f5d4a783bcaa508a90187a48882 */
-diff --git a/package/znc/0002-Fix-build-with-libressl.patch b/package/znc/0002-Fix-build-with-libressl.patch
-deleted file mode 100644
-index b8d22445fb..0000000000
---- a/package/znc/0002-Fix-build-with-libressl.patch
-+++ /dev/null
-@@ -1,68 +0,0 @@
--From dcb5f3df82fcfec48aab356252067dc897fb98cf Mon Sep 17 00:00:00 2001
--From: Alexey Sokolov <alexey+znc@asokolov.org>
--Date: Sun, 14 Nov 2021 00:45:01 +0000
--Subject: [PATCH] Fix build with libressl
--
--It got another feature of openssl implemented, which broke this
--
--Downloaded from upstream commit
--https://github.com/znc/znc/commit/dcb5f3df82fcfec48aab356252067dc897fb98cf
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- CMakeLists.txt                   | 14 ++++++++++++++
-- include/znc/zncconfig.h.cmake.in |  1 +
-- modules/schat.cpp                |  3 +--
-- 3 files changed, 16 insertions(+), 2 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 0913ff2691..1f77f5632b 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -82,6 +82,20 @@ endmacro()
-- tristate_option(OPENSSL "Support SSL")
-- if(WANT_OPENSSL)
-- 	find_package(OpenSSL ${TRISTATE_OPENSSL_REQUIRED})
--+
--+	if(OPENSSL_FOUND)
--+		# SSL_SESSION was made opaque in OpenSSL 1.1.0;
--+		# LibreSSL gained that function later too.
--+		# TODO: maybe remove this check at some point, and stop supporting old
--+		# libssl versions
--+		function(check_SSL_SESSION_get0_cipher)
--+			set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
--+			set(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
--+			check_cxx_symbol_exists(SSL_SESSION_get0_cipher openssl/ssl.h
--+				HAVE_SSL_SESSION_get0_cipher)
--+		endfunction()
--+		check_SSL_SESSION_get0_cipher()
--+	endif()
-- endif()
-- set(HAVE_LIBSSL "${OPENSSL_FOUND}")
-- 
--diff --git a/include/znc/zncconfig.h.cmake.in b/include/znc/zncconfig.h.cmake.in
--index 5426b828af..7b07b99aec 100644
----- a/include/znc/zncconfig.h.cmake.in
--+++ b/include/znc/zncconfig.h.cmake.in
--@@ -31,6 +31,7 @@
-- #define HAVE_PTHREAD 1
-- #cmakedefine HAVE_THREADED_DNS 1
-- #cmakedefine HAVE_LIBSSL 1
--+#cmakedefine HAVE_SSL_SESSION_get0_cipher 1
-- #cmakedefine HAVE_IPV6 1
-- #cmakedefine HAVE_ZLIB 1
-- #cmakedefine HAVE_I18N 1
--diff --git a/modules/schat.cpp b/modules/schat.cpp
--index aa7a338dcd..66e67e695c 100644
----- a/modules/schat.cpp
--+++ b/modules/schat.cpp
--@@ -25,8 +25,7 @@
-- #include <znc/User.h>
-- #include <znc/IRCNetwork.h>
-- 
---#if !defined(OPENSSL_VERSION_NUMBER) || defined(LIBRESSL_VERSION_NUMBER) || \
---    OPENSSL_VERSION_NUMBER < 0x10100007
--+#ifndef HAVE_SSL_SESSION_get0_cipher
-- /* SSL_SESSION was made opaque in OpenSSL 1.1.0, cipher accessor was added 2
-- weeks before the public release.
-- See openssl/openssl@e92813234318635639dba0168c7ef5568757449b. */
-diff --git a/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch b/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch
-deleted file mode 100644
-index a2946643fc..0000000000
---- a/package/znc/0003-DH_set0_pqg-and-DH_get0_key-have-existed-since-Libre.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 7c8ac8981a8516edaba469641aff4d8ec452ae9e Mon Sep 17 00:00:00 2001
--From: Charlie Li <git@vishwin.info>
--Date: Mon, 14 Mar 2022 18:32:46 -0400
--Subject: [PATCH] DH_set0_pqg and DH_get0_key have existed since LibreSSL 2.7
--
--https://github.com/libressl-portable/openbsd/commit/848e2a019c796b685fc8c5848283b86e48fbe0bf
--https://github.com/libressl-portable/openbsd/commit/3789e379353c1d53313a249461b3d735de4ac742
--
--Downloaded from upstream commit
--https://github.com/znc/znc/commit/7c8ac8981a8516edaba469641aff4d8ec452ae9e
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- modules/crypt.cpp | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/modules/crypt.cpp b/modules/crypt.cpp
--index 7655371b6e..68f7aafcea 100644
----- a/modules/crypt.cpp
--+++ b/modules/crypt.cpp
--@@ -68,7 +68,8 @@ class CCryptMod : public CModule {
--     CString m_sPrivKey;
--     CString m_sPubKey;
-- 
---#if OPENSSL_VERSION_NUMBER < 0X10100000L || defined(LIBRESSL_VERSION_NUMBER)
--+#if OPENSSL_VERSION_NUMBER < 0X10100000L || \
--+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x02070000fL)
--     static int DH_set0_pqg(DH* dh, BIGNUM* p, BIGNUM* q, BIGNUM* g) {
--         /* If the fields p and g in dh are nullptr, the corresponding input
--          * parameters MUST be non-nullptr.  q may remain nullptr.
-diff --git a/package/znc/0004-Add-support-SWIG-4.1.0-drop-support-for-4.0.1.patch b/package/znc/0004-Add-support-SWIG-4.1.0-drop-support-for-4.0.1.patch
-deleted file mode 100644
-index cb0988e631..0000000000
---- a/package/znc/0004-Add-support-SWIG-4.1.0-drop-support-for-4.0.1.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From fecdd9895894b3afe903021b0843a422eb4d3308 Mon Sep 17 00:00:00 2001
--From: Alexey Sokolov <alexey+znc@asokolov.org>
--Date: Sat, 5 Nov 2022 12:54:40 +0000
--Subject: [PATCH] Add support SWIG 4.1.0, drop support for < 4.0.1
--
--https://bugs.gentoo.org/878587
--
--Upstream: https://github.com/znc/znc/commit/fecdd9895894b3afe903021b0843a422eb4d3308
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- CMakeLists.txt                   | 2 +-
-- modules/modperl/CMakeLists.txt   | 1 -
-- modules/modpython/CMakeLists.txt | 1 -
-- 3 files changed, 1 insertion(+), 3 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 9d43578e0e..efab0ee1ee 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -173,7 +173,7 @@ if(WANT_PYTHON AND NOT EXISTS
-- 	endif()
-- endif()
-- if(search_swig)
---	find_package(SWIG 3.0.0)
--+	find_package(SWIG 4.0.1)
-- 	if(NOT SWIG_FOUND)
-- 		message(FATAL_ERROR
-- 			"Can't find SWIG, therefore Perl and Python aren't supported. "
--diff --git a/modules/modperl/CMakeLists.txt b/modules/modperl/CMakeLists.txt
--index e18fe47644..a87f74e478 100644
----- a/modules/modperl/CMakeLists.txt
--+++ b/modules/modperl/CMakeLists.txt
--@@ -53,7 +53,6 @@ if(SWIG_FOUND)
-- 		"-I${PROJECT_SOURCE_DIR}/include"
-- 		"-I${CMAKE_CURRENT_SOURCE_DIR}/.."
-- 		"-I${CMAKE_CURRENT_SOURCE_DIR}/include"
---		-DZNC_EXPORT_LIB_EXPORT
-- 		-outdir "${CMAKE_CURRENT_BINARY_DIR}"
-- 		-o "${CMAKE_CURRENT_BINARY_DIR}/modperl_biglib.cpp"
-- 		"${CMAKE_CURRENT_SOURCE_DIR}/modperl.i"
--diff --git a/modules/modpython/CMakeLists.txt b/modules/modpython/CMakeLists.txt
--index edbeb41ed5..36a2e649f0 100644
----- a/modules/modpython/CMakeLists.txt
--+++ b/modules/modpython/CMakeLists.txt
--@@ -50,7 +50,6 @@ if(SWIG_FOUND)
-- 		"-I${PROJECT_BINARY_DIR}/include"
-- 		"-I${PROJECT_SOURCE_DIR}/include"
-- 		"-I${CMAKE_CURRENT_SOURCE_DIR}/.."
---		-DZNC_EXPORT_LIB_EXPORT
-- 		-outdir "${CMAKE_CURRENT_BINARY_DIR}"
-- 		-o "${CMAKE_CURRENT_BINARY_DIR}/modpython_biglib.cpp"
-- 		"${CMAKE_CURRENT_SOURCE_DIR}/modpython.i"
-diff --git a/package/znc/Config.in b/package/znc/Config.in
-index 915b5f632c..3b8f0f7195 100644
---- a/package/znc/Config.in
-+++ b/package/znc/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_ZNC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
- 	help
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_ZNC
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 9374af71b0..37e1a59032 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  19b31956d229b5b9ca5671fa1c74320179682a3d8d00fc86794114b21da86039  linux-6.8.12.tar.xz
+-sha256  a13ebc20dc2a75722699949af74aa86a4ce5d544d6daaa6a7de4e8c81b40de97  linux-6.6.33.tar.xz
+-sha256  df31af2ef5923d61fadd68bfd991f50f2e42a913895eb4b03214ee78f8720bcf  linux-6.1.93.tar.xz
++sha256  f3976e77708694fe4a1f8d1307c315c8a36cbc58f038a38e006b91e29a1f3214  linux-6.6.37.tar.xz
++sha256  890b845f36452328716e62dd893b634584f607cdd44b4e685392d302d3be41af  linux-6.1.97.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  f41e718e33b88f269a6b6a7653e5e9824c4ba541f6ffe5bf26ecc37c540a1b05  linux-5.15.160.tar.xz
+-sha256  9c36b243e8c3ec1d5963366618f336710b84340bf95be2037b26c452392cb2d6  linux-5.10.218.tar.xz
+-sha256  7e1f5b28588e49ddfd18e7772476e4e8b52bdc9c3e19beafcbb7c103e6c01f51  linux-5.4.277.tar.xz
++sha256  91bfc0ea152ce7b102a0b79d35a7c92843874ebf085c99d2ba8b4d85e62b1a7c  linux-5.15.162.tar.xz
++sha256  da1dd47febac4f7856654038a47703666da3afba348b8e96e39584e0972e2725  linux-5.10.221.tar.xz
++sha256  b298436b26395b5c3ace6963836ba70d57cd61e01cff254b0e5443636c324a5e  linux-5.4.279.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  6c5e4d3c87feadbfdb9f7d2e46f3f120b00286ba380491c5956708e0b94232c8  linux-4.19.315.tar.xz
++sha256  062b70cc132378e1c685df44ddf7e05bab4752b690ada17b080655a63f993581  linux-4.19.317.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 487d941a16..9eff2fec9c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -415,12 +415,12 @@ endchoice
  
- 	  http://www.znc.in
- 
--comment "znc needs a toolchain w/ C++, dynamic library, gcc >= 4.8, threads"
-+comment "znc needs a toolchain w/ C++, dynamic library, gcc >= 8, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-index e86171ba1f..8d59c7a1dc 100644
---- a/package/znc/znc.hash
-+++ b/package/znc/znc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ff238aae3f2ae0e44e683c4aee17dc8e4fdd261ca9379d83b48a7d422488de0d  znc-1.8.2.tar.gz
-+sha256  8b99c9dbb21c1309705073460be9bfacb6f7b0e83a15fe5d4b7140201b39d2a1  znc-1.9.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 07fced8407..a910655195 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZNC_VERSION = 1.8.2
-+ZNC_VERSION = 1.9.0
- ZNC_SITE = http://znc.in/releases/archive
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.19.315"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.277"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.218"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.160"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.93"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.33"	if BR2_KERNEL_HEADERS_6_6
++	default "4.19.317"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.279"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.221"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.162"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.97"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.37"	if BR2_KERNEL_HEADERS_6_6
+ 	default "6.8.12"	if BR2_KERNEL_HEADERS_6_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
