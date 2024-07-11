@@ -4,48 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B80B6C3DA45
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:06:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E8B4C3DA45
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:06:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CD71412A4;
-	Fri, 12 Jul 2024 07:06:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 260C2411ED;
+	Fri, 12 Jul 2024 07:06:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bu0lYkluc75e; Fri, 12 Jul 2024 07:06:27 +0000 (UTC)
+ id aGKQBtGgFkpX; Fri, 12 Jul 2024 07:06:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76D5641206
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2B26411F7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 76D5641206;
-	Fri, 12 Jul 2024 07:06:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18E321BF48C
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:06:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2B26411F7;
+	Fri, 12 Jul 2024 07:06:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DE1121BF48C
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0549E413E5
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:06:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC298607C2
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:06:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zNgjPCumVBGA for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 07:06:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1793F413BC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1793F413BC
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:06:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 00C818541B; Fri, 12 Jul 2024 07:06:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 09:05:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 99e1b07c4e840ab5b727c48cad107d3e605aad00
-X-Git-Newrev: 484b4370cc92debfa49969b490464cb57c938610
-X-Patchwork-Hint: ignore
-Message-Id: <20240712070625.00C818541B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencsd: bump to version 1.5.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VU3UHCzMkflR for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 07:06:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12e; helo=mail-lf1-x12e.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 83011607BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83011607BC
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
+ [IPv6:2a00:1450:4864:20::12e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 83011607BC
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:06:44 +0000 (UTC)
+Received: by mail-lf1-x12e.google.com with SMTP id
+ 2adb3069b0e04-52ea7bdde68so1902657e87.0
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 00:06:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720768002; x=1721372802;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=dyDCZUrYw50ucOiY0+X3CcA+GrRplmb73pWiM7QDosQ=;
+ b=nrZDDCvGglK082M3GgPNc+tZMJB+KIHjraUYV8saErnitCCMNjlQDLqEVaARHgU5Py
+ lXyfJevfxJCs0aMl1HNyTsF0N2Q5gqlWg6+wPY88iDlX+JUUwoFcURHQiSehDC/aNmt2
+ KcyRrSPtgiGc9WlU2N/U5VPLoKd8OjLOUqtmza2y9F3ClGfup+XAa5fpmJPFwW62qii8
+ 7s/qAMuPz3BCDAC8dlCRDCJeFQF1xzz1BcRgtToeudYqMNRZwdZB6hTBjGqOMqJO18v8
+ Lc2Yi9nBc4qfidNOmTSCpAGLYHPu/IyRq7whI4JGoQPnTWGpBVET4484oXL9f8yKaCj0
+ 175A==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVc1nfBsnIcw80DUfdjPkrIlGFnGvikve8O/hmMFcw6WqIUApmZ6Qgarf7ghCHiyIwp9xiZBMvk2BEfS+wHCaR4S2hrSZUf+w==
+X-Gm-Message-State: AOJu0Yw1BFix/IxXiEUKt2hYyFHTeSmBWwfHm1cCk7BKywQ8YOJeoLGp
+ t+sqY2tKfrAKz1IFYDYMOHNY1UzpQmVzQpw+NXjUttkos+6wxYhbJdFSyHQNQPk=
+X-Google-Smtp-Source: AGHT+IHcD1jT5nema9U9f92KjxdCpALX1CSR7OcJPtCJ2/vVxpT8uQm2soCbwANue01VPJG1WZoQ5w==
+X-Received: by 2002:a05:6512:2807:b0:52c:df8c:72cc with SMTP id
+ 2adb3069b0e04-52eb99d1715mr7987098e87.43.1720768001942; 
+ Fri, 12 Jul 2024 00:06:41 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
+ (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:b481:98b5:611f:e783])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4279f23a000sm12491785e9.5.2024.07.12.00.06.41
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 12 Jul 2024 00:06:41 -0700 (PDT)
+Message-ID: <00011dae-3329-477c-8b45-793874be746a@mind.be>
+Date: Fri, 12 Jul 2024 00:11:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Geoff Levand <geoff@infradead.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+References: <576922a7-90e6-4c0b-a03f-0225ddf175a7@infradead.org>
+Content-Language: en-GB
+In-Reply-To: <576922a7-90e6-4c0b-a03f-0225ddf175a7@infradead.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1720768002; x=1721372802; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=dyDCZUrYw50ucOiY0+X3CcA+GrRplmb73pWiM7QDosQ=;
+ b=gCxO9H/MCCJxIFeoOPdOiz1RfGMkmjNkyhn8Gu0e3nEN3jyvlpZFUffZOLBoZqxbyw
+ yyLQFobpn+Ho+fSaZ2A84f9KFUijkTI5JAoZQcFOp7+duxmnSOkTxzBqNAHfrApLlj2X
+ JkNpeVMEvyV/hqBcoo+p9P51Q8/u0ZI4WzZaECjsKCgN/YB+OyYCoticHpuBDK01mEqL
+ LT0+Psgz3XH+NHKPVE/tCXcCkppGBbEWjvfmo1wIX+VtInBQv4Y0kG8EKaDvJxtp1TbT
+ bfN3O7Zl0iUu3TEKEc696nDfGmSQtSSQW7wf2C/tjtMp6IiLubdKjDfRrPlamF83G0/S
+ x/QA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=gCxO9H/M
+Subject: Re: [Buildroot] [PATCH] package/flannel: Bump to version 0.25.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +108,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=484b4370cc92debfa49969b490464cb57c938610
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log, see:
-https://github.com/Linaro/OpenCSD/blob/v1.5.3/README.md?plain=1#L329
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/opencsd/opencsd.hash | 2 +-
- package/opencsd/opencsd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 10/06/2024 07:49, Geoff Levand wrote:
+> Signed-off-by: Geoff Levand <geoff@infradead.org>
 
-diff --git a/package/opencsd/opencsd.hash b/package/opencsd/opencsd.hash
-index 43a5a38683..9800d21377 100644
---- a/package/opencsd/opencsd.hash
-+++ b/package/opencsd/opencsd.hash
-@@ -1,3 +1,3 @@
- # Locally Computed:
--sha256  ef27fe6afa6402b051aeae5c2827fa6d8c2d174170a5dc244f7f721db6908219  opencsd-1.5.2.tar.gz
-+sha256  86ee4248f26d768f60f4f4a09f62acaf63989a6448fe1f65a1539478123d95df  opencsd-1.5.3.tar.gz
- sha256  980eef4b0744e63834e3ec0d50c2a4ff6d81d7ec62dd8ba8c66acae0ec5a2e88  LICENSE
-diff --git a/package/opencsd/opencsd.mk b/package/opencsd/opencsd.mk
-index 8aafeeaad5..42712133a3 100644
---- a/package/opencsd/opencsd.mk
-+++ b/package/opencsd/opencsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCSD_VERSION = 1.5.2
-+OPENCSD_VERSION = 1.5.3
- OPENCSD_SITE = $(call github,Linaro,OpenCSD,v$(OPENCSD_VERSION))
- OPENCSD_LICENSE = BSD-3-Clause
- OPENCSD_LICENSE_FILES = LICENSE
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> 
+> diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
+> index 367c4f6ecf..b3caf907db 100644
+> --- a/package/flannel/flannel.hash
+> +++ b/package/flannel/flannel.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  565dedf012a358d87d6bb89a4b7118a4a7ab9a3aada9b9bf76349ca5e451d954  flannel-0.25.2-go2.tar.gz
+> +sha256  73c832ab860ceae15d6f890fae7c71e265af4825f885b5c367a91bd884eb2c09  flannel-0.25.3-go2.tar.gz
+>   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+> index 317ad14ba3..ffbfad888f 100644
+> --- a/package/flannel/flannel.mk
+> +++ b/package/flannel/flannel.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -FLANNEL_VERSION = 0.25.2
+> +FLANNEL_VERSION = 0.25.3
+>   FLANNEL_SITE = $(call github,flannel-io,flannel,v$(FLANNEL_VERSION))
+>   
+>   FLANNEL_LICENSE = Apache-2.0
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
