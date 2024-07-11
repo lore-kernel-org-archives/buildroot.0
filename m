@@ -4,99 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98486C3DA45
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 22:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54185C3DA45
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 22:10:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2DC6D4016D;
-	Thu, 11 Jul 2024 22:08:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 038BA40277;
+	Thu, 11 Jul 2024 22:10:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KOgj83bGKaz3; Thu, 11 Jul 2024 22:08:41 +0000 (UTC)
+ id 6lPzcqVYFgks; Thu, 11 Jul 2024 22:10:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C65B840277
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A54444027D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C65B840277;
-	Thu, 11 Jul 2024 22:08:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 87ECC1BF860
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 22:08:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A54444027D;
+	Thu, 11 Jul 2024 22:10:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A1051BF860
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 22:10:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7332F84108
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 22:08:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 062654027D
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 22:10:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KukjyTuIMPpK for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 22:08:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q52Q4PzHA1Ti for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 22:10:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::22c; helo=mail-lj1-x22c.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6793F84103
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6793F84103
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6793F84103
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 22:08:38 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-42797bcfc77so9177415e9.2
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 15:08:38 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AEF3E40277
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEF3E40277
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
+ [IPv6:2a00:1450:4864:20::22c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AEF3E40277
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 22:10:14 +0000 (UTC)
+Received: by mail-lj1-x22c.google.com with SMTP id
+ 38308e7fff4ca-2ebe40673d8so19437771fa.3
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 15:10:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720735716; x=1721340516;
+ d=1e100.net; s=20230601; t=1720735812; x=1721340612;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=eK8kveqBQkMRO2vJ14URcI1h4QyUl2EjFjWE0BqAe5A=;
- b=TA44ffgFX4UoDWafhqcPvUTQDZpsLEJMLZ3oSJCCZjDc0a0RXhGYkvYNtJ8Ia29ZWz
- LWTxLtAEAWwbNSea9H6oNpLmQVHzRjMbAkQdgkgN6yJgMPpeF61F5yKtR5lDmmE2Sdx0
- yFyW1b9lHoUs5zQpySwnwz90g7UPHBSdFt3y3NH/s4XObJLb1sm1zbL0VwmL5IGCpUeI
- dUJtXFzE8N3C0mC5Ec1h916nTCfNTGvqBiecjQivv/er2xGkOjoQJzHY1xgrIp3dFnPJ
- AbEGJ7f+37Gm7k+gG35Zhs8G+kYULul+V9pw9NK52hFSLLqtyXW8z7sngDDP9ElDPhwj
- 5AjA==
+ bh=hzXFFvwF5iOCh0DHfukvn8+Llj9sd1PQqdwTOE74EZ8=;
+ b=W/+1VfXFPSdOXMs43zJFVy4JezXr41D+lQ+DsnxqUM//YzkFK8XhpE9+UagvW7jRef
+ BlsCyY0q6SkQ3hoPcJBHxFDOToPiWLw46SZQRqbkqec5RT2vSTPNKXEG0nlhg5FVz8kI
+ kNhK4FWJ5Gs7kG3po5IVq8B5PVlq0VDmJlTrQj5Gq/d9uKayB01KxebTzVAny6u8e2mf
+ nocU5xOzTsUlIELuAgX94+tkNRu1B9BGB83TLdfEqFSfeJfG+DjW60bWkOSIeJP9U8Jt
+ VAaXqiiWdFgRKn4RNTMMV4wW+VXHm620HsWBXHEJkNk/h3fNKA/RlEbCpR63WbZJ3njA
+ OpMw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXJOTaaHwBH9QrsDG7GRy/tvau7SKn4m0tso6vtwxsIEb+/fN0cFafcuZUeTjUFY7fJxrYD2xS1idFJ9px3PvV8h4q0Wm42Kw==
-X-Gm-Message-State: AOJu0YyVsZJy13QvNxoqFROPan6tNonyMgr03AZbSpyjrUBRw5BCSMMz
- ZlDX/zgL5FL/uoRJTJFvScRINvEOkxPNvgeDe22JHP2kAcyFV5CP/Di586HIMBY=
-X-Google-Smtp-Source: AGHT+IE/mKyPje6JrrA/2YzqyYdlCpyUmPH1OnFaNWHu8jeMeT7GcpROL7kK3cJ4Yo+7HkGSbHgetQ==
-X-Received: by 2002:a05:600c:70a:b0:426:6320:226a with SMTP id
- 5b1f17b1804b1-426707db6f3mr64685775e9.15.1720735716357; 
- Thu, 11 Jul 2024 15:08:36 -0700 (PDT)
+ AJvYcCX+F1fCofO8mZ6I/YBgk1XXiA1JhwDHfQtjyTPJlusmBnTGOlOxjlUgXojAdlBakbhRECdwmQFx+DbpP6orx1BRm3jHxY2J6A==
+X-Gm-Message-State: AOJu0YwEDkZUF3jnnPT5iWjD/fMMNRJq4JU8TWmzHUACmalkODO9ep2F
+ vWd/KzTSsW+5KTEHMnHJOFWXag8xcpOjznP5VFmAtCQnRxtPUQKkSv0e/TJuSN+vCQtRmfoJ4G0
+ H1qs=
+X-Google-Smtp-Source: AGHT+IH5kgSdAQ/2Nr+K5aRFqabyHJ5bzLG+IxrpXVMbcg9tKc8dcUJBbpMhztySBB8w4znh4b9+PA==
+X-Received: by 2002:a2e:9845:0:b0:2ee:7740:aa74 with SMTP id
+ 38308e7fff4ca-2eeb30bbf36mr57329211fa.3.1720735812212; 
+ Thu, 11 Jul 2024 15:10:12 -0700 (PDT)
 Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
  (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:b481:98b5:611f:e783])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-367cde89164sm8763504f8f.63.2024.07.11.15.08.35
+ ffacd0b85a97d-367cde84655sm8686604f8f.32.2024.07.11.15.10.11
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 11 Jul 2024 15:08:35 -0700 (PDT)
-Message-ID: <c8f71ea8-a7dc-457a-90ea-2af4084eb484@mind.be>
-Date: Fri, 12 Jul 2024 00:08:32 +0200
+ Thu, 11 Jul 2024 15:10:11 -0700 (PDT)
+Message-ID: <573976ce-c9eb-47e1-86f1-1d498391fd0b@mind.be>
+Date: Fri, 12 Jul 2024 00:10:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>, buildroot@buildroot.org
-References: <20240611141216.1211627-1-roy.kollen.svendsen@gmail.com>
+To: Woodrow Douglass <wdouglass@carnegierobotics.com>, buildroot@buildroot.org
+References: <20240610124539.1851720-1-wdouglass@carnegierobotics.com>
 Content-Language: en-GB
-In-Reply-To: <20240611141216.1211627-1-roy.kollen.svendsen@gmail.com>
+In-Reply-To: <20240610124539.1851720-1-wdouglass@carnegierobotics.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1720735716; x=1721340516; darn=buildroot.org;
+ d=mind.be; s=google; t=1720735812; x=1721340612; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=eK8kveqBQkMRO2vJ14URcI1h4QyUl2EjFjWE0BqAe5A=;
- b=LDMOF1dcojxuGxivyMcd2tYQ8M5oLWTWL9DXEUXtC/vkjhXKNq7kdGnrmn8EKozKGX
- cnrHnF+gBpgR3LVxXPN9gZ/aRxCvNJf8K6Lvj+7nYs9Ma0vQ2OYoAGJzzqYMNuE5MJT7
- SsKiIpYsI3lUYW8Ip0Gh7Jj8L8EOOqf/O9jKyNL0E90H1fJUErVRCCubOpLrC2otdI45
- C+7Ot7A7PZRAb7TWqF0bYnLg6JjUq426tPltrkETqolqemO4na8wDzsWOTJ0idKGMQLq
- 93CbAs0K48Pw1kT9bjsxaXPo1PlvvIzgm2Hwvlq7e8MhQi0pFm5P9/VqVPhOSXaTm9Ku
- C2+g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=hzXFFvwF5iOCh0DHfukvn8+Llj9sd1PQqdwTOE74EZ8=;
+ b=I7giR0cDX1oEaxwKc5Ds1vXXecA5wkRuPMCEqS7mm5ZlUIOS2Jeg6PGJbUBRLkKDwV
+ Xf0GnLgKwW9suGVip9s8uc3hAbozX8l4VmHuVq26vaTgDNo1ZNBXNgpk2XIEW+Z6O682
+ 2bxnRWzEOy1ez2qZr5xajOxSlLQQouXqpTMsi1T8V2xrg8NEgcmtBf6SD/OLd+OkWDit
+ 9H3EEbrpxXNCnHRd0BDj1VCKUh6uuR+4rKmyakp3GoR6p9hKI0ZKuFkagrMc8xxdkT3g
+ 8MiLQQ9DDWxz6a1a+KISIr3T8vMrLCNuURPnKgzia6im/k7TuppLb/SQcIWWbE0xud8R
+ UT3w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=LDMOF1dc
-Subject: Re: [Buildroot] [PATCH] package/qt5: bump packages to lateste kde
- submodule versions
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=I7giR0cD
+Subject: Re: [Buildroot] [PATCH 1/1] package/opencv4: bump to version 4.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,32 +109,75 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@gmail.com>,
- Joshua Henderson <joshua.henderson@microchip.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>, Peter Seiderer <ps.report@gmx.net>,
- Julien Corjon <corjon.j@ecagroup.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Roy,
 
-On 11/06/2024 16:12, Roy Kollen Svendsen wrote:
-> Bump qt5 packages to latest submodule versions from:
-> https://invent.kde.org/qt/qt/qt5/-/tree/kde/5.15
 
-  Your Signoff is missing...
+On 10/06/2024 14:45, Woodrow Douglass via buildroot wrote:
+> https://github.com/opencv/opencv/wiki/ChangeLog#version4100
+> 
+> Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
 
-  You can just reply to this mail with your signoff and we can add it while 
-applying.
-
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
-[snip]
+> ---
+>   package/opencv4-contrib/opencv4-contrib.hash | 2 +-
+>   package/opencv4-contrib/opencv4-contrib.mk   | 2 +-
+>   package/opencv4/opencv4.hash                 | 2 +-
+>   package/opencv4/opencv4.mk                   | 2 +-
+>   4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/opencv4-contrib/opencv4-contrib.hash b/package/opencv4-contrib/opencv4-contrib.hash
+> index 2e20717c76..05c30ea250 100644
+> --- a/package/opencv4-contrib/opencv4-contrib.hash
+> +++ b/package/opencv4-contrib/opencv4-contrib.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  8952c45a73b75676c522dd574229f563e43c271ae1d5bbbd26f8e2b6bc1a4dae  opencv4-contrib-4.9.0.tar.gz
+> +sha256  65597f8fb8dc2b876c1b45b928bbcc5f772ddbaf97539bf1b737623d0604cba1  opencv4-contrib-4.10.0.tar.gz
+>   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
+> index a4d0179472..ed00a317c9 100644
+> --- a/package/opencv4-contrib/opencv4-contrib.mk
+> +++ b/package/opencv4-contrib/opencv4-contrib.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -OPENCV4_CONTRIB_VERSION = 4.9.0
+> +OPENCV4_CONTRIB_VERSION = 4.10.0
+>   OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
+>   OPENCV4_CONTRIB_INSTALL_TARGET = NO
+>   OPENCV4_CONTRIB_LICENSE = Apache-2.0
+> diff --git a/package/opencv4/opencv4.hash b/package/opencv4/opencv4.hash
+> index 15f5e37278..ae407e4381 100644
+> --- a/package/opencv4/opencv4.hash
+> +++ b/package/opencv4/opencv4.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  ddf76f9dffd322c7c3cb1f721d0887f62d747b82059342213138dc190f28bc6c  opencv4-4.9.0.tar.gz
+> +sha256  b2171af5be6b26f7a06b1229948bbb2bdaa74fcf5cd097e0af6378fce50a6eb9  opencv4-4.10.0.tar.gz
+>   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+> index e50e0f99a9..989d32b91b 100644
+> --- a/package/opencv4/opencv4.mk
+> +++ b/package/opencv4/opencv4.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -OPENCV4_VERSION = 4.9.0
+> +OPENCV4_VERSION = 4.10.0
+>   OPENCV4_SITE = $(call github,opencv,opencv,$(OPENCV4_VERSION))
+>   OPENCV4_INSTALL_STAGING = YES
+>   OPENCV4_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
