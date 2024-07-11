@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 575FAC3DA41
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 10:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FFA8C3DA41
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 10:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCD37611B9;
-	Thu, 11 Jul 2024 10:12:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32B6A60679;
+	Thu, 11 Jul 2024 10:14:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WZ746aCOZFwt; Thu, 11 Jul 2024 10:12:57 +0000 (UTC)
+ id CscltOQUosCl; Thu, 11 Jul 2024 10:14:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 474D661105
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3889A606A9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 474D661105;
-	Thu, 11 Jul 2024 10:12:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 74B0A1BF40D
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 10:12:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3889A606A9;
+	Thu, 11 Jul 2024 10:14:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 374D21BF40D
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 10:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 619DF4097C
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 10:12:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 31B886100D
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 10:13:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MQJmeE50PswN for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 10:12:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kxj3CyuyGUof for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 10:13:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AA85408C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83018606A9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AA85408C5
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 10:12:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83018606A9
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 10:13:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56D1484BCE; Thu, 11 Jul 2024 10:12:52 +0000 (UTC)
+ id 7BEC084C30; Thu, 11 Jul 2024 10:13:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 12:12:09 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 6ab6731fa24fc9a51fd55b111c8eb6afd1feee37
-X-Git-Newrev: 6e5487d739502a1b0e4e98075bc62087b7da484a
+Date: Thu, 11 Jul 2024 12:11:33 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 0660fb5ed89e59bd4ae0f499f0d1054d2b31f1eb
+X-Git-Newrev: 9a71dd347a3ab1b21960455aff097b34536fb725
 X-Patchwork-Hint: ignore
-Message-Id: <20240711101252.56D1484BCE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/apache: security
- bump version to 2.4.61
+Message-Id: <20240711101358.7BEC084C30@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/php: bump version
+ to 8.3.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e5487d739502a1b0e4e98075bc62087b7da484a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9a71dd347a3ab1b21960455aff097b34536fb725
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Fixes CVE-2024-39884.
-
-Changelog: https://downloads.apache.org/httpd/CHANGES_2.4.61
+Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
+Release notes: https://news-web.php.net/php.announce/432
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 158c2a000404cfcb3a216054c686d11454a5ef7f)
+(cherry picked from commit 677c3f2995b4e6acaedcecc699b5f6ddf294f524)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index bd503d84f9..2ed9c17f9a 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
+diff --git a/package/php/php.hash b/package/php/php.hash
+index cd5f8a1c1b..59a82b001d 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,5 +1,5 @@
--# From https://downloads.apache.org/httpd/httpd-2.4.59.tar.bz2.{sha256,sha512}
--sha256  7b1ec7ec5635da7cb01550513215a90f8b2f52bb7c90cf3e97ede936d3e55b0f  httpd-2.4.60.tar.bz2
--sha512  c1591389f76699beaa5d32b019729e25f1ed5b828311c82b52f1a4edd5d28b73e697958df384d7628b314521a831dbb0af418bc37cdf031cfe133e53c195d8ad  httpd-2.4.60.tar.bz2
-+# From https://downloads.apache.org/httpd/httpd-2.4.61.tar.bz2.{sha256,sha512}
-+sha256  ea8ba86fd95bd594d15e46d25ac5bbda82ae0c9122ad93998cc539c133eaceb6  httpd-2.4.61.tar.bz2
-+sha512  00656220ecc2b80788f539536553f0a3a57602fb981be22e63af87d0f98ffe5da3056e722ce52ae8cf9c2111ad1922b3aaea1fd7d69d0ed76795199203d593ff  httpd-2.4.61.tar.bz2
- # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 39ccc3cf96..0319a96815 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+ # From https://www.php.net/downloads.php
+-sha256  aea358b56186f943c2bbd350c9005b9359133d47e954cfc561385319ae5bb8d7  php-8.3.8.tar.xz
++sha256  bf4d7b8ea60a356064f88485278bd6f941a230ec16f0fc401574ce1445ad6c77  php-8.3.9.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 268b8e0a62..3fdce8186a 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.60
-+APACHE_VERSION = 2.4.61
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = https://dlcdn.apache.org/httpd
- APACHE_LICENSE = Apache-2.0
+-PHP_VERSION = 8.3.8
++PHP_VERSION = 8.3.9
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
