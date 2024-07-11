@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CA49C41513
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 21:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9338FC3DA45
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 21:27:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A9FB34116D;
-	Thu, 11 Jul 2024 21:27:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 549F841180;
+	Thu, 11 Jul 2024 21:27:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tKfUEhKJgfO9; Thu, 11 Jul 2024 21:27:10 +0000 (UTC)
+ id AGU-SB9RyK1u; Thu, 11 Jul 2024 21:27:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7059941180
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DE144118D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7059941180;
-	Thu, 11 Jul 2024 21:27:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 516371BF5F5
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 21:26:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DE144118D;
+	Thu, 11 Jul 2024 21:27:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8992E1BF5F5
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 21:27:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B7B68405A
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 21:26:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 842F060752
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 21:27:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7B1-pwwjL2Xl for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 21:26:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a7ToXxK6c1hm for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 21:27:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7ED1384059
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B10CB6063C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7ED1384059
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 21:26:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B10CB6063C
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 21:27:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73EE685092; Thu, 11 Jul 2024 21:26:46 +0000 (UTC)
+ id 9EB5C8516E; Thu, 11 Jul 2024 21:27:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 23:26:12 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 26226496c0a80bcca4efa745673491a251a8ddc2
-X-Git-Newrev: 70cd92cae176dd878171a53138ef903242526ccb
+Date: Thu, 11 Jul 2024 23:26:07 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 60495596cde8463d5931dad5cc48fba0b77eaae5
+X-Git-Newrev: 9cddd68f8e667a4ab28f18ceb2eaa9e69c2fdef8
 X-Patchwork-Hint: ignore
-Message-Id: <20240711212646.73EE685092@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x]
+Message-Id: <20240711212752.9EB5C8516E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x]
  board/pine64/rockpro64/linux.fragment: integrate stmmac driver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70cd92cae176dd878171a53138ef903242526ccb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9cddd68f8e667a4ab28f18ceb2eaa9e69c2fdef8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Currently, the stmmac driver is configured as a module in the defconfig, which
 means that the network functionality is not available until the driver module
