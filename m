@@ -4,71 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AAAFC3DA4B
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 19:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62814C3DA4B
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 19:15:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2807E41117;
-	Thu, 11 Jul 2024 19:10:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 11ABE41121;
+	Thu, 11 Jul 2024 19:15:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DBD4x891I6rY; Thu, 11 Jul 2024 19:10:29 +0000 (UTC)
+ id I_ebalczkXcP; Thu, 11 Jul 2024 19:15:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEEF74111C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5DA841138
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DEEF74111C;
-	Thu, 11 Jul 2024 19:10:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 30FBE1BF479
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:10:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B5DA841138;
+	Thu, 11 Jul 2024 19:15:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 76D3D1BF479
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2BEE860899
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:10:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6373D4168C
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:15:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pnv4Pzn6J3ge for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 19:10:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0072B60895
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0072B60895
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0072B60895
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 19:10:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 994ADC0003;
- Thu, 11 Jul 2024 19:10:22 +0000 (UTC)
-Date: Thu, 11 Jul 2024 21:10:20 +0200
-To: Alexander Wellbrock via buildroot <buildroot@buildroot.org>
-Message-ID: <20240711211020.000370bb@windsurf>
-In-Reply-To: <20240617180157.3771298-1-a.wellbrock@mailbox.org>
-References: <20240617180157.3771298-1-a.wellbrock@mailbox.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JBL2Ij0HMlrQ for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 19:15:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.131;
+ helo=smtpcmd04131.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5F47A413CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F47A413CC
+Received: from smtpcmd04131.aruba.it (smtpcmd04131.aruba.it [62.149.158.131])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5F47A413CC
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 19:15:42 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id RzGVsHNZ1DrVnRzGWsxTma; Thu, 11 Jul 2024 21:15:40 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Thu, 11 Jul 2024 21:15:39 +0200
+Message-Id: <20240711191539.90650-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <29a51211-e273-4b28-ba3c-648df58b83c3@mind.be>
+References: <29a51211-e273-4b28-ba3c-648df58b83c3@mind.be>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720725023;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=xMqysi3ijd7koniN+yX39VwFf13yzfhfn+mUxtZuInY=;
- b=n8diFziVIiGJ23Hv9cBZW0M5Dq6RliPSW41+MxZPwb/xAp2iTOBQJl+Bk6EDe924rmZcl4
- EMWUKDCPEfzZZDmxxhAIxy529bMk8WQS0dmYp1AfeIcoS0m8d2SO0tJcWZYlIkhchprhBd
- 6u6bzOzTVMVe6ScEmIpeOP2g+sHEeVUBhUrLBccDmRHINI5my+uoN81Uaki/MagoXtyD5V
- Xp8BF2gQgQMBnTTWs80gtzecPnJYm/5ikoXCraHpAzC4eS2QyUe4U9RUxAHshvmoEhDnh8
- 92k1CUKKBLOIFwLdtyvu7FFkr4NOFwZbMajaGpmNRFiMDk2hf169+S8J5oUf0w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-CMAE-Envelope: MS4xfJapfKzf1U04KysBakeCZeuFsg1zzFBWWKE+xm7xbkN7FYgIfm9+tozlhmAzIY7vcqH7qb89ff7bZcyNmtFVZIKBzytxR1zYDbLDQLwKGelspswqERtY
+ se0OQkkyZ2NRbOZccadE04KMn8USYzVg4qq8or3QFgYunuRZcUDXvXP38resy+xFqC98Y+mPntjNyIfhKk5xkSFNo39rbyO2cdJ88S22kPeM/CHumP1ufsnK
+ RVO2tN/LbidR7snuJFQ5MrXN2GX6vqQcdC11KzizMhbRM8QvcKJVtsSXYVl+FjdyZui+HyflPdjK1cC18hVZqt5RZouiVk+47N2ToT2XvBzAQBeyIrDmYppj
+ LFy+4sHr12CwLFl35za5YwMWloTeQUbprqIjczFCcYcRnhXWNRI=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1720725340; bh=ZzTS1NDMUFP/sHp+UoKbVl/7MV/asonRB6kbI3/QW0E=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=FabsROZt4Fxe9qXif/BsR49dY//rmsUg+0d7dmwbtTAz1xTbiaphDCSVzEEJSr2uS
+ 8D9msaf/47N5WTCIFG4CIEMpNDKJCe8FH5BDAK/7ZPAFVB6bf2LHWHs0/wgl3IQwES
+ +qK5k9SPLXz6/OjKuNtDKGyKDkkybSy/Ns9iiw4m/tcRMxmwoVFtWO7olUjL6qGP/e
+ FcXz8FwMehATzaQRD+aT6vPSuzCeXtUwXZpMVxqBJnOH/H2F5fQhDH375WhuqHMHRW
+ PDhfjix4jU58VX0otoh96a532HPzRuRYkzVr0fY3fguAHZpmJpgUJFmR7sBJUxiWs2
+ D6OfAY/fjv2ug==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=n8diFziV
-Subject: Re: [Buildroot] [PATCH 1/1] package/c-ares: update site url
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=FabsROZt
+Subject: [Buildroot] [PATCH] package/sunxi-mali-utgard-driver: bump to
+ version 2024-07-11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,41 +82,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: alex <alexander.wellbrock@othermo.de>, a.wellbrock@mailbox.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 17 Jun 2024 20:01:57 +0200
-Alexander Wellbrock via buildroot <buildroot@buildroot.org> wrote:
+This version provide patches that can be applied with fuzz 0 and this is
+now required by Buildroot.
 
-> From: alex <alexander.wellbrock@othermo.de>
-> 
-> Download URLs changed after hosting of the c-ares website changed
-> ownership:
-> https://daniel.haxx.se/blog/2024/06/06/bye-bye-hosting-c-ares-web/
-> 
-> This cannot be fixed upstream as github pages does not support .htaccess
-> files according to:
-> https://github.com/c-ares/c-ares.github.io/issues/2
-> 
-> Signed-off-by: Alexander Wellbrock <a.wellbrock@mailbox.org>
-> ---
->  package/c-ares/c-ares.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash | 2 +-
+ package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, after fixing the From: field to match with the
-Signed-off-by, as Alexander clarified in a follow-up e-mail. Thanks a
-lot for your contribution Alexander!
-
-Thomas
+diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
+index be27a85970..5f3e001325 100644
+--- a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
++++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f2e5e671575d9488fd19b821d70e59952b6dbbb5b2036ea5462f811eec819370  sunxi-mali-utgard-driver-c4bc3e229c0e5f30c24c20ff1fb8db0e4a450c0f.tar.gz
++sha256  151a56eb6a47efee19369a1c08b7aec506e48f983683a3cd05c5494cedf0fb69  sunxi-mali-utgard-driver-ad7e98bc1e81c7ac9c897f854c1a429d33e45d58.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
+index b8a12247d3..ba7c50718d 100644
+--- a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
++++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_MALI_UTGARD_DRIVER_VERSION = c4bc3e229c0e5f30c24c20ff1fb8db0e4a450c0f
++SUNXI_MALI_UTGARD_DRIVER_VERSION = ad7e98bc1e81c7ac9c897f854c1a429d33e45d58
+ SUNXI_MALI_UTGARD_DRIVER_SITE = $(call github,giuliobenetti,sunxi-mali,$(SUNXI_MALI_UTGARD_DRIVER_VERSION))
+ SUNXI_MALI_UTGARD_DRIVER_DEPENDENCIES = linux
+ SUNXI_MALI_UTGARD_DRIVER_LICENSE = GPL-2.0
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
