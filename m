@@ -4,91 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CA1FC3271E
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 07:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CCADC3271E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 07:32:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BD83416DC;
-	Thu, 11 Jul 2024 07:05:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3F034098D;
+	Thu, 11 Jul 2024 07:32:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RYq_rLXIIsXQ; Thu, 11 Jul 2024 07:05:39 +0000 (UTC)
+ id s2AYQ-4G9Z-q; Thu, 11 Jul 2024 07:32:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 061524170F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC5E440D83
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 061524170F;
-	Thu, 11 Jul 2024 07:05:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9CC901BF990
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 07:05:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC5E440D83;
+	Thu, 11 Jul 2024 07:32:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BE61B1BF863
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 07:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 87A6183F38
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 07:05:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A937940184
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 07:32:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PtBu5yqRBoe1 for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 07:05:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9736F83F36
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9736F83F36
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9736F83F36
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 07:05:34 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-a77dc08db60so59934266b.1
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 00:05:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720681533; x=1721286333;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=jjoE62MuSLhozQje7/3W80mmDCsphb4cD/HITdLfMfY=;
- b=s0S3B1+FqSOGCxqRsmpIglLfliytcuEv9xu9nn/Iimmmc22/A8c6cHFdnNS/N3rBeA
- NVgB+Ns7jOLO3HMftk7C1RIaeY0S99v5ubmu6xrPujbqzlzpotYB/Q6eu3C27UKkgf4q
- p4cSInXQD4fBCLDqFcYCgCyghYhTwyNrakYxVT9zOAtEYBvJcc/5+LHlh0w5aHGm25yR
- Q7WFNYUliwuJGJIDSvcBaIJFAb79d+KyVhygi0hKWNAaWv4+bhPoMSW0irKK6ftbhRtK
- EDksbKYrs/dH4p+u1ryzdDB7o07x2/iphNf+EOoLYERrQh2A4RAmF7Dvd48TBLOZprza
- G2QA==
-X-Gm-Message-State: AOJu0YyB0IWsBr23N72Bie5NtZ/NfD+byuhYija+ABY6w3fHDFKeOIzm
- dV1DPU0nFcPmRt4U8cGkRuFuZAo/N5uZnPHGuNlEXCGlbwWE1vPbqsxLIZiWEl9TXV6bK6Ngb7B
- f/r0=
-X-Google-Smtp-Source: AGHT+IFRbSdHOioKstvXA8aJ0wsD1ZWLZkH+oBnPHeB1VWy8r3T0YptSbCp5HjSKJ6O0zOguxNY12Q==
-X-Received: by 2002:a17:906:b74a:b0:a72:5715:f7b9 with SMTP id
- a640c23a62f3a-a780b689247mr517334966b.15.1720681532681; 
- Thu, 11 Jul 2024 00:05:32 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.40.36])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a780a6bc6cdsm229868166b.23.2024.07.11.00.05.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Jul 2024 00:05:32 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YCEkQ9JwOwxZ for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 07:32:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.137.243.65;
+ helo=fallback13.i.mail.ru; envelope-from=fido_max@inbox.ru;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C842A400F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C842A400F6
+Received: from fallback13.i.mail.ru (fallback13.i.mail.ru [79.137.243.65])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C842A400F6
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 07:32:18 +0000 (UTC)
+Received: from [10.12.4.30] (port=56826 helo=smtp55.i.mail.ru)
+ by fallback13.i.mail.ru with esmtp (envelope-from <fido_max@inbox.ru>)
+ id 1sRoHo-00D5ff-4G
+ for buildroot@buildroot.org; Thu, 11 Jul 2024 10:32:16 +0300
+Received: by smtp55.i.mail.ru with esmtpa (envelope-from <fido_max@inbox.ru>)
+ id 1sRoHb-00000002rkw-1tMs; Thu, 11 Jul 2024 10:32:03 +0300
 To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 09:05:25 +0200
-Message-ID: <20240711070525.1406612-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Date: Thu, 11 Jul 2024 10:31:56 +0300
+Message-ID: <20240711073156.360955-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1720681533; x=1721286333;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jjoE62MuSLhozQje7/3W80mmDCsphb4cD/HITdLfMfY=;
- b=Na+mg+fdhsbswkDJ0roEuUJdzzCn0aqwSoSYuJViwLetqi8wsKE0H1iTOUHk8fmZwE
- aVlnlrZ92vf+LJypUf9SXsmYd1fqtIL4Ur8yJku9mSUV7sdXlpLHb3zRXVhhPxO/xbzR
- dYy6rallMtrtpWAUKxpjAtSI1kdgPZDIwCrYU=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=Na+mg+fd
-Subject: [Buildroot] [PATCH 1/1] package/sunxi-mali-utgard-driver: fix patch
- fuzz
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD9985AA43F8E1EDB6E06D05F165CEF3A3EF7AA80C9DB1578BA00894C459B0CD1B9A5B394FF03EFE14014D5C4874F525AA323152D85EB6C62ECB0F1CD599AA56AA6C91F273C30732FC0
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7176D509958FF914FEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637829D9538242026C38638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D80A01449365D561F277C96513F8DF9C40C24CC48DD2DD501420879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C07E7E81EEA8A9722B8941B15DA834481FA18204E546F3947C78444BBB7636F62AF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F7900637E67544712269775B389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FCF1175FABE1C0F9B6E2021AF6380DFAD18AA50765F7900637F09814068C508CC822CA9DD8327EE4930A3850AC1BE2E735D2D576BCF940C736C4224003CC83647689D4C264860C145E
+X-87b9d050: 1
+X-C1DE0DAB: 0D63561A33F958A5F931F399137557055002B1117B3ED69692B67679DBCE3217B91D2EB2DEE3878C823CB91A9FED034534781492E4B8EEADC3194D76C41E9723C79554A2A72441328621D336A7BC284946AD531847A6065A17B107DEF921CE79BDAD6C7F3747799A
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF116EAE95BAC474C3739D2CF91D9400EC00FAFDA4A6D54F4BD5777884F1273F7C141C0AB2DA7D0DDA8E7497A9C4BD18FF89537678580E6EB6482D23CCE93A4347A772BE206503F469111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojYxP1dNBoSZmbPffCXqAw9w==
+X-Mailru-Sender: 689FA8AB762F7393C6D0B12EA33CAA9BDC03D1BCA683DCDE26DDCB453C49819FAF7BEC489D2623DA90DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-4EC0790: 10
+X-7564579A: 646B95376F6C166E
+X-77F55803: 6242723A09DB00B4FC2B51242C20761DDD0753F9E2DCBD5BA5CC27D153D6789C049FFFDB7839CE9E7B40050E93261B940748AD083DB7A5F0008AEC242F5C81E605059BF875A5E4ED
+X-7FA49CB5: 0D63561A33F958A56302A5CDED266C15FC42D8E0EAF12D5ACDD236C08694496CCACD7DF95DA8FC8BD5E8D9A59859A8B64071617579528AACCC7F00164DA146DAFE8445B8C89999728AA50765F7900637CBA2F893EF2800639FA2833FD35BB23D2EF20D2F80756B5F868A13BD56FB6657A471835C12D1D977725E5C173C3A84C342E5C09891E4E6C3CC7F00164DA146DA6F5DAA56C3B73B23C77107234E2CFBA522CA9DD8327EE4930A3850AC1BE2E735C8D5298E42E60C1FC4224003CC83647689D4C264860C145E
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojYxP1dNBoSZk6e+jcyWlbMg==
+X-Mailru-MI: 8000000000400800
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; s=mail4; 
+ h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
+ bh=6xjAePlB4Rjlev1Ni1ymoB2YLrygF4AwfXlX6Q11B8g=; 
+ t=1720683138;x=1720773138; 
+ b=ijFYqqGXsYzNwKOPTTivHkzRyuxAgptONOFyUJa00gY5ZF2/M9CF4p4p9hsYFNuCW77ZjEIfrBq0+sDN5HlyjBqQepND59/hazku5OyCwAetcW5MrWm6oo9iO8twvSL8nc5AlKlo6qgqc3/sSRYvBR/L1GMua2rcbvZmhtidu7FMWwaTwMrC7Lr44m6D94sXR8kkweuItY/cX8NCh5zUZi1y5Lg190JHo6lQYmTKbe9i7Sjt5CdzutbwYQquXSpvABiAG1SW46V4mzeccpUXtXpiTRub7K36CcL3Th40Mvjd6M+ZTKEQlOUtE2Hk9Rwdhz4EDmFMXBSwv6/IkpveTQ==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
+ To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
+ Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+ Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+ List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
+ X-Cloud-Ids:Disposition-Notification-To;
+ bh=6xjAePlB4Rjlev1Ni1ymoB2YLrygF4AwfXlX6Q11B8g=; t=1720683136; x=1720773136; 
+ b=ACyQz+K7wMVsJVRFrzyd5mvOKBeAR/sXBGOsI8kVsN9hixx1ylle3fr72bLmfKkuML1VD3AxUrJ
+ 4k3yNl9N3wntYQcD5LdiE7/Xv1JO6MR6nqxw59F4GFsFC5OvgE61zzqpPLBK3/IeSg8m+1gxoIzFV
+ g53fDt66QphCxOzmuKz/HKc9Aqh5QRgLBjakW9gKWD33i4cu9lfRAdvD5cCsTRYUX4JKXbS8M1X/v
+ Clk8iizWpKxHHPPv6jVXdDhRLCnjHdsbi+XEx1N5IFw/jfXyELwz05/tWQg3IrRcG3VZM/CgkUPDK
+ eugVBgy8SA338N7ExCy8mKBvBMCOFGHZa8dw==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=inbox.ru
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=ijFYqqGX; 
+ dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=ACyQz+K7
+Subject: [Buildroot] [PATCH 1/1] package/libgeos: bump version to 3.12.2
+ Changelog: https://github.com/libgeos/geos/releases/tag/3.12.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,379 +106,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0") reduced the fuzz factor.
-
-Due to this change, sunxi-mali-utgard-driver fails to build with output:
-
-    - r6p2:
-
-        Applying 0018-mali-support-building-against-4.20.patch using series:
-	patching file src/devicedrv/mali/linux/mali_kernel_linux.c
-	Hunk #1 succeeded at 1125 (offset 193 lines).
-	patching file src/devicedrv/mali/linux/mali_kernel_linux.h
-	Hunk #1 FAILED at 16.
-	Hunk #2 succeeded at 33 (offset 5 lines).
-	1 out of 2 hunks FAILED -- saving rejects to file src/devicedrv/mali/linux/mali_kernel_linux.h.rej
-
-    -r8p1:
-
-	Applying r6p2/0013-mali-support-building-against-4.15.patch using series:
-	patching file src/devicedrv/mali/common/mali_control_timer.c
-	patching file src/devicedrv/mali/common/mali_group.c
-	Hunk #2 FAILED at 1768.
-	1 out of 2 hunks FAILED -- saving rejects to file src/devicedrv/mali/common/mali_group.c.rej
-	patching file src/devicedrv/mali/common/mali_osk_types.h
-	patching file src/devicedrv/mali/linux/mali_memory_os_alloc.c
-	Hunk #1 succeeded at 202 (offset -2 lines).
-	patching file src/devicedrv/mali/linux/mali_osk_timers.c
-
-	Applying 0020-mali-support-building-against-4.17.patch using series:
-	patching file src/devicedrv/mali/linux/mali_memory.c
-	Hunk #1 FAILED at 57.
-	1 out of 1 hunk FAILED -- saving rejects to file src/devicedrv/mali/linux/mali_memory.c.rej
-
-This commit fixes the driver patches on the current package version.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- ...he-patches-to-be-applied-with-fuzz-0.patch | 317 ++++++++++++++++++
- 1 file changed, 317 insertions(+)
- create mode 100644 package/sunxi-mali-utgard-driver/0002-Update-the-patches-to-be-applied-with-fuzz-0.patch
+ package/libgeos/libgeos.hash | 2 +-
+ package/libgeos/libgeos.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sunxi-mali-utgard-driver/0002-Update-the-patches-to-be-applied-with-fuzz-0.patch b/package/sunxi-mali-utgard-driver/0002-Update-the-patches-to-be-applied-with-fuzz-0.patch
-new file mode 100644
-index 000000000000..00e313a57d9a
---- /dev/null
-+++ b/package/sunxi-mali-utgard-driver/0002-Update-the-patches-to-be-applied-with-fuzz-0.patch
-@@ -0,0 +1,317 @@
-+From 6aed6098e4bdfeef87ae7003bfcff03df7b2e13e Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Tue, 9 Jul 2024 18:39:08 +0200
-+Subject: [PATCH] Update the patches to be applied with fuzz 0
-+
-+This driver, used in Buildroot for versions r6p2 and r8p1, fails to apply
-+some patches after the commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh:
-+set the maximum fuzz factor to 0") has been merged.
-+
-+This commit fixes those patches so that they can be applied with fuzz
-+factor 0, without causing regressions for any of the Mali versions,
-+including those not used in Buildroot.
-+
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://github.com/giuliobenetti/sunxi-mali/pull/2
-+---
-+ ...8-mali-support-building-against-4.20.patch |  87 ++++++++++++
-+ patches/r6p2/series                           |   2 +-
-+ ...3-mali-support-building-against-4.15.patch | 127 ++++++++++++++++++
-+ ...0-mali-support-building-against-4.17.patch |  21 +++
-+ patches/r8p1/series                           |   6 +-
-+ 5 files changed, 239 insertions(+), 4 deletions(-)
-+ create mode 100644 patches/r6p2/0018-mali-support-building-against-4.20.patch
-+ create mode 100644 patches/r8p1/0013-mali-support-building-against-4.15.patch
-+ create mode 100644 patches/r8p1/0020-mali-support-building-against-4.17.patch
-+
-+diff --git a/patches/r6p2/0018-mali-support-building-against-4.20.patch b/patches/r6p2/0018-mali-support-building-against-4.20.patch
-+new file mode 100644
-+index 000000000000..aac891ee1af3
-+--- /dev/null
-++++ b/patches/r6p2/0018-mali-support-building-against-4.20.patch
-+@@ -0,0 +1,87 @@
-++From ab90dcd9c5c33d3c26f2553f63dcd1837ce49d79 Mon Sep 17 00:00:00 2001
-++From: Roman Stratiienko <roman.stratiienko@globallogic.com>
-++Date: Wed, 28 Nov 2018 14:23:57 +0200
-++Subject: [PATCH] mali: support building against 4.20
-++
-++From 4.20 kernel vm_insert_pfn was dropped
-++This makes wrapper to preserve compatibility
-++
-++Also get_monotonic_boottime(...) was removed from 4.20
-++Replace it with ktime_get_boot_ns()
-++
-++Signed-off-by: Roman Stratiienko <roman.stratiienko@globallogic.com>
-++---
-++ src/devicedrv/mali/linux/mali_kernel_linux.c | 11 +++++++++++
-++ src/devicedrv/mali/linux/mali_kernel_linux.h | 10 ++++++++++
-++ src/devicedrv/mali/linux/mali_osk_time.c     |  4 ++++
-++ 3 files changed, 25 insertions(+)
-++
-++diff --git a/src/devicedrv/mali/linux/mali_kernel_linux.c b/src/devicedrv/mali/linux/mali_kernel_linux.c
-++index 34cb3d7..6ed89a6 100755
-++--- a/src/devicedrv/mali/linux/mali_kernel_linux.c
-+++++ b/src/devicedrv/mali/linux/mali_kernel_linux.c
-++@@ -1125,6 +1125,17 @@
-++ 	return err;
-++ }
-++ 
-+++/*
-+++ * From 4.20.0 kernel vm_insert_pfn was dropped
-+++ * Make wrapper to preserve compatibility
-+++ */
-+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 20, 0)
-+++int vm_insert_pfn(struct vm_area_struct *vma, unsigned long addr,
-+++		  unsigned long pfn)
-+++{
-+++	return vm_fault_to_errno(vmf_insert_pfn(vma, addr, pfn), 0xffff);
-+++}
-+++#endif
-++ 
-++ module_init(mali_module_init);
-++ module_exit(mali_module_exit);
-++diff --git a/src/devicedrv/mali/linux/mali_kernel_linux.h b/src/devicedrv/mali/linux/mali_kernel_linux.h
-++index 8548c9f..f858a5c 100755
-++--- a/src/devicedrv/mali/linux/mali_kernel_linux.h
-+++++ b/src/devicedrv/mali/linux/mali_kernel_linux.h
-++@@ -16,6 +16,7 @@
-++ #endif
-++ 
-++ #include <linux/cdev.h>     /* character device definitions */
-+++#include <linux/mm.h>
-++ #include <linux/idr.h>
-++ #include <linux/rbtree.h>
-++ #include "mali_kernel_license.h"
-++@@ -33,6 +34,15 @@
-++ #define __GFP_REPEAT __GFP_RETRY_MAYFAIL
-++ #endif
-++ 
-+++/*
-+++ * From 4.20.0 kernel vm_insert_pfn was dropped
-+++ * Make wrapper to preserve compatibility
-+++ */
-+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 20, 0)
-+++extern int vm_insert_pfn(struct vm_area_struct *vma, unsigned long addr,
-+++			 unsigned long pfn);
-+++#endif
-+++
-++ #ifdef __cplusplus
-++ }
-++ #endif
-++diff --git a/src/devicedrv/mali/linux/mali_osk_time.c b/src/devicedrv/mali/linux/mali_osk_time.c
-++index 4deaa10..a14cb7d 100755
-++--- a/src/devicedrv/mali/linux/mali_osk_time.c
-+++++ b/src/devicedrv/mali/linux/mali_osk_time.c
-++@@ -53,7 +53,11 @@ u64 _mali_osk_time_get_ns(void)
-++ 
-++ u64 _mali_osk_boot_time_get_ns(void)
-++ {
-+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 20, 0)
-+++	return ktime_get_boot_ns();
-+++#else
-++ 	struct timespec tsval;
-++ 	get_monotonic_boottime(&tsval);
-++ 	return (u64)timespec_to_ns(&tsval);
-+++#endif
-++ }
-++-- 
-++2.17.1
-++
-+diff --git a/patches/r6p2/series b/patches/r6p2/series
-+index 8922fa49e5f6..c1ff18d1b522 100644
-+--- a/patches/r6p2/series
-++++ b/patches/r6p2/series
-+@@ -14,7 +14,7 @@ r6p2/0013-mali-support-building-against-4.15.patch
-+ r6p2/0014-mali-Make-devfreq-optional.patch
-+ 0015-Enable-parallel-building-passing-variable-to-Makefile.patch
-+ r6p2/0016-mali-support-building-against-4.16.patch
-+-0018-mali-support-building-against-4.20.patch
-++r6p2/0018-mali-support-building-against-4.20.patch
-+ 0019-mali-support-building-against-5.0.patch
-+ 0020-mali-support-building-against-4.17.patch
-+ 0021-mali-support-building-against-5.3.patch
-+diff --git a/patches/r8p1/0013-mali-support-building-against-4.15.patch b/patches/r8p1/0013-mali-support-building-against-4.15.patch
-+new file mode 100644
-+index 000000000000..ff6641a74f37
-+--- /dev/null
-++++ b/patches/r8p1/0013-mali-support-building-against-4.15.patch
-+@@ -0,0 +1,127 @@
-++From 5bc1f96c6e9b8927e3020fdfe58b2d99fa42bcb3 Mon Sep 17 00:00:00 2001
-++From: John Stultz <john.stultz@linaro.org>
-++Date: Thu, 16 Nov 2017 13:42:23 -0800
-++Subject: MALI: v4.15-rc build fix
-++
-++Signed-off-by: John Stultz <john.stultz@linaro.org>
-++---
-++ src/devicedrv/mali/common/mali_control_timer.c  | 2 +-
-++ src/devicedrv/mali/common/mali_group.c          | 8 +++++---
-++ src/devicedrv/mali/common/mali_osk_types.h      | 8 +++++++-
-++ src/devicedrv/mali/linux/mali_memory_os_alloc.c | 2 +-
-++ src/devicedrv/mali/linux/mali_osk_timers.c      | 16 ++++++++++------
-++ 5 files changed, 24 insertions(+), 12 deletions(-)
-++
-++--- a/src/devicedrv/mali/common/mali_control_timer.c
-+++++ b/src/devicedrv/mali/common/mali_control_timer.c
-++@@ -28,7 +28,7 @@ void mali_control_timer_add(u32 timeout)
-++ 	_mali_osk_timer_add(mali_control_timer, _mali_osk_time_mstoticks(timeout));
-++ }
-++ 
-++-static void mali_control_timer_callback(void *arg)
-+++static void mali_control_timer_callback(struct timer_list *t)
-++ {
-++ 	if (mali_utilization_enabled()) {
-++ 		struct mali_gpu_utilization_data *util_data = NULL;
-++--- a/src/devicedrv/mali/common/mali_group.c
-+++++ b/src/devicedrv/mali/common/mali_group.c
-++@@ -44,7 +44,7 @@
-++ static void mali_group_bottom_half_mmu(void *data);
-++ static void mali_group_bottom_half_gp(void *data);
-++ static void mali_group_bottom_half_pp(void *data);
-++-static void mali_group_timeout(void *data);
-+++static void mali_group_timeout(struct timer_list *t);
-++ static void mali_group_reset_pp(struct mali_group *group);
-++ static void mali_group_reset_mmu(struct mali_group *group);
-++ 
-++@@ -1761,9 +1761,11 @@
-++ 				      0xFFFFFFFF, 0);
-++ }
-++ 
-++-static void mali_group_timeout(void *data)
-+++static void mali_group_timeout(struct timer_list *t)
-++ {
-++-	struct mali_group *group = (struct mali_group *)data;
-+++	_mali_osk_timer_t *tim = container_of(t, _mali_osk_timer_t, timer);
-+++	struct mali_group *group = container_of(&tim, struct mali_group, timeout_timer);
-+++
-++ 	MALI_DEBUG_ASSERT_POINTER(group);
-++ 
-++ 	MALI_DEBUG_PRINT(2, ("Group: timeout handler for %s at %u\n",
-++--- a/src/devicedrv/mali/common/mali_osk_types.h
-+++++ b/src/devicedrv/mali/common/mali_osk_types.h
-++@@ -50,6 +50,7 @@ typedef unsigned long long u64;
-++ #include <linux/types.h>
-++ #endif
-++ 
-+++#include <linux/timer.h>
-++ /** @brief Mali Boolean type which uses MALI_TRUE and MALI_FALSE
-++   */
-++ typedef unsigned long mali_bool;
-++@@ -395,7 +396,12 @@ typedef struct _mali_osk_notification_t_
-++  * by any callers of _mali_osk_timer_del(). Otherwise, a deadlock may occur.
-++  *
-++  * @param arg Function-specific data */
-++-typedef void (*_mali_osk_timer_callback_t)(void *arg);
-+++typedef void (*_mali_osk_timer_callback_t)(struct timer_list *t);
-+++
-+++
-+++struct _mali_osk_timer_t_struct {
-+++	struct timer_list timer;
-+++};
-++ 
-++ /** @brief Private type for Timer Callback Objects */
-++ typedef struct _mali_osk_timer_t_struct _mali_osk_timer_t;
-++--- a/src/devicedrv/mali/linux/mali_memory_os_alloc.c
-+++++ b/src/devicedrv/mali/linux/mali_memory_os_alloc.c
-++@@ -202,7 +202,7 @@
-++ 	/* Allocate new pages, if needed. */
-++ 	for (i = 0; i < remaining; i++) {
-++ 		dma_addr_t dma_addr;
-++-		gfp_t flags = __GFP_ZERO | __GFP_REPEAT | __GFP_NOWARN | __GFP_COLD;
-+++		gfp_t flags = __GFP_ZERO | __GFP_REPEAT | __GFP_NOWARN;
-++ 		int err;
-++ 
-++ #if defined(CONFIG_ARM) && !defined(CONFIG_ARM_LPAE)
-++--- a/src/devicedrv/mali/linux/mali_osk_timers.c
-+++++ b/src/devicedrv/mali/linux/mali_osk_timers.c
-++@@ -18,16 +18,25 @@
-++ #include "mali_osk.h"
-++ #include "mali_kernel_common.h"
-++ 
-++-struct _mali_osk_timer_t_struct {
-++-	struct timer_list timer;
-++-};
-+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0)
-+++
-+++#define TIMER_DATA_TYPE		unsigned long
-+++#define TIMER_FUNC_TYPE		void (*)(TIMER_DATA_TYPE)
-+++
-+++static inline void timer_setup(struct timer_list *timer,
-+++			       void (*callback)(struct timer_list *),
-+++			       unsigned int flags)
-+++{
-+++	__setup_timer(timer, (TIMER_FUNC_TYPE)callback,
-+++		      (TIMER_DATA_TYPE)timer, flags);
-+++}
-+++#endif
-++ 
-++ typedef void (*timer_timeout_function_t)(unsigned long);
-++ 
-++ _mali_osk_timer_t *_mali_osk_timer_init(void)
-++ {
-++ 	_mali_osk_timer_t *t = (_mali_osk_timer_t *)kmalloc(sizeof(_mali_osk_timer_t), GFP_KERNEL);
-++-	if (NULL != t) init_timer(&t->timer);
-++ 	return t;
-++ }
-++ 
-++@@ -65,8 +74,7 @@ mali_bool _mali_osk_timer_pending(_mali_
-++ void _mali_osk_timer_setcallback(_mali_osk_timer_t *tim, _mali_osk_timer_callback_t callback, void *data)
-++ {
-++ 	MALI_DEBUG_ASSERT_POINTER(tim);
-++-	tim->timer.data = (unsigned long)data;
-++-	tim->timer.function = (timer_timeout_function_t)callback;
-+++	timer_setup(&tim->timer, callback, 0);
-++ }
-++ 
-++ void _mali_osk_timer_term(_mali_osk_timer_t *tim)
-+diff --git a/patches/r8p1/0020-mali-support-building-against-4.17.patch b/patches/r8p1/0020-mali-support-building-against-4.17.patch
-+new file mode 100644
-+index 000000000000..3077f080f60d
-+--- /dev/null
-++++ b/patches/r8p1/0020-mali-support-building-against-4.17.patch
-+@@ -0,0 +1,21 @@
-++mali: support building against 4.17
-++
-++4.17 changed the return code of the fault handler from int to vm_fault_t.
-++
-++The return values don't change though, so we only need to update the prototype.
-++
-++Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
-++
-++--- a/src/devicedrv/mali/linux/mali_memory.c
-+++++ b/src/devicedrv/mali/linux/mali_memory.c
-++@@ -70,7 +70,9 @@
-++ 	}
-++ }
-++ 
-++-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
-+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 17, 0)
-+++static vm_fault_t mali_mem_vma_fault(struct vm_fault *vmf)
-+++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
-++ static int mali_mem_vma_fault(struct vm_fault *vmf)
-++ #else
-++ static int mali_mem_vma_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
-+diff --git a/patches/r8p1/series b/patches/r8p1/series
-+index 564bf88a0ba1..15fdd50e7255 100644
-+--- a/patches/r8p1/series
-++++ b/patches/r8p1/series
-+@@ -4,14 +4,14 @@
-+ r6p2/0006-mali-Allow-devfreq-to-run-without-power-models.patch
-+ r8p1/0011-mali-support-building-against-4.13.patch
-+ 0012-mali-support-building-against-4.14.patch
-+-r6p2/0013-mali-support-building-against-4.15.patch
-++r8p1/0013-mali-support-building-against-4.15.patch
-+ r6p2/0014-mali-Make-devfreq-optional.patch
-+ 0015-Enable-parallel-building-passing-variable-to-Makefile.patch
-+ r6p2/0016-mali-support-building-against-4.16.patch
-+ r8p1/0017-mali-support-building-against-4.9-later.patch
-+-0018-mali-support-building-against-4.20.patch
-++r6p2/0018-mali-support-building-against-4.20.patch
-+ 0019-mali-support-building-against-5.0.patch
-+-0020-mali-support-building-against-4.17.patch
-++r8p1/0020-mali-support-building-against-4.17.patch
-+ 0021-mali-support-building-against-5.3.patch
-+ r6p2/0022-mali-support-building-against-5.6.patch
-+ 0023-mali-support-building-against-5.7.patch
-+-- 
-+2.43.0
-+
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index 37fe7d6d23..362f1c10b6 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d6ea7e492224b51193e8244fe3ec17c4d44d0777f3c32ca4fb171140549a0d03  geos-3.12.1.tar.bz2
++sha256  34c7770bf0090ee88488af98767d08e779f124fa33437e0aabec8abd4609fec6  geos-3.12.2.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 491168324f..05b74b60a2 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGEOS_VERSION = 3.12.1
++LIBGEOS_VERSION = 3.12.2
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
 -- 
-2.43.0
+2.45.2
 
 _______________________________________________
 buildroot mailing list
