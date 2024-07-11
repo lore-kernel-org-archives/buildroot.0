@@ -4,48 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42C11C3DA49
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 17:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48FF4C3DA49
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 17:58:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E523141030;
-	Thu, 11 Jul 2024 17:57:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8FA2410F8;
+	Thu, 11 Jul 2024 17:58:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NflwPCd5PLd6; Thu, 11 Jul 2024 17:57:37 +0000 (UTC)
+ id jNQhJ8q7VzxA; Thu, 11 Jul 2024 17:58:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52F2841100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83D15410FB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 52F2841100;
-	Thu, 11 Jul 2024 17:57:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DB4791BF47D
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 17:57:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83D15410FB;
+	Thu, 11 Jul 2024 17:58:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E87251BF47D
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 17:58:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C892341030
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 17:57:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D55B26066D
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 17:58:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6DHQRjcz87pE for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 17:57:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V0ZHO7zQUN3B for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 17:58:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F126840543
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F126840543
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 17:57:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6820D84E15; Thu, 11 Jul 2024 17:57:31 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 19:36:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b4008cf9a61a953c0b7c13d5bbb7931f251f7295
-X-Git-Newrev: 77c62cfc75f0fe2779ecb108bbc2b3e41639b042
-X-Patchwork-Hint: ignore
-Message-Id: <20240711175731.6820D84E15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tbb: bump to version 2021.12.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AE5A1605DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE5A1605DA
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AE5A1605DA
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 17:58:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CB6D6240002;
+ Thu, 11 Jul 2024 17:58:23 +0000 (UTC)
+Date: Thu, 11 Jul 2024 19:58:22 +0200
+To: Francis Laniel <flaniel@linux.microsoft.com>
+Message-ID: <20240711195822.2f07883f@windsurf>
+In-Reply-To: <20240617151020.31120-2-flaniel@linux.microsoft.com>
+References: <20240617151020.31120-1-flaniel@linux.microsoft.com>
+ <20240617151020.31120-2-flaniel@linux.microsoft.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720720704;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=iw4vUy/AprtMz8QcvMdr2MxgkKcZ8BdgnCv2O6iz19E=;
+ b=mCvwK38nbx4saTNtiJkE9V76YWLy5GbhG2HCEHN5EjinWOmJ30xaCtbJ7dcJIZn3AESEJN
+ K5OMZNIrh5ue/iPD+WyfZRO8HNo0+DdxGOr/kOqbKAH8IY+yoVMLeMjG8Wn1rhE1XHnuwM
+ yc8dJuch5F9PW8nbOnF3W514Kn5Nf6QMiqsfplPBeJ/Z/hVT2xTm5qc5vKj6C70PQpDD5w
+ EreQ2bHc4rhDPheLiHiZ15+8uMB03b23mRsOi1YlUEeAPGMo0ztFqFKJnZZqCADVIQvHsj
+ qYO9kNGrXBfvt4rdWBtAGHdz+jbxgd/Y+eiUmV864Id5dMvFSPko+nPWGny/Fg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mCvwK38n
+Subject: Re: [Buildroot] [RFC PATCH v1 1/4] package/pahole: bump to version
+ 1.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +84,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77c62cfc75f0fe2779ecb108bbc2b3e41639b042
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 17 Jun 2024 16:10:17 +0100
+Francis Laniel <flaniel@linux.microsoft.com> wrote:
 
-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tbb/tbb.hash | 2 +-
- package/tbb/tbb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/NEWS?h=v1.27
+> 
+> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> ---
+>  package/pahole/pahole.hash | 2 +-
+>  package/pahole/pahole.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tbb/tbb.hash b/package/tbb/tbb.hash
-index 4d2cb10da8..14c86068ee 100644
---- a/package/tbb/tbb.hash
-+++ b/package/tbb/tbb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  782ce0cab62df9ea125cdea253a50534862b563f1d85d4cda7ad4e77550ac363  tbb-2021.11.0.tar.gz
-+sha256  c7bb7aa69c254d91b8f0041a71c5bcc3936acb64408a1719aec0b2b7639dd84f  tbb-2021.12.0.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
-diff --git a/package/tbb/tbb.mk b/package/tbb/tbb.mk
-index 1b0afbb889..40fcb66d38 100644
---- a/package/tbb/tbb.mk
-+++ b/package/tbb/tbb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TBB_VERSION = 2021.11.0
-+TBB_VERSION = 2021.12.0
- TBB_SITE = $(call github,01org,tbb,v$(TBB_VERSION))
- TBB_INSTALL_STAGING = YES
- TBB_LICENSE = Apache-2.0
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
