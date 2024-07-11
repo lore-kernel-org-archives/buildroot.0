@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 779A1C3DA4B
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 19:46:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AE8AC3DA45
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 20:00:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28D1D60811;
-	Thu, 11 Jul 2024 19:46:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1FB9607E4;
+	Thu, 11 Jul 2024 20:00:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gOkREKTcR0fQ; Thu, 11 Jul 2024 19:46:39 +0000 (UTC)
+ id 87OpvZHfPO5l; Thu, 11 Jul 2024 20:00:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A1F26082E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB7C160EA7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A1F26082E;
-	Thu, 11 Jul 2024 19:46:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B9F9A1BF479
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:46:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB7C160EA7;
+	Thu, 11 Jul 2024 20:00:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1295C1BF479
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 20:00:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A57AE84050
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 19:46:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0020D60EA7
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 20:00:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qDMDj1nbXSA2 for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 19:46:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ffK27alvP-Kp for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 20:00:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6EFE84045
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6EFE84045
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 19:46:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9534D84758; Thu, 11 Jul 2024 19:46:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 21:46:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 60c8807c69be60a8f1c35ed9f992850b009126be
-X-Git-Newrev: 63b4cbacb1bb22ead0a6351d4aa2fc9b85f0bbde
-X-Patchwork-Hint: ignore
-Message-Id: <20240711194637.9534D84758@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: fix compiling with
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DCFC4607E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCFC4607E4
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DCFC4607E4
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 20:00:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 614111C0005;
+ Thu, 11 Jul 2024 20:00:42 +0000 (UTC)
+Date: Thu, 11 Jul 2024 22:00:40 +0200
+To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= via buildroot
+ <buildroot@buildroot.org>
+Message-ID: <20240711220040.22319e31@windsurf>
+In-Reply-To: <20240617080310.2433521-1-raphael.melotte@mind.be>
+References: <20240617080310.2433521-1-raphael.melotte@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720728043;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qyaudh4crI9NiJpzbN+zn5L1cQCutgXwnGD4M9SX92U=;
+ b=WG9vSzf0foQYPZPHRIwwEADiPdmugi4fpXeLbGxh4EP6jcFyOrpWEmaNbDCER2Fn6mql1y
+ qV5CrTkQvFMIGuY8Y1cwhlCEeB3Ff3SQkjnTKxgpTjPWiM7An/BYYaCgoY+M8yKzoow92a
+ HmZdgZgMJC28BMgcwsDR+pRIO7Qu1s1BCo/QVnq7grV8u4njXoARVRZHHq2TBgGxMglccx
+ jtiDvtcrwWD7PXQI9I4v2QV1mWsGwDEX9NU5HWLHCDtFiHloHl9Wu8tXZBF4YoxPE7/icE
+ NP4Yf9150EZC1xS6TDOWdu0EURAs5q8YV9e7RHogxHezPcq98y/xQ0rUwOJBIg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WG9vSzf0
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: fix compiling with
  headers < 4.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,156 +84,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9146652884074096759=="
+Cc: Sen Hastings <sen@hastings.org>, Norbert Lange <nolange79@gmail.com>,
+ =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9146652884074096759==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=63b4cbacb1bb22ead0a6351d4aa2fc9b85f0bbde
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-In commit 360a7cd738a85067ba60b029ca88eb7c874bfe4f ("package/systemd:
-bump linux-headers dependency to 4.14"), the headers requirements were
-bumped to 4.14 because of new build failures due to
-LOOP_SET_BLOCK_SIZE.
-
-Even though systemd does not recommend using it with headers <
-4.15 (see [1]), it is still possible to build it and use some of its
-features (after fixing the build failure).
-
-Note that this was build-tested with 4.4 headers only, and not all the
-way back to 3.15 (which is the version requirement that was used
-before 360a7cd738a85067ba60b029ca88eb7c874bfe4f).
-
-[1]: https://github.com/systemd/systemd/blob/main/README
-
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...issing_loop.h-fix-missing-LOOP_SET_BLOCK_.patch | 38 ++++++++++++++++++++++
- package/systemd/Config.in                          |  7 ++--
- system/Config.in                                   |  6 ++--
- 3 files changed, 45 insertions(+), 6 deletions(-)
-
-diff --git a/package/systemd/0001-src-basic-missing_loop.h-fix-missing-LOOP_SET_BLOCK_.patch b/package/systemd/0001-src-basic-missing_loop.h-fix-missing-LOOP_SET_BLOCK_.patch
-new file mode 100644
-index 0000000000..7d520f81d4
---- /dev/null
-+++ b/package/systemd/0001-src-basic-missing_loop.h-fix-missing-LOOP_SET_BLOCK_.patch
-@@ -0,0 +1,38 @@
-+From e358793a796f8c742af4ea3f4fe398731ca46649 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-+Date: Fri, 14 Jun 2024 14:37:29 +0200
-+Subject: [PATCH] src/basic/missing_loop.h: fix missing LOOP_SET_BLOCK_SIZE
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Builds with kernels headers < 4.14 fail with:
-+
-+../src/shared/loop-util.c: In function ‘loop_configure_fallback’:
-+../src/shared/loop-util.c:237:31: error: ‘LOOP_SET_BLOCK_SIZE’ undeclared (first use in this function); did you mean ‘LOOP_SET_DIRECT_IO’?
-+                 if (ioctl(fd, LOOP_SET_BLOCK_SIZE, (unsigned long) c->block_size) < 0)
-+                               ^~~~~~~~~~~~~~~~~~~
-+                               LOOP_SET_DIRECT_IO
-+
-+Fixes: https://github.com/systemd/systemd/issues/33341
-+Upstream: https://github.com/systemd/systemd/commit/56ab1c54497d9fac74380ff9e11aaf931a917d2b
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+---
-+ src/basic/missing_loop.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/basic/missing_loop.h b/src/basic/missing_loop.h
-+index 7141544b64..b1505f678b 100644
-+--- a/src/basic/missing_loop.h
-++++ b/src/basic/missing_loop.h
-+@@ -22,3 +22,7 @@ struct loop_config {
-+ #ifndef LOOP_SET_STATUS_SETTABLE_FLAGS
-+ #define LOOP_SET_STATUS_SETTABLE_FLAGS (LO_FLAGS_AUTOCLEAR | LO_FLAGS_PARTSCAN | LO_FLAGS_DIRECT_IO)
-+ #endif
-++
-++#ifndef LOOP_SET_BLOCK_SIZE
-++#  define LOOP_SET_BLOCK_SIZE 0x4C09
-++#endif
-+-- 
-+2.25.1
-+
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index a94e9b73b8..82c0e30474 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -22,7 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on !BR2_STATIC_LIBS # kmod
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 # LOOP_SET_BLOCK_SIZE
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
- 	select BR2_PACKAGE_HAS_UDEV
-@@ -239,6 +239,7 @@ config BR2_PACKAGE_SYSTEMD_HOMED
- 	depends on BR2_USE_MMU # cryptsetup -> lvm2
- 	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # fscrypt_key
- 	select BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-@@ -249,11 +250,11 @@ config BR2_PACKAGE_SYSTEMD_HOMED
- 
- 	  https://www.freedesktop.org/software/systemd/man/systemd-homed.service.html
- 
--comment "homed support needs a toolchain w/ threads, dynamic library"
-+comment "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
- 
- config BR2_PACKAGE_SYSTEMD_HOSTNAMED
- 	bool "enable hostname daemon"
-diff --git a/system/Config.in b/system/Config.in
-index 3fb17ed1c6..bc0c6eb6bc 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -125,19 +125,19 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_HOST_GCC_AT_LEAST_5
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
- 
--comment "systemd needs a glibc toolchain w/ SSP, headers >= 4.14, host and target gcc >= 5"
-+comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.15, host and target gcc >= 5"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_HAS_SSP || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
- 		!BR2_HOST_GCC_AT_LEAST_5
- 
-
---===============9146652884074096759==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9146652884074096759==--
+T24gTW9uLCAxNyBKdW4gMjAyNCAxMDowMzowOSArMDIwMApSYXBoYcOrbCBNw6lsb3R0ZSB2aWEg
+YnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IEluIGNvbW1pdCAz
+NjBhN2NkNzM4YTg1MDY3YmE2MGIwMjljYTg4ZWI3Yzg3NGJmZTRmICgicGFja2FnZS9zeXN0ZW1k
+Ogo+IGJ1bXAgbGludXgtaGVhZGVycyBkZXBlbmRlbmN5IHRvIDQuMTQiKSwgdGhlIGhlYWRlcnMg
+cmVxdWlyZW1lbnRzIHdlcmUKPiBidW1wZWQgdG8gNC4xNCBiZWNhdXNlIG9mIG5ldyBidWlsZCBm
+YWlsdXJlcyBkdWUgdG8KPiBMT09QX1NFVF9CTE9DS19TSVpFLgo+IAo+IEV2ZW4gdGhvdWdoIHN5
+c3RlbWQgZG9lcyBub3QgcmVjb21tZW5kIHVzaW5nIGl0IHdpdGggaGVhZGVycyA8Cj4gNC4xNSAo
+c2VlIFsxXSksIGl0IGlzIHN0aWxsIHBvc3NpYmxlIHRvIGJ1aWxkIGl0IGFuZCB1c2Ugc29tZSBv
+ZiBpdHMKPiBmZWF0dXJlcyAoYWZ0ZXIgZml4aW5nIHRoZSBidWlsZCBmYWlsdXJlKS4KPiAKPiBO
+b3RlIHRoYXQgdGhpcyB3YXMgYnVpbGQtdGVzdGVkIHdpdGggNC40IGhlYWRlcnMgb25seSwgYW5k
+IG5vdCBhbGwgdGhlCj4gd2F5IGJhY2sgdG8gMy4xNSAod2hpY2ggaXMgdGhlIHZlcnNpb24gcmVx
+dWlyZW1lbnQgdGhhdCB3YXMgdXNlZAo+IGJlZm9yZSAzNjBhN2NkNzM4YTg1MDY3YmE2MGIwMjlj
+YTg4ZWI3Yzg3NGJmZTRmKS4KPiAKPiBbMV06IGh0dHBzOi8vZ2l0aHViLmNvbS9zeXN0ZW1kL3N5
+c3RlbWQvYmxvYi9tYWluL1JFQURNRQo+IAo+IFNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxv
+dHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KPiAtLS0KPiAgLi4uZ19sb29wLmgtZml4LW1p
+c3NpbmctTE9PUF9TRVRfQkxPQ0tfLnBhdGNoIHwgNDAgKysrKysrKysrKysrKysrKysrKwo+ICBw
+YWNrYWdlL3N5c3RlbWQvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgfCAgNyArKy0tCj4g
+IHN5c3RlbS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA2ICstLQo+
+ICAzIGZpbGVzIGNoYW5nZWQsIDQ3IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCj4gIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3N5c3RlbWQvMDAwMS1zcmMtYmFzaWMtbWlzc2luZ19s
+b29wLmgtZml4LW1pc3NpbmctTE9PUF9TRVRfQkxPQ0tfLnBhdGNoCgpBcHBsaWVkIHRvIG1hc3Rl
+ciwgYWZ0ZXIgcmVmcmVzaGluZyB0aGUgcGF0Y2ggc28gdGhhdCBpdCBhcHBsaWVzIG9uIHRoZQpj
+dXJyZW50IHZlcnNpb24gb2Ygc3lzdGVtZCB3ZSBoYXZlIHBhY2thZ2VkLCBhbmQgdXBkYXRpbmcg
+dGhlIFVwc3RyZWFtOgp0YWcgb2YgdGhlIHBhdGNoIHRvIHBvaW50IHRvIHRoZSB1cHN0cmVhbSBj
+b21taXQsIG5vdyB0aGF0IHlvdXIgcHVsbApyZXF1ZXN0IGhhcyBiZWVuIGFjY2VwdGVkIHVwc3Ry
+ZWFtLgoKVGhhbmtzIGEgbG90IQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEJv
+b3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3Rs
+aW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
