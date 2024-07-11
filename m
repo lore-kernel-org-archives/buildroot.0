@@ -4,74 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93E8EC3DA41
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 07:59:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11B85C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 08:17:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45A9E41705;
-	Thu, 11 Jul 2024 07:59:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EDB741714;
+	Thu, 11 Jul 2024 08:17:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pavuHK_JrwuE; Thu, 11 Jul 2024 07:59:21 +0000 (UTC)
+ id lFhjloN9vZys; Thu, 11 Jul 2024 08:17:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 121FC41706
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56F3F41715
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 121FC41706;
-	Thu, 11 Jul 2024 07:59:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 491271BF232
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 07:59:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56F3F41715;
+	Thu, 11 Jul 2024 08:17:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D4511BF5A4
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 08:17:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 34AAA80F76
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 07:59:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09BD240184
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 08:17:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b3Jp7KwS4yvo for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 07:59:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Go99cq_XuMf4 for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 08:17:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E439C80F72
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E439C80F72
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 37E14400F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37E14400F6
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E439C80F72
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 07:59:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 12C0D2000D;
- Thu, 11 Jul 2024 07:59:15 +0000 (UTC)
-Date: Thu, 11 Jul 2024 09:59:15 +0200
-To: Viacheslav <adeep@lexina.in>
-Message-ID: <20240711095915.6e0c9473@windsurf>
-In-Reply-To: <fcdc3e33-99c6-488c-9231-4169b9201ce1@lexina.in>
-References: <20240619075547.1390096-1-adeep@lexina.in>
- <20240711001637.4fe27e3d@windsurf>
- <fcdc3e33-99c6-488c-9231-4169b9201ce1@lexina.in>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 37E14400F6
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 08:17:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CD37A2000A;
+ Thu, 11 Jul 2024 08:17:29 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sRozY-0097cs-29;
+ Thu, 11 Jul 2024 10:17:28 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain <ju.o@free.fr>
+References: <20240706110642.939667-1-ju.o@free.fr>
+Date: Thu, 11 Jul 2024 10:17:28 +0200
+In-Reply-To: <20240706110642.939667-1-ju.o@free.fr> (Julien Olivain's message
+ of "Sat, 6 Jul 2024 13:06:42 +0200")
+Message-ID: <87ttgwibqf.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720684756;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CJilVEy8ajuwK18bGIXtbYqVY7eviJO/uR31a+3cyVY=;
- b=Q4ImUs1myfFPxVnEFp+XwRfwJ0wUsmTjphFmmizlwb7oc0teKZMAaNCmnamRySdk7FGNyf
- JOfn/lJ1SKy7TQWQaFWSPDu1zp1cb4wTtn5IYAvkedNo89Q7CtdZCGPVq3EDrNvALDptIv
- aw2uZi+OVD/dL6XyTo4fXUhk2RKMIIdPc42gqUaMX8hpPcRjAGyqzthEXzrhuq/DE30SnE
- zVMhuaQBephOyb/C7p0EPLVkHqz1Uu8RjvdzU27fPURpheyiMyrupGs2WOROv5RUNJsvKS
- Rdk4tggVQeu8+IybqQ5sBBj6h7ByigrNOB9bjkURxJNjgqoo2w2g2O4Vrb4j/g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Q4ImUs1m
-Subject: Re: [Buildroot] [PATCH v1] package/rtl8822cs bump driver version to
- latest
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] configs/visionfive2: fix build by
+ adding kernel header version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,45 +69,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Francois Dugast <francois.dugast.foss@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-On Thu, 11 Jul 2024 08:56:42 +0300
-Viacheslav <adeep@lexina.in> wrote:
+ > commit d9e6d2d081 "configs/visionfive2: update kernel to upstream
+ > 6.8.2" removed the config directive:
 
-> > One question: https://github.com/jethome-ru/rtl88x2cs says "** USE
-> > RTW88 NOT THIS DRIVER **", so why are we using it? It seems like you
-> > are the person maintaining this driver.  
-> 
-> RTW88 in-kernel driver has some problems at this moment: no working AP 
-> mode, wifi connection fails after 2-3 days, speed issues.
-> 
-> The comment appeared when JetHub devices switched to the rtw88 driver. 
-> After we switched back to rtl88x2cs, I decided to keep the comment as 
-> motivation for development and to identify issues in rtw88.
-> However, in production, we and some other boards use the rtl88x2cs 
-> driver and we maintain it as necessary.
-> 
-> Since this question has been asked more than once, I decided to modify 
-> the description a bit. Now that alarming message will no longer be there)
+ >     BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
 
-Thanks for the clarification!
+ > but forgot to add:
 
-Best regards,
+ >     BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
 
-Thomas
+ > It was most likely generated with a "make savedefconfig", while Linux
+ > kernel v6.8 was the default at that time. After commit aa70c331a2
+ > "linux: bump latest version to 6.9", the defconfig failed to build
+ > with error:
+
+ >     Incorrect selection of kernel headers: expected 6.9.x, got 6.8.x
+
+ > This commit fixes the defconfig by adding back the kernel custom header
+ > version.
+
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/7271150175
+
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+Committed to 2024.05.x, thanks.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
