@@ -4,50 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECFE2C3DA45
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 18:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CFD0C3DA45
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 18:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0F24411B3;
-	Thu, 11 Jul 2024 18:49:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B1EA400F2;
+	Thu, 11 Jul 2024 18:59:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a59oYMzfHCtF; Thu, 11 Jul 2024 18:49:57 +0000 (UTC)
+ id UmqQYM4qNmwv; Thu, 11 Jul 2024 18:59:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3E1F411A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB5CF410F3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3E1F411A4;
-	Thu, 11 Jul 2024 18:49:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9C52F1BF59E
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:49:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB5CF410F3;
+	Thu, 11 Jul 2024 18:59:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 79D7C1BF232
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 159D760615
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:49:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73E03410F3
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:59:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j1ff3un3PBsV for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 18:49:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i6kzZn9i-Cgf for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 18:59:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EBF06064C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6874400F2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2EBF06064C
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 18:49:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6874400F2
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 18:59:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DCF284F32; Thu, 11 Jul 2024 18:49:42 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id CCFAB82696; Thu, 11 Jul 2024 18:59:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 20:43:59 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 1697eca98644e1a3234fd4add397fb6cb140bb9a
-X-Git-Newrev: 26226496c0a80bcca4efa745673491a251a8ddc2
+Date: Thu, 11 Jul 2024 20:41:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a2b7e3c40321a8c7e78a2ef652dcc0d9d881a414
+X-Git-Newrev: 622957a2adb224b8a666472c3a58bc1ade8a2040
 X-Patchwork-Hint: ignore
-Message-Id: <20240711184942.1DCF284F32@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/ghostscript:
- security bump version to 10.03.1
+Message-Id: <20240711185923.CCFAB82696@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/asterisk: update to 20.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,98 +57,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26226496c0a80bcca4efa745673491a251a8ddc2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=622957a2adb224b8a666472c3a58bc1ade8a2040
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2024-33869, CVE-2023-52722, CVE-2024-33870, CVE-2024-33871
-and CVE-2024-29510.
+See here for a ChangeLog:
+https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-20-current.md
 
-Release notes:
-https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/tag/gs10031
+20.8.1 contains a fix for CVE-2024-35190. However, the vulnerability
+was introduced in commit 68a49128253f677f9e1b235c70d2316342372f7d
+between 20.7.0 and 20.8.0, and Buildroot was using 20.7.0, so we were
+not affected by this vulnerability.
 
-Remove patch which is included in this release.
+Patch 0005 is applied upstream.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 515e579567a8e44e8e4c537ba10f49d5b5d732d9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Fix-build-without-BUILD_PDF.patch         | 34 ----------------------
- package/ghostscript/ghostscript.hash               |  4 +--
- package/ghostscript/ghostscript.mk                 |  2 +-
- 3 files changed, 3 insertions(+), 37 deletions(-)
+ ...005-res-stasis-control.c-include-signal.h.patch | 43 ----------------------
+ package/asterisk/asterisk.hash                     |  2 +-
+ package/asterisk/asterisk.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 45 deletions(-)
 
-diff --git a/package/ghostscript/0001-Fix-build-without-BUILD_PDF.patch b/package/ghostscript/0001-Fix-build-without-BUILD_PDF.patch
+diff --git a/package/asterisk/0005-res-stasis-control.c-include-signal.h.patch b/package/asterisk/0005-res-stasis-control.c-include-signal.h.patch
 deleted file mode 100644
-index af69cd3670..0000000000
---- a/package/ghostscript/0001-Fix-build-without-BUILD_PDF.patch
+index fc615c4a19..0000000000
+--- a/package/asterisk/0005-res-stasis-control.c-include-signal.h.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From 088f3cd6e58cff5fa51e072d1829f7691a5f6681 Mon Sep 17 00:00:00 2001
+@@ -1,43 +0,0 @@
+-From 8391dc3891337ecff8becefe1927a30d3922b848 Mon Sep 17 00:00:00 2001
 -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 20 Sep 2023 13:44:28 +0100
--Subject: [PATCH] Fix build without BUILD_PDF
+-Date: Wed, 1 May 2024 16:50:50 +0200
+-Subject: [PATCH] res/stasis/control.c: include signal.h
 -
--The PDFSetParams PostScript extension operator was missing a stub function definition
--when the PDF interpreter is not built in.
+-Include signal.h to avoid the following build failure with uclibc-ng
+-raised since
+-https://github.com/asterisk/asterisk/commit/2694792e13c7f3ab1911c4a69fba0df32c544177:
 -
-- Author:    Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=088f3cd6e58cff5fa51e072d1829f7691a5f6681
+-stasis/control.c: In function 'exec_command_on_condition':
+-stasis/control.c:313:3: warning: implicit declaration of function 'pthread_kill'; did you mean 'pthread_yield'? [-Wimplicit-function-declaration]
+-  313 |   pthread_kill(control->control_thread, SIGURG);
+-      |   ^~~~~~~~~~~~
+-      |   pthread_yield
+-stasis/control.c:313:41: error: 'SIGURG' undeclared (first use in this function)
+-  313 |   pthread_kill(control->control_thread, SIGURG);
+-      |                                         ^~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/d16e4ca4bd26234f84d17da24c04a8c19faba6c5
+-
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/asterisk/asterisk/pull/728
 ----
-- psi/zpdfops.c | 5 +++++
-- 1 file changed, 5 insertions(+)
+- res/stasis/control.c | 2 ++
+- 1 file changed, 2 insertions(+)
 -
--diff --git a/psi/zpdfops.c b/psi/zpdfops.c
--index e7e0a42ee..271687a18 100644
----- a/psi/zpdfops.c
--+++ b/psi/zpdfops.c
--@@ -1507,6 +1507,11 @@ static int zPDFdrawannots(i_ctx_t *i_ctx_p)
--     return_error(gs_error_undefined);
-- }
+-diff --git a/res/stasis/control.c b/res/stasis/control.c
+-index 360f20790..4ed0e2af1 100644
+---- a/res/stasis/control.c
+-+++ b/res/stasis/control.c
+-@@ -41,6 +41,8 @@
+- #include "asterisk/musiconhold.h"
+- #include "asterisk/app.h"
 - 
--+static int zPDFSetParams(i_ctx_t *i_ctx_p)
--+{
--+    return_error(gs_error_undefined);
--+}
+-+#include <signal.h>
 -+
-- static int zPDFInit(i_ctx_t *i_ctx_p)
-- {
--     return_error(gs_error_undefined);
+- AST_LIST_HEAD(app_control_rules, stasis_app_control_rule);
+- 
+- /*!
 --- 
--2.34.1
+-2.43.0
 -
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index 849f6c64ba..ed8e4cf7d9 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 8cb5468249..bff34b37bb 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10021/SHA512SUMS
--sha512  ee0f754c1bd8a18428ad14eaa3ead80ff8b96275af5012e7a8384f1f10490da056eec9ae3cc791a7a13a24e16e54df5bccdd109c7d53a14534bbd7360a300b11  ghostscript-10.02.1.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10031/SHA512SUMS
-+sha512  59e071cd23aed246b51317d3cccd9ccf8e1e84c4ecf9b22fb938e561eff42cec61915b0bdd96a313a3ea27750579c54ca0d0862b65edd306a621731c0063ffd3  ghostscript-10.03.1.tar.xz
+ # Locally computed
+-sha256  62adff44f5bc415627e16957e6bd528e1782a892e116ff261c46f96ca87c342b  asterisk-20.7.0.tar.gz
++sha256  bea2978c41d0f69f7197536c35c2d80cbfdf7db826f48c0741b6f66462981d2f  asterisk-20.8.1.tar.gz
  
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index da23ebbadb..80e2543d1c 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index be27509441..3d41285c78 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GHOSTSCRIPT_VERSION = 10.02.1
-+GHOSTSCRIPT_VERSION = 10.03.1
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+-ASTERISK_VERSION = 20.7.0
++ASTERISK_VERSION = 20.8.1
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
