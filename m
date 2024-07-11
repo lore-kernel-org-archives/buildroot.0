@@ -4,102 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB413C3271E
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 05:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34811C3271E
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 06:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DB6C6086A;
-	Thu, 11 Jul 2024 05:56:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEB1A610F4;
+	Thu, 11 Jul 2024 06:05:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JxWveFmHZ0KP; Thu, 11 Jul 2024 05:56:57 +0000 (UTC)
+ id dL64en-NIjHo; Thu, 11 Jul 2024 06:05:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5CF5610E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3232610E6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5CF5610E0;
-	Thu, 11 Jul 2024 05:56:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F0B51BF599
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 05:56:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3232610E6;
+	Thu, 11 Jul 2024 06:05:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 552461BF3E1
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 06:05:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 479B6416E8
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 05:56:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42EF681F92
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 06:05:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nneSmf4bFcvb for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 05:56:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.250.0.168;
- helo=mx.adeep.su; envelope-from=adeep@lexina.in; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8A821416E5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A821416E5
-Received: from mx.adeep.su (mx.adeep.su [185.250.0.168])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8A821416E5
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 05:56:53 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2EFF11C8E4; Thu, 11 Jul 2024 08:56:43 +0300 (MSK)
-Message-ID: <fcdc3e33-99c6-488c-9231-4169b9201ce1@lexina.in>
-Date: Thu, 11 Jul 2024 08:56:42 +0300
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SBMFSVt6cvM3 for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 06:05:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
+ helo=fllv0016.ext.ti.com; envelope-from=p-bhagat@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F0B3E81F89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0B3E81F89
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F0B3E81F89
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 06:05:42 +0000 (UTC)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+ by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 46B65fbm054048;
+ Thu, 11 Jul 2024 01:05:41 -0500
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+ by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 46B65fP0000695
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Thu, 11 Jul 2024 01:05:41 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 11
+ Jul 2024 01:05:41 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 11 Jul 2024 01:05:41 -0500
+Received: from localhost (ula0502350.dhcp.ti.com [172.24.227.38])
+ by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 46B65eq9021316;
+ Thu, 11 Jul 2024 01:05:41 -0500
+To: <buildroot@buildroot.org>
+Date: Thu, 11 Jul 2024 11:35:31 +0530
+Message-ID: <20240711060531.4067193-1-p-bhagat@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <20240619075547.1390096-1-adeep@lexina.in>
- <20240711001637.4fe27e3d@windsurf>
-Content-Language: ru
-Autocrypt: addr=adeep@lexina.in; keydata=
- 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
-In-Reply-To: <20240711001637.4fe27e3d@windsurf>
-X-Last-TLS-Session-Version: TLSv1.3
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lexina.in; s=dkim; 
- t=1720677406; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references:autocrypt;
- bh=F67rJvrI/0AvdR2ONCdx9aLMDibbxn66VEJ5Oygptuw=;
- b=ircc+fwiPYGEWyxncgTS5cWb51W0syzNQ0P0onwzacmzsiPu8F5/iwpaDuA64IsyJy6HtB
- r6JxyWK+CL0xQAr7JpRs53hEKlhKGLZEmP3CRUUOQYWUhsITsZNv1/tGgHnCw/PHassYNy
- pFDu2Auerxv1sMgfNzGvIsred39Ntf6JbgegMgkkU4L0Y+tWVbf9rYkoEZ3ooEmj1EuNUk
- NWdvLykaDhfalpHRxua3eZmT7i+VJ2m4iEkYBVpy7lSTEk21to3Fq52xK6CGhdSdblHKID
- 2/ni4WiRy/RU37bff2hCxK9yoimZhMk+DSIA1/s5UYJApycqnJHyEvblNSjTsw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=ti.com; s=ti-com-17Q1; t=1720677941;
+ bh=O1Z1UDQjaYnDOXr3SNTsGAiGtZqJzK92pDtBQ9JwBxw=;
+ h=From:To:CC:Subject:Date;
+ b=IJ1P9OpYQ5d6+Mc2JCaTZkfpLRQ6AeBNz/T7DYyyIRHDf6Klv56Yi0aNNFZlIUvsC
+ Mhb4PioQVPoAuG/ho36lRYj+vGXrNPjY6PoEWFBqMLBnxnxcm4u8FVX/53LojYRgoL
+ DOgmqPts+JrybTlepslbUW2sx/u6rZkWIMhVOb8g=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=lexina.in
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=lexina.in header.i=@lexina.in header.a=rsa-sha256
- header.s=dkim header.b=ircc+fwi
-Subject: Re: [Buildroot] [PATCH v1] package/rtl8822cs bump driver version to
- latest
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=IJ1P9OpY
+Subject: [Buildroot] [PATCH v4] boot/ti-k3-boot-firmware: Add config option
+ to specify version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,53 +87,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Viacheslav via buildroot <buildroot@buildroot.org>
-Reply-To: Viacheslav <adeep@lexina.in>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Paresh Bhagat via buildroot <buildroot@buildroot.org>
+Reply-To: Paresh Bhagat <p-bhagat@ti.com>
+Cc: Bryan Brattlof <bb@ti.com>, Chirag Shilwant <c-shilwant@ti.com>,
+ Gyan Gupta <g-gupta@ti.com>, Xuanhao Shi <X15000177@gmail.com>,
+ Syed Mohammed Khasim <khasim@ti.com>, Andreas Dannenberg <dannenberg@ti.com>,
+ Sai Sree Kartheek Adivi <s-adivi@ti.com>, Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi!
+Previously the version of ti-k3-boot-firmware (TI_K3_BOOT_FIRMWARE_VERSION) was
+fixed in mk file. Introduce a new config option BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
+so that user can change the version for ti-k3-boot-firmware using menuconfig.
 
-11/07/2024 01.16, Thomas Petazzoni via buildroot wrote:
-> On Wed, 19 Jun 2024 10:55:40 +0300
-> Viacheslav Bocharov via buildroot <buildroot@buildroot.org> wrote:
-> 
->> - Update driver for kernel 6.9+
->> - Fix warning/errors on build
->>
->> Fixes: http://autobuild.buildroot.net/results/82dd4d986c0ddfb48e7316473186ef4c9d8ee783
->>
->> Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
->> ---
->>   package/rtl8822cs/rtl8822cs.hash | 3 ++-
->>   package/rtl8822cs/rtl8822cs.mk   | 2 +-
->>   2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> Thanks for your patch, I've applied to master.
-> 
-> One question: https://github.com/jethome-ru/rtl88x2cs says "** USE
-> RTW88 NOT THIS DRIVER **", so why are we using it? It seems like you
-> are the person maintaining this driver.
+This provides greater flexibility for users to select different versions of
+ti-k3-boot-firmware without modifying the build script directly.
 
-RTW88 in-kernel driver has some problems at this moment: no working AP 
-mode, wifi connection fails after 2-3 days, speed issues.
+Signed-off-by: Paresh Bhagat <p-bhagat@ti.com>
 
-The comment appeared when JetHub devices switched to the rtw88 driver. 
-After we switched back to rtl88x2cs, I decided to keep the comment as 
-motivation for development and to identify issues in rtw88.
-However, in production, we and some other boards use the rtl88x2cs 
-driver and we maintain it as necessary.
+---
+Changes v3 -> v4:
+  - Ti k3 -> TI K3 (Suggested by Andreas Dannenberg)
+  - git.ti.org -> git.ti.com (Suggested by Andreas Dannenberg)
 
+Changes v2 -> v3:
+  - flexibilty -> flexibility (Suggested by Chirag Shilwant)
 
-Since this question has been asked more than once, I decided to modify 
-the description a bit. Now that alarming message will no longer be there)
+Changes v1 -> v2:
+  - Fix whitespaces/indentation in Config.in file (Suggested by Bryan Brattlof)
 
---
-Regards,
-Viacheslav
+---
+ boot/ti-k3-boot-firmware/Config.in            | 30 +++++++++++++++++++
+ .../ti-k3-boot-firmware.mk                    |  2 +-
+ 2 files changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/boot/ti-k3-boot-firmware/Config.in b/boot/ti-k3-boot-firmware/Config.in
+index d80bb4bdb3..581ec0c3b9 100644
+--- a/boot/ti-k3-boot-firmware/Config.in
++++ b/boot/ti-k3-boot-firmware/Config.in
+@@ -5,3 +5,33 @@ config BR2_TARGET_TI_K3_BOOT_FIRMWARE
+ 	  This package downloads and installs the TI-specific ti-sysfw
+ 	  and ti-dm firmware needed to boot TI K3 platforms (which
+ 	  include AM62x, AM64x, AM65x and more).
++
++if BR2_TARGET_TI_K3_BOOT_FIRMWARE
++choice
++	prompt "ti-k3-boot-firmware version"
++	default BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
++	help
++	  Select the version of TI K3 boot firmware you want to use.
++
++config BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
++	bool "09.02.00.009"
++
++config BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
++	bool "Custom version"
++	help
++	  This option allows to use a specific official version from
++	  git.ti.com.
++
++endchoice
++
++config BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION_VALUE
++	string "Custom ti-k3-boot-firmware version"
++	depends on BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
++
++config BR2_TARGET_TI_K3_BOOT_FIRMWARE_VERSION
++	string
++	default "09.02.00.009"     if BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
++	default BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION_VALUE \
++				if BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
++
++endif
+diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+index 9332732ad4..350381ebbe 100644
+--- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
++++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TI_K3_BOOT_FIRMWARE_VERSION = 09.02.00.009
++TI_K3_BOOT_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_TI_K3_BOOT_FIRMWARE_VERSION))
+ TI_K3_BOOT_FIRMWARE_SITE = https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/snapshot
+ TI_K3_BOOT_FIRMWARE_SOURCE = ti-linux-firmware-$(TI_K3_BOOT_FIRMWARE_VERSION).tar.xz
+ TI_K3_BOOT_FIRMWARE_INSTALL_IMAGES = YES
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
