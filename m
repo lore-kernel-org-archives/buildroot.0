@@ -4,71 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A4EAC3DA45
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 18:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C34C3DA45
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 18:08:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8610A40543;
-	Thu, 11 Jul 2024 18:01:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DEF5F410FB;
+	Thu, 11 Jul 2024 18:08:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yRonDAB6xIIF; Thu, 11 Jul 2024 18:01:43 +0000 (UTC)
+ id fC_wiFzNqakY; Thu, 11 Jul 2024 18:08:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CB0041101
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AE4E405FA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3CB0041101;
-	Thu, 11 Jul 2024 18:01:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AE4E405FA;
+	Thu, 11 Jul 2024 18:08:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8F26C1BF47D
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:01:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8AEB11BF5A2
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:08:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C6CE410FB
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:01:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 846FF405FA
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 18:08:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Em4Ia8dB7Tf4 for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 18:01:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CC82840543
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC82840543
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CC82840543
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 18:01:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DC5BF40006;
- Thu, 11 Jul 2024 18:01:35 +0000 (UTC)
-Date: Thu, 11 Jul 2024 20:01:34 +0200
-To: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Message-ID: <20240711200134.59b302d9@windsurf>
-In-Reply-To: <20240711144810.2291029-1-julien.boibessot@armadeus.com>
-References: <20240711144810.2291029-1-julien.boibessot@armadeus.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+ id L-NtsoBoNHw8 for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 18:08:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C8CFF40462
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8CFF40462
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C8CFF40462
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 18:08:24 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-42565670e20so13851345e9.0
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 11:08:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720721303; x=1721326103;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=m1BXLNv+oRyDGGp+Q1BJuGZAorz+lmEDOgZ1CDri1cw=;
+ b=nMeOsYJsh3vuZvlEYQ6Bp+p4mwJvraDB3uxnuGp47cPw8zT3cmsT1Aq7kt9OthIzox
+ 79uhdq414Brj7c5x37vsAiCfSsnK0uhAFcK/tFLQx7TPcNEc9UaAntQQWM07amX3YgPZ
+ xSCOM9Tz6KRnt6ppuZo2Hdy0jpEWM//7C0wcTAy6o+wiAKiHG8+D5YiI6mAm6YzBzudF
+ l7vDC0Kqd26c/1+ToWowMlhgUI1rHIqzIsp+Yc/3g6SfDZ9bRLrAsLqn4Gmr+GEL/h72
+ yRPjVHdOCn8m4ADhUJxdBCfVDpl4AOnrKkxXxLalEsB5DSIo07eBbsSTWxqLLe8pTf/m
+ je4w==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXAQt+uecUlGwlxT3znzG+2UdU/rbv9JGU+HvV1AgZm4KtfVBMv2zR+ufncdm3HrApjN7+ku1VzIfdy5ucRSiCt1mbNuD9eyg==
+X-Gm-Message-State: AOJu0YwZu+MxVXPLOIqvjsI4QTbzFHRpOd4WhqeR1XwqHKaXyIcVO/+b
+ fu1lBS0irQ3v90BFLnSH+t2WaitgykIdZ1wMrzSk42U6WSdyOcq2fVWKa13opPjDKGLbxgdbOdR
+ 98T6V7iOm8QI2omZqh4nFjaXdAshgX2Lj
+X-Google-Smtp-Source: AGHT+IF3EzPRNhdvVv+oBH5Tkv+tVwyJQ4vTfp0x/lhwp/nbHxOsqpr8n3KI9pcVwVxEYdhwus8GBwNkrk72MBNLt6g=
+X-Received: by 2002:a5d:47c4:0:b0:366:e9f7:4e73 with SMTP id
+ ffacd0b85a97d-367ff6e758emr344507f8f.5.1720721302315; Thu, 11 Jul 2024
+ 11:08:22 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+References: <20240617151020.31120-1-flaniel@linux.microsoft.com>
+ <20240617151020.31120-4-flaniel@linux.microsoft.com>
+ <20240711200029.0763fc1d@windsurf>
+In-Reply-To: <20240711200029.0763fc1d@windsurf>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 11 Jul 2024 20:08:08 +0200
+Message-ID: <CA+TH9VkQ_mMTyGmjM0T0HeMz0+BvWp6bBjthP4GXbY5VNKdVzw@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720720896;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=OqELMTXrYmX2m5BGY7tUVD8iLg5SAjg8EPVEAKHa82s=;
- b=fwfeaaQvcU3wQ1qbUEnclUptEStM2hP5z1DLRrgZ3sqn7JaWZCAMUL6IFdlG+4bZPgyJu2
- Ke0Ai7pKvAwRe8Jpbiqq0WyXf4QJVj1hpBzc7rvKZnxSbGFIN7H5HIJ707J2ycuLmnQI/3
- xESX3QMqpP00cnF+9I+ksBnWYVURClPsUJvZFFdjZEgUebqEvQ+yAStDf9gWUh3RNtfdD0
- Rmgh195AivD3C2UIv6SwiaAzCYXka9pDa/XGZ44YgxIvAxbt0T2nVaPUBVmx3oNKK3F4kJ
- FMq2K1Tynnh8wN5luABKuIfms6UWxEn5VGZad8xJrLS1rxO7O+31c0wEWzTc3A==
+ d=gmail.com; s=20230601; t=1720721303; x=1721326103; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=m1BXLNv+oRyDGGp+Q1BJuGZAorz+lmEDOgZ1CDri1cw=;
+ b=h2SXPz7/o70xUJbwIfeQqpb6RbNiqWO9TJixcyx2xyHx3PotBvlNXi8UfzOInRFl2P
+ R5E7oaWtmk2IuwQHMycHD9lLufBXRIlDSN1yqRKdedrWxITvQ1/vQQt82GZIjnU4d4JX
+ hluLNcknlUjYa2Td6Qt7y1vsS5rwg8/VaeWL47QI+9IiWeE/8bbhYulUajwlnGpkMlyK
+ R7WoCfXEE1si4IDgshCI2lBdUe3DX4FwlFY0fLAZK8aD0nCOnv7hYzPjNGwq4TpbejUc
+ 4Wu5ZGhrtoYL9mZ9HJMg6SZZXnzZZO22/By0UyyZcxTOHulrvFvUu+RHX6aryR8XWYoS
+ LYZA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fwfeaaQv
-Subject: Re: [Buildroot] [PATCH 1/1] package/ltris: bump version to 1.3.2
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=h2SXPz7/
+Subject: Re: [Buildroot] [RFC PATCH v1 3/4] package/sysdig: remove package.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,83 +101,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Francis Laniel <flaniel@linux.microsoft.com>,
+ buildroot <buildroot@buildroot.org>,
+ Angelo Compagnucci <angelo@amarulasolutions.com>
+Content-Type: multipart/mixed; boundary="===============5789373905079352412=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 11 Jul 2024 16:48:10 +0200
-Julien BOIBESSOT <julien.boibessot@armadeus.com> wrote:
+--===============5789373905079352412==
+Content-Type: multipart/alternative; boundary="000000000000fb6db1061cfca508"
 
-> As requested by Buildroot's autobuilder tracking outdated packages.
-> 
-> Build tested with:
-> 
-> $ ./utils/test-pkg -c ltris.config -p ltris -a
->                              arm-aarch64 [ 1/41]: OK
->                    bootlin-aarch64-glibc [ 2/41]: OK
->                bootlin-arcle-hs38-uclibc [ 3/41]: OK
->                     bootlin-armv5-uclibc [ 4/41]: OK
->                      bootlin-armv7-glibc [ 5/41]: OK
->                    bootlin-armv7m-uclibc [ 6/41]: SKIPPED
->                       bootlin-armv7-musl [ 7/41]: OK
->                 bootlin-m68k-5208-uclibc [ 8/41]: SKIPPED
->                bootlin-m68k-68040-uclibc [ 9/41]: OK
->              bootlin-microblazeel-uclibc [10/41]: OK
->                 bootlin-mipsel32r6-glibc [11/41]: OK
->                    bootlin-mipsel-uclibc [12/41]: OK
->                      bootlin-nios2-glibc [13/41]: OK
->                  bootlin-openrisc-uclibc [14/41]: OK
->         bootlin-powerpc64le-power8-glibc [15/41]: OK
->            bootlin-powerpc-e500mc-uclibc [16/41]: OK
->                    bootlin-riscv32-glibc [17/41]: OK
->                    bootlin-riscv64-glibc [18/41]: OK
->                     bootlin-riscv64-musl [19/41]: OK
->                  bootlin-s390x-z13-glibc [20/41]: OK
->                       bootlin-sh4-uclibc [21/41]: OK
->                    bootlin-sparc64-glibc [22/41]: OK
->                     bootlin-sparc-uclibc [23/41]: OK
->                     bootlin-x86-64-glibc [24/41]: OK
->                      bootlin-x86-64-musl [25/41]: OK
->                    bootlin-x86-64-uclibc [26/41]: OK
->                    bootlin-x86-i686-musl [27/41]: OK
->                    bootlin-xtensa-uclibc [28/41]: OK
->                             br-arm-basic [29/41]: OK
->                     br-arm-full-nothread [30/41]: OK
->                       br-arm-full-static [31/41]: OK
->                    br-i386-pentium4-full [32/41]: OK
->                       br-mips64-n64-full [33/41]: OK
->                  br-mips64r6-el-hf-glibc [34/41]: OK
->                br-powerpc-603e-basic-cpp [35/41]: OK
->                br-powerpc64-power7-glibc [36/41]: OK
->                        linaro-aarch64-be [37/41]: OK
->                           linaro-aarch64 [38/41]: OK
->                               linaro-arm [39/41]: OK
->                          sourcery-mips64 [40/41]: OK
->                            sourcery-mips [41/41]: OK
-> 41 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-> 
-> $ cat ltris.config
-> BR2_PACKAGE_LTRIS=y
-> BR2_PACKAGE_LTRIS_AUDIO=y
-> 
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> ---
->  package/ltris/ltris.hash | 2 +-
->  package/ltris/ltris.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+--000000000000fb6db1061cfca508
+Content-Type: text/plain; charset="UTF-8"
 
-Applied to master, thanks.
+Il gio 11 lug 2024, 20:00 Thomas Petazzoni via buildroot <
+buildroot@buildroot.org> ha scritto:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Hello Francis,
+>
+> I'm adding in Cc: Angelo who is also listed as a maintainer for this
+> package in our DEVELOPERS file. Angelo, any feedback?
+>
+> See below.
+>
+> On Mon, 17 Jun 2024 16:10:19 +0100
+> Francis Laniel <flaniel@linux.microsoft.com> wrote:
+>
+> > Building sysdig within buildroot is a complicated task which
+> > has changed at each of their release.
+>
+> But the package is working right now, isn't it?
+
+
+To my knowledge it is, I have used it in the past, even if it's not updated.
+
+Did you try to update
+> it to a newer version and encountered some specific issues? If so,
+> which issues?
+>
+
+Francis sent several iteration of the bumping patches but from my
+knowledge, they were never good enough to be included.
+
+I promised myself to look again at it, but really never found the time.
+
+
+> Maybe those issues should be communicated back to upstream, so that
+> they can improve how sysdig is provided/delivered? If something like
+> Buildroot can't package sysdig, maybe they will be interested in
+> hearing why?
+>
+
+I fixed several things in the past in the build system, I think they are
+still open to proper fixes.
+
+
+> > As the package seems to not be really used in buildroot, it
+> > seems wise to remove it.
+>
+> How can you say it is "not really used"? We have no usage metrics for
+> packages, so really we have no idea of who uses sysdig.
+>
+
+Indeed. It is a wonderful tool in my opinion to not to have in buildroot.
+
+
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+--000000000000fb6db1061cfca508
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div><br><br><div class=3D"gmail_quote"><div dir=3D"ltr" =
+class=3D"gmail_attr">Il gio 11 lug 2024, 20:00 Thomas Petazzoni via buildro=
+ot &lt;<a href=3D"mailto:buildroot@buildroot.org">buildroot@buildroot.org</=
+a>&gt; ha scritto:<br></div><blockquote class=3D"gmail_quote" style=3D"marg=
+in:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hello Francis,<b=
+r>
+<br>
+I&#39;m adding in Cc: Angelo who is also listed as a maintainer for this<br=
+>
+package in our DEVELOPERS file. Angelo, any feedback?<br>
+<br>
+See below.<br>
+<br>
+On Mon, 17 Jun 2024 16:10:19 +0100<br>
+Francis Laniel &lt;<a href=3D"mailto:flaniel@linux.microsoft.com" target=3D=
+"_blank" rel=3D"noreferrer">flaniel@linux.microsoft.com</a>&gt; wrote:<br>
+<br>
+&gt; Building sysdig within buildroot is a complicated task which<br>
+&gt; has changed at each of their release.<br>
+<br>
+But the package is working right now, isn&#39;t it? </blockquote></div></di=
+v><div dir=3D"auto"><br></div><div dir=3D"auto">To my knowledge it is, I ha=
+ve used it in the past, even if it&#39;s not updated.</div><div dir=3D"auto=
+"><br></div><div dir=3D"auto"><div class=3D"gmail_quote"><blockquote class=
+=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
+ing-left:1ex">Did you try to update<br>
+it to a newer version and encountered some specific issues? If so,<br>
+which issues?<br></blockquote></div></div><div dir=3D"auto"><br></div><div =
+dir=3D"auto">Francis sent several iteration of the bumping patches but from=
+ my knowledge, they were never good enough to be included.</div><div dir=3D=
+"auto"><br></div><div dir=3D"auto">I promised myself to look again at it, b=
+ut really never found the time.</div><div dir=3D"auto"><br></div><div dir=
+=3D"auto"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" styl=
+e=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+<br>
+Maybe those issues should be communicated back to upstream, so that<br>
+they can improve how sysdig is provided/delivered? If something like<br>
+Buildroot can&#39;t package sysdig, maybe they will be interested in<br>
+hearing why?<br></blockquote></div></div><div dir=3D"auto"><br></div><div d=
+ir=3D"auto">I fixed several things in the past in the build system, I think=
+ they are still open to proper fixes.</div><div dir=3D"auto"><br></div><div=
+ dir=3D"auto"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" =
+style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+<br>
+&gt; As the package seems to not be really used in buildroot, it<br>
+&gt; seems wise to remove it.<br>
+<br>
+How can you say it is &quot;not really used&quot;? We have no usage metrics=
+ for<br>
+packages, so really we have no idea of who uses sysdig.<br></blockquote></d=
+iv></div><div dir=3D"auto"><br></div><div dir=3D"auto">Indeed. It is a wond=
+erful tool in my opinion to not to have in buildroot.</div><div dir=3D"auto=
+"><br></div><div dir=3D"auto"><div class=3D"gmail_quote"><blockquote class=
+=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
+ing-left:1ex">
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer noreferrer" target=3D"_bl=
+ank">https://bootlin.com</a><br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank" rel=3D"norefer=
+rer">buildroot@buildroot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman=
+/listinfo/buildroot</a><br>
+</blockquote></div></div></div>
+
+--000000000000fb6db1061cfca508--
+
+--===============5789373905079352412==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5789373905079352412==--
