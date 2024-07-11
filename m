@@ -4,91 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13F7CC3DA49
-	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 12:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FA5FC3DA45
+	for <buildroot@archiver.kernel.org>; Thu, 11 Jul 2024 16:04:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77A9540D6F;
-	Thu, 11 Jul 2024 12:54:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0740D4155C;
+	Thu, 11 Jul 2024 16:04:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dm7kiOewIqzb; Thu, 11 Jul 2024 12:54:21 +0000 (UTC)
+ id DG0mIjvE-P-Q; Thu, 11 Jul 2024 16:04:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 429C0413DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4E4741553
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 429C0413DC;
-	Thu, 11 Jul 2024 12:54:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 54F031BF4DB
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 12:54:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4E4741553;
+	Thu, 11 Jul 2024 16:04:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CB701BF577
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 16:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4188F413DC
- for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 12:54:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED76580F89
+ for <buildroot@lists.busybox.net>; Thu, 11 Jul 2024 16:04:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1dV_Np5kGpsk for <buildroot@lists.busybox.net>;
- Thu, 11 Jul 2024 12:54:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0882740D6F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0882740D6F
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0882740D6F
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 12:54:18 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id
- a640c23a62f3a-a6fd513f18bso115851466b.3
- for <buildroot@buildroot.org>; Thu, 11 Jul 2024 05:54:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720702457; x=1721307257;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=u6Q6BFz2R2FZFIDywhKvwtKr0iSVQA9KFRXnRoxzvDk=;
- b=jKSfPX3o3Vbu85KL3M7URvAy80XoLxuPVjmPLjnFtILU5qw7Nel8HhlwZF/VFsN9ng
- vB14BvOgulGBJ6BAVfWiFHojkwgaqsDlsa8gg6k5/dao2RbqSgoHPMQ0q4zDLmjoV1/f
- B5LbFLlnDsZVQsdXp0yKgusgfoteFEgwCQg6R9rW2KsJfEgbKr/3ZA9QnY/AK9j30kWi
- Ya9ItRVQis6ngTRVUxoIGvxxHz54of2VPhv+0oVza8D4UH1tjafbyoMfOuIgfwXocV4K
- zoDBedvNpLZZtg227nJujTydk6Tpl98sLthX3Ba45pViif9h+yd34+D3rSIyGcdFf88n
- c7sg==
-X-Gm-Message-State: AOJu0Yz7g0rgVin6uwvX0E54Bwrr+7m/wWx4X5qeu3HmI3TFmYhwH2BU
- yJgfE/6ynuLJepkg8DL9tK9YyjLTLnOY1lHLZehgJ3rrH/9efEPoLEXbvr0hHOiql9Dx9G2wUGZ
- Zr7U=
-X-Google-Smtp-Source: AGHT+IH96/c1ZQYB25US6X39xcdxMD/goOcz0eFDPLI7lAonk1lOMrWNe61zUjH6IV3AoDCMYs63+Q==
-X-Received: by 2002:a17:906:fa8c:b0:a6e:f7bc:dcab with SMTP id
- a640c23a62f3a-a780b89debbmr560974366b.65.1720702456726; 
- Thu, 11 Jul 2024 05:54:16 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.40.36])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a780a57bf00sm252256966b.0.2024.07.11.05.54.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 11 Jul 2024 05:54:16 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FSwcF-4unnl4 for <buildroot@lists.busybox.net>;
+ Thu, 11 Jul 2024 16:04:45 +0000 (UTC)
+X-Greylist: delayed 4579 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 11 Jul 2024 16:04:42 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C380A80F4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C380A80F4B
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=46.105.40.176;
+ helo=9.mo584.mail-out.ovh.net; envelope-from=julien.boibessot@armadeus.com;
+ receiver=<UNKNOWN> 
+Received: from 9.mo584.mail-out.ovh.net (9.mo584.mail-out.ovh.net
+ [46.105.40.176])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C380A80F4B
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 16:04:42 +0000 (UTC)
+Received: from director3.ghost.mail-out.ovh.net (unknown [10.108.9.253])
+ by mo584.mail-out.ovh.net (Postfix) with ESMTP id 4WKczS3LQ9z1NYj
+ for <buildroot@buildroot.org>; Thu, 11 Jul 2024 14:48:20 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-p6knh (unknown [10.111.174.233])
+ by director3.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 02BD31FD4E;
+ Thu, 11 Jul 2024 14:48:19 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.103])
+ by ghost-submission-6684bf9d7b-p6knh with ESMTPSA
+ id hnH3NrPwj2awHAAAOQ0HoQ
+ (envelope-from <julien.boibessot@armadeus.com>);
+ Thu, 11 Jul 2024 14:48:19 +0000
+X-OVh-ClientIp: 86.235.104.210
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Jul 2024 14:54:12 +0200
-Message-ID: <20240711125412.2662104-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Date: Thu, 11 Jul 2024 16:48:10 +0200
+Message-Id: <20240711144810.2291029-1-julien.boibessot@armadeus.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1720702457; x=1721307257;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=u6Q6BFz2R2FZFIDywhKvwtKr0iSVQA9KFRXnRoxzvDk=;
- b=HqAqXPBb2P8tSpZxgHOuOjtUTa8W5cYUCEwTyzdiycJpfyeuP52LDTfn/xKxkTIJO8
- CL9gtJcREnWp39SHr50v4o0LENy+VPcFuWaV6WXUjOnJmurcM8ZZ6cfBZ/kB0r66Wsad
- 8jmmtcBeK1uamtyDcrQ/zrceHoNKEUDl8DqLI=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=HqAqXPBb
-Subject: [Buildroot] [PATCH v2 1/1] configs/stm32f769_disco_sd: bump Linux
- to 5.15.162 and U-Boot to 2024.04
+X-Ovh-Tracer-Id: 17344488068556050897
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 49
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeftddrfeeggdekudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecuogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefluhhlihgvnhcuuefqkfeugffuuffqvfcuoehjuhhlihgvnhdrsghoihgsvghsshhothesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeejlefhkefgudetieffgfelheeugffhjeehieektefguedvheejfeefieevffevfeenucffohhmrghinhepshhouhhrtggvfhhorhhgvgdrnhgvthenucfkphepuddvjedrtddrtddruddpkeeirddvfeehrddutdegrddvuddtpdefjedrheelrddugedvrddutdefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpehjuhhlihgvnhdrsghoihgsvghsshhothesrghrmhgruggvuhhsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheekgedpmhhouggvpehsmhhtphhouhht
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ bh=9kP8dramSm/Qxrnb4VIxORxhhXIX85TiTMit6AuOiV4=; 
+ c=relaxed/relaxed; d=armadeus.com; h=From; s=ovhmo103079-selector1;
+ t=1720709300; v=1;
+ b=TJdS/CtXM+bNRP8H1tX0vI3jC65HQTtO/lcmq7NB2H8UEa+3qLtww2yVDWQz1Gmgs9Ph79MR
+ wqlCTxo3YmQvGWPaMCujzu7NM0I9mKcluV9nhlpeJZtgqrGuWjLYdGzYWnlpqc09SsN0vgiKGr8
+ BJImyf67BW/Jr0lL11now6b4aKHvfcX82cr2HUkP8O+favpp0+maHXOkpULzWN9VuzWgYtp+U0x
+ L3/z6lwBwBlhNxPto+BdJWWRvqgKeljf3IowjjlwwEfCQP98gR0hxqzfFESiCnmc3v9xCkRYMZY
+ Xo7X4GIMXAJlr+8E9crt7Gc21rKDrWkB8C+WZgt5caVng==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=armadeus.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=armadeus.com header.i=@armadeus.com header.a=rsa-sha256
+ header.s=ovhmo103079-selector1 header.b=TJdS/CtX
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-103G005b77a91da-5a85-4b1b-bd96-4e0d69629fcc,
+ 05E343665D7C41E3FDDC56377E599F7C2F18E325)
+ smtp.auth=julien.boibessot@armadeus.com
+Subject: [Buildroot] [PATCH 1/1] package/ltris: bump version to 1.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,70 +94,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 5.15.162 and U-Boot to
-version 2024.04.
+As requested by Buildroot's autobuilder tracking outdated packages.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Build tested with:
+
+$ ./utils/test-pkg -c ltris.config -p ltris -a
+                             arm-aarch64 [ 1/41]: OK
+                   bootlin-aarch64-glibc [ 2/41]: OK
+               bootlin-arcle-hs38-uclibc [ 3/41]: OK
+                    bootlin-armv5-uclibc [ 4/41]: OK
+                     bootlin-armv7-glibc [ 5/41]: OK
+                   bootlin-armv7m-uclibc [ 6/41]: SKIPPED
+                      bootlin-armv7-musl [ 7/41]: OK
+                bootlin-m68k-5208-uclibc [ 8/41]: SKIPPED
+               bootlin-m68k-68040-uclibc [ 9/41]: OK
+             bootlin-microblazeel-uclibc [10/41]: OK
+                bootlin-mipsel32r6-glibc [11/41]: OK
+                   bootlin-mipsel-uclibc [12/41]: OK
+                     bootlin-nios2-glibc [13/41]: OK
+                 bootlin-openrisc-uclibc [14/41]: OK
+        bootlin-powerpc64le-power8-glibc [15/41]: OK
+           bootlin-powerpc-e500mc-uclibc [16/41]: OK
+                   bootlin-riscv32-glibc [17/41]: OK
+                   bootlin-riscv64-glibc [18/41]: OK
+                    bootlin-riscv64-musl [19/41]: OK
+                 bootlin-s390x-z13-glibc [20/41]: OK
+                      bootlin-sh4-uclibc [21/41]: OK
+                   bootlin-sparc64-glibc [22/41]: OK
+                    bootlin-sparc-uclibc [23/41]: OK
+                    bootlin-x86-64-glibc [24/41]: OK
+                     bootlin-x86-64-musl [25/41]: OK
+                   bootlin-x86-64-uclibc [26/41]: OK
+                   bootlin-x86-i686-musl [27/41]: OK
+                   bootlin-xtensa-uclibc [28/41]: OK
+                            br-arm-basic [29/41]: OK
+                    br-arm-full-nothread [30/41]: OK
+                      br-arm-full-static [31/41]: OK
+                   br-i386-pentium4-full [32/41]: OK
+                      br-mips64-n64-full [33/41]: OK
+                 br-mips64r6-el-hf-glibc [34/41]: OK
+               br-powerpc-603e-basic-cpp [35/41]: OK
+               br-powerpc64-power7-glibc [36/41]: OK
+                       linaro-aarch64-be [37/41]: OK
+                          linaro-aarch64 [38/41]: OK
+                              linaro-arm [39/41]: OK
+                         sourcery-mips64 [40/41]: OK
+                           sourcery-mips [41/41]: OK
+41 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+$ cat ltris.config
+BR2_PACKAGE_LTRIS=y
+BR2_PACKAGE_LTRIS_AUDIO=y
+
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 ---
-Changes v1 -> v2:
- - Drop 0001-serial-stm32-rework-RX-over-DMA.patch.
- - Update to Linux version to 5.15.162, which now includes the patch
-   fixing the UART issue.
- - Update Linux hash for version 5.15.162.
+ package/ltris/ltris.hash | 2 +-
+ package/ltris/ltris.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- .../stm32f769-disco/patches/linux/linux.hash                  | 2 +-
- .../stm32f769-disco/patches/uboot/uboot.hash                  | 2 +-
- configs/stm32f769_disco_sd_defconfig                          | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
-index 49a2ba85a7de..d8e8263e9eff 100644
---- a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  8beb69ada46f1cbca2f4cf901ec078846035c1cd925d9471422f65aff74243ba  linux-5.15.108.tar.xz
-+sha256  91bfc0ea152ce7b102a0b79d35a7c92843874ebf085c99d2ba8b4d85e62b1a7c  linux-5.15.162.tar.xz
-diff --git a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
-index 7cef5b688ec3..97a2b4eaf95b 100644
---- a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
-+++ b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  e31cac91545ff41b71cec5d8c22afd695645cd6e2a442ccdacacd60534069341  u-boot-2023.04.tar.bz2
-+sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
-diff --git a/configs/stm32f769_disco_sd_defconfig b/configs/stm32f769_disco_sd_defconfig
-index 952d22cc60dd..c9140d089a39 100644
---- a/configs/stm32f769_disco_sd_defconfig
-+++ b/configs/stm32f769_disco_sd_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f769-disco/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.108"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.162"
- BR2_LINUX_KERNEL_DEFCONFIG="stm32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xc0000000.config board/stmicroelectronics/stm32f769-disco/linux-sd.fragment"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-@@ -22,7 +22,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f769-disco"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/package/ltris/ltris.hash b/package/ltris/ltris.hash
+index abe6853d9b..3b2043a2c8 100644
+--- a/package/ltris/ltris.hash
++++ b/package/ltris/ltris.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  1291c6a642d06b9ee153ac0a2e7855a2c983e839c618f1a294df04d829525cb0  ltris-1.2.7.tar.gz
++sha256  ff28c55a18c61f28a86ba7f30f13222dfed0f7fbeb492acd95c97de9c659cec9  ltris-1.3.2.tar.gz
+ sha256  67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34  COPYING
+diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
+index b34ac142ce..6ebaa74294 100644
+--- a/package/ltris/ltris.mk
++++ b/package/ltris/ltris.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LTRIS_SITE = http://downloads.sourceforge.net/lgames/ltris
+-LTRIS_VERSION = 1.2.7
++LTRIS_VERSION = 1.3.2
+ LTRIS_LICENSE = GPL-2.0+
+ LTRIS_LICENSE_FILES = COPYING
+ 
 -- 
-2.43.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
