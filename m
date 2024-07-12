@@ -4,67 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2798FC3DA45
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 18:39:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E968C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 18:42:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEB7160658;
-	Fri, 12 Jul 2024 18:39:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0253160658;
+	Fri, 12 Jul 2024 18:42:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cxzTPU0aFlDc; Fri, 12 Jul 2024 18:39:43 +0000 (UTC)
+ id kFdzLIxo9xm4; Fri, 12 Jul 2024 18:42:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D17746138C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 185D76138C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D17746138C;
-	Fri, 12 Jul 2024 18:39:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 75BC31BF4D5
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 18:39:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 185D76138C;
+	Fri, 12 Jul 2024 18:42:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 150C01BF4D5
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 18:42:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E2704175C
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 18:39:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 02820846EF
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 18:42:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0lYAj3vqQesW for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 18:39:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DCA774169E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCA774169E
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DCA774169E
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 18:39:39 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 3850FB00585;
- Fri, 12 Jul 2024 20:39:36 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7UzbdnavXOSA for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 18:42:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
+ envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B5B6E84692
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5B6E84692
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B5B6E84692
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 18:42:51 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id
+ 4fb4d7f45d1cf-585e774fd3dso3148433a12.0
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 11:42:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720809770; x=1721414570;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=5RVC2oRAJKl4oINnEq8fbpSg1MBdtv5m9YQH78PoINo=;
+ b=UNM2w8xHEoQnsOSt293jXLgHQY4jiGdPJ4qRR91nelDXmwQpWFAKJBKrhskJbhDqPl
+ j2t07E4dPjovXD1WTvlxq+lTF2cBMVsADun5k2DSUJZUNkMFP/Kb+XBHax+nBc1p8ANS
+ azS884yo8MCihRc9mIyGajDPH5CJLP92++Htin/kUZU26b/+ETb+Wx/ochFXn6LqziX2
+ U9u75vvaGPZCQMNiShnWze2mbdC1yhM/jHAfH/QTO7J1uGKHOg5WtU0HYcUz6tgP3EOO
+ 3WIrAJYS0j1J9oN0AMvy6J53NW/pDIfNQW5kNVqh4nHEEGryClXKQK5sToRaabO6//9H
+ uqxA==
+X-Gm-Message-State: AOJu0YycaqDJ5aY0NA04nyC1WtaRl9NsqyantjIw+SJhN8LhTmae7Tpg
+ sH9xXNGVk2lVrp0NjZcE2YAXbT6i4iA0qdKpXaeoptVf7e1+zKJyl3BeFA==
+X-Google-Smtp-Source: AGHT+IHej1XhMJ5Nn17WNDi0dmOAaiJlN6dE9RJktbajFtXeIBSaaRFWORX4lxwpX1od7fdLQvKQcA==
+X-Received: by 2002:a05:6402:50cc:b0:58d:d3f6:58d2 with SMTP id
+ 4fb4d7f45d1cf-594ba98e65emr10398043a12.3.1720809769286; 
+ Fri, 12 Jul 2024 11:42:49 -0700 (PDT)
+Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-594bc4e81a6sm4807865a12.49.2024.07.12.11.42.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 12 Jul 2024 11:42:48 -0700 (PDT)
+From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 20:39:31 +0200
-Message-ID: <20240712183931.245991-1-ju.o@free.fr>
+Date: Fri, 12 Jul 2024 20:42:41 +0200
+Message-ID: <20240712184241.256166-1-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1720809577;
- bh=gU/JQXOaouiXzb2YoZBU33N3GHdJksfJ+xifBz/WzjE=;
- h=From:To:Cc:Subject:Date:From;
- b=sKVpVrE4dduuDL1sIUMoslUKll7i/nsWkfDliXw5E+t40ulic/WJIG5/k9k/A9FYN
- 9XDfsdQieeovt8P7FhbXJCwSqmA5apN0JVnnDYWInyXUoPzTb3WyPnIQt5+AguUHoE
- RlULbBKGfdpNrr73zqOP+mdcPIgJBZg9va8IQdbMTf4HskOPOfURTUxWAlrrmmX4EX
- qAMRT8YrjvSr6gKC5xDPnclGH+Y+YCZ34MxfrOqcehn5xqj+M+xt8N9sxGbiygPVCA
- oKExWpU8w5AHcYPkwEgUtyHGjQuk97T/remgvmWoWPij3xMDI2/1ia9Xoq8Puh4knF
- iVlO08xbUnToQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1720809770; x=1721414570; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=5RVC2oRAJKl4oINnEq8fbpSg1MBdtv5m9YQH78PoINo=;
+ b=Ma5KEs+l+a3TK/bACRe2bgbLqYEQhr+4f7Tbi6lh6UGg0WGblo4WL9mGRKKVI0pKSY
+ XSo77Pv0ioV4JqJwNeWbNXk+fHk8Phuo3iSr3jVnIsHKb/goiEzU3wFB2FAVxIZHgCos
+ Xk8nqq02HevZTq9XuqmBaCPuCYtnAyloFe9BoB8x6yZH+vP5TR9EryrlBjpwLZGVg53J
+ XWlW7iLOSaFzI7JmrzD2dX0ygUh4VN8VfllWL0spUfoVpM6FfKASopOTEjMtepooa7yz
+ 12Cl35qcRXBWCcjAudUuVP4c/6Nh9cl626yFHT4CDUNgl365jCAHy4b+1zy+B95lDfLe
+ Mreg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=sKVpVrE4
-Subject: [Buildroot] [PATCH 1/1] configs/spike_riscv64: bump kernel to
- 6.6.35 and add hashes
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Ma5KEs+l
+Subject: [Buildroot] [PATCH 1/1] package/ima-evm-utils: bump version to 1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,98 +100,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Petr Vorel <petr.vorel@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit [1] introduced a new spike_riscv32_defconfig with Kernel
-at v6.6.35.
+Upstream moved git repository.
 
-This commit bumps the Kernel of spike_riscv64_defconfig to have it
-aligned with its 32bit counterpart.
-
-This commit also adds custom hashes. Therefore, it adds
-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y in the defconfig, adds a global
-patch directory, and removes the entry in ".checkpackageignore".
-
-Finally, to completely align with the spike_riscv32_defconfig, the
-config directive BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM is moved by few
-lines.
-
-With this commit, the maintenance of the two spike_riscv{32,64}
-defconfigs will be easier.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/a83ab3f4c8621dec58dc78a8dcb48e519377ac3d
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- .checkpackageignore                                         | 1 -
- .../spike/riscv64/patches/linux-headers/linux-headers.hash  | 1 +
- board/spike/riscv64/patches/linux/linux.hash                | 2 ++
- board/spike/riscv64/patches/opensbi/opensbi.hash            | 2 ++
- configs/spike_riscv64_defconfig                             | 6 ++++--
- 5 files changed, 9 insertions(+), 3 deletions(-)
- create mode 120000 board/spike/riscv64/patches/linux-headers/linux-headers.hash
- create mode 100644 board/spike/riscv64/patches/linux/linux.hash
- create mode 100644 board/spike/riscv64/patches/opensbi/opensbi.hash
+ package/ima-evm-utils/ima-evm-utils.hash | 6 +++---
+ package/ima-evm-utils/ima-evm-utils.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2c0f265d96..be51c16e36 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -282,7 +282,6 @@ configs/socrates_cyclone5_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_clearfog_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_clearfog_gt_8k_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
--configs/spike_riscv64_defconfig lib_defconfig.ForceCheckHash
- configs/stm32mp157c_dk2_defconfig lib_defconfig.ForceCheckHash
- configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
- configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/spike/riscv64/patches/linux-headers/linux-headers.hash b/board/spike/riscv64/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/spike/riscv64/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/spike/riscv64/patches/linux/linux.hash b/board/spike/riscv64/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..a3b67a09a4
---- /dev/null
-+++ b/board/spike/riscv64/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  fce3ee728712ed063aa8c14a8756c8ff8c7a46ba3827f61d2b04a73c7cf5dd9e  linux-6.6.35.tar.xz
-diff --git a/board/spike/riscv64/patches/opensbi/opensbi.hash b/board/spike/riscv64/patches/opensbi/opensbi.hash
-new file mode 100644
-index 0000000000..bc4058abe6
---- /dev/null
-+++ b/board/spike/riscv64/patches/opensbi/opensbi.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  319b62a4186fbce9b81a0c5f0ec9f003a10c808397a72138bc9745d9b87b1eb1  opensbi-1.4.tar.gz
-diff --git a/configs/spike_riscv64_defconfig b/configs/spike_riscv64_defconfig
-index fa8cba4275..feb13d84db 100644
---- a/configs/spike_riscv64_defconfig
-+++ b/configs/spike_riscv64_defconfig
-@@ -1,10 +1,12 @@
- BR2_riscv=y
- BR2_RISCV_64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_GLOBAL_PATCH_DIR="board/spike/riscv64/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.26"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.35"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TARGET_ROOTFS_CPIO=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_OPENSBI=y
+diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
+index 9777c7f213..844ba0d4fe 100644
+--- a/package/ima-evm-utils/ima-evm-utils.hash
++++ b/package/ima-evm-utils/ima-evm-utils.hash
+@@ -1,3 +1,3 @@
+-# https://github.com/mimizohar/ima-evm-utils/releases/download/v1.5/ima-evm-utils-1.5.tar.gz.sha256
+-sha256  45f1caa3ad59ec59a1d6a74ea5df38c413488cd952ab62d98cf893c15e6f246d  ima-evm-utils-1.5.tar.gz
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++# https://github.com/linux-integrity/ima-evm-utils/releases/download/v1.6/ima-evm-utils-1.6.tar.gz.sha256
++sha256  3d09e77a09e985b285891f13d458653f44913879147679dce30bdbf00380d40e  ima-evm-utils-1.6.tar.gz
++sha256  d037fb0b5fdb4d1e09e246a56bdb8049fc6d9b1f9270c0ec2ae4bc8f9285165b  LICENSES.txt
+diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
+index b969b4709e..052400eea3 100644
+--- a/package/ima-evm-utils/ima-evm-utils.mk
++++ b/package/ima-evm-utils/ima-evm-utils.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-IMA_EVM_UTILS_VERSION = 1.5
+-IMA_EVM_UTILS_SITE = https://github.com/mimizohar/ima-evm-utils/releases/download/v$(IMA_EVM_UTILS_VERSION)
++IMA_EVM_UTILS_VERSION = 1.6
++IMA_EVM_UTILS_SITE = https://github.com/linux-integrity/ima-evm-utils/releases/download/v$(IMA_EVM_UTILS_VERSION)
+ IMA_EVM_UTILS_LICENSE = GPL-2.0
+-IMA_EVM_UTILS_LICENSE_FILES = COPYING
++IMA_EVM_UTILS_LICENSE_FILES = LICENSES.txt
+ IMA_EVM_UTILS_INSTALL_STAGING = YES
+ IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl tpm2-tss
+ 
 -- 
 2.45.2
 
