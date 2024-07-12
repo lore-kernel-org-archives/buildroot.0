@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02931C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:02:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A979C3DA4B
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:02:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7DA4417C4;
-	Fri, 12 Jul 2024 14:02:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0912B419A8;
+	Fri, 12 Jul 2024 14:02:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qbjknb2WCCsR; Fri, 12 Jul 2024 14:02:37 +0000 (UTC)
+ id tWR_XxhG46HV; Fri, 12 Jul 2024 14:02:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 700C04196D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5786A4198E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 700C04196D;
-	Fri, 12 Jul 2024 14:02:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DFB541BF59E
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:02:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5786A4198E;
+	Fri, 12 Jul 2024 14:02:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 333771BF59E
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:02:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA9404196D
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:02:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D55261106
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:02:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q8G4elfyjbBm for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PDYdAuY1CIk6 for <buildroot@lists.busybox.net>;
  Fri, 12 Jul 2024 14:02:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5369F417C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5369F417C4
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5369F417C4
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:02:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4A9DB20003;
- Fri, 12 Jul 2024 14:02:31 +0000 (UTC)
-Date: Fri, 12 Jul 2024 16:02:30 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20240712160230.1e95bb85@windsurf>
-In-Reply-To: <20240609195519.1154353-1-yann.morin.1998@free.fr>
-References: <20240609195519.1154353-1-yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720792951;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=MC1YROn1ERmogG9BEqzJOijcqvzYL0FOJeMalZTqRvQ=;
- b=YKeaLyWY36NQXE4XH7McIEUoRgoAkeDJy1+KQa7bJRgBP8+J/wD8A0ecYFu5HiugJYu/Zw
- YcYz9bMjWyF+pxqERsaaZSuxXpcFdzMbO6QuSCSopbdaYbept5nnYfS/D6hsm21Ig79fgA
- 9YdoHfrNyrwhH2+yi/2Cf9EmMW1dDYn+UwHw51A0aPC4kwf1P47Nke+vIdMcVEOyI7HgrE
- CzM+iLiHbEaIRyPXCkuXx57Zy/rU8QU6HZ35FmENhcqM8qRZGH1mFqih6bTG8pw/SnAFeV
- 8TvMLEVIIpLHHVoXGugyLs4CYNLIPGdnOMFJMukEJoO9C419fk1NKZJJIPsqsA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YKeaLyWY
-Subject: Re: [Buildroot] [PATCH] package/bcc: add missing dependencies to
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31CEF61103
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 31CEF61103
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:02:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1626585EB8; Fri, 12 Jul 2024 14:02:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 16:01:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fd358b97c053af9e45fcb94e59ade63b4d895f10
+X-Git-Newrev: 76051e653199f8f6c20afa0c28496c7d8cfcb527
+X-Patchwork-Hint: ignore
+Message-Id: <20240712140235.1626585EB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bcc: add missing dependencies to
  comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,40 +60,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
- Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  9 Jun 2024 21:55:19 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=76051e653199f8f6c20afa0c28496c7d8cfcb527
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Since its inception in 146498d13c48 (package/bcc: new package), not all
-> the dependencies of bcc are mirrored in the comment to be displayed when
-> those dependencies are not met.
-> 
-> Fix that by adding the missing pieces:
->   - wchar,
->   - threads
->   - dynamic libs,
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/bcc/Config.in | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
+Since its inception in 146498d13c48 (package/bcc: new package), not all
+the dependencies of bcc are mirrored in the comment to be displayed when
+those dependencies are not met.
 
-Applied to master, thanks.
+Fix that by adding the missing pieces:
+  - wchar,
+  - threads
+  - dynamic libs,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/bcc/Config.in | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/package/bcc/Config.in b/package/bcc/Config.in
+index b91e0e5ee3..bf46f07d93 100644
+--- a/package/bcc/Config.in
++++ b/package/bcc/Config.in
+@@ -38,8 +38,13 @@ config BR2_PACKAGE_BCC
+ 	  https://github.com/iovisor/bcc
+ 	  http://www.ebpf.io
+ 
+-comment "bcc needs a glibc toolchain, C++, gcc >= 7, host gcc >= 7"
++comment "bcc needs a glibc toolchain, C++, wchar, threads, dynamic libs, gcc >= 7, host gcc >= 7"
+ 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_HOST_GCC_AT_LEAST_7
++	depends on !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 \
++		|| !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_HOST_GCC_AT_LEAST_7 \
++		|| !BR2_USE_WCHAR \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
