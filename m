@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3C9EC3DA4D
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 11:02:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83DF2C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 11:07:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADDF14198B;
-	Fri, 12 Jul 2024 11:02:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2719417FC;
+	Fri, 12 Jul 2024 11:07:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4FErQUAgNJRB; Fri, 12 Jul 2024 11:02:39 +0000 (UTC)
+ id lRzItlGynN_X; Fri, 12 Jul 2024 11:07:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 703DA41767
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A94BA41811
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 703DA41767;
-	Fri, 12 Jul 2024 11:02:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D0DA61BF47F
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 11:02:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A94BA41811;
+	Fri, 12 Jul 2024 11:07:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 002151BF3F4
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 11:07:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB96E6061C
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 11:02:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE4F640114
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 11:07:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0hQG6QaT6_ub for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 11:02:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hi5rrs2dOgrH for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 11:07:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 178DC605FA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 178DC605FA
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 11:02:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 02FFC85D17; Fri, 12 Jul 2024 11:02:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 12:57:33 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c56e71b46007bc1d70e9c13267109abe4776f49
-X-Git-Newrev: 5543661bc0c1ebcd01e5e6bf5ac565fd0f1ac8d8
-X-Patchwork-Hint: ignore
-Message-Id: <20240712110227.02FFC85D17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sunxi-mali-utgard-driver: bump to
- version 2024-07-11
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A140F400C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A140F400C6
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A140F400C6
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 11:07:20 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A928D1BF204;
+ Fri, 12 Jul 2024 11:07:17 +0000 (UTC)
+Date: Fri, 12 Jul 2024 13:07:16 +0200
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Message-ID: <20240712130716.600a075e@windsurf>
+In-Reply-To: <20240712094717.2539892-3-fiona.klute@gmx.de>
+References: <20240712094717.2539892-1-fiona.klute@gmx.de>
+ <20240712094717.2539892-3-fiona.klute@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720782437;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=edpod8Y1pZ6HpkdsUfkGpUopk/0CDNBOJeNdT3IChXM=;
+ b=cAWVS7BGA7brS4crcsvjqk6yLXVe5xCa8bTPwxsrcOFRN0DLCXD4iSvjSdVoZEVaK7+tCA
+ e5wbVCAdQvRywnXzMLqiLKAZibAcBNrUHfUZ8283m0gtOkZjziCwYcN7DAH09po/A5UQoZ
+ efDuXSa6ZoO1qxaQAOgLyBXh2Cey4KpWoFpEQTuzP29gvVc/N/GlZZ981UfXuCZck5VViO
+ yk4XRILizGhm4+XkTJg8mjBfKgI4gSjbrjGoXguk/PWCwEcFbjj4/rhd9iv1LCj1LHyd4K
+ g37faN1ReO3eyInAqSAK6EixfPBzy+86LGZRsgt+gYvSW84R9iwI8HsNrZ2N+w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cAWVS7BG
+Subject: Re: [Buildroot] [PATCH 2/6] package/busybox: tidy up S01syslogd
+ init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,48 +84,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd@kuhls.net>, Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5543661bc0c1ebcd01e5e6bf5ac565fd0f1ac8d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fiona,
 
-This version provide patches that can be applied with fuzz 0 and this is
-now required by Buildroot.
+Thanks for your work on this, much appreciated!
 
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash | 2 +-
- package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, 12 Jul 2024 11:47:13 +0200
+Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
 
-diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-index be27a85970..5f3e001325 100644
---- a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-+++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f2e5e671575d9488fd19b821d70e59952b6dbbb5b2036ea5462f811eec819370  sunxi-mali-utgard-driver-c4bc3e229c0e5f30c24c20ff1fb8db0e4a450c0f.tar.gz
-+sha256  151a56eb6a47efee19369a1c08b7aec506e48f983683a3cd05c5494cedf0fb69  sunxi-mali-utgard-driver-ad7e98bc1e81c7ac9c897f854c1a429d33e45d58.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-index b8a12247d3..ba7c50718d 100644
---- a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-+++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUNXI_MALI_UTGARD_DRIVER_VERSION = c4bc3e229c0e5f30c24c20ff1fb8db0e4a450c0f
-+SUNXI_MALI_UTGARD_DRIVER_VERSION = ad7e98bc1e81c7ac9c897f854c1a429d33e45d58
- SUNXI_MALI_UTGARD_DRIVER_SITE = $(call github,giuliobenetti,sunxi-mali,$(SUNXI_MALI_UTGARD_DRIVER_VERSION))
- SUNXI_MALI_UTGARD_DRIVER_DEPENDENCIES = linux
- SUNXI_MALI_UTGARD_DRIVER_LICENSE = GPL-2.0
+> +	# Wait for process to be gone, because Busybox'
+> +	# start-stop-daemon does not support --retry (as of 1.36.1).
+> +	while true; do
+> +		pid="$( cat "${PIDFILE}" 2>/dev/null || true )"
+> +		{ [ -n "${pid}" ] && [ -d "/proc/${pid}" ]; } || break
+> +		sleep 0.1
+
+I am not a big fan of this, and Arnout pointed out that Busybox
+start-stop-daemon has the --status option:
+
+        -T,--status             Check for the existence of a process, return exitcode (since version 1.16.1)
+                                0 - program is running
+                                1 - program is not running and the pid file exists
+                                3 - program is not running
+                                4 - can't determine program status
+
+Could we use this instead of poking into /proc manually?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
