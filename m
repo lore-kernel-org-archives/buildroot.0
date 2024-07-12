@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7A26C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5D6CC3DA4D
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 856954149A;
-	Fri, 12 Jul 2024 14:13:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C460419A8;
+	Fri, 12 Jul 2024 14:13:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UZwSd8h89svw; Fri, 12 Jul 2024 14:13:09 +0000 (UTC)
+ id kNNO6PLijKdG; Fri, 12 Jul 2024 14:13:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BB334199D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0951E41994
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BB334199D;
-	Fri, 12 Jul 2024 14:13:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0C4341BF424
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0951E41994;
+	Fri, 12 Jul 2024 14:13:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2655E1BF995
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:13:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE0D961312
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:13:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 148B2845FD
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:13:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ypxRoz3GiTcA for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P5bdopPIvdGy for <buildroot@lists.busybox.net>;
  Fri, 12 Jul 2024 14:13:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1549661106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41F25845F5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1549661106
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41F25845F5
  for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:13:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F087B85EF4; Fri, 12 Jul 2024 14:13:02 +0000 (UTC)
+ id 2D3B880E2B; Fri, 12 Jul 2024 14:13:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 16:08:23 +0200
+Date: Fri, 12 Jul 2024 16:08:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 76051e653199f8f6c20afa0c28496c7d8cfcb527
-X-Git-Newrev: 98f452f97425c76a9404692530b585cd950dd1fd
+X-Git-Oldrev: c90b87156dec69c9acabb8bd80d2447a5dbfb1e8
+X-Git-Newrev: 5e36efd7ac994ed430bc2430ee0c03d44f0cbbff
 X-Patchwork-Hint: ignore
-Message-Id: <20240712141302.F087B85EF4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-python: fix pep517 data files
- installation
+Message-Id: <20240712141303.2D3B880E2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] .checkpackageignore: remove chromebook
+ check-hash exceptions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,47 +66,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98f452f97425c76a9404692530b585cd950dd1fd
+commit: https://git.buildroot.net/buildroot/commit/?id=5e36efd7ac994ed430bc2430ee0c03d44f0cbbff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When installing a wheel in pep517 compatibility mode, the pyinstaller.py is
-invoked with the --data parameter which point to the directory in which data
-files should be installed.
-Actually the --data parameter points to the /usr subdirectory which is indeed
-wrong cause it shall point to the root directory where the wheel will be
-installed.
-This fixes the problem of having configuration files installed in /usr/etc
-instead of /etc.
+Commits 3988f2d9238bc027b5d16219867e8d3c701c0c06 and
+0d91281d7bdfa09be28237bab694e6ac22466541 added hashes for the chromebook
+defconfigs, but forgot to remove the exception from .checkpackageignore.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Tested-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+Regenerate .checkpackageignore, which removes those exceptions.
+
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/pkg-python.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 88fadecd54..2a85a04b7c 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -67,7 +67,7 @@ PKG_PYTHON_PEP517_INSTALL_TARGET_CMD = \
- 	--purelib=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	--headers=$(TARGET_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
- 	--scripts=$(TARGET_DIR)/usr/bin \
--	--data=$(TARGET_DIR)/usr
-+	--data=$(TARGET_DIR)
- 
- PKG_PYTHON_PEP517_INSTALL_STAGING_CMD = \
- 	$(TOPDIR)/support/scripts/pyinstaller.py \
-@@ -76,7 +76,7 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_CMD = \
- 	--purelib=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
- 	--headers=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
- 	--scripts=$(STAGING_DIR)/usr/bin \
--	--data=$(STAGING_DIR)/usr
-+	--data=$(STAGING_DIR)
- 
- PKG_PYTHON_PEP517_DEPENDENCIES = \
- 	host-python-pypa-build \
+diff --git a/.checkpackageignore b/.checkpackageignore
+index dfd5b2578e..f36e99fcf4 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -148,8 +148,6 @@ configs/beaglev_defconfig lib_defconfig.ForceCheckHash
+ configs/beelink_gs1_defconfig lib_defconfig.ForceCheckHash
+ configs/broadcom_northstar_defconfig lib_defconfig.ForceCheckHash
+ configs/canaan_kd233_defconfig lib_defconfig.ForceCheckHash
+-configs/chromebook_elm_defconfig lib_defconfig.ForceCheckHash
+-configs/chromebook_snow_defconfig lib_defconfig.ForceCheckHash
+ configs/ci20_defconfig lib_defconfig.ForceCheckHash
+ configs/cubieboard2_defconfig lib_defconfig.ForceCheckHash
+ configs/engicam_imx6qdl_icore_defconfig lib_defconfig.ForceCheckHash
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
