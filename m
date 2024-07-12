@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF289C3DA45
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:16:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48B03C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 799C841478;
-	Fri, 12 Jul 2024 07:16:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CE4C414BA;
+	Fri, 12 Jul 2024 07:16:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m-_W3Yuwa5-q; Fri, 12 Jul 2024 07:16:13 +0000 (UTC)
+ id x4lLUhK6vcc4; Fri, 12 Jul 2024 07:16:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A182B4149C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE0EF412C2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A182B4149C;
-	Fri, 12 Jul 2024 07:16:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 29DA81BF48C
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE0EF412C2;
+	Fri, 12 Jul 2024 07:16:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C2BE1BF48C
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:15:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA921607BC
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A555409A6
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:15:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dVb1Addp4A8D for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wV5bBLeQ9llh for <buildroot@lists.busybox.net>;
  Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 012E5607C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16F7C411CD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 012E5607C2
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 16F7C411CD
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDD57857A8; Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
+ id 13BCB857AA; Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 09:14:39 +0200
+Date: Fri, 12 Jul 2024 09:14:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a5c1a9980679c1c9ea8d1287082cf6359bbeb770
-X-Git-Newrev: 90314fdfb0e63b1b49d86addddfc0c957feaa622
+X-Git-Oldrev: 9a7c709012f9db0f4dcaee02d611e8d1427226a3
+X-Git-Newrev: 86d87085ea2cbbc664715db56eb984ee63a19aa9
 X-Patchwork-Hint: ignore
-Message-Id: <20240712071536.EDD57857A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx: add i.MX 8ULP
- support
+Message-Id: <20240712071537.13BCB857AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/freescale/common/imx: add support
+ for i.MX 8ULP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,120 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90314fdfb0e63b1b49d86addddfc0c957feaa622
+commit: https://git.buildroot.net/buildroot/commit/?id=86d87085ea2cbbc664715db56eb984ee63a19aa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-More details on the platform here:
-
-https://www.ezurio.com/system-on-module/nxp-imx8/nitrogen8ulp-som
-
-https://www.nxp.com/products/processors-and-microcontrollers/arm-processors/i-mx-applications-processors/i-mx-8-applications-processors/i-mx-8ulp-applications-processor-family:i.MX8ULP
-
-There have been 3 silicon revisions of this processor (A0, A1, A2) and
-A2 is the current production version.
-
 Signed-off-by: Chris Dimich <cdimich2188@gmail.com>
+[Arnout: remove newly introduced shellcheck errors]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/freescale-imx/Config.in                  | 31 ++++++++++++++++++++++--
- package/freescale-imx/firmware-ele-imx/Config.in |  3 +++
- package/freescale-imx/firmware-imx/Config.in     |  1 +
- 3 files changed, 33 insertions(+), 2 deletions(-)
+ board/freescale/common/imx/imx8-bootloader-prepare.sh | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 3211592468..34ce1d1311 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -55,6 +55,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
- 	bool "imx8mp"
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index b353d506fe..0f5dff674f 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -58,6 +58,25 @@ main ()
+ 		rm -f ${BINARIES_DIR}/u-boot.its
  
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULP
-+	bool "imx8ulp"
-+
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 	bool "imx8x"
- 
-@@ -70,7 +73,28 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
- endchoice
- 
- choice
--	prompt "i.MX Silicon Revision"
-+	prompt "i.MX 8ULP Silicon Revision"
-+	default BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA2
-+	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULP
-+	help
-+	  Some packages related to the selected i.MX platform need to
-+	  know the silicon revision of the platform they will run on.
-+
-+	  Note - mismatches may result in a failure to boot!
-+
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA0
-+	bool "imx8ulpa0"
-+
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA1
-+	bool "imx8ulpa1"
-+
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA2
-+	bool "imx8ulpa2"
-+
-+endchoice
-+
-+choice
-+	prompt "i.MX 93 Silicon Revision"
- 	default BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93A1
- 	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
- 	help
-@@ -104,6 +128,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
- 	default "IMX8MM" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
- 	default "IMX8MN" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
- 	default "IMX8MP" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
-+	default "IMX8ULP" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULP
- 	default "IMX91" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
- 	default "IMX93" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
- 
-@@ -130,12 +155,14 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULP || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 
- config BR2_PACKAGE_FREESCALE_IMX_HAS_ELE
- 	bool
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91 || \
-+	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULP || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91 || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
- 
- source "package/freescale-imx/imx-alsa-plugins/Config.in"
-diff --git a/package/freescale-imx/firmware-ele-imx/Config.in b/package/freescale-imx/firmware-ele-imx/Config.in
-index a99cbc3392..e8369f0102 100644
---- a/package/freescale-imx/firmware-ele-imx/Config.in
-+++ b/package/freescale-imx/firmware-ele-imx/Config.in
-@@ -15,6 +15,9 @@ if BR2_PACKAGE_FIRMWARE_ELE_IMX
- 
- config BR2_PACKAGE_FIRMWARE_ELE_IMX_AHAB_CONTAINER_IMAGE
- 	string
-+	default "mx8ulpa0-ahab-container.img" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA0
-+	default "mx8ulpa1-ahab-container.img" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA1
-+	default "mx8ulpa2-ahab-container.img" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA2
- 	default "mx93a0-ahab-container.img" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93A0
- 	default "mx93a1-ahab-container.img" if \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91 || \
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index 63990947c8..4a9986448f 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -25,6 +25,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME
- 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
- 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
- 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
-+	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULP
- 
- config BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME
- 	string
+ 		${HOST_DIR}/bin/mkimage_imx8 -v v2 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x920000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
++	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULP=y$" "${BR2_CONFIG}"; then
++		SPL_LOAD_ADDR=0x22020000
++		ATF_LOAD_ADDR=0x20040000
++		"${HOST_DIR}/bin/mkimage_imx8" -commit > "${BINARIES_DIR}/mkimg.commit"
++		cat "${BINARIES_DIR}/u-boot.bin" "${BINARIES_DIR}/mkimg.commit" > "${BINARIES_DIR}/u-boot-hash.bin"
++		rm -f "${BINARIES_DIR}/mkimg.commit"
++		if grep -Eq "^BR2_TARGET_OPTEE_OS=y$" "${BR2_CONFIG}"; then
++			"${HOST_DIR}/bin/mkimage_imx8" -soc ULP -c -ap "${BINARIES_DIR}/bl31.bin" a35 ${ATF_LOAD_ADDR} -ap "${BINARIES_DIR}/u-boot-hash.bin" a35 0x80200000 -ap "${BINARIES_DIR}/tee.bin" a35 0xa6000000 -out "${BINARIES_DIR}/u-boot-atf-container.img"
++		else
++			"${HOST_DIR}/bin/mkimage_imx8" -soc ULP -c -ap "${BINARIES_DIR}/bl31.bin" a35 ${ATF_LOAD_ADDR} -ap "${BINARIES_DIR}/u-boot-hash.bin" a35 0x80200000 -out "${BINARIES_DIR}/u-boot-atf-container.img"
++		fi
++		if [ -e "${BINARIES_DIR}/m33_image.bin" ]; then
++			"${HOST_DIR}/bin/mkimage_imx8" -soc ULP -append "${BINARIES_DIR}/ahab-container.img" -c -upower "${BINARIES_DIR}/upower.bin" -m4 "${BINARIES_DIR}/m33_image.bin" 0 0x1ffc2000 -ap "${BINARIES_DIR}/u-boot-spl.bin" a35 ${SPL_LOAD_ADDR} -out "${BINARIES_DIR}/imx8-boot-sd.bin"
++		else
++			"${HOST_DIR}/bin/mkimage_imx8" -soc ULP -append "${BINARIES_DIR}/ahab-container.img" -c -upower "${BINARIES_DIR}/upower.bin" 0 0x1ffc2000 -ap "${BINARIES_DIR}/u-boot-spl.bin" a35 ${SPL_LOAD_ADDR} -out "${BINARIES_DIR}/imx8-boot-sd.bin"
++		fi
++		flashbin_size="$(wc -c "${BINARIES_DIR}/imx8-boot-sd.bin" | awk '{print $1}')"
++		pad_cnt=$(($((flashbin_size + 0x400 - 1)) / 0x400))
++		dd if="${BINARIES_DIR}/u-boot-atf-container.img" of="${BINARIES_DIR}/imx8-boot-sd.bin" bs=1K seek=${pad_cnt}
+ 	else
+ 		${HOST_DIR}/bin/mkimage_imx8 -commit > ${BINARIES_DIR}/mkimg.commit
+ 		cat ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/mkimg.commit > ${BINARIES_DIR}/u-boot-hash.bin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
