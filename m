@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22543C3DA45
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03596C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B51A941450;
-	Fri, 12 Jul 2024 07:16:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF56941471;
+	Fri, 12 Jul 2024 07:16:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8QKZLcUDm4Ka; Fri, 12 Jul 2024 07:16:06 +0000 (UTC)
+ id jGMv0iwR0xtv; Fri, 12 Jul 2024 07:16:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE35541487
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BB5441488
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE35541487;
-	Fri, 12 Jul 2024 07:16:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3CE791BF48C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8BB5441488;
+	Fri, 12 Jul 2024 07:16:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 463291BF995
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:15:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B56E3607BD
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC04B40568
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tJlFuzmtQKNe for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kHUcdt0KYvsx for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B303C607BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2E38409A6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B303C607BC
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2E38409A6
  for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E835857AA; Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
+ id E0816857AA; Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 09:14:20 +0200
+Date: Fri, 12 Jul 2024 09:14:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ed889c918a2195af07f72d4d4667f0961b28261f
-X-Git-Newrev: 4a3766dc4e0160ea7866ae92a9409faeb1b8f8bb
+X-Git-Oldrev: be95c350c210a85143a7a3194b081181cc0f626e
+X-Git-Newrev: a5c1a9980679c1c9ea8d1287082cf6359bbeb770
 X-Patchwork-Hint: ignore
-Message-Id: <20240712071536.9E835857AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-g2d: bump to
- version 6.4.11.p2.2
+Message-Id: <20240712071536.E0816857AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ package/freescale-imx/kernel-module-imx-gpu-viv: bump to version
+ 6.4.11.p.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,49 +67,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a3766dc4e0160ea7866ae92a9409faeb1b8f8bb
+commit: https://git.buildroot.net/buildroot/commit/?id=a5c1a9980679c1c9ea8d1287082cf6359bbeb770
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 - To match NXP 6.1.55-2.2.0 release.
-- EULA/COPYING: update to LA_OPT_NXP_Software_License v49.
 
 Signed-off-by: Chris Dimich <cdimich2188@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 8 ++++----
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index 580b31e453..d15287ebc7 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  1ed29a4818161198b658ffc428dff7c154c38f5ba48d7358ed9b0be261d72b99  imx-gpu-g2d-6.4.11.p1.2-arm.bin
--sha256  cdf096c9b15c773ad600b24ec8888c1c4a33711c195c655e9411d4b66a992c25  imx-gpu-g2d-6.4.11.p1.2-aarch64.bin
--sha256  913ba38d4be97361c3d0fa9bf2f6dbe7b1c0c41213dd268fb6738db9704dbe32  COPYING
--sha256  4fd8bb45a2ec22117d20cfea84370e2a3a2cd99e8e177138bed0938137b1aeb3  EULA
-+sha256  bc168b19096a997251e7137f82ffcff404c61709cf5f227c53a099f631569f76  imx-gpu-g2d-6.4.11.p2.2-arm-fd0148d.bin
-+sha256  1cedc606be965b01300613ccea81b4fd589d940306bb1caa30a37c41928616ec  imx-gpu-g2d-6.4.11.p2.2-aarch64-fd0148d.bin
-+sha256  24d7cb3a7e51011466a149bd99acf89387b832be2d0890ce2e183dfbc9d7cb84  COPYING
-+sha256  3282d88fad766897f93b0827297a70c2707d9358db24cccd5777abf7c997da77  EULA
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index 87fe08ebe3..51a49b6972 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -5,9 +5,9 @@
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index 1411c8d3ef..1a1e89b95a 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  ce32d7f9e16daa0ac87a41bd6da2f96743cd5b28b7bc324ca642e985a29a4e48  kernel-module-imx-gpu-viv-1e65746bb15628ccbe88e3ee7a0a1d2becc48e79.tar.gz
++sha256  b174a79042266b5d36c03f7db12036c93acd546f996367dd33233581e64857bb  kernel-module-imx-gpu-viv-4d035200e7b15d2713d49979a1d05f201b92cf4c.tar.gz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 13df35dcc0..d87f575064 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- ifeq ($(BR2_aarch64),y)
--IMX_GPU_G2D_VERSION = 6.4.11.p1.2-aarch64
-+IMX_GPU_G2D_VERSION = 6.4.11.p2.2-aarch64-fd0148d
- else
--IMX_GPU_G2D_VERSION = 6.4.11.p1.2-arm
-+IMX_GPU_G2D_VERSION = 6.4.11.p2.2-arm-fd0148d
- endif
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = 1e65746bb15628ccbe88e3ee7a0a1d2becc48e79
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 4d035200e7b15d2713d49979a1d05f201b92cf4c
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
