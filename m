@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E04B2C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 22:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F556C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 22:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65D3E84664;
-	Fri, 12 Jul 2024 22:22:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24DBB80E92;
+	Fri, 12 Jul 2024 22:23:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GYiTQK34C2iJ; Fri, 12 Jul 2024 22:22:34 +0000 (UTC)
+ id pbLyOm--Yfj7; Fri, 12 Jul 2024 22:23:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E7578466E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18C2780E24
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E7578466E;
-	Fri, 12 Jul 2024 22:22:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A60E51BF995
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 22:22:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18C2780E24;
+	Fri, 12 Jul 2024 22:23:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 323E61BF427
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 22:23:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A0AF660699
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 22:22:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E4F680E24
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 22:23:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KzHIDuR2nil3 for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 22:22:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ooYimJvWcUOj for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 22:23:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A877B6067C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 385A580D59
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A877B6067C
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 22:22:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 385A580D59
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 22:23:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9152F86346; Fri, 12 Jul 2024 22:22:28 +0000 (UTC)
+ id E774386366; Fri, 12 Jul 2024 22:23:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 00:19:14 +0200
+Date: Sat, 13 Jul 2024 00:22:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e167800979b48a449c168c229448e7069d2045e7
-X-Git-Newrev: a320986c44774f3729454249a94904365f020a58
+X-Git-Oldrev: a320986c44774f3729454249a94904365f020a58
+X-Git-Newrev: f5f3d8ca007d46c1b4a351e53b619209b232b113
 X-Patchwork-Hint: ignore
-Message-Id: <20240712222228.9152F86346@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/Makefile.in: add PARALLEL_JOBS to
- post-build/post-image scripts
+Message-Id: <20240712222354.E774386366@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erofs-utils: bump to 1.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,79 +60,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7345713911561894565=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a320986c44774f3729454249a94904365f020a58
+--===============7345713911561894565==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f5f3d8ca007d46c1b4a351e53b619209b232b113
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Post-build, post-image, and other build scripts may run some commands in
-parallel, for example to parallelize xargs, Makefiles, etc. Export
-PARALLEL_JOBS to these scripts so they can enforce the same job limits
-that other Buildroot packages use.
-
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Jan Čermák <sairon@sairon.cz>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- docs/manual/customize-post-image.adoc | 4 ++--
- docs/manual/customize-rootfs.adoc     | 1 +
- docs/manual/debugging-buildroot.adoc  | 1 +
- package/Makefile.in                   | 3 ++-
- 4 files changed, 6 insertions(+), 3 deletions(-)
+ package/erofs-utils/erofs-utils.hash | 2 +-
+ package/erofs-utils/erofs-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/customize-post-image.adoc b/docs/manual/customize-post-image.adoc
-index 1f11cf915f..849e941de3 100644
---- a/docs/manual/customize-post-image.adoc
-+++ b/docs/manual/customize-post-image.adoc
-@@ -33,8 +33,8 @@ arguments that are only used for the post-image scripts you can use
- 
- Again just like for the post-build scripts, the scripts have access to
- the environment variables +BR2_CONFIG+, +HOST_DIR+, +STAGING_DIR+,
--+TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+ and
--+BASE_DIR+.
-++TARGET_DIR+, +BUILD_DIR+, +BINARIES_DIR+, +CONFIG_DIR+, +BASE_DIR+,
-+and +PARALLEL_JOBS+.
- 
- The post-image scripts will be executed as the user that executes
- Buildroot, which should normally _not_ be the root user. Therefore, any
-diff --git a/docs/manual/customize-rootfs.adoc b/docs/manual/customize-rootfs.adoc
-index 1384c1d2d3..d334093748 100644
---- a/docs/manual/customize-rootfs.adoc
-+++ b/docs/manual/customize-rootfs.adoc
-@@ -75,6 +75,7 @@ In addition, you may also use these environment variables:
-   - +BINARIES_DIR+: the place where all binary files (aka images) are
-     stored
-   - +BASE_DIR+: the base output directory
-+  - +PARALLEL_JOBS+: the number of jobs to use when running parallel processes.
- 
- Below three more methods of customizing the target filesystem are
- described, but they are not recommended.
-diff --git a/docs/manual/debugging-buildroot.adoc b/docs/manual/debugging-buildroot.adoc
-index f575fc48ee..b9068ead52 100644
---- a/docs/manual/debugging-buildroot.adoc
-+++ b/docs/manual/debugging-buildroot.adoc
-@@ -41,3 +41,4 @@ The script has access to the following variables:
-   - +BINARIES_DIR+: the place where all binary files (aka images) are
-     stored
-   - +BASE_DIR+: the base output directory
-+  - +PARALLEL_JOBS+: the number of jobs to use when running parallel processes.
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 5476234c7e..47a89f1ae1 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -331,7 +331,8 @@ EXTRA_ENV = \
- 	BR2_DL_DIR=$(BR2_DL_DIR) \
- 	BUILD_DIR=$(BUILD_DIR) \
- 	CONFIG_DIR=$(CONFIG_DIR) \
--	O=$(CANONICAL_O)
-+	O=$(CANONICAL_O) \
-+	PARALLEL_JOBS=$(PARALLEL_JOBS)
- 
+diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
+index a03a0d5a7d..063d384511 100644
+--- a/package/erofs-utils/erofs-utils.hash
++++ b/package/erofs-utils/erofs-utils.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  2310fa4377b566bf943e8eef992db3990f759528d5973e700efe3e4cb115ec23  erofs-utils-1.5.tar.gz
++sha256  196083d63e5e231fb5799e7ce86a944bbca564daabce3de9225a8aca9dcaff15  erofs-utils-1.7.1.tar.gz
+ sha256  0df042de29b44887355db86c79708a4489ce6e6666f6e33ad02040293f09e6a2  COPYING
+ sha256  a400f85dd06d230f1b308cde4290a53f345b6e320a376b7904b31c51c2fd4b1a  LICENSES/Apache-2.0
+ sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  LICENSES/GPL-2.0
+diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
+index df4c652d30..0aed99ba76 100644
+--- a/package/erofs-utils/erofs-utils.mk
++++ b/package/erofs-utils/erofs-utils.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
- # settings we need to pass to configure
+ 
+-EROFS_UTILS_VERSION = 1.5
++EROFS_UTILS_VERSION = 1.7.1
+ EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
+ EROFS_UTILS_LICENSE = GPL-2.0+, GPL-2.0+ or Apache-2.0 (liberofs)
+ EROFS_UTILS_LICENSE_FILES = COPYING LICENSES/Apache-2.0 LICENSES/GPL-2.0
+
+--===============7345713911561894565==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7345713911561894565==--
