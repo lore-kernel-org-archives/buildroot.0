@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18934C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:15:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61BF9C3DA45
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:15:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CCBF840568;
-	Fri, 12 Jul 2024 07:15:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E6E89409A6;
+	Fri, 12 Jul 2024 07:15:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C0sXOmOj4UqY; Fri, 12 Jul 2024 07:15:39 +0000 (UTC)
+ id iRlIHwgZsdS3; Fri, 12 Jul 2024 07:15:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A6B140C15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EF964129F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A6B140C15;
-	Fri, 12 Jul 2024 07:15:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AF47C1BF48C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3EF964129F;
+	Fri, 12 Jul 2024 07:15:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CC14A1BF48C
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9CF3183F62
+ by smtp4.osuosl.org (Postfix) with ESMTP id B8F3A417C3
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fEgfr0kDobK8 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X-85d7pOnQM5 for <buildroot@lists.busybox.net>;
  Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C33DD820B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3FD541788
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C33DD820B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3FD541788
  for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE806857AB; Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
+ id 8DD51857A9; Fri, 12 Jul 2024 07:15:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 09:14:24 +0200
+Date: Fri, 12 Jul 2024 09:14:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a3766dc4e0160ea7866ae92a9409faeb1b8f8bb
-X-Git-Newrev: d653e8edcf2df3380a9f38845f6e507d767ddf19
+X-Git-Oldrev: e76d131e7cc6cf34514d19eaa86ee556813353ab
+X-Git-Newrev: ed889c918a2195af07f72d4d4667f0961b28261f
 X-Patchwork-Hint: ignore
-Message-Id: <20240712071536.AE806857AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: bump to
- version 6.4.11.p2.2
+Message-Id: <20240712071536.8DD51857A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-codec: bump to
+ version 4.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,7 +66,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d653e8edcf2df3380a9f38845f6e507d767ddf19
+commit: https://git.buildroot.net/buildroot/commit/?id=ed889c918a2195af07f72d4d4667f0961b28261f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 - To match NXP 6.1.55-2.2.0 release.
@@ -75,40 +75,35 @@ branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: Chris Dimich <cdimich2188@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 8 ++++----
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/freescale-imx/imx-codec/imx-codec.hash | 6 +++---
+ package/freescale-imx/imx-codec/imx-codec.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-index a380e1b712..b350443a51 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  491ac012d691e27856769296e2334ad1b6f45e31ffe7313fcdb028c75b3b69ae  imx-gpu-viv-6.4.11.p1.2-aarch32-1e0c396.bin
--sha256  d5904cbbe33a3c1160e9cd15c44d78df25d0dbd7b251add796673af53d3046f6  imx-gpu-viv-6.4.11.p1.2-aarch64-1e0c396.bin
--sha256  913ba38d4be97361c3d0fa9bf2f6dbe7b1c0c41213dd268fb6738db9704dbe32  COPYING
--sha256  4fd8bb45a2ec22117d20cfea84370e2a3a2cd99e8e177138bed0938137b1aeb3  EULA
-+sha256  15efe6da5d4bac2a6067c2a898190be8754df6f14128c3db4756cff59c6da049  imx-gpu-viv-6.4.11.p2.2-aarch32-fd0148d.bin
-+sha256  6e34f3718925ba37c362cd09a3228cc56d03cfad323ebae0932f64449dbaeb2e  imx-gpu-viv-6.4.11.p2.2-aarch64-fd0148d.bin
+diff --git a/package/freescale-imx/imx-codec/imx-codec.hash b/package/freescale-imx/imx-codec/imx-codec.hash
+index 8dab5a5c4c..666d38d001 100644
+--- a/package/freescale-imx/imx-codec/imx-codec.hash
++++ b/package/freescale-imx/imx-codec/imx-codec.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+-sha256  6bb54f91c3ca18567e14d95d3858022dc9be00dc86e9edfdb544d1240a3b2b04  imx-codec-4.3.5.bin
+-sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
+-sha256  fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
++sha256  b0744a91c265202a79a019c72f17cae01fd5b63a3ba451592b6c8349d95719e0  imx-codec-4.8.2.bin
 +sha256  24d7cb3a7e51011466a149bd99acf89387b832be2d0890ce2e183dfbc9d7cb84  COPYING
 +sha256  3282d88fad766897f93b0827297a70c2707d9358db24cccd5777abf7c997da77  EULA
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 5a13419e3e..3cfbfe3ccc 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -5,9 +5,9 @@
+diff --git a/package/freescale-imx/imx-codec/imx-codec.mk b/package/freescale-imx/imx-codec/imx-codec.mk
+index 2b7c346a6e..54ba6f126e 100644
+--- a/package/freescale-imx/imx-codec/imx-codec.mk
++++ b/package/freescale-imx/imx-codec/imx-codec.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- ifeq ($(BR2_aarch64),y)
--IMX_GPU_VIV_VERSION = 6.4.11.p1.2-aarch64-1e0c396
-+IMX_GPU_VIV_VERSION = 6.4.11.p2.2-aarch64-fd0148d
- else
--IMX_GPU_VIV_VERSION = 6.4.11.p1.2-aarch32-1e0c396
-+IMX_GPU_VIV_VERSION = 6.4.11.p2.2-aarch32-fd0148d
- endif
- IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
+-IMX_CODEC_VERSION = 4.3.5
++IMX_CODEC_VERSION = 4.8.2
+ IMX_CODEC_SITE = $(FREESCALE_IMX_SITE)
+ IMX_CODEC_SOURCE = imx-codec-$(IMX_CODEC_VERSION).bin
+ IMX_CODEC_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
