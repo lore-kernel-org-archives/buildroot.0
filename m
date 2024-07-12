@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1244DC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 18:31:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BDDCC2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 18:31:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E2BE613DF;
-	Fri, 12 Jul 2024 18:31:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB23C613FA;
+	Fri, 12 Jul 2024 18:31:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lITHscozknZi; Fri, 12 Jul 2024 18:31:33 +0000 (UTC)
+ id s14foxLOSZ43; Fri, 12 Jul 2024 18:31:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6A1D613E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1EF9613FD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6A1D613E8;
-	Fri, 12 Jul 2024 18:31:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3DFDC1BF4D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1EF9613FD;
+	Fri, 12 Jul 2024 18:31:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E0B61BF4D5
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 18:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3647F40487
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C32E613DF
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 18:31:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vDoQKzi_NMfH for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Go_laRMsJcu6 for <buildroot@lists.busybox.net>;
  Fri, 12 Jul 2024 18:31:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 253B940003
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28A70613F6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 253B940003
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28A70613F6
  for <buildroot@buildroot.org>; Fri, 12 Jul 2024 18:31:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C75886140; Fri, 12 Jul 2024 18:31:31 +0000 (UTC)
+ id 1FBCD86141; Fri, 12 Jul 2024 18:31:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 20:30:36 +0200
+Date: Fri, 12 Jul 2024 20:30:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d57555407f2a0708515e7c377f57a6466c78b1b
-X-Git-Newrev: cca315f814888025daa80fc320610117a6f69007
+X-Git-Oldrev: cca315f814888025daa80fc320610117a6f69007
+X-Git-Newrev: ccc12c0f244de23672300b5837b473292c8db931
 X-Patchwork-Hint: ignore
-Message-Id: <20240712183131.0C75886140@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/check-package: fix check for
- <pkg>_REDISTRIBUTE
+Message-Id: <20240712183131.1FBCD86141@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/check-package: check linux-tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,63 +65,162 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cca315f814888025daa80fc320610117a6f69007
+commit: https://git.buildroot.net/buildroot/commit/?id=ccc12c0f244de23672300b5837b473292c8db931
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit "8e87d76c12 check-package: check *.mk files" added a typo that
-prevents check-package from checking <PKG>_REDISTRIBUTE default value.
+Each linux tool uses a fragment of a .mk file, named, for instance:
+package/linux-tools/linux-tool-cpupower.mk.in
+So currently check-package does not check these files.
 
-Fix the typo: _INSTALL_REDISTRIBUTE -> _REDISTRIBUTE
+Add the support in check-package script.
+At the same time, factor out a function to derive package prefix from
+the filename being checked, so the fix (calling os.path.splitext twice)
+can be applied in a single place.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[Arnout: add docstring and explain double splitext to
+         get_package_prefix_from_filename]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- utils/checkpackagelib/lib_mk.py      | 2 +-
- utils/checkpackagelib/test_lib_mk.py | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ utils/check-package                  |  3 ++-
+ utils/checkpackagelib/lib_mk.py      | 30 +++++++++++++++------------
+ utils/checkpackagelib/test_lib_mk.py | 40 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+), 14 deletions(-)
 
+diff --git a/utils/check-package b/utils/check-package
+index cbb3613e19..3741a2ccdc 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -126,6 +126,7 @@ DO_CHECK_INTREE = re.compile(r"|".join([
+ DO_NOT_CHECK_INTREE = re.compile(r"|".join([
+     r"boot/barebox/barebox\.mk$",
+     r"fs/common\.mk$",
++    r"package/alchemy/atom.mk.in$",
+     r"package/doc-asciidoc\.mk$",
+     r"package/pkg-\S*\.mk$",
+     r"support/dependencies/[^/]+\.mk$",
+@@ -163,7 +164,7 @@ def get_lib_from_filename(fname):
+         return checkpackagelib.lib_defconfig
+     if fname.endswith(".hash"):
+         return checkpackagelib.lib_hash
+-    if fname.endswith(".mk"):
++    if fname.endswith(".mk") or fname.endswith(".mk.in"):
+         return checkpackagelib.lib_mk
+     if fname.endswith(".patch"):
+         return checkpackagelib.lib_patch
 diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index ce2ab5157c..4d97571f50 100644
+index 4d97571f50..1e6bd708a5 100644
 --- a/utils/checkpackagelib/lib_mk.py
 +++ b/utils/checkpackagelib/lib_mk.py
-@@ -324,7 +324,7 @@ class UselessFlag(_CheckFunction):
-         r"_LIBTOOL_PATCH\s*=\s*YES"])))
-     DEFAULT_GENERIC_FLAG = re.compile(r"^.*{}".format("|".join([
-         r"_INSTALL_IMAGES\s*=\s*NO",
--        r"_INSTALL_REDISTRIBUTE\s*=\s*YES",
-+        r"_REDISTRIBUTE\s*=\s*YES",
-         r"_INSTALL_STAGING\s*=\s*NO",
-         r"_INSTALL_TARGET\s*=\s*YES"])))
-     END_CONDITIONAL = re.compile(r"^\s*({})".format("|".join(end_conditional)))
+@@ -49,6 +49,18 @@ class Ifdef(_CheckFunction):
+                     text]
+ 
+ 
++def get_package_prefix_from_filename(filename):
++    """Return a tuple (pkgname, PKGNAME) with the package name derived from the file name"""
++    # Double splitext to support .mk.in
++    package = os.path.splitext(os.path.splitext(os.path.basename(filename))[0])[0]
++    # linux tools do not use LINUX_TOOL_ prefix for variables
++    package = package.replace("linux-tool-", "")
++    # linux extensions do not use LINUX_EXT_ prefix for variables
++    package = package.replace("linux-ext-", "")
++    package_upper = package.replace("-", "_").upper()
++    return package, package_upper
++
++
+ class Indent(_CheckFunction):
+     COMMENT = re.compile(r"^\s*#")
+     CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional + continue_conditional)))
+@@ -207,12 +219,10 @@ class RemoveDefaultPackageSourceVariable(_CheckFunction):
+     packages_that_may_contain_default_source = ["binutils", "gcc", "gdb"]
+ 
+     def before(self):
+-        package, _ = os.path.splitext(os.path.basename(self.filename))
+-        package_upper = package.replace("-", "_").upper()
+-        self.package = package
++        self.package, package_upper = get_package_prefix_from_filename(self.filename)
+         self.FIND_SOURCE = re.compile(
+             r"^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
+-            .format(package_upper, package, package_upper))
++            .format(package_upper, self.package, package_upper))
+ 
+     def check_line(self, lineno, text):
+         if self.FIND_SOURCE.search(text):
+@@ -282,16 +292,10 @@ class TypoInPackageVariable(_CheckFunction):
+     VARIABLE = re.compile(r"^(define\s+)?([A-Z0-9_]+_[A-Z0-9_]+)")
+ 
+     def before(self):
+-        package, _ = os.path.splitext(os.path.basename(self.filename))
+-        package = package.replace("-", "_").upper()
+-        # linux tools do not use LINUX_TOOL_ prefix for variables
+-        package = package.replace("LINUX_TOOL_", "")
+-        # linux extensions do not use LINUX_EXT_ prefix for variables
+-        package = package.replace("LINUX_EXT_", "")
+-        self.package = package
+-        self.REGEX = re.compile(r"(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
++        _, self.package = get_package_prefix_from_filename(self.filename)
++        self.REGEX = re.compile(r"(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(self.package))
+         self.FIND_VIRTUAL = re.compile(
+-            r"^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
++            r"^{}_PROVIDES\s*(\+|)=\s*(.*)".format(self.package))
+         self.virtual = []
+ 
+     def check_line(self, lineno, text):
 diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-index 2086237ebb..11fecdd5cf 100644
+index 11fecdd5cf..208b1ecdc2 100644
 --- a/utils/checkpackagelib/test_lib_mk.py
 +++ b/utils/checkpackagelib/test_lib_mk.py
-@@ -602,13 +602,13 @@ UselessFlag = [
-     ('generic',
-      'any.mk',
-      'ANY_INSTALL_IMAGES = NO\n'
--     'ANY_INSTALL_REDISTRIBUTE = YES\n'
-+     'ANY_REDISTRIBUTE = YES\n'
-      'ANY_INSTALL_STAGING = NO\n'
-      'ANY_INSTALL_TARGET = YES\n',
-      [['any.mk:1: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
-        'ANY_INSTALL_IMAGES = NO\n'],
-       ['any.mk:2: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
--       'ANY_INSTALL_REDISTRIBUTE = YES\n'],
-+       'ANY_REDISTRIBUTE = YES\n'],
-       ['any.mk:3: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
-        'ANY_INSTALL_STAGING = NO\n'],
-       ['any.mk:4: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
-@@ -618,9 +618,9 @@ UselessFlag = [
-      'ifneq (condition)\n'
-      'ANY_INSTALL_IMAGES = NO\n'
-      'endif\n'
--     'ANY_INSTALL_REDISTRIBUTE = YES\n',
-+     'ANY_REDISTRIBUTE = YES\n',
-      [['any.mk:4: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
--       'ANY_INSTALL_REDISTRIBUTE = YES\n']]),
-+       'ANY_REDISTRIBUTE = YES\n']]),
+@@ -74,6 +74,40 @@ def test_Ifdef(testname, filename, string, expected):
+     assert warnings == expected
+ 
+ 
++get_package_prefix_from_filename = [
++    ('linux extension',
++     'linux/linux-ext-aufs.mk',
++     ['aufs', 'AUFS']),
++    ('linux tool',
++     'package/linux-tools/linux-tool-gpio.mk.in',
++     ['gpio', 'GPIO']),
++    ('boot',
++     'boot/binaries-marvell/binaries-marvell.mk',
++     ['binaries-marvell', 'BINARIES_MARVELL']),
++    ('toolchain',
++     'toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk',
++     ['toolchain-external-bootlin', 'TOOLCHAIN_EXTERNAL_BOOTLIN']),
++    ('package, underscore, subfolder',
++     'package/x11r7/xapp_bitmap/xapp_bitmap.mk',
++     ['xapp_bitmap', 'XAPP_BITMAP']),
++    ('package, starting with number',
++     'package/4th/4th.mk',
++     ['4th', '4TH']),
++    ('package, long name',
++     'package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk',
++     ['perl-mojolicious-plugin-authentication', 'PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION']),
++    ('package, case sensitive',
++     'package/libeXosip2/libeXosip2.mk',
++     ['libeXosip2', 'LIBEXOSIP2']),
++    ]
++
++
++@pytest.mark.parametrize('testname,filename,expected', get_package_prefix_from_filename)
++def test_get_package_prefix_from_filename(testname, filename, expected):
++    prefix_lower, prefix_upper = m.get_package_prefix_from_filename(filename)
++    assert [prefix_lower, prefix_upper] == expected
++
++
+ Indent = [
+     ('ignore comment at beginning of line',
+      'any',
+@@ -567,6 +601,12 @@ TypoInPackageVariable = [
+      'OTHERS_VAR = \n',
+      [['any.mk:2: possible typo: OTHERS_VAR -> *ANY*',
+        'OTHERS_VAR = \n']]),
++    ('linux tool',
++     'package/linux-tools/linux-tool-cpupower.mk.in',
++     'CPUPOWER_DEPENDENCIES =\n'
++     'POWER_DEPENDENCIES +=\n',
++     [['package/linux-tools/linux-tool-cpupower.mk.in:2: possible typo: POWER_DEPENDENCIES -> *CPUPOWER*',
++       'POWER_DEPENDENCIES +=\n']]),
      ]
  
  
