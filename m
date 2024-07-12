@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C34F5C3DA4B
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 13:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19193C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 13:56:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71EAB413E3;
-	Fri, 12 Jul 2024 13:55:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7BC5416AC;
+	Fri, 12 Jul 2024 13:56:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sn6awfTU4BcC; Fri, 12 Jul 2024 13:55:55 +0000 (UTC)
+ id tSVOZQaiIX-w; Fri, 12 Jul 2024 13:56:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 369AE41486
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5496841714
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 369AE41486;
-	Fri, 12 Jul 2024 13:55:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 254CE1BF59E
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:55:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5496841714;
+	Fri, 12 Jul 2024 13:56:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CBE51BF59E
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:56:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1EFD8401C7
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:55:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3591384524
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:56:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RziBW3ebjLVD for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 13:55:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ePg9VvgAhSMd for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 13:56:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A9F5040185
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9F5040185
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A9F5040185
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 13:55:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 69B70240005;
- Fri, 12 Jul 2024 13:55:49 +0000 (UTC)
-Date: Fri, 12 Jul 2024 15:55:48 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240712155548.2482c429@windsurf>
-In-Reply-To: <20240622180432.4094568-1-dario.binacchi@amarulasolutions.com>
-References: <20240622180432.4094568-1-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720792549;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mnt+i26SeBXotrh4VMjJ+JSol5iEWTdORU+uGP2K52Y=;
- b=NjEN7LaCXVfxs8TEHcZnyVYsOXeR449SbpwuQHXzQXm2p9VmmqB1ODh32jjgAxJipofZSI
- zeKFYecX3iICHnON0n91e617uRucxLi/xlU2Q9GF93i6+R8kkUhXWbFboZzmf2P/wRsize
- h7S7SByB0DW6+Y/r9N2obr+QbkN//Unhf2T60bmVFHT8MrZHipmGT3a6bPji/HYoi0JDCX
- PR6oAhKqWXiSHcnbMofX7+iG9fgwNneX/u8hMM0QBk3GGFLK45ycl2iW0U747tbiOb3dSJ
- zyo5xEkJb4hH9ThmA3OPn/lpDdREwsCwUrNkRd8dOWsb5/A/r9inn3iAZj/DgQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NjEN7LaC
-Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32mp157a_dk1: add hashes
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 592AA841A7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 592AA841A7
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 13:56:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3B53085E7A; Fri, 12 Jul 2024 13:56:00 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 15:55:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e24a11738896118870037d89ccd64d2fa331e15e
+X-Git-Newrev: 751228436a4c68bc440a2f9dd1ef12ceb861765c
+X-Patchwork-Hint: ignore
+Message-Id: <20240712135600.3B53085E7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32mp157a_dk1: add hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,41 +59,87 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marleen Vos <marleen.vos@mind.be>, Bartosz Bilas <b.bilas@grinn-global.com>,
- linux-amarula@amarulasolutions.com, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 22 Jun 2024 20:04:32 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=751228436a4c68bc440a2f9dd1ef12ceb861765c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The patch adds .hash files for Arm trusted firmware, Linux, Linux headers
-> and U-Boot and then enables BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we
-> can now drop the defconfig from .checkpackageignore.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->  .checkpackageignore                                             | 1 -
->  .../patches/arm-trusted-firmware/arm-trusted-firmware.hash      | 2 ++
->  .../stm32mp157a-dk1/patches/linux-headers/linux-headers.hash    | 1 +
->  .../stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash | 2 ++
->  .../stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash | 2 ++
->  configs/stm32mp157a_dk1_defconfig                               | 2 ++
->  6 files changed, 9 insertions(+), 1 deletion(-)
->  create mode 100644 board/stmicroelectronics/stm32mp157a-dk1/patches/arm-trusted-firmware/arm-trusted-firmware.hash
->  create mode 120000 board/stmicroelectronics/stm32mp157a-dk1/patches/linux-headers/linux-headers.hash
->  create mode 100644 board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash
->  create mode 100644 board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash
+The patch adds .hash files for Arm trusted firmware, Linux, Linux headers
+and U-Boot and then enables BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we
+can now drop the defconfig from .checkpackageignore.
 
-Applied to master, thanks.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                                     | 1 -
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash              | 2 ++
+ .../stm32mp157a-dk1/patches/linux-headers/linux-headers.hash            | 1 +
+ board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash       | 2 ++
+ board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash       | 2 ++
+ configs/stm32mp157a_dk1_defconfig                                       | 2 ++
+ 6 files changed, 9 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 31be0b99e3..dfd5b2578e 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -285,7 +285,6 @@ configs/solidrun_clearfog_defconfig lib_defconfig.ForceCheckHash
+ configs/solidrun_clearfog_gt_8k_defconfig lib_defconfig.ForceCheckHash
+ configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
+ configs/spike_riscv64_defconfig lib_defconfig.ForceCheckHash
+-configs/stm32mp157a_dk1_defconfig lib_defconfig.ForceCheckHash
+ configs/stm32mp157c_dk2_defconfig lib_defconfig.ForceCheckHash
+ configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
+ configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+new file mode 100644
+index 0000000000..97c4500711
+--- /dev/null
++++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  068325043b7c8ecc47ebb8b4f241f01e86d3f69dc49a63f340aa94bd41a9e6df  arm-trusted-firmware/arm-trusted-firmware-lts-v2.8.16.tar.gz
+diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/linux-headers/linux-headers.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..8b7624cceb
+--- /dev/null
++++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9  linux-5.13.tar.xz
+diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..7cef5b688e
+--- /dev/null
++++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  e31cac91545ff41b71cec5d8c22afd695645cd6e2a442ccdacacd60534069341  u-boot-2023.04.tar.bz2
+diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+index aed6cfad34..38f7bc8946 100644
+--- a/configs/stm32mp157a_dk1_defconfig
++++ b/configs/stm32mp157a_dk1_defconfig
+@@ -6,6 +6,8 @@ BR2_cortex_a7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
+ 
+ # System configuration
++BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32mp157a-dk1/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
