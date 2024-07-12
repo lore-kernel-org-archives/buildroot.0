@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 383F2C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:52:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DC69C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:52:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BE2BD412D2;
-	Fri, 12 Jul 2024 15:52:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C905841493;
+	Fri, 12 Jul 2024 15:52:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QFOoPzK0pnN1; Fri, 12 Jul 2024 15:52:15 +0000 (UTC)
+ id KhVy6fh_0nPv; Fri, 12 Jul 2024 15:52:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F34F2410FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A19B64129F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F34F2410FB;
-	Fri, 12 Jul 2024 15:52:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1C3F21BF5D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id A19B64129F;
+	Fri, 12 Jul 2024 15:52:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E3621BF5D7
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:52:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07F9D41A3D
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:52:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 795D3608BE
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:52:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lrJ1FK7gs1jE for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id THgB3mLKPsM0 for <buildroot@lists.busybox.net>;
  Fri, 12 Jul 2024 15:52:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5FD141A03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C74161387
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5FD141A03
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C74161387
  for <buildroot@buildroot.org>; Fri, 12 Jul 2024 15:52:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B096D860CC; Fri, 12 Jul 2024 15:52:11 +0000 (UTC)
+ id 7D23B860CC; Fri, 12 Jul 2024 15:52:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 17:51:31 +0200
+Date: Fri, 12 Jul 2024 17:51:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 70319b47f646f74f407ed3355baf5b581a10518a
-X-Git-Newrev: 0d57555407f2a0708515e7c377f57a6466c78b1b
+X-Git-Oldrev: 4cb762efa4f35fa62a63475154c9431fd0da8e97
+X-Git-Newrev: 70319b47f646f74f407ed3355baf5b581a10518a
 X-Patchwork-Hint: ignore
-Message-Id: <20240712155211.B096D860CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sysprof: update to version 46.0
+Message-Id: <20240712155211.7D23B860CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdex: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,174 +65,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d57555407f2a0708515e7c377f57a6466c78b1b
+commit: https://git.buildroot.net/buildroot/commit/?id=70319b47f646f74f407ed3355baf5b581a10518a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bring Sysprof twelve years into the future by updating it to the most
-recent release. The GUI now uses GTK4, for which there is not yet a
-package, so for now the option is removed.
+This package provides utilities for asynchronous programming in C
+using a futures/promises model. Newer versions of sysprof require
+this library.
 
-Obviously, many things changed:
-
-- Build system moved to meson
-- License moved from GPLv2 to GPLv3
-- Many new dependencies
+https://gitlab.gnome.org/GNOME/libdex
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                               |  1 -
- package/sysprof/0001-define-NT_GNU_BUILD_ID.patch | 22 -------------
- package/sysprof/Config.in                         | 40 +++++++++++------------
- package/sysprof/sysprof.hash                      |  8 +++--
- package/sysprof/sysprof.mk                        | 26 +++++++++++----
- 5 files changed, 43 insertions(+), 54 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/libdex/Config.in   | 17 +++++++++++++++++
+ package/libdex/libdex.hash |  5 +++++
+ package/libdex/libdex.mk   | 31 +++++++++++++++++++++++++++++++
+ 5 files changed, 55 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 3866c4b146..2c0f265d96 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1344,7 +1344,6 @@ package/suricata/0001-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
- package/suricata/S99suricata Shellcheck
- package/swupdate/swupdate.sh Shellcheck
- package/sylpheed/0001-harden-link-checker-before-accepting-click.patch lib_patch.Upstream
--package/sysprof/0001-define-NT_GNU_BUILD_ID.patch lib_patch.Upstream
- package/sysrepo/S51sysrepo-plugind Shellcheck lib_sysv.Indent
- package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch lib_patch.Upstream
- package/tar/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
-diff --git a/package/sysprof/0001-define-NT_GNU_BUILD_ID.patch b/package/sysprof/0001-define-NT_GNU_BUILD_ID.patch
-deleted file mode 100644
-index dcc2cbe67c..0000000000
---- a/package/sysprof/0001-define-NT_GNU_BUILD_ID.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--On uclibc elf.h does not have GNU extentions but we need this define
--so we define it locally if its not getting it from elf.h
--
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--
--Upstream-Status: Pending
--
--Index: git/elfparser.h
--===================================================================
----- git.orig/elfparser.h	2011-07-16 18:57:41.000000000 -0700
--+++ git/elfparser.h	2011-07-16 20:28:54.733829895 -0700
--@@ -17,6 +17,10 @@
--  */
-- #include <glib.h>
-- 
--+#ifndef NT_GNU_BUILD_ID
--+#define NT_GNU_BUILD_ID 3
--+#endif
--+
-- typedef struct ElfSym ElfSym;
-- typedef struct ElfParser ElfParser;
-- 
-diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
-index 3913274be4..1d1b2fa264 100644
---- a/package/sysprof/Config.in
-+++ b/package/sysprof/Config.in
-@@ -1,31 +1,29 @@
- config BR2_PACKAGE_SYSPROF
- 	bool "sysprof"
--	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
--	depends on BR2_USE_MMU # glib2
--	# In its util.h file, sysprof contains architecture-specific
--	# code
--	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_sh4a || BR2_sh4aeb
-+	depends on BR2_USE_WCHAR # glib2, libdex, json-glib
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, libdex, json-glib, polkit
-+	depends on BR2_USE_MMU # glib2, libdex, json-glib
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libunwind, polkit
-+	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS # libunwind, polkit
-+	depends on !BR2_OPTIMIZE_FAST # polkit
-+	select BR2_PACKAGE_JSON_GLIB
-+	select BR2_PACKAGE_LIBDEX
- 	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBUNWIND
-+	select BR2_PACKAGE_POLKIT
- 	help
- 	  Sysprof is a statistical, system-wide profiler that can
- 	  profile user and kernel code using the perf API.
- 
- 	  http://sysprof.com
- 
--if BR2_PACKAGE_SYSPROF
--
--config BR2_PACKAGE_SYSPROF_GUI
--	bool "sysprof GUI"
--	depends on BR2_PACKAGE_LIBGTK2
--	select BR2_PACKAGE_LIBGLADE
--	select BR2_PACKAGE_GDK_PIXBUF
--	help
--	  GUI for the sysprof system-wide statistical profiler.
--
--endif
--
--comment "sysprof needs a toolchain w/ wchar, threads"
-+comment "sysprof needs a toolchain w/ dynamic libraray, wchar, threads, gcc >= 7"
- 	depends on BR2_USE_MMU
--	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_sh4a || BR2_sh4aeb
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		BR2_STATIC_LIBS
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ae3a675731..1fa425f3ee 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -55,6 +55,7 @@ F:	package/brotli/
+ F:	package/bubblewrap/
+ F:	package/cage/
+ F:	package/cog/
++F:	package/libdex/
+ F:	package/libepoxy/
+ F:	package/libmanette/
+ F:	package/libpsl/
+diff --git a/package/Config.in b/package/Config.in
+index 44ce5a5005..2b71978112 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2163,6 +2163,7 @@ menu "Other"
+ 	source "package/libcrossguid/Config.in"
+ 	source "package/libcsv/Config.in"
+ 	source "package/libdaemon/Config.in"
++	source "package/libdex/Config.in"
+ 	source "package/libdill/Config.in"
+ 	source "package/libeastl/Config.in"
+ 	source "package/libee/Config.in"
+diff --git a/package/libdex/Config.in b/package/libdex/Config.in
+new file mode 100644
+index 0000000000..f10bdac46f
+--- /dev/null
++++ b/package/libdex/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIBDEX
++	bool "libdex"
++	depends on BR2_USE_MMU # libglib2
++	depends on BR2_USE_WCHAR # libglib2, gettext
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  Dex provides Future-based programming for GLib-based
++	  applications. It both integrates with and brings new
++	  features for application and library authors who want
++	  to structure concurrent code in an easy to manage way.
 +
-+comment "sysprof can't be built with Optimize for fast"
-+	depends on BR2_OPTIMIZE_FAST
-diff --git a/package/sysprof/sysprof.hash b/package/sysprof/sysprof.hash
-index 4ce206be0b..f21e7621e1 100644
---- a/package/sysprof/sysprof.hash
-+++ b/package/sysprof/sysprof.hash
-@@ -1,3 +1,5 @@
--# Locally calculated
--sha256  baf03c6fc01a845c705873e6fc7927aa89539dcda6963f9ec4c8eb4c086a64f1  sysprof-1.2.0.tar.gz
--sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+# From https://download.gnome.org/sources/sysprof/46/sysprof-46.0.sha256sum
-+sha256  73aa7e75ebab3e4e0946a05a723df7e6ee4249e3b9e884dba35500aba2a1d176  sysprof-46.0.tar.xz
++	  https://gitlab.gnome.org/GNOME/libdex
++
++comment "libdex needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libdex/libdex.hash b/package/libdex/libdex.hash
+new file mode 100644
+index 0000000000..ec22f330d9
+--- /dev/null
++++ b/package/libdex/libdex.hash
+@@ -0,0 +1,5 @@
++# From https://download.gnome.org/sources/libdex/0.6/libdex-0.6.1.sha256sum
++sha256  d176de6578571e32a8c0b603b6a5a13fa5f87fb6b5442575b38ec5af16b17a92  libdex-0.6.1.tar.xz
 +
 +# License files
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/sysprof/sysprof.mk b/package/sysprof/sysprof.mk
-index 9823416e3f..8e69a7044e 100644
---- a/package/sysprof/sysprof.mk
-+++ b/package/sysprof/sysprof.mk
-@@ -4,14 +4,26 @@
- #
- ################################################################################
- 
--SYSPROF_VERSION = 1.2.0
--SYSPROF_SITE = http://sysprof.com
--SYSPROF_DEPENDENCIES = libglib2
--SYSPROF_LICENSE = GPL-2.0+
-+SYSPROF_VERSION_MAJOR = 46
-+SYSPROF_VERSION = $(SYSPROF_VERSION_MAJOR).0
-+SYSPROF_SOURCE = sysprof-$(SYSPROF_VERSION).tar.xz
-+SYSPROF_SITE = https://download.gnome.org/sources/sysprof/$(SYSPROF_VERSION_MAJOR)
-+SYSPROF_LICENSE = GPL-3.0+
- SYSPROF_LICENSE_FILES = COPYING
-+SYSPROF_DEPENDENCIES = libglib2 libdex libunwind json-glib polkit
-+SYSPROF_CONF_OPTS = \
-+	-Ddevelopment=false \
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libdex/libdex.mk b/package/libdex/libdex.mk
+new file mode 100644
+index 0000000000..530dfc2bab
+--- /dev/null
++++ b/package/libdex/libdex.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# libdex
++#
++################################################################################
++
++LIBDEX_VERSION_MAJOR = 0.6
++LIBDEX_VERSION = $(LIBDEX_VERSION_MAJOR).1
++LIBDEX_SOURCE = libdex-$(LIBDEX_VERSION).tar.xz
++LIBDEX_SITE = https://download.gnome.org/sources/libdex/$(LIBDEX_VERSION_MAJOR)
++LIBDEX_LICENSE = LGPL-2.1+
++LIBDEX_LICENSE_FILES = COPYING
++LIBDEX_INSTALL_STAGING = YES
++LIBDEX_DEPENDENCIES = libglib2
++LIBDEX_CONF_OPTS = \
++	-Ddocs=false \
 +	-Dexamples=false \
-+	-Dgtk=false \
-+	-Dhelp=false \
-+	-Dinstall-static=false \
-+	-Dlibsysprof=true \
++	-Dsysprof=false \
 +	-Dtests=false \
-+	-Dtools=true \
-+	-Dsystemdunitdir=/usr/lib/systemd/system
- 
--ifeq ($(BR2_PACKAGE_SYSPROF_GUI),y)
--SYSPROF_DEPENDENCIES += libgtk2 libglade gdk-pixbuf
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+SYSPROF_DEPENDENCIES += systemd
- endif
- 
--$(eval $(autotools-package))
++	-Dvapi=false \
++	-Deventfd=enabled \
++	-Dintrospection=disabled
++
++ifeq ($(BR2_PACKAGE_LIBURING),y)
++LIBDEX_CONF_OPTS += -Dliburing=enabled
++LIBDEX_DEPENDENCIES += liburing
++else
++LIBDEX_CONF_OPTS += -Dliburing=disabled
++endif
++
 +$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
