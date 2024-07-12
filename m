@@ -4,90 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B8BC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 19:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07C71C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 19:31:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D96A80EDD;
-	Fri, 12 Jul 2024 19:24:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83BDF847AE;
+	Fri, 12 Jul 2024 19:31:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ohTDKEkBK0_a; Fri, 12 Jul 2024 19:24:04 +0000 (UTC)
+ id bjHduJ5AqvrL; Fri, 12 Jul 2024 19:31:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D836080E80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BF02847A9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D836080E80;
-	Fri, 12 Jul 2024 19:24:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 727891BF279
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:24:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BF02847A9;
+	Fri, 12 Jul 2024 19:31:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CD3601BF279
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:31:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F288400FF
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:24:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B86A0419C0
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:31:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TWoitzRlb4da for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 19:24:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
- envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F1D0B4000B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1D0B4000B
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F1D0B4000B
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 19:24:00 +0000 (UTC)
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-2eeb1051360so21332701fa.0
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 12:24:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720812239; x=1721417039;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=kgKNbN5il9hvqQ6c2f31wvchr9TtqA0esPk8fSkIAkQ=;
- b=ieffVLLsxCd8zAvJOeuTjTG36ziURXDM0hjvtzguJE2jsKbEkPL6QjlfoGs+Qioz8u
- JGMmrEP0/qiUGh0sOGhhSaBzmvk8TwPfl3OKIeSDiGPHbDUC32Fadmbw1bHTW9bE99ea
- q1rWPI1NysHzAO8rhs/NTMuUFrrqpK6L02vN5Or7g8uw7nld+RCQ3U75rIKMlJyXny5i
- GDQ0l4t6paf2UakD7WCHtyczOiTT0mYEDBxBIqNOFzNxdnlrwHi/HS8SiOmov1N7waoe
- YGsqxvSgWY+SGEpTbprpURcSaAmgv0PuOrS7meKCtNfJWbLV7VWXCrTktDHtU7PjMbWL
- MZLQ==
-X-Gm-Message-State: AOJu0Yz8BXniV4RD5II7ous2qdEZd+4npo+xQ8XGFwm5bWaaURPPBnMV
- +WSK2XdPPjyDg0oRlGcGm1XG34kftuBrPD95izyS2uK2GcZw9PsBLjCXsQVrjBEc1B/b+B5z4pp
- j6r3eMA31zq21jv3zT3W/laVACnY=
-X-Google-Smtp-Source: AGHT+IG5LGJ1BotuI0zBA1MKBN28VP8jqFnoZHQp0/gH4JUX4CLx75LUvEsxN8muIrBglGW1472jLMKRaOXLNWhxVhg=
-X-Received: by 2002:a2e:9f03:0:b0:2ee:4ccf:ca4f with SMTP id
- 38308e7fff4ca-2eeb3101de6mr77973671fa.31.1720812238447; Fri, 12 Jul 2024
- 12:23:58 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ax5FbJ3c9IjT for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 19:31:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
+ helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DF5CA419BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF5CA419BE
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DF5CA419BE
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 19:31:09 +0000 (UTC)
+Received: from pps.filterd (m0346901.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 46CI10kW014429; Fri, 12 Jul 2024 19:31:07 GMT
+Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40b5dybrf2-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 12 Jul 2024 19:31:07 +0000
+Received: from xusxph004rp020.corp.ray.com ([128.13.120.224])
+ by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46CJV59o022002
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 12 Jul 2024 19:31:06 GMT
+Received: from ciulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph004rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 46CJV5O4021512
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Fri, 12 Jul 2024 19:31:05 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id 921833000286;
+ Fri, 12 Jul 2024 14:31:05 -0500 (CDT)
+Date: Fri, 12 Jul 2024 19:31:04 +0000
 MIME-Version: 1.0
-References: <20240704123452.3535612-1-heiko.thiery@gmail.com>
- <20240704123452.3535612-2-heiko.thiery@gmail.com>
- <911573ac-f0bf-4ceb-99b0-5d24dd1937bd@mind.be>
- <CAEyMn7anNnq2aH9EViFjY+ihnmwCXaWXMs9sJAYFBpH=q_WT+Q@mail.gmail.com>
-In-Reply-To: <CAEyMn7anNnq2aH9EViFjY+ihnmwCXaWXMs9sJAYFBpH=q_WT+Q@mail.gmail.com>
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 12 Jul 2024 21:23:46 +0200
-Message-ID: <CAEyMn7Ze=uM6Tf4TRe4-jzai-T7DD8MvT4t_YLjyQzzOzbYfKQ@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
+Message-Id: <20240712-pytest-qemu-prompt-detection-v2-1-273b85382796@collins.com>
+X-B4-Tracking: v=1; b=H4sIAHiEkWYC/0XMTQ7CIBBA4as0rJ2mDC1NXXkP44LC1JKUHwGNp
+ undJW5cfov3dpYpWcrs3Ows0ctmG3wFnhqmV+XvBNZUM+yw70aOED+FcoEHuSfEFFwsYKiQLjU
+ E0S+CjBDj3E2sLmKixb5/++uteqkBlDWR+k8HRD70ksuWoxxGOQGHOSlvgm+dspQuOmyb9bnVw
+ bHj+AJSw0UjswAAAA==
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-12_15,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-12_15,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ suspectscore=0 mlxscore=0
+ malwarescore=0 adultscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407120131
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ mlxlogscore=999
+ phishscore=0 spamscore=0 adultscore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2406180000 definitions=main-2407120131
+X-Proofpoint-GUID: peGIQdsqDy3nuYB85h3kKPcfyE2IOK8-
+X-Proofpoint-ORIG-GUID: peGIQdsqDy3nuYB85h3kKPcfyE2IOK8-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-12_15,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
+ adultscore=0 bulkscore=0 mlxscore=0 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407120131
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720812239; x=1721417039; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=kgKNbN5il9hvqQ6c2f31wvchr9TtqA0esPk8fSkIAkQ=;
- b=lDqhEjP8FNqCulDYSg+J2w5WEKX0DPnaqqipLODlda+SzYb5wNDNbGAlc6Y0pWAppJ
- IHH1Jm73Hs1DCV6KIUvmVNtwXsNGIYMqPrMNkYVISfBHNkpox9BIwvUr3Y7WlmKdgLpQ
- z+JgvJX9eK97GUPwzG7oOR+lwep39vyn2gHuIqPEipj4RWh5dSMvmlgeK0ro9Tgbv50H
- qh1R87qniA0wuei22c0aaM/55j3ihU4eHkvpQhJzI78rBwNdkY8N0hGKCFMJR4qhTmjl
- /SKYG4sxddqdvZugDMBC4+N9J6ijl+okzmdeVqW4S64EGaDNErCW0njiEBCcNDKgVKX+
- YqPg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=lDqhEjP8
-Subject: Re: [Buildroot] [PATCH v3 1/3] package/blake3: add new host package
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : message-id :
+ mime-version : subject : to; s=POD051818;
+ bh=QhWitnhyjVkbNpY2LVD4BZId3P8jb2PuONHBpAbeqNk=;
+ b=shx68IFYeLelfmtxNI0GsoQ2Nf8cTnXUD15qk4U9J8igqCTo3UiTJprc5bX1E/25cc6/
+ a7cXIGUaXzD7NwaCllbvJBeAqqZ7tf9ugIFTa4RvSrXmRrebdvQB/VOPPtOXGnCrO0Q5
+ /Qy5R9KcCc6wQHMVs9pNnnneas5nDHIIFnc6ymAKsYquUyZYbLu1fE7J85S7vYEdPJf4
+ jMl76rxDSy+Ey7d85YGY/wEWRdipgqOvMi0+QjplQSISkXrqiiIkc078yB6CNmpNs91+
+ e5C8D7v2anl7MwCh8qIjeHozt+w1ub+a+1qXnp3OeR1crLS7A3g4KX6PtW5yvhOOr9U1 2A== 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=shx68IFY
+Subject: [Buildroot] [PATCH v2] support/testing/infra/emulator.py: fix qemu
+ prompt detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,161 +125,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lance Fredrickson <lancethepants@gmail.com>,
- Samuel Martin <s.martin49@gmail.com>, Peter Seiderer <ps.report@gmx.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Julien Olivain <ju.o@free.fr>, Brandon Maier <brandon.maier@collins.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout,
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
 
-Am Fr., 12. Juli 2024 um 21:08 Uhr schrieb Heiko Thiery
-<heiko.thiery@gmail.com>:
->
-> Hi Arnout,
->
-> Am Fr., 12. Juli 2024 um 10:38 Uhr schrieb Arnout Vandecappelle
-> <arnout@mind.be>:
-> >
-> >   Hi Heiko,
-> >
-> > On 04/07/2024 14:34, Heiko Thiery wrote:
-> > > This package is used and required for ccache update.
-> > >
-> > > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> > > ---
-> > >
-> > > v2:
-> > >      - on change
-> > >
-> > > v3:
-> > >      - fix BLAKE3_LICENSE_FILES and corresponding hash values
-> > >
-> > >
-> > >   DEVELOPERS                 |  1 +
-> > >   package/blake3/blake3.hash |  3 +++
-> > >   package/blake3/blake3.mk   | 20 ++++++++++++++++++++
-> > >   3 files changed, 24 insertions(+)
-> > >   create mode 100644 package/blake3/blake3.hash
-> > >   create mode 100644 package/blake3/blake3.mk
-> > >
-> > > diff --git a/DEVELOPERS b/DEVELOPERS
-> > > index 90d1a111ab..46fe3cd2e1 100644
-> > > --- a/DEVELOPERS
-> > > +++ b/DEVELOPERS
-> > > @@ -1359,6 +1359,7 @@ F:      configs/kontron_bl_imx8mm_defconfig
-> > >   F:  configs/kontron_smarc_sal28_defconfig
-> > >   F:  configs/kontron_pitx_imx8m_defconfig
-> > >   F:  package/altera-stapl/
-> > > +F:   package/blake3/
-> > >   F:  package/ipmitool/
-> > >   F:  package/libnetconf2/
-> > >   F:  package/libyang/
-> > > diff --git a/package/blake3/blake3.hash b/package/blake3/blake3.hash
-> > > new file mode 100644
-> > > index 0000000000..2a00d19b02
-> > > --- /dev/null
-> > > +++ b/package/blake3/blake3.hash
-> > > @@ -0,0 +1,3 @@
-> > > +# sha256 computed locally
-> > > +sha256  822cd37f70152e5985433d2c50c8f6b2ec83aaf11aa31be9fe71486a91744f37  blake3-1.5.1.tar.gz
-> > > +sha256  6a94bedb8b707ed97f6e310d0d015ab14e0683ffa0a612b02958581b9cc9fc0e  LICENSE
-> > > diff --git a/package/blake3/blake3.mk b/package/blake3/blake3.mk
-> > > new file mode 100644
-> > > index 0000000000..76e4e32e7a
-> > > --- /dev/null
-> > > +++ b/package/blake3/blake3.mk
-> > > @@ -0,0 +1,20 @@
-> > > +################################################################################
-> > > +#
-> > > +# blake3
-> > > +#
-> > > +################################################################################
-> > > +
-> > > +BLAKE3_VERSION = 1.5.1
-> > > +BLAKE3_SITE = $(call github,BLAKE3-team,BLAKE3,refs/tags/$(BLAKE3_VERSION))
-> >
-> >   Why do you put the refs/tags here? It was necessary in one or two packages
-> > because of a conflict with a branch name, but I don't think that's the case
-> > here. I admit that there's a certain elegance to making it explicit that we want
-> > a tag, but then we really should be doing that everywhere...
->
-> You are right. I changed it to:
-> BLAKE3_SITE = $(call github,BLAKE3-team,BLAKE3,$(BLAKE3_VERSION))
->
-> I think this is what you expect.
->
-> >
-> > > +BLAKE3_SUBDIR = c
-> > > +BLAKE3_LICENSE = Apache-2.0, CC0-1.0
-> > > +BLAKE3_LICENSE_FILES = LICENSE
-> > > +
-> > > +# We may be a ccache dependency, so we can't use ccache; reset the
-> > > +# options set by the cmake infra.
-> > > +HOST_BLAKE3_CONF_OPTS += \
-> > > +     -DCMAKE_ASM_COMPILER="$(CMAKE_HOST_C_COMPILER)" \
-> >
-> >   Why is this needed? And is it even a good idea? In pkg-cmake, this is defined
-> > as -DCMAKE_ASM_COMPILER="$$(HOSTAS)", and HOSTAS is simply "as" without any
-> > ccache. In fact, this changes it from "as" to "gcc" which I expect is not
-> > correct at all...
->
-> When not defining that I got the errror:
->
-> [ 25%] Building C object CMakeFiles/blake3.dir/blake3_portable.c.o
-> [ 37%] Building ASM object CMakeFiles/blake3.dir/blake3_avx2_x86-64_unix.S.o
-> [ 50%] Building C object CMakeFiles/blake3.dir/blake3_dispatch.c.o
-> Assembler messages:
-> Fatal error: bad defsym; format is --defsym name=value
-> make[3]: *** [CMakeFiles/blake3.dir/build.make:117:
-> CMakeFiles/blake3.dir/blake3_avx2_x86-64_unix.S.o] Error 1
-> make[3]: *** Waiting for unfinished jobs....
-> [ 62%] Building ASM object CMakeFiles/blake3.dir/blake3_avx512_x86-64_unix.S.o
-> Assembler messages:
-> Fatal error: bad defsym; format is --defsym name=value
-> make[3]: *** [CMakeFiles/blake3.dir/build.make:130:
-> CMakeFiles/blake3.dir/blake3_avx512_x86-64_unix.S.o] Error 1
-> make[3]: Leaving directory
-> '/home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/c'
-> make[2]: *** [CMakeFiles/Makefile2:83: CMakeFiles/blake3.dir/all] Error 2
-> make[2]: Leaving directory
-> '/home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/c'
-> make[1]: *** [Makefile:136: all] Error 2
-> make[1]: Leaving directory
-> '/home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/c'
-> make: *** [package/pkg-generic.mk:283:
-> /home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/.stamp_built]
-> Error 2
->
-> So when changing to use gcc instead of as it works.
->
-> I tried to build on my host and see that cmake sets the var
-> "CMAKE_ASM_COMPILER=/usr/bin/cc". When overwriting it with as it also
-> does not build.
+The qemu.run() method can break when a command happens to output the
+string "# " to stdout. This is because qemu.run() detects when a command
+has completed by searching for the shell prompt, which by default is
+"# ". It then captures everything before the "# " as the commands
+output, causing the rest of output to be lost.
 
-But unsetting -UCMAKE_C_COMPILER_LAUNCHER and
--UCMAKE_CXX_COMPILER_LAUNCHE is not required. So would remove these
-two lines.
+Instead use the pexpect libraries REPLWrapper to handle running
+commands. It has hooks to set a custom prompt and avoid some other
+pitfalls of wrapping a shell.
 
->
-> --
-> Heiko
->
-> >
-> >   Since you said you could respin this weekend, I will mark as Changes
-> > Requested, but it's possible that your respin only has some commit message
-> > changes of course.
-> >
-> >   Regards,
-> >   Arnout
-> >
-> > > +     -UCMAKE_C_COMPILER_LAUNCHER \
-> > > +     -UCMAKE_CXX_COMPILER_LAUNCHER
-> > > +
-> > > +$(eval $(host-cmake-package))
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+---
+I tested this against a couple tests and test_bash.py which Yann noticed
+is special in Julian patch series. I am running a full test run but
+that will take awhile, so sending this in the meantime for review.
+
+Changes in v2:
+- Rewrite to use pexpect REPLWrapper (Arnout)
+- Link to v1: https://patchwork.ozlabs.org/project/buildroot/patch/20240522154616.1265769-1-brandon.maier@collins.com/
+- Link to Julian Olivain version: https://patchwork.ozlabs.org/project/buildroot/patch/20230611104518.337528-1-ju.o@free.fr/
+---
+ support/testing/infra/emulator.py | 56 +++++++++++++++++++++++++++++++--------
+ 1 file changed, 45 insertions(+), 11 deletions(-)
+
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 624740fcb1..c586603787 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -1,12 +1,38 @@
+ import pexpect
++import pexpect.replwrap
+ 
+ import infra
+ 
++BR_PROMPT = '[BRTEST# '
++BR_CONTINUATION_PROMPT = '[BRTEST+ '
++
++
++def _repl_sh_spawn(spawn, orig_prompt, non_printable_insert='\\[\\]',
++                   extra_init_cmd="export PAGER=cat"):
++    """Wrap the shell prompt to handle command output
++    Based on pexpect.replwrap.bash()
++    https://github.com/pexpect/pexpect/blob/aa989594e1e413f45c18b26ded1783f7d5990fe5/pexpect/replwrap.py#L115
++    """
++
++    ps1 = BR_PROMPT[:5] + non_printable_insert + BR_PROMPT[5:]
++    ps2 = (BR_CONTINUATION_PROMPT[:5] + non_printable_insert +
++           BR_CONTINUATION_PROMPT[5:])
++    prompt_change = "PS1='{0}' PS2='{1}' PROMPT_COMMAND=''".format(ps1, ps2)
++    return pexpect.replwrap.REPLWrapper(
++            spawn,
++            orig_prompt,
++            prompt_change,
++            new_prompt=BR_PROMPT,
++            continuation_prompt=BR_CONTINUATION_PROMPT,
++            extra_init_cmd=extra_init_cmd
++        )
++
+ 
+ class Emulator(object):
+ 
+     def __init__(self, builddir, downloaddir, logtofile, timeout_multiplier):
+         self.qemu = None
++        self.repl = None
+         self.downloaddir = downloaddir
+         self.logfile = infra.open_log_file(builddir, "run", logtofile)
+         # We use elastic runners on the cloud to runs our tests. Those runners
+@@ -97,26 +123,34 @@ class Emulator(object):
+         if password:
+             self.qemu.expect("Password:")
+             self.qemu.sendline(password)
+-        index = self.qemu.expect(["# ", pexpect.TIMEOUT])
+-        if index != 0:
+-            raise SystemError("Cannot login")
+-        self.run("dmesg -n 1")
+-        # Prevent the shell from wrapping the commands at 80 columns.
+-        self.run("stty columns 29999")
++
++        extra_init_cmd = " && ".join([
++            'export PAGER=cat',
++            'dmesg -n 1',
++            # Prevent the shell from wrapping the commands at 80 columns.
++            'stty columns 29999',
++            # Fix the prompt of any subshells that get run
++            '''printf "%s\n"  "PS1='$PS1'" "PS2='$PS2'" "PROMPT_COMMAND=''" >>/etc/profile'''
++        ])
++        self.repl = _repl_sh_spawn(
++                self.qemu,
++                '# ',
++                non_printable_insert='\\[\\]',
++                extra_init_cmd=extra_init_cmd)
++        if not self.repl:
++            raise SystemError("Cannot initialize REPL prompt")
+ 
+     # Run the given 'cmd' with a 'timeout' on the target
+     # return a tuple (output, exit_code)
+     def run(self, cmd, timeout=-1):
+-        self.qemu.sendline(cmd)
+         if timeout != -1:
+             timeout *= self.timeout_multiplier
+-        self.qemu.expect("# ", timeout=timeout)
++        output = self.repl.run_command(cmd, timeout=timeout)
+         # Remove double carriage return from qemu stdout so str.splitlines()
+         # works as expected.
+-        output = self.qemu.before.replace("\r\r", "\r").splitlines()[1:]
++        output = output.replace("\r\r", "\r").splitlines()[1:]
+ 
+-        self.qemu.sendline("echo $?")
+-        self.qemu.expect("# ")
++        exit_code = self.repl.run_command("echo $?")
+         exit_code = self.qemu.before.splitlines()[2]
+         exit_code = int(exit_code)
+ 
+
+---
+base-commit: 5543661bc0c1ebcd01e5e6bf5ac565fd0f1ac8d8
+change-id: 20240712-pytest-qemu-prompt-detection-34f3ed337b09
+
+Best regards,
+-- 
+Brandon Maier <brandon.maier@collins.com>
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
