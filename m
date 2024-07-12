@@ -1,51 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ECDEC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:39:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B468C3DA45
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 08:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FEF6405A6;
-	Fri, 12 Jul 2024 07:39:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE1D180C2C;
+	Fri, 12 Jul 2024 08:13:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lz2Fe60nZKmH; Fri, 12 Jul 2024 07:39:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hdANjlQIJMxt; Fri, 12 Jul 2024 08:13:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 703554129A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E11E80C61
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 703554129A;
-	Fri, 12 Jul 2024 07:39:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7FA491BF48C
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:39:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E11E80C61;
+	Fri, 12 Jul 2024 08:13:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B71371BF584
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:13:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 79C6D405A6
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:39:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A49386062E
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:13:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7O9I6IVe1bH2 for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 07:39:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54087412B8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54087412B8
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:39:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D09684F39; Fri, 12 Jul 2024 07:39:44 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 09:38:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3988f2d9238bc027b5d16219867e8d3c701c0c06
-X-Git-Newrev: c981800251f984d41594aa86b2fc471511b880ac
-X-Patchwork-Hint: ignore
-Message-Id: <20240712073944.3D09684F39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/beecrypt: drop package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vlfgel9VW_Me for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 08:13:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 67E1660604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67E1660604
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 67E1660604
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 08:13:53 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-367b0cc6c65so1058987f8f.3
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 01:13:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720772032; x=1721376832;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=TTvP/ftRCXUoeyVk4rxqPokasSZI7g+6eYBG3lTWVG0=;
+ b=xUng6wAFrFNaIArKochY+RdDMmo/c/geS//KXxO93/LwsSlC/LWt67SMUu83dJo17U
+ QIOf7nxd9xI4wo/PGzv0SAAt74PrvAqeNV8Kq5y9mf2csd3Lm/Nv0XmppsM1+fxl3kQq
+ fCNOSgh3QoewrA1OyN2kGZ+KUQnlEOwbJSuumNKplvFzFhrGpHdNtO8QtMwmjkTy2lWx
+ yhdQNGBB99SL5pYS8UY4UERjR7HVMrmCAGQN311hTYp8UfRDSjVrzKJCFdXdTQnyKuwh
+ 7jjLVMDViJEr49kxgXSL5cS9cdXJuAWfY93gijAvPsl4V8g3UFACpKf5fc/levGjQIHI
+ Z2Qg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXbIYlNf/9tqSnB2hWksj1tY2/SBcbaaYHUSvHO2ekymLYh68Fk2pfOxCSCxRvQmqsmSW8/TLtomPutD9Us07mONpf7kYeKEg==
+X-Gm-Message-State: AOJu0Yz+ZRqfmer6RWdYi2+hHhn702tMXECb0DvtjzWBJJLw8JYmMMlP
+ iEUHCp3w/ZfJRvSI9mWG6q5dCWSNpsZMuFkHYFly1o1DdtH7SQoMQdlUcGn0BHLo878S2bfu8B8
+ 3qiE=
+X-Google-Smtp-Source: AGHT+IFCjJdfRWIeGWSdtmtqLYNWqoBXHIJC+vJlsqTlnkk3UFESeYfRNwKJESorqpgFrdNP2EHheQ==
+X-Received: by 2002:a5d:5847:0:b0:366:f001:78d5 with SMTP id
+ ffacd0b85a97d-367cea46c97mr9684530f8f.13.1720772031943; 
+ Fri, 12 Jul 2024 01:13:51 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
+ (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:b481:98b5:611f:e783])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-367cde7df3dsm9528949f8f.16.2024.07.12.01.13.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 12 Jul 2024 01:13:51 -0700 (PDT)
+Message-ID: <1e5e26ad-a563-4198-bdd4-769e5fbf0d62@mind.be>
+Date: Fri, 12 Jul 2024 10:13:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>, Brandon Maier <brandon.maier@collins.com>
+References: <20240522154616.1265769-1-brandon.maier@collins.com>
+ <a27d5bf51fad0eb68dfbc1faee805b8d@free.fr>
+Content-Language: en-GB
+In-Reply-To: <a27d5bf51fad0eb68dfbc1faee805b8d@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1720772032; x=1721376832; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=TTvP/ftRCXUoeyVk4rxqPokasSZI7g+6eYBG3lTWVG0=;
+ b=Yl49363l9v7jXvBx0spVK3bcfpO9LvkvB9lvjfh0lIWSsaegWdc605UMUojunf4BrZ
+ 0BM+xpgBSCzwZp6tILGSmkhUKZdIK453WR06jCrLPn6jZHIdqBOZWUXbWykr/9HA7mx7
+ VoJ55iFdJvEo4qhopXviHyLdbxwpKYaywOMvLzHm2lYEgyOZSFkOGJMQGQFruMv/gFdx
+ i4OB3wRyt+kRBOR0xWfNjMWVW2iq3260bTKaLqKGysWito10udFdWysSWd90LCIwB018
+ Fm3WLOWYuZjSSwZvsFu8OPVdt9CZFZqceOgYVdgyATjV5OOXlicaoeamXqzq7ISG7naV
+ TZ7Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Yl49363l
+Subject: Re: [Buildroot] [PATCH] support/testing/infra/emulator.py: fix qemu
+ prompt detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,405 +111,81 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c981800251f984d41594aa86b2fc471511b880ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As advocated by Yann E. Morin [1], drop beecrypt as package is not
-maintained anymore.
-
-This will also avoid the following build failure with gcc 14:
-
-blockmode.c: In function 'blockEncryptCTR':
-blockmode.c:162:42: error: implicit declaration of function 'swapu32' [-Wimplicit-function-declaration]
-  162 |                                 buf[i] = swapu32(fdback[j]);
-      |                                          ^~~~~~~
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20240615204233.3339310-1-fontaine.fabrice@gmail.com
-
-Fixes:
- - http://autobuild.buildroot.org/results/651e0e31305b1f211071d94ea74f7b7a5793b03e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- .checkpackageignore                                |   3 -
- Config.in.legacy                                   |   7 +
- package/Config.in                                  |   1 -
- .../beecrypt/0001-cppglue.cxx-cplusplus-only.patch |  28 ----
- package/beecrypt/0002-build-system.patch           | 173 ---------------------
- .../0003-don-t-check-for-cplusplus-compiler.patch  |  27 ----
- package/beecrypt/Config.in                         |  10 --
- package/beecrypt/beecrypt.hash                     |   3 -
- package/beecrypt/beecrypt.mk                       |  39 -----
- 9 files changed, 7 insertions(+), 284 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 21d1f63f1b..31be0b99e3 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -366,9 +366,6 @@ package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch lib_patch.Upstre
- package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch lib_patch.Upstream
- package/bcusdk/0002-eibd-fix-endless-recursion-when-using-USB-backends.patch lib_patch.Upstream
- package/bearssl/0001-Fix-missing-objdir-dependency.patch lib_patch.Upstream
--package/beecrypt/0001-cppglue.cxx-cplusplus-only.patch lib_patch.Upstream
--package/beecrypt/0002-build-system.patch lib_patch.Upstream
--package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch lib_patch.Upstream
- package/benejson/0001-c-std.patch lib_patch.Upstream
- package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch lib_patch.Upstream
- package/berkeleydb/0001-cwd-db_config.patch lib_patch.Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a5f7638415..78dcabed63 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -160,6 +160,13 @@ config BR2_PACKAGE_CGIC
- 	help
- 	  the cgic upstream no longer exists.
- 
-+config BR2_PACKAGE_BEECRYPT
-+	bool "beecrypt package removed"
-+	select BR2_LEGACY
-+	help
-+	  The beecrypt package was removed as it is not maintained
-+	  anymore (no release since 2015).
-+
- config BR2_PACKAGE_VERSAL_FIRMWARE
- 	bool "versal-firmware has been replaced by xilinx-prebuilt"
- 	select BR2_TARGET_XILINX_PREBUILT
-diff --git a/package/Config.in b/package/Config.in
-index 8dc8b5ed5d..9806f6dc25 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1540,7 +1540,6 @@ endmenu
- 
- menu "Crypto"
- 	source "package/bearssl/Config.in"
--	source "package/beecrypt/Config.in"
- 	source "package/botan/Config.in"
- 	source "package/ca-certificates/Config.in"
- 	source "package/cryptodev-linux/Config.in"
-diff --git a/package/beecrypt/0001-cppglue.cxx-cplusplus-only.patch b/package/beecrypt/0001-cppglue.cxx-cplusplus-only.patch
-deleted file mode 100644
-index 298e3eba93..0000000000
---- a/package/beecrypt/0001-cppglue.cxx-cplusplus-only.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Makefile.am: Only compile/link cppglue.cxx if --with-cplusplus is used
--
--Bloats libbeecrypt for no use and breaks build on systems without a C++
--compiler.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- Makefile.am |    7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
--
--Index: beecrypt-4.2.1/Makefile.am
--===================================================================
----- beecrypt-4.2.1.orig/Makefile.am
--+++ beecrypt-4.2.1/Makefile.am
--@@ -62,7 +62,12 @@
-- 
-- lib_LTLIBRARIES = libbeecrypt.la
-- 
---libbeecrypt_la_SOURCES = aes.c base64.c beecrypt.c blockmode.c blockpad.c blowfish.c dhies.c dldp.c dlkp.c dlpk.c dlsvdp-dh.c dsa.c elgamal.c endianness.c entropy.c fips186.c hmac.c hmacmd5.c hmacsha1.c hmacsha224.c hmacsha256.c md4.c md5.c hmacsha384.c hmacsha512.c memchunk.c mp.c mpbarrett.c mpnumber.c mpprime.c mtprng.c pkcs1.c pkcs12.c ripemd128.c ripemd160.c ripemd256.c ripemd320.c rsa.c rsakp.c rsapk.c sha1.c sha224.c sha256.c sha384.c sha512.c sha2k32.c sha2k64.c timestamp.c cppglue.cxx
--+libbeecrypt_la_SOURCES = aes.c base64.c beecrypt.c blockmode.c blockpad.c blowfish.c dhies.c dldp.c dlkp.c dlpk.c dlsvdp-dh.c dsa.c elgamal.c endianness.c entropy.c fips186.c hmac.c hmacmd5.c hmacsha1.c hmacsha224.c hmacsha256.c md4.c md5.c hmacsha384.c hmacsha512.c memchunk.c mp.c mpbarrett.c mpnumber.c mpprime.c mtprng.c pkcs1.c pkcs12.c ripemd128.c ripemd160.c ripemd256.c ripemd320.c rsa.c rsakp.c rsapk.c sha1.c sha224.c sha256.c sha384.c sha512.c sha2k32.c sha2k64.c timestamp.c
--+
--+if WITH_CPLUSPLUS
--+libbeecrypt_la_SOURCES += cppglue.cxx
--+endif
--+
-- libbeecrypt_la_DEPENDENCIES = $(BEECRYPT_OBJECTS)
-- libbeecrypt_la_LIBADD = blowfishopt.lo mpopt.lo sha1opt.lo $(OPENMP_LIBS)
-- libbeecrypt_la_LDFLAGS = -no-undefined -version-info $(LIBBEECRYPT_LT_CURRENT):$(LIBBEECRYPT_LT_REVISION):$(LIBBEECRYPT_LT_AGE)
-diff --git a/package/beecrypt/0002-build-system.patch b/package/beecrypt/0002-build-system.patch
-deleted file mode 100644
-index 05746899ef..0000000000
---- a/package/beecrypt/0002-build-system.patch
-+++ /dev/null
-@@ -1,173 +0,0 @@
--Fix build with BR2_ENABLE_DEBUG=yes, no need for expert mode anymore
--
--Otherwise configure issues this error message:
--configure: error: --enable-debug cannot be used in conjunction with --enable-expert-mode
--
--Downloaded from Gentoo:
--http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/beecrypt/files/beecrypt-4.2.1-build-system.patch?revision=1.2&view=markup
--
--This patch also removes the hard-coded CFLAGS provided by beecrypt in favour
--of the CFLAGS provided by buildroot.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
----- beecrypt-4.2.1/configure.ac
--+++ beecrypt-4.2.1/configure.ac
--@@ -11,7 +11,7 @@
-- 
-- # Checks for package options
-- AC_ARG_ENABLE(expert-mode, [  --enable-expert-mode      follow user-defined CFLAGS settings [[default=no]]],[
---  ac_enable_expert_mode=yes
--+  ac_enable_expert_mode=$enableval
--   ],[
--   if test "X$CFLAGS" != "X"; then
--     echo "enabling expert mode"
--@@ -25,7 +25,7 @@
--   if test "$ac_enable_expert_mode" = yes; then
--     AC_MSG_ERROR([--enable-debug cannot be used in conjunction with --enable-expert-mode])
--   fi
---  ac_enable_debug=yes
--+  ac_enable_debug=$enableval
--   ],[
--   ac_enable_debug=no
--   ])
--@@ -456,7 +456,7 @@
--       ac_cv_python_include="-I`$PYTHON -c 'import distutils.sysconfig; print distutils.sysconfig.get_python_inc()'`"
--     ])
--     AC_CACHE_CHECK([where to install python libraries], ac_cv_python_libdir, [
---      ac_cv_python_libdir=`$PYTHON -c 'import distutils.sysconfig; print distutils.sysconfig.get_python_lib()'`
--+      ac_cv_python_libdir=`$PYTHON -c 'import distutils.sysconfig; print distutils.sysconfig.get_python_lib(1, 0)'`
--     ])
--   fi
-- fi
----- beecrypt-4.2.1/acinclude.m4
--+++ beecrypt-4.2.1/acinclude.m4
--@@ -498,15 +498,6 @@ AC_DEFUN([BEE_GNU_CC],[
--     AC_SUBST(OPENMP_LIBS,"-lgomp")
--   fi
--   case $bc_target_arch in
---  x86_64 | athlon64 | athlon-fx | k8 | opteron | em64t | nocona)
---    CC="$CC -m64"
---    ;;
---  i[[3456]]86 | \
---  pentium* | \
---  athlon*)
---    CC="$CC -m32"
---    CCAS="$CCAS -m32"
---    ;;
--   ia64)
--     case $target_os in
--     # HP/UX on Itanium needs to be told that a long is 64-bit!
--@@ -525,17 +516,8 @@ AC_DEFUN([BEE_GNU_CC],[
--     aix*)
--       CC="$CC -maix64"
--       ;;
---    linux*)
---      CC="$CC -m64"
---      ;;
--     esac
--     ;;
---  sparc | sparcv8*)
---    CC="$CC -m32"
---    ;;
---  sparc64 | sparcv9*)
---    CC="$CC -m64"
---    ;;
--   esac
--   # Certain platforms needs special flags for multi-threaded code
--   if test "$ac_enable_threads" = yes; then
--@@ -646,14 +646,6 @@ dnl  BEE_GNU_CXX
-- AC_DEFUN([BEE_GNU_CXX],[
--   AC_REQUIRE([AC_PROG_CXX])
--   case $bc_target_arch in
---  x86_64 | athlon64 | athlon-fx | k8 | opteron | em64t | nocona | core2)
---    CXX="$CXX -m64"
---    ;;
---  i[[3456]]86 | \
---  pentium* | \
---  athlon*)
---    CXX="$CXX -m32"
---    ;;
--   ia64)
--     case $target_os in
--     # HP/UX on Itanium needs to be told that a long is 64-bit!
--@@ -672,17 +664,8 @@ AC_DEFUN([BEE_GNU_CXX],[
--     aix*)
--       CXX="$CXX -maix64"
--       ;;
---    linux*)
---      CXX="$CXX -m64"
---      ;;
--     esac
--     ;;
---  sparc | sparcv8*)
---    CXX="$CXX -m32"
---    ;;
---  sparc64 | sparcv9*)
---    CXX="$CXX -m64"
---    ;;
--   esac
--   # Certain platforms needs special flags for multi-threaded code
--   if test "$ac_enable_threads" = yes; then
----- beecrypt-4.2.1/java/Makefile.am
--+++ beecrypt-4.2.1/java/Makefile.am
--@@ -26,7 +26,7 @@
-- 
-- INCLUDES = -I$(top_srcdir)/include
-- 
---libaltdir=$(prefix)/lib@LIBALT@
--+libaltdir=$(libdir)
-- 
-- libalt_LTLIBRARIES = libbeecrypt_java.la
-- 
----- beecrypt-4.2.1/acinclude.m4
--+++ beecrypt-4.2.1/acinclude.m4
--@@ -1589,20 +1589,5 @@
--   AC_SUBST(TYPEDEF_BC_THREADID_T,$bc_typedef_bc_threadid_t)
--   ])
---
---AH_BOTTOM([
---#if ENABLE_THREADS
---# ifndef _REENTRANT
---#  define _REENTRANT
---# endif
---# if LINUX
---#  define _LIBC_REENTRANT
---# endif
---#else
---# ifdef _REENTRANT
---#  undef _REENTRANT
---# endif
---#endif
---])
-- 
-- 
-- dnl  BEE_THREAD_LOCAL_STORAGE
--@@ -1623,7 +1609,5 @@
--   ])
-- 
-- AH_BOTTOM([
---#if !ENABLE_THREAD_LOCAL_STORAGE
---# define __thread
---#endif
--+#include "config.threads.h"
-- ])
----- beecrypt-4.2.1/config.threads.h
--+++ beecrypt-4.2.1/config.threads.h
--@@ -0,0 +1,16 @@
--+#if ENABLE_THREADS
--+# ifndef _REENTRANT
--+#  define _REENTRANT
--+# endif
--+# if LINUX
--+#  define _LIBC_REENTRANT
--+# endif
--+#else
--+# ifdef _REENTRANT
--+#  undef _REENTRANT
--+# endif
--+#endif
--+
--+#if !ENABLE_THREAD_LOCAL_STORAGE
--+# define __thread
--+#endif
-diff --git a/package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch b/package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch
-deleted file mode 100644
-index 32f167996f..0000000000
---- a/package/beecrypt/0003-don-t-check-for-cplusplus-compiler.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--configure.ac: don't check for C++ compiler
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--
--diff -durN beecrypt-4.2.1-orig/configure.ac beecrypt-4.2.1/configure.ac
----- beecrypt-4.2.1-orig/configure.ac	2019-03-01 19:58:16.516117640 +0100
--+++ beecrypt-4.2.1/configure.ac	2019-03-01 21:10:17.707391803 +0100
--@@ -119,9 +119,6 @@
-- 
-- # Checks for C compiler and preprocessor
-- AC_PROG_CC
---AC_PROG_CPP
---AC_PROG_CXX
---AC_PROG_CXXCPP
-- AM_PROG_AS
-- AC_PROG_LD
-- AC_PROG_LN_S
--@@ -133,9 +130,6 @@
-- AC_LANG_PUSH(C)
-- AC_OPENMP
-- AC_LANG_POP(C)
---AC_LANG_PUSH(C++)
---AC_OPENMP
---AC_LANG_POP(C++)
-- 
-- # Checks for compiler characteristics and flags
-- if test "$ac_enable_expert_mode" = no; then
-diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
-deleted file mode 100644
-index 9aec85afdb..0000000000
---- a/package/beecrypt/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--comment "beecrypt needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
--config BR2_PACKAGE_BEECRYPT
--	bool "beecrypt"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	help
--	  Beecrypt is a general-purpose cryptography library.
--
--	  http://beecrypt.sf.net
-diff --git a/package/beecrypt/beecrypt.hash b/package/beecrypt/beecrypt.hash
-deleted file mode 100644
-index 2f84007b45..0000000000
---- a/package/beecrypt/beecrypt.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  286f1f56080d1a6b1d024003a5fa2158f4ff82cae0c6829d3c476a4b5898c55d  beecrypt-4.2.1.tar.gz
--sha256  512d2d21b6b3384ba64781abb0208a1b87740bc31e2df48e2b206ddb7e4d5779  COPYING.LIB
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
-deleted file mode 100644
-index 20e1a122d0..0000000000
---- a/package/beecrypt/beecrypt.mk
-+++ /dev/null
-@@ -1,39 +0,0 @@
--################################################################################
--#
--# beecrypt
--#
--################################################################################
--
--BEECRYPT_VERSION = 4.2.1
--BEECRYPT_SITE = http://downloads.sourceforge.net/project/beecrypt/beecrypt/$(BEECRYPT_VERSION)
--BEECRYPT_AUTORECONF = YES
--BEECRYPT_INSTALL_STAGING = YES
--BEECRYPT_LICENSE = LGPL-2.1+
--BEECRYPT_LICENSE_FILES = COPYING.LIB
--BEECRYPT_CPE_ID_VALID = YES
--
--BEECRYPT_CONF_OPTS = \
--	--disable-expert-mode \
--	--without-java \
--	--without-python \
--	--disable-openmp \
--	--without-cplusplus
--
--# disable optimized m68k assembly as it doesn't compile for coldfire
--ifeq ($(BR2_m68k_cf),y)
--BEECRYPT_CONF_OPTS += --enable-debug
--endif
--
--# arm asm optimization doesn't work for thumb-only
--ifeq ($(BR2_arm):$(BR2_ARM_CPU_HAS_ARM),y:)
--BEECRYPT_CONF_OPTS += --enable-debug
--endif
--
--# automake/libtool uses the C++ compiler to link libbeecrypt because of
--# (the optional) cppglue.cxx. Force it to use the C compiler instead.
--define BEECRYPT_LINK_WITH_CC
--	$(SED) 's/--tag=CXX/--tag=CC/g' $(@D)/Makefile
--endef
--BEECRYPT_POST_CONFIGURE_HOOKS += BEECRYPT_LINK_WITH_CC
--
--$(eval $(autotools-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICBIaSBCcmFuZG9uLCBKdWxpZW4sCgpPbiAyMi8wNS8yMDI0IDIxOjA0LCBKdWxpZW4gT2xpdmFp
+biB3cm90ZToKPiBIaSBCcmFuZG9uLCBBbGwsCj4gCj4gT24gMjIvMDUvMjAyNCAxNzo0NiwgQnJh
+bmRvbiBNYWllciB2aWEgYnVpbGRyb290IHdyb3RlOgo+PiBUaGUgcWVtdS5ydW4oKSBtZXRob2Qg
+Y2FuIGJyZWFrIHdoZW4gYSBjb21tYW5kIGhhcHBlbnMgdG8gb3V0cHV0IHRoZQo+PiBzdHJpbmcg
+IiMgIiB0byBzdGRvdXQuIFRoaXMgaXMgYmVjYXVzZSBxZW11LnJ1bigpIGRldGVjdHMgd2hlbiBh
+IGNvbW1hbmQKPj4gaGFzIGNvbXBsZXRlZCBieSBzZWFyY2hpbmcgZm9yIHRoZSBzaGVsbCBwcm9t
+cHQsIHdoaWNoIGJ5IGRlZmF1bHQgaXMKPj4gIiMgIi4gSXQgdGhlbiBjYXB0dXJlcyBldmVyeXRo
+aW5nIGJlZm9yZSB0aGUgIiMgIiBhcyB0aGUgY29tbWFuZHMKPj4gb3V0cHV0LCBjYXVzaW5nIHRo
+ZSByZXN0IG9mIG91dHB1dCB0byBiZSBsb3N0Lgo+Pgo+PiBUbyB3b3JrIGFyb3VuZCB0aGUgaXNz
+dWUgc2V0IHRoZSBwcm9tcHQgdG8gc29tZXRoaW5nIG1vcmUgdW5pcXVlLiBUaGlzCj4+IG1ha2Vz
+IGl0IGxlc3MgbGlrZWx5IHRvIGFwcGVhciBpbiBjb21tYW5kIG91dHB1dC4KPiAKPiBJIHByb3Bv
+c2VkIGEgc2ltaWxhciBwYXRjaCBsYXN0IHllYXI6Cj4gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJz
+Lm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9saXN0Lz9zZXJpZXM9MzYyNzYxCj4gCj4gQ2hhbmdpbmcg
+dGhpcyBwcm9tcHQgcmVxdWlyZXMgdG8gYWxzbyBwYXRjaCB0aGUgImJhc2giIHJ1bnRpbWUgdGVz
+dCwKPiB3aGljaCBpcyBmYWlsaW5nIGlmIHRoZSBwcm9tcHQgaXMgY2hhbmdlZCBpbiB0aGUgZW11
+bGF0b3IuCgogIEluc3RlYWQgb2Ygcm9sbGluZyBvdXIgb3duLCB3b3VsZG4ndCBpdCBiZSBiZXR0
+ZXIgdG8gc2ltcGx5IHVzZSByZXBsd3JhcCBbMV0/IApXZSdyZSBhbHJlYWR5IHVzaW5nIHBleHBl
+Y3Qgc28gSSBleHBlY3QgKHB1biBpbnRlbmRlZCkgc3dpdGNoaW5nIGZyb20gc3Bhd24gdG8gCnJl
+cGx3cmFwIHNob3VsZCBiZSBxdWl0ZSB0cml2aWFsLi4uCgoKPiBJIHRoaW5rIG15IHBhdGNoZXMg
+d2VyZSBub3QgaW5jbHVkZWQgZHVlIHRvIGxvc3QgMy80IGFuZCA0LzQgcGF0Y2hlcwo+IGluIHRo
+ZSBzZXJpZXMgZnJvbSBteSBlbWFpbCBwcm92aWRlci4gVGhvc2UgcGF0Y2hlcyB3ZXJlIG9yaWdp
+bmFsbHkKPiBpbiB0aGUgdjIuIFNlZToKPiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3By
+b2plY3QvYnVpbGRyb290L2xpc3QvP3Nlcmllcz0zNTkxODUmc3RhdGU9KgoKICBQZXJoYXBzIHlv
+dSBndXlzIGNhbiBzeW5jIGJldHdlZW4gdGhlIHR3byBvZiB5b3Ugd2hvIHdpbGwgdGFrZSB0aGlz
+IHdvcmsgYW5kIAp0aGVuIHJlc2VuZCB0aGUgZW50aXJlIHNlcmllcz8KCiAgUmVnYXJkcywKICBB
+cm5vdXQKClsxXSBodHRwczovL3BleHBlY3QucmVhZHRoZWRvY3MuaW8vZW4vc3RhYmxlL2FwaS9y
+ZXBsd3JhcC5odG1sCgo+IAo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBCcmFuZG9uIE1haWVyIDxicmFu
+ZG9uLm1haWVyQGNvbGxpbnMuY29tPgo+PiAtLS0KPj4gwqBzdXBwb3J0L3Rlc3RpbmcvaW5mcmEv
+ZW11bGF0b3IucHkgfCAxMSArKysrKysrKystLQo+PiDCoDEgZmlsZSBjaGFuZ2VkLCA5IGluc2Vy
+dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS9zdXBwb3J0L3Rlc3Rp
+bmcvaW5mcmEvZW11bGF0b3IucHkgCj4+IGIvc3VwcG9ydC90ZXN0aW5nL2luZnJhL2VtdWxhdG9y
+LnB5Cj4+IGluZGV4IDYyNDc0MGZjYjEuLmFhNTc5NDQzYTYgMTAwNjQ0Cj4+IC0tLSBhL3N1cHBv
+cnQvdGVzdGluZy9pbmZyYS9lbXVsYXRvci5weQo+PiArKysgYi9zdXBwb3J0L3Rlc3RpbmcvaW5m
+cmEvZW11bGF0b3IucHkKPj4gQEAgLTEwMCw2ICsxMDAsMTMgQEAgY2xhc3MgRW11bGF0b3Iob2Jq
+ZWN0KToKPj4gwqDCoMKgwqDCoMKgwqDCoCBpbmRleCA9IHNlbGYucWVtdS5leHBlY3QoWyIjICIs
+IHBleHBlY3QuVElNRU9VVF0pCj4+IMKgwqDCoMKgwqDCoMKgwqAgaWYgaW5kZXggIT0gMDoKPj4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJhaXNlIFN5c3RlbUVycm9yKCJDYW5ub3QgbG9naW4i
+KQo+PiArCj4+ICvCoMKgwqDCoMKgwqDCoCAjIFNldCBhIHByb21wdCB0aGF0IGlzIHVubGlrZWx5
+IHRvIGFwcGVhciBpbiBjb21tYW5kIG91dHB1dAo+PiArwqDCoMKgwqDCoMKgwqAgc2VsZi5xZW11
+LnNlbmRsaW5lKCJQUzE9J2JyLXFlbXUtdGVzdCMgJyIpCj4+ICvCoMKgwqDCoMKgwqDCoCBpbmRl
+eCA9IHNlbGYucWVtdS5leHBlY3QoWyJcclxuYnItcWVtdS10ZXN0IyAiLCBwZXhwZWN0LlRJTUVP
+VVRdKQo+PiArwqDCoMKgwqDCoMKgwqAgaWYgaW5kZXggIT0gMDoKPj4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgcmFpc2UgU3lzdGVtRXJyb3IoIkNhbm5vdCBzZXQgdGVzdCBwcm9tcHQiKQo+PiAr
+Cj4+IMKgwqDCoMKgwqDCoMKgwqAgc2VsZi5ydW4oImRtZXNnIC1uIDEiKQo+PiDCoMKgwqDCoMKg
+wqDCoMKgICMgUHJldmVudCB0aGUgc2hlbGwgZnJvbSB3cmFwcGluZyB0aGUgY29tbWFuZHMgYXQg
+ODAgY29sdW1ucy4KPj4gwqDCoMKgwqDCoMKgwqDCoCBzZWxmLnJ1bigic3R0eSBjb2x1bW5zIDI5
+OTk5IikKPj4gQEAgLTExMCwxMyArMTE3LDEzIEBAIGNsYXNzIEVtdWxhdG9yKG9iamVjdCk6Cj4+
+IMKgwqDCoMKgwqDCoMKgwqAgc2VsZi5xZW11LnNlbmRsaW5lKGNtZCkKPj4gwqDCoMKgwqDCoMKg
+wqDCoCBpZiB0aW1lb3V0ICE9IC0xOgo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgdGltZW91
+dCAqPSBzZWxmLnRpbWVvdXRfbXVsdGlwbGllcgo+PiAtwqDCoMKgwqDCoMKgwqAgc2VsZi5xZW11
+LmV4cGVjdCgiIyAiLCB0aW1lb3V0PXRpbWVvdXQpCj4+ICvCoMKgwqDCoMKgwqDCoCBzZWxmLnFl
+bXUuZXhwZWN0KCJici1xZW11LXRlc3QjICIsIHRpbWVvdXQ9dGltZW91dCkKPj4gwqDCoMKgwqDC
+oMKgwqDCoCAjIFJlbW92ZSBkb3VibGUgY2FycmlhZ2UgcmV0dXJuIGZyb20gcWVtdSBzdGRvdXQg
+c28gc3RyLnNwbGl0bGluZXMoKQo+PiDCoMKgwqDCoMKgwqDCoMKgICMgd29ya3MgYXMgZXhwZWN0
+ZWQuCj4+IMKgwqDCoMKgwqDCoMKgwqAgb3V0cHV0ID0gc2VsZi5xZW11LmJlZm9yZS5yZXBsYWNl
+KCJcclxyIiwgIlxyIikuc3BsaXRsaW5lcygpWzE6XQo+Pgo+PiDCoMKgwqDCoMKgwqDCoMKgIHNl
+bGYucWVtdS5zZW5kbGluZSgiZWNobyAkPyIpCj4+IC3CoMKgwqDCoMKgwqDCoCBzZWxmLnFlbXUu
+ZXhwZWN0KCIjICIpCj4+ICvCoMKgwqDCoMKgwqDCoCBzZWxmLnFlbXUuZXhwZWN0KCJici1xZW11
+LXRlc3QjICIpCj4+IMKgwqDCoMKgwqDCoMKgwqAgZXhpdF9jb2RlID0gc2VsZi5xZW11LmJlZm9y
+ZS5zcGxpdGxpbmVzKClbMl0KPj4gwqDCoMKgwqDCoMKgwqDCoCBleGl0X2NvZGUgPSBpbnQoZXhp
+dF9jb2RlKQo+Pgo+PiAtLSAKPj4gMi40NS4xCj4+Cj4+IF9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCj4+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPj4gYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKPj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cj4gCj4gQmVzdCByZWdhcmRzLAo+IAo+IEp1bGllbi4KPiBf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo=
