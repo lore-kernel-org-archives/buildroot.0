@@ -4,99 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A593C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 19:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A440C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 19:53:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11A1B8408D;
-	Fri, 12 Jul 2024 19:52:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 081CD8408D;
+	Fri, 12 Jul 2024 19:53:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A5xlKxcCe6B4; Fri, 12 Jul 2024 19:52:49 +0000 (UTC)
+ id cqPUQmiJd4Ao; Fri, 12 Jul 2024 19:53:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 041FD84198
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 122398418E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 041FD84198;
-	Fri, 12 Jul 2024 19:52:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 43BDD1BF279
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:52:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 122398418E;
+	Fri, 12 Jul 2024 19:53:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B9521BF279
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3137660655
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:52:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC9B94011D
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:53:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oO64ZilgBgiM for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 19:52:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CC30560648
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC30560648
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CC30560648
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 19:52:46 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4266ea6a412so16294495e9.1
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 12:52:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720813965; x=1721418765;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=k57q8wXF6j0y/qiDgx3+zHF40Z0AMJ8Vmptxrf3JLls=;
- b=Fx9b0tHXalEHIJYXnEzDUwH3AkOqbI91Jyz7kPSgGHatyXhYaQhtofAJyapgj4tVn9
- GMPegI8+YmmIqkVz0X+spFjrQfhvL3webbfHkIUQqO0TIfzs7TB6R7s8A6fFExUNY9C3
- 0vvuLD4zEwU6o3WYvQKQaV7/pU0KyC4aJpPROmEoOiYNhXhXb9yGSkH1q7kqTtsMgWyC
- 1Eql09O84J6YuyKrlBJu/QVYAqw+DsNh/stVGDtYdhjxz0pAVIJ9+rpMtfUnZlYU/isa
- QYiWj3tI9pEhsxmY1DgzBgtSEA7kX1SWJcsfVlx5Bk4A0h+AjzvwVqRuUSjPmopusI8Z
- 0xUA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWy8wkKF25+6wmofFCRgTjQn7KfXXKHBm0ol/y+lmSvNK1ylwcAp0hp3Tio+4QtElIAbfeiHPHnFlHXDwCDmY911/tzqkwU6g==
-X-Gm-Message-State: AOJu0YxM8FaMTSe7FPVMJSZ8/KzmLi11oTbqCMJ2PxMi4FNjp5prg4nQ
- 0PbpASy67JG7eCryIUq8oVXOMHId6dVyJH4L/7Y2qD3NLxBkGjb4+KqHF+4gHfYza25XrvpY0+T
- lVlY=
-X-Google-Smtp-Source: AGHT+IHo2TW5vSPW+4y78YOjNH+Iwr1iAv2lmJNAQS0gKe8sIBhOaA24cPIbV4zD5R7ZRH10wqUOjA==
-X-Received: by 2002:a05:600c:2247:b0:426:5dc8:6a6a with SMTP id
- 5b1f17b1804b1-426707d7fd6mr85835105e9.21.1720813964797; 
- Fri, 12 Jul 2024 12:52:44 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
- (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:b481:98b5:611f:e783])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-367cdfb228csm10819786f8f.114.2024.07.12.12.52.43
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 12:52:44 -0700 (PDT)
-Message-ID: <554e5ab9-95a0-4258-b4d4-80aebd0fab3b@mind.be>
-Date: Fri, 12 Jul 2024 21:52:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
-References: <ZN4z+n37WMFvHgsF@waldemar-brodkorb.de>
-Content-Language: en-GB
-In-Reply-To: <ZN4z+n37WMFvHgsF@waldemar-brodkorb.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zEy6aYHaVOxz for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 19:53:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B70094000B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B70094000B
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B70094000B
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 19:53:36 +0000 (UTC)
+Received: from pps.filterd (m0346908.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 46CHCmc4009325; Fri, 12 Jul 2024 19:53:34 GMT
+Received: from xusxph004rp050.rtx.com (xusxph004rp050.rtx.com [128.13.120.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40ana82q4h-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 12 Jul 2024 19:53:34 +0000
+Received: from xusxph009rp020.corp.ray.com ([128.13.125.224])
+ by xusxph004rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46CJrW3T015291
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 12 Jul 2024 19:53:32 GMT
+Received: from ciulimr02.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph009rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 46CJrSnq021507
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Fri, 12 Jul 2024 19:53:32 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by ciulimr02.rockwellcollins.com (Postfix) with ESMTP id 7DF2F100276C;
+ Fri, 12 Jul 2024 14:53:28 -0500 (CDT)
+Mime-Version: 1.0
+Date: Fri, 12 Jul 2024 19:53:28 +0000
+Message-Id: <D2NTNM2UYWN6.3O7CJ5OTL4NDJ@collins.com>
+To: "Fiona Klute" <fiona.klute@gmx.de>, <buildroot@buildroot.org>
+X-Mailer: aerc 0.17.0-0-g6ea74eb30457
+References: <20240710183917.387437-1-fiona.klute@gmx.de>
+In-Reply-To: <20240710183917.387437-1-fiona.klute@gmx.de>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-12_15,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-12_15,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ bulkscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2406180000 definitions=main-2407120134
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ mlxlogscore=999
+ suspectscore=0 phishscore=0 spamscore=0 mlxscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2406180000 definitions=main-2407120134
+X-Proofpoint-ORIG-GUID: geHJl2PIilfxP3jx4PcV0WD34XI27thG
+X-Proofpoint-GUID: geHJl2PIilfxP3jx4PcV0WD34XI27thG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-12_15,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ priorityscore=1501 clxscore=1011 malwarescore=0 bulkscore=0
+ impostorscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0
+ adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407120134
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1720813965; x=1721418765; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=k57q8wXF6j0y/qiDgx3+zHF40Z0AMJ8Vmptxrf3JLls=;
- b=KBSbhyiCT4zcoH4VR/8iKBSUUD8G/KW/GqPI3NrxkEtii124EuaGI07q7Jq2xdVeHG
- q6GlBmnd4gDsNB9EOTB0NxB/cfuyz+M0bKYP6m9SOdUbuRw6FmDz2kMj2AMEckW49fQe
- /Ef/X7GD8A+VBUdjToCTcy5v6JoaoNcx7cpnnkMcYht1bjYD6x4zgRCkYEVW27AyIF6S
- fdggsNSS2MYXBOC3CZ9AI6J42AZ6ctaQhu4JC/KA0jTevbtUytGq99be6HYlC3ms52Rn
- MdWJAXifni8SHoudCkwAhFO0RNNvfFGH+nb8dRIj0xAcsPmjewKTmTjrPiw7u1VVRb5x
- XNxQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=KBSbhyiC
-Subject: Re: [Buildroot] [PATCHv2 2/2] package/tcf-agent: fix uClibc-ng
- compile on ARM
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=POD051818;
+ bh=CRZpgOZ7r4nHKO0F9oqZK+KRxgAbrUWDgJWAjrJz0sw=;
+ b=M2TE9HEavo6P8M4K9sNp7F4DKC3HQf/KTV7qUFAySj8saDc5AXR5dMs4Y7lnuFikvYlR
+ lCpUcpXqParSsk47dH7dV1oacmkslFse8EXLg2wpgGmbhaomtYqoSty5VSbsfrti4/Np
+ hooRKIG4Ik9oFHDCunxCcTsyHWuoV4oN37uztla4Q1bj9WfGX3ihBV0oW/yEYUobl7y3
+ EWZ4v0XNRIozIWafuTSRUcfoePcKhBiV7LlXGkZfLd3NMgX8SbXrcowt8+fxrwdjn4sj
+ tgfXQwtRJnJ3bbyKFI9hmKN4x7hPFAMpvKuD0pVp0gZhN3QoUvb7kw+1p8ZzxftdmTyM vQ== 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=M2TE9HEa
+Subject: Re: [Buildroot] [PATCH 1/1] utils/docker-run: mount and pass
+ BR2_EXTERNAL dirs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,94 +123,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hi Fiona,
 
+On Wed Jul 10, 2024 at 6:39 PM UTC, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+>
+> The BR2_EXTERNAL environment variable is passed into the container,
+> and each path listed in it mounted. This allows using external trees
+> when running a build using utils/docker-run. Testing the existence of
+> the variable instead of a non-empty value allows passing an empty
+> BR2_EXTERNAL variable to disable currently set external trees.
+>
+> Note that splitting multiple paths listed in BR2_EXTERNAL will break
+> if any path contains spaces, the added code shares that limitation
+> with the existing code in support/scripts/br2-external.
 
-On 17/08/2023 16:51, Waldemar Brodkorb wrote:
-> When a shared build is used, we can use getauxval and no ARM only
-> instuctions are in use.
-> 
-> When a static build is used, we need to override CFLAGS to use
-> arm instructions, as uClibc-ng only supports getauxval for shared case.
-> 
-> Fixes:
->   - http://autobuild.buildroot.net/results/3b5/3b5c5519a3e5ee490308bc1a1b9579ce13417235
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Looking at the git history for br2-external, that limitation was added
+in 2016 to accommodate RHEL5. Even Red Hat stopped supporting RHEL5 in
+2021. One of the maintaners would know better, but I doubt Buildroot is
+still usable on those ancient machines anyway.
 
-  Applied to master, thanks.
+Even though Buildroot doesn't support BR2_EXTERNAL's with whitespace. In
+this case I think it would be good to handle correctly. As the split
+BR2_EXTERNAL are passed to Docker before Buildroot, and a malformed
+Docker command can wreck havoc to a machine.
 
-  Regards,
-  Arnout
-
+>
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 > ---
-> v1 -> v2:
->    - musl is not affected, change requested by Thomas Petazzoni
-> 
-> ---
->   .../0001-fix-uClibc-ng-compile.patch          | 27 +++++++++++++++++++
->   package/tcf-agent/tcf-agent.mk                |  7 +++++
->   2 files changed, 34 insertions(+)
->   create mode 100644 package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-> 
-> diff --git a/package/tcf-agent/0001-fix-uClibc-ng-compile.patch b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-> new file mode 100644
-> index 0000000000..b8f46f3c48
-> --- /dev/null
-> +++ b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-> @@ -0,0 +1,27 @@
-> +From a78007cd139e1dea3d893f5fe1d1c3a47503e6a2 Mon Sep 17 00:00:00 2001
-> +From: Waldemar Brodkorb <wbx@openadk.org>
-> +Date: Sat, 12 Aug 2023 18:27:02 +0200
-> +Subject: [PATCH] fix uClibc-ng compile
+>  utils/docker-run | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/utils/docker-run b/utils/docker-run
+> index 1adb02d74e..dffe784d13 100755
+> --- a/utils/docker-run
+> +++ b/utils/docker-run
+> @@ -90,6 +90,13 @@ if [ "${BR2_DL_DIR}" ]; then
+>      docker_opts+=( --env BR2_DL_DIR )
+>  fi
+>
+> +if [ -v BR2_EXTERNAL ]; then
+> +    for br2_ext in ${BR2_EXTERNAL//:/ }; do
+> +        mountpoints+=( "${br2_ext}" )
+
+This doesn't handle git-new-workdir and git-worktree like the $MAIN_DIR
+mountpoint does. It would be good to take the git-worktree logic and put
+it into a Bash function, so we can use the same code for $MAIN_DIR and
+$BR2_EXTERNAL.
+
+Thanks,
+Brandon
+
+> +    done
+> +    docker_opts+=( --env BR2_EXTERNAL )
+> +fi
 > +
-> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> +Upstream: N/A only mail available
-> +---
-> + agent/machine/arm/tcf/cpudefs-mdep.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/agent/machine/arm/tcf/cpudefs-mdep.c b/agent/machine/arm/tcf/cpudefs-mdep.c
-> +index 051631a0..7c4fbf3e 100644
-> +--- a/agent/machine/arm/tcf/cpudefs-mdep.c
-> ++++ b/agent/machine/arm/tcf/cpudefs-mdep.c
-> +@@ -21,7 +21,7 @@
-> +
-> + #ifndef USE_getauxval
-> + #  include <features.h>
-> +-#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)))
-> ++#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)) || (defined(__UCLIBC__) && defined(__HAVE_SHARED__)))
-> + #endif
-> +
-> + #include <stddef.h>
-> +--
-> +2.39.2
-> +
-> diff --git a/package/tcf-agent/tcf-agent.mk b/package/tcf-agent/tcf-agent.mk
-> index 2b8a61b66f..7c25df864a 100644
-> --- a/package/tcf-agent/tcf-agent.mk
-> +++ b/package/tcf-agent/tcf-agent.mk
-> @@ -21,6 +21,13 @@ TCF_AGENT_CONF_OPTS = \
->   	-DBUILD_SHARED_LIBS=OFF \
->   	-DTCF_MACHINE=$(call qstrip,$(BR2_PACKAGE_TCF_AGENT_ARCH))
->   
-> +# tcf-agent uses some arm instructions in case getauxval is not available.
-> +# unfortunately the uClibc-ng implementation of getauxval uses some features
-> +# of ld.so to work
-> +ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_ARM_INSTRUCTIONS_THUMB),yyy)
-> +TCF_AGENT_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
-> +endif
-> +
->   define TCF_AGENT_INSTALL_INIT_SYSTEMD
->   	$(INSTALL) -D -m 644 package/tcf-agent/tcf-agent.service \
->   		$(TARGET_DIR)/usr/lib/systemd/system/tcf-agent.service
+>  # shellcheck disable=SC2013 # can't use while-read because of the assignment
+>  for dir in $(printf '%s\n' "${mountpoints[@]}" |LC_ALL=C sort -u); do
+>      docker_opts+=( --mount "type=bind,src=${dir},dst=${dir}" )
+> --
+> 2.45.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
