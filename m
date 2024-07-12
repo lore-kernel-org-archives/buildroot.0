@@ -4,48 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AA12C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 10:57:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CD71C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 11:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3653341964;
-	Fri, 12 Jul 2024 10:57:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8F2940293;
+	Fri, 12 Jul 2024 11:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CYpt7q8NbRa9; Fri, 12 Jul 2024 10:57:14 +0000 (UTC)
+ id EYBA8bobncp6; Fri, 12 Jul 2024 11:02:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD78C41973
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87D5E40752
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD78C41973;
-	Fri, 12 Jul 2024 10:57:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D1E851BF47F
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 10:57:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87D5E40752;
+	Fri, 12 Jul 2024 11:02:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8EDE21BF47F
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 11:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CC197605FA
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 10:57:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7AE9540752
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 11:02:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I6wXO1NAhfDO for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 10:57:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4I8YhLPpqTfs for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 11:02:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14124605AA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14124605AA
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 10:57:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C80F685DF0; Fri, 12 Jul 2024 10:57:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 12:56:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 51f753710d55a6a9e6ee778fba9d1c6b2a722485
-X-Git-Newrev: 7c56e71b46007bc1d70e9c13267109abe4776f49
-X-Patchwork-Hint: ignore
-Message-Id: <20240712105708.C80F685DF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cryptsetup: bump version to 2.7.3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 198D040293
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 198D040293
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 198D040293
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 11:02:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1F668E0007;
+ Fri, 12 Jul 2024 11:02:20 +0000 (UTC)
+Date: Fri, 12 Jul 2024 13:02:20 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20240712130220.09d65a68@windsurf>
+In-Reply-To: <20240711191539.90650-1-giulio.benetti@benettiengineering.com>
+References: <29a51211-e273-4b28-ba3c-648df58b83c3@mind.be>
+ <20240711191539.90650-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720782141;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=BtYLS48Yrb7/l3y9Is6UvmuAa1G3ETh4DYnG//lSu4U=;
+ b=TPNtAQvY+mhREdajvnGL6b6B0gfOtdy4IiOjFRL02CKn3r7KujybXGTC2+RDHg2sTX21d7
+ W+6QuXAzkMhZdsCo02fa3O2Ag3Meyhop50yga7UKCSJmJgze2vmsefaQbOA4uvl0I8JSgS
+ Gn4zDE2cXGAXpJlfNbAlexwqq+5O2pLteS7jHPESN8fdCAPgT/M2yDToAFlGZxI//WJ6QR
+ coaLUoY9Ttw+ktYdfDc0ZTpscCKpiS1SHWv2aom9Ad2vjGs7XmxYjHDX+3dL9NSVN/58vh
+ C1gPRLjBS+go7VMUYbbyjT49BEv0xSFITmxoLG/oYDUVhRjEpqAYb+jJqY6HJg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TPNtAQvY
+Subject: Re: [Buildroot] [PATCH] package/sunxi-mali-utgard-driver: bump to
+ version 2024-07-11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,45 +84,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c56e71b46007bc1d70e9c13267109abe4776f49
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 11 Jul 2024 21:15:39 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> This version provide patches that can be applied with fuzz 0 and this is
+> now required by Buildroot.
+> 
+> Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash | 2 +-
+>  package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index 531432aaaf..dfee537a4a 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/sha256sums.asc
--sha256  da5d1419e2a86e01aa32fd79582cd54d208857cb541bca2fd426a5ff1aaabbc3  cryptsetup-2.7.1.tar.xz
-+sha256  b772ae4f6df0cee7200b28cea960e4daaff2a203d2fd502beab3c1317b07a456  cryptsetup-2.7.3.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index b15f458576..d5046d9943 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CRYPTSETUP_VERSION_MAJOR = 2.7
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
