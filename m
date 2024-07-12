@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73A76C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 06:43:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24F10C3DA45
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 06:43:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7634845AA;
-	Fri, 12 Jul 2024 06:43:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF945845A3;
+	Fri, 12 Jul 2024 06:43:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KMB-wvwFxVsh; Fri, 12 Jul 2024 06:43:26 +0000 (UTC)
+ id 6YSuM9K99ZJ4; Fri, 12 Jul 2024 06:43:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AEEF845A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E37ED845A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AEEF845A6;
-	Fri, 12 Jul 2024 06:43:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CFB721BF591
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 06:43:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E37ED845A8;
+	Fri, 12 Jul 2024 06:43:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AD5811BF591
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 06:43:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9355417C0
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 06:43:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6CF04045F
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 06:43:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id atwd9qab9c7y for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 06:43:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O1nThU3EFSVf for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 06:43:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B14694176F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B14694176F
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 06:43:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 958F285481; Fri, 12 Jul 2024 06:43:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 00:28:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3c1f667dcc300eb7205aa3e1731ba3377a8e48d
-X-Git-Newrev: b2aa09a492cf0b1b481b754dcc5f0168a039bd3c
-X-Patchwork-Hint: ignore
-Message-Id: <20240712064323.958F285481@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ncftp: fix GCC 14.x related build
- errors
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 43CD5400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43CD5400FE
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 43CD5400FE
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 06:43:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 141731BF206;
+ Fri, 12 Jul 2024 06:43:32 +0000 (UTC)
+Date: Fri, 12 Jul 2024 08:43:21 +0200
+To: yegorslists@googlemail.com
+Message-ID: <20240712084321.25f457f7@windsurf>
+In-Reply-To: <20240617093626.38573-1-yegorslists@googlemail.com>
+References: <20240617093626.38573-1-yegorslists@googlemail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720766615;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=DfI0ABT+V/273JmXWWznuAU2jzI1gRH0XzoQNJR3q9E=;
+ b=jPf9l/PSsgkZm4KQhSPSb4Z9+vipCdSjhvZyZhipSo8AMgg+0o40d5gD8qwK3Y+lf3kUbO
+ frbYfCS6o6EaMhdn/RtRy/rZaJf37XjopWieDQsgFyqiGQmpPix/S9cjZmX9JEm8u95GSy
+ grFXSHEU9aKLR0CRM+WS/OWnN3GsBSTbqrl+uLX+q38s6zlixCw8rUAIeWz9GEDIXx8uUb
+ 4RR1BWfjPHOpGrI3fOUu+NyNbyWUrg956jO7Ii2bQGhhDoyNH8USslJfpk1B2cpwSxiQyM
+ FyNJuDlFcXxqxaNnoSQt+IERxb/Ma7YXDKv3Xqmx0TSXsqrPH0PslpNHVZxXRw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=jPf9l/PS
+Subject: Re: [Buildroot] [PATCH v2] package/ncftp: fix GCC 14.x related
+ build errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,133 +83,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: yann.morin.1998@free.fr, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2aa09a492cf0b1b481b754dcc5f0168a039bd3c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 17 Jun 2024 11:36:26 +0200
+yegorslists@googlemail.com wrote:
 
-Patches were taken from Gentoo:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Patches were taken from Gentoo:
+> 
+> https://bugs.gentoo.org/921487
+> https://gitweb.gentoo.org/repo/gentoo.git/tree/net-ftp/ncftp/files/ncftp-3.2.7-fix-clang.patch
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/058578eae885ce6e206c25b5a24aa11b625adf88/
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+> Changes v1 -> v2:
+>     - add Upstream tags to the patches (Yann E. MORIN)
 
-https://bugs.gentoo.org/921487
-https://gitweb.gentoo.org/repo/gentoo.git/tree/net-ftp/ncftp/files/ncftp-3.2.7-fix-clang.patch
+Applied to master, thanks.
 
-Fixes:
-http://autobuild.buildroot.net/results/058578eae885ce6e206c25b5a24aa11b625adf88/
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ncftp/0001-ncftp-3.2.7-fix-gcc14.patch | 19 +++++++
- package/ncftp/0002-ncftp-3.2.7-fix-clang.patch | 72 ++++++++++++++++++++++++++
- 2 files changed, 91 insertions(+)
-
-diff --git a/package/ncftp/0001-ncftp-3.2.7-fix-gcc14.patch b/package/ncftp/0001-ncftp-3.2.7-fix-gcc14.patch
-new file mode 100644
-index 0000000000..e2cda631d4
---- /dev/null
-+++ b/package/ncftp/0001-ncftp-3.2.7-fix-gcc14.patch
-@@ -0,0 +1,19 @@
-+fix select arg detection
-+
-+Reference:
-+ https://bugs.gentoo.org/921487
-+
-+Upstream: N/A, unresponsive contact email address.
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+--- a/autoconf_local/aclocal.m4
-++++ b/autoconf_local/aclocal.m4
-+@@ -4196,7 +4196,7 @@
-+ #include <sys/select.h>
-+ #endif
-+ #include <sys/socket.h>	/* MG: always incl */
-+-extern select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg5);],,dnl
-++extern int select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg5);],,dnl
-+         [ac_not_found=no ; break 3],ac_not_found=yes)
-+       done
-+      done
-diff --git a/package/ncftp/0002-ncftp-3.2.7-fix-clang.patch b/package/ncftp/0002-ncftp-3.2.7-fix-clang.patch
-new file mode 100644
-index 0000000000..bed103609c
---- /dev/null
-+++ b/package/ncftp/0002-ncftp-3.2.7-fix-clang.patch
-@@ -0,0 +1,72 @@
-+Fix compilation with clang-16
-+
-+aclocal.m4 contains code that no longer compiles: missing headers and missing
-+return types.
-+
-+Reference:
-+ https://gitweb.gentoo.org/repo/gentoo.git/tree/net-ftp/ncftp/files/ncftp-3.2.7-fix-clang.patch
-+
-+Upstream: N/A, unresponsive contact email address.
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+--- a/autoconf_local/aclocal.m4
-++++ b/autoconf_local/aclocal.m4
-+@@ -3057,6 +3057,7 @@
-+ #include <sys/uio.h>
-+ #include <sys/socket.h>
-+ #include <sys/un.h>
-++#include <string.h>
-+ ],[
-+ struct sockaddr_un uaddr;
-+ 
-+@@ -3285,6 +3286,7 @@
-+ #ifdef HAVE_RESOLV_H
-+ #	include <resolv.h>
-+ #endif
-++#include <string.h>
-+ ],[
-+ 	/* function-body */
-+ 	int len;
-+@@ -3363,6 +3365,7 @@
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ 		 
-++			int
-+ 			main(int argc, char **argv)
-+ 			{
-+ 				/* Note:  don't actually call readline,
-+@@ -5145,6 +5148,7 @@
-+ #ifdef HAVE_STDLIB_H
-+ #	include <stdlib.h>
-+ #endif
-++#include <string.h>
-+ 
-+ #ifdef HAVE_NCURSES_H
-+ #	define NCURSES_OPAQUE 0
-+@@ -5176,6 +5180,7 @@
-+ #endif
-+ 
-+  
-++int
-+ main(int argc, char **argv)
-+ {
-+ 	/* Note:  don't actually call curses, since it may block;
-+@@ -6510,7 +6515,6 @@
-+ #endif
-+ #endif			/* MG */
-+ 
-+-int
-+ int  main(void)
-+ {
-+ 	char *data, *data2, *data3;
-+@@ -6607,8 +6611,9 @@
-+ 	AC_CACHE_CHECK(whether setvbuf arguments are reversed,
-+ 	  ac_cv_func_setvbuf_reversed,
-+ 	[AC_TRY_RUN([#include <stdio.h>
-++	$include <stdlib.h>
-+ 	/* If setvbuf has the reversed format, exit 0. */
-+-	main () {
-++	int main (void) {
-+ 	  /* This call has the arguments reversed.
-+ 	     A reversed system may check and see that the address of main
-+ 	     is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
