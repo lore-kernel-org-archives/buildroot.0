@@ -4,98 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C494C3DA45
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 08:31:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EB3CC2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 08:38:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 474C08401D;
-	Fri, 12 Jul 2024 08:31:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0424B83FEA;
+	Fri, 12 Jul 2024 08:38:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dwpORlxBnhYk; Fri, 12 Jul 2024 08:31:04 +0000 (UTC)
+ id ZbvXcjZBANeC; Fri, 12 Jul 2024 08:38:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B59584027
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC940845D2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B59584027;
-	Fri, 12 Jul 2024 08:31:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 24A061BF584
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:31:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC940845D2;
+	Fri, 12 Jul 2024 08:38:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 804161BF584
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 11FC260AC3
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:31:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D00C845D2
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:38:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DFx7_Vitnvz5 for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 08:31:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PNjgpTTSONog for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 08:38:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 41A7260AE3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41A7260AE3
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 41A7260AE3
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 08:31:01 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-42122ac2f38so10460595e9.1
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 01:31:01 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8BCAA83FEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BCAA83FEA
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8BCAA83FEA
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 08:38:38 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-42797289c8bso12868635e9.0
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 01:38:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720773060; x=1721377860;
+ d=1e100.net; s=20230601; t=1720773516; x=1721378316;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=8Q5t/hD5CW0qRS3++uxEiTVbtxh86+nW8lN7DnN4r1Q=;
- b=nmIwMEC55OIgD1/fLvpzL0ppDv4GXEhNcmss6bi9M2+oH8cTxFsSvEIEaAD5ZFuAoA
- gpf3J7Zr/A+18pU2gNtWmkHQdB1DZsyWsUI8SMCSqCSBuLk2AnHK+RlhTvs1NrC2AkXj
- XNQHwtDE0iSaWOVockX9AK6sJUEK6Ik3wyNYyE+Q6DQU6Nsxw1AbaRMJAbxgWo0HwRq2
- LW7nIQejQJylYUUcR/VpgzI/W7pAAGjWkf4nR8ds8SRKKuj0e+hhfPvsITMJ7RNBF1Y+
- duUP2RIWLWNkOg7LwVlhrHkYvJ35ltwDKy6znar3jnKnygLC6gr2GtYmERxV5fOYSiTU
- 2mJA==
+ bh=shVs8VnPxEVcVKEYZ/pxvp4p5mrVZo6DgwknUayTDCI=;
+ b=EJNgNVUTT1sNF9sg0zead38GFB3DGAYPiRFHxTu+/100whX/0h55wHCxxIx/6tqTEO
+ jDc1ao3CQOgK6MbIwpmtTfyUsPGryGbyYPZxwzq8KqRdjw/APW+FCEwSSSJK4XCLoOLg
+ yuHQaGHtGFOLZ4n5hWzyF9MIRjCwOIpyjaTXFMMCuuZwWlhS8cpImcSL/Q7gTWm6Llcx
+ jxTn5U5z7m7gMzLtPmC698AXb4ksuepTQ80eHJi0rzAxrIQfMv7qoRFRetJB4YV4fT1+
+ uWb2YbUkxf7mPRFwbLHA4VFDdFxh0iVDobkI2HeH+MvPhrwQOPImkqsH/2SgF/zl782I
+ ooCQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXdjP8eKHTdpOqFLe9zgRIfFiCayDY27drTcWdmItS/MiFEeFarQ7WFR0T57KLm6U9ZNXyYPK+tej3fxSMgRISzaYjIoDJbCg==
-X-Gm-Message-State: AOJu0YxzMxC7pIFKAbWr4akbkWtwurfZ/M9Mp1JXAB6dBio2r/iYiXTB
- 1VH9ZbqTSuSua0Vy9Xaj+rVZ4XmGKEylnwqgfcYB+aTRJtwGCjhlibKzrBSpL1s=
-X-Google-Smtp-Source: AGHT+IHVAZJmB4YSyZaLwxARFOEYAF5QYmjsFI/SiCGLvfaRvUtrV8ZfcOEXVJMh6eZRiZQlEVlOXg==
-X-Received: by 2002:a05:600c:3204:b0:424:7871:2e9e with SMTP id
- 5b1f17b1804b1-4279dacf793mr15777185e9.6.1720773060052; 
- Fri, 12 Jul 2024 01:31:00 -0700 (PDT)
+ AJvYcCWl2EJdbMhISvOI0PJjFOY6JcOCAQk6h1pGHGIt/l4eDezI3Zc5/pcRRHEFtfCg6QTQol7Lr2qC1nDE4D9WWoJg050CFWB/bA==
+X-Gm-Message-State: AOJu0YyvRZLjYRlPZIAJlRGrqe7cUL9EIqSWg9Za6gMiJzdemm2jvn0a
+ 2qjMVx7TtesdgFbmc49ZXAZtEbIVIhjHo5RiQGr6beFPmzOChxE/s5WzOywZAiM=
+X-Google-Smtp-Source: AGHT+IELmqR42vWH55g2L81rh1sPKIMr6QPXr+7HijAPnKWsbECR3DScyJ8rpqMVTBoj2JN1vkZ8GA==
+X-Received: by 2002:a05:600c:5349:b0:426:6861:a1ab with SMTP id
+ 5b1f17b1804b1-426708f19a9mr68123945e9.39.1720773516539; 
+ Fri, 12 Jul 2024 01:38:36 -0700 (PDT)
 Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
  (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:b481:98b5:611f:e783])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4279f288bd1sm14645895e9.24.2024.07.12.01.30.59
+ 5b1f17b1804b1-4279f25a962sm15025465e9.12.2024.07.12.01.38.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 01:30:59 -0700 (PDT)
-Message-ID: <87aa4c6c-19f6-4c09-89d8-af0a69429966@mind.be>
-Date: Fri, 12 Jul 2024 10:30:57 +0200
+ Fri, 12 Jul 2024 01:38:36 -0700 (PDT)
+Message-ID: <911573ac-f0bf-4ceb-99b0-5d24dd1937bd@mind.be>
+Date: Fri, 12 Jul 2024 10:38:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Brandon Maier <brandon.maier@collins.com>, buildroot@buildroot.org
-References: <20240617-mtd-2-2-0-bugfixes-v1-0-a136825e24ff@collins.com>
+To: Heiko Thiery <heiko.thiery@gmail.com>, buildroot@buildroot.org,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Peter Seiderer <ps.report@gmx.net>,
+ Lance Fredrickson <lancethepants@gmail.com>
+References: <20240704123452.3535612-1-heiko.thiery@gmail.com>
+ <20240704123452.3535612-2-heiko.thiery@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <20240617-mtd-2-2-0-bugfixes-v1-0-a136825e24ff@collins.com>
+In-Reply-To: <20240704123452.3535612-2-heiko.thiery@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1720773060; x=1721377860; darn=buildroot.org;
+ d=mind.be; s=google; t=1720773516; x=1721378316; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=8Q5t/hD5CW0qRS3++uxEiTVbtxh86+nW8lN7DnN4r1Q=;
- b=iLD7LxefewbLMCDjkPT/8LdDQS3pPnLdYx5CiAqyru5KwFrHKVOry+3OqqfuVca+Lk
- 7UJTMIplzvJNIZ1lDzhCXfevyHpVzfEXunOZlPrVezKf/MhD7Gw2ohPq2fNpqLFK9Izy
- bosaDIqAiV4YYo5KXODQhcGWSZ5daBVTHqIdtQq1DOism/cRybfTg1b1W39gHhzPfUf5
- SD1KGVGoWENF0uPOHgr3ADqL0vavNRMUoW4BBfY6Ht//8z/oupg17PWaY93jX0703DFb
- w1wGkfd9e1YxoP+ru8E7K1UEDYZ4W8vjkTV+s0b25V+XNEA8Zsww4D5TKIuBt0rZFpmr
- CIWw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=shVs8VnPxEVcVKEYZ/pxvp4p5mrVZo6DgwknUayTDCI=;
+ b=Vv2s0PDcTcS7KRwasgqGmJQZiCybSeu/xIMyo9LEeGf6eEjDDAD75bcm5GQYhMJjEb
+ TUt4XEPIQoCviIGUAXE9OryEdsZfNJueHBXOHsZ2XKRBtwB1Rxc9hR4TdPnuHSRhu85D
+ IZUHFPIA/A39c/e1AALXg3hDwfGMYkPjuyOEEj4mhj6V9wBH0RbbWr/4urba9zEY2gBN
+ CjeXU7HdfSfhSagGtYaj1BBws4QV94lFBKnEaULidXMqZ3sDwR8v/4StJboIBtL/kYkr
+ kWdKoX8f3VCxx9DB9TWe6uLoIF/qzkBi3MW6uLPOfky9v/JCw8tlilvjuip5fYZJ/OLD
+ TfhA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=iLD7Lxef
-Subject: Re: [Buildroot] [PATCH 0/3] package/mtd: fixes and changes for
- release 2.2.0
+ header.a=rsa-sha256 header.s=google header.b=Vv2s0PDc
+Subject: Re: [Buildroot] [PATCH v3 1/3] package/blake3: add new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,36 +112,102 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+  Hi Heiko,
 
-
-On 17/06/2024 20:43, Brandon Maier via buildroot wrote:
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+On 04/07/2024 14:34, Heiko Thiery wrote:
+> This package is used and required for ccache update.
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 > ---
-> Brandon Maier (3):
->        package/mtd: fix tests compiling when disabled
->        package/mtd: make lzo an optional dependency
->        package/mtd: make zlib an optional dependency
+> 
+> v2:
+>      - on change
+> 
+> v3:
+>      - fix BLAKE3_LICENSE_FILES and corresponding hash values
+> 
+> 
+>   DEVELOPERS                 |  1 +
+>   package/blake3/blake3.hash |  3 +++
+>   package/blake3/blake3.mk   | 20 ++++++++++++++++++++
+>   3 files changed, 24 insertions(+)
+>   create mode 100644 package/blake3/blake3.hash
+>   create mode 100644 package/blake3/blake3.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 90d1a111ab..46fe3cd2e1 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1359,6 +1359,7 @@ F:	configs/kontron_bl_imx8mm_defconfig
+>   F:	configs/kontron_smarc_sal28_defconfig
+>   F:	configs/kontron_pitx_imx8m_defconfig
+>   F:	package/altera-stapl/
+> +F:	package/blake3/
+>   F:	package/ipmitool/
+>   F:	package/libnetconf2/
+>   F:	package/libyang/
+> diff --git a/package/blake3/blake3.hash b/package/blake3/blake3.hash
+> new file mode 100644
+> index 0000000000..2a00d19b02
+> --- /dev/null
+> +++ b/package/blake3/blake3.hash
+> @@ -0,0 +1,3 @@
+> +# sha256 computed locally
+> +sha256  822cd37f70152e5985433d2c50c8f6b2ec83aaf11aa31be9fe71486a91744f37  blake3-1.5.1.tar.gz
+> +sha256  6a94bedb8b707ed97f6e310d0d015ab14e0683ffa0a612b02958581b9cc9fc0e  LICENSE
+> diff --git a/package/blake3/blake3.mk b/package/blake3/blake3.mk
+> new file mode 100644
+> index 0000000000..76e4e32e7a
+> --- /dev/null
+> +++ b/package/blake3/blake3.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# blake3
+> +#
+> +################################################################################
+> +
+> +BLAKE3_VERSION = 1.5.1
+> +BLAKE3_SITE = $(call github,BLAKE3-team,BLAKE3,refs/tags/$(BLAKE3_VERSION))
 
-  Applied series to master, thanks.
+  Why do you put the refs/tags here? It was necessary in one or two packages 
+because of a conflict with a branch name, but I don't think that's the case 
+here. I admit that there's a certain elegance to making it explicit that we want 
+a tag, but then we really should be doing that everywhere...
+
+
+> +BLAKE3_SUBDIR = c
+> +BLAKE3_LICENSE = Apache-2.0, CC0-1.0
+> +BLAKE3_LICENSE_FILES = LICENSE
+> +
+> +# We may be a ccache dependency, so we can't use ccache; reset the
+> +# options set by the cmake infra.
+> +HOST_BLAKE3_CONF_OPTS += \
+> +	-DCMAKE_ASM_COMPILER="$(CMAKE_HOST_C_COMPILER)" \
+
+  Why is this needed? And is it even a good idea? In pkg-cmake, this is defined 
+as -DCMAKE_ASM_COMPILER="$$(HOSTAS)", and HOSTAS is simply "as" without any 
+ccache. In fact, this changes it from "as" to "gcc" which I expect is not 
+correct at all...
+
+  Since you said you could respin this weekend, I will mark as Changes 
+Requested, but it's possible that your respin only has some commit message 
+changes of course.
 
   Regards,
   Arnout
 
-> 
->   package/mtd/Config.in |  4 ----
->   package/mtd/mtd.mk    | 24 +++++++++++++++++++-----
->   2 files changed, 19 insertions(+), 9 deletions(-)
-> ---
-> base-commit: 7bfea9372f1842279a8f57b5fc4428bbae822e91
-> change-id: 20240617-mtd-2-2-0-bugfixes-995704faabb2
-> 
-> Best regards,
+> +	-UCMAKE_C_COMPILER_LAUNCHER \
+> +	-UCMAKE_CXX_COMPILER_LAUNCHER
+> +
+> +$(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
