@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66167C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:53:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC391C3DA45
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:00:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2549640822;
-	Fri, 12 Jul 2024 14:53:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9BCD6409EC;
+	Fri, 12 Jul 2024 15:00:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AEfMOI5fF3eF; Fri, 12 Jul 2024 15:00:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F111409FB
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F111409FB;
+	Fri, 12 Jul 2024 15:00:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D6041BF424
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:00:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 197BC405BD
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:00:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pWKBhi-25DJm; Fri, 12 Jul 2024 14:53:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBB4C408CF
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DBB4C408CF;
-	Fri, 12 Jul 2024 14:53:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 901CD1BF424
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:53:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7DD6C60631
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:53:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JnXe-oED-ghR for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 14:53:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 9Hg4_P1qa2yg for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 15:00:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5F73E6061E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F73E6061E
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5F73E6061E
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:53:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8EE5D20002;
- Fri, 12 Jul 2024 14:53:04 +0000 (UTC)
-Date: Fri, 12 Jul 2024 16:53:03 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240712165303.21ae8d44@windsurf>
-In-Reply-To: <20240705073527.3254389-1-dario.binacchi@amarulasolutions.com>
-References: <20240705073527.3254389-1-dario.binacchi@amarulasolutions.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 652EC4010F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 652EC4010F
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 652EC4010F
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 15:00:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F1D9E240009;
+ Fri, 12 Jul 2024 15:00:15 +0000 (UTC)
+Date: Fri, 12 Jul 2024 17:00:12 +0200
+To: Neal Frager via buildroot <buildroot@buildroot.org>
+Message-ID: <20240712170012.7b912bf2@windsurf>
+In-Reply-To: <20240618033849.2389758-1-neal.frager@amd.com>
+References: <20240618033849.2389758-1-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720795984;
+ d=bootlin.com; s=gm1; t=1720796416;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=y2IoX/Zk4sz9WcxMJwSgk4G7FDr5BCtGS7rhreXZFqU=;
- b=BcqZnlMxevifzfHHRzFb+yA6G61X1Ofre0SViILXsr3HyXEeuEbpk4+kU7slgnhz6RVKgd
- 5ipNglAYMmebyXOmrwV0YWaQ+TqQxn99PL6N0mrZJFzSVu37hEOmU472/Go6XFANHucelp
- fRmpJqwn9p2o9XzXaSndhDv4dJs5JDhwAnq7nfDp9SySTQNNomD/xusbatHhCgI9GR4Yp/
- K94ES/2yjhWP7DSc1D10Tundw0JLHQzxfp8XmmIKTAtBTjsD2tJlvcs6vc87oTe9Woc1lH
- j0lspUVh0Y6ylvys/Zi9OpoTEcTeIk1H9JeyUCiVTzfYxkzMm0XNzM85UAQRTA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=mYC2g/jy9JKWbaJwPfDCio/xdRL6NW8NkIv+D5L0Ruo=;
+ b=Z4V3LZtbWU4Y18WfWJ/vY2LMNeL8fxV6v8dwVN1I2RCYbukrBO/Afnnr3CqM+E9LqCVWQZ
+ HwbTGDTTWOqtsg8MxPA0J6/J7Q6kCYNlegd7hrMtY3HJ8ueAMXZuOtd8+M2h6xN6IYs3kt
+ WM82TVv4TWdQzZHXAXjqY2IJY/0VigNxPotuh06+2haTbb3H4+Nj3CG4zIciZYndQkYuZk
+ YrTO9npDueST0WeyxYiX0laJHc97GEBNCKpgnTLV0B3MPNva6/ddBr+l/fvz97znHOGkLA
+ 9r5vHYyMfAB95J4ips78n3+CcmWDaDqn8I97NdwOvoN2QWbE1p4YLnlywqgXZA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=BcqZnlMx
-Subject: Re: [Buildroot] [PATCH 1/1] package/oatpp: update the patches to be
- applied with fuzz 0
+ header.s=gm1 header.b=Z4V3LZtb
+Subject: Re: [Buildroot] [PATCH v4 1/2] configs/zynqmp_kria_kd240_defconfig:
+ bump to xilinx-v2024.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,34 +83,72 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alessandro Partesotti <a.partesotti@gmail.com>,
- linux-amarula@amarulasolutions.com, buildroot@buildroot.org
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ brandon.maier@collins.com, Neal Frager <neal.frager@amd.com>,
+ michal.simek@amd.com, yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  5 Jul 2024 09:35:27 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+On Tue, 18 Jun 2024 04:38:48 +0100
+Neal Frager via buildroot <buildroot@buildroot.org> wrote:
 
-> Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-> fuzz factor to 0") reduced the fuzz factor.
+> This patch bumps the zynqmp_kria_kd240_defconfig to xilinx-v2024.1 which includes
+> the following updates:
 > 
-> Due to this change, oatpp fails to build with output:
+> - Linux v6.6.10
+> - U-Boot v2024.01
+> - ATF v2.10
+> - PMUFW xilinx-v2024.1
 > 
->     Applying 0001-src-oatpp-core-base-Environment.hpp-include-cstdarg.patch using patch:
->     patching file src/oatpp/core/base/Environment.hpp
->     Hunk #1 FAILED at 29.
->     1 out of 1 hunk FAILED -- saving rejects to file src/oatpp/core/base/Environment.hpp.rej
+> Migrated u-boot to xilinx_zynqmp_kria_defconfig, so uboot.fragment no longer
+> needed.
 > 
-> This commit refreshes the package patch on the current package version.
+> With u-boot 2024.1, CONFIG_SYS_SPI_U_BOOT_OFFS has a new meaning. It is now
+> the offset between the base address of the boot.bin and u-boot.itb instead of
+> a raw base address of u-boot.itb. This allows for A/B firmware updates since
+> the u-boot.itb is set by default to a 0x80000 offset of the boot.bin.
 > 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Thus, Kria SOMs come with the following QSPI address table.
+> 
+> Partition A:
+> 0x200000 - boot.bin
+> 0x280000 - u-boot.itb
+> 
+> Partition B:
+> 0xF80000 - boot.bin
+> 0x1000000 - u-boot.itb
+> 
+> In addition, the kd240 still requires a board specific patch for the usb to sd
+> card bridge device.  Without the board specific patch in the
+> ./board/zynqmp/kria/kd240/patches directory, the usb will not come up correctly
+> and u-boot will not be able to find the sd card containing the Linux kernel and
+> file system.
+> 
+> Upstream: https://patchwork.ozlabs.org/project/uboot/patch/20240604083854.2033917-1-neal.frager@amd.com/
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 > ---
->  ...re-base-Environment.hpp-include-cstdarg.patch | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
+> V1->V2:
+> - Removed numbers from patch and added Upstream link
+> V2->V3:
+> - Updated patch with version that does not init serdes
+> V3->V4:
+> - Migrated to xilinx-prebuilt
+> - Added force check hashes
+> ---
+>  .checkpackageignore                           |   1 -
+>  ...arm64-zynqmp-Enable-usb3-for-k24-som.patch |  81 ++++
+>  ...nqmp-Fix-k24-psu_init_gpl.c-clocking.patch | 401 ------------------
+>  ...ynqmp-Add-output-enable-pins-to-SOMs.patch |  79 ----
+>  configs/zynqmp_kria_kd240_defconfig           |  20 +-
+>  5 files changed, 93 insertions(+), 489 deletions(-)
+>  create mode 100644 board/zynqmp/kria/kd240/patches/uboot/0001-arm64-zynqmp-Enable-usb3-for-k24-som.patch
+>  delete mode 100644 board/zynqmp/kria/kd240/patches/uboot/0001-arm64-zynqmp-Fix-k24-psu_init_gpl.c-clocking.patch
+>  delete mode 100644 board/zynqmp/kria/kd240/patches/uboot/0002-arm64-zynqmp-Add-output-enable-pins-to-SOMs.patch
 
-Applied to master, thanks.
+Series applied to master, thanks.
 
 Thomas
 -- 
