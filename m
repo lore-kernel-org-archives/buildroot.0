@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1098BC3DA4B
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 13:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B27AC2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:00:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE2774196D;
-	Fri, 12 Jul 2024 13:59:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FDF9417CE;
+	Fri, 12 Jul 2024 14:00:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ye3TNPbxxIi3; Fri, 12 Jul 2024 13:59:38 +0000 (UTC)
+ id hVKDca9zBS7p; Fri, 12 Jul 2024 14:00:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D4C2418CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C50B4187C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D4C2418CA;
-	Fri, 12 Jul 2024 13:59:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D6BBE1BF232
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:59:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C50B4187C;
+	Fri, 12 Jul 2024 14:00:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 15E631BF59E
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:00:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4BB6401C7
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:59:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F2314187C
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:00:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iHeKlzVX8fTy for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 13:59:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UPnlgaEwNUjL for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 14:00:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7280240185
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7280240185
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7280240185
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 13:59:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 05F791C0003;
- Fri, 12 Jul 2024 13:59:31 +0000 (UTC)
-Date: Fri, 12 Jul 2024 15:59:31 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240712155931.38420795@windsurf>
-In-Reply-To: <20240622114621.447904-1-ju.o@free.fr>
-References: <20240622114621.447904-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720792772;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=qxlTWa+H/C3b982OtC6w+RGiAq2b4CAuKZj+ZHiRi7k=;
- b=afMRTgLG8iG++0yEoLHsVBM6c05pDHkxq/Uxy/f/Vp0qkLm8ITbPrbwbQZal+qeZi1L+U7
- Hd6QcA6MQuz+PTxp7tVYezduGYj2n6ClEZpOdWCxtP5biRfczkVFHCD1+jIgm9LMRs/Cg9
- LvENGR48JFN7xd4v4MvAqAUV3YCnW/cWysJaKK7DKwSgu7dBW2/RIxWzXzu1ortXBN66gu
- /t2/uox8upahWNDuMwImoXD0VCUk8mrTm3UcpLPRMiyz5hU2rBrViTHTkg83C/deIH78HC
- hui0BQWK+U+zM6qOiQsct/Tggk06/0GtdcDttSKvDJ+GF6/uAHlkNqdAyF6OWQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=afMRTgLG
-Subject: Re: [Buildroot] [PATCH 1/1] configs/spike_riscv32: new defconfig
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09F48417CE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09F48417CE
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:00:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EB98485EB9; Fri, 12 Jul 2024 14:00:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 16:00:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a83ab3f4c8621dec58dc78a8dcb48e519377ac3d
+X-Git-Newrev: fd358b97c053af9e45fcb94e59ade63b4d895f10
+X-Patchwork-Hint: ignore
+Message-Id: <20240712140038.EB98485EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dump1090: fix build with GCC 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,33 +59,80 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 22 Jun 2024 13:46:21 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fd358b97c053af9e45fcb94e59ade63b4d895f10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Buildroot commit [1] updated riscv-isa-sim (Spike), which now includes
-> a NS16550 uart emulation. This can be used by RV32 Linux Kernel. This
-> commit introduce a defconfig for running Linux on Spike RISC-V 32-bit
-> ISA simulator.
-> 
-> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/853b7661bf5ddca5d4b81964ef1a19a133beac85
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Patch tested on branch master at commit 853b766 with commands:
+Fixes http://autobuild.buildroot.net/results/1d5804974153f96e80f5200793ec8cd12c9fa18a/
 
-Applied to master, thanks.
+GCC 14 complains if the arguments to calloc (nmemb, size) are swapped
+around, causing a build failure as dump1090 builds with -Werror:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+net_io.c:107:34: error: 'calloc' sizes specified with 'sizeof' in the earlier argument and not in the later argument [-Werror=calloc-transposed-args]
+  107 |     if (!(service = calloc(sizeof(*service), 1))) {
+
+Add a patch from an upstream pull request to fix that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-swap-size-arguments-to-calloc.patch       | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+
+diff --git a/package/dump1090/0001-swap-size-arguments-to-calloc.patch b/package/dump1090/0001-swap-size-arguments-to-calloc.patch
+new file mode 100644
+index 0000000000..1c2d502793
+--- /dev/null
++++ b/package/dump1090/0001-swap-size-arguments-to-calloc.patch
+@@ -0,0 +1,43 @@
++From be8f5b7ab1223076ba0086f14aeeb53ace2d4b5c Mon Sep 17 00:00:00 2001
++From: Jeff Lawson <jeff.lawson@flightaware.com>
++Date: Tue, 18 Jun 2024 15:58:24 +0000
++Subject: [PATCH] swap size arguments to calloc
++
++fixes #241
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Upstream: https://github.com/flightaware/dump1090/pull/243
++---
++ adaptive.c | 2 +-
++ net_io.c   | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/adaptive.c b/adaptive.c
++index f16e16c..d656433 100644
++--- a/adaptive.c
+++++ b/adaptive.c
++@@ -195,7 +195,7 @@ void adaptive_init()
++     adaptive_burst_window_remaining = adaptive_samples_per_window;
++     adaptive_burst_window_counter = 0;
++ 
++-    adaptive_range_radix = calloc(sizeof(unsigned), 65536);
+++    adaptive_range_radix = calloc(65536, sizeof(unsigned));
++     adaptive_range_state = RANGE_RESCAN_UP;
++ 
++     // select and enforce gain limits
++diff --git a/net_io.c b/net_io.c
++index bf98028..8abd510 100644
++--- a/net_io.c
+++++ b/net_io.c
++@@ -104,7 +104,7 @@ struct net_service *serviceInit(const char *descr, struct net_writer *writer, he
++ {
++     struct net_service *service;
++ 
++-    if (!(service = calloc(sizeof(*service), 1))) {
+++    if (!(service = calloc(1, sizeof(*service)))) {
++         fprintf(stderr, "Out of memory allocating service %s\n", descr);
++         exit(1);
++     }
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
