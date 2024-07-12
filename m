@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 047FDC3DA45
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C66CFC2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:35:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AE25B4144A;
-	Fri, 12 Jul 2024 15:35:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 20A2E41494;
+	Fri, 12 Jul 2024 15:35:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kLpzt1e5HmVe; Fri, 12 Jul 2024 15:35:20 +0000 (UTC)
+ id fb07Ou0kb723; Fri, 12 Jul 2024 15:35:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2212D41471
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 162CF41497
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2212D41471;
-	Fri, 12 Jul 2024 15:35:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 919831BF5D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 162CF41497;
+	Fri, 12 Jul 2024 15:35:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B114E1BF5D7
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:35:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7DE67820C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9F831611DE
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:35:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oQLdnmIdsFOT for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 15:35:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lBDW-tCzhXNG for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 15:35:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5D08F82033
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D08F82033
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D08F82033
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9AEC060590
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AEC060590
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9AEC060590
  for <buildroot@buildroot.org>; Fri, 12 Jul 2024 15:35:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6780EE0005;
- Fri, 12 Jul 2024 15:35:11 +0000 (UTC)
-Date: Fri, 12 Jul 2024 17:35:10 +0200
-To: Adrian Perez de Castro <aperez@igalia.com>
-Message-ID: <20240712173510.20d586c1@windsurf>
-In-Reply-To: <20240627220223.6687-2-aperez@igalia.com>
-References: <20240627220223.6687-1-aperez@igalia.com>
- <20240627220223.6687-2-aperez@igalia.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 61E97C000A;
+ Fri, 12 Jul 2024 15:35:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 17:35:06 +0200
+Message-Id: <20240712153509.2583089-2-kory.maincent@bootlin.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240712153509.2583089-1-kory.maincent@bootlin.com>
+References: <20240712153509.2583089-1-kory.maincent@bootlin.com>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720798511;
+ d=bootlin.com; s=gm1; t=1720798512;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=8nm4saove2PRfbFV8Gu1/6LdtjNNT/R6Xlu9aLGneeA=;
- b=UPu2dWySvXorWfwU0ov5c2CH3H52CLJPlvETSxec5EYAYbroF8ZlqCrJkGA4WhFJ2mvsw7
- YadKNEmjSf1PjAu4Tk+MUUKrTlZ0tmfS66wedqm0IGnnIeA73CCnYka+MK8wvzXFrwAWms
- 35gmCqaUd4kfib6UXK2hd/9b/WvoyGPZfkDyI0bmFEP2rTzPiTTzF3pSgk3ymQmN+D7HVk
- C6xSRWz/IOSiG+VRhWSKOwvqLZsQMwnYI3TWc2pM58PSdyvDsgP5hkZIqYZQ/5hIKuKmug
- f30t+WVAr2ZrzZznYjsJ5DAKvTXLCAnzcB8in2IGXitYZD+hzXJnebb1VZeEcQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=2HoIhn13OR/sFqoYWsbe8Xj84GdEStwQENaLEFpWAr4=;
+ b=lrMe3qlH93a6RlZ0sXAZAUE2o4onBhM9WFtNKe4T/3fE63sQIj7HvW8p4dKrJEpzfrn93b
+ OCAmNXEHOXOGXbDj5BpTVfHUm9oPvzla4lZlpKez8I/v1SjZE4XqppTUBG00WPxlAs70K3
+ YbPldad8khsHYkfk2QSHzQ3JBThciC6Qw4rv98VZZahhKzwRIfdthe6vnzeG3Wb+whILCp
+ Fsh3ZEPkR6TbmApFpU+FhP5cptgs+ipW8ofkE1mI7XC81rA/x6BfWNeTNFggS51hgvfG4F
+ na62Du2SqPPBjFZCpZTHvBH8P8GijB1OG/kOr91nLl2a/omj1ZAZSrxmnOo6xw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UPu2dWyS
-Subject: Re: [Buildroot] [PATCH 1/2] package/libdex: new package
+ header.s=gm1 header.b=lrMe3qlH
+Subject: [Buildroot] [PATCH v4 1/4] package/python-intelhex: Add support for
+ host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,66 +80,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Will Newton <will.newton@gmail.com>, buildroot@buildroot.org
+From: Kory Maincent via buildroot <buildroot@buildroot.org>
+Reply-To: Kory Maincent <kory.maincent@bootlin.com>
+Cc: Kory Maincent <kory.maincent@bootlin.com>, Asaf Kahlon <asafka7@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, thomas.petazzoni@bootlin.com,
+ Mauro Condarelli <mc5686@mclink.it>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adrian,
+Add support for the host package to enable future support for
+TrustedFirmware-M, which depends on it.
 
-On Fri, 28 Jun 2024 01:02:18 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+---
+ package/python-intelhex/python-intelhex.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> This package provides utilities for asynchronous programming in C
-> using a futures/promises model. Newer versions of sysprof require
-> this library.
-> 
-> https://gitlab.gnome.org/GNOME/libdex
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
-Thanks, applied with some really minor changes.
-
-> diff --git a/package/Config.in b/package/Config.in
-> index 550fdc1f411..ff55d892e0e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2155,6 +2155,7 @@ menu "Other"
->  	source "package/libcap/Config.in"
->  	source "package/libcap-ng/Config.in"
->  	source "package/libcgroup/Config.in"
-> +	source "package/libdex/Config.in"
->  	source "package/llvm-project/libclc/Config.in"
->  	source "package/libcofi/Config.in"
->  	source "package/libcorrect/Config.in"
-
-Fix up alphabetic ordering here. This was pointed out by "make
-check-package".
-
-> +LIBDEX_VERSION_MAJOR = 0.6
-> +LIBDEX_VERSION = $(LIBDEX_VERSION_MAJOR).1
-> +LIBDEX_SOURCE = libdex-$(LIBDEX_VERSION).tar.xz
-> +LIBDEX_SITE = https://download.gnome.org/sources/libdex/$(LIBDEX_VERSION_MAJOR)
-> +LIBDEX_LICENSE = LGPL-2.1+
-> +LIBDEX_LICENSE_FILES = COPYING
-> +LIBDEX_INSTALL_STAGING = YES
-> +LIBDEX_DEPENDENCIES += libglib2
-
-= instead of +=
-
-> +LIBDEX_CONF_OPTS += \
-
-Ditto here.
-
-Thomas
+diff --git a/package/python-intelhex/python-intelhex.mk b/package/python-intelhex/python-intelhex.mk
+index cc8b973f0f..56f758e643 100644
+--- a/package/python-intelhex/python-intelhex.mk
++++ b/package/python-intelhex/python-intelhex.mk
+@@ -12,3 +12,4 @@ PYTHON_INTELHEX_LICENSE = BSD-3-Clause
+ PYTHON_INTELHEX_LICENSE_FILES = LICENSE.txt
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
