@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C6C7C3DA45
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:16:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDB3C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 07:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB023414A4;
-	Fri, 12 Jul 2024 07:16:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B05DA40592;
+	Fri, 12 Jul 2024 07:20:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e09WtRDMRDy6; Fri, 12 Jul 2024 07:16:22 +0000 (UTC)
+ id Ep18MApKKMGG; Fri, 12 Jul 2024 07:20:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB4A7414C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8021641206
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB4A7414C6;
-	Fri, 12 Jul 2024 07:16:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F75B1BF48C
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:15:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8021641206;
+	Fri, 12 Jul 2024 07:20:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DCA01BF48C
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:20:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3DA56411CD
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:15:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B906607BC
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 07:20:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3u0UM_t6TYcY for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GOQ-PojjB2nR for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 07:20:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AA1740C15
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0AA1740C15
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 076CA857A9; Fri, 12 Jul 2024 07:15:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 09:14:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90314fdfb0e63b1b49d86addddfc0c957feaa622
-X-Git-Newrev: 9a7c709012f9db0f4dcaee02d611e8d1427226a3
-X-Patchwork-Hint: ignore
-Message-Id: <20240712071537.076CA857A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/firmware-upower: new
- package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1BD296070C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BD296070C
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1BD296070C
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:20:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 522F91C000B;
+ Fri, 12 Jul 2024 07:20:41 +0000 (UTC)
+Date: Fri, 12 Jul 2024 09:20:41 +0200
+To: Andy Yan <andyshrk@163.com>
+Message-ID: <20240712092041.38bab6ac@windsurf>
+In-Reply-To: <20240628121740.2810640-1-andyshrk@163.com>
+References: <20240628121740.2810640-1-andyshrk@163.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720768842;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=t77uyD/aiEttBvmAvm4PV2ou0CXR4Gi+FxqIxKMmo90=;
+ b=euXYq7m9jIqWHwW2wlwlgT1WHJiSVLHktkHCig69l3VHL3LPKBUb0VlxfbJ2np3d0cV+gF
+ S4tcMWC4qop9l0yJCOQO7XLETMzZqZXPsE2K4zUcpvAH29uZRW9ln2Jl1hoQuTeL7zKcI6
+ P2lAdnZMjjubLOFQsriXv2RM1Ycqz7Xb+VDxqQ71KsYlVD2RqY0tANviETk/p4KmJ0oiup
+ mHUgBHXXgFy65IlRlrOKP55B/BJcfUaVd8CGYK+JlyhrqFxLeKgyi3d5jESEsyt4hxKTQZ
+ IXrVflSHPa9TYADOdmGZYc3WontWaVfpTzQEsZp1dPGYOwN1G8XeuxZPA4qvsw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=euXYq7m9
+Subject: Re: [Buildroot] [PATCH] package/linux-firmware: Add Arm mali CSF
+ firmwares
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,123 +81,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a7c709012f9db0f4dcaee02d611e8d1427226a3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Andy,
 
-This package provides NXP i.MX uPower firmware present on i.MX 8ULP SoC.
-This version comes from the NXP 6.1.55-2.2.0 release.
+Thanks for your patch, I applied it after adjusting some small things.
+See below.
 
-Signed-off-by: Chris Dimich <cdimich2188@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/freescale-imx/Config.in                    |  5 ++++
- package/freescale-imx/firmware-upower/Config.in    | 22 ++++++++++++++++++
- .../firmware-upower/firmware-upower.hash           |  4 ++++
- .../firmware-upower/firmware-upower.mk             | 27 ++++++++++++++++++++++
- 4 files changed, 58 insertions(+)
+On Fri, 28 Jun 2024 20:17:40 +0800
+Andy Yan <andyshrk@163.com> wrote:
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 34ce1d1311..6d196a052d 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -165,6 +165,10 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_ELE
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91 || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
- 
-+config BR2_PACKAGE_FREESCALE_IMX_HAS_UPOWER
-+	bool
-+	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULP
-+
- source "package/freescale-imx/imx-alsa-plugins/Config.in"
- source "package/freescale-imx/imx-codec/Config.in"
- source "package/freescale-imx/imx-kobs/Config.in"
-@@ -177,6 +181,7 @@ source "package/freescale-imx/imx-vpu-hantro/Config.in"
- source "package/freescale-imx/imx-vpuwrap/Config.in"
- source "package/freescale-imx/firmware-ele-imx/Config.in"
- source "package/freescale-imx/firmware-imx/Config.in"
-+source "package/freescale-imx/firmware-upower/Config.in"
- source "package/freescale-imx/imx-sc-firmware/Config.in"
- source "package/freescale-imx/imx-seco/Config.in"
- source "package/freescale-imx/imx-vpu-hantro-daemon/Config.in"
-diff --git a/package/freescale-imx/firmware-upower/Config.in b/package/freescale-imx/firmware-upower/Config.in
-new file mode 100644
-index 0000000000..ca7486d2b7
---- /dev/null
-+++ b/package/freescale-imx/firmware-upower/Config.in
-@@ -0,0 +1,22 @@
-+comment "firmware-upower needs an i.MX platform with uPower"
-+	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_UPOWER
-+
-+config BR2_PACKAGE_FIRMWARE_UPOWER
-+	bool "firmware-upower"
-+	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_UPOWER
-+	help
-+	  NXP i.MX uPower firmware present on i.MX 8ULP SoC.
-+
-+	  This library is provided by NXP as-is and doesn't have an
-+	  upstream.
-+
-+if BR2_PACKAGE_FIRMWARE_UPOWER
-+
-+config BR2_PACKAGE_FIRMWARE_UPOWER_UPOWER_FIRMWARE_NAME
-+	string
-+	default "upower_a0.bin" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA0
-+	default "upower_a1.bin" if \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA1 || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA2
-+
-+endif # BR2_PACKAGE_FIRMWARE_UPOWER
-diff --git a/package/freescale-imx/firmware-upower/firmware-upower.hash b/package/freescale-imx/firmware-upower/firmware-upower.hash
-new file mode 100644
-index 0000000000..dc5938ad16
---- /dev/null
-+++ b/package/freescale-imx/firmware-upower/firmware-upower.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  1df3a03d69feb38a450ee63abc7713d78cf6339988476e4c9f95ebbf63790f66  firmware-upower-1.3.1.bin
-+sha256  de37a0bcbf1717b910c1a53ea6eab853c404e61e8143bb6c081d39f532571e54  COPYING
-+sha256  b158adaac5e2d1c7fa6e739ff168ab498957e3303070f1c0b0e66d9a8f02a354  EULA
-diff --git a/package/freescale-imx/firmware-upower/firmware-upower.mk b/package/freescale-imx/firmware-upower/firmware-upower.mk
-new file mode 100644
-index 0000000000..dfdf75510c
---- /dev/null
-+++ b/package/freescale-imx/firmware-upower/firmware-upower.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# firmware-ele-imx
-+#
-+################################################################################
-+
-+FIRMWARE_UPOWER_VERSION = 1.3.1
-+FIRMWARE_UPOWER_SITE = $(FREESCALE_IMX_SITE)
-+FIRMWARE_UPOWER_SOURCE = firmware-upower-$(FIRMWARE_UPOWER_VERSION).bin
-+
-+FIRMWARE_UPOWER_LICENSE = NXP Semiconductor Software License Agreement
-+FIRMWARE_UPOWER_LICENSE_FILES = COPYING EULA
-+FIRMWARE_UPOWER_REDISTRIBUTE = NO
-+
-+FIRMWARE_UPOWER_INSTALL_IMAGES = YES
-+
-+define FIRMWARE_UPOWER_EXTRACT_CMDS
-+	$(call NXP_EXTRACT_HELPER,$(FIRMWARE_UPOWER_DL_DIR)/$(FIRMWARE_UPOWER_SOURCE))
-+endef
-+
-+FIRMWARE_UPOWER_UPOWER_FIRMWARE_NAME = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_UPOWER_UPOWER_FIRMWARE_NAME))
-+
-+define FIRMWARE_UPOWER_INSTALL_IMAGES_CMDS
-+	cp $(@D)/$(FIRMWARE_UPOWER_UPOWER_FIRMWARE_NAME) $(BINARIES_DIR)/upower.bin
-+endef
-+
-+$(eval $(generic-package))
+> +menu "GPU Firmware"
+> +
+> +config BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF
+> +	bool "Arm Mali CSF firmware"
+> +	help
+> +	  Firmware files for Arm Mali 10th generation GPU
+> +          needed by the linux panthor kernel driver.
+
+This last line was indented with spaces instead of a tab. This was
+pointed out by "make check-package":
+
+WARNING: package/linux-firmware/Config.in:700: help text: <tab><2 spaces><62 chars> (https://nightly.buildroot.org/#writing-rules-config-in)
+
+> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> index 13dbc6d98c..6a1b99f438 100644
+> --- a/package/linux-firmware/linux-firmware.mk
+> +++ b/package/linux-firmware/linux-firmware.mk
+> @@ -883,6 +883,11 @@ LINUX_FIRMWARE_FILES += intel/ipu/shisp_2401a0_v21.bin
+>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.ivsc
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF),y)
+> +LINUX_FIRMWARE_DIRS += arm
+
+I wasn't a big fan of including the full arm/ directory, because while
+it for now only contains this GPU firmware, it might contain other
+things in the future. Since the panthor driver loads this:
+
+        snprintf(fw_path, sizeof(fw_path), "arm/mali/arch%d.%d/%s",
+                 (u32)GPU_ARCH_MAJOR(ptdev->gpu_info.gpu_id),
+                 (u32)GPU_ARCH_MINOR(ptdev->gpu_info.gpu_id),
+                 CSF_FW_NAME);
+
+I changed linux-firmware.mk to this:
+
+LINUX_FIRMWARE_FILES += arm/mali/arch*/mali_csffw.bin
+
+so that it only installs the CSF firmware.
+
+Applied with those changes. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
