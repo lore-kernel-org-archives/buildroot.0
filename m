@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7D1DC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 20:42:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2D0CC2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 20:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E2F4412F5;
-	Fri, 12 Jul 2024 20:42:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACD2E40954;
+	Fri, 12 Jul 2024 20:43:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Npnpl5LtbAX9; Fri, 12 Jul 2024 20:42:24 +0000 (UTC)
+ id zlZ0L7vqTbAH; Fri, 12 Jul 2024 20:43:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 888E1418A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 926B540959
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 888E1418A3;
-	Fri, 12 Jul 2024 20:42:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 926B540959;
+	Fri, 12 Jul 2024 20:43:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 931981BF420
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 20:42:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5A9551BF420
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 20:43:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E880412F5
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 20:42:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 51B9B402C8
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 20:43:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fs_fK6VN9bwO for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 20:42:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id iR_RVne5SYlN for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 20:43:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 769664065D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 769664065D
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 20:42:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5ECDA86246; Fri, 12 Jul 2024 20:42:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 22:39:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 38d84178ce29ac3433cc1d1ae5b52ff17aace724
-X-Git-Newrev: 8460ba0d2625abd8d4116f04fd25073845669a96
-X-Patchwork-Hint: ignore
-Message-Id: <20240712204214.5ECDA86246@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/spike_riscv64: bump kernel to
- 6.6.35 and add hashes
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1395840929
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1395840929
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1395840929
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 20:43:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 06EAF1BF203;
+ Fri, 12 Jul 2024 20:43:40 +0000 (UTC)
+Date: Fri, 12 Jul 2024 22:43:40 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240712224340.383674fa@windsurf>
+In-Reply-To: <20240712183318.243890-1-ju.o@free.fr>
+References: <20240712183318.243890-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720817021;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Hob8qR4DVwWhMElCe4IGBUIgZgVhyO5asQlu6fS99Rs=;
+ b=NpNpDRqt5ZKv3kv//su9fEd4v466cR5uHs4OQoZafI3/b+oE0k58zEiE8m6083Y6S+uwd2
+ qvVcWMw1UR3836deulpk2wfoQvt5I9jhgsmRztGzPFa50brQGLUa8qTAdT+sTjdb9dHZdq
+ mIQMOSywLwr3UqDzvqa+R1TqjS9CGfvdbon/43GRl5Bmr1ubZf7aLc1q13iMA5AOw7xIVM
+ y3e535bdDDbJSp6+k/vdUukOhqgD2HK3uvWx6O28xcP2HgdDcYYdBfLUPjmVuGPgkv+nJw
+ 6TxWQa4zYFLNC2N0VHbZg+7XgGlH620dHDIgpuM9IK7Hhpfo+58/hz2GkevG+A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=NpNpDRqt
+Subject: Re: [Buildroot] [PATCH 1/1] board/spike/riscv64/readme.txt: remove
+ obsolete comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,99 +83,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8460ba0d2625abd8d4116f04fd25073845669a96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 12 Jul 2024 20:33:18 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Commit [1] introduced a new spike_riscv32_defconfig with Kernel
-at v6.6.35.
+> At the time the spike_riscv64_defconfig was introduced in commit [1], it
+> was not possible to have a console input using Spike and OpenSBI for
+> RISC-V 32 bits. This limitation no longer applies, as upstream
+> components now implements support for this.
+> 
+> Buildroot commit [2] updated riscv-isa-sim (Spike), which now includes a
+> NS16550 uart emulation. This can be used by RV32 Linux Kernel. Finally,
+> a spike_riscv32_defconfig was added in [3].
+> 
+> This commit removes the comment about this limitation, since it no
+> longer applies.
+> 
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/24d07fdc1404901fb1872ac55f875fe1d555cbb3
+> [2] https://gitlab.com/buildroot.org/buildroot/-/commit/853b7661bf5ddca5d4b81964ef1a19a133beac85
+> [3] https://gitlab.com/buildroot.org/buildroot/-/commit/a83ab3f4c8621dec58dc78a8dcb48e519377ac3d
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  board/spike/riscv64/readme.txt | 8 --------
+>  1 file changed, 8 deletions(-)
 
-This commit bumps the Kernel of spike_riscv64_defconfig to have it
-aligned with its 32bit counterpart.
+Applied to master, thanks.
 
-This commit also adds custom hashes. Therefore, it adds
-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y in the defconfig, adds a global
-patch directory, and removes the entry in ".checkpackageignore".
-
-Finally, to completely align with the spike_riscv32_defconfig, the
-config directive BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM is moved by few
-lines.
-
-With this commit, the maintenance of the two spike_riscv{32,64}
-defconfigs will be easier.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/a83ab3f4c8621dec58dc78a8dcb48e519377ac3d
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                          | 1 -
- board/spike/riscv64/patches/linux-headers/linux-headers.hash | 1 +
- board/spike/riscv64/patches/linux/linux.hash                 | 2 ++
- board/spike/riscv64/patches/opensbi/opensbi.hash             | 2 ++
- configs/spike_riscv64_defconfig                              | 6 ++++--
- 5 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 81cabcb308..0944eb1c2d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -281,7 +281,6 @@ configs/socrates_cyclone5_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_clearfog_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_clearfog_gt_8k_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
--configs/spike_riscv64_defconfig lib_defconfig.ForceCheckHash
- configs/stm32mp157c_dk2_defconfig lib_defconfig.ForceCheckHash
- configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
- configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/spike/riscv64/patches/linux-headers/linux-headers.hash b/board/spike/riscv64/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/spike/riscv64/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/spike/riscv64/patches/linux/linux.hash b/board/spike/riscv64/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..a3b67a09a4
---- /dev/null
-+++ b/board/spike/riscv64/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  fce3ee728712ed063aa8c14a8756c8ff8c7a46ba3827f61d2b04a73c7cf5dd9e  linux-6.6.35.tar.xz
-diff --git a/board/spike/riscv64/patches/opensbi/opensbi.hash b/board/spike/riscv64/patches/opensbi/opensbi.hash
-new file mode 100644
-index 0000000000..bc4058abe6
---- /dev/null
-+++ b/board/spike/riscv64/patches/opensbi/opensbi.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  319b62a4186fbce9b81a0c5f0ec9f003a10c808397a72138bc9745d9b87b1eb1  opensbi-1.4.tar.gz
-diff --git a/configs/spike_riscv64_defconfig b/configs/spike_riscv64_defconfig
-index fa8cba4275..feb13d84db 100644
---- a/configs/spike_riscv64_defconfig
-+++ b/configs/spike_riscv64_defconfig
-@@ -1,10 +1,12 @@
- BR2_riscv=y
- BR2_RISCV_64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_GLOBAL_PATCH_DIR="board/spike/riscv64/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.26"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.35"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TARGET_ROOTFS_CPIO=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_OPENSBI=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
