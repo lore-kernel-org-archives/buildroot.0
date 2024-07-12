@@ -4,99 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA7C0C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 19:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E62C7C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 19:48:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B560480B96;
-	Fri, 12 Jul 2024 19:47:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7795D80B96;
+	Fri, 12 Jul 2024 19:48:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vhgJ1BvePCJq; Fri, 12 Jul 2024 19:47:23 +0000 (UTC)
+ id KuEsTmkSKSDc; Fri, 12 Jul 2024 19:48:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8DC2810D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34CC5810D4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8DC2810D4;
-	Fri, 12 Jul 2024 19:47:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CBCC41BF279
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:47:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 34CC5810D4;
+	Fri, 12 Jul 2024 19:48:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 562951BF279
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:48:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C41B3413C3
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:47:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43AE1605AD
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:48:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2BaaaVae_FAn for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 19:47:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B405B410A7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B405B410A7
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B405B410A7
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 19:47:19 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4279c924ca7so11806735e9.2
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 12:47:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720813638; x=1721418438;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=coNa+8nqdGo04lRhYUgdx1OVzeXHxeazrPQo/IhqAc0=;
- b=GIvx7ObR6GHj5K4XAi+5vgaKJXxfITTDodBPfnXRCS3LYI2t/Yd5BO8vxPZfp5MW1v
- mISvg02SsEuBF233GqDDcBV8My/0i3fcA6mhmZXjyqapfySbja+ZtbciX+sS+Ka/FHni
- zgySgINDgiXuUASMhyFZLrJyEVoSvFBe83O47eKHThkoalVv1H4Nv3wmWguCXfZpbS3V
- GXTbT0vbctd13zDwQmsdBCMLu6cdc/mKug/U68IYB5BNVZ2hOES+i6xgYd/H3Z5HPtt+
- jT6JRA9Bl0K6Iu9AmfITKGLFFsLQzlEA6jaFxDLn/Es7a5fNk6uCYRlFovvO0FbIZYZz
- aJBg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWHgffSnq0zw2v2AqeDZ6AQGQiqlRlr/kdPEt5FvBAJHvmfnVhQp0o+2vInRY/3Zdbqqn6Nimckj2eZ2Ex+PNKW1lkSPXpqGQ==
-X-Gm-Message-State: AOJu0YzgCmE0ab2x1nMMCTMZSN8H0ic6cHmgBXgv6sJqTkuc7JDbe7W3
- e3tF5yUZswHmfr/6fQrpv26VhLvC8Z7uKSXiOXV6pGYzPh8wqSUS1HfRvDNWu2AL9efU3wfB0yR
- 6twU=
-X-Google-Smtp-Source: AGHT+IF+qizHvNQxKTR9bdw0mZjxcjpp9QoyF6dw8UZ2E8k/wj1N308W6R+yDZXFGmIKufXS4x6ZdA==
-X-Received: by 2002:adf:fdc3:0:b0:367:4337:4065 with SMTP id
- ffacd0b85a97d-367cead1e76mr7807760f8f.51.1720813637723; 
- Fri, 12 Jul 2024 12:47:17 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
- (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:b481:98b5:611f:e783])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-367cdfab141sm10900845f8f.96.2024.07.12.12.47.16
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 12:47:17 -0700 (PDT)
-Message-ID: <09cd6cff-4562-4998-adfb-e2aacea9c713@mind.be>
-Date: Fri, 12 Jul 2024 21:47:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20230818151608.988723-1-bernd@kuhls.net>
-Content-Language: en-GB
-In-Reply-To: <20230818151608.988723-1-bernd@kuhls.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1720813638; x=1721418438; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=coNa+8nqdGo04lRhYUgdx1OVzeXHxeazrPQo/IhqAc0=;
- b=YhItxrLEkWv7VSF7jIOSukFnjYjM/vsegfHW77jQg8I7DyZD5CUkkOXq15INoIdttX
- LUjQoK6475htFS7KF3vz/4RP4ew+merP8ZXt3Ikp4TqMLzJKJd8ihrwBNR+n1QJAaEG+
- 9Lco33i08VFGmcWo9V3IuXM4Ywv3FoyAn1rV0nHZT/wRQ1UqteKgzwMQe7LIEQ2YeyEg
- SaM1PXs0aos6fMYyjpDBXeP2pn3/MY7ExyHHLEui4CyW43cWJPPdn1qTZBKvq0nI7E74
- f9YOSgJJRT7riW86x8NADJk0Sq3UguE/8xvby5kBvExufQS+QlO+QbMoINjwL+r/ycra
- eH3w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YhItxrLE
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix typo in
- make target .stamp_built
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VhLRMdoOSgav for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 19:48:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FC5060648
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FC5060648
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 19:48:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 567CE86170; Fri, 12 Jul 2024 19:48:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 21:47:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9ede791756a9c7a24da2d88667d813a0dc2c43ff
+X-Git-Newrev: 3149532ff14c6b5d4e00e9458a39daae60b07fca
+X-Patchwork-Hint: ignore
+Message-Id: <20240712194841.567CE86170@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rdesktop: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,43 +58,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=3149532ff14c6b5d4e00e9458a39daae60b07fca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0" reduced the fuzz factor.
 
-On 18/08/2023 17:16, Bernd Kuhls wrote:
-> This fix can be backported because the offending line was added in 2009.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Due to this change, rdesktop fails to build with output:
 
-  Applied to master with a slightly more extended commit message, thanks.
+    Applying 0001-8bit-colors.patch using patch:
+    patching file xwin.c
+    Hunk #1 succeeded at 1801 (offset 340 lines).
+    Hunk #2 FAILED at 1568.
+    1 out of 2 hunks FAILED -- saving rejects to file xwin.c.rej
 
-  Regards,
-  Arnout
+This commit refreshes the package patches on the current package
+version. The original patch was not generated with "git format-patch",
+and had no information (no commit log, no author, no date, ...). Since
+it was introduced in commit [1], the author and date is set to this
+commit. The "Upstream:" tag is also added to the patch, mentioning
+the upstream project is reported as unmaintained on its homepage (at
+the time of this commit). Finally, the ".checkpackageignore" entry is
+removed, since it is no longer needed.
 
-> ---
->   package/pkg-generic.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 5d1c1da128..9d40754939 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -286,7 +286,7 @@ $(BUILD_DIR)/%/.stamp_configured:
->   	$(Q)touch $@
->   
->   # Build
-> -$(BUILD_DIR)/%/.stamp_built::
-> +$(BUILD_DIR)/%/.stamp_built:
->   	@$(call step_start,build)
->   	@$(call MESSAGE,"Building")
->   	$(foreach hook,$($(PKG)_PRE_BUILD_HOOKS),$(call $(hook))$(sep))
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/e2dde9c7cdc2f9ed851acfb7daa858ffa1744246
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ .checkpackageignore                            |  1 -
+ package/rdesktop/0001-8bit-colors.patch        | 21 --------------
+ package/rdesktop/0001-Allow-8-bit-colors.patch | 38 ++++++++++++++++++++++++++
+ 3 files changed, 38 insertions(+), 22 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 69b8dece38..63a27410ca 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1226,7 +1226,6 @@ package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch lib_pat
+ package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch lib_patch.Upstream
+ package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch lib_patch.Upstream
+ package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch lib_patch.Upstream
+-package/rdesktop/0001-8bit-colors.patch lib_patch.Sob lib_patch.Upstream
+ package/read-edid/0001-Fix-install-file-list.patch lib_patch.Upstream
+ package/read-edid/0002-Fix-compiler-check.patch lib_patch.Upstream
+ package/read-edid/0003-fix-build-with-gcc-10.patch lib_patch.Upstream
+diff --git a/package/rdesktop/0001-8bit-colors.patch b/package/rdesktop/0001-8bit-colors.patch
+deleted file mode 100644
+index 710f8debef..0000000000
+--- a/package/rdesktop/0001-8bit-colors.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-diff -urpN rdesktop-1.5.0-orig/xwin.c rdesktop-1.5.0/xwin.c
+---- rdesktop-1.5.0-orig/xwin.c	2007-01-17 12:01:18.000000000 +0100
+-+++ rdesktop-1.5.0/xwin.c	2007-01-17 12:05:02.000000000 +0100
+-@@ -1461,7 +1461,7 @@ select_visual(int screen_num)
+- 		}
+- 
+- 		/* we use a colourmap, so the default visual should do */
+--		g_owncolmap = True;
+-+//		g_owncolmap = True;
+- 		g_visual = vmatches[0].visual;
+- 		g_depth = vmatches[0].depth;
+- 	}
+-@@ -1568,7 +1568,7 @@ ui_init(void)
+- 	{
+- 		g_xcolmap =
+- 			XCreateColormap(g_display, RootWindowOfScreen(g_screen), g_visual,
+--					AllocNone);
+-+					(g_depth <= 8) ? AllocAll : AllocNone);
+- 		if (g_depth <= 8)
+- 			warning("Display colour depth is %d bit: you may want to use -C for a private colourmap.\n", g_depth);
+- 	}
+diff --git a/package/rdesktop/0001-Allow-8-bit-colors.patch b/package/rdesktop/0001-Allow-8-bit-colors.patch
+new file mode 100644
+index 0000000000..0c2b820a45
+--- /dev/null
++++ b/package/rdesktop/0001-Allow-8-bit-colors.patch
+@@ -0,0 +1,38 @@
++From 2159684f1287b6bca2bd74c129b752a636ee807f Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Wed, 17 Jan 2007 13:58:01 +0000
++Subject: [PATCH] Allow 8-bit colors
++
++Upstream: Reported as unmaintained on homepage http://www.rdesktop.org/
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[Julien: refreshed the patch to be applied with fuzz factor 0]
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ xwin.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/xwin.c b/xwin.c
++index d96d0f4..d11f4a6 100644
++--- a/xwin.c
+++++ b/xwin.c
++@@ -1801,7 +1801,7 @@ select_visual(int screen_num)
++ 		}
++ 
++ 		/* we use a colourmap, so the default visual should do */
++-		g_owncolmap = True;
+++//		g_owncolmap = True;
++ 		g_visual = vmatches[0].visual;
++ 		g_depth = vmatches[0].depth;
++ 	}
++@@ -2010,7 +2010,7 @@ ui_init(void)
++ 	{
++ 		g_xcolmap =
++ 			XCreateColormap(g_display, RootWindowOfScreen(g_screen), g_visual,
++-					AllocNone);
+++					(g_depth <= 8) ? AllocAll : AllocNone);
++ 		if (g_depth <= 8)
++ 			logger(GUI, Warning,
++ 			       "Display colour depth is %d bit: you may want to use -C for a private colourmap",
++-- 
++2.45.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
