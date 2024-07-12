@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A038BC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:35:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99685C3DA45
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:35:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6DE62414B8;
-	Fri, 12 Jul 2024 15:35:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4FF6541481;
+	Fri, 12 Jul 2024 15:35:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JNxHpag3DA5B; Fri, 12 Jul 2024 15:35:34 +0000 (UTC)
+ id tmcOatNPbBrP; Fri, 12 Jul 2024 15:35:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6138A4149C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2C4241498
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6138A4149C;
-	Fri, 12 Jul 2024 15:35:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2C4241498;
+	Fri, 12 Jul 2024 15:35:36 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 588D21BF5D7
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:35:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 688F61BF5D7
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 46F2B60590
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:35:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 56E6B610FA
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:35:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7vpcRJ9APgck for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 15:35:15 +0000 (UTC)
+ id aY1CWP_0SyOU for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 15:35:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
  helo=relay6-d.mail.gandi.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7714F610FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7714F610FA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 701E060590
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 701E060590
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7714F610FA
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 15:35:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F767C000B;
- Fri, 12 Jul 2024 15:35:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 701E060590
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 15:35:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7CB68C0007;
+ Fri, 12 Jul 2024 15:35:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 17:35:07 +0200
-Message-Id: <20240712153509.2583089-3-kory.maincent@bootlin.com>
+Date: Fri, 12 Jul 2024 17:35:08 +0200
+Message-Id: <20240712153509.2583089-4-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240712153509.2583089-1-kory.maincent@bootlin.com>
 References: <20240712153509.2583089-1-kory.maincent@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: kory.maincent@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720798514;
+ d=bootlin.com; s=gm1; t=1720798515;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=x7jD1Upmc0WOwiPsBsJYBsRVP5JKiOEOaZFCE5ba2oU=;
- b=XnUp5qE5of2/7W2elqGpLxix6hzi8RurXIVZUhQ/XxdnCBzoEOkMk2/mPTMs00PFLA4bI+
- WpvMqV0+H7c+UsqSegvVFcIcW8Hm3+CWj4Y0ze+sUul9Y3MNi/LBcZ1pZSk//TL0quaE5w
- LcHT5TF15ZoBmwjRoGRhrdY43tD7mTbzrDH+t3V343NrM6DMZLO3DkZFkNF28EXoYlKGDM
- 56QX6kzGa4Y4gaeckQxxCTSsBBmR8Edtg72XVlAg1Q/hcDrTPyhOi9e9GWQvU8Lgm0dgFW
- 92m7XSVUjVQu76lPqHSZw7620BQUiW9QZiMdxToC67qm1U7A9Fsuq4Of1JzpXQ==
+ bh=Ddf5cp0qZswzd7uS3aFTz0WCxjQzsL9BgNlU+SV04DY=;
+ b=OcDSzzuCizbBHTQCdkuG/lYAMTIhACZZzBvNQX9Mw2hU0JP5McCm8S7ImpAduT+lFTYoE3
+ N5LGcgXZoYsIW9TFr50zBSYCV4FVqgn3C5zBwEDZ6n7C265u8kLPo09Mlt1MHDfMJmVvrw
+ ziffbeqMLgs5yw9qj3rwDte1fUGfWbKcnG4Zlv1KPdmfKcHbQ+r3Zpk/L0ZDXkaQbGR9Xw
+ 30tMCtKAg2c7tF0o7mrObdCYUoB3wtaU+RQu0t0zdalmW+tdzL+MzmI1dDP8hCrngXecqC
+ h+mG75jS9jPOr08w4W/WCyXogIncUL3qC5SHcGaXbYiEE0G+ST0apCPdWKVjlA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XnUp5qE5
-Subject: [Buildroot] [PATCH v4 2/4] package/python-click: Add support for
+ header.s=gm1 header.b=OcDSzzuC
+Subject: [Buildroot] [PATCH v4 3/4] package/python-cbor2: Add support for
  host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -96,15 +96,19 @@ TrustedFirmware-M, which depends on it.
 
 Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
- package/python-click/python-click.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-cbor2/python-cbor2.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
-index 0e29ff034e..3223ab39ce 100644
---- a/package/python-click/python-click.mk
-+++ b/package/python-click/python-click.mk
-@@ -12,3 +12,4 @@ PYTHON_CLICK_LICENSE_FILES = LICENSE.rst
- PYTHON_CLICK_SETUP_TYPE = setuptools
+diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
+index 5040301867..e0e9bfd920 100644
+--- a/package/python-cbor2/python-cbor2.mk
++++ b/package/python-cbor2/python-cbor2.mk
+@@ -12,5 +12,8 @@ PYTHON_CBOR2_LICENSE = MIT
+ PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
+ PYTHON_CBOR2_DEPENDENCIES = host-python-setuptools-scm
+ PYTHON_CBOR2_ENV = CBOR2_BUILD_C_EXTENSION=1
++HOST_PYTHON_CBOR2_SETUP_TYPE = pep517
++HOST_PYTHON_CBOR2_DEPENDENCIES += host-python-setuptools-scm
  
  $(eval $(python-package))
 +$(eval $(host-python-package))
