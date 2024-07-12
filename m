@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48CC1C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 12:59:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FECEC2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 13:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1242A413AB;
-	Fri, 12 Jul 2024 12:59:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A736408BD;
+	Fri, 12 Jul 2024 13:01:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TCYENJqVALDv; Fri, 12 Jul 2024 12:59:06 +0000 (UTC)
+ id qklhP2QPQg2T; Fri, 12 Jul 2024 13:01:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD768417E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0F92417DC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD768417E2;
-	Fri, 12 Jul 2024 12:59:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0F07F1BF232
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 12:59:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0F92417DC;
+	Fri, 12 Jul 2024 13:01:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B0C11BF40F
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:01:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EEEF2417E2
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 12:59:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54DD7402C7
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:01:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kNYL-KyJh-jz for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 12:59:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PKrKpmJMpGy2 for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 13:01:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBDFF413AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D76E4043E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EBDFF413AB
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 12:59:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D76E4043E
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 13:01:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDCB385E25; Fri, 12 Jul 2024 12:59:03 +0000 (UTC)
+ id 411D081D3A; Fri, 12 Jul 2024 13:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 14:58:36 +0200
+Date: Fri, 12 Jul 2024 15:01:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e0f2414330b049276678a19a45a53bfb521c52f2
-X-Git-Newrev: 20a6d583bd2c4cbeba409a3f892422e98181e2b0
+X-Git-Oldrev: 20a6d583bd2c4cbeba409a3f892422e98181e2b0
+X-Git-Newrev: cc2157418dedbfb8e0bd7400e13b6964e5ee92ac
 X-Patchwork-Hint: ignore
-Message-Id: <20240712125903.DDCB385E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8188eu: bump to 2024-02-06
- version on v5.2.2.4 branch
+Message-Id: <20240712130125.411D081D3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jack2: fix build with python 3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,45 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20a6d583bd2c4cbeba409a3f892422e98181e2b0
+commit: https://git.buildroot.net/buildroot/commit/?id=cc2157418dedbfb8e0bd7400e13b6964e5ee92ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version allows to build with Linux 6.8
+Fix the following build failure with python 3.12 (which removed imp
+module):
 
-Fixes:
+Traceback (most recent call last):
+  File "/home/autobuild/autobuild/instance-7/output-1/build/jack2-1.9.22/./waf", line 166, in <module>
+    from waflib import Scripting
+  File "/home/autobuild/autobuild/instance-7/output-1/build/jack2-1.9.22/waflib/Scripting.py", line 10, in <module>
+    from waflib import Utils, Configure, Logs, Options, ConfigSet, Context, Errors, Build, Node
+  File "/home/autobuild/autobuild/instance-7/output-1/build/jack2-1.9.22/waflib/Configure.py", line 16, in <module>
+    from waflib import ConfigSet, Utils, Options, Logs, Context, Build, Errors
+  File "/home/autobuild/autobuild/instance-7/output-1/build/jack2-1.9.22/waflib/Options.py", line 14, in <module>
+    from waflib import Logs, Utils, Context, Errors
+  File "/home/autobuild/autobuild/instance-7/output-1/build/jack2-1.9.22/waflib/Context.py", line 9, in <module>
+    import os, re, imp, sys
+ModuleNotFoundError: No module named 'imp'
 
-  http://autobuild.buildroot.net/results/c2524c7580d97f7387ec22da62be71d77f2ed8ec
+Fixes: 36e635d2d5c0166476858aa239ccbe78e8f2af14
+ - http://autobuild.buildroot.org/results/1bfe34e10ffdab80647ac01863165e93bcc9b0d8
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rtl8188eu/rtl8188eu.hash | 2 +-
- package/rtl8188eu/rtl8188eu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/jack2/0001-Update-to-waf-2-0-26.patch | 3480 +++++++++++++++++++++++++
+ 1 file changed, 3480 insertions(+)
 
-diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
-index eb28e6cf0a..4f8f83e78c 100644
---- a/package/rtl8188eu/rtl8188eu.hash
-+++ b/package/rtl8188eu/rtl8188eu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8cb10a047d39f13c776b0097ef1290f6b3c63590fd57bc0827e8638c878819f0  rtl8188eu-306f3e62cf7cddf8cee74f70f88a7a7b3af46f56.tar.gz
-+sha256  507d32eb91d3d407c7758319c81a36a9dc69e2b89378cabcd382411153927b7b  rtl8188eu-f42fc9c45d2086c415dce70d3018031b54a7beef.tar.gz
- sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index 36a84d34de..eca0fb8007 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8188EU_VERSION = 306f3e62cf7cddf8cee74f70f88a7a7b3af46f56
-+RTL8188EU_VERSION = f42fc9c45d2086c415dce70d3018031b54a7beef
- RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
