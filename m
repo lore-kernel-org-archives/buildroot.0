@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F822C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 10:26:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6788C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 10:42:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AE91418CE;
-	Fri, 12 Jul 2024 10:26:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A2CE41870;
+	Fri, 12 Jul 2024 10:42:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y_p8HrRiuDEJ; Fri, 12 Jul 2024 10:26:12 +0000 (UTC)
+ id spgdlkcNJqBw; Fri, 12 Jul 2024 10:42:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8097541813
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2BB941972
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8097541813;
-	Fri, 12 Jul 2024 10:26:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2C3061BF47F
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 10:26:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2BB941972;
+	Fri, 12 Jul 2024 10:42:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9996B1BF47F
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 10:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 255A541813
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 10:26:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8459561062
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 10:42:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sOikMPrjnDk3 for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 10:26:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gXfl8U9bn6G2 for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 10:42:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF3214180F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7708C61310
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF3214180F
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 10:26:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7708C61310
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 10:42:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C935A85CCA; Fri, 12 Jul 2024 10:26:09 +0000 (UTC)
+ id 5C64D85D18; Fri, 12 Jul 2024 10:42:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 12:25:57 +0200
+Date: Fri, 12 Jul 2024 12:41:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e514277a53ca997d0567754035e8b453396e173b
-X-Git-Newrev: 70a319f7f9aba2d44ed7548d7ac3cb42b6b216b3
+X-Git-Oldrev: 70a319f7f9aba2d44ed7548d7ac3cb42b6b216b3
+X-Git-Newrev: 4d609f369c7e3f8adc111f23e0238ba440165aae
 X-Patchwork-Hint: ignore
-Message-Id: <20240712102609.C935A85CCA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt6/qt6tools: new package
+Message-Id: <20240712104207.5C64D85D18@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6/qt6virtualkeyboard: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,135 +65,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70a319f7f9aba2d44ed7548d7ac3cb42b6b216b3
+commit: https://git.buildroot.net/buildroot/commit/?id=4d609f369c7e3f8adc111f23e0238ba440165aae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The Network module is explicitly required by qt6tools:
-
-  Failed to find required Qt component "Network".
-
-We need host-qt6base with Sql support for host-qt6tools to build the
-qhelpgenerator host tool. qt6tools will fail to build if qhelpgenerator
-is not available:
-
-  Failed to find the host tool "Qt6::qhelpgenerator".  It is part of the
-  Qt6ToolsTools package, but the package did not contain the tool.  Make sure
-  that the host module Tools was built with all features enabled (no
-  explicitly disabled tools).
 
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/Config.in              |  1 +
- package/qt6/qt6tools/Config.in     | 17 ++++++++++++++
- package/qt6/qt6tools/qt6tools.hash | 12 ++++++++++
- package/qt6/qt6tools/qt6tools.mk   | 45 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 75 insertions(+)
+ package/qt6/Config.in                              |  1 +
+ package/qt6/qt6virtualkeyboard/Config.in           | 11 ++++++
+ .../qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash | 12 +++++++
+ .../qt6/qt6virtualkeyboard/qt6virtualkeyboard.mk   | 39 ++++++++++++++++++++++
+ 4 files changed, 63 insertions(+)
 
 diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 69ce0b3f6a..48366f5fd1 100644
+index 48366f5fd1..9dbc4b804a 100644
 --- a/package/qt6/Config.in
 +++ b/package/qt6/Config.in
-@@ -51,6 +51,7 @@ source "package/qt6/qt6serialbus/Config.in"
- source "package/qt6/qt6serialport/Config.in"
+@@ -52,6 +52,7 @@ source "package/qt6/qt6serialport/Config.in"
  source "package/qt6/qt6shadertools/Config.in"
  source "package/qt6/qt6svg/Config.in"
-+source "package/qt6/qt6tools/Config.in"
+ source "package/qt6/qt6tools/Config.in"
++source "package/qt6/qt6virtualkeyboard/Config.in"
  source "package/qt6/qt6wayland/Config.in"
  source "package/qt6/qt6websockets/Config.in"
  
-diff --git a/package/qt6/qt6tools/Config.in b/package/qt6/qt6tools/Config.in
+diff --git a/package/qt6/qt6virtualkeyboard/Config.in b/package/qt6/qt6virtualkeyboard/Config.in
 new file mode 100644
-index 0000000000..5f52c5644f
+index 0000000000..4a9d6d57c0
 --- /dev/null
-+++ b/package/qt6/qt6tools/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_QT6TOOLS
-+	bool "qt6tools"
-+	select BR2_PACKAGE_QT6BASE_NETWORK
-+	# qt6tools needs host-qt6tools, and host-qt6tools needs
-+	# network support in qt6base. In addition, we also need
-+	# host-qt6base with Sql support to build the qhelpgenerator
-+	# tool, if target support for Sql is present
-+	select BR2_PACKAGE_HOST_QT6BASE_NETWORK
-+	select BR2_PACKAGE_HOST_QT6BASE_SQL if BR2_PACKAGE_QT6BASE_SQL
++++ b/package/qt6/qt6virtualkeyboard/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QT6VIRTUALKEYBOARD
++	bool "qt6virtualkeyboard"
++	select BR2_PACKAGE_QT6DECLARATIVE
++	select BR2_PACKAGE_QT6SVG
 +	help
 +	  Qt is a cross-platform application and UI framework for
 +	  developers using C++.
 +
-+	  Qt Tools provides tools facilitate the development
-+	  and design of applications.
++	  This package corresponds to the qt6virtualkeyboard module.
 +
-+	  https://github.com/qt/qttools
-diff --git a/package/qt6/qt6tools/qt6tools.hash b/package/qt6/qt6tools/qt6tools.hash
++	  https://doc.qt.io/qt-6/qtvirtualkeyboard-index.html
+diff --git a/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash b/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash
 new file mode 100644
-index 0000000000..622df4a00f
+index 0000000000..f34eb11e9e
 --- /dev/null
-+++ b/package/qt6/qt6tools/qt6tools.hash
++++ b/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash
 @@ -0,0 +1,12 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qttools-everywhere-src-6.7.2.tar.xz.sha256
-+sha256  58e855ad1b2533094726c8a425766b63a04a0eede2ed85086860e54593aa4b2a  qttools-everywhere-src-6.7.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qtvirtualkeyboard-everywhere-src-6.7.2.tar.xz.sha256
++sha256  320664b55a0960ff79c1b822dcf6e8cebe3e08b791147d41b570996d81ce180f  qtvirtualkeyboard-everywhere-src-6.7.2.tar.xz
 +
 +# Hashes for license files:
 +sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  3abd6471b9a9a08d65ce771143f8e278bb4c1aeb10c1c2d476935a6b049653f5  LICENSES/BSL-1.0.txt
 +sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
 +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
 +sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
 +sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6tools/qt6tools.mk b/package/qt6/qt6tools/qt6tools.mk
++sha256  05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1  src/plugins/openwnn/3rdparty/openwnn/NOTICE
++sha256  b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986  src/plugins/pinyin/3rdparty/pinyin/NOTICE
++sha256  9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6  src/plugins/tcime/3rdparty/tcime/COPYING
+diff --git a/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.mk b/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.mk
 new file mode 100644
-index 0000000000..d996f75b34
+index 0000000000..5c61ed7ec4
 --- /dev/null
-+++ b/package/qt6/qt6tools/qt6tools.mk
-@@ -0,0 +1,45 @@
++++ b/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.mk
+@@ -0,0 +1,39 @@
 +################################################################################
 +#
-+# qt6tools
++# qt6virtualkeyboard
 +#
 +################################################################################
 +
-+QT6TOOLS_VERSION = $(QT6_VERSION)
-+QT6TOOLS_SITE = $(QT6_SITE)
-+QT6TOOLS_SOURCE = qttools-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6TOOLS_VERSION).tar.xz
-+QT6TOOLS_INSTALL_STAGING = YES
-+QT6TOOLS_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6VIRTUALKEYBOARD_VERSION = $(QT6_VERSION)
++QT6VIRTUALKEYBOARD_SITE = $(QT6_SITE)
++QT6VIRTUALKEYBOARD_SOURCE = qtvirtualkeyboard-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6VIRTUALKEYBOARD_VERSION).tar.xz
++QT6VIRTUALKEYBOARD_INSTALL_STAGING = YES
 +
-+QT6TOOLS_CMAKE_BACKEND = ninja
++QT6VIRTUALKEYBOARD_SUPPORTS_IN_SOURCE_BUILD = NO
 +
-+QT6TOOLS_LICENSE = \
++QT6VIRTUALKEYBOARD_CMAKE_BACKEND = ninja
++
++QT6VIRTUALKEYBOARD_LICENSE = \
 +	BSD-3-Clause (examples), \
-+	BSD-3-Clause (corecon), \
-+	BSL-1.0 (catch), \
-+	LGPL-3.0 or GPL-3.0 or GPL-2.0, \
-+	GPL-3.0 WITH Qt-GPL-exception-1.0
++	GPL-3.0, \
++	Apache-2.0 (openwnn, pinyin, tcime plugins)
 +
-+QT6TOOLS_LICENSE_FILES = \
++QT6VIRTUALKEYBOARD_LICENSE_FILES = \
 +	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/BSL-1.0.txt \
-+	LICENSES/GPL-2.0-only.txt \
 +	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-3.0-only.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt
++	src/plugins/openwnn/3rdparty/openwnn/NOTICE \
++	src/plugins/pinyin/3rdparty/pinyin/NOTICE \
++	src/plugins/tcime/3rdparty/tcime/COPYING
 +
-+QT6TOOLS_CONF_OPTS = \
++QT6VIRTUALKEYBOARD_CONF_OPTS = \
 +	-DQT_HOST_PATH=$(HOST_DIR) \
 +	-DBUILD_WITH_PCH=OFF \
 +	-DQT_BUILD_EXAMPLES=OFF \
 +	-DQT_BUILD_TESTS=OFF
 +
-+QT6TOOLS_DEPENDENCIES = \
++QT6VIRTUALKEYBOARD_DEPENDENCIES = \
 +	qt6base \
-+	host-qt6tools
-+
-+ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
-+QT6TOOLS_DEPENDENCIES += qt6declarative
-+endif
++	qt6declarative \
++	qt6svg
 +
 +$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
