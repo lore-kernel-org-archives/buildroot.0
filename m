@@ -4,100 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A1C9C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28854C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:48:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E944741885;
-	Fri, 12 Jul 2024 14:47:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1C7340628;
+	Fri, 12 Jul 2024 14:48:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KV2bH8gAxi5G; Fri, 12 Jul 2024 14:47:07 +0000 (UTC)
+ id Il-u1cFRjKqM; Fri, 12 Jul 2024 14:48:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E0B4417F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71878405B7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E0B4417F7;
-	Fri, 12 Jul 2024 14:47:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B14521BF424
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:47:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71878405B7;
+	Fri, 12 Jul 2024 14:48:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E6EF1BF424
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:48:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB6AB846A1
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:47:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35AA861325
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:48:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ucWTJVv101RQ for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 14:47:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 89CED846A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89CED846A0
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 89CED846A0
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:47:04 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-42122ac2f38so12928555e9.1
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:47:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720795622; x=1721400422;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=FnKUEiB4jufyydRwBQBlPImAOieXB9i8n3R/eW0T0H0=;
- b=bq0+HRHe0JTuq+qeC1JAy4Gh3UIP3n1ruISHELoBpMKc77MdOOdSKp3S4a5TwWfIhB
- +QvhsEwXVf5AoAm4TtmPOQTLvTqvYOFNPamquo1iafXi5Hl9Wjz5nFO7teWE9sAE4rf1
- 6dmPDU5Plgl8eIwLteJRfxSWH+VVYXDMCZ0py1WtU6F518rz3aN470MleoFf1BO9wH0G
- OrsW5DY3G/RP/g7zAGcKe/8gtZCqn8GU5AmuY0PvgrRW7d9W4+ZWs24o/QFgpJHLkZsu
- AA2Tvhovr3TrHB+50QiQi/mvpxx8yxxVE6okABnqVDvvcU6lMFOtM8pEeuHLR8nS78Gy
- FnsA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUdJSU7muFrcoMz0Xze3vkmVaffqdClf0Rv7XG/zcslSjP9bBa3uT72PxDyYfj4AAAf7CZ4n3mh5hq2k1iwlztHjwDArYCyLg==
-X-Gm-Message-State: AOJu0YyyC0+u117mYdnWxz/wjoxzGANm7uqNy0lnPa8J2OPG+rAgRfmV
- NEd2MJEtyKey3zArFO9MC3VrvH4XAw2e36wBRZROfOmRZ2ah4qItBhVBFjytTKjp1LE+WpNLJYo
- hoks=
-X-Google-Smtp-Source: AGHT+IEM/5S/UoTMSNQDURGqJaWLCcdKQQS/UrFFjg91ZOcar7Zla7X6Q5AGF41vVSITkHq3u7DACg==
-X-Received: by 2002:a05:600c:4196:b0:426:5b52:84fb with SMTP id
- 5b1f17b1804b1-4279dacef9amr26440885e9.7.1720795622290; 
- Fri, 12 Jul 2024 07:47:02 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
- (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:b481:98b5:611f:e783])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4279f2397easm25894515e9.6.2024.07.12.07.47.01
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 07:47:01 -0700 (PDT)
-Message-ID: <f430f9e8-8ef4-4f89-8463-36dfc046d8b7@mind.be>
-Date: Fri, 12 Jul 2024 16:46:59 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5-KXDNUyFx0P for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 14:48:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EF72261324
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF72261324
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EF72261324
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:48:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5636C240009;
+ Fri, 12 Jul 2024 14:48:38 +0000 (UTC)
+Date: Fri, 12 Jul 2024 16:48:37 +0200
+To: Gael PORTAY <gael.portay@rtone.fr>
+Message-ID: <20240712164837.214641d2@windsurf>
+In-Reply-To: <DB9PR07MB9104EEDA904AF785C1A5205182D42@DB9PR07MB9104.eurprd07.prod.outlook.com>
+References: <ec99ecde-ff6e-40c6-9622-f4440462a026@gmx.de>
+ <20240603230940.51746-1-foss@athaariq.my.id>
+ <0f36a666-274b-4980-aa08-e738f0fccb79@mind.be>
+ <DB9PR07MB9104EEDA904AF785C1A5205182D42@DB9PR07MB9104.eurprd07.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Ricardo Martincoski <ricardo.martincoski@gmail.com>,
- buildroot@buildroot.org
-References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
- <20230101233653.487175-27-ricardo.martincoski@gmail.com>
-Content-Language: en-GB
-In-Reply-To: <20230101233653.487175-27-ricardo.martincoski@gmail.com>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1720795622; x=1721400422; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=FnKUEiB4jufyydRwBQBlPImAOieXB9i8n3R/eW0T0H0=;
- b=RkDk1TbPakoZ9GiEj+WerRXRC4HFSK70muLAgsN3cDbixw3cBwPRAihjfPrVlRmZWZ
- pd3zYU1+IMBY1h4MLvtiRJFLvKgPbSHJHQlW7Fn/FYGhVo+4TYHIBPgt7mIkYu94bxPE
- 12XJdK4eZ0xqgxVhWE8in56Xr70k4Lyb0dczACrvBKOMauH2X/vYWqc4H1Dqtcxd9sih
- NKGjFCJTNcZetMym/mPqjNSaD7CbQ6d5wxgc2KQUv4X18ezML9p1+CL0a+HIlAJeocXm
- iYGHfzKo2sHFAVDkEEDSqFus6ZxDq9QRKPDBq07/eoeqYX73p9ppvF3saqGAciIrqtVg
- cKIQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=RkDk1TbP
-Subject: Re: [Buildroot] [PATCH 26/29] utils/check-package: check linux-tools
+ d=bootlin.com; s=gm1; t=1720795719;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=PyN7Aqv4aA+X/SstwK1KlcQ7DymZLC/MrAllal5WQEs=;
+ b=fJ3c/ZWjM5+MKNxj9KUPjhnwblSqKahUAxsV9bKtJNH+wZMhCOnDzCHorCrKldZQEJ1SQ0
+ tP+QPWGV8G4fCrKp4ShKOTcTA0tDO+Hxrbb6Obd/0AL11ESepkX4hHOLDEmAck47nWL5u2
+ 4RE/g/B3OXPYu1OIIg7pTfb8ZVGeSK4pm66/6RLwlfH7k87hUa6rPzZB2GtksjpjEu0XpI
+ ZAnUIdVkmSilQQAFzd0Ml6kUaSgizRsOoUZl/NthI0Dk+qCDQTpPBYf/onTqXVKiPNfUTq
+ XAudhvp3C1F4gJvvtaDym8SkLp0yK0q/soKzUcXWgk9v7V6v1c+cZUtiMHkebQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fJ3c/ZWj
+Subject: Re: [Buildroot] [PATCH v3 1/3] package/rpi-firmware: bump version
+ to v1.20240529
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,177 +84,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Fiona Klute <fiona.klute@gmx.de>, Athaariq Ardhiansyah <foss@athaariq.my.id>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ Martin Bark <martin@barkynet.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello,
 
+On Mon, 24 Jun 2024 08:31:57 +0000
+Gael PORTAY <gael.portay@rtone.fr> wrote:
 
-On 02/01/2023 00:36, Ricardo Martincoski wrote:
-> Each linux tool uses a fragment of a .mk file, named, for instance:
-> package/linux-tools/linux-tool-cpupower.mk.in
-> So currently check-package does not check these files.
+> [I hope I am not responding in HTML, I have no choice but to use a new e-mail since today].
+
+Argh, your HTML e-mail is a mess.
+
+> Arnout, I agree, that symbol is unneeded.
 > 
-> Add the support in check-package script.
-> At the same time, factor out a function to derive package prefix from
-> the filename being checked, so the fix (calling os.path.splitext twice)
-> can be applied in a single place.
+> However, BR requires that package to install the device-tree to boot
+> the system because of the device-trees and device-tree overlays.
+
+Apparently, not in the case of RPi5, because the patch from Athaariq
+has:
+
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI5=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi5/config_5.txt"
+
+so neither BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS nor
+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS are enabled. Therefore
+the rpi-firmware package does not install DTBs or DTBOs.
+
+> And I agree, there is possible work to get rid of that package for
+> pi5.
 > 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
-> Running on current master generates no warnings.
-> ---
->   utils/check-package                  |  3 ++-
->   utils/checkpackagelib/lib_mk.py      | 28 ++++++++++---------
->   utils/checkpackagelib/test_lib_mk.py | 40 ++++++++++++++++++++++++++++
->   3 files changed, 57 insertions(+), 14 deletions(-)
+> BR could provides its own bare minimal config.txt for every pi, it
+> can be overriden by menuconfig.
 > 
-> diff --git a/utils/check-package b/utils/check-package
-> index f64daed84c..6bd0c0b31f 100755
-> --- a/utils/check-package
-> +++ b/utils/check-package
-> @@ -61,6 +61,7 @@ DO_CHECK_INTREE = re.compile(r"|".join([
->   DO_NOT_CHECK_INTREE = re.compile(r"|".join([
->       r"boot/barebox/barebox\.mk$",
->       r"fs/common\.mk$",
-> +    r"package/alchemy/atom.mk.in$",
->       r"package/doc-asciidoc\.mk$",
->       r"package/pkg-\S*\.mk$",
->       r"toolchain/helpers\.mk$",
-> @@ -84,7 +85,7 @@ def get_lib_from_filename(fname):
->           return checkpackagelib.lib_config
->       if fname.endswith(".hash"):
->           return checkpackagelib.lib_hash
-> -    if fname.endswith(".mk"):
-> +    if fname.endswith(".mk") or fname.endswith(".mk.in"):
->           return checkpackagelib.lib_mk
->       if fname.endswith(".patch"):
->           return checkpackagelib.lib_patch
-> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-> index b0bd52bdf6..931fa39dda 100644
-> --- a/utils/checkpackagelib/lib_mk.py
-> +++ b/utils/checkpackagelib/lib_mk.py
-> @@ -21,6 +21,16 @@ continue_conditional = ["elif", "else"]
->   end_conditional = ["endif"]
->   
->   
-> +def get_package_prefix_from_filename(filename):
+> Also, I have that attempt to install the dtb and dtbo from the kernel
+> package instead of using the ones from the rpi-firmware package.
+> 
+> https://patchwork.ozlabs.org/project/buildroot/patch/20240412140945.1626579-2-gael.portay@rtone.fr/ 
 
-  I added a docstring and a comment explaining the double splitext here.
+OK, but for the time being, I wouldn't mind to see a RPi 5
+configuration merged that works in the current setup. Then we can
+improve later on. We really want to have a RPi5 configuration in
+Buildroot soon.
 
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> +    package = os.path.splitext(os.path.splitext(os.path.basename(filename))[0])[0]
-> +    # linux tools do not use LINUX_TOOL_ prefix for variables
-> +    package = package.replace("linux-tool-", "")
-> +    # linux extensions do not use LINUX_EXT_ prefix for variables
-> +    package = package.replace("linux-ext-", "")
-> +    package_upper = package.replace("-", "_").upper()
-> +    return package, package_upper
-> +
-> +
->   class Indent(_CheckFunction):
->       COMMENT = re.compile(r"^\s*#")
->       CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional + continue_conditional)))
-> @@ -179,12 +189,10 @@ class RemoveDefaultPackageSourceVariable(_CheckFunction):
->       packages_that_may_contain_default_source = ["binutils", "gcc", "gdb"]
->   
->       def before(self):
-> -        package, _ = os.path.splitext(os.path.basename(self.filename))
-> -        package_upper = package.replace("-", "_").upper()
-> -        self.package = package
-> +        self.package, package_upper = get_package_prefix_from_filename(self.filename)
->           self.FIND_SOURCE = re.compile(
->               r"^{}_SOURCE\s*=\s*{}-\$\({}_VERSION\)\.tar\.gz"
-> -            .format(package_upper, package, package_upper))
-> +            .format(package_upper, self.package, package_upper))
->   
->       def check_line(self, lineno, text):
->           if self.FIND_SOURCE.search(text):
-> @@ -254,16 +262,10 @@ class TypoInPackageVariable(_CheckFunction):
->       VARIABLE = re.compile(r"^(define\s+)?([A-Z0-9_]+_[A-Z0-9_]+)")
->   
->       def before(self):
-> -        package, _ = os.path.splitext(os.path.basename(self.filename))
-> -        package = package.replace("-", "_").upper()
-> -        # linux tools do not use LINUX_TOOL_ prefix for variables
-> -        package = package.replace("LINUX_TOOL_", "")
-> -        # linux extensions do not use LINUX_EXT_ prefix for variables
-> -        package = package.replace("LINUX_EXT_", "")
-> -        self.package = package
-> -        self.REGEX = re.compile(r"(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
-> +        _, self.package = get_package_prefix_from_filename(self.filename)
-> +        self.REGEX = re.compile(r"(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(self.package))
->           self.FIND_VIRTUAL = re.compile(
-> -            r"^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
-> +            r"^{}_PROVIDES\s*(\+|)=\s*(.*)".format(self.package))
->           self.virtual = []
->   
->       def check_line(self, lineno, text):
-> diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-> index 5f5663377b..d817cdece0 100644
-> --- a/utils/checkpackagelib/test_lib_mk.py
-> +++ b/utils/checkpackagelib/test_lib_mk.py
-> @@ -3,6 +3,40 @@ import checkpackagelib.test_util as util
->   import checkpackagelib.lib_mk as m
->   
->   
-> +get_package_prefix_from_filename = [
-> +    ('linux extension',
-> +     'linux/linux-ext-aufs.mk',
-> +     ['aufs', 'AUFS']),
-> +    ('linux tool',
-> +     'package/linux-tools/linux-tool-gpio.mk.in',
-> +     ['gpio', 'GPIO']),
-> +    ('boot',
-> +     'boot/binaries-marvell/binaries-marvell.mk',
-> +     ['binaries-marvell', 'BINARIES_MARVELL']),
-> +    ('toolchain',
-> +     'toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk',
-> +     ['toolchain-external-bootlin', 'TOOLCHAIN_EXTERNAL_BOOTLIN']),
-> +    ('package, underscore, subfolder',
-> +     'package/x11r7/xapp_bitmap/xapp_bitmap.mk',
-> +     ['xapp_bitmap', 'XAPP_BITMAP']),
-> +    ('package, starting with number',
-> +     'package/4th/4th.mk',
-> +     ['4th', '4TH']),
-> +    ('package, long name',
-> +     'package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk',
-> +     ['perl-mojolicious-plugin-authentication', 'PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION']),
-> +    ('package, case sensitive',
-> +     'package/libeXosip2/libeXosip2.mk',
-> +     ['libeXosip2', 'LIBEXOSIP2']),
-> +    ]
-> +
-> +
-> +@pytest.mark.parametrize('testname,filename,expected', get_package_prefix_from_filename)
-> +def test_get_package_prefix_from_filename(testname, filename, expected):
-> +    prefix_lower, prefix_upper = m.get_package_prefix_from_filename(filename)
-> +    assert [prefix_lower, prefix_upper] == expected
-> +
-> +
->   Indent = [
->       ('ignore comment at beginning of line',
->        'any',
-> @@ -496,6 +530,12 @@ TypoInPackageVariable = [
->        'OTHERS_VAR = \n',
->        [['any.mk:2: possible typo: OTHERS_VAR -> *ANY*',
->          'OTHERS_VAR = \n']]),
-> +    ('linux tool',
-> +     'package/linux-tools/linux-tool-cpupower.mk.in',
-> +     'CPUPOWER_DEPENDENCIES =\n'
-> +     'POWER_DEPENDENCIES +=\n',
-> +     [['package/linux-tools/linux-tool-cpupower.mk.in:2: possible typo: POWER_DEPENDENCIES -> *CPUPOWER*',
-> +       'POWER_DEPENDENCIES +=\n']]),
->       ]
->   
->   
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
