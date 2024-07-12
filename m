@@ -4,103 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CBE5C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 21:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E47F2C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 21:54:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1088B419E1;
-	Fri, 12 Jul 2024 21:53:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 434824199E;
+	Fri, 12 Jul 2024 21:54:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7mzbpL_yrtDx; Fri, 12 Jul 2024 21:53:13 +0000 (UTC)
+ id vuW3KwaD2J1P; Fri, 12 Jul 2024 21:54:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E014341981
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56DD8419A0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E014341981;
-	Fri, 12 Jul 2024 21:53:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9634A1BF3C4
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 21:53:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56DD8419A0;
+	Fri, 12 Jul 2024 21:54:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0636F1BF3C4
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 21:54:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82E83844E3
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 21:53:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00AF2400DA
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 21:54:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZNJUwithF9zU for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 21:53:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D69BE844DF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D69BE844DF
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D69BE844DF
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 21:53:09 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-36796a9b636so1459104f8f.2
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:53:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720821188; x=1721425988;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=qONCuqmU5uiGiPj4fiIY9dpxh49QOANPdUMqR2pgQwc=;
- b=l561lyywDGK07hsMdAO2tPVzIzvJcPjZ3aVU8bPOhzxYxHkFBfO0dWGhQFVEUvlT3k
- kOlaZxmgVzjOe0Rg6LRQJ6rVr7xHUMRH1dUMJpP7yrvneJRcwemTGAZtqYQTff/vJKYG
- nJzQG3fKc9zgjzORutsYx1WysiUTv0nrVJk8aePguyII2ZbZLmLI/2O6xNQG7oLdZWDw
- 46GE1yRjAbq2z0PLMZRAlbILe7e7YYqySRud8Vd5sK/mb4UPYzweUD3d2q4W8YCfWBDr
- hAadm00tt3CJljHlbCJeLzuRBCGFkj3IlKxQzrJ0uVcdAK9Hmz9+HqEYEHDr4hv8iYr6
- 8B+g==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXPXDoVGRXokcInXkUbFQxcwmpHSTxRGXxtpDb2iCEcYLs1BPDnP2B0CLU78YFeqkdo6XjIILOL4h6pRtyNORP87BCsY8goKA==
-X-Gm-Message-State: AOJu0YzWdxfhB6cCVwveK0V6ams/L6wbun22XNnEmGup7J/m2QSuRenB
- olqgKdr5GQeuS4kv4R44Uoy3aeburgej1IKKjJZXtPX+24CDl4Ou0Qn9Kzp2Pfk=
-X-Google-Smtp-Source: AGHT+IGzt45GpwVlKVdlKEpsmhVWlviq80QLqZVQU6a/3Pcgl+GGtjn/NKDVTT1eKg0MBOMi+bDFPw==
-X-Received: by 2002:a5d:6186:0:b0:367:8aa3:4366 with SMTP id
- ffacd0b85a97d-367cea961a5mr8143643f8f.38.1720821187587; 
- Fri, 12 Jul 2024 14:53:07 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:f9c8:f443:ffd:1bed?
- (2a01cb05949d5800f9c8f4430ffd1bed.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:f9c8:f443:ffd:1bed])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-426740d8c4bsm85990005e9.1.2024.07.12.14.53.07
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 14:53:07 -0700 (PDT)
-Message-ID: <bf8b544f-85db-43ae-9579-9b4dee1c7643@smile.fr>
-Date: Fri, 12 Jul 2024 23:53:06 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id otdrxagdXJhL for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 21:54:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1661F400AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1661F400AC
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1661F400AC
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 21:54:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F2D17E0004;
+ Fri, 12 Jul 2024 21:54:49 +0000 (UTC)
+Date: Fri, 12 Jul 2024 23:54:49 +0200
+To: Wilfred Mallawa via buildroot <buildroot@buildroot.org>
+Message-ID: <20240712235449.766c2931@windsurf>
+In-Reply-To: <20240402035140.71770-2-wilfred.mallawa@wdc.com>
+References: <20240402035140.71770-2-wilfred.mallawa@wdc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20240410171211.1633127-1-jeanmichel.hautbois@yoseli.org>
- <20240410171211.1633127-2-jeanmichel.hautbois@yoseli.org>
- <20240410215656.1756a37e@windsurf>
- <f85e872c-8d99-4dcf-997e-95d3a382b463@yoseli.org>
- <20240410231711.084c9d7e@windsurf>
- <9b5aee40-4cdb-480c-bd9f-d1bcbe5c57a9@yoseli.org>
- <4ce12a2a-17e5-483a-abdf-5d5cec085875@yoseli.org>
-Content-Language: en-US
-In-Reply-To: <4ce12a2a-17e5-483a-abdf-5d5cec085875@yoseli.org>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1720821188; x=1721425988; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=qONCuqmU5uiGiPj4fiIY9dpxh49QOANPdUMqR2pgQwc=;
- b=iOQSPxcf2p8L6UJ7BVBNhDQe2zWrdnp69Aq8KrVacUW97kqJogxZn0TAyYT3F3C7np
- 9i2vNEVSMXABiH0oF980h123A+W44ks7fAlv24apiELde/d5RP3j6ktOeL4Hl1MxtxQQ
- SLOl2Tlq+N/QMvsXTwQl3Ah1+p9xk7CtVxiFs=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=bootlin.com; s=gm1; t=1720821290;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=VrMwW01nwy2123FW3XxJuOUW0WxCxhodwLsqtu9sD8s=;
+ b=T37XRIqh+QQciev0JgUPyz8qqkSJTQ4kxKxQ3nvWCHjCezyLSr5U38egQb6+EVIKyeoS/C
+ 9VFCiXgvgVoS3bkugLI/Kz2zFCC2SKhGrk321rC5KKW1bji1OuQoFnJpNCVi7vz+NmchkU
+ gHoLQoF2h/4/8N1R73CoVj+ZepPSESjT+x+Z38tsHsNKNOpqVXQtZvop2cINqSLZsgevee
+ NBMvJwau90s7DGDCyAEPktkKVpflECHSOKHIfZ2TZUajF4Bvmvzsr2XFP0uST8NoxqSq5x
+ 9l0Y/OMaLtzAUGa9t4d3Hh6gKsoGFbZdiRbSV+NVzj/WCFZHUNTozlk4OPO96Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=iOQSPxcf
-Subject: Re: [Buildroot] [PATCH v2 1/3] arch: add support for mcf5441x
- Colfdire
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=T37XRIqh
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/spdm-utils: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,61 +80,237 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Wilfred Mallawa <wilfred.mallawa@wdc.com>, alistair.francis@wdc.com,
  yann.morin.1998@free.fr
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmVhbi1NaWNoZWwsCgpMZSAxMS8wNC8yMDI0IMOgIDE1OjQ4LCBKZWFuLU1pY2hlbCBI
-YXV0Ym9pcyBhIMOpY3JpdMKgOgo+IEhlbGxvLAo+IAo+IE9uIDExLzA0LzIwMjQgMDc6NTksIEpl
-YW4tTWljaGVsIEhhdXRib2lzIHdyb3RlOgo+PiBPbiAxMC8wNC8yMDI0IDIzOjE3LCBUaG9tYXMg
-UGV0YXp6b25pIHZpYSBidWlsZHJvb3Qgd3JvdGU6Cj4+PiBPbiBXZWQsIDEwIEFwciAyMDI0IDIz
-OjA4OjE0ICswMjAwCj4+PiBKZWFuLU1pY2hlbCBIYXV0Ym9pcyA8amVhbm1pY2hlbC5oYXV0Ym9p
-c0B5b3NlbGkub3JnPiB3cm90ZToKPj4+Cj4+Pj4+IFdoYXQgaGFwcGVucyB3aGVuIHlvdSBkb24n
-dCBzcGVjaWZ5IC1tYXJjaD8gRG8geW91IGtub3cgd2hpY2ggb2YgaXNhYSwKPj4+Pj4gaXNhYXBs
-dXMsIGlzYWIgYW5kIGlzYWMgdGhlIE1DRjU0NDF4IGNvcnJlc3BvbmRzIHRvPwo+Pj4+Cj4+Pj4g
-SSBkaWQgbm90IGNoZWNrIHdoYXQgaGFwcGVucywgYnV0IGJhc2VkIG9uIHRoZSBmb2xsb3dpbmcg
-ZmlsZSBpdCBpcyBpc2FjOgo+Pj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9nY2MtbWlycm9yL2djYy9i
-bG9iL21hc3Rlci9nY2MvY29uZmlnL202OGsvbTY4ay1kZXZpY2VzLmRlZiNMMTY4Cj4+Pgo+Pj4g
-QW5kIGlmIHlvdSBzcGVjaWZ5IC1tY3B1IGluc3RlYWQsIGRvZXMgaXQgd29yaz8gV2hhdCBkb2Vz
-bid0IHdvcmsgaWYKPj4+IHlvdSBvbWl0IC1tYXJjaD8KPj4KPj4gSWYgSSBjaGFuZ2UgdGhlIGxp
-bmUgdG8gcGFzcyBpc2FjLCBob3N0LWdjYy1maW5hbCBkb2VzdCBub3QgYnVpbGQgYXQgYWxsOgo+
-PiA8c25pcD4KPj4gY2hlY2tpbmcgaWYgbWtkaXIgdGFrZXMgb25lIGFyZ3VtZW50Li4uIG5vCj4+
-IEludmFsaWQgLS13aXRoLWFyY2g9aXNhYwo+PiBtYWtlWzNdOiAqKiogW01ha2VmaWxlOjQ1NTM6
-IGNvbmZpZ3VyZS1nY2NdIEVycm9yIDEKPj4gbWFrZVsyXTogKioqIFtNYWtlZmlsZToxMDI5OiBh
-bGxdIEVycm9yIDIKPj4gbWFrZVsxXTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmljLm1rOjI4MzoK
-Pj4gL2hvbWUvam0vUHJvamVjdHMvd2FidGVjL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvaG9zdC1n
-Y2MtZmluYWwtMTIuMy4wLy5zdGFtcF9idWlsdF0gRXJyb3IgMgo+Pgo+PiBBcyBJIGFtIG5vdCBh
-cyBleHBlcmltZW50ZWQgYXMgeW91IHdpdGggdG9vbGNoYWlucywgSSB3b3VsZCBjZXJ0YWlubHkK
-Pj4gYXBwcmVjaWF0ZSBzb21lIGd1aWRhbmNlIHRvIGRlYnVnIGlmIG5lZWRlZC4KPj4KPj4gSSBj
-YW4gdGVsbCBmb3Igc3VyZSB0aGF0IHdpdGggImNmIiBhbmQgdGhlIDU0NDU1IGZhbWlseSBzcGVj
-aWZpZWQsIGl0IGJ1aWxkcwo+PiBteSBhcHBsaWNhdGlvbnMgOy0pLgoKSXQncyBub3QgY2xlYXIg
-d2h5IHRoZSBvcHRpb24gaXMgQlIyX202OGtfY2Y1NDQxeCBidXQgeW91IHNldCA1NDQ1NSBmb3IK
-QlIyX0dDQ19UQVJHRVRfQ1BVCgogY29uZmlnIEJSMl9HQ0NfVEFSR0VUX0NQVQogCWRlZmF1bHQg
-IjY4MDQwIgkJaWYgQlIyX202OGtfNjgwNDAKIAlkZWZhdWx0ICI1MjA4IgkJaWYgQlIyX202OGtf
-Y2Y1MjA4CisJZGVmYXVsdCAiNTQ0NTUiCQlpZiBCUjJfbTY4a19jZjU0NDF4CgppcyBhIHR5cG8/
-Cgo+IAo+IFNtYWxsIHVwZGF0ZToKPiBJIGhhdmUgdG8gYWRkIHRoZSBmb2xsb3dpbmcgcGF0Y2gg
-aW4gcGFja2FnZS9nY2MvMTIuMy4wIHRvIG1ha2UgaXQgdXNlIHRoZQo+IG1hcmNoPSJpc2FjIi4K
-PiAKPiBkaWZmIC0tZ2l0IGEvZ2NjL2NvbmZpZy5nY2MgYi9nY2MvY29uZmlnLmdjYwo+IGluZGV4
-IDVjMzc4YzY5OGZmLi5hNmZlOWMyYWQ1MyAxMDA2NDQKPiAtLS0gYS9nY2MvY29uZmlnLmdjYwo+
-ICsrKyBiL2djYy9jb25maWcuZ2NjCj4gQEAgLTQ1MjIsNyArNDUyMiw3IEBAIGNhc2UgIiR7dGFy
-Z2V0fSIgaW4KPiDCoMKgwqDCoMKgwqDCoCBmaWRvLSotKiB8IG02OGsqLSotKikKPiDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3VwcG9ydGVkX2RlZmF1bHRzPSJhcmNoIGNwdSIKPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY2FzZSAiJHdpdGhfYXJjaCIgaW4KPiAtwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAiIiB8ICJtNjhrInwgImNmIikKPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCAiIiB8ICJtNjhrInwgImNmIiB8ICJpc2FjIikKPiDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG02OGtfYXJjaF9mYW1pbHk9
-IiR3aXRoX2FyY2giCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCA7Owo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqKQoKQ2FuIHlvdSBhc2sg
-b24gdGhlIGdjYyBtYWlsaW5nIGxpc3QgdG8gZ2V0IGFuIHVwc3RyZWFtIHJldmlldz8KCkJlc3Qg
-cmVnYXJkcywKUm9tYWluCgoKPiAKPiBKTQo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hello Wilfred,
+
+I wanted to merge this package, but got some build issues. See below.
+
+On Tue,  2 Apr 2024 13:51:41 +1000
+Wilfred Mallawa via buildroot <buildroot@buildroot.org> wrote:
+
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+> ---
+> Changes in V2:                                                   
+>         - Added required python3 dependencies
+>         - Now depends on `udev` instead of selecting `eudev`
+>         - Now depends on `libspdm`
+>         - Hook define moved below the hook, stylistically similar to
+>             other packages
+>         - Removed cargo package re-vendoring as we aren't patching
+>         - Changed certificate/manifest installation path to be system wide.
+> 
+>  package/Config.in                  |  1 +
+>  package/spdm-utils/Config.in       | 24 ++++++++++++++++++++
+>  package/spdm-utils/spdm-utils.hash |  2 ++
+>  package/spdm-utils/spdm-utils.mk   | 36 ++++++++++++++++++++++++++++++
+>  4 files changed, 63 insertions(+)
+>  create mode 100644 package/spdm-utils/Config.in
+>  create mode 100644 package/spdm-utils/spdm-utils.hash
+>  create mode 100644 package/spdm-utils/spdm-utils.mk
+
+In order to validate the dependencies, I went back to a simpler
+package, like this:
+
+config BR2_PACKAGE_SPDM_UTILS
+	bool "spdm-utils"
+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+	depends on BR2_PACKAGE_HAS_UDEV
+	select BR2_PACKAGE_HOST_RUSTC
+	help
+	  SPDM-Utils is a Linux application designed to support,
+	  test and develop SPDM requesters and responders.
+	  SPDM-Utils uses libspdm as the backend to perform SPDM
+	  communication. SPDM-Utils currently supports the
+	  PCIe Data Object Exchange (DOE) Capability.
+
+	  https://github.com/westerndigitalcorporation/spdm-utils
+
+comment "spdm-utils needs udev /dev management"
+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+        depends on !BR2_PACKAGE_HAS_UDEV
+
+and in the .mk file, reduced the DEPENDENCIES variable to:
+
+SPDM_UTILS_DEPENDENCIES = udev
+
+And with this, I get:
+
+  Unable to find libclang: "couldn't find any valid shared libraries matching: ['libclang.so', 'libclang-*.so', 'libclang.so.*', 'libclang-*.so.*'], set the `LIBCLANG_PATH` environment variable to a path where one of these files can be found (invalid: [])"
+
+However, none of your dependencies where related to libclang, so I
+believe something is probably missing in terms of dependencies in your
+submission. Could you double check?
+
+Also, see below some comments.
+
+
+> diff --git a/package/spdm-utils/Config.in b/package/spdm-utils/Config.in
+> new file mode 100644
+> index 0000000000..b96365451f
+> --- /dev/null
+> +++ b/package/spdm-utils/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_SPDM_UTILS
+> +	bool "spdm-utils"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
+> +	depends on BR2_USE_WCHAR # eudev
+
+Not needed, you simply need BR2_PACKAGE_HAS_UDEV.
+
+> +	depends on !BR2_STATIC_LIBS
+
+Please drop, you have this line duplicated below.
+
+> +	depends on BR2_USE_MMU # eudev
+
+We don't care about eudev dependencies, BR2_PACKAGE_HAS_UDEV is enough.
+However, BR2_USE_MMU is needed for python3, so add # python3 at the end
+of this line (if python3 is really needed, of course)
+
+> +	depends on !BR2_STATIC_LIBS  # python3
+
+> +	depends on BR2_USE_MMU  # eudev, python3
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	depends on BR2_PACKAGE_LIBSPDM
+
+Please select this library, but then you need:
+
+	depends on BR2_PACKAGE_LIBSPDM_ARCH_SUPPORTS
+
+> +	select BR2_PACKAGE_HOST_RUSTC
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_PCIUTILS
+> +	select BR2_PACKAGE_EUDEV
+
+This select is not needed.
+
+> +	select BR2_PACKAGE_PYTHON3
+> +	help
+> +	  SPDM-Utils is a Linux application designed to support,
+> +	  test and develop SPDM requesters and responders.
+> +	  SPDM-Utils uses libspdm as the backend to perform SPDM
+> +	  communication. SPDM-Utils currently supports the
+> +	  PCIe Data Object Exchange (DOE) Capability.
+> +
+> +	  https://github.com/westerndigitalcorporation/spdm-utils
+
+Please add Config.in comments about the dependencies. So probably:
+
+comment "spdm-utils needs a toolchain w/ threads, dynamic library"
+	depends on BR2_USE_MMU
+	depends on BR2_PACKAGE_LIBSPDM_ARCH_SUPPORTS
+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+
+comment "spdm-utils needs udev /dev management"
+	depends on BR2_USE_MMU
+	depends on BR2_PACKAGE_LIBSPDM_ARCH_SUPPORTS
+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+        depends on !BR2_PACKAGE_HAS_UDEV
+
+
+> diff --git a/package/spdm-utils/spdm-utils.hash b/package/spdm-utils/spdm-utils.hash
+> new file mode 100644
+> index 0000000000..aaa243315e
+> --- /dev/null
+> +++ b/package/spdm-utils/spdm-utils.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256  3f06f087220b126262a2becf68c9e06a59d8d613816f82a168c81093de087d1a  spdm-utils-0.3.0.tar.gz
+
+This needs to be fixed with recent changes in the Cargo infrastructure.
+Do a build, you'll notice.
+
+> diff --git a/package/spdm-utils/spdm-utils.mk b/package/spdm-utils/spdm-utils.mk
+> new file mode 100644
+> index 0000000000..4176f61871
+> --- /dev/null
+> +++ b/package/spdm-utils/spdm-utils.mk
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# spdm-utils
+> +#
+> +################################################################################
+> +
+> +SPDM_UTILS_VERSION = 0.3.0
+> +SPDM_UTILS_SITE = $(call github,westerndigitalcorporation,spdm-utils,v$(SPDM_UTILS_VERSION))
+> +SPDM_UTILS_LICENSE = Apache-2.0 or MIT
+> +SPDM_UTILS_DEPENDENCIES += pciutils libspdm openssl udev
+
+Just =, not +=. What about python3? Not needed as a dependency?
+
+> +
+> +# Note that we also copy `setup_certs.sh` and `generate_certs.sh`.
+> +# `setup_certs.sh` shall be used by a responder to regenerate it's mutable
+> +# certificate chain. `generate_certs.sh` can be used to generate a new
+> +# certificate chain, which maybe useful in testing and development.
+> +define SPDM_UTILS_INSTALL_CERTS
+> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/local/spdm_certs
+> +	cp -r $(@D)/certs/generate_certs.sh $(TARGET_DIR)/usr/local/spdm_certs
+> +	cp -r $(@D)/certs/openssl.cnf $(TARGET_DIR)/usr/local/spdm_certs
+> +	cp -r $(@D)/certs/setup_certs.sh $(TARGET_DIR)/usr/local/spdm_certs
+> +
+> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/local/spdm_certs/slot0
+> +	cp $(@D)/certs/slot0/immutable.der $(TARGET_DIR)/usr/local/spdm_certs/slot0
+> +	cp $(@D)/certs/slot0/device.cert.der $(TARGET_DIR)/usr/local/spdm_certs/slot0
+> +	cp $(@D)/certs/slot0/device.der $(TARGET_DIR)/usr/local/spdm_certs/slot0
+> +	cp $(@D)/certs/slot0/device.key $(TARGET_DIR)/usr/local/spdm_certs/slot0
+> +	cp $(@D)/certs/slot0/param.pem $(TARGET_DIR)/usr/local/spdm_certs/slot0
+> +	cp $(@D)/certs/slot0/bundle_responder.certchain.der $(TARGET_DIR)/usr/local/spdm_certs/slot0
+
+Meh, a bit verbose. Maybe:
+
+SPDM_UTILS_CERT_SCRIPTS = \
+	generate_certs.sh \
+	setup_certs.sh
+
+SPDM_UTILS_CERT_DATA_FILES = \
+	openssl.cnf \
+	slot0/immutable.der \
+	slot0/device.cert.der \
+	slot0/device.der \
+	slot0/device.key \
+	slot0/param.pem \
+	slot0/bundle_responder.certchain.der
+
+and then in SPDM_UTILS_INSTALL_CERTS:
+
+	$(foreach f,$(SPDM_UTILS_CERT_DATA_FILES),
+		$(INSTALL) -D -m 0644 $(f) $(TARGET_DIR)/usr/local/spdm_certs/$(f)
+	)
+
+	$(foreach f,$(SPDM_UTILS_CERT_SCRIPTS),
+		$(INSTALL) -D -m 0755 $(f) $(TARGET_DIR)/usr/local/spdm_certs/$(f)
+	)
+
+Also, why do we install those files in /usr/local/ ?
+/usr/local/spdm_certs and /usr/local/spdm_manifest seem like very
+unconventional paths. I would rather expect those in
+/usr/share/spdm/certs/ and /usr/share/spdm/manifest/ or something like
+this.
+
+Could you have a look at those different suggestions, and come back
+with a v3 of your submission?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
