@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B917CC3DA4D
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 13:44:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9015C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 13:44:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EB0D41347;
-	Fri, 12 Jul 2024 13:44:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9107E4133F;
+	Fri, 12 Jul 2024 13:44:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OW4unhqqGVEk; Fri, 12 Jul 2024 13:44:01 +0000 (UTC)
+ id GBs98WvyPIJW; Fri, 12 Jul 2024 13:44:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 627E34093E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34760414B2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 627E34093E;
-	Fri, 12 Jul 2024 13:44:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D6C081BF59E
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:43:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34760414B2;
+	Fri, 12 Jul 2024 13:44:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E16131BF59E
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CEB0B60651
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD07680F38
  for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:43:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 47HSFiRmA1vv for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 13:43:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9faZ0FfklNjp for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 13:43:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB86E605E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4B4780E78
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB86E605E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id E4B4780E78
  for <buildroot@buildroot.org>; Fri, 12 Jul 2024 13:43:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C342A8438E; Fri, 12 Jul 2024 13:43:54 +0000 (UTC)
+ id CEBB685E89; Fri, 12 Jul 2024 13:43:54 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 12 Jul 2024 15:43:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6d0cce7dab6cbfad02edd27254b548948612432e
-X-Git-Newrev: 51ef6691ac3b18c3a6738535c7ec7c9e3a401bc1
+X-Git-Oldrev: 51ef6691ac3b18c3a6738535c7ec7c9e3a401bc1
+X-Git-Newrev: e24a11738896118870037d89ccd64d2fa331e15e
 X-Patchwork-Hint: ignore
-Message-Id: <20240712134354.C342A8438E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5webkit: fix JavaScriptCore
- parser error
+Message-Id: <20240712134354.CEBB685E89@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5webkit: fix WebCore
+ compatibility issue with updated libxml2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,114 +61,114 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4365664741701747560=="
+Content-Type: multipart/mixed; boundary="===============2634456304029082479=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4365664741701747560==
+--===============2634456304029082479==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51ef6691ac3b18c3a6738535c7ec7c9e3a401bc1
+commit: https://git.buildroot.net/buildroot/commit/?id=e24a11738896118870037d89ccd64d2fa331e15e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-qt5webkit build currently fails with the following error:
+qt5webkit build currently breaks on the following error:
 
-[...] parser.rb:587:in `block in parseSequence': undefined method `=~' for an instance of Annotation (NoMethodError)
-  from <internal:kernel>:187:in `loop'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:654:in `block in parseSequence'
-  from <internal:kernel>:187:in `loop'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:814:in `parseData'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:818:in `parse'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:780:in `block in parseSequence'
-  from <internal:kernel>:187:in `loop'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:625:in `block in parseSequence'
-  from <internal:kernel>:187:in `loop'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:814:in `parseData'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:818:in `parse'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/generate_offset_extractor.rb:68:in `<main>'
+XSLStyleSheetLibxslt.cpp:148:129: error: invalid conversion from ‘void (*)(void*, xmlError*)’ {aka ‘void (*)(void*, _xmlError*)’} to ‘xmlStructuredErrorFunc’ {aka ‘void (*)(void*, const _xmlError*)’} [-fpermissive]
+  148 |     XMLDocumentParserScope scope(cachedResourceLoader(), XSLTProcessor::genericErrorFunc, XSLTProcessor::parseErrorFunc, console);
+      |                                                                                                                                 ^
+      |                                                                                                                                 |
+      |                                                                                                                                 void (*)(void*, xmlError*) {aka void (*)(void*, _xmlError*)}
 
-This issue is due to =~ being marked as deprecated since a few Ruby
-versions, and finally removed in 3.2.0 [1]. This now breaks the build since
-buildroot has moved to Ruby v3.3.0.
-The corresponding fix has already been issued in upstream Webkit project
-[2], but qt5webkit version tracked in buildroot does not have the
-corresponding webkit version pulled. Fix this build error by bringing the upstream
-patch. The patch is slightly modified (exclude part about Changelog file,
-which is absent from qt5webkit)
+This error is due to an API update in libxml2, enforcing const on more
+struct in version 2.12.0 (see [1]). Buildroot now tracks v2.12.5.
+Upstream Webkit project has already issued the corresponding fix ([2]),
+which updates corresponding internal prototypes depending on libxml2
+version, but the qt5webkit version tracked in buildroot does not integrate
+the corresponding Webkit version.
 
-Fixes:
+Fix this build issue by bringing the upstream patch "as is" from Webkit
 
-  http://autobuild.buildroot.net/results/21397b110fe02e5711ecb1d35be2108221751b0a/
+No autobuilder references because this build error was hidden by
+another build error fixed in a previous patch.
 
-[1] https://www.ruby-lang.org/en/news/2022/12/25/ruby-3-2-0-released/
-[2] https://github.com/WebKit/WebKit/commit/c7d19a492d97f9282a546831beb918e03315f6ef
+[1] https://gitlab.gnome.org/GNOME/libxml2/-/releases/v2.12.0
+[2] https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b
 
 Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...warnings-with-newer-Ruby-versions-https-b.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ ...-with-libxml2-version-2.12.0-due-to-API-c.patch | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/qt5/qt5webkit/0007-Offlineasm-warnings-with-newer-Ruby-versions-https-b.patch b/package/qt5/qt5webkit/0007-Offlineasm-warnings-with-newer-Ruby-versions-https-b.patch
+diff --git a/package/qt5/qt5webkit/0008-Build-fails-with-libxml2-version-2.12.0-due-to-API-c.patch b/package/qt5/qt5webkit/0008-Build-fails-with-libxml2-version-2.12.0-due-to-API-c.patch
 new file mode 100644
-index 0000000000..c8e339c5f8
+index 0000000000..d6f379ae8e
 --- /dev/null
-+++ b/package/qt5/qt5webkit/0007-Offlineasm-warnings-with-newer-Ruby-versions-https-b.patch
-@@ -0,0 +1,48 @@
-+From 47e03d4af292805bf304f09e34333b38a94c1789 Mon Sep 17 00:00:00 2001
-+From: "aperez@igalia.com" <aperez@igalia.com>
-+Date: Wed, 15 Jan 2020 22:15:38 +0000
-+Subject: [PATCH] Offlineasm warnings with newer Ruby versions
-+ https://bugs.webkit.org/show_bug.cgi?id=206233
++++ b/package/qt5/qt5webkit/0008-Build-fails-with-libxml2-version-2.12.0-due-to-API-c.patch
+@@ -0,0 +1,61 @@
++From df49bfc4c93001970c9b9266903ee7e8804fb576 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Mon, 20 Nov 2023 07:42:30 -0800
++Subject: [PATCH] Build fails with libxml2 version 2.12.0 due to API change
++ https://bugs.webkit.org/show_bug.cgi?id=265128
 +
-+Reviewed by Yusuke Suzuki.
++Reviewed by Philippe Normand.
 +
-+Avoid a warning about using Object#=~ on Annotation instances, which
-+has been deprecated in Ruby 2.7.
++Starting with libxml2 2.12.0, the API has changed the const-ness of the
++xmlError pointers, which results in a build error due to a mismatched
++type in the parsing error callback. This papers over the difference by
++using preprocessor conditionals.
 +
-+* offlineasm/parser.rb: Swap checks to prevent applying the =~ operator
-+to Annotation instances, which do not define it.
++* Source/WebCore/xml/XSLTProcessor.h: Use const when building against
++  libxml2 2.12.0 or newer.
++* Source/WebCore/xml/XSLTProcessorLibxslt.cpp:
++(WebCore::XSLTProcessor::parseErrorFunc): Ditto.
 +
-+git-svn-id: http://svn.webkit.org/repository/webkit/trunk@254637 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-+Upstream: https://github.com/WebKit/WebKit/commit/c7d19a492d97f9282a546831beb918e03315f6ef
++Canonical link: https://commits.webkit.org/270977@main
++Upstream: https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b
 +Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
 +---
-+ Source/JavaScriptCore/offlineasm/parser.rb | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
++ Source/WebCore/xml/XSLTProcessor.h          | 4 ++++
++ Source/WebCore/xml/XSLTProcessorLibxslt.cpp | 4 ++++
++ 2 files changed, 8 insertions(+)
 +
-+diff --git a/Source/JavaScriptCore/offlineasm/parser.rb b/Source/JavaScriptCore/offlineasm/parser.rb
-+index b4451124521f..cd1cffaec6ed 100644
-+--- a/Source/JavaScriptCore/offlineasm/parser.rb
-++++ b/Source/JavaScriptCore/offlineasm/parser.rb
-+@@ -584,9 +584,7 @@ class Parser
-+         firstCodeOrigin = @tokens[@idx].codeOrigin
-+         list = []
-+         loop {
-+-            if (@idx == @tokens.length and not final) or (final and @tokens[@idx] =~ final)
-+-                break
-+-            elsif @tokens[@idx].is_a? Annotation
-++            if @tokens[@idx].is_a? Annotation
-+                 # This is the only place where we can encounter a global
-+                 # annotation, and hence need to be able to distinguish between
-+                 # them.
-+@@ -600,6 +598,8 @@ class Parser
-+                 list << Instruction.new(codeOrigin, annotationOpcode, [], @tokens[@idx].string)
-+                 @annotation = nil
-+                 @idx += 2 # Consume the newline as well.
-++            elsif (@idx == @tokens.length and not final) or (final and @tokens[@idx] =~ final)
-++                break
-+             elsif @tokens[@idx] == "\n"
-+                 # ignore
-+                 @idx += 1
++diff --git a/Source/WebCore/xml/XSLTProcessor.h b/Source/WebCore/xml/XSLTProcessor.h
++index 21bb45b5cbe1..5cf20557918f 100644
++--- a/Source/WebCore/xml/XSLTProcessor.h
+++++ b/Source/WebCore/xml/XSLTProcessor.h
++@@ -61,7 +61,11 @@ public:
++ 
++     void reset();
++ 
+++#if LIBXML_VERSION >= 21200
+++    static void parseErrorFunc(void* userData, const xmlError*);
+++#else
++     static void parseErrorFunc(void* userData, xmlError*);
+++#endif
++     static void genericErrorFunc(void* userData, const char* msg, ...);
++     
++     // Only for libXSLT callbacks
++diff --git a/Source/WebCore/xml/XSLTProcessorLibxslt.cpp b/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
++index a65691087e3c..9f6b363dfc6c 100644
++--- a/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
+++++ b/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
++@@ -59,7 +59,11 @@ void XSLTProcessor::genericErrorFunc(void*, const char*, ...)
++     // It would be nice to do something with this error message.
++ }
++ 
+++#if LIBXML_VERSION >= 21200
+++void XSLTProcessor::parseErrorFunc(void* userData, const xmlError* error)
+++#else
++ void XSLTProcessor::parseErrorFunc(void* userData, xmlError* error)
+++#endif
++ {
++     PageConsoleClient* console = static_cast<PageConsoleClient*>(userData);
++     if (!console)
 +-- 
 +2.43.1
 +
 
---===============4365664741701747560==
+--===============2634456304029082479==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -179,4 +179,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4365664741701747560==--
+--===============2634456304029082479==--
