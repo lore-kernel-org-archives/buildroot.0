@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9222CC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 12:58:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48CC1C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 12:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43F61405C9;
-	Fri, 12 Jul 2024 12:58:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1242A413AB;
+	Fri, 12 Jul 2024 12:59:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hICD6p8hVHqw; Fri, 12 Jul 2024 12:58:47 +0000 (UTC)
+ id TCYENJqVALDv; Fri, 12 Jul 2024 12:59:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2007B405CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD768417E2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2007B405CC;
-	Fri, 12 Jul 2024 12:58:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 43A711BF40F
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 12:58:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD768417E2;
+	Fri, 12 Jul 2024 12:59:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F07F1BF232
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 12:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30D03605F5
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 12:58:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EEEF2417E2
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 12:59:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rnWBFu7E1e7n for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 12:58:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kNYL-KyJh-jz for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 12:59:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E39CC605E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E39CC605E0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E39CC605E0
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 12:58:43 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1215B1BF204;
- Fri, 12 Jul 2024 12:58:40 +0000 (UTC)
-Date: Fri, 12 Jul 2024 14:58:40 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20240712145840.5191010d@windsurf>
-In-Reply-To: <20240207214729.115691-1-giulio.benetti@benettiengineering.com>
-References: <20240207214729.115691-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720789121;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/FB9CAGxd11Cot5GfM5mnXPCplgzVn3QrOYai20cGqc=;
- b=TUFPHABRTLe3ZLXmsNTNVTnYX2grjjHuSrL8+gXjCicm6IzTjQyalV+1K04ZGS7D0ZbnCo
- MepvEtQIRKDNzeVhDN61x90NqQ5JOxQxCi9lH1Dkjj3SCoHERD1U9BRkm1GPxIjlePvApu
- chGeVjSs3XnxV0G/eGX8RLf1iJAnMt5l3+Hc4agSclxyKNyE9abGAf1KtLHA2uHCS1/KVP
- Xl1o4To7Y+t/b6P6U97zD89bWbJIM5VQUTJMTFhB5NGBtM3xONIvOfpbvKZ5wnE40OINtU
- aIPQEo2xrnB6ZlIPSEUJKTp72xibtQflZAJAYjKIOK3sy6dElE3b290MkH/rwA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TUFPHABR
-Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: bump to 2024-02-06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBDFF413AB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBDFF413AB
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 12:59:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DDCB385E25; Fri, 12 Jul 2024 12:59:03 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 14:58:36 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e0f2414330b049276678a19a45a53bfb521c52f2
+X-Git-Newrev: 20a6d583bd2c4cbeba409a3f892422e98181e2b0
+X-Patchwork-Hint: ignore
+Message-Id: <20240712125903.DDCB385E25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8188eu: bump to 2024-02-06
  version on v5.2.2.4 branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,30 +60,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  7 Feb 2024 22:47:29 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=20a6d583bd2c4cbeba409a3f892422e98181e2b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This version allows to build with Linux 6.8
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/rtl8188eu/rtl8188eu.hash | 2 +-
->  package/rtl8188eu/rtl8188eu.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+This version allows to build with Linux 6.8
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  http://autobuild.buildroot.net/results/c2524c7580d97f7387ec22da62be71d77f2ed8ec
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rtl8188eu/rtl8188eu.hash | 2 +-
+ package/rtl8188eu/rtl8188eu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
+index eb28e6cf0a..4f8f83e78c 100644
+--- a/package/rtl8188eu/rtl8188eu.hash
++++ b/package/rtl8188eu/rtl8188eu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8cb10a047d39f13c776b0097ef1290f6b3c63590fd57bc0827e8638c878819f0  rtl8188eu-306f3e62cf7cddf8cee74f70f88a7a7b3af46f56.tar.gz
++sha256  507d32eb91d3d407c7758319c81a36a9dc69e2b89378cabcd382411153927b7b  rtl8188eu-f42fc9c45d2086c415dce70d3018031b54a7beef.tar.gz
+ sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
+diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+index 36a84d34de..eca0fb8007 100644
+--- a/package/rtl8188eu/rtl8188eu.mk
++++ b/package/rtl8188eu/rtl8188eu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8188EU_VERSION = 306f3e62cf7cddf8cee74f70f88a7a7b3af46f56
++RTL8188EU_VERSION = f42fc9c45d2086c415dce70d3018031b54a7beef
+ RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
+ RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
+ RTL8188EU_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
