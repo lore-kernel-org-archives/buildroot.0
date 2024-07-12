@@ -4,100 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1740BC3DA4B
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:08:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9258C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:11:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2B21405F4;
-	Fri, 12 Jul 2024 14:08:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADCBE417C4;
+	Fri, 12 Jul 2024 14:11:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TnaF8mEqnH2g; Fri, 12 Jul 2024 14:08:57 +0000 (UTC)
+ id O7av1r2OURkZ; Fri, 12 Jul 2024 14:11:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47AE540632
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B0C1417F2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47AE540632;
-	Fri, 12 Jul 2024 14:08:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 514831BF424
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:08:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B0C1417F2;
+	Fri, 12 Jul 2024 14:11:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 15C101BF424
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:11:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4536C606F0
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:08:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D972845FA
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:11:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qAngVQx3XQcY for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 14:08:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d8o2EmD3jW6q for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 14:11:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EDA186064A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDA186064A
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EDA186064A
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:08:53 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-42565670e20so18818445e9.0
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:08:53 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0FC11845F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FC11845F5
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0FC11845F5
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:11:46 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-4277a5ed48bso15058515e9.2
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:11:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720793332; x=1721398132;
+ d=1e100.net; s=20230601; t=1720793505; x=1721398305;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=cCWWoLWT9Yv3u6GYTFmPbKXH9mf1BpkIZrHjBgGdzlI=;
- b=swAsNiykurhluNOSXPvmqlh7Ons4TJFbqpIQcoKF3CG5hqe8Bl5B7tiukdCVwMVolw
- M3J6pCytm6VfI96mnoh5G+RTiy9pm8uIMAxT9jFMQ9ZVlirDdKcdFrBlNAIQ/7yGA8di
- pq+1KD5rHzIh37hRSmhoCZxWm2/mfL20aHcrIeu0sBBl4UpuXJmsE2V2r2XWtTnjrtZK
- 1yF7KuzN/nWk0EUS2EOb3kMtrXlH2Ofbc5ro+gK2zoW67hQ2T3mZa+ffvQdI7c6EJ/fW
- hQZjKBan7Ewe8uRP6YXqVhZvnaC4r1lx0j3lK/rskZ2zPSZlHfUQjJLawPvy8Lk3Iidi
- xdvw==
+ bh=VT4sLzREcQAywy4ptH7zVXt6hWX0mPQ5wAxhOi8BjsA=;
+ b=GIXaYGDQBC4Uu6mrQFiNpeps0lukFa+T0slXNONqVJKgxz7OD5W8kDrTisMhgQdfXT
+ Bw1TTBumlZm8sOuJt87HKHiuA+p38DfM+G9chS6Ed4PTWatajHiDQ8QIzN+EzoAl23D9
+ zKRMkp2RrvojPCJk00C/O8GjCh+kJfqN2qFH1hLQYYZNvjEpA1XOmAR9LabAygca3mUZ
+ NKv6fvlmikktWc4PYGrPT8UEryCvRr3RuGyLth620y4F2k2KsuKug8A6gu0k7CsqEhVl
+ V97meUxDG7CUHlzsCX0UP4dkUTV/utgp75p6ADGDJEicjvezt/7EL/aMMZ/QZbXj4bLS
+ bcRA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUZDN0VaGFfjDdT/vpy0rNLVw/ArMfatipuRxKSp7ueUzAYuyTRhZ/vBwrPeHTPZjnM88B54RMjrYVJn7ouqSWfwOoe9S25XQ==
-X-Gm-Message-State: AOJu0YzJAKFuDaka8Hx4U9GJyzz3LC3B+42Nyx7bForZTSMNQE/yiYl2
- 1DJBfnsuwOFVCOiPlSgmi1DVc7Rpl4pEbzAenCNsbRAl/7Hhjh3+PqMk2vkwBtRfseS0rfA3auz
- 3QME=
-X-Google-Smtp-Source: AGHT+IEryJ8g8pWe2zl5UJI0rKi/MGGf3wgrBzJdg5e7p4tn0jQYyMXJ34TSIKibEqzM+fiUIfWPEw==
-X-Received: by 2002:a05:600c:3204:b0:424:7871:2e9e with SMTP id
- 5b1f17b1804b1-4279dacf793mr24255265e9.6.1720793331743; 
- Fri, 12 Jul 2024 07:08:51 -0700 (PDT)
+ AJvYcCWw7fXJjh2oB1RN+98qOxfBFOBlhtxmo23NFL5GJv1OcLrKx8yAGmqQPJWN9FCG2N1oXW9nX2TUrenS52aMp34m1LBJRYCP6g==
+X-Gm-Message-State: AOJu0YxFcmkaQXbstvGZ/YLOw/lB//fo2lEs8LU8TiCxFSwZnfdRQO/5
+ HhjvKEtjG1xnujuRBX7rfbc+D9GsRHUlf6VQdo5LzqbtxLG0zaAQd3WIeJiHIMbF1QM0sWY38+m
+ 1HrY=
+X-Google-Smtp-Source: AGHT+IHolT5+5LBbpyRpuMhtCIDAozFEc9kxXQkixVFFa5vEoMeGPovhjCjo/DjE0EXsO58Oeo++cA==
+X-Received: by 2002:a05:600c:2050:b0:426:67df:31e6 with SMTP id
+ 5b1f17b1804b1-426707d7909mr77753005e9.17.1720793504994; 
+ Fri, 12 Jul 2024 07:11:44 -0700 (PDT)
 Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
  (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:b481:98b5:611f:e783])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4279f2d7c9csm24679975e9.48.2024.07.12.07.08.49
+ ffacd0b85a97d-367cde7dedfsm10386900f8f.24.2024.07.12.07.11.43
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 07:08:51 -0700 (PDT)
-Message-ID: <9d578028-a6e5-4006-8ead-c3f608ac08d8@mind.be>
-Date: Fri, 12 Jul 2024 16:08:45 +0200
+ Fri, 12 Jul 2024 07:11:44 -0700 (PDT)
+Message-ID: <094496df-f537-4cd9-8695-f6c67d1577cb@mind.be>
+Date: Fri, 12 Jul 2024 16:11:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
-References: <20240709101841.1145134-1-fiona.klute@gmx.de>
- <20240709101841.1145134-4-fiona.klute@gmx.de>
+To: Michael Nosthoff <buildroot@heine.tech>, buildroot@buildroot.org
+References: <20240712113306.829994-1-buildroot@heine.tech>
 Content-Language: en-GB
-In-Reply-To: <20240709101841.1145134-4-fiona.klute@gmx.de>
+In-Reply-To: <20240712113306.829994-1-buildroot@heine.tech>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1720793332; x=1721398132; darn=buildroot.org;
+ d=mind.be; s=google; t=1720793505; x=1721398305; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=cCWWoLWT9Yv3u6GYTFmPbKXH9mf1BpkIZrHjBgGdzlI=;
- b=U1URa0zhSrH7qqxNKalRUxO5MrNgG2sqJ44BdqJFh9qzHBedE1ukXwocFnRuWcm2q1
- tf3ZPIQKTJj5uyVZGVvz3WB4zrXatesWlIwsWFrWwhc1j4jRQFfocUikuJ17Ykfo3VQN
- CDaSAiAs/3+i+CNw4ANEynO9AIhhe8djF1WMEoKLRIqPeCB20i83+iugToOCEuSPVuP1
- wU3zJBFAIqKjbPrXuVFItXQyMFrbn/OR4McA+jFKY5Bj2f58l3glAX9kb6HiMj/TTazj
- dgdBaVy4Tk+gbfzW9HC9Qggu74p973m9oBJ8Fy2cLSCwwDyAc6nZo/kW7lKx3FWcUtan
- +mYQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=VT4sLzREcQAywy4ptH7zVXt6hWX0mPQ5wAxhOi8BjsA=;
+ b=N3PZdMSz0yhZmyiAIG2+0mye/ZmPPclz3GJi40kYORb/lTrir31YBkfw6qaoUlLzwM
+ CicRF1w3AnWbhxr0w/Nnw6KYnKN8Mk0eFX2GnnBejui9n9akBrbqf0FG2RhYusDNa7Sd
+ 9rIEi6y41BUgIB1uQZ6xwL1yFKyriIVDLxpoGbkUrXIv2gQ9rkJT1WDtfFpZPh8OAhy8
+ kD6eJKd+5OyAq/MZ73/VWh4qwcAtrrnbi5Zjh7Hc5ep7Lx/gT/EmguugcdoGNPyoUplJ
+ zbATK0lXOrIGwRFXMPabZLktPTG35aN2yC6Q0opi7oWlz1AeTWDcqmsTfzmbAR3qW3xm
+ Sn7g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=U1URa0zh
-Subject: Re: [Buildroot] [PATCH v3 3/4] package/fail2ban: bump version to
- 1.1.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=N3PZdMSz
+Subject: Re: [Buildroot] [PATCH] package/boost: cleanup HOST_BOOST_FLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,107 +110,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+  Hi Michael,
 
+On 12/07/2024 13:33, Michael Nosthoff via buildroot wrote:
+> - fix alphabetical ordering
+> - align to 80 char width
+> - add comment explaining why options are enabled
 
-On 09/07/2024 12:18, Fiona Klute via buildroot wrote:
-> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-> 
-> Fail2ban 1.1.0 brings Python 3.12 compatibility, and removes support
-> for 2.x. This means 2to3 handling can be dropped.
-> 
-> Unfortunately fail2ban 1.1.0 still relies on asynchat and asyncore,
-> which have been removed from the Python standard library in
-> 3.12. Depend on the compatibility package python-pyasynchat (which
-> pulls in python-pyasyncore) and remove copies bundled in upstream
-> code.
-> 
-> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+  Thanks for this improvement!
 
-  Applied to master, thanks.
+  Perhaps you can also change it to one per line? Because honestly, that wall of 
+text still doesn't look very clean :-)
 
   Regards,
   Arnout
 
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 > ---
-> Changes v2 -> v3:
-> * Add "# runtime" comment for pyasynchat dependency, drop
->    FAIL2BAN_DEPENDENCIES in fail2ban.mk
+>   package/boost/boost.mk | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
 > 
->   package/fail2ban/Config.in     |  1 +
->   package/fail2ban/fail2ban.hash |  2 +-
->   package/fail2ban/fail2ban.mk   | 14 +++++++-------
->   3 files changed, 9 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
-> index 8a48a8c1d0..4c2c56440d 100644
-> --- a/package/fail2ban/Config.in
-> +++ b/package/fail2ban/Config.in
-> @@ -1,6 +1,7 @@
->   config BR2_PACKAGE_FAIL2BAN
->   	bool "fail2ban"
->   	depends on BR2_PACKAGE_PYTHON3
-> +	select BR2_PACKAGE_PYTHON_PYASYNCHAT # runtime
->   	select BR2_PACKAGE_PYTHON_SYSTEMD if BR2_PACKAGE_SYSTEMD
->   	help
->   	  Fail2ban scans log files (e.g. /var/log/apache/error_log) and
-> diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
-> index b40922e70a..8627e01f05 100644
-> --- a/package/fail2ban/fail2ban.hash
-> +++ b/package/fail2ban/fail2ban.hash
-> @@ -1,3 +1,3 @@
->   # sha256 locally computed
-> -sha256  ae8b0b41f27a7be12d40488789d6c258029b23a01168e3c0d347ee80b325ac23  fail2ban-1.0.2.tar.gz
-> +sha256  474fcc25afdaf929c74329d1e4d24420caabeea1ef2e041a267ce19269570bae  fail2ban-1.1.0.tar.gz
->   sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
-> diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-> index 0c1208c6fe..a77e5fad6c 100644
-> --- a/package/fail2ban/fail2ban.mk
-> +++ b/package/fail2ban/fail2ban.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
-> 
-> -FAIL2BAN_VERSION = 1.0.2
-> +FAIL2BAN_VERSION = 1.1.0
->   FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
->   FAIL2BAN_LICENSE = GPL-2.0+
->   FAIL2BAN_LICENSE_FILES = COPYING
-> @@ -12,13 +12,13 @@ FAIL2BAN_CPE_ID_VENDOR = fail2ban
->   FAIL2BAN_SELINUX_MODULES = fail2ban
->   FAIL2BAN_SETUP_TYPE = setuptools
-> 
-> -define FAIL2BAN_PYTHON_2TO3
-> -	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
-> +# fail2ban contains bundled copies of pyasyncore and pyasynchat,
-> +# remove them so only the packaged versions are installed.
-> +define FAIL2BAN_REMOVE_BUNDLED_COMPAT
-> +	$(SED) '/fail2ban\.compat/d' $(@D)/setup.py
-> +	rm -rf $(@D)/fail2ban/compat
->   endef
-> -FAIL2BAN_DEPENDENCIES = host-python3
-> -# We can't use _POST_PATCH_HOOKS because dependencies are not guaranteed
-> -# to build and install before _POST_PATCH_HOOKS run.
-> -FAIL2BAN_PRE_CONFIGURE_HOOKS += FAIL2BAN_PYTHON_2TO3
-> +FAIL2BAN_POST_PATCH_HOOKS += FAIL2BAN_REMOVE_BUNDLED_COMPAT
-> 
->   define FAIL2BAN_FIX_DEFAULT_CONFIG
->   	$(SED) '/^socket/c\socket = /run/fail2ban.sock' $(TARGET_DIR)/etc/fail2ban/fail2ban.conf
-> --
-> 2.45.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+> index 9b1baec5bf..84c95ef993 100644
+> --- a/package/boost/boost.mk
+> +++ b/package/boost/boost.mk
+> @@ -13,12 +13,13 @@ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+>   BOOST_CPE_ID_VENDOR = boost
+>   
+>   # keep host variant as minimal as possible
+> +# regex & system are needed by host-riscv-isa-sim
+>   HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+> -	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+> -	contract container coroutine date_time exception fiber filesystem graph \
+> +	--without-libraries=$(subst $(space),$(comma),atomic chrono container \
+> +	context contract coroutine date_time exception fiber filesystem graph \
+>   	graph_parallel iostreams json locale log math mpi nowide program_options \
+> -	python random serialization stacktrace test thread timer \
+> -	type_erasure url wave)
+> +	python random serialization stacktrace test thread timer type_erasure url \
+> +	wave)
+>   
+>   BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+>   BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
