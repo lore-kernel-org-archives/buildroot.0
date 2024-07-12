@@ -4,71 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33334C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:40:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C7D1C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 14:40:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F06CE41A17;
-	Fri, 12 Jul 2024 14:40:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E10F41A27;
+	Fri, 12 Jul 2024 14:40:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Go-2ik--TBmH; Fri, 12 Jul 2024 14:40:40 +0000 (UTC)
+ id 9_ZfDh8hPkaI; Fri, 12 Jul 2024 14:40:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0FDD41A1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2D4C41A3B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0FDD41A1C;
-	Fri, 12 Jul 2024 14:40:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BDCD01BF424
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:40:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2D4C41A3B;
+	Fri, 12 Jul 2024 14:40:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9922F1BF424
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:40:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABDD284692
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:40:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 85C8440185
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 14:40:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6zv37zaJUIzX for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 14:40:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A0A2A84690
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0A2A84690
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A0A2A84690
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:40:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C459B240004;
- Fri, 12 Jul 2024 14:40:33 +0000 (UTC)
-Date: Fri, 12 Jul 2024 16:40:33 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240712164033.062082c2@windsurf>
-In-Reply-To: <20240601210104.1160688-1-ju.o@free.fr>
-References: <20240601210104.1160688-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J-LtQ8_itLqY for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 14:40:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 639CC4043E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 639CC4043E
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 639CC4043E
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 14:40:46 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-367aa05bf9dso1204993f8f.3
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 07:40:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720795244; x=1721400044;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=NN7/RzrbWN7F3tVNcTdsU2h3rLu34fOEMftBSVpnKO8=;
+ b=IsvqCwMgGivDGMo1qIOgeFPFbgskbsQPJ6lLIAtz1fO+iKYbdc59iXNX77+FJFdW4+
+ 1KQ+H8pxDBpsQubiQaSoIO32zYgicDV+SNv09usvZAig028yzvUE+rlT00AGWL3QMeGW
+ MuzEGoGbV7y9q+HPq7S6NweXSdzMRMnnad0EpcCnXzZRyhw+DgwbC1Q/vPnCDZxT2DHT
+ xUQgG472LlsdJu/Hi24v/hTA9xFYoQKWfxDBMMiXNBPfAPDpgZV0C2jIv/5xwj75bWWq
+ MFU7Jq8rZBhD0VVvKm0gAE2eLhhVWJNaBsllomQyYxC5hq+r8ixTuM8DVXHa5DQ/jCFb
+ vvBA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUT39zDU/c0qaVPKx3Rk2iRxgd+mKMSilx1J6obTt1AN2J7A38kgdLfh1dchRw0Orx6WRvATbtshCFXUh6B4Bq9y2R4dago8g==
+X-Gm-Message-State: AOJu0YzstfcSr7lJMyE2wEKNMcBN3GElmZ2B+jNS4V4Y0o2ilTgvskOO
+ rjnusLFT3bLoAW3s8nsc3RwFB+4aD+N52Sk8LdQIOWQ4OgGp4bRdj7rlVxPREEk=
+X-Google-Smtp-Source: AGHT+IFu+2mWbR4ueF0yGdHTzcZ3iBjQ418IkW+yT4SleYHchpLgIQunq1oe+w2Znkix715Kq8Chog==
+X-Received: by 2002:adf:f990:0:b0:367:89fd:1e06 with SMTP id
+ ffacd0b85a97d-367cea966f2mr7744650f8f.36.1720795244365; 
+ Fri, 12 Jul 2024 07:40:44 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
+ (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:b481:98b5:611f:e783])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-367cdfa079asm10294438f8f.68.2024.07.12.07.40.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 12 Jul 2024 07:40:43 -0700 (PDT)
+Message-ID: <eb4af76e-16a0-456c-a0d5-3e058527ff9a@mind.be>
+Date: Fri, 12 Jul 2024 16:40:41 +0200
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+User-Agent: Mozilla Thunderbird
+To: Ricardo Martincoski <ricardo.martincoski@gmail.com>,
+ buildroot@buildroot.org
+References: <20230101233653.487175-1-ricardo.martincoski@gmail.com>
+ <20230101233653.487175-26-ricardo.martincoski@gmail.com>
+Content-Language: en-GB
+In-Reply-To: <20230101233653.487175-26-ricardo.martincoski@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720795234;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=gSkMKLQTvUhtWh0feyo//4yQtsClPskA7924i02tWUo=;
- b=JwLzPhM+w4pvC/ateu0F9Oi17++2j0b5FLM2SkEAxqR6/jAfj95OodQvHBfwCttIXcHfFW
- tk8jzlVxHj3747v8pyogsxemy70yaRoOg0mKD9uqs1WhXNkqIOIcwNd4Pt8UdEl7YoW+ik
- DfDEfEiL+b8YIEKH9M4N6uPEoqJNE5fw/b8pdztAy7/f0w1zMiI19g1bK32TD5zhIfuVML
- hfheOLsgtW+hsTlyHo8ywYb5zvzAnENVxhLLP+xs/VdwarydOnKCIT6UXoliza8OB3qxIf
- /9aplanNMV5vtKPY86ZkjAyg4JqZuXhr6fLUVFCTHG5In/wofxLNtn/x3PWZCg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JwLzPhM+
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add bcc runtime test
+ d=mind.be; s=google; t=1720795244; x=1721400044; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=NN7/RzrbWN7F3tVNcTdsU2h3rLu34fOEMftBSVpnKO8=;
+ b=GHDqZ4k4yalTBXlaVKoYuEB0t+TC24jQI0U/ltdGqtRarhPFsj0+HaFhjcrICSJpRX
+ tLfbRMsU4NBPIIo1ze2T0RYOY2YBRB9QweKWqlREyTD3mJadCb4pUsK2hD41vii5molw
+ uthPLAfc95G0LlQlyyJE7MiF9i9MBl6gVCKf7PcOgcFaQrCuSgku2juaYUXIImKiwUSd
+ JCweZnx/xgP8m8mb3EqdiIpOPHNI6cJ+mg20qWp2xxphdfjZOJDQNvmSIVbGJ1/BvCBK
+ N1bK+loxfaz/bo0+NFsP3+U552NWiipx9sqX7njKHncbGsMdt5g8Swe4yPiWDcBNXUZn
+ rV6A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=GHDqZ4k4
+Subject: Re: [Buildroot] [PATCH 25/29] utils/check-package: fix check for
+ <pkg>_REDISTRIBUTE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,33 +109,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  1 Jun 2024 23:01:04 +0200
-Julien Olivain <ju.o@free.fr> wrote:
 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+On 02/01/2023 00:36, Ricardo Martincoski wrote:
+> Commit "8e87d76c12 check-package: check *.mk files" added a typo that
+> prevents check-package from checking <PKG>_REDISTRIBUTE default value.
+> 
+> Fix the typo: _INSTALL_REDISTRIBUTE -> _REDISTRIBUTE
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
 > ---
->  DEVELOPERS                                    |  2 +
->  support/testing/tests/package/test_bcc.py     | 84 +++++++++++++++++++
->  .../tests/package/test_bcc/linux-bcc.fragment |  4 +
->  3 files changed, 90 insertions(+)
->  create mode 100644 support/testing/tests/package/test_bcc.py
->  create mode 100644 support/testing/tests/package/test_bcc/linux-bcc.fragment
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Running on current master generates no warnings.
+> ---
+>   utils/checkpackagelib/lib_mk.py      | 2 +-
+>   utils/checkpackagelib/test_lib_mk.py | 8 ++++----
+>   2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+> index b50a19ac62..b0bd52bdf6 100644
+> --- a/utils/checkpackagelib/lib_mk.py
+> +++ b/utils/checkpackagelib/lib_mk.py
+> @@ -296,7 +296,7 @@ class UselessFlag(_CheckFunction):
+>           r"_LIBTOOL_PATCH\s*=\s*YES"])))
+>       DEFAULT_GENERIC_FLAG = re.compile(r"^.*{}".format("|".join([
+>           r"_INSTALL_IMAGES\s*=\s*NO",
+> -        r"_INSTALL_REDISTRIBUTE\s*=\s*YES",
+> +        r"_REDISTRIBUTE\s*=\s*YES",
+>           r"_INSTALL_STAGING\s*=\s*NO",
+>           r"_INSTALL_TARGET\s*=\s*YES"])))
+>       END_CONDITIONAL = re.compile(r"^\s*({})".format("|".join(end_conditional)))
+> diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
+> index 49fa216fcd..5f5663377b 100644
+> --- a/utils/checkpackagelib/test_lib_mk.py
+> +++ b/utils/checkpackagelib/test_lib_mk.py
+> @@ -531,13 +531,13 @@ UselessFlag = [
+>       ('generic',
+>        'any.mk',
+>        'ANY_INSTALL_IMAGES = NO\n'
+> -     'ANY_INSTALL_REDISTRIBUTE = YES\n'
+> +     'ANY_REDISTRIBUTE = YES\n'
+>        'ANY_INSTALL_STAGING = NO\n'
+>        'ANY_INSTALL_TARGET = YES\n',
+>        [['any.mk:1: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
+>          'ANY_INSTALL_IMAGES = NO\n'],
+>         ['any.mk:2: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
+> -       'ANY_INSTALL_REDISTRIBUTE = YES\n'],
+> +       'ANY_REDISTRIBUTE = YES\n'],
+>         ['any.mk:3: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
+>          'ANY_INSTALL_STAGING = NO\n'],
+>         ['any.mk:4: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
+> @@ -547,9 +547,9 @@ UselessFlag = [
+>        'ifneq (condition)\n'
+>        'ANY_INSTALL_IMAGES = NO\n'
+>        'endif\n'
+> -     'ANY_INSTALL_REDISTRIBUTE = YES\n',
+> +     'ANY_REDISTRIBUTE = YES\n',
+>        [['any.mk:4: useless default value (url#_infrastructure_for_packages_with_specific_build_systems)',
+> -       'ANY_INSTALL_REDISTRIBUTE = YES\n']]),
+> +       'ANY_REDISTRIBUTE = YES\n']]),
+>       ]
+>   
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
