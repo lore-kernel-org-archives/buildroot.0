@@ -4,97 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2A7CC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 19:23:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B8BC2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 19:24:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F8AD84698;
-	Fri, 12 Jul 2024 19:23:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D96A80EDD;
+	Fri, 12 Jul 2024 19:24:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i8y2m-rygBFh; Fri, 12 Jul 2024 19:23:46 +0000 (UTC)
+ id ohTDKEkBK0_a; Fri, 12 Jul 2024 19:24:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56D2B8469E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D836080E80
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56D2B8469E;
-	Fri, 12 Jul 2024 19:23:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D836080E80;
+	Fri, 12 Jul 2024 19:24:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C06A1BF279
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:23:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 727891BF279
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08D6A400FF
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:23:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F288400FF
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 19:24:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o0pqXhh2hlMN for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 19:23:44 +0000 (UTC)
+ id TWoitzRlb4da for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 19:24:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=rgallaispou@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C407B4000B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C407B4000B
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C407B4000B
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 19:23:43 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4266ea6a488so18567665e9.1
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 12:23:43 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F1D0B4000B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1D0B4000B
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F1D0B4000B
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 19:24:00 +0000 (UTC)
+Received: by mail-lj1-x22e.google.com with SMTP id
+ 38308e7fff4ca-2eeb1051360so21332701fa.0
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 12:24:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720812222; x=1721417022;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=bbILCh8pkxqsy6eXLzRJGguiFtuYP9YdzOSotY487dU=;
- b=dMC4Btd+z00fcs23wO+7KUdrOgdq3QBKezAORQWckx67n55RAgx+N1GRg1c1+r1MG/
- gtUXA/aj/kXaS4xFCLujAUehh3YrnCdu3iUtX583tbWt4RbKJDTlmns4QLAtwKxhdx9P
- a7zqDJtEjcSntd28mzXiwlAQh6GW3r2kuDAoDwLDLgYXKpBV0t81nKR9HjoT2i892RNZ
- /Jy+snOK1GpQd1qbk9Huk/f91g2csO+vRVXAIPWIS0KDJGUmWaxHCaGs35WczNXubIJV
- tj1xyeEmYWWu02HxYhucffex1uURKCdm1ihVQTZxlbhwHTiSuXUvix4kO8FU+cHRruWR
- cHjQ==
-X-Gm-Message-State: AOJu0Yx7n3t96Mi5bsh1rWMVzwG2ti8hcAizpoNYgyuG/MQkYHK49lh3
- GDyFBQgw4CLwuTQXRO0WImQ3USWPxPYVDZ6xBO0fcG3kw1DE282OOr5MBw==
-X-Google-Smtp-Source: AGHT+IG6pXI3bGGb+Zj5hBIpMBuzmMAefhz1ZOCLqDxH4aj0Bn1UhP4urhexJxAeBopViOwJ0G5Tng==
-X-Received: by 2002:a05:600c:42d3:b0:426:5520:b835 with SMTP id
- 5b1f17b1804b1-426706c6486mr90877615e9.5.1720812221453; 
- Fri, 12 Jul 2024 12:23:41 -0700 (PDT)
-Received: from ?IPV6:2001:861:3385:e20:6384:4cf:52c5:3194?
- ([2001:861:3385:e20:6384:4cf:52c5:3194])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4279f25942csm31801735e9.15.2024.07.12.12.23.41
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 12:23:41 -0700 (PDT)
-Message-ID: <28de63ff-7351-45d5-a0d0-4bb696b5728e@gmail.com>
-Date: Fri, 12 Jul 2024 21:23:39 +0200
+ d=1e100.net; s=20230601; t=1720812239; x=1721417039;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=kgKNbN5il9hvqQ6c2f31wvchr9TtqA0esPk8fSkIAkQ=;
+ b=ieffVLLsxCd8zAvJOeuTjTG36ziURXDM0hjvtzguJE2jsKbEkPL6QjlfoGs+Qioz8u
+ JGMmrEP0/qiUGh0sOGhhSaBzmvk8TwPfl3OKIeSDiGPHbDUC32Fadmbw1bHTW9bE99ea
+ q1rWPI1NysHzAO8rhs/NTMuUFrrqpK6L02vN5Or7g8uw7nld+RCQ3U75rIKMlJyXny5i
+ GDQ0l4t6paf2UakD7WCHtyczOiTT0mYEDBxBIqNOFzNxdnlrwHi/HS8SiOmov1N7waoe
+ YGsqxvSgWY+SGEpTbprpURcSaAmgv0PuOrS7meKCtNfJWbLV7VWXCrTktDHtU7PjMbWL
+ MZLQ==
+X-Gm-Message-State: AOJu0Yz8BXniV4RD5II7ous2qdEZd+4npo+xQ8XGFwm5bWaaURPPBnMV
+ +WSK2XdPPjyDg0oRlGcGm1XG34kftuBrPD95izyS2uK2GcZw9PsBLjCXsQVrjBEc1B/b+B5z4pp
+ j6r3eMA31zq21jv3zT3W/laVACnY=
+X-Google-Smtp-Source: AGHT+IG5LGJ1BotuI0zBA1MKBN28VP8jqFnoZHQp0/gH4JUX4CLx75LUvEsxN8muIrBglGW1472jLMKRaOXLNWhxVhg=
+X-Received: by 2002:a2e:9f03:0:b0:2ee:4ccf:ca4f with SMTP id
+ 38308e7fff4ca-2eeb3101de6mr77973671fa.31.1720812238447; Fri, 12 Jul 2024
+ 12:23:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20240712182712.216799-1-rgallaispou@gmail.com>
- <20240712211157.13910779@windsurf>
-Content-Language: en-US, fr
-From: =?UTF-8?Q?Rapha=C3=ABl_Gallais-Pou?= <rgallaispou@gmail.com>
-In-Reply-To: <20240712211157.13910779@windsurf>
+References: <20240704123452.3535612-1-heiko.thiery@gmail.com>
+ <20240704123452.3535612-2-heiko.thiery@gmail.com>
+ <911573ac-f0bf-4ceb-99b0-5d24dd1937bd@mind.be>
+ <CAEyMn7anNnq2aH9EViFjY+ihnmwCXaWXMs9sJAYFBpH=q_WT+Q@mail.gmail.com>
+In-Reply-To: <CAEyMn7anNnq2aH9EViFjY+ihnmwCXaWXMs9sJAYFBpH=q_WT+Q@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 12 Jul 2024 21:23:46 +0200
+Message-ID: <CAEyMn7Ze=uM6Tf4TRe4-jzai-T7DD8MvT4t_YLjyQzzOzbYfKQ@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720812222; x=1721417022; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=bbILCh8pkxqsy6eXLzRJGguiFtuYP9YdzOSotY487dU=;
- b=UYU1rHuqRh+/DQQwetOsfTZSa1lETo9z8MEZadqpc138wNGKTGc5yC5NvhIyjPjDkl
- lMY0RVVN2/+aos67VuD4u60b9yOi7RIjyXM4ZNboio48tOeXVP2K8c/PNv58qoLdAcDb
- GnSCxiCvomNOH7d9wQ89o5QqkbzUgPqk6BLgffOl2qiSj9y8fQohMdEGlS1rVX0CMyJG
- UuneZbXIFIeRVT+fVXpxPfFsnrvWJ0LWpIHXNSdiUwFuGB6jojGe+S+k5Q5LmKf4eKmh
- HO4cjsHdW6KJBFD28jUGEOtt4RxJ0tiHU53pep18GpNV/QViCjTQvU/NP2+yxR2wvaPe
- uCqA==
+ d=gmail.com; s=20230601; t=1720812239; x=1721417039; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=kgKNbN5il9hvqQ6c2f31wvchr9TtqA0esPk8fSkIAkQ=;
+ b=lDqhEjP8FNqCulDYSg+J2w5WEKX0DPnaqqipLODlda+SzYb5wNDNbGAlc6Y0pWAppJ
+ IHH1Jm73Hs1DCV6KIUvmVNtwXsNGIYMqPrMNkYVISfBHNkpox9BIwvUr3Y7WlmKdgLpQ
+ z+JgvJX9eK97GUPwzG7oOR+lwep39vyn2gHuIqPEipj4RWh5dSMvmlgeK0ro9Tgbv50H
+ qh1R87qniA0wuei22c0aaM/55j3ihU4eHkvpQhJzI78rBwNdkY8N0hGKCFMJR4qhTmjl
+ /SKYG4sxddqdvZugDMBC4+N9J6ijl+okzmdeVqW4S64EGaDNErCW0njiEBCcNDKgVKX+
+ YqPg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=UYU1rHuq
-Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32mp157c_dk2: bump Linux to
- 6.9
+ header.a=rsa-sha256 header.s=20230601 header.b=lDqhEjP8
+Subject: Re: [Buildroot] [PATCH v3 1/3] package/blake3: add new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,47 +99,162 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marleen Vos <marleen.vos@mind.be>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Lance Fredrickson <lancethepants@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>, Peter Seiderer <ps.report@gmx.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgMTIvMDcvMjAyNCDDoCAyMToxMSwgVGhvbWFzIFBldGF6em9uaSBhIMOpY3JpdMKgOgo+IEhl
-bGxvIFJhcGhhZWwsCj4gCj4gVGhhbmtzIGZvciB5b3VyIHBhdGNoLiBTZWUgYmVsb3cgYSByZXZp
-ZXcuCj4gCj4gT24gRnJpLCAxMiBKdWwgMjAyNCAyMDoyNzoxMiArMDIwMAo+IFJhcGhhZWwgR2Fs
-bGFpcy1Qb3UgPHJnYWxsYWlzcG91QGdtYWlsLmNvbT4gd3JvdGU6Cj4gCj4+IEJhc2UgY29uZmln
-IG9uIGxhdGVzdCBrZXJuZWwgdmVyc2lvbiBhdmFpbGFibGUuCj4+Cj4+IFNpZ25lZC1vZmYtYnk6
-IFJhcGhhZWwgR2FsbGFpcy1Qb3UgPHJnYWxsYWlzcG91QGdtYWlsLmNvbT4KPj4gLS0tCj4+ICAg
-Y29uZmlncy9zdG0zMm1wMTU3Y19kazJfZGVmY29uZmlnIHwgMjAgKystLS0tLS0tLS0tLS0tLS0t
-LS0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxOCBkZWxldGlvbnMoLSkK
-Pj4KPj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvc3RtMzJtcDE1N2NfZGsyX2RlZmNvbmZpZyBiL2Nv
-bmZpZ3Mvc3RtMzJtcDE1N2NfZGsyX2RlZmNvbmZpZwo+PiBpbmRleCBjNDg3MDViMmZiLi4wZTI2
-MDQyYjkwIDEwMDY0NAo+PiAtLS0gYS9jb25maWdzL3N0bTMybXAxNTdjX2RrMl9kZWZjb25maWcK
-Pj4gKysrIGIvY29uZmlncy9zdG0zMm1wMTU3Y19kazJfZGVmY29uZmlnCj4+IEBAIC0xLDMxICsx
-LDE3IEBACj4+IC0jIEFyY2hpdGVjdHVyZQo+PiAgIEJSMl9hcm09eQo+PiAgIEJSMl9jb3J0ZXhf
-YTc9eQo+PiAtCj4+IC0jIExpbnV4IGhlYWRlcnMgc2FtZSBhcyBrZXJuZWwsIGEgNS4xMyBzZXJp
-ZXMKPj4gLUJSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xMz15Cj4gCj4g
-UGxlYXNlIGtlZXAgdGhlIGNvbW1lbnRzIGFuZCB0aGlzIG9wdGlvbiAoYnV0IHVwZGF0ZWQpLiBJ
-dCBzZWVtcyBsaWtlCj4geW91IGRpZCBhICJtYWtlIHNhdmVkZWZjb25maWciLCB3aXRob3V0IHJl
-YWxseSB3b3JyeWluZyBhYm91dCB3aGF0Cj4gY2hhbmdlZC4KPiAKSGkgVGhvbWFzLAoKVGhhbmtz
-IGZvciB0aGUgcXVpY2sgcmV2aWV3LgoKSW5kZWVkLCB0aGlzIGlzIGV4YWN0bHkgd2hhdCBJIGRp
-ZC4gSSAod3JvbmdseSkgZGlkIG5vdCBjb21wYXJlZCB3aXRoIApzaW1pbGFyIGNoYW5nZXMgZXZl
-biB0aG91Z2ggdGhpcyB3YXMgbXkgZmlyc3QgY29udHJpYnV0aW9uIHRvIEJ1aWxkcm9vdC4KCk15
-IGJhZC4KCj4+IC0KPj4gLSMgU3lzdGVtIGNvbmZpZ3VyYXRpb24KPj4gICBCUjJfUk9PVEZTX09W
-RVJMQVk9ImJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMm1wMTU3Yy1kazIvb3ZlcmxheS8i
-Cj4+ICAgQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvc3RtaWNyb2VsZWN0cm9u
-aWNzL2NvbW1vbi9zdG0zMm1wMTU3L3Bvc3QtaW1hZ2Uuc2giCj4+IC0KPj4gLSMgS2VybmVsCj4+
-ICAgQlIyX0xJTlVYX0tFUk5FTD15Cj4+IC1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9O
-PXkKPj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjUuMTMiCj4gCj4g
-V2UgbmVlZCB0byBrZWVwIGFuIGV4cGxpY2l0IGtlcm5lbCB2ZXJzaW9uLCBzbyB0aGF0IGl0IGRv
-ZXNuJ3QKPiBhdXRvbWF0aWNhbGx5IHVzZXMgdGhlICJsYXRlc3QiLgoKTWFrZXMgc2Vuc2UgaW4g
-b3JkZXIgbm90IHRvIGludHJvZHVjZSBzeXN0ZW1hdGljIHVuY29udHJvbGxlZCBicmVha3MgaW4g
-CnRoZSBzd2FybSBvZiBib2FyZHMuCgo+IAo+IEkgYmVsaWV2ZSBpdCB3b3VsZCBhbHNvIG1ha2Ug
-c2Vuc2UgdG8gdXBkYXRlIFRGLUEgYW5kIFUtQm9vdCBhdCB0aGUKPiBzYW1lIHRpbWUuCj4gCj4g
-Q291bGQgeW91IGZpeCB1cCB0aG9zZSBkZXRhaWxzLCBhbmQgc3VibWl0IGFuIHVwZGF0ZWQgdmVy
-c2lvbj8KClllcywgSSdsbCBkbyBzb21lIHRlc3RpbmcgYmVmb3JlIGFuZCB0aGVuIHNlbmQgYSB2
-Mi4KClRoYW5rcywKUmFwaGHDq2wKPiAKPiBUaGFua3MgYSBsb3QhCj4gCj4gVGhvbWFzCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hi Arnout,
+
+Am Fr., 12. Juli 2024 um 21:08 Uhr schrieb Heiko Thiery
+<heiko.thiery@gmail.com>:
+>
+> Hi Arnout,
+>
+> Am Fr., 12. Juli 2024 um 10:38 Uhr schrieb Arnout Vandecappelle
+> <arnout@mind.be>:
+> >
+> >   Hi Heiko,
+> >
+> > On 04/07/2024 14:34, Heiko Thiery wrote:
+> > > This package is used and required for ccache update.
+> > >
+> > > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > > ---
+> > >
+> > > v2:
+> > >      - on change
+> > >
+> > > v3:
+> > >      - fix BLAKE3_LICENSE_FILES and corresponding hash values
+> > >
+> > >
+> > >   DEVELOPERS                 |  1 +
+> > >   package/blake3/blake3.hash |  3 +++
+> > >   package/blake3/blake3.mk   | 20 ++++++++++++++++++++
+> > >   3 files changed, 24 insertions(+)
+> > >   create mode 100644 package/blake3/blake3.hash
+> > >   create mode 100644 package/blake3/blake3.mk
+> > >
+> > > diff --git a/DEVELOPERS b/DEVELOPERS
+> > > index 90d1a111ab..46fe3cd2e1 100644
+> > > --- a/DEVELOPERS
+> > > +++ b/DEVELOPERS
+> > > @@ -1359,6 +1359,7 @@ F:      configs/kontron_bl_imx8mm_defconfig
+> > >   F:  configs/kontron_smarc_sal28_defconfig
+> > >   F:  configs/kontron_pitx_imx8m_defconfig
+> > >   F:  package/altera-stapl/
+> > > +F:   package/blake3/
+> > >   F:  package/ipmitool/
+> > >   F:  package/libnetconf2/
+> > >   F:  package/libyang/
+> > > diff --git a/package/blake3/blake3.hash b/package/blake3/blake3.hash
+> > > new file mode 100644
+> > > index 0000000000..2a00d19b02
+> > > --- /dev/null
+> > > +++ b/package/blake3/blake3.hash
+> > > @@ -0,0 +1,3 @@
+> > > +# sha256 computed locally
+> > > +sha256  822cd37f70152e5985433d2c50c8f6b2ec83aaf11aa31be9fe71486a91744f37  blake3-1.5.1.tar.gz
+> > > +sha256  6a94bedb8b707ed97f6e310d0d015ab14e0683ffa0a612b02958581b9cc9fc0e  LICENSE
+> > > diff --git a/package/blake3/blake3.mk b/package/blake3/blake3.mk
+> > > new file mode 100644
+> > > index 0000000000..76e4e32e7a
+> > > --- /dev/null
+> > > +++ b/package/blake3/blake3.mk
+> > > @@ -0,0 +1,20 @@
+> > > +################################################################################
+> > > +#
+> > > +# blake3
+> > > +#
+> > > +################################################################################
+> > > +
+> > > +BLAKE3_VERSION = 1.5.1
+> > > +BLAKE3_SITE = $(call github,BLAKE3-team,BLAKE3,refs/tags/$(BLAKE3_VERSION))
+> >
+> >   Why do you put the refs/tags here? It was necessary in one or two packages
+> > because of a conflict with a branch name, but I don't think that's the case
+> > here. I admit that there's a certain elegance to making it explicit that we want
+> > a tag, but then we really should be doing that everywhere...
+>
+> You are right. I changed it to:
+> BLAKE3_SITE = $(call github,BLAKE3-team,BLAKE3,$(BLAKE3_VERSION))
+>
+> I think this is what you expect.
+>
+> >
+> > > +BLAKE3_SUBDIR = c
+> > > +BLAKE3_LICENSE = Apache-2.0, CC0-1.0
+> > > +BLAKE3_LICENSE_FILES = LICENSE
+> > > +
+> > > +# We may be a ccache dependency, so we can't use ccache; reset the
+> > > +# options set by the cmake infra.
+> > > +HOST_BLAKE3_CONF_OPTS += \
+> > > +     -DCMAKE_ASM_COMPILER="$(CMAKE_HOST_C_COMPILER)" \
+> >
+> >   Why is this needed? And is it even a good idea? In pkg-cmake, this is defined
+> > as -DCMAKE_ASM_COMPILER="$$(HOSTAS)", and HOSTAS is simply "as" without any
+> > ccache. In fact, this changes it from "as" to "gcc" which I expect is not
+> > correct at all...
+>
+> When not defining that I got the errror:
+>
+> [ 25%] Building C object CMakeFiles/blake3.dir/blake3_portable.c.o
+> [ 37%] Building ASM object CMakeFiles/blake3.dir/blake3_avx2_x86-64_unix.S.o
+> [ 50%] Building C object CMakeFiles/blake3.dir/blake3_dispatch.c.o
+> Assembler messages:
+> Fatal error: bad defsym; format is --defsym name=value
+> make[3]: *** [CMakeFiles/blake3.dir/build.make:117:
+> CMakeFiles/blake3.dir/blake3_avx2_x86-64_unix.S.o] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> [ 62%] Building ASM object CMakeFiles/blake3.dir/blake3_avx512_x86-64_unix.S.o
+> Assembler messages:
+> Fatal error: bad defsym; format is --defsym name=value
+> make[3]: *** [CMakeFiles/blake3.dir/build.make:130:
+> CMakeFiles/blake3.dir/blake3_avx512_x86-64_unix.S.o] Error 1
+> make[3]: Leaving directory
+> '/home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/c'
+> make[2]: *** [CMakeFiles/Makefile2:83: CMakeFiles/blake3.dir/all] Error 2
+> make[2]: Leaving directory
+> '/home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/c'
+> make[1]: *** [Makefile:136: all] Error 2
+> make[1]: Leaving directory
+> '/home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/c'
+> make: *** [package/pkg-generic.mk:283:
+> /home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/.stamp_built]
+> Error 2
+>
+> So when changing to use gcc instead of as it works.
+>
+> I tried to build on my host and see that cmake sets the var
+> "CMAKE_ASM_COMPILER=/usr/bin/cc". When overwriting it with as it also
+> does not build.
+
+But unsetting -UCMAKE_C_COMPILER_LAUNCHER and
+-UCMAKE_CXX_COMPILER_LAUNCHE is not required. So would remove these
+two lines.
+
+>
+> --
+> Heiko
+>
+> >
+> >   Since you said you could respin this weekend, I will mark as Changes
+> > Requested, but it's possible that your respin only has some commit message
+> > changes of course.
+> >
+> >   Regards,
+> >   Arnout
+> >
+> > > +     -UCMAKE_C_COMPILER_LAUNCHER \
+> > > +     -UCMAKE_CXX_COMPILER_LAUNCHER
+> > > +
+> > > +$(eval $(host-cmake-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
