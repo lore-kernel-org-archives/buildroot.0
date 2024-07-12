@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E443C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 22:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79424C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 22:05:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC074818CA;
-	Fri, 12 Jul 2024 22:05:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A085818CA;
+	Fri, 12 Jul 2024 22:05:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zxO5NcSvVmA6; Fri, 12 Jul 2024 22:05:18 +0000 (UTC)
+ id 2yP9mZ1xMX-f; Fri, 12 Jul 2024 22:05:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3DBA844F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B4CD844F3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3DBA844F3;
-	Fri, 12 Jul 2024 22:05:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1EF1D1BF427
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 22:05:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B4CD844F3;
+	Fri, 12 Jul 2024 22:05:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B780E1BF427
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 22:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1911041A36
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 22:05:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5412606A6
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 22:05:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ibG68Sd_gdzc for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 22:05:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZEjuCmcOkGwp for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 22:05:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 122BA41811
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 122BA41811
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 22:05:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F12A486272; Fri, 12 Jul 2024 22:05:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 00:04:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c54134bf6914593caaa9ed4aa11cbe3a17c59eca
-X-Git-Newrev: 6df6286b78eeb97b7bd399b6f75c829262fbdbe4
-X-Patchwork-Hint: ignore
-Message-Id: <20240712220515.F12A486272@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/uevm5432_defconfig: bump Linux and
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5DF8060656
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DF8060656
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5DF8060656
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 22:05:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B65B9E0002;
+ Fri, 12 Jul 2024 22:05:37 +0000 (UTC)
+Date: Sat, 13 Jul 2024 00:05:36 +0200
+To: Vincent =?UTF-8?B?U3RlaGzDqQ==?= via buildroot <buildroot@buildroot.org>
+Message-ID: <20240713000536.57e43cd6@windsurf>
+In-Reply-To: <20240524155617.3231-1-vincent.stehle@laposte.net>
+References: <20240524155617.3231-1-vincent.stehle@laposte.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720821937;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Hmnbu6ArKMOCZV5I6u4i985GV0d2m5QCqpUMAkfOq+Y=;
+ b=Amh/loiIjhLPWCuj4QWe9q0HMtWauvB4JAbeLnyaVN3L8PGnDPF2TuUMW89bZ5v6t35GRw
+ y5MGR7Be32m40vq22jJcP7d8DQMucOVCh2a1WkdEVPIWpS/ZNxxKZSOY83dTfTYJ39UMjV
+ 67/pzhAN02JKw7ENvSBeefLaupYthVrjNEJ4aCfh1J4/G6L/8b92Ko8bpVKmnPxJKuJB78
+ 6v17H0i2+MDeDyoktuPT2XeMpzxAZStTFhEM+e8hBDSq1OvAvtxuuW0MIpIKmRhUH6bupo
+ WpgsUgZ9Yx2r8A67eQQVa+z5LNoQh6EA0ozl8FCSNoOP8lqq7PIUbSQukIbi/w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Amh/loiI
+Subject: Re: [Buildroot] [PATCH] configs/uevm5432_defconfig: bump Linux and
  U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,138 +83,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2219069301198616465=="
+Cc: Vincent =?UTF-8?B?U3RlaGzDqQ==?= <vincent.stehle@laposte.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2219069301198616465==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6df6286b78eeb97b7bd399b6f75c829262fbdbe4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Bump Linux kernel to v6.8.10.
-  The Devicetree has moved; update our config accordingly.
-
-- Bump U-Boot to 2023.04.
-  This is the most recent version we can use as U-Boot 2023.07 dropped
-  support for the uevm.
-  OpenSSL is now required for the build.
-  The default boot method has changed; switch to booting with an extlinux
-  configuration to overcome this.
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/uevm5432/extlinux.conf |  4 ++++
- board/uevm5432/genimage.cfg  |  6 ++++--
- board/uevm5432/post-build.sh |  6 ++++++
- configs/uevm5432_defconfig   | 13 +++++++------
- 4 files changed, 21 insertions(+), 8 deletions(-)
-
-diff --git a/board/uevm5432/extlinux.conf b/board/uevm5432/extlinux.conf
-new file mode 100644
-index 0000000000..50f3cd30fb
---- /dev/null
-+++ b/board/uevm5432/extlinux.conf
-@@ -0,0 +1,4 @@
-+label uevm5432-buildroot
-+  kernel /zImage
-+  fdt /omap5-uevm.dtb
-+  append root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait console=ttyO2,115200
-diff --git a/board/uevm5432/genimage.cfg b/board/uevm5432/genimage.cfg
-index dfe388227e..7bb90e198b 100644
---- a/board/uevm5432/genimage.cfg
-+++ b/board/uevm5432/genimage.cfg
-@@ -2,7 +2,10 @@ image boot.vfat {
- 	vfat {
- 		files = {
- 			"MLO",
--			"u-boot.img"
-+			"u-boot.img",
-+			"zImage",
-+			"omap5-uevm.dtb",
-+			"extlinux"
- 		}
- 	}
- 
-@@ -22,6 +25,5 @@ image sdcard.img {
- 	partition rootfs {
- 		partition-type = 0x83
- 		image = "rootfs.ext4"
--		size = 512M
- 	}
- }
-diff --git a/board/uevm5432/post-build.sh b/board/uevm5432/post-build.sh
-new file mode 100755
-index 0000000000..f90f76d8b5
---- /dev/null
-+++ b/board/uevm5432/post-build.sh
-@@ -0,0 +1,6 @@
-+#!/bin/sh
-+set -e
-+
-+BOARD_DIR="$(dirname "$0")"
-+
-+install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$BINARIES_DIR"/extlinux/extlinux.conf
-diff --git a/configs/uevm5432_defconfig b/configs/uevm5432_defconfig
-index 7b9a4309c6..03dc789fa8 100644
---- a/configs/uevm5432_defconfig
-+++ b/configs/uevm5432_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a15=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 5.12 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
-+# Linux headers same as kernel, a 6.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
- 
- # System
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-@@ -12,17 +12,17 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
- BR2_SYSTEM_DHCP="eth0"
- 
- # Image
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/uevm5432/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/uevm5432/genimage.cfg"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.10"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap5-uevm"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/omap5-uevm"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
- # Filesystem
-@@ -34,8 +34,9 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="omap5_uevm"
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
-
---===============2219069301198616465==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2219069301198616465==--
+T24gRnJpLCAyNCBNYXkgMjAyNCAxNzo1NjoxNyArMDIwMApWaW5jZW50IFN0ZWhsw6kgdmlhIGJ1
+aWxkcm9vdCA8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3RlOgoKPiAtIEJ1bXAgTGludXgg
+a2VybmVsIHRvIHY2LjguMTAuCj4gICBUaGUgRGV2aWNldHJlZSBoYXMgbW92ZWQ7IHVwZGF0ZSBv
+dXIgY29uZmlnIGFjY29yZGluZ2x5Lgo+IAo+IC0gQnVtcCBVLUJvb3QgdG8gMjAyMy4wNC4KPiAg
+IFRoaXMgaXMgdGhlIG1vc3QgcmVjZW50IHZlcnNpb24gd2UgY2FuIHVzZSBhcyBVLUJvb3QgMjAy
+My4wNyBkcm9wcGVkCj4gICBzdXBwb3J0IGZvciB0aGUgdWV2bS4KCkhtLCB0aGlzIG1lYW5zIHdl
+IHdpbGwgaGF2ZSB0byByZW1vdmUgdGhpcyBkZWZjb25maWcgYXQgc29tZSBwb2ludCBpbgp0aGUg
+ZnV0dXJlLgoKPiAgIE9wZW5TU0wgaXMgbm93IHJlcXVpcmVkIGZvciB0aGUgYnVpbGQuCj4gICBU
+aGUgZGVmYXVsdCBib290IG1ldGhvZCBoYXMgY2hhbmdlZDsgc3dpdGNoIHRvIGJvb3Rpbmcgd2l0
+aCBhbiBleHRsaW51eAo+ICAgY29uZmlndXJhdGlvbiB0byBvdmVyY29tZSB0aGlzLgo+IAo+IFNp
+Z25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVAbGFwb3N0ZS5uZXQ+
+CgpJbiB0aGUgbWVhbiB0aW1lOiBhcHBsaWVkIHRvIG1hc3Rlci4gVGhhbmtzIQoKVGhvbWFzCi0t
+IApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExp
+bnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5j
+b20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
