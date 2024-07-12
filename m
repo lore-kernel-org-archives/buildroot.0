@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ECFFC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:07:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1622DC2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 18DD040146;
-	Fri, 12 Jul 2024 15:07:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 762244129F;
+	Fri, 12 Jul 2024 15:07:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8u_PCO_u6VeA; Fri, 12 Jul 2024 15:07:09 +0000 (UTC)
+ id 1CuQTMNOgNIJ; Fri, 12 Jul 2024 15:07:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E31794043A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87B14412A7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E31794043A;
-	Fri, 12 Jul 2024 15:07:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 75CBE1BF5D7
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:06:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 87B14412A7;
+	Fri, 12 Jul 2024 15:07:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 726971BF5D7
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:06:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 70CF26133F
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:06:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E7E484688
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:06:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JsJtN2qk1O6I for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 15:06:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ymzBtg9gt5vR for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 15:06:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 539106132A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 539106132A
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 539106132A
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 15:06:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 87DDA2000B;
- Fri, 12 Jul 2024 15:06:42 +0000 (UTC)
-Date: Fri, 12 Jul 2024 17:06:41 +0200
-To: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-Message-ID: <20240712170641.12f1d760@windsurf>
-In-Reply-To: <20240519045003.306052-1-dm.chestnykh@gmail.com>
-References: <20240519045003.306052-1-dm.chestnykh@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720796802;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=St8AVqRvDCoOYI25frD0lXLzQ2sAZ+6e5rzKQM3G/Ig=;
- b=MvQUYLiuyswggV+oWp0Gi50MBG36eAdg6r0jI9mZh2w6suMlUJDhXCvzDYj6nkXOdBcufB
- TQLUiQYmJ+ZbC/Ee46IPTD4ilx7Giq2RZxN1uc+r2np1gDL7lJregQCdiLpIH2SM38oR3S
- Q84LXO2jPQ6fXSFTl2kuA7MKa9brWQkXMCh+BnlsNVPGd7pAVJWs2D6Khm6gFelMoWZkIh
- G2I1QoQIdxIVRA67wbuhO9sJB/PjuJE8pwzHsJdbhNl33/X2bFkfGgBmcjxr6GLRvKk1ig
- 7iLJlvkl4+qJdVDhpG1js6eB6gu+2F7YUua2z05qunQCHrDzI810JhzKwNTTQg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MvQUYLiu
-Subject: Re: [Buildroot] [PATCH] package/uclibc-ng-test: Bump to the latest
- git version.
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9519084637
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9519084637
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 15:06:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8397086033; Fri, 12 Jul 2024 15:06:48 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 17:06:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a72b3e2eee788ca4b8544ab4f6c0db41065823c6
+X-Git-Newrev: 581b4ddd54a4819d5165c0ec3b3ab324927dda92
+X-Patchwork-Hint: ignore
+Message-Id: <20240712150648.8397086033@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uclibc-ng-test: bump to the latest
+ git version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,32 +60,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 19 May 2024 07:50:03 +0300
-Dmitry Chestnykh <dm.chestnykh@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=581b4ddd54a4819d5165c0ec3b3ab324927dda92
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Upstream contains new tests and refactoring
-> of the existing functionality.
-> 
-> Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-> ---
->  DEVELOPERS                                 | 1 +
->  package/uclibc-ng-test/uclibc-ng-test.hash | 2 +-
->  package/uclibc-ng-test/uclibc-ng-test.mk   | 2 +-
->  3 files changed, 3 insertions(+), 2 deletions(-)
+Upstream contains new tests and refactoring of the existing
+functionality.
 
-Applied to master, thanks.
+Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                 | 1 +
+ package/uclibc-ng-test/uclibc-ng-test.hash | 2 +-
+ package/uclibc-ng-test/uclibc-ng-test.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b0c5cc02d7..ae3a675731 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -853,6 +853,7 @@ F:	package/wireless-regdb/
+ N:	Dmitry Chestnykh <dm.chestnykh@gmail.com>
+ F:	board/qemu/sparc-ss10/
+ F:	configs/qemu_sparc_ss10_defconfig
++F:	package/uclibc-ng-test/
+ 
+ N:	Dominik Faessler <faessler@was.ch>
+ F:	package/logsurfer/
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.hash b/package/uclibc-ng-test/uclibc-ng-test.hash
+index dc0499001e..38621062be 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.hash
++++ b/package/uclibc-ng-test/uclibc-ng-test.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7f5badc6621eb9dbc9030121bfa6d4d1ccf680a346cd15c6dca05a6e03010d96  uclibc-ng-test-0f303c63fab7f4038515ced6f2659242cf60ac19-git4.tar.gz
++sha256  fae9be86b0eb050e139047d934e7e02599d074d481523dead65ce164c8453500  uclibc-ng-test-132c6134d69146bcafbdda68ae3a9cbd9f8fb921-git4.tar.gz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
+index 7d62401244..a80b64349b 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.mk
++++ b/package/uclibc-ng-test/uclibc-ng-test.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_NG_TEST_VERSION = 0f303c63fab7f4038515ced6f2659242cf60ac19
++UCLIBC_NG_TEST_VERSION = 132c6134d69146bcafbdda68ae3a9cbd9f8fb921
+ UCLIBC_NG_TEST_SITE = https://git.uclibc-ng.org/git/uclibc-ng-test.git
+ UCLIBC_NG_TEST_SITE_METHOD = git
+ UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
