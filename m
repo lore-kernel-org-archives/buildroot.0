@@ -4,139 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6105C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 09:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 047AAC3DA4A
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 09:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB1B9417C2;
-	Fri, 12 Jul 2024 09:49:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2707A417F8;
+	Fri, 12 Jul 2024 09:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SlA9bmxJ8fE6; Fri, 12 Jul 2024 09:49:22 +0000 (UTC)
+ id cMI697NXSsNm; Fri, 12 Jul 2024 09:53:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B3DC417ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DCEA417F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B3DC417ED;
-	Fri, 12 Jul 2024 09:49:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DCEA417F9;
+	Fri, 12 Jul 2024 09:53:18 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 42D551BF5A9
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 09:49:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2F2C11BF5A9
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 09:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2ECB381446
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 09:49:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1D2C7845C6
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 09:53:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R__8sn-A1Fu4 for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 09:49:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CA56E818B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA56E818B5
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CA56E818B5
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 09:49:18 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.120.126]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbivG-1rwiAP29hG-00lZhS; Fri, 12
- Jul 2024 11:49:15 +0200
-Message-ID: <5c9a2ece-b4a6-4e44-af3e-e635d3101547@gmx.de>
-Date: Fri, 12 Jul 2024 11:49:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Arnout Vandecappelle <arnout@mind.be>
-References: <20240705094449.8550-1-fiona.klute@gmx.de>
- <20240705094449.8550-2-fiona.klute@gmx.de> <20240708231151.2606b9ff@windsurf>
- <40102a9d-6674-4a11-bf18-a4ea41164095@gmx.de>
- <20240709113704.65a5c956@windsurf>
- <a11a2bc2-cc24-421d-8333-2f0b622368b4@mind.be>
- <20240709135717.6f0f69d0@windsurf>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <20240709135717.6f0f69d0@windsurf>
-X-Provags-ID: V03:K1:MIljSymkcXy/tUlzJ8XsG8HV0qdDjIr6sU51HjqRdrJX7zJCXsU
- 8JGpAw6BEqPCHIT/CQ+qGFZ8J3nUCytIprNBBJbs5V9ifgQ4XUrxv9mi3lzzX+68nXsgaS8
- Tk0oswwiN+bGR+wVZlqBo3apMpvAAyXbKeorQYT2v1DmX927e0wQmAiYARLPJ7jO8oH4yl4
- suDMQYf5KVJnoGTTbWuqA==
-UI-OutboundReport: notjunk:1;M01:P0:dURunNTUOpU=;788W4JmM4P4jUdM5YfUjUT7kmQt
- eQhm97zEFB+Uvy+NCgYz7eSh+KNV555mU97IGu+Om4yq+VEIJ/jMafXQh6MxXyEocCLfoFcMD
- K36h0pX4h/EhDef5KeKX0gvRXA2UtPvmtvvEEvGtBhn+PxJ+jiRsqkPX5GUM9a26jeKEEoUVJ
- O7BhYVmBzOyEJrZuxQ8GaWZC8wA0QnC3CuxGpaeISfq+nEho42v/ui93QQxekqdSiiDzlDoug
- l8yPwD63xFN2yqjGHM4T5y5AvV0N/sfOw3oiw6ambRHsqfesyxIWvUzk1ittU7P5D72Ku5uwm
- KhyJMua94MhFZYfwb7GVSW0LO4NJKu8q5ub/DbPeJk25vpfRb4YHx5ZfSD06whwjgU73ur5/D
- CD4Mxk5QyMB0u/FTsMjFQzrQeA2INQIJab5Uirt+vS0ZhWBVlhAA8QJzWHODBAmUI7A5HUDcW
- 4vPq9h3+h2iJ2G+v6EIHzsiB0zVqE94+OcI3sNNcKbbQNfQyBIhZ6EPjcKMlDdbf9t5fkC2R1
- M9rwg8PoA+vzUwuyr+pHefpZs6biADJzNCdL7s3DkQm83YEMdxJsAvEA89jSw2CLwVCzjY8tS
- BZmfUN49rST/HOUkZI3E34rElnAnCOoi9gDtQ+ui0ClY1h/Yc4YdUkaq0x13BbnZ/QbEIXf9M
- 5kgiRQ9NEFKXcN/lXdJhXZLcM3RmVmBNTRfbpaYxziLc8DtK7pPSrRszxDnWumlD7JoH5ZJyU
- Ut7LP+rNE+YFZEQXkQB2xrjT/psx4PYz/pJH1IEAtza77feAPsq5CatzTyVyUcQ9l/I9O3Zyz
- tTXzg2dAjl+kbycv3LYzlJHg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1720777755; x=1721382555; i=fiona.klute@gmx.de;
- bh=ISY++0R5Ov6C0Zh01CsO+31xcaI99SWbzIT8pGUL4Gk=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=KXGYoS0XUvS8QbSgZbNqfGw1KfIoSAg2Ed12ngzE3/tp1+npGVR2cQSY/g5/ntHN
- DhX6aK+3GF7U6wLguiUDs7wY+qgcrbvQ1u/nNWdX87nyVtAFswUUoqNVigHplgFXL
- nt/Ew0Pw8Bp4QTXIE+pGkABMzX+vPhqT4XpUS8i1/QcEHfD06Ztoe0bBim3E60p8t
- 2bU/RDvAcQCjml+cwnc/8u/tdc2EFOjBhW2F4Wljvaq8E0brBOdE1cBeYKsndmFGE
- YML2PeOUkgVvjD3Zqqge3g3EJvpeSS+KG1YTdoaYsXjQAduDfjGWxx3lrC3dGZOnT
- pkP2Z/iCfxClI8bCxA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=KXGYoS0X
-Subject: Re: [Buildroot] [PATCH 1/2] docs/manual: describe relying on
- default options
+ id m3umYznlQnuP for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 09:53:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D031845C2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D031845C2
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 09:53:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E2F1885D67; Fri, 12 Jul 2024 09:53:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 11:52:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f69f957f289fc715ab913629212448d3799dd168
+X-Git-Newrev: b4e6ef2c7ae3c126d7e9af1ddd2be674f382aa06
+X-Patchwork-Hint: ignore
+Message-Id: <20240712095315.E2F1885D67@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6/qt6declarative: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -148,39 +57,224 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Fiona Klute via buildroot <buildroot@buildroot.org>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 09.07.24 um 13:57 schrieb Thomas Petazzoni:
-> On Tue, 9 Jul 2024 12:13:08 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
->
->>> I don't have a strong opinion, but I think
->>> section https://buildroot.org/downloads/manual/manual.html#adding-packages-start-script
->>> makes more sense, as it's actually close to where it matters. Arnout?
->>
->>    The init scripts are just an example here, the principle applies more in
->> general. It also applies to e.g. ifupdown scripts, or even systemd unit files
->> (e.g. if a systemd unit file needs some ExecStartPre command). That's why I
->> thought that the start script was not the most appropriate place.
->
-> ACK. But then perhaps the discussion can be extended beyond Busybox.
-> For example for uClibc-ng, we also assume it is built with our default
-> configuration, and don't try to support the myriad of possible
-> uClibc-ng configurations.
+commit: https://git.buildroot.net/buildroot/commit/?id=b4e6ef2c7ae3c126d7e9af1ddd2be674f382aa06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've tried to make clearer that it's a general thing, with Busybox being
-an example (patch 1 in the "Update init script style" series I just
-sent). I hope that works.
+Add host-qt6svg to dependencies when qt6svg is available to build the
+required svgtoqml host tool:
 
-Best regards,
-Fiona
+  Failed to find the host tool "Qt6::svgtoqml".  It is part of the
+  Qt6QuickTools package, but the package could not be found.  Make sure you
+  have built and installed the host Quick module, which will ensure the
+  creation of the Qt6QuickTools package.
 
+Select the host-qt6base Testlib module to build the qmltestrunner host
+tool when the qt6base Testlib module is enabled:
+
+  Failed to find the host tool "Qt6::qmltestrunner".  It is part of the
+  Qt6QmlTools package, but the package did not contain the tool.  Make sure
+  that the host module Qml was built with all features enabled (no explicitly
+  disabled tools).
+
+Select the host-qt6base Network module to build the qmlprofiler host
+tool when the qt6base Network module is enabled:
+
+  Failed to find the host tool "Qt6::qmlprofiler".  It is part of the
+  Qt6QmlTools package, but the package did not contain the tool.  Make sure
+  that the host module Qml was built with all features enabled (no explicitly
+  disabled tools).
+
+Add patch to avoid checking for FEATURE_ssl when FEATURE_network
+is not available. FEATURE_ssl is defined by the Qt Network module. So
+we will get the following build failure if the patch is not applied and
+FEATURE_network=ON:
+
+  Attempting to evaluate feature ssl but its definition is missing.  Either
+  the feature does not exist or a dependency to the module that defines it is
+  missing
+
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt6/Config.in                              |  1 +
+ .../0001-Fix-build-with--no-feature-network.patch  | 28 +++++++++
+ package/qt6/qt6declarative/Config.in               | 22 +++++++
+ package/qt6/qt6declarative/qt6declarative.hash     | 11 ++++
+ package/qt6/qt6declarative/qt6declarative.mk       | 67 ++++++++++++++++++++++
+ 5 files changed, 129 insertions(+)
+
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 81682af476..625134d281 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -45,6 +45,7 @@ if BR2_PACKAGE_QT6
+ 
+ source "package/qt6/qt6base/Config.in"
+ source "package/qt6/qt6core5compat/Config.in"
++source "package/qt6/qt6declarative/Config.in"
+ source "package/qt6/qt6languageserver/Config.in"
+ source "package/qt6/qt6serialbus/Config.in"
+ source "package/qt6/qt6serialport/Config.in"
+diff --git a/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patch b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patch
+new file mode 100644
+index 0000000000..bef5794229
+--- /dev/null
++++ b/package/qt6/qt6declarative/0001-Fix-build-with--no-feature-network.patch
+@@ -0,0 +1,28 @@
++From 8377691a0998fd84e6fc8349a5db450bf2d79164 Mon Sep 17 00:00:00 2001
++From: Tasuku Suzuki <tasuku.suzuki@signal-slot.co.jp>
++Date: Tue, 21 Nov 2023 23:58:43 +0900
++Subject: Fix build with -no-feature-network
++
++Change-Id: Ib21012301da6afb5458f707b39a9a8079d93eb93
++Reviewed-by: Ulf Hermann <ulf.hermann@qt.io>
++Upstream: https://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=8377691a0998fd84e6fc8349a5db450bf2d79164
++Signed-off-by: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>
++---
++ src/qml/configure.cmake | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/qml/configure.cmake b/src/qml/configure.cmake
++index 2d0434643a..d1ff90bd54 100644
++--- a/src/qml/configure.cmake
+++++ b/src/qml/configure.cmake
++@@ -82,7 +82,7 @@ qt_feature("qml-ssl" PUBLIC
++     SECTION "QML"
++     LABEL "QML SSL support"
++     PURPOSE "Provides ssl support in QML."
++-    CONDITION QT_FEATURE_ssl
+++    CONDITION QT_FEATURE_qml_network AND QT_FEATURE_ssl
++ )
++ 
++ # On arm and arm64 we need a specialization of cacheFlush() for each OS to be
++-- 
++cgit v1.2.3
+diff --git a/package/qt6/qt6declarative/Config.in b/package/qt6/qt6declarative/Config.in
+new file mode 100644
+index 0000000000..0a977ed808
+--- /dev/null
++++ b/package/qt6/qt6declarative/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_QT6DECLARATIVE
++	bool "qt6declarative"
++	# Enable host test module to ensure that qmltestrunner is built
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt6declarative module.
++
++	  https://doc.qt.io/qt-6/qtdeclarative-index.html
++
++if BR2_PACKAGE_QT6DECLARATIVE
++
++config BR2_PACKAGE_QT6DECLARATIVE_QUICK
++	bool "quick module"
++	select BR2_PACKAGE_HOST_QT6BASE_TEST if BR2_PACKAGE_QT6BASE_TEST # qmltestrunner
++	select BR2_PACKAGE_HOST_QT6BASE_NETWORK if BR2_PACKAGE_QT6BASE_NETWORK # qmlprofiler
++	select BR2_PACKAGE_QT6BASE_GUI
++	select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_QT6_GL_SUPPORTS
++	select BR2_PACKAGE_QT6SHADERTOOLS
++
++endif
+diff --git a/package/qt6/qt6declarative/qt6declarative.hash b/package/qt6/qt6declarative/qt6declarative.hash
+new file mode 100644
+index 0000000000..006b49e4b1
+--- /dev/null
++++ b/package/qt6/qt6declarative/qt6declarative.hash
+@@ -0,0 +1,11 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qtdeclarative-everywhere-src-6.7.2.tar.xz.sha256
++sha256  4c29cba1af8c42d425d8eb6e01bad24cb80f4b983d71eef566a0542dfdb9b999  qtdeclarative-everywhere-src-6.7.2.tar.xz
++
++# Hashes for license files:
++sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
++sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
++sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
++sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+diff --git a/package/qt6/qt6declarative/qt6declarative.mk b/package/qt6/qt6declarative/qt6declarative.mk
+new file mode 100644
+index 0000000000..57a89a3b6e
+--- /dev/null
++++ b/package/qt6/qt6declarative/qt6declarative.mk
+@@ -0,0 +1,67 @@
++################################################################################
++#
++# qt6declaratve
++#
++################################################################################
++
++QT6DECLARATIVE_VERSION = $(QT6_VERSION)
++QT6DECLARATIVE_SITE = $(QT6_SITE)
++QT6DECLARATIVE_SOURCE = qtdeclarative-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6DECLARATIVE_VERSION).tar.xz
++QT6DECLARATIVE_INSTALL_STAGING = YES
++
++QT6DECLARATIVE_SUPPORTS_IN_SOURCE_BUILD = NO
++
++QT6DECLARATIVE_CMAKE_BACKEND = ninja
++
++QT6DECLARATIVE_LICENSE = \
++	LGPL-3.0 or GPL-3.0 or GPL-2.0, \
++	BSD-3-Clause (docs), \
++	GFDL-1.3 no invariants (docs), \
++	BSD-3-Clause (examples), \
++	GPL-3.0 (tests), \
++	GPL-3.0 WITH Qt-GPL-exception-1.0 (tools)
++
++QT6DECLARATIVE_LICENSE_FILES = \
++	LICENSES/BSD-3-Clause.txt \
++	LICENSES/GPL-2.0-only.txt \
++	LICENSES/GPL-3.0-only.txt \
++	LICENSES/LGPL-3.0-only.txt \
++	LICENSES/GFDL-1.3-no-invariants-only.txt \
++	LICENSES/Qt-GPL-exception-1.0.txt
++
++QT6DECLARATIVE_CONF_OPTS = \
++	-DQT_HOST_PATH=$(HOST_DIR) \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF
++
++HOST_QT6DECLARATIVE_CONF_OPTS = \
++	-DQT_HOST_PATH=$(HOST_DIR) \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF
++
++HOST_QT6DECLARATIVE_DEPENDENCIES = \
++	host-qt6base
++
++QT6DECLARATIVE_DEPENDENCIES = \
++	host-qt6declarative \
++	qt6base
++
++ifeq ($(BR2_PACKAGE_QT6DECLARATIVE_QUICK),y)
++HOST_QT6DECLARATIVE_DEPENDENCIES += \
++	host-qt6shadertools
++QT6DECLARATIVE_DEPENDENCIES += \
++	host-qt6base \
++	qt6shadertools
++
++# We need host-qt6svg, when qt6svg is available to build the required
++# svgtoqml host tool
++ifeq ($(BR2_PACKAGE_QT6SVG),y)
++HOST_QT6DECLARATIVE_DEPENDENCIES += host-qt6svg
++endif
++
++endif
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
