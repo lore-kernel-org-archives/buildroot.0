@@ -4,98 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 961C3C3DA4B
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 13:42:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EF9EC3DA4B
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 13:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DA9C408CF;
-	Fri, 12 Jul 2024 13:42:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29EDE408CF;
+	Fri, 12 Jul 2024 13:43:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uO7ofzwsKLpu; Fri, 12 Jul 2024 13:42:08 +0000 (UTC)
+ id aE4GFoUMu3PQ; Fri, 12 Jul 2024 13:43:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8D78410A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAC96410A7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8D78410A7;
-	Fri, 12 Jul 2024 13:42:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 478DE1BF59E
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:42:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAC96410A7;
+	Fri, 12 Jul 2024 13:43:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B6BA1BF59E
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 34ED560651
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:42:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8888184631
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 13:43:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7niPcPHCV9on for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 13:42:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tRclMBi7flzE for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 13:43:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B6B5E60652
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6B5E60652
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B6B5E60652
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 13:42:04 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4265b7514fcso18552515e9.1
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 06:42:04 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::1134; helo=mail-yw1-x1134.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 87FB5812F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87FB5812F6
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com
+ [IPv6:2607:f8b0:4864:20::1134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 87FB5812F6
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 13:43:20 +0000 (UTC)
+Received: by mail-yw1-x1134.google.com with SMTP id
+ 00721157ae682-65651296d91so19440717b3.3
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 06:43:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720791722; x=1721396522;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=DFx7I5mOs4y8Lj4FjwulImB54tzOFL4yDA5Zvj7BymY=;
- b=xEhw4SU47dljlpj2Y5+TuoKfkdXP2rXz2veOHnG7a9sGsgg8lBKNPqxRI+5vxcaBUc
- mN4XejruRcvEywoiumiBnSLoCjOS8CmMVvUXECNQamphAxZ2wZ2DteMAoirR7ISF6mXj
- QFb+/wBAxJWWXNL27Y4VBtxCUMXvszVaP1XDIPTpCz6kIdELgZYu71j5qWaVkreton6L
- IM40a9moI2HG7JdqjNzhC9ydle0J8QM2bCyt8ZXTE7LLettTQMhCY1G5h5NNOQms7YCK
- PNmGRziARc50Db1Ny0IkadnIe7Iha39ORhIwAOJTbHPw5wK5d3Q2XKlOjeJg0UjFhDV5
- gYVQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCU3sUVA9qruVGX4w1AIfEradwom5F62JelZw3Dz02xnCAQ5KVSkgScawjXNz1fSMD7s1K06oJBV63pteBPWdzWIkNwzzkKQGw==
-X-Gm-Message-State: AOJu0YywRNyOQDNYSZ3KyfNea2PLGuZlvxF/MsawIIuvykgNGgybV/Gh
- uAUmtG6B/D/Iul1fo6060/Ono46Sj4lIpF1DScKQnF6OQkX64aVBsN+V2j+g8wQ=
-X-Google-Smtp-Source: AGHT+IGnHBGpSjLV3aduN9uM5Gvo6cbLK8adwMcfM6hm9c5R+5iEEIDilflLYZuHwRLTYKS6i6KjMA==
-X-Received: by 2002:a05:600c:4196:b0:426:5b52:84fb with SMTP id
- 5b1f17b1804b1-4279dacef9amr24646885e9.7.1720791722143; 
- Fri, 12 Jul 2024 06:42:02 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
- (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:b481:98b5:611f:e783])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-368051abcc7sm1467683f8f.100.2024.07.12.06.42.01
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 06:42:01 -0700 (PDT)
-Message-ID: <bae05249-8ad9-4acc-90dc-15c783e8e921@mind.be>
-Date: Fri, 12 Jul 2024 15:41:59 +0200
+ d=1e100.net; s=20230601; t=1720791799; x=1721396599;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=IhJILdX1tD2ArCEpiYBjqDSSHeVPyAPqfswTq1w5ifc=;
+ b=quqv69wrf8d4KAMswvaA3s2BXGEl7Vf+3hw3tAT5DuKbWwY39MxkUYBXlPBUdBQJpy
+ e4WUg7TTt7NJusb6vcKm8N15oGuyXPgTk/XR5UCMAXUllhF8zqBIyWJseG2gnNV418Gv
+ vx5ewur8dWa5tXSmR/hO0PkI9k7Nyg92aWtv9DjckwO6bxsJel00ccud6I1DaE9yiGAP
+ +76AQ7NWx2+6qybi+C1UGztEoLepk2IF4AZDRwui3kSFVlrgOE64rIa5jpN5BYnQ/SR7
+ fUfKThNY5CV/bo6waanI90WDs89LOe1JbsKTLcXPVoaXwhvNABUxDBnzeVhy6tiIJusf
+ 2lVQ==
+X-Gm-Message-State: AOJu0YzLaFCqAUfOg4MqPWgGf38+0vB3yq6Ud8LcTU9qwKjMmEyUmrUc
+ eidSkwIsKSci7aWao2AerhPdw/IYj9GWGJB2t0TphUv3U7b5Tnqepgmza11tkabq4EMmlPMVWn2
+ XllCTSp+rhZQSQH40w8jYSqLD19FLjw==
+X-Google-Smtp-Source: AGHT+IEKN1PxyUIvizIPSZSmXkgCwlOFt5xgGCRMrTOjX3HAJGHUV5kDZOA8vSKdHgED6aXrFMmLWwNHyfMRsKrUN24=
+X-Received: by 2002:a05:690c:fd4:b0:65b:cdab:2678 with SMTP id
+ 00721157ae682-65cbafb2003mr69480457b3.15.1720791799218; Fri, 12 Jul 2024
+ 06:43:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
-References: <20240419213216.518041-1-angelo.compagnucci@gmail.com>
-Content-Language: en-GB
-In-Reply-To: <20240419213216.518041-1-angelo.compagnucci@gmail.com>
+References: <20240611141216.1211627-1-roy.kollen.svendsen@gmail.com>
+ <c8f71ea8-a7dc-457a-90ea-2af4084eb484@mind.be>
+In-Reply-To: <c8f71ea8-a7dc-457a-90ea-2af4084eb484@mind.be>
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Date: Fri, 12 Jul 2024 15:43:08 +0200
+Message-ID: <CA+R_derS68K1iKkeGRfReXHOjonS37zv9iLsbRbb+Nw-rOoCDw@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1720791722; x=1721396522; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=DFx7I5mOs4y8Lj4FjwulImB54tzOFL4yDA5Zvj7BymY=;
- b=FVOq+nfEgaXu0Azb0yuWtunLNbaVMjLECJftUue+DE2btz26WlWoQtU5uyyhC4Ip9c
- KYfTgTN9jIUznXQx+rTTUpY5y05s29BGfY2GeRGWd4MxvW9I6qF2AxV7kFFAtkd1ss4V
- AQpsAcowDy+uJEj6nlg0MJDXticvJWemqopf9r6xoliYRFcZrdGiFpXFmvHz/Cd8FaYk
- ra1CNlsDVl4Q3AIOOXKhgzWatsAcm5mbpHvjV9kqy9/HtuYXY/Gg6xoBMtWLkgzMvv+Q
- UadEkMOmfNROXL1+rZvPs9WW3G78rSoJIQpbO8aAIjXK5QkhbaRQu8gnzanq8c4YzEHG
- kmMw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=FVOq+nfE
-Subject: Re: [Buildroot] [PATCH 0/2] Fix fail2ban
+ d=gmail.com; s=20230601; t=1720791799; x=1721396599; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=IhJILdX1tD2ArCEpiYBjqDSSHeVPyAPqfswTq1w5ifc=;
+ b=OQscOryIW0G1Ht35jY6qYOYlX/D7arDQl3O9Iv15bB1us7LahOFc7EKYONatcOePiO
+ tX2/0qs4m5ID6JRhmkuVnpFXUl8OonCYysHXeAdQMbUjucdePCbL9uCzMWmV19OlHKSX
+ ywEaDPus/Z0ktN3T8MtpZdtrCcBPbYxx5if9NmRcjRSItk5CI+qjqXCraBrewlM/bovZ
+ W9XEEPb5var4VcZmRNlPLzX56OCdHBwn5zdELmqFJbuVjm3ELheGSBKiv3RNlvLRjAP4
+ Z6marns9vZxzmI1vxEKoUliF/oZCgFbz8hxCJh4zobFF7wOTpMBNLMauNOThRfCs9yaE
+ cfKg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=OQscOryI
+Subject: Re: [Buildroot] [PATCH] package/qt5: bump packages to lateste kde
+ submodule versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,63 +98,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Fiona Klute <fiona.klute@gmx.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Joshua Henderson <joshua.henderson@microchip.com>,
+ Bartosz Bilas <b.bilas@grinn-global.com>, Peter Seiderer <ps.report@gmx.net>,
+ Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: multipart/mixed; boundary="===============8994669771298725351=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+--===============8994669771298725351==
+Content-Type: multipart/alternative; boundary="000000000000ecc8c6061d0d0ffe"
 
+--000000000000ecc8c6061d0d0ffe
+Content-Type: text/plain; charset="UTF-8"
 
-On 19/04/2024 23:32, Angelo Compagnucci wrote:
-> This series fixes fail2ban not installing configuration files in /etc anymore.
-> While fixing the problem, I discovered a bug in the way we invoke the
-> pyinstaller.py in pep517 compatibility.
-> Basically, pyinstaller.py will install data_files defined in setup.py
-> and tarballed in the wheel inside the directory pointed by the --data parameter,
-> which is nowadays pointing to /usr of TARGET/STAGING directory.
-> 
-> I consider this wrong, because the data folder shall point to the
-> TARGET_DIR/STAGING_DIR to be correct and we shall trust the destination path
-> expressed in the setup.py.
-> 
-> In the case of fail2ban, configuration files end up being installed in
-> /usr/etc/fail2ban instead of /etc/fail2ban.
-> 
-> v1 -> v2:
-> Fix signed off with correct email.
-> v2 -> v3:
-> Fix commit author too
-> 
-> 
-> Angelo Compagnucci (2):
->    package/fail2ban: fix data_files installation path
->    package/pkg-python: fix pep517 data files installation
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 
-  Applied both to master, thanks.
+fre. 12. jul. 2024, 00:08 skrev Arnout Vandecappelle <arnout@mind.be>:
 
-  I added the Upstream: tag as suggested by Fiona. Still, I think it would be 
-good to report the issue upstream, so they can take it into account when they 
-eventually get around to migrating to a pep517 build system.
+>   Hi Roy,
+>
+> On 11/06/2024 16:12, Roy Kollen Svendsen wrote:
+> > Bump qt5 packages to latest submodule versions from:
+> > https://invent.kde.org/qt/qt/qt5/-/tree/kde/5.15
+>
+>   Your Signoff is missing...
+>
+>   You can just reply to this mail with your signoff and we can add it
+> while
+> applying.
+>
+>
+>   Regards,
+>   Arnout
+>
+> [snip]
+>
 
-  I also changed the order of the two commits, and removed the Fixes entry from 
-the one in pkg-python.
+--000000000000ecc8c6061d0d0ffe
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-  Do you know if this issue also occurs on 2024.02.x and 2024.05.x?
+<div dir=3D"auto"><span style=3D"font-size:12.8px">Signed-off-by: Roy Kolle=
+n Svendsen &lt;</span><a href=3D"mailto:roykollensvendsen@gmail.com" style=
+=3D"text-decoration-line:none;color:rgb(66,133,244);font-size:12.8px">royko=
+llensvendsen@gmail.com</a><span style=3D"font-size:12.8px">&gt;</span></div=
+><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">fre. =
+12. jul. 2024, 00:08 skrev Arnout Vandecappelle &lt;<a href=3D"mailto:arnou=
+t@mind.be">arnout@mind.be</a>&gt;:<br></div><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">=
+=C2=A0 Hi Roy,<br>
+<br>
+On 11/06/2024 16:12, Roy Kollen Svendsen wrote:<br>
+&gt; Bump qt5 packages to latest submodule versions from:<br>
+&gt; <a href=3D"https://invent.kde.org/qt/qt/qt5/-/tree/kde/5.15" rel=3D"no=
+referrer noreferrer" target=3D"_blank">https://invent.kde.org/qt/qt/qt5/-/t=
+ree/kde/5.15</a><br>
+<br>
+=C2=A0 Your Signoff is missing...<br>
+<br>
+=C2=A0 You can just reply to this mail with your signoff and we can add it =
+while <br>
+applying.<br>
+<br>
+<br>
+=C2=A0 Regards,<br>
+=C2=A0 Arnout<br>
+<br>
+[snip]<br>
+</blockquote></div>
 
-  Regards,
-  Arnout
+--000000000000ecc8c6061d0d0ffe--
 
-> 
->   ...001-setup.py-fix-data-relative-paths.patch | 73 +++++++++++++++++++
->   package/pkg-python.mk                         |  4 +-
->   2 files changed, 75 insertions(+), 2 deletions(-)
->   create mode 100644 package/fail2ban/0001-setup.py-fix-data-relative-paths.patch
-> 
+--===============8994669771298725351==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8994669771298725351==--
