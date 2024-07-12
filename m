@@ -4,96 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DAE1C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 20:32:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6619C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 20:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4132B41370;
-	Fri, 12 Jul 2024 20:32:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 939ED4067C;
+	Fri, 12 Jul 2024 20:38:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fYajwSOnRQca; Fri, 12 Jul 2024 20:32:00 +0000 (UTC)
+ id 6VuKRJYYmmN9; Fri, 12 Jul 2024 20:38:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6DC7413B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D5D24062F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6DC7413B8;
-	Fri, 12 Jul 2024 20:31:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D5D24062F;
+	Fri, 12 Jul 2024 20:38:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3312B1BF995
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 20:31:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C9B021BF420
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 20:38:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F112413B8
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 20:31:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0F554067C
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 20:38:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fj6PigjIF0vq for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 20:31:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22f; helo=mail-lj1-x22f.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 93D9441370
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93D9441370
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
- [IPv6:2a00:1450:4864:20::22f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 93D9441370
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 20:31:56 +0000 (UTC)
-Received: by mail-lj1-x22f.google.com with SMTP id
- 38308e7fff4ca-2ee910d6aaeso31212961fa.1
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 13:31:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720816314; x=1721421114;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=lrR5Z8SBEW3VhzF6t4Q9aqMGryFzLJe3dL6Jau4j/yk=;
- b=tqHXY4XTe/HBPk0iA9/u2X6sXUun1XWvMHDGl6vituMhJz7+syj0roEedCel9GElN9
- wgdTIjvzAARjMiw1UfM3f+xYDfWb9Trye0BN1BBbWF8oPvnzgnR+LKoZAl1ndnslWhiC
- fRscuPe8V8nGeR0M24QECEen4NNSOR8oDYwmZm4lcL38DbVJM45jWs4eVDeyEyeY64sc
- T6uUjtRvCOgirGIsTbo2MhLA5Gf5Cmq5FtAkW5fJlLGpp52j6gBAgvgzYwFkuGw+6NJi
- XflSLErDWAkBgi3lUXwn1SXD0gJq8WnMs5GihIHRGugoAzln4Vj80nRIMx1ceFGUIy+c
- /wLQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVfydSgM4FF7LUCW+RvYYHnU2t7BT5KPv/zFAfLS/XMLiTHCLtr6YY5h4RRvDdesuIrn2nobHufp9UmvtznmDUEi4qx0O2gQA==
-X-Gm-Message-State: AOJu0Yz4CjLMregs5yZ09hWkp4Zd6hOoNJZritMDIL7I48IQS5WPBd9Z
- PzADwnhfCc85VDEnbAWrkkO03tiBWTKDUDC+fxoFP0SJVFS5QfpWtwqGP3Yux6q1Ckx9kjxYxV9
- x
-X-Google-Smtp-Source: AGHT+IEzg9QbKE3oPsIYa6mTSCbvbEWcwNerJPcbuKWvAmQ6xtXubDKCAbYy+M0PIhYMg3L4sQDOgw==
-X-Received: by 2002:a2e:a367:0:b0:2ee:7bcd:a3f with SMTP id
- 38308e7fff4ca-2eeb30eb72amr76635091fa.22.1720816314166; 
- Fri, 12 Jul 2024 13:31:54 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:f9c8:f443:ffd:1bed?
- (2a01cb05949d5800f9c8f4430ffd1bed.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:f9c8:f443:ffd:1bed])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427a14d32e8sm25093325e9.17.2024.07.12.13.31.53
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 13:31:53 -0700 (PDT)
-Message-ID: <31bafcff-e7c2-4b0c-9fd1-8d5283269eb0@smile.fr>
-Date: Fri, 12 Jul 2024 22:31:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20240705011114.1313589-1-james.hilliard1@gmail.com>
-Content-Language: fr
-In-Reply-To: <20240705011114.1313589-1-james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1720816314; x=1721421114; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=lrR5Z8SBEW3VhzF6t4Q9aqMGryFzLJe3dL6Jau4j/yk=;
- b=DJvA6if063D2H6sXvAQToJ1kvd45ttddJhBC7A+MWNvLvW6Gmat27sPffqGG4ZBNVF
- gyA+OdAVb1ZqyPqVk1e6pJJFHR38OT0+ixUGP5FUR9kG5Zy4t95DI8uSvHder3VdVm2r
- IKnZOHcDZVUwrksCJE19NmXsXARe2Ahp+pmi0=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=DJvA6if0
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/systemd: enable required
- oomd kernel options
+ id IkFWn7wNQwMP for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 20:38:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 372A44062F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 372A44062F
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 20:38:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2D912861E8; Fri, 12 Jul 2024 20:38:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 22:38:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: be5f14657a5540fdabb03ba8b5ff64c0da804e32
+X-Git-Newrev: f6d9fa3692b0e5dd75bb1fee5d151fe58da7800d
+X-Patchwork-Hint: ignore
+Message-Id: <20240712203846.2D912861E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fwts: fix build with host make >=
+ 4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,42 +58,176 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Cc: Norbert Lange <nolange79@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, Sen Hastings <sen@hastings.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmFtZXMsCgpMZSAwNS8wNy8yMDI0IMOgIDAzOjExLCBKYW1lcyBIaWxsaWFyZCBhIMOp
-Y3JpdMKgOgo+IEluIG9yZGVyIGZvciBzeXN0ZW1kLW9vbWQgdG8gcnVuIENPTkZJR19QU0kgYW5k
-IENPTkZJR19NRU1DRyBtdXN0IGJlCj4gZW5hYmxlZCBpbiB0aGUga2VybmVsIGNvbmZpZy4KPiAK
-PiBTZWU6Cj4gaHR0cHM6Ly9naXRodWIuY29tL3N5c3RlbWQvc3lzdGVtZC9jb21taXQvZTdiM2Yx
-YTZjMzU4ZGQzZWFmMGI1MDU0N2JkNTIxMzBhZDQxMjZhZQo+IGh0dHBzOi8vZ2l0aHViLmNvbS9z
-eXN0ZW1kL3N5c3RlbWQvY29tbWl0L2FhMzI5Yjg5MjIzYTc5NzkzY2RlODI4OGIxYmM2ZTkzZGIx
-NzQ5MzgKPiAKPiBTaWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQx
-QGdtYWlsLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpCZXN0IHJlZ2FyZHMsClJv
-bWFpbgoKCj4gLS0tCj4gQ2hhbmdlcyB2MSAtPiB2MjoKPiAgIC0gYWRkIGxpbmtzIHRvIHJlYWRt
-ZSBjb21taXRzCj4gLS0tCj4gIHBhY2thZ2Uvc3lzdGVtZC9zeXN0ZW1kLm1rIHwgNiArKysrKysK
-PiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNr
-YWdlL3N5c3RlbWQvc3lzdGVtZC5tayBiL3BhY2thZ2Uvc3lzdGVtZC9zeXN0ZW1kLm1rCj4gaW5k
-ZXggNmIzNTUzNzIzYy4uNTJmYTM0NDgwNyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3N5c3RlbWQv
-c3lzdGVtZC5tawo+ICsrKyBiL3BhY2thZ2Uvc3lzdGVtZC9zeXN0ZW1kLm1rCj4gQEAgLTQ4MCw2
-ICs0ODAsMTAgQEAgZW5kaWYKPiAgaWZlcSAoJChCUjJfUEFDS0FHRV9TWVNURU1EX09PTUQpLHkp
-Cj4gIFNZU1RFTURfQ09ORl9PUFRTICs9IC1Eb29tZD10cnVlCj4gIFNZU1RFTURfT09NRF9VU0VS
-ID0gc3lzdGVtZC1vb20gLTEgc3lzdGVtZC1vb20gLTEgKiAtIC0gLSBzeXN0ZW1kIFVzZXJzcGFj
-ZSBPT00gS2lsbGVyCj4gK2RlZmluZSBTWVNURU1EX09PTURfTElOVVhfQ09ORklHX0ZJWFVQUwo+
-ICsJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfUFNJKQo+ICsJJChjYWxsIEtDT05G
-SUdfRU5BQkxFX09QVCxDT05GSUdfTUVNQ0cpCj4gK2VuZGVmCj4gIGVsc2UKPiAgU1lTVEVNRF9D
-T05GX09QVFMgKz0gLURvb21kPWZhbHNlCj4gIGVuZGlmCj4gQEAgLTgwNCw2ICs4MDgsOCBAQCBk
-ZWZpbmUgU1lTVEVNRF9MSU5VWF9DT05GSUdfRklYVVBTCj4gIAkkKGNhbGwgS0NPTkZJR19FTkFC
-TEVfT1BULENPTkZJR19BVVRPRlM0X0ZTKQo+ICAJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxD
-T05GSUdfVE1QRlNfUE9TSVhfQUNMKQo+ICAJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05G
-SUdfVE1QRlNfWEFUVFIpCj4gKwo+ICsJJChTWVNURU1EX09PTURfTElOVVhfQ09ORklHX0ZJWFVQ
-UykKPiAgZW5kZWYKPiAgCj4gICMgV2UgbmVlZCBhIHZlcnkgbWluaW1hbCBob3N0IHZhcmlhbnQs
-IHNvIHdlIGRpc2FibGUgYXMgbXVjaCBhcyBwb3NzaWJsZS4KCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=f6d9fa3692b0e5dd75bb1fee5d151fe58da7800d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+When build host has a many CPUs (more that 20) and GNU Make 4.4
+(included for example in Fedora 40), fwts can randomly fail to build.
+
+This commit adds a package patch to fix the issue.
+
+Fixes:
+
+    mv: cannot stat 'dtcompilerparser.tab.c': No such file or directory
+    mv: cannot stat 'prparser.tab.c': No such file or directory
+
+See also:
+https://github.com/fwts/fwts/issues/7
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...iasl-fix-parallel-build-with-GNU-Make-4.4.patch | 133 +++++++++++++++++++++
+ 1 file changed, 133 insertions(+)
+
+diff --git a/package/fwts/0002-libfwtsiasl-fix-parallel-build-with-GNU-Make-4.4.patch b/package/fwts/0002-libfwtsiasl-fix-parallel-build-with-GNU-Make-4.4.patch
+new file mode 100644
+index 0000000000..a5568d1fd9
+--- /dev/null
++++ b/package/fwts/0002-libfwtsiasl-fix-parallel-build-with-GNU-Make-4.4.patch
+@@ -0,0 +1,133 @@
++From 65a89b6253ef527ab4bc951eb8f9deba12f0121a Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Mon, 20 May 2024 11:14:02 +0200
++Subject: [PATCH] libfwtsiasl: fix parallel build with GNU Make >= 4.4
++
++When a build host has a large number of cores (like 20+) and GNU Make
++version is >= 4.4, fwts randomly fail to build in parallel, with a
++"make -j$(nproc)" command, with error:
++
++    mv: cannot stat 'dtcompilerparser.tab.c': No such file or directory
++    mv: cannot stat 'prparser.tab.c': No such file or directory
++
++This issue has been reported here:
++https://github.com/fwts/fwts/issues/7
++
++The Makefile.am of libfwtsiasl is using the GNU Make ".NOTPARALLEL"
++special target with prerequisites to handle commands generating
++multiple outputs (like lex/yacc invocations). See:
++https://github.com/fwts/fwts/blob/V24.03.00/src/libfwtsiasl/Makefile.am#L61
++
++First, the .NOTPARALLEL special target _with_ prerequisites is a
++feature added in GNU Make 4.4. See:
++https://git.savannah.gnu.org/cgit/make.git/commit/?id=f6ea899d83bf00fe9201fde0ca9cf7af8e443677
++https://lists.gnu.org/archive/html/help-make/2022-10/msg00020.html
++
++GNU Make version < 4.4 will interpret it as if it was written without
++prerequisite (as a standalone ".NOTPARALLEL:"). The effect is that the
++parallel compilation is disabled for the whole libfwtsiasl. The
++standalone .NOTPARALLEL special target was introduced in GNU Make 3.79
++in 2000. This is why parallel builds are working with Make older than
++version 4.4.
++
++Secondly, the reason why the build is failing on GNU Make >= 4.4 is
++because the usage of .NOTPARALLEL in incorrect.
++
++Quoting the Make manual:
++https://www.gnu.org/software/make/manual/html_node/Parallel-Disable.html
++"""
++If the .NOTPARALLEL special target has prerequisites, then each of those
++prerequisites will be considered a target and all prerequisites of these
++targets will be run serially.
++"""
++
++Note the serialization will happen on the prerequisites of the targets
++set as prerequisites of .NOTPARALLEL.
++
++The targets will not be correctly marked to disable parallel
++execution.
++
++Thirdly, the use of multiple targets in a rule is incorrect here. See
++Make manual:
++https://www.gnu.org/software/make/manual/html_node/Multiple-Targets.html
++The construct used in Makefile.am of libfwtsiasl for lex/yacc parsers
++assumes they are independant targets (so they can be executed in
++parallel). Finally, the "mv" command is failing, because there will be
++one parallel execution per target, the first mv will suceed and the
++other ones will fail. Multiple independant targets are often used in
++Makefiles for lex/yacc, they are working because they are not using
++"mv". Even in multiple execution, files are just overwritten.
++
++Fixing this .NOTPARALLEL usage with prerequisites would require Make
++version 4.4 or greater. This is a strong requirement, as there is
++still many Linux distros with older Make version (as an example Ubuntu
++22.04 LTS has Make 4.3).
++
++The .WAIT special target could be used, but was also introduced in
++Make version 4.4. See:
++https://git.savannah.gnu.org/cgit/make.git/commit/?id=f6ea899d83bf00fe9201fde0ca9cf7af8e443677
++
++GNU Make 4.3 also introduced "Grouped Targets" for that purpose. See:
++https://www.gnu.org/software/make/manual/html_node/Multiple-Targets.html
++But this would add a requirement on a recent Make version.
++
++This commit fixes the issue by declaring the first generated file as a
++dependency of the other extra generated files. This has the effect of
++completely solving the parallel build for all GNU Make versions. Also,
++this enables parallel build for libfwtsiasl (except for the parser
++generation) and makes the whole build faster.
++
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++Upstream: https://github.com/fwts/fwts/commit/c0962cd74c725418523c46ca44101e0e70201f81
++---
++ src/libfwtsiasl/Makefile.am | 16 ++++++++--------
++ 1 file changed, 8 insertions(+), 8 deletions(-)
++
++diff --git a/src/libfwtsiasl/Makefile.am b/src/libfwtsiasl/Makefile.am
++index cb10bc58..ac54f621 100644
++--- a/src/libfwtsiasl/Makefile.am
+++++ b/src/libfwtsiasl/Makefile.am
++@@ -58,32 +58,32 @@ aslcompiler.y: $(ASL_PARSER)
++ aslcompilerlex.c: $(ASL_LEXER)
++ 	${LEX} ${AM_LFLAGS} -PAslCompiler -o$@ $(top_srcdir)/src/acpica/source/compiler/aslcompiler.l
++ 
++-.NOTPARALLEL: aslcompiler.c
++-aslcompiler.c aslcompiler.y.h: aslcompiler.y
+++aslcompiler.c: aslcompiler.y
++ 	${YACC} ${AM_YFLAGS} -d -baslcompiler -pAslCompiler $^
++ 	mv aslcompiler.tab.c aslcompiler.c
++ 	cp aslcompiler.tab.h aslcompiler.y.h
+++aslcompiler.y.h: aslcompiler.c
++ 
++-.NOTPARALLEL: dtcompilerparserlex.c
++-dtcompilerparserlex.c dtcompilerparser.c dtcompilerparser.y.h: $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.l $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.y
+++dtcompilerparserlex.c: $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.l $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.y
++ 	${LEX} ${AM_LFLAGS} -PDtCompilerParser -odtcompilerparserlex.c $<
++ 	${YACC} ${AM_YFLAGS} -bdtcompilerparser -pDtCompilerParser $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.y
++ 	mv dtcompilerparser.tab.c dtcompilerparser.c
++ 	cp dtcompilerparser.tab.h dtcompilerparser.y.h
+++dtcompilerparser.c dtcompilerparser.y.h: dtcompilerparserlex.c
++ 
++-.NOTPARALLEL: dtparserlex.c
++-dtparserlex.c dtparser.c dtparser.y.h: $(top_srcdir)/src/acpica/source/compiler/dtparser.l $(top_srcdir)/src/acpica/source/compiler/dtparser.y
+++dtparserlex.c: $(top_srcdir)/src/acpica/source/compiler/dtparser.l $(top_srcdir)/src/acpica/source/compiler/dtparser.y
++ 	${LEX} ${AM_LFLAGS} -PDtParser -odtparserlex.c $<
++ 	${YACC} ${AM_YFLAGS} -bdtparser -pDtParser $(top_srcdir)/src/acpica/source/compiler/dtparser.y
++ 	mv dtparser.tab.c dtparser.c
++ 	cp dtparser.tab.h dtparser.y.h
+++dtparser.c dtparser.y.h: dtparserlex.c
++ 
++-.NOTPARALLEL: prparserlex.c
++-prparserlex.c prparser.c prparser.y.h: $(top_srcdir)/src/acpica/source/compiler/prparser.l $(top_srcdir)/src/acpica/source/compiler/prparser.y
+++prparserlex.c: $(top_srcdir)/src/acpica/source/compiler/prparser.l $(top_srcdir)/src/acpica/source/compiler/prparser.y
++ 	${LEX} ${AM_LFLAGS} -PPrParser -oprparserlex.c $<
++ 	${YACC} ${AM_YFLAGS} -bprparser -pPrParser $(top_srcdir)/src/acpica/source/compiler/prparser.y
++ 	mv prparser.tab.c prparser.c
++ 	cp prparser.tab.h prparser.y.h
+++prparser.c prparser.y.h: prparserlex.c
++ 
++ pkglib_LTLIBRARIES = libfwtsiasl.la
++ 
++-- 
++2.45.1
++
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
