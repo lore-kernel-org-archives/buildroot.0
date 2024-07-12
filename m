@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DC69C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 15:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBC0CC2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 16:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C905841493;
-	Fri, 12 Jul 2024 15:52:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2CC1641955;
+	Fri, 12 Jul 2024 16:04:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bV-yyN3Bp1nS; Fri, 12 Jul 2024 16:04:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD4704187C
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD4704187C;
+	Fri, 12 Jul 2024 16:04:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DC82D1BF399
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 16:04:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C92AD410FB
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 16:04:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KhVy6fh_0nPv; Fri, 12 Jul 2024 15:52:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A19B64129F
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A19B64129F;
-	Fri, 12 Jul 2024 15:52:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8E3621BF5D7
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:52:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 795D3608BE
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 15:52:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id THgB3mLKPsM0 for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 15:52:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id qxCL0D22NsMp for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 16:04:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C74161387
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C74161387
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 15:52:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D23B860CC; Fri, 12 Jul 2024 15:52:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 17:51:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4cb762efa4f35fa62a63475154c9431fd0da8e97
-X-Git-Newrev: 70319b47f646f74f407ed3355baf5b581a10518a
-X-Patchwork-Hint: ignore
-Message-Id: <20240712155211.7D23B860CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdex: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F0D9240108
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0D9240108
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F0D9240108
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 16:04:20 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 281A11C0002;
+ Fri, 12 Jul 2024 16:04:19 +0000 (UTC)
+Date: Fri, 12 Jul 2024 18:04:18 +0200
+To: Stephan Lukits <stephan.lukits@gmail.com>
+Message-ID: <20240712180418.26d8a89c@windsurf>
+In-Reply-To: <d94896a3-989a-429f-9c3d-f8b744aa91b8@gmail.com>
+References: <d94896a3-989a-429f-9c3d-f8b744aa91b8@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720800259;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1+NQ0O/JR1slHwCPZ5zOhzBSfc2pHlhcJEX4wN+drbM=;
+ b=mO/i6Eg5WOPpLN4Hklgeg+QZRibtcWJCWZ9fO0hvkNuoYufJ2M4+/nTcUaa6hZLPex8eYX
+ j8c3Ii1T9Wror/Q0Hb4PI2rpMZhMWMQLI+8xkQdjuPfQ+x8Ic8zl5E/hU3qkFgj9gN8K/e
+ OO9G9RxBXX4WGC/Ida1pQu4gN51en1Lm961pmNhwSHbQM83zAyqjicdWAHX8s4ZBi0hryX
+ UqoFhM42MIhMtae40zB6kuYj+LQZsan1gtEljKsqnn0VtWywKf1cHpdUxX0fJVZsg+XTC4
+ CGlL5EZaz+as+mYYzk/IhnzqGAhkMYUg5NP3p1yKGCtwfD8evomOHWeXPdLMyw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mO/i6Eg5
+Subject: Re: [Buildroot] few patches for raspberrypi3_qt5we_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,126 +82,104 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70319b47f646f74f407ed3355baf5b581a10518a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Stephan,
 
-This package provides utilities for asynchronous programming in C
-using a futures/promises model. Newer versions of sysprof require
-this library.
+Thanks a lot for your e-mail and your contribution! Please see below
+some feedback.
 
-https://gitlab.gnome.org/GNOME/libdex
+On Thu, 6 Jun 2024 10:19:25 +0200
+Stephan Lukits <stephan.lukits@gmail.com> wrote:
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/libdex/Config.in   | 17 +++++++++++++++++
- package/libdex/libdex.hash |  5 +++++
- package/libdex/libdex.mk   | 31 +++++++++++++++++++++++++++++++
- 5 files changed, 55 insertions(+)
+> Good afternoon, on my way to build raspberrypi3_qt5we_defconfig with
+> buildroot 2024.02 I had to do the following patches in order to proceed.
+> I did NOT do these patches as described in
+> https://buildroot.org/downloads/manual/manual.html#submitting-patches
+> (I'm not there yet) but with 'quilt' so I put them all in this mail to
+> more aid the maintainer of 'raspberrypi3_qt5we_defconfig' then to
+> actually provide patches.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ae3a675731..1fa425f3ee 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -55,6 +55,7 @@ F:	package/brotli/
- F:	package/bubblewrap/
- F:	package/cage/
- F:	package/cog/
-+F:	package/libdex/
- F:	package/libepoxy/
- F:	package/libmanette/
- F:	package/libpsl/
-diff --git a/package/Config.in b/package/Config.in
-index 44ce5a5005..2b71978112 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2163,6 +2163,7 @@ menu "Other"
- 	source "package/libcrossguid/Config.in"
- 	source "package/libcsv/Config.in"
- 	source "package/libdaemon/Config.in"
-+	source "package/libdex/Config.in"
- 	source "package/libdill/Config.in"
- 	source "package/libeastl/Config.in"
- 	source "package/libee/Config.in"
-diff --git a/package/libdex/Config.in b/package/libdex/Config.in
-new file mode 100644
-index 0000000000..f10bdac46f
---- /dev/null
-+++ b/package/libdex/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBDEX
-+	bool "libdex"
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_WCHAR # libglib2, gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  Dex provides Future-based programming for GLib-based
-+	  applications. It both integrates with and brings new
-+	  features for application and library authors who want
-+	  to structure concurrent code in an easy to manage way.
-+
-+	  https://gitlab.gnome.org/GNOME/libdex
-+
-+comment "libdex needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libdex/libdex.hash b/package/libdex/libdex.hash
-new file mode 100644
-index 0000000000..ec22f330d9
---- /dev/null
-+++ b/package/libdex/libdex.hash
-@@ -0,0 +1,5 @@
-+# From https://download.gnome.org/sources/libdex/0.6/libdex-0.6.1.sha256sum
-+sha256  d176de6578571e32a8c0b603b6a5a13fa5f87fb6b5442575b38ec5af16b17a92  libdex-0.6.1.tar.xz
-+
-+# License files
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libdex/libdex.mk b/package/libdex/libdex.mk
-new file mode 100644
-index 0000000000..530dfc2bab
---- /dev/null
-+++ b/package/libdex/libdex.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# libdex
-+#
-+################################################################################
-+
-+LIBDEX_VERSION_MAJOR = 0.6
-+LIBDEX_VERSION = $(LIBDEX_VERSION_MAJOR).1
-+LIBDEX_SOURCE = libdex-$(LIBDEX_VERSION).tar.xz
-+LIBDEX_SITE = https://download.gnome.org/sources/libdex/$(LIBDEX_VERSION_MAJOR)
-+LIBDEX_LICENSE = LGPL-2.1+
-+LIBDEX_LICENSE_FILES = COPYING
-+LIBDEX_INSTALL_STAGING = YES
-+LIBDEX_DEPENDENCIES = libglib2
-+LIBDEX_CONF_OPTS = \
-+	-Ddocs=false \
-+	-Dexamples=false \
-+	-Dsysprof=false \
-+	-Dtests=false \
-+	-Dvapi=false \
-+	-Deventfd=enabled \
-+	-Dintrospection=disabled
-+
-+ifeq ($(BR2_PACKAGE_LIBURING),y)
-+LIBDEX_CONF_OPTS += -Dliburing=enabled
-+LIBDEX_DEPENDENCIES += liburing
-+else
-+LIBDEX_CONF_OPTS += -Dliburing=disabled
-+endif
-+
-+$(eval $(meson-package))
+Thanks, but unfortunately, it means we are unable to apply them :-/
+
+> Following https://github.com/google/snappy/pull/169/files I made a
+> 0001-check-NEON-for-ARMv8-CPUs.patch
+> 
+> Index: snappy-1.1.10/CMakeLists.txt
+> ===================================================================
+> --- snappy-1.1.10.orig/CMakeLists.txt
+> +++ snappy-1.1.10/CMakeLists.txt
+> @@ -194,9 +194,9 @@ int main() {
+>   check_cxx_source_compiles("
+>   #include <arm_neon.h>
+>   int main() {
+> -  uint8_t val = 3, dup[8];
+> +  uint8_t val = 3;
+>     uint8x16_t v = vld1q_dup_u8(&val);
+> -  vst1q_u8(dup, v);
+> +  val = vmaxvq_u8(v);
+>     return 0;
+>   }" SNAPPY_HAVE_NEON)
+
+I am not 100% sure because it's not the same patch, but I believe this
+snappy issue has been fixed
+by https://gitlab.com/buildroot.org/buildroot/-/commit/01f35f8875acc98adb670d789b256790e2418be8
+which we merged today.
+
+> Following 
+> https://lore.kernel.org/buildroot/20231025205233.1925727-1-kadir.c.yilmaz@gmail.com 
+> I made a 0003-python3.11-regex-error.patch
+
+When you say "following", do you mind "in addition to" ? Seems like no,
+your patch is the same
+as https://lore.kernel.org/buildroot/20231025205233.1925727-1-kadir.c.yilmaz@gmail.com/.
+
+> Index: 
+> qtwebengine-chromium-0ad2814370799a2161057d92231fe3ee00e2fe98/chromium/tools/metrics/ukm/ukm_model.py
+> ===================================================================
+> --- 
+> qtwebengine-chromium-0ad2814370799a2161057d92231fe3ee00e2fe98.orig/chromium/tools/metrics/ukm/ukm_model.py
+> +++ 
+> qtwebengine-chromium-0ad2814370799a2161057d92231fe3ee00e2fe98/chromium/tools/metrics/ukm/ukm_model.py
+> @@ -42,7 +42,7 @@ _INDEX_TYPE = models.ObjectNodeType(
+>   _STATISTICS_TYPE =  models.ObjectNodeType(
+>       'statistics',
+>       attributes=[
+> -      ('export', str, r'^(?i)(|true|false)$'),
+> +      ('export', str, r'(?i)^(|true|false)$'),
+>       ],
+>       children=[
+>           models.ChildType(_QUANTILES_TYPE.tag, _QUANTILES_TYPE, 
+> multiple=False),
+> @@ -94,7 +94,7 @@ _EVENT_TYPE =  models.ObjectNodeType(
+>       'event',
+>       attributes=[
+>         ('name', str, r'^[A-Za-z0-9.]+$'),
+> -      ('singular', str, r'^(?i)(|true|false)$'),
+> +      ('singular', str, r'(?i)^(|true|false)$'),
+>       ],
+>       alphabetization=[
+>           (_OBSOLETE_TYPE.tag, _KEEP_ORDER),
+> 
+> 
+> Following 
+> https://salsa.debian.org/qt-kde-team/qt/qtwebengine/-/commit/32198a3e0694401b745b4d01add18cdcddf658b4 
+> I made a
+> 0004-fix-building-with-gcc-12.patch
+
+OK, thanks, need to fire up a build and reproduce the issue I guess.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
