@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 280BBC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 08:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DE42C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 09:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED0EC41444;
-	Fri, 12 Jul 2024 08:51:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A477D412CE;
+	Fri, 12 Jul 2024 09:00:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k9qZX1bqoWeu; Fri, 12 Jul 2024 08:51:49 +0000 (UTC)
+ id nx8Nx5B4w90D; Fri, 12 Jul 2024 09:00:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1088E412D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A234412C0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1088E412D5;
-	Fri, 12 Jul 2024 08:51:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B649D1BF584
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:51:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A234412C0;
+	Fri, 12 Jul 2024 09:00:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D798F1BF232
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:59:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B114560AE3
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:51:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D265A81E81
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 08:59:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rCMnLN1Ppb7P for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 08:51:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u7KMiEkk21-D for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 08:59:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8EEAC608C3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EEAC608C3
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8EEAC608C3
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 08:51:44 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9BE31FF804;
- Fri, 12 Jul 2024 08:51:42 +0000 (UTC)
-Date: Fri, 12 Jul 2024 10:51:42 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AF28081E7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF28081E7D
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AF28081E7D
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 08:59:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B2B641C0005;
+ Fri, 12 Jul 2024 08:59:55 +0000 (UTC)
+Date: Fri, 12 Jul 2024 10:59:54 +0200
 To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <20240712105142.0bcda85f@windsurf>
-In-Reply-To: <20240625211847.1419944-7-roykollensvendsen@gmail.com>
+Message-ID: <20240712105954.7eb8b35b@windsurf>
+In-Reply-To: <20240625211847.1419944-8-roykollensvendsen@gmail.com>
 References: <20240618212646.4154474-1-roykollensvendsen@gmail.com>
  <20240625211847.1419944-1-roykollensvendsen@gmail.com>
- <20240625211847.1419944-7-roykollensvendsen@gmail.com>
+ <20240625211847.1419944-8-roykollensvendsen@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720774303;
+ d=bootlin.com; s=gm1; t=1720774796;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=03c/7sYryl3B9SNW10zmbWDX/Xo4sGOoiRFIWdjkbRA=;
- b=JkokKSsSH2iEsbl4b0oEqCGJnNLQpnfkYUym1Gim9p96zh51NqYG4BXZXhDsnYiyJsc04a
- tq3eNJ7cZlVk9rVwGJKySjIKxFuG6mD8kyFrswVIWPNQgoG6WqIyRJauZlMcV6UCe1/Qq2
- TK3UMA7COozLkKBOoopgnVOhefY5+JTDOje1cL2ov4s8dP/qkdeUTC7/2jsoL7rG7u4fZH
- zxKErxEPfygcc2pj/hcvZT/OBseP299sjNX8vpNT+L/IeZFBurbGRSRoSP7KjVLljXGb28
- Fe9PiNk1V6v/88/AFbZiLhZewwz4+lUzaTB/FTntzkQemNcTbkDtqlo7VKONgw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=3XDpFwzHfElw+wPAJbOfToVLz+CHIlypgPC1TEgrAUk=;
+ b=bEqJqdeb1EbJRi1a80lAvpVY/XafG/pz4PVJgg2RiklA9I1d8uqItTnEkwLrGGgDBjghhV
+ Qao2QtncwbkOUY1CohONkRvxmsbXT2p1AwCOPKGR//YoMtwhwxsRf5QH2ssmZwIpVOcuuQ
+ t4tnhsNFaxdvsUp81WG7dOXYoN6zrJoznJfu127TBhEDwRmwKk88DZih3DIF4f/xn+4yHS
+ xmzTwyifsu8dOabkQGSWbL2LaNaRxN68s5wX1xCjsoZGFoS5TcSR9Dlmd+HK1O+HjBCrWO
+ rjXqWDvTJESz+gVEUgE6PW/Y7+PQouCRr/nwsHjtbiu9rb/C9qDez/BKd42ABg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JkokKSsS
-Subject: Re: [Buildroot] [PATCH v9 07/14] package/qt6/qt6svg: allow building
- for host
+ header.s=gm1 header.b=bEqJqdeb
+Subject: Re: [Buildroot] [PATCH v9 08/14] package/qt6/qt6languageserver: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,20 +93,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 25 Jun 2024 23:18:31 +0200
+Hello Roy,
+
+On Tue, 25 Jun 2024 23:18:32 +0200
 Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
 
-> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-> ---
->  package/qt6/qt6svg/qt6svg.mk | 1 +
->  1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
+> diff --git a/package/qt6/qt6languageserver/Config.in b/package/qt6/qt6languageserver/Config.in
+> new file mode 100644
+> index 0000000000..8a54ae1911
+> --- /dev/null
+> +++ b/package/qt6/qt6languageserver/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_QT6LANGUAGESERVER
+> +	bool "qt6languageserver"
+> +	help
+> +	  Qt is a cross-platform application and UI framework for
+> +	  developers using C++.
+> +
+> +	  This package corresponds to the qt6languageserver module.
+> +
+> +	  https://doc.qt.io/qt-6/qtlanguageserver-index.html
+
+This link is a 404. I couldn't find a really good home page for this
+particular module, so I used:
+
+https://github.com/qt/qtlanguageserver
+
+
+> +QT6LANGUAGESERVER_CMAKE_BACKEND = ninja
+> +
+> +QT6LANGUAGESERVER_LICENSE = \
+> +	GPL-2.0+ or LGPL-3.0, \
+> +	GPL-3.0, GFDL-1.3 no invariants (docs)
+
+Same comment on the licensing terms, these are not correct I believe,
+so I changed them to:
+
++QT6LANGUAGESERVER_LICENSE = \
++       GPL-2.0 or LGPL-3.0 or GPL-3.0, \
++       GPL-3.0 (tests)
+
+when applying.
+
+> +QT6LANGUAGESERVER_LICENSE_FILES = \
+> +	LICENSES/GPL-2.0-only.txt \
+> +	LICENSES/GPL-3.0-only.txt \
+> +	LICENSES/LGPL-3.0-only.txt \
+> +	LICENSES/GFDL-1.3-no-invariants-only.txt
+
+I should have dropped this GFDL-1.3-no-invariants-only.txt though, as
+there is no documentation under this license in this submodule. Maybe
+something to fix as a follow-up patch.
+
+Applied with the changes detailed above. Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
