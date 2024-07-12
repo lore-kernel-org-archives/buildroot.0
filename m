@@ -4,98 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EC2CC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 09:06:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6898C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 09:20:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E71FA412B3;
-	Fri, 12 Jul 2024 09:06:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 381CF412C3;
+	Fri, 12 Jul 2024 09:20:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0YXTvc2N7ySq; Fri, 12 Jul 2024 09:06:49 +0000 (UTC)
+ id Z56iLNef4Q61; Fri, 12 Jul 2024 09:20:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 788CB412B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EED740A1E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 788CB412B7;
-	Fri, 12 Jul 2024 09:06:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2432C1BF5A9
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 09:06:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2EED740A1E;
+	Fri, 12 Jul 2024 09:20:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 11F591BF5A9
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 09:20:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DD098460A
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 09:06:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C08C608C3
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 09:20:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fjDP_8Bz21L1 for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 09:06:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EFE2F84577
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFE2F84577
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EFE2F84577
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 09:06:46 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4279c10a40eso8948425e9.3
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 02:06:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720775205; x=1721380005;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Q6Ka/YYVTVTTg0swwAsw18SokweEy04uys0nIV91tzw=;
- b=w8uxiRDVZ1glSGmu8m/lTO7hdUoKh837HzV1+gBBNgJRyCchWXDq6tMG0IH4qpuXVm
- 9RvjuVki/cO4eRcWntN5YPz5dKp/tRAHv/6/K+Jmj/un2Nff1WxXIxcXQDmBqMJqhnuW
- 4n7KN3krI7N3Y7yxsJSAtIcouplyv/QjAZUBvGKqwZ8qFfMstvNV3xnQBzYKkk/WPGqG
- MQD9yolnA1Q6SsnCHEoRpIluPjmr5VqP6qKaTByD+cL40v5ZKFxPIlgxq7BG7u+y57OC
- JPWULz7bWCgyX6ZNrJJClVj+g+tb9mNFFjoQlu8gYTOeEhqE3CLbHvS4MFovOGiVKEZU
- T4Yg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVq5UNZ+WeceaRAnyCX+fAg3ccec+5bm1EoiTr0aY/FwxI6DGmDoBbI0SXF/kRXDjfvW0qzwU03KB3Dm2mQVpx40R0MJFvZGw==
-X-Gm-Message-State: AOJu0YxH12bDJOFrXg1vu1G0t99Ev3MhG7F6WYQU8s/unTNOcSEQ+srQ
- +42xiMnQBtMyVMUkzvk4dM+QnwN1CZw54XT1zPe7jTIcG/TBU3MX/qOYnBfbWvo=
-X-Google-Smtp-Source: AGHT+IEkJzfZ0p62AVSbaHGkc6fK/IqM46rvpeu/xSLM5kA1e+DcwGvf7tEHlnY1NHMB+0hCol0Jbg==
-X-Received: by 2002:a05:600c:4d0d:b0:426:6326:4cec with SMTP id
- 5b1f17b1804b1-426707f90d0mr72357005e9.29.1720775204665; 
- Fri, 12 Jul 2024 02:06:44 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
- (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:b481:98b5:611f:e783])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4279f264875sm15983815e9.11.2024.07.12.02.06.43
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 12 Jul 2024 02:06:44 -0700 (PDT)
-Message-ID: <45610001-5454-4cab-bb53-5914984d8053@mind.be>
-Date: Fri, 12 Jul 2024 11:06:39 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uNUgeutX6Tbs for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 09:20:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A0646608B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0646608B2
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A0646608B2
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 09:20:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D23F7FF807;
+ Fri, 12 Jul 2024 09:20:39 +0000 (UTC)
+Date: Fri, 12 Jul 2024 11:20:38 +0200
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Message-ID: <20240712112038.17a13aa4@windsurf>
+In-Reply-To: <20240625211847.1419944-1-roykollensvendsen@gmail.com>
+References: <20240618212646.4154474-1-roykollensvendsen@gmail.com>
+ <20240625211847.1419944-1-roykollensvendsen@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Heiko Thiery <heiko.thiery@gmail.com>, buildroot@buildroot.org
-References: <20230804085118.315117-1-heiko.thiery@gmail.com>
-Content-Language: en-GB
-In-Reply-To: <20230804085118.315117-1-heiko.thiery@gmail.com>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1720775205; x=1721380005; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Q6Ka/YYVTVTTg0swwAsw18SokweEy04uys0nIV91tzw=;
- b=KlkYlTg604KPH6YBrmVVWnEhaGXF74UP/4TyUlIdBMibeVK2+1OfxppnsEMK6uFWPm
- f44qba2AbszWYzTO4swrKikD7BYAcIOx9iszjsw9K48i/COFGF6UZBiVGKb1bG8IodvX
- im3L/msucoe2fOkGlghVUEZsCtCHIZ8a/dqdIUSNj3Fo8IRJb7HDMvWMk2AwZaFyYcoM
- D2y51ylKz7TtlwvgqpH1pF8hj+i7iP8wNJmooqzYx/x7gnYMczXyA0Eu8M2F58Q1UJZD
- iWXVI2MVbKlHGMKE+yD/leQkD3tyQpZkzqZvAtZQNVuGYjC/mtEKnfKETXsZa6stofGJ
- rDVg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=KlkYlTg6
-Subject: Re: [Buildroot] [PATCH v2] boot/uboot: add option to install custom
- environment file
+ d=bootlin.com; s=gm1; t=1720776040;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=unBgnOCboOHTtbUTy3csIG5Hij4fMAsfz8H1eNJoR2M=;
+ b=DmqBDeLCzszPtC2bnrznK3vpme1MRsvUfclRQEn7WBP1nvrTt1xXXnNL5rIvSLkAnuZJRb
+ +UmgvtTQ2MmxtXDsnFixpBxzKYHQ+eZILO5ENrTbN6QaUEcPmAHQlSMlAnqJyYJEZ4nJnu
+ O0D5R3iU5cRrUCUiVn4S9Lzf2WRq50teQ3r1x67+RZLV+Yrw3zpCHeKHakc6WlzgUlyQfj
+ VDWP949MYdV+/ecP+tmBELic01BNmbqDE5JwpW3j45aHl1y19AnHCxapPT/PXha38VuKaw
+ a5BeKKRZWNheadb51YhQaIkJJ+BWW88l/Q/h/7HKLTU36xh/yccKw9FmcrPSwQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=DmqBDeLC
+Subject: Re: [Buildroot] [PATCH v9 01/14] package/qt6: bump version to 6.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,123 +81,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Michael Walle <michael@walle.cc>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Heiko,
+Hello Roy,
 
-  Thanks for reviving this old patch :-)
+On Tue, 25 Jun 2024 23:18:25 +0200
+Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
 
-On 04/08/2023 10:51, Heiko Thiery wrote:
-> U-Boot has the capability to set the environment variables via a text file.
-> The text file has to be located in the U-Boot board source directory and
-> selected via the CONFIG_ENV_SOURCE_FILE option. The value of
-> CONFIG_ENV_SOURCE_FILE must only contain the filename without the
-> '.env' suffix.
+> For details see [1], [2], [3], [4], [5], [6], [7], [8], [9], [10] and [11].
 > 
-> Thus the buildroot option BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_FILE is added
-> that needs the information about the target of the file in the buildroot
-> environment.
+> [1] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.0/release-note.md
+> [2] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.1/release-note.md
+> [3] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.2/release-note.md
+> [4] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.5.3/release-note.md
 > 
-> Since the environment file must be located in the U-Boot board source
-> directory <SRC>/board/<VENDOR>/<BOARDNAME>.
-
-  More recently, Luca has posted a patch [1] that achieves the same purpose but 
-using a different U-Boot config (why they have two configs doing essentially the 
-same thing, I don't know...). Luca's version is a bit more elegant I think 
-because it doesn't need this special directory.
-
-  Could you test that patch, change it if needed, and resend it? Luca hadn't 
-noticed that you had already sent a patch with the same purpose, by taking over 
-his patch you can recover some of the credit :-)
-
-
-> These information about vendor name and board name are available in the
-> U-Boot .config file and can be extracted from there to determine the
-> destination directoy.
+> [5] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.0/release-note.md
+> [6] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.1/release-note.md
+> [7] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.2/release-note.md
+> [8] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.6.3/release-note.md
 > 
-> Cc: Michael Walle <michael@walle.cc>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> [9] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.0/release-note.md
+> [10] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.1/release-note.md
+> [11] https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.7.2/release-note.md
+> 
+> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 > ---
-> v2: change to shell expansion instead of make shell expansion. With that
->      we make sure it is expanded right at the time the command is called.
-> 
-> 
->   boot/uboot/Config.in | 10 ++++++++++
->   boot/uboot/uboot.mk  | 19 +++++++++++++++++++
->   2 files changed, 29 insertions(+)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 8b726eaa57..cbbf629ba6 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -607,6 +607,16 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
->   
->   endif
->   
-> +config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_FILE
-> +	string "Custom environment file"
-> +	help
-> +	  Provide a custom u-boot environment file. This will be
-> +	  copied to the U-Boot source directory in the corresponding
-> +	  boardspecific folder and enabled via the U-Boot config
-> +	  option CONFIG_ENV_SOURCE_FILE. The target path will be
-> +	  determined based on the U-Boot configuration using
-> +	  CONFIG_SYS_VENDOR and CONFIG_SYS_BOARD.
+> Changes v8 -> v9:
+>   - add release note link for 6.7.2 to commit message
+>   - bump version from 6.7.1 to 6.7.2
+>   - update hashes for existing qt6 packages
 
-  The help text should indicate the minimum U-Boot version that has this feature.
+Another request: would you mind adding yourself to the DEVELOPERS file
+for package/qt6/ ? This way you would:
 
-  Regards,
-  Arnout
+ 1. Be Cc'ed on patches posted that touch qt6
 
-> +
->   config BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS
->   	string "Custom make options"
->   	help
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index b3d26b16fe..2007647e3b 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -181,6 +181,24 @@ UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_ATF_FIRMWARE
->   endif
->   endif
->   
-> +#
-> +# Prepare for custom environment
-> +#
-> +UBOOT_CUSTOM_ENVIRONMENT_FILE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_FILE))
-> +UBOOT_ENV_FILE_NAME=$(patsubst %.env,%,$(notdir $(UBOOT_CUSTOM_ENVIRONMENT_FILE)))
-> +ifneq ($(UBOOT_CUSTOM_ENVIRONMENT_FILE),)
-> +define UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
-> +	sys_vendor=`BR2_PREFIX= utils/config --file $(@D)/.config -s CONFIG_SYS_VENDOR`; \
-> +	sys_board=`BR2_PREFIX= utils/config --file $(@D)/.config -s CONFIG_SYS_BOARD`; \
-> +	cp -f $(UBOOT_CUSTOM_ENVIRONMENT_FILE) $(@D)/board/$${sys_vendor}/$${sys_board}
-> +endef
-> +UBOOT_POST_CONFIGURE_HOOKS += UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
-> +
-> +define UBOOT_KCONFIG_CUSTOM_ENV_SOURCE
-> +	$(call KCONFIG_SET_OPT,CONFIG_ENV_SOURCE_FILE,"$(UBOOT_ENV_FILE_NAME)")
-> +endef
-> +endif  # UBOOT_CUSTOM_ENVIRONMENT_FILE != ""
-> +
->   ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE),y)
->   UBOOT_DEPENDENCIES += optee-os
->   UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee.elf
-> @@ -497,6 +515,7 @@ define UBOOT_KCONFIG_FIXUP_CMDS
->   	$(UBOOT_ZYNQMP_KCONFIG_PMUFW)
->   	$(UBOOT_ZYNQMP_KCONFIG_PM_CFG)
->   	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
-> +	$(UBOOT_KCONFIG_CUSTOM_ENV_SOURCE)
->   endef
->   
->   ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
+ 2. Be reported build issues detected by our autobuilders on qt6
+
+Considering how involved you are in the qt6 packaging in Buildroot, I
+think it would make a lot of sense.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
