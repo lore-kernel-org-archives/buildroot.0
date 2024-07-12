@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCEC4C2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 06:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A188C2BD09
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 06:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 646C6409F2;
-	Fri, 12 Jul 2024 06:46:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E336D400FE;
+	Fri, 12 Jul 2024 06:47:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GYU4zr5ezxWB; Fri, 12 Jul 2024 06:46:09 +0000 (UTC)
+ id Z75gyh7MXBTH; Fri, 12 Jul 2024 06:47:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7D67400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A44EA4045F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7D67400FE;
-	Fri, 12 Jul 2024 06:46:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6E19C1BF591
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 06:46:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A44EA4045F;
+	Fri, 12 Jul 2024 06:47:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 82E311BF591
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 06:47:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B98360ABC
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 06:46:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F551417C2
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 06:47:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sHXOH20ReUN8 for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 06:46:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4d33p-sRfhuO for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 06:47:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CCD660A99
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CCD660A99
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 06:46:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 704388465A; Fri, 12 Jul 2024 06:46:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 12 Jul 2024 08:45:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b2aa09a492cf0b1b481b754dcc5f0168a039bd3c
-X-Git-Newrev: e8efe3df48b2e7d3216162128fe67c58cbf02324
-X-Patchwork-Hint: ignore
-Message-Id: <20240712064606.704388465A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: fix build with fmt 11
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D5C6540604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5C6540604
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D5C6540604
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 06:47:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EB50D1BF203;
+ Fri, 12 Jul 2024 06:47:43 +0000 (UTC)
+Date: Fri, 12 Jul 2024 08:47:43 +0200
+To: Andreas Ziegler <br015@umbiko.net>
+Message-ID: <20240712084743.0da3c657@windsurf>
+In-Reply-To: <20240712053614.733789-1-br015@umbiko.net>
+References: <20240712053614.733789-1-br015@umbiko.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720766864;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=88JZVzbLq1WIvbliv59Z7Qj8QE9JECCHQm8sp3ren/U=;
+ b=fSNbi9BOr/4Ye18N39aaA95eKrejG4zNSNnFZDO4YXcsLjkocGMh/AAFaPQ7QZtWbP2l/O
+ cxcVhyU/aMVDrdx1lkonZPyN5JhyIJCkQmJflcYbTLifqwv4JrtOWDHHYDYYBz8pcaWesv
+ eESKS0W53cNVSOlG1FXjNql3GHerNIx9Af4PLx3+UZQTvKpwFgAW7iB90XgiAxfsdePZBs
+ JJGSa9So0QZQyTAB8rIVG46a9oAyrlgy/uJhODdkFh64rLRuepes+R7Li7OdV3Kjr8ZHs+
+ IPu2LQAAb6zjdMIh4hIhjvkFpWPgEUdxBlyq7UyTvEKBNjjdnwZmvPzmp/1fuQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fSNbi9BO
+Subject: Re: [Buildroot] [PATCH] package/mpd: fix build with fmt 11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,148 +82,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7955592958493542433=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7955592958493542433==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e8efe3df48b2e7d3216162128fe67c58cbf02324
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since commit 6b86f07 (package/fmt: bump to version 11.0.1), mpd fails to build:
-
-/home/data/buildroot.x86_64/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/fmt/base.h:1392:29: error: passing ‘const fmt::v11::formatter<std::__exception_ptr::exception_ptr>’ as ‘this’ argument discards qualifiers [-fpermissive]
- 1392 |     ctx.advance_to(cf.format(*static_cast<qualified_type*>(arg), ctx));
-      |                    ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from ../src/Log.cxx:5:
-../src/lib/fmt/ExceptionFormatter.hxx:15:14: note:   in call to ‘auto fmt::v11::formatter<std::__exception_ptr::exception_ptr>::format(std::__exception_ptr::exception_ptr, FormatContext&) [with FormatContext = fmt::v11::context]’
-   15 |         auto format(std::exception_ptr e, FormatContext &ctx) {
-      |              ^~~~~~
-
-Adapt an upstream change to restore mpd compatibility with fmt 11.
-
-Fixes:
-	http://autobuild.buildroot.net/results/73514ea76a5960f59b4c50e2074571b10e4682d4
-	http://autobuild.buildroot.net/results/a58ddbdfe35bd19021e65db0b8b8cc4c1c884d51
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-lib-fmt-support-build-with-libfmt-11.0.0.patch | 93 ++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
-
-diff --git a/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch b/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
-new file mode 100644
-index 0000000000..e0a361fee2
---- /dev/null
-+++ b/package/mpd/0002-lib-fmt-support-build-with-libfmt-11.0.0.patch
-@@ -0,0 +1,93 @@
-+From 1402869715e3efca87942d79c3173a6b21a6925d Mon Sep 17 00:00:00 2001
-+From: Rudi Heitbaum <rudi@heitbaum.com>
-+Date: Fri, 5 Jul 2024 14:27:45 +0000
-+Subject: [PATCH] lib/fmt: support build with libfmt-11.0.0
-+
-+Upstream libfmt commit fmtlib/fmt@d707292
-+now requires the format function to be const.
-+
-+Adjust the function prototype so it is const and can compile.
-+
-+Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
-+
-+Context: https://github.com/MusicPlayerDaemon/MPD/issues/2071
-+Pull request: https://github.com/MusicPlayerDaemon/MPD/pull/2069
-+
-+Fixes: http://autobuild.buildroot.net/results/73514ea76a5960f59b4c50e2074571b10e4682d4
-+Fixes: http://autobuild.buildroot.net/results/a58ddbdfe35bd19021e65db0b8b8cc4c1c884d51
-+
-+Rebase for mpd-0.23.15
-+
-+Upstream: https://github.com/MusicPlayerDaemon/MPD/commit/3648475f871c33daa9e598c102a16e5a1a4d4dfc
-+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-+---
-+ src/lib/ffmpeg/LibFmt.hxx            | 2 +-
-+ src/lib/fmt/AudioFormatFormatter.hxx | 4 ++--
-+ src/lib/fmt/ExceptionFormatter.hxx   | 2 +-
-+ src/lib/fmt/PathFormatter.hxx        | 2 +-
-+ 4 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/lib/ffmpeg/LibFmt.hxx b/src/lib/ffmpeg/LibFmt.hxx
-+index aa068711f..dee83ed2d 100644
-+--- a/src/lib/ffmpeg/LibFmt.hxx
-++++ b/src/lib/ffmpeg/LibFmt.hxx
-+@@ -29,7 +29,7 @@
-+ struct fmt::formatter<AVSampleFormat> : formatter<string_view>
-+ {
-+ 	template<typename FormatContext>
-+-	auto format(const AVSampleFormat format, FormatContext &ctx) {
-++	auto format(const AVSampleFormat format, FormatContext &ctx) const {
-+ 		const char *name = av_get_sample_fmt_name(format);
-+ 		if (name == nullptr)
-+ 			name = "?";
-+diff --git a/src/lib/fmt/AudioFormatFormatter.hxx b/src/lib/fmt/AudioFormatFormatter.hxx
-+index e0ffb6216..8da98efd4 100644
-+--- a/src/lib/fmt/AudioFormatFormatter.hxx
-++++ b/src/lib/fmt/AudioFormatFormatter.hxx
-+@@ -39,7 +39,7 @@
-+ struct fmt::formatter<SampleFormat> : formatter<string_view>
-+ {
-+ 	template<typename FormatContext>
-+-	auto format(const SampleFormat format, FormatContext &ctx) {
-++	auto format(const SampleFormat format, FormatContext &ctx) const {
-+ 		return formatter<string_view>::format(sample_format_to_string(format),
-+ 						      ctx);
-+ 	}
-+@@ -49,7 +49,7 @@
-+ struct fmt::formatter<AudioFormat> : formatter<string_view>
-+ {
-+ 	template<typename FormatContext>
-+-	auto format(const AudioFormat &af, FormatContext &ctx) {
-++	auto format(const AudioFormat &af, FormatContext &ctx) const {
-+ 		return formatter<string_view>::format(ToString(af).c_str(),
-+ 						      ctx);
-+ 	}
-+diff --git a/src/lib/fmt/ExceptionFormatter.hxx b/src/lib/fmt/ExceptionFormatter.hxx
-+index 3f342df67..f08b3bb22 100644
-+--- a/src/lib/fmt/ExceptionFormatter.hxx
-++++ b/src/lib/fmt/ExceptionFormatter.hxx
-+@@ -38,7 +38,7 @@
-+ struct fmt::formatter<std::exception_ptr> : formatter<string_view>
-+ {
-+ 	template<typename FormatContext>
-+-	auto format(std::exception_ptr e, FormatContext &ctx) {
-++	auto format(std::exception_ptr e, FormatContext &ctx) const {
-+ 		return formatter<string_view>::format(GetFullMessage(e), ctx);
-+ 	}
-+ };
-+diff --git a/src/lib/fmt/PathFormatter.hxx b/src/lib/fmt/PathFormatter.hxx
-+index e5ae89dec..add06df81 100644
-+--- a/src/lib/fmt/PathFormatter.hxx
-++++ b/src/lib/fmt/PathFormatter.hxx
-+@@ -29,7 +29,7 @@
-+ struct fmt::formatter<Path> : formatter<string_view>
-+ {
-+ 	template<typename FormatContext>
-+-	auto format(Path path, FormatContext &ctx) {
-++	auto format(Path path, FormatContext &ctx) const {
-+ 		return formatter<string_view>::format(path.ToUTF8(), ctx);
-+ 	}
-+ };
-+-- 
-+2.43.0
-+
-
---===============7955592958493542433==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7955592958493542433==--
+SGVsbG8gQW5kcmVhcywKCk9uIEZyaSwgMTIgSnVsIDIwMjQgMDc6MzU6NTkgKzAyMDAKQW5kcmVh
+cyBaaWVnbGVyIDxicjAxNUB1bWJpa28ubmV0PiB3cm90ZToKCj4gU2luY2UgY29tbWl0IDZiODZm
+MDcgKHBhY2thZ2UvZm10OiBidW1wIHRvIHZlcnNpb24gMTEuMC4xKSwgbXBkIGZhaWxzIHRvIGJ1
+aWxkOgo+IAo+IC9ob21lL2RhdGEvYnVpbGRyb290Lng4Nl82NC9ob3N0L3g4Nl82NC1idWlsZHJv
+b3QtbGludXgtdWNsaWJjL3N5c3Jvb3QvdXNyL2luY2x1ZGUvZm10L2Jhc2UuaDoxMzkyOjI5OiBl
+cnJvcjogcGFzc2luZyDigJhjb25zdCBmbXQ6OnYxMTo6Zm9ybWF0dGVyPHN0ZDo6X19leGNlcHRp
+b25fcHRyOjpleGNlcHRpb25fcHRyPuKAmSBhcyDigJh0aGlz4oCZIGFyZ3VtZW50IGRpc2NhcmRz
+IHF1YWxpZmllcnMgWy1mcGVybWlzc2l2ZV0KPiAgMTM5MiB8ICAgICBjdHguYWR2YW5jZV90byhj
+Zi5mb3JtYXQoKnN0YXRpY19jYXN0PHF1YWxpZmllZF90eXBlKj4oYXJnKSwgY3R4KSk7Cj4gICAg
+ICAgfCAgICAgICAgICAgICAgICAgICAgfn5+fn5+fn5+Xn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
+fn5+fn5+fn5+fn5+fn5+fn4KPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gLi4vc3JjL0xvZy5jeHg6
+NToKPiAuLi9zcmMvbGliL2ZtdC9FeGNlcHRpb25Gb3JtYXR0ZXIuaHh4OjE1OjE0OiBub3RlOiAg
+IGluIGNhbGwgdG8g4oCYYXV0byBmbXQ6OnYxMTo6Zm9ybWF0dGVyPHN0ZDo6X19leGNlcHRpb25f
+cHRyOjpleGNlcHRpb25fcHRyPjo6Zm9ybWF0KHN0ZDo6X19leGNlcHRpb25fcHRyOjpleGNlcHRp
+b25fcHRyLCBGb3JtYXRDb250ZXh0JikgW3dpdGggRm9ybWF0Q29udGV4dCA9IGZtdDo6djExOjpj
+b250ZXh0XeKAmQo+ICAgIDE1IHwgICAgICAgICBhdXRvIGZvcm1hdChzdGQ6OmV4Y2VwdGlvbl9w
+dHIgZSwgRm9ybWF0Q29udGV4dCAmY3R4KSB7Cj4gICAgICAgfCAgICAgICAgICAgICAgXn5+fn5+
+Cj4gCj4gQWRhcHQgYW4gdXBzdHJlYW0gY2hhbmdlIHRvIHJlc3RvcmUgbXBkIGNvbXBhdGliaWxp
+dHkgd2l0aCBmbXQgMTEuICAKPiAKPiBGaXhlczogCj4gCWh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRy
+b290Lm5ldC9yZXN1bHRzLzczNTE0ZWE3NmE1OTYwZjU5YjRjNTBlMjA3NDU3MWIxMGU0NjgyZDQK
+PiAJaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvYTU4ZGRiZGZlMzViZDE5
+MDIxZTY1ZGIwYjhiOGNjNGMxYzg4NGQ1MQo+IAo+IFNpZ25lZC1vZmYtYnk6IEFuZHJlYXMgWmll
+Z2xlciA8YnIwMTVAdW1iaWtvLm5ldD4KPiAtLS0KPiAgLi4uZm10LXN1cHBvcnQtYnVpbGQtd2l0
+aC1saWJmbXQtMTEuMC4wLnBhdGNoIHwgOTIgKysrKysrKysrKysrKysrKysrKwo+ICAxIGZpbGUg
+Y2hhbmdlZCwgOTIgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9t
+cGQvMDAwMi1saWItZm10LXN1cHBvcnQtYnVpbGQtd2l0aC1saWJmbXQtMTEuMC4wLnBhdGNoCgpU
+aGFua3MgZm9yIHRoZSBmaXghIFlvdXIgcGF0Y2ggaGFkIHR3byBzbWFsbCBpc3N1ZXMgZGV0ZWN0
+ZWQgYnkgIm1ha2UKY2hlY2stcGFja2FnZSI6CgpXQVJOSU5HOiBwYWNrYWdlL21wZC8wMDAyLWxp
+Yi1mbXQtc3VwcG9ydC1idWlsZC13aXRoLWxpYmZtdC0xMS4wLjAucGF0Y2g6NDogZ2VuZXJhdGUg
+eW91ciBwYXRjaGVzIHdpdGggJ2dpdCBmb3JtYXQtcGF0Y2ggLU4nCldBUk5JTkc6IHBhY2thZ2Uv
+bXBkLzAwMDItbGliLWZtdC1zdXBwb3J0LWJ1aWxkLXdpdGgtbGliZm10LTExLjAuMC5wYXRjaDow
+OiBtaXNzaW5nIFVwc3RyZWFtIGluIHRoZSBoZWFkZXIgKGh0dHBzOi8vbmlnaHRseS5idWlsZHJv
+b3Qub3JnLyNfYWRkaXRpb25hbF9wYXRjaF9kb2N1bWVudGF0aW9uKQoKSSBmaXhlZCB0aG9zZSB0
+d28gaXNzdWVzIGFuZCBhcHBsaWVkLiBUaGFua3MgYSBsb3QhCgpUaG9tYXMKLS0gClRob21hcyBQ
+ZXRhenpvbmksIENUTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVy
+aW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
