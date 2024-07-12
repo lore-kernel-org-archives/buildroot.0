@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5197AC2BD09
-	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 21:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE626C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri, 12 Jul 2024 21:20:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B5D44098D;
-	Fri, 12 Jul 2024 21:10:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E60441600;
+	Fri, 12 Jul 2024 21:20:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WZvdSy03G1HC; Fri, 12 Jul 2024 21:10:07 +0000 (UTC)
+ id KhNKYyTVE0PX; Fri, 12 Jul 2024 21:20:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D145D41D70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A965416AC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D145D41D70;
-	Fri, 12 Jul 2024 21:10:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8386C1BF3C4
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 21:10:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A965416AC;
+	Fri, 12 Jul 2024 21:20:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CA581BF3C4
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 21:20:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71428400B9
- for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 21:10:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79801416AC
+ for <buildroot@lists.busybox.net>; Fri, 12 Jul 2024 21:20:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ku99tcfujDOY for <buildroot@lists.busybox.net>;
- Fri, 12 Jul 2024 21:10:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t2h5P08Qzqte for <buildroot@lists.busybox.net>;
+ Fri, 12 Jul 2024 21:20:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2AACF400A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AACF400A6
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2AACF400A6
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 21:10:03 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5E47620004;
- Fri, 12 Jul 2024 21:10:01 +0000 (UTC)
-Date: Fri, 12 Jul 2024 23:10:00 +0200
-To: Christian Stewart via buildroot <buildroot@buildroot.org>
-Message-ID: <20240712231000.4da034a8@windsurf>
-In-Reply-To: <20240703193329.6627-1-christian@aperture.us>
-References: <20240703193329.6627-1-christian@aperture.us>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720818601;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UmhC0oxUM/KYVqr2unKxGDNbPDMvHAP5FxaKDUwEpyE=;
- b=IqkEAymFzqnhAVVAggiaO9cWzMHusHJKciKdEInVlMRpJKWI6H7N0ixwytER7335TlGV+4
- Mv8oBmd64lt+OcK0gV+Yk/yArhIDfcHyoAan+YbXYJjcybwvOKrG18gxEeiO8avwzmPL5V
- 7zwaZJ5Dm533RQoQ5FeiRw9Sx5dLPC+GR0OIO4HaISeKQZYUsnbrafJOoeftTbCjo5T+Lt
- MiFFzDXj4FcotXLLJxvcxZpA27cNGk0qbPJr6ydLH6ZMxq8sbTkDBYKprT0z7eMd+r9nsh
- DqCminWTtjqTJSjy+iAYywF3hrfsZD42cn+IW+Uxwve64B1L39FGXFRyXjHKlA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IqkEAymF
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: security bump version to
- go1.22.5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E13841600
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E13841600
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 21:20:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1AFA5862CD; Fri, 12 Jul 2024 21:20:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 12 Jul 2024 23:10:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d02277884e406625c0142e7c3e68dfe30bdf6c4
+X-Git-Newrev: d200d8ebe255384cd492ee0f983ec7868df9caec
+X-Patchwork-Hint: ignore
+Message-Id: <20240712212027.1AFA5862CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 9.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,35 +59,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Christian Stewart <christian@aperture.us>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  3 Jul 2024 12:33:29 -0700
-Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d200d8ebe255384cd492ee0f983ec7868df9caec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes CVE:
-> 
-> CVE-2024-24791: net/http: denial of service due to improper 100-continue handling
-> 
-> https://go.dev/doc/devel/release#go1.22.5
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
-> ---
->  package/go/go-src/go-src.hash | 2 +-
->  package/go/go.mk              | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Since the major release changed all the packages that have direct
+dependency to harfbuzz have been succesfully built:
+- efl
+- libass
+- mupdf
+- pango
+- qt5base
+- qt5webengine
+- qt6base
+- sdl2_ttf
+- supertuxkart
+- vlc
+- webkitgtk
+- wpewebkit
 
-Applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 1ea54e8ee9..fa4ee16a9f 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  af4ea73e25ab748c8c063b78c2f88e48833db9b2ac369e29bd115702e789755e  harfbuzz-8.4.0.tar.xz
++sha256  a41b272ceeb920c57263ec851604542d9ec85ee3030506d94662067c7b6ab89e  harfbuzz-9.0.0.tar.xz
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 848fac4dd6..946b2b0f70 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 8.4.0
++HARFBUZZ_VERSION = 9.0.0
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
