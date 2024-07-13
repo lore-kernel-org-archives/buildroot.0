@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AD5FC3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 11:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C0BEC3DA45
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 11:29:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DFC97400DD;
-	Sat, 13 Jul 2024 11:19:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 010A04018D;
+	Sat, 13 Jul 2024 11:29:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k6puFJUujYZZ; Sat, 13 Jul 2024 11:19:58 +0000 (UTC)
+ id VCBu8KBEu3C1; Sat, 13 Jul 2024 11:29:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6F174018D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDB4B40385
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6F174018D;
-	Sat, 13 Jul 2024 11:19:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CDB4B40385;
+	Sat, 13 Jul 2024 11:29:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 261251BF4E4
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 11:19:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4821C1BF4E4
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 11:29:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12B3B40931
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 11:19:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 33A5C40B63
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 11:29:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LMfMAJ_47j1T for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 11:19:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 3bCqqHGUU3GD for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 11:29:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AD2D240912
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD2D240912
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AD2D240912
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 11:19:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A837AE0003;
- Sat, 13 Jul 2024 11:19:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sSan9-00Ck02-3A;
- Sat, 13 Jul 2024 13:19:51 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4446240B4F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4446240B4F
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 11:29:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2EEAB86386; Sat, 13 Jul 2024 11:29:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@smile.fr>
-References: <20240527100424.397567-1-romain.naour@smile.fr>
- <871q5jqesv.fsf@dell.be.48ers.dk>
- <c8db4a2c-bee2-4ecc-9bf3-f0e1444964aa@smile.fr>
-Date: Sat, 13 Jul 2024 13:19:51 +0200
-In-Reply-To: <c8db4a2c-bee2-4ecc-9bf3-f0e1444964aa@smile.fr> (Romain Naour's
- message of "Sat, 13 Jul 2024 00:15:47 +0200")
-Message-ID: <87ikx9fsiw.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCHv2] configs/lepotato_defconfig: new defconfig
+To: buildroot@buildroot.org
+Date: Sat, 13 Jul 2024 13:12:02 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 13d564b62ef40dae4cf247ccdce192dca3fbeec0
+X-Git-Newrev: 38b5b420863a1736080b88dff7f541c17c517d0e
+X-Patchwork-Hint: ignore
+Message-Id: <20240713112912.2EEAB86386@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/xfsprogs: update
+ Kconfig package homepage URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,32 +59,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>,
- Romain Naour via buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=38b5b420863a1736080b88dff7f541c17c517d0e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Hi,
+The old xfs homepage URL [1] seems defunct at the time of this commit.
+The http URL redirects to https, the certificate expired on
+2024-01-26. If the certificate expiration date is ignored, the site
+shows a "502 Bad Gateway" error.
 
- >> Is the vfat partition strictly needed or could you directly have the
- >> rootfs as the first/single partition like we do for lafrite?
+The package README [2] advertise the homepage as [3].
 
- > I never tried without the vfat partition. But Lafrite board is the only one
- > without an SDcard connector and only use emmc flashed using a USB flash drive.
+This commit updates the URL to the new one.
 
- > libre-computer-project seems to use genimage configuration with vfat partition
- > for lepotato:
+[1] http://xfs.org
+[2] https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/README?h=v6.4.0#n12
+[3] https://xfs.wiki.kernel.org
 
- > https://github.com/libre-computer-project/libretech-buildroot/blob/rebase/board/librecomputer/genimage/initramfs/genimage.cfg#L1
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit daa5d775d729efd529ff7ff8c58c0380018f1e42)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xfsprogs/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-OK, fine by me.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+index d14c3d4698..1a29579d8b 100644
+--- a/package/xfsprogs/Config.in
++++ b/package/xfsprogs/Config.in
+@@ -18,4 +18,4 @@ config BR2_PACKAGE_XFSPROGS
+ 	help
+ 	  The XFS file system utilities and libraries
+ 
+-	  http://xfs.org
++	  https://xfs.wiki.kernel.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
