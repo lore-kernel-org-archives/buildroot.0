@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3D37C3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41BA2C3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90E1940942;
-	Sat, 13 Jul 2024 14:27:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D538408ED;
+	Sat, 13 Jul 2024 14:28:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c_MumhgmPob9; Sat, 13 Jul 2024 14:27:54 +0000 (UTC)
+ id Oz4OlRk3cIPF; Sat, 13 Jul 2024 14:28:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54258414EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E522840942
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54258414EB;
-	Sat, 13 Jul 2024 14:27:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8BEAE1BF86D
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:27:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E522840942;
+	Sat, 13 Jul 2024 14:28:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3712A1BF41B
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 855AF40942
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:27:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E87C81E76
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:28:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DFMSkM6fgDmp for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 14:27:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SYuUntwA1Vj1 for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 14:28:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7790F408ED
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7790F408ED
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:27:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63266864C7; Sat, 13 Jul 2024 14:27:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 16:27:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bbc8cc1cb6ed0db859bc6caf6b52d8913d51506e
-X-Git-Newrev: df8df20004879bd75ae2d21dcb586cb1c34ffd38
-X-Patchwork-Hint: ignore
-Message-Id: <20240713142748.63266864C7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/stm32mp157a_dk1: bump Linux to
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 41EAC81E84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41EAC81E84
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 41EAC81E84
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:28:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 97F0E1C0003;
+ Sat, 13 Jul 2024 14:27:59 +0000 (UTC)
+Date: Sat, 13 Jul 2024 16:27:55 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20240713162755.676c5c39@windsurf>
+In-Reply-To: <20240713130847.4097389-1-dario.binacchi@amarulasolutions.com>
+References: <20240713130847.4097389-1-dario.binacchi@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720880881;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Fj86TDbR3nOaWbfdova0/8N/p0FUBvULo5aqJM02fY4=;
+ b=jmXE3lR5Lj+DmTPTvg9e7k6Pk8oiGh4uPLXWkd9h1Eb5ayrpdstr/zPRJOv87T+XyNaFyW
+ 5iGXiGKsEkUDW4Y5g8R/wXFydNKUjLIrsquG4CDV4ResWd1ONXCMnLerNfIIhsRevWmvT1
+ KnXELBM2KmYCXPDltpGwJtlk2o1WFG5lzfThawQNN2ddiBWxFOl8x7ctM+YKOXU7kUhStl
+ H6B473KfIB6W1rbfqoTgoRGKIoSAOkxBfOe08DohAATwBer9dz9hnGD4m0FlFb327+Lo3d
+ kCxm+rMpJ+imzDStp9qL70Qxy6G+KYfQ9BZ/4NxAwMPrm1w5XAeY/XtEHlSfaQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=jmXE3lR5
+Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32mp157a_dk1: bump Linux to
  6.6.39 and U-Boot to 2024.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,80 +83,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Marleen Vos <marleen.vos@mind.be>, Bartosz Bilas <b.bilas@grinn-global.com>,
+ linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df8df20004879bd75ae2d21dcb586cb1c34ffd38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 13 Jul 2024 15:08:47 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-The patch bumps the Linux kernel to version 6.6.39 and U-Boot to version
-2024.07.
+> The patch bumps the Linux kernel to version 6.6.39 and U-Boot to version
+> 2024.07.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  .../stm32mp157a-dk1/patches/linux/linux.hash           |  2 +-
+>  .../stm32mp157a-dk1/patches/uboot/uboot.hash           |  2 +-
+>  configs/stm32mp157a_dk1_defconfig                      | 10 +++++-----
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../stm32mp157a-dk1/patches/linux/linux.hash                   |  2 +-
- .../stm32mp157a-dk1/patches/uboot/uboot.hash                   |  2 +-
- configs/stm32mp157a_dk1_defconfig                              | 10 +++++-----
- 3 files changed, 7 insertions(+), 7 deletions(-)
+Applied to master, thanks.
 
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash
-index 8b7624cceb..f4b1146f83 100644
---- a/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9  linux-5.13.tar.xz
-+sha256  2783d42112095f95c510e1b421f056df8cbfa845f9040c6115080434a77a776b  linux-6.6.39.tar.xz
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash
-index 7cef5b688e..fe9b4f53dc 100644
---- a/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash
-+++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  e31cac91545ff41b71cec5d8c22afd695645cd6e2a442ccdacacd60534069341  u-boot-2023.04.tar.bz2
-+sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index 38f7bc8946..31c52a7723 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
- 
--# Linux headers same as kernel, a 5.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
-+# Linux headers same as kernel, a 6.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- 
- # System configuration
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32mp157a-dk1/patches"
-@@ -14,11 +14,11 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-im
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.39"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157a-dk1"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32mp157a-dk1"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
- # Filesystem
-@@ -41,7 +41,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
