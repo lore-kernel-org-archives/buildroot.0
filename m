@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10620C3DA45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 09:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AE66C3DA45
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 09:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E08E6061A;
-	Sat, 13 Jul 2024 09:28:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55CC26069A;
+	Sat, 13 Jul 2024 09:30:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZxNp6ypqTKHE; Sat, 13 Jul 2024 09:28:49 +0000 (UTC)
+ id KtQA69c9KovA; Sat, 13 Jul 2024 09:30:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74D3460647
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70A026069E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74D3460647;
-	Sat, 13 Jul 2024 09:28:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70A026069E;
+	Sat, 13 Jul 2024 09:30:51 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D3C8E1BF4D6
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:28:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CABAC1BF4D6
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDAB740204
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:28:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B6C1640204
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:30:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LdDK4TZS9LRY for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 09:28:47 +0000 (UTC)
+ id XO16t3T5-Sp4 for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 09:30:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
  helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E1E9B40190
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1E9B40190
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6CF3C40190
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CF3C40190
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E1E9B40190
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 09:28:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6CF3C40190
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 09:30:48 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 0AFA13536265; Sat, 13 Jul 2024 11:28:42 +0200 (CEST)
-Date: Sat, 13 Jul 2024 11:28:42 +0200
+ id A390A3536273; Sat, 13 Jul 2024 11:30:46 +0200 (CEST)
+Date: Sat, 13 Jul 2024 11:30:46 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <ZpJIyk4HUUwuvaTE@waldemar-brodkorb.de>
+Message-ID: <ZpJJRjTc24UClMCY@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 5.10.0-27-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1720862923; bh=653gJbuM2teZm3/ngsKHUkkPgbyp3HnUa6RoI0oV6ls=;
+ t=1720863046; bh=64WnKSxrS4oRcg84p6EvpKCNgtNK9X07t1iAmHknwGk=;
  h=Date:From:To:Subject:From;
- b=HTXc98laF99TsRbZZ2g3d3sZRujAq/VEF98XMV+ZJa2vcUIEFyeDuJeNCyJHhUOpJ
- zZx9f8nv5ZLN4K8wAmRcmVlcN51hSdPvx8yoSXP/MjmZeo8nDtLbdra3CGngaQtxdm
- iLxCELguCGyo3HMFGNSCjfNHqcdeJwdx1uQTNKR9E5W+bHKHJlyTn+9aLUfgxiBKpY
- 5CJtI/3jRn3EMz8eSw8GGdkWEYD6CAFUnf/LdIVwwR9D/X4oYfvwjzU3boge9OPw9O
- HaZqaFw5IPFJqQ9XTMDqzvNPqqdQPF+zuGiS72arPnAfNO84ApXK2tY0qeUzxr0+qp
- 9dS7xRRMZ8liQ==
+ b=qK+BkFVWKYKaeygIUGKoMaCV0gbMx3IJO5HD9TaSvzw3YS+R4Qrd+jzCWUhHFADfi
+ 4ELZ9NGHpWc9jaLor3VP/8j1qxaT8MZcApJ0b05aGPBdDMcquMpnorE0hXghbwGNih
+ nsyM8dDCus7X1SiC9i+LErzISHor7rt+M/25fBRI7Z/4GvKD4URaZLN1MjQpp2tXT2
+ cFaeTppT/cbFpLkpiXNdCCaiRPDwbNn9YuXBZT2txoteVE+KNRkYWosuih5jFSLtSu
+ M2GxpEqx25l5KuHfVr2I/JRceOMb2tQolORiBQcnFFk/p3nLgfSiel3g+4EwWma+Tb
+ OfnV/1W2EFpOw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=HTXc98la
-Subject: [Buildroot] [PATCH] package/squid: update to 6.10
+ dkim=pass (2048-bit key) header.d=openadk.org header.i=@openadk.org
+ header.a=rsa-sha256 header.s=2022 header.b=qK+BkFVW
+Subject: [Buildroot] [PATCH] configs/qemu_riscv32_nommu_virt: remove
+ duplicate entry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,45 +79,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The ESI feature is now disabled by default. Use --enable-esi if needed.
-
-See here for other changes:
-https://github.com/squid-cache/squid/commits/v6
+Commit d037d9c2d63e9cd47b3701aaef8e28c32b8f5b37 added accidentally
+a duplicate of BR2_DOWNLOAD_FORCE_CHECK_HASHES. Remove that.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../riscv32-virt/patches/linux-headers/linux-headers.hash     | 2 --
+ board/qemu/riscv32-virt/patches/linux/linux.hash              | 2 --
+ configs/qemu_riscv32_nommu_virt_defconfig                     | 4 ----
+ 3 files changed, 8 deletions(-)
+ delete mode 100644 board/qemu/riscv32-virt/patches/linux-headers/linux-headers.hash
+ delete mode 100644 board/qemu/riscv32-virt/patches/linux/linux.hash
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index e5017ae5cd..e0dede862a 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v6/squid-6.9.tar.xz.asc
--md5  4888e9dc75c0daa0ed526b34c055cb67  squid-6.9.tar.xz
--sha1  5e73b30116ce7111589cc2b1c9bfe3c17efa2e75  squid-6.9.tar.xz
-+# From http://www.squid-cache.org/Versions/v6/squid-6.10.tar.xz.asc
-+md5  86deefa7282c4388be95260aa4d4cf6a  squid-6.10.tar.xz
-+sha1  70e90865df0e4e9ba7765b622da40bda9bb8fc5d  squid-6.10.tar.xz
- # Locally calculated
--sha256  1ad72d46e1cb556e9561214f0fb181adb87c7c47927ef69bc8acd68a03f61882  squid-6.9.tar.xz
-+sha256  0b07b187e723f04770dd25beb89aec12030a158696aa8892d87c8b26853408a7  squid-6.10.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 60eca397ec..bfb3664082 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/qemu/riscv32-virt/patches/linux-headers/linux-headers.hash b/board/qemu/riscv32-virt/patches/linux-headers/linux-headers.hash
+deleted file mode 100644
+index a6c777192c..0000000000
+--- a/board/qemu/riscv32-virt/patches/linux-headers/linux-headers.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  4e43d8c5fba14f7c82597838011648056487b7550fd83276ad534559e8499b1d  linux-6.6.18.tar.xz
+diff --git a/board/qemu/riscv32-virt/patches/linux/linux.hash b/board/qemu/riscv32-virt/patches/linux/linux.hash
+deleted file mode 100644
+index a6c777192c..0000000000
+--- a/board/qemu/riscv32-virt/patches/linux/linux.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  4e43d8c5fba14f7c82597838011648056487b7550fd83276ad534559e8499b1d  linux-6.6.18.tar.xz
+diff --git a/configs/qemu_riscv32_nommu_virt_defconfig b/configs/qemu_riscv32_nommu_virt_defconfig
+index 38a1cf791f..b958d42d02 100644
+--- a/configs/qemu_riscv32_nommu_virt_defconfig
++++ b/configs/qemu_riscv32_nommu_virt_defconfig
+@@ -7,10 +7,6 @@ BR2_RISCV_32=y
+ BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
  
--SQUID_VERSION = 6.9
-+SQUID_VERSION = 6.10
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v6
- SQUID_LICENSE = GPL-2.0+
+-# Hashes
+-BR2_GLOBAL_PATCH_DIR="board/qemu/riscv32-virt/patches"
+-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-
+ # Linux headers same as kernel
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ 
 -- 
 2.39.2
 
