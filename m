@@ -4,94 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5716CC3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 05:42:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E322AC3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 05:44:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FFB76080F;
-	Sat, 13 Jul 2024 05:42:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5B3960ADB;
+	Sat, 13 Jul 2024 05:44:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TBTaGwr4Gagv; Sat, 13 Jul 2024 05:42:49 +0000 (UTC)
+ id JW1dOWaIjt3m; Sat, 13 Jul 2024 05:44:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 300E260A59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E0B36080F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 300E260A59;
-	Sat, 13 Jul 2024 05:42:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 62BE01BF847
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:42:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E0B36080F;
+	Sat, 13 Jul 2024 05:44:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 22A151BF847
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:44:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FA4E4022D
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:42:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B29281F1C
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:44:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Epzl4VpNYWRF for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 05:42:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tn58nJQuJ3lz for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 05:44:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
+ client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
  envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 20ED040175
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20ED040175
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 20ED040175
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 05:42:45 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-a7527afa23cso349105466b.2
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 22:42:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 40A5B80F7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40A5B80F7D
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 40A5B80F7D
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 05:44:21 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-58f9874aeb4so3357275a12.0
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 22:44:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720849363; x=1721454163;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Wty4Zjcl5aUu2FP6GmQEWKRsPRM9Rz0jEduyvWcwrE0=;
- b=MLW+XlGw7/nxulez7y93rVyrYWuu16NA97A6hZKoc4Y5EZJk79BI+02HfP3U2/2Tkz
- Iia/hK+nq6kulAVJv4+kH0IyaSLWk4WY9wG+3Y7mp4NgVOqids8IDfC/jzuU/ihNK3WG
- Hm1kNukeiU/sjIRdL6u573x2HiD3CJvwOKDE9+ym9LkP/MpMw9TIhWkLW0zeQExAgyRU
- w5Zckk30cL+uuzohgbBZ1JyJEPQYFetn9kuBc/a4sw96rcXflhunFsV/kqBfFN2HzHHr
- Url2XnvD9pUnV1RoGw0b7cyqSHGJEe3z7z62nc2BmhLUKOFQK6S7joEOC3GKLFslye9K
- POmg==
-X-Gm-Message-State: AOJu0YzsXE4Y19ob5jhNVsXfZ13/3QDH7jJj4IYrJ3VpwQIAH2nU8JyG
- wkEMpqoe0Q9X15xTLb0fS+3SqzSmNRl5SZYnAGxazgEzLHIMI4k+ez3Psg==
-X-Google-Smtp-Source: AGHT+IHe/9S19lNJrrGPHXACgOjKiPbW6cqn/twGuL0dEb2rMyFcqlEJHcV48js79xtKHmWOQNCkOg==
-X-Received: by 2002:a17:907:7da8:b0:a72:4320:19f3 with SMTP id
- a640c23a62f3a-a780b70088cmr1197972966b.39.1720849363175; 
- Fri, 12 Jul 2024 22:42:43 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1720849458; x=1721454258;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=MT35i5FhAG8LqByZhzI05zsMrTiT2K2Gve3fvJWbFbw=;
+ b=K9wqM6yP81hrgV828caI7dufgSTap3GTFsr9n4OhE0FQWB5NPhsbu4+ei8OTzObxJC
+ 2VEBh2PUZl9xzk6aRPrPEPYmXx+mXQxRUPH4csNVjYLWUHGq0yHDTedruW1/9TnJbWt8
+ 0LJiDf9MjhM2r7DtEdsZYLN9Z4VB48Obak4RaOY0KAOkObKEnA2YoI/r1s+HwkzczRz7
+ dgHF5wGeX01n5jKk/BwV2tfCOLZCTaoTKY7sh5oHhLJgtpVSvQSE4XLHbjiPZm5hRBOY
+ scDJ1155T68FQkqjw0qyYQZoCsOCLd3v5kT5/N6zvnKkCUoPdwhg4gwoL5H0hMRRcBMf
+ 5dXA==
+X-Gm-Message-State: AOJu0Yw06uBtXe+EmiIa+u56pRTvpe1cxmJ7GfDfS3mOQI02Lw8I6mbV
+ bKWxw4ok4b8xC4ule7Z+zjE8VHeSfO4KJf/3edzgCVzbFqQq4FN/qitb+g==
+X-Google-Smtp-Source: AGHT+IFUPnOPvGDhbRDsyNR4JgsSGZAeYUEMHW3r8w0w39+0N3APS/cxGErpV8BKsnOg5JTpQqSUbA==
+X-Received: by 2002:a05:6402:4307:b0:582:5195:3a79 with SMTP id
+ 4fb4d7f45d1cf-594ba98f268mr10416668a12.6.1720849457769; 
+ Fri, 12 Jul 2024 22:44:17 -0700 (PDT)
 Received: from hthiery.fritz.box ([95.91.160.230])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a79bc7f1e5asm19866666b.109.2024.07.12.22.42.42
+ 4fb4d7f45d1cf-59b26f61ffcsm289997a12.83.2024.07.12.22.44.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jul 2024 22:42:42 -0700 (PDT)
+ Fri, 12 Jul 2024 22:44:17 -0700 (PDT)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 07:42:15 +0200
-Message-Id: <20240713054213.228070-2-heiko.thiery@gmail.com>
+Date: Sat, 13 Jul 2024 07:44:08 +0200
+Message-Id: <20240713054407.229084-1-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240713054213.228070-1-heiko.thiery@gmail.com>
-References: <20240713054213.228070-1-heiko.thiery@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720849363; x=1721454163; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Wty4Zjcl5aUu2FP6GmQEWKRsPRM9Rz0jEduyvWcwrE0=;
- b=ZOxJoZzaZRcJ7v2XZODSAvzfxnw27uDCcQ01EkrE1/hC4edQGgKvmi53g7tLooxyt9
- D9QE+W+YJo/YBRmmss5acyNw7lD7S16GEron2EWfN8PMyDvZ5ImnqUNwIuQCjv29PbA+
- zIWQt1uFHE02E2rRAQNcjm7HAuQkI80BWVZFkDgX0sXCKXnby1IBH/iMK2rZEvJ8R1m4
- bCKT3arjD6jDynKRJRNSzVoyAOdQ4PK+aL04HRLDfEqk4Hbzg6vPW/PTkxJ6Ju1MLC33
- DOtrXR0Ti8r6pVdQJULv7jsZiryIU2b6XP5iGJve4U3pzrrjVKIKKut1QNuJdMqfusge
- INbQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1720849458; x=1721454258; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=MT35i5FhAG8LqByZhzI05zsMrTiT2K2Gve3fvJWbFbw=;
+ b=VVt/mgy7MRWCUT/nWWxRB4oofKqHXTZHxCGb8wY7X2tb6+0tON5+/fVQqmEAu5ElQE
+ lW4hNTWbmk+RgHFfkHYg/kcmYVVNw5uWtPZAhBm8I8HYBTpnsuxStvJWwXOEumuc0KD1
+ 9SVRXdwLPx0QtVavc3ncpWRj925/QJDwAb5RPetLWOnnRWsib6ZYRrwhFBJQ1iPbJNzH
+ RoT/iN8h/97I0LY4dXNGrix1RslV/MPQILuA90xSMydqfRrqnZDPiAcDo9NgRu0TaOik
+ e68uLax6KjXG96sh7ZrxD7EBCMV48q/wFQ1BN+IohIkMcglpqfpOLeUJmgGTuE1f440c
+ /4Ow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ZOxJoZza
-Subject: [Buildroot] [PATCH 1/2] package/pkg-cmake: remove override of
- CMAKE_ASM_COMPILER
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=VVt/mgy7
+Subject: [Buildroot] [PATCH 2/2] package/llvm-project/llvm: remove
+ overriding the ASM compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,26 +110,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Overriding the ASM is wrong and leads to failures e.g. for the llvm
-package. Therefore the ASM compiler was overwritten there.
+There was an error in the pkg-cmake infra file regarding the selection
+of the ASM compiler. Now that this has been fixed, overwriting the
+ASM compiler selection is no longer necessary.
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/pkg-cmake.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/llvm-project/llvm/llvm.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 8f391eb4c9..c7032312fb 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -147,7 +147,6 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
- 		-DCMAKE_SHARED_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
--		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
- 		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
- 		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
- 		$(if $$(CMAKE_HOST_C_COMPILER_LAUNCHER),\
+diff --git a/package/llvm-project/llvm/llvm.mk b/package/llvm-project/llvm/llvm.mk
+index 6598d8b6c1..b0515474d8 100644
+--- a/package/llvm-project/llvm/llvm.mk
++++ b/package/llvm-project/llvm/llvm.mk
+@@ -20,10 +20,6 @@ LLVM_DEPENDENCIES = host-llvm
+ HOST_LLVM_CONF_OPTS += -DCMAKE_MODULE_PATH=$(HOST_DIR)/lib/cmake/llvm
+ LLVM_CONF_OPTS += -DCMAKE_MODULE_PATH=$(HOST_DIR)/lib/cmake/llvm
+ 
+-# Assembly files for x64 in lib/Support/BLAKE3 need to be compiled
+-# by a C compiler
+-HOST_LLVM_CONF_OPTS += -DCMAKE_ASM_COMPILER="$(CMAKE_HOST_C_COMPILER)"
+-
+ # Don't build clang libcxx libcxxabi lldb compiler-rt lld polly as llvm subprojects
+ # This flag assumes that projects are checked out side-by-side and not nested
+ HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_PROJECTS=""
 -- 
 2.39.2
 
