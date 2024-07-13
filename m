@@ -4,49 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 495CFC3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 21:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE821C3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 21:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F5A380B6A;
-	Sat, 13 Jul 2024 21:18:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43AD580DD9;
+	Sat, 13 Jul 2024 21:19:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QyYg-jRIWm6G; Sat, 13 Jul 2024 21:18:58 +0000 (UTC)
+ id 6HYAFRnPTkor; Sat, 13 Jul 2024 21:19:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D256380B81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1BB980C36
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D256380B81;
-	Sat, 13 Jul 2024 21:18:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1A2421BF355
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 21:18:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1BB980C36;
+	Sat, 13 Jul 2024 21:19:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BF771BF355
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 21:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 08166605B7
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 21:18:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15F62404BF
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 21:19:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7wVn7z5Wu1aM for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 21:18:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A50B605A9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A50B605A9
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 21:18:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E884866B8; Sat, 13 Jul 2024 21:18:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 23:16:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4ae4122936306952109865006d055a112a111f1
-X-Git-Newrev: 322e8d845196aad484b0ca099968aed800b00c1b
-X-Patchwork-Hint: ignore
-Message-Id: <20240713211855.3E884866B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imx6ulz_bsh_smm_m2_defconfig: new
- defconfig
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AUlyYI6RHzOY for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 21:18:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9FD78404B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FD78404B1
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9FD78404B1
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 21:18:57 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-42565670e20so24093875e9.0
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:18:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720905535; x=1721510335;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=cJOgTIxwbNPlMmtwiTdyLM9jrq8Aq+JjnLmtoiViaR8=;
+ b=HvPLmJvN2m7zH/W/RSvztPd/IwMlmRJ2IaQ7hl6AAya/LnSBnEKJ84V4S9I40Jqq87
+ 7/7dENENq33zA/4ez5EiYN506z9rRTi2TaAKk4tu22dGeHJyg+4rPj/MTWWxYD5Klk+P
+ ZhoxaPs78vGcGNImjEMrD6tyUcjwQDCF5CYmx6zeXX899os8Di/iOipxnK51wY1NcRpx
+ 689ORrXLMzo9VpcRcASfWZhVxd3F8bMGJ7sVJtjqOGZeFJDnRlbciuRtaRpn9hZEyMbd
+ 3nHLomTwKlXiBHy2llObADBtNL1AHM5wBOKbeGo2OiE8IFml3wAOrLiiDYRRtqzxWxXQ
+ xAjw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWwADo+BRvgZueqV24MFtT0pD49wL3MnyKBr22Exh7hh79eM+BxQMXudIB2hDraScaJOszIavOqeqMkZPSfFWL7uEWeZrrWUQ==
+X-Gm-Message-State: AOJu0Yxz921mpex79bWMXUNma9fxT1wslVXTRs03ybb60FpYR1ytbJ1N
+ ihYR031DwOWOzTs0s6h+d69GZAJK9MTZkPzqaRleCXzzqAJaE5CnUbRzl9dVsmk=
+X-Google-Smtp-Source: AGHT+IHo9AaTJo19X8h5BcPVUVKLQSnSABhJ1vS3nQHCmCPF/LI737BAHhUfyG/tjBL6ePwsc77Xpw==
+X-Received: by 2002:a05:600c:3229:b0:426:6f0e:8ba4 with SMTP id
+ 5b1f17b1804b1-4279da02b12mr49461415e9.8.1720905535495; 
+ Sat, 13 Jul 2024 14:18:55 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:f9c8:f443:ffd:1bed?
+ (2a01cb05949d5800f9c8f4430ffd1bed.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:f9c8:f443:ffd:1bed])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4279f2d7047sm68463965e9.41.2024.07.13.14.18.54
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 13 Jul 2024 14:18:55 -0700 (PDT)
+Message-ID: <0602e06f-be42-41e5-97bb-f6c8494bfd58@smile.fr>
+Date: Sat, 13 Jul 2024 23:18:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
+References: <20240304173142.1509510-1-dario.binacchi@amarulasolutions.com>
+Content-Language: fr
+In-Reply-To: <20240304173142.1509510-1-dario.binacchi@amarulasolutions.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1720905535; x=1721510335; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=cJOgTIxwbNPlMmtwiTdyLM9jrq8Aq+JjnLmtoiViaR8=;
+ b=f/yejW0DNgYx7QaW961gHPlwwQ/dtOWgEMSyB9KIVB0+/wIVqsgK7xkawSOqHnsmrM
+ o1/ZjPxSKwNPvVTlsnXeGB9j7/lbrK6+ocErSo8RYUFnLTplTQvU+RtSPfrEfmJqQH8C
+ Vbw/gN1WdMWd9OcjC05mAqKQEzOFGBeVv4UM0=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=f/yejW0D
+Subject: Re: [Buildroot] [PATCH v3 1/1]
+ configs/imx6ulz_bsh_smm_m2_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,621 +108,334 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6227669790186002290=="
+Cc: linux-amarula@amarulasolutions.com,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Ariel D'Alessandro <ariel@vanguardiasur.com.ar>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6227669790186002290==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=322e8d845196aad484b0ca099968aed800b00c1b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-BSH SMM M2 (SystemMaster M2) Board is an add-on board which provides
-input and output interfaces to a dedicated carrier board. It is designed
-mainly to provide graphical/video and connectivity interfaces to the
-appliance.
-
-Board support package includes the following components:
-- mainline Linux kernel 6.1.68
-- mainline U-Boot 2023.10
-
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Romain:
-  - enable BR2_DOWNLOAD_FORCE_CHECK_HASHES and add hashes files
-  - enable BR2_KERNEL_HEADERS_AS_KERNEL for linux-headers to avoid specify
-    BR2_KERNEL_HEADERS_6_1
-  - make sure to use uuu from HOST_DIR in flash.sh
-]
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- DEVELOPERS                                         |   2 +
- board/bsh/imx6ulz-bsh-smm-m2/flash.sh              |  25 ++
- board/bsh/imx6ulz-bsh-smm-m2/linux.config          | 303 +++++++++++++++++++++
- board/bsh/imx6ulz-bsh-smm-m2/nand-full.lst         |  40 +++
- .../patches/linux-headers/linux-headers.hash       |   1 +
- .../imx6ulz-bsh-smm-m2/patches/linux/linux.hash    |   2 +
- .../imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash    |   2 +
- board/bsh/imx6ulz-bsh-smm-m2/post-build.sh         |   4 +
- board/bsh/imx6ulz-bsh-smm-m2/readme.txt            |  67 +++++
- configs/imx6ulz_bsh_smm_m2_defconfig               |  42 +++
- 10 files changed, 488 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9474d03520..e48ba20aa4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -782,6 +782,7 @@ F:	package/xinetd/
- N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
- F:	board/bsh/
- F:	board/stmicroelectronics/stm32f769-disco/
-+F:	configs/imx6ulz_bsh_smm_m2_defconfig
- F:	configs/imx8mn_bsh_smm_s2_defconfig
- F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
- F:	configs/stm32f769_disco_sd_defconfig
-@@ -2306,6 +2307,7 @@ F:	package/sqlitecpp/
- 
- N:	Michael Trimarchi <michael@amarulasolutions.com>
- F:	board/bsh/
-+F:	configs/imx6ulz_bsh_smm_m2_defconfig
- F:	configs/imx8mn_bsh_smm_s2_defconfig
- F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
- F:	package/python-spidev/
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/flash.sh b/board/bsh/imx6ulz-bsh-smm-m2/flash.sh
-new file mode 100755
-index 0000000000..b2a610644e
---- /dev/null
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/flash.sh
-@@ -0,0 +1,25 @@
-+#!/bin/bash
-+
-+if [ $# -eq 0 ]; then
-+    OUTPUT_DIR=output
-+else
-+    OUTPUT_DIR=$1
-+fi
-+
-+if ! test -d "${OUTPUT_DIR}" ; then
-+    echo "ERROR: no output directory specified."
-+    echo "Usage: $0 OUTPUT_DIR"
-+    echo ""
-+    echo "Arguments:"
-+    echo "    OUTPUT_DIR    The Buildroot output directory."
-+    exit 1
-+fi
-+
-+IMAGES_DIR="${OUTPUT_DIR}/images"
-+
-+"${OUTPUT_DIR}"/host/bin/uuu -v -b "${IMAGES_DIR}/nand-full.lst" \
-+  "${IMAGES_DIR}/u-boot-with-spl.imx" \
-+  "${IMAGES_DIR}/u-boot-with-spl.imx" \
-+  "${IMAGES_DIR}/rootfs.ubifs" \
-+  "${IMAGES_DIR}/zImage" \
-+  "${IMAGES_DIR}/imx6ulz-bsh-smm-m2.dtb"
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/linux.config b/board/bsh/imx6ulz-bsh-smm-m2/linux.config
-new file mode 100644
-index 0000000000..7da8d4abe9
---- /dev/null
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/linux.config
-@@ -0,0 +1,303 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT_VOLUNTARY=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=18
-+CONFIG_CGROUPS=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_RELAY=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_EXPERT=y
-+CONFIG_ARCH_MULTI_V6=y
-+CONFIG_ARCH_MXC=y
-+CONFIG_SOC_IMX6Q=y
-+CONFIG_SOC_IMX6SL=y
-+CONFIG_SOC_IMX6SLL=y
-+CONFIG_SOC_IMX6SX=y
-+CONFIG_SOC_IMX6UL=y
-+CONFIG_SMP=y
-+CONFIG_HAVE_ARM_ARCH_TIMER=y
-+CONFIG_ARM_PSCI=y
-+CONFIG_HIGHMEM=y
-+CONFIG_ARCH_FORCE_MAX_ORDER=14
-+CONFIG_CMDLINE="noinitrd console=ttymxc0,115200"
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_STAT=y
-+CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
-+CONFIG_CPU_FREQ_GOV_POWERSAVE=y
-+CONFIG_CPU_FREQ_GOV_USERSPACE=y
-+CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
-+CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
-+CONFIG_CPUFREQ_DT=y
-+CONFIG_ARM_IMX6Q_CPUFREQ=y
-+CONFIG_ARM_IMX_CPUFREQ_DT=y
-+CONFIG_CPU_IDLE=y
-+CONFIG_ARM_CPUIDLE=y
-+CONFIG_ARM_PSCI_CPUIDLE=y
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_PM_DEBUG=y
-+CONFIG_PM_TEST_SUSPEND=y
-+CONFIG_KPROBES=y
-+# CONFIG_GCC_PLUGINS is not set
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+CONFIG_MODULE_SRCVERSION_ALL=y
-+CONFIG_BINFMT_MISC=m
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_CMA=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IPV6_SIT=m
-+CONFIG_NETFILTER=y
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_VLAN_8021Q=y
-+CONFIG_LLC2=y
-+CONFIG_DNS_RESOLVER=y
-+CONFIG_NET_PKTGEN=m
-+CONFIG_BT=y
-+CONFIG_BT_RFCOMM=y
-+CONFIG_BT_RFCOMM_TTY=y
-+CONFIG_BT_BNEP=y
-+CONFIG_BT_BNEP_MC_FILTER=y
-+CONFIG_BT_BNEP_PROTO_FILTER=y
-+CONFIG_BT_HIDP=y
-+CONFIG_BT_HCIUART=m
-+CONFIG_BT_HCIUART_BCSP=y
-+CONFIG_BT_HCIUART_ATH3K=y
-+CONFIG_BT_HCIUART_LL=y
-+CONFIG_BT_HCIUART_3WIRE=y
-+CONFIG_BT_HCIUART_BCM=y
-+CONFIG_BT_HCIVHCI=y
-+CONFIG_CFG80211=y
-+CONFIG_NL80211_TESTMODE=y
-+CONFIG_MAC80211=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+# CONFIG_STANDALONE is not set
-+CONFIG_FW_LOADER_USER_HELPER=y
-+CONFIG_BRCMSTB_GISB_ARB=y
-+CONFIG_IMX_WEIM=y
-+CONFIG_VEXPRESS_CONFIG=y
-+CONFIG_CONNECTOR=y
-+CONFIG_MTD=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_CFI=y
-+CONFIG_MTD_JEDECPROBE=y
-+CONFIG_MTD_CFI_INTELEXT=y
-+CONFIG_MTD_CFI_AMDSTD=y
-+CONFIG_MTD_CFI_STAA=y
-+CONFIG_MTD_PHYSMAP=y
-+CONFIG_MTD_PHYSMAP_OF=y
-+CONFIG_MTD_DATAFLASH=y
-+CONFIG_MTD_SST25L=y
-+CONFIG_MTD_RAW_NAND=y
-+CONFIG_MTD_NAND_GPMI_NAND=y
-+CONFIG_MTD_NAND_MXC=y
-+CONFIG_MTD_SPI_NOR=y
-+# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-+CONFIG_MTD_UBI=y
-+CONFIG_MTD_UBI_FASTMAP=y
-+CONFIG_MTD_UBI_BLOCK=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_SIZE=65536
-+CONFIG_EEPROM_AT25=y
-+CONFIG_NETDEVICES=y
-+# CONFIG_ETHERNET is not set
-+# CONFIG_USB_NET_DRIVERS is not set
-+CONFIG_BRCMFMAC=m
-+CONFIG_HOSTAP=y
-+CONFIG_INPUT_MISC=y
-+CONFIG_SERIO_SERPORT=m
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+# CONFIG_LEGACY_PTYS is not set
-+CONFIG_SERIAL_IMX=y
-+CONFIG_SERIAL_IMX_CONSOLE=y
-+CONFIG_SERIAL_FSL_LPUART=y
-+CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_SPI=y
-+CONFIG_SPI_FSL_QUADSPI=y
-+CONFIG_SPI_GPIO=y
-+CONFIG_SPI_IMX=y
-+CONFIG_SPI_SPIDEV=y
-+CONFIG_PTP_1588_CLOCK=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_GPIO_MXC=y
-+CONFIG_POWER_RESET=y
-+CONFIG_POWER_RESET_SYSCON=y
-+CONFIG_POWER_RESET_SYSCON_POWEROFF=y
-+CONFIG_SENSORS_GPIO_FAN=y
-+CONFIG_THERMAL=y
-+CONFIG_THERMAL_STATISTICS=y
-+CONFIG_THERMAL_WRITABLE_TRIPS=y
-+CONFIG_CPU_THERMAL=y
-+CONFIG_IMX_THERMAL=y
-+CONFIG_IMX8MM_THERMAL=y
-+CONFIG_WATCHDOG=y
-+CONFIG_IMX2_WDT=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_REGULATOR_ANATOP=y
-+CONFIG_REGULATOR_GPIO=y
-+CONFIG_MEDIA_CEC_SUPPORT=y
-+CONFIG_IMX_IPUV3_CORE=y
-+CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_HCD_TEST_MODE=y
-+CONFIG_USB_ACM=m
-+CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_UDC=y
-+CONFIG_USB_CHIPIDEA_HOST=y
-+CONFIG_USB_EHSET_TEST_FIXTURE=y
-+CONFIG_NOP_USB_XCEIV=y
-+CONFIG_USB_MXS_PHY=y
-+CONFIG_USB_ULPI=y
-+CONFIG_USB_GADGET=y
-+CONFIG_USB_SNP_UDC_PLAT=y
-+CONFIG_USB_BDC_UDC=y
-+CONFIG_USB_CONFIGFS=y
-+CONFIG_USB_CONFIGFS_SERIAL=y
-+CONFIG_USB_CONFIGFS_ACM=y
-+CONFIG_USB_CONFIGFS_OBEX=y
-+CONFIG_USB_CONFIGFS_NCM=y
-+CONFIG_USB_CONFIGFS_ECM=y
-+CONFIG_USB_CONFIGFS_ECM_SUBSET=y
-+CONFIG_USB_CONFIGFS_RNDIS=y
-+CONFIG_USB_CONFIGFS_EEM=y
-+CONFIG_USB_CONFIGFS_MASS_STORAGE=y
-+CONFIG_USB_CONFIGFS_F_LB_SS=y
-+CONFIG_USB_CONFIGFS_F_FS=y
-+CONFIG_USB_CONFIGFS_F_HID=y
-+CONFIG_USB_CONFIGFS_F_PRINTER=y
-+CONFIG_USB_ZERO=m
-+CONFIG_USB_ETH=m
-+CONFIG_USB_G_NCM=m
-+CONFIG_USB_GADGETFS=m
-+CONFIG_USB_FUNCTIONFS=m
-+CONFIG_USB_MASS_STORAGE=m
-+CONFIG_USB_G_SERIAL=m
-+CONFIG_TYPEC=y
-+CONFIG_TYPEC_TCPM=y
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SDHCI_ESDHC_IMX=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_INTF_DEV_UIE_EMUL=y
-+CONFIG_RTC_DRV_MXC=y
-+CONFIG_RTC_DRV_MXC_V2=y
-+CONFIG_RTC_DRV_SNVS=y
-+CONFIG_DMADEVICES=y
-+CONFIG_FSL_EDMA=y
-+CONFIG_FSL_QDMA=m
-+CONFIG_IMX_SDMA=m
-+CONFIG_MXS_DMA=y
-+CONFIG_DMATEST=y
-+CONFIG_DMABUF_HEAPS=y
-+CONFIG_DMABUF_HEAPS_SYSTEM=y
-+CONFIG_DMABUF_HEAPS_CMA=y
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_VHOST_MENU is not set
-+CONFIG_COMMON_CLK_PWM=y
-+CONFIG_CLK_IMX8MN=y
-+CONFIG_SOC_BRCMSTB=y
-+CONFIG_IMX_GPCV2_PM_DOMAINS=y
-+CONFIG_SOC_IMX8M=y
-+CONFIG_SOC_TI=y
-+CONFIG_MEMORY=y
-+CONFIG_PWM=y
-+CONFIG_PWM_FSL_FTM=m
-+CONFIG_PWM_IMX27=y
-+CONFIG_PWM_IMX_TPM=y
-+CONFIG_PHY_CADENCE_SALVO=y
-+CONFIG_FSL_IMX8_DDR_PMU=y
-+CONFIG_NVMEM_IMX_OCOTP=y
-+CONFIG_NVMEM_SNVS_LPGPR=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_POSIX_ACL=y
-+CONFIG_EXT3_FS_SECURITY=y
-+CONFIG_AUTOFS_FS=y
-+CONFIG_ISO9660_FS=m
-+CONFIG_JOLIET=y
-+CONFIG_ZISOFS=y
-+CONFIG_UDF_FS=m
-+CONFIG_MSDOS_FS=m
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_XATTR=y
-+CONFIG_UBIFS_FS=y
-+# CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_NLS_DEFAULT="cp437"
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_ISO8859_15=m
-+CONFIG_NLS_UTF8=y
-+CONFIG_SECURITYFS=y
-+CONFIG_CRYPTO_USER=y
-+CONFIG_CRYPTO_TEST=m
-+CONFIG_CRYPTO_DH=m
-+CONFIG_CRYPTO_ANUBIS=m
-+CONFIG_CRYPTO_BLOWFISH=m
-+CONFIG_CRYPTO_CAMELLIA=m
-+CONFIG_CRYPTO_CAST5=m
-+CONFIG_CRYPTO_CAST6=m
-+CONFIG_CRYPTO_DES=m
-+CONFIG_CRYPTO_FCRYPT=m
-+CONFIG_CRYPTO_KHAZAD=m
-+CONFIG_CRYPTO_SEED=m
-+CONFIG_CRYPTO_SERPENT=m
-+CONFIG_CRYPTO_TEA=m
-+CONFIG_CRYPTO_TWOFISH=m
-+CONFIG_CRYPTO_ARC4=m
-+CONFIG_CRYPTO_CFB=m
-+CONFIG_CRYPTO_CTS=m
-+CONFIG_CRYPTO_LRW=m
-+CONFIG_CRYPTO_OFB=m
-+CONFIG_CRYPTO_PCBC=m
-+CONFIG_CRYPTO_CHACHA20POLY1305=m
-+CONFIG_CRYPTO_MD4=m
-+CONFIG_CRYPTO_RMD160=m
-+CONFIG_CRYPTO_SHA1=y
-+CONFIG_CRYPTO_STREEBOG=m
-+CONFIG_CRYPTO_VMAC=m
-+CONFIG_CRYPTO_WP512=m
-+CONFIG_CRYPTO_XCBC=m
-+CONFIG_CRYPTO_USER_API_HASH=m
-+CONFIG_CRYPTO_USER_API_SKCIPHER=m
-+CONFIG_CRYPTO_USER_API_AEAD=m
-+CONFIG_CRYPTO_DEV_FSL_CAAM=y
-+CONFIG_CRYPTO_DEV_SAHARA=y
-+CONFIG_CRYPTO_DEV_MXS_DCP=y
-+CONFIG_CRYPTO_DEV_AMLOGIC_GXL=m
-+CONFIG_CRC_T10DIF=y
-+CONFIG_CRC7=m
-+CONFIG_LIBCRC32C=m
-+CONFIG_DMA_CMA=y
-+CONFIG_CMA_SIZE_MBYTES=64
-+CONFIG_IRQ_POLL=y
-+CONFIG_PRINTK_TIME=y
-+# CONFIG_DEBUG_BUGVERBOSE is not set
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
-+# CONFIG_SLUB_DEBUG is not set
-+# CONFIG_SCHED_DEBUG is not set
-+CONFIG_PROVE_LOCKING=y
-+# CONFIG_FTRACE is not set
-+CONFIG_CORESIGHT=y
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/nand-full.lst b/board/bsh/imx6ulz-bsh-smm-m2/nand-full.lst
-new file mode 100644
-index 0000000000..7c5a884d65
---- /dev/null
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/nand-full.lst
-@@ -0,0 +1,40 @@
-+# @_flash.bin            | bootloader
-+# @_image   [_flash.bin] | image burn to nand, default is the same as bootloader
-+# @_filesystem           | filesystem to burn
-+# @_kernel               | kernel image
-+# @_dtb                  | dtb image
-+
-+# This command will be run when i.MX6/7 i.MX8MM, i.MX8MQ
-+SDP: boot -f _flash.bin
-+
-+# These commands will be run when use SPL and will be skipped if no spl
-+# SDPU will be deprecated. please use SDPV instead of SDPU
-+# {
-+SDPU: delay 1000
-+SDPU: write -f _flash.bin -offset 0x57c00
-+SDPU: jump
-+# }
-+
-+# These commands will be run when use SPL and will be skipped if no spl
-+# if (SPL support SDPV)
-+# {
-+SDPV: delay 1000
-+SDPV: write -f _flash.bin -offset 0x11000
-+SDPV: jump
-+# }
-+
-+FB: ucmd setenv fastboot_buffer ${loadaddr}
-+FB[-t 60000]: ucmd nand erase.chip
-+FB[-t 60000]: ucmd ubi part rootfs
-+FB[-t 60000]: ucmd ubi create root -
-+FB: download -f _filesystem
-+FB[-t 60000]: ucmd ubi write ${loadaddr} root ${filesize}
-+
-+FB: download -f _kernel
-+FB[-t 60000]: ucmd nand write ${loadaddr} kernel ${filesize}
-+
-+FB: download -f _dtb
-+FB[-t 8000]: ucmd nand write ${loadaddr} nanddtb ${filesize}
-+FB: ucmd setenv loadaddr 0x82000000
-+
-+FB: done
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux-headers/linux-headers.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..25e4464adb
---- /dev/null
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  365ff26a30e206de9b18489f45d38582a0a61b7c5919f8ab89295a47316784e1  linux-6.1.68.tar.xz
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..c0b3bcdd04
---- /dev/null
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  e00e6c6f014e046101739d08d06f328811cebcf5ae101348f409cbbd55ce6900  u-boot-2023.10.tar.bz2
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/post-build.sh b/board/bsh/imx6ulz-bsh-smm-m2/post-build.sh
-new file mode 100755
-index 0000000000..eac82cc22a
---- /dev/null
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/post-build.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname "$0")"
-+
-+cp "${BOARD_DIR}/nand-full.lst" "${BINARIES_DIR}"
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/readme.txt b/board/bsh/imx6ulz-bsh-smm-m2/readme.txt
-new file mode 100644
-index 0000000000..e6641e6df1
---- /dev/null
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/readme.txt
-@@ -0,0 +1,67 @@
-+i.MX6ULZ BSH SMM M2
-+==================
-+
-+This tutorial describes how to use the predefined Buildroot
-+configuration for the i.MX6ULZ BSH SMM M2 board.
-+
-+Building
-+--------
-+
-+Configure buildroot:
-+
-+  $ make imx6ulz_bsh_smm_m2_defconfig
-+
-+Change settings to fit your needs (optional):
-+
-+  $ make menuconfig
-+
-+Compile everything and build the rootfs image:
-+
-+  $ make
-+
-+
-+Result of the build
-+-------------------
-+
-+After building, the output/images directory contains:
-+
-+  output/images/
-+    ├── imx6ulz-bsh-smm-m2.dtb
-+    ├── zImage
-+    ├── nand-full.lst
-+    ├── rootfs.ubifs
-+    └── u-boot-with-spl.imx
-+
-+Preparing the board
-+-------------------
-+
-+Plug the USB type A to micro B cable into the USB Debug
-+Connector (DBG UART). Use serial port settings 115200 8N1
-+to access the debug console.
-+
-+Plug another USB type A to micro B cable into the USB-OTG
-+Connector (USB1). This connection is used to flash the board
-+firmware using the Freescale/NXP UUU tool.
-+
-+Connect the power supply/adaptor to the DC Power Jack (labelled
-++5V).
-+
-+
-+Flashing
-+--------
-+
-+Power up the board by switching on the Power ON Switch, which is
-+placed right next to the DC Jack.
-+
-+Enter the following U-Boot commands on the debug serial console:
-+
-+  $ nand erase.chip
-+  $ reset
-+
-+Flash the built images directly to board’s memory. On your computer,
-+run:
-+
-+  $ board/bsh/imx6ulz-bsh-smm-m2/flash.sh output/
-+
-+It will flash the bootloader, the Device Tree Blob, the kernel image
-+and the UBI root file system.
-diff --git a/configs/imx6ulz_bsh_smm_m2_defconfig b/configs/imx6ulz_bsh_smm_m2_defconfig
-new file mode 100644
-index 0000000000..29177c4756
---- /dev/null
-+++ b/configs/imx6ulz_bsh_smm_m2_defconfig
-@@ -0,0 +1,42 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_VFPV3=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_GLOBAL_PATCH_DIR="board/bsh/imx6ulz-bsh-smm-m2/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx6ulz-bsh-smm-m2/post-build.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.68"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/bsh/imx6ulz-bsh-smm-m2/linux.config"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ulz-bsh-smm-m2"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+BR2_PACKAGE_BLUEZ_TOOLS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS_CLIENT=y
-+BR2_PACKAGE_IW=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ulz_smm_m2"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-with-spl.imx"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_E2FSPROGS=y
-+BR2_PACKAGE_HOST_ENVIRONMENT_SETUP=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-
---===============6227669790186002290==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6227669790186002290==--
+SGVsbG8gRGFyaW8sCgpMZSAwNC8wMy8yMDI0IMOgIDE4OjMxLCBEYXJpbyBCaW5hY2NoaSBhIMOp
+Y3JpdMKgOgo+IEZyb206IE1pY2hhZWwgVHJpbWFyY2hpIDxtaWNoYWVsQGFtYXJ1bGFzb2x1dGlv
+bnMuY29tPgo+IAo+IEJTSCBTTU0gTTIgKFN5c3RlbU1hc3RlciBNMikgQm9hcmQgaXMgYW4gYWRk
+LW9uIGJvYXJkIHdoaWNoIHByb3ZpZGVzCj4gaW5wdXQgYW5kIG91dHB1dCBpbnRlcmZhY2VzIHRv
+IGEgZGVkaWNhdGVkIGNhcnJpZXIgYm9hcmQuIEl0IGlzIGRlc2lnbmVkCj4gbWFpbmx5IHRvIHBy
+b3ZpZGUgZ3JhcGhpY2FsL3ZpZGVvIGFuZCBjb25uZWN0aXZpdHkgaW50ZXJmYWNlcyB0byB0aGUK
+PiBhcHBsaWFuY2UuCj4gCj4gQm9hcmQgc3VwcG9ydCBwYWNrYWdlIGluY2x1ZGVzIHRoZSBmb2xs
+b3dpbmcgY29tcG9uZW50czoKPiAtIG1haW5saW5lIExpbnV4IGtlcm5lbCA2LjEuNjgKPiAtIG1h
+aW5saW5lIFUtQm9vdCAyMDIzLjEwCj4gCj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBUcmltYXJj
+aGkgPG1pY2hhZWxAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gU2lnbmVkLW9mZi1ieTogRGFyaW8g
+QmluYWNjaGkgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+IFJldmlld2Vk
+LWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNv
+bT4KPiBUZXN0ZWQtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5n
+aW5lZXJpbmcuY29tPgoKSSBkaWQgdGhlIGZvbGxvd2luZyBjaGFuZ2VzIGJlZm9yZSBtZXJnaW5n
+IHRoaXMgZGVmY29uZmlnOgoKICAtIGVuYWJsZSBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFT
+SEVTIGFuZCBhZGQgaGFzaGVzIGZpbGVzCiAgLSBlbmFibGUgQlIyX0tFUk5FTF9IRUFERVJTX0FT
+X0tFUk5FTCBmb3IgbGludXgtaGVhZGVycyB0byBhdm9pZCBzcGVjaWZ5CiAgICBCUjJfS0VSTkVM
+X0hFQURFUlNfNl8xCiAgLSBtYWtlIHN1cmUgdG8gdXNlIHV1dSBmcm9tIEhPU1RfRElSIGluIGZs
+YXNoLnNoCgpCdWlsZCB0ZXN0ZWQgdXNpbmcgdXRpbHMvZG9ja2VyLXJ1bgoKPiAKPiAtLS0KPiAK
+PiBDaGFuZ2VzIGluIHYzOgo+IC0gRHJvcCBCUjJfVE9PTENIQUlOX0JVSUxEUk9PVF9DWFggYW5k
+IEJSMl9QQUNLQUdFX0JVU1lCT1hfU0hPV19PVEhFUlMKPiAgIGZyb20gaW14NnVsel9ic2hfc21t
+X20yX2RlZmNvbmZpZy4KPiAtIERyb3AgdXNlbGVzcyBjb25maWd1cmF0aW9ucyBmcm9tIGJvYXJk
+L2JzaC9pbXg2dWx6LWJzaC1zbW0tbTIvbGludXguY29uZmlnLgo+IAo+IENoYW5nZXMgaW4gdjI6
+Cj4gLSBCdW1wIExpbnV4IHRvIDYuMS42OC4KPiAtIEJ1bXAgVS1Cb290IHRvIDIwMjMuMTAuCj4g
+LSBGaXggcGF0aCBvZiBsaW51eCBjb25maWd1cmF0aW9uLgo+IC0gUmVuYW1lIGRlZmNvbmZpZyB0
+byBsaW51eC5jb25maWcuCj4gLSBEcm9wIGNvbmZpZ3VyYXRpb25zIG5vdCBuZWNlc3NhcnksIGlu
+IG9yZGVyIHRvIGtlZXAgdGhlIGJvYXJkCj4gICBjb25maWd1cmF0aW9uIHZlcnkgbWluaW1hbCwg
+YXMgc3VnZ2VzdGVkIGJ5IHRoZSByZXZpZXcgb2YKPiAgIEdpdWxpbyBCZW5ldHRpLgo+IC0gVXBk
+YXRlIGNvbW1pdCBtZXNzYWdlCj4gLSBEcm9tcCBJTVg4TSBjb21tYW5kcyBmcm9tIG5hbmQtZnVs
+bC5sc3QuCj4gCj4gIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAgMiArCj4gIGJvYXJkL2JzaC9pbXg2dWx6LWJzaC1zbW0tbTIvZmxhc2guc2ggICAgICB8ICAy
+NSArKwo+ICBib2FyZC9ic2gvaW14NnVsei1ic2gtc21tLW0yL2xpbnV4LmNvbmZpZyAgfCAzMDMg
+KysrKysrKysrKysrKysrKysrKysrCj4gIGJvYXJkL2JzaC9pbXg2dWx6LWJzaC1zbW0tbTIvbmFu
+ZC1mdWxsLmxzdCB8ICA0MCArKysKPiAgYm9hcmQvYnNoL2lteDZ1bHotYnNoLXNtbS1tMi9wb3N0
+LWJ1aWxkLnNoIHwgICA0ICsKPiAgYm9hcmQvYnNoL2lteDZ1bHotYnNoLXNtbS1tMi9yZWFkbWUu
+dHh0ICAgIHwgIDY3ICsrKysrCj4gIGNvbmZpZ3MvaW14NnVsel9ic2hfc21tX20yX2RlZmNvbmZp
+ZyAgICAgICB8ICA0MCArKysKPiAgNyBmaWxlcyBjaGFuZ2VkLCA0ODEgaW5zZXJ0aW9ucygrKQo+
+ICBjcmVhdGUgbW9kZSAxMDA3NTUgYm9hcmQvYnNoL2lteDZ1bHotYnNoLXNtbS1tMi9mbGFzaC5z
+aAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvYnNoL2lteDZ1bHotYnNoLXNtbS1tMi9saW51
+eC5jb25maWcKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2JzaC9pbXg2dWx6LWJzaC1zbW0t
+bTIvbmFuZC1mdWxsLmxzdAo+ICBjcmVhdGUgbW9kZSAxMDA3NTUgYm9hcmQvYnNoL2lteDZ1bHot
+YnNoLXNtbS1tMi9wb3N0LWJ1aWxkLnNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9ic2gv
+aW14NnVsei1ic2gtc21tLW0yL3JlYWRtZS50eHQKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGNvbmZp
+Z3MvaW14NnVsel9ic2hfc21tX20yX2RlZmNvbmZpZwo+IAo+IGRpZmYgLS1naXQgYS9ERVZFTE9Q
+RVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IDBiZmU5MWYwNjRhOS4uM2E3MWVhZjgzZTBlIDEwMDY0
+NAo+IC0tLSBhL0RFVkVMT1BFUlMKPiArKysgYi9ERVZFTE9QRVJTCj4gQEAgLTc1NCw2ICs3NTQs
+NyBAQCBGOglwYWNrYWdlL3hpbmV0ZC8KPiAgTjoJRGFyaW8gQmluYWNjaGkgPGRhcmlvLmJpbmFj
+Y2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+ICBGOglib2FyZC9ic2gvCj4gIEY6CWJvYXJkL3N0
+bWljcm9lbGVjdHJvbmljcy9zdG0zMmY3NjktZGlzY28vCj4gK0Y6CWNvbmZpZ3MvaW14NnVsel9i
+c2hfc21tX20yX2RlZmNvbmZpZwo+ICBGOgljb25maWdzL2lteDhtbl9ic2hfc21tX3MyX2RlZmNv
+bmZpZwo+ICBGOgljb25maWdzL2lteDhtbl9ic2hfc21tX3MyX3Byb19kZWZjb25maWcKPiAgRjoJ
+Y29uZmlncy9zdG0zMmY3NjlfZGlzY29fc2RfZGVmY29uZmlnCj4gQEAgLTIyMjYsNiArMjIyNyw3
+IEBAIEY6CXBhY2thZ2Uvc3BkbG9nLwo+ICAKPiAgTjoJTWljaGFlbCBUcmltYXJjaGkgPG1pY2hh
+ZWxAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gIEY6CWJvYXJkL2JzaC8KPiArRjoJY29uZmlncy9p
+bXg2dWx6X2JzaF9zbW1fbTJfZGVmY29uZmlnCj4gIEY6CWNvbmZpZ3MvaW14OG1uX2JzaF9zbW1f
+czJfZGVmY29uZmlnCj4gIEY6CWNvbmZpZ3MvaW14OG1uX2JzaF9zbW1fczJfcHJvX2RlZmNvbmZp
+Zwo+ICBGOglwYWNrYWdlL3B5dGhvbi1zcGlkZXYvCj4gZGlmZiAtLWdpdCBhL2JvYXJkL2JzaC9p
+bXg2dWx6LWJzaC1zbW0tbTIvZmxhc2guc2ggYi9ib2FyZC9ic2gvaW14NnVsei1ic2gtc21tLW0y
+L2ZsYXNoLnNoCj4gbmV3IGZpbGUgbW9kZSAxMDA3NTUKPiBpbmRleCAwMDAwMDAwMDAwMDAuLmUz
+YjdiZWVmODhlYgo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib2FyZC9ic2gvaW14NnVsei1ic2gt
+c21tLW0yL2ZsYXNoLnNoCj4gQEAgLTAsMCArMSwyNSBAQAo+ICsjIS9iaW4vYmFzaAo+ICsKPiAr
+aWYgWyAkIyAtZXEgMCBdOyB0aGVuCj4gKyAgICBPVVRQVVRfRElSPW91dHB1dAo+ICtlbHNlCj4g
+KyAgICBPVVRQVVRfRElSPSQxCj4gK2ZpCj4gKwo+ICtpZiAhIHRlc3QgLWQgIiR7T1VUUFVUX0RJ
+Un0iIDsgdGhlbgo+ICsgICAgZWNobyAiRVJST1I6IG5vIG91dHB1dCBkaXJlY3Rvcnkgc3BlY2lm
+aWVkLiIKPiArICAgIGVjaG8gIlVzYWdlOiAkMCBPVVRQVVRfRElSIgo+ICsgICAgZWNobyAiIgo+
+ICsgICAgZWNobyAiQXJndW1lbnRzOiIKPiArICAgIGVjaG8gIiAgICBPVVRQVVRfRElSICAgIFRo
+ZSBCdWlsZHJvb3Qgb3V0cHV0IGRpcmVjdG9yeS4iCj4gKyAgICBleGl0IDEKPiArZmkKPiArCj4g
+K0lNQUdFU19ESVI9IiR7T1VUUFVUX0RJUn0vaW1hZ2VzIgo+ICsKPiArdXV1IC12IC1iICIke0lN
+QUdFU19ESVJ9L25hbmQtZnVsbC5sc3QiIFwKPiArICAiJHtJTUFHRVNfRElSfS91LWJvb3Qtd2l0
+aC1zcGwuaW14IiBcCj4gKyAgIiR7SU1BR0VTX0RJUn0vdS1ib290LXdpdGgtc3BsLmlteCIgXAo+
+ICsgICIke0lNQUdFU19ESVJ9L3Jvb3Rmcy51YmlmcyIgXAo+ICsgICIke0lNQUdFU19ESVJ9L3pJ
+bWFnZSIgXAo+ICsgICIke0lNQUdFU19ESVJ9L2lteDZ1bHotYnNoLXNtbS1tMi5kdGIiCj4gZGlm
+ZiAtLWdpdCBhL2JvYXJkL2JzaC9pbXg2dWx6LWJzaC1zbW0tbTIvbGludXguY29uZmlnIGIvYm9h
+cmQvYnNoL2lteDZ1bHotYnNoLXNtbS1tMi9saW51eC5jb25maWcKPiBuZXcgZmlsZSBtb2RlIDEw
+MDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMC4uN2RhOGQ0YWJlOTFiCj4gLS0tIC9kZXYvbnVsbAo+
+ICsrKyBiL2JvYXJkL2JzaC9pbXg2dWx6LWJzaC1zbW0tbTIvbGludXguY29uZmlnCj4gQEAgLTAs
+MCArMSwzMDMgQEAKPiArQ09ORklHX1NZU1ZJUEM9eQo+ICtDT05GSUdfTk9fSFpfSURMRT15Cj4g
+K0NPTkZJR19ISUdIX1JFU19USU1FUlM9eQo+ICtDT05GSUdfUFJFRU1QVF9WT0xVTlRBUlk9eQo+
+ICtDT05GSUdfSUtDT05GSUc9eQo+ICtDT05GSUdfSUtDT05GSUdfUFJPQz15Cj4gK0NPTkZJR19M
+T0dfQlVGX1NISUZUPTE4Cj4gK0NPTkZJR19DR1JPVVBTPXkKPiArQ09ORklHX0NHUk9VUF9GUkVF
+WkVSPXkKPiArQ09ORklHX1JFTEFZPXkKPiArQ09ORklHX0JMS19ERVZfSU5JVFJEPXkKPiArQ09O
+RklHX0VYUEVSVD15Cj4gK0NPTkZJR19BUkNIX01VTFRJX1Y2PXkKPiArQ09ORklHX0FSQ0hfTVhD
+PXkKPiArQ09ORklHX1NPQ19JTVg2UT15Cj4gK0NPTkZJR19TT0NfSU1YNlNMPXkKPiArQ09ORklH
+X1NPQ19JTVg2U0xMPXkKPiArQ09ORklHX1NPQ19JTVg2U1g9eQo+ICtDT05GSUdfU09DX0lNWDZV
+TD15Cj4gK0NPTkZJR19TTVA9eQo+ICtDT05GSUdfSEFWRV9BUk1fQVJDSF9USU1FUj15Cj4gK0NP
+TkZJR19BUk1fUFNDST15Cj4gK0NPTkZJR19ISUdITUVNPXkKPiArQ09ORklHX0FSQ0hfRk9SQ0Vf
+TUFYX09SREVSPTE0Cj4gK0NPTkZJR19DTURMSU5FPSJub2luaXRyZCBjb25zb2xlPXR0eW14YzAs
+MTE1MjAwIgo+ICtDT05GSUdfQ1BVX0ZSRVE9eQo+ICtDT05GSUdfQ1BVX0ZSRVFfU1RBVD15Cj4g
+K0NPTkZJR19DUFVfRlJFUV9ERUZBVUxUX0dPVl9PTkRFTUFORD15Cj4gK0NPTkZJR19DUFVfRlJF
+UV9HT1ZfUE9XRVJTQVZFPXkKPiArQ09ORklHX0NQVV9GUkVRX0dPVl9VU0VSU1BBQ0U9eQo+ICtD
+T05GSUdfQ1BVX0ZSRVFfR09WX0NPTlNFUlZBVElWRT15Cj4gK0NPTkZJR19DUFVfRlJFUV9HT1Zf
+U0NIRURVVElMPXkKPiArQ09ORklHX0NQVUZSRVFfRFQ9eQo+ICtDT05GSUdfQVJNX0lNWDZRX0NQ
+VUZSRVE9eQo+ICtDT05GSUdfQVJNX0lNWF9DUFVGUkVRX0RUPXkKPiArQ09ORklHX0NQVV9JRExF
+PXkKPiArQ09ORklHX0FSTV9DUFVJRExFPXkKPiArQ09ORklHX0FSTV9QU0NJX0NQVUlETEU9eQo+
+ICtDT05GSUdfVkZQPXkKPiArQ09ORklHX05FT049eQo+ICtDT05GSUdfUE1fREVCVUc9eQo+ICtD
+T05GSUdfUE1fVEVTVF9TVVNQRU5EPXkKPiArQ09ORklHX0tQUk9CRVM9eQo+ICsjIENPTkZJR19H
+Q0NfUExVR0lOUyBpcyBub3Qgc2V0Cj4gK0NPTkZJR19NT0RVTEVTPXkKPiArQ09ORklHX01PRFVM
+RV9VTkxPQUQ9eQo+ICtDT05GSUdfTU9EVkVSU0lPTlM9eQo+ICtDT05GSUdfTU9EVUxFX1NSQ1ZF
+UlNJT05fQUxMPXkKPiArQ09ORklHX0JJTkZNVF9NSVNDPW0KPiArIyBDT05GSUdfQ09NUEFUX0JS
+SyBpcyBub3Qgc2V0Cj4gK0NPTkZJR19DTUE9eQo+ICtDT05GSUdfTkVUPXkKPiArQ09ORklHX1BB
+Q0tFVD15Cj4gK0NPTkZJR19VTklYPXkKPiArQ09ORklHX0lORVQ9eQo+ICtDT05GSUdfSVBfUE5Q
+PXkKPiArQ09ORklHX0lQX1BOUF9ESENQPXkKPiArQ09ORklHX0lQVjZfU0lUPW0KPiArQ09ORklH
+X05FVEZJTFRFUj15Cj4gK0NPTkZJR19JUF9ORl9JUFRBQkxFUz15Cj4gK0NPTkZJR19JUF9ORl9G
+SUxURVI9eQo+ICtDT05GSUdfVkxBTl84MDIxUT15Cj4gK0NPTkZJR19MTEMyPXkKPiArQ09ORklH
+X0ROU19SRVNPTFZFUj15Cj4gK0NPTkZJR19ORVRfUEtUR0VOPW0KPiArQ09ORklHX0JUPXkKPiAr
+Q09ORklHX0JUX1JGQ09NTT15Cj4gK0NPTkZJR19CVF9SRkNPTU1fVFRZPXkKPiArQ09ORklHX0JU
+X0JORVA9eQo+ICtDT05GSUdfQlRfQk5FUF9NQ19GSUxURVI9eQo+ICtDT05GSUdfQlRfQk5FUF9Q
+Uk9UT19GSUxURVI9eQo+ICtDT05GSUdfQlRfSElEUD15Cj4gK0NPTkZJR19CVF9IQ0lVQVJUPW0K
+PiArQ09ORklHX0JUX0hDSVVBUlRfQkNTUD15Cj4gK0NPTkZJR19CVF9IQ0lVQVJUX0FUSDNLPXkK
+PiArQ09ORklHX0JUX0hDSVVBUlRfTEw9eQo+ICtDT05GSUdfQlRfSENJVUFSVF8zV0lSRT15Cj4g
+K0NPTkZJR19CVF9IQ0lVQVJUX0JDTT15Cj4gK0NPTkZJR19CVF9IQ0lWSENJPXkKPiArQ09ORklH
+X0NGRzgwMjExPXkKPiArQ09ORklHX05MODAyMTFfVEVTVE1PREU9eQo+ICtDT05GSUdfTUFDODAy
+MTE9eQo+ICtDT05GSUdfREVWVE1QRlM9eQo+ICtDT05GSUdfREVWVE1QRlNfTU9VTlQ9eQo+ICsj
+IENPTkZJR19TVEFOREFMT05FIGlzIG5vdCBzZXQKPiArQ09ORklHX0ZXX0xPQURFUl9VU0VSX0hF
+TFBFUj15Cj4gK0NPTkZJR19CUkNNU1RCX0dJU0JfQVJCPXkKPiArQ09ORklHX0lNWF9XRUlNPXkK
+PiArQ09ORklHX1ZFWFBSRVNTX0NPTkZJRz15Cj4gK0NPTkZJR19DT05ORUNUT1I9eQo+ICtDT05G
+SUdfTVREPXkKPiArQ09ORklHX01URF9DTURMSU5FX1BBUlRTPXkKPiArQ09ORklHX01URF9CTE9D
+Sz15Cj4gK0NPTkZJR19NVERfQ0ZJPXkKPiArQ09ORklHX01URF9KRURFQ1BST0JFPXkKPiArQ09O
+RklHX01URF9DRklfSU5URUxFWFQ9eQo+ICtDT05GSUdfTVREX0NGSV9BTURTVEQ9eQo+ICtDT05G
+SUdfTVREX0NGSV9TVEFBPXkKPiArQ09ORklHX01URF9QSFlTTUFQPXkKPiArQ09ORklHX01URF9Q
+SFlTTUFQX09GPXkKPiArQ09ORklHX01URF9EQVRBRkxBU0g9eQo+ICtDT05GSUdfTVREX1NTVDI1
+TD15Cj4gK0NPTkZJR19NVERfUkFXX05BTkQ9eQo+ICtDT05GSUdfTVREX05BTkRfR1BNSV9OQU5E
+PXkKPiArQ09ORklHX01URF9OQU5EX01YQz15Cj4gK0NPTkZJR19NVERfU1BJX05PUj15Cj4gKyMg
+Q09ORklHX01URF9TUElfTk9SX1VTRV80S19TRUNUT1JTIGlzIG5vdCBzZXQKPiArQ09ORklHX01U
+RF9VQkk9eQo+ICtDT05GSUdfTVREX1VCSV9GQVNUTUFQPXkKPiArQ09ORklHX01URF9VQklfQkxP
+Q0s9eQo+ICtDT05GSUdfQkxLX0RFVl9MT09QPXkKPiArQ09ORklHX0JMS19ERVZfUkFNPXkKPiAr
+Q09ORklHX0JMS19ERVZfUkFNX1NJWkU9NjU1MzYKPiArQ09ORklHX0VFUFJPTV9BVDI1PXkKPiAr
+Q09ORklHX05FVERFVklDRVM9eQo+ICsjIENPTkZJR19FVEhFUk5FVCBpcyBub3Qgc2V0Cj4gKyMg
+Q09ORklHX1VTQl9ORVRfRFJJVkVSUyBpcyBub3Qgc2V0Cj4gK0NPTkZJR19CUkNNRk1BQz1tCj4g
+K0NPTkZJR19IT1NUQVA9eQo+ICtDT05GSUdfSU5QVVRfTUlTQz15Cj4gK0NPTkZJR19TRVJJT19T
+RVJQT1JUPW0KPiArQ09ORklHX1ZUX0hXX0NPTlNPTEVfQklORElORz15Cj4gKyMgQ09ORklHX0xF
+R0FDWV9QVFlTIGlzIG5vdCBzZXQKPiArQ09ORklHX1NFUklBTF9JTVg9eQo+ICtDT05GSUdfU0VS
+SUFMX0lNWF9DT05TT0xFPXkKPiArQ09ORklHX1NFUklBTF9GU0xfTFBVQVJUPXkKPiArQ09ORklH
+X1NFUklBTF9GU0xfTFBVQVJUX0NPTlNPTEU9eQo+ICtDT05GSUdfU0VSSUFMX0RFVl9CVVM9eQo+
+ICtDT05GSUdfU1BJPXkKPiArQ09ORklHX1NQSV9GU0xfUVVBRFNQST15Cj4gK0NPTkZJR19TUElf
+R1BJTz15Cj4gK0NPTkZJR19TUElfSU1YPXkKPiArQ09ORklHX1NQSV9TUElERVY9eQo+ICtDT05G
+SUdfUFRQXzE1ODhfQ0xPQ0s9eQo+ICtDT05GSUdfR1BJT19TWVNGUz15Cj4gK0NPTkZJR19HUElP
+X01YQz15Cj4gK0NPTkZJR19QT1dFUl9SRVNFVD15Cj4gK0NPTkZJR19QT1dFUl9SRVNFVF9TWVND
+T049eQo+ICtDT05GSUdfUE9XRVJfUkVTRVRfU1lTQ09OX1BPV0VST0ZGPXkKPiArQ09ORklHX1NF
+TlNPUlNfR1BJT19GQU49eQo+ICtDT05GSUdfVEhFUk1BTD15Cj4gK0NPTkZJR19USEVSTUFMX1NU
+QVRJU1RJQ1M9eQo+ICtDT05GSUdfVEhFUk1BTF9XUklUQUJMRV9UUklQUz15Cj4gK0NPTkZJR19D
+UFVfVEhFUk1BTD15Cj4gK0NPTkZJR19JTVhfVEhFUk1BTD15Cj4gK0NPTkZJR19JTVg4TU1fVEhF
+Uk1BTD15Cj4gK0NPTkZJR19XQVRDSERPRz15Cj4gK0NPTkZJR19JTVgyX1dEVD15Cj4gK0NPTkZJ
+R19SRUdVTEFUT1I9eQo+ICtDT05GSUdfUkVHVUxBVE9SX0ZJWEVEX1ZPTFRBR0U9eQo+ICtDT05G
+SUdfUkVHVUxBVE9SX0FOQVRPUD15Cj4gK0NPTkZJR19SRUdVTEFUT1JfR1BJTz15Cj4gK0NPTkZJ
+R19NRURJQV9DRUNfU1VQUE9SVD15Cj4gK0NPTkZJR19JTVhfSVBVVjNfQ09SRT15Cj4gK0NPTkZJ
+R19VU0I9eQo+ICtDT05GSUdfVVNCX0FOTk9VTkNFX05FV19ERVZJQ0VTPXkKPiArQ09ORklHX1VT
+Ql9FSENJX0hDRD15Cj4gK0NPTkZJR19VU0JfSENEX1RFU1RfTU9ERT15Cj4gK0NPTkZJR19VU0Jf
+QUNNPW0KPiArQ09ORklHX1VTQl9DSElQSURFQT15Cj4gK0NPTkZJR19VU0JfQ0hJUElERUFfVURD
+PXkKPiArQ09ORklHX1VTQl9DSElQSURFQV9IT1NUPXkKPiArQ09ORklHX1VTQl9FSFNFVF9URVNU
+X0ZJWFRVUkU9eQo+ICtDT05GSUdfTk9QX1VTQl9YQ0VJVj15Cj4gK0NPTkZJR19VU0JfTVhTX1BI
+WT15Cj4gK0NPTkZJR19VU0JfVUxQST15Cj4gK0NPTkZJR19VU0JfR0FER0VUPXkKPiArQ09ORklH
+X1VTQl9TTlBfVURDX1BMQVQ9eQo+ICtDT05GSUdfVVNCX0JEQ19VREM9eQo+ICtDT05GSUdfVVNC
+X0NPTkZJR0ZTPXkKPiArQ09ORklHX1VTQl9DT05GSUdGU19TRVJJQUw9eQo+ICtDT05GSUdfVVNC
+X0NPTkZJR0ZTX0FDTT15Cj4gK0NPTkZJR19VU0JfQ09ORklHRlNfT0JFWD15Cj4gK0NPTkZJR19V
+U0JfQ09ORklHRlNfTkNNPXkKPiArQ09ORklHX1VTQl9DT05GSUdGU19FQ009eQo+ICtDT05GSUdf
+VVNCX0NPTkZJR0ZTX0VDTV9TVUJTRVQ9eQo+ICtDT05GSUdfVVNCX0NPTkZJR0ZTX1JORElTPXkK
+PiArQ09ORklHX1VTQl9DT05GSUdGU19FRU09eQo+ICtDT05GSUdfVVNCX0NPTkZJR0ZTX01BU1Nf
+U1RPUkFHRT15Cj4gK0NPTkZJR19VU0JfQ09ORklHRlNfRl9MQl9TUz15Cj4gK0NPTkZJR19VU0Jf
+Q09ORklHRlNfRl9GUz15Cj4gK0NPTkZJR19VU0JfQ09ORklHRlNfRl9ISUQ9eQo+ICtDT05GSUdf
+VVNCX0NPTkZJR0ZTX0ZfUFJJTlRFUj15Cj4gK0NPTkZJR19VU0JfWkVSTz1tCj4gK0NPTkZJR19V
+U0JfRVRIPW0KPiArQ09ORklHX1VTQl9HX05DTT1tCj4gK0NPTkZJR19VU0JfR0FER0VURlM9bQo+
+ICtDT05GSUdfVVNCX0ZVTkNUSU9ORlM9bQo+ICtDT05GSUdfVVNCX01BU1NfU1RPUkFHRT1tCj4g
+K0NPTkZJR19VU0JfR19TRVJJQUw9bQo+ICtDT05GSUdfVFlQRUM9eQo+ICtDT05GSUdfVFlQRUNf
+VENQTT15Cj4gK0NPTkZJR19NTUM9eQo+ICtDT05GSUdfTU1DX1NESENJPXkKPiArQ09ORklHX01N
+Q19TREhDSV9QTFRGTT15Cj4gK0NPTkZJR19NTUNfU0RIQ0lfRVNESENfSU1YPXkKPiArQ09ORklH
+X1JUQ19DTEFTUz15Cj4gK0NPTkZJR19SVENfSU5URl9ERVZfVUlFX0VNVUw9eQo+ICtDT05GSUdf
+UlRDX0RSVl9NWEM9eQo+ICtDT05GSUdfUlRDX0RSVl9NWENfVjI9eQo+ICtDT05GSUdfUlRDX0RS
+Vl9TTlZTPXkKPiArQ09ORklHX0RNQURFVklDRVM9eQo+ICtDT05GSUdfRlNMX0VETUE9eQo+ICtD
+T05GSUdfRlNMX1FETUE9bQo+ICtDT05GSUdfSU1YX1NETUE9bQo+ICtDT05GSUdfTVhTX0RNQT15
+Cj4gK0NPTkZJR19ETUFURVNUPXkKPiArQ09ORklHX0RNQUJVRl9IRUFQUz15Cj4gK0NPTkZJR19E
+TUFCVUZfSEVBUFNfU1lTVEVNPXkKPiArQ09ORklHX0RNQUJVRl9IRUFQU19DTUE9eQo+ICsjIENP
+TkZJR19WSVJUSU9fTUVOVSBpcyBub3Qgc2V0Cj4gKyMgQ09ORklHX1ZIT1NUX01FTlUgaXMgbm90
+IHNldAo+ICtDT05GSUdfQ09NTU9OX0NMS19QV009eQo+ICtDT05GSUdfQ0xLX0lNWDhNTj15Cj4g
+K0NPTkZJR19TT0NfQlJDTVNUQj15Cj4gK0NPTkZJR19JTVhfR1BDVjJfUE1fRE9NQUlOUz15Cj4g
+K0NPTkZJR19TT0NfSU1YOE09eQo+ICtDT05GSUdfU09DX1RJPXkKPiArQ09ORklHX01FTU9SWT15
+Cj4gK0NPTkZJR19QV009eQo+ICtDT05GSUdfUFdNX0ZTTF9GVE09bQo+ICtDT05GSUdfUFdNX0lN
+WDI3PXkKPiArQ09ORklHX1BXTV9JTVhfVFBNPXkKPiArQ09ORklHX1BIWV9DQURFTkNFX1NBTFZP
+PXkKPiArQ09ORklHX0ZTTF9JTVg4X0REUl9QTVU9eQo+ICtDT05GSUdfTlZNRU1fSU1YX09DT1RQ
+PXkKPiArQ09ORklHX05WTUVNX1NOVlNfTFBHUFI9eQo+ICtDT05GSUdfRVhUMl9GUz15Cj4gK0NP
+TkZJR19FWFQyX0ZTX1hBVFRSPXkKPiArQ09ORklHX0VYVDJfRlNfUE9TSVhfQUNMPXkKPiArQ09O
+RklHX0VYVDJfRlNfU0VDVVJJVFk9eQo+ICtDT05GSUdfRVhUM19GUz15Cj4gK0NPTkZJR19FWFQz
+X0ZTX1BPU0lYX0FDTD15Cj4gK0NPTkZJR19FWFQzX0ZTX1NFQ1VSSVRZPXkKPiArQ09ORklHX0FV
+VE9GU19GUz15Cj4gK0NPTkZJR19JU085NjYwX0ZTPW0KPiArQ09ORklHX0pPTElFVD15Cj4gK0NP
+TkZJR19aSVNPRlM9eQo+ICtDT05GSUdfVURGX0ZTPW0KPiArQ09ORklHX01TRE9TX0ZTPW0KPiAr
+Q09ORklHX1ZGQVRfRlM9eQo+ICtDT05GSUdfVE1QRlM9eQo+ICtDT05GSUdfVE1QRlNfWEFUVFI9
+eQo+ICtDT05GSUdfVUJJRlNfRlM9eQo+ICsjIENPTkZJR19ORVRXT1JLX0ZJTEVTWVNURU1TIGlz
+IG5vdCBzZXQKPiArQ09ORklHX05MU19ERUZBVUxUPSJjcDQzNyIKPiArQ09ORklHX05MU19DT0RF
+UEFHRV80Mzc9eQo+ICtDT05GSUdfTkxTX0FTQ0lJPXkKPiArQ09ORklHX05MU19JU084ODU5XzE9
+eQo+ICtDT05GSUdfTkxTX0lTTzg4NTlfMTU9bQo+ICtDT05GSUdfTkxTX1VURjg9eQo+ICtDT05G
+SUdfU0VDVVJJVFlGUz15Cj4gK0NPTkZJR19DUllQVE9fVVNFUj15Cj4gK0NPTkZJR19DUllQVE9f
+VEVTVD1tCj4gK0NPTkZJR19DUllQVE9fREg9bQo+ICtDT05GSUdfQ1JZUFRPX0FOVUJJUz1tCj4g
+K0NPTkZJR19DUllQVE9fQkxPV0ZJU0g9bQo+ICtDT05GSUdfQ1JZUFRPX0NBTUVMTElBPW0KPiAr
+Q09ORklHX0NSWVBUT19DQVNUNT1tCj4gK0NPTkZJR19DUllQVE9fQ0FTVDY9bQo+ICtDT05GSUdf
+Q1JZUFRPX0RFUz1tCj4gK0NPTkZJR19DUllQVE9fRkNSWVBUPW0KPiArQ09ORklHX0NSWVBUT19L
+SEFaQUQ9bQo+ICtDT05GSUdfQ1JZUFRPX1NFRUQ9bQo+ICtDT05GSUdfQ1JZUFRPX1NFUlBFTlQ9
+bQo+ICtDT05GSUdfQ1JZUFRPX1RFQT1tCj4gK0NPTkZJR19DUllQVE9fVFdPRklTSD1tCj4gK0NP
+TkZJR19DUllQVE9fQVJDND1tCj4gK0NPTkZJR19DUllQVE9fQ0ZCPW0KPiArQ09ORklHX0NSWVBU
+T19DVFM9bQo+ICtDT05GSUdfQ1JZUFRPX0xSVz1tCj4gK0NPTkZJR19DUllQVE9fT0ZCPW0KPiAr
+Q09ORklHX0NSWVBUT19QQ0JDPW0KPiArQ09ORklHX0NSWVBUT19DSEFDSEEyMFBPTFkxMzA1PW0K
+PiArQ09ORklHX0NSWVBUT19NRDQ9bQo+ICtDT05GSUdfQ1JZUFRPX1JNRDE2MD1tCj4gK0NPTkZJ
+R19DUllQVE9fU0hBMT15Cj4gK0NPTkZJR19DUllQVE9fU1RSRUVCT0c9bQo+ICtDT05GSUdfQ1JZ
+UFRPX1ZNQUM9bQo+ICtDT05GSUdfQ1JZUFRPX1dQNTEyPW0KPiArQ09ORklHX0NSWVBUT19YQ0JD
+PW0KPiArQ09ORklHX0NSWVBUT19VU0VSX0FQSV9IQVNIPW0KPiArQ09ORklHX0NSWVBUT19VU0VS
+X0FQSV9TS0NJUEhFUj1tCj4gK0NPTkZJR19DUllQVE9fVVNFUl9BUElfQUVBRD1tCj4gK0NPTkZJ
+R19DUllQVE9fREVWX0ZTTF9DQUFNPXkKPiArQ09ORklHX0NSWVBUT19ERVZfU0FIQVJBPXkKPiAr
+Q09ORklHX0NSWVBUT19ERVZfTVhTX0RDUD15Cj4gK0NPTkZJR19DUllQVE9fREVWX0FNTE9HSUNf
+R1hMPW0KPiArQ09ORklHX0NSQ19UMTBESUY9eQo+ICtDT05GSUdfQ1JDNz1tCj4gK0NPTkZJR19M
+SUJDUkMzMkM9bQo+ICtDT05GSUdfRE1BX0NNQT15Cj4gK0NPTkZJR19DTUFfU0laRV9NQllURVM9
+NjQKPiArQ09ORklHX0lSUV9QT0xMPXkKPiArQ09ORklHX1BSSU5US19USU1FPXkKPiArIyBDT05G
+SUdfREVCVUdfQlVHVkVSQk9TRSBpcyBub3Qgc2V0Cj4gK0NPTkZJR19NQUdJQ19TWVNSUT15Cj4g
+K0NPTkZJR19ERUJVR19GUz15Cj4gKyMgQ09ORklHX1NMVUJfREVCVUcgaXMgbm90IHNldAo+ICsj
+IENPTkZJR19TQ0hFRF9ERUJVRyBpcyBub3Qgc2V0Cj4gK0NPTkZJR19QUk9WRV9MT0NLSU5HPXkK
+PiArIyBDT05GSUdfRlRSQUNFIGlzIG5vdCBzZXQKPiArQ09ORklHX0NPUkVTSUdIVD15Cj4gZGlm
+ZiAtLWdpdCBhL2JvYXJkL2JzaC9pbXg2dWx6LWJzaC1zbW0tbTIvbmFuZC1mdWxsLmxzdCBiL2Jv
+YXJkL2JzaC9pbXg2dWx6LWJzaC1zbW0tbTIvbmFuZC1mdWxsLmxzdAo+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMDAwLi43YzVhODg0ZDY1YzgKPiAtLS0gL2Rldi9udWxs
+Cj4gKysrIGIvYm9hcmQvYnNoL2lteDZ1bHotYnNoLXNtbS1tMi9uYW5kLWZ1bGwubHN0Cj4gQEAg
+LTAsMCArMSw0MCBAQAo+ICsjIEBfZmxhc2guYmluICAgICAgICAgICAgfCBib290bG9hZGVyCj4g
+KyMgQF9pbWFnZSAgIFtfZmxhc2guYmluXSB8IGltYWdlIGJ1cm4gdG8gbmFuZCwgZGVmYXVsdCBp
+cyB0aGUgc2FtZSBhcyBib290bG9hZGVyCj4gKyMgQF9maWxlc3lzdGVtICAgICAgICAgICB8IGZp
+bGVzeXN0ZW0gdG8gYnVybgo+ICsjIEBfa2VybmVsICAgICAgICAgICAgICAgfCBrZXJuZWwgaW1h
+Z2UKPiArIyBAX2R0YiAgICAgICAgICAgICAgICAgIHwgZHRiIGltYWdlCj4gKwo+ICsjIFRoaXMg
+Y29tbWFuZCB3aWxsIGJlIHJ1biB3aGVuIGkuTVg2LzcgaS5NWDhNTSwgaS5NWDhNUQo+ICtTRFA6
+IGJvb3QgLWYgX2ZsYXNoLmJpbgo+ICsKPiArIyBUaGVzZSBjb21tYW5kcyB3aWxsIGJlIHJ1biB3
+aGVuIHVzZSBTUEwgYW5kIHdpbGwgYmUgc2tpcHBlZCBpZiBubyBzcGwKPiArIyBTRFBVIHdpbGwg
+YmUgZGVwcmVjYXRlZC4gcGxlYXNlIHVzZSBTRFBWIGluc3RlYWQgb2YgU0RQVQo+ICsjIHsKPiAr
+U0RQVTogZGVsYXkgMTAwMAo+ICtTRFBVOiB3cml0ZSAtZiBfZmxhc2guYmluIC1vZmZzZXQgMHg1
+N2MwMAo+ICtTRFBVOiBqdW1wCj4gKyMgfQo+ICsKPiArIyBUaGVzZSBjb21tYW5kcyB3aWxsIGJl
+IHJ1biB3aGVuIHVzZSBTUEwgYW5kIHdpbGwgYmUgc2tpcHBlZCBpZiBubyBzcGwKPiArIyBpZiAo
+U1BMIHN1cHBvcnQgU0RQVikKPiArIyB7Cj4gK1NEUFY6IGRlbGF5IDEwMDAKPiArU0RQVjogd3Jp
+dGUgLWYgX2ZsYXNoLmJpbiAtb2Zmc2V0IDB4MTEwMDAKPiArU0RQVjoganVtcAo+ICsjIH0KPiAr
+Cj4gK0ZCOiB1Y21kIHNldGVudiBmYXN0Ym9vdF9idWZmZXIgJHtsb2FkYWRkcn0KPiArRkJbLXQg
+NjAwMDBdOiB1Y21kIG5hbmQgZXJhc2UuY2hpcAo+ICtGQlstdCA2MDAwMF06IHVjbWQgdWJpIHBh
+cnQgcm9vdGZzCj4gK0ZCWy10IDYwMDAwXTogdWNtZCB1YmkgY3JlYXRlIHJvb3QgLQo+ICtGQjog
+ZG93bmxvYWQgLWYgX2ZpbGVzeXN0ZW0KPiArRkJbLXQgNjAwMDBdOiB1Y21kIHViaSB3cml0ZSAk
+e2xvYWRhZGRyfSByb290ICR7ZmlsZXNpemV9Cj4gKwo+ICtGQjogZG93bmxvYWQgLWYgX2tlcm5l
+bAo+ICtGQlstdCA2MDAwMF06IHVjbWQgbmFuZCB3cml0ZSAke2xvYWRhZGRyfSBrZXJuZWwgJHtm
+aWxlc2l6ZX0KPiArCj4gK0ZCOiBkb3dubG9hZCAtZiBfZHRiCj4gK0ZCWy10IDgwMDBdOiB1Y21k
+IG5hbmQgd3JpdGUgJHtsb2FkYWRkcn0gbmFuZGR0YiAke2ZpbGVzaXplfQo+ICtGQjogdWNtZCBz
+ZXRlbnYgbG9hZGFkZHIgMHg4MjAwMDAwMAo+ICsKPiArRkI6IGRvbmUKPiBkaWZmIC0tZ2l0IGEv
+Ym9hcmQvYnNoL2lteDZ1bHotYnNoLXNtbS1tMi9wb3N0LWJ1aWxkLnNoIGIvYm9hcmQvYnNoL2lt
+eDZ1bHotYnNoLXNtbS1tMi9wb3N0LWJ1aWxkLnNoCj4gbmV3IGZpbGUgbW9kZSAxMDA3NTUKPiBp
+bmRleCAwMDAwMDAwMDAwMDAuLmVhYzgyY2MyMmFmNQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9i
+b2FyZC9ic2gvaW14NnVsei1ic2gtc21tLW0yL3Bvc3QtYnVpbGQuc2gKPiBAQCAtMCwwICsxLDQg
+QEAKPiArIyEvYmluL3NoCj4gK0JPQVJEX0RJUj0iJChkaXJuYW1lICIkMCIpIgo+ICsKPiArY3Ag
+IiR7Qk9BUkRfRElSfS9uYW5kLWZ1bGwubHN0IiAiJHtCSU5BUklFU19ESVJ9Igo+IGRpZmYgLS1n
+aXQgYS9ib2FyZC9ic2gvaW14NnVsei1ic2gtc21tLW0yL3JlYWRtZS50eHQgYi9ib2FyZC9ic2gv
+aW14NnVsei1ic2gtc21tLW0yL3JlYWRtZS50eHQKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
+ZGV4IDAwMDAwMDAwMDAwMC4uZTY2NDFlNmRmMWZjCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2Jv
+YXJkL2JzaC9pbXg2dWx6LWJzaC1zbW0tbTIvcmVhZG1lLnR4dAo+IEBAIC0wLDAgKzEsNjcgQEAK
+PiAraS5NWDZVTFogQlNIIFNNTSBNMgo+ICs9PT09PT09PT09PT09PT09PT0KPiArCj4gK1RoaXMg
+dHV0b3JpYWwgZGVzY3JpYmVzIGhvdyB0byB1c2UgdGhlIHByZWRlZmluZWQgQnVpbGRyb290Cj4g
+K2NvbmZpZ3VyYXRpb24gZm9yIHRoZSBpLk1YNlVMWiBCU0ggU01NIE0yIGJvYXJkLgo+ICsKPiAr
+QnVpbGRpbmcKPiArLS0tLS0tLS0KPiArCj4gK0NvbmZpZ3VyZSBidWlsZHJvb3Q6Cj4gKwo+ICsg
+ICQgbWFrZSBpbXg2dWx6X2JzaF9zbW1fbTJfZGVmY29uZmlnCj4gKwo+ICtDaGFuZ2Ugc2V0dGlu
+Z3MgdG8gZml0IHlvdXIgbmVlZHMgKG9wdGlvbmFsKToKPiArCj4gKyAgJCBtYWtlIG1lbnVjb25m
+aWcKPiArCj4gK0NvbXBpbGUgZXZlcnl0aGluZyBhbmQgYnVpbGQgdGhlIHJvb3RmcyBpbWFnZToK
+PiArCj4gKyAgJCBtYWtlCj4gKwo+ICsKPiArUmVzdWx0IG9mIHRoZSBidWlsZAo+ICstLS0tLS0t
+LS0tLS0tLS0tLS0tCj4gKwo+ICtBZnRlciBidWlsZGluZywgdGhlIG91dHB1dC9pbWFnZXMgZGly
+ZWN0b3J5IGNvbnRhaW5zOgo+ICsKPiArICBvdXRwdXQvaW1hZ2VzLwo+ICsgICAg4pSc4pSA4pSA
+IGlteDZ1bHotYnNoLXNtbS1tMi5kdGIKPiArICAgIOKUnOKUgOKUgCB6SW1hZ2UKPiArICAgIOKU
+nOKUgOKUgCBuYW5kLWZ1bGwubHN0Cj4gKyAgICDilJzilIDilIAgcm9vdGZzLnViaWZzCj4gKyAg
+ICDilJTilIDilIAgdS1ib290LXdpdGgtc3BsLmlteAo+ICsKPiArUHJlcGFyaW5nIHRoZSBib2Fy
+ZAo+ICstLS0tLS0tLS0tLS0tLS0tLS0tCj4gKwo+ICtQbHVnIHRoZSBVU0IgdHlwZSBBIHRvIG1p
+Y3JvIEIgY2FibGUgaW50byB0aGUgVVNCIERlYnVnCj4gK0Nvbm5lY3RvciAoREJHIFVBUlQpLiBV
+c2Ugc2VyaWFsIHBvcnQgc2V0dGluZ3MgMTE1MjAwIDhOMQo+ICt0byBhY2Nlc3MgdGhlIGRlYnVn
+IGNvbnNvbGUuCj4gKwo+ICtQbHVnIGFub3RoZXIgVVNCIHR5cGUgQSB0byBtaWNybyBCIGNhYmxl
+IGludG8gdGhlIFVTQi1PVEcKPiArQ29ubmVjdG9yIChVU0IxKS4gVGhpcyBjb25uZWN0aW9uIGlz
+IHVzZWQgdG8gZmxhc2ggdGhlIGJvYXJkCj4gK2Zpcm13YXJlIHVzaW5nIHRoZSBGcmVlc2NhbGUv
+TlhQIFVVVSB0b29sLgo+ICsKPiArQ29ubmVjdCB0aGUgcG93ZXIgc3VwcGx5L2FkYXB0b3IgdG8g
+dGhlIERDIFBvd2VyIEphY2sgKGxhYmVsbGVkCj4gKys1VikuCj4gKwo+ICsKPiArRmxhc2hpbmcK
+PiArLS0tLS0tLS0KPiArCj4gK1Bvd2VyIHVwIHRoZSBib2FyZCBieSBzd2l0Y2hpbmcgb24gdGhl
+IFBvd2VyIE9OIFN3aXRjaCwgd2hpY2ggaXMKPiArcGxhY2VkIHJpZ2h0IG5leHQgdG8gdGhlIERD
+IEphY2suCj4gKwo+ICtFbnRlciB0aGUgZm9sbG93aW5nIFUtQm9vdCBjb21tYW5kcyBvbiB0aGUg
+ZGVidWcgc2VyaWFsIGNvbnNvbGU6Cj4gKwo+ICsgICQgbmFuZCBlcmFzZS5jaGlwCj4gKyAgJCBy
+ZXNldAo+ICsKPiArRmxhc2ggdGhlIGJ1aWx0IGltYWdlcyBkaXJlY3RseSB0byBib2FyZOKAmXMg
+bWVtb3J5LiBPbiB5b3VyIGNvbXB1dGVyLAo+ICtydW46Cj4gKwo+ICsgICQgYm9hcmQvYnNoL2lt
+eDZ1bHotYnNoLXNtbS1tMi9mbGFzaC5zaCBvdXRwdXQvCj4gKwo+ICtJdCB3aWxsIGZsYXNoIHRo
+ZSBib290bG9hZGVyLCB0aGUgRGV2aWNlIFRyZWUgQmxvYiwgdGhlIGtlcm5lbCBpbWFnZQo+ICth
+bmQgdGhlIFVCSSByb290IGZpbGUgc3lzdGVtLgo+IGRpZmYgLS1naXQgYS9jb25maWdzL2lteDZ1
+bHpfYnNoX3NtbV9tMl9kZWZjb25maWcgYi9jb25maWdzL2lteDZ1bHpfYnNoX3NtbV9tMl9kZWZj
+b25maWcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMC4uYzdlNzUy
+YjZjZWNjCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2NvbmZpZ3MvaW14NnVsel9ic2hfc21tX20y
+X2RlZmNvbmZpZwo+IEBAIC0wLDAgKzEsNDAgQEAKPiArQlIyX2FybT15Cj4gK0JSMl9jb3J0ZXhf
+YTc9eQo+ICtCUjJfQVJNX0ZQVV9WRlBWMz15Cj4gK0JSMl9LRVJORUxfSEVBREVSU182XzE9eQo+
+ICtCUjJfUk9PVEZTX0RFVklDRV9DUkVBVElPTl9EWU5BTUlDX0VVREVWPXkKPiArQlIyX1RBUkdF
+VF9HRU5FUklDX0dFVFRZX1BPUlQ9InR0eW14YzMiCj4gK0JSMl9ST09URlNfUE9TVF9CVUlMRF9T
+Q1JJUFQ9ImJvYXJkL2JzaC9pbXg2dWx6LWJzaC1zbW0tbTIvcG9zdC1idWlsZC5zaCIKPiArQlIy
+X0xJTlVYX0tFUk5FTD15Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+ICtC
+UjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEuNjgiCj4gK0JSMl9MSU5V
+WF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9eQo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9D
+T05GSUdfRklMRT0iYm9hcmQvYnNoL2lteDZ1bHotYnNoLXNtbS1tMi9saW51eC5jb25maWciCj4g
+K0JSMl9MSU5VWF9LRVJORUxfRFRTX1NVUFBPUlQ9eQo+ICtCUjJfTElOVVhfS0VSTkVMX0lOVFJF
+RV9EVFNfTkFNRT0iaW14NnVsei1ic2gtc21tLW0yIgo+ICtCUjJfTElOVVhfS0VSTkVMX05FRURT
+X0hPU1RfT1BFTlNTTD15Cj4gK0JSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVg9eQo+ICtCUjJfUEFD
+S0FHRV9GUkVFU0NBTEVfSU1YX1BMQVRGT1JNX0lNWDZVTD15Cj4gK0JSMl9QQUNLQUdFX0ZJUk1X
+QVJFX0lNWD15Cgo+ICtCUjJfUEFDS0FHRV9CTFVFWl9UT09MUz15PiArQlIyX1BBQ0tBR0VfQkxV
+RVo1X1VUSUxTPXkKPiArQlIyX1BBQ0tBR0VfQkxVRVo1X1VUSUxTX0NMSUVOVD15Cj4gK0JSMl9Q
+QUNLQUdFX0lXPXkKClVzdWFsbHkgZGVmY29uZmlnIHNob3VsZCBiZSBzbWFsbCBhcyBwb3NzaWJs
+ZSBhbmQgYmx1ZXogYW5kIGl3IHBhY2thZ2VzIGFyZQpsaWtlbHkgbm90IG1hbmRhdG9yeSB0byBi
+b290IHRoZSBib2FyZC4KCkl0IHNlZW1zIHNldmVyYWwgb3RoZXIgZGVmY29uZmlnIGluIEJ1aWxk
+cm9vdCBlbmFibGUgc3VjaCBwYWNrYWdlLCBwcm9iYWJseQpiZWNhdXNlIGl0IHdhcyBub3Qgbm90
+aWNlZCBkdXJpbmcgdGhlIHJldmlldy4KCkZvciBub3csIEkgcHJlZmVyIGtlZXBpbmcgdGhpcyBh
+cyBpcy4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiArIyBCUjJfVEFSR0VUX1JPT1RGU19UQVIg
+aXMgbm90IHNldAo+ICtCUjJfVEFSR0VUX1JPT1RGU19VQklGUz15Cj4gK0JSMl9UQVJHRVRfUk9P
+VEZTX1VCSUZTX0xFQlNJWkU9MHgxZjAwMAo+ICtCUjJfVEFSR0VUX1VCT09UPXkKPiArQlIyX1RB
+UkdFVF9VQk9PVF9CVUlMRF9TWVNURU1fS0NPTkZJRz15Cj4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VT
+VE9NX1ZFUlNJT049eQo+ICtCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIy
+MDIzLjEwIgo+ICtCUjJfVEFSR0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJRz0iaW14NnVsel9zbW1f
+bTIiCj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRDPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9O
+RUVEU19PUEVOU1NMPXkKPiArIyBCUjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9CSU4gaXMgbm90IHNl
+dAo+ICtCUjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9DVVNUT009eQo+ICtCUjJfVEFSR0VUX1VCT09U
+X0ZPUk1BVF9DVVNUT01fTkFNRT0idS1ib290LXdpdGgtc3BsLmlteCIKPiArQlIyX1BBQ0tBR0Vf
+SE9TVF9ET1NGU1RPT0xTPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9FMkZTUFJPR1M9eQo+ICtCUjJf
+UEFDS0FHRV9IT1NUX0VOVklST05NRU5UX1NFVFVQPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9HRU5J
+TUFHRT15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTVRPT0xTPXkKCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
