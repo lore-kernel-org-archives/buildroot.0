@@ -4,49 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E58AC3DA45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 13:17:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C89B0C3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 13:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB6BF40C27;
-	Sat, 13 Jul 2024 13:17:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B43E40895;
+	Sat, 13 Jul 2024 13:25:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q2Jgga4LcnT4; Sat, 13 Jul 2024 13:17:25 +0000 (UTC)
+ id HNxlwiGlzFOo; Sat, 13 Jul 2024 13:25:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D1DF41354
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6279540968
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D1DF41354;
-	Sat, 13 Jul 2024 13:17:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 64BE81BF400
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 13:17:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6279540968;
+	Sat, 13 Jul 2024 13:25:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 341971BF400
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 13:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 511B540968
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 13:17:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2141583EFF
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 13:25:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TAykkKCWMnYq for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 13:17:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2095A40985
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2095A40985
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 13:17:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BF967FA52; Sat, 13 Jul 2024 13:17:20 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UWLHtn-Kvjyg for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 13:25:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::529; helo=mail-ed1-x529.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4232E83EE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4232E83EE4
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4232E83EE4
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 13:25:37 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id
+ 4fb4d7f45d1cf-5854ac817afso3625089a12.2
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 06:25:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720877135; x=1721481935;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=w+Gd6u+B4jMJimiuCigTyWsm2V+C5l439mdSsrybkh4=;
+ b=JARi4b3LB3rXZqq1wIKvt9MfZRQqSN48dy/L/ppNYZ3aNUrjeIwtKD7rtCovIPaHlB
+ GEtzr7PI5O3xQSpRiDx4vd8v8eSnJ7hAGsExBAoTe1Fgruf2DeQ7BDHU3PfssCU/UZ3l
+ FpscDGJuXng6NJfpKL7rQq1Ah19W8l9Q1Zpo+UHnxHQrR2tNWUBkjWbQy6TEhGFdov2h
+ hd9jfkXH4GiryLwfeIllOdwEZ9VkV12dowks3jbKguyEL1D1/hcA8zbf5/HZlnhKtKkP
+ ZpnCpd2G4P2mOEf8yUv/QxJY+cVuVy5fiH/izhPRP2EpHTtZTHyf9O6B2/we7CCudJn3
+ YUuw==
+X-Gm-Message-State: AOJu0YyhxAVlgArz+8mYHToEmv1ZfD0mCgVkkgKDaWVJqiovnWv8tv1O
+ 0A+0BWazsbyF0HIB1qEq+MdNumzlo9i2DOb2yMfRES9fsjYrT6FIr7XcfS7594Scu5iF9ow2gPf
+ DNc8=
+X-Google-Smtp-Source: AGHT+IEfR9fYAvEM83RpeMTH702NY8QqW7jjLCs7hMy35Bl8yBc5rirP6SYKPI0urBNwnIML2WkDSA==
+X-Received: by 2002:a17:907:7247:b0:a77:e2e3:3546 with SMTP id
+ a640c23a62f3a-a780b68a8d1mr1232547666b.9.1720877135045; 
+ Sat, 13 Jul 2024 06:25:35 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-95-244-101-21.retail.telecomitalia.it. [95.244.101.21])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a79bc800056sm51907866b.174.2024.07.13.06.25.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 13 Jul 2024 06:25:34 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 15:16:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68b2091fe5fa79d436e1f57da7cdf497201da99b
-X-Git-Newrev: cf8085cb6dcb1145d1381c75bada03c6302951f8
-X-Patchwork-Hint: ignore
-Message-Id: <20240713131720.0BF967FA52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: Update for 2024.02.4
+Date: Sat, 13 Jul 2024 15:25:32 +0200
+Message-ID: <20240713132532.4099578-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1720877135; x=1721481935;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=w+Gd6u+B4jMJimiuCigTyWsm2V+C5l439mdSsrybkh4=;
+ b=E19WcRyj82tBXRbz9bOU/t4tVM6y1SrmohQVNmjfvinM/P8T5FuB8DkMrO4hy8cinC
+ Y0gcS9cWMCfQwG54+kU79my3bjhZ0abeF1NoJNHpeQAh4GyohINoumHm/4esRdtvZZVc
+ YZ4Lz+/t9gdn+0gwNaxWGkDJgdoQHOgXPiDWU=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=E19WcRyj
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: drop duplicated libnfc entry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,102 +100,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf8085cb6dcb1145d1381c75bada03c6302951f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The patch removes one of the two occurrences of libnfc from the list of
+packages managed by Simon Dawson.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index b9526e24d9..ce859c43b5 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2024.02.3</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2024.02.4</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2024.02.3.tar.gz">buildroot-2024.02.3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.02.3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.02.4.tar.gz">buildroot-2024.02.4.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.02.4.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.4.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.4.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2024.02.3.tar.xz">buildroot-2024.02.3.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.02.3.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.02.4.tar.xz">buildroot-2024.02.4.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.02.4.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 4989c04a72..6b0d4c721a 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2024.02.4 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>13 July 2024</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2024.02.4 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2024.02.3 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2024.02.4/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/871q3xfnar.fsf@dell.be.48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2024.02.4.tar.xz">2024.02.4 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b66fda5fcb26..5634a27e7ae7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2926,7 +2926,6 @@ F:	package/lcdapi/
+ F:	package/libfreefare/
+ F:	package/libjson/
+ F:	package/libnfc/
+-F:	package/libnfc/
+ F:	package/libserial/
+ F:	package/libsigsegv/
+ F:	package/macchanger/
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
