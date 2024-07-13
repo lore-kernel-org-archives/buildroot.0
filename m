@@ -4,91 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBD53C3DA45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 20:54:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B122CC3DA45
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 21:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8655780EA7;
-	Sat, 13 Jul 2024 20:54:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73D39812B1;
+	Sat, 13 Jul 2024 21:05:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5O1ASUr44MiL; Sat, 13 Jul 2024 20:54:29 +0000 (UTC)
+ id outOdHwWEOtO; Sat, 13 Jul 2024 21:05:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E1CA80EC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50E2D812DA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E1CA80EC9;
-	Sat, 13 Jul 2024 20:54:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E5C71BF271
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 20:54:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50E2D812DA;
+	Sat, 13 Jul 2024 21:05:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BF5CB1BF355
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 21:05:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B4FC404BF
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 20:54:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD4EF812DA
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 21:05:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QSjDCz5Btq9v for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 20:54:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4DD4E40133
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DD4E40133
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4DD4E40133
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 20:54:26 +0000 (UTC)
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-2ee817dac89so36028511fa.1
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 13:54:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720904064; x=1721508864;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=h6Re+AEtoTMp4bg6at3DjWIFuCqZvhonhZYz9jdfuhI=;
- b=Ohd7ZpCNKAYO5VjbYxPFz3XQy+Z4HeVLZMsTda+o/QHlUWtPpKaqr3hBezAQeYZM9+
- 10+ykq5mBD3jcdadndvIHOC7TsJ2RJcCFPGKi7zRJ44VXj2dvgRNu8YC+IsQiWSw7K+I
- Z2oGOrC4z/BQLiytz1Slo7ABgO3WsSm8bkJyzW94gPqobBIB+1946wu70ZDiCARa9sRH
- BM2cXc1yruKbBzWgjobLoKRlFTtgVE35Zg+KOD7yzdR3Py6ki5pHQTXuYkJoIwMLQRua
- 4QkeO26+iCzAMnpCpXmDar4U0UJbBPWVPkpbAe4+3MiUiAp1aoymz4BAwK8py/wa62Ci
- Gw4w==
-X-Gm-Message-State: AOJu0YxEEyaOyimwTi9CRtVF8LluTZWUwNtEoFMdO3G5oQuxHlx6yx8Z
- yUTfJbfkmaa7kEzlsEbTNcSRJz6wCmSZAcXHvnRV9r53wqMMRJJgV9Jv+Q==
-X-Google-Smtp-Source: AGHT+IF1fPrLpdfbT4iAGtlZ43AC6C+eFkSWuW0jLV8QPJRrKO++ygTDdwMDHHuhrUSP1eJis+YvXg==
-X-Received: by 2002:ac2:4c41:0:b0:52e:7478:9d14 with SMTP id
- 2adb3069b0e04-52ecb80eb70mr1761106e87.18.1720904063653; 
- Sat, 13 Jul 2024 13:54:23 -0700 (PDT)
-Received: from precision7530-arch-roy.lan ([79.161.254.12])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-52ed24e23ddsm294263e87.58.2024.07.13.13.54.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 13 Jul 2024 13:54:22 -0700 (PDT)
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N_8UFrHPPzpH for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 21:05:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C386E812B1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C386E812B1
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 21:05:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7E1CD8668C; Sat, 13 Jul 2024 21:05:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 22:54:03 +0200
-Message-ID: <20240713205404.3375131-1-roykollensvendsen@gmail.com>
-X-Mailer: git-send-email 2.45.2
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720904064; x=1721508864; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=h6Re+AEtoTMp4bg6at3DjWIFuCqZvhonhZYz9jdfuhI=;
- b=fJiYHyuab7Sa+26XuG/xiqcAWS0OVyIs9sx0kCgmN6iqs8ieJfQYpoqxLLs8EtBNZW
- /Ltf88AeeH3cSIv51GG50adIJFsj7jR1ez/ODS6aysMZ8LEeP+y8YU9b5QO8xvag62HW
- oNWD6W/9WkqGyJQM2+YO5Y9f6lmD3/7cKBP9FeIf7hgdAsId0n3JuDi0/SnOPqU8XJUK
- KXkRmk4ZQPVeC/Ujp7qUbDYCofhnnslQi8C5EPRNiumsP9g3gmkgFMyO2Iwe37QpMYYx
- 6xffdyU+culxFi7iFsIpEhtMnIXZeSfF6qRgnXmqDaKQRXYA0GPaz6VxE1JwZ3fKSpxU
- eNlQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=fJiYHyua
-Subject: [Buildroot] [PATCH 1/1] package/qt6/qt6base: improve qt6 filesystem
- layout
+Date: Sat, 13 Jul 2024 22:53:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d90980129f5773e1cff33f66f999209b68a0831a
+X-Git-Newrev: 36c7b1f08607c92186b849bd395fb2529942a6f9
+X-Patchwork-Hint: ignore
+Message-Id: <20240713210503.7E1CD8668C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libxshmfence: fix build
+ on riscv32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,41 +58,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-I here use the same layout as on Arch Linux.
+commit: https://git.buildroot.net/buildroot/commit/?id=36c7b1f08607c92186b849bd395fb2529942a6f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+In preparation to revert e39ad96136a8c340b3aea6b036024e28f14584f3,
+and (partial) 26642e4cc09666110d5105e7867579a0e48cfa09.
+
+xshmfence_futex.h: In function 'sys_futex':
+xshmfence_futex.h:58:24: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
+   58 |         return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
+      |                        ^~~~~~~~~
+      |                        sys_futex
+
+Fixes:
+ - https://gitlab.com/buildroot.org/buildroot/-/commit/e39ad96136a8c340b3aea6b036024e28f14584f3
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/qt6base/qt6base.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ ...ce_futex.h-fix-build-on-32-bit-architectu.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 5ab61ba3e0..49c6227428 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -43,6 +43,12 @@ QT6BASE_INSTALL_STAGING = YES
- QT6BASE_CONF_OPTS = \
- 	-DQT_HOST_PATH=$(HOST_DIR) \
- 	-DINSTALL_ARCHDATADIR=lib/qt6 \
-+	-DINSTALL_BINDIR=lib/qt6/bin \
-+	-DINSTALL_DATADIR=share/qt6 \
-+	-DINSTALL_DOCDIR=share/doc/qt6 \
-+	-DINSTALL_EXAMPLESDIR=share/doc/qt6/examples \
-+	-DINSTALL_INCLUDEDIR=include/qt6 \
-+	-DINSTALL_MKSPECSDIR=lib/qt6/mkspecs \
- 	-DFEATURE_concurrent=OFF \
- 	-DFEATURE_xml=OFF \
- 	-DFEATURE_sql=OFF \
--- 
-2.45.2
-
+diff --git a/package/x11r7/xlib_libxshmfence/0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch b/package/x11r7/xlib_libxshmfence/0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch
+new file mode 100644
+index 0000000000..40a796c4f2
+--- /dev/null
++++ b/package/x11r7/xlib_libxshmfence/0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch
+@@ -0,0 +1,46 @@
++From 4fca45a71f08a5bebd12d39c85f49e0b0e4426bf Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas@devoogdt.com>
++Date: Fri, 5 Apr 2024 10:45:15 +0200
++Subject: [PATCH] src/xshmfence_futex.h: fix build on 32-bit architectures
++ using 64-bit time_t
++
++Fix the following build failure on 32-bit architectures using 64-bit
++time_t (e.g. riscv32):
++
++xshmfence_futex.h: In function 'sys_futex':
++xshmfence_futex.h:58:24: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
++   58 |         return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
++      |                        ^~~~~~~~~
++      |                        sys_futex
++
++Similar to:
++https://gitlab.freedesktop.org/mesa/mesa/-/commit/7d87478124061915582412ba410759afe863d679
++
++Fixes:
++https://gitlab.com/buildroot.org/buildroot/-/commit/e39ad96136a8c340b3aea6b036024e28f14584f3
++
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++Part-of: <https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/merge_requests/8>
++Upstream: https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/commit/4fca45a71f08a5bebd12d39c85f49e0b0e4426bf
++---
++ src/xshmfence_futex.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/xshmfence_futex.h b/src/xshmfence_futex.h
++index 673ac0e..4476038 100644
++--- a/src/xshmfence_futex.h
+++++ b/src/xshmfence_futex.h
++@@ -53,6 +53,10 @@ static inline int futex_wait(int32_t *addr, int32_t value) {
++ #include <sys/time.h>
++ #include <sys/syscall.h>
++ 
+++#if defined(SYS_futex_time64) && !defined(SYS_futex)
+++#define SYS_futex SYS_futex_time64
+++#endif
+++
++ static inline long sys_futex(void *addr1, int op, int val1, struct timespec *timeout, void *addr2, int val3)
++ {
++ 	return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
