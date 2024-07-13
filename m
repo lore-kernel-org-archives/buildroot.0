@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22EEDC3DA45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:21:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C11A2C3DA45
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF9CA410B0;
-	Sat, 13 Jul 2024 14:21:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B34C4098E;
+	Sat, 13 Jul 2024 14:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yHl8zZyJFN01; Sat, 13 Jul 2024 14:21:48 +0000 (UTC)
+ id OtxGgllBuzHx; Sat, 13 Jul 2024 14:22:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9812241306
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77B69410B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9812241306;
-	Sat, 13 Jul 2024 14:21:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A8CB81BF41B
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:21:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77B69410B0;
+	Sat, 13 Jul 2024 14:22:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D5F241BF86D
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:22:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 956FC400A4
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:21:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C383760643
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:22:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C9nHioD9UblN for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 14:21:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7sZlMocFPNfM for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 14:22:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 66A2040096
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66A2040096
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 66A2040096
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:21:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D9B9240002;
- Sat, 13 Jul 2024 14:21:43 +0000 (UTC)
-Date: Sat, 13 Jul 2024 16:21:39 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240713162139.06363c3f@windsurf>
-In-Reply-To: <20240713110753.220955-1-ju.o@free.fr>
-References: <20240713110753.220955-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720880503;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=KAfWxZkMKBO8tWenLPoSYcpaQbmmk9z7dJpwjoEqkhk=;
- b=aKCJVi4IhmfePQJhStVVtWB112GSgsV7mM/nbdoOA70hDIKrIl7veBcz1osEToIcCS5SGI
- gvPekoTti08K5cLP4ZsD05IKBOPw9ftZ2GeSEp/dZ36HwmU2ySX7LWFOwOc1xba7y6Ljzw
- 9iXeiV/f0a0HPrkrct9aiXnbjo2uv5Z6pd72uXhVVic/kWexYy5rZEtXb+qXbU6cxX4s1S
- +PT/HldNVuipWb0GpI23Pd8ChgCxeGvQeM+L+rXOhzD4pfmdENK5ZAb+OxZj+Ye2PLrOhv
- SEXFPEFpxK/YEgfBBt7WFpe80ENkDUM4WIS7M0cyMlM6BHZ+cYjvltOXX8j+Xg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aKCJVi4I
-Subject: Re: [Buildroot] [PATCH 1/1] board/spike/riscv64/readme.txt: update
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C06D60639
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C06D60639
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:22:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E9C11864B3; Sat, 13 Jul 2024 14:21:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 13 Jul 2024 16:21:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c2237dd25072236fe9a5dffd03bf2cdda71ff819
+X-Git-Newrev: fd988ac2b84b15eb7b19fe514acc9bd99a159ab2
+X-Patchwork-Hint: ignore
+Message-Id: <20240713142159.E9C11864B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/spike/riscv64/readme.txt: update
  riscv-openocd URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,32 +60,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 13 Jul 2024 13:07:53 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fd988ac2b84b15eb7b19fe514acc9bd99a159ab2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The URL https://github.com/riscv/riscv-openocd is now redirecting to:
-> https://github.com/riscv-collab/riscv-openocd
-> 
-> This commit updates the URL to this new location.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  board/spike/riscv64/readme.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The URL https://github.com/riscv/riscv-openocd is now redirecting to:
+https://github.com/riscv-collab/riscv-openocd
 
-Applied to master, thanks.
+This commit updates the URL to this new location.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/spike/riscv64/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/board/spike/riscv64/readme.txt b/board/spike/riscv64/readme.txt
+index 34db625aad..465fb06b39 100644
+--- a/board/spike/riscv64/readme.txt
++++ b/board/spike/riscv64/readme.txt
+@@ -28,4 +28,4 @@ https://github.com/riscv-software-src/riscv-isa-sim/tree/v1.1.0#simulating-a-new
+ https://github.com/riscv-software-src/riscv-isa-sim/tree/v1.1.0#debugging-with-gdb
+ 
+ [3].
+-https://github.com/riscv/riscv-openocd
++https://github.com/riscv-collab/riscv-openocd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
