@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE359C3DA45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 05:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A9F3C3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 05:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8751C60622;
-	Sat, 13 Jul 2024 05:32:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89C5360A77;
+	Sat, 13 Jul 2024 05:42:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RL1nepptZbZE; Sat, 13 Jul 2024 05:32:14 +0000 (UTC)
+ id 8eW7y2pmlpfK; Sat, 13 Jul 2024 05:42:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B51C6062D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28963606B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B51C6062D;
-	Sat, 13 Jul 2024 05:32:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9AEA51BF847
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:32:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28963606B1;
+	Sat, 13 Jul 2024 05:42:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 268581BF847
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:42:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94B8240175
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:32:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 141E7606B1
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:42:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hd2YerImCPaB for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 05:32:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zfjqaHNIU4jJ for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 05:42:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::231; helo=mail-lj1-x231.google.com;
+ client-ip=2a00:1450:4864:20::12b; helo=mail-lf1-x12b.google.com;
  envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 46D12400F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D12400F5
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
- [IPv6:2a00:1450:4864:20::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 46D12400F5
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 05:32:12 +0000 (UTC)
-Received: by mail-lj1-x231.google.com with SMTP id
- 38308e7fff4ca-2eedebccfa4so5430531fa.1
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 22:32:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 177C26064E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 177C26064E
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 177C26064E
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 05:42:30 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id
+ 2adb3069b0e04-52e97e5a84bso3845427e87.2
+ for <buildroot@buildroot.org>; Fri, 12 Jul 2024 22:42:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720848730; x=1721453530;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1720849348; x=1721454148;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=FBzcHYXgq7BR9SR9xXTzAz0rIy5/o6kZyYLW6OASvII=;
- b=YITdvxqu1ak8MjLZphsnEbkYL8sc3Wlqq7fMr/100qF8CGuRfXAyUR23I4dgfxwIxg
- pXHwt/+pBPs1AAKebE9sCKoi5dFLNsBZIJ13zuLGvbA9ePPz+8QZlJ/jOijXEaammdgc
- Hzz4+fRetgU++EU9LIaXuH+z9ts96rGUdv3tSxxCZKufVbmBsqA7SCaSlV0CZKqFlw7v
- dr7xkpXszht9xPDU6mhfiRekPkUZPCHiCaflOUvBufxEZumFpyNccNtAW40/HlfhNn1s
- 7ZHHp3+6xbom5cSDQZ8zIUFumChpsaheciHN21lWMg4LpwFhZsLj4BrOgis8s+YKswWw
- b5Yw==
-X-Gm-Message-State: AOJu0Yy29q30qljqWQ3wXzvHy/QhGzBlLDV8jqtxh8Qql7UWiwmlyZGG
- sfAr0tP7+JnXNfBXr2WO/OW84RniMUvW8wacpNLKMO29rlGg2mKugKBwm9KDTMGOUsorJ84lo+v
- mcTXc/XEDhHDquulerwHMfzQflRw=
-X-Google-Smtp-Source: AGHT+IHQa8Sz9DwdSk+P/MlkVmMMTn0ynozNsAWn6Jc7zAGbV5VK4DwArcniLE4G/G9zQDL4ZelnJodUqoSVPoZXer4=
-X-Received: by 2002:a2e:a792:0:b0:2ec:63f:fe91 with SMTP id
- 38308e7fff4ca-2eeb3181609mr123102581fa.38.1720848729438; Fri, 12 Jul 2024
- 22:32:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20240704123452.3535612-1-heiko.thiery@gmail.com>
- <20240704123452.3535612-2-heiko.thiery@gmail.com>
- <911573ac-f0bf-4ceb-99b0-5d24dd1937bd@mind.be>
- <CAEyMn7anNnq2aH9EViFjY+ihnmwCXaWXMs9sJAYFBpH=q_WT+Q@mail.gmail.com>
- <96c4bf27-26a3-41aa-a7e2-3eeef8c9cfc1@mind.be>
-In-Reply-To: <96c4bf27-26a3-41aa-a7e2-3eeef8c9cfc1@mind.be>
+ bh=P35/kdXALj/uD30Bdq/CQfAgSqSAn3u/K7shahPZl0s=;
+ b=aFPaU3DmuSClpQyFhD8Vnes8E9XsVtQ3RhmeetUFQhnL+vsaIttST4mQmkPE3FwWvd
+ ib9HYwrTWb26nR9YmirjAZ/F2kGHS/iPgGHK0VFWqIN9/qr+j2YZY0XNe5Mq7/p8VJ/G
+ AaqvsR/5jv89b4bjds0fauPraF/aOCm9yG4Oh1vtXI4xx6PvdWDX3oCG23kGhhkqdZJm
+ IsS/lKrnaNwgl2dsuNCDSqAhfyYkf/Hu5Ke606qrniUI7u3Tn4fNqKPuAK/2ei82U07u
+ TikUP0T97KC6/Yb7nThhe11ygtds3TBXjCahtLsTKryjKpG34PQq1rUlpsKhqI5+bD3/
+ vL0A==
+X-Gm-Message-State: AOJu0YyJL9cCUFTN3ywWof5FhD3bgymEvntWNXLP+OcovUZovzh+wYjK
+ YAYOAAsq2dgUHxWEtmx5n3JzW51SpZCYbG3P6WRWr4/Xlyq4UxqsSeZSYg==
+X-Google-Smtp-Source: AGHT+IHT1YNpMPiAvIAg+a90atxZGiyCqczYA4LlW9JOMHf60I36zWIgT/kMCb077AKy+J4lVDmUeQ==
+X-Received: by 2002:a05:6512:39cc:b0:52e:96d7:2f38 with SMTP id
+ 2adb3069b0e04-52eb99d6840mr12833630e87.62.1720849347810; 
+ Fri, 12 Jul 2024 22:42:27 -0700 (PDT)
+Received: from hthiery.fritz.box ([95.91.160.230])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a79bc7f1e5asm19866666b.109.2024.07.12.22.42.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 12 Jul 2024 22:42:27 -0700 (PDT)
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat, 13 Jul 2024 07:31:57 +0200
-Message-ID: <CAEyMn7bNU37A5gxtz8D89ZKcPdbikjnzi55zr+FkbbgDUFrqTQ@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Sat, 13 Jul 2024 07:42:12 +0200
+Message-Id: <20240713054213.228070-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720848730; x=1721453530; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=FBzcHYXgq7BR9SR9xXTzAz0rIy5/o6kZyYLW6OASvII=;
- b=giO+KnQyCDlptqXIIV8d6m7pzH/qP9nx503JQg2oFiQ2R7qZZGkNEqyTLgENS+lgQL
- xA883vwvPTagKHH6brlGhf0ikOjvu1kwaTcxCOQhN/8XWi2nuqMZmcG2xtjN04dt99ze
- HwoAf6CLP0pEWcOsCCOkalKoHIUX1hgFYITebUbLn6cHs3PjFKT5C37pU3HHd8mCz1Cg
- KwhtA8Gm03yLeXF9PNUNXw+oqy8jQF/BSyo1y4O3r1cjMZpuenUwchUdO/KBW2kba1na
- GCYAaorxViglTALI+Sw+yObbsGBRC03wFJkYQznfwtr7AM+25MC2HDA8zagL4IQfuA/L
- 9L1w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1720849348; x=1721454148; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=P35/kdXALj/uD30Bdq/CQfAgSqSAn3u/K7shahPZl0s=;
+ b=GkFAps8hYHor20+PXJ8Wp5Y//U/EC5TfqyBnm3xF5MIRfdQPFoyN2cWa0MQfldzbP6
+ Z78GJLG70oNP6tP0ohS472BSyV1E8dmwMOTsldq3cfbpkb/KCAM2/4hNeM0gzbo0KIZD
+ jdTvhmaDOdJ42W0ssr1fqmCGrcg+pakjAmABKyiQ94PRFcHFhOn7chb2AgMHoSMLUkKn
+ 5ooUdHdIc7HSituef/fCI7XersPeUt63jonnhqGi1w9gx5fG7Dywz0hAxvPyHOT1YEVy
+ vMzawQZz1jy+vcUMJIy5KUTGciHIUBYS82AjCDEoMFfVHVeecgEg8Zy77dy6WsvLJtl8
+ ipCw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=giO+KnQy
-Subject: Re: [Buildroot] [PATCH v3 1/3] package/blake3: add new host package
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=GkFAps8h
+Subject: [Buildroot] [PATCH 0/2] pkg-cmake CMAKE_ASM_COMPILER override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,97 +100,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lance Fredrickson <lancethepants@gmail.com>,
- Samuel Martin <s.martin49@gmail.com>, Peter Seiderer <ps.report@gmx.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>, Daniel Lang <dalang@gmx.at>,
+ Samuel Martin <s.martin49@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ Heiko Thiery <heiko.thiery@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+While I was adding a new host package (blake3) I got an error
+with the selection of the ASM compiler. The error could be fixed
+by using -DCMAKE_ASM_COMPILER="$(CMAKE_HOST_C_COMPILER). During
+the review it was noticed that the value DCMAKE_ASM_COMPILER was
+incorrectly set in the pkg-cmake infra. After this was fixed,
+the workaround for this could be removed in the blake3 package.
 
-Am Fr., 12. Juli 2024 um 21:21 Uhr schrieb Arnout Vandecappelle
-<arnout@mind.be>:
->
->
->
-> On 12/07/2024 21:08, Heiko Thiery wrote:
-> > Hi Arnout,
-> >
-> > Am Fr., 12. Juli 2024 um 10:38 Uhr schrieb Arnout Vandecappelle
-> > <arnout@mind.be>:
-> >>
-> >>    Hi Heiko,
-> >>
-> >> On 04/07/2024 14:34, Heiko Thiery wrote:
-> [snip]
->
-> >>> +HOST_BLAKE3_CONF_OPTS += \
-> >>> +     -DCMAKE_ASM_COMPILER="$(CMAKE_HOST_C_COMPILER)" \
-> >>
-> >>    Why is this needed? And is it even a good idea? In pkg-cmake, this is defined
-> >> as -DCMAKE_ASM_COMPILER="$$(HOSTAS)", and HOSTAS is simply "as" without any
-> >> ccache. In fact, this changes it from "as" to "gcc" which I expect is not
-> >> correct at all...
-> >
-> > When not defining that I got the errror:
-> >
-> > [ 25%] Building C object CMakeFiles/blake3.dir/blake3_portable.c.o
-> > [ 37%] Building ASM object CMakeFiles/blake3.dir/blake3_avx2_x86-64_unix.S.o
-> > [ 50%] Building C object CMakeFiles/blake3.dir/blake3_dispatch.c.o
-> > Assembler messages:
-> > Fatal error: bad defsym; format is --defsym name=value
-> > make[3]: *** [CMakeFiles/blake3.dir/build.make:117:
-> > CMakeFiles/blake3.dir/blake3_avx2_x86-64_unix.S.o] Error 1
-> > make[3]: *** Waiting for unfinished jobs....
-> > [ 62%] Building ASM object CMakeFiles/blake3.dir/blake3_avx512_x86-64_unix.S.o
-> > Assembler messages:
-> > Fatal error: bad defsym; format is --defsym name=value
-> > make[3]: *** [CMakeFiles/blake3.dir/build.make:130:
-> > CMakeFiles/blake3.dir/blake3_avx512_x86-64_unix.S.o] Error 1
-> > make[3]: Leaving directory
-> > '/home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/c'
-> > make[2]: *** [CMakeFiles/Makefile2:83: CMakeFiles/blake3.dir/all] Error 2
-> > make[2]: Leaving directory
-> > '/home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/c'
-> > make[1]: *** [Makefile:136: all] Error 2
-> > make[1]: Leaving directory
-> > '/home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/c'
-> > make: *** [package/pkg-generic.mk:283:
-> > /home/hthiery/sources/mainline/buildroot/output/build/host-blake3-1.5.1/.stamp_built]
-> > Error 2
-> >
-> > So when changing to use gcc instead of as it works.
-> >
-> > I tried to build on my host and see that cmake sets the var
-> > "CMAKE_ASM_COMPILER=/usr/bin/cc". When overwriting it with as it also
-> > does not build.
->
->   Hah, indeed, our setting of CMAKE_ASM_COMPILER is incorrect in pkg-cmake.mk.
-> That's why it also had to be overridden in llvm.mk. Also, we don't have such a
-> definition for the target, which makes me think that by default it just uses
-> CMAKE_C_COMPILER (which is exactly what we want here).
->
->   Could you try to remove the definition from pkg-cmake.mk and see if that
-> works? And then also remove it in llvm.mk. In separate patches, of course.
+This workaround is also present in the llvm package and now
+can also be removed.
 
-Indeed, when removing the CMAKE_ASM_COMPILER from pkg-cmake.pkg the blake3
-and llvm package build without the need of setting ASM to gcc.
+Heiko Thiery (2):
+  package/pkg-cmake: remove override of CMAKE_ASM_COMPILER
+  package/llvm-project/llvm: remove overriding the ASM compiler
 
-I will create a patch for that (pkg-cmake and llvm). But only i can't
-explain exactly why the setting
-in pkg-cmake is wrong. it would be good if you could improve the
-commit message accordingly.
+ package/llvm-project/llvm/llvm.mk | 6 +++---
+ package/pkg-cmake.mk              | 1 -
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
 -- 
-Heiko
+2.39.2
 
->   Regards,
->   Arnout
->
->
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
