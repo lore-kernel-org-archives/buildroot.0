@@ -4,113 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21989C3DA45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 16:25:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56327C3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 16:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D465C401B2;
-	Sat, 13 Jul 2024 16:24:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B860401B2;
+	Sat, 13 Jul 2024 16:30:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iLYhr_7X9xoG; Sat, 13 Jul 2024 16:24:58 +0000 (UTC)
+ id 7DrAcxLsyVmB; Sat, 13 Jul 2024 16:30:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8312240396
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCAD040359
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8312240396;
-	Sat, 13 Jul 2024 16:24:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BCAD040359;
+	Sat, 13 Jul 2024 16:30:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 017F61BF2FA
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 16:24:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6FC4D1BF2FA
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 16:30:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E1F54404EB
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 16:24:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5AE17413E5
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 16:30:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k9U2KNE4FRXM for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 16:24:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
- helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AC625404D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC625404D7
-Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
- [67.231.152.184])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AC625404D7
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 16:24:55 +0000 (UTC)
-Received: from pps.filterd (m0346901.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 46DBJeCt013486; Sat, 13 Jul 2024 16:24:54 GMT
-Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40bj6ets1f-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Sat, 13 Jul 2024 16:24:54 +0000
-Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
- by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46DGOrb8030226
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Sat, 13 Jul 2024 16:24:53 GMT
-Received: from dtulimr01.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 46DGOqHg026920
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Sat, 13 Jul 2024 16:24:53 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by dtulimr01.rockwellcollins.com (Postfix) with ESMTP id 5A3002005494;
- Sat, 13 Jul 2024 11:24:52 -0500 (CDT)
-Mime-Version: 1.0
-Date: Sat, 13 Jul 2024 16:24:52 +0000
-Message-Id: <D2OJUFSZ6Y3N.CIWMCVYF7ZFS@collins.com>
-To: "Arnout Vandecappelle" <arnout@mind.be>, <buildroot@buildroot.org>
-X-Mailer: aerc 0.17.0-0-g6ea74eb30457
-References: <20240713144316.403640-1-arnout@mind.be>
-In-Reply-To: <20240713144316.403640-1-arnout@mind.be>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-13_12,2024-07-11_01,2024-05-17_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-13_12,2024-07-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- spamscore=0 malwarescore=0
- mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
- definitions=main-2407130123
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- adultscore=0 bulkscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
- definitions=main-2407130122
-X-Proofpoint-GUID: M9tomjrD78SxIBWHKvNcWULCiSTroCE2
-X-Proofpoint-ORIG-GUID: M9tomjrD78SxIBWHKvNcWULCiSTroCE2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-13_12,2024-07-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0 adultscore=0
- clxscore=1015 mlxscore=0 suspectscore=0 impostorscore=0 bulkscore=0
- mlxlogscore=999 phishscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2406180000 definitions=main-2407130123
+ id Kb1NXbY8bb8f for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 16:30:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 075E6413DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 075E6413DC
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 075E6413DC
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 16:30:26 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-a77b60cafecso367997466b.1
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 09:30:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720888224; x=1721493024;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=6rA2R3T99mp4LuPIzuOv9/fWH3kgt34Jn4wrNpkmgwc=;
+ b=pIaOEN4lunw03jW7inm0ZRLYtIS+y6j3griXfKjrNoM5BZNkWG+RvVc8Q34q8xCE5L
+ S4vQBUNskXouybN52LKhSRBA+5A1vJkK6fbWefW53c7GKTM9aoKmkiFtdoV7kwPZb7d3
+ b7TsPLebMTIr8p7itFN1EvJTxPP9s6JIJ8e2SbKgYJwneGHO10j2y6Z2lJZz4+FA0AF2
+ CXLcSg5Iy3yagwSAjfimnmBkecEQa+CUizO8gRAxNB3k8TfSEAD6H358fz8MHDbt+Ogh
+ zNd51rr9uFf8DjRGzGqgLeal5PxsViYSqIVamI252x60SepzXFW5cLNu7FS+z6BTVIEt
+ breg==
+X-Gm-Message-State: AOJu0YymyTYnOwxOmtjCIchQwKtCUFGjFiXU7higGKMeJsaZhLWhlozz
+ yMoP1oK5bcQVqjiLado5o0XWNjcBXT9tZbXUXBoFXauSXz4sn4/rgmeDOubPnCfwU5nUEcWW+dV
+ K8mQ=
+X-Google-Smtp-Source: AGHT+IGgT84YwPEHgOpToWmp1FWjvMg4UEjbXclKt6kx9mxEQC2zFbktWIjchyeo62cjEeOUc6IEJQ==
+X-Received: by 2002:a17:906:eb55:b0:a77:e1fb:7df0 with SMTP id
+ a640c23a62f3a-a780b688b3emr935938466b.2.1720888222150; 
+ Sat, 13 Jul 2024 09:30:22 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-95-244-101-21.retail.telecomitalia.it. [95.244.101.21])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a79bc7f2197sm62570266b.117.2024.07.13.09.30.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 13 Jul 2024 09:30:21 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Sat, 13 Jul 2024 18:30:16 +0200
+Message-ID: <20240713163016.1135653-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=POD051818;
- bh=IamfUdi57apRXxM0NRvWBUWoOL/Jx4Gf1+/xjpKgb6o=;
- b=IsdSg+Muv81DxGeJQr2+w/P5aTGVR6B5wG6A16eiCo5gh+tWu/pUsOZ8pmU6Y7LIZsZ/
- jYSEBrpSvjaDiKyHV3GkCQasKi+8PfX9bXY6y/JrqbCR92Lvb++5dc21wYrUGvnt9zzq
- GLePgMHrmPs5thlJ7p1i7Uz8HQ3SqSoQKJTiogFnhaUVl3Zciag1DVCEN5ypWjW/f/Sd
- rD4o05dNPmhcqgDyvFE1Kx0j4zBAj8z2fLZ2nxQOTu3xqZ0d/M4jcDPj2yVJEty7Jcw/
- YPGoibgStRY7jg/akj2D3+sQy7Jq4nIMqAtCgnHiCjtq3lTKlTSwID8Y9GiyZG5fltlf lQ== 
+ d=amarulasolutions.com; s=google; t=1720888224; x=1721493024;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6rA2R3T99mp4LuPIzuOv9/fWH3kgt34Jn4wrNpkmgwc=;
+ b=QG1inRaU1l5NYYCa7x7tboO30rwS1BRBhw6buo5J+dM0I/AcVhKe3bqWviPrxkperF
+ Xieo7XwOkkFFTGmd8buE0xrpgf3+VyOEuy2w/+JBrhy6ARl3uw8mdthIgvFjXWpIRHi0
+ N+dagUMEJttwUiNIEDHY6jXPTfARPWDG9QTlM=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
- header.s=POD051818 header.b=IsdSg+Mu
-Subject: Re: [Buildroot] [PATCH 1/3] utils/docker-run: allow to specify
- extra mount points to propagate
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=QG1inRaU
+Subject: [Buildroot] [PATCH 1/1] configs/ti_am62x_sk: bump Linux to 6.8.12
+ and U-Boot to 2024.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -122,80 +101,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>
+Cc: Xuanhao Shi <X15000177@gmail.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com, Bryan Brattlof <bb@ti.com>,
+ Anand Gadiyar <gadiyar@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout,
+The patch bumps the Linux kernel to version 6.8.12 and U-Boot to version
+2024.07.
 
-On Sat Jul 13, 2024 at 2:43 PM UTC, Arnout Vandecappelle via buildroot wrote:
-> Sometimes, the build needs access to directories which are outside of
-> the current directory, e.g. for pre-downloaded toolchains, local kernel
-> sources, OVERRIDE_SRCDIR, BR2_EXTERNALs, ... We need these to be mounted
-> into the container to be able to perform the build.
->
-> Since there is no generic way to find out all the directories that are
-> needed, we need a manual mechanism. We choose the environment variable
-> EXTRA_MOUNTPOINTS which contains a space-separated list of directories
-> (or files) to mount.
->
-> We choose an environment variable to avoid having to parse command-line
-> arguments to docker-run.
->
-> Update the terse documentation in utils/readme.txt with this
-> information.
->
-> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  utils/docker-run | 5 +++++
->  utils/readme.txt | 5 ++++-
->  2 files changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/utils/docker-run b/utils/docker-run
-> index 1adb02d74e..3bb7b6a41b 100755
-> --- a/utils/docker-run
-> +++ b/utils/docker-run
-> @@ -90,6 +90,11 @@ if [ "${BR2_DL_DIR}" ]; then
->      docker_opts+=( --env BR2_DL_DIR )
->  fi
->
-> +if [ -n "${EXTRA_MOUNTPOINTS:-}" ]; then
-> +    read -r -a extra_mountpoints <<<"${EXTRA_MOUNTPOINTS}"
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ board/ti/am62x-sk/patches/linux/linux.hash                  | 2 +-
+ .../am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash   | 2 +-
+ board/ti/am62x-sk/patches/uboot/uboot.hash                  | 2 +-
+ configs/ti_am62x_sk_defconfig                               | 6 +++---
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-I think it would be good to use `IFS=:` here and split EXTRA_MOUNTPOINTS
-on ':'. That would make sure we don't split on other unexpected
-characters like spaces, tabs, and newlines. And it would be consistent
-with how BR2_EXTERNAL works.
+diff --git a/board/ti/am62x-sk/patches/linux/linux.hash b/board/ti/am62x-sk/patches/linux/linux.hash
+index 2e9aad399ebe..5e9df51ecddc 100644
+--- a/board/ti/am62x-sk/patches/linux/linux.hash
++++ b/board/ti/am62x-sk/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  1c4cdcb9d560fad1fb95db2cb8afbedc922f9ead848371fe40363b13f9f631ba  linux-6.8.8.tar.xz
++sha256  19b31956d229b5b9ca5671fa1c74320179682a3d8d00fc86794114b21da86039  linux-6.8.12.tar.xz
+diff --git a/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+index 97a2b4eaf95b..fe9b4f53dc63 100644
+--- a/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
++++ b/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
++sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
+diff --git a/board/ti/am62x-sk/patches/uboot/uboot.hash b/board/ti/am62x-sk/patches/uboot/uboot.hash
+index 97a2b4eaf95b..fe9b4f53dc63 100644
+--- a/board/ti/am62x-sk/patches/uboot/uboot.hash
++++ b/board/ti/am62x-sk/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
++sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
+diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
+index 36052dba407a..f56669c24fe5 100644
+--- a/configs/ti_am62x_sk_defconfig
++++ b/configs/ti_am62x_sk_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -l am62x
+ BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/ti/am62x-sk/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.12"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am625-sk"
+@@ -27,12 +27,12 @@ BR2_TARGET_OPTEE_OS=y
+ BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
+ BR2_TARGET_TI_K3_R5_LOADER=y
+ BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
+-BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.04"
++BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am62x_evm_r5"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am62x_evm_a53"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-- 
+2.43.0
 
-Thanks,
-Brandon
-
-> +    mountpoints+=( "${extra_mountpoints[@]}" )
-> +fi
-> +
->  # shellcheck disable=SC2013 # can't use while-read because of the assignment
->  for dir in $(printf '%s\n' "${mountpoints[@]}" |LC_ALL=C sort -u); do
->      docker_opts+=( --mount "type=bind,src=${dir},dst=${dir}" )
-> diff --git a/utils/readme.txt b/utils/readme.txt
-> index 6488d13c75..0cc665e478 100644
-> --- a/utils/readme.txt
-> +++ b/utils/readme.txt
-> @@ -21,7 +21,10 @@ check-package
->  docker-run
->      a script that runs a command (like make check-package) inside the
->      buildroot CI docker container; pass no command to get an interactive
-> -    shell.
-> +    shell. If additional directories need to be accessible inside the
-> +    container, specify them with the environment variable EXTRA_MOUNTPOINTS.
-> +    The buildroot directory, the current directory, and the download
-> +    directory are automatically propagated.
->
->  genrandconfig
->      a script that generates a random configuration, used by the autobuilders
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
