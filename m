@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F021C3DA45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 19:23:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18C96C3DA45
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 19:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3B66400BF;
-	Sat, 13 Jul 2024 19:23:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3C9A40148;
+	Sat, 13 Jul 2024 19:27:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EOLDfRHEY2Ym; Sat, 13 Jul 2024 19:23:23 +0000 (UTC)
+ id s7SsHyKYkiZc; Sat, 13 Jul 2024 19:27:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D343401D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63671401D8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D343401D8;
-	Sat, 13 Jul 2024 19:23:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A2C671BF3F6
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:23:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63671401D8;
+	Sat, 13 Jul 2024 19:27:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1ECEC1BF3F6
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9CFB360605
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:23:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0AE1E40975
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:27:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8N-6AhNPh-uk for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 19:23:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GUqwIk4jH544 for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 19:27:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 209D1605F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 209D1605F5
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 209D1605F5
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 19:23:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5379D408CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5379D408CF
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5379D408CF
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 19:27:08 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.112.6]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M7K3Y-1sRbKi02ns-00HUSi; Sat, 13
- Jul 2024 21:23:08 +0200
-Message-ID: <af335782-20ce-4f0d-876e-97c9d2777ca7@gmx.de>
-Date: Sat, 13 Jul 2024 21:23:07 +0200
+Received: from [192.168.7.2] ([85.22.112.6]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVN6j-1stu0j2DPr-00X35Q; Sat, 13
+ Jul 2024 21:26:42 +0200
+Message-ID: <0607bf8d-1064-4b24-8a90-0bcd6e310b13@gmx.de>
+Date: Sat, 13 Jul 2024 21:26:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
+To: Brandon Maier <brandon.maier@collins.com>, buildroot@buildroot.org
 References: <20240713115244.848755-1-fiona.klute@gmx.de>
- <ae7df766-114c-4b14-82ba-54528af7edc1@mind.be>
+ <D2OJJE8XA10T.33AXPFIGRGL3L@collins.com>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -91,45 +91,46 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  MCTaUC2HWAAsiG90beT7JkkKKgMLS9DxmX9BN5Cm18Azckexy+vMg79LCcfw/gocQ4+lQn4/
  3BjqSuHfj+dXG+qcQ9pgB5+4/812hHog78dKT2r8l3ax3mHZCDTAC9Ks3LQU9/pMBm6K6nnL
  a4ASpGZSg2zLGIT0gnzi5h8EcIu9J1BFq6zRPZIjxBlhswF6J0BXjlDVe/3JzmeTTts=
-In-Reply-To: <ae7df766-114c-4b14-82ba-54528af7edc1@mind.be>
-X-Provags-ID: V03:K1:Dafo6OA61x1CmThSmNuIwqCzWp8jHOcFnTTSDDjYVF9ivICcDSg
- +ZygDoml7WXVBmRPZ8FTcdFFMV54FlxI426EoblbfzqgwwX7LNvo7oRmIkYIgP4LGPf0BmN
- Gg37L5Nmgd1ytXgvyOPOLPR3MljJYvvbhEG/yNLHkObCPiVzrIIwdbCIPQc6P9p6+zswtPF
- kTrIMS8kIP8QfM0YgYcYQ==
-UI-OutboundReport: notjunk:1;M01:P0:sXLqUf2Wqn8=;FVsrqY6kyYYOpGGCcoP+PFLqp8/
- lD2EWebcxT0kB/iwDLU22SeyqSZweDW8tCdpW5ONhYl/VwVCn0/Wqx5fVCrav7DzoP9xP4r2i
- NHWZ4kXeceUWrV/Qpmf/JRlEdYSbbs3S60bVvw3mOMnCPBwYpU8ZqjXrtCw70Y1M+Td05nwpQ
- CHGyKBdQVzGk5dNThKmf/AdUHcwuWYyrGQcJQa3G6cuMP5lnd7URVOeDUkmqbn0bYRo5SbSrw
- pVzRUPjOQZHdV1pknsl19en+canZ6HJHrn9g5zkUM2z1h5/npzucJDyksdIew9HVMqBdtMMs0
- gAN0lSXqiGhEnajRNXYWL1BipVvnKmPJM7g/HaTg2tzTY71Yhw34N6CbdAjawKxP9dIcP99cm
- agbukeYa+Ws9a2fxtPI1ZgJfxcnxvoWJZ1DbFlNz4a2BRmdzZfJvamonM9/klnchDRYyNCM+P
- XKmG/TzQVMsb5cgvVioQDKYXs1Eub0FLzdCoNGaCPEXO0wuUgamwmLK8ZkfRkygqKqFms6Bbe
- 8A4nRjZqhxd88TZ7Qofb3HJ/9mpNKQVgsepO/7LpCCgYLPTqliSca7EpVMTzSIKDQYxeM5Ufa
- j8Bo+/u9Bg4QUzKDVKnp3qZdFacXJ5cMFiKN0Xz0Z9lCAAvXVsE97yhb9k4Zqut7gmbQO6ODv
- slxGTG1LB1k0zjs4wJMpq+qWj1KvRIGNog62HkLFo6vOb4PoU6leq75xUiaovx6TyTOAbDSYf
- NCXN/r/vm5Q50Vppri8f5BsxVvAPQ7EzIY10dmNhnh/3SQSCzuiXSjNFCXMTGBlR4OjmqVP6X
- c4nsQ3wGoR0bzyS7qiZQyfrQ==
+In-Reply-To: <D2OJJE8XA10T.33AXPFIGRGL3L@collins.com>
+X-Provags-ID: V03:K1:6hNSzxtLxyY71xKxBWbRwoBK2Fn5xxOy8FEnyt1JZVuc1kcWMwu
+ OUr1G/MvRXwjRiFSGrcAtjDIZ3ftoU7eX0znjCuhxxMNY37zopIH0w0yUCl1HflDqRErNBp
+ 2eS7VCclvBJl8Yr9MLMplJrNiw7fgoW1KuaCim2ATDaS7HWw7xXQdLhH+WMC4Y9TeK34Tqk
+ dRiExIblFAL0UF9ws00Fg==
+UI-OutboundReport: notjunk:1;M01:P0:cyZog1YsFfQ=;HnxadSA4iE9bx0hxpTiOCnV9oNN
+ zS/j56rNP2A1CkW+7UOm/SZXxij45329lZQnupJB3rne6/TT3Ws7TOjamUUbzH3VdIzLZwJZe
+ Xh3SevN/KVlYcJzyWgiYNofNey34P2k12lWw065yiRf5Mpy+NUDEEN84JcJU268F/J9MMTVbj
+ 5rdLimFEmHK9CxxuUJMTxgHLp2Lj8L7kyjh198OUrF5FhrZBi5p0Kv3wMgNsZDMUL/3wecTpQ
+ IJtAtNhv5QUvJS7ngggmv2IKwyiW8g04CxCyxPVuJyffKIidMc8k+XpXarj9N+j3wg6NXmB/9
+ 5PKVV6RwLDfHW/X3B6cXn7Dle5VdsM1PzG/CuB/w5jyztw0/E7ALlvCBBwzpD5lGgRgF1wA6k
+ ST9zAo6ZeREVws8ELHrzOIklPGoQ2XVSkwWAK6bNYWjwUw9h8n01lu7SeEqEByPKBOnYJgfYK
+ Bk8MkXCSIgHR1PWGXIG1yXGeZagy3y6nFUvkacuPojprCJElYc2Sk5OWSKc2RFn6KtTHC53Dp
+ KrpJtGhCsbz4UjdQfVOewtSqKTRp0G3mcO8/Psqhn1f2d6JpoL0TQEVXFJKHVQyDn8k//87vC
+ 85oKd0YZroFGokCh+VP+cg7SZ9a9oE5/bpdKjSHbrbLk0n9p0CaJ9BclUPyFMOkkp+FSUR1oi
+ LDsqSB1ItSuWdunI487NSCbTA0FviLZ1+NYcaNK1G2zc8wddGv+/cTcXeqRNUDuVbcguDH54D
+ yNwdoDwImU3JwcLIcAhouNnzeGiUIIkcQ70pExIZ/VvKKO4jRDpY2rq6h/hzUzGdWBtNtZHpf
+ 1tYnZKubZP1ut/l8OHqlDzQw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1720898588; x=1721503388; i=fiona.klute@gmx.de;
- bh=LK50qNZN8lgiw98Q6IvgDF+Onn6dSDG7vG2jJHYr9sw=;
+ s=s31663417; t=1720898802; x=1721503602; i=fiona.klute@gmx.de;
+ bh=YGkRU8CtNxFmJXhlsU+eDmOsSVCpuWzhw/qjMowD6Jo=;
  h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=NVSB76mavcHLes1NrQ+T/X4feTwPkwF7LjkFpRB/GZcAw3bWpBYSSuDbUjjHteET
- TM0QymnJeohQdI8z4TqufY0af3DJ58evKTKZmBx6N9uOigolP5CAO7uUYG0Zl+JzH
- HaddK8ra1tf6jGaKdkOVQ+cUjAL1Bkznp94QiaaRS071JQX4O60z2crQ2vppHvcGI
- vXUQswON3Ef32WOlqvMUnliSj9E0hZB/zYXjtLyTkdITfn9KfdJjeV6T74V4/5+gO
- mNn4oSKOHaL8B2IvjrbLOjsWkTmkcSsp9wH8PMlNP7DE/ixJjHUc+HX5+Wde3S/lW
- 6GlJGE7en3Hpf1Ji0w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=qONUwQeZkhVBUE5taQvgkU2hleCJXoS2HYd6HceSuzYPQLkqGl49FVxZSge0MF3d
+ ZVrYWpM+Qsa9Mx+3GocMMsQbDWjDTqduvezW8oREfHhPAn8XcxQCdhZBI4Xx6Endj
+ 4+BXwvZ4CUNOSYMgXus1AvYhX9tlKB5+n8NcftlKZSmeNNdMvgbQ4x1H+69TZk4n/
+ PyFJgqSZbfnM7FjDsU2fxHHVx9bJZATbuwET+q5auVaTwgkdp5LJK8PnKDpw5G9NK
+ 5u6ziBgRA5tj/My52ptgM3znILNB5UJxOIz4iYL0YfzZuOA9cN+O9idnQkMi+zRK6
+ 5+1EU2in4bF/bcvjNA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=NVSB76ma
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=qONUwQeZ
 Subject: Re: [Buildroot] [PATCH v2 1/2] utils/docker-run: mount and pass
  BR2_EXTERNAL dirs
 X-BeenThere: buildroot@buildroot.org
@@ -146,65 +147,83 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Fiona Klute via buildroot <buildroot@buildroot.org>
 Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Brandon Maier <brandon.maier@collins.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QW0gMTMuMDcuMjQgdW0gMTY6Mzcgc2NocmllYiBBcm5vdXQgVmFuZGVjYXBwZWxsZToKPiAgwqBI
-aSBGaW9uYSwKPgo+IE9uIDEzLzA3LzIwMjQgMTM6NTIsIEZpb25hIEtsdXRlIHZpYSBidWlsZHJv
-b3Qgd3JvdGU6Cj4+IEZyb206ICJGaW9uYSBLbHV0ZSAoV0lXQSkiIDxmaW9uYS5rbHV0ZUBnbXgu
-ZGU+Cj4+Cj4+IFRoZSBCUjJfRVhURVJOQUwgZW52aXJvbm1lbnQgdmFyaWFibGUgaXMgcGFzc2Vk
-IGludG8gdGhlIGNvbnRhaW5lciwKPj4gYW5kIGVhY2ggcGF0aCBsaXN0ZWQgaW4gaXQgbW91bnRl
-ZC4gVGhpcyBhbGxvd3MgdXNpbmcgZXh0ZXJuYWwgdHJlZXMKPj4gd2hlbiBydW5uaW5nIGEgYnVp
-bGQgdXNpbmcgdXRpbHMvZG9ja2VyLXJ1bi4gVGVzdGluZyB0aGUgZXhpc3RlbmNlIG9mCj4+IHRo
-ZSB2YXJpYWJsZSBpbnN0ZWFkIG9mIGEgbm9uLWVtcHR5IHZhbHVlIGFsbG93cyBwYXNzaW5nIGFu
-IGVtcHR5Cj4+IEJSMl9FWFRFUk5BTCB2YXJpYWJsZSB0byBkaXNhYmxlIGN1cnJlbnRseSBzZXQg
-ZXh0ZXJuYWwgdHJlZXMuCj4KPiAgwqBJIGhhdmVuJ3QgbG9va2VkIGF0IHlvdXIgcGF0Y2hlcyB5
-ZXQsIGJ1dCBJIGhhZCBhIHNlcmllcyBwcmVwYXJlZAo+ICh0aGF0IEkgYXBwYXJlbnRseSBmb3Jn
-b3QgdG8gc2VuZCBzbyBJIGp1c3Qgc2VudCBpdCBvdXQgbm93IHdpdGggeW91ciBpbgo+IENjKSB0
-aGF0IGhhcyB0aGUgc2FtZSBwdXJwb3NlLiBQZXJoYXBzIHlvdSBjYW4gc2VlIGlmIHRoZXJlJ3Mg
-YW55Cj4gY29tbW9uYWxpdHkgYW5kIHdoaWNoIGFwcHJvYWNoIG9mIHRoZSB0d28gd29ya3MgYmVz
-dC4gSSBhbHJlYWR5IGZvcmdvdAo+IGhvdyBteSBhcHByb2FjaCB3b3JrZWQgc28gSSBtYWtlIGFi
-c29sdXRlbHkgbm8gY2xhaW0gdGhhdCBpdCB3b3VsZCBiZQo+IGJldHRlci4KPgo+ICDCoE9oLCBu
-b3cgSSBzZWUgdGhhdCB0aGV5J3JlIGluIGZhY3QgY29tcGxlbWVudGFyeSAtIEkgZG9uJ3QgaGFu
-ZGxlCj4gQlIyX0VYVEVSTkFMIGFzIGEgdmFyaWFibGUsIGFuZCB5b3UgZG9uJ3QgaGFuZGxlIGNh
-bGxpbmcgZG9ja2VyLXJ1biBmcm9tCj4gYW4gb3V0cHV0IGRpcmVjdG9yeSB0aGF0IGFscmVhZHkg
-aGFzIHRoZSAuYnIyX2V4dGVybmFsLm1rIGZpbGUuIFNvCj4gdGhleSdyZSBjb21wbGVtZW50YXJ5
-IQoKSSBhZ3JlZSEgSSB0aGluayB0aGUgb25seSB0aGluZyB3ZSBuZWVkIHRvIGdldCB0aGUgc2Ft
-ZSBiZWhhdmlvciBhcyBmb3IKbWFrZSAoZW52IG92ZXJyaWRlcyBmaWxlcykgaXMgdG8gY2hhaW4g
-dGhlIGNvbmRpdGlvbmFsIGJsb2NrcyB3aXRoCnByZWZlcmVuY2UgdG8gdGhlIGVudmlyb25tZW50
-IHZhcmlhYmxlOgoKaWYgWyAtdiBCUjJfRVhURVJOQUwgXTsgdGhlbgogICAgICMgZnJvbSBteSBw
-YXRjaAplbGlmIFsgLWUgJy5icjItZXh0ZXJuYWwubWsnIF07IHRoZW4KICAgICAjIGZyb20geW91
-ciBwYXRjaCAyCmZpCgpJJ3ZlIGp1c3Qgc2VudCB2MyB3aXRoIHRoZSBjaGFuZ2VkIG1vdW50cG9p
-bnRzIGhhbmRsaW5nIHN1Z2dlc3RlZCBieQpCcmFuZG9uLCBpZiB0aGF0J3MgZ29vZCB0byBtZXJn
-ZSBub3cgaXQgbWlnaHQgYmUgZWFzaWVzdCB0byByZXNwaW4geW91cgpwYXRjaCBvbiB0b3AuIDot
-KQoKQmVzdCByZWdhcmRzLApGaW9uYQoKPj4gU2lnbmVkLW9mZi1ieTogRmlvbmEgS2x1dGUgKFdJ
-V0EpIDxmaW9uYS5rbHV0ZUBnbXguZGU+Cj4+IC0tLQo+PiBDaGFuZ2VzIHYxIC0+IHYyOgo+PiAq
-IENvcnJlY3RseSBoYW5kbGUgc3BhY2VzIGluIGV4dGVybmFsIHRyZWUgcGF0aHMKPj4KPj4gwqAg
-dXRpbHMvZG9ja2VyLXJ1biB8IDExICsrKysrKysrKysrCj4+IMKgIDEgZmlsZSBjaGFuZ2VkLCAx
-MSBpbnNlcnRpb25zKCspCj4+Cj4+IGRpZmYgLS1naXQgYS91dGlscy9kb2NrZXItcnVuIGIvdXRp
-bHMvZG9ja2VyLXJ1bgo+PiBpbmRleCAxYWRiMDJkNzRlLi44MDI0YzJkM2EzIDEwMDc1NQo+PiAt
-LS0gYS91dGlscy9kb2NrZXItcnVuCj4+ICsrKyBiL3V0aWxzL2RvY2tlci1ydW4KPj4gQEAgLTkw
-LDEwICs5MCwyMSBAQCBpZiBbICIke0JSMl9ETF9ESVJ9IiBdOyB0aGVuCj4+IMKgwqDCoMKgwqAg
-ZG9ja2VyX29wdHMrPSggLS1lbnYgQlIyX0RMX0RJUiApCj4+IMKgIGZpCj4+Cj4+ICtpZiBbIC12
-IEJSMl9FWFRFUk5BTCBdOyB0aGVuCj4+ICvCoMKgwqAgSUZTPSI6IiByZWFkIC1yIC1hIGJyMl9l
-eHRfYXJyIDw8PCAiJHtCUjJfRVhURVJOQUx9Igo+PiArwqDCoMKgIGZvciBicjJfZXh0IGluICIk
-e2JyMl9leHRfYXJyW0BdfSI7IGRvCj4+ICvCoMKgwqDCoMKgwqDCoCBtb3VudHBvaW50cys9KCAi
-JHticjJfZXh0fSIgKQo+PiArwqDCoMKgIGRvbmUKPj4gK8KgwqDCoCBkb2NrZXJfb3B0cys9KCAt
-LWVudiBCUjJfRVhURVJOQUwgKQo+PiArZmkKPj4gKwo+PiArIyBkaXIgbmFtZXMgbWlnaHQgY29u
-dGFpbiBzcGFjZXMsIHNvIHNwbGl0IG9ubHkgb24gbGluZWJyZWFrcyBmb3IKPj4gdGhpcyBsb29w
-Cj4+ICtJRlM9JCdcbicKPj4gwqAgIyBzaGVsbGNoZWNrIGRpc2FibGU9U0MyMDEzICMgY2FuJ3Qg
-dXNlIHdoaWxlLXJlYWQgYmVjYXVzZSBvZiB0aGUKPj4gYXNzaWdubWVudAo+PiDCoCBmb3IgZGly
-IGluICQocHJpbnRmICclc1xuJyAiJHttb3VudHBvaW50c1tAXX0iIHxMQ19BTEw9QyBzb3J0IC11
-KTsgZG8KPj4gwqDCoMKgwqDCoCBkb2NrZXJfb3B0cys9KCAtLW1vdW50ICJ0eXBlPWJpbmQsc3Jj
-PSR7ZGlyfSxkc3Q9JHtkaXJ9IiApCj4+IMKgIGRvbmUKPj4gK3Vuc2V0IElGUwo+Pgo+PiDCoCBp
-ZiB0dHkgLXM7IHRoZW4KPj4gwqDCoMKgwqDCoCBkb2NrZXJfb3B0cys9KCAtdCApCj4+IC0tCj4+
-IDIuNDUuMgo+Pgo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwo+PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cj4+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Am 13.07.24 um 18:10 schrieb Brandon Maier:
+> Hi Fiona,
+>
+> On Sat Jul 13, 2024 at 11:52 AM UTC, Fiona Klute via buildroot wrote:
+>> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+>>
+>> The BR2_EXTERNAL environment variable is passed into the container,
+>> and each path listed in it mounted. This allows using external trees
+>> when running a build using utils/docker-run. Testing the existence of
+>> the variable instead of a non-empty value allows passing an empty
+>> BR2_EXTERNAL variable to disable currently set external trees.
+>>
+>> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+>> ---
+>> Changes v1 -> v2:
+>> * Correctly handle spaces in external tree paths
+>>
+>>   utils/docker-run | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git a/utils/docker-run b/utils/docker-run
+>> index 1adb02d74e..8024c2d3a3 100755
+>> --- a/utils/docker-run
+>> +++ b/utils/docker-run
+>> @@ -90,10 +90,21 @@ if [ "${BR2_DL_DIR}" ]; then
+>>       docker_opts+=( --env BR2_DL_DIR )
+>>   fi
+>>
+>> +if [ -v BR2_EXTERNAL ]; then
+>> +    IFS=":" read -r -a br2_ext_arr <<< "${BR2_EXTERNAL}"
+>> +    for br2_ext in "${br2_ext_arr[@]}"; do
+>> +        mountpoints+=( "${br2_ext}" )
+>> +    done
+>> +    docker_opts+=( --env BR2_EXTERNAL )
+>> +fi
+>> +
+>> +# dir names might contain spaces, so split only on linebreaks for this loop
+>> +IFS=$'\n'
+>>   # shellcheck disable=SC2013 # can't use while-read because of the assignment
+>>   for dir in $(printf '%s\n' "${mountpoints[@]}" |LC_ALL=C sort -u); do
+>
+> This will invoke Bash glob on '*', '?', and '[...]'. We can fix that by
+> parsing the lines with `read -r`, for example
+>
+>      while IFS=$'\n' read -r dir; do
+>          docker_opts+=( --mount "type=bind,src=${dir},dst=${dir}" )
+>      done < <(printf '%s\n' "${mountpoints[@]}" |LC_ALL=C sort -u)
+
+Good point, thanks. I've added that in v3.
+
+And I just realized I forgot to add your Reviewed-by to patch 2 during
+respin, should I do another one or is it easier to add that on merge?
+
+Best regards,
+Fiona
+
+>>       docker_opts+=( --mount "type=bind,src=${dir},dst=${dir}" )
+>>   done
+>> +unset IFS
+>>
+>>   if tty -s; then
+>>       docker_opts+=( -t )
+>> --
+>> 2.45.2
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
