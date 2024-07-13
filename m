@@ -4,48 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AF02C3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8B03C3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3550B409EF;
-	Sat, 13 Jul 2024 14:54:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2398541325;
+	Sat, 13 Jul 2024 14:55:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0bkMV0H-EGsD; Sat, 13 Jul 2024 14:54:40 +0000 (UTC)
+ id G1A_IIpcx4_A; Sat, 13 Jul 2024 14:55:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A89C1405E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61CAB409EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A89C1405E6;
-	Sat, 13 Jul 2024 14:54:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C52BC1BF41B
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:54:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61CAB409EF;
+	Sat, 13 Jul 2024 14:55:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1889B1BF41B
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2676400A4
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:54:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06025606E3
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:55:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kr08TLB0Q2PE for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 14:54:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 857C640096
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 857C640096
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:54:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 722248605C; Sat, 13 Jul 2024 14:54:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 16:53:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a226f9a9ca44b88faa8e6504bb1336724ab79827
-X-Git-Newrev: b4454720908e79252ea98bcbe4de86e4bbd4de77
-X-Patchwork-Hint: ignore
-Message-Id: <20240713145438.722248605C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: bump 12.x series to 12.4
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pG2dcxqaDBpP for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 14:55:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A0473605C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0473605C5
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A0473605C5
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:55:02 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4266182a9d7so18343195e9.0
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 07:55:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720882501; x=1721487301;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=OnXuCMx6be34pB7JZGzDp0LpCXdiyFGsoqSW00PaxtM=;
+ b=GoqzYrPR2NEDOIPshvUHym+Qyoa53tWDl/aXCYIh6bn0OqCLfw92wfQrSt+sylTWMB
+ IAzW7rBWbXIqODXOx87c6ZUJyM0jpw9+Y+AG5VpVlRGMH4/16rpa1Ivi7RRzukfA5pC+
+ 8OXvrqZY67auFiZghjCpD9RiRWg2iv1q2fTGJ6VZj9D9mAhd4P7BRvq5orodgekVo7pR
+ YI35gCmImq36vQvCbEWqYhLa+E89OsfO2kGO1N0Yvsif5k2qdVraC7+omtauByFNBot1
+ xmWqN4VVw2bGme3z7p4Xtlx8PnsELYLWCThAskQ24U4STHBwDtDKsJXeHUymoZxful2B
+ 45Qw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXseJlsxTYyAutx05XqAPdBdUptmrewManKjt3/bPuI10Bye8SzVC7rp6SmoNNwFOCcqUmJfwV0MMgij+3QjoU2Lgvw1Khemw==
+X-Gm-Message-State: AOJu0Yz8KE1U2Dl9wXPfyQyKC5HXlkjE7Sn94XemnQgwVtEsPHtY1/bP
+ yrnfe/nRYgDjEaqisMRGDnWFFibGG6fTTS5pFhDTUxcxIx3q+Z+FoAXqsuO8h+8=
+X-Google-Smtp-Source: AGHT+IEFxfTMgaiNUxy8ySt8nVPYemXr4Q35mvIoJepa2p5COV8VFuYPGDgZV5ND+f/ziQBxOYavmA==
+X-Received: by 2002:a05:600c:a:b0:426:67ad:38e3 with SMTP id
+ 5b1f17b1804b1-426707cc8d5mr85142925e9.3.1720882500612; 
+ Sat, 13 Jul 2024 07:55:00 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:f9c8:f443:ffd:1bed?
+ (2a01cb05949d5800f9c8f4430ffd1bed.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:f9c8:f443:ffd:1bed])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3680daccbd2sm1600505f8f.49.2024.07.13.07.55.00
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 13 Jul 2024 07:55:00 -0700 (PDT)
+Message-ID: <5c56a814-9982-4481-917f-3e33c40fc422@smile.fr>
+Date: Sat, 13 Jul 2024 16:54:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+References: <20240711213435.1172955-1-thomas.petazzoni@bootlin.com>
+Content-Language: fr
+In-Reply-To: <20240711213435.1172955-1-thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1720882501; x=1721487301; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=OnXuCMx6be34pB7JZGzDp0LpCXdiyFGsoqSW00PaxtM=;
+ b=H+jM+i0POMPNIn+TeA3TmgrdMV/sw3tztj370v2nUWOK8Z8OF7FYK9yxyAInMZd/HG
+ hfqeSJcudXhNZggAWCFVjbpKNDDXCeSXx1KOVUAq84tivm2Tth1MY8gi7RbYWuRINbus
+ A1K0lv3ihqsbu0fXklfXiAs21gmK35y6ZDcSU=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=H+jM+i0P
+Subject: Re: [Buildroot] [PATCH] package/gcc: bump 12.x series to 12.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,99 +105,119 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4454720908e79252ea98bcbe4de86e4bbd4de77
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-https://gcc.gnu.org/gcc-12/changes.html describes the changes of gcc
-12.4 as follows:
-
-  This is the list of problem reports (PRs) from GCC's bug tracking
-  system that are known to be fixed in the 12.4 release. This list
-  might not be complete (that is, it is possible that some PRs that
-  have been fixed are not listed here).
-
-With a link to
-https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=12.4
-
-There are 654 relevant commits (ignoring the "daily bumps") between
-gcc 12.3.0 and 12.4.0, which is too much to list exhaustively here.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- .checkpackageignore                                                   | 2 +-
- .../0001-disable-split-stack-for-non-thread-builds.patch              | 0
- .../0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch      | 0
- .../0003-xtensa-add-.note.GNU-stack-section-on-linux.patch            | 0
- .../0004-Remove-crypt-and-crypt_r-interceptors.patch                  | 0
- package/gcc/Config.in.host                                            | 2 +-
- package/gcc/gcc.hash                                                  | 4 ++--
- 7 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1052a6f90f..eb2021fadb 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -578,7 +578,7 @@ package/fxload/0001-fix-static-build.patch lib_patch.Upstream
- package/gamin/0001-no-abstract-sockets.patch lib_patch.Upstream
- package/gamin/0002-no-const-return.patch lib_patch.Sob lib_patch.Upstream
- package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch lib_patch.Upstream
--package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
-+package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
-diff --git a/package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch
-similarity index 100%
-rename from package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch
-diff --git a/package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/12.4.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-similarity index 100%
-rename from package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-rename to package/gcc/12.4.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-diff --git a/package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch b/package/gcc/12.4.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
-similarity index 100%
-rename from package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
-rename to package/gcc/12.4.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
-diff --git a/package/gcc/12.3.0/0004-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/12.4.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
-similarity index 100%
-rename from package/gcc/12.3.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
-rename to package/gcc/12.4.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 969702b707..c88518a415 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -73,7 +73,7 @@ config BR2_GCC_SUPPORTS_DLANG
- config BR2_GCC_VERSION
- 	string
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
--	default "12.3.0"    if BR2_GCC_VERSION_12_X
-+	default "12.4.0"    if BR2_GCC_VERSION_12_X
- 	default "13.3.0"    if BR2_GCC_VERSION_13_X
- 	default "14.1.0"    if BR2_GCC_VERSION_14_X
- 	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 0b48a1acdd..4534655790 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -2,8 +2,8 @@
- sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-10.4.0/sha512.sum
- sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.3.0/sha512.sum
--sha512  8fb799dfa2e5de5284edf8f821e3d40c2781e4c570f5adfdb1ca0671fcae3fb7f794ea783e80f01ec7bfbf912ca508e478bd749b2755c2c14e4055648146c204  gcc-12.3.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.4.0/sha512.sum
-+sha512  5bd29402cad2deb5d9388d0236c7146414d77e5b8d5f1c6c941c7a1f47691c3389f08656d5f6e8e2d6717bf2c81f018d326f632fb468f42925b40bd217fc4853  gcc-12.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
- sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.1.0/sha512.sum
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKTGUgMTEvMDcvMjAyNCDDoCAyMzozNCwgVGhvbWFzIFBldGF6em9uaSB2
+aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gaHR0cHM6Ly9nY2MuZ251Lm9yZy9nY2MtMTIvY2hh
+bmdlcy5odG1sIGRlc2NyaWJlcyB0aGUgY2hhbmdlcyBvZiBnY2MKPiAxMi40IGFzIGZvbGxvd3M6
+Cj4gCj4gICBUaGlzIGlzIHRoZSBsaXN0IG9mIHByb2JsZW0gcmVwb3J0cyAoUFJzKSBmcm9tIEdD
+QydzIGJ1ZyB0cmFja2luZwo+ICAgc3lzdGVtIHRoYXQgYXJlIGtub3duIHRvIGJlIGZpeGVkIGlu
+IHRoZSAxMi40IHJlbGVhc2UuIFRoaXMgbGlzdAo+ICAgbWlnaHQgbm90IGJlIGNvbXBsZXRlICh0
+aGF0IGlzLCBpdCBpcyBwb3NzaWJsZSB0aGF0IHNvbWUgUFJzIHRoYXQKPiAgIGhhdmUgYmVlbiBm
+aXhlZCBhcmUgbm90IGxpc3RlZCBoZXJlKS4KPiAKPiBXaXRoIGEgbGluayB0bwo+IGh0dHBzOi8v
+Z2NjLmdudS5vcmcvYnVnemlsbGEvYnVnbGlzdC5jZ2k/YnVnX3N0YXR1cz1SRVNPTFZFRCZyZXNv
+bHV0aW9uPUZJWEVEJnRhcmdldF9taWxlc3RvbmU9MTIuNAo+IAo+IFRoZXJlIGFyZSA2NTQgcmVs
+ZXZhbnQgY29tbWl0cyAoaWdub3JpbmcgdGhlICJkYWlseSBidW1wcyIpIGJldHdlZW4KPiBnY2Mg
+MTIuMy4wIGFuZCAxMi40LjAsIHdoaWNoIGlzIHRvbyBtdWNoIHRvIGxpc3QgZXhoYXVzdGl2ZWx5
+IGhlcmUuCj4gCj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6
+em9uaUBib290bGluLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpCZXN0IHJlZ2Fy
+ZHMsClJvbWFpbgoKCj4gLS0tCj4gIC5jaGVja3BhY2thZ2VpZ25vcmUgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAyICstCj4gIC4uLi8wMDAxLWRpc2FibGUtc3Bs
+aXQtc3RhY2stZm9yLW5vbi10aHJlYWQtYnVpbGRzLnBhdGNoICAgICAgfCAwCj4gIC4uLjAyLW9y
+MWstT25seS1kZWZpbmUtVEFSR0VUX0hBVkVfVExTLXdoZW4tSEFWRV9BU19UTFMucGF0Y2ggfCAw
+Cj4gIC4uLi8wMDAzLXh0ZW5zYS1hZGQtLm5vdGUuR05VLXN0YWNrLXNlY3Rpb24tb24tbGludXgu
+cGF0Y2ggICAgfCAwCj4gIC4uLi8wMDA0LVJlbW92ZS1jcnlwdC1hbmQtY3J5cHRfci1pbnRlcmNl
+cHRvcnMucGF0Y2ggICAgICAgICAgfCAwCj4gIHBhY2thZ2UvZ2NjL0NvbmZpZy5pbi5ob3N0ICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAyICstCj4gIHBhY2thZ2UvZ2NjL2dj
+Yy5oYXNoICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCA0ICsrLS0K
+PiAgNyBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCj4gIHJl
+bmFtZSBwYWNrYWdlL2djYy97MTIuMy4wID0+IDEyLjQuMH0vMDAwMS1kaXNhYmxlLXNwbGl0LXN0
+YWNrLWZvci1ub24tdGhyZWFkLWJ1aWxkcy5wYXRjaCAoMTAwJSkKPiAgcmVuYW1lIHBhY2thZ2Uv
+Z2NjL3sxMi4zLjAgPT4gMTIuNC4wfS8wMDAyLW9yMWstT25seS1kZWZpbmUtVEFSR0VUX0hBVkVf
+VExTLXdoZW4tSEFWRV9BU19UTFMucGF0Y2ggKDEwMCUpCj4gIHJlbmFtZSBwYWNrYWdlL2djYy97
+MTIuMy4wID0+IDEyLjQuMH0vMDAwMy14dGVuc2EtYWRkLS5ub3RlLkdOVS1zdGFjay1zZWN0aW9u
+LW9uLWxpbnV4LnBhdGNoICgxMDAlKQo+ICByZW5hbWUgcGFja2FnZS9nY2MvezEyLjMuMCA9PiAx
+Mi40LjB9LzAwMDQtUmVtb3ZlLWNyeXB0LWFuZC1jcnlwdF9yLWludGVyY2VwdG9ycy5wYXRjaCAo
+MTAwJSkKPiAKPiBkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2FnZWlnbm9yZSBiLy5jaGVja3BhY2th
+Z2VpZ25vcmUKPiBpbmRleCA5YTQ2ODQwNDIyLi5lNGM0MGZiZjFlIDEwMDY0NAo+IC0tLSBhLy5j
+aGVja3BhY2thZ2VpZ25vcmUKPiArKysgYi8uY2hlY2twYWNrYWdlaWdub3JlCj4gQEAgLTU5MSw3
+ICs1OTEsNyBAQCBwYWNrYWdlL2Z4bG9hZC8wMDAxLWZpeC1zdGF0aWMtYnVpbGQucGF0Y2ggbGli
+X3BhdGNoLlVwc3RyZWFtCj4gIHBhY2thZ2UvZ2FtaW4vMDAwMS1uby1hYnN0cmFjdC1zb2NrZXRz
+LnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICBwYWNrYWdlL2dhbWluLzAwMDItbm8tY29uc3Qt
+cmV0dXJuLnBhdGNoIGxpYl9wYXRjaC5Tb2IgbGliX3BhdGNoLlVwc3RyZWFtCj4gIHBhY2thZ2Uv
+Z2FtaW4vMDAwMy1maXgtbWlzc2luZy1QVEhSRUFEX01VVEVYX1JFQ1VSU0lWRV9OUC5wYXRjaCBs
+aWJfcGF0Y2guVXBzdHJlYW0KPiAtcGFja2FnZS9nY2MvMTIuMy4wLzAwMDEtZGlzYWJsZS1zcGxp
+dC1zdGFjay1mb3Itbm9uLXRocmVhZC1idWlsZHMucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCj4g
+K3BhY2thZ2UvZ2NjLzEyLjQuMC8wMDAxLWRpc2FibGUtc3BsaXQtc3RhY2stZm9yLW5vbi10aHJl
+YWQtYnVpbGRzLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQo+ICBwYWNrYWdlL2djYy8xMy4zLjAv
+MDAwMS1kaXNhYmxlLXNwbGl0LXN0YWNrLWZvci1ub24tdGhyZWFkLWJ1aWxkcy5wYXRjaCBsaWJf
+cGF0Y2guVXBzdHJlYW0KPiAgcGFja2FnZS9nY2MvMTQuMS4wLzAwMDEtZGlzYWJsZS1zcGxpdC1z
+dGFjay1mb3Itbm9uLXRocmVhZC1idWlsZHMucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCj4gIHBh
+Y2thZ2UvZ2NjLzguNC4wLzAwMDEteHRlbnNhLWZpeC1QUi10YXJnZXQtOTE4ODAucGF0Y2ggbGli
+X3BhdGNoLlVwc3RyZWFtCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ2NjLzEyLjMuMC8wMDAxLWRp
+c2FibGUtc3BsaXQtc3RhY2stZm9yLW5vbi10aHJlYWQtYnVpbGRzLnBhdGNoIGIvcGFja2FnZS9n
+Y2MvMTIuNC4wLzAwMDEtZGlzYWJsZS1zcGxpdC1zdGFjay1mb3Itbm9uLXRocmVhZC1idWlsZHMu
+cGF0Y2gKPiBzaW1pbGFyaXR5IGluZGV4IDEwMCUKPiByZW5hbWUgZnJvbSBwYWNrYWdlL2djYy8x
+Mi4zLjAvMDAwMS1kaXNhYmxlLXNwbGl0LXN0YWNrLWZvci1ub24tdGhyZWFkLWJ1aWxkcy5wYXRj
+aAo+IHJlbmFtZSB0byBwYWNrYWdlL2djYy8xMi40LjAvMDAwMS1kaXNhYmxlLXNwbGl0LXN0YWNr
+LWZvci1ub24tdGhyZWFkLWJ1aWxkcy5wYXRjaAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2djYy8x
+Mi4zLjAvMDAwMi1vcjFrLU9ubHktZGVmaW5lLVRBUkdFVF9IQVZFX1RMUy13aGVuLUhBVkVfQVNf
+VExTLnBhdGNoIGIvcGFja2FnZS9nY2MvMTIuNC4wLzAwMDItb3Ixay1Pbmx5LWRlZmluZS1UQVJH
+RVRfSEFWRV9UTFMtd2hlbi1IQVZFX0FTX1RMUy5wYXRjaAo+IHNpbWlsYXJpdHkgaW5kZXggMTAw
+JQo+IHJlbmFtZSBmcm9tIHBhY2thZ2UvZ2NjLzEyLjMuMC8wMDAyLW9yMWstT25seS1kZWZpbmUt
+VEFSR0VUX0hBVkVfVExTLXdoZW4tSEFWRV9BU19UTFMucGF0Y2gKPiByZW5hbWUgdG8gcGFja2Fn
+ZS9nY2MvMTIuNC4wLzAwMDItb3Ixay1Pbmx5LWRlZmluZS1UQVJHRVRfSEFWRV9UTFMtd2hlbi1I
+QVZFX0FTX1RMUy5wYXRjaAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2djYy8xMi4zLjAvMDAwMy14
+dGVuc2EtYWRkLS5ub3RlLkdOVS1zdGFjay1zZWN0aW9uLW9uLWxpbnV4LnBhdGNoIGIvcGFja2Fn
+ZS9nY2MvMTIuNC4wLzAwMDMteHRlbnNhLWFkZC0ubm90ZS5HTlUtc3RhY2stc2VjdGlvbi1vbi1s
+aW51eC5wYXRjaAo+IHNpbWlsYXJpdHkgaW5kZXggMTAwJQo+IHJlbmFtZSBmcm9tIHBhY2thZ2Uv
+Z2NjLzEyLjMuMC8wMDAzLXh0ZW5zYS1hZGQtLm5vdGUuR05VLXN0YWNrLXNlY3Rpb24tb24tbGlu
+dXgucGF0Y2gKPiByZW5hbWUgdG8gcGFja2FnZS9nY2MvMTIuNC4wLzAwMDMteHRlbnNhLWFkZC0u
+bm90ZS5HTlUtc3RhY2stc2VjdGlvbi1vbi1saW51eC5wYXRjaAo+IGRpZmYgLS1naXQgYS9wYWNr
+YWdlL2djYy8xMi4zLjAvMDAwNC1SZW1vdmUtY3J5cHQtYW5kLWNyeXB0X3ItaW50ZXJjZXB0b3Jz
+LnBhdGNoIGIvcGFja2FnZS9nY2MvMTIuNC4wLzAwMDQtUmVtb3ZlLWNyeXB0LWFuZC1jcnlwdF9y
+LWludGVyY2VwdG9ycy5wYXRjaAo+IHNpbWlsYXJpdHkgaW5kZXggMTAwJQo+IHJlbmFtZSBmcm9t
+IHBhY2thZ2UvZ2NjLzEyLjMuMC8wMDA0LVJlbW92ZS1jcnlwdC1hbmQtY3J5cHRfci1pbnRlcmNl
+cHRvcnMucGF0Y2gKPiByZW5hbWUgdG8gcGFja2FnZS9nY2MvMTIuNC4wLzAwMDQtUmVtb3ZlLWNy
+eXB0LWFuZC1jcnlwdF9yLWludGVyY2VwdG9ycy5wYXRjaAo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L2djYy9Db25maWcuaW4uaG9zdCBiL3BhY2thZ2UvZ2NjL0NvbmZpZy5pbi5ob3N0Cj4gaW5kZXgg
+OTY5NzAyYjcwNy4uYzg4NTE4YTQxNSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2djYy9Db25maWcu
+aW4uaG9zdAo+ICsrKyBiL3BhY2thZ2UvZ2NjL0NvbmZpZy5pbi5ob3N0Cj4gQEAgLTczLDcgKzcz
+LDcgQEAgY29uZmlnIEJSMl9HQ0NfU1VQUE9SVFNfRExBTkcKPiAgY29uZmlnIEJSMl9HQ0NfVkVS
+U0lPTgo+ICAJc3RyaW5nCj4gIAlkZWZhdWx0ICI4LjQuMCIgICAgIGlmIEJSMl9HQ0NfVkVSU0lP
+Tl9QT1dFUlBDX1NQRQo+IC0JZGVmYXVsdCAiMTIuMy4wIiAgICBpZiBCUjJfR0NDX1ZFUlNJT05f
+MTJfWAo+ICsJZGVmYXVsdCAiMTIuNC4wIiAgICBpZiBCUjJfR0NDX1ZFUlNJT05fMTJfWAo+ICAJ
+ZGVmYXVsdCAiMTMuMy4wIiAgICBpZiBCUjJfR0NDX1ZFUlNJT05fMTNfWAo+ICAJZGVmYXVsdCAi
+MTQuMS4wIiAgICBpZiBCUjJfR0NDX1ZFUlNJT05fMTRfWAo+ICAJZGVmYXVsdCAiYXJjLTIwMjMu
+MDktcmVsZWFzZSIgaWYgQlIyX0dDQ19WRVJTSU9OX0FSQwo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L2djYy9nY2MuaGFzaCBiL3BhY2thZ2UvZ2NjL2djYy5oYXNoCj4gaW5kZXggMGI0OGExYWNkZC4u
+NDUzNDY1NTc5MCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2djYy9nY2MuaGFzaAo+ICsrKyBiL3Bh
+Y2thZ2UvZ2NjL2djYy5oYXNoCj4gQEAgLTIsOCArMiw4IEBACj4gIHNoYTUxMiAgNmRlOTA0ZjU1
+MmEwMmRlMzNiMTFlZjUyMzEyYmI2NjQzOTZlZmQ3ZTFjZTNiYmUzN2JmYWQ1ZWY2MTdmMTMzMDk1
+YjM3NjdiNDgwNGJjN2ZlNzhkZjMzNWNiNTNiYzgzZjFhYzA1NWJhZWQ0MDk3OWNlNGMyYzNlNDZi
+NzAyODAgIGdjYy04LjQuMC50YXIueHoKPiAgIyBGcm9tIGh0dHBzOi8vZ2NjLmdudS5vcmcvcHVi
+L2djYy9yZWxlYXNlcy9nY2MtMTAuNC4wL3NoYTUxMi5zdW0KPiAgc2hhNTEyICA0NDBjMDhjYTc0
+NmRhNDUwZDlhMWIzNWU4ZmQyMzA1Y2IyN2U3ZTY5ODdjZDlkMGY3ZDM3NWYzYjFmYzllNGIwYmQ3
+YWNiM2NkN2JmNzk1ZTcyZmNiZWFkNTljZGVmNWI2YzE1Mjg2MmY1ZDM1Y2Q5ZmJmZTY5MDIxMDFj
+ZTY0OCAgZ2NjLTEwLjQuMC50YXIueHoKPiAtIyBGcm9tIGh0dHBzOi8vZ2NjLmdudS5vcmcvcHVi
+L2djYy9yZWxlYXNlcy9nY2MtMTIuMy4wL3NoYTUxMi5zdW0KPiAtc2hhNTEyICA4ZmI3OTlkZmEy
+ZTVkZTUyODRlZGY4ZjgyMWUzZDQwYzI3ODFlNGM1NzBmNWFkZmRiMWNhMDY3MWZjYWUzZmI3Zjc5
+NGVhNzgzZTgwZjAxZWM3YmZiZjkxMmNhNTA4ZTQ3OGJkNzQ5YjI3NTVjMmMxNGU0MDU1NjQ4MTQ2
+YzIwNCAgZ2NjLTEyLjMuMC50YXIueHoKPiArIyBGcm9tIGh0dHBzOi8vZ2NjLmdudS5vcmcvcHVi
+L2djYy9yZWxlYXNlcy9nY2MtMTIuNC4wL3NoYTUxMi5zdW0KPiArc2hhNTEyICA1YmQyOTQwMmNh
+ZDJkZWI1ZDkzODhkMDIzNmM3MTQ2NDE0ZDc3ZTViOGQ1ZjFjNmM5NDFjN2ExZjQ3NjkxYzMzODlm
+MDg2NTZkNWY2ZThlMmQ2NzE3YmYyYzgxZjAxOGQzMjZmNjMyZmI0NjhmNDI5MjViNDBiZDIxN2Zj
+NDg1MyAgZ2NjLTEyLjQuMC50YXIueHoKPiAgIyBGcm9tIGh0dHBzOi8vZ2NjLmdudS5vcmcvcHVi
+L2djYy9yZWxlYXNlcy9nY2MtMTMuMy4wL3NoYTUxMi5zdW0KPiAgc2hhNTEyICBlZDVmMmY0YzZl
+ZDJjNzk2ZmNmMmM5MzcwNzE1OWU5ZGJkM2RkYjFiYTA2M2Q1NDk4MDRkZDY4Y2RhYmJiNmQ1NTA5
+ODVhZTFjODQ2NWFlOWEzMzZjZmUyOTI3NGE2ZWIwZjQyZTIxOTI0MzYwNTc0ZWJkOGU1ZDVjN2M5
+YTgwMSAgZ2NjLTEzLjMuMC50YXIueHoKPiAgIyBGcm9tIGh0dHBzOi8vZ2NjLmdudS5vcmcvcHVi
+L2djYy9yZWxlYXNlcy9nY2MtMTQuMS4wL3NoYTUxMi5zdW0KCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
