@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E16C3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A406FC3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:37:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1459416B3;
-	Sat, 13 Jul 2024 14:37:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B804413C7;
+	Sat, 13 Jul 2024 14:37:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IxvVVYdLwceO; Sat, 13 Jul 2024 14:37:38 +0000 (UTC)
+ id xCo3L6ChphdJ; Sat, 13 Jul 2024 14:37:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12F2C416ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7E6D41707
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12F2C416ED;
-	Sat, 13 Jul 2024 14:37:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C09DC1BF86D
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:37:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7E6D41707;
+	Sat, 13 Jul 2024 14:37:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B0AE1BF41B
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD1CA413C7
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:37:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 744278208F
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:37:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7F1FjEiGMa2U for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 14:37:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xEKPAG3_wPzX for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 14:37:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF348413B8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF348413B8
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:37:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8261864BC; Sat, 13 Jul 2024 14:37:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 16:37:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 673d371cf22262509e8f764615864be31b3e146e
-X-Git-Newrev: d40b0c9403346ba63dfbd22a518ce50fcd22d34d
-X-Patchwork-Hint: ignore
-Message-Id: <20240713143732.B8261864BC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/stm32mp157c_dk2: bump {TF-A, U-Boot,
- Linux} versions up
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4D8D980F6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D8D980F6D
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4D8D980F6D
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:37:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4019740004;
+ Sat, 13 Jul 2024 14:37:31 +0000 (UTC)
+Date: Sat, 13 Jul 2024 16:37:28 +0200
+To: Raphael Gallais-Pou <rgallaispou@gmail.com>
+Message-ID: <20240713163728.617f32b4@windsurf>
+In-Reply-To: <20240712221333.909756-1-rgallaispou@gmail.com>
+References: <20240712221333.909756-1-rgallaispou@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720881451;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=16sQFfMroXhrcikSOYKVFoVrhiFnTOFFc9rUI7KLatQ=;
+ b=QpQpE8ZGVMIUtGhm/DWqoUZ3gUrQN0hqfmP7Anzjm2ovrpo2HTmAAD/Bb5uKH0CWGal2Zy
+ FKtDMNjs5cREug8J5ajmcQo1HApDXooawYZQybq+KZXAYoxX2t6vyZupK/MP6WQ/QnjP+c
+ U+/98OsP3OH/CWHIZ3EfI2DpnSKIMB6fraHAqHNwRHlqlroudzRsKz+b88qD7J/HMQaJdr
+ PpGjmIGaw6A42/5/BBnmOjc6MrlL+/t6U8VjdmGQGnyPlMKQ2FKJM8zI493o66lmM0kLbP
+ FuNV/RGdcM9jMDR+XsKpDffCthHIfV1klJVjT7SmO5sMPlfKrbu8wpJqevmcdg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=QpQpE8ZG
+Subject: Re: [Buildroot] [PATCH v2 1/1] configs/stm32mp157c_dk2: bump {TF-A,
+ U-Boot, Linux} versions up
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,78 +83,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Marleen Vos <marleen.vos@mind.be>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d40b0c9403346ba63dfbd22a518ce50fcd22d34d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 13 Jul 2024 00:13:33 +0200
+Raphael Gallais-Pou <rgallaispou@gmail.com> wrote:
 
-Bump TF-A to v2.9
-Bump U-Boot to v2024.07
-Bump Linux to v6.0
+> Bump TF-A to v2.9
+> Bump U-Boot to v2024.07
+> Bump Linux to v6.0
+> 
+> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+> ---
+> Changes in v2:
+>   - Keep comments
+>   - Update TF-A and U-Boot along with the kernel
+>   - Use explicit versions
+> ---
+>  configs/stm32mp157c_dk2_defconfig | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
 
-Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/stm32mp157c_dk2_defconfig | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+Applied to master, thanks.
 
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index c48705b2fb..c923d2cd60 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
- 
--# Linux headers same as kernel, a 5.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
-+# Linux headers same as kernel, a 6.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_9=y
- 
- # System configuration
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
-@@ -12,11 +12,11 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-im
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.9.8"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157c-dk2"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32mp157c-dk2"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
- # Filesystem
-@@ -27,7 +27,8 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- 
- # Bootloaders
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_8_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-@@ -39,11 +40,11 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
--# BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
