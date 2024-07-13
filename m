@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D1A8C3DA45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 11:29:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8969C3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 11:30:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6E7D40473;
-	Sat, 13 Jul 2024 11:29:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7610E400DD;
+	Sat, 13 Jul 2024 11:30:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1sdNF8FAIPxA; Sat, 13 Jul 2024 11:29:17 +0000 (UTC)
+ id bLyeJVvk6vn4; Sat, 13 Jul 2024 11:30:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5883B4045D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4806A4018D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5883B4045D;
-	Sat, 13 Jul 2024 11:29:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4806A4018D;
+	Sat, 13 Jul 2024 11:30:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 54A711BF86D
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 11:29:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2CC461BF4E4
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 11:30:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 422F480DCE
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 11:29:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 17F8C84569
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 11:30:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UxWeo-L0lvqE for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 11:29:12 +0000 (UTC)
+ id HiBWi8VCo_wk for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 11:30:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DC1880D61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43A5083FC5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DC1880D61
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 11:29:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43A5083FC5
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 11:30:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 12F1D86367; Sat, 13 Jul 2024 11:29:12 +0000 (UTC)
+ id 3E78485FCC; Sat, 13 Jul 2024 11:30:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 12:59:38 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 70cd92cae176dd878171a53138ef903242526ccb
-X-Git-Newrev: 13d564b62ef40dae4cf247ccdce192dca3fbeec0
+Date: Sat, 13 Jul 2024 13:11:47 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 2e34d5638de988816c037ff09ce88c986a871331
+X-Git-Newrev: e01bb070d95f00915f00f2b1d2ff61b9283a6cea
 X-Patchwork-Hint: ignore
-Message-Id: <20240713112912.12F1D86367@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x]
- package/raspberrypi-usbboot: bump version to 20221215-105525
+Message-Id: <20240713113033.3E78485FCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/xfsprogs: update
+ Kconfig package homepage URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,92 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13d564b62ef40dae4cf247ccdce192dca3fbeec0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e01bb070d95f00915f00f2b1d2ff61b9283a6cea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The "msd" (mass storage device) firmware files in 2021.07.01 don't
-work with some newer CM4 based devices, the one I had issues with is a
-RevPi Connect 4. Updating fixes the issue. Mass storage device mode is
-required to flash the eMMC of CM4 devices.
+The old xfs homepage URL [1] seems defunct at the time of this commit.
+The http URL redirects to https, the certificate expired on
+2024-01-26. If the certificate expiration date is ignored, the site
+shows a "502 Bad Gateway" error.
 
-Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+The package README [2] advertise the homepage as [3].
+
+This commit updates the URL to the new one.
+
+[1] http://xfs.org
+[2] https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/README?h=v6.4.0#n12
+[3] https://xfs.wiki.kernel.org
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fbd9a3f3114ef52d6ff9a14ec2648926909fd46e)
+(cherry picked from commit daa5d775d729efd529ff7ff8c58c0380018f1e42)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch     | 16 ++++++++++------
- package/raspberrypi-usbboot/raspberrypi-usbboot.hash     |  2 +-
- package/raspberrypi-usbboot/raspberrypi-usbboot.mk       |  4 ++--
- 3 files changed, 13 insertions(+), 9 deletions(-)
+ package/xfsprogs/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-index d482b0b9d4..29a9311651 100644
---- a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-+++ b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
-@@ -1,4 +1,4 @@
--From 38b730c00f45abf324caf687b5b00662ff4252c2 Mon Sep 17 00:00:00 2001
-+From acd175aa53af1f1b8422bf1f1fe57eafc710cdca Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Fri, 2 Dec 2016 23:09:44 +0100
- Subject: [PATCH] Makefile: allow passing CFLAGS/LDFLAGS
-@@ -10,21 +10,25 @@ Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [Rebased on 9324fd7]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+[Rebased on 20221215-105525-0-g1afa26c5]
-+Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
- ---
-  Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+index d14c3d4698..1a29579d8b 100644
+--- a/package/xfsprogs/Config.in
++++ b/package/xfsprogs/Config.in
+@@ -18,4 +18,4 @@ config BR2_PACKAGE_XFSPROGS
+ 	help
+ 	  The XFS file system utilities and libraries
  
- diff --git a/Makefile b/Makefile
--index 822e714..875e717 100755
-+index dc78cfe..c9d4910 100755
- --- a/Makefile
- +++ b/Makefile
--@@ -1,5 +1,5 @@
-+@@ -1,7 +1,7 @@
-+ PKG_VER=$(shell grep rpiboot debian/changelog | head -n1 | sed 's/.*(\(.*\)).*/\1/g')
-+ GIT_VER=$(shell git rev-parse HEAD 2>/dev/null | cut -c1-8 || echo "")
-  rpiboot: main.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
---	$(CC) -Wall -Wextra -g -o $@ $< -lusb-1.0
--+	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ $< -lusb-1.0 $(LDFLAGS)
-+-	$(CC) -Wall -Wextra -g -o $@ $< `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\""
-++	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ $< `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" $(LDFLAGS)
-  
-  %.h: %.bin ./bin2c
-  	./bin2c $< $@
- -- 
--2.31.1
-+2.45.2
- 
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-index cedc5fb7e1..830ead8243 100644
---- a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  4565314b38e7c7505b7d32a3b51b49f79c7dd5767d45b86d38e5255ae7489a43  raspberrypi-usbboot-2021.07.01.tar.gz
-+sha256  2f02dbe9a88e9dfad5f05e513e1f30afd47b1575820f7c3b09665dfefc45bbaa  raspberrypi-usbboot-20221215-105525.tar.gz
- 
- # License files
- sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-index 2e4194da0b..24a1f6d906 100644
---- a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--RASPBERRYPI_USBBOOT_VERSION = 2021.07.01
-+RASPBERRYPI_USBBOOT_VERSION = 20221215-105525
- RASPBERRYPI_USBBOOT_SITE = \
--	$(call github,raspberrypi,usbboot,v$(RASPBERRYPI_USBBOOT_VERSION))
-+	$(call github,raspberrypi,usbboot,$(RASPBERRYPI_USBBOOT_VERSION))
- RASPBERRYPI_USBBOOT_LICENSE = Apache-2.0
- RASPBERRYPI_USBBOOT_LICENSE_FILES = LICENSE
- 
+-	  http://xfs.org
++	  https://xfs.wiki.kernel.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
