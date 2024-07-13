@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A69BC3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 19:36:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0531EC3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 19:36:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4294E40148;
-	Sat, 13 Jul 2024 19:36:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C29F0404B0;
+	Sat, 13 Jul 2024 19:36:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FhNqiWKf-y6M; Sat, 13 Jul 2024 19:36:27 +0000 (UTC)
+ id S5VdOgm60oe1; Sat, 13 Jul 2024 19:36:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 119E9401D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C87C404C1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 119E9401D8;
-	Sat, 13 Jul 2024 19:36:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C87C404C1;
+	Sat, 13 Jul 2024 19:36:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1C4951BF86D
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:36:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 45BCB1BF86D
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:36:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1330A4133D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2BB1341347
  for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:36:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fDecl8a-C9_P for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 19:36:04 +0000 (UTC)
+ id bhynZach2gy2 for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 19:36:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D19D340895
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F003E41333
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D19D340895
+ by smtp4.osuosl.org (Postfix) with ESMTP id F003E41333
  for <buildroot@buildroot.org>; Sat, 13 Jul 2024 19:36:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B6CD6865AA; Sat, 13 Jul 2024 19:36:04 +0000 (UTC)
+ id D3486865AB; Sat, 13 Jul 2024 19:36:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 19:13:06 +0200
+Date: Sat, 13 Jul 2024 19:13:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7f75d2b8f856401b50fa35617dda22b728725ee
-X-Git-Newrev: 88ab90e3092de7ce43a79e01e9a8cad8e7323047
+X-Git-Oldrev: 88ab90e3092de7ce43a79e01e9a8cad8e7323047
+X-Git-Newrev: 1fb08cdc85fab4ba1460cd15e0829494afc0fdf2
 X-Patchwork-Hint: ignore
-Message-Id: <20240713193604.B6CD6865AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bitcoin: bump to version 26.2
+Message-Id: <20240713193604.D3486865AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: new xfsprogs runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,155 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88ab90e3092de7ce43a79e01e9a8cad8e7323047
+commit: https://git.buildroot.net/buildroot/commit/?id=1fb08cdc85fab4ba1460cd15e0829494afc0fdf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For change log since 26.0, see:
-https://bitcoincore.org/en/releases/26.1/
-https://bitcoincore.org/en/releases/26.2/
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/bitcoin/bitcoin.hash | 6 +++---
- package/bitcoin/bitcoin.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                                         |   2 +
+ support/testing/tests/package/test_xfsprogs.py     | 112 +++++++++++++++++++++
+ .../tests/package/test_xfsprogs/linux-xfs.fragment |   1 +
+ 3 files changed, 115 insertions(+)
 
-diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
-index 6b3008af86..9bd0843085 100644
---- a/package/bitcoin/bitcoin.hash
-+++ b/package/bitcoin/bitcoin.hash
-@@ -1,7 +1,7 @@
--# Hash from: https://bitcoincore.org/bin/bitcoin-core-26.0/SHA256SUMS
-+# Hash from: https://bitcoincore.org/bin/bitcoin-core-26.2/SHA256SUMS
- # After checking pgp signature from:
--# https://bitcoincore.org/bin/bitcoin-core-26.0/SHA256SUMS.asc
--sha256  ab1d99276e28db62d1d9f3901e85ac358d7f1ebcb942d348a9c4e46f0fcdc0a1  bitcoin-26.0.tar.gz
-+# https://bitcoincore.org/bin/bitcoin-core-26.2/SHA256SUMS.asc
-+sha256  78d59418741f45cbdaa9bf20ebc49a5e95ff9f7172f72fc78d14307eaf341b3c  bitcoin-26.2.tar.gz
- 
- # Hash for license file
- sha256  a6331cd1f889397adfc0c3b0535682a20950c6cf8e5c712e9997a15ce98324e1  COPYING
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index 2f8a1777a2..9ca29092ad 100644
---- a/package/bitcoin/bitcoin.mk
-+++ b/package/bitcoin/bitcoin.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BITCOIN_VERSION = 26.0
-+BITCOIN_VERSION = 26.2
- BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
- BITCOIN_AUTORECONF = YES
- BITCOIN_LICENSE = MIT
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fe3247273e..c070379ced 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1933,6 +1933,8 @@ F:	support/testing/tests/package/test_usbutils/
+ F:	support/testing/tests/package/test_weston.py
+ F:	support/testing/tests/package/test_weston/
+ F:	support/testing/tests/package/test_wine.py
++F:	support/testing/tests/package/test_xfsprogs.py
++F:	support/testing/tests/package/test_xfsprogs/
+ F:	support/testing/tests/package/test_xz.py
+ F:	support/testing/tests/package/test_z3.py
+ F:	support/testing/tests/package/test_z3/
+diff --git a/support/testing/tests/package/test_xfsprogs.py b/support/testing/tests/package/test_xfsprogs.py
+new file mode 100644
+index 0000000000..a3a4bd27d8
+--- /dev/null
++++ b/support/testing/tests/package/test_xfsprogs.py
+@@ -0,0 +1,112 @@
++import os
++import subprocess
++
++import infra.basetest
++
++
++class TestXfsProgs(infra.basetest.BRTest):
++    # This test needs a Kernel with XFS support.
++    kern_frag = \
++        infra.filepath("tests/package/test_xfsprogs/linux-xfs.fragment")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.37"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_XFSPROGS=y
++        BR2_PACKAGE_OPENSSL=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        # Prepare the disk image. XFS requires at least 300MB of
++        # storage to work.
++        disk_file = os.path.join(self.builddir, "images", "disk.img")
++        self.emulator.logfile.write(f"Creating disk image: {disk_file}")
++        self.emulator.logfile.flush()
++        subprocess.check_call(
++            ["dd", "if=/dev/zero", f"of={disk_file}", "bs=1M", "count=512"],
++            stdout=self.emulator.logfile,
++            stderr=self.emulator.logfile)
++
++        # Run the emulator with a blank drive.
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        bootargs = ["console=ttyAMA0"]
++        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
++                     "-initrd", img,
++                     "-drive", f"file={disk_file},if=virtio,format=raw"]
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=bootargs,
++                           options=qemu_opts)
++        self.emulator.login()
++
++        # Check a program can run and show its version.
++        self.assertRunOk("mkfs.xfs -V")
++
++        # Variables for this test.
++        dev = "/dev/vda"
++        label = "BR_TEST"
++        mnt_pt = "/tmp/xfs"
++        data_file = f"{mnt_pt}/data.bin"
++
++        # We create the XFS filesystem on our device.
++        self.assertRunOk(f"mkfs.xfs {dev}")
++
++        # We set a label on this filesystem.
++        self.assertRunOk(f"xfs_admin -L '{label}' {dev}")
++
++        # We create a mount point.
++        self.assertRunOk(f"mkdir -p {mnt_pt}")
++
++        # We mount the XFS filesystem.
++        self.assertRunOk(f"mount {dev} {mnt_pt}")
++
++        # We create a file with random data, to use this new
++        # filesystem a bit.
++        self.assertRunOk(f"dd if=/dev/urandom of={data_file} bs=1M count=10")
++
++        # We compute the sha256 hash and save it for later.
++        hash_cmd = f"sha256sum {data_file}"
++        out, ret = self.emulator.run(hash_cmd)
++        self.assertEqual(ret, 0)
++        data_sha256 = out[0]
++
++        # We unmount the filesystem.
++        self.assertRunOk(f"umount {mnt_pt}")
++
++        # We query the fragmentation level. Since it's a new
++        # filesystem, we don't expect any filesystem
++        # fragmentation. This invocation is just to test the "xfs_db"
++        # program can run and read the filesystem.
++        self.assertRunOk(f"xfs_db -c frag -r {dev}")
++
++        # We run a repair (this tool is the equivalent of
++        # "fsck"). Again, since we cleanly unmounted the filesystem,
++        # we are not expecting any repair. This is just to test the
++        # program works correctly.
++        self.assertRunOk(f"xfs_repair {dev}")
++
++        # We query the label and check it is the one we set at the
++        # beginning.
++        out, ret = self.emulator.run(f"xfs_admin -l {dev}")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], f"label = \"{label}\"")
++
++        # We remount our filesystem.
++        self.assertRunOk(f"mount {dev} {mnt_pt}")
++
++        # We should recompute the same sha256 hash as before.
++        out, ret = self.emulator.run(hash_cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], data_sha256)
+diff --git a/support/testing/tests/package/test_xfsprogs/linux-xfs.fragment b/support/testing/tests/package/test_xfsprogs/linux-xfs.fragment
+new file mode 100644
+index 0000000000..32f7f6d872
+--- /dev/null
++++ b/support/testing/tests/package/test_xfsprogs/linux-xfs.fragment
+@@ -0,0 +1 @@
++CONFIG_XFS_FS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
