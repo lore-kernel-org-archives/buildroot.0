@@ -4,49 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A45FFC3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 09:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE7CC3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 09:18:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DAD6606C2;
-	Sat, 13 Jul 2024 09:17:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C1756061C;
+	Sat, 13 Jul 2024 09:18:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u-ezWT9Jm2XS; Sat, 13 Jul 2024 09:17:36 +0000 (UTC)
+ id SISQrQ6wzJta; Sat, 13 Jul 2024 09:18:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B852160670
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9777D6061E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B852160670;
-	Sat, 13 Jul 2024 09:17:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 68E991BF4D6
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:17:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9777D6061E;
+	Sat, 13 Jul 2024 09:18:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D8F041BF4D6
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:18:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 56095845CA
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:17:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5B2640571
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:18:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P-yQ8qXXh8Ww for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 09:17:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD19D845C9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD19D845C9
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 09:17:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B601B863F0; Sat, 13 Jul 2024 09:17:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 11:16:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9954315fc5b2026552a0f0175307ec8784b51578
-X-Git-Newrev: 92a8ad923e33e3fdf8c76caf2825de9b36b2ff43
-X-Patchwork-Hint: ignore
-Message-Id: <20240713091733.B601B863F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/beaglev_fire: add support for
- BeagleV Fire
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1Xn5m9B4IavY for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 09:18:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9C6114052D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C6114052D
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9C6114052D
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 09:18:48 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-52e99060b41so2910357e87.2
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 02:18:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720862326; x=1721467126;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=bL9BjPsQk0drJG2bmLh8ADH7eNmLu8ATjjLP79k13Mg=;
+ b=qdvVhwSAhYEHUjZKSMY767PyK0wUCk7VfS1+CDcnkQhqVdr6IpQiZs4nJA5w8ozO3Q
+ 94TGFa36+dwbFk6YKP0GZVCChTXtJ8Ox8w3bkYF4aCF6gOLCRmc+azxpoEy0K4rwslbY
+ RCOFERshMpThKMEUYaMDXGI449a3Ch/2rUcayHiiEtb5tGOLT1XY63qd7ZYCeu/Fyuqp
+ Im+ZbB3YTJQMoF69LWkp7GBFqpOpBrWN+m6RrYDGPrYq6jStoJuu4UOtPUmEzceSmoVg
+ ZxS9xNKURAkVSTi5ZSny/mkQzu0NBY0Rj18sqs1SrTPnSycoESkYQkwPp25pDyP1O8BC
+ SttQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXANBaN/J+Jovxi/rkN186LfCcW5xPwL8XR5DeBWtuIZDrfJPhFuU6Q7HS+rUeYJRlrArPaRRd8VFDka8QlN37T70cGs3+TrA==
+X-Gm-Message-State: AOJu0Yy+oI42CAWCBJ473eZSOcWXUZIfHgVV19khW9edywD7DNBRhnDc
+ ydPc2Nx3/NwhrLnESXzUzVS9KZFgG8eO3ox/kqWeA2SsLZQ+uuNYbfnmLklDVj0=
+X-Google-Smtp-Source: AGHT+IGBq3biCv2plZPzemAQ8qTq3sI1SGh/WW+S2dtjrCkaCL71x6LUY+iKsERtm01Kgk3fcA+cuw==
+X-Received: by 2002:ac2:41d3:0:b0:52e:9762:2ba4 with SMTP id
+ 2adb3069b0e04-52eb999552bmr7236395e87.25.1720862325677; 
+ Sat, 13 Jul 2024 02:18:45 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:f9c8:f443:ffd:1bed?
+ (2a01cb05949d5800f9c8f4430ffd1bed.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:f9c8:f443:ffd:1bed])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427a5e77471sm13776585e9.4.2024.07.13.02.18.44
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 13 Jul 2024 02:18:45 -0700 (PDT)
+Message-ID: <d6ff3eab-77c6-4b1f-952c-1b679dc2710c@smile.fr>
+Date: Sat, 13 Jul 2024 11:18:44 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Jamie Gibbons <jamie.gibbons@microchip.com>, buildroot@buildroot.org
+References: <20240618080504.3964101-1-jamie.gibbons@microchip.com>
+Content-Language: fr
+In-Reply-To: <20240618080504.3964101-1-jamie.gibbons@microchip.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1720862326; x=1721467126; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=bL9BjPsQk0drJG2bmLh8ADH7eNmLu8ATjjLP79k13Mg=;
+ b=p7Jpaj0v8lH2ubMqQYguRLJAxE961v5QU+6fms8qT3H8zPzkuIbVQnpTnlY0VeOgSu
+ xOYd3e9phxPaKSx5NBetgfFKPYYJOHZZDuvyHNWTNeSL9NHbXDWmQw2jSoR73OqVBzgL
+ yo8CDSI5k4tUGV6cEdXXsOIGbk03OUdzoz1ts=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=p7Jpaj0v
+Subject: Re: [Buildroot] [PATCH v2 1/1] configs/beaglev_fire: add support
+ for BeagleV Fire
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,511 +107,332 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Valentina Fernandez <valentina.fernandezalanis@microchip.com>,
+ Conor Dooley <Conor.Dooley@microchip.com>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92a8ad923e33e3fdf8c76caf2825de9b36b2ff43
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add support for the BeagleV Fire, the Beagleboard SBC powered by
-Microchip's PolarFire SoC.
-
-The configuration file is beaglev_fire_defconfig. It builds a
-bootable kernel image with an embedded root file system. The image
-built can be flashed to the board using the eMMC.
-
-The yaml configuration file is used by the hss payload generator. It
-maps the ELF binaries or binary blobs to the application hart.
-
-The image generator script sets the partitions of the image.
-
-The image tree souce file creates a FIT image.
-
-The post image script creates the payload using the payload generator
-host package and finally, creates the FIT image using the ITS after the
-kernel build. It also creates the BMAP file for use with the BMAP
-command line tool to transfer the image to the board.
-
-The U-Boot script and additional U-Boot configurations ensure that
-U-Boot behaves as expected for the BeagleV-Fire and boots the FIT image.
-
-The rootfs-overlay contains script for updating the BeagleV-Fire
-gateware.
-
-The README.txt documents how to build and boot the Beagle-V Fire with
-this configuration. It also explains how to program a custom bitstream.
-
-Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
-Reviewed-by: Valentina Fernandez <valentina.fernandezalanis@microchip.com>
-[Romain:
-  - move board files to board/beagleboard directory
-  - enable BR2_DOWNLOAD_FORCE_CHECK_HASHES and add hashes files
-  - enable BR2_KERNEL_HEADERS_AS_KERNEL for linux-headers to avoid specify
-    BR2_DEFAULT_KERNEL_VERSION
-  - add BR2_PACKAGE_HOST_DOSFSTOOLS for mkdosfs (host variant)
-]
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- DEVELOPERS                                         |   2 +
- board/beagleboard/beaglev_fire/README.txt          | 134 +++++++++++++++++++++
- board/beagleboard/beaglev_fire/beaglev_fire.its    |  55 +++++++++
- board/beagleboard/beaglev_fire/boot.cmd            |  15 +++
- board/beagleboard/beaglev_fire/config.yaml         |  28 +++++
- board/beagleboard/beaglev_fire/genimage.cfg        |  35 ++++++
- .../patches/linux-headers/linux-headers.hash       |   1 +
- .../beaglev_fire/patches/linux/linux.hash          |   2 +
- .../beaglev_fire/patches/uboot/uboot.hash          |   2 +
- board/beagleboard/beaglev_fire/post-image.sh       |  14 +++
- .../usr/share/microchip/update-gateware.sh         |  32 +++++
- .../beagleboard/beaglev_fire/uboot-fragment.config |   3 +
- configs/beaglev_fire_defconfig                     |  33 +++++
- 13 files changed, 356 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7b0f65fbfb..5336f0fe76 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1500,7 +1500,9 @@ F:	package/swaybg/
- F:	package/yad/
- 
- N:	Jamie Gibbons <jamie.gibbons@microchip.com>
-+F:	board/beagleboard/beaglev_fire/
- F:	board/microchip/mpfs_icicle/
-+F:	configs/beaglev_fire_defconfig
- F:	configs/microchip_mpfs_icicle_defconfig
- F:	package/microchip-hss-payload-generator/
- 
-diff --git a/board/beagleboard/beaglev_fire/README.txt b/board/beagleboard/beaglev_fire/README.txt
-new file mode 100644
-index 0000000000..c9a824b67f
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/README.txt
-@@ -0,0 +1,134 @@
-+Beagle-V Fire
-+==============
-+
-+BeagleV Fire is a low-cost RISC-V 64-bit based platform, powered by
-+Microchip's PolarFire SoC. This file describes how to use the
-+pre-defined Buildroot configuration for the Beagle-V Fire board.
-+
-+Further information about the Beagle-V Fire can be found at
-+https://docs.beagleboard.org/latest/boards/beaglev/fire/index.html.
-+
-+
-+Building
-+========
-+
-+Configure Buildroot using the default board configuration:
-+
-+  '$ make beaglev_fire_defconfig'
-+
-+Customise the build as necessary:
-+
-+  '$ make menuconfig'
-+
-+Start the build:
-+
-+  '$ make'
-+
-+
-+Result of the build
-+===================
-+
-+Once the build has finished you will have the following files:
-+
-+    output/images/
-+    +-- boot.scr
-+    +-- boot.vfat
-+    +-- Image
-+    +-- Image.gz
-+    +-- beaglev_fire.itb
-+    +-- beaglev_fire.its
-+    +-- mpfs-beaglev-fire.dtb
-+    +-- payload.bin
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4
-+    +-- rootfs.tar
-+    +-- sdcard.img
-+    +-- u-boot.bin
-+
-+
-+Flashing the image to your eMMC
-+===============================
-+
-+By default Buildroot builds an image suitable for the eMMC. The first partition
-+of this image contains a U-Boot binary, embedded in a Hart Software Services
-+(HSS) payload. The second partition contains a FAT filesystem with a U-Boot env
-+and an ITB file containing the kernel and the device tree. The third partition
-+contains the file system. This image can be written directly to the eMMC.
-+
-+To do so, follow the below steps:
-+
-+1. Connect to BeagleV-Fire UART debug port using a 3.3v USB to UART bridge.
-+
-+2. Now you can run `tio <port>` in a terminal window to access the UART debug
-+port connection.
-+  e.g `tio /dev/ttyUSB4`
-+
-+3. Once you are connected properly, you can press the Reset button which will
-+show you a progress bar.
-+
-+4. Press any key in the terminal application to stop the HSS from booting. This
-+will give you access to the HSS command line interface and a ">>" for input
-+will be displayed in the terminal.
-+
-+5. Type `usbdmsc` in the HSS command line interface. The HSS `usbdmsc` command
-+exposes the eMMC as a USB mass storage device using the USB type C connector.
-+If successful, a message saying "USB Host connected" will be displayed.
-+
-+6. The eMMC should now appear as mass storage device/drive on your host PC, as
-+it is mounted through your USB type C connector.
-+
-+7. Now, all you need to do is dd the image to the eMMC, which can be done with
-+the following command on your development host:
-+
-+  '$ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=1M'
-+
-+You will have to replace /dev/sdX by the actual device name of your eMMC.
-+Please, be especially cautious not to overwrite the wrong drive as this cannot
-+be undone.
-+
-+8. Once the image transfer has completed you can type `CTRL+C` to disconnect
-+your device.
-+
-+9. Finally, type `boot` or reset your board to boot your new Linux image.
-+
-+Customize BeagleV-Fire Cape Gateware Using Verilog (Optional)
-+=============================================================
-+
-+To customize your Beagle-V Fire gateware please follow the guide below to
-+create your custom bitstream (steps 1 - 6):
-+https://docs.beagleboard.org/latest/boards/beaglev/fire/demos-and-tutorials/gateware/customize-cape-gateware-verilog.html
-+
-+
-+  Program BeagleV-Fire With Your Custom Bitstream with Buildroot
-+  ==============================================================
-+
-+  After following the steps 1-6 from the above tutorial, you should now have a
-+  artifacts.zip file on your local host.
-+
-+  Unzip the downloaded artifacts.zip file.
-+
-+  Go to the custom FPGA design directory:
-+    'cd artifacts/bitstreams/my_custom_fpga_design'
-+
-+  On your Linux host development computer, copy the bitstream to BeagleV-Fire
-+  board, replacing </path/to/your/> with the path to your BeagleV-Fire root file
-+  system.
-+    'cp -r ./LinuxProgramming /path/to/your/buildroot/board/beagleboard/beaglev_fire/rootfs-overlay/etc/'
-+
-+  To apply these changes to your image, make sure to re-build it with:
-+    `make`
-+
-+  Then, re-flash your image - to ensure you have the necessary firmware files - by
-+  following the above section "Flashing the image to your eMMC".
-+
-+  On BeagleV-Fire,
-+    1. Make your update gateware script executable
-+      'chmod +x /usr/share/microchip/update-gateware.sh'
-+    2. Create a firmware directory
-+      'mkdir /lib/firmware'
-+    3. Change to the directory of your gateware script
-+      `cd /usr/share/microchip/`
-+    3. initiate the reprogramming of the FPGA with your gateware bitstream:
-+      './update-gateware.sh /etc/LinuxProgramming/'
-+
-+  Wait for a couple of minutes for the BeagleV-Fire to reprogram itself.
-diff --git a/board/beagleboard/beaglev_fire/beaglev_fire.its b/board/beagleboard/beaglev_fire/beaglev_fire.its
-new file mode 100644
-index 0000000000..97c878c118
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/beaglev_fire.its
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Flattened Image Tree file for BVF
-+ *
-+ * Copyright (C) 2024 Microchip Technology Inc. and its subsidiaries.
-+ *
-+ */
-+
-+/dts-v1/;
-+
-+/ {
-+	description = "U-Boot fitImage for the BeagleV-Fire";
-+	#address-cells = <2>;
-+
-+		images {
-+			kernel {
-+				description = "Linux kernel";
-+				data = /incbin/("./Image.gz");
-+				type = "kernel";
-+				arch = "riscv";
-+				os = "linux";
-+				compression = "gzip";
-+				load = <0x80200000>;
-+				entry = <0x80200000>;
-+				hash-1 {
-+					algo = "sha256";
-+				};
-+			};
-+			base_fdt {
-+				description = "Flattened Device Tree blob";
-+				data = /incbin/("./mpfs-beaglev-fire.dtb");
-+				type = "flat_dt";
-+				arch = "riscv";
-+				compression = "none";
-+				load = <0x8a000000>;
-+				hash-1 {
-+					algo = "sha256";
-+				};
-+			};
-+		};
-+
-+		configurations {
-+			default = "kernel_dtb";
-+			kernel_dtb {
-+				description = "1 Linux kernel, FDT blob";
-+				kernel = "kernel";
-+				fdt = "base_fdt";
-+			};
-+
-+			base_dtb {
-+				description = "Base FDT blob for BeagleV-Fire board";
-+				fdt = "base_fdt";
-+			};
-+		};
-+};
-diff --git a/board/beagleboard/beaglev_fire/boot.cmd b/board/beagleboard/beaglev_fire/boot.cmd
-new file mode 100644
-index 0000000000..05f4858bac
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/boot.cmd
-@@ -0,0 +1,15 @@
-+# this assumes ${scriptaddr} is already set!!
-+
-+# Try to boot a fitImage from eMMC/SD
-+
-+setenv fdt_high 0xffffffffffffffff
-+setenv initrd_high 0xffffffffffffffff
-+
-+load mmc 0:${distro_bootpart} ${scriptaddr} beaglev_fire.itb;
-+bootm start ${scriptaddr}#kernel_dtb;
-+bootm loados ${scriptaddr};
-+# Try to load a ramdisk if available inside fitImage
-+bootm ramdisk;
-+bootm prep;
-+fdt set /soc/ethernet@20110000 mac-address ${beaglevfire_mac_addr0};
-+bootm go;
-diff --git a/board/beagleboard/beaglev_fire/config.yaml b/board/beagleboard/beaglev_fire/config.yaml
-new file mode 100644
-index 0000000000..5fccdfd34f
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/config.yaml
-@@ -0,0 +1,28 @@
-+#
-+# HSS Payload Generator - buildroot configuration file
-+#
-+
-+# First, we can optionally set a name for our image, otherwise one will be created dynamically
-+set-name: 'PolarFire-SoC-HSS::U-Boot'
-+
-+#
-+# Next, we'll define the entry point addresses for each hart, as follows:
-+#
-+hart-entry-points: {u54_1: '0x80200000', u54_2: '0x80200000', u54_3: '0x80200000', u54_4: '0x80200000'}
-+#
-+# Finally, we'll define a payloads (source binary file) that will be placed at certain regions in memory
-+# The payload section is defined with the keyword payloads, and then a number of individual
-+# payload descriptors.
-+#
-+# Each payload has a name (path to its ELF/bin file), an owner-hart, and optionally 1-3 secondary-harts.
-+#
-+# Additionally, it has a privilege mode in which it will start execution.
-+#  * Valid privilege modes are PRV_M, PRV_S and PRV_U.
-+#
-+#
-+# In this case, the only payload is the u-boot s-mode binary.
-+#
-+# Case only matters for the ELF path names, not the keywords.
-+#
-+payloads:
-+  u-boot.bin: {exec-addr: '0x80200000', owner-hart: u54_1, secondary-hart: u54_2, secondary-hart: u54_3, secondary-hart: u54_4, priv-mode: prv_s}
-diff --git a/board/beagleboard/beaglev_fire/genimage.cfg b/board/beagleboard/beaglev_fire/genimage.cfg
-new file mode 100644
-index 0000000000..ef650704c6
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/genimage.cfg
-@@ -0,0 +1,35 @@
-+# Image for eMMC boot on the Microchip PolarFire SOC BeagleV-Fire Board
-+#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			 "beaglev_fire.itb",
-+		}
-+
-+		file boot.scr {
-+			image = "boot.scr"
-+		}
-+	}
-+	size = 60M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+		partition-table-type = "gpt"
-+	}
-+
-+	partition uboot {
-+		partition-type-uuid = 21686148-6449-6E6F-744E-656564454649
-+		image = "payload.bin"
-+	}
-+
-+	partition kernel {
-+		partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition root {
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/beagleboard/beaglev_fire/patches/linux-headers/linux-headers.hash b/board/beagleboard/beaglev_fire/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/beagleboard/beaglev_fire/patches/linux/linux.hash b/board/beagleboard/beaglev_fire/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..d621dc3201
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  7d634bf425f2ad68c3a6aab0d67a5f0c9f59a4fae02f051054f428854913f58a  linux4microchip+fpga-2024.02.tar.gz
-diff --git a/board/beagleboard/beaglev_fire/patches/uboot/uboot.hash b/board/beagleboard/beaglev_fire/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..684aa15a12
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c21209347beac37540f1c7070760498493975052b536fc02677faa2110666bab  linux4microchip+fpga-2024.02.tar.gz
-diff --git a/board/beagleboard/beaglev_fire/post-image.sh b/board/beagleboard/beaglev_fire/post-image.sh
-new file mode 100755
-index 0000000000..43be1356cf
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/post-image.sh
-@@ -0,0 +1,14 @@
-+#!/bin/bash
-+set -e
-+
-+HSS_PAYLOAD_GENERATOR="${HOST_DIR}"/bin/hss-payload-generator
-+MKIMAGE="${HOST_DIR}"/bin/mkimage
-+BOARD_DIR="$(pwd)"/"${0%/*}"
-+
-+pushd "${BINARIES_DIR}"
-+"${HSS_PAYLOAD_GENERATOR}" -c "${BOARD_DIR}"/config.yaml payload.bin
-+cp "${BOARD_DIR}"/beaglev_fire.its "${BINARIES_DIR}"/beaglev_fire.its
-+gzip -9 Image -c > Image.gz
-+"${MKIMAGE}" -f beaglev_fire.its beaglev_fire.itb
-+popd
-+support/scripts/genimage.sh -c "${BOARD_DIR}"/genimage.cfg
-diff --git a/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh b/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
-new file mode 100644
-index 0000000000..f455037b60
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
-@@ -0,0 +1,32 @@
-+#!/bin/sh
-+
-+if [ ! -e "$1"/mpfs_bitstream.spi ]; then
-+        echo "No gateware file found."
-+        exit 1
-+fi
-+
-+if [ ! -d /lib/firmware ]
-+then
-+    mkdir /lib/firmware
-+fi
-+
-+cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
-+cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
-+
-+mount -t debugfs none /sys/kernel/debug
-+
-+# Trash existing device tree overlay in case the rest of the process fails:
-+flash_erase /dev/mtd0 0 1024
-+
-+# # Write device tree overlay
-+dd if=/lib/firmware/mpfs_dtbo.spi of=/dev/mtd0 seek=1024
-+
-+# Fake the presence of a golden image for now.
-+dd if=/dev/zero of=/dev/mtd0 count=4 bs=1
-+
-+# Initiate FPGA update.
-+echo 1 > /sys/kernel/debug/fpga/microchip_exec_update
-+
-+# Reboot Linux for the gateware update to take effect.
-+# FPGA reprogramming takes places between Linux shut-down and HSS restarting the board.
-+reboot
-diff --git a/board/beagleboard/beaglev_fire/uboot-fragment.config b/board/beagleboard/beaglev_fire/uboot-fragment.config
-new file mode 100644
-index 0000000000..e2a5eb9438
---- /dev/null
-+++ b/board/beagleboard/beaglev_fire/uboot-fragment.config
-@@ -0,0 +1,3 @@
-+CONFIG_USE_BOOTARGS=y
-+CONFIG_BOOTARGS="root=/dev/mmcblk0p3 rootwait uio_pdrv_genirq.of_id=generic-uio"
-+CONFIG_MPFS_PRIORITISE_QSPI_BOOT=n
-diff --git a/configs/beaglev_fire_defconfig b/configs/beaglev_fire_defconfig
-new file mode 100644
-index 0000000000..d52ec3c7d7
---- /dev/null
-+++ b/configs/beaglev_fire_defconfig
-@@ -0,0 +1,33 @@
-+BR2_riscv=y
-+BR2_RISCV_ISA_RVC=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_GLOBAL_PATCH_DIR="board/beagleboard/beaglev_fire/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_OVERLAY="board/beagleboard/beaglev_fire/rootfs-overlay/"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beagleboard/beaglev_fire/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux-6.1-mchp+fpga)/linux4microchip+fpga-2024.02.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="mpfs"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="microchip/mpfs-beaglev-fire"
-+BR2_PACKAGE_MTD=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,polarfire-soc,u-boot)linux4microchip+fpga-2024.02.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="beaglev_fire"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/beagleboard/beaglev_fire/uboot-fragment.config"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MICROCHIP_HSS_PAYLOAD_GENERATOR=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/beagleboard/beaglev_fire/boot.cmd"
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSmFtaWUsIEFsbCwKCkxlIDE4LzA2LzIwMjQgw6AgMTA6MDUsIEphbWllIEdpYmJvbnMg
+dmlhIGJ1aWxkcm9vdCBhIMOpY3JpdMKgOgo+IEFkZCBzdXBwb3J0IGZvciB0aGUgQmVhZ2xlViBG
+aXJlLCB0aGUgQmVhZ2xlYm9hcmQgU0JDIHBvd2VyZWQgYnkKPiBNaWNyb2NoaXAncyBQb2xhckZp
+cmUgU29DLgo+IAo+IFRoZSBjb25maWd1cmF0aW9uIGZpbGUgaXMgYmVhZ2xldl9maXJlX2RlZmNv
+bmZpZy4gSXQgYnVpbGRzIGEKPiBib290YWJsZSBrZXJuZWwgaW1hZ2Ugd2l0aCBhbiBlbWJlZGRl
+ZCByb290IGZpbGUgc3lzdGVtLiBUaGUgaW1hZ2UKPiBidWlsdCBjYW4gYmUgZmxhc2hlZCB0byB0
+aGUgYm9hcmQgdXNpbmcgdGhlIGVNTUMuCj4gCj4gVGhlIHlhbWwgY29uZmlndXJhdGlvbiBmaWxl
+IGlzIHVzZWQgYnkgdGhlIGhzcyBwYXlsb2FkIGdlbmVyYXRvci4gSXQKPiBtYXBzIHRoZSBFTEYg
+YmluYXJpZXMgb3IgYmluYXJ5IGJsb2JzIHRvIHRoZSBhcHBsaWNhdGlvbiBoYXJ0Lgo+IAo+IFRo
+ZSBpbWFnZSBnZW5lcmF0b3Igc2NyaXB0IHNldHMgdGhlIHBhcnRpdGlvbnMgb2YgdGhlIGltYWdl
+Lgo+IAo+IFRoZSBpbWFnZSB0cmVlIHNvdWNlIGZpbGUgY3JlYXRlcyBhIEZJVCBpbWFnZS4KPiAK
+PiBUaGUgcG9zdCBpbWFnZSBzY3JpcHQgY3JlYXRlcyB0aGUgcGF5bG9hZCB1c2luZyB0aGUgcGF5
+bG9hZCBnZW5lcmF0b3IKPiBob3N0IHBhY2thZ2UgYW5kIGZpbmFsbHksIGNyZWF0ZXMgdGhlIEZJ
+VCBpbWFnZSB1c2luZyB0aGUgSVRTIGFmdGVyIHRoZQo+IGtlcm5lbCBidWlsZC4gSXQgYWxzbyBj
+cmVhdGVzIHRoZSBCTUFQIGZpbGUgZm9yIHVzZSB3aXRoIHRoZSBCTUFQCj4gY29tbWFuZCBsaW5l
+IHRvb2wgdG8gdHJhbnNmZXIgdGhlIGltYWdlIHRvIHRoZSBib2FyZC4KPiAKPiBUaGUgVS1Cb290
+IHNjcmlwdCBhbmQgYWRkaXRpb25hbCBVLUJvb3QgY29uZmlndXJhdGlvbnMgZW5zdXJlIHRoYXQK
+PiBVLUJvb3QgYmVoYXZlcyBhcyBleHBlY3RlZCBmb3IgdGhlIEJlYWdsZVYtRmlyZSBhbmQgYm9v
+dHMgdGhlIEZJVCBpbWFnZS4KPiAKPiBUaGUgcm9vdGZzLW92ZXJsYXkgY29udGFpbnMgc2NyaXB0
+IGZvciB1cGRhdGluZyB0aGUgQmVhZ2xlVi1GaXJlCj4gZ2F0ZXdhcmUuCj4gCj4gVGhlIFJFQURN
+RS50eHQgZG9jdW1lbnRzIGhvdyB0byBidWlsZCBhbmQgYm9vdCB0aGUgQmVhZ2xlLVYgRmlyZSB3
+aXRoCj4gdGhpcyBjb25maWd1cmF0aW9uLiBJdCBhbHNvIGV4cGxhaW5zIGhvdyB0byBwcm9ncmFt
+IGEgY3VzdG9tIGJpdHN0cmVhbS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKYW1pZSBHaWJib25zIDxq
+YW1pZS5naWJib25zQG1pY3JvY2hpcC5jb20+Cj4gUmV2aWV3ZWQtYnk6IFZhbGVudGluYSBGZXJu
+YW5kZXogPHZhbGVudGluYS5mZXJuYW5kZXphbGFuaXNAbWljcm9jaGlwLmNvbT4KClRoYW5rcyBm
+b3IgdGhlIGRldGFpbGxlZCBjb21taXQgbG9nIGFuZCBleHBsYW5hdGlvbiBhYm91dCB0aGUgYmVh
+Z2xldl9maXJlIGJyaW5ndXAhCgpBIG5ldyBib2FyZC9iZWFnbGVib2FyZCBkaXJlY3RvcnkgaGFz
+IGJlZW4gYWRkZWQgcmVjZW50bHkgZm9yIGJlYWdsZWJvbmVhaTY0CmFuZCBiZWFnbGVwbGF5IGJh
+cmRzLiBJIHBsYW4gdG8gbW92ZSBhbGwgZXhpc3RpbmcgYmVhZ2xlYm9hcmQgYm9hcmRzCihiZWFn
+bGVib2FyZHgxNSBiZWFnbGVib25lIGJlYWdsZWJvbmVhaSBiZWFnbGV2KSB0byBpdC4KU28gSSBt
+b3ZlZCBhbGwgYmVhZ2xldl9maXJlIGJvYXJkIGZpbGVzIHRvIGJvYXJkL2JlYWdsZWJvYXJkLgoK
+RW5hYmxpbmcgQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUyBpcyBub3cgcmVxdWlyZWQg
+aW4gb3JkZXIgdG8gY2hlY2ggdGhlCmhhc2ggb2YgZG93bmxvYWRlZCBhcmNoaXZlcyB3aGVuIGEg
+Y3VzdG9tIHZlcnNpb24gaXMgdXNlZC4KCkkgZW5hYmxlZCBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hF
+Q0tfSEFTSEVTIGFuZCBhZGRlZCBhbGwgcmVxdWlyZWQgaGFzaCBmaWxlcy4KCj4gLS0tCj4gdjEg
+LT4gdjI6Cj4gLSBSRUFETUUgdXBkYXRlcwo+IC0gcmVuYW1lZCBVLUJvb3QgYm9vdCBzY3JpcHQK
+PiAtIGNvbWJpbmVkIGdhdGV3YXJlIHVwZGF0ZSBzY3JpcHRzCj4gLSByZXBsYWNlZCBtdGRfZGVi
+dWcgd2l0aCBmbGFzaF9lcmFzZSBhbmQgZGQgaW4gZ2F0ZXdhcmUgdXBkYXRlIHNjcmlwdAo+IC0g
+Zml4ZWQgZ2VuaW1hZ2UgZm9yIGluaXRyYW1mcyBpbWFnZSBnZW5lcmF0aW9uCj4gLSByZW1vdmVk
+IHVudXNlZCB0YXJnZXQgcGFja2FnZXMKPiAtLS0KPiAgREVWRUxPUEVSUyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgICAyICsKPiAgYm9hcmQvYmVhZ2xldl9maXJlL1JFQURN
+RS50eHQgICAgICAgICAgICAgICAgIHwgMTM0ICsrKysrKysrKysrKysrKysrKwo+ICBib2FyZC9i
+ZWFnbGV2X2ZpcmUvYmVhZ2xldl9maXJlLml0cyAgICAgICAgICAgfCAgNTUgKysrKysrKwo+ICBi
+b2FyZC9iZWFnbGV2X2ZpcmUvYm9vdC5jbWQgICAgICAgICAgICAgICAgICAgfCAgMTUgKysKPiAg
+Ym9hcmQvYmVhZ2xldl9maXJlL2NvbmZpZy55YW1sICAgICAgICAgICAgICAgIHwgIDI4ICsrKysK
+PiAgYm9hcmQvYmVhZ2xldl9maXJlL2dlbmltYWdlLmNmZyAgICAgICAgICAgICAgIHwgIDM1ICsr
+KysrCj4gIGJvYXJkL2JlYWdsZXZfZmlyZS9wb3N0LWltYWdlLnNoICAgICAgICAgICAgICB8ICAx
+NCArKwo+ICAuLi4vdXNyL3NoYXJlL21pY3JvY2hpcC91cGRhdGUtZ2F0ZXdhcmUuc2ggICAgfCAg
+MzIgKysrKysKPiAgYm9hcmQvYmVhZ2xldl9maXJlL3Vib290LWZyYWdtZW50LmNvbmZpZyAgICAg
+IHwgICAzICsKPiAgY29uZmlncy9iZWFnbGV2X2ZpcmVfZGVmY29uZmlnICAgICAgICAgICAgICAg
+IHwgIDMyICsrKysrCj4gIDEwIGZpbGVzIGNoYW5nZWQsIDM1MCBpbnNlcnRpb25zKCspCj4gIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9iZWFnbGV2X2ZpcmUvUkVBRE1FLnR4dAo+ICBjcmVhdGUg
+bW9kZSAxMDA2NDQgYm9hcmQvYmVhZ2xldl9maXJlL2JlYWdsZXZfZmlyZS5pdHMKPiAgY3JlYXRl
+IG1vZGUgMTAwNjQ0IGJvYXJkL2JlYWdsZXZfZmlyZS9ib290LmNtZAo+ICBjcmVhdGUgbW9kZSAx
+MDA2NDQgYm9hcmQvYmVhZ2xldl9maXJlL2NvbmZpZy55YW1sCj4gIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBib2FyZC9iZWFnbGV2X2ZpcmUvZ2VuaW1hZ2UuY2ZnCj4gIGNyZWF0ZSBtb2RlIDEwMDc1NSBi
+b2FyZC9iZWFnbGV2X2ZpcmUvcG9zdC1pbWFnZS5zaAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9h
+cmQvYmVhZ2xldl9maXJlL3Jvb3Rmcy1vdmVybGF5L3Vzci9zaGFyZS9taWNyb2NoaXAvdXBkYXRl
+LWdhdGV3YXJlLnNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9iZWFnbGV2X2ZpcmUvdWJv
+b3QtZnJhZ21lbnQuY29uZmlnCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL2JlYWdsZXZf
+ZmlyZV9kZWZjb25maWcKPiAKPiBkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMK
+PiBpbmRleCA4YmZkMzZmMWQ4Li41OTc4M2NjOTg5IDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BFUlMK
+PiArKysgYi9ERVZFTE9QRVJTCj4gQEAgLTE0ODksNyArMTQ4OSw5IEBAIEY6CXBhY2thZ2Uvc3dh
+eWJnLwo+ICBGOglwYWNrYWdlL3lhZC8KPiAgCj4gIE46CUphbWllIEdpYmJvbnMgPGphbWllLmdp
+YmJvbnNAbWljcm9jaGlwLmNvbT4KPiArRjoJYm9hcmQvYmVhZ2xldl9maXJlLwo+ICBGOglib2Fy
+ZC9taWNyb2NoaXAvbXBmc19pY2ljbGUvCj4gK0Y6CWNvbmZpZ3MvYmVhZ2xldl9maXJlX2RlZmNv
+bmZpZwo+ICBGOgljb25maWdzL21pY3JvY2hpcF9tcGZzX2ljaWNsZV9kZWZjb25maWcKPiAgRjoJ
+cGFja2FnZS9taWNyb2NoaXAtaHNzLXBheWxvYWQtZ2VuZXJhdG9yLwo+ICAKPiBkaWZmIC0tZ2l0
+IGEvYm9hcmQvYmVhZ2xldl9maXJlL1JFQURNRS50eHQgYi9ib2FyZC9iZWFnbGV2X2ZpcmUvUkVB
+RE1FLnR4dAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uZjc4ZjMw
+YmE1ZAo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib2FyZC9iZWFnbGV2X2ZpcmUvUkVBRE1FLnR4
+dAo+IEBAIC0wLDAgKzEsMTM0IEBACj4gK0JlYWdsZS1WIEZpcmUKPiArPT09PT09PT09PT09PT0K
+PiArCj4gK0JlYWdsZVYgRmlyZSBpcyBhIGxvdy1jb3N0IFJJU0MtViA2NC1iaXQgYmFzZWQgcGxh
+dGZvcm0sIHBvd2VyZWQgYnkKPiArTWljcm9jaGlwJ3MgUG9sYXJGaXJlIFNvQy4gVGhpcyBmaWxl
+IGRlc2NyaWJlcyBob3cgdG8gdXNlIHRoZQo+ICtwcmUtZGVmaW5lZCBCdWlsZHJvb3QgY29uZmln
+dXJhdGlvbiBmb3IgdGhlIEJlYWdsZS1WIEZpcmUgYm9hcmQuCj4gKwo+ICtGdXJ0aGVyIGluZm9y
+bWF0aW9uIGFib3V0IHRoZSBCZWFnbGUtViBGaXJlIGNhbiBiZSBmb3VuZCBhdAo+ICtodHRwczov
+L2RvY3MuYmVhZ2xlYm9hcmQub3JnL2xhdGVzdC9ib2FyZHMvYmVhZ2xldi9maXJlL2luZGV4Lmh0
+bWwuCj4gKwo+ICsKPiArQnVpbGRpbmcKPiArPT09PT09PT0KPiArCj4gK0NvbmZpZ3VyZSBCdWls
+ZHJvb3QgdXNpbmcgdGhlIGRlZmF1bHQgYm9hcmQgY29uZmlndXJhdGlvbjoKPiArCj4gKyAgJyQg
+bWFrZSBiZWFnbGV2X2ZpcmVfZGVmY29uZmlnJwo+ICsKPiArQ3VzdG9taXNlIHRoZSBidWlsZCBh
+cyBuZWNlc3Nhcnk6Cj4gKwo+ICsgICckIG1ha2UgbWVudWNvbmZpZycKPiArCj4gK1N0YXJ0IHRo
+ZSBidWlsZDoKPiArCj4gKyAgJyQgbWFrZScKPiArCj4gKwo+ICtSZXN1bHQgb2YgdGhlIGJ1aWxk
+Cj4gKz09PT09PT09PT09PT09PT09PT0KPiArCj4gK09uY2UgdGhlIGJ1aWxkIGhhcyBmaW5pc2hl
+ZCB5b3Ugd2lsbCBoYXZlIHRoZSBmb2xsb3dpbmcgZmlsZXM6Cj4gKwo+ICsgICAgb3V0cHV0L2lt
+YWdlcy8KPiArICAgICstLSBib290LnNjcgo+ICsgICAgKy0tIGJvb3QudmZhdAo+ICsgICAgKy0t
+IEltYWdlCj4gKyAgICArLS0gSW1hZ2UuZ3oKPiArICAgICstLSBiZWFnbGV2X2ZpcmUuaXRiCj4g
+KyAgICArLS0gYmVhZ2xldl9maXJlLml0cwo+ICsgICAgKy0tIG1wZnMtYmVhZ2xldi1maXJlLmR0
+Ygo+ICsgICAgKy0tIHBheWxvYWQuYmluCj4gKyAgICArLS0gcm9vdGZzLmV4dDIKPiArICAgICst
+LSByb290ZnMuZXh0NAo+ICsgICAgKy0tIHJvb3Rmcy50YXIKPiArICAgICstLSBzZGNhcmQuaW1n
+Cj4gKyAgICArLS0gdS1ib290LmJpbgo+ICsKPiArCj4gK0ZsYXNoaW5nIHRoZSBpbWFnZSB0byB5
+b3VyIGVNTUMKPiArPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQo+ICsKPiArQnkgZGVm
+YXVsdCBCdWlsZHJvb3QgYnVpbGRzIGFuIGltYWdlIHN1aXRhYmxlIGZvciB0aGUgZU1NQy4gVGhl
+IGZpcnN0IHBhcnRpdGlvbgo+ICtvZiB0aGlzIGltYWdlIGNvbnRhaW5zIGEgVS1Cb290IGJpbmFy
+eSwgZW1iZWRkZWQgaW4gYSBIYXJ0IFNvZnR3YXJlIFNlcnZpY2VzCj4gKyhIU1MpIHBheWxvYWQu
+IFRoZSBzZWNvbmQgcGFydGl0aW9uIGNvbnRhaW5zIGEgRkFUIGZpbGVzeXN0ZW0gd2l0aCBhIFUt
+Qm9vdCBlbnYKPiArYW5kIGFuIElUQiBmaWxlIGNvbnRhaW5pbmcgdGhlIGtlcm5lbCBhbmQgdGhl
+IGRldmljZSB0cmVlLiBUaGUgdGhpcmQgcGFydGl0aW9uCj4gK2NvbnRhaW5zIHRoZSBmaWxlIHN5
+c3RlbS4gVGhpcyBpbWFnZSBjYW4gYmUgd3JpdHRlbiBkaXJlY3RseSB0byB0aGUgZU1NQy4gCj4g
+Kwo+ICtUbyBkbyBzbywgZm9sbG93IHRoZSBiZWxvdyBzdGVwczoKPiArCj4gKzEuIENvbm5lY3Qg
+dG8gQmVhZ2xlVi1GaXJlIFVBUlQgZGVidWcgcG9ydCB1c2luZyBhIDMuM3YgVVNCIHRvIFVBUlQg
+YnJpZGdlLgo+ICsKPiArMi4gTm93IHlvdSBjYW4gcnVuIGB0aW8gPHBvcnQ+YCBpbiBhIHRlcm1p
+bmFsIHdpbmRvdyB0byBhY2Nlc3MgdGhlIFVBUlQgZGVidWcKPiArcG9ydCBjb25uZWN0aW9uLgo+
+ICsgIGUuZyBgdGlvIC9kZXYvdHR5VVNCNGAKPiArCj4gKzMuIE9uY2UgeW91IGFyZSBjb25uZWN0
+ZWQgcHJvcGVybHksIHlvdSBjYW4gcHJlc3MgdGhlIFJlc2V0IGJ1dHRvbiB3aGljaCB3aWxsCj4g
+K3Nob3cgeW91IGEgcHJvZ3Jlc3MgYmFyLgo+ICsKPiArNC4gUHJlc3MgYW55IGtleSBpbiB0aGUg
+dGVybWluYWwgYXBwbGljYXRpb24gdG8gc3RvcCB0aGUgSFNTIGZyb20gYm9vdGluZy4gVGhpcwo+
+ICt3aWxsIGdpdmUgeW91IGFjY2VzcyB0byB0aGUgSFNTIGNvbW1hbmQgbGluZSBpbnRlcmZhY2Ug
+YW5kIGEgIj4+IiBmb3IgaW5wdXQKPiArd2lsbCBiZSBkaXNwbGF5ZWQgaW4gdGhlIHRlcm1pbmFs
+Lgo+ICsKPiArNS4gVHlwZSBgdXNiZG1zY2AgaW4gdGhlIEhTUyBjb21tYW5kIGxpbmUgaW50ZXJm
+YWNlLiBUaGUgSFNTIGB1c2JkbXNjYCBjb21tYW5kCj4gK2V4cG9zZXMgdGhlIGVNTUMgYXMgYSBV
+U0IgbWFzcyBzdG9yYWdlIGRldmljZSB1c2luZyB0aGUgVVNCIHR5cGUgQyBjb25uZWN0b3IuCj4g
+K0lmIHN1Y2Nlc3NmdWwsIGEgbWVzc2FnZSBzYXlpbmcgIlVTQiBIb3N0IGNvbm5lY3RlZCIgd2ls
+bCBiZSBkaXNwbGF5ZWQuCj4gKwo+ICs2LiBUaGUgZU1NQyBzaG91bGQgbm93IGFwcGVhciBhcyBt
+YXNzIHN0b3JhZ2UgZGV2aWNlL2RyaXZlIG9uIHlvdXIgaG9zdCBQQywgYXMKPiAraXQgaXMgbW91
+bnRlZCB0aHJvdWdoIHlvdXIgVVNCIHR5cGUgQyBjb25uZWN0b3IuCj4gKwo+ICs3LiBOb3csIGFs
+bCB5b3UgbmVlZCB0byBkbyBpcyBkZCB0aGUgaW1hZ2UgdG8gdGhlIGVNTUMsIHdoaWNoIGNhbiBi
+ZSBkb25lIHdpdGgKPiArdGhlIGZvbGxvd2luZyBjb21tYW5kIG9uIHlvdXIgZGV2ZWxvcG1lbnQg
+aG9zdDoKPiArCj4gKyAgJyQgc3VkbyBkZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9
+L2Rldi9zZFggYnM9MU0nCj4gKwo+ICtZb3Ugd2lsbCBoYXZlIHRvIHJlcGxhY2UgL2Rldi9zZFgg
+YnkgdGhlIGFjdHVhbCBkZXZpY2UgbmFtZSBvZiB5b3VyIGVNTUMuCj4gK1BsZWFzZSwgYmUgZXNw
+ZWNpYWxseSBjYXV0aW91cyBub3QgdG8gb3ZlcndyaXRlIHRoZSB3cm9uZyBkcml2ZSBhcyB0aGlz
+IGNhbm5vdAo+ICtiZSB1bmRvbmUuCj4gKwo+ICs4LiBPbmNlIHRoZSBpbWFnZSB0cmFuc2ZlciBo
+YXMgY29tcGxldGVkIHlvdSBjYW4gdHlwZSBgQ1RSTCtDYCB0byBkaXNjb25uZWN0Cj4gK3lvdXIg
+ZGV2aWNlLgo+ICsKPiArOS4gRmluYWxseSwgdHlwZSBgYm9vdGAgb3IgcmVzZXQgeW91ciBib2Fy
+ZCB0byBib290IHlvdXIgbmV3IExpbnV4IGltYWdlLgo+ICsKPiArQ3VzdG9taXplIEJlYWdsZVYt
+RmlyZSBDYXBlIEdhdGV3YXJlIFVzaW5nIFZlcmlsb2cgKE9wdGlvbmFsKQo+ICs9PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Cj4gKwo+
+ICtUbyBjdXN0b21pemUgeW91ciBCZWFnbGUtViBGaXJlIGdhdGV3YXJlIHBsZWFzZSBmb2xsb3cg
+dGhlIGd1aWRlIGJlbG93IHRvCj4gK2NyZWF0ZSB5b3VyIGN1c3RvbSBiaXRzdHJlYW0gKHN0ZXBz
+IDEgLSA2KToKPiAraHR0cHM6Ly9kb2NzLmJlYWdsZWJvYXJkLm9yZy9sYXRlc3QvYm9hcmRzL2Jl
+YWdsZXYvZmlyZS9kZW1vcy1hbmQtdHV0b3JpYWxzL2dhdGV3YXJlL2N1c3RvbWl6ZS1jYXBlLWdh
+dGV3YXJlLXZlcmlsb2cuaHRtbAo+ICsKPiArCj4gKyAgUHJvZ3JhbSBCZWFnbGVWLUZpcmUgV2l0
+aCBZb3VyIEN1c3RvbSBCaXRzdHJlYW0gd2l0aCBCdWlsZHJvb3QKPiArICA9PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQo+ICsKPiAr
+ICBBZnRlciBmb2xsb3dpbmcgdGhlIHN0ZXBzIDEtNiBmcm9tIHRoZSBhYm92ZSB0dXRvcmlhbCwg
+eW91IHNob3VsZCBub3cgaGF2ZSBhCj4gKyAgYXJ0aWZhY3RzLnppcCBmaWxlIG9uIHlvdXIgbG9j
+YWwgaG9zdC4KPiArCj4gKyAgVW56aXAgdGhlIGRvd25sb2FkZWQgYXJ0aWZhY3RzLnppcCBmaWxl
+LiAKPiArCj4gKyAgR28gdG8gdGhlIGN1c3RvbSBGUEdBIGRlc2lnbiBkaXJlY3Rvcnk6Cj4gKyAg
+ICAnY2QgYXJ0aWZhY3RzL2JpdHN0cmVhbXMvbXlfY3VzdG9tX2ZwZ2FfZGVzaWduJwo+ICsKPiAr
+ICBPbiB5b3VyIExpbnV4IGhvc3QgZGV2ZWxvcG1lbnQgY29tcHV0ZXIsIGNvcHkgdGhlIGJpdHN0
+cmVhbSB0byBCZWFnbGVWLUZpcmUKPiArICBib2FyZCwgcmVwbGFjaW5nIDwvcGF0aC90by95b3Vy
+Lz4gd2l0aCB0aGUgcGF0aCB0byB5b3VyIEJlYWdsZVYtRmlyZSByb290IGZpbGUKPiArICBzeXN0
+ZW0uCj4gKyAgICAnY3AgLXIgLi9MaW51eFByb2dyYW1taW5nIC9wYXRoL3RvL3lvdXIvYnVpbGRy
+b290L2JvYXJkL2JlYWdsZXZfZmlyZS9yb290ZnMtb3ZlcmxheS9ldGMvJwo+ICsKPiArICBUbyBh
+cHBseSB0aGVzZSBjaGFuZ2VzIHRvIHlvdXIgaW1hZ2UsIG1ha2Ugc3VyZSB0byByZS1idWlsZCBp
+dCB3aXRoOgo+ICsgICAgYG1ha2VgCj4gKwo+ICsgIFRoZW4sIHJlLWZsYXNoIHlvdXIgaW1hZ2Ug
+LSB0byBlbnN1cmUgeW91IGhhdmUgdGhlIG5lY2Vzc2FyeSBmaXJtd2FyZSBmaWxlcyAtIGJ5Cj4g
+KyAgZm9sbG93aW5nIHRoZSBhYm92ZSBzZWN0aW9uICJGbGFzaGluZyB0aGUgaW1hZ2UgdG8geW91
+ciBlTU1DIi4KPiArCj4gKyAgT24gQmVhZ2xlVi1GaXJlLAo+ICsgICAgMS4gTWFrZSB5b3VyIHVw
+ZGF0ZSBnYXRld2FyZSBzY3JpcHQgZXhlY3V0YWJsZQo+ICsgICAgICAnY2htb2QgK3ggL3Vzci9z
+aGFyZS9taWNyb2NoaXAvdXBkYXRlLWdhdGV3YXJlLnNoJwo+ICsgICAgMi4gQ3JlYXRlIGEgZmly
+bXdhcmUgZGlyZWN0b3J5Cj4gKyAgICAgICdta2RpciAvbGliL2Zpcm13YXJlJwo+ICsgICAgMy4g
+Q2hhbmdlIHRvIHRoZSBkaXJlY3Rvcnkgb2YgeW91ciBnYXRld2FyZSBzY3JpcHQKPiArICAgICAg
+YGNkIC91c3Ivc2hhcmUvbWljcm9jaGlwL2AKPiArICAgIDMuIGluaXRpYXRlIHRoZSByZXByb2dy
+YW1taW5nIG9mIHRoZSBGUEdBIHdpdGggeW91ciBnYXRld2FyZSBiaXRzdHJlYW06Cj4gKyAgICAg
+ICcuL3VwZGF0ZS1nYXRld2FyZS5zaCAvZXRjL0xpbnV4UHJvZ3JhbW1pbmcvJwo+ICsKPiArICBX
+YWl0IGZvciBhIGNvdXBsZSBvZiBtaW51dGVzIGZvciB0aGUgQmVhZ2xlVi1GaXJlIHRvIHJlcHJv
+Z3JhbSBpdHNlbGYuCj4gXCBObyBuZXdsaW5lIGF0IGVuZCBvZiBmaWxlCj4gZGlmZiAtLWdpdCBh
+L2JvYXJkL2JlYWdsZXZfZmlyZS9iZWFnbGV2X2ZpcmUuaXRzIGIvYm9hcmQvYmVhZ2xldl9maXJl
+L2JlYWdsZXZfZmlyZS5pdHMKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAw
+MDAuLjk3Yzg3OGMxMTgKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvYmVhZ2xldl9maXJl
+L2JlYWdsZXZfZmlyZS5pdHMKPiBAQCAtMCwwICsxLDU1IEBACj4gKy8vIFNQRFgtTGljZW5zZS1J
+ZGVudGlmaWVyOiAoR1BMLTIuMCsgT1IgTUlUKQo+ICsvKgo+ICsgKiBGbGF0dGVuZWQgSW1hZ2Ug
+VHJlZSBmaWxlIGZvciBCVkYKPiArICoKPiArICogQ29weXJpZ2h0IChDKSAyMDI0IE1pY3JvY2hp
+cCBUZWNobm9sb2d5IEluYy4gYW5kIGl0cyBzdWJzaWRpYXJpZXMuCj4gKyAqCj4gKyAqLwo+ICsK
+PiArL2R0cy12MS87Cj4gKwo+ICsvIHsKPiArCWRlc2NyaXB0aW9uID0gIlUtQm9vdCBmaXRJbWFn
+ZSBmb3IgdGhlIEJlYWdsZVYtRmlyZSI7Cj4gKwkjYWRkcmVzcy1jZWxscyA9IDwyPjsKPiArCj4g
+KwkJaW1hZ2VzIHsKPiArCQkJa2VybmVsIHsKPiArCQkJCWRlc2NyaXB0aW9uID0gIkxpbnV4IGtl
+cm5lbCI7Cj4gKwkJCQlkYXRhID0gL2luY2Jpbi8oIi4vSW1hZ2UuZ3oiKTsKPiArCQkJCXR5cGUg
+PSAia2VybmVsIjsKPiArCQkJCWFyY2ggPSAicmlzY3YiOwo+ICsJCQkJb3MgPSAibGludXgiOwo+
+ICsJCQkJY29tcHJlc3Npb24gPSAiZ3ppcCI7Cj4gKwkJCQlsb2FkID0gPDB4ODAyMDAwMDA+Owo+
+ICsJCQkJZW50cnkgPSA8MHg4MDIwMDAwMD47Cj4gKwkJCQloYXNoLTEgewo+ICsJCQkJCWFsZ28g
+PSAic2hhMjU2IjsKPiArCQkJCX07Cj4gKwkJCX07Cj4gKwkJCWJhc2VfZmR0IHsKPiArCQkJCWRl
+c2NyaXB0aW9uID0gIkZsYXR0ZW5lZCBEZXZpY2UgVHJlZSBibG9iIjsKPiArCQkJCWRhdGEgPSAv
+aW5jYmluLygiLi9tcGZzLWJlYWdsZXYtZmlyZS5kdGIiKTsKPiArCQkJCXR5cGUgPSAiZmxhdF9k
+dCI7Cj4gKwkJCQlhcmNoID0gInJpc2N2IjsKPiArCQkJCWNvbXByZXNzaW9uID0gIm5vbmUiOwo+
+ICsJCQkJbG9hZCA9IDwweDhhMDAwMDAwPjsKPiArCQkJCWhhc2gtMSB7Cj4gKwkJCQkJYWxnbyA9
+ICJzaGEyNTYiOwo+ICsJCQkJfTsKPiArCQkJfTsKPiArCQl9Owo+ICsKPiArCQljb25maWd1cmF0
+aW9ucyB7Cj4gKwkJCWRlZmF1bHQgPSAia2VybmVsX2R0YiI7Cj4gKwkJCWtlcm5lbF9kdGIgewo+
+ICsJCQkJZGVzY3JpcHRpb24gPSAiMSBMaW51eCBrZXJuZWwsIEZEVCBibG9iIjsKPiArCQkJCWtl
+cm5lbCA9ICJrZXJuZWwiOwo+ICsJCQkJZmR0ID0gImJhc2VfZmR0IjsKPiArCQkJfTsKPiArCj4g
+KwkJCWJhc2VfZHRiIHsKPiArCQkJCWRlc2NyaXB0aW9uID0gIkJhc2UgRkRUIGJsb2IgZm9yIEJl
+YWdsZVYtRmlyZSBib2FyZCI7Cj4gKwkJCQlmZHQgPSAiYmFzZV9mZHQiOwo+ICsJCQl9Owo+ICsJ
+CX07Cj4gK307Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL2JlYWdsZXZfZmlyZS9ib290LmNtZCBiL2Jv
+YXJkL2JlYWdsZXZfZmlyZS9ib290LmNtZAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXgg
+MDAwMDAwMDAwMC4uMDVmNDg1OGJhYwo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib2FyZC9iZWFn
+bGV2X2ZpcmUvYm9vdC5jbWQKPiBAQCAtMCwwICsxLDE1IEBACj4gKyMgdGhpcyBhc3N1bWVzICR7
+c2NyaXB0YWRkcn0gaXMgYWxyZWFkeSBzZXQhIQo+ICsKPiArIyBUcnkgdG8gYm9vdCBhIGZpdElt
+YWdlIGZyb20gZU1NQy9TRAo+ICsKPiArc2V0ZW52IGZkdF9oaWdoIDB4ZmZmZmZmZmZmZmZmZmZm
+Zgo+ICtzZXRlbnYgaW5pdHJkX2hpZ2ggMHhmZmZmZmZmZmZmZmZmZmZmCj4gKwo+ICtsb2FkIG1t
+YyAwOiR7ZGlzdHJvX2Jvb3RwYXJ0fSAke3NjcmlwdGFkZHJ9IGJlYWdsZXZfZmlyZS5pdGI7Cj4g
+K2Jvb3RtIHN0YXJ0ICR7c2NyaXB0YWRkcn0ja2VybmVsX2R0YjsKPiArYm9vdG0gbG9hZG9zICR7
+c2NyaXB0YWRkcn07Cj4gKyMgVHJ5IHRvIGxvYWQgYSByYW1kaXNrIGlmIGF2YWlsYWJsZSBpbnNp
+ZGUgZml0SW1hZ2UKPiArYm9vdG0gcmFtZGlzazsKPiArYm9vdG0gcHJlcDsKPiArZmR0IHNldCAv
+c29jL2V0aGVybmV0QDIwMTEwMDAwIG1hYy1hZGRyZXNzICR7YmVhZ2xldmZpcmVfbWFjX2FkZHIw
+fTsKPiArYm9vdG0gZ287Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL2JlYWdsZXZfZmlyZS9jb25maWcu
+eWFtbCBiL2JvYXJkL2JlYWdsZXZfZmlyZS9jb25maWcueWFtbAo+IG5ldyBmaWxlIG1vZGUgMTAw
+NjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uNWZjY2RmZDM0Zgo+IC0tLSAvZGV2L251bGwKPiArKysg
+Yi9ib2FyZC9iZWFnbGV2X2ZpcmUvY29uZmlnLnlhbWwKPiBAQCAtMCwwICsxLDI4IEBACj4gKyMK
+PiArIyBIU1MgUGF5bG9hZCBHZW5lcmF0b3IgLSBidWlsZHJvb3QgY29uZmlndXJhdGlvbiBmaWxl
+Cj4gKyMKPiArCj4gKyMgRmlyc3QsIHdlIGNhbiBvcHRpb25hbGx5IHNldCBhIG5hbWUgZm9yIG91
+ciBpbWFnZSwgb3RoZXJ3aXNlIG9uZSB3aWxsIGJlIGNyZWF0ZWQgZHluYW1pY2FsbHkKPiArc2V0
+LW5hbWU6ICdQb2xhckZpcmUtU29DLUhTUzo6VS1Cb290Jwo+ICsKPiArIwo+ICsjIE5leHQsIHdl
+J2xsIGRlZmluZSB0aGUgZW50cnkgcG9pbnQgYWRkcmVzc2VzIGZvciBlYWNoIGhhcnQsIGFzIGZv
+bGxvd3M6Cj4gKyMKPiAraGFydC1lbnRyeS1wb2ludHM6IHt1NTRfMTogJzB4ODAyMDAwMDAnLCB1
+NTRfMjogJzB4ODAyMDAwMDAnLCB1NTRfMzogJzB4ODAyMDAwMDAnLCB1NTRfNDogJzB4ODAyMDAw
+MDAnfQo+ICsjCj4gKyMgRmluYWxseSwgd2UnbGwgZGVmaW5lIGEgcGF5bG9hZHMgKHNvdXJjZSBi
+aW5hcnkgZmlsZSkgdGhhdCB3aWxsIGJlIHBsYWNlZCBhdCBjZXJ0YWluIHJlZ2lvbnMgaW4gbWVt
+b3J5Cj4gKyMgVGhlIHBheWxvYWQgc2VjdGlvbiBpcyBkZWZpbmVkIHdpdGggdGhlIGtleXdvcmQg
+cGF5bG9hZHMsIGFuZCB0aGVuIGEgbnVtYmVyIG9mIGluZGl2aWR1YWwKPiArIyBwYXlsb2FkIGRl
+c2NyaXB0b3JzLgo+ICsjCj4gKyMgRWFjaCBwYXlsb2FkIGhhcyBhIG5hbWUgKHBhdGggdG8gaXRz
+IEVMRi9iaW4gZmlsZSksIGFuIG93bmVyLWhhcnQsIGFuZCBvcHRpb25hbGx5IDEtMyBzZWNvbmRh
+cnktaGFydHMuCj4gKyMKPiArIyBBZGRpdGlvbmFsbHksIGl0IGhhcyBhIHByaXZpbGVnZSBtb2Rl
+IGluIHdoaWNoIGl0IHdpbGwgc3RhcnQgZXhlY3V0aW9uLgo+ICsjICAqIFZhbGlkIHByaXZpbGVn
+ZSBtb2RlcyBhcmUgUFJWX00sIFBSVl9TIGFuZCBQUlZfVS4KPiArIwo+ICsjCj4gKyMgSW4gdGhp
+cyBjYXNlLCB0aGUgb25seSBwYXlsb2FkIGlzIHRoZSB1LWJvb3Qgcy1tb2RlIGJpbmFyeS4KPiAr
+Iwo+ICsjIENhc2Ugb25seSBtYXR0ZXJzIGZvciB0aGUgRUxGIHBhdGggbmFtZXMsIG5vdCB0aGUg
+a2V5d29yZHMuCj4gKyMKPiArcGF5bG9hZHM6Cj4gKyAgdS1ib290LmJpbjoge2V4ZWMtYWRkcjog
+JzB4ODAyMDAwMDAnLCBvd25lci1oYXJ0OiB1NTRfMSwgc2Vjb25kYXJ5LWhhcnQ6IHU1NF8yLCBz
+ZWNvbmRhcnktaGFydDogdTU0XzMsIHNlY29uZGFyeS1oYXJ0OiB1NTRfNCwgcHJpdi1tb2RlOiBw
+cnZfc30KPiBkaWZmIC0tZ2l0IGEvYm9hcmQvYmVhZ2xldl9maXJlL2dlbmltYWdlLmNmZyBiL2Jv
+YXJkL2JlYWdsZXZfZmlyZS9nZW5pbWFnZS5jZmcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
+ZGV4IDAwMDAwMDAwMDAuLmVmNjUwNzA0YzYKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQv
+YmVhZ2xldl9maXJlL2dlbmltYWdlLmNmZwo+IEBAIC0wLDAgKzEsMzUgQEAKPiArIyBJbWFnZSBm
+b3IgZU1NQyBib290IG9uIHRoZSBNaWNyb2NoaXAgUG9sYXJGaXJlIFNPQyBCZWFnbGVWLUZpcmUg
+Qm9hcmQKPiArIwo+ICtpbWFnZSBib290LnZmYXQgewo+ICsJdmZhdCB7Cj4gKwkJZmlsZXMgPSB7
+Cj4gKwkJCSAiYmVhZ2xldl9maXJlLml0YiIsCj4gKwkJfQo+ICsKPiArCQlmaWxlIGJvb3Quc2Ny
+IHsKPiArCQkJaW1hZ2UgPSAiYm9vdC5zY3IiCj4gKwkJfQo+ICsJfQo+ICsJc2l6ZSA9IDYwTQo+
+ICt9Cj4gKwo+ICtpbWFnZSBzZGNhcmQuaW1nIHsKPiArCWhkaW1hZ2Ugewo+ICsJCXBhcnRpdGlv
+bi10YWJsZS10eXBlID0gImdwdCIKPiArCX0KPiArCj4gKwlwYXJ0aXRpb24gdWJvb3Qgewo+ICsJ
+CXBhcnRpdGlvbi10eXBlLXV1aWQgPSAyMTY4NjE0OC02NDQ5LTZFNkYtNzQ0RS02NTY1NjQ0NTQ2
+NDkKPiArCQlpbWFnZSA9ICJwYXlsb2FkLmJpbiIKPiArCX0KPiArCj4gKwlwYXJ0aXRpb24ga2Vy
+bmVsIHsKPiArCQlwYXJ0aXRpb24tdHlwZS11dWlkID0gMEZDNjNEQUYtODQ4My00NzcyLThFNzkt
+M0Q2OUQ4NDc3REU0Cj4gKwkJYm9vdGFibGUgPSAidHJ1ZSIKPiArCQlpbWFnZSA9ICJib290LnZm
+YXQiCj4gKwl9Cj4gKwo+ICsJcGFydGl0aW9uIHJvb3Qgewo+ICsJCWltYWdlID0gInJvb3Rmcy5l
+eHQ0Igo+ICsJfQo+ICt9Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL2JlYWdsZXZfZmlyZS9wb3N0LWlt
+YWdlLnNoIGIvYm9hcmQvYmVhZ2xldl9maXJlL3Bvc3QtaW1hZ2Uuc2gKPiBuZXcgZmlsZSBtb2Rl
+IDEwMDc1NQo+IGluZGV4IDAwMDAwMDAwMDAuLjQzYmUxMzU2Y2YKPiAtLS0gL2Rldi9udWxsCj4g
+KysrIGIvYm9hcmQvYmVhZ2xldl9maXJlL3Bvc3QtaW1hZ2Uuc2gKPiBAQCAtMCwwICsxLDE0IEBA
+Cj4gKyMhL2Jpbi9iYXNoCj4gK3NldCAtZQo+ICsKPiArSFNTX1BBWUxPQURfR0VORVJBVE9SPSIk
+e0hPU1RfRElSfSIvYmluL2hzcy1wYXlsb2FkLWdlbmVyYXRvcgo+ICtNS0lNQUdFPSIke0hPU1Rf
+RElSfSIvYmluL21raW1hZ2UKPiArQk9BUkRfRElSPSIkKHB3ZCkiLyIkezAlLyp9Igo+ICsKPiAr
+cHVzaGQgIiR7QklOQVJJRVNfRElSfSIKPiArIiR7SFNTX1BBWUxPQURfR0VORVJBVE9SfSIgLWMg
+IiR7Qk9BUkRfRElSfSIvY29uZmlnLnlhbWwgcGF5bG9hZC5iaW4KPiArY3AgIiR7Qk9BUkRfRElS
+fSIvYmVhZ2xldl9maXJlLml0cyAiJHtCSU5BUklFU19ESVJ9Ii9iZWFnbGV2X2ZpcmUuaXRzCj4g
+K2d6aXAgLTkgSW1hZ2UgLWMgPiBJbWFnZS5nego+ICsiJHtNS0lNQUdFfSIgLWYgYmVhZ2xldl9m
+aXJlLml0cyBiZWFnbGV2X2ZpcmUuaXRiCj4gK3BvcGQKPiArc3VwcG9ydC9zY3JpcHRzL2dlbmlt
+YWdlLnNoIC1jICIke0JPQVJEX0RJUn0iL2dlbmltYWdlLmNmZwo+IGRpZmYgLS1naXQgYS9ib2Fy
+ZC9iZWFnbGV2X2ZpcmUvcm9vdGZzLW92ZXJsYXkvdXNyL3NoYXJlL21pY3JvY2hpcC91cGRhdGUt
+Z2F0ZXdhcmUuc2ggYi9ib2FyZC9iZWFnbGV2X2ZpcmUvcm9vdGZzLW92ZXJsYXkvdXNyL3NoYXJl
+L21pY3JvY2hpcC91cGRhdGUtZ2F0ZXdhcmUuc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
+ZGV4IDAwMDAwMDAwMDAuLmY0NTUwMzdiNjAKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQv
+YmVhZ2xldl9maXJlL3Jvb3Rmcy1vdmVybGF5L3Vzci9zaGFyZS9taWNyb2NoaXAvdXBkYXRlLWdh
+dGV3YXJlLnNoCj4gQEAgLTAsMCArMSwzMiBAQAo+ICsjIS9iaW4vc2gKPiArCj4gK2lmIFsgISAt
+ZSAiJDEiL21wZnNfYml0c3RyZWFtLnNwaSBdOyB0aGVuCj4gKyAgICAgICAgZWNobyAiTm8gZ2F0
+ZXdhcmUgZmlsZSBmb3VuZC4iCj4gKyAgICAgICAgZXhpdCAxCj4gK2ZpCj4gKwo+ICtpZiBbICEg
+LWQgL2xpYi9maXJtd2FyZSBdCj4gK3RoZW4KPiArICAgIG1rZGlyIC9saWIvZmlybXdhcmUKPiAr
+ZmkKPiArCj4gK2NwICIkMSIvbXBmc19kdGJvLnNwaSAvbGliL2Zpcm13YXJlL21wZnNfZHRiby5z
+cGkKPiArY3AgIiQxIi9tcGZzX2JpdHN0cmVhbS5zcGkgL2xpYi9maXJtd2FyZS9tcGZzX2JpdHN0
+cmVhbS5zcGkKPiArCj4gK21vdW50IC10IGRlYnVnZnMgbm9uZSAvc3lzL2tlcm5lbC9kZWJ1Zwo+
+ICsKPiArIyBUcmFzaCBleGlzdGluZyBkZXZpY2UgdHJlZSBvdmVybGF5IGluIGNhc2UgdGhlIHJl
+c3Qgb2YgdGhlIHByb2Nlc3MgZmFpbHM6Cj4gK2ZsYXNoX2VyYXNlIC9kZXYvbXRkMCAwIDEwMjQK
+PiArCj4gKyMgIyBXcml0ZSBkZXZpY2UgdHJlZSBvdmVybGF5Cj4gK2RkIGlmPS9saWIvZmlybXdh
+cmUvbXBmc19kdGJvLnNwaSBvZj0vZGV2L210ZDAgc2Vlaz0xMDI0Cj4gKwo+ICsjIEZha2UgdGhl
+IHByZXNlbmNlIG9mIGEgZ29sZGVuIGltYWdlIGZvciBub3cuCj4gK2RkIGlmPS9kZXYvemVybyBv
+Zj0vZGV2L210ZDAgY291bnQ9NCBicz0xCj4gKwo+ICsjIEluaXRpYXRlIEZQR0EgdXBkYXRlLgo+
+ICtlY2hvIDEgPiAvc3lzL2tlcm5lbC9kZWJ1Zy9mcGdhL21pY3JvY2hpcF9leGVjX3VwZGF0ZQo+
+ICsKPiArIyBSZWJvb3QgTGludXggZm9yIHRoZSBnYXRld2FyZSB1cGRhdGUgdG8gdGFrZSBlZmZl
+Y3QuCj4gKyMgRlBHQSByZXByb2dyYW1taW5nIHRha2VzIHBsYWNlcyBiZXR3ZWVuIExpbnV4IHNo
+dXQtZG93biBhbmQgSFNTIHJlc3RhcnRpbmcgdGhlIGJvYXJkLgo+ICtyZWJvb3QKPiBkaWZmIC0t
+Z2l0IGEvYm9hcmQvYmVhZ2xldl9maXJlL3Vib290LWZyYWdtZW50LmNvbmZpZyBiL2JvYXJkL2Jl
+YWdsZXZfZmlyZS91Ym9vdC1mcmFnbWVudC5jb25maWcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+
+IGluZGV4IDAwMDAwMDAwMDAuLmUyYTVlYjk0MzgKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9h
+cmQvYmVhZ2xldl9maXJlL3Vib290LWZyYWdtZW50LmNvbmZpZwo+IEBAIC0wLDAgKzEsMyBAQAo+
+ICtDT05GSUdfVVNFX0JPT1RBUkdTPXkKPiArQ09ORklHX0JPT1RBUkdTPSJyb290PS9kZXYvbW1j
+YmxrMHAzIHJvb3R3YWl0IHVpb19wZHJ2X2dlbmlycS5vZl9pZD1nZW5lcmljLXVpbyIKPiArQ09O
+RklHX01QRlNfUFJJT1JJVElTRV9RU1BJX0JPT1Q9bgo+IGRpZmYgLS1naXQgYS9jb25maWdzL2Jl
+YWdsZXZfZmlyZV9kZWZjb25maWcgYi9jb25maWdzL2JlYWdsZXZfZmlyZV9kZWZjb25maWcKPiBu
+ZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjI3N2M4MzI5ZmQKPiAtLS0g
+L2Rldi9udWxsCj4gKysrIGIvY29uZmlncy9iZWFnbGV2X2ZpcmVfZGVmY29uZmlnCj4gQEAgLTAs
+MCArMSwzMiBAQAo+ICtCUjJfcmlzY3Y9eQo+ICtCUjJfUklTQ1ZfSVNBX1JWQz15Cj4gK0JSMl9L
+RVJORUxfSEVBREVSU19WRVJTSU9OPXkKPiArQlIyX0RFRkFVTFRfS0VSTkVMX1ZFUlNJT049IjYu
+MS4zMCIKCklzIGFueSByZWFzb24gdG8gdXNlIHRoaXMgc3BlY2lmaWMga2VybmVsIHZlcnNpb24g
+Zm9yIGxpbnV4LWhlYWRlcnM/Ckluc3RlYWQgd2UgcHJlZmVyIHVzaW5nIEJSMl9LRVJORUxfSEVB
+REVSU19BU19LRVJORUwgd2l0aApCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9N
+XzZfMT15LgoKPiArQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE9eQo+
+ICtCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCj4gK0JSMl9ST09URlNfT1ZFUkxBWT0iYm9hcmQvYmVh
+Z2xldl9maXJlL3Jvb3Rmcy1vdmVybGF5LyIKPiArQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQ
+VD0iYm9hcmQvYmVhZ2xldl9maXJlL3Bvc3QtaW1hZ2Uuc2giCj4gK0JSMl9MSU5VWF9LRVJORUw9
+eQo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMPXkKPiArQlIyX0xJTlVYX0tFUk5F
+TF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsIGdpdGh1YixsaW51eDRtaWNyb2NoaXAs
+bGludXgsbGludXgtNi4xLW1jaHArZnBnYSkvbGludXg0bWljcm9jaGlwK2ZwZ2EtMjAyNC4wMi50
+YXIuZ3oiCj4gK0JSMl9MSU5VWF9LRVJORUxfREVGQ09ORklHPSJtcGZzIgo+ICtCUjJfTElOVVhf
+S0VSTkVMX0RUU19TVVBQT1JUPXkKPiArQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9
+Im1pY3JvY2hpcC9tcGZzLWJlYWdsZXYtZmlyZSIKPiArQlIyX1BBQ0tBR0VfTVREPXkKPiArQlIy
+X1RBUkdFVF9ST09URlNfRVhUMj15Cj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15Cj4gK0JS
+Ml9UQVJHRVRfVUJPT1Q9eQo+ICtCUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09ORklH
+PXkKPiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVEFSQkFMTD15Cj4gK0JSMl9UQVJHRVRfVUJP
+T1RfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQoY2FsbCBnaXRodWIscG9sYXJmaXJlLXNvYyx1
+LWJvb3QpbGludXg0bWljcm9jaGlwK2ZwZ2EtMjAyNC4wMi50YXIuZ3oiCgpDYW4geW91IGNoZWNr
+IGlmIHdlIHNob3VsZCB1c2UgdS1ib290LW1jaHAgcmVwb3NpdG9yeSBpbnN0ZWFkPyB0aGUgcG9s
+YXJmaXJlLXNvYwpvbmUgaGFzIGJlZW4gYXJjaGl2ZWQgcmVjZW50bHkgKEp1bCA1LCAyMDI0KS4K
+Cmh0dHBzOi8vZ2l0aHViLmNvbS9saW51eDRtaWNyb2NoaXAvdS1ib290LW1jaHAKCkZvciBub3cs
+IEkga2VlcCB0aGUgdXJsIGFzIGlzLgoKPiArQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05G
+SUc9ImJlYWdsZXZfZmlyZSIKPiArQlIyX1RBUkdFVF9VQk9PVF9DT05GSUdfRlJBR01FTlRfRklM
+RVM9ImJvYXJkL2JlYWdsZXZfZmlyZS91Ym9vdC1mcmFnbWVudC5jb25maWciCj4gK0JSMl9UQVJH
+RVRfVUJPT1RfTkVFRFNfRFRDPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU1NMPXkK
+PiArQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTUlDUk9D
+SElQX0hTU19QQVlMT0FEX0dFTkVSQVRPUj15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTVRPT0xTPXkK
+CkJSMl9QQUNLQUdFX0hPU1RfRE9TRlNUT09MUz15IGlzIG5lZWRlZCB0byBwcm92aWRlIG1rZG9z
+ZnMgKGhvc3QgdmFyaWFudCkuCgpBcHBsaWVkIHRvIG1hc3RlciB3aGl0aCB0aGF0IGFkZGVkLCB0
+aGFua3MuCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKPiArQlIyX1BBQ0tBR0VfSE9TVF9VQk9PVF9U
+T09MUz15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFNfRklUX1NVUFBPUlQ9eQo+ICtC
+UjJfUEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTX0JPT1RfU0NSSVBUPXkKPiArQlIyX1BBQ0tBR0Vf
+SE9TVF9VQk9PVF9UT09MU19CT09UX1NDUklQVF9TT1VSQ0U9ImJvYXJkL2JlYWdsZXZfZmlyZS9i
+b290LmNtZCIKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
