@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ABACC3DA45
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:54:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AF02C3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 14:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22FB0408C1;
-	Sat, 13 Jul 2024 14:54:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3550B409EF;
+	Sat, 13 Jul 2024 14:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X6xqyAarbbTL; Sat, 13 Jul 2024 14:54:08 +0000 (UTC)
+ id 0bkMV0H-EGsD; Sat, 13 Jul 2024 14:54:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9B4540105
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A89C1405E6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9B4540105;
-	Sat, 13 Jul 2024 14:54:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B191C1BF41B
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:54:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A89C1405E6;
+	Sat, 13 Jul 2024 14:54:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C52BC1BF41B
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:54:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AAFC6409C5
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:54:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B2676400A4
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 14:54:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HhpqADexm79A for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 14:54:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kr08TLB0Q2PE for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 14:54:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 330C7408C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 330C7408C1
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 330C7408C1
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:54:04 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 32BE1E0002;
- Sat, 13 Jul 2024 14:54:03 +0000 (UTC)
-Date: Sat, 13 Jul 2024 16:54:02 +0200
-To: Romain Naour via buildroot <buildroot@buildroot.org>
-Message-ID: <20240713165402.1091446e@windsurf>
-In-Reply-To: <20240713140133.2107977-1-romain.naour@smile.fr>
-References: <20240713140133.2107977-1-romain.naour@smile.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720882443;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=NlB21DEgGoooqdjbS2A8o0Z/OuoF/o8VOU0bfT5iLdU=;
- b=YbsR8aKvEHocgdGKd2k2q1XYgK1P8JJ9QtDmhLOBf3CYS6pVMGSXWiZf4FzBXarZA0R4UA
- s+BjihHoCiKTk7p4KWk22sG6D9fWANzEQff13TrbIo82/K6yDLRjyGgahsZt9UhZv27JpC
- GRXDyNBk3E/egCVCJ6M7oOwZkF70mmDdZQCzEXCbUBwXvVnNsjeSZ+8jnItNkrwuXeJw4R
- gywGdxYqQjmiWvwVpVaCK38g38R97hdxGpKT71RhrEoDx12R9j9R8OWPDbPmX7Ehj8EiWP
- rSKKozpFtHDESzHM7Fkv9x+dKLURhq8F/SIZHiTygyGHO+hu2sehOFwEe/oJgA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YbsR8aKv
-Subject: Re: [Buildroot] [PATCH 1/5] configs/beagleboneai_defconfig: move
- board files to board/beagleboard/beagleboneai
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 857C640096
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 857C640096
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 14:54:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 722248605C; Sat, 13 Jul 2024 14:54:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 13 Jul 2024 16:53:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a226f9a9ca44b88faa8e6504bb1336724ab79827
+X-Git-Newrev: b4454720908e79252ea98bcbe4de86e4bbd4de77
+X-Patchwork-Hint: ignore
+Message-Id: <20240713145438.722248605C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: bump 12.x series to 12.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,52 +57,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@smile.fr>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 13 Jul 2024 16:01:29 +0200
-Romain Naour via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b4454720908e79252ea98bcbe4de86e4bbd4de77
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The beagleboneai board files from beagleboard.org project should be
-> moved to board/beagleboard directory.
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
->  .checkpackageignore                                         | 4 ++--
->  DEVELOPERS                                                  | 2 +-
->  board/{ => beagleboard}/beagleboneai/genimage.cfg           | 0
->  .../beagleboneai/patches/linux-headers/linux-headers.hash   | 0
->  .../{ => beagleboard}/beagleboneai/patches/linux/linux.hash | 0
->  .../beagleboneai/patches/uboot/0001-am57xx_evm-fixes.patch  | 0
->  .../{ => beagleboard}/beagleboneai/patches/uboot/uboot.hash | 0
->  board/beagleboard/beagleboneai/post-build.sh                | 4 ++++
->  board/{ => beagleboard}/beagleboneai/readme.txt             | 0
->  board/{ => beagleboard}/beagleboneai/uEnv.txt               | 0
->  board/beagleboneai/post-build.sh                            | 4 ----
->  configs/beagleboneai_defconfig                              | 6 +++---
->  12 files changed, 10 insertions(+), 10 deletions(-)
->  rename board/{ => beagleboard}/beagleboneai/genimage.cfg (100%)
->  rename board/{ => beagleboard}/beagleboneai/patches/linux-headers/linux-headers.hash (100%)
->  rename board/{ => beagleboard}/beagleboneai/patches/linux/linux.hash (100%)
->  rename board/{ => beagleboard}/beagleboneai/patches/uboot/0001-am57xx_evm-fixes.patch (100%)
->  rename board/{ => beagleboard}/beagleboneai/patches/uboot/uboot.hash (100%)
->  create mode 100755 board/beagleboard/beagleboneai/post-build.sh
->  rename board/{ => beagleboard}/beagleboneai/readme.txt (100%)
->  rename board/{ => beagleboard}/beagleboneai/uEnv.txt (100%)
->  delete mode 100755 board/beagleboneai/post-build.sh
+https://gcc.gnu.org/gcc-12/changes.html describes the changes of gcc
+12.4 as follows:
 
-Series applied to master, thanks!
+  This is the list of problem reports (PRs) from GCC's bug tracking
+  system that are known to be fixed in the 12.4 release. This list
+  might not be complete (that is, it is possible that some PRs that
+  have been fixed are not listed here).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+With a link to
+https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=12.4
+
+There are 654 relevant commits (ignoring the "daily bumps") between
+gcc 12.3.0 and 12.4.0, which is too much to list exhaustively here.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ .checkpackageignore                                                   | 2 +-
+ .../0001-disable-split-stack-for-non-thread-builds.patch              | 0
+ .../0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch      | 0
+ .../0003-xtensa-add-.note.GNU-stack-section-on-linux.patch            | 0
+ .../0004-Remove-crypt-and-crypt_r-interceptors.patch                  | 0
+ package/gcc/Config.in.host                                            | 2 +-
+ package/gcc/gcc.hash                                                  | 4 ++--
+ 7 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 1052a6f90f..eb2021fadb 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -578,7 +578,7 @@ package/fxload/0001-fix-static-build.patch lib_patch.Upstream
+ package/gamin/0001-no-abstract-sockets.patch lib_patch.Upstream
+ package/gamin/0002-no-const-return.patch lib_patch.Sob lib_patch.Upstream
+ package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch lib_patch.Upstream
+-package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
++package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
+diff --git a/package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch
+similarity index 100%
+rename from package/gcc/12.3.0/0001-disable-split-stack-for-non-thread-builds.patch
+rename to package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch
+diff --git a/package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/12.4.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+similarity index 100%
+rename from package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+rename to package/gcc/12.4.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+diff --git a/package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch b/package/gcc/12.4.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
+similarity index 100%
+rename from package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
+rename to package/gcc/12.4.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
+diff --git a/package/gcc/12.3.0/0004-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/12.4.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
+similarity index 100%
+rename from package/gcc/12.3.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
+rename to package/gcc/12.4.0/0004-Remove-crypt-and-crypt_r-interceptors.patch
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 969702b707..c88518a415 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -73,7 +73,7 @@ config BR2_GCC_SUPPORTS_DLANG
+ config BR2_GCC_VERSION
+ 	string
+ 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
+-	default "12.3.0"    if BR2_GCC_VERSION_12_X
++	default "12.4.0"    if BR2_GCC_VERSION_12_X
+ 	default "13.3.0"    if BR2_GCC_VERSION_13_X
+ 	default "14.1.0"    if BR2_GCC_VERSION_14_X
+ 	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 0b48a1acdd..4534655790 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -2,8 +2,8 @@
+ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-10.4.0/sha512.sum
+ sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.3.0/sha512.sum
+-sha512  8fb799dfa2e5de5284edf8f821e3d40c2781e4c570f5adfdb1ca0671fcae3fb7f794ea783e80f01ec7bfbf912ca508e478bd749b2755c2c14e4055648146c204  gcc-12.3.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.4.0/sha512.sum
++sha512  5bd29402cad2deb5d9388d0236c7146414d77e5b8d5f1c6c941c7a1f47691c3389f08656d5f6e8e2d6717bf2c81f018d326f632fb468f42925b40bd217fc4853  gcc-12.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
+ sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.1.0/sha512.sum
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
