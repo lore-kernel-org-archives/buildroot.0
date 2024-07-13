@@ -1,95 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E322AC3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 05:44:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34A5DC3DA42
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 06:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5B3960ADB;
-	Sat, 13 Jul 2024 05:44:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3061041A08;
+	Sat, 13 Jul 2024 06:31:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JW1dOWaIjt3m; Sat, 13 Jul 2024 05:44:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u9zC5S-AMX7f; Sat, 13 Jul 2024 06:31:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E0B36080F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A20E7419E1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E0B36080F;
-	Sat, 13 Jul 2024 05:44:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A20E7419E1;
+	Sat, 13 Jul 2024 06:31:44 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 22A151BF847
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:44:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E3AA61BF5A2
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 06:31:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B29281F1C
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 05:44:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE1DE84611
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 06:31:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tn58nJQuJ3lz for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 05:44:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
- envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 40A5B80F7D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40A5B80F7D
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 40A5B80F7D
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 05:44:21 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id
- 4fb4d7f45d1cf-58f9874aeb4so3357275a12.0
- for <buildroot@buildroot.org>; Fri, 12 Jul 2024 22:44:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720849458; x=1721454258;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=MT35i5FhAG8LqByZhzI05zsMrTiT2K2Gve3fvJWbFbw=;
- b=K9wqM6yP81hrgV828caI7dufgSTap3GTFsr9n4OhE0FQWB5NPhsbu4+ei8OTzObxJC
- 2VEBh2PUZl9xzk6aRPrPEPYmXx+mXQxRUPH4csNVjYLWUHGq0yHDTedruW1/9TnJbWt8
- 0LJiDf9MjhM2r7DtEdsZYLN9Z4VB48Obak4RaOY0KAOkObKEnA2YoI/r1s+HwkzczRz7
- dgHF5wGeX01n5jKk/BwV2tfCOLZCTaoTKY7sh5oHhLJgtpVSvQSE4XLHbjiPZm5hRBOY
- scDJ1155T68FQkqjw0qyYQZoCsOCLd3v5kT5/N6zvnKkCUoPdwhg4gwoL5H0hMRRcBMf
- 5dXA==
-X-Gm-Message-State: AOJu0Yw06uBtXe+EmiIa+u56pRTvpe1cxmJ7GfDfS3mOQI02Lw8I6mbV
- bKWxw4ok4b8xC4ule7Z+zjE8VHeSfO4KJf/3edzgCVzbFqQq4FN/qitb+g==
-X-Google-Smtp-Source: AGHT+IFUPnOPvGDhbRDsyNR4JgsSGZAeYUEMHW3r8w0w39+0N3APS/cxGErpV8BKsnOg5JTpQqSUbA==
-X-Received: by 2002:a05:6402:4307:b0:582:5195:3a79 with SMTP id
- 4fb4d7f45d1cf-594ba98f268mr10416668a12.6.1720849457769; 
- Fri, 12 Jul 2024 22:44:17 -0700 (PDT)
-Received: from hthiery.fritz.box ([95.91.160.230])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-59b26f61ffcsm289997a12.83.2024.07.12.22.44.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Jul 2024 22:44:17 -0700 (PDT)
-From: Heiko Thiery <heiko.thiery@gmail.com>
+ id x6fl2fIWGAiF for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 06:31:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBADA81F82
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EBADA81F82
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 06:31:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CB19F86271; Sat, 13 Jul 2024 06:31:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 07:44:08 +0200
-Message-Id: <20240713054407.229084-1-heiko.thiery@gmail.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1720849458; x=1721454258; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=MT35i5FhAG8LqByZhzI05zsMrTiT2K2Gve3fvJWbFbw=;
- b=VVt/mgy7MRWCUT/nWWxRB4oofKqHXTZHxCGb8wY7X2tb6+0tON5+/fVQqmEAu5ElQE
- lW4hNTWbmk+RgHFfkHYg/kcmYVVNw5uWtPZAhBm8I8HYBTpnsuxStvJWwXOEumuc0KD1
- 9SVRXdwLPx0QtVavc3ncpWRj925/QJDwAb5RPetLWOnnRWsib6ZYRrwhFBJQ1iPbJNzH
- RoT/iN8h/97I0LY4dXNGrix1RslV/MPQILuA90xSMydqfRrqnZDPiAcDo9NgRu0TaOik
- e68uLax6KjXG96sh7ZrxD7EBCMV48q/wFQ1BN+IohIkMcglpqfpOLeUJmgGTuE1f440c
- /4Ow==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=VVt/mgy7
-Subject: [Buildroot] [PATCH 2/2] package/llvm-project/llvm: remove
- overriding the ASM compiler
+Date: Sat, 13 Jul 2024 08:31:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d889031e0b70390ea34703071f96a5b750803d30
+X-Git-Newrev: 22579ce771bde65dffa8cef22c3e8bb4973ef9ab
+X-Patchwork-Hint: ignore
+Message-Id: <20240713063141.CB19F86271@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-cli-buildx: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,42 +57,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, Daniel Lang <dalang@gmx.at>,
- Samuel Martin <s.martin49@gmail.com>, Romain Naour <romain.naour@gmail.com>,
- Heiko Thiery <heiko.thiery@gmail.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There was an error in the pkg-cmake infra file regarding the selection
-of the ASM compiler. Now that this has been fixed, overwriting the
-ASM compiler selection is no longer necessary.
+commit: https://git.buildroot.net/buildroot/commit/?id=22579ce771bde65dffa8cef22c3e8bb4973ef9ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+buildx is a docker CLI plugin implementing extended build features.
+
+buildx is the default builder as of Docker v23.x, and if the plugin is not
+present, the CLI will output an error warning that it is using the deprecated
+built-in builder instead of the buildx builder.
+
+However, buildx is a separate repository from docker-cli: it is a plugin that
+needs to be installed at /usr/lib/docker/cli-plugins on the target.
+
+https://github.com/docker/buildx
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/llvm-project/llvm/llvm.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/Config.in                                |  1 +
+ package/docker-cli-buildx/Config.in              | 16 +++++++++++
+ package/docker-cli-buildx/docker-cli-buildx.hash |  3 ++
+ package/docker-cli-buildx/docker-cli-buildx.mk   | 36 ++++++++++++++++++++++++
+ 4 files changed, 56 insertions(+)
 
-diff --git a/package/llvm-project/llvm/llvm.mk b/package/llvm-project/llvm/llvm.mk
-index 6598d8b6c1..b0515474d8 100644
---- a/package/llvm-project/llvm/llvm.mk
-+++ b/package/llvm-project/llvm/llvm.mk
-@@ -20,10 +20,6 @@ LLVM_DEPENDENCIES = host-llvm
- HOST_LLVM_CONF_OPTS += -DCMAKE_MODULE_PATH=$(HOST_DIR)/lib/cmake/llvm
- LLVM_CONF_OPTS += -DCMAKE_MODULE_PATH=$(HOST_DIR)/lib/cmake/llvm
- 
--# Assembly files for x64 in lib/Support/BLAKE3 need to be compiled
--# by a C compiler
--HOST_LLVM_CONF_OPTS += -DCMAKE_ASM_COMPILER="$(CMAKE_HOST_C_COMPILER)"
--
- # Don't build clang libcxx libcxxabi lldb compiler-rt lld polly as llvm subprojects
- # This flag assumes that projects are checked out side-by-side and not nested
- HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_PROJECTS=""
--- 
-2.39.2
-
+diff --git a/package/Config.in b/package/Config.in
+index a52ed146d9..65d7981773 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2757,6 +2757,7 @@ menu "System tools"
+ 	source "package/ddrescue/Config.in"
+ 	source "package/debianutils/Config.in"
+ 	source "package/docker-cli/Config.in"
++	source "package/docker-cli-buildx/Config.in"
+ 	source "package/docker-compose/Config.in"
+ 	source "package/docker-engine/Config.in"
+ 	source "package/earlyoom/Config.in"
+diff --git a/package/docker-cli-buildx/Config.in b/package/docker-cli-buildx/Config.in
+new file mode 100644
+index 0000000000..486f1196c3
+--- /dev/null
++++ b/package/docker-cli-buildx/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_DOCKER_CLI_BUILDX
++	bool "docker-cli-buildx"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_DOCKER_CLI
++	help
++	  buildx is a Docker CLI plugin for extended build
++	  capabilities with BuildKit.
++
++	  https://github.com/docker/buildx
++
++comment "docker-cli-buildx needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/docker-cli-buildx/docker-cli-buildx.hash b/package/docker-cli-buildx/docker-cli-buildx.hash
+new file mode 100644
+index 0000000000..a6e0b0deab
+--- /dev/null
++++ b/package/docker-cli-buildx/docker-cli-buildx.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  371eb742213ed580179fc4fdfd9a197f0e3115e91979b7907828427d578d49e5  docker-cli-buildx-0.11.2-go2.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/docker-cli-buildx/docker-cli-buildx.mk b/package/docker-cli-buildx/docker-cli-buildx.mk
+new file mode 100644
+index 0000000000..b62d09fbcc
+--- /dev/null
++++ b/package/docker-cli-buildx/docker-cli-buildx.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# docker-cli-buildx
++#
++################################################################################
++
++DOCKER_CLI_BUILDX_VERSION = 0.11.2
++DOCKER_CLI_BUILDX_SITE = $(call github,docker,buildx,v$(DOCKER_CLI_BUILDX_VERSION))
++
++DOCKER_CLI_BUILDX_LICENSE = Apache-2.0
++DOCKER_CLI_BUILDX_LICENSE_FILES = LICENSE
++
++DOCKER_CLI_BUILDX_DEPENDENCIES = host-pkgconf
++
++DOCKER_CLI_BUILDX_BUILD_TARGETS = cmd/buildx
++DOCKER_CLI_BUILDX_GOMOD = github.com/docker/buildx
++
++DOCKER_CLI_BUILDX_LDFLAGS = \
++	-X $(DOCKER_CLI_BUILDX_GOMOD)/version.Revision=$(DOCKER_CLI_BUILDX_VERSION) \
++	-X $(DOCKER_CLI_BUILDX_GOMOD)/version.Version=$(DOCKER_CLI_BUILDX_VERSION)
++
++# create the go.mod file with required language version go1.20
++# remove the conflicting vendor/modules.txt
++# https://github.com/moby/moby/issues/44618#issuecomment-1343565705
++define DOCKER_CLI_BUILDX_FIX_VENDORING
++	printf "module $(DOCKER_CLI_BUILDX_GOMOD)\n\ngo 1.20\n" > $(@D)/go.mod
++	rm -f $(@D)/vendor/modules.txt
++endef
++DOCKER_CLI_BUILDX_POST_EXTRACT_HOOKS += DOCKER_CLI_BUILDX_FIX_VENDORING
++
++define DOCKER_CLI_BUILDX_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/bin/buildx \
++		$(TARGET_DIR)/usr/lib/docker/cli-plugins/docker-buildx
++endef
++
++$(eval $(golang-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
