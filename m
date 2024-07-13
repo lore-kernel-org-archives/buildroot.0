@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E5B7C3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 09:41:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 585A4C3DA4D
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 09:41:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CD80606F7;
-	Sat, 13 Jul 2024 09:41:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C38961077;
+	Sat, 13 Jul 2024 09:41:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AIaX1FWGkFOu; Sat, 13 Jul 2024 09:41:31 +0000 (UTC)
+ id M01XUVErlxKk; Sat, 13 Jul 2024 09:41:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C67EE608F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E0E360FD9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C67EE608F2;
-	Sat, 13 Jul 2024 09:41:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5F9341BF4D6
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:41:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E0E360FD9;
+	Sat, 13 Jul 2024 09:41:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EE1BF1BF4D6
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BE3D41940
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:41:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D82FA83EF8
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 09:41:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RbTIq7L1HMpZ for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GUHbuXbgrhnl for <buildroot@lists.busybox.net>;
  Sat, 13 Jul 2024 09:41:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F149418E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1452382085
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F149418E9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1452382085
  for <buildroot@buildroot.org>; Sat, 13 Jul 2024 09:41:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 18D2A863F0; Sat, 13 Jul 2024 09:41:26 +0000 (UTC)
+ id 0915F8634A; Sat, 13 Jul 2024 09:41:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 11:39:13 +0200
+Date: Sat, 13 Jul 2024 11:39:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 347def2fd1f062be5d335d06aaaec577c5fa1d68
-X-Git-Newrev: 0a0de4d86cd1fbeb5ff0439259b297756b3a5d98
+X-Git-Oldrev: aa549fb95f8409c2b364cd1d8257f92a1b693720
+X-Git-Newrev: 347def2fd1f062be5d335d06aaaec577c5fa1d68
 X-Patchwork-Hint: ignore
-Message-Id: <20240713094126.18D2A863F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cdrkit: fix build with gcc 14.x
+Message-Id: <20240713094126.0915F8634A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cdrkit: convert first patch to Git
+ formatted one
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,97 +61,75 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7707921684508897643=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7707921684508897643==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=0a0de4d86cd1fbeb5ff0439259b297756b3a5d98
+commit: https://git.buildroot.net/buildroot/commit/?id=347def2fd1f062be5d335d06aaaec577c5fa1d68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This commit adds a patch, which is already in Debian, fixing the build
-with gcc 14.x:
-
-/home/autobuild/autobuild/instance-7/output-1/build/host-cdrkit-1.1.11/genisoimage/genisoimage.c:1509:17: error: implicit declaration of function 'parse_checksum_algo' [-Wimplicit-function-declaration]
- 1509 |             if (parse_checksum_algo(optarg, &checksum_algo_iso))
-      |                 ^~~~~~~~~~~~~~~~~~~
-make[3]: *** [genisoimage/CMakeFiles/genisoimage.dir/build.make:76: genisoimage/CMakeFiles/genisoimage.dir/genisoimage.o] Error 1
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/a9cca8da22774ecafdbb382697aae71f78e348f4/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../cdrkit/0004-Add-missing-header-includes.patch  | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ .checkpackageignore                                    |  2 +-
+ ...-no-rcmd.patch => 0001-fix-build-with-uClibc.patch} | 18 ++++++++++++------
+ 2 files changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/package/cdrkit/0004-Add-missing-header-includes.patch b/package/cdrkit/0004-Add-missing-header-includes.patch
-new file mode 100644
-index 0000000000..d2a93fe5a7
---- /dev/null
-+++ b/package/cdrkit/0004-Add-missing-header-includes.patch
-@@ -0,0 +1,48 @@
-+From 8b7852149c45c8a837a9f5124e91812dd475a270 Mon Sep 17 00:00:00 2001
-+From: Andrey Rakhmatullin <wrar@debian.org>
-+Date: Sat, 13 Jul 2024 11:37:07 +0200
-+Subject: [PATCH] Add missing header includes
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Bug-Debian: https://bugs.debian.org/1066264
-+
-+Fixes:
-+
-+genisoimage/genisoimage.c:1509:17: error: implicit declaration of function ‘parse_checksum_algo’ [-Wimplicit-function-declaration]
-+
-+Upstream: https://sources.debian.org/patches/cdrkit/9:1.1.11-3.5/fix-implicit-function-declaration.patch/
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ genisoimage/genisoimage.c | 1 +
-+ genisoimage/jte.c         | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/genisoimage/genisoimage.c b/genisoimage/genisoimage.c
-+index 46f0cb7..fa2f8bd 100644
-+--- a/genisoimage/genisoimage.c
-++++ b/genisoimage/genisoimage.c
-+@@ -53,6 +53,7 @@
-+ #include <ctype.h>
-+ #include "match.h"
-+ #include "exclude.h"
-++#include "checksum.h"
-+ #include <unls.h>	/* For UNICODE translation */
-+ #include <schily.h>
-+ #ifdef UDF
-+diff --git a/genisoimage/jte.c b/genisoimage/jte.c
-+index 0dff289..4c4d986 100644
-+--- a/genisoimage/jte.c
-++++ b/genisoimage/jte.c
-+@@ -27,6 +27,7 @@
-+ #include "ifo_read.h"
-+ #include "endianconv.h"
-+ #include "checksum.h"
-++#include "md5.h"
-+ #endif
-+ #ifdef APPLE_HYB
-+ #include <ctype.h>
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ade6c9fd20..6b4412a193 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -395,7 +395,7 @@ package/cache-calibrator/0001-Fix-conflicting-round-function.patch lib_patch.Ups
+ package/cairo/0001-_arc_max_angle_for_tolerance_normalized-fix-infinite.patch lib_patch.Upstream
+ package/cairo/0002-Fix-mask-usage-in-image-compositor.patch lib_patch.Upstream
+ package/caps/0001-Fix-stdint-types-with-musl.patch lib_patch.Upstream
+-package/cdrkit/0001-no-rcmd.patch lib_patch.Upstream
++package/cdrkit/0001-fix-build-with-uClibc.patch lib_patch.Upstream
+ package/cdrkit/0002-define-__THROW-to-avoid-build-issue-with-musl.patch lib_patch.Upstream
+ package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch lib_patch.Upstream
+ package/cfm/S65cfm lib_sysv.Indent lib_sysv.Variables
+diff --git a/package/cdrkit/0001-no-rcmd.patch b/package/cdrkit/0001-fix-build-with-uClibc.patch
+similarity index 59%
+rename from package/cdrkit/0001-no-rcmd.patch
+rename to package/cdrkit/0001-fix-build-with-uClibc.patch
+index 294779f7a5..27203eee64 100644
+--- a/package/cdrkit/0001-no-rcmd.patch
++++ b/package/cdrkit/0001-fix-build-with-uClibc.patch
+@@ -1,17 +1,20 @@
+-[PATCH] fix build with uClibc
++From 13823cfe42f33e947f8375f5a3f9ee177c699960 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Sat, 13 Jul 2024 10:57:57 +0200
++Subject: [PATCH] fix build with uClibc
+ 
+ cdrkit unconditionally enables code using rcmd(3), which isn't available
+ on uClibc.
+ 
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+ ---
+- include/xconfig.h.in |    1 -
++ include/xconfig.h.in | 1 -
+  1 file changed, 1 deletion(-)
+ 
+-Index: cdrkit-1.1.10/include/xconfig.h.in
+-===================================================================
+---- cdrkit-1.1.10.orig/include/xconfig.h.in
+-+++ cdrkit-1.1.10/include/xconfig.h.in
++diff --git a/include/xconfig.h.in b/include/xconfig.h.in
++index c130600..00f2044 100644
++--- a/include/xconfig.h.in
+++++ b/include/xconfig.h.in
+ @@ -187,7 +187,6 @@
+   *	they are placed before the large file tests.
+   */
+@@ -20,3 +23,6 @@ Index: cdrkit-1.1.10/include/xconfig.h.in
+  #define HAVE_SOCKET 1		/* socket() is present in libc/libsocket */
+  #define HAVE_SOCKETPAIR 1		/* socketpair() is present in libc/libsocket */
+  #define HAVE_GETSERVBYNAME 1	/* getservbyname() is present in libc/libsocket */
 +-- 
 +2.45.2
 +
-
---===============7707921684508897643==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7707921684508897643==--
