@@ -4,48 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0531EC3DA42
-	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 19:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD922C3DA45
+	for <buildroot@archiver.kernel.org>; Sat, 13 Jul 2024 19:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C29F0404B0;
-	Sat, 13 Jul 2024 19:36:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 551BF40148;
+	Sat, 13 Jul 2024 19:38:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S5VdOgm60oe1; Sat, 13 Jul 2024 19:36:30 +0000 (UTC)
+ id aW0aHsrayidz; Sat, 13 Jul 2024 19:38:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C87C404C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8A074048B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C87C404C1;
-	Sat, 13 Jul 2024 19:36:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 45BCB1BF86D
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:36:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8A074048B;
+	Sat, 13 Jul 2024 19:38:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2AE331BF3F6
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2BB1341347
- for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:36:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22BB481FD9
+ for <buildroot@lists.busybox.net>; Sat, 13 Jul 2024 19:38:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bhynZach2gy2 for <buildroot@lists.busybox.net>;
- Sat, 13 Jul 2024 19:36:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0dfizNcGFV1m for <buildroot@lists.busybox.net>;
+ Sat, 13 Jul 2024 19:38:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F003E41333
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F003E41333
- for <buildroot@buildroot.org>; Sat, 13 Jul 2024 19:36:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3486865AB; Sat, 13 Jul 2024 19:36:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 13 Jul 2024 19:13:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 88ab90e3092de7ce43a79e01e9a8cad8e7323047
-X-Git-Newrev: 1fb08cdc85fab4ba1460cd15e0829494afc0fdf2
-X-Patchwork-Hint: ignore
-Message-Id: <20240713193604.D3486865AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: new xfsprogs runtime test
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 122D880DB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 122D880DB9
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 122D880DB9
+ for <buildroot@buildroot.org>; Sat, 13 Jul 2024 19:38:31 +0000 (UTC)
+Received: from pps.filterd (m0346906.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 46DEcWkJ002055; Sat, 13 Jul 2024 19:38:29 GMT
+Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40bjb6ucmt-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Sat, 13 Jul 2024 19:38:29 +0000
+Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
+ by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46DJcRjs017362
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Sat, 13 Jul 2024 19:38:28 GMT
+Received: from crulimr02.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 46DJcRrj006097
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Sat, 13 Jul 2024 19:38:27 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by crulimr02.rockwellcollins.com (Postfix) with ESMTP id 1ECBC3003AA3;
+ Sat, 13 Jul 2024 14:38:27 -0500 (CDT)
+Mime-Version: 1.0
+Date: Sat, 13 Jul 2024 19:38:27 +0000
+Message-Id: <D2ONYNM0BBJP.3KFQM3V7NIQOO@collins.com>
+To: "Fiona Klute" <fiona.klute@gmx.de>, <buildroot@buildroot.org>
+X-Mailer: aerc 0.17.0-0-g6ea74eb30457
+References: <20240713192207.873065-1-fiona.klute@gmx.de>
+In-Reply-To: <20240713192207.873065-1-fiona.klute@gmx.de>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-13_15,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-13_15,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ spamscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407130149
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ adultscore=0 bulkscore=0
+ phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407130149
+X-Proofpoint-ORIG-GUID: sVoOtyUCR6eKMiAYbDrOY4rJr-7d_K-T
+X-Proofpoint-GUID: sVoOtyUCR6eKMiAYbDrOY4rJr-7d_K-T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-13_16,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0 clxscore=1015
+ bulkscore=0 adultscore=0 impostorscore=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2406180000 definitions=main-2407130150
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=POD051818;
+ bh=abGJcOiP/O6Y4KpUm8//vgn9bHFEIAECAvL4yxgusGU=;
+ b=LHM2PKcFA5NTLd2EYa+GYFcIhmYid7CYKtfiSdvwXMa7EDAQbbIeVgkouLfZv0NVvgyR
+ EYxw8r+ZeJTr6ogG7bh37tNbMoKzC4imTxoOVJ3uj2haDiQHIFObbIzfCM9B06juXMfD
+ uCOrbwKyQ8vbUAujtQhlh0GhiDD/GbV15Qj3BbSqlsLsu8ciCgrN0CsszsjaO32V01ye
+ aZ51Puqs4p4Ll/cXi2JxK/rI0bFKofsUv+Br2ezc+aMQ6q9HokgAV8Smd52Ei5uxV4Km
+ DZIZebJylfue6jQdhpwiCCszGG/prC5BZpE9/XOsPxEpqxY1msjZ8iOdH3wCBdM7I4RJ 0g== 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=LHM2PKcF
+Subject: Re: [Buildroot] [PATCH v3 1/2] utils/docker-run: mount and pass
+ BR2_EXTERNAL dirs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,163 +122,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fb08cdc85fab4ba1460cd15e0829494afc0fdf2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Fiona,
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- DEVELOPERS                                         |   2 +
- support/testing/tests/package/test_xfsprogs.py     | 112 +++++++++++++++++++++
- .../tests/package/test_xfsprogs/linux-xfs.fragment |   1 +
- 3 files changed, 115 insertions(+)
+On Sat Jul 13, 2024 at 7:22 PM UTC, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+>
+> The BR2_EXTERNAL environment variable is passed into the container,
+> and each path listed in it mounted. This allows using external trees
+> when running a build using utils/docker-run. Testing the existence of
+> the variable instead of a non-empty value allows passing an empty
+> BR2_EXTERNAL variable to disable currently set external trees.
+>
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fe3247273e..c070379ced 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1933,6 +1933,8 @@ F:	support/testing/tests/package/test_usbutils/
- F:	support/testing/tests/package/test_weston.py
- F:	support/testing/tests/package/test_weston/
- F:	support/testing/tests/package/test_wine.py
-+F:	support/testing/tests/package/test_xfsprogs.py
-+F:	support/testing/tests/package/test_xfsprogs/
- F:	support/testing/tests/package/test_xz.py
- F:	support/testing/tests/package/test_z3.py
- F:	support/testing/tests/package/test_z3/
-diff --git a/support/testing/tests/package/test_xfsprogs.py b/support/testing/tests/package/test_xfsprogs.py
-new file mode 100644
-index 0000000000..a3a4bd27d8
---- /dev/null
-+++ b/support/testing/tests/package/test_xfsprogs.py
-@@ -0,0 +1,112 @@
-+import os
-+import subprocess
-+
-+import infra.basetest
-+
-+
-+class TestXfsProgs(infra.basetest.BRTest):
-+    # This test needs a Kernel with XFS support.
-+    kern_frag = \
-+        infra.filepath("tests/package/test_xfsprogs/linux-xfs.fragment")
-+    config = \
-+        f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.37"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_XFSPROGS=y
-+        BR2_PACKAGE_OPENSSL=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        # Prepare the disk image. XFS requires at least 300MB of
-+        # storage to work.
-+        disk_file = os.path.join(self.builddir, "images", "disk.img")
-+        self.emulator.logfile.write(f"Creating disk image: {disk_file}")
-+        self.emulator.logfile.flush()
-+        subprocess.check_call(
-+            ["dd", "if=/dev/zero", f"of={disk_file}", "bs=1M", "count=512"],
-+            stdout=self.emulator.logfile,
-+            stderr=self.emulator.logfile)
-+
-+        # Run the emulator with a blank drive.
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        bootargs = ["console=ttyAMA0"]
-+        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
-+                     "-initrd", img,
-+                     "-drive", f"file={disk_file},if=virtio,format=raw"]
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=bootargs,
-+                           options=qemu_opts)
-+        self.emulator.login()
-+
-+        # Check a program can run and show its version.
-+        self.assertRunOk("mkfs.xfs -V")
-+
-+        # Variables for this test.
-+        dev = "/dev/vda"
-+        label = "BR_TEST"
-+        mnt_pt = "/tmp/xfs"
-+        data_file = f"{mnt_pt}/data.bin"
-+
-+        # We create the XFS filesystem on our device.
-+        self.assertRunOk(f"mkfs.xfs {dev}")
-+
-+        # We set a label on this filesystem.
-+        self.assertRunOk(f"xfs_admin -L '{label}' {dev}")
-+
-+        # We create a mount point.
-+        self.assertRunOk(f"mkdir -p {mnt_pt}")
-+
-+        # We mount the XFS filesystem.
-+        self.assertRunOk(f"mount {dev} {mnt_pt}")
-+
-+        # We create a file with random data, to use this new
-+        # filesystem a bit.
-+        self.assertRunOk(f"dd if=/dev/urandom of={data_file} bs=1M count=10")
-+
-+        # We compute the sha256 hash and save it for later.
-+        hash_cmd = f"sha256sum {data_file}"
-+        out, ret = self.emulator.run(hash_cmd)
-+        self.assertEqual(ret, 0)
-+        data_sha256 = out[0]
-+
-+        # We unmount the filesystem.
-+        self.assertRunOk(f"umount {mnt_pt}")
-+
-+        # We query the fragmentation level. Since it's a new
-+        # filesystem, we don't expect any filesystem
-+        # fragmentation. This invocation is just to test the "xfs_db"
-+        # program can run and read the filesystem.
-+        self.assertRunOk(f"xfs_db -c frag -r {dev}")
-+
-+        # We run a repair (this tool is the equivalent of
-+        # "fsck"). Again, since we cleanly unmounted the filesystem,
-+        # we are not expecting any repair. This is just to test the
-+        # program works correctly.
-+        self.assertRunOk(f"xfs_repair {dev}")
-+
-+        # We query the label and check it is the one we set at the
-+        # beginning.
-+        out, ret = self.emulator.run(f"xfs_admin -l {dev}")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], f"label = \"{label}\"")
-+
-+        # We remount our filesystem.
-+        self.assertRunOk(f"mount {dev} {mnt_pt}")
-+
-+        # We should recompute the same sha256 hash as before.
-+        out, ret = self.emulator.run(hash_cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], data_sha256)
-diff --git a/support/testing/tests/package/test_xfsprogs/linux-xfs.fragment b/support/testing/tests/package/test_xfsprogs/linux-xfs.fragment
-new file mode 100644
-index 0000000000..32f7f6d872
---- /dev/null
-+++ b/support/testing/tests/package/test_xfsprogs/linux-xfs.fragment
-@@ -0,0 +1 @@
-+CONFIG_XFS_FS=y
+Reviewed-by: Brandon Maier <brandon.maier@collins.com>
+
+> ---
+> Changes v2 -> v3:
+> * Use read to make the loop that creates mount options more robust,
+>   removing pre-exisiting shellcheck override. Suggested by Brandon
+>   Maier.
+>
+> Changes v1 -> v2:
+> * Correctly handle spaces in external tree paths
+>
+>  utils/docker-run | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+>
+> diff --git a/utils/docker-run b/utils/docker-run
+> index 1adb02d74e..dbb9c45fdd 100755
+> --- a/utils/docker-run
+> +++ b/utils/docker-run
+> @@ -90,10 +90,17 @@ if [ "${BR2_DL_DIR}" ]; then
+>      docker_opts+=( --env BR2_DL_DIR )
+>  fi
+>
+> -# shellcheck disable=SC2013 # can't use while-read because of the assignment
+> -for dir in $(printf '%s\n' "${mountpoints[@]}" |LC_ALL=C sort -u); do
+> +if [ -v BR2_EXTERNAL ]; then
+> +    IFS=":" read -r -a br2_ext_arr <<< "${BR2_EXTERNAL}"
+> +    for br2_ext in "${br2_ext_arr[@]}"; do
+> +        mountpoints+=( "${br2_ext}" )
+> +    done
+> +    docker_opts+=( --env BR2_EXTERNAL )
+> +fi
+> +
+> +while IFS=$'\n' read -r dir; do
+>      docker_opts+=( --mount "type=bind,src=${dir},dst=${dir}" )
+> -done
+> +done < <(printf '%s\n' "${mountpoints[@]}" | LC_ALL=C sort -u)
+>
+>  if tty -s; then
+>      docker_opts+=( -t )
+> --
+> 2.45.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
