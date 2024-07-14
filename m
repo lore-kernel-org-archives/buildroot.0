@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB121C3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 15:51:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A976AC3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 15:53:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 625CF605C3;
-	Sun, 14 Jul 2024 15:51:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76C95605C3;
+	Sun, 14 Jul 2024 15:53:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xcf6FAMRQo46; Sun, 14 Jul 2024 15:51:40 +0000 (UTC)
+ id jnAX760rRe5U; Sun, 14 Jul 2024 15:53:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B3E0605D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A54C605D8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B3E0605D8;
-	Sun, 14 Jul 2024 15:51:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9406E1BF44A
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:51:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A54C605D8;
+	Sun, 14 Jul 2024 15:53:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BB5721BF44A
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:53:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E47A605D8
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:51:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B22AC81194
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:53:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hQB-lrElUds7 for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 15:51:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YLSpDVqFURWK for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 15:53:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 694BD605C3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 694BD605C3
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 694BD605C3
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 15:51:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DF02A240005;
- Sun, 14 Jul 2024 15:51:32 +0000 (UTC)
-Date: Sun, 14 Jul 2024 17:51:32 +0200
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <20240714175132.48fbbace@windsurf>
-In-Reply-To: <20231130160710.3146545-1-roy.kollen.svendsen@akersolutions.com>
-References: <20231130160710.3146545-1-roy.kollen.svendsen@akersolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720972294;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=zFAvuiuL+fLpdPIfRLCgA9CXMz9b3ymdGSyg2T4W5Ds=;
- b=jLoQ6eLGbNribJKFFZCBO5lPJuxNygNA5jix42V6mB/OR5gnzsqH6gJKloDjJH1g0degSK
- 2CJZhrkvJvKJzafJypzYHiBdQqW0VZUar1+f9KFcXVlChiCPRi0G/r2Z/Je8c5hXx1Xi2j
- IhuE1SjyoYSGQWzl/Pr7oUecqHekfdzr2FW/DzqXgaw71HGq9JyF+5FUhPCKlTdnyrme/l
- jxFoyG/hsB94Ew9ZBSh1mkg2rL3p/RGRtDuVU/4BN4teJW5MqiTzPbxGjiaRZVL+CxzO2R
- CN3GHyX88yfto4Aws0MwibOMoLL3H+SqWH2nI2oqd/ooXV3FKMtWu8Tsz4/8Wg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jLoQ6eLG
-Subject: Re: [Buildroot] [PATCH 2022.08.x] package/qt5base: fix memory leak
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F056181192
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F056181192
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 15:53:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D8BC686894; Sun, 14 Jul 2024 15:53:10 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 14 Jul 2024 17:52:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3a5c045fd3ef30d62c551dbfa3756f5ee657f866
+X-Git-Newrev: 31212c4c58d7547cb4bff77e17b62bc88f3ffa1b
+X-Patchwork-Hint: ignore
+Message-Id: <20240714155310.D8BC686894@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/janet: bump to version 1.35.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,38 +59,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Roy Kollen Svendsen <roy.kollen.svendsen@akersolutions.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Roy,
+commit: https://git.buildroot.net/buildroot/commit/?id=31212c4c58d7547cb4bff77e17b62bc88f3ffa1b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Nov 2023 17:07:09 +0100
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/janet/janet.hash | 2 +-
+ package/janet/janet.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> We noticed that our qt5 application froze after running for
-> a few days on our imx8m mini based panel-pc.
-
-Sorry for the very long delay in getting back to you. Unfortunately,
-2022.08.x is no longer maintained, it was not even a LTS. I checked,
-and all 4 commits you proposed to backport are part of the qt5base
-version we have in 2024.02.x, so the currently maintained LTS branch is
-not affected by this issue.
-
-Therefore, I have marked your patch as Not Applicable in patchwork, as
-we're no longer taking patches against 2022.08.x.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/janet/janet.hash b/package/janet/janet.hash
+index 33bbad5853..a35835a54e 100644
+--- a/package/janet/janet.hash
++++ b/package/janet/janet.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  c9018fbd69b825cfc706d8c40e9464be37e924ce07089933e92f4f931ccf0d8d  janet-1.33.0.tar.gz
++sha256  947dfdab6c1417c7c43efef2ecb7a92a3c339ce2135233fe88323740e6e7fab1  janet-1.35.2.tar.gz
+ 
+ # Locally calculated
+ sha256  95fca700e8dce9699248e7cc80ac88ce2357874c8352cd2be4d18f183dc9710b  LICENSE
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+index ac34ba0a38..9bf5322d16 100644
+--- a/package/janet/janet.mk
++++ b/package/janet/janet.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANET_VERSION = 1.33.0
++JANET_VERSION = 1.35.2
+ JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
+ JANET_LICENSE = MIT
+ JANET_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
