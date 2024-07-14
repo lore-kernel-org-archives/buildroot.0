@@ -4,98 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86EFDC3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 17:46:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FA80C3DA42
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 18:01:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E835560754;
-	Sun, 14 Jul 2024 17:46:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 089AE6064B;
+	Sun, 14 Jul 2024 18:01:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sclUsAdMBUXa; Sun, 14 Jul 2024 17:46:33 +0000 (UTC)
+ id y_LpT3NN35g6; Sun, 14 Jul 2024 18:01:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2546060687
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BB5460687
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2546060687;
-	Sun, 14 Jul 2024 17:46:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 233631BF3F2
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:46:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BB5460687;
+	Sun, 14 Jul 2024 18:01:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 535D71BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 18:01:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F0A4405C9
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:46:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 40D9F60687
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 18:01:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Je7iYUHeVAd for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 17:46:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22c; helo=mail-lj1-x22c.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7EE7540506
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EE7540506
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
- [IPv6:2a00:1450:4864:20::22c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7EE7540506
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 17:46:22 +0000 (UTC)
-Received: by mail-lj1-x22c.google.com with SMTP id
- 38308e7fff4ca-2eedeca1c79so17184741fa.3
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 10:46:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720979180; x=1721583980;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=XPXfLI4p1mPyFlzx2TZN6KX6XKiltqBjft0zP0Ym5Ts=;
- b=GGLUymIBrXTh5tSGhaAlewSKj26cakPMpvlgzBemBXG7xWrmoEywDGP3RUbKlkm0uX
- Ey7DJTV/IeueeQaZWW6vkzX7/w081zcMbEuQiJNxoMq80RQpkUp3n2MY0V8AdF6oqkOF
- vVUk/93WQSc8y2TiXF3EErck817+4oiHKQvG4OmOwqBcE5btJitoGeKiXyiA6xVd830/
- gseizIq5BYdlO/PEoysautZOg6lJL9sJAYkKn2dvDeUzQJ7UOiqXMiB6c0O5YlskGIIx
- Lh/4TXCjhzNucNcLenSWImz9AWlZoZzVuYJIPeXFVtZic+4VSgqk+FvMU6T1TU7pm+/L
- xyNw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVYpnu6Kr/d7cWemaCitduEsAjJLaT/qf1WtHAxkwkFooYE/2xYKBIT57aRxQadUIyMw/zhikzgPNzwzExhN/S14L8Fc6TnYA==
-X-Gm-Message-State: AOJu0YzuGccHFujEsZLUOsO0OByy9SWJvlZJ3UUDomowQ1SBOvvxEDyw
- +VQ9jF8P2cIV3EVp4bU9jEfYjZMPGzdBNmzYDP3DwJWW/Nm7I/tGwNRdT554/vQ=
-X-Google-Smtp-Source: AGHT+IEGlBnpRYY03V1rDM4BQxL24TSWCbr1DlR7ywGoVNNjlqQ8ZHJroQQzOj8dILLtnbaa7kCv3w==
-X-Received: by 2002:a2e:2ac4:0:b0:2ee:8adb:6190 with SMTP id
- 38308e7fff4ca-2eeb3181a58mr123433501fa.35.1720979180114; 
- Sun, 14 Jul 2024 10:46:20 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:f9c8:f443:ffd:1bed?
- (2a01cb05949d5800f9c8f4430ffd1bed.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:f9c8:f443:ffd:1bed])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3680daccbd2sm4324014f8f.49.2024.07.14.10.46.19
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 14 Jul 2024 10:46:19 -0700 (PDT)
-Message-ID: <cfaf217e-437e-480f-a4a8-1510f8ec11ba@smile.fr>
-Date: Sun, 14 Jul 2024 19:46:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: kilian.zinnecker@mail.de, buildroot@buildroot.org
-References: <20240217083525.561684-1-kilian.zinnecker@mail.de>
- <8b75fd72-c3e4-4359-9691-2bf824904d45@benettiengineering.com>
- <6052941.lOV4Wx5bFT@laptop>
-Content-Language: fr
-In-Reply-To: <6052941.lOV4Wx5bFT@laptop>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1720979180; x=1721583980; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=XPXfLI4p1mPyFlzx2TZN6KX6XKiltqBjft0zP0Ym5Ts=;
- b=OdlXE14LxObN64fM0ycU/vnqeuu8JJSHCUQBqqfLCm92R2p5Dy0q4LymyOMgbnCjTp
- NppsjhnlYlc+lO6TcPtfY+d/0Ok+Ki7Dvk2ZJStJIHrEU6r75HynfK0ieVUseMJXKNSM
- zjjdBpJrkAxjxy2NLyIe4ga/Fy4fZuZwoNqsw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=OdlXE14L
-Subject: Re: [Buildroot] [PATCH v3] configs/rock5b_defconfig: switch to
- mainline linux
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b61PmLGYjfmI for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 18:01:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BA566064B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5BA566064B
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 18:01:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4F9DF86934; Sun, 14 Jul 2024 18:01:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 14 Jul 2024 19:46:44 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b7dbdd3d775b8e94664c6f37b11afc8a6a352e35
+X-Git-Newrev: 99e536d9c7382f5a3ff9d7533d62615d7b6efeef
+X-Patchwork-Hint: ignore
+Message-Id: <20240714180143.4F9DF86934@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/orangepi/orangepi-lite: switch to
+ extlinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,26 +60,123 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8ga2lsaWFuLAoKTGUgMDkvMDYvMjAyNCDDoCAxNDozMywga2lsaWFuLnppbm5lY2tlci0t
-LSB2aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gSGVsbG8gR2l1bGlvLCBBbGwsCj4gCj4+IGl0
-IGxvb2tzIGV2ZXJ5dGhpbmcgZ29vZCB0byBtZSBub3csIHNvOgo+PiBSZXZpZXdlZC1ieTogR2l1
-bGlvIEJlbmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Cj4gCj4g
-VGhhbmtzIGZvciBhbGwgdGhlIGZlZWRiYWNrIGFuZCBmb3IgcmV2aWV3aW5nIEdpdWxpbyEKPiAK
-PiBAYWxsOiBBcmUgdGhlcmUgc3RpbGwgdGhpbmdzIHdoaWNoIEkgbWF5IGZpeCBvciBpbXByb3Zl
-LCBzbyB0aGF0IHRoZSBwYXRjaCBtYXkgCj4gZmluYWxseSBiZSBhcHBsaWVkPyBGcm9tIG15IHNp
-ZGUgaXRzIG5vdCB1cmdlbnQsIGJ1dCBvZiBjb3Vyc2UgSSB3b3VsZCBsaWtlIHRvIAo+IHNlZSB0
-aGUgcGF0Y2ggaG9wZWZ1bGx5IGdldCBhY2NlcHRlZCBhdCBzb21lIHBvaW50LCBhbmQgb2ZjIGlm
-IG5lZWRlZCwgSSB3b3VsZCAKPiBnaXZlIGl0IGEgdHJ5IHRvIGltcHJvdmUgdGhlIHBhdGNoLgoK
-QXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAKPiBC
-ZXN0IHJlZ2FyZHMsCj4gS2lsaWFuIAo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=99e536d9c7382f5a3ff9d7533d62615d7b6efeef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Switch to extlinux instead of U-Boot boot script. Drop custom
+boot script and genimage config. Instead use common orangepi
+files from board/orangepi/common.
+
+Signed-off-by: Jan Kraval <jan.kraval@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ board/orangepi/orangepi-lite/boot.cmd     |  8 -------
+ board/orangepi/orangepi-lite/genimage.cfg | 37 -------------------------------
+ configs/orangepi_lite_defconfig           | 12 ++++------
+ 3 files changed, 4 insertions(+), 53 deletions(-)
+
+diff --git a/board/orangepi/orangepi-lite/boot.cmd b/board/orangepi/orangepi-lite/boot.cmd
+deleted file mode 100644
+index 5c29dabfe8..0000000000
+--- a/board/orangepi/orangepi-lite/boot.cmd
++++ /dev/null
+@@ -1,8 +0,0 @@
+-setenv fdt_high ffffffff
+-
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
+-
+-fatload mmc 0 $kernel_addr_r zImage
+-fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-lite.dtb
+-
+-bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/orangepi/orangepi-lite/genimage.cfg b/board/orangepi/orangepi-lite/genimage.cfg
+deleted file mode 100644
+index b422a751a8..0000000000
+--- a/board/orangepi/orangepi-lite/genimage.cfg
++++ /dev/null
+@@ -1,37 +0,0 @@
+-# Minimal SD card image for the OrangePi Lite
+-#
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"sun8i-h3-orangepi-lite.dtb",
+-			"boot.scr"
+-		}
+-	}
+-
+-	size = 10M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-		size = 512M
+-	}
+-}
+diff --git a/configs/orangepi_lite_defconfig b/configs/orangepi_lite_defconfig
+index e834816456..eff5af938b 100644
+--- a/configs/orangepi_lite_defconfig
++++ b/configs/orangepi_lite_defconfig
+@@ -4,6 +4,9 @@ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Lite"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Lite"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.1"
+@@ -11,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-lite/linux-extras.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-lite"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_RTL8189FS=y
+ BR2_PACKAGE_WIRELESS_TOOLS=y
+@@ -25,15 +29,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_lite"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-lite/boot.cmd"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-lite/genimage.cfg"
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
