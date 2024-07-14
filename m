@@ -4,68 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1218AC3DA49
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 16:34:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CD36C3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 16:42:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9FD094027C;
-	Sun, 14 Jul 2024 16:34:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B659C40444;
+	Sun, 14 Jul 2024 16:42:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PZ7Mtf_xv8MI; Sun, 14 Jul 2024 16:34:49 +0000 (UTC)
+ id Jtr0b9GPVAJ6; Sun, 14 Jul 2024 16:42:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB1EE401ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AE964027C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DB1EE401ED;
-	Sun, 14 Jul 2024 16:34:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1AE964027C;
+	Sun, 14 Jul 2024 16:42:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB24A1BF4E7
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:34:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E0DB61BF32B
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:41:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4D8F401ED
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:34:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA2E44027C
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:41:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iGl9MUKeaZqP for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 16:34:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 56D0140165
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56D0140165
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 56D0140165
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 16:34:43 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id BEC0DB00576;
- Sun, 14 Jul 2024 18:34:39 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 18:34:29 +0200
-Message-ID: <20240714163429.2331461-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+ id xuiBo7DA74Wg for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 16:41:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3B20740242
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B20740242
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B20740242
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 16:41:56 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-36796aee597so2114940f8f.1
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 09:41:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720975315; x=1721580115;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=QTcFNetzAC5XhDVqk/708FhRszr+Sqoe8KLeYj7+ktY=;
+ b=hNS26OXKaLNt6hfeViPSMnBW/2p6Vhtr66uEm3/vzZFEWk6MGu3Tgy82+2x5d/1AsR
+ ZXQ9bTsV3GOTx1P4TsiCIuFdk6YFBoZgbScKXQTOha1XqtPqyeU0tVgKuM6Q3mHGzKvb
+ +dlguIMPra62uAjyMMmEnWLJ2Cr4+O0R1PVUH0J4PeP/JUboRH/czrHDwCOl1850T6oc
+ BnIVH8GM7u8pj18HuDqpNlg6mYiYVrne1cigHjyIpaxl/sp0EnHLNKsselmVgO2q+QYO
+ 3DUG80YUDgp9tsLG/1Jx8Eclm7dElCS1EkTqwmxSXJVV5plwnZXcrKkIoIio8h7tb9Y5
+ vzeQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUstIMkXYpYP93C0Azm2DWYw8tduZiN/PNhArMB10zBKm+ipi7rw9aX53kJ84NAjUPbIY39qppx6edkUF+Q0FSn8ozNO1CAeg==
+X-Gm-Message-State: AOJu0Yx/QOXf9TJW3EPWWoCR5az2o578RISoIM0+E6GqJWghhMrVUCiq
+ lM0haDc+8M2oUTzdwSHi6n0ZFgKknAKlX0QNNKuzuyIdtKivDUq4j2laJb4XgMCXLqKW3+iyMpK
+ oXR0=
+X-Google-Smtp-Source: AGHT+IFt0tOG+96ZY/Q30B5sbrA1vFt+0tvuZKmoY4KnlLXg9Wc15YxmzJ5L8IilG29PYNhLZ6VFMA==
+X-Received: by 2002:adf:e5c3:0:b0:367:96aa:af79 with SMTP id
+ ffacd0b85a97d-367cead9082mr10867107f8f.58.1720975314824; 
+ Sun, 14 Jul 2024 09:41:54 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
+ (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:b481:98b5:611f:e783])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3680dafb939sm4196971f8f.89.2024.07.14.09.41.53
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 14 Jul 2024 09:41:54 -0700 (PDT)
+Message-ID: <96550245-ea02-4448-97e0-6a4fc91cc81c@mind.be>
+Date: Sun, 14 Jul 2024 18:41:52 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1720974880;
- bh=lssyzeV6j3xTNRZyTooQ51Sek8K2btGaGaYgNIm2lcg=;
- h=From:To:Cc:Subject:Date:From;
- b=SoNMHMUfDRhir6cLVWYYD5kEWgGPc+f3hTiL0opgwZCgcEIDtUcxeBAgTf6w5h25Q
- 278Yv9JCAcAawfDrdtNtx25UR8L7xYrsLTHB9tuZizrpEsQwi7ZzQL74kjdy6psu7P
- k0U75Y/EOcxwXs0f9n8ZknxCit+ulKjzcg1VTx3uXBYz4NaE0/hoKc2bjxN0JURb8V
- CBXuCt3vHRVoJrElHaeOmWRbVKRw/+GhtImZMaKjSNl7wCAormZOk1O6y6sGjQwgnp
- ClCk5NtVCowkrgeJDBmSFqGTyt0+XWhdPMsv2xP49up+NAathcMcL01LT5SEXhlRfP
- eHaFU91MElvrA==
+User-Agent: Mozilla Thunderbird
+To: Charles Hardin <ckhardin@gmail.com>, buildroot@buildroot.org
+References: <20230209231518.9458-1-ckhardin@gmail.com>
+ <cover.1677104777.git.ckhardin@gmail.com>
+ <cf471549729217bc79a9fc16bd74d3eb5918389e.1677104777.git.ckhardin@gmail.com>
+Content-Language: en-GB
+In-Reply-To: <cf471549729217bc79a9fc16bd74d3eb5918389e.1677104777.git.ckhardin@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1720975315; x=1721580115; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=QTcFNetzAC5XhDVqk/708FhRszr+Sqoe8KLeYj7+ktY=;
+ b=MErblDKasnA+r+76s8VjESamdlgHOGFKwy65BQxIZOhktfru4/z6K/uHr8aSqDjvxk
+ mvvc5bh6UJX24QqHNjPL6PKaWT4uVemDdRjlvazIBeIxPbaofTtzAg9kZfLGl7EGqSyy
+ UImmen5XAxxeOWH625OjMybQeQhUt3yZeH5wmGdpBRj6JaKJYBlVg4WHqKgoql8cORHk
+ i0VjYwqe/MwJ/m+pvPfT4sjw50lGZezaD28iS0Ug+p3J+H4ZZalHvRaX+wfxQ+ZR8rRC
+ /3bg4inb54Xivofa2tz1GqvtYNk/uKk6Eg6acnDDD2R2FTYH3qM+b01Rvg4WgwuTSruG
+ hECQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=SoNMHMUf
-Subject: [Buildroot] [PATCH v2 1/1] package/btrfs-progs: bump version to
- 6.9.2
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=MErblDKa
+Subject: Re: [Buildroot] [PATCH v2 1/3] support/download: add a helper scipt
+ to generate scmversions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,231 +111,200 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since v5.16.2, see:
-https://github.com/kdave/btrfs-progs/blob/v6.9.2/CHANGES
+  Hi Charles,
 
-This commit also adds two patches:
-- one to fix compilation with gcc 5.x and 6.x.
-- another to fix compilation with uClibc-ng
+  Sorry that it took so long to get back to this. I can imagine that you're no 
+longer motivated to work on this, but perhaps someone else is willing to pick it up.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Changes v1 -> v2:
-- Improve the package printf.h detection logic,
-  as suggested by Thomas in:
-  https://lists.buildroot.org/pipermail/buildroot/2024-July/757857.html
----
- ...compat-fix-fallthrough-definition-fo.patch | 63 ++++++++++++++
- ...uClibc-ng-compatibility-for-printf-f.patch | 85 +++++++++++++++++++
- package/btrfs-progs/btrfs-progs.hash          |  2 +-
- package/btrfs-progs/btrfs-progs.mk            |  5 +-
- 4 files changed, 153 insertions(+), 2 deletions(-)
- create mode 100644 package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
- create mode 100644 package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
+  We discussed this in the BR hackaton and we think there should be a better way 
+to achieve this.
 
-diff --git a/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch b/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
-new file mode 100644
-index 0000000000..588e9d4723
---- /dev/null
-+++ b/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
-@@ -0,0 +1,63 @@
-+From 0d2bf742df7f6b6d91fff8abe3c2f8b6ef0e0c01 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Sun, 14 Jul 2024 12:52:33 +0200
-+Subject: [PATCH] btrfs-progs: kerncompat: fix fallthrough definition for gcc
-+ 5.x and 6.x.
-+
-+Commit [1] 3a1d4aa089 "btrfs-progs: fix fallthrough cases with proper
-+attributes" introduced a macro "fallthrough" to better handle compiler
-+warnings of fallthrough situations.
-+
-+This macro is defined using the "__has_attribute" built-in
-+function-like macro, which was introduced in GCC 5. See [2]. It then
-+test for the "__fallthrough__" attribute, which was introduced in
-+GCC 7. See [3].
-+
-+When compiling with a gcc version which supports "__has_attribute" and
-+not the "__fallthrough__" attribute, compilation fails with error
-+message:
-+
-+    common/format-output.c: In function 'print_escaped':
-+    common/format-output.c:78:4: error: 'fallthrough' undeclared (first use in this function)
-+        fallthrough;
-+        ^
-+btrfs-progs claim to support gcc at minimal version 4.8 in [4].
-+
-+This commit fixes this issue by adding the missing definition.
-+
-+The definition of the unsupported case is duplicated, because testing
-+for "__has_attribute" and an attribute at the same time is not
-+portable. See the cpp "__has_attribute" documentation [5].
-+
-+Note: the issue was found with Buildroot Linux [6], while testing with
-+the command "utils/test-pkg -a -p btrfs-progs".
-+
-+[1] https://github.com/kdave/btrfs-progs/commit/3a1d4aa089419b7c94b31ff87122fa74907e1aa6
-+[2] https://gcc.gnu.org/gcc-5/changes.html
-+[3] https://gcc.gnu.org/gcc-7/changes.html
-+[4] https://github.com/kdave/btrfs-progs/tree/v6.9.2#build-compatibility
-+[5] https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005fattribute.html
-+[6] https://buildroot.org/
-+
-+Upstream: Proposed: https://github.com/kdave/btrfs-progs/pull/842
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ include/kerncompat.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/include/kerncompat.h b/include/kerncompat.h
-+index 31cd9d8d..bcd46bde 100644
-+--- a/include/kerncompat.h
-++++ b/include/kerncompat.h
-+@@ -305,6 +305,8 @@ static inline void up_read(struct rw_semaphore *sem)
-+ #if defined __has_attribute
-+ # if __has_attribute(__fallthrough__)
-+ #  define fallthrough			__attribute__((__fallthrough__))
-++# else
-++#  define fallthrough			do {} while (0)  /* fallthrough */
-+ # endif
-+ #else
-+ # define fallthrough			do {} while (0)  /* fallthrough */
-+-- 
-+2.45.2
-+
-diff --git a/package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch b/package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
-new file mode 100644
-index 0000000000..b1b4fba519
---- /dev/null
-+++ b/package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
-@@ -0,0 +1,85 @@
-+From 0f34a362c8644f212138fb8de8e0fba54941e757 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Sun, 14 Jul 2024 16:28:08 +0200
-+Subject: [PATCH] btrfs-progs: add uClibc-ng compatibility for printf format
-+ %pV
-+
-+Commit [1] 164bc10d "btrfs-progs: add musl compatibility for printf
-+format %pV" added a logic to detect the presence of the glibc
-+<printf.h> header, and if present, to use the
-+register_printf_specifier() and register_printf_modifier() functions.
-+
-+The original intent (as the commit log suggests), was to support the
-+musl libc, which does not provides this <printf.h> header.
-+
-+When compiling with another libc, such as uClibc-ng, btrfs-progs fail
-+to build with error:
-+
-+    common/messages.c: In function 'print_va_format':
-+    common/messages.c:51:19: error: 'const struct printf_info' has no member named 'user'
-+       51 |         if (!(info->user & va_modifier))
-+          |                   ^~
-+    common/messages.c: In function 'btrfs_no_printk':
-+    common/messages.c:76:17: warning: implicit declaration of function 'register_printf_specifier'; did you mean 'register_printf_function'? [-Wimplicit-function-declaration]
-+       76 |                 register_printf_specifier('V', print_va_format,
-+          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
-+          |                 register_printf_function
-+    common/messages.c:78:31: warning: implicit declaration of function 'register_printf_modifier'; did you mean 'register_printf_function'? [-Wimplicit-function-declaration]
-+       78 |                 va_modifier = register_printf_modifier(L"p");
-+          |                               ^~~~~~~~~~~~~~~~~~~~~~~~
-+          |                               register_printf_function
-+
-+This is because uClibc-ng provides a <printf.h> header, but not the
-+register_printf_specifier() and register_printf_modifier() functions.
-+See [2]. It mainly includes register_printf_function(). uClibc-ng
-+emulates an older glibc behavior. Glibc added support for printf user
-+elements in commit [3] (first included in glibc-2.10, in 2009). Checking
-+only the <printf.h> is not sufficient.
-+
-+This commit fixes this build issue by refining the detection logic of
-+the <printf.h> functions required by btrfs-progs.
-+
-+[1] https://github.com/kdave/btrfs-progs/commit/164bc10dfc08d8754d23ef0d6d7281e139d6cd53
-+[2] https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/src/v1.0.49/include/printf.h
-+[3] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=9d26efa90c6dcbcd6b3e586c9927b6058ef4d529
-+
-+Upstream: Proposed: https://github.com/kdave/btrfs-progs/pull/843
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ common/messages.h | 4 +++-
-+ configure.ac      | 4 ++++
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/common/messages.h b/common/messages.h
-+index d6d4044d..aced7c9b 100644
-+--- a/common/messages.h
-++++ b/common/messages.h
-+@@ -25,7 +25,9 @@
-+ /*
-+  * Workaround for custom format %pV that may not be supported on all libcs.
-+  */
-+-#ifdef HAVE_PRINTF_H
-++#if defined(HAVE_PRINTF_H) \
-++	&& defined(HAVE_REGISTER_PRINTF_SPECIFIER) \
-++	&& defined(HAVE_REGISTER_PRINTF_MODIFIER)
-+ #define DECLARE_PV(name)		struct va_format name
-+ #define PV_FMT				"%pV"
-+ #define PV_VAL(va)			&va
-+diff --git a/configure.ac b/configure.ac
-+index b69973b3..62b88973 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -95,6 +95,10 @@ AC_CHECK_HEADERS([linux/hw_breakpoint.h])
-+ AC_CHECK_HEADERS([linux/fsverity.h])
-+ AC_CHECK_HEADERS([printf.h])
-+ 
-++dnl Check for printf.h functions.
-++AC_CHECK_FUNCS([register_printf_specifier])
-++AC_CHECK_FUNCS([register_printf_modifier])
-++
-+ if grep -q 'HAVE_LINUX_FSVERITY_H.*1' confdefs.h; then
-+ 	have_fsverity='yes'
-+ else
-+-- 
-+2.45.2
-+
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 14eeb1ca07..082e8c1cdc 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256  9e9b303a1d0fd9ceaaf204ee74c1c8fa1fd55794e223d9fe2bc62875ecbd53d2  btrfs-progs-v5.16.2.tar.xz
-+sha256  43865bb272dc0ab2585de3605434d81ba217578f0897bf700cd36c14ac40652a  btrfs-progs-v6.9.2.tar.xz
- # Locally computed
- sha256  0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  libbtrfsutil/COPYING
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 9bf50ccfda..800c0e3082 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BTRFS_PROGS_VERSION = 5.16.2
-+BTRFS_PROGS_VERSION = 6.9.2
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
-@@ -13,6 +13,9 @@ BTRFS_PROGS_LICENSE = GPL-2.0, LGPL-2.1+ (libbtrfsutil)
- BTRFS_PROGS_LICENSE_FILES = COPYING libbtrfsutil/COPYING
- BTRFS_PROGS_INSTALL_STAGING = YES
- 
-+# 0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
-+BTRFS_PROGS_AUTORECONF = YES
-+
- # Doesn't autodetect static-only and tries to build both
- ifeq ($(BR2_STATIC_LIBS),y)
- BTRFS_PROGS_MAKE_OPTS = static
--- 
-2.45.2
+On 22/02/2023 23:30, Charles Hardin wrote:
+> Primarily focused on uboot and linux, getting the scmversion from
+> the custom repository references is required for change control
+> tracking off of different builds and pipelines. So, extend the
+> download framework to generate these files while the locks are
+> being held for the generation to avoid the git information from
+> changes during the download process.
+> 
+> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+> 
+> wip scmversion
+> 
+> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+> ---
+>   package/pkg-download.mk     |  1 +
+>   support/download/dl-wrapper |  5 +--
+>   support/download/git        | 10 ++++++
+>   support/download/hg         | 10 ++++++
+>   support/download/scmversion | 63 +++++++++++++++++++++++++++++++++++++
+>   support/download/svn        | 10 ++++++
+>   6 files changed, 97 insertions(+), 2 deletions(-)
+>   create mode 100755 support/download/scmversion
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 0718f21aad..333a53ce7e 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -119,6 +119,7 @@ define DOWNLOAD
+>   		-n '$($(2)_BASENAME_RAW)' \
+>   		-N '$($(2)_RAWNAME)' \
+>   		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
+> +		$(if $($(2)_SCMVERSION),-s) \
 
+  It's a pity that we need all this forwarding of arguments, but that's how the 
+infra is built :-(
+
+>   		$(if $($(2)_GIT_SUBMODULES),-r) \
+>   		$(if $($(2)_GIT_LFS),-l) \
+>   		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
+
+
+[snip]
+
+> diff --git a/support/download/git b/support/download/git
+> index 1a1c315f73..277c412e26 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -12,6 +12,7 @@ set -E
+>   #
+>   # Options:
+>   #   -q          Be quiet.
+> +#   -s          Generate an scmversion file
+>   #   -r          Clone and archive sub-modules.
+>   #   -o FILE     Generate archive in FILE.
+>   #   -u URI      Clone from repository at URI.
+> @@ -51,11 +52,13 @@ _on_error() {
+>   }
+>   
+>   quiet=
+> +scmversion=0
+>   large_file=0
+>   recurse=0
+>   while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+>       case "${OPT}" in
+>       q)  quiet=-q; exec >/dev/null;;
+> +    s)  scmversion=1;;
+>       l)  large_file=1;;
+>       r)  recurse=1;;
+>       o)  output="${OPTARG}";;
+> @@ -229,3 +232,10 @@ popd >/dev/null
+>   # the state of the remote server. It also would generate large tarballs
+>   # (gigabytes for some linux trees) when a full clone took place.
+>   mk_tar_gz "${git_cache}" "${basename}" "${date}" "${output}" ".git/*"
+> +
+> +# If an scmversion is needed then generate the version information
+> +if [ ${scmversion} -eq 1 ]; then
+> +    post_process_unpack "${basename}" "${output}"
+> +    support/download/scmversion "${git_cache}" "${basename}/.scmversion"
+> +    post_process_repack "$(pwd)" "${basename}" "${output}"
+> +fi
+
+  AFAICS, there's no need to unpack like this. You can simply do it before the 
+tarball is created (i.e. before the mk_tar_gz call).
+
+
+[snip]
+
+> diff --git a/support/download/scmversion b/support/download/scmversion
+> new file mode 100755
+> index 0000000000..16868a11e5
+> --- /dev/null
+> +++ b/support/download/scmversion
+> @@ -0,0 +1,63 @@
+> +#!/usr/bin/env bash
+> +set -x
+> +set -e
+> +
+> +# Helper to generate an scmversion in a dowload script before
+> +# the tarball is created. Because the tarball has to exclude
+> +# repository directories like .git and .hg to make reproducible
+> +# archives on subsequent downloads the version information is
+> +# not available during the builds for a script like setlocalversion
+> +# to run.
+> +#
+> +# So, this is hook to call right before the make tarball gz that
+> +# will generate a .scmversion file that will be included in an
+> +# archive and then available during the build steps.
+> +#
+> +# Call it with:
+> +#   $1: the path to the srctree (see mk_tar_gz in helpers)
+> +#   $2: output file
+> +#
+> +# Because this can fail for a variety of reason, there is no exit
+> +# code to avoid build breakage. It is assumed the scripts will be
+> +# reproducible because they are based on the contents that get generated
+> +
+> +while getopts :q OPT; do
+> +    case "${OPT}" in
+> +    q)  exec >/dev/null;;
+> +    \?) exit 1;;
+> +    esac
+> +done
+> +shift $((OPTIND-1))
+> +
+> +srctree="${1}"
+> +scmversion="${2}"
+> +
+> +# Bail early if no srctree or scmversion
+> +if [ -z "${srctree}" -o -z "${scmversion}" ]; then
+> +    exit 0
+> +fi
+> +
+> +# Does the scmversion exist and readonly
+> +if [ -f "${scmversion}" -a ! -w "${scmversion}" ]; then
+> +    printf "WARNING: scmversion %s is readonly\n" "${scmversion}" >&2
+> +    exit 0
+> +fi
+> +
+> +#
+> +# Generate the scmversion from some expected locations in srctree
+> +# and fallback to the buildroot version of setlocalversion another
+> +# script is not used
+> +#
+> +if [ -x "${srctree}/setlocalversion" ]; then
+> +    res=$(cd "${srctree}"; ./setlocalversion)
+> +elif [ -x "${srctree}/scripts/setlocalversion" ]; then
+> +    res=$(cd "${srctree}"; ./scripts/setlocalversion)
+> +elif [ -x "${srctree}/tools/setlocalversion" ]; then
+> +    res=$(cd "${srctree}"; ./tools/setlocalversion)
+> +fi
+> +if [ -z "${res}" ]; then
+> +    res=$("${0%/*}/../scripts/setlocalversion" "${srctree}")
+> +fi
+
+  This is where it gets hairy. We add all this complexity, and in the end we 
+call a script that needs to do some heuristics to find out which script to call 
+exactly.
+
+  What we actually want is for the script that needs to be called to be 
+specified in the .mk file, because there you know exactly what it should be 
+called. Something like:
+
+define UBOOT_SET_SCMVERSION
+	./tools/setlocalversion > .scmversion
+endef
+
+
+  The trouble is how to pass that through the download infrastructure to make 
+sure the git download helper can use it. You'll still need a new option for 
+that. Then you can pass it trough (properly quoted) and finally in the git 
+download helper:
+
+if [ -n "${setscmversion}" ]; then
+     eval "${setscmversion}"
+fi
+
+
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
