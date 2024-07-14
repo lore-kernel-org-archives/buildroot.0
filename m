@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D714EC3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 17:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49915C3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 17:32:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A14B5605D2;
-	Sun, 14 Jul 2024 17:20:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD6DE6063E;
+	Sun, 14 Jul 2024 17:32:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kpMaPSOy-916; Sun, 14 Jul 2024 17:20:30 +0000 (UTC)
+ id twyhe4M7Z6cq; Sun, 14 Jul 2024 17:32:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A530E605E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E673760643
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A530E605E3;
-	Sun, 14 Jul 2024 17:20:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E673760643;
+	Sun, 14 Jul 2024 17:32:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 922471BF3F2
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:20:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3C1D21BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CDA8605E3
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:20:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29AA660643
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:32:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jip234SNuSCA for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 17:20:27 +0000 (UTC)
+ id YrcGzGtWMHiG for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 17:32:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EFC9605D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54AAB60636
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EFC9605D2
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 17:20:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 54AAB60636
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 17:32:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E6A2868BE; Sun, 14 Jul 2024 17:20:27 +0000 (UTC)
+ id 411CE86909; Sun, 14 Jul 2024 17:32:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 19:16:13 +0200
+Date: Sun, 14 Jul 2024 19:31:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 522f3dd479e21f59595f85e1367cbcbaacd56775
-X-Git-Newrev: f32e64bec304ce91454a2ca59110e309daedf5dc
+X-Git-Oldrev: d8e838fa3116ee5429c1f3a2a0ef17f5e3772e3e
+X-Git-Newrev: 3dc80614442cc3942a372a8c31abd22c1bc96241
 X-Patchwork-Hint: ignore
-Message-Id: <20240714172027.1E6A2868BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/chicken: fix references to
- libchicken
+Message-Id: <20240714173210.411CE86909@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/busybox: tidy up S01syslogd init
+ script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,69 +58,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4903341821663945879=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4903341821663945879==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f32e64bec304ce91454a2ca59110e309daedf5dc
+commit: https://git.buildroot.net/buildroot/commit/?id=3dc80614442cc3942a372a8c31abd22c1bc96241
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While applying, the package was renamed from libchicken to chicken, but
-two references remained: in DEVELOPERS, and in the Config.in help text.
-Fix both.
+The manual refers to this script as a reference of how init scripts
+should be written. The changes are:
 
-While we're at it, extend the help text by copying the first sentence of
-the website.
+* Use long form options for start-stop-daemon for clarity
+* Use --exec on stop to ensure the right process gets stopped
+* Avoid --quiet for clearer messages on failure
+* Wait for the process to be gone during stop
+* Avoid fixed wait between start and stop on restart
 
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                | 2 +-
- package/chicken/Config.in | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/busybox/S01syslogd | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e3804db1cd..ba40388982 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3282,7 +3282,7 @@ N:	Wojciech Niziński <niziak@spox.org>
- F:	package/fwup/
+diff --git a/package/busybox/S01syslogd b/package/busybox/S01syslogd
+index 15006bc06f..a1f4bbfd1d 100644
+--- a/package/busybox/S01syslogd
++++ b/package/busybox/S01syslogd
+@@ -9,11 +9,12 @@ SYSLOGD_ARGS=""
+ [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
  
- N:	Woodrow Douglass <wdouglass@carnegierobotics.com>
--F:	package/libchicken
-+F:	package/chicken
- F:	package/opencv4
- F:	package/opencv4-contrib
+ # BusyBox' syslogd does not create a pidfile, so pass "-n" in the command line
+-# and use "-m" to instruct start-stop-daemon to create one.
++# and use "--make-pidfile" to instruct start-stop-daemon to create one.
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
++	start-stop-daemon --start --background --make-pidfile \
++		--pidfile "$PIDFILE" --exec "/sbin/$DAEMON" \
+ 		-- -n $SYSLOGD_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+@@ -26,20 +27,24 @@ start() {
  
-diff --git a/package/chicken/Config.in b/package/chicken/Config.in
-index dce0581951..84e4ca1f3c 100644
---- a/package/chicken/Config.in
-+++ b/package/chicken/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_CHICKEN
- 	bool "chicken"
- 	depends on BR2_USE_MMU
- 	help
--	  libchicken is the runtime library for chicken scheme.
-+	  CHICKEN is a compiler for the Scheme programming language.
-+	  This package contains the runtime, the interpreter, and
-+	  the (native for target) compiler.
+ stop() {
+ 	printf 'Stopping %s: ' "$DAEMON"
+-	start-stop-daemon -K -q -p "$PIDFILE"
++	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/sbin/$DAEMON"
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+-		rm -f "$PIDFILE"
+ 		echo "OK"
+ 	else
+ 		echo "FAIL"
++		return "$status"
+ 	fi
++	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
++		--exec "/sbin/$DAEMON"; do
++		sleep 0.1
++	done
++	rm -f "$PIDFILE"
+ 	return "$status"
+ }
  
- 	  https://call-cc.org
-
---===============4903341821663945879==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ restart() {
+ 	stop
+-	sleep 1
+ 	start
+ }
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4903341821663945879==--
