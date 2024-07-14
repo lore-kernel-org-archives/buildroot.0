@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 876E4C3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 15:08:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5967C3DA42
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 15:08:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49683600C6;
-	Sun, 14 Jul 2024 15:08:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CC2B607D8;
+	Sun, 14 Jul 2024 15:08:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pF00vVxeX0hs; Sun, 14 Jul 2024 15:08:05 +0000 (UTC)
+ id ljcL5OZJLE2J; Sun, 14 Jul 2024 15:08:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25339606C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40FFB60801
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25339606C4;
-	Sun, 14 Jul 2024 15:08:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 050951BF44A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40FFB60801;
+	Sun, 14 Jul 2024 15:08:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 11C261BF954
  for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:07:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F22AB60585
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2D7881240
  for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:07:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZgF8nmVYcu0x for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W8ucmr_gYw8J for <buildroot@lists.busybox.net>;
  Sun, 14 Jul 2024 15:07:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 190036062F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F884811D6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 190036062F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F884811D6
  for <buildroot@buildroot.org>; Sun, 14 Jul 2024 15:07:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14845867DD; Sun, 14 Jul 2024 15:07:57 +0000 (UTC)
+ id EDA258681A; Sun, 14 Jul 2024 15:07:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 17:06:51 +0200
+Date: Sun, 14 Jul 2024 17:06:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ccd19e14a8665b4de117dd5525f4677ba4c3befc
-X-Git-Newrev: 487416dfe502025458596ab5f1ff1cd83ad2968f
+X-Git-Oldrev: 34b8cb403314e91d83a74f4a6af9b0f8cde25345
+X-Git-Newrev: e5e2dd5f1ca0a7d65486ad03aaa3b40087170950
 X-Patchwork-Hint: ignore
-Message-Id: <20240714150757.14845867DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/stm32mp157c_dk2: add hashes
+Message-Id: <20240714150756.EDA258681A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cloudflared: set
+ CLOUDFLARED_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,82 +66,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=487416dfe502025458596ab5f1ff1cd83ad2968f
+commit: https://git.buildroot.net/buildroot/commit/?id=e5e2dd5f1ca0a7d65486ad03aaa3b40087170950
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that the configurations of boards stm32mp157a-dk1 and stm32mp157c-dk2
-have the same software versions, it is possible to share the hash files as
-well.
-The patch uses the hash files for Arm Trusted Firmware, Linux, Linux
-headers and U-Boot of stm32mp175a_dk1 also for stm32mp175c_dk2, and then
-enables BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop the
-defconfig from .checkpackageignore.
+cpe:2.3:a:cloudflare:cloudflared is a valid CPE identifier for this
+package:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+  https://nvd.nist.gov/products/cpe/detail/83298F83-C1E0-4BAC-8FFC-90FDEDFD95D8
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                                     | 1 -
- .../stm32mp157}/patches/arm-trusted-firmware/arm-trusted-firmware.hash  | 0
- .../stm32mp157}/patches/linux-headers/linux-headers.hash                | 0
- .../{stm32mp157a-dk1 => common/stm32mp157}/patches/linux/linux.hash     | 0
- .../{stm32mp157a-dk1 => common/stm32mp157}/patches/uboot/uboot.hash     | 0
- configs/stm32mp157a_dk1_defconfig                                       | 2 +-
- configs/stm32mp157c_dk2_defconfig                                       | 2 ++
- 7 files changed, 3 insertions(+), 2 deletions(-)
+ package/cloudflared/cloudflared.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8edb2f8c70..5bac2b73a0 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -278,7 +278,6 @@ configs/socrates_cyclone5_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_clearfog_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_clearfog_gt_8k_defconfig lib_defconfig.ForceCheckHash
- configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
--configs/stm32mp157c_dk2_defconfig lib_defconfig.ForceCheckHash
- configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
- configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
- configs/toradex_apalis_imx6_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/stmicroelectronics/common/stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-similarity index 100%
-rename from board/stmicroelectronics/stm32mp157a-dk1/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-rename to board/stmicroelectronics/common/stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/linux-headers/linux-headers.hash b/board/stmicroelectronics/common/stm32mp157/patches/linux-headers/linux-headers.hash
-similarity index 100%
-rename from board/stmicroelectronics/stm32mp157a-dk1/patches/linux-headers/linux-headers.hash
-rename to board/stmicroelectronics/common/stm32mp157/patches/linux-headers/linux-headers.hash
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp157/patches/linux/linux.hash
-similarity index 100%
-rename from board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash
-rename to board/stmicroelectronics/common/stm32mp157/patches/linux/linux.hash
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash b/board/stmicroelectronics/common/stm32mp157/patches/uboot/uboot.hash
-similarity index 100%
-rename from board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash
-rename to board/stmicroelectronics/common/stm32mp157/patches/uboot/uboot.hash
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index cf42b29a7c..310e179cf7 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -6,7 +6,7 @@ BR2_cortex_a7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_9=y
- 
- # System configuration
--BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32mp157a-dk1/patches"
-+BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp157/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index c923d2cd60..2a9c31df37 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -6,6 +6,8 @@ BR2_cortex_a7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_9=y
- 
- # System configuration
-+BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp157/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+diff --git a/package/cloudflared/cloudflared.mk b/package/cloudflared/cloudflared.mk
+index 1796972be6..a243686441 100644
+--- a/package/cloudflared/cloudflared.mk
++++ b/package/cloudflared/cloudflared.mk
+@@ -8,6 +8,7 @@ CLOUDFLARED_VERSION = 2024.6.1
+ CLOUDFLARED_SITE = $(call github,cloudflare,cloudflared,$(CLOUDFLARED_VERSION))
+ CLOUDFLARED_LICENSE = Apache-2.0
+ CLOUDFLARED_LICENSE_FILES = LICENSE
++CLOUDFLARED_CPE_ID_VENDOR = cloudflare
+ CLOUDFLARED_BUILD_TARGETS = cmd/cloudflared
+ CLOUDFLARED_LDFLAGS = -X main.Version=$(CLOUDFLARED_VERSION)
  
 _______________________________________________
 buildroot mailing list
