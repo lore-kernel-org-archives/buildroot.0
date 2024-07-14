@@ -4,48 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6E4EC3DA49
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 16:51:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E190C3DA42
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 16:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7CAC94010D;
-	Sun, 14 Jul 2024 16:51:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CB054010D;
+	Sun, 14 Jul 2024 16:55:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2SHpf27Xpgms; Sun, 14 Jul 2024 16:51:16 +0000 (UTC)
+ id y4v65QoQLm5W; Sun, 14 Jul 2024 16:55:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6CD540242
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF176401F6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6CD540242;
-	Sun, 14 Jul 2024 16:51:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80B1D1BF32B
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:51:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF176401F6;
+	Sun, 14 Jul 2024 16:55:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B71361BF32B
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:55:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AE10605BA
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:51:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A308240574
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:55:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kCqWKVfhk6yT for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 16:51:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76A85605AF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76A85605AF
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 16:51:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B19586794; Sun, 14 Jul 2024 16:51:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SXG1M1c0dTEY for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 16:55:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5B3C240571
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B3C240571
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5B3C240571
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 16:55:35 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id D2221B0059A;
+ Sun, 14 Jul 2024 18:55:31 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 18:50:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7dcc56a50c35c9397b369678834a9d31c3b500ee
-X-Git-Newrev: fab48302865e5c0c98d91b696bc90e75e38189bb
-X-Patchwork-Hint: ignore
-Message-Id: <20240714165113.6B19586794@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gtkiostream: new package
+Date: Sun, 14 Jul 2024 18:55:27 +0200
+Message-ID: <20240714165527.2451312-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.2
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1720976133;
+ bh=L6XSGybhqIsKVT+fZPIbCB/OlUnSGb7ptdzbsvu7eak=;
+ h=From:To:Cc:Subject:Date:From;
+ b=kTWOduyOAVpzk0DxKbn9IJJFFfb/efOPyUPa+ALA0jltv6tDscl092W9dUuvjrMYH
+ C3Ub0MP5fOQMIdl3Cbu1TRexQBvEWmtoyxdv6UMfpQxF7jpsRmE+MMivAkkEvqH1IR
+ qbCJ0HefB/IJdsrElKo6DE/y/1Rye08q49Mo1fvq9+l37OvLg8PfL+jtcIK7bQPOsz
+ no5meDIqoi64KT5yE8Cd8Erab5gFiP9RQ2ei+MA/trF3RC4HPAMKYt7yOioWYth09m
+ 598gU8L8wlTJPiKA6yuKAZswmtitUXLK2UHnN7hydbDemtpYsvUt2w6GSXLPapBjyk
+ gWU8WGo229MTw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=kTWOduyO
+Subject: [Buildroot] [PATCH 1/1] support/testing: new dmidecode runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,232 +75,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fab48302865e5c0c98d91b696bc90e75e38189bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Note: this test was not working in Buildroot test infrastructure
+before commit [1] was merged, because dmidecode has the string "# "
+in its output.
 
-This package provides many useful software engineering and signal
-processing libraries.
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/0cad947b964be5612a182413da136fcf0dc5a1f2
 
-Signed-off-by: Matt Flax <flatmax@flatmax.com>
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                         |  4 ++
- package/Config.in                                  |  1 +
- ...-configure.ac-add-option-to-disable-tests.patch | 54 +++++++++++++++++
- package/gtkiostream/Config.in                      | 17 ++++++
- package/gtkiostream/gtkiostream.hash               |  3 +
- package/gtkiostream/gtkiostream.mk                 | 68 ++++++++++++++++++++++
- 6 files changed, 147 insertions(+)
+ DEVELOPERS                                    |  1 +
+ .../testing/tests/package/test_dmidecode.py   | 67 +++++++++++++++++++
+ 2 files changed, 68 insertions(+)
+ create mode 100644 support/testing/tests/package/test_dmidecode.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 466dcd4826..e3804db1cd 100644
+index 466dcd4826..2190567246 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -201,6 +201,7 @@ F:	package/cups-filters/
- F:	package/cutekeyboard/
- F:	package/fail2ban/
- F:	package/grep/
-+F:	package/gtkiostream/
- F:	package/htpdate/
- F:	package/i2c-tools/
- F:	package/jq/
-@@ -2241,6 +2242,9 @@ N:	Masahiro Yamada <yamada.masahiro@socionext.com>
- F:	board/arm/foundation-v8/
- F:	configs/arm_foundationv8_defconfig
- 
-+N:	Matt Flax <flatmax@flatmax.org>
-+F:	package/gtkiostream/
-+
- N:	Matt Silva <dev@matt-silva.com>
- F:	package/rlwrap/
- 
-diff --git a/package/Config.in b/package/Config.in
-index c40dc34ae7..f42762140a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1478,6 +1478,7 @@ menu "Audio/Sound"
- 	source "package/bcg729/Config.in"
- 	source "package/caps/Config.in"
- 	source "package/fdk-aac/Config.in"
-+	source "package/gtkiostream/Config.in"
- 	source "package/libao/Config.in"
- 	source "package/libbroadvoice/Config.in"
- 	source "package/libcanberra/Config.in"
-diff --git a/package/gtkiostream/0001-configure.ac-add-option-to-disable-tests.patch b/package/gtkiostream/0001-configure.ac-add-option-to-disable-tests.patch
+@@ -1831,6 +1831,7 @@ F:	support/testing/tests/package/test_cryptsetup.py
+ F:	support/testing/tests/package/test_cryptsetup/
+ F:	support/testing/tests/package/test_ddrescue.py
+ F:	support/testing/tests/package/test_ddrescue/
++F:	support/testing/tests/package/test_dmidecode.py
+ F:	support/testing/tests/package/test_dos2unix.py
+ F:	support/testing/tests/package/test_ed.py
+ F:	support/testing/tests/package/test_ethtool.py
+diff --git a/support/testing/tests/package/test_dmidecode.py b/support/testing/tests/package/test_dmidecode.py
 new file mode 100644
-index 0000000000..4c7fb6010f
+index 0000000000..33c19f0d96
 --- /dev/null
-+++ b/package/gtkiostream/0001-configure.ac-add-option-to-disable-tests.patch
-@@ -0,0 +1,54 @@
-+From 864d67d5cb4334f106c1ae055f0260b44f0dbb3b Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo@amarulasolutions.com>
-+Date: Wed, 8 Feb 2023 10:58:20 +0100
-+Subject: [PATCH] configure.ac: add option to disable tests
++++ b/support/testing/tests/package/test_dmidecode.py
+@@ -0,0 +1,67 @@
++import os
 +
-+This commit adds an option that allows to disable building tests,
-+which are not useful in some situations.
++import infra.basetest
 +
-+Upstream: https://github.com/flatmax/gtkiostream/pull/25
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+[Thomas: improved with a configuration option]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ Makefile.am  | 7 ++++++-
-+ configure.ac | 5 +++++
-+ 2 files changed, 11 insertions(+), 1 deletion(-)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 3cc0944..cd5d9e4 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -20,7 +20,12 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
-+ SUBDIRS = src api include
-+ 
-+ if !HAVE_EMSCRIPTEN
-+-SUBDIRS += applications test
-++SUBDIRS += applications
-++
-++if HAVE_TESTS
-++SUBDIRS += test
-++endif
-++
-+ endif
-+ 
-+ ACLOCAL_AMFLAGS = -I m4
-+diff --git a/configure.ac b/configure.ac
-+index 4557858..7950bf2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -68,6 +68,11 @@ fi
-+ # Checks for documentation
-+ AM_CONDITIONAL([HAVE_DOXYGEN],[test -n "$DOXYGEN"])AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([api/Doxyfile])])
-+ 
-++AC_ARG_ENABLE(tests, AS_HELP_STRING([--disable-tests],
-++	      [Disable tests (default: enabled)]),
-++	      [TESTS=$enableval], [TESTS=yes])
-++AM_CONDITIONAL([HAVE_TESTS],[test "x$TESTS" = xyes])
-++
-+ #check whether this is a cygwin system
-+ AM_CONDITIONAL(CYGWIN, test "$build_os" = "cygwin")
-+ 
-+-- 
-+2.45.2
++class TestDmidecode(infra.basetest.BRTest):
++    # We use a x86_64 arch for this dmidecode test because aarch64
++    # SMBIOS is not supported in non-UEFI use-cases (and using a UEFI
++    # aarch64 would make the test longer).
++    config = \
++        """
++        BR2_x86_64=y
++        BR2_x86_corei7=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.39"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
++        BR2_PACKAGE_DMIDECODE=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-diff --git a/package/gtkiostream/Config.in b/package/gtkiostream/Config.in
-new file mode 100644
-index 0000000000..17480b8ff8
---- /dev/null
-+++ b/package/gtkiostream/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_GTKIOSTREAM
-+	bool "gtkiostream"
-+	depends on BR2_INSTALL_LIBSTDCPP # eigen
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_EIGEN
-+	select BR2_PACKAGE_FFTW
-+	select BR2_PACKAGE_FFTW_DOUBLE
-+	select BR2_PACKAGE_FFTW_SINGLE
-+	help
-+	  This package provides many useful software engineering and
-+	  signal processing includes and linkable library.
++    def test_run(self):
 +
-+	  https://github.com/flatmax/gtkiostream
++        # An arbitrary SMBIOS OEM string for the test
++        oem_string = "Hello Buildroot SMBIOS"
 +
-+comment "gtkiostream needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/gtkiostream/gtkiostream.hash b/package/gtkiostream/gtkiostream.hash
-new file mode 100644
-index 0000000000..90c754f48c
---- /dev/null
-+++ b/package/gtkiostream/gtkiostream.hash
-@@ -0,0 +1,3 @@
-+# locally computed hash
-+sha256  44e8d921d462005cd330a1c24e5bd8061175b90ae53f537dbf73f59b74f6e01b  gtkiostream-v1.8.0.tar.gz
-+sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  gpl.txt
-diff --git a/package/gtkiostream/gtkiostream.mk b/package/gtkiostream/gtkiostream.mk
-new file mode 100644
-index 0000000000..36905d7e7d
---- /dev/null
-+++ b/package/gtkiostream/gtkiostream.mk
-@@ -0,0 +1,68 @@
-+################################################################################
-+#
-+# GTKIOSTREAM
-+#
-+################################################################################
++        kernel = os.path.join(self.builddir, "images", "bzImage")
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        self.emulator.boot(
++            arch="x86_64",
++            kernel=kernel,
++            kernel_cmdline=["console=ttyS0"],
++            options=["-cpu", "Nehalem", "-m", "256", "-initrd", cpio_file,
++                     "-smbios", f"type=11,value={oem_string}"],
++        )
++        self.emulator.login()
 +
-+GTKIOSTREAM_VERSION = v1.8.0
-+GTKIOSTREAM_SITE = $(call github,flatmax,gtkiostream,$(GTKIOSTREAM_VERSION))
-+GTKIOSTREAM_LICENSE = GPL-2.0+
-+GTKIOSTREAM_LICENSE_FILES = gpl.txt
++        # Check the program can run
++        cmd = "dmidecode --version"
++        self.assertRunOk(cmd)
 +
-+# configure script not available
-+GTKIOSTREAM_AUTORECONF = YES
++        # Check a simple invocation of "dmidecode"
++        self.assertRunOk("dmidecode")
 +
-+GTKIOSTREAM_DEPENDENCIES = \
-+	eigen \
-+	fftw-double \
-+	fftw-single \
-+	host-pkgconf
++        # Check a simple invocation of "biosdecode"
++        self.assertRunOk("biosdecode")
 +
-+GTKIOSTREAM_CONF_OPTS = \
-+	--disable-tests \
-+	$(if $(BR2_TOOLCHAIN_HAS_OPENMP),--disable,--enable)-openmp
++        # Check dmidecode detects SMBIOS
++        cmd = "dmidecode | grep -E '^SMBIOS .* present\\.$'"
++        self.assertRunOk(cmd)
 +
-+ifeq ($(BR2_PACKAGE_OCTAVE),y)
-+GTKIOSTREAM_DEPENDENCIES += octave
-+GTKIOSTREAM_CONF_OPTS += --enable-octave
-+else
-+GTKIOSTREAM_CONF_OPTS += --disable-octave
-+endif
++        # Check the system-manufacturer is QEMU
++        cmd = "dmidecode -s system-manufacturer"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0], "QEMU")
 +
-+# For the optional packages below, there's unfortunately no
-+# ./configure option to explicitly enable/disable them. They are
-+# checked by the ./configure script using pkg-config.
-+
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+GTKIOSTREAM_DEPENDENCIES += alsa-lib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JACK2),y)
-+GTKIOSTREAM_DEPENDENCIES += jack2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+GTKIOSTREAM_DEPENDENCIES += libglib2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK2),y)
-+GTKIOSTREAM_DEPENDENCIES += libgtk2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+GTKIOSTREAM_DEPENDENCIES += libgtk3
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
-+GTKIOSTREAM_DEPENDENCIES += libwebsockets
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENCV3),y)
-+GTKIOSTREAM_DEPENDENCIES += opencv3
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SOX),y)
-+GTKIOSTREAM_DEPENDENCIES += sox
-+endif
-+
-+$(eval $(autotools-package))
++        # Check we read back our OEM string
++        cmd = "dmidecode --oem-string 1"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0], oem_string)
+-- 
+2.45.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
