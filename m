@@ -4,49 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E71FC3DA49
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 19:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F06AC3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 19:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BE3E8116C;
-	Sun, 14 Jul 2024 19:38:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8777781167;
+	Sun, 14 Jul 2024 19:46:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YlpoP2x8CAWd; Sun, 14 Jul 2024 19:38:19 +0000 (UTC)
+ id jHMrJZ9NqWSZ; Sun, 14 Jul 2024 19:46:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF31B8117B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EAD5811AB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF31B8117B;
-	Sun, 14 Jul 2024 19:38:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F11D31BF40B
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 19:38:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EAD5811AB;
+	Sun, 14 Jul 2024 19:46:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B19F21BF40B
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 19:46:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DCEEB605E0
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 19:38:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E146401F6
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 19:46:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9fTdRp7hIKa3 for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 19:38:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB1226063E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB1226063E
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 19:38:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3B8D86947; Sun, 14 Jul 2024 19:38:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 21:31:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0c2e6050cc7cae25dfbae1fb6795e7b21e3362d9
-X-Git-Newrev: ca6c896bdd75cf334ac9a02a6dd786415221f55e
-X-Patchwork-Hint: ignore
-Message-Id: <20240714193812.B3B8D86947@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/graph-depends allow for
- forward and reverse depends on same graph
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2rqmA5vLkpYf for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 19:46:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A63C4400E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A63C4400E2
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A63C4400E2
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 19:46:06 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-367a3d1a378so3246469f8f.1
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 12:46:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720986364; x=1721591164;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Cw8gPfPkaJhZec6fxBXt3fysS16o1fSpB1BQs9ba6fE=;
+ b=l7yBpHtciPxDVBhMXAzB7/hytNoYwMkst9gEpnrvQFPE9QSRBT/lNEtQx1KraNKUrl
+ 3gcyPXbhM0EenKMCV6ChjO/CXxyGtm11Xb3wFOi9bbuakPG5gZFrOyyZibe70euIYfh7
+ wniiD5R8ts+YkYszbGEsIxNYmwu67SaJUSrQ1L/i4ap/8qtZNBSVsW7nyFwuZdiXEihO
+ u+jn5NscWvKJzJnJOYLBG79Og71NjEgH7X8uY7f0rEa8E8ZC9b1ZergZXv5HMgt9739B
+ QNwJE0o1+y+T00+Op8VwInMIYo3KBEHBWoI7QCe7rSrLFjij8wIdUh1Dya0r+H8Epr3K
+ 26kQ==
+X-Gm-Message-State: AOJu0YxPWZ0LeDLqWuJccAZ3MTBSaJXbB8WE+/ku1G6PNDXjUhFSprPu
+ 3KjAijqeoVdjRz0zugM0IPmjcxmCK8RmCgmQgOJaJsWKbUCgzAImA/PUTv9DSBw=
+X-Google-Smtp-Source: AGHT+IHiKcG6Dhgf1rUd3OD9/YMuUCWOrPcgfJ1BRn8b34CBefix10PviXuotgkH/o3gtSVU8QxbsQ==
+X-Received: by 2002:adf:e54b:0:b0:367:9754:8107 with SMTP id
+ ffacd0b85a97d-367ceadc90bmr13677594f8f.62.1720986364014; 
+ Sun, 14 Jul 2024 12:46:04 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:f9c8:f443:ffd:1bed?
+ (2a01cb05949d5800f9c8f4430ffd1bed.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:f9c8:f443:ffd:1bed])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3680dafba0esm4516661f8f.71.2024.07.14.12.46.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 14 Jul 2024 12:46:03 -0700 (PDT)
+Message-ID: <09155f65-8222-4a08-9fde-88141ba61501@smile.fr>
+Date: Sun, 14 Jul 2024 21:46:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Jan Kraval <jan.kraval@gmail.com>
+References: <20240220051926.68559-1-jan.kraval@gmail.com>
+ <20240513233014.3b09e56e@windsurf>
+ <12ae846b-1fc5-49ca-a996-485eb8283405@gmail.com>
+ <20240530112514.1843a3a7@windsurf>
+Content-Language: fr
+In-Reply-To: <20240530112514.1843a3a7@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1720986364; x=1721591164; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Cw8gPfPkaJhZec6fxBXt3fysS16o1fSpB1BQs9ba6fE=;
+ b=P6J3VcFZw3EuluagIcbcWskclxnbykHZ50cslCN2jhbGbjLPXYxVOWfFC8cP7sj3Um
+ qveCvIu5z3U6cgildnDUtDW0s24DNndCYkiHQAQ2Sq2LMLDxrWgJF+qT+qJF3i/1CK50
+ 9OA51tUrFIAdWNn6h1nsbkmb0NUxv5oXVazO0=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=P6J3VcFZ
+Subject: Re: [Buildroot] [PATCH 1/2] board/orangepi/orangepi-lite: switch to
+ extlinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,230 +107,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca6c896bdd75cf334ac9a02a6dd786415221f55e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The current implementation of buildroot depe dependency graphing
-either does forward- or reverse-dependency traversal.
-
-This patch enables buildroot to graph forward and reverse dependencies
-on the graph for the same package: (Diagram Credit: Yann E. MORIN)
-
-    $ make pkg-d-graph-both-depends
-
-    pkg A -.            .-> pkg E
-            \          /
-    pkg B ----> pkg D ----> pkg F
-            /          \
-    pkg C -'            '-> pkg G
-
-In the above example a single graph shows pkg {A,B,C} are needed
-by pkg D, and pkg D is a dependency of pkg {E,F,G}.
-
-Makefile help and manual are also updated.
-
-Signed-off-by: Steve Hay <me@stevenhay.com>
-[Arnout:
- - remove DEPTH and RDEPTH, their functionality is already covered by
-   BR2_GRAPH_DEPS_OPTS;
- - remove --rdepth, it was felt to not add sufficient added value;
- - add the new target to the manual;
- - fix flake8 errors.
-]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- Makefile                             |  3 ++
- docs/manual/package-make-target.adoc |  4 +++
- package/pkg-generic.mk               |  3 ++
- support/scripts/graph-depends        | 67 +++++++++++++++++++++---------------
- 4 files changed, 50 insertions(+), 27 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index cd8498edf6..db5244baeb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1171,6 +1171,9 @@ help:
- 	@echo '                         - Recursively list packages which have <pkg> as a dependency'
- 	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
- 	@echo '  <pkg>-graph-rdepends   - Generate a graph of <pkg>'\''s reverse dependencies'
-+	@echo '  <pkg>-graph-both-depends'
-+	@echo '                         - Generate a graph of both <pkg>'\''s forward and'
-+	@echo '                           reverse dependencies.
- 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
- 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
- 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
-diff --git a/docs/manual/package-make-target.adoc b/docs/manual/package-make-target.adoc
-index 90a7910e23..7a7ba7f7a0 100644
---- a/docs/manual/package-make-target.adoc
-+++ b/docs/manual/package-make-target.adoc
-@@ -81,6 +81,10 @@ graphs.
-   dependencies (i.e the packages that depend on it, directly or
-   indirectly)
- 
-+| +graph-both-depends+ | Generate a graph of this package in both
-+  directions (i.e the packages that depend on it and on which it
-+  depends, directly or indirectly)
-+
- | +dirclean+        | Remove the whole package build directory
- 
- | +reinstall+       | Re-run the install commands
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 0d84fc3773..365d6c748d 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1042,6 +1042,9 @@ $(1)-graph-depends: graph-depends-requirements
- $(1)-graph-rdepends: graph-depends-requirements
- 	$(call pkg-graph-depends,$(1),--reverse)
- 
-+$(1)-graph-both-depends: graph-depends-requirements
-+	$(call pkg-graph-depends,$(1),--direct --reverse)
-+
- $(1)-all-source:	$(1)-source
- $(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
- 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 3e3373950f..cda0000c01 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -159,11 +159,11 @@ def check_circular_deps(deps):
- 
- # This functions trims down the dependency list of all packages.
- # It applies in sequence all the dependency-elimination methods.
--def remove_extra_deps(deps, rootpkg, transitive, arrow_dir):
-+def remove_extra_deps(deps, rootpkg, transitive, direct):
-     # For the direct dependencies, find and eliminate mandatory
-     # deps, and add them to the root package. Don't do it for a
-     # reverse graph, because mandatory deps are only direct deps.
--    if arrow_dir == "forward":
-+    if direct:
-         for pkg in list(deps.keys()):
-             if not pkg == rootpkg:
-                 for d in get_mandatory_deps(pkg, deps):
-@@ -199,12 +199,13 @@ def print_attrs(outfile, pkg, pkg_type, pkg_version, depth, colors):
- 
- # Print the dependency graph of a package
- def print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
--                   arrow_dir, draw_graph, depth, max_depth, pkg, colors, done_deps=None):
-+                   direct, draw_graph, depth, max_depth, pkg, colors, done_deps=None):
-     if done_deps is None:
-         done_deps = []
-     if pkg in done_deps:
-         return
-     done_deps.append(pkg)
-+
-     if draw_graph:
-         print_attrs(outfile, pkg, dict_types[pkg], dict_versions[pkg], depth, colors)
-     elif depth != 0:
-@@ -231,9 +232,12 @@ def print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exc
-                     break
-             if add:
-                 if draw_graph:
--                    outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
-+                    if direct:
-+                        outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), "forward"))
-+                    else:
-+                        outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(d), pkg_node_name(pkg), "forward"))
-                 print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
--                               arrow_dir, draw_graph, depth + 1, max_depth, d, colors, done_deps)
-+                               direct, draw_graph, depth + 1, max_depth, d, colors, done_deps)
- 
- 
- def parse_args():
-@@ -265,9 +269,9 @@ def parse_args():
-                         default=False)
-     parser.add_argument("--no-transitive", dest="transitive", action='store_false',
-                         help="Draw (do not draw) transitive dependencies")
--    parser.add_argument("--direct", dest="direct", action='store_true', default=True,
-+    parser.add_argument("--direct", dest="direct", action='store_true', default=False,
-                         help="Draw direct dependencies (the default)")
--    parser.add_argument("--reverse", dest="direct", action='store_false',
-+    parser.add_argument("--reverse", dest="reverse", action='store_true', default=False,
-                         help="Draw reverse dependencies")
-     parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
-                         help="Quiet")
-@@ -292,6 +296,9 @@ def main():
-             sys.exit(1)
-         outfile = open(args.outfile, "w")
- 
-+    if not args.direct and not args.reverse:
-+        args.direct = True
-+
-     if args.package is None:
-         mode = MODE_FULL
-         rootpkg = 'all'
-@@ -312,13 +319,9 @@ def main():
-     if args.exclude_mandatory:
-         exclude_list += MANDATORY_DEPS
- 
--    if args.direct:
--        arrow_dir = "forward"
--    else:
--        if mode == MODE_FULL:
--            logging.error("--reverse needs a package")
--            sys.exit(1)
--        arrow_dir = "back"
-+    if args.reverse and mode == MODE_FULL:
-+        logging.error("--reverse needs a package")
-+        sys.exit(1)
- 
-     draw_graph = not args.flat_list
- 
-@@ -330,23 +333,33 @@ def main():
-         logging.error("Error: incorrect color list '%s'" % args.colors)
-         sys.exit(1)
- 
--    deps, rdeps, dict_types, dict_versions = brpkgutil.get_dependency_tree()
--    dict_deps = deps if args.direct else rdeps
--
--    check_circular_deps(dict_deps)
--    if check_only:
--        sys.exit(0)
--
--    dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, arrow_dir)
--
-     # Start printing the graph data
--    if draw_graph:
-+    if not check_only and draw_graph:
-         outfile.write("digraph G {\n")
- 
--    print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
--                   arrow_dir, draw_graph, 0, args.depth, rootpkg, colors)
-+    deps, rdeps, dict_types, dict_versions = brpkgutil.get_dependency_tree()
- 
--    if draw_graph:
-+    # forward
-+    if args.direct:
-+        dict_deps = deps
-+        direct = True
-+        check_circular_deps(dict_deps)
-+        if not check_only:
-+            dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, direct)
-+            print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
-+                           direct, draw_graph, 0, args.depth, rootpkg, colors)
-+
-+    # reverse
-+    if args.reverse:
-+        dict_deps = rdeps
-+        direct = False
-+        check_circular_deps(dict_deps)
-+        if not check_only:
-+            dict_deps = remove_extra_deps(dict_deps, rootpkg, args.transitive, direct)
-+            print_pkg_deps(outfile, dict_deps, dict_types, dict_versions, stop_list, exclude_list,
-+                           direct, draw_graph, 0, args.depth, rootpkg, colors)
-+
-+    if not check_only and draw_graph:
-         outfile.write("}\n")
-     else:
-         outfile.write("\n")
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSmFuLCBBbGwsCgpMZSAzMC8wNS8yMDI0IMOgIDExOjI1LCBUaG9tYXMgUGV0YXp6b25p
+IHZpYSBidWlsZHJvb3QgYSDDqWNyaXTCoDoKPiBIZWxsbyBKYW4sCj4gCj4gT24gV2VkLCAyMiBN
+YXkgMjAyNCAwNjozNzoyOSArMDIwMAo+IEphbiBLcmF2YWwgPGphbi5rcmF2YWxAZ21haWwuY29t
+PiB3cm90ZToKPiAKPj4gQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19QWVRIT04zPXnCoHdhcyByZW1v
+dmVkIGJ5IG1ha2Ugc2F2ZWRlZmNvbmZpZy4gQWN0dWFsCj4+IHZhbHVlIGRpZCBub3QgY2hhbmdl
+LCBpdCBpcyBlbmFibGVkIGF1dG9tYXRpY2FsbHkgYnl8QlIyX1RBUkdFVF9VQk9PVF9ORUVEU19Q
+WUxJQkZEVCwgd2hpY2ggcmVtYWluZWQgdW5jaGFuZ2VkIGluIHRoZSAKPj4gZGVmY29uZmlnLiBJ
+ZiB0aGVyZSBpcyBzb21lIHJlYXNvbiB0byBrZWVwIHRoZSBsaW5lIGluIHRoZSBkZWZjb25maWcs
+IAo+PiBwbGVhc2UgbGV0IG1lIGtub3csIEknbGwgc2VuZCBwYXRjaCB2MiBSZWdhcmRzLCBKYW4g
+fAo+IAo+IE1ha2VzIHNlbnNlLCBubyBuZWVkIHRvIHNlbmQgYSB2MiB0aGVuIQoKQXBwbGllZCB0
+byBtYXN0ZXIgYWZ0ZXIgYWRkaW5nIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVMgYW5k
+IGhhc2ggZmlsZXMsCnRoYW5rcy4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAKPiBCZXN0IHJl
+Z2FyZHMsCj4gCj4gVGhvbWFzCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
