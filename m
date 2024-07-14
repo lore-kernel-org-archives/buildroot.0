@@ -1,70 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01543C3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 12:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CECF6C3DA42
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 13:13:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E41B80D21;
-	Sun, 14 Jul 2024 12:49:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C871C600B6;
+	Sun, 14 Jul 2024 13:13:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4JuBwYx4MI6t; Sun, 14 Jul 2024 12:49:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wEDjCLn3MFUX; Sun, 14 Jul 2024 13:13:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70DD480CB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96E0C60606
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70DD480CB2;
-	Sun, 14 Jul 2024 12:49:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 241BE1BF3F7
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 12:49:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96E0C60606;
+	Sun, 14 Jul 2024 13:13:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BCD391BF3D8
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 13:13:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 109B7404E9
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 12:49:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5D6960606
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 13:13:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QyuqC5JgE37a for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 12:49:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0466B404E3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0466B404E3
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0466B404E3
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 12:49:27 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 92EABB00535;
- Sun, 14 Jul 2024 14:49:23 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 14:49:10 +0200
-Message-ID: <20240714124910.1928300-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NhG-BbkVE28j for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 13:13:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5CEDB600B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CEDB600B6
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5CEDB600B6
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 13:13:27 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4266182a9d7so21692005e9.0
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 06:13:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720962806; x=1721567606;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=hXnLZsH3Wo306fYkK7iSvPfmY0fKPCNCV8OtQZ+moGg=;
+ b=Aubbv8oZHJXey0PPNQJQg6RWOA5byceyoHoUDbhQrTqhgc8pkfVCtBFgh5INi8d2QY
+ 11Pas14Wl2p2TQ7o2EYLCUNw/K0WCrkMYfbrAtX1o8bss6Y9H/Ti1dH8CK4t4eXV6BNc
+ c4cHo7K4AjmZJ4br5yRWzBgsQS7foReBdrMM87O6e9EahZNp94s7JaFtcx/pvz2m2z0Q
+ kiSm3Q3Mlo03iZNqsPT+t1AYAOXWHujHuY2uuAd6LaOH8ZjY8F+++tMaI6GJ436KGbei
+ l8G77nglLkd56lRJF7UxAinPol08x7Re6kp+eg3035HbJ7MBfTZwoNOMVGoAq14tWZaz
+ bBeA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVA4FsKX2kgOOl5HfjstcvcwwVy9LXbkcsTJG0T2wrazcAHrvEgn0gylVLR7MSkDMFFW/XqAbzMYl4O2SSJbfaOmTt179GdpA==
+X-Gm-Message-State: AOJu0YzP1dWZIji8mODeRY2Drv9881cMKhhkOUigbaPGmjDKH6UYIj2w
+ yEl4lWMSjo0Z23mCu/5FcCOUV4YsWoBDnUnC3YNDGfPebUjOlkRmYxW06f2C+I92bUGoJVih4um
+ aObs=
+X-Google-Smtp-Source: AGHT+IHlziSVmAwAznhXpMYGcycIuzCfvzBixdoN475qDEDPwc2Q8zQX/jGhYPE5n2gTV4hFSmByYw==
+X-Received: by 2002:a7b:ce8b:0:b0:426:5216:3247 with SMTP id
+ 5b1f17b1804b1-426707cc9femr103899045e9.6.1720962805597; 
+ Sun, 14 Jul 2024 06:13:25 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
+ (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:b481:98b5:611f:e783])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427a5e77a55sm51467655e9.10.2024.07.14.06.13.24
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 14 Jul 2024 06:13:25 -0700 (PDT)
+Message-ID: <19631b3f-55ee-4075-8571-84b1d9b1e293@mind.be>
+Date: Sun, 14 Jul 2024 15:13:22 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1720961364;
- bh=DEWBay0T6OsPc9wINfLKvM4i5dWMQHegGxrZeQKOE8s=;
- h=From:To:Cc:Subject:Date:From;
- b=eEis1sQXQSl72vgYUuvhD/xNzB/i5yN16Ukl+sfh5G3H+CdcMsJcHai5oTX5HnhEY
- bwLIa1vuMJ/1i5Lw311TzJuO8yqb5ZVGZ0j2dPILOX3UZIo25L+rerdVkwYO5/nGvW
- xqxnLKZlUbUy2uFjjjMZzASDeysQA+hce5q2m5S1I9Y3B0FT1O3ashp8R7k68o4FW4
- 68Hd6vgNdylUKorcBJD0tqdXmqcuDXfoCMcmLbZYnjdgYvgVWvL1ofXW35yqu0qVDl
- +duIKOUFBGJlK5mXr478w8O7D3C6xk8Zks04pwIOKMizoOz3XKpUh9x5PFAt3ceVrG
- pCpobzhaOE9/w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=eEis1sQX
-Subject: [Buildroot] [PATCH 1/1] package/btrfs-progs: bump version to 6.9.2
+User-Agent: Mozilla Thunderbird
+To: Luca Pesce <luca.pesce@vimar.com>, buildroot@buildroot.org
+References: <1670323283-5697-1-git-send-email-luca.pesce@vimar.com>
+ <1670323283-5697-2-git-send-email-luca.pesce@vimar.com>
+Content-Language: en-GB
+In-Reply-To: <1670323283-5697-2-git-send-email-luca.pesce@vimar.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1720962806; x=1721567606; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=hXnLZsH3Wo306fYkK7iSvPfmY0fKPCNCV8OtQZ+moGg=;
+ b=gBYOlWoOsd8cmv433EnXJppPdfH4aaMc7QC/qvMJJajE0rvweHFPQQUYnI9Mjsl2Pp
+ 49Xg0P1qtaJP/VZoiPSxQESKc69bErsorwBG/wyVdNyLuQId6gkbW1dqQw/CKlSCJ/cL
+ 6ISGni/eiYV0pq1VRdb63Y+ZNxxqTsQWZ0f3tteQznrDoisdXJdKtGvPNsT4Zhk7Gf/W
+ 7z+qjfyZgJbqRCx/mkUTb+lp2EnkpkC9yL+uO1dpOylgPSOSoBah1KwOL9WnZFGRGHbU
+ Lsu3fsTFex08O3bsjmIS2CDN1/Wd70Rx48ukJe2XZShWr6h8kew9n1i+wlhgKsUmng24
+ mz9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=gBYOlWoO
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-download: restore user's
+ original umask for the whole download process
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,161 +109,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since v5.16.2, see:
-https://github.com/kdave/btrfs-progs/blob/v6.9.2/CHANGES
+  Hi Luca,
 
-This commit also adds a _CONF_ENV when using a uClibc toolchain.
-btrfs-progs is now using glibc printf functions, if the <printf.h>
-header is present. uClibc provides this header, but not the functions.
-This configuration environment variable will prevent the header of
-being detected, which will make brtfs-progs to use a workaround.
+  Sorry for the extremely long turnaround time for this. Messing with umasks is 
+something that nobody really wants to think about because it entails all kinds 
+of corner cases... In the end, though, it took me just a little more than half 
+an hour to get this merged.
 
-This commit also adds a patch to fix compilation with gcc 5.x and 6.x.
+On 06/12/2022 11:41, Luca Pesce via buildroot wrote:
+> Root makefile imposes 'umask 0022', and this may be more restrictive than the
+> user's original umask - which could have provisions set to share files/dirs
+> with other users.
+> As an example, the imposed value makes the per-package download directories not
+> writeable for the group, but just for the owner - the user that issued the first
+> build that populated the per-package dl dir for the first time (say user A).
+> Thus, if a BR package changes its version (e.g. for buildroot update), and
+> another user (say user B, in the same group of A) starts a build, BR fails the
+> creation of package-xxx.tar.gz inside the dl dir, because user B has no write
+> permissions on that path. Furthermore, in the case of the git backend, this
+> makes the git cache not updatable by a different user. This is disruptive for a
+> host used by many users, all belonging to a certain group.
+> 
+> So, to allow sharing of a rw BR2_DL_DIR location among users, we save the
+> original umask value (but only if it is more permissive than our REQ_UMASK,
+> which is our minimum working requirement) and restore it during the download
+> process.
+> 
+> Signed-off-by: Luca Pesce <luca.pesce@vimar.com>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on branch master at commit 804edd8 with command:
+  Applied to master, thanks, with the following changes:
+      - CURR_UMASK -> CUR_UMASK.
+      - BR2_ORIG_UMASK -> BR_ORIG_UMASK.
+      - Don't check if the umask is more permissive, apply it regardless. If
+        the user explicitly doesn't want to make their DL_DIR readable by
+        others, that's fine.
+      - Don't export BR_ORIG_UMASK.
+      - Only set BR_ORIG_UMASK if it we recurse, and only set umask if
+        BR_ORIG_UMASK is set.
+      - Add DOWNLOAD_SET_UMASK to simplify the latter.
 
-    utils/docker-run make check-package
-    ...
-    0 warnings generated
+  I hope it helps you!
 
-    utils/test-pkg -a -p btrfs-progs
-    ...
-    41 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+  Regards,
+  Arnout
 
-Also tested with the runtime test proposed at:
-https://patchwork.ozlabs.org/project/buildroot/patch/20240713173149.346681-1-ju.o@free.fr/
-
-Also tested host-btrfs-progs by building a qemu config with a btrfs rootfs.
-(I'll probably write a fs runtime test later for that case...).
----
- ...compat-fix-fallthrough-definition-fo.patch | 63 +++++++++++++++++++
- package/btrfs-progs/btrfs-progs.hash          |  2 +-
- package/btrfs-progs/btrfs-progs.mk            | 13 +++-
- 3 files changed, 76 insertions(+), 2 deletions(-)
- create mode 100644 package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
-
-diff --git a/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch b/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
-new file mode 100644
-index 0000000000..1bad695210
---- /dev/null
-+++ b/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
-@@ -0,0 +1,63 @@
-+From 156a9237fb31145a1f082fe13ff1866aafca5174 Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Sun, 14 Jul 2024 12:52:33 +0200
-+Subject: [PATCH] btrfs-progs: kerncompat: fix fallthrough definition for gcc
-+ 5.x and 6.x.
-+
-+Commit [1] 3a1d4aa089 "btrfs-progs: fix fallthrough cases with proper
-+attributes" introduced a macro "fallthrough" to better handle compiler
-+warnings of fallthrough situations.
-+
-+This macro is defined using the "__has_attribute" built-in
-+function-like macro, which was introduced in GCC 5. See [2]. It then
-+test for the "__fallthrough__" attribute, which was introduced in
-+GCC 7. See [3].
-+
-+When compiling with a gcc version which supports "__has_attribute" and
-+not the "__fallthrough__" attribute, compilation fails with error
-+message:
-+
-+    common/format-output.c: In function 'print_escaped':
-+    common/format-output.c:78:4: error: 'fallthrough' undeclared (first use in this function)
-+        fallthrough;
-+        ^
-+btrfs-progs claim to support gcc at minimal version 4.8 in [4].
-+
-+This commit fixes this issue by adding the missing definition.
-+
-+The definition of the unsupported case is duplicated, because testing
-+for "__has_attribute" and an attribute at the same time is not
-+portable. See the cpp "__has_attribute" documentation [5].
-+
-+Note: the issue was found with Buildroot Linux [6], while testing with
-+the command "utils/test-pkg -a -p btrfs-progs".
-+
-+[1] https://github.com/kdave/btrfs-progs/commit/3a1d4aa089419b7c94b31ff87122fa74907e1aa6
-+[2] https://gcc.gnu.org/gcc-5/changes.html
-+[3] https://gcc.gnu.org/gcc-7/changes.html
-+[4] https://github.com/kdave/btrfs-progs/tree/v6.9.2#build-compatibility
-+[5] https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005fattribute.html
-+[6] https://buildroot.org/
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+Upstream: Proposed: https://github.com/kdave/btrfs-progs/pull/842
-+---
-+ include/kerncompat.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/include/kerncompat.h b/include/kerncompat.h
-+index 31cd9d8d..bcd46bde 100644
-+--- a/include/kerncompat.h
-++++ b/include/kerncompat.h
-+@@ -305,6 +305,8 @@ static inline void up_read(struct rw_semaphore *sem)
-+ #if defined __has_attribute
-+ # if __has_attribute(__fallthrough__)
-+ #  define fallthrough			__attribute__((__fallthrough__))
-++# else
-++#  define fallthrough			do {} while (0)  /* fallthrough */
-+ # endif
-+ #else
-+ # define fallthrough			do {} while (0)  /* fallthrough */
-+-- 
-+2.45.2
-+
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 14eeb1ca07..082e8c1cdc 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256  9e9b303a1d0fd9ceaaf204ee74c1c8fa1fd55794e223d9fe2bc62875ecbd53d2  btrfs-progs-v5.16.2.tar.xz
-+sha256  43865bb272dc0ab2585de3605434d81ba217578f0897bf700cd36c14ac40652a  btrfs-progs-v6.9.2.tar.xz
- # Locally computed
- sha256  0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  libbtrfsutil/COPYING
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 9bf50ccfda..be8162fdcc 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BTRFS_PROGS_VERSION = 5.16.2
-+BTRFS_PROGS_VERSION = 6.9.2
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
-@@ -13,6 +13,17 @@ BTRFS_PROGS_LICENSE = GPL-2.0, LGPL-2.1+ (libbtrfsutil)
- BTRFS_PROGS_LICENSE_FILES = COPYING libbtrfsutil/COPYING
- BTRFS_PROGS_INSTALL_STAGING = YES
- 
-+# btrfs-progs uses the glibc register_printf_specifier() and
-+# register_printf_modifier() functions, if the header <printf.h> is
-+# detected at configure time. uClibc has this header, but does not
-+# provide those functions. This leads to build failure. In case no
-+# header is present, btrfs-progs is providing a workaround. We disable
-+# the <printf.h> header detection for uClibc toolchains. Musl libc is
-+# not impacted, because it does not provide a <printf.h> header.
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+BTRFS_PROGS_CONF_ENV += ac_cv_header_printf_h=no
-+endif
-+
- # Doesn't autodetect static-only and tries to build both
- ifeq ($(BR2_STATIC_LIBS),y)
- BTRFS_PROGS_MAKE_OPTS = static
--- 
-2.45.2
-
+> ---
+>   Makefile                | 17 ++++++++++++++++-
+>   package/pkg-download.mk |  6 ++++--
+>   2 files changed, 20 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 88f90cd..ec45589 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -68,21 +68,31 @@ endif
+>   CANONICAL_CURDIR = $(realpath $(CURDIR))
+>   
+>   REQ_UMASK = 0022
+> +CURR_UMASK = $(shell umask)
+>   
+>   # Make sure O= is passed (with its absolute canonical path) everywhere the
+>   # toplevel makefile is called back.
+>   EXTRAMAKEARGS := O=$(CANONICAL_O)
+>   
+>   # Check Buildroot execution pre-requisites here.
+> -ifneq ($(shell umask):$(CURDIR):$(O),$(REQ_UMASK):$(CANONICAL_CURDIR):$(CANONICAL_O))
+> +ifneq ($(CURR_UMASK):$(CURDIR):$(O),$(REQ_UMASK):$(CANONICAL_CURDIR):$(CANONICAL_O))
+>   .PHONY: _all $(MAKECMDGOALS)
+>   
+> +# Save the user's original umask (but only if it is more permissive than or
+> +# equal to REQ_UMASK, which is our minimum working requirement)
+> +ifeq ($(shell printf "%04o" "$$(( $(CURR_UMASK) | $(REQ_UMASK) ))"),$(REQ_UMASK))
+> +BR2_ORIG_UMASK := $(CURR_UMASK)
+> +else
+> +BR2_ORIG_UMASK := $(REQ_UMASK)
+> +endif
+> +
+>   $(MAKECMDGOALS): _all
+>   	@:
+>   
+>   _all:
+>   	@umask $(REQ_UMASK) && \
+>   		$(MAKE) -C $(CANONICAL_CURDIR) --no-print-directory \
+> +			BR2_ORIG_UMASK=$(BR2_ORIG_UMASK) \
+>   			$(MAKECMDGOALS) $(EXTRAMAKEARGS)
+>   
+>   else # umask / $(CURDIR) / $(O)
+> @@ -91,6 +101,11 @@ else # umask / $(CURDIR) / $(O)
+>   all:
+>   .PHONY: all
+>   
+> +# Export the user's original umask: we may need it later to honour user's file
+> +# creation permissions when creating non-target files/dirs (e.g. during the
+> +# execution of dl-wrapper script)
+> +export BR2_ORIG_UMASK := $(or $(BR2_ORIG_UMASK),$(CURR_UMASK))
+> +
+>   # Set and export the version string
+>   export BR2_VERSION := 2023.02-git
+>   # Actual time the release is cut (for reproducible builds)
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 0718f21..eb2a242 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -107,9 +107,11 @@ endif
+>   #
+>   ################################################################################
+>   
+> +# Restore the user's original umask during the whole download, in case he has
+> +# provisions set to share the download directory with his group (or others).
+>   define DOWNLOAD
+> -	$(Q)mkdir -p $($(2)_DL_DIR)
+> -	$(Q)$(EXTRA_ENV) $($(2)_DL_ENV) \
+> +	$(Q)umask $(BR2_ORIG_UMASK); mkdir -p $($(2)_DL_DIR)
+> +	$(Q)umask $(BR2_ORIG_UMASK); $(EXTRA_ENV) $($(2)_DL_ENV) \
+>   		flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
+>   		-c '$($(2)_DL_VERSION)' \
+>   		-d '$($(2)_DL_DIR)' \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
