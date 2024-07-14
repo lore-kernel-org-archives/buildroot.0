@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4F50C3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 20:23:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9438CC3DA42
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 20:23:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B7C640590;
-	Sun, 14 Jul 2024 20:23:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4096D405AD;
+	Sun, 14 Jul 2024 20:23:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RWSiDvJG9L1h; Sun, 14 Jul 2024 20:23:22 +0000 (UTC)
+ id 7TSZ_g0Y65XC; Sun, 14 Jul 2024 20:23:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C37B4059D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC674405A2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C37B4059D;
-	Sun, 14 Jul 2024 20:23:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 291DA1BF592
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC674405A2;
+	Sun, 14 Jul 2024 20:23:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 354D71BF954
  for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 20:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 14B93810EE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D8CD6064B
  for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 20:23:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tFmB9xPOaF2m for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xQMkYmHa3JkN for <buildroot@lists.busybox.net>;
  Sun, 14 Jul 2024 20:23:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B172810ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1850B60627
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B172810ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1850B60627
  for <buildroot@buildroot.org>; Sun, 14 Jul 2024 20:23:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2717584C4D; Sun, 14 Jul 2024 20:23:20 +0000 (UTC)
+ id 0348D869A9; Sun, 14 Jul 2024 20:23:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 21:46:24 +0200
+Date: Sun, 14 Jul 2024 21:38:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 07039e8174c65bea37ccc679a01610d5c335dc61
-X-Git-Newrev: f7756e2e24362aafca460a24d72c1b160be80c10
+X-Git-Oldrev: e9e0670f3cfbf9b66c868e38d5c5f9de44511dd6
+X-Git-Newrev: 9dff6c7f48a719ec404a84b54be1e34cc3eb8919
 X-Patchwork-Hint: ignore
-Message-Id: <20240714202320.2717584C4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] s6-rc: bump to version 0.5.4.3
+Message-Id: <20240714202320.0348D869A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] execline: bump to version 2.9.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,50 +60,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1541947004951991196=="
+Content-Type: multipart/mixed; boundary="===============6846689827840282305=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1541947004951991196==
+--===============6846689827840282305==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7756e2e24362aafca460a24d72c1b160be80c10
+commit: https://git.buildroot.net/buildroot/commit/?id=9dff6c7f48a719ec404a84b54be1e34cc3eb8919
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The COPYING hash changed because the copyright year was updated.
 
 Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/s6-rc/s6-rc.hash | 4 ++--
- package/s6-rc/s6-rc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/execline/execline.hash | 2 +-
+ package/execline/execline.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
-index a09c08ba3c..72bd5d42be 100644
---- a/package/s6-rc/s6-rc.hash
-+++ b/package/s6-rc/s6-rc.hash
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+index 3f9ff8a138..76412978b9 100644
+--- a/package/execline/execline.hash
++++ b/package/execline/execline.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256  00bdfa596fa7161512e972ec9282a2abd8fd0e31f09177bad7a2bc3d8f283982  s6-rc-0.5.4.2.tar.gz
--sha256  f68451e55e6686dc187df1ca427c574d9ac0d6f6926e1bdb909ad8b657668fe5  COPYING
-+sha256  e3272796a947904de37ab34ec10430e26107b8ef05210d81059c8b36203e6a9f  s6-rc-0.5.4.3.tar.gz
-+sha256  75b0b50d7bcb9b2fc174d01442536bce03333da1814df3e61cd6ef8f663548f1  COPYING
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 61090c9a27..301c705910 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
+-sha256  df750035d0fb21c7265bffb7ed7e1b661de1e842944a2252bdcddc32d0d97217  execline-2.9.5.1.tar.gz
++sha256  ba2a27e97c5eb6bd7ca6a0987a8925e44465a5be996daa0d18f8feca37d7571a  execline-2.9.6.0.tar.gz
+ sha256  fdc931295525dd0009cdf339189cbecd228d65cefe33402f037f9b046f07989e  COPYING
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+index b3d2d98216..ee38d3ed3c 100644
+--- a/package/execline/execline.mk
++++ b/package/execline/execline.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_RC_VERSION = 0.5.4.2
-+S6_RC_VERSION = 0.5.4.3
- S6_RC_SITE = https://skarnet.org/software/s6-rc
- S6_RC_LICENSE = ISC
- S6_RC_LICENSE_FILES = COPYING
+-EXECLINE_VERSION = 2.9.5.1
++EXECLINE_VERSION = 2.9.6.0
+ EXECLINE_SITE = https://skarnet.org/software/execline
+ EXECLINE_LICENSE = ISC
+ EXECLINE_LICENSE_FILES = COPYING
 
---===============1541947004951991196==
+--===============6846689827840282305==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -114,4 +111,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1541947004951991196==--
+--===============6846689827840282305==--
