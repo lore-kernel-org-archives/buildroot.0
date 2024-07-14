@@ -4,99 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3373DC3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 07:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DCA9C3DA42
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 07:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 201E74042F;
-	Sun, 14 Jul 2024 07:37:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D84340589;
+	Sun, 14 Jul 2024 07:41:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mkBE1kf-nomw; Sun, 14 Jul 2024 07:37:15 +0000 (UTC)
+ id uMItTQZ2G4hl; Sun, 14 Jul 2024 07:41:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB89D4043A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04ED94058B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB89D4043A;
-	Sun, 14 Jul 2024 07:37:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B554F1BF3E5
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 07:37:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04ED94058B;
+	Sun, 14 Jul 2024 07:41:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D2C4F1BF3E5
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 07:41:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A04418138E
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 07:37:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFDD5401B2
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 07:41:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lCoF-RdLJVKJ for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 07:37:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OUj_YY5yfMwJ for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 07:41:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::132; helo=mail-lf1-x132.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A3B0D8137A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3B0D8137A
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
- [IPv6:2a00:1450:4864:20::132])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A3B0D8137A
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 07:37:10 +0000 (UTC)
-Received: by mail-lf1-x132.google.com with SMTP id
- 2adb3069b0e04-52e976208f8so3701753e87.2
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 00:37:10 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BDFD940010
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDFD940010
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BDFD940010
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 07:41:23 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-42122ac2f38so19301965e9.1
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 00:41:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1720942628; x=1721547428;
+ d=1e100.net; s=20230601; t=1720942882; x=1721547682;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=OQhLGsB54WjqG9IQ41+Pn0uaSiCHy0QFtvyIuRZcn5c=;
- b=uXjQOaj6WNrirNJ6aAvYcxFnHPoelo7g2HnQghCtqsisEUOHMQvBTW64i59j0X+0EI
- i974Q1jWKGlkLXL8gMmti7MR7TzRuKDC64veIBkiAjXBklP9aQVplx99nlM6QDsUDf93
- AFkrnqXVBKbVoSN4abVxyfB/Ab61sI28EtY6lLSbvKNdH5Y4u3oPIBNGwkwWqFTmO27H
- Os+DOSWktJ/IbxVIrXAcSLBnvH5fZSvUwSiqQ0LbXlIZzE08LqKGD6gGeO6ExFD4gEUz
- PMqyzyhSNgAtkNMjFJkDyVMCRTkEgL+DvmYFPpUm1eEwGGDcf+ehzO+paBzX0GX3MZIk
- QTOg==
+ bh=a5VNrN31CnkYxLRXMC1XfeoGmZ5MWwGfKfw7vs/oCr0=;
+ b=HK78/ipiuyd0dMj0hLIYM+aCbbHGYIYPrHe6tMKt/Np3Dzbhv36T3M89l7/0zIW5C3
+ Hd4q8+cW2ysTKE7Dq7qI9BHryx0PqjSGTYVHDfcEOAhCbqYJrORWfeKH+sTymhrhk97n
+ wa0GifLG62v/U8ImdMPxCal+fPR+qSUGr/X/e2Q/ZLXUVIzIVTZrhvZru1WaakAvmuAc
+ r0yKmp6gDr2OCMCtNfUZ40HSbOSkrWo6sIjuXELaiUBitnwdCkXoabSPWttHjCYV7Q+l
+ zImgl0jAqfeTQKmJ4D65YnIUtyBhcaMzc7k5BclA1EnqIAeUmVs5ncx6pdATAkv8UXvi
+ LLEw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVZ17BgIkMV26dkBoet+gvDwm8GHY1TA1uzM7L4xYvXAFaSeYelAnnsDYUd561gET2N9n7Kcq3LfEht80ShFNcbOjxY+z0fmw==
-X-Gm-Message-State: AOJu0YxKhHxiBpwfBNgNY3tKNmliLN96OcB6bQF+sxhkkzh+4uIOz39D
- bqCWIHu/C636rd9ysLGcURpAslFlGFbVDbRCMSh1For8ElubCcXflpz56zTDw3c=
-X-Google-Smtp-Source: AGHT+IEfCiE2Otb4aBImMLzSQW1Tk3/a8vHGxRFNRyYynti6VBaW9EmQBO85rgZt941s9WeGvNhWEQ==
-X-Received: by 2002:a19:f509:0:b0:52c:e4bf:d55d with SMTP id
- 2adb3069b0e04-52eb9990d3dmr10772827e87.8.1720942628472; 
- Sun, 14 Jul 2024 00:37:08 -0700 (PDT)
+ AJvYcCW/4lseG2AkdoeLmQkXo+hvBAoqprlwYi48MsquhxYoMIiLL9DDZfEvQgRDQlZxvHT4wRppfLYxrrTnpuhfv71pEsz7MjTjTw==
+X-Gm-Message-State: AOJu0YzkDlGExPX3mPTehRWjj/TMxOkPPngZctM0fSR4TzG7xQfKdwyb
+ GgpaIEK2kRpwrjqLhnRSOkzEUAqwMRc0lnr3m9tSsLT3YFpsY3+6okD1O6sUfA4=
+X-Google-Smtp-Source: AGHT+IHD4kJtkyoENDIw039h4pVLBuwOwNu7ALnAQ8lr5NrDAQ1hmF4432gnAlw9DZjmMOfYtiUHsA==
+X-Received: by 2002:a05:600c:524c:b0:426:65b0:3035 with SMTP id
+ 5b1f17b1804b1-4279da3a671mr64738075e9.15.1720942881748; 
+ Sun, 14 Jul 2024 00:41:21 -0700 (PDT)
 Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
  (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:b481:98b5:611f:e783])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3680db046e2sm3180031f8f.105.2024.07.14.00.37.07
+ 5b1f17b1804b1-427a5ef44a9sm42951715e9.40.2024.07.14.00.41.20
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 14 Jul 2024 00:37:07 -0700 (PDT)
-Message-ID: <7d84ad52-7b9d-4f6e-bdea-8ed20fcc6139@mind.be>
-Date: Sun, 14 Jul 2024 09:37:05 +0200
+ Sun, 14 Jul 2024 00:41:21 -0700 (PDT)
+Message-ID: <d3e1c7e1-59a5-44dc-8f7f-0108cb501095@mind.be>
+Date: Sun, 14 Jul 2024 09:41:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 References: <cover.1717779951.git.yann.morin.1998@free.fr>
- <6bf853bc8b61fed824a99148786105fc038a5894.1717779951.git.yann.morin.1998@free.fr>
+ <9d4bffd033df7518f8ce488faff9379f1f993591.1717779951.git.yann.morin.1998@free.fr>
 Content-Language: en-GB
-In-Reply-To: <6bf853bc8b61fed824a99148786105fc038a5894.1717779951.git.yann.morin.1998@free.fr>
+In-Reply-To: <9d4bffd033df7518f8ce488faff9379f1f993591.1717779951.git.yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1720942628; x=1721547428; darn=buildroot.org;
+ d=mind.be; s=google; t=1720942882; x=1721547682; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=OQhLGsB54WjqG9IQ41+Pn0uaSiCHy0QFtvyIuRZcn5c=;
- b=d7HrWpu92HSBtPMdgdfAQ9gt2H6m5soG0Jn62VALIwmH9jpGYjSvdIxNti++EEfMUR
- bSbKlWKrCX78CftIgj7Y6vnwN6V6Wf/qHBwqy4GwVPmhSJS/8RtxOOvgeQDksV6wt5Tz
- u4HgvPLQfTltXyCmajGAq8/XMaSFiSBRigXrm59Kf7fz5JB5cCcZjBN/y04g5GXrN3KD
- 8RlmKibb8Hva5OmTt8q52/XCUo9Mpprq1Rgax3kcL3ZSK6BaqDMEt3JAzzbvlIDWdMVW
- RFMaTlzmSL0yZNOO9qd7hff/f/B9nofEN5dBnPr3dxKUes+cDbVhJHgJ/ICxR7kO2xhU
- VEpQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=a5VNrN31CnkYxLRXMC1XfeoGmZ5MWwGfKfw7vs/oCr0=;
+ b=TQohdGUOzvE7G86X3EkhATP1j1/NqUddjUxvr8KL3z/LjPcuIXpHzX/7YkzWsvJvKI
+ QqK/ozyQtnnky1hpnkMTWiwe/zslcV1E0bJbGrb5WTG7rIDRsjbCwvcPi49F/XJb6gzn
+ /fjgku8mkCeNnN8jC7/VNxXd0qz2fnfR6gbLtIdzmR6BD+jcvijl/DNBT9kWFiWqjWZk
+ Yj5XgmdtxFOSCjQAq8EhHRgRlZrDHb0HpR6L59Ha/42643iO5OYqhQ6ZN5T67ZZ1QV1C
+ WB495kdQQbmO9LycabfFcCKN5VCi1dYQmutxsm64WNgRbFc/a8duLBoHHG/X7MEyQcIu
+ zkuw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=d7HrWpu9
-Subject: Re: [Buildroot] [PATCH 03/20 v2] utils/check-package: add option to
- run the test-suite
+ header.a=rsa-sha256 header.s=google header.b=TQohdGUO
+Subject: Re: [Buildroot] [PATCH 04/20 v2] utils/checkpackagelib: instruct
+ shellcheck to follow included files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -119,74 +119,42 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 07/06/2024 19:05, Yann E. MORIN wrote:
-> Currently, how to run the check-package test-suite is thoroughly under-
-> documented. There is one hint in the commit log for commit fc254881e6df
-> (utils/checkpackagelib: add unit tests), and another in commit
-> 242e9d72e7d2 (utils/docker-run: new script); the former is hard to find,
-> and the latter is about an unrelated script, so harder yet to find...
+> We do have a few shell scripts that have source directives (either with
+> 'source' or with '.'), and they all are currently either globally
+> ignored in .checkpackageignore, or have shellcheck directives to ignore
+> the source statement (SC1090).
 > 
-> Add a new option to check-package, that will make it run its test-suite.
-> Since pytest is only needed for the test-suite, only import it in that
-> case.
+> So, we can safely instruct shellcheck where to lookup for sourced files;
+> that does not trigger any new error.
 > 
-> pytest will be default create a cache of the tests (not sure what it is
-> about, though), so instruct it not to (esp. since the tree can be
-> read-only).
+> This will alow fixing some shellcheck errors in later commits.
 > 
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
 > ---
->   utils/check-package              | 10 ++++++++++
->   utils/checkpackagelib/readme.txt |  1 +
->   2 files changed, 11 insertions(+)
+>   utils/checkpackagelib/tool.py | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/utils/check-package b/utils/check-package
-> index cbb3613e19..f759d88a89 100755
-> --- a/utils/check-package
-> +++ b/utils/check-package
-> @@ -85,6 +85,9 @@ def parse_args():
->       parser.add_argument("--failed-only", action="store_true", help="print only"
->                           " the name of the functions that failed (debug)")
+> diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
+> index 907ada704f..e12e1fa406 100644
+> --- a/utils/checkpackagelib/tool.py
+> +++ b/utils/checkpackagelib/tool.py
+> @@ -31,7 +31,7 @@ class Flake8(_Tool):
 >   
-> +    parser.add_argument("--test-suite", action="store_true", help="Run the"
-> +                        " test-suite")
-> +
->       flags = parser.parse_args()
->   
->       flags.ignore_list = get_ignored_parsers_per_file(flags.intree_only, flags.ignore_filename)
-> @@ -287,6 +290,13 @@ def __main__():
->       global flags
->       flags = parse_args()
->   
-> +    if flags.test_suite:
-> +        import pytest
-> +        return pytest.main(
-> +            # Disable writing/loading a cache with: -p no:cacheprovider
-> +            ["-v", "-p", "no:cacheprovider", os.path.dirname(__file__)]
+>   class Shellcheck(_Tool):
+>       def run(self):
+> -        cmd = ['shellcheck', self.filename]
+> +        cmd = ['shellcheck', "-x", self.filename]
 
-  This will run all the tests in the utils/ directory, so also the ones from 
-checksymbols. I've moved this code to checkpackagelib.base instead.
+  I've changed this to --external-sources so future me doesn't have to open a 
+man page to know wtf -x means.
 
   Regards,
   Arnout
 
-> +        )
-> +
->       if flags.intree_only:
->           # change all paths received to be relative to the base dir
->           base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-> diff --git a/utils/checkpackagelib/readme.txt b/utils/checkpackagelib/readme.txt
-> index 3bfe289607..b3e8c67100 100644
-> --- a/utils/checkpackagelib/readme.txt
-> +++ b/utils/checkpackagelib/readme.txt
-> @@ -23,6 +23,7 @@ How the scripts are structured:
->   - lib_type.py contains check functions specific to files of this type.
->   
->   Some hints when changing this code:
-> +- test your changes: utils/check-package --test-suite
->   - prefer O(n) algorithms, where n is the total number of lines in the files
->     processed.
->   - when there is no other reason for ordering, use alphabetical order (e.g. keep
+>           try:
+>               p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+>               stdout = p.communicate()[0]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
