@@ -1,70 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E41CC3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 17:06:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13D62C3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 17:15:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D77934010D;
-	Sun, 14 Jul 2024 17:06:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B46F960687;
+	Sun, 14 Jul 2024 17:15:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zrP4MEUa2If7; Sun, 14 Jul 2024 17:15:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E223B605D2
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E223B605D2;
+	Sun, 14 Jul 2024 17:15:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A396D1BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:15:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CFB5402A8
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:15:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G60yRhLbt_DM; Sun, 14 Jul 2024 17:06:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 999DA401F6
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 999DA401F6;
-	Sun, 14 Jul 2024 17:06:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 047071BF3F2
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:05:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E683D8102F
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:05:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OeJZpQ7UP4_f for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 17:05:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E52A481006
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E52A481006
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E52A481006
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 17:05:57 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id BAA04B00563;
- Sun, 14 Jul 2024 19:05:54 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 19:05:50 +0200
-Message-ID: <20240714170550.2527918-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+ id j0P3KtWyedCC for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 17:15:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 12ED74010D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12ED74010D
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 12ED74010D
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 17:15:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 42DA21BF204;
+ Sun, 14 Jul 2024 17:15:16 +0000 (UTC)
+Date: Sun, 14 Jul 2024 19:15:15 +0200
+To: Geoff Levand <geoff@infradead.org>
+Message-ID: <20240714191515.372e70b2@windsurf>
+In-Reply-To: <20240714170557.25802224@windsurf>
+References: <5809d7c9-8cd2-4eb1-8227-901e6722a068@infradead.org>
+ <20240714170557.25802224@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1720976756;
- bh=MlpH1IWHFxQJ/NGWEEXJbtlGKq27QNO2MBy8Lf8RSf0=;
- h=From:To:Cc:Subject:Date:From;
- b=cy+h+IVPUCJbABreskRtJ9PtgnbLYTrzqkhfYUyqUL9JoIDh2RSeyqrr1PcldwHak
- gKIGsZ7biN2SRE/S+R3TM6VufUBw922U0wnWIYRDBqE0UdFTFTlOEKYN2AVkHIAcha
- EfOGjxMTyKtcorG53LFI43suzMaUkIscV3tF4HItrITwPb1uEvlDGg0R0LphG5WVde
- Oli5hWx6/8wiPRm0618KlQ2FKzmbfBbJbmS0HPTro2DNGETaCS2R4yJgj9Fog1GJpO
- FquAfrHveUS+F++RXEv1deFkLg/E6i8fp0YeZH9w66a8uoasJrOUNAjbM9FFLF2XPa
- /fi74ltjId3/Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1720977316;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=xNkW7GMYD9KsgNfoOw99jRenazI3iOWKqlyXLdcXcBo=;
+ b=fM1O5u5nbBva+Ayk7cSZpn4Z//32Tx2XSgaN/68R4cMwEdeYBT/rXDvgtYfE/jom6qmXll
+ 7jSsQ9UG6pD8WN4gcc4O+9VGIzw97wz9AkhnzL0i9w9Mbast3X6htaCd3fIcIoYn13dMO2
+ GfIYevJyQ57lM92nMMuXent7+6iMrAZreBMIWOnwBn/IuBl7PZRBRiU3Os4indX7rRJnFo
+ oHjNFTT0qyiHJPhaDQQSt4aO1lnaMU15UbLNh/MKvxY3Rs5G/CjAiSZD7sqyyV2A5mydfm
+ Iep+eFXkFBX94erOy++Rf+QPUbdEuEV/kpjtdwTDHe5S18y9W2sHTddPpWkzxg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=cy+h+IVP
-Subject: [Buildroot] [PATCH 1/1] support/testing: new dieharder runtime test
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fM1O5u5n
+Subject: Re: [Buildroot] package/flannel: Bump to version 0.25.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,86 +81,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Note: this test was not working in Buildroot test infrastructure
-before commit [1] was merged, because dieharder has the string "# "
-in its output.
+On Sun, 14 Jul 2024 17:05:57 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/0cad947b964be5612a182413da136fcf0dc5a1f2
+> > -FLANNEL_VERSION = 0.25.3
+> > +FLANNEL_VERSION = 0.25.4
+> >  FLANNEL_SITE = $(call github,flannel-io,flannel,v$(FLANNEL_VERSION))
+> >  
+> >  FLANNEL_LICENSE = Apache-2.0
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                    |  1 +
- .../testing/tests/package/test_dieharder.py   | 40 +++++++++++++++++++
- 2 files changed, 41 insertions(+)
- create mode 100644 support/testing/tests/package/test_dieharder.py
+Obviously, I wanted to say:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e3804db1cd..83c60405e0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1832,6 +1832,7 @@ F:	support/testing/tests/package/test_cryptsetup.py
- F:	support/testing/tests/package/test_cryptsetup/
- F:	support/testing/tests/package/test_ddrescue.py
- F:	support/testing/tests/package/test_ddrescue/
-+F:	support/testing/tests/package/test_dieharder.py
- F:	support/testing/tests/package/test_dos2unix.py
- F:	support/testing/tests/package/test_ed.py
- F:	support/testing/tests/package/test_ethtool.py
-diff --git a/support/testing/tests/package/test_dieharder.py b/support/testing/tests/package/test_dieharder.py
-new file mode 100644
-index 0000000000..d324a34557
---- /dev/null
-+++ b/support/testing/tests/package/test_dieharder.py
-@@ -0,0 +1,40 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestDieharder(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_DIEHARDER=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check the program can run (by showing its version)
-+        self.assertRunOk("dieharder -V")
-+
-+        # The birthdays test on small number (1) of sample is expected to fail
-+        cmd = "dieharder -g /dev/urandom -d diehard_birthdays -t 1"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("FAILED", '\n'.join(output))
-+
-+        # The birthdays test on higher number (25) of sample is expected to succeed
-+        cmd = "dieharder -g mt19937 -d diehard_birthdays -t 25"
-+        output, exit_code = self.emulator.run(cmd, timeout=10)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("PASSED", '\n'.join(output))
-+
-+        # The birthdays test on file /dev/zero is expected to fail
-+        cmd = "dieharder -g file_input_raw -f /dev/zero -d diehard_birthdays -t 25"
-+        output, exit_code = self.emulator.run(cmd, timeout=40)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("FAILED", '\n'.join(output))
+Applied to master, thanks!
+
+Thomas
 -- 
-2.45.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
