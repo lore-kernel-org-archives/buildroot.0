@@ -4,117 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CDCCC3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 16:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1218AC3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 16:34:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EADCC40165;
-	Sun, 14 Jul 2024 16:11:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FD094027C;
+	Sun, 14 Jul 2024 16:34:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DAg8itRvNFCu; Sun, 14 Jul 2024 16:11:25 +0000 (UTC)
+ id PZ7Mtf_xv8MI; Sun, 14 Jul 2024 16:34:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9708402A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB1EE401ED
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B9708402A7;
-	Sun, 14 Jul 2024 16:11:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5EFF21BF4E7
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:11:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB1EE401ED;
+	Sun, 14 Jul 2024 16:34:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AB24A1BF4E7
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:34:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 542DA4052B
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:11:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4D8F401ED
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 16:34:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W18p9MwA6hOk for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 16:11:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.53.144.211;
- helo=mail.selirafood.com; envelope-from=foss@athaariq.my.id;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D70C5403A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D70C5403A0
-Received: from mail.selirafood.com (mail.selirafood.com [117.53.144.211])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D70C5403A0
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 16:11:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by mail.selirafood.com (Postfix) with ESMTP id A32F632482;
- Sun, 14 Jul 2024 23:11:19 +0700 (WIB)
-Received: from [192.168.111.115] (unknown [192.168.100.1])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
- (No client certificate requested)
- by mail.selirafood.com (Postfix) with ESMTPSA id B6AFB510CE;
- Sun, 14 Jul 2024 23:11:17 +0700 (WIB)
-Message-ID: <5a147c46-12f8-44bf-8fb9-1747f49b618d@athaariq.my.id>
-Date: Sun, 14 Jul 2024 23:11:08 +0700
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iGl9MUKeaZqP for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 16:34:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 56D0140165
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56D0140165
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 56D0140165
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 16:34:43 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id BEC0DB00576;
+ Sun, 14 Jul 2024 18:34:39 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 14 Jul 2024 18:34:29 +0200
+Message-ID: <20240714163429.2331461-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-References: <20240607071359.767329-1-gael.portay@rtone.fr>
- <20240607071359.767329-3-gael.portay@rtone.fr>
- <89da691d-0f62-4e00-803d-4bfe49641ffd@mind.be>
- <20240712164437.1137d0c0@windsurf>
-Content-Language: en-US
-From: Athaariq Ardhiansyah <foss@athaariq.my.id>
-Autocrypt: addr=foss@athaariq.my.id; keydata=
- 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
- GMviPu198f0Mg1RQmg==
-In-Reply-To: <20240712164437.1137d0c0@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=athaariq.my.id; 
- h=content-transfer-encoding:content-type:content-type
- :in-reply-to:from:from:content-language:references:subject
- :subject:user-agent:mime-version:date:date:message-id:received;
- s=dkim20240121; t=1720973479; x=1722183080; bh=moeM+LkhXgEuu/wJ
- m13QcmoMa+WXN74wyAYN1U8FNo0=; b=vZJpDaIrzULM0lK/1/llyP72+NHGDcin
- lspHw03OSwDXWJVX4SuIpKG93I6UHVLJ4EKx07LowIckZfOVXXg7KEz3+8POthn4
- R/aOefhD5yDJb2iYbcq3HQjRIXbIkFYsK9jSLfWCLzT1PSxEpe9CwDyDoAW6kTRH
- p9CnO/K1TlPNINmTu+dqMfJCSHtiq8avjYU/7W4kVTgGxfo5Lg/zp00Bw4+b2pwV
- hX3Yxxie3OdHUIQ8aarNsJkkIPh0NRt3qruMgyL2m1jAt2bSx6BLRFlUrCyhKUpY
- F82pgX5ICKuyXUPJL1aZpPG1kuyBbBb0i9D4uaA6iAep0rsu3zJVLQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1720974880;
+ bh=lssyzeV6j3xTNRZyTooQ51Sek8K2btGaGaYgNIm2lcg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=SoNMHMUfDRhir6cLVWYYD5kEWgGPc+f3hTiL0opgwZCgcEIDtUcxeBAgTf6w5h25Q
+ 278Yv9JCAcAawfDrdtNtx25UR8L7xYrsLTHB9tuZizrpEsQwi7ZzQL74kjdy6psu7P
+ k0U75Y/EOcxwXs0f9n8ZknxCit+ulKjzcg1VTx3uXBYz4NaE0/hoKc2bjxN0JURb8V
+ CBXuCt3vHRVoJrElHaeOmWRbVKRw/+GhtImZMaKjSNl7wCAormZOk1O6y6sGjQwgnp
+ ClCk5NtVCowkrgeJDBmSFqGTyt0+XWhdPMsv2xP49up+NAathcMcL01LT5SEXhlRfP
+ eHaFU91MElvrA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=athaariq.my.id
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=athaariq.my.id header.i=@athaariq.my.id
- header.a=rsa-sha256 header.s=dkim20240121 header.b=vZJpDaIr
-Subject: Re: [Buildroot] [next v2 2/2] package/rpi-firmware: bump version to
- 5476720
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=SoNMHMUf
+Subject: [Buildroot] [PATCH v2 1/1] package/btrfs-progs: bump version to
+ 6.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -126,26 +77,232 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, Martin Bark <martin@barkynet.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLAoKPiBTbywgR2HDq2wsIEF0aGFhcmlxIHBsZWFzZSBjb29yZGluYXRlIHRv
-IHNlbmQgYW4gdXBkYXRlIHRvIHJwaS1maXJtd2FyZQo+IHRoYXQgdXNlcyB0aGUgc3RhYmxlIGJy
-YW5jaCwgYW5kIHRoYXQgd29ya3Mgd2l0aCB0aGUgY3VycmVudCBSUGkga2VybmVsCj4gd2UgdXNl
-LgoKSSB0cmllZCBteSBiZXN0IHRvIHVwZGF0ZSB0aGUgZmlybXdhcmUgYW5kIGl0cyBjb3JyZXNw
-b25kaW5nIGtlcm5lbCB0byAKdGhlIGxhdGVzdCBzdGFibGUgdmVyc2lvbi4gSG93ZXZlciwgSSBu
-ZWVkIGhlbHAgdG8gdGVzdCB0aGUgY2hhbmdlcyBkdWUKdG8gbXkgaW5hYmlsaXR5IG9mIHJlY292
-ZXJpbmcgbXkgZnJpZWQgUmFzcGJlcnJ5IFBpIDUgUE1JQy4gUGxlYXNlIGNoZWNrCnRoZSBwYXRj
-aHdvcmsgYmVsb3cuCgpodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRy
-b290L3BhdGNoLzIwMjQwNzE0MTYwNDU3LjM5NDM0LTEtZm9zc0BhdGhhYXJpcS5teS5pZC8KClNv
-cnJ5IGZvciB0YWtpbmcgdG9vIGxvbmcuIFRoYW5rIHlvdSBmb3IgeW91ciBwYXRpZW5jZS4KClNp
-bmNlcmVseSwKQXRoYWFyaXEgQXJkaGlhbnN5YWgKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+For change log since v5.16.2, see:
+https://github.com/kdave/btrfs-progs/blob/v6.9.2/CHANGES
+
+This commit also adds two patches:
+- one to fix compilation with gcc 5.x and 6.x.
+- another to fix compilation with uClibc-ng
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Changes v1 -> v2:
+- Improve the package printf.h detection logic,
+  as suggested by Thomas in:
+  https://lists.buildroot.org/pipermail/buildroot/2024-July/757857.html
+---
+ ...compat-fix-fallthrough-definition-fo.patch | 63 ++++++++++++++
+ ...uClibc-ng-compatibility-for-printf-f.patch | 85 +++++++++++++++++++
+ package/btrfs-progs/btrfs-progs.hash          |  2 +-
+ package/btrfs-progs/btrfs-progs.mk            |  5 +-
+ 4 files changed, 153 insertions(+), 2 deletions(-)
+ create mode 100644 package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
+ create mode 100644 package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
+
+diff --git a/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch b/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
+new file mode 100644
+index 0000000000..588e9d4723
+--- /dev/null
++++ b/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
+@@ -0,0 +1,63 @@
++From 0d2bf742df7f6b6d91fff8abe3c2f8b6ef0e0c01 Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Sun, 14 Jul 2024 12:52:33 +0200
++Subject: [PATCH] btrfs-progs: kerncompat: fix fallthrough definition for gcc
++ 5.x and 6.x.
++
++Commit [1] 3a1d4aa089 "btrfs-progs: fix fallthrough cases with proper
++attributes" introduced a macro "fallthrough" to better handle compiler
++warnings of fallthrough situations.
++
++This macro is defined using the "__has_attribute" built-in
++function-like macro, which was introduced in GCC 5. See [2]. It then
++test for the "__fallthrough__" attribute, which was introduced in
++GCC 7. See [3].
++
++When compiling with a gcc version which supports "__has_attribute" and
++not the "__fallthrough__" attribute, compilation fails with error
++message:
++
++    common/format-output.c: In function 'print_escaped':
++    common/format-output.c:78:4: error: 'fallthrough' undeclared (first use in this function)
++        fallthrough;
++        ^
++btrfs-progs claim to support gcc at minimal version 4.8 in [4].
++
++This commit fixes this issue by adding the missing definition.
++
++The definition of the unsupported case is duplicated, because testing
++for "__has_attribute" and an attribute at the same time is not
++portable. See the cpp "__has_attribute" documentation [5].
++
++Note: the issue was found with Buildroot Linux [6], while testing with
++the command "utils/test-pkg -a -p btrfs-progs".
++
++[1] https://github.com/kdave/btrfs-progs/commit/3a1d4aa089419b7c94b31ff87122fa74907e1aa6
++[2] https://gcc.gnu.org/gcc-5/changes.html
++[3] https://gcc.gnu.org/gcc-7/changes.html
++[4] https://github.com/kdave/btrfs-progs/tree/v6.9.2#build-compatibility
++[5] https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005fattribute.html
++[6] https://buildroot.org/
++
++Upstream: Proposed: https://github.com/kdave/btrfs-progs/pull/842
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ include/kerncompat.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/include/kerncompat.h b/include/kerncompat.h
++index 31cd9d8d..bcd46bde 100644
++--- a/include/kerncompat.h
+++++ b/include/kerncompat.h
++@@ -305,6 +305,8 @@ static inline void up_read(struct rw_semaphore *sem)
++ #if defined __has_attribute
++ # if __has_attribute(__fallthrough__)
++ #  define fallthrough			__attribute__((__fallthrough__))
+++# else
+++#  define fallthrough			do {} while (0)  /* fallthrough */
++ # endif
++ #else
++ # define fallthrough			do {} while (0)  /* fallthrough */
++-- 
++2.45.2
++
+diff --git a/package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch b/package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
+new file mode 100644
+index 0000000000..b1b4fba519
+--- /dev/null
++++ b/package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
+@@ -0,0 +1,85 @@
++From 0f34a362c8644f212138fb8de8e0fba54941e757 Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Sun, 14 Jul 2024 16:28:08 +0200
++Subject: [PATCH] btrfs-progs: add uClibc-ng compatibility for printf format
++ %pV
++
++Commit [1] 164bc10d "btrfs-progs: add musl compatibility for printf
++format %pV" added a logic to detect the presence of the glibc
++<printf.h> header, and if present, to use the
++register_printf_specifier() and register_printf_modifier() functions.
++
++The original intent (as the commit log suggests), was to support the
++musl libc, which does not provides this <printf.h> header.
++
++When compiling with another libc, such as uClibc-ng, btrfs-progs fail
++to build with error:
++
++    common/messages.c: In function 'print_va_format':
++    common/messages.c:51:19: error: 'const struct printf_info' has no member named 'user'
++       51 |         if (!(info->user & va_modifier))
++          |                   ^~
++    common/messages.c: In function 'btrfs_no_printk':
++    common/messages.c:76:17: warning: implicit declaration of function 'register_printf_specifier'; did you mean 'register_printf_function'? [-Wimplicit-function-declaration]
++       76 |                 register_printf_specifier('V', print_va_format,
++          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
++          |                 register_printf_function
++    common/messages.c:78:31: warning: implicit declaration of function 'register_printf_modifier'; did you mean 'register_printf_function'? [-Wimplicit-function-declaration]
++       78 |                 va_modifier = register_printf_modifier(L"p");
++          |                               ^~~~~~~~~~~~~~~~~~~~~~~~
++          |                               register_printf_function
++
++This is because uClibc-ng provides a <printf.h> header, but not the
++register_printf_specifier() and register_printf_modifier() functions.
++See [2]. It mainly includes register_printf_function(). uClibc-ng
++emulates an older glibc behavior. Glibc added support for printf user
++elements in commit [3] (first included in glibc-2.10, in 2009). Checking
++only the <printf.h> is not sufficient.
++
++This commit fixes this build issue by refining the detection logic of
++the <printf.h> functions required by btrfs-progs.
++
++[1] https://github.com/kdave/btrfs-progs/commit/164bc10dfc08d8754d23ef0d6d7281e139d6cd53
++[2] https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/src/v1.0.49/include/printf.h
++[3] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=9d26efa90c6dcbcd6b3e586c9927b6058ef4d529
++
++Upstream: Proposed: https://github.com/kdave/btrfs-progs/pull/843
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ common/messages.h | 4 +++-
++ configure.ac      | 4 ++++
++ 2 files changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/common/messages.h b/common/messages.h
++index d6d4044d..aced7c9b 100644
++--- a/common/messages.h
+++++ b/common/messages.h
++@@ -25,7 +25,9 @@
++ /*
++  * Workaround for custom format %pV that may not be supported on all libcs.
++  */
++-#ifdef HAVE_PRINTF_H
+++#if defined(HAVE_PRINTF_H) \
+++	&& defined(HAVE_REGISTER_PRINTF_SPECIFIER) \
+++	&& defined(HAVE_REGISTER_PRINTF_MODIFIER)
++ #define DECLARE_PV(name)		struct va_format name
++ #define PV_FMT				"%pV"
++ #define PV_VAL(va)			&va
++diff --git a/configure.ac b/configure.ac
++index b69973b3..62b88973 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -95,6 +95,10 @@ AC_CHECK_HEADERS([linux/hw_breakpoint.h])
++ AC_CHECK_HEADERS([linux/fsverity.h])
++ AC_CHECK_HEADERS([printf.h])
++ 
+++dnl Check for printf.h functions.
+++AC_CHECK_FUNCS([register_printf_specifier])
+++AC_CHECK_FUNCS([register_printf_modifier])
+++
++ if grep -q 'HAVE_LINUX_FSVERITY_H.*1' confdefs.h; then
++ 	have_fsverity='yes'
++ else
++-- 
++2.45.2
++
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 14eeb1ca07..082e8c1cdc 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256  9e9b303a1d0fd9ceaaf204ee74c1c8fa1fd55794e223d9fe2bc62875ecbd53d2  btrfs-progs-v5.16.2.tar.xz
++sha256  43865bb272dc0ab2585de3605434d81ba217578f0897bf700cd36c14ac40652a  btrfs-progs-v6.9.2.tar.xz
+ # Locally computed
+ sha256  0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 9bf50ccfda..800c0e3082 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BTRFS_PROGS_VERSION = 5.16.2
++BTRFS_PROGS_VERSION = 6.9.2
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
+@@ -13,6 +13,9 @@ BTRFS_PROGS_LICENSE = GPL-2.0, LGPL-2.1+ (libbtrfsutil)
+ BTRFS_PROGS_LICENSE_FILES = COPYING libbtrfsutil/COPYING
+ BTRFS_PROGS_INSTALL_STAGING = YES
+ 
++# 0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
++BTRFS_PROGS_AUTORECONF = YES
++
+ # Doesn't autodetect static-only and tries to build both
+ ifeq ($(BR2_STATIC_LIBS),y)
+ BTRFS_PROGS_MAKE_OPTS = static
+-- 
+2.45.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
