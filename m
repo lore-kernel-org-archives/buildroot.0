@@ -4,49 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D493C3DA49
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 11:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 704ACC3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 11:19:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B8F34050A;
-	Sun, 14 Jul 2024 11:11:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07B5C405F7;
+	Sun, 14 Jul 2024 11:19:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V5_e1Y1xuUWI; Sun, 14 Jul 2024 11:11:51 +0000 (UTC)
+ id RwMnRoXt4Eeq; Sun, 14 Jul 2024 11:19:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F0D54050D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 722DC405EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F0D54050D;
-	Sun, 14 Jul 2024 11:11:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9808A1BF3EC
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 11:11:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 722DC405EF;
+	Sun, 14 Jul 2024 11:19:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 32CD61BF3EC
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 11:19:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 842B5401B2
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 11:11:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 20994605DD
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 11:19:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lMX6coHAzJDl for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 11:11:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90DDE40021
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 90DDE40021
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 11:11:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5ABB866C4; Sun, 14 Jul 2024 11:11:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 13:10:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 804edd8683d5e7413dd4ec3715c2f7b8bb742684
-X-Git-Newrev: d201f2f5cd0d1e0389430cda78adead37977a6cd
-X-Patchwork-Hint: ignore
-Message-Id: <20240714111147.E5ABB866C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/android-tools: add patches to fix
- build with GCC 14.x
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wfekChtgcFQR for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 11:19:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A9CB660598
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9CB660598
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A9CB660598
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 11:19:31 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-426636ef8c9so22624505e9.2
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 04:19:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1720955969; x=1721560769;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Hpm8M/blIDytl8dwWL7qVVF76VWR1iUQRoe9ersHPRg=;
+ b=YzQwXQFLaJVKGaXaKHbIFD9mN06rWr1cRBB1L6rLYGjWcVsOaynuT5jq30f/zD/brS
+ EBEdkoaxYSyl4DXmkK6YJXf1G2pQ/QqW+6ucgfzMgi45RhxJwDdw43AXOPBzH7v+ZeFB
+ JSlgO6D7fQt+jlkbJR0Nhig+/7cpNavA3lO416U/jwT/UnhfgVw8WUJ4POY01i/fdFth
+ UQeNd02HJjQSGcox8xTkcFA/HwtZayNkTfz5NlKpvFpO5LIK2jqOgBm876GGzy0Auc4l
+ B1X0j+XsKLaUBok2qVWt91kwY8EokUklpLNS/CU8JvxQACS/8+qcuNv9cs6UGHPglsPl
+ pMpg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXKo4ARnU266SkUIsrpcATScs2Dh+RM2f5B/mFnto6qnFXj+waZetuC/UAVhjrnTY5Kbx3I1DuSo+dOAwPG/bvFN9JzpB06vw==
+X-Gm-Message-State: AOJu0Yw+/V64aQBvunuaBiuIzp/exlZTgooLbdyxHa/K9lVr8M03lbPF
+ OMchOjFh6WJNGLYVpdibYkuk9fqGIifPYF0CriWUX+KD6dgDOcmsQlZoP5Em+hWd/yDDW5dIlvh
+ 4/SU=
+X-Google-Smtp-Source: AGHT+IGeO/gAvnweFM+1QVnvBmj9MmDLtRrTDh6zMKq73D/JodC2MI61bj517kd4vcUUJQwXJpEG5w==
+X-Received: by 2002:a05:600c:4c15:b0:425:7796:8e2c with SMTP id
+ 5b1f17b1804b1-426707d8b58mr116647025e9.12.1720955969121; 
+ Sun, 14 Jul 2024 04:19:29 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:b481:98b5:611f:e783?
+ (2a01cb05949d5800b48198b5611fe783.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:b481:98b5:611f:e783])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427a5e996c1sm48990905e9.25.2024.07.14.04.19.28
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 14 Jul 2024 04:19:28 -0700 (PDT)
+Message-ID: <30940a3c-24de-4ca1-bd88-37817f308aa3@mind.be>
+Date: Sun, 14 Jul 2024 13:19:26 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Brandon Maier <brandon.maier@collins.com>, buildroot@buildroot.org
+References: <20240712-pytest-qemu-prompt-detection-v2-1-273b85382796@collins.com>
+Content-Language: en-GB
+In-Reply-To: <20240712-pytest-qemu-prompt-detection-v2-1-273b85382796@collins.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1720955969; x=1721560769; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Hpm8M/blIDytl8dwWL7qVVF76VWR1iUQRoe9ersHPRg=;
+ b=Lwx5g+fUTZzY44pDzodTar1rcdFOTpw/NpEzsGAf5HzX0A9qesU+F4GBq2qrr1u9pg
+ Fuc/D6ThaEixPqpX6s15Y+Ldtuejy3Y/XMO5/3k47OH3bQFBYXzLVtBUIi7xwXq82ZmH
+ YDjwL3NAJJL0MOah1gUPvVGJT3uW1rhOLwupuHLUxvjiXo1QzWRchX4h6bzmMmCbprF0
+ F2RCpzH4gLQH4LfTkNdbCZ9XhYwrNFJxiRA9K8jUuDYrxDaIEQ/JFR3uY/IC6HrCzFsu
+ FFbnVlpE69UzER5+bTZSw5K6p1Zn0S32Du2IAgZhcPEGzmbPGC04lP7TLsotiV7u/r/D
+ f02g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Lwx5g+fU
+Subject: Re: [Buildroot] [PATCH v2] support/testing/infra/emulator.py: fix
+ qemu prompt detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,321 +108,166 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7097405744060919508=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7097405744060919508==
-Content-Type: text/plain
+  Hi Brandon,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d201f2f5cd0d1e0389430cda78adead37977a6cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/07/2024 21:31, Brandon Maier wrote:
+> From: Brandon Maier via buildroot <buildroot@buildroot.org>
+> 
+> The qemu.run() method can break when a command happens to output the
+> string "# " to stdout. This is because qemu.run() detects when a command
+> has completed by searching for the shell prompt, which by default is
+> "# ". It then captures everything before the "# " as the commands
+> output, causing the rest of output to be lost.
+> 
+> Instead use the pexpect libraries REPLWrapper to handle running
+> commands. It has hooks to set a custom prompt and avoid some other
+> pitfalls of wrapping a shell.
+> 
+> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+> ---
+> I tested this against a couple tests and test_bash.py which Yann noticed
+> is special in Julian patch series. I am running a full test run but
+> that will take awhile, so sending this in the meantime for review.
 
-This commit adds 3 patches that fix various implicit declarations
-error that arise with GCC 14.x.
+  I'm also running the full battery but it will take +- 20 hours to finish.
 
-Fixes host-android-tools build issues:
+  I've merged already. If there's breakage, we'll fix it :-)
 
- http://autobuild.buildroot.net/results/1fd0d0a9547d4ad2a24916eb79230d49a825e694
- http://autobuild.buildroot.net/results/9e3bb951d7db1c8a8725b5570c54f6dec0e8b344
- http://autobuild.buildroot.net/results/8c9345fcad6e935c13b16c318bbb27282de10ac1
- http://autobuild.buildroot.net/results/4e8a2ce69bfb8a86da2711cb32a99ad51b0bdf5f
- http://autobuild.buildroot.net/results/ca6310cfcb0a9787eb5cec3c33aab903f4964cab
- http://autobuild.buildroot.net/results/a77509d4df8281d666d870faeb008f9196d3bbc3
- http://autobuild.buildroot.net/results/74cdcbcbe8bab244b1c368260162e3cef133376f
- http://autobuild.buildroot.net/results/225b2722b030b1ea1706db8dd54d62da81d8725b
+  There are a couple more changes I made:
 
-As well as android-tools build issues:
+      - Make all arguments to _repl_sh_spawn non-optional.
+      - Move non_printable_insert to a local variable instead of an argument,
+        we don't need to override it.
+      - Copy the comment from _repl_sh that explains why non_printable_insert
+        is needed.
+      - Add a comment about timeouts.
+      - Rename spawn to child (we don't actually spawn anything so this felt
+        more natural, even though the class
+      - Use single quotes instead of triple quotes, and explicitly escape the
+        nested quotes.
 
- http://autobuild.buildroot.net/results/abfaf53328d0b29c778f75e105cc7043f2ad44fe
- http://autobuild.buildroot.net/results/d2467a2ac4a915d850cc8bc2341d9803346604a9
- http://autobuild.buildroot.net/results/a4cf59ce479b7db7f0a3269c0462ce1ccc9f600e
- http://autobuild.buildroot.net/results/667a49bff45b226dec4349d54f977c8bd6abadd5
- http://autobuild.buildroot.net/results/92cf3eea0e0d7531220cd9850993e269a3a4744d
+  I also pushed one additional commit that adds a copyright header. The copied 
+_repl_sh part makes the file ISC licensed in addition to our default GPL-2.0, so 
+it's better to make that explicit.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ot-fastboot.c-reorder-functions-to-avoid-.patch | 54 ++++++++++++++++++++++
- ...rse-sparse_read.c-add-missing-output_file.patch | 37 +++++++++++++++
- ..._utils-make_ext4fs_main.c-disable-Android.patch | 54 ++++++++++++++++++++++
- .../0014-core-adbd-adb.c-open-code-capset.patch    | 52 +++++++++++++++++++++
- ...bd-adb.c-include-correct-header-for-prctl.patch | 34 ++++++++++++++
- 5 files changed, 231 insertions(+)
+  Regards,
+  Arnout
 
-diff --git a/package/android-tools/0011-core-fastboot-fastboot.c-reorder-functions-to-avoid-.patch b/package/android-tools/0011-core-fastboot-fastboot.c-reorder-functions-to-avoid-.patch
-new file mode 100644
-index 0000000000..b5592e6992
---- /dev/null
-+++ b/package/android-tools/0011-core-fastboot-fastboot.c-reorder-functions-to-avoid-.patch
-@@ -0,0 +1,54 @@
-+From 9724d78fda4eb023f83d2fd30e665b436d7a7f97 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 14 Jul 2024 11:41:10 +0200
-+Subject: [PATCH] core/fastboot/fastboot.c: reorder functions to avoid implicit
-+ definition
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The match_fastboot() function uses match_fastboot_with_serial() but is
-+implemented before it, causing an implicit definition. Re-order the
-+functions to avoid this.
-+
-+Fixes:
-+
-+core/fastboot/fastboot.c:191:12: error: implicit declaration of function ‘match_fastboot_with_serial’ [-Wimplicit-function-declaration]
-+
-+Upstream: N/A, we're too far from upstream
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ core/fastboot/fastboot.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/core/fastboot/fastboot.c b/core/fastboot/fastboot.c
-+index 3de6d7d..9b2c86f 100644
-+--- a/core/fastboot/fastboot.c
-++++ b/core/fastboot/fastboot.c
-+@@ -186,11 +186,6 @@ oops:
-+ }
-+ #endif
-+ 
-+-int match_fastboot(usb_ifc_info *info)
-+-{
-+-    return match_fastboot_with_serial(info, serial);
-+-}
-+-
-+ int match_fastboot_with_serial(usb_ifc_info *info, const char *local_serial)
-+ {
-+     if(!(vendor_id && (info->dev_vendor == vendor_id)) &&
-+@@ -217,6 +212,11 @@ int match_fastboot_with_serial(usb_ifc_info *info, const char *local_serial)
-+     return 0;
-+ }
-+ 
-++int match_fastboot(usb_ifc_info *info)
-++{
-++    return match_fastboot_with_serial(info, serial);
-++}
-++
-+ int list_devices_callback(usb_ifc_info *info)
-+ {
-+     if (match_fastboot_with_serial(info, NULL) == 0) {
-+-- 
-+2.45.2
-+
-diff --git a/package/android-tools/0012-core-libsparse-sparse_read.c-add-missing-output_file.patch b/package/android-tools/0012-core-libsparse-sparse_read.c-add-missing-output_file.patch
-new file mode 100644
-index 0000000000..9a6a77eceb
---- /dev/null
-+++ b/package/android-tools/0012-core-libsparse-sparse_read.c-add-missing-output_file.patch
-@@ -0,0 +1,37 @@
-+From 2812c2005cfa4bfc5741651c8310e36f28c0327e Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 14 Jul 2024 11:41:56 +0200
-+Subject: [PATCH] core/libsparse/sparse_read.c: add missing output_file.h
-+ include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+sparse_read.c uses read_all() without including the header file
-+containing its prototype, causing:
-+
-+core/libsparse/sparse_read.c:122:31: error: implicit declaration of function ‘read_all’ [-Wimplicit-function-declaration]
-+
-+Fix this by including output_file.h.
-+
-+Upstream: N/A, we're too far from upstream
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ core/libsparse/sparse_read.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/core/libsparse/sparse_read.c b/core/libsparse/sparse_read.c
-+index 704bcfa..0a8f838 100644
-+--- a/core/libsparse/sparse_read.c
-++++ b/core/libsparse/sparse_read.c
-+@@ -32,6 +32,7 @@
-+ #include "sparse_crc32.h"
-+ #include "sparse_file.h"
-+ #include "sparse_format.h"
-++#include "output_file.h"
-+ 
-+ #if defined(__APPLE__) && defined(__MACH__)
-+ #define lseek64 lseek
-+-- 
-+2.45.2
-+
-diff --git a/package/android-tools/0013-extras-ext4_utils-make_ext4fs_main.c-disable-Android.patch b/package/android-tools/0013-extras-ext4_utils-make_ext4fs_main.c-disable-Android.patch
-new file mode 100644
-index 0000000000..c11e88bf07
---- /dev/null
-+++ b/package/android-tools/0013-extras-ext4_utils-make_ext4fs_main.c-disable-Android.patch
-@@ -0,0 +1,54 @@
-+From 83f9bed233b86dd2bbf603611b13b673caeccb69 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 14 Jul 2024 11:46:51 +0200
-+Subject: [PATCH] extras/ext4_utils/make_ext4fs_main.c: disable
-+ Android-specific code
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Since we are not building with the Android code, we do not have the
-+implementation of the selinux_android_file_context_handle(). However,
-+its only call site is when 'mountpoint' is set, and 'mountpoint'
-+cannot be non-NULL in non-Android cases due to how the -a option is
-+parsed:
-+
-+		case 'a':
-+ #ifdef ANDROID
-+			fs_config_func = fs_config;
-+			mountpoint = optarg;
-+ #else
-+			fprintf(stderr, "can't set android permissions - built without android support\n");
-+			usage(argv[0]);
-+			exit(EXIT_FAILURE);
-+ #endif
-+
-+So also compile out the code calling
-+selinux_android_file_context_handle() when ANDROID is not set.
-+
-+Fixes:
-+
-+make_ext4fs_main.c:155:25: error: implicit declaration of function ‘selinux_android_file_context_handle’ [-Wimplicit-function-declaration]
-+
-+Upstream: N/A, we're too far from upstream
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ extras/ext4_utils/make_ext4fs_main.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/extras/ext4_utils/make_ext4fs_main.c b/extras/ext4_utils/make_ext4fs_main.c
-+index 17d3735..cb58011 100644
-+--- a/extras/ext4_utils/make_ext4fs_main.c
-++++ b/extras/ext4_utils/make_ext4fs_main.c
-+@@ -149,7 +149,7 @@ int main(int argc, char **argv)
-+ 		}
-+ 	}
-+ 
-+-#if !defined(HOST)
-++#if !defined(HOST) && defined(ANDROID)
-+ 	// Use only if -S option not requested
-+ 	if (!sehnd && mountpoint) {
-+ 		sehnd = selinux_android_file_context_handle();
-+-- 
-+2.45.2
-+
-diff --git a/package/android-tools/0014-core-adbd-adb.c-open-code-capset.patch b/package/android-tools/0014-core-adbd-adb.c-open-code-capset.patch
-new file mode 100644
-index 0000000000..1496b8bca4
---- /dev/null
-+++ b/package/android-tools/0014-core-adbd-adb.c-open-code-capset.patch
-@@ -0,0 +1,52 @@
-+From 2b5060146b0890f7f1a63ef891af1358b8cdf9bc Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 14 Jul 2024 12:57:22 +0200
-+Subject: [PATCH] core/adbd/adb.c: open code capset()
-+
-+capset() is apparently implemented by C libraries (at least glibc and
-+musl), but not exposed through a header as an official public API.
-+
-+In addition capset(2) says:
-+
-+  Note: glibc provides no wrappers for these system calls,
-+  necessitating the use of syscall(2)
-+
-+The lack of a header with a prototype for capset() was not causing any
-+problem so far, but GCC 14.x has become stricter on implicit
-+declarations, causing the build to fail with:
-+
-+core/adbd/adb.c:1296:9: error: implicit declaration of function 'capset' [-Wimplicit-function-declaration]
-+
-+So fix that by open-coding it using syscall() as suggested by the man
-+page.
-+
-+Upstream: N/A, we're too far from upstream
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ core/adbd/adb.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/core/adbd/adb.c b/core/adbd/adb.c
-+index 7fe6445..98b1de1 100644
-+--- a/core/adbd/adb.c
-++++ b/core/adbd/adb.c
-+@@ -41,6 +41,7 @@
-+ #if !ADB_HOST
-+ #include "android_filesystem_config.h"
-+ #include <linux/capability.h>
-++#include <sys/syscall.h>
-+ #include <linux/prctl.h>
-+ #include <sys/mount.h>
-+ #else
-+@@ -1293,7 +1294,7 @@ int adb_main(int is_daemon, int server_port)
-+         header.pid = 0;
-+         cap[CAP_TO_INDEX(CAP_SYS_BOOT)].effective |= CAP_TO_MASK(CAP_SYS_BOOT);
-+         cap[CAP_TO_INDEX(CAP_SYS_BOOT)].permitted |= CAP_TO_MASK(CAP_SYS_BOOT);
-+-        capset(&header, cap);
-++        syscall(SYS_capset, &header, cap);
-+ 
-+         D("Local port disabled\n");
-+     } else {
-+-- 
-+2.45.2
-+
-diff --git a/package/android-tools/0015-core-adbd-adb.c-include-correct-header-for-prctl.patch b/package/android-tools/0015-core-adbd-adb.c-include-correct-header-for-prctl.patch
-new file mode 100644
-index 0000000000..cfbefecb26
---- /dev/null
-+++ b/package/android-tools/0015-core-adbd-adb.c-include-correct-header-for-prctl.patch
-@@ -0,0 +1,34 @@
-+From c14070011e070d8674cf3578708cbae433090a47 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 14 Jul 2024 13:00:02 +0200
-+Subject: [PATCH] core/adbd/adb.c: include correct header for prctl()
-+
-+As documented by prctl(2), the correct header to include for prctl()
-+is <sys/prctl.h>, not <linux/prctl.h>.
-+
-+Fixes:
-+
-+core/adbd/adb.c:1256:13: error: implicit declaration of function 'prctl' [-Wimplicit-function-declaration]
-+
-+Upstream: N/A, we're too far from upstream
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ core/adbd/adb.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/core/adbd/adb.c b/core/adbd/adb.c
-+index 98b1de1..10f420b 100644
-+--- a/core/adbd/adb.c
-++++ b/core/adbd/adb.c
-+@@ -42,7 +42,7 @@
-+ #include "android_filesystem_config.h"
-+ #include <linux/capability.h>
-+ #include <sys/syscall.h>
-+-#include <linux/prctl.h>
-++#include <sys/prctl.h>
-+ #include <sys/mount.h>
-+ #else
-+ #include "usb_vendors.h"
-+-- 
-+2.45.2
-+
-
---===============7097405744060919508==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> 
+> Changes in v2:
+> - Rewrite to use pexpect REPLWrapper (Arnout)
+> - Link to v1: https://patchwork.ozlabs.org/project/buildroot/patch/20240522154616.1265769-1-brandon.maier@collins.com/
+> - Link to Julian Olivain version: https://patchwork.ozlabs.org/project/buildroot/patch/20230611104518.337528-1-ju.o@free.fr/
+> ---
+>   support/testing/infra/emulator.py | 56 +++++++++++++++++++++++++++++++--------
+>   1 file changed, 45 insertions(+), 11 deletions(-)
+> 
+> diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+> index 624740fcb1..c586603787 100644
+> --- a/support/testing/infra/emulator.py
+> +++ b/support/testing/infra/emulator.py
+> @@ -1,12 +1,38 @@
+>   import pexpect
+> +import pexpect.replwrap
+>   
+>   import infra
+>   
+> +BR_PROMPT = '[BRTEST# '
+> +BR_CONTINUATION_PROMPT = '[BRTEST+ '
+> +
+> +
+> +def _repl_sh_spawn(spawn, orig_prompt, non_printable_insert='\\[\\]',
+> +                   extra_init_cmd="export PAGER=cat"):
+> +    """Wrap the shell prompt to handle command output
+> +    Based on pexpect.replwrap.bash()
+> +    https://github.com/pexpect/pexpect/blob/aa989594e1e413f45c18b26ded1783f7d5990fe5/pexpect/replwrap.py#L115
+> +    """
+> +
+> +    ps1 = BR_PROMPT[:5] + non_printable_insert + BR_PROMPT[5:]
+> +    ps2 = (BR_CONTINUATION_PROMPT[:5] + non_printable_insert +
+> +           BR_CONTINUATION_PROMPT[5:])
+> +    prompt_change = "PS1='{0}' PS2='{1}' PROMPT_COMMAND=''".format(ps1, ps2)
+> +    return pexpect.replwrap.REPLWrapper(
+> +            spawn,
+> +            orig_prompt,
+> +            prompt_change,
+> +            new_prompt=BR_PROMPT,
+> +            continuation_prompt=BR_CONTINUATION_PROMPT,
+> +            extra_init_cmd=extra_init_cmd
+> +        )
+> +
+>   
+>   class Emulator(object):
+>   
+>       def __init__(self, builddir, downloaddir, logtofile, timeout_multiplier):
+>           self.qemu = None
+> +        self.repl = None
+>           self.downloaddir = downloaddir
+>           self.logfile = infra.open_log_file(builddir, "run", logtofile)
+>           # We use elastic runners on the cloud to runs our tests. Those runners
+> @@ -97,26 +123,34 @@ class Emulator(object):
+>           if password:
+>               self.qemu.expect("Password:")
+>               self.qemu.sendline(password)
+> -        index = self.qemu.expect(["# ", pexpect.TIMEOUT])
+> -        if index != 0:
+> -            raise SystemError("Cannot login")
+> -        self.run("dmesg -n 1")
+> -        # Prevent the shell from wrapping the commands at 80 columns.
+> -        self.run("stty columns 29999")
+> +
+> +        extra_init_cmd = " && ".join([
+> +            'export PAGER=cat',
+> +            'dmesg -n 1',
+> +            # Prevent the shell from wrapping the commands at 80 columns.
+> +            'stty columns 29999',
+> +            # Fix the prompt of any subshells that get run
+> +            '''printf "%s\n"  "PS1='$PS1'" "PS2='$PS2'" "PROMPT_COMMAND=''" >>/etc/profile'''
+> +        ])
+> +        self.repl = _repl_sh_spawn(
+> +                self.qemu,
+> +                '# ',
+> +                non_printable_insert='\\[\\]',
+> +                extra_init_cmd=extra_init_cmd)
+> +        if not self.repl:
+> +            raise SystemError("Cannot initialize REPL prompt")
+>   
+>       # Run the given 'cmd' with a 'timeout' on the target
+>       # return a tuple (output, exit_code)
+>       def run(self, cmd, timeout=-1):
+> -        self.qemu.sendline(cmd)
+>           if timeout != -1:
+>               timeout *= self.timeout_multiplier
+> -        self.qemu.expect("# ", timeout=timeout)
+> +        output = self.repl.run_command(cmd, timeout=timeout)
+>           # Remove double carriage return from qemu stdout so str.splitlines()
+>           # works as expected.
+> -        output = self.qemu.before.replace("\r\r", "\r").splitlines()[1:]
+> +        output = output.replace("\r\r", "\r").splitlines()[1:]
+>   
+> -        self.qemu.sendline("echo $?")
+> -        self.qemu.expect("# ")
+> +        exit_code = self.repl.run_command("echo $?")
+>           exit_code = self.qemu.before.splitlines()[2]
+>           exit_code = int(exit_code)
+>   
+> 
+> ---
+> base-commit: 5543661bc0c1ebcd01e5e6bf5ac565fd0f1ac8d8
+> change-id: 20240712-pytest-qemu-prompt-detection-34f3ed337b09
+> 
+> Best regards,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7097405744060919508==--
