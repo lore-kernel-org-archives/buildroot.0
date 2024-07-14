@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C227C3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 17:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8BADC3DA42
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 17:32:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EF00607D5;
-	Sun, 14 Jul 2024 17:32:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FF5C60643;
+	Sun, 14 Jul 2024 17:32:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fx6URYfmf28y; Sun, 14 Jul 2024 17:32:26 +0000 (UTC)
+ id oAjQDkOSA9SF; Sun, 14 Jul 2024 17:32:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2371607FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BB73607FA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2371607FA;
-	Sun, 14 Jul 2024 17:32:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BB73607FA;
+	Sun, 14 Jul 2024 17:32:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 943D01BF3F2
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:32:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A45751BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:32:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8765781200
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8CA4C811FF
  for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 17:32:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x7_BHjTG81Ck for <buildroot@lists.busybox.net>;
+ id gP7Vy75BXwWQ for <buildroot@lists.busybox.net>;
  Sun, 14 Jul 2024 17:32:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9465F811FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A887181203
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9465F811FF
+ by smtp1.osuosl.org (Postfix) with ESMTP id A887181203
  for <buildroot@buildroot.org>; Sun, 14 Jul 2024 17:32:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 808EF8690C; Sun, 14 Jul 2024 17:32:10 +0000 (UTC)
+ id 4FFB98690A; Sun, 14 Jul 2024 17:32:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Jul 2024 19:31:58 +0200
+Date: Sun, 14 Jul 2024 19:31:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 134a9f2beb24f831347b252c0fe015dce651a14d
-X-Git-Newrev: b0a0c25e625a9736c38d0957956447e102ceec1e
+X-Git-Oldrev: 3dc80614442cc3942a372a8c31abd22c1bc96241
+X-Git-Newrev: 02d8e072d1149264601d87762c77cc806d29044b
 X-Patchwork-Hint: ignore
-Message-Id: <20240714173210.808EF8690C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/network-manager: rewrite init
- script
+Message-Id: <20240714173210.4FFB98690A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: include S01syslogd from source
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,171 +65,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0a0c25e625a9736c38d0957956447e102ceec1e
+commit: https://git.buildroot.net/buildroot/commit/?id=02d8e072d1149264601d87762c77cc806d29044b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This brings the NetworkManager init script in line with the standard
-Buildroot init script pattern, including the script name.
+The manual describes package/busybox/S01syslogd as the reference of
+how an init script should be written. Include it from source instead
+of having a copy in the manual to ensure actual code and manual stay
+in sync.
 
-Reload using SIGHUP is also supported now, note that the
-NetworkManager documentation cautions that not all parameters can be
-changed at runtime (without a full restart).
+Also use long options in the paragraph after the script to follow the
+same style.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                        |  1 -
- package/network-manager/S45NetworkManager  | 68 ++++++++++++++++++++++++++++++
- package/network-manager/S45network-manager | 41 ------------------
- package/network-manager/network-manager.mk |  2 +-
- 4 files changed, 69 insertions(+), 43 deletions(-)
+ docs/manual/adding-packages-directory.adoc | 65 +++---------------------------
+ docs/manual/manual.mk                      |  5 +++
+ 2 files changed, 11 insertions(+), 59 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5bac2b73a0..42b22d4aed 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1003,7 +1003,6 @@ package/netsurf/0002-do-not-cross-compile-nsgenbind.patch lib_patch.Upstream
- package/netsurf/0003-fix-compilation-without-curl.patch lib_patch.Upstream
- package/netsurf/0004-framebuffer-Fix-internal-font-generated-source-for-GCC-10.patch lib_patch.Upstream
- package/nettle/0001-disable-testsuite-examples.patch lib_patch.Upstream
--package/network-manager/S45network-manager Shellcheck lib_sysv.ConsecutiveEmptyLines lib_sysv.EmptyLastLine lib_sysv.Variables
- package/nfs-utils/S60nfs Shellcheck lib_sysv.ConsecutiveEmptyLines lib_sysv.Variables
- package/nginx-modsecurity/0001-config-use-pkg-config.patch lib_patch.Upstream
- package/nginx/0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch lib_patch.Upstream
-diff --git a/package/network-manager/S45NetworkManager b/package/network-manager/S45NetworkManager
-new file mode 100644
-index 0000000000..9f3398a347
---- /dev/null
-+++ b/package/network-manager/S45NetworkManager
-@@ -0,0 +1,68 @@
-+#!/bin/sh
-+
-+DAEMON="NetworkManager"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+# shellcheck source=/dev/null
-+test -r "/etc/default/$DAEMON" && . "/etc/default/$DAEMON"
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	[ ! -d "/var/run/$DAEMON" ] && install -d "/var/run/$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon --start --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON" \
-+		-- --pid-file="$PIDFILE" $NETWORKMANAGER_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "$status"
-+	fi
-+	# NetworkManager deletes its PID file on exit, wait for it to
-+	# be gone
-+	while [ -f "$PIDFILE" ]; do
-+		sleep 0.1
-+	done
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+reload() {
-+	printf 'Reloading %s config: ' "$DAEMON"
-+	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+case "$1" in
-+	start|stop|restart|reload)
-+		"$1";;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/network-manager/S45network-manager b/package/network-manager/S45network-manager
-deleted file mode 100644
-index bc775d3b20..0000000000
---- a/package/network-manager/S45network-manager
-+++ /dev/null
-@@ -1,41 +0,0 @@
--#!/bin/sh
--
--# Allow a few customizations from a config file
--test -r /etc/default/NetworkManager && . /etc/default/NetworkManager
--
--PID=`pidof NetworkManager`
--case "$1" in
--	start)
--		printf "Starting NetworkManager ... "
--		[ ! -d /var/run/NetworkManager ] && install -d /var/run/NetworkManager
--		if [ -z "$PID" ]; then
--			/usr/sbin/NetworkManager $NETWORKMANAGER_ARGS
--		fi
--		if [ ! -z "$PID" -o $? -gt 0 ]; then
--			echo "failed!"
--		else
--			echo "done."
--		fi
--		;;
--	stop)
--		printf "Stopping NetworkManager ... "
--			[ ! -z "$PID" ] && kill $PID > /dev/null 2>&1
--		if [ $? -gt 0 ]; then
--			echo "failed!"
--		else
--			echo "done."
--		fi
--		;;
--	restart)
--		$0 stop
--		sleep 1
--		$0 start
--		;;
--	*)
--		echo "usage: $0 {start|stop|restart|sleep|wake}"
--		;;
--esac
--exit 0
--
--
--
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index cbd2ba8839..3937982c5f 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -163,7 +163,7 @@ NETWORK_MANAGER_CONF_OPTS += -Dnmcli=false
- endif
+diff --git a/docs/manual/adding-packages-directory.adoc b/docs/manual/adding-packages-directory.adoc
+index 2039c2c7cc..4ca11507e1 100644
+--- a/docs/manual/adding-packages-directory.adoc
++++ b/docs/manual/adding-packages-directory.adoc
+@@ -578,70 +578,17 @@ not start before +S40network+.  The scripts are started in alphabetical
+ order, so +S01syslogd+ starts before +S01watchdogd+, and +S02sysctl+
+ start thereafter.
  
- define NETWORK_MANAGER_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/network-manager/S45network-manager $(TARGET_DIR)/etc/init.d/S45network-manager
-+	$(INSTALL) -m 0755 -D package/network-manager/S45NetworkManager $(TARGET_DIR)/etc/init.d/S45NetworkManager
- endef
++[source,sh]
+ ----
+-01: #!/bin/sh
+-02:
+-03: DAEMON="syslogd"
+-04: PIDFILE="/var/run/$DAEMON.pid"
+-05:
+-06: SYSLOGD_ARGS=""
+-07:
+-08: # shellcheck source=/dev/null
+-09: [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+-10:
+-11: # BusyBox' syslogd does not create a pidfile, so pass "-n" in the command line
+-12: # and use "-m" to instruct start-stop-daemon to create one.
+-13: start() {
+-14: 	printf 'Starting %s: ' "$DAEMON"
+-15: 	# shellcheck disable=SC2086 # we need the word splitting
+-16: 	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
+-17: 		-- -n $SYSLOGD_ARGS
+-18: 	status=$?
+-19: 	if [ "$status" -eq 0 ]; then
+-20: 		echo "OK"
+-21: 	else
+-22: 		echo "FAIL"
+-23: 	fi
+-24: 	return "$status"
+-25: }
+-26:
+-27: stop() {
+-28: 	printf 'Stopping %s: ' "$DAEMON"
+-29: 	start-stop-daemon -K -q -p "$PIDFILE"
+-30: 	status=$?
+-31: 	if [ "$status" -eq 0 ]; then
+-32: 		rm -f "$PIDFILE"
+-33: 		echo "OK"
+-34: 	else
+-35: 		echo "FAIL"
+-36: 	fi
+-37: 	return "$status"
+-38: }
+-39:
+-40: restart() {
+-41: 	stop
+-42: 	sleep 1
+-43: 	start
+-44: }
+-45:
+-46: case "$1" in
+-47: 	start|stop|restart)
+-48: 		"$1";;
+-49: 	reload)
+-50: 		# Restart, since there is no true "reload" feature.
+-51: 		restart;;
+-52: 	*)
+-53: 		echo "Usage: $0 {start|stop|restart|reload}"
+-54: 		exit 1
+-55: esac
++include::S01syslogd[]
+ ----
  
- define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
+ *Note:* programs that support reloading their configuration in some
+ fashion (+SIGHUP+) should provide a +reload()+ function similar to
+-+stop()+.  The +start-stop-daemon+ supports +-K -s HUP+ for this.
+-It is recommended to always append +-x "/sbin/$DAEMON"+ to all the
+-+start-stop-daemon+ commands to ensure signals are set to a PID that
+-matches +$DAEMON+.
+++stop()+. The +start-stop-daemon+ command supports +--stop --signal
++HUP+ for this. It is recommended to always append +--exec
++"/sbin/$DAEMON"+ to all +start-stop-daemon+ commands to ensure signals
++are set to a PID that matches +$DAEMON+.
+ 
+ Both start scripts and unit files can source command line arguments from
+ +/etc/default/foo+, in general, if such a file does not exist it should
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index e851a084ae..ca5a14f838 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -7,4 +7,9 @@
+ MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.adoc) $(wildcard docs/images/*))
+ MANUAL_RESOURCES = $(TOPDIR)/docs/images
+ 
++define MANUAL_INIT_SCRIPT_REF
++	cp package/busybox/S01syslogd $(@D)/S01syslogd
++endef
++MANUAL_POST_RSYNC_HOOKS += MANUAL_INIT_SCRIPT_REF
++
+ $(eval $(call asciidoc-document))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
