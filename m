@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 696C9C3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 15:09:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0125EC3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 15:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 394C9608EB;
-	Sun, 14 Jul 2024 15:09:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B32EA605D8;
+	Sun, 14 Jul 2024 15:09:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jLqZCNmp0Vc3; Sun, 14 Jul 2024 15:09:00 +0000 (UTC)
+ id t5CKpZ0DSSEO; Sun, 14 Jul 2024 15:09:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0094060877
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CABA860730
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0094060877;
-	Sun, 14 Jul 2024 15:08:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B244F1BF44A
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:08:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CABA860730;
+	Sun, 14 Jul 2024 15:09:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 973F31BF44A
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC1C74032E
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:08:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83A09404A8
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:09:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eghuitXwAnQO for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 15:08:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dHMsx6peQiEA for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 15:09:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4D53540096
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D53540096
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D53540096
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 15:08:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 64EFA20002;
- Sun, 14 Jul 2024 15:08:54 +0000 (UTC)
-Date: Sun, 14 Jul 2024 17:08:52 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240714170852.5e4e718c@windsurf>
-In-Reply-To: <20240713195813.560673-1-fontaine.fabrice@gmail.com>
-References: <20240713195813.560673-1-fontaine.fabrice@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 31F9F404A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31F9F404A4
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 31F9F404A4
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 15:09:21 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D02D1C0003;
+ Sun, 14 Jul 2024 15:09:20 +0000 (UTC)
+Date: Sun, 14 Jul 2024 17:09:19 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20240714170919.144fbdf4@windsurf>
+In-Reply-To: <20240713170337.1137765-1-dario.binacchi@amarulasolutions.com>
+References: <20240713170337.1137765-1-dario.binacchi@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720969734;
+ d=bootlin.com; s=gm1; t=1720969760;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=uERA+zUjMrluNESCfi081DRz38zTTZrSi0gbW8yqGHc=;
- b=J9RrPayh3Ei5TYxeSPtdzM/+ACfYsxQdz0uTMlDpeMxpwgbztalFvwJ1DE+ijkAbhMChvi
- IHzFJSHWdQp3HMk+jklc3igK56vSZbnj7g+FPdQaV9Ja9Ebt80eUju1ItWhaQ+PSE4+Z/x
- 77XjjSTj9PByHcGNaIyJNcBGB6l8Rb4ZGauDPxdcLrxFxtKYu66FSz4HpPDlQl6rZK7CXh
- hy1J68LcmPlCKG8OdfhVRoQz9ytYlHcMXoRoRHwwJyTIvL7liqHaS+FxzxhBHpe4YUEBCc
- FSMuz3HeYPVMIwHvdepJZDY9vAipTqHiGtg4/sopzUfGqIE+X18jNvJtjQmIPA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=u8M+UurRKIp9SDT2JSv8AaFLbowIRn9wc4p93g+4Qrc=;
+ b=KPaJl6sT6A8U6Rtzlmh9GA5+O330s8FTG6v4S38K5Hzr/AVdKgi2lX03ZHarC5Pf78SRGJ
+ AHPD5jpA7nfBT6hfT/tAx7lETMG9TbCC2Kqi+ryhqIVmZ8lbrJEoOP5PYZgTjheN5ZRgvT
+ nbJpgGNihPb01VVYf5bGyWEDnGAHYclem/MnMJbKtYlsGrYZtO3hnGy3xKW8D5tewbZAYS
+ eV3TK29CXBefnZNQ1YpEcnIRnDTbq1T64NwEHozpR0bOH+KnVwE1+fY3iKrypjkdBTApf/
+ szReu5F11AF2EbTHeQr8WhUEmATD8VL3TjrhQHjL9TfQCFKSfQ4EtJX9qsrp3A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=J9RrPayh
-Subject: Re: [Buildroot] [PATCH 1/1] package/libopenmpt: add
- LIBOPENMPT_CPE_ID_VENDOR
+ header.s=gm1 header.b=KPaJl6sT
+Subject: Re: [Buildroot] [PATCH 1/1] boot/uboot: bump to version 2024.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,23 +82,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+Cc: linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 13 Jul 2024 21:58:13 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 13 Jul 2024 19:03:37 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-> cpe:2.3:a:openmpt:libopenmpt is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/detail/05979DC5-95A8-40BD-9102-402B69F5AFAA
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > ---
->  package/libopenmpt/libopenmpt.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  boot/uboot/Config.in  | 6 +++---
+>  boot/uboot/uboot.hash | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
