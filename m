@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95BE9C3DA42
-	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 15:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0213C3DA42
+	for <buildroot@archiver.kernel.org>; Sun, 14 Jul 2024 15:06:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 633DF6062F;
-	Sun, 14 Jul 2024 15:06:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A8BF60841;
+	Sun, 14 Jul 2024 15:06:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t-G0W9ic96ZE; Sun, 14 Jul 2024 15:06:23 +0000 (UTC)
+ id V8nfB0p-BATe; Sun, 14 Jul 2024 15:06:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFA8E60817
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D414260827
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CFA8E60817;
-	Sun, 14 Jul 2024 15:06:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 912BC1BF44A
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:06:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D414260827;
+	Sun, 14 Jul 2024 15:06:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A889F1BF44A
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86C3A404EF
- for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:06:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E9C36081C
+ for <buildroot@lists.busybox.net>; Sun, 14 Jul 2024 15:06:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dw_Vzs2Dw1OL for <buildroot@lists.busybox.net>;
- Sun, 14 Jul 2024 15:06:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jB2eGskwduwl for <buildroot@lists.busybox.net>;
+ Sun, 14 Jul 2024 15:06:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C1D4404F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C1D4404F4
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0C1D4404F4
- for <buildroot@buildroot.org>; Sun, 14 Jul 2024 15:06:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C969FF802;
- Sun, 14 Jul 2024 15:06:12 +0000 (UTC)
-Date: Sun, 14 Jul 2024 17:06:11 +0200
-To: "=?UTF-8?B?R2HDq2w=?= PORTAY" <gael.portay@gmail.com>
-Message-ID: <20240714170611.6ba44e9f@windsurf>
-In-Reply-To: <20240714135442.857934-1-gael.portay@rtone.fr>
-References: <20240714135442.857934-1-gael.portay@rtone.fr>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ADF1A6080B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADF1A6080B
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ADF1A6080B
+ for <buildroot@buildroot.org>; Sun, 14 Jul 2024 15:06:21 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 936F31C0004;
+ Sun, 14 Jul 2024 15:06:18 +0000 (UTC)
+Date: Sun, 14 Jul 2024 17:06:17 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20240714170617.4d50eb1f@windsurf>
+In-Reply-To: <20240714145759.3932146-1-dario.binacchi@amarulasolutions.com>
+References: <20240714145759.3932146-1-dario.binacchi@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1720969572;
+ d=bootlin.com; s=gm1; t=1720969578;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=Ap5YCyjYElSkwpxaQJVJPtvCM5dt2k5KJSQgpSfr3jc=;
- b=XNHNTk4E8WBdXNDdrVDk/zRuVL6vAAHmnXZcTjS9p/lN/RRvdnlnVg9gsbVwB6EDe0X2TP
- KLSOIIB4IGTGlC4BCI3ok/9quB1hA20Q7JlA1dwzJchtyOHXcHUxNQkoyTgCpDBcSy/CgS
- oYSNxwczJusBwc7sr0xSHFYG/bs6CXv7ZHgqAQ7q0c97TpiQKdhT7C/SGYR6qdK8prX/IH
- LcojeopBktw4CxIGE6sf6pVfqB9bJB0Cx4m0ot3v5EbKQ4UNkh3pM/raBNBidw4fLVBhOF
- HFSXnDXhhs5DYpHGAZNw51AHEncyHA+6CKTGrLxDHOv2EqpeDuZLrfxnlNtYLQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=g9N2J1ppvH7MMxNGmxIuz3J5zKPd3dUJh+0nVGhleTo=;
+ b=LLBdGfdNFDA89B9ZIVzjagLtCvcNQI6p8gVH9IzCnxftauOmJUwL+tR2Jf0cwAJP9MykOn
+ Wqn8XCESjk4Y7d4kNQExNDqJDGJkr2myAAac/k/1MlTT+/7rCss+hMFohtPX3oWoesP4Y+
+ JGxkkFddxnuYTLcaE367hkaU/zL7FMkRwaEjkvGrlJKkNzZo/WLnHCwdMdlePvE2Ftd5kW
+ 7A8LBAp2f4jIVo6ZOct11xnTBSao0okVADUBbmaluakT8ROgzIuZi/FkDrW13h6xqSftOw
+ OshZntffW8QlVEMeblBefngz5bc5HPCR1Tgnt6ToPL8LhabytDmLNLsk3bxkjw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XNHNTk4E
-Subject: Re: [Buildroot] [PATCH 1/1] configs/raspberrypi3_qt5we: fix path to
- in-tree device-tree blob
+ header.s=gm1 header.b=LLBdGfdN
+Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f769_disco_sd: bump U-Boot
+ to 2024.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,21 +83,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: =?UTF-8?B?R2HDq2w=?= PORTAY <gael.portay@rtone.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: linux-amarula@amarulasolutions.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCAxNCBKdWwgMjAyNCAxNTo1NDo0MiArMDIwMAoiR2HDq2wgUE9SVEFZIiA8Z2FlbC5w
-b3J0YXlAZ21haWwuY29tPiB3cm90ZToKCj4gVGhpcyBmaXhlcyBjb21taXQgNTFiNDQyMTc1OCAo
-Y29uZmlncy9yYXNwYmVycnlwaSo6IGJ1bXAga2VybmVsIHZlcnNpb24KPiB0byAxN2YxMzViICg2
-LjYuMjgpKS4KPiAKPiBGaXhlczoKPiAKPiAJbWFrZVszXTogKioqIE5vIHJ1bGUgdG8gbWFrZSB0
-YXJnZXQgJ2FyY2gvYXJtL2Jvb3QvZHRzL2JjbTI3MTAtcnBpLTMtYi5kdGInLiAgU3RvcC4KPiAK
-PiBTaWduZWQtb2ZmLWJ5OiBHYcOrbCBQT1JUQVkgPGdhZWwucG9ydGF5QHJ0b25lLmZyPgo+IC0t
-LQo+IEhlbGxvLAoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClRob21hcwotLSAKVGhvbWFz
-IFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5l
-ZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+On Sun, 14 Jul 2024 16:57:59 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+
+> The patch bumps U-Boot to version 2024.07.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  .../stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash | 2 +-
+>  configs/stm32f769_disco_sd_defconfig                            | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
