@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA890C3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 09:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69BC7C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 09:20:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C2CA80B64;
-	Mon, 15 Jul 2024 09:20:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE0A680DF3;
+	Mon, 15 Jul 2024 09:20:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5MKX935t4iOW; Mon, 15 Jul 2024 09:20:38 +0000 (UTC)
+ id hHGB54V9qP1l; Mon, 15 Jul 2024 09:20:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7688D80C3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9C3380E3A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7688D80C3C;
-	Mon, 15 Jul 2024 09:20:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9C3380E3A;
+	Mon, 15 Jul 2024 09:20:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F00B11BF41C
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 09:20:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 007171BF41C
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 09:20:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9090607BA
+ by smtp3.osuosl.org (Postfix) with ESMTP id A8C396079F
  for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 09:20:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 40zfuPrwR5I5 for <buildroot@lists.busybox.net>;
+ id 1BHNgWFhQZMG for <buildroot@lists.busybox.net>;
  Mon, 15 Jul 2024 09:20:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A143F60676
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAF856078F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A143F60676
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAF856078F
  for <buildroot@buildroot.org>; Mon, 15 Jul 2024 09:20:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8BEE586B3B; Mon, 15 Jul 2024 09:20:36 +0000 (UTC)
+ id 9819086B3C; Mon, 15 Jul 2024 09:20:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 15 Jul 2024 11:20:08 +0200
+Date: Mon, 15 Jul 2024 11:20:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a14c862c08865e053d5fce90a0d0323b8f9e4bc0
-X-Git-Newrev: 95013777cf93548eee7ac3010b513d354e8b0a30
+X-Git-Oldrev: 95013777cf93548eee7ac3010b513d354e8b0a30
+X-Git-Newrev: 3847a145c23234b3bddae3a9ceb9d2d4e6a90fc5
 X-Patchwork-Hint: ignore
-Message-Id: <20240715092036.8BEE586B3B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dhrystone: cleanup patch stack
+Message-Id: <20240715092036.9819086B3C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dhrystone: fix build with GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,316 +60,205 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0903340430322441226=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95013777cf93548eee7ac3010b513d354e8b0a30
+--===============0903340430322441226==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=3847a145c23234b3bddae3a9ceb9d2d4e6a90fc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-dhrystone is basically a dead project, so there is no Git repo
-available anywhere, no new release, nothing.
+GCC14 will give errors for missing function declarations and
+missing return types :
 
-Despite that, let's reformat the patches with "git format-patch", keep
-the original authorship but add my SoB since I'm reintroducing the
-patches, and indicate the Upstream: status.
+dhry_1.c:75:1: error: return type defaults to ‘int’ [-Wimplicit-int]
+   75 | main(int argc, char *argv[])
+      | ^~~~
+dhry_1.c: In function ‘main’:
+dhry_1.c:159:5: error: implicit declaration of function ‘Proc_5’ [-Wimplicit-function-declaration]
+  159 |     Proc_5();
+      |     ^~~~~~
 
+Fixes:
+
+  http://autobuild.buildroot.net/results/8e65ba30efd5a6bca197f24ced2db1f8226b2c51/
+
+Signed-off-by: Steffen Persvold <spersvold@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  5 ----
- ...pecify-the-number-of-runs-on-the-command.patch} | 22 ++++++++++++----
- ...e-from-system-rather-than-requiring-via-C.patch | 29 ++++++++++++++++++++++
- package/dhrystone/0002-HZ.patch                    | 17 -------------
- package/dhrystone/0003-exit.patch                  | 14 -----------
- ...0003-trust-the-exit-status-of-the-program.patch | 26 +++++++++++++++++++
- ...004-get-prototypes-for-malloc-exit-strcpy.patch | 27 ++++++++++++++++++++
- package/dhrystone/0004-headers.patch               | 15 -----------
- ...ision-with-C-library-using-NO_PROTOTYPES.patch} | 20 ++++++++++++---
- 9 files changed, 115 insertions(+), 60 deletions(-)
+ .../0006-Add-missing-function-declarations.patch   | 152 +++++++++++++++++++++
+ 1 file changed, 152 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2f229b931a..0613483a13 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -444,11 +444,6 @@ package/dhcp/S80dhcp-relay Shellcheck lib_sysv.Variables
- package/dhcp/S80dhcp-server Shellcheck lib_sysv.Variables
- package/dhcp/dhclient-script Shellcheck lib_shellscript.TrailingSpace
- package/dhcpcd/S41dhcpcd lib_sysv.Indent lib_sysv.Variables
--package/dhrystone/0001-cmdline-nruns.patch lib_patch.Sob lib_patch.Upstream
--package/dhrystone/0002-HZ.patch lib_patch.Sob lib_patch.Upstream
--package/dhrystone/0003-exit.patch lib_patch.Sob lib_patch.Upstream
--package/dhrystone/0004-headers.patch lib_patch.Sob lib_patch.Upstream
--package/dhrystone/0005-prototypes.patch lib_patch.Sob lib_patch.Upstream
- package/dht/0001-cmake.patch lib_patch.Upstream
- package/dillo/0001-usr-local-include.patch lib_patch.Upstream
- package/dillo/0002-Fix-openssl-detection.patch lib_patch.Upstream
-diff --git a/package/dhrystone/0001-cmdline-nruns.patch b/package/dhrystone/0001-let-people-specify-the-number-of-runs-on-the-command.patch
-similarity index 66%
-rename from package/dhrystone/0001-cmdline-nruns.patch
-rename to package/dhrystone/0001-let-people-specify-the-number-of-runs-on-the-command.patch
-index 1164610cca..b185826847 100644
---- a/package/dhrystone/0001-cmdline-nruns.patch
-+++ b/package/dhrystone/0001-let-people-specify-the-number-of-runs-on-the-command.patch
-@@ -1,10 +1,19 @@
--let people specify the number of runs on the command line
-+From 16d84fa7ecea8102680c9610d4186c4f54936b07 Mon Sep 17 00:00:00 2001
-+From: Vivi Li <vivi.li@analog.com>
-+Date: Mon, 15 Jul 2024 11:07:11 +0200
-+Subject: [PATCH] let people specify the number of runs on the command line
- 
--Patch by Vivi Li <vivi.li@analog.com>
-+Upstream: dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ dhry_1.c | 25 ++++++++++++++++++-------
-+ 1 file changed, 18 insertions(+), 7 deletions(-)
- 
-+diff --git a/dhry_1.c b/dhry_1.c
-+index 7ab02a8..97bd30f 100644
- --- a/dhry_1.c
- +++ b/dhry_1.c
--@@ -66,7 +70,7 @@
-+@@ -66,7 +66,7 @@ float           Microseconds,
-  /* end of variables for time measurement */
-  
-  
-@@ -13,7 +22,7 @@ Patch by Vivi Li <vivi.li@analog.com>
-  /*****/
-  
-    /* main program, corresponds to procedures        */
--@@ -101,6 +105,13 @@
-+@@ -101,6 +101,13 @@ main ()
-          /* Warning: With 16-Bit processors and Number_Of_Runs > 32000,  */
-          /* overflow may occur for this array element.                   */
-  
-@@ -27,7 +36,7 @@ Patch by Vivi Li <vivi.li@analog.com>
-    printf ("\n");
-    printf ("Dhrystone Benchmark, Version 2.1 (Language: C)\n");
-    printf ("\n");
--@@ -114,13 +125,17 @@
-+@@ -114,13 +121,17 @@ main ()
-      printf ("Program compiled without 'register' attribute\n");
-      printf ("\n");
-    }
-@@ -51,3 +60,6 @@ Patch by Vivi Li <vivi.li@analog.com>
-  
-    printf ("Execution starts, %d runs through Dhrystone\n", Number_Of_Runs);
-  
-+-- 
-+2.45.2
-+
-diff --git a/package/dhrystone/0002-Get-HZ-value-from-system-rather-than-requiring-via-C.patch b/package/dhrystone/0002-Get-HZ-value-from-system-rather-than-requiring-via-C.patch
+diff --git a/package/dhrystone/0006-Add-missing-function-declarations.patch b/package/dhrystone/0006-Add-missing-function-declarations.patch
 new file mode 100644
-index 0000000000..064a1a9524
+index 0000000000..0518340e3f
 --- /dev/null
-+++ b/package/dhrystone/0002-Get-HZ-value-from-system-rather-than-requiring-via-C.patch
-@@ -0,0 +1,29 @@
-+From 7d890402dc5a32a72d5bc0532c87576937c18eb7 Mon Sep 17 00:00:00 2001
-+From: Robin Getz <rgetz@blackfin.uclinux.org>
-+Date: Mon, 15 Jul 2024 11:07:54 +0200
-+Subject: [PATCH] Get HZ value from system rather than requiring via CPPFLAGS
++++ b/package/dhrystone/0006-Add-missing-function-declarations.patch
+@@ -0,0 +1,152 @@
++From fd7ce4b6a9e268e60071c94852f7f00f6e60ef11 Mon Sep 17 00:00:00 2001
++From: Steffen Persvold <spersvold@gmail.com>
++Date: Mon, 15 Jul 2024 11:16:36 +0200
++Subject: [PATCH] Add missing function declarations
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++GCC14 will give errors for missing function declarations and
++missing return types :
++
++dhry_1.c:75:1: error: return type defaults to ‘int’ [-Wimplicit-int]
++   75 | main(int argc, char *argv[])
++      | ^~~~
++dhry_1.c: In function ‘main’:
++dhry_1.c:159:5: error: implicit declaration of function ‘Proc_5’ [-Wimplicit-function-declaration]
++  159 |     Proc_5();
++      |     ^~~~~~
 +
 +Upstream: dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Steffen Persvold <spersvold@gmail.com>
 +---
-+ dhry.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/dhry.h b/dhry.h
-+index 1714562..482d343 100644
-+--- a/dhry.h
-++++ b/dhry.h
-+@@ -359,6 +359,10 @@
-+                 /* for "times" */
-+ #endif
-+ 
-++#ifndef HZ
-++#include <sys/param.h>
-++#endif
-++
-+ #define Mic_secs_Per_Second     1000000.0
-+                 /* Berkeley UNIX C returns process times in seconds/HZ */
-+ 
-+-- 
-+2.45.2
-+
-diff --git a/package/dhrystone/0002-HZ.patch b/package/dhrystone/0002-HZ.patch
-deleted file mode 100644
-index e3b8a0e05d..0000000000
---- a/package/dhrystone/0002-HZ.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Get HZ value from system rather than requiring via CPPFLAGS
--
--Patch by Robin Getz <rgetz@blackfin.uclinux.org>
--
----- a/dhry.h
--+++ b/dhry.h
--@@ -359,6 +359,10 @@
--                 /* for "times" */
-- #endif
-- 
--+#ifndef HZ
--+#include <sys/param.h>
--+#endif
--+
-- #define Mic_secs_Per_Second     1000000.0
--                 /* Berkeley UNIX C returns process times in seconds/HZ */
-- 
-diff --git a/package/dhrystone/0003-exit.patch b/package/dhrystone/0003-exit.patch
-deleted file mode 100644
-index 8d99f4e5d7..0000000000
---- a/package/dhrystone/0003-exit.patch
-+++ /dev/null
-@@ -1,14 +0,0 @@
--trust the exit status of the program
--
--Patch by Robin Getz <rgetz@blackfin.uclinux.org>
--
----- a/dhry_1.c
--+++ b/dhry_1.c
--@@ -274,6 +289,7 @@
--     printf ("\n");
--   }
--   
--+  exit(0);
-- }
-- 
-- 
-diff --git a/package/dhrystone/0003-trust-the-exit-status-of-the-program.patch b/package/dhrystone/0003-trust-the-exit-status-of-the-program.patch
-new file mode 100644
-index 0000000000..b7bc2b306c
---- /dev/null
-+++ b/package/dhrystone/0003-trust-the-exit-status-of-the-program.patch
-@@ -0,0 +1,26 @@
-+From acd266448386c805c0afded780a5d7e6903bb485 Mon Sep 17 00:00:00 2001
-+From: Robin Getz <rgetz@blackfin.uclinux.org>
-+Date: Mon, 15 Jul 2024 11:08:43 +0200
-+Subject: [PATCH] trust the exit status of the program
-+
-+Upstream: dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ dhry_1.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ dhry_1.c | 26 +++++++++++++++++---------
++ dhry_2.c |  8 ++++----
++ 2 files changed, 21 insertions(+), 13 deletions(-)
 +
 +diff --git a/dhry_1.c b/dhry_1.c
-+index 97bd30f..358bdc3 100644
++index 3ed1716..cad5840 100644
 +--- a/dhry_1.c
 ++++ b/dhry_1.c
-+@@ -285,6 +285,7 @@ main(int argc, char *argv[])
-+     printf ("\n");
-+   }
-+   
-++  exit(0);
++@@ -32,6 +32,7 @@ int             Arr_2_Glob [50] [50];
++ extern char     *malloc ();
++ #endif
++ Enumeration     Func_1 ();
+++Boolean         Func_2 ();
++   /* forward declaration necessary since Enumeration may not simply be int */
++ 
++ #ifndef REG
++@@ -71,8 +72,17 @@ float           Microseconds,
++ 
++ /* end of variables for time measurement */
++ 
++-
++-main(int argc, char *argv[])
+++/* forward declarations */
+++void Proc_1 ();
+++void Proc_2 ();
+++void Proc_3 ();
+++void Proc_4 ();
+++void Proc_5 ();
+++void Proc_6 ();
+++void Proc_7 ();
+++void Proc_8 ();
+++
+++int main(int argc, char *argv[])
++ /*****/
++ 
++   /* main program, corresponds to procedures        */
++@@ -295,7 +305,7 @@ main(int argc, char *argv[])
 + }
 + 
 + 
-+-- 
-+2.45.2
-+
-diff --git a/package/dhrystone/0004-get-prototypes-for-malloc-exit-strcpy.patch b/package/dhrystone/0004-get-prototypes-for-malloc-exit-strcpy.patch
-new file mode 100644
-index 0000000000..e925f1e781
---- /dev/null
-+++ b/package/dhrystone/0004-get-prototypes-for-malloc-exit-strcpy.patch
-@@ -0,0 +1,27 @@
-+From 85dcf4ca20a60689479bcb143ecf8c0402822abe Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Mon, 15 Jul 2024 11:09:18 +0200
-+Subject: [PATCH] get prototypes for malloc/exit/strcpy
-+
-+Upstream: dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ dhry.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/dhry.h b/dhry.h
-+index 482d343..825ef35 100644
-+--- a/dhry.h
-++++ b/dhry.h
-+@@ -388,6 +388,8 @@
-+ /* General definitions: */
++-Proc_1 (Ptr_Val_Par)
+++void Proc_1 (Ptr_Val_Par)
++ /******************/
 + 
-+ #include <stdio.h>
-++#include <stdlib.h>
-++#include <string.h>
-+                 /* for strcpy, strcmp */
++ REG Rec_Pointer Ptr_Val_Par;
++@@ -329,7 +339,7 @@ REG Rec_Pointer Ptr_Val_Par;
++ } /* Proc_1 */
 + 
-+ #define Null 0 
++ 
++-Proc_2 (Int_Par_Ref)
+++void Proc_2 (Int_Par_Ref)
++ /******************/
++     /* executed once */
++     /* *Int_Par_Ref == 1, becomes 4 */
++@@ -352,7 +362,7 @@ One_Fifty   *Int_Par_Ref;
++ } /* Proc_2 */
++ 
++ 
++-Proc_3 (Ptr_Ref_Par)
+++void Proc_3 (Ptr_Ref_Par)
++ /******************/
++     /* executed once */
++     /* Ptr_Ref_Par becomes Ptr_Glob */
++@@ -367,7 +377,7 @@ Rec_Pointer *Ptr_Ref_Par;
++ } /* Proc_3 */
++ 
++ 
++-Proc_4 () /* without parameters */
+++void Proc_4 () /* without parameters */
++ /*******/
++     /* executed once */
++ {
++@@ -379,7 +389,7 @@ Proc_4 () /* without parameters */
++ } /* Proc_4 */
++ 
++ 
++-Proc_5 () /* without parameters */
+++void Proc_5 () /* without parameters */
++ /*******/
++     /* executed once */
++ {
++@@ -399,5 +409,3 @@ register int    l;
++         while (l--) *d++ = *s++;
++ }
++ #endif
++-
++-
++diff --git a/dhry_2.c b/dhry_2.c
++index 63a3d3e..25051e7 100644
++--- a/dhry_2.c
+++++ b/dhry_2.c
++@@ -26,8 +26,9 @@
++ extern  int     Int_Glob;
++ extern  char    Ch_1_Glob;
++ 
+++Boolean Func_3 ();
++ 
++-Proc_6 (Enum_Val_Par, Enum_Ref_Par)
+++void Proc_6 (Enum_Val_Par, Enum_Ref_Par)
++ /*********************************/
++     /* executed once */
++     /* Enum_Val_Par == Ident_3, Enum_Ref_Par becomes Ident_2 */
++@@ -61,7 +62,7 @@ Enumeration *Enum_Ref_Par;
++ } /* Proc_6 */
++ 
++ 
++-Proc_7 (Int_1_Par_Val, Int_2_Par_Val, Int_Par_Ref)
+++void Proc_7 (Int_1_Par_Val, Int_2_Par_Val, Int_Par_Ref)
++ /**********************************************/
++     /* executed three times                                      */ 
++     /* first call:      Int_1_Par_Val == 2, Int_2_Par_Val == 3,  */
++@@ -81,7 +82,7 @@ One_Fifty      *Int_Par_Ref;
++ } /* Proc_7 */
++ 
++ 
++-Proc_8 (Arr_1_Par_Ref, Arr_2_Par_Ref, Int_1_Par_Val, Int_2_Par_Val)
+++void Proc_8 (Arr_1_Par_Ref, Arr_2_Par_Ref, Int_1_Par_Val, Int_2_Par_Val)
++ /*********************************************************************/
++     /* executed once      */
++     /* Int_Par_Val_1 == 3 */
++@@ -189,4 +190,3 @@ Enumeration Enum_Par_Val;
++   else /* not executed */
++     return (false);
++ } /* Func_3 */
++-
 +-- 
 +2.45.2
 +
-diff --git a/package/dhrystone/0004-headers.patch b/package/dhrystone/0004-headers.patch
-deleted file mode 100644
-index 82bb60d92d..0000000000
---- a/package/dhrystone/0004-headers.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--get prototypes for malloc/exit/strcpy
--
--Patch by Mike Frysinger <vapier@gentoo.org>
--
----- a/dhry.h
--+++ b/dhry.h
--@@ -388,6 +388,8 @@
-- /* General definitions: */
-- 
-- #include <stdio.h>
--+#include <stdlib.h>
--+#include <string.h>
--                 /* for strcpy, strcmp */
-- 
-- #define Null 0 
-diff --git a/package/dhrystone/0005-prototypes.patch b/package/dhrystone/0005-Avoid-collision-with-C-library-using-NO_PROTOTYPES.patch
-similarity index 59%
-rename from package/dhrystone/0005-prototypes.patch
-rename to package/dhrystone/0005-Avoid-collision-with-C-library-using-NO_PROTOTYPES.patch
-index 7fdcf94ee9..4cffc25a8d 100644
---- a/package/dhrystone/0005-prototypes.patch
-+++ b/package/dhrystone/0005-Avoid-collision-with-C-library-using-NO_PROTOTYPES.patch
-@@ -1,10 +1,19 @@
--Avoid collision with C library using NO_PROTOTYPES found in code already
-+From 9a701143fc38fd9f5373af70dfd5f0da0bc8e04a Mon Sep 17 00:00:00 2001
-+From: Robin Getz <rgetz@blackfin.uclinux.org>
-+Date: Mon, 15 Jul 2024 11:09:55 +0200
-+Subject: [PATCH] Avoid collision with C library using NO_PROTOTYPES
- 
--Patch by Robin Getz <rgetz@blackfin.uclinux.org>
-+Upstream: dead
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ dhry_1.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
- 
-+diff --git a/dhry_1.c b/dhry_1.c
-+index 358bdc3..3ed1716 100644
- --- a/dhry_1.c
- +++ b/dhry_1.c
--@@ -28,7 +28,9 @@
-+@@ -28,7 +28,9 @@ char            Ch_1_Glob,
-  int             Arr_1_Glob [50];
-  int             Arr_2_Glob [50] [50];
-  
-@@ -14,7 +23,7 @@ Patch by Robin Getz <rgetz@blackfin.uclinux.org>
-  Enumeration     Func_1 ();
-    /* forward declaration necessary since Enumeration may not simply be int */
-  
--@@ -45,14 +45,18 @@
-+@@ -45,14 +47,18 @@ Enumeration     Func_1 ();
-  
-  #ifdef TIMES
-  struct tms      time_info;
-@@ -33,3 +42,6 @@ Patch by Robin Getz <rgetz@blackfin.uclinux.org>
-  #define Too_Small_Time 2
-                  /* Measurements should last at least 2 seconds */
-  #endif
-+-- 
-+2.45.2
-+
+
+--===============0903340430322441226==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0903340430322441226==--
