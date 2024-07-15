@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 341AEC3DA45
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 08:23:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF6F7C2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 08:36:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56D9E60712;
-	Mon, 15 Jul 2024 08:23:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31AB26071A;
+	Mon, 15 Jul 2024 08:36:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C94tLMMA6hXc; Mon, 15 Jul 2024 08:23:03 +0000 (UTC)
+ id P6Bd64Mhdl2T; Mon, 15 Jul 2024 08:36:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3239D605E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1B0B607F8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3239D605E8;
-	Mon, 15 Jul 2024 08:23:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E1791BF421
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 08:23:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1B0B607F8;
+	Mon, 15 Jul 2024 08:27:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EECE31BF421
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 08:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2762440448
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 08:23:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBCAF403A7
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 08:27:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bRajLBv7Y8iY for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 08:23:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tbVpymyXiBiz for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 08:27:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5F9B403D3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C5F9B403D3
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 08:23:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA42D869C4; Mon, 15 Jul 2024 08:23:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 15 Jul 2024 10:22:49 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 455637e8010840ee76c6ad8ae36c189606919262
-X-Git-Newrev: 9a66711be1786b90f94cbb1648fa470def3486f8
-X-Patchwork-Hint: ignore
-Message-Id: <20240715082300.BA42D869C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tar: fix linking with libiconv
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EDC5540065
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDC5540065
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EDC5540065
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 08:27:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B8F1E60006;
+ Mon, 15 Jul 2024 08:27:42 +0000 (UTC)
+Date: Mon, 15 Jul 2024 10:27:40 +0200
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Message-ID: <20240715102740.07b6e0be@windsurf>
+In-Reply-To: <20240605111347.1581931-2-fiona.klute@gmx.de>
+References: <20240605111347.1581931-1-fiona.klute@gmx.de>
+ <20240605111347.1581931-2-fiona.klute@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721032063;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=XdZXhN+pdGkoK6UngDE7v4fF1O5z5RYrkkAkr3GRPdI=;
+ b=a6ukoooyYNmsIiSwV6M+WYeOl4IYbVw6DIZw0+j2nTRlQ/8M+N0qiOpYFN49Pf4Z91du06
+ eEma7S7wxPoYCuZS/K9ADLKYQPBRRg3UTxBe2RgiPzM2DunpyW3C5qF4kVgsmhuHUK34BW
+ CptLzurWw1zqsXHOgaz7pIZkathXBCKykPe6z8aGwr7gJlXA/IxXGu8Ffoxl1YYvLqY3FE
+ BJGsn5VDRqzBZY0dEgBk24dz/kYLfSsKgluvuJDWHJufxb6XXVyr5GdUBMAZHLDG/RvpYQ
+ ef/bQdkrJtDQdNjE4iTB+5XUADPjrf9Hlb7vGBCIUtXIDNUcG84RiknmnmgAmw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=a6ukoooy
+Subject: Re: [Buildroot] [PATCH 2/2] package/busybox: Add ifplugd init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,111 +83,113 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Fiona Klute <fiona.klute@gmx.de>, "Alvaro G . M" <alvaro.gamez@hazent.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a66711be1786b90f94cbb1648fa470def3486f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fiona,
 
-Backport two patches from upstream to fix linking with libiconv, e.g.
-with this defconfig:
+On Wed,  5 Jun 2024 13:13:47 +0200
+Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
 
-    BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-    BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-    BR2_SYSTEM_ENABLE_NLS=y
-    BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-    BR2_PACKAGE_LIBICONV=y
-    BR2_PACKAGE_TAR=y
+> The init script will be installed only if no other package provides
+> ifplugd (currently that could be package/ifplugd). Users can configure
+> the interface(s) which ifplugd should watch either using
+> /etc/default/ifplugd (for one interface) or using per-interface
+> symlinks to the script in /etc/init.d (for any number of
+> interfaces). The action script that ifplugd runs when a link change is
+> detected must be supplied separately.
+> 
+> Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
 
-It is interesting to note that the first patch we backport is the first
-commit in the tar repository after the 1.35 tag, and was comitted the
-same day the release was cut...
+I applied your patch, with some changes. See below.
 
-Fixes:
+> ---
+> make check-package complains about "Incorrect PIDFILE value" in the
+> script. To support running multiple instances I need to support
+> multiple (per-interface) PID files. Is there a better way to handle
+> that, or explicitly silence the check?
 
- https://gitlab.com/buildroot.org/buildroot/-/issues/4
- http://autobuild.buildroot.net/results/c074c2e22a7f764400ecc7dd1a6cd6022fa87fb9/
+Silence the check. See below :-)
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tar/0002-Fix-savannah-bug-#64441.patch | 28 ++++++++++++++++++++++++
- package/tar/0003-tests-fix-LDADD.patch         | 30 ++++++++++++++++++++++++++
- 2 files changed, 58 insertions(+)
+> 
+>  package/busybox/S41ifplugd | 84 ++++++++++++++++++++++++++++++++++++++
+>  package/busybox/busybox.mk | 13 ++++++
+>  2 files changed, 97 insertions(+)
+>  create mode 100644 package/busybox/S41ifplugd
+> 
+> diff --git a/package/busybox/S41ifplugd b/package/busybox/S41ifplugd
+> new file mode 100644
+> index 0000000000..4d3b56ab6d
+> --- /dev/null
+> +++ b/package/busybox/S41ifplugd
+> @@ -0,0 +1,84 @@
+> +#!/bin/sh
+> +
+> +DAEMON="ifplugd"
+> +
+> +# Each ifplugd instance handles only one interface, so this script is
+> +# designed to be symlinked per interface. For each interface create a
+> +# symlink with .IFACE appended to the name. E.g. to launch ifplugd for
+> +# eth1 create a symlink from /etc/init.d/S41ifplugd.eth1 to this
+> +# script. DEFAULT_IFACE sets the interface the non-symlink script will
+> +# use, set it to empty in /etc/default/ifplugd to disable the default
+> +# instance and use symlinked instances only.
+> +DEFAULT_IFACE="eth0"
+> +# If your action script is not in the default location
+> +# /etc/ifplugd/ifplugd.action, use the "-r" option to set the
+> +# location.
+> +IFPLUGD_ARGS="-M"
+> +
+> +# shellcheck source=/dev/null
+> +[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+> +
+> +NAME_IFACE="$(basename "$0" | cut -s -d. -f2)"
+> +if [ -n "$NAME_IFACE" ]; then
+> +	IFACE="${NAME_IFACE}"
+> +elif [ -n "$DEFAULT_IFACE" ]; then
+> +	IFACE="${DEFAULT_IFACE}"
+> +else
+> +	# no interface configured
+> +	exit 0
+> +fi
+> +
+> +PIDFILE="/var/run/${DAEMON}.${IFACE}.pid"
 
-diff --git a/package/tar/0002-Fix-savannah-bug-#64441.patch b/package/tar/0002-Fix-savannah-bug-#64441.patch
-new file mode 100644
-index 0000000000..049e08c27b
---- /dev/null
-+++ b/package/tar/0002-Fix-savannah-bug-#64441.patch
-@@ -0,0 +1,28 @@
-+From 8632df398b2f548465ebe68b8f494c0d6f8d913d Mon Sep 17 00:00:00 2001
-+From: Sergey Poznyakoff <gray@gnu.org>
-+Date: Tue, 18 Jul 2023 17:02:23 +0300
-+Subject: Fix savannah bug #64441
-+
-+* src/Makefile.am (tar_LDADD): Add libiconv libraries.
-+
-+[yann.morin.1998@free.fr: backport from upstream]
-+Upstream: https://git.savannah.gnu.org/cgit/tar.git/commit/?id=8632df398b2f548465ebe68b8f494c0d6f8d913d
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ src/Makefile.am | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 36c9543..e2ec58d 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -52,4 +52,5 @@ AM_CFLAGS = $(WARN_CFLAGS) $(WERROR_CFLAGS)
-+ tar_LDADD = $(LIBS) ../lib/libtar.a ../gnu/libgnu.a\
-+  $(LIB_ACL) $(LIB_CLOCK_GETTIME) $(LIB_EACCESS)\
-+  $(LIB_GETRANDOM) $(LIB_HARD_LOCALE) $(FILE_HAS_ACL_LIB) $(LIB_MBRTOWC)\
-+- $(LIB_SELINUX) $(LIB_SETLOCALE_NULL)
-++ $(LIB_SELINUX) $(LIB_SETLOCALE_NULL) \
-++ $(LIBINTL) $(LIBICONV)
-+-- 
-+cgit v1.1
-+
-diff --git a/package/tar/0003-tests-fix-LDADD.patch b/package/tar/0003-tests-fix-LDADD.patch
-new file mode 100644
-index 0000000000..c00f14d2c1
---- /dev/null
-+++ b/package/tar/0003-tests-fix-LDADD.patch
-@@ -0,0 +1,30 @@
-+From 71530f72d21d9af00b5688948111666f62f5ec4b Mon Sep 17 00:00:00 2001
-+From: Paul Eggert <eggert@cs.ucla.edu>
-+Date: Wed, 19 Jul 2023 15:48:25 -0700
-+Subject: tests: fix LDADD
-+
-+Problem reported by Christian Weisgerber <naddy@mips.inka.de> in:
-+https://lists.gnu.org/r/bug-tar/2023-07/msg00015.html
-+* tests/Makefile.am (LDADD): Add $(LIBINTL), $(LIBICONV).
-+
-+[yann.morin.1998@free.fr: backport from upstream]
-+Upstream: https://git.savannah.gnu.org/cgit/tar.git/commit/?id=71530f72d21d9af00b5688948111666f62f5ec4b
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ tests/Makefile.am | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/tests/Makefile.am b/tests/Makefile.am
-+index 1884b72..b696f01 100644
-+--- a/tests/Makefile.am
-++++ b/tests/Makefile.am
-+@@ -337,4 +337,5 @@ AM_CPPFLAGS = \
-+ LDADD = ../gnu/libgnu.a\
-+  $(LIB_ACL) $(LIB_CLOCK_GETTIME) $(LIB_EACCESS)\
-+  $(LIB_GETRANDOM) $(LIB_HARD_LOCALE) $(FILE_HAS_ACL_LIB) $(LIB_MBRTOWC)\
-+- $(LIB_SELINUX) $(LIB_SETLOCALE_NULL)
-++ $(LIB_SELINUX) $(LIB_SETLOCALE_NULL) \
-++ $(LIBINTL) $(LIBICONV)
-+-- 
-+cgit v1.1
-+
+I've added:
+
++# check-package disable Variables
+
+above this line to ignore the PIDFILE warning.
+
+> +# BusyBox' ifplugd does not create a pidfile, so pass "-n" in the
+> +# command line and use "-m" to instruct start-stop-daemon to create
+> +# one.
+> +start() {
+> +	printf 'Starting %s for %s: ' "$DAEMON" "$IFACE"
+> +	# shellcheck disable=SC2086 # we need the word splitting
+> +	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+> +		-- -n $IFPLUGD_ARGS
+
+And I fixed the script to use the long options.
+
+> +	while true; do
+> +		pid="$( cat "${PIDFILE}" 2>/dev/null || true )"
+> +		{ [ -n "${pid}" ] && [ -d "/proc/${pid}" ]; } || break
+> +		sleep 0.1
+> +	done
+
+And the start-stop-daemon loop.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
