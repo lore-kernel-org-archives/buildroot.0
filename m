@@ -4,99 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC5EC2BD09
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 07:46:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDCAC2BD09
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 07:57:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3266D811AA;
-	Mon, 15 Jul 2024 07:46:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACB2880FDD;
+	Mon, 15 Jul 2024 07:57:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M8GfiaQTY9Uq; Mon, 15 Jul 2024 07:46:10 +0000 (UTC)
+ id hngF9DdZsuii; Mon, 15 Jul 2024 07:57:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2F6A81198
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0025810AF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2F6A81198;
-	Mon, 15 Jul 2024 07:46:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 854C11BF2B9
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 07:44:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0025810AF;
+	Mon, 15 Jul 2024 07:57:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AA821BF2B9
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 07:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F0B1403B5
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 07:44:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9340404FF
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 07:57:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MRUdmpdm6drg for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 07:44:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 17CBE403A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17CBE403A1
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
- [IPv6:2a00:1450:4864:20::131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 17CBE403A1
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 07:44:55 +0000 (UTC)
-Received: by mail-lf1-x131.google.com with SMTP id
- 2adb3069b0e04-52e99060b0dso4198011e87.1
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 00:44:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721029494; x=1721634294;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=KJb6R1SrGR/UihZeacGZRoPxyXCg7X8meIeFrXkJ0iA=;
- b=iHS/LPYTUG53BXT+lvXpwxQXBe01Dnzc1GEFMN+JfzfL5+tzUXBebCKiu/g74ipCtH
- 8emWYYu24TVcn8VWURZmSxstzq9VpAoB4GcDvchF7LSJM3wM9CvMKsUmvrgmhynr/aIB
- 7UV3x4UrgIEbviPHyt2051kdHCXmwedicODia0ZzHLqcThzT2lDCaND5n2k/eORXT1Xh
- ezOhpjU3+8PR5TatuTWO344KSacEbhdMJVg05DgM2xTReSWYhHxVkLAraHXWrVDla8w9
- UTB3oM4tplnvbkLlnQsh5fxf3SdmUocadBjauBP86d0fFPNZkXXefjP82LDNuHz4RZxs
- zT5g==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWgVzwLeF8fRbxYkXGRHh5TKJjY0p+q3RF53pVZvayytsQaZeilJcK4yPS0fBEX8FmR9X+FJkza1fYU/LhK68Q+oVT3VPhzmA==
-X-Gm-Message-State: AOJu0Yz2pyTCMa0DmHSphjceg7KfdTy58rsZyhGq/Ibe0+hj0YUXtJlS
- AyzCx8IDPM967JDzgziQsXhoZlC1ZTp/19jlgfEAE5AN7a3qV5Rvab89jmoK4tOoVYUJ+U5KWyv
- 1h+U=
-X-Google-Smtp-Source: AGHT+IHqmKVE/04FFUy/j/ixEJ8yG3MsAeW1ywIgb8P7guEdjDyV7XHg0NyRy8tatR+w4mG70RKm4w==
-X-Received: by 2002:a05:6512:3d0e:b0:52e:d0f8:2d30 with SMTP id
- 2adb3069b0e04-52ed0f82f30mr5055402e87.59.1721029493913; 
- Mon, 15 Jul 2024 00:44:53 -0700 (PDT)
-Received: from [10.3.160.38]
- (laubervilliers-656-1-158-76.w82-127.abo.wanadoo.fr. [82.127.106.76])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427a5e7751asm75899585e9.3.2024.07.15.00.44.53
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 15 Jul 2024 00:44:53 -0700 (PDT)
-Message-ID: <9f6c7813-9f45-4f6d-842e-a8149e189b36@mind.be>
-Date: Mon, 15 Jul 2024 00:12:35 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g0cphNgqW9bq for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 07:57:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4BB97403A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BB97403A7
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BB97403A7
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 07:57:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1CF0740004;
+ Mon, 15 Jul 2024 07:57:47 +0000 (UTC)
+Date: Mon, 15 Jul 2024 09:57:45 +0200
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Message-ID: <20240715095745.2b194a9b@windsurf>
+In-Reply-To: <20240605111347.1581931-1-fiona.klute@gmx.de>
+References: <20240605111347.1581931-1-fiona.klute@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- buildroot@buildroot.org
-References: <20240704-svtree-v1-1-8fbd93dcfbb9@gmx.net>
-Content-Language: en-GB
-In-Reply-To: <20240704-svtree-v1-1-8fbd93dcfbb9@gmx.net>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1721029494; x=1721634294; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=KJb6R1SrGR/UihZeacGZRoPxyXCg7X8meIeFrXkJ0iA=;
- b=B7FvX4br83J60Y6/lQMYDrZmV45Mq2cDh9n01aoD8PioqJ/1p2XWVbBdBYzOV9howx
- OOFVXzh0xKIKHIc23zITW0zVTEBEEkj/AR/xX/MpP4Z/pSm7Fc9ySJDaR+V5rt7UwmRI
- 6HlKwOv+FmkFl/Bru2DMDteAqvbSzk0QLkItuLM7OIawben2Uy07OfHdmUPisuzeUvyF
- 1V721/vgDavt7BFHAmhQdyO6N4KBX+bTSAhFDP9KRHGssnkhnTjGjDbrFIHY3pfb/ywK
- wjSai0xmFwKJigVEYDvCJW5k64mBq5H5vGvlIWF7inbR/5ZOjuOInUe4LRKAZ+lcIe1f
- km+Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=B7FvX4br
-Subject: Re: [Buildroot] [PATCH] system: Add option to maintain a
- supervision tree
+ d=bootlin.com; s=gm1; t=1721030267;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=QACJiBrH2tKpI6EJLUi9/H3dAlxAuf9NwBIsv14xzKk=;
+ b=pzE9FP4rNEtgqIfbbzwJ90MGgT1du/FpY8QQ7gjhbCLJdzvfinnfo9IaCfPj/g0oC9FpEY
+ c30innRQkw2QMBsx0RollToKZ6rFvUnb2lFitGw3bnlk6WBETek9DTBTJLhoE+Vxfi5jtq
+ 6TP/uPhM/CaownczpPv6UZ9wIsy5+8k50bVUwvXquSCgZ+4/Z8ICY6CZCG7XBFldJby+We
+ Wi2U9FrP+7wB8T5hJssLtffRrszuMZzjBWIS5NGwL/esedbhQifTQDnHX2Z2Uv0N2bTNYj
+ Ujoayg6eTJRo7j1vmEsDUSfYo2Tz5TBsaxa25yGpkEY1j+jJPjIxDaSTe4nqTQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=pzE9FP4r
+Subject: Re: [Buildroot] [PATCH 1/2] package/busybox: Add crond init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,123 +80,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fiona Klute <fiona.klute@gmx.de>, "Alvaro G . M" <alvaro.gamez@hazent.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAwNC8wNy8yMDI0IDIxOjAwLCBKLiBOZXVzY2jDpGZlciB2aWEgYnVpbGRyb290IHdyb3Rl
-Ogo+IE9uZSBvZiB0aGUgbWFqb3IgZHJhd2JhY2tzIG9mIGNsYXNzaWMgaW5pdC9yYyBzeXN0ZW1z
-IGlzIHRoYXQgZGVhZAo+IGRhZW1vbnMgcmVtYWluIGRlYWQ6IE9uY2Ugc3RhcnRlZCBieSB0aGUg
-cmMgc2NyaXB0cywgdGhleSBhcmUgbGVmdCB0bwo+IGxvb2sgYWZ0ZXIgdGhlbXNlbHZlcy4KPiAK
-PiBBIHNpbXBsZSBhcHByb2FjaCB0byBrZWVwIHRoZW0gcnVubmluZyByZWxpYWJseSBpcyB0byBz
-dXBlcnZpc2UgdGhlbToKPiBJbiBhIHRyZWUgd2l0aCBQSUQgMSBhdCBpdHMgcm9vdCwgZXZlcnkg
-cHJvY2VzcyBrbm93cyB3aGljaCBjaGlsZHJlbgo+IG91Z2h0IHRvIHJ1biB1bmRlciBpdCwgYW5k
-IGl0IHJlc3Bhd25zIHRoZW0gYWNjb3JkaW5nbHkuIFRoaXMgaXMgdGhlCj4gc3VwZXJ2aXNpb24g
-dHJlZS4KPiAKPiBDbGFzc2ljIGluaXQgYWxyZWFkeSBwcm92aWRlcyBydWRpbWVudGFyeSBzdXBl
-cnZpc2lvbiBpbiB0aGUgZm9ybSBvZgo+IGluaXR0YWIuIFRoaXMgcGF0Y2ggdXNlcyBpbml0dGFi
-IHRvIGVzdGFibGlzaCBhIG1vcmUgZmxleGlibGUKPiBzdXBlcnZpc2lvbiB0cmVlIGJhc2VkIG9u
-IHJ1bml0J3MgcnZzdmRpciBvciBzNidzIHM2LXN2c2Nhbi4KPiAKPiBCUjJfVEFSR0VUX1NVUEVS
-VklTSU9OX1RSRUUgY291bGQgYmUgZXh0ZW5kZWQgdG8gb3RoZXIgaW5pdCBzeXN0ZW1zCj4gKHN5
-c3RlbWQgYW5kIE9wZW5SQykgYXMgd2VsbCwgYnV0IEkgaGF2ZW4ndCBkb25lIGl0IGJlY2F1c2Ug
-Ym90aCBvZgo+IHRoZW0gaGF2ZSB0aGVpciBvd24gc3VwZXJ2aXNpb24gZmVhdHVyZXMuCj4gCj4g
-U2lnbmVkLW9mZi1ieTogSi4gTmV1c2Now6RmZXIgPGoubmV1c2NoYWVmZXJAZ214Lm5ldD4KCiAg
-QXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gLS0tCj4g
-ICBwYWNrYWdlL2J1c3lib3gvYnVzeWJveC5tayAgIHwgMTYgKysrKysrKysrKysrKysrKwo+ICAg
-cGFja2FnZS9idXN5Ym94L2luaXR0YWIgICAgICB8ICAzICsrKwo+ICAgcGFja2FnZS9zeXN2aW5p
-dC9pbml0dGFiICAgICB8ICAzICsrKwo+ICAgcGFja2FnZS9zeXN2aW5pdC9zeXN2aW5pdC5tayB8
-ICA4ICsrKysrKysrCj4gICBzeXN0ZW0vQ29uZmlnLmluICAgICAgICAgICAgIHwgMzMgKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrCj4gICA1IGZpbGVzIGNoYW5nZWQsIDYzIGluc2Vy
-dGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9idXN5Ym94L2J1c3lib3gubWsgYi9w
-YWNrYWdlL2J1c3lib3gvYnVzeWJveC5tawo+IGluZGV4IGViNWU3YWQ5MjIuLjMxMjMxYmZjOTIg
-MTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9idXN5Ym94L2J1c3lib3gubWsKPiArKysgYi9wYWNrYWdl
-L2J1c3lib3gvYnVzeWJveC5tawo+IEBAIC0yMjksNiArMjI5LDEzIEBAIGRlZmluZSBCVVNZQk9Y
-X1NFVF9JTklUCj4gICAJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfSU5JVCkKPiAg
-IGVuZGVmCj4gCj4gK2lmZXEgKCQoQlIyX1RBUkdFVF9TVVBFUlZJU0lPTl9UUkVFX1JVTklUKSx5
-KQo+ICtkZWZpbmUgQlVTWUJPWF9TRVRfUlVOSVQKPiArCSQoY2FsbCBLQ09ORklHX0VOQUJMRV9P
-UFQsQ09ORklHX1JVTlNWRElSKQo+ICsJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdf
-UlVOU1YpCj4gK2VuZGVmCj4gK2VuZGlmCj4gKwo+ICAgaWZlcSAoJChCUjJfVEFSR0VUX0dFTkVS
-SUNfR0VUVFkpLHkpCj4gICBkZWZpbmUgQlVTWUJPWF9TRVRfR0VUVFkKPiAgIAkkKFNFRCkgJy8j
-IEdFTkVSSUNfU0VSSUFMJCQvc35eLiojfiQoU1lTVEVNX0dFVFRZX1BPUlQpOjpyZXNwYXduOi9z
-YmluL2dldHR5IC1MICQoU1lTVEVNX0dFVFRZX09QVElPTlMpICQoU1lTVEVNX0dFVFRZX1BPUlQp
-ICQoU1lTVEVNX0dFVFRZX0JBVURSQVRFKSAkKFNZU1RFTV9HRVRUWV9URVJNKSAjficgXAo+IEBA
-IC0yNDEsNiArMjQ4LDE0IEBAIGVuZGVmCj4gICBlbmRpZiAjIEJSMl9UQVJHRVRfR0VORVJJQ19H
-RVRUWQo+ICAgQlVTWUJPWF9UQVJHRVRfRklOQUxJWkVfSE9PS1MgKz0gQlVTWUJPWF9TRVRfR0VU
-VFkKPiAKPiAraWZlcSAoJChCUjJfVEFSR0VUX1NVUEVSVklTSU9OX1RSRUUpLHkpCj4gK2RlZmlu
-ZSBCVVNZQk9YX1NFVF9TVVBFUlZJU09SCj4gKwkkKFNFRCkgJy8jIFNVUEVSVklTSU9OX1RSRUUk
-JC9zfl4uKiN+OjpyZXNwYXduOiQoY2FsbCBxc3RyaXAsJChCUjJfVEFSR0VUX1NVUEVSVklTSU9O
-X1RSRUVfQ09NTUFORCkpICN+JyAkKFRBUkdFVF9ESVIpL2V0Yy9pbml0dGFiCj4gKwlta2RpciAt
-cCAkKFRBUkdFVF9ESVIpL3Zhci9zZXJ2aWNlCj4gK2VuZGVmCj4gK0JVU1lCT1hfVEFSR0VUX0ZJ
-TkFMSVpFX0hPT0tTICs9IEJVU1lCT1hfU0VUX1NVUEVSVklTT1IKPiArZW5kaWYKPiArCj4gICBC
-VVNZQk9YX1RBUkdFVF9GSU5BTElaRV9IT09LUyArPSBTWVNURU1fUkVNT1VOVF9ST09UX0lOSVRU
-QUIKPiAKPiAgIGVuZGlmICMgQlIyX0lOSVRfQlVTWUJPWAo+IEBAIC0zODAsNiArMzk1LDcgQEAg
-ZGVmaW5lIEJVU1lCT1hfS0NPTkZJR19GSVhVUF9DTURTCj4gICAJJChCVVNZQk9YX1NFVF9DUllQ
-VF9TSEEpCj4gICAJJChCVVNZQk9YX0xJTlVYX1BBTSkKPiAgIAkkKEJVU1lCT1hfU0VUX0lOSVQp
-Cj4gKwkkKEJVU1lCT1hfU0VUX1JVTklUKQo+ICAgCSQoQlVTWUJPWF9TRVRfV0FUQ0hET0cpCj4g
-ICAJJChCVVNZQk9YX1NFVF9TRUxJTlVYKQo+ICAgCSQoQlVTWUJPWF9TRVRfTEVTU19GTEFHUykK
-PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9idXN5Ym94L2luaXR0YWIgYi9wYWNrYWdlL2J1c3lib3gv
-aW5pdHRhYgo+IGluZGV4IGYyYjRkZjgwMWIuLjhiZWQyOTQwMTkgMTAwNjQ0Cj4gLS0tIGEvcGFj
-a2FnZS9idXN5Ym94L2luaXR0YWIKPiArKysgYi9wYWNrYWdlL2J1c3lib3gvaW5pdHRhYgo+IEBA
-IC0zMSw2ICszMSw5IEBAIG51bGw6OnN5c2luaXQ6L2Jpbi9sbiAtc2YgL3Byb2Mvc2VsZi9mZC8y
-IC9kZXYvc3RkZXJyCj4gICAjIFB1dCBhIGdldHR5IG9uIHRoZSBzZXJpYWwgcG9ydAo+ICAgI3R0
-eVMwOjpyZXNwYXduOi9zYmluL2dldHR5IC1MIHR0eVMwIDExNTIwMCB2dDEwMCAjIEdFTkVSSUNf
-U0VSSUFMCj4gCj4gKyMgTWFpbnRhaW4gYSBzdXBlcnZpc2lvbiB0cmVlCj4gKyM6OnJlc3Bhd246
-L2Jpbi9ydW5zdmRpciAvdmFyL3NlcnZpY2UgIyBTVVBFUlZJU0lPTl9UUkVFCj4gKwo+ICAgIyBT
-dHVmZiB0byBkbyBmb3IgdGhlIDMtZmluZ2VyIHNhbHV0ZQo+ICAgIzo6Y3RybGFsdGRlbDovc2Jp
-bi9yZWJvb3QKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zeXN2aW5pdC9pbml0dGFiIGIvcGFj
-a2FnZS9zeXN2aW5pdC9pbml0dGFiCj4gaW5kZXggYWZjMjhlNmMwMy4uZTcwNjg0ZmFkZSAxMDA2
-NDQKPiAtLS0gYS9wYWNrYWdlL3N5c3Zpbml0L2luaXR0YWIKPiArKysgYi9wYWNrYWdlL3N5c3Zp
-bml0L2luaXR0YWIKPiBAQCAtMTksNiArMTksOSBAQCByY1M6MTIzNDU6d2FpdDovZXRjL2luaXQu
-ZC9yY1MKPiAKPiAgICMgUzA6MTpyZXNwYXduOi9zYmluL2dldHR5IC1MIHR0eVMwIDExNTIwMCB2
-dDEwMCAjIEdFTkVSSUNfU0VSSUFMCj4gCj4gKyMgTWFpbnRhaW4gYSBzdXBlcnZpc2lvbiB0cmVl
-Cj4gKyNzdjo6cmVzcGF3bjovYmluL3J1bnN2ZGlyIC92YXIvc2VydmljZSAjIFNVUEVSVklTSU9O
-X1RSRUUKPiArCj4gICAjIFN0dWZmIHRvIGRvIGZvciB0aGUgMy1maW5nZXIgc2FsdXRlCj4gICAj
-Y2E6OmN0cmxhbHRkZWw6L3NiaW4vcmVib290Cj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc3lz
-dmluaXQvc3lzdmluaXQubWsgYi9wYWNrYWdlL3N5c3Zpbml0L3N5c3Zpbml0Lm1rCj4gaW5kZXgg
-N2YzN2NlYTEzMS4uMTY1MDlkZDYyMiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3N5c3Zpbml0L3N5
-c3Zpbml0Lm1rCj4gKysrIGIvcGFja2FnZS9zeXN2aW5pdC9zeXN2aW5pdC5tawo+IEBAIC00OSw2
-ICs0OSwxNCBAQCBlbmRlZgo+ICAgZW5kaWYgIyBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFkKPiAg
-IFNZU1ZJTklUX1RBUkdFVF9GSU5BTElaRV9IT09LUyArPSBTWVNWSU5JVF9TRVRfR0VUVFkKPiAK
-PiAraWZlcSAoJChCUjJfVEFSR0VUX1NVUEVSVklTSU9OX1RSRUUpLHkpCj4gK2RlZmluZSBTWVNW
-SU5JVF9TRVRfU1VQRVJWSVNPUgo+ICsJJChTRUQpICcvIyBTVVBFUlZJU0lPTl9UUkVFJCQvc35e
-LiojfnN2OjpyZXNwYXduOiQoY2FsbCBxc3RyaXAsJChCUjJfVEFSR0VUX1NVUEVSVklTSU9OX1RS
-RUVfQ09NTUFORCkpICN+JyAkKFRBUkdFVF9ESVIpL2V0Yy9pbml0dGFiCj4gKwlta2RpciAtcCAk
-KFRBUkdFVF9ESVIpL3Zhci9zZXJ2aWNlCj4gK2VuZGVmCj4gK1NZU1ZJTklUX1RBUkdFVF9GSU5B
-TElaRV9IT09LUyArPSBTWVNWSU5JVF9TRVRfU1VQRVJWSVNPUgo+ICtlbmRpZgo+ICsKPiAgIFNZ
-U1ZJTklUX1RBUkdFVF9GSU5BTElaRV9IT09LUyArPSBTWVNURU1fUkVNT1VOVF9ST09UX0lOSVRU
-QUIKPiAKPiAgICQoZXZhbCAkKGdlbmVyaWMtcGFja2FnZSkpCj4gZGlmZiAtLWdpdCBhL3N5c3Rl
-bS9Db25maWcuaW4gYi9zeXN0ZW0vQ29uZmlnLmluCj4gaW5kZXggM2ZiMTdlZDFjNi4uYmI4OGYy
-NzZlYyAxMDA2NDQKPiAtLS0gYS9zeXN0ZW0vQ29uZmlnLmluCj4gKysrIGIvc3lzdGVtL0NvbmZp
-Zy5pbgo+IEBAIC00NjAsNiArNDYwLDM5IEBAIGNvbmZpZyBCUjJfVEFSR0VUX0dFTkVSSUNfR0VU
-VFlfT1BUSU9OUwo+ICAgCSAgUmVmZXIgdG8gZ2V0dHkgLS1oZWxwIGZvciBkZXRhaWxzLgo+ICAg
-ZW5kaWYKPiAKPiArbWVudWNvbmZpZyBCUjJfVEFSR0VUX1NVUEVSVklTSU9OX1RSRUUKPiArCWJv
-b2wgIk1haW50YWluIGEgcHJvY2VzcyBzdXBlcnZpc2lvbiB0cmVlIGF0IC92YXIvc2VydmljZSIK
-PiArCWRlcGVuZHMgb24gQlIyX0lOSVRfQlVTWUJPWCB8fCBCUjJfSU5JVF9TWVNWCj4gKwo+ICtp
-ZiBCUjJfVEFSR0VUX1NVUEVSVklTSU9OX1RSRUUKPiArY2hvaWNlCj4gKwlwcm9tcHQgIlN1cGVy
-dmlzb3IiCj4gKwo+ICtjb25maWcgQlIyX1RBUkdFVF9TVVBFUlZJU0lPTl9UUkVFX1JVTklUCj4g
-Kwlib29sICJydW5zdmRpciIKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfQlVTWUJPWAo+ICsJ
-aGVscAo+ICsJICBVc2UgcnVuc3ZkaXIgKHByb3ZpZGVkIGJ5IHRoZSBCdXN5Qm94IHBhY2thZ2Up
-IHRvIHJ1biB0aGUKPiArCSAgc3VwZXJ2aXNpb24gdHJlZS4KPiArCj4gK2NvbmZpZyBCUjJfVEFS
-R0VUX1NVUEVSVklTSU9OX1RSRUVfUzYKPiArCWJvb2wgInM2LXN2c2NhbiIKPiArCWRlcGVuZHMg
-b24gQlIyX1VTRV9NTVUgIyBzNgo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1M2Cj4gKwloZWxwCj4g
-KwkgIFVzZSBzNi1zdnNjYW4gKHByb3ZpZGVkIGJ5IHM2KSB0byBydW4gdGhlIHN1cGVydmlzaW9u
-IHRyZWUuCj4gKwo+ICtlbmRjaG9pY2UKPiArCj4gK2NvbmZpZyBCUjJfVEFSR0VUX1NVUEVSVklT
-SU9OX1RSRUVfQ09NTUFORAo+ICsJc3RyaW5nCj4gKwlkZWZhdWx0ICIvdXNyL2Jpbi9ydW5zdmRp
-ciAvdmFyL3NlcnZpY2UiIGlmIEJSMl9UQVJHRVRfU1VQRVJWSVNJT05fVFJFRV9SVU5JVAo+ICsJ
-ZGVmYXVsdCAiL2Jpbi9zNi1zdnNjYW4gL3Zhci9zZXJ2aWNlIiBpZiBCUjJfVEFSR0VUX1NVUEVS
-VklTSU9OX1RSRUVfUzYKPiArZW5kaWYKPiArCj4gK2NvbW1lbnQgInByb2Nlc3Mgc3VwZXJ2aXNp
-b24gdHJlZSBuZWVkcyBzeXN2IG9yIGJ1c3lib3ggaW5pdCIKPiArCWRlcGVuZHMgb24gIUJSMl9J
-TklUX0JVU1lCT1ggJiYgIUJSMl9JTklUX1NZU1YKPiArCj4gICBjb25maWcgQlIyX1RBUkdFVF9H
-RU5FUklDX1JFTU9VTlRfUk9PVEZTX1JXCj4gICAJYm9vbCAicmVtb3VudCByb290IGZpbGVzeXN0
-ZW0gcmVhZC13cml0ZSBkdXJpbmcgYm9vdCIKPiAgIAlkZWZhdWx0IHkKPiAKPiAtLS0KPiBiYXNl
-LWNvbW1pdDogM2ViYzdjNjlkNTY0MzBjMzRlYmE0Yzg2OWQxZDRmZTRkMWU4ZGU1NQo+IGNoYW5n
-ZS1pZDogMjAyNDA1MzEtc3Z0cmVlLTE5MjUxMDc3MTljZQo+IAo+IEJlc3QgcmVnYXJkcywKPiAt
-LQo+IEouIE5ldXNjaMOkZmVyIDxqLm5ldXNjaGFlZmVyQGdteC5uZXQ+Cj4gCj4gX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGlu
-ZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+Hello Fiona,
+
+On Wed,  5 Jun 2024 13:13:46 +0200
+Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
+
+> The init script will be installed only if no other package provides
+> cron (currently that could be package/dcron). Users will need to
+> select a suitable location for their crontabs, using either runtime
+> configuration in /etc/default/crond or Busybox build
+> configuration. Note that crond fails to start if the crontabs
+> directory doesn't exist.
+> 
+> Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
+
+Thanks, I applied your patch after making a few changes.
+
+> +# Note that the Busybox default location for crontabs
+> +# /var/spool/cron/crontabs is on a tmpfs in the default Buildroot
+> +# filesystem layout. If you want persistent crontabs, override that
+> +# either using either the "-c" runtime option of crond in CROND_ARGS,
+> +# or the CONFIG_FEATURE_CROND_DIR Busybox build configuration option.
+
+After discussion with Arnout, we decided that our default of
+/var/spool/cron didn't make sense. Indeed the crontab generally needs
+to be persistent, so having it in a tmpfs as the out-of-the-box
+experience didn't seem very appropriate. So we changed the default
+Busybox configuration to set CONFIG_FEATURE_CROND_DIR="/etc/cron". So
+of course, I dropped your comment above.
+
+> +	printf 'Starting %s: ' "$DAEMON"
+> +	# shellcheck disable=SC2086 # we need the word splitting
+> +	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+
+Adjusted to use long options.
+
+> +		-- -f $CROND_ARGS
+> +	status=$?
+> +	if [ "$status" -eq 0 ]; then
+> +		echo "OK"
+> +	else
+> +		echo "FAIL"
+> +	fi
+> +	return "$status"
+> +}
+> +
+> +stop() {
+> +	printf 'Stopping %s: ' "$DAEMON"
+> +	start-stop-daemon -K -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON"
+
+Ditto.
+
+> +	status=$?
+> +	# wait for process to be gone
+> +	while true; do
+> +		pid="$( cat "${PIDFILE}" 2>/dev/null || true )"
+> +		{ [ -n "${pid}" ] && [ -d "/proc/${pid}" ]; } || break
+> +		sleep 0.1
+> +	done
+
+And adjusted to use the loop of start-stop-daemon.
+
+
+> +# Only install our crond script if no other package does it.
+> +ifeq ($(BR2_PACKAGE_DCRON),)
+> +define BUSYBOX_INSTALL_CROND_SCRIPT
+> +	if grep -q CONFIG_CROND=y $(@D)/.config; \
+> +	then \
+
+And here we create $(TARGET_DIR)/etc/cron/crontabs/ to make sure it
+exists, otherwise crond doesn't start.
+
+> +		$(INSTALL) -m 0755 -D package/busybox/S50crond \
+> +			$(TARGET_DIR)/etc/init.d/S50crond; \
+> +	fi;
+> +endef
+> +endif
+
+Thanks for this work!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
