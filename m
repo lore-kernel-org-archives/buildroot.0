@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10616C3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 10:14:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13328C3DA5E
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 10:14:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66C2C405A2;
-	Mon, 15 Jul 2024 10:14:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD21C40551;
+	Mon, 15 Jul 2024 10:14:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vrl9Qy8PotW3; Mon, 15 Jul 2024 10:14:37 +0000 (UTC)
+ id lwyMn7hnhJvs; Mon, 15 Jul 2024 10:14:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 784B9403AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 363B8405B7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 784B9403AA;
-	Mon, 15 Jul 2024 10:14:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1DE591BF3FF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 363B8405B7;
+	Mon, 15 Jul 2024 10:14:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 267001BF969
  for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:14:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17A2540327
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:14:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CACF180D45
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:14:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XPyzHMB1XMpo for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hTJirGkvIZOh for <buildroot@lists.busybox.net>;
  Mon, 15 Jul 2024 10:14:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81C1B4039B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC20080D58
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 81C1B4039B
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC20080D58
  for <buildroot@buildroot.org>; Mon, 15 Jul 2024 10:14:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6CED186B29; Mon, 15 Jul 2024 10:14:23 +0000 (UTC)
+ id C725786C44; Mon, 15 Jul 2024 10:14:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 15 Jul 2024 12:13:44 +0200
+Date: Mon, 15 Jul 2024 12:13:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 34857f644b594b1c6f9abc1c24d3045446afd46c
-X-Git-Newrev: b5cdce85e8dc27f192634556556ac56dadea3433
+X-Git-Oldrev: 638babd596141e74572c57f0b7ff65d4665a58de
+X-Git-Newrev: ca7cedaa8cab0a0ac0fc48c2f40c4e6a84fb6877
 X-Patchwork-Hint: ignore
-Message-Id: <20240715101423.6CED186B29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5webengine-chromium: fix
- another Python 3.x issue
+Message-Id: <20240715101423.C725786C44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5webengine: use bundled icu
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,199 +65,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5cdce85e8dc27f192634556556ac56dadea3433
+commit: https://git.buildroot.net/buildroot/commit/?id=ca7cedaa8cab0a0ac0fc48c2f40c4e6a84fb6877
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport an upstream Chromium patch that fixes:
+With the "-webengine-icu" config option qt5webengine uses icu headers
+on the build host. Unfortunately, the build fails with:
 
-FAILED: gen/services/metrics/public/cpp/ukm_builders.cc gen/services/metrics/public/cpp/ukm_builders.h gen/services/metrics/public/cpp/ukm_decode.cc gen/services/metrics/public/cpp/ukm_decode.h
-/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/host-bin/python ../../3rdparty/chromium/tools/metrics/ukm/gen_builders.py --input ../../3rdparty/chromium/tools/metrics/ukm/ukm.xml --output gen/services/metrics/public/cpp
-/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/3rdparty/chromium/tools/metrics/ukm/../common/models.py:247: SyntaxWarning: invalid escape sequence '\w'
-  """A complex node type that has attributes or other nodes as children.
-Traceback (most recent call last):
-  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/core/release/../../3rdparty/chromium/tools/metrics/ukm/gen_builders.py", line 59, in <module>
-    sys.exit(main(sys.argv))
-             ^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/core/release/../../3rdparty/chromium/tools/metrics/ukm/gen_builders.py", line 27, in main
-    data = ReadFilteredData(args.input)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/core/release/../../3rdparty/chromium/tools/metrics/ukm/gen_builders.py", line 48, in ReadFilteredData
-    data = ukm_model.UKM_XML_TYPE.Parse(ukm_file.read())
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/3rdparty/chromium/tools/metrics/ukm/../common/models.py", line 439, in Parse
-    return self._ParseMinidom(input_file)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/3rdparty/chromium/tools/metrics/ukm/../common/models.py", line 418, in _ParseMinidom
-    return self.root_type.Unmarshall(root)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/3rdparty/chromium/tools/metrics/ukm/../common/models.py", line 324, in Unmarshall
-    child.node_type.Unmarshall(n) for n in nodes]
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/3rdparty/chromium/tools/metrics/ukm/../common/models.py", line 302, in Unmarshall
-    if not re.match(attr_re, attr_val):
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/host/lib/python3.12/re/__init__.py", line 167, in match
-    return _compile(pattern, flags).match(string)
-           ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/host/lib/python3.12/re/__init__.py", line 307, in _compile
-    p = _compiler.compile(pattern, flags)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/host/lib/python3.12/re/_compiler.py", line 745, in compile
-    p = _parser.parse(p, flags)
-        ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/host/lib/python3.12/re/_parser.py", line 979, in parse
-    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/host/lib/python3.12/re/_parser.py", line 460, in _parse_sub
-    itemsappend(_parse(source, state, verbose, nested + 1,
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/thomas/buildroot/buildroot/output/host/lib/python3.12/re/_parser.py", line 840, in _parse
-    raise source.error('global flags not at the start '
-re.error: global flags not at the start of the expression at position 1
+/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/host-bin/python "../../3rdparty/chromium/build/toolchain/gcc_link_wrapper.py" --output="v8_snapshot/gen-regexp-special-case" -- /usr/bin/g++ -pie -Wl,--fatal-warnings -Wl,--build-id=sha1 -fPIC -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -Wl,-z,defs -Wl,--as-needed -m32 -pie -Wl,--disable-new-dtags -Wl,-O2 -Wl,--gc-sections -L/usr/lib -o "v8_snapshot/gen-regexp-special-case" -Wl,--start-group @"v8_snapshot/gen-regexp-special-case.rsp"  -Wl,--end-group  -ldl -lpthread -lrt -licui18n -licuuc -licudata
+/usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicui18n.so when searching for -licui18n
+/usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicui18n.a when searching for -licui18n
+/usr/bin/ld: cannot find -licui18n
+/usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.so when searching for -licuuc
+/usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicuuc.a when searching for -licuuc
+/usr/bin/ld: cannot find -licuuc
+/usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicudata.so when searching for -licudata
+/usr/bin/ld: skipping incompatible /usr/lib/x86_64-linux-gnu/libicudata.a when searching for -licudata
+/usr/bin/ld: cannot find -licudata
+/usr/bin/ld: skipping incompatible /usr/lib/libgcc_s.so.1 when searching for libgcc_s.so.1
+collect2: error: ld returned 1 exit status
 
+So use the bundled icu instead, as it needs an icu with a bitness
+matching the bitness of the target, and other complexities.
+
+Signed-off-by: Kadir Yilmaz <kadir.c.yilmaz@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0004-Migrate-presubmit-to-python3.patch        | 132 +++++++++++++++++++++
- 1 file changed, 132 insertions(+)
+ package/qt5/qt5webengine/qt5webengine.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/qt5/qt5webengine-chromium/0004-Migrate-presubmit-to-python3.patch b/package/qt5/qt5webengine-chromium/0004-Migrate-presubmit-to-python3.patch
-new file mode 100644
-index 0000000000..9314e30c5c
---- /dev/null
-+++ b/package/qt5/qt5webengine-chromium/0004-Migrate-presubmit-to-python3.patch
-@@ -0,0 +1,132 @@
-+From 71d96b9be632b5231b28277d9e72f6a6c5308e24 Mon Sep 17 00:00:00 2001
-+From: Dan Harrington <harringtond@chromium.org>
-+Date: Fri, 4 Jun 2021 16:46:25 +0000
-+Subject: [PATCH] Migrate presubmit to python3
-+
-+Fixed a couple warnings I found when running the unit
-+tests in python3.
-+
-+Bug: 1212110
-+Change-Id: I3d1b5859b5c517ad5eea30cb816fad0389715f73
-+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/2934203
-+Reviewed-by: Jesse Doherty <jwd@chromium.org>
-+Commit-Queue: Dan H <harringtond@chromium.org>
-+Cr-Commit-Position: refs/heads/master@{#889331}
-+Upstream: https://github.com/chromium/chromium/commit/f90f49df8db04dcb72f7ce0c4d0b2fe329bab00c
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ chromium/tools/metrics/ukm/PRESUBMIT.py       |  2 +
-+ .../tools/metrics/ukm/gen_builders_test.py    |  4 +-
-+ chromium/tools/metrics/ukm/ukm_model.py       | 56 +++++++++++--------
-+ 3 files changed, 37 insertions(+), 25 deletions(-)
-+
-+diff --git a/chromium/tools/metrics/ukm/PRESUBMIT.py b/chromium/tools/metrics/ukm/PRESUBMIT.py
-+index 28fab1cffb7..99b13be681b 100644
-+--- a/chromium/tools/metrics/ukm/PRESUBMIT.py
-++++ b/chromium/tools/metrics/ukm/PRESUBMIT.py
-+@@ -8,6 +8,8 @@ See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts
-+ for more details on the presubmit API built into gcl.
-+ """
-+ 
-++USE_PYTHON3 = True
-++
-+ UKM_XML = 'ukm.xml'
-+ 
-+ 
-+diff --git a/chromium/tools/metrics/ukm/gen_builders_test.py b/chromium/tools/metrics/ukm/gen_builders_test.py
-+index 1ca15e52c9a..0015320a524 100755
-+--- a/chromium/tools/metrics/ukm/gen_builders_test.py
-++++ b/chromium/tools/metrics/ukm/gen_builders_test.py
-+@@ -25,8 +25,8 @@ class GenBuildersTest(unittest.TestCase):
-+ 
-+   def testGenerateCode(self):
-+     relpath = '.'
-+-    data = ukm_model.UKM_XML_TYPE.Parse(
-+-        open('../../tools/metrics/ukm/ukm.xml').read())
-++    with open('../../tools/metrics/ukm/ukm.xml') as f:
-++      data = ukm_model.UKM_XML_TYPE.Parse(f.read())
-+     event = data[ukm_model._EVENT_TYPE.tag][0]
-+     metric = event[ukm_model._METRIC_TYPE.tag][0]
-+     self.assertIsNotNone(event)
-+diff --git a/chromium/tools/metrics/ukm/ukm_model.py b/chromium/tools/metrics/ukm/ukm_model.py
-+index ec24dd57360..b36899db189 100644
-+--- a/chromium/tools/metrics/ukm/ukm_model.py
-++++ b/chromium/tools/metrics/ukm/ukm_model.py
-+@@ -39,15 +39,16 @@ _INDEX_TYPE = models.ObjectNodeType(
-+     ],
-+     single_line=True)
-+ 
-+-_STATISTICS_TYPE =  models.ObjectNodeType(
-++_STATISTICS_TYPE = models.ObjectNodeType(
-+     'statistics',
-+     attributes=[
-+-      ('export', str, r'^(?i)(|true|false)$'),
-++        ('export', str, r'(?i)^(|true|false)$'),
-+     ],
-+     children=[
-+         models.ChildType(_QUANTILES_TYPE.tag, _QUANTILES_TYPE, multiple=False),
-+-        models.ChildType(
-+-            _ENUMERATION_TYPE.tag, _ENUMERATION_TYPE, multiple=False),
-++        models.ChildType(_ENUMERATION_TYPE.tag,
-++                         _ENUMERATION_TYPE,
-++                         multiple=False),
-+     ])
-+ 
-+ _HISTORY_TYPE =  models.ObjectNodeType(
-+@@ -90,25 +91,34 @@ _METRIC_TYPE =  models.ObjectNodeType(
-+             _AGGREGATION_TYPE.tag, _AGGREGATION_TYPE, multiple=True),
-+     ])
-+ 
-+-_EVENT_TYPE =  models.ObjectNodeType(
-+-    'event',
-+-    attributes=[
-+-      ('name', str, r'^[A-Za-z0-9.]+$'),
-+-      ('singular', str, r'^(?i)(|true|false)$'),
-+-    ],
-+-    alphabetization=[
-+-        (_OBSOLETE_TYPE.tag, _KEEP_ORDER),
-+-        (_OWNER_TYPE.tag, _KEEP_ORDER),
-+-        (_SUMMARY_TYPE.tag, _KEEP_ORDER),
-+-        (_METRIC_TYPE.tag, _LOWERCASE_FN('name')),
-+-    ],
-+-    extra_newlines=(1, 1, 1),
-+-    children=[
-+-        models.ChildType(_OBSOLETE_TYPE.tag, _OBSOLETE_TYPE, multiple=False),
-+-        models.ChildType(_OWNER_TYPE.tag, _OWNER_TYPE, multiple=True),
-+-        models.ChildType(_SUMMARY_TYPE.tag, _SUMMARY_TYPE, multiple=False),
-+-        models.ChildType(_METRIC_TYPE.tag, _METRIC_TYPE, multiple=True),
-+-    ])
-++_EVENT_TYPE = models.ObjectNodeType('event',
-++                                    attributes=[
-++                                        ('name', str, r'^[A-Za-z0-9.]+$'),
-++                                        ('singular', str,
-++                                         r'(?i)^(|true|false)$'),
-++                                    ],
-++                                    alphabetization=[
-++                                        (_OBSOLETE_TYPE.tag, _KEEP_ORDER),
-++                                        (_OWNER_TYPE.tag, _KEEP_ORDER),
-++                                        (_SUMMARY_TYPE.tag, _KEEP_ORDER),
-++                                        (_METRIC_TYPE.tag,
-++                                         _LOWERCASE_FN('name')),
-++                                    ],
-++                                    extra_newlines=(1, 1, 1),
-++                                    children=[
-++                                        models.ChildType(_OBSOLETE_TYPE.tag,
-++                                                         _OBSOLETE_TYPE,
-++                                                         multiple=False),
-++                                        models.ChildType(_OWNER_TYPE.tag,
-++                                                         _OWNER_TYPE,
-++                                                         multiple=True),
-++                                        models.ChildType(_SUMMARY_TYPE.tag,
-++                                                         _SUMMARY_TYPE,
-++                                                         multiple=False),
-++                                        models.ChildType(_METRIC_TYPE.tag,
-++                                                         _METRIC_TYPE,
-++                                                         multiple=True),
-++                                    ])
-+ 
-+ _UKM_CONFIGURATION_TYPE = models.ObjectNodeType(
-+     'ukm-configuration',
-+-- 
-+2.25.1
-+
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 836ba62189..56f951fdbe 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -61,7 +61,6 @@ QT5WEBENGINE_DEPENDENCIES += \
+ 	host-freetype \
+ 	host-gperf \
+ 	host-harfbuzz \
+-	host-icu \
+ 	host-ninja \
+ 	host-nodejs \
+ 	host-pkgconf \
+@@ -87,7 +86,6 @@ QT5WEBENGINE_DEPENDENCIES += \
+ QT5WEBENGINE_CONF_OPTS += \
+ 	-webengine-embedded-build \
+ 	-webengine-ffmpeg \
+-	-webengine-icu \
+ 	-webengine-opus \
+ 	-webengine-webchannel \
+ 	-webengine-webp \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
