@@ -4,115 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CE50C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 15:22:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BBABC3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 16:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD00440597;
-	Mon, 15 Jul 2024 15:22:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B728403D6;
+	Mon, 15 Jul 2024 16:10:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K38uQadqIhbE; Mon, 15 Jul 2024 15:22:53 +0000 (UTC)
+ id edqC6PEkZ0Cq; Mon, 15 Jul 2024 16:10:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF30240647
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A548403D1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF30240647;
-	Mon, 15 Jul 2024 15:22:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 99DA41BF3B5
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 15:22:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A548403D1;
+	Mon, 15 Jul 2024 16:10:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B4951BF401
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 16:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9288240647
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 15:22:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69CAB60690
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 16:10:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8ntEdnDpiYo5 for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 15:22:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
- helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4zOR6t5E5Iga for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 16:10:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.53.144.211;
+ helo=mail.selirafood.com; envelope-from=foss@athaariq.my.id;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2117640597
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2117640597
-Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
- [67.231.144.184])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2117640597
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 15:22:49 +0000 (UTC)
-Received: from pps.filterd (m0346907.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 46FDjGkC013120; Mon, 15 Jul 2024 15:22:47 GMT
-Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40bh64es60-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 15 Jul 2024 15:22:47 +0000
-Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
- by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46FFMieb010392
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 15 Jul 2024 15:22:45 GMT
-Received: from ciulimr01.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 46FFMhVN015009
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Mon, 15 Jul 2024 15:22:44 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id CFEFA3000445;
- Mon, 15 Jul 2024 10:22:43 -0500 (CDT)
-Mime-Version: 1.0
-Date: Mon, 15 Jul 2024 15:22:43 +0000
-Message-Id: <D2Q7RY7OPU0I.2KCWEGO4SYQX5@collins.com>
-To: "Arnout Vandecappelle" <arnout@mind.be>, "Kory Maincent"
- <kory.maincent@bootlin.com>, <buildroot@buildroot.org>
-X-Mailer: aerc 0.17.0-0-g6ea74eb30457
-References: <20240710152941.334195-1-kory.maincent@bootlin.com>
- <d9fcfe9b-7b11-42ee-9773-b9620d720135@mind.be>
-In-Reply-To: <d9fcfe9b-7b11-42ee-9773-b9620d720135@mind.be>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-15_09,2024-07-11_01,2024-05-17_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-15_09,2024-07-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
- spamscore=0 adultscore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
- definitions=main-2407150121
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- adultscore=0 bulkscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
- definitions=main-2407150121
-X-Proofpoint-GUID: LYWgnZlOi_1SvPYiXDJrltvAznlmm_Cx
-X-Proofpoint-ORIG-GUID: LYWgnZlOi_1SvPYiXDJrltvAznlmm_Cx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-15_09,2024-07-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0
- suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
- mlxscore=0 clxscore=1011 priorityscore=1501 malwarescore=0 impostorscore=0
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2406180000 definitions=main-2407150121
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=POD051818;
- bh=6nbXWu7V4W9lqxl5zE7aihFYveV3PNCh6ZGoCJCSbCk=;
- b=LP2wxG0rojqP42yw5EFd9oFTjsyROlwUzIGU6ZjVA0PnPqaq9+0FWZlNk9kz659w+kCC
- gy5YL+1aXeKBiO+Ks74r4jotAkkyQ7cz7S8nyTfQNSukTXU8R/tnZfmrv5QxMflAzpgI
- 4ndKUJO7yfmc0elGq0FdAoAdv74tl13/B54039tqgpf3QdyozV9eMtI6w+WwzROMPiHZ
- gq9xMuxg4t7cYEvYSwhNKMQgHrLfNhT1KNEajJkefiSOLqxOVuhBW5sOujMZ1RgrqzVX
- vOX0dyUSU9GocesGQaDkb/oHUB4kBy+VQSWtqTusQGwgpuRdOqGtu2A9CxwXQCnK1XRv jg== 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 27EC1605C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27EC1605C1
+Received: from mail.selirafood.com (mail.selirafood.com [117.53.144.211])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 27EC1605C1
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 16:10:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.selirafood.com (Postfix) with ESMTP id 78F7226634;
+ Mon, 15 Jul 2024 23:09:56 +0700 (WIB)
+Received: from localhost.localdomain (unknown [192.168.100.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+ (No client certificate requested)
+ by mail.selirafood.com (Postfix) with ESMTPSA id 89131511FD;
+ Mon, 15 Jul 2024 23:09:55 +0700 (WIB)
+From: Athaariq Ardhiansyah <foss@athaariq.my.id>
+To: buildroot@buildroot.org
+Date: Mon, 15 Jul 2024 23:09:36 +0700
+Message-ID: <20240715160941.90353-1-foss@athaariq.my.id>
+X-Mailer: git-send-email 2.45.2
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=athaariq.my.id; 
+ h=content-transfer-encoding:mime-version:x-mailer:message-id
+ :date:date:subject:subject:from:from:received; s=dkim20240121;
+ t=1721059796; x=1722269397; bh=TrsL3QuTbjc6k4Rd/WiUqRHvyKvep/Uo
+ 4G6NWjgahg0=; b=cIBsw7G6c5hk33EMCgXNSu8t6k1kzmaTAFj2E4bxSL8hACXZ
+ wi6mpzkanTW3DGNqkZEkhfpu7r1WCcbF8m31EQSE170Y57HScAEN0zlxBcWRlRTF
+ cIkYlc8HqoGqNU14ommpAopse8SA0R7zUi6n5d9NjlcUtJ7b45eLhavDRFOO2Ppv
+ vFOio2ep1vYLxOU9HQvBJy0IfeBWYPzjJWNBVuZoubH/v4+gD/QJQOXqfKp4NkvH
+ i7Mi4x76Fk6ZIQk/7gPgTSwZnhw/vDHB5KnNO6ONN/m1zR8ODJPYf3ajqP6JkP0u
+ 0PYEk08j819erCWZm3nNG3yNTHcJwjuLTl9Y2g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=athaariq.my.id
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
- header.s=POD051818 header.b=LP2wxG0r
-Subject: Re: [Buildroot] [PATCH] linux: Add support for vendor directory in
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ unprotected) header.d=athaariq.my.id header.i=@athaariq.my.id
+ header.a=rsa-sha256 header.s=dkim20240121 header.b=cIBsw7G6
+X-Mailman-Original-Authentication-Results: mail.selirafood.com (amavisd-new); 
+ dkim=pass (2048-bit key)
+ reason="pass (just generated, assumed good)"
+ header.d=athaariq.my.id
+Subject: [Buildroot] [PATCH v5 1/3] package/rpi-firmware: bump version to
+ 1.20240529
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -124,158 +87,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: thomas.petazzoni@bootlin.com
+Cc: Athaariq Ardhiansyah <foss@athaariq.my.id>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Martin Bark <martin@barkynet.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Arnout, Kory,
+DTB Firmware support for Raspberry Pi 5 since 1.20240306 and several
+critical bug fixes including Wi-Fi breakage on BCM2712 chip.
 
-On Mon Jul 15, 2024 at 2:07 PM UTC, Arnout Vandecappelle via buildroot wrote:
->
->
-> On 10/07/2024 17:29, Kory Maincent via buildroot wrote:
-> > Linux organizes devicetree files under vendor subdirectories for arm and
-> > arm64 architectures, such as arch/<arch>/boot/dts/<vendor>/. The
-> > BR2_LINUX_KERNEL_CUSTOM_DTS_PATH was only copying devicetree files to
-> > arch/<arch>/boot/dts/, which is incompatible with the vendor
-> > subdirectory structure.
->
->   I don't see what the problem is though? If a DT is put in
-> arch/<arch>/boot/dts, it can still be built with the current Buildroot.
->
->   The only thing you need to do is to make sure to do
->
-> #include "vendor/cpu.dtsi"
->
-> instead of
->
-> #include "cpu.dtsi"
->
->   The in-tree DTSes don't have the vendor/ part in the include, of course, but
-> for custom DTSes you can do what you want, right?
+Signed-off-by: Athaariq Ardhiansyah <foss@athaariq.my.id>
 
-This does work, I do this for Xilinx devicetrees which go into a
-'xilinx' vendor directory.
+---
+Changes v1 -> v2:
+  - Fix missing description due to terminal issue
 
->
->   I'm going to mark it as Rejected for now, but feel free to resubmit if there
-> is a good reason to have this feature.
+Changes v2 -> v4:
+  - Change back from commit ID to commit tag
 
-This does solve one problem for me. I compile the same devicetree into
-Linux and U-Boot. But Linux migrated the Xilinx devicetrees into a
-'xilinx/' vendor directory. But U-Boot has not made the same migration
-as their Makefiles don't support dts sub-directories. So the #include
-path is the only thing different between the Linux and U-Boot
-devicetrees.
+Changes v4 -> v5:
+  - Reword commit description due to ambiguous 'latest' word
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I work around it for now by patching a symlink into U-Boot
-'arch/arm/dts/xilinx -> ./'.
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 4501db739c..5dc6efd8b3 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  00fe5487376e9d5ed14cbc72a9b7a5bd8d6900c84aee10f6d656f192a26d161c  rpi-firmware-5476720d52cf579dc1627715262b30ba1242525e.tar.gz
++sha256  48d0b1b041bf77dc81d7ed04c423a7f4ce0afd0e3fbea26462309e738b89a552  rpi-firmware-1.20240529.tar.gz
+ sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 7ae9ff6c28..81066f0fc0 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 5476720d52cf579dc1627715262b30ba1242525e
++RPI_FIRMWARE_VERSION = 1.20240529
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-- 
+2.45.2
 
-Though ideally U-Boot would be updated to use the same devicetree layout
-as Linux.
-
-Thanks,
-Brandon
-
->
->
-> > This patch adds support for using a directory in
-> > BR2_LINUX_KERNEL_CUSTOM_DTS_PATH that matches the vendor subdirectory name.
-> >
-> > Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-> > ---
-> >   linux/Config.in |  4 +++-
-> >   linux/linux.mk  | 14 +++++++++++---
-> >   2 files changed, 14 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/linux/Config.in b/linux/Config.in
-> > index 34057a4893..6ca615cae3 100644
-> > --- a/linux/Config.in
-> > +++ b/linux/Config.in
-> > @@ -423,7 +423,9 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
-> >   	  Paths to out-of-tree Device Tree Source (.dts) and Device Tree
-> >   	  Source Include (.dtsi) files, separated by spaces. These files
-> >   	  will be copied to the kernel sources and the .dts files will
-> > -	  be compiled from there.
-> > +	  be compiled from there. You can also use a directory which
-> > +	  name match the vendor name as in
-> > +	  arch/<arch>/boot/dts/<vendor>/
->
->   I think the explanation could be better:
->
-> 	  Starting from Linux 6.5, the device trees are put in a <vendor>
-> 	  subdirectory. To emulate this, you can put custom device trees
-> 	  in a directory with that same <vendor> name, and specify the
-> 	  path to that directory here instead of to individual dts files.
->
->   I feel this is pretty complicated for a user to understand though...
->
-> >
-> >   config BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME
-> >   	bool "Keep the directory name of the Device Tree"
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index 16d9f19470..07d4ddf7f3 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -198,7 +198,15 @@ LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
-> >   # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
-> >   # copied to arch/<arch>/boot/dts, but only the .dts files will
-> >   # actually be generated as .dtb.
-> > -LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
-> > +# In case we are copying a vendor dts subdirectory as in
-> > +# arch/<arch>/boot/dts/<vendor>/ we have to append the wildcard to the
-> > +# folder to list the devicetree.
-> > +LINUX_KERNEL_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH))
-> > +ifneq ($(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/.*),)
->
->   You don't actually need the * here.
->
->   Also, better use positive logic (ifeq instead of ifneq, and swap the branches).
->
-> > +LINUX_DTS_NAME += $(addprefix $(notdir $(LINUX_KERNEL_CUSTOM_DTS_PATH))/,$(basename $(filter %.dts,$(notdir $(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/*)))))
-> > +else
-> > +LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)))))
->
->   This is also getting pretty complicated, could it be refactored so there are a
-> bit more common parts? Something like:
->
-> ifeq ($(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/.),)
-> LINUX_CUSTOM_DTS_FILES = $(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/*))
-> LINUX_CUSTOM_DTS_PREFIX = $(notdir $(LINUX_KERNEL_CUSTOM_DTS_PATH))/
-> else
-> LINUX_CUSTOM_DTS_FILES = $(LINUX_KERNEL_CUSTOM_DTS_PATH)
-> endif
-> LINUX_DTS_NAME += $(addprefix $(LINUX_CUSTOM_DTS_PREFIX),$(basename $(filter
-> %.dts,$(LINUX_CUSTOM_DTS_FILES))))
->
-> (parenthesis added in an email editor so probably unbalanced :-)
->
->   Regards,
->   Arnout
->
-> > +endif
-> >
-> >   LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME))
-> >
-> > @@ -505,8 +513,8 @@ endif
-> >   #   http://lists.busybox.net/pipermail/buildroot/2020-May/282727.html
-> >   define LINUX_BUILD_CMDS
-> >   	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
-> > -	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
-> > -		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
-> > +	$(foreach dts,$(LINUX_KERNEL_CUSTOM_DTS_PATH), \
-> > +		cp -rf $(dts) $(LINUX_ARCH_PATH)/boot/dts/
-> >   	)
-> >   	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
-> >   	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
