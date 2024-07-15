@@ -4,72 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96519C3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 13:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2393CC3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5368F81240;
-	Mon, 15 Jul 2024 13:53:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1599810BE;
+	Mon, 15 Jul 2024 14:01:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ThnqjeazNDrh; Mon, 15 Jul 2024 13:53:14 +0000 (UTC)
+ id 07UUs3zprVMN; Mon, 15 Jul 2024 14:01:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40E9D8114C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0055810DC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40E9D8114C;
-	Mon, 15 Jul 2024 13:53:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0055810DC;
+	Mon, 15 Jul 2024 14:01:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D0A311BF3BE
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 13:53:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9326E1BF3BE
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B088E60873
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 13:53:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 804E060806
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:01:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JZQeNCtCHEd6 for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 13:53:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
+ id XsTeuPhujv4e for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 14:01:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1C00B60831
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C00B60831
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1C00B60831
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 13:53:09 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D2D6620007;
- Mon, 15 Jul 2024 13:53:06 +0000 (UTC)
-Date: Mon, 15 Jul 2024 15:51:33 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2BEAE6076C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BEAE6076C
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2BEAE6076C
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:01:03 +0000 (UTC)
+Received: from pps.filterd (m0346910.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 46FDfGAj019503; Mon, 15 Jul 2024 14:01:03 GMT
+Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40bj9rdc7p-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 15 Jul 2024 14:01:02 +0000
+Received: from xusxph009rp020.corp.ray.com ([128.13.125.224])
+ by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46FE105w002455
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 15 Jul 2024 14:01:01 GMT
+Received: from ciulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph009rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 46FE10ix018925
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Mon, 15 Jul 2024 14:01:00 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id 432B83000424;
+ Mon, 15 Jul 2024 09:01:00 -0500 (CDT)
+Date: Mon, 15 Jul 2024 14:00:52 +0000
 MIME-Version: 1.0
-Message-Id: <20240715-uboot-default-env-v2-1-8a585679ba0a@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAGQplWYC/32NQQ6CMBBFr0Jm7RjaIBRX3sOwKGUqk2BLWmg0h
- LtbOIDL9/P/+xtECkwR7sUGgRJH9i6DvBRgRu1ehDxkBlnKqqxFg2vv/YIDWb1OC5JLWNW1Ujc
- pbK8J8m4OZPlzOp9d5pHj4sP3vEjiSP/ZkkCBrTZK2ZJEo9rHUZnYXY1/Q7fv+w8YvVQxtAAAA
- A==
+Message-Id: <20240715-support-testing-s6-networking-fix-v1-1-f6fe7d3fcf51@collins.com>
+X-B4-Tracking: v=1; b=H4sIAJMrlWYC/x3NSw7CMAyE4atUXmOpSSkGroK6QDAUCymJ7PCQq
+ t6dwPL7FzMLOUzhdOwWMrzUNaeGsOnocj+nGazXZop93PYSRvZnKdkqV3jVNLPvOKG+sz1+uum
+ H4x4yyhAOAqG2Uwwt/z9O07p+AXGGtExzAAAA
 To: buildroot@buildroot.org
 X-Mailer: b4 0.14.0
-X-GND-Sasl: luca.ceresoli@bootlin.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-15_08,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-15_08,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ spamscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407150110
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ bulkscore=0
+ suspectscore=0 phishscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2406180000 definitions=main-2407150110
+X-Proofpoint-ORIG-GUID: NWy8JGiRo9by9I_IDfNshbJJ2ryryAiy
+X-Proofpoint-GUID: NWy8JGiRo9by9I_IDfNshbJJ2ryryAiy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-15_08,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ suspectscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 clxscore=1011
+ bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501
+ mlxlogscore=999 malwarescore=0 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407150111
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721051587;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=3+QT9kFqQtfkWIcyMtOjRmG49HJxQJCVI4nNLngrqsI=;
- b=F0SemKLD51fCnisfgH+/a6IWs6BERmB1QIZhp9kwtkXyA/8lrVgM8vLJorngsTiMaSRVGw
- vFidbxNcjH4HEhKkgdTpmeYq+c3EVvPmzKR98QiYEMwzuJD35l31CAtsXejdfHeM6zI77z
- 5CDE3XTjqMWlSaBiGrlrf1LnNhEwpu6WETh9jAbcJzu+hz/h0jtd4n66fWaxcNLwpYtxJe
- 8oKNGXUoC/9jO2is/5kmFt/XrxFd0P1NbVzpoC1b6hTsWSnYnWDi0e7NeSXwD4uSZ1Oy+x
- UV1cvde74SgmddHBNbsqkodih2X2qn6WnlDJi/mnH2fI7znujuDvx761F/02yA==
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : message-id :
+ mime-version : subject : to; s=POD051818;
+ bh=1Ie85Juj81beZzc1aj/p6qWFm5MrbaNqr57i9aeyDdM=;
+ b=ldTyLe8B4RQ3lxhTmme4HsQ1Sz7n86UjVfAjkM2U7CuNzXfUbdGmfsS21lzBkXBU8H2S
+ QOPbJqB5+hY/J7ZYCbOdX+E/9EJWVgZdXNOqtlnSmy1GVPUpIcR1oq9dx/+SFNCj61iR
+ F3FufDy39/YPxee5mwD7ytXERaFBiuDPFQYUlCc56HC2I8q/G+SFDn9Ac84t8+bXmN6a
+ ybTyWoZKYBJTJROULfhSN9wfRy4ZTcg5A/NL4SEIM1FHs0FAh6mxSMKCnR1JJnxYUFtd
+ CU+/nnBIELDv04XKzX6sZ4B/Yd2b5gvMuXTp/5B5CZu2IxlqU7S0WndKTYf65vsv9jXg QQ== 
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ header.from=collins.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=F0SemKLD
-Subject: [Buildroot] [PATCH v2] uboot: allow taking the entire default
- environment from a text file
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=ldTyLe8B
+Subject: [Buildroot] [PATCH] support/testing: fix
+ package/test_s6_networking.py
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,81 +124,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: =?utf-8?q?K=C3=B6ry_Maincent?= <kory.maincent@bootlin.com>,
- Heiko Thiery <heiko.thiery@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Brandon Maier <brandon.maier@collins.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QnkgZGVmYXVsdCBVLUJvb3QgYnVpbGRzIGEgZGVmYXVsdCBlbnZpcm9ubWVudCBmcm9tIGl0cyBv
-d24gY29uZmlndXJhdGlvbgphbmQgYSBib2FyZC1zcGVjaWZpYyBzZXQgb2YgdmFyaWFibGVzLiBI
-b3dldmVyIGl0IGFsc28gYWxsb3dzIHRvIGJ5cGFzcwp0aGlzIGVudGlyZWx5IGFuZCBkZWZpbmUg
-dGhlIGVudGlyZSBkZWZhdWx0IGVudmlyb25tZW50IGZyb20gYSB0ZXh0IGZpbGUuCgpFeHBvc2Ug
-dGhpcyBmZWF0dXJlIHRvIEJ1aWxkcm9vdC4gVGhpcyBhbGxvd3MgdG8gaGF2ZSBhIGZpbGUgZS5n
-LiBpbgpib2FyZC8uLi4vdWJvb3QuZW52IHdoaWNoIGNvbnRhaW5zIGFuIGVhc3kgdG8gbWFpbnRh
-aW4gdGV4dCBmaWxlIHdpdGggdGhlCndhbnRlZCBkZWZhdWx0IGVudmlyb25tZW50LCB3aXRob3V0
-IHBhdGNoaW5nIHRoZSBVLUJvb3Qgc291cmNlIGNvZGUuCgpTaWduZWQtb2ZmLWJ5OiBMdWNhIENl
-cmVzb2xpIDxsdWNhLmNlcmVzb2xpQGJvb3RsaW4uY29tPgotLS0KQ2hhbmdlcyBpbiB2MjoKLSBV
-c2Ugb25seSBvbmUgc3RyaW5nIHZhcmlhYmxlIChlbXB0eSA9IGRpc2FibGVkKSBhbmQgbWVyZ2Ug
-aGVscCB0ZXh0cyAoQXJub3V0KQotIFdyYXAgaGVscCBsaW5lcyBhdCA2MiBjaGFycyAoS8O2cnkp
-Ci0gTGluayB0byB2MTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDI0MDYxNy11Ym9vdC1k
-ZWZhdWx0LWVudi12MS0xLTlhYzg4ZjBlMTc4OUBib290bGluLmNvbQotLS0KCkNoYW5nZWQgaW4g
-djI6CiAtIFVzZSBvbmx5IG9uZSBzdHJpbmcgdmFyaWFibGUgKGVtcHR5ID0gZGlzYWJsZWQpIGFu
-ZCBtZXJnZSBoZWxwIHRleHRzIChBcm5vdXQpCiAtIFdyYXAgaGVscCBsaW5lcyBhdCA2MiBjaGFy
-cyAoS8O2cnkpCi0tLQogYm9vdC91Ym9vdC9Db25maWcuaW4gfCAyOSArKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKwogYm9vdC91Ym9vdC91Ym9vdC5tayAgfCAgOSArKysrKysrKysKIDIgZmls
-ZXMgY2hhbmdlZCwgMzggaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2Jvb3QvdWJvb3QvQ29u
-ZmlnLmluIGIvYm9vdC91Ym9vdC9Db25maWcuaW4KaW5kZXggZjM3MDQwYTI4YTk3Li42YjdmOWQ2
-NzcxYWMgMTAwNjQ0Ci0tLSBhL2Jvb3QvdWJvb3QvQ29uZmlnLmluCisrKyBiL2Jvb3QvdWJvb3Qv
-Q29uZmlnLmluCkBAIC0xMzYsNiArMTM2LDM1IEBAIGNvbmZpZyBCUjJfVEFSR0VUX1VCT09UX0NP
-TkZJR19GUkFHTUVOVF9GSUxFUwogCSAgdGhhdCB3aWxsIGJlIG1lcmdlZCB0byB0aGUgbWFpbiBV
-LUJvb3QgY29uZmlndXJhdGlvbiBmaWxlLgogZW5kaWYKIAorY29uZmlnIEJSMl9UQVJHRVRfVUJP
-T1RfREVGQVVMVF9FTlZfRklMRQorCXN0cmluZyAiVGV4dCBmaWxlIHdpdGggZGVmYXVsdCBlbnZp
-cm9ubWVudCIKKwlzZWxlY3QgQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19YWEQKKwloZWxwCisJICBU
-ZXh0IGZpbGUgY29udGFpbmluZyB0aGUgdmFyaWFibGVzIHRvIGJlIHVzZWQgYXMgdGhlIGRlZmF1
-bHQKKwkgIGVudmlyb25tZW50IGluIFUtQm9vdC4KKworCSAgSWYgZW1wdHksIGxldCBVLUJvb3Qg
-Z2VuZXJhdGUgdGhlIGRlZmF1bHQgZW52aXJvbW5lbnQgZnJvbSB0aGUKKwkgIHNvdXJjZSBjb2Rl
-IGFuZCBvdGhlciBVLUJvb3QgY29uZmlndXJhdGlvbiB2YWx1ZXMsIHdoaWNoIGlzCisJICB0aGUg
-ZGVmYXVsdCBiZWhhdmlvdXIuCisKKwkgIElmIHNldCB0byB0aGUgcGF0aCB0byBhIGZpbGUsIGlu
-c3RydWN0cyBVLUJvb3QgdG8gZGVmaW5lIHRoZQorCSAgZW50aXJlIFUtQm9vdCBkZWZhdWx0IGVu
-dmlyb25tZW50IGZyb20gdGhlIHByb3ZpZGVkIGZpbGUsCisJICBkaXNhYmxpbmcgYWxsIHRoZSBk
-ZWZhdWx0IGJlaGF2aW91ci4KKworCSAgRnJvbSB0aGUgVS1Cb290IGRvY3VtZW50YXRpb246CisK
-KwkgICAgVGhlIGZvcm1hdCBpcyB0aGUgc2FtZSBhcyBhY2NlcHRlZCBieSB0aGUgbWtlbnZpbWFn
-ZSB0b29sLAorCSAgICB3aXRoIGxpbmVzIGNvbnRhaW5pbmcga2V5PXZhbHVlIHBhaXJzLiBCbGFu
-ayBsaW5lcyBhbmQKKwkgICAgbGluZXMgYmVnaW5uaW5nIHdpdGggJyMnIGFyZSBpZ25vcmVkLgor
-CisJICBCYXNlZCBvbiB0aGUgVVNFX0RFRkFVTFRfRU5WX0ZJTEUgYW5kIERFRkFVTFRfRU5WX0ZJ
-TEUgVS1Cb290CisJICBjb25maWd1cmF0aW9uIHZhcmlhYmxlcy4KKworCSAgRm9yIG1vcmUgaW5m
-byBzZWU6CisJICBodHRwczovL2RvY3MudS1ib290Lm9yZy9lbi9sYXRlc3QvdXNhZ2UvZW52aXJv
-bm1lbnQuaHRtbCNleHRlcm5hbC1lbnZpcm9ubWVudC1maWxlCisKKwkgIFJlcXVpcmVzIFUtQm9v
-dCA+PSB2MjAxOC4wNS4KKwogY29uZmlnIEJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRDCiAJYm9v
-bCAiVS1Cb290IG5lZWRzIGR0YyIKIAlzZWxlY3QgQlIyX1BBQ0tBR0VfSE9TVF9EVEMKZGlmZiAt
-LWdpdCBhL2Jvb3QvdWJvb3QvdWJvb3QubWsgYi9ib290L3Vib290L3Vib290Lm1rCmluZGV4IDE5
-ZjRjZGI1NTdlNi4uNmNjODdiMzVkM2Q2IDEwMDY0NAotLS0gYS9ib290L3Vib290L3Vib290Lm1r
-CisrKyBiL2Jvb3QvdWJvb3QvdWJvb3QubWsKQEAgLTM5MCw2ICszOTAsMTQgQEAgVUJPT1RfS0NP
-TkZJR19FRElUT1JTID0gbWVudWNvbmZpZyB4Y29uZmlnIGdjb25maWcgbmNvbmZpZwogIyBvdmVy
-cmlkZSBhZ2Fpbi4gSW4gYWRkaXRpb24sIGhvc3QtY2NhY2hlIGlzIG5vdCByZWFkeSBhdCBrY29u
-ZmlnCiAjIHRpbWUsIHNvIHVzZSBIT1NUQ0NfTk9DQ0FDSEUuCiBVQk9PVF9LQ09ORklHX09QVFMg
-PSAkKFVCT09UX01BS0VfT1BUUykgSE9TVENDPSIkKEhPU1RDQ19OT0NDQUNIRSkiIEhPU1RMREZM
-QUdTPSIiCisKK1VCT09UX0RFRkFVTFRfRU5WX0ZJTEUgPSAkKGNhbGwgcXN0cmlwLCQoQlIyX1RB
-UkdFVF9VQk9PVF9ERUZBVUxUX0VOVl9GSUxFKSkKK2lmbmVxICgkKFVCT09UX0RFRkFVTFRfRU5W
-X0ZJTEUpLCkKK2RlZmluZSBVQk9PVF9LQ09ORklHX0RFRkFVTFRfRU5WX0ZJTEUKKwkkKGNhbGwg
-S0NPTkZJR19TRVRfT1BULENPTkZJR19VU0VfREVGQVVMVF9FTlZfRklMRSx5KQorCSQoY2FsbCBL
-Q09ORklHX1NFVF9PUFQsQ09ORklHX0RFRkFVTFRfRU5WX0ZJTEUsIiQoc2hlbGwgcmVhZGxpbmsg
-LWYgJChVQk9PVF9ERUZBVUxUX0VOVl9GSUxFKSkiKQorZW5kZWYKK2VuZGlmCiBlbmRpZiAjIEJS
-Ml9UQVJHRVRfVUJPT1RfQlVJTERfU1lTVEVNX0xFR0FDWQogCiBVQk9PVF9DVVNUT01fRFRTX1BB
-VEggPSAkKGNhbGwgcXN0cmlwLCQoQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fRFRTX1BBVEgpKQpA
-QCAtNTMwLDYgKzUzOCw3IEBAIGRlZmluZSBVQk9PVF9LQ09ORklHX0ZJWFVQX0NNRFMKIAkkKFVC
-T09UX1pZTlFNUF9LQ09ORklHX1BNVUZXKQogCSQoVUJPT1RfWllOUU1QX0tDT05GSUdfUE1fQ0ZH
-KQogCSQoVUJPT1RfWllOUU1QX0tDT05GSUdfUFNVX0lOSVQpCisJJChVQk9PVF9LQ09ORklHX0RF
-RkFVTFRfRU5WX0ZJTEUpCiBlbmRlZgogCiBpZmVxICgkKEJSMl9UQVJHRVRfVUJPT1QpJChCUl9C
-VUlMRElORykseXkpCgotLS0KYmFzZS1jb21taXQ6IDdiZmVhOTM3MmYxODQyMjc5YThmNTdiNWZj
-NDQyOGJiYWU4MjJlOTEKY2hhbmdlLWlkOiAyMDI0MDYxNy11Ym9vdC1kZWZhdWx0LWVudi00NjY4
-ODUyMWZiYWUKCkJlc3QgcmVnYXJkcywKLS0gCkx1Y2EgQ2VyZXNvbGkgPGx1Y2EuY2VyZXNvbGlA
-Ym9vdGxpbi5jb20+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+This test fails with the following error
+
+  -sh: s6-tcpserver4: not found
+
+In release 2.6.0.0 of s6-networking the `s6-tcpserver4` was unified into
+a new `s6-tcpserver` command[1].
+
+[1] https://github.com/skarnet/s6-networking/blob/master/NEWS#L33
+
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+---
+ support/testing/tests/package/test_s6_networking.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/testing/tests/package/test_s6_networking.py b/support/testing/tests/package/test_s6_networking.py
+index 1fe1b81668..bbbaefdf94 100644
+--- a/support/testing/tests/package/test_s6_networking.py
++++ b/support/testing/tests/package/test_s6_networking.py
+@@ -28,7 +28,7 @@ class TestS6Networking(infra.basetest.BRTest):
+         self.assertEqual(output[1][0:5], "after")
+ 
+         # Test the TCP server and client
+-        _, exit_code = self.emulator.run("s6-tcpserver4 127.0.0.1 1024 cat &")
++        _, exit_code = self.emulator.run("s6-tcpserver 127.0.0.1 1024 cat &")
+         self.emulator.run("sleep 2")
+         cmd = "echo foobar | s6-tcpclient 127.0.0.1 1024 s6-ioconnect -67"
+         output, exit_code = self.emulator.run(cmd)
+
+---
+base-commit: 51a58ff0624f62ca0fa0ca6494928e8bd1410f69
+change-id: 20240715-support-testing-s6-networking-fix-28e7573197e7
+
+Best regards,
+-- 
+Brandon Maier <brandon.maier@collins.com>
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
