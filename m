@@ -1,76 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8CA9C3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:06:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4073FC3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:07:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E72080BC7;
-	Mon, 15 Jul 2024 14:06:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE6B540586;
+	Mon, 15 Jul 2024 14:07:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lv2TLVC_8dF1; Mon, 15 Jul 2024 14:06:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zpY6lgHovVIp; Mon, 15 Jul 2024 14:07:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EAC98128F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77D6940607
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3EAC98128F;
-	Mon, 15 Jul 2024 14:06:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 77D6940607;
+	Mon, 15 Jul 2024 14:07:37 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 719561BF3AD
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:06:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AE8961BF3AD
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:07:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5ED3C60822
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:06:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A664D60822
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:07:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lOKqq49SIXqr for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 14:05:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F134E60815
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F134E60815
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F134E60815
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:05:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BD5541BF20F;
- Mon, 15 Jul 2024 14:05:56 +0000 (UTC)
-Date: Mon, 15 Jul 2024 16:05:55 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240715160555.6e88961e@windsurf>
-In-Reply-To: <20240421095353.208034-2-dario.binacchi@amarulasolutions.com>
-References: <20240421095353.208034-1-dario.binacchi@amarulasolutions.com>
- <20240421095353.208034-2-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+ id L0Mu-qV1UYEQ for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 14:07:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 76ED960815
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76ED960815
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 76ED960815
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:07:34 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-4257d5fc9b7so33713095e9.2
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 07:07:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721052452; x=1721657252;
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :cc:to:subject:from:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=tmYmCtc1PAx3mVQonYnBYO46KxGl/9fchBwESI1cZ5g=;
+ b=J/ILCzEoJ9HL7N7YcwYiLu+ePBCkimP8zdv3pgP+n5VGamcafwwNAUgxcm5PvOZaus
+ pc/G8wLIt97JQ+ftGiAWtXIXpaG0OV0c8JQDz/ZYqKIAnwcgs2XlpZ/5PQLuHJXiD717
+ Nh1M91UQgEGDeo2yNTiAoUjpIAERrUIwVrXl2n+xLEBMksQVN5dVP14WtbkkPPAlcO1G
+ Boc3k0ivhZ3NWoPlo9fMxkWMMXss7pBKeZdeF6/R8TWmXrwj6tO5+8XLdSWojF5tS7Iq
+ +BKo0U8c2kN1SyOcJhzETvoT+fDHO1pdLDMn5ufnBkK5uA38uB7YoxcuINwfoKMhEtCz
+ p2AQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWvqbLV0zV1TtjnBnXZFEa3wMcJiqqdWcTyc7igzqDfgkveNJHpaV5qvj81aKEl7jI+Zb1t3BL3kpb8LJAYcIcaOOKbLbHkxA==
+X-Gm-Message-State: AOJu0YwZgpCcJM11pRtO1yIXJBe0026IOc9AdksBQrKOQd2ePwDiRuOP
+ wse8s5EkMu3vBW6wCeA16OMFbdz55EQX01LJ0KrRxzbEWLIr0nc574zaF4z0Ux4t86SN1VNskTk
+ +kIs=
+X-Google-Smtp-Source: AGHT+IGKppGkUjiqkZWvE/9btG2+4gzkkc04cSp8IMvzVL4Z0O4QgPKuIRB6WwanwwlM8Bm49mnGMg==
+X-Received: by 2002:a05:600c:8a9:b0:426:59d3:8cae with SMTP id
+ 5b1f17b1804b1-426707cf7aemr149988345e9.13.1721052452197; 
+ Mon, 15 Jul 2024 07:07:32 -0700 (PDT)
+Received: from [10.8.0.42] (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4279f2cc306sm125323845e9.30.2024.07.15.07.07.30
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 15 Jul 2024 07:07:31 -0700 (PDT)
+Message-ID: <d9fcfe9b-7b11-42ee-9773-b9620d720135@mind.be>
+Date: Mon, 15 Jul 2024 16:07:28 +0200
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+User-Agent: Mozilla Thunderbird
+To: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
+References: <20240710152941.334195-1-kory.maincent@bootlin.com>
+Content-Language: en-GB
+In-Reply-To: <20240710152941.334195-1-kory.maincent@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721052357;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=bew21MNoNyf3RLARzags4YNaeGDgN/wkGb7G3JrOHYk=;
- b=C3Ven2W3vijV9VSOBQlC3CYybVGTqREADMbEvt9V1l7QFgvemTDSAJhScNYnRqCaPZKCjD
- 44xGA3SPLNb9btkznz4WdaZ+P+bH19aZsBMXfn3kqgjYPzmKPIAakjD/4HyBUvgSjFW3su
- zF6UG1CR12p4eA1l0q/jqD2gUrzfrRUBRo83nucSzBM06vEhyy/dpHdvmJWrc7XsvhpceY
- 5IAUtSR9gbJMzX+MkYGxFEHLW/2p7APz65NWihjzesKUKOvWnmH7wL5rQJF5JpRnztMkHG
- ZfXW2YUjb2MYZzYp5ePnI/IsaMK8f3RgrUfExpFgfA0sK/B6NEjc58rukP88iQ==
+ d=mind.be; s=google; t=1721052452; x=1721657252; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=tmYmCtc1PAx3mVQonYnBYO46KxGl/9fchBwESI1cZ5g=;
+ b=VpcR9b2WFbt9D9TA2BgxHFz8kQyy+dIgK7cs3VR7uq0q/AWRxKlGOsGrbf98wYCdGh
+ HAuv2xOhcXhnC0p9M1+J5/phQS4gdXttpCd5pvq0Gz2pBHa2VwQDJRxxbbzmxfcwIh89
+ BYrAsItduPDvQD95HJEi/NQZ+OaO1BoN5OdOpPBlP/y5YUyT2lLfaAs6wc8MTmY35qsf
+ JZdI8BeLSVmw5OeBafPkbaMSqp/Hg4GVjT9LQNaHb5b+WVbUG66xvHEV0GOz12paOA5D
+ iuIdqBnubjlJNJt8nEHVhF/+y9Z2WiLYf3OXaoou73Fp7c4mfY5XyHeNHPXR6dbHIAXt
+ DNgg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=C3Ven2W3
-Subject: Re: [Buildroot] [RFC PATCH 1/2] support/scripts/genimage.sh:
- support creating a bmap image
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=VpcR9b2W
+Subject: Re: [Buildroot] [PATCH] linux: Add support for vendor directory in
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,85 +106,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Xuanhao Shi <X15000177@gmail.com>, Anand Gadiyar <gadiyar@ti.com>,
- michael@amarulasolutions.com, linux-amarula@amarulasolutions.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: thomas.petazzoni@bootlin.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Dario,
 
-On Sun, 21 Apr 2024 11:53:52 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-> The patch adds an option to create, in addition to the usual image, an
-> image of type bmap that drastically reduces the amount of data that
-> needs to be written to an SD card, resulting in time savings.
+On 10/07/2024 17:29, Kory Maincent via buildroot wrote:
+> Linux organizes devicetree files under vendor subdirectories for arm and
+> arm64 architectures, such as arch/<arch>/boot/dts/<vendor>/. The
+> BR2_LINUX_KERNEL_CUSTOM_DTS_PATH was only copying devicetree files to
+> arch/<arch>/boot/dts/, which is incompatible with the vendor
+> subdirectory structure.
+
+  I don't see what the problem is though? If a DT is put in 
+arch/<arch>/boot/dts, it can still be built with the current Buildroot.
+
+  The only thing you need to do is to make sure to do
+
+#include "vendor/cpu.dtsi"
+
+instead of
+
+#include "cpu.dtsi"
+
+  The in-tree DTSes don't have the vendor/ part in the include, of course, but 
+for custom DTSes you can do what you want, right?
+
+  I'm going to mark it as Rejected for now, but feel free to resubmit if there 
+is a good reason to have this feature.
+
+
+> This patch adds support for using a directory in
+> BR2_LINUX_KERNEL_CUSTOM_DTS_PATH that matches the vendor subdirectory name.
 > 
-> This makes it possible to activate this option easily and maintain
-> backward compatibility for all configurations already using the genimage
-> tool for creating the image to be written to the SD card:
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+> ---
+>   linux/Config.in |  4 +++-
+>   linux/linux.mk  | 14 +++++++++++---
+>   2 files changed, 14 insertions(+), 4 deletions(-)
 > 
-> BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/<manufacturer>/<boardname>/genimage.cfg -b"
-> +BR2_PACKAGE_HOST_BMAP_TOOLS=y
-> 
-> It follows that the script now assumes a broader functionality that
-> extends beyond just being an interface for the genimage tool.
-> 
-> An alternative implementation could have been to create another script,
-> such as support/scripts/bmap.sh, capable of creating the bmap image
-> using the same parameters passed to support/scripts/genimage.sh (i. e.
-> -c board/<manufacturer>/<boardname>/genimage.cfg). However, in this case,
-> the script would also need to know that the image is located in the
-> ${BINARIES} directory. This could be achieved by adding an additional
-> parameter, but it might cause genimage.sh to fail due to an unrecognized
-> parameter.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 34057a4893..6ca615cae3 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -423,7 +423,9 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+>   	  Paths to out-of-tree Device Tree Source (.dts) and Device Tree
+>   	  Source Include (.dtsi) files, separated by spaces. These files
+>   	  will be copied to the kernel sources and the .dts files will
+> -	  be compiled from there.
+> +	  be compiled from there. You can also use a directory which
+> +	  name match the vendor name as in
+> +	  arch/<arch>/boot/dts/<vendor>/
 
-We took advantage of the on-going Buildroot hackathon to discuss live,
-and we pushed your patch, but with some changes:
+  I think the explanation could be better:
 
-(1) We don't add an option to script, but rather we look in the
-Buildroot .config file is host-bmap-tools has been enabled. If it is
-enabled, we assume the user wants bmap images
+	  Starting from Linux 6.5, the device trees are put in a <vendor>
+	  subdirectory. To emulate this, you can put custom device trees
+	  in a directory with that same <vendor> name, and specify the
+	  path to that directory here instead of to individual dts files.
 
-(2) We generate bmap images for all images, as long as they exist in
-$(BINARIES_DIR). Indeed your trick of counting how many times the name
-of the image was referenced in the genimage.cfg to try to guess what is
-the "final" image (like sdcard.img) would fail badly if the final image
-was:
+  I feel this is pretty complicated for a user to understand though...
 
-image a {
+>   
+>   config BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME
+>   	bool "Keep the directory name of the Device Tree"
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 16d9f19470..07d4ddf7f3 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -198,7 +198,15 @@ LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+>   # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
+>   # copied to arch/<arch>/boot/dts, but only the .dts files will
+>   # actually be generated as .dtb.
+> -LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+> +# In case we are copying a vendor dts subdirectory as in
+> +# arch/<arch>/boot/dts/<vendor>/ we have to append the wildcard to the
+> +# folder to list the devicetree.
+> +LINUX_KERNEL_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH))
+> +ifneq ($(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/.*),)
 
-}
+  You don't actually need the * here.
 
-because the image name "a" is probably found more than once in the
-genimage.cfg.
+  Also, better use positive logic (ifeq instead of ifneq, and swap the branches).
 
-However, with that, we are not going to apply your PATCH 2/2, because
-we don't want to force everyone to build host-bmap-tools. Now everyone
-only has to enable BR2_PACKAGE_HOST_BMAP_TOOLS=y in their configuration
-to automagically get bmap-capable images generated. Perhaps what should
-be done now is to document this somewhere in the manual. The question
-is of course where to document it, and on that I'm not sure.
+> +LINUX_DTS_NAME += $(addprefix $(notdir $(LINUX_KERNEL_CUSTOM_DTS_PATH))/,$(basename $(filter %.dts,$(notdir $(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/*)))))
+> +else
+> +LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)))))
 
-Note: it might be relevant to also adjust the filesystem generation
-code in fs/common.mk to also generate a bmap-capable image of the
-rootfs image itself, also based on the availability of host-bmap-tools.
+  This is also getting pretty complicated, could it be refactored so there are a 
+bit more common parts? Something like:
 
-Thanks for your work!
+ifeq ($(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/.),)
+LINUX_CUSTOM_DTS_FILES = $(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/*))
+LINUX_CUSTOM_DTS_PREFIX = $(notdir $(LINUX_KERNEL_CUSTOM_DTS_PATH))/
+else
+LINUX_CUSTOM_DTS_FILES = $(LINUX_KERNEL_CUSTOM_DTS_PATH)
+endif
+LINUX_DTS_NAME += $(addprefix $(LINUX_CUSTOM_DTS_PREFIX),$(basename $(filter 
+%.dts,$(LINUX_CUSTOM_DTS_FILES))))
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+(parenthesis added in an email editor so probably unbalanced :-)
+
+  Regards,
+  Arnout
+
+> +endif
+>   
+>   LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME))
+>   
+> @@ -505,8 +513,8 @@ endif
+>   #   http://lists.busybox.net/pipermail/buildroot/2020-May/282727.html
+>   define LINUX_BUILD_CMDS
+>   	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
+> -	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+> -		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+> +	$(foreach dts,$(LINUX_KERNEL_CUSTOM_DTS_PATH), \
+> +		cp -rf $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+>   	)
+>   	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
+>   	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
