@@ -1,73 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2202DC3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 12:45:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06257C3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 13:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D820F40400;
-	Mon, 15 Jul 2024 12:45:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B77BB810E8;
+	Mon, 15 Jul 2024 13:07:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Iu7JUbiCSBZk; Mon, 15 Jul 2024 13:07:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9B97810E4
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9B97810E4;
+	Mon, 15 Jul 2024 13:07:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A06B1BF3BE
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 13:07:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA63140393
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 13:07:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5JFI_4KWNwX2; Mon, 15 Jul 2024 12:45:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC9B840469
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC9B840469;
-	Mon, 15 Jul 2024 12:45:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 061F71BF3B8
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:45:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 00CBE605D2
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:45:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PDSWu3-RdVnT for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 12:45:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CC800605C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC800605C9
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CC800605C9
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 12:45:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DD9E8C000C;
- Mon, 15 Jul 2024 12:45:15 +0000 (UTC)
-Date: Mon, 15 Jul 2024 14:45:14 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240715144514.56030468@windsurf>
-In-Reply-To: <ZhuHcg6qHhbBCUCE@waldemar-brodkorb.de>
+ id EqYD56iuH2oM for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 13:07:16 +0000 (UTC)
+X-Greylist: delayed 474 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 15 Jul 2024 13:07:15 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 747A54035D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 747A54035D
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 747A54035D
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 13:07:15 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 0F7983536276; Mon, 15 Jul 2024 14:59:17 +0200 (CEST)
+Date: Mon, 15 Jul 2024 14:59:17 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZpUdJSlXXfp3T/bg@waldemar-brodkorb.de>
 References: <ZhuHcg6qHhbBCUCE@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+ <20240715144514.56030468@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721047516;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=OQL/WGQWQ3uK9Db9fmCksH+qmZyZPcMreyJZ2ig5IhI=;
- b=YuZSS0P384AJKiOJvRVlYKJiTiJ1U+8EXRihL4KU/XwbhzWBXLo09nELv/LvConJ0J6bDk
- wxsG7yx4VQxdiCVixGtL9u/Mx20fv/0u64dBGGodh6JuSXcF4ctiBCYki1ELnhQKuyiEPq
- uRIpBrwqmY0jcaJdl1wRMaNP8G+VnN3QitNsGWz6+6p92K+y6o7cuQ5f+0J8tregP9iAFp
- 1+ofAqDbVWHZBesgXnlhVQi8FGyHxKk6l8mw+y4a2/+tOJdJxY06lRnVWCQSLNs/7zoDMl
- xTXMGBpcFqkaDYRZI5Dkcntm/VDTA3FoDYFfVVuhm/xUb3YrBSOL9O5msfUhrw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240715144514.56030468@windsurf>
+X-Operating-System: Linux 5.10.0-27-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1721048358; bh=7pjUzB8wmL1x34fNUPtxFkGlNJVfwdUgGXWwXNzLnw8=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=FVoNPKU+ytCUT2/Ltd5RylBuMk3VDaKXVRjoJbMyXW0sGDGjem31EvAjHzm4T2HJW
+ oIBv1MuEKx1TkiWqfFlcPTNAqR+um3PGsU0oyxV53+Rl6pDLzaC3yz+58+jx2TwfAW
+ 8k7da87gz0BYtQ0mpBtrvqzg4GdOXr6I0kShBA6+ZwFIFYD30I50F1V59HoqgkTj78
+ 3t0SijbMMYrrf8j+g0U66woJUm/VKi1LX4so/25fwNKmSHk+xojgBKJ90Q73MOzy0O
+ f+ubT03GUJw/+Iccsbw9M3oKxOg5J3rEIrlgk3ZoIDDy5+Et1e4fTReCw+nNddYy/W
+ wnDsjUDWIYh5A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YuZSS0P3
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=FVoNPKU+
 Subject: Re: [Buildroot] [PATCH] package/uclibc: enable time64 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -80,8 +81,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Chin Huat Ang <chinhuat@gmail.com>,
  Dmitry Chestnykh <dm.chestnykh@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
@@ -89,34 +88,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Waldemar,
+Hi,
+Thomas Petazzoni wrote,
 
-On Sun, 14 Apr 2024 09:36:18 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
-
-> uClibc-ng supports time64 since release 1.0.46.
-> This commit enables it by default.
-> It was discussed on the mailinglist and one suggestion was to
-> enable it by default without a config option inside buildroot.
+> Hello Waldemar,
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/uclibc/uClibc-ng.config | 1 +
->  1 file changed, 1 insertion(+)
+> On Sun, 14 Apr 2024 09:36:18 +0200
+> Waldemar Brodkorb <wbx@openadk.org> wrote:
+> 
+> > uClibc-ng supports time64 since release 1.0.46.
+> > This commit enables it by default.
+> > It was discussed on the mailinglist and one suggestion was to
+> > enable it by default without a config option inside buildroot.
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> >  package/uclibc/uClibc-ng.config | 1 +
+> >  1 file changed, 1 insertion(+)
+> 
+> My understanding is that since we've updated to 1.0.49, this is anyway
+> the default, so this patch in fact isn't needed anymore, as we've
+> already enabled 64-bit time_t on 32-bit archs with uClibc-ng since we
+> bumped to 1.0.49. So I marked this patch as Rejected. Of course, let me
+> know if I misunderstood the situation.
 
-My understanding is that since we've updated to 1.0.49, this is anyway
-the default, so this patch in fact isn't needed anymore, as we've
-already enabled 64-bit time_t on 32-bit archs with uClibc-ng since we
-bumped to 1.0.49. So I marked this patch as Rejected. Of course, let me
-know if I misunderstood the situation.
+No, perfectly fine description of the situation.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+best regards
+ Waldemar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
